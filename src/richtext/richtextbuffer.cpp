@@ -806,7 +806,7 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxTe
     if (attr.GetBottom().IsValid() && attr.GetBottom().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE)
     {
         borderBottom = converter.GetPixels(attr.GetBottom().GetWidth());
-        wxColour col(attr.GetTop().GetColour());
+        wxColour col(attr.GetBottom().GetColour());
 
         // If pen width is > 1, resorts to a solid rectangle.
         if (borderBottom == 1)
@@ -1533,7 +1533,7 @@ void wxRichTextCompositeObject::Dump(wxTextOutputStream& stream)
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextCompositeObject::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position, wxArrayInt* partialExtents) const
+bool wxRichTextCompositeObject::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, const wxPoint& position, const wxSize& parentSize, wxArrayInt* partialExtents) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
@@ -1589,7 +1589,7 @@ bool wxRichTextCompositeObject::GetRangeSize(const wxRichTextRange& range, wxSiz
                     sz.x += childSize.x;
                     descent = wxMax(descent, childDescent);
                 }
-                else if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, context, flags, wxPoint(position.x + sz.x, position.y), p))
+                else if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, context, flags, wxPoint(position.x + sz.x, position.y), parentSize, p))
                 {
                     sz.y = wxMax(sz.y, childSize.y);
                     sz.x += childSize.x;
@@ -2183,7 +2183,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
 }
 
 /// Get/set the size for the given range.
-bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position, wxArrayInt* WXUNUSED(partialExtents)) const
+bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, const wxPoint& position, const wxSize& parentSize, wxArrayInt* WXUNUSED(partialExtents)) const
 {
     wxSize sz;
 
@@ -2242,7 +2242,7 @@ bool wxRichTextParagraphLayoutBox::GetRangeSize(const wxRichTextRange& range, wx
         wxSize childSize;
 
         int childDescent = 0;
-        child->GetRangeSize(rangeToFind, childSize, childDescent, dc, context, flags, position);
+        child->GetRangeSize(rangeToFind, childSize, childDescent, dc, context, flags, position, parentSize);
 
         descent = wxMax(childDescent, descent);
 
@@ -4719,7 +4719,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     int paraDescent = 0;
 
     // This calculates the partial text extents
-    GetRangeSize(GetRange(), paraSize, paraDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_CACHE_SIZE, rect.GetPosition(), & partialExtents);
+    GetRangeSize(GetRange(), paraSize, paraDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_CACHE_SIZE, rect.GetPosition(), parentRect.GetSize(), & partialExtents);
 #else
     node = m_children.GetFirst();
     while (node)
@@ -4801,7 +4801,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                 partialExtents.Clear();
 
                 // Recalculate the partial text extents since the child object changed size
-                GetRangeSize(GetRange(), paraSize, paraDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_CACHE_SIZE, wxPoint(0,0), & partialExtents);
+                GetRangeSize(GetRange(), paraSize, paraDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_CACHE_SIZE, wxPoint(0,0), parentRect.GetSize(), & partialExtents);
             }
         }
 
@@ -4818,10 +4818,10 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         {
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
             // Get height only, then the width using the partial extents
-            GetRangeSize(wxRichTextRange(lastEndPos+1, lastPosToUse), childSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_HEIGHT_ONLY);
+            GetRangeSize(wxRichTextRange(lastEndPos+1, lastPosToUse), childSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_HEIGHT_ONLY, wxPoint(0,0), parentRect.GetSize());
             childSize.x = wxRichTextGetRangeWidth(*this, wxRichTextRange(lastEndPos+1, lastPosToUse), partialExtents);
 #else
-            GetRangeSize(wxRichTextRange(lastEndPos+1, lastPosToUse), childSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED, rect.GetPosition());
+            GetRangeSize(wxRichTextRange(lastEndPos+1, lastPosToUse), childSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED, rect.GetPosition(), parentRect.GetSize());
 #endif
         }
 
@@ -4890,7 +4890,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                     // lays out the object again using the minimum size
                     child->Invalidate(wxRICHTEXT_ALL);
                     child->LayoutToBestSize(dc, context, buffer,
-                                attr, child->GetAttributes(), availableRect, parentRect, style);
+                                attr, child->GetAttributes(), availableRect, parentRect.GetSize(), style);
                     childSize = child->GetCachedSize();
                     childDescent = child->GetDescent();
 
@@ -4899,7 +4899,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
                         partialExtents.Clear();
 
                         // Recalculate the partial text extents since the child object changed size
-                        GetRangeSize(GetRange(), paraSize, paraDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_CACHE_SIZE, wxPoint(0,0), & partialExtents);
+                        GetRangeSize(GetRange(), paraSize, paraDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_CACHE_SIZE, wxPoint(0,0), parentRect.GetSize(), & partialExtents);
                     }
 
                     // Go around the loop finding the available rect for the given floating objects
@@ -4928,9 +4928,10 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         if ((lineBreakInThisObject && (childSize.x + currentWidth <= availableRect.width))
             ||
             (childSize.x + currentWidth > availableRect.width)
+#if 0
             ||
             ((childSize.x + currentWidth <= availableRect.width) && !node->GetNext())
-
+#endif
             )
         {
             long wrapPosition = 0;
@@ -4969,12 +4970,12 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
             if (!child->IsEmpty())
             {
                 // Get height only, then the width using the partial extents
-                GetRangeSize(actualRange, actualSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_HEIGHT_ONLY);
+                GetRangeSize(actualRange, actualSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_HEIGHT_ONLY, wxPoint(0,0), parentRect.GetSize());
                 actualSize.x = wxRichTextGetRangeWidth(*this, actualRange, partialExtents);
             }
             else
 #endif
-                GetRangeSize(actualRange, actualSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED);
+                GetRangeSize(actualRange, actualSize, childDescent, dc, context, wxRICHTEXT_UNFORMATTED, wxPoint(0,0), parentRect.GetSize());
 
             currentWidth = actualSize.x;
 
@@ -5071,6 +5072,41 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     }
 
     //wxASSERT(!(lastCompletedEndPos != -1 && lastCompletedEndPos < GetRange().GetEnd()-1));
+
+    // Add the last line - it's the current pos -> last para pos
+    // Substract -1 because the last position is always the end-paragraph position.
+    if (lastCompletedEndPos <= GetRange().GetEnd()-1)
+    {
+        currentPosition.x = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
+
+        wxRichTextLine* line = AllocateLine(lineCount);
+
+        wxRichTextRange actualRange(lastCompletedEndPos+1, GetRange().GetEnd()-1);
+
+        // Set relative range so we won't have to change line ranges when paragraphs are moved
+        line->SetRange(wxRichTextRange(actualRange.GetStart() - GetRange().GetStart(), actualRange.GetEnd() - GetRange().GetStart()));
+
+        line->SetPosition(currentPosition);
+
+        if (lineHeight == 0 && buffer)
+        {
+            wxFont font(buffer->GetFontTable().FindFont(attr));
+            wxCheckSetFont(dc, font);
+            lineHeight = dc.GetCharHeight();
+        }
+        
+        if (maxDescent == 0)
+        {
+            int w, h;
+            dc.GetTextExtent(wxT("X"), & w, &h, & maxDescent);
+        }
+
+        line->SetSize(wxSize(currentWidth, lineHeight));
+        line->SetDescent(maxDescent);
+        currentPosition.y += lineHeight;
+        currentPosition.y += lineSpacing;
+        lineCount ++;
+    }
 
     // Remove remaining unused line objects, if any
     ClearUnusedLines(lineCount);
@@ -5290,7 +5326,7 @@ void wxRichTextParagraph::ClearLines()
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position, wxArrayInt* partialExtents) const
+bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, const wxPoint& position, const wxSize& parentSize, wxArrayInt* partialExtents) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
@@ -5404,7 +5440,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                             partialExtents->Add(childSize.x + lastSize);
                         }
                     }
-                    else if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, context, flags, wxPoint(position.x + sz.x, position.y), p))
+                    else if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, context, flags, wxPoint(position.x + sz.x, position.y), parentSize, p))
                     {
                         if (childDescent == 0)
                         {
@@ -5491,7 +5527,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
                         wxSize childSize;
                         int childDescent = 0;
-                        if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, context, flags, wxPoint(position.x + sz.x, position.y)))
+                        if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, context, flags, wxPoint(position.x + sz.x, position.y), parentSize))
                         {
                             if (childDescent == 0)
                             {
@@ -5697,7 +5733,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, wxRichTextDrawingContext& context, co
                 int paraDescent;
 
                 // This calculates the partial text extents
-                GetRangeSize(lineRange, paraSize, paraDescent, dc, context, wxRICHTEXT_UNFORMATTED, linePos, & partialExtents);
+                GetRangeSize(lineRange, paraSize, paraDescent, dc, context, wxRICHTEXT_UNFORMATTED, linePos, wxDefaultSize, & partialExtents);
 
                 int lastX = linePos.x;
                 size_t i;
@@ -6720,7 +6756,7 @@ void wxRichTextPlainText::Copy(const wxRichTextPlainText& obj)
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int WXUNUSED(flags), wxPoint position, wxArrayInt* partialExtents) const
+bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int WXUNUSED(flags), const wxPoint& position, const wxSize& WXUNUSED(parentSize), wxArrayInt* partialExtents) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
@@ -8854,13 +8890,13 @@ bool wxRichTextField::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     return wxRichTextParagraphLayoutBox::Layout(dc, context, rect, parentRect, style);
 }
 
-bool wxRichTextField::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position, wxArrayInt* partialExtents) const
+bool wxRichTextField::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, const wxPoint& position, const wxSize& parentSize, wxArrayInt* partialExtents) const
 {
     wxRichTextFieldType* fieldType = wxRichTextBuffer::FindFieldType(GetFieldType());
     if (fieldType)
-        return fieldType->GetRangeSize((wxRichTextField*) this, range, size, descent, dc, context, flags, position, partialExtents);
+        return fieldType->GetRangeSize((wxRichTextField*) this, range, size, descent, dc, context, flags, position, parentSize, partialExtents);
 
-    return wxRichTextParagraphLayoutBox::GetRangeSize(range, size, descent, dc, context, flags, position, partialExtents);
+    return wxRichTextParagraphLayoutBox::GetRangeSize(range, size, descent, dc, context, flags, position, parentSize, partialExtents);
 }
 
 /// Calculate range
@@ -9096,10 +9132,10 @@ bool wxRichTextFieldTypeStandard::Layout(wxRichTextField* obj, wxDC& dc, wxRichT
     return true;
 }
 
-bool wxRichTextFieldTypeStandard::GetRangeSize(wxRichTextField* obj, const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position, wxArrayInt* partialExtents) const
+bool wxRichTextFieldTypeStandard::GetRangeSize(wxRichTextField* obj, const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, const wxPoint& position, const wxSize& parentSize, wxArrayInt* partialExtents) const
 {
     if (IsTopLevel(obj))
-        return obj->wxRichTextParagraphLayoutBox::GetRangeSize(range, size, descent, dc, context, flags, position);
+        return obj->wxRichTextParagraphLayoutBox::GetRangeSize(range, size, descent, dc, context, flags, position, parentSize);
     else
     {
         wxSize sz = GetSize(obj, dc, context, 0);
@@ -9987,9 +10023,9 @@ void wxRichTextTable::CalculateRange(long start, long& end)
 }
 
 // Gets the range size.
-bool wxRichTextTable::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, wxPoint position, wxArrayInt* partialExtents) const
+bool wxRichTextTable::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, const wxPoint& position, const wxSize& parentSize, wxArrayInt* partialExtents) const
 {
-    return wxRichTextBox::GetRangeSize(range, size, descent, dc, context, flags, position, partialExtents);
+    return wxRichTextBox::GetRangeSize(range, size, descent, dc, context, flags, position, parentSize, partialExtents);
 }
 
 // Deletes content in the given range.
@@ -11052,13 +11088,17 @@ wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichT
         SetAttributes(*charStyle);
 }
 
+wxRichTextImage::~wxRichTextImage()
+{
+}
+
 void wxRichTextImage::Init()
 {
     m_originalImageSize = wxSize(-1, -1);
 }
 
 /// Create a cached image at the required size
-bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
+bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache, const wxSize& parentSize)
 {
     if (!m_imageBlock.IsOk())
         return false;
@@ -11088,33 +11128,36 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache)
     int maxWidth = -1;
     int maxHeight = -1;
 
-    wxRichTextBuffer* buffer = GetBuffer();
-    if (buffer)
+    wxSize sz = parentSize;
+    if (sz == wxDefaultSize)
     {
-        wxSize sz;
-        if (buffer->GetRichTextCtrl())
+        if (GetParent() && GetParent()->GetParent())
+            sz = GetParent()->GetParent()->GetCachedSize();
+    }
+
+    if (sz != wxDefaultSize)
+    {
+        wxRichTextBuffer* buffer = GetBuffer();
+        if (buffer)
         {
-            // Subtract borders
-            sz = buffer->GetRichTextCtrl()->GetClientSize();
-
-            // Use a minimum size to stop images becoming very small
-            sz.x = wxMax(sz.x, 100);
-            sz.y = wxMax(sz.y, 100);
-
+            // Find the actual space available when margin is taken into account
             wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
             marginRect = wxRect(0, 0, sz.x, sz.y);
-            buffer->GetBoxRects(dc, buffer, buffer->GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
+            if (GetParent() && GetParent()->GetParent())
+            {
+                buffer->GetBoxRects(dc, buffer, GetParent()->GetParent()->GetAttributes(), marginRect, borderRect, contentRect, paddingRect, outlineRect);
+                sz = contentRect.GetSize();
+            }
 
-            sz = contentRect.GetSize();
+            // Use a minimum size to stop images becoming very small
+            parentWidth = wxMax(100, sz.GetWidth());
+            parentHeight = wxMax(100, sz.GetHeight());
 
-            // Start with a maximum width of the control size, even if not specified by the content,
-            // to minimize the amount of picture overlapping the right-hand side
-            maxWidth = sz.x;
+            if (buffer->GetRichTextCtrl())
+                // Start with a maximum width of the control size, even if not specified by the content,
+                // to minimize the amount of picture overlapping the right-hand side
+                maxWidth = parentWidth;
         }
-        else
-            sz = buffer->GetCachedSize();
-        parentWidth = sz.GetWidth();
-        parentHeight = sz.GetHeight();
     }
 
     if (GetAttributes().GetTextBoxAttr().GetWidth().IsValid() && GetAttributes().GetTextBoxAttr().GetWidth().GetValue() > 0)
@@ -11290,12 +11333,12 @@ bool wxRichTextImage::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& WXUNUSED(descent), wxDC& dc, wxRichTextDrawingContext& context, int WXUNUSED(flags), wxPoint WXUNUSED(position), wxArrayInt* partialExtents) const
+bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& WXUNUSED(descent), wxDC& dc, wxRichTextDrawingContext& context, int WXUNUSED(flags), const wxPoint& WXUNUSED(position), const wxSize& parentSize, wxArrayInt* partialExtents) const
 {
     if (!range.IsWithin(GetRange()))
         return false;
 
-    if (!((wxRichTextImage*)this)->LoadImageCache(dc))
+    if (!((wxRichTextImage*)this)->LoadImageCache(dc, false, parentSize))
     {
         size.x = 0; size.y = 0;
         if (partialExtents)

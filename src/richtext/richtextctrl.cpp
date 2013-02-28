@@ -438,9 +438,6 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         dc.SetFont(GetFont());
 
-        // Paint the background
-        PaintBackground(dc);
-
         wxRect drawingArea(GetUpdateRegion().GetBox());
         drawingArea.SetPosition(GetUnscaledPoint(GetLogicalPoint(drawingArea.GetPosition())));
         drawingArea.SetSize(GetUnscaledSize(drawingArea.GetSize()));
@@ -458,6 +455,9 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
             SetupScrollbars();
         }
+
+        // Paint the background
+        PaintBackground(dc);
 
         wxRect clipRect(availableSpace);
         clipRect.x += GetBuffer().GetLeftMargin();
@@ -3262,7 +3262,7 @@ void wxRichTextCtrl::Replace(long from, long to,
 
     SetSelection(from, to);
 
-    wxRichTextAttr attr = GetDefaultStyle();
+    wxRichTextAttr attr(GetDefaultStyle());
 
     DeleteSelectedContent();
 
