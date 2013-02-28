@@ -57,7 +57,7 @@ TOOLKIT = MSW
 
 # GTK+ toolkit version [,2]
 !ifndef TOOLKIT_VERSION
-TOOLKIT_VERSION =
+TOOLKIT_VERSION = 
 !endif
 
 # Build wxUniversal instead of native port? [0,1]

@@ -297,3 +297,4 @@ $(OBJS)\image_canvas.obj :  .AUTODEPEND .\canvas.cpp
 
 $(OBJS)\image_image.res :  .AUTODEPEND .\image.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+

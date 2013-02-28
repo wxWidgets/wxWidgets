@@ -44,7 +44,7 @@ SHARED ?= 0
 TOOLKIT ?= MSW
 
 # GTK+ toolkit version [,2]
-TOOLKIT_VERSION ?=
+TOOLKIT_VERSION ?= 
 
 # Build wxUniversal instead of native port? [0,1]
 WXUNIV ?= 0

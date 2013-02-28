@@ -3018,10 +3018,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_osx_cocoa_mediactrl.obj
 !endif
 !if "$(TOOLKIT)" == "OSX_IPHONE"
-____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS = 
 !endif
 !if "$(TOOLKIT)" == "PM"
-____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS = 
 !endif
 !if "$(TOOLKIT)" == "WINCE"
 ____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =  \
@@ -4403,10 +4403,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_osx_cocoa_mediactrl.obj
 !endif
 !if "$(TOOLKIT)" == "OSX_IPHONE"
-____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS = 
 !endif
 !if "$(TOOLKIT)" == "PM"
-____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS = 
 !endif
 !if "$(TOOLKIT)" == "WINCE"
 ____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =  \
@@ -6887,10 +6887,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\mediadll_osx_cocoa_mediactrl.obj
 !endif
 !if "$(TOOLKIT)" == "OSX_IPHONE"
-____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS = 
 !endif
 !if "$(TOOLKIT)" == "PM"
-____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS = 
 !endif
 !if "$(TOOLKIT)" == "WINCE"
 ____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =  \
@@ -6933,10 +6933,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\medialib_osx_cocoa_mediactrl.obj
 !endif
 !if "$(TOOLKIT)" == "OSX_IPHONE"
-____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS = 
 !endif
 !if "$(TOOLKIT)" == "PM"
-____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS = 
 !endif
 !if "$(TOOLKIT)" == "WINCE"
 ____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =  \
@@ -7527,16 +7527,16 @@ ____LOWLEVEL_SRC_FILENAMES =  \
 	$(OBJS)\monodll_uuid.obj
 !endif
 !if "$(TOOLKIT)" == "OSX_CARBON"
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 !endif
 !if "$(TOOLKIT)" == "OSX_COCOA"
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 !endif
 !if "$(TOOLKIT)" == "OSX_IPHONE"
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 !endif
 !if "$(TOOLKIT)" == "PM"
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 !endif
 !if "$(TOOLKIT)" == "WINCE"
 ____LOWLEVEL_SRC_FILENAMES =  \
@@ -7994,16 +7994,16 @@ ____LOWLEVEL_SRC_FILENAMES_0 =  \
 	$(OBJS)\monolib_uuid.obj
 !endif
 !if "$(TOOLKIT)" == "OSX_CARBON"
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 !endif
 !if "$(TOOLKIT)" == "OSX_COCOA"
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 !endif
 !if "$(TOOLKIT)" == "OSX_IPHONE"
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 !endif
 !if "$(TOOLKIT)" == "PM"
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 !endif
 !if "$(TOOLKIT)" == "WINCE"
 ____LOWLEVEL_SRC_FILENAMES_0 =  \
@@ -8461,16 +8461,16 @@ ____LOWLEVEL_SRC_FILENAMES_1 =  \
 	$(OBJS)\coredll_uuid.obj
 !endif
 !if "$(TOOLKIT)" == "OSX_CARBON"
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 !endif
 !if "$(TOOLKIT)" == "OSX_COCOA"
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 !endif
 !if "$(TOOLKIT)" == "OSX_IPHONE"
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 !endif
 !if "$(TOOLKIT)" == "PM"
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 !endif
 !if "$(TOOLKIT)" == "WINCE"
 ____LOWLEVEL_SRC_FILENAMES_1 =  \
@@ -8817,16 +8817,16 @@ ____LOWLEVEL_SRC_FILENAMES_2 =  \
 	$(OBJS)\corelib_uuid.obj
 !endif
 !if "$(TOOLKIT)" == "OSX_CARBON"
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 !endif
 !if "$(TOOLKIT)" == "OSX_COCOA"
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 !endif
 !if "$(TOOLKIT)" == "OSX_IPHONE"
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 !endif
 !if "$(TOOLKIT)" == "PM"
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 !endif
 !if "$(TOOLKIT)" == "WINCE"
 ____LOWLEVEL_SRC_FILENAMES_2 =  \
@@ -9151,7 +9151,7 @@ __htmldll_library_link_LIBR = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG_14 =
+__THREADSFLAG_14 = 
 !endif
 !if "$(USE_THREADS)" == "1"
 __THREADSFLAG_14 = mt
@@ -9160,7 +9160,7 @@ __THREADSFLAG_14 = mt
 __RUNTIME_LIBS_5 = i
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_5 =
+__RUNTIME_LIBS_5 = 
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p_67 = -d__WXUNIVERSAL__
@@ -9229,7 +9229,7 @@ __OPTIMIZEFLAG = -Od
 __OPTIMIZEFLAG = -O2
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG =
+__THREADSFLAG = 
 !endif
 !if "$(USE_THREADS)" == "1"
 __THREADSFLAG = -tWM
@@ -9238,7 +9238,7 @@ __THREADSFLAG = -tWM
 __RUNTIME_LIBS = -tWR
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS =
+__RUNTIME_LIBS = 
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -9286,7 +9286,7 @@ $(OBJS):
 
 all: setup_h $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__wxscintilla) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__webviewdll___depname) $(__webviewlib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__ribbondll___depname) $(__ribbonlib___depname) $(__propgriddll___depname) $(__propgridlib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__stcdll___depname) $(__stclib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
-clean:
+clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.csm del $(OBJS)\*.csm
@@ -9826,13 +9826,13 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 !endif
 
-samples:
+samples: 
 	@echo cd ..\..\samples >$(OBJS)\samples.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>$(OBJS)\samples.bat
 	call $(OBJS)\samples.bat
 	@del $(OBJS)\samples.bat
 
-$(LIBDIRNAME):
+$(LIBDIRNAME): 
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)
 
 $(SETUPHDIR): $(LIBDIRNAME)
@@ -9841,10 +9841,10 @@ $(SETUPHDIR): $(LIBDIRNAME)
 $(SETUPHDIR)\wx: $(SETUPHDIR)
 	if not exist $(SETUPHDIR)\wx mkdir $(SETUPHDIR)\wx
 
-..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h:
+..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h: 
 	if not exist ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup0.h ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h
 
-$(SETUPHDIR)\wx\setup.h:
+$(SETUPHDIR)\wx\setup.h: 
 	if not exist $(SETUPHDIR)\wx\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_2)\setup.h $(SETUPHDIR)\wx\setup.h
 
 $(SETUPHDIR)\wx\msw: $(SETUPHDIR)\wx
@@ -32773,3 +32773,4 @@ $(OBJS)\gllib_msw_glcanvas.obj: ..\..\src\msw\glcanvas.cpp
 
 $(OBJS)\gllib_x11_glcanvas.obj: ..\..\src\x11\glcanvas.cpp
 	$(CXX) -q -c -P -o$@ $(GLLIB_CXXFLAGS) ..\..\src\x11\glcanvas.cpp
+

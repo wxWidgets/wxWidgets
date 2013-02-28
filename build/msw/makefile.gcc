@@ -3057,10 +3057,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_osx_cocoa_mediactrl.o
 endif
 ifeq ($(TOOLKIT),OSX_IPHONE)
-____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS = 
 endif
 ifeq ($(TOOLKIT),PM)
-____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS = 
 endif
 ifeq ($(TOOLKIT),WINCE)
 ____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =  \
@@ -4462,10 +4462,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_osx_cocoa_mediactrl.o
 endif
 ifeq ($(TOOLKIT),OSX_IPHONE)
-____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS = 
 endif
 ifeq ($(TOOLKIT),PM)
-____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS = 
 endif
 ifeq ($(TOOLKIT),WINCE)
 ____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =  \
@@ -7010,10 +7010,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\mediadll_osx_cocoa_mediactrl.o
 endif
 ifeq ($(TOOLKIT),OSX_IPHONE)
-____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS = 
 endif
 ifeq ($(TOOLKIT),PM)
-____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS = 
 endif
 ifeq ($(TOOLKIT),WINCE)
 ____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =  \
@@ -7062,10 +7062,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\medialib_osx_cocoa_mediactrl.o
 endif
 ifeq ($(TOOLKIT),OSX_IPHONE)
-____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS = 
 endif
 ifeq ($(TOOLKIT),PM)
-____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS = 
 endif
 ifeq ($(TOOLKIT),WINCE)
 ____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =  \
@@ -7770,16 +7770,16 @@ ____LOWLEVEL_SRC_FILENAMES =  \
 	$(OBJS)\monodll_uuid.o
 endif
 ifeq ($(TOOLKIT),OSX_CARBON)
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 endif
 ifeq ($(TOOLKIT),OSX_COCOA)
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 endif
 ifeq ($(TOOLKIT),OSX_IPHONE)
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 endif
 ifeq ($(TOOLKIT),PM)
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 endif
 ifeq ($(TOOLKIT),WINCE)
 ____LOWLEVEL_SRC_FILENAMES =  \
@@ -8249,16 +8249,16 @@ ____LOWLEVEL_SRC_FILENAMES_0 =  \
 	$(OBJS)\monolib_uuid.o
 endif
 ifeq ($(TOOLKIT),OSX_CARBON)
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 endif
 ifeq ($(TOOLKIT),OSX_COCOA)
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 endif
 ifeq ($(TOOLKIT),OSX_IPHONE)
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 endif
 ifeq ($(TOOLKIT),PM)
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 endif
 ifeq ($(TOOLKIT),WINCE)
 ____LOWLEVEL_SRC_FILENAMES_0 =  \
@@ -8728,16 +8728,16 @@ ____LOWLEVEL_SRC_FILENAMES_1 =  \
 	$(OBJS)\coredll_uuid.o
 endif
 ifeq ($(TOOLKIT),OSX_CARBON)
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 endif
 ifeq ($(TOOLKIT),OSX_COCOA)
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 endif
 ifeq ($(TOOLKIT),OSX_IPHONE)
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 endif
 ifeq ($(TOOLKIT),PM)
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 endif
 ifeq ($(TOOLKIT),WINCE)
 ____LOWLEVEL_SRC_FILENAMES_1 =  \
@@ -9090,16 +9090,16 @@ ____LOWLEVEL_SRC_FILENAMES_2 =  \
 	$(OBJS)\corelib_uuid.o
 endif
 ifeq ($(TOOLKIT),OSX_CARBON)
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 endif
 ifeq ($(TOOLKIT),OSX_COCOA)
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 endif
 ifeq ($(TOOLKIT),OSX_IPHONE)
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 endif
 ifeq ($(TOOLKIT),PM)
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 endif
 ifeq ($(TOOLKIT),WINCE)
 ____LOWLEVEL_SRC_FILENAMES_2 =  \
@@ -9502,11 +9502,11 @@ endif
 endif
 ifeq ($(BUILD),release)
 ifeq ($(DEBUG_INFO),default)
-__DEBUGINFO =
+__DEBUGINFO = 
 endif
 endif
 ifeq ($(DEBUG_INFO),0)
-__DEBUGINFO =
+__DEBUGINFO = 
 endif
 ifeq ($(DEBUG_INFO),1)
 __DEBUGINFO = -g
@@ -9518,7 +9518,7 @@ ifeq ($(BUILD),release)
 __OPTIMIZEFLAG = -O2
 endif
 ifeq ($(USE_THREADS),0)
-__THREADSFLAG =
+__THREADSFLAG = 
 endif
 ifeq ($(USE_THREADS),1)
 __THREADSFLAG = -mthreads
@@ -9527,13 +9527,13 @@ ifeq ($(USE_RTTI),0)
 __RTTIFLAG = -fno-rtti
 endif
 ifeq ($(USE_RTTI),1)
-__RTTIFLAG =
+__RTTIFLAG = 
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONSFLAG = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG =
+__EXCEPTIONSFLAG = 
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -9581,7 +9581,7 @@ $(OBJS):
 
 all: setup_h $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(__wxscintilla) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__webviewdll___depname) $(__webviewlib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__ribbondll___depname) $(__ribbonlib___depname) $(__propgriddll___depname) $(__propgridlib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__stcdll___depname) $(__stclib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
-clean:
+clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a del $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a
@@ -10121,10 +10121,10 @@ wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 endif
 endif
 
-samples:
+samples: 
 	$(MAKE) -C ..\..\samples -f makefile.gcc $(MAKEARGS) all
 
-$(LIBDIRNAME):
+$(LIBDIRNAME): 
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)
 
 $(SETUPHDIR): $(LIBDIRNAME)
@@ -10133,10 +10133,10 @@ $(SETUPHDIR): $(LIBDIRNAME)
 $(SETUPHDIR)\wx: $(SETUPHDIR)
 	if not exist $(SETUPHDIR)\wx mkdir $(SETUPHDIR)\wx
 
-..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h:
+..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h: 
 	if not exist ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup0.h ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h
 
-$(SETUPHDIR)\wx\setup.h:
+$(SETUPHDIR)\wx\setup.h: 
 	if not exist $(SETUPHDIR)\wx\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_2)\setup.h $(SETUPHDIR)\wx\setup.h
 
 $(SETUPHDIR)\wx\msw: $(SETUPHDIR)\wx

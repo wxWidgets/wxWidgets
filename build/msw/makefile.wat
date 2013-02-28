@@ -1501,10 +1501,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_osx_cocoa_mediactrl.obj
 !endif
 !ifeq TOOLKIT OSX_IPHONE
-____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS = 
 !endif
 !ifeq TOOLKIT PM
-____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS = 
 !endif
 !ifeq TOOLKIT WINCE
 ____MEDIA_PLATFORM_SRC_FILENAMES_OBJECTS =  &
@@ -2922,10 +2922,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_osx_cocoa_mediactrl.obj
 !endif
 !ifeq TOOLKIT OSX_IPHONE
-____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS = 
 !endif
 !ifeq TOOLKIT PM
-____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS = 
 !endif
 !ifeq TOOLKIT WINCE
 ____MEDIA_PLATFORM_SRC_FILENAMES_1_OBJECTS =  &
@@ -5511,10 +5511,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\mediadll_osx_cocoa_mediactrl.obj
 !endif
 !ifeq TOOLKIT OSX_IPHONE
-____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS = 
 !endif
 !ifeq TOOLKIT PM
-____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS = 
 !endif
 !ifeq TOOLKIT WINCE
 ____MEDIA_PLATFORM_SRC_FILENAMES_2_OBJECTS =  &
@@ -5565,10 +5565,10 @@ ____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\medialib_osx_cocoa_mediactrl.obj
 !endif
 !ifeq TOOLKIT OSX_IPHONE
-____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS = 
 !endif
 !ifeq TOOLKIT PM
-____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =
+____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS = 
 !endif
 !ifeq TOOLKIT WINCE
 ____MEDIA_PLATFORM_SRC_FILENAMES_3_OBJECTS =  &
@@ -6335,16 +6335,16 @@ ____LOWLEVEL_SRC_FILENAMES =  &
 	$(OBJS)\monodll_uuid.obj
 !endif
 !ifeq TOOLKIT OSX_CARBON
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 !endif
 !ifeq TOOLKIT OSX_COCOA
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 !endif
 !ifeq TOOLKIT OSX_IPHONE
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 !endif
 !ifeq TOOLKIT PM
-____LOWLEVEL_SRC_FILENAMES =
+____LOWLEVEL_SRC_FILENAMES = 
 !endif
 !ifeq TOOLKIT WINCE
 ____LOWLEVEL_SRC_FILENAMES =  &
@@ -6816,16 +6816,16 @@ ____LOWLEVEL_SRC_FILENAMES_0 =  &
 	$(OBJS)\monolib_uuid.obj
 !endif
 !ifeq TOOLKIT OSX_CARBON
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 !endif
 !ifeq TOOLKIT OSX_COCOA
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 !endif
 !ifeq TOOLKIT OSX_IPHONE
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 !endif
 !ifeq TOOLKIT PM
-____LOWLEVEL_SRC_FILENAMES_0 =
+____LOWLEVEL_SRC_FILENAMES_0 = 
 !endif
 !ifeq TOOLKIT WINCE
 ____LOWLEVEL_SRC_FILENAMES_0 =  &
@@ -7297,16 +7297,16 @@ ____LOWLEVEL_SRC_FILENAMES_1 =  &
 	$(OBJS)\coredll_uuid.obj
 !endif
 !ifeq TOOLKIT OSX_CARBON
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 !endif
 !ifeq TOOLKIT OSX_COCOA
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 !endif
 !ifeq TOOLKIT OSX_IPHONE
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 !endif
 !ifeq TOOLKIT PM
-____LOWLEVEL_SRC_FILENAMES_1 =
+____LOWLEVEL_SRC_FILENAMES_1 = 
 !endif
 !ifeq TOOLKIT WINCE
 ____LOWLEVEL_SRC_FILENAMES_1 =  &
@@ -7660,16 +7660,16 @@ ____LOWLEVEL_SRC_FILENAMES_2 =  &
 	$(OBJS)\corelib_uuid.obj
 !endif
 !ifeq TOOLKIT OSX_CARBON
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 !endif
 !ifeq TOOLKIT OSX_COCOA
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 !endif
 !ifeq TOOLKIT OSX_IPHONE
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 !endif
 !ifeq TOOLKIT PM
-____LOWLEVEL_SRC_FILENAMES_2 =
+____LOWLEVEL_SRC_FILENAMES_2 = 
 !endif
 !ifeq TOOLKIT WINCE
 ____LOWLEVEL_SRC_FILENAMES_2 =  &
@@ -8029,11 +8029,11 @@ __DEBUGINFO_4 = debug all
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_4 =
+__DEBUGINFO_4 = 
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_4 =
+__DEBUGINFO_4 = 
 !endif
 !ifeq DEBUG_INFO 1
 __DEBUGINFO_4 = debug all
@@ -8084,7 +8084,7 @@ __OPTIMIZEFLAG = -ot -ox
 !endif
 __THREADSFLAG =
 !ifeq USE_THREADS 0
-__THREADSFLAG =
+__THREADSFLAG = 
 !endif
 !ifeq USE_THREADS 1
 __THREADSFLAG = -bm
@@ -8094,18 +8094,18 @@ __RUNTIME_LIBS =
 __RUNTIME_LIBS = -br
 !endif
 !ifeq RUNTIME_LIBS static
-__RUNTIME_LIBS =
+__RUNTIME_LIBS = 
 !endif
 __RTTIFLAG =
 !ifeq USE_RTTI 0
-__RTTIFLAG =
+__RTTIFLAG = 
 !endif
 !ifeq USE_RTTI 1
 __RTTIFLAG = -xr
 !endif
 __EXCEPTIONSFLAG =
 !ifeq USE_EXCEPTIONS 0
-__EXCEPTIONSFLAG =
+__EXCEPTIONSFLAG = 
 !endif
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG = -xs
@@ -9753,7 +9753,7 @@ $(OBJS) :
 
 all : .SYMBOLIC setup_h $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__wxscintilla) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__webviewdll___depname) $(__webviewlib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__ribbondll___depname) $(__ribbonlib___depname) $(__propgriddll___depname) $(__propgridlib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__stcdll___depname) $(__stclib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
-clean : .SYMBOLIC
+clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
@@ -10468,12 +10468,12 @@ wxgl : .SYMBOLIC $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 !endif
 !endif
 
-samples : .SYMBOLIC
+samples : .SYMBOLIC 
 	cd ..\..\samples
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
-$(LIBDIRNAME) :
+$(LIBDIRNAME) :  
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)
 
 $(SETUPHDIR) :  $(LIBDIRNAME)
@@ -10482,10 +10482,10 @@ $(SETUPHDIR) :  $(LIBDIRNAME)
 $(SETUPHDIR)\wx :  $(SETUPHDIR)
 	if not exist $(SETUPHDIR)\wx mkdir $(SETUPHDIR)\wx
 
-..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h :
+..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h :  
 	if not exist ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup0.h ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_1)\setup.h
 
-$(SETUPHDIR)\wx\setup.h :
+$(SETUPHDIR)\wx\setup.h :  
 	if not exist $(SETUPHDIR)\wx\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES_2)\setup.h $(SETUPHDIR)\wx\setup.h
 
 $(SETUPHDIR)\wx\msw :  $(SETUPHDIR)\wx
@@ -13968,7 +13968,7 @@ $(OBJS)\monodll_unix_dialup.obj :  .AUTODEPEND ..\..\src\unix\dialup.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_unix_dialup.obj :  .AUTODEPEND ..\..\src\unix\dialup.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -13991,7 +13991,7 @@ $(OBJS)\monodll_displayx11.obj :  .AUTODEPEND ..\..\src\unix\displayx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_displayx11.obj :  .AUTODEPEND ..\..\src\unix\displayx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14014,7 +14014,7 @@ $(OBJS)\monodll_uiactionx11.obj :  .AUTODEPEND ..\..\src\unix\uiactionx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_uiactionx11.obj :  .AUTODEPEND ..\..\src\unix\uiactionx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14037,7 +14037,7 @@ $(OBJS)\monodll_utilsx11.obj :  .AUTODEPEND ..\..\src\unix\utilsx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_utilsx11.obj :  .AUTODEPEND ..\..\src\unix\utilsx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14067,7 +14067,7 @@ $(OBJS)\monodll_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmea
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmeasure.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14088,7 +14088,7 @@ $(OBJS)\monodll_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmea
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_app.obj :  .AUTODEPEND ..\..\src\gtk1\app.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14097,7 +14097,7 @@ $(OBJS)\monodll_gtk1_app.obj :  .AUTODEPEND ..\..\src\gtk1\app.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_bitmap.obj :  .AUTODEPEND ..\..\src\gtk1\bitmap.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14106,7 +14106,7 @@ $(OBJS)\monodll_gtk1_bitmap.obj :  .AUTODEPEND ..\..\src\gtk1\bitmap.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_brush.obj :  .AUTODEPEND ..\..\src\gtk1\brush.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14115,7 +14115,7 @@ $(OBJS)\monodll_gtk1_brush.obj :  .AUTODEPEND ..\..\src\gtk1\brush.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_clipbrd.obj :  .AUTODEPEND ..\..\src\gtk1\clipbrd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14124,7 +14124,7 @@ $(OBJS)\monodll_gtk1_clipbrd.obj :  .AUTODEPEND ..\..\src\gtk1\clipbrd.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_colour.obj :  .AUTODEPEND ..\..\src\gtk1\colour.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14133,7 +14133,7 @@ $(OBJS)\monodll_gtk1_colour.obj :  .AUTODEPEND ..\..\src\gtk1\colour.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_cursor.obj :  .AUTODEPEND ..\..\src\gtk1\cursor.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14142,7 +14142,7 @@ $(OBJS)\monodll_gtk1_cursor.obj :  .AUTODEPEND ..\..\src\gtk1\cursor.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_data.obj :  .AUTODEPEND ..\..\src\gtk1\data.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14151,7 +14151,7 @@ $(OBJS)\monodll_gtk1_data.obj :  .AUTODEPEND ..\..\src\gtk1\data.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_dataobj.obj :  .AUTODEPEND ..\..\src\gtk1\dataobj.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14160,7 +14160,7 @@ $(OBJS)\monodll_gtk1_dataobj.obj :  .AUTODEPEND ..\..\src\gtk1\dataobj.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_dc.obj :  .AUTODEPEND ..\..\src\gtk1\dc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14169,7 +14169,7 @@ $(OBJS)\monodll_gtk1_dc.obj :  .AUTODEPEND ..\..\src\gtk1\dc.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_dcclient.obj :  .AUTODEPEND ..\..\src\gtk1\dcclient.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14178,7 +14178,7 @@ $(OBJS)\monodll_gtk1_dcclient.obj :  .AUTODEPEND ..\..\src\gtk1\dcclient.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_dcmemory.obj :  .AUTODEPEND ..\..\src\gtk1\dcmemory.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14187,7 +14187,7 @@ $(OBJS)\monodll_gtk1_dcmemory.obj :  .AUTODEPEND ..\..\src\gtk1\dcmemory.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_dcscreen.obj :  .AUTODEPEND ..\..\src\gtk1\dcscreen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14196,7 +14196,7 @@ $(OBJS)\monodll_gtk1_dcscreen.obj :  .AUTODEPEND ..\..\src\gtk1\dcscreen.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_dnd.obj :  .AUTODEPEND ..\..\src\gtk1\dnd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14205,7 +14205,7 @@ $(OBJS)\monodll_gtk1_dnd.obj :  .AUTODEPEND ..\..\src\gtk1\dnd.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_evtloop.obj :  .AUTODEPEND ..\..\src\gtk1\evtloop.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14214,7 +14214,7 @@ $(OBJS)\monodll_gtk1_evtloop.obj :  .AUTODEPEND ..\..\src\gtk1\evtloop.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_font.obj :  .AUTODEPEND ..\..\src\gtk1\font.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14223,7 +14223,7 @@ $(OBJS)\monodll_gtk1_font.obj :  .AUTODEPEND ..\..\src\gtk1\font.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_sockgtk.obj :  .AUTODEPEND ..\..\src\gtk1\sockgtk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14232,7 +14232,7 @@ $(OBJS)\monodll_gtk1_sockgtk.obj :  .AUTODEPEND ..\..\src\gtk1\sockgtk.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_main.obj :  .AUTODEPEND ..\..\src\gtk1\main.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14241,7 +14241,7 @@ $(OBJS)\monodll_gtk1_main.obj :  .AUTODEPEND ..\..\src\gtk1\main.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_minifram.obj :  .AUTODEPEND ..\..\src\gtk1\minifram.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14250,7 +14250,7 @@ $(OBJS)\monodll_gtk1_minifram.obj :  .AUTODEPEND ..\..\src\gtk1\minifram.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_pen.obj :  .AUTODEPEND ..\..\src\gtk1\pen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14259,7 +14259,7 @@ $(OBJS)\monodll_gtk1_pen.obj :  .AUTODEPEND ..\..\src\gtk1\pen.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_popupwin.obj :  .AUTODEPEND ..\..\src\gtk1\popupwin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14268,7 +14268,7 @@ $(OBJS)\monodll_gtk1_popupwin.obj :  .AUTODEPEND ..\..\src\gtk1\popupwin.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_region.obj :  .AUTODEPEND ..\..\src\gtk1\region.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14277,7 +14277,7 @@ $(OBJS)\monodll_gtk1_region.obj :  .AUTODEPEND ..\..\src\gtk1\region.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_renderer.obj :  .AUTODEPEND ..\..\src\gtk1\renderer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14286,7 +14286,7 @@ $(OBJS)\monodll_gtk1_renderer.obj :  .AUTODEPEND ..\..\src\gtk1\renderer.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_settings.obj :  .AUTODEPEND ..\..\src\gtk1\settings.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14295,7 +14295,7 @@ $(OBJS)\monodll_gtk1_settings.obj :  .AUTODEPEND ..\..\src\gtk1\settings.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_timer.obj :  .AUTODEPEND ..\..\src\gtk1\timer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14304,7 +14304,7 @@ $(OBJS)\monodll_gtk1_timer.obj :  .AUTODEPEND ..\..\src\gtk1\timer.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_tooltip.obj :  .AUTODEPEND ..\..\src\gtk1\tooltip.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14313,7 +14313,7 @@ $(OBJS)\monodll_gtk1_tooltip.obj :  .AUTODEPEND ..\..\src\gtk1\tooltip.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_toplevel.obj :  .AUTODEPEND ..\..\src\gtk1\toplevel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14322,7 +14322,7 @@ $(OBJS)\monodll_gtk1_toplevel.obj :  .AUTODEPEND ..\..\src\gtk1\toplevel.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_utilsgtk.obj :  .AUTODEPEND ..\..\src\gtk1\utilsgtk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -14331,7 +14331,7 @@ $(OBJS)\monodll_gtk1_utilsgtk.obj :  .AUTODEPEND ..\..\src\gtk1\utilsgtk.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_win_gtk.obj :  .AUTODEPEND ..\..\src\gtk1\win_gtk.c
 	$(CC) -bt=nt -zq -fo=$^@ $(MONODLL_CFLAGS) $<
@@ -14340,7 +14340,7 @@ $(OBJS)\monodll_gtk1_win_gtk.obj :  .AUTODEPEND ..\..\src\gtk1\win_gtk.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_window.obj :  .AUTODEPEND ..\..\src\gtk1\window.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -15392,7 +15392,7 @@ $(OBJS)\monodll_wrapdfb.obj :  .AUTODEPEND ..\..\src\dfb\wrapdfb.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
@@ -15408,7 +15408,7 @@ $(OBJS)\monodll_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
@@ -15440,7 +15440,7 @@ $(OBJS)\monodll_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
@@ -15470,7 +15470,7 @@ $(OBJS)\monodll_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
@@ -15493,7 +15493,7 @@ $(OBJS)\monodll_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
@@ -15525,7 +15525,7 @@ $(OBJS)\monodll_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
@@ -15983,7 +15983,7 @@ $(OBJS)\monodll_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_clrpickerg.obj :  .AUTODEPEND ..\..\src\generic\clrpickerg.cpp
@@ -16015,7 +16015,7 @@ $(OBJS)\monodll_clrpickerg.obj :  .AUTODEPEND ..\..\src\generic\clrpickerg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
@@ -16047,7 +16047,7 @@ $(OBJS)\monodll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -16072,7 +16072,7 @@ $(OBJS)\monodll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
@@ -16097,7 +16097,7 @@ $(OBJS)\monodll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
@@ -16124,7 +16124,7 @@ $(OBJS)\monodll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_fontpickerg.obj :  .AUTODEPEND ..\..\src\generic\fontpickerg.cpp
@@ -17720,7 +17720,7 @@ $(OBJS)\monodll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -17920,7 +17920,7 @@ $(OBJS)\monodll_unix_joystick.obj :  .AUTODEPEND ..\..\src\unix\joystick.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_unix_joystick.obj :  .AUTODEPEND ..\..\src\unix\joystick.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -17943,7 +17943,7 @@ $(OBJS)\monodll_unix_sound.obj :  .AUTODEPEND ..\..\src\unix\sound.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_unix_sound.obj :  .AUTODEPEND ..\..\src\unix\sound.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -17966,7 +17966,7 @@ $(OBJS)\monodll_taskbarx11.obj :  .AUTODEPEND ..\..\src\unix\taskbarx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_taskbarx11.obj :  .AUTODEPEND ..\..\src\unix\taskbarx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -18036,7 +18036,7 @@ $(OBJS)\monodll_hildon_notifmsg.obj :  .AUTODEPEND ..\..\src\gtk\hildon\notifmsg
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_eggtrayicon.obj :  .AUTODEPEND ..\..\src\gtk1\eggtrayicon.c
 	$(CC) -bt=nt -zq -fo=$^@ $(MONODLL_CFLAGS) $<
@@ -18045,7 +18045,7 @@ $(OBJS)\monodll_gtk1_eggtrayicon.obj :  .AUTODEPEND ..\..\src\gtk1\eggtrayicon.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_gtk1_taskbar.obj :  .AUTODEPEND ..\..\src\gtk1\taskbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -20925,7 +20925,7 @@ $(OBJS)\monolib_unix_dialup.obj :  .AUTODEPEND ..\..\src\unix\dialup.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_unix_dialup.obj :  .AUTODEPEND ..\..\src\unix\dialup.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -20948,7 +20948,7 @@ $(OBJS)\monolib_displayx11.obj :  .AUTODEPEND ..\..\src\unix\displayx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_displayx11.obj :  .AUTODEPEND ..\..\src\unix\displayx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -20971,7 +20971,7 @@ $(OBJS)\monolib_uiactionx11.obj :  .AUTODEPEND ..\..\src\unix\uiactionx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_uiactionx11.obj :  .AUTODEPEND ..\..\src\unix\uiactionx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -20994,7 +20994,7 @@ $(OBJS)\monolib_utilsx11.obj :  .AUTODEPEND ..\..\src\unix\utilsx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_utilsx11.obj :  .AUTODEPEND ..\..\src\unix\utilsx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21024,7 +21024,7 @@ $(OBJS)\monolib_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmea
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmeasure.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21045,7 +21045,7 @@ $(OBJS)\monolib_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmea
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_app.obj :  .AUTODEPEND ..\..\src\gtk1\app.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21054,7 +21054,7 @@ $(OBJS)\monolib_gtk1_app.obj :  .AUTODEPEND ..\..\src\gtk1\app.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_bitmap.obj :  .AUTODEPEND ..\..\src\gtk1\bitmap.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21063,7 +21063,7 @@ $(OBJS)\monolib_gtk1_bitmap.obj :  .AUTODEPEND ..\..\src\gtk1\bitmap.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_brush.obj :  .AUTODEPEND ..\..\src\gtk1\brush.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21072,7 +21072,7 @@ $(OBJS)\monolib_gtk1_brush.obj :  .AUTODEPEND ..\..\src\gtk1\brush.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_clipbrd.obj :  .AUTODEPEND ..\..\src\gtk1\clipbrd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21081,7 +21081,7 @@ $(OBJS)\monolib_gtk1_clipbrd.obj :  .AUTODEPEND ..\..\src\gtk1\clipbrd.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_colour.obj :  .AUTODEPEND ..\..\src\gtk1\colour.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21090,7 +21090,7 @@ $(OBJS)\monolib_gtk1_colour.obj :  .AUTODEPEND ..\..\src\gtk1\colour.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_cursor.obj :  .AUTODEPEND ..\..\src\gtk1\cursor.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21099,7 +21099,7 @@ $(OBJS)\monolib_gtk1_cursor.obj :  .AUTODEPEND ..\..\src\gtk1\cursor.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_data.obj :  .AUTODEPEND ..\..\src\gtk1\data.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21108,7 +21108,7 @@ $(OBJS)\monolib_gtk1_data.obj :  .AUTODEPEND ..\..\src\gtk1\data.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_dataobj.obj :  .AUTODEPEND ..\..\src\gtk1\dataobj.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21117,7 +21117,7 @@ $(OBJS)\monolib_gtk1_dataobj.obj :  .AUTODEPEND ..\..\src\gtk1\dataobj.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_dc.obj :  .AUTODEPEND ..\..\src\gtk1\dc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21126,7 +21126,7 @@ $(OBJS)\monolib_gtk1_dc.obj :  .AUTODEPEND ..\..\src\gtk1\dc.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_dcclient.obj :  .AUTODEPEND ..\..\src\gtk1\dcclient.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21135,7 +21135,7 @@ $(OBJS)\monolib_gtk1_dcclient.obj :  .AUTODEPEND ..\..\src\gtk1\dcclient.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_dcmemory.obj :  .AUTODEPEND ..\..\src\gtk1\dcmemory.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21144,7 +21144,7 @@ $(OBJS)\monolib_gtk1_dcmemory.obj :  .AUTODEPEND ..\..\src\gtk1\dcmemory.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_dcscreen.obj :  .AUTODEPEND ..\..\src\gtk1\dcscreen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21153,7 +21153,7 @@ $(OBJS)\monolib_gtk1_dcscreen.obj :  .AUTODEPEND ..\..\src\gtk1\dcscreen.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_dnd.obj :  .AUTODEPEND ..\..\src\gtk1\dnd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21162,7 +21162,7 @@ $(OBJS)\monolib_gtk1_dnd.obj :  .AUTODEPEND ..\..\src\gtk1\dnd.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_evtloop.obj :  .AUTODEPEND ..\..\src\gtk1\evtloop.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21171,7 +21171,7 @@ $(OBJS)\monolib_gtk1_evtloop.obj :  .AUTODEPEND ..\..\src\gtk1\evtloop.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_font.obj :  .AUTODEPEND ..\..\src\gtk1\font.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21180,7 +21180,7 @@ $(OBJS)\monolib_gtk1_font.obj :  .AUTODEPEND ..\..\src\gtk1\font.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_sockgtk.obj :  .AUTODEPEND ..\..\src\gtk1\sockgtk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21189,7 +21189,7 @@ $(OBJS)\monolib_gtk1_sockgtk.obj :  .AUTODEPEND ..\..\src\gtk1\sockgtk.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_main.obj :  .AUTODEPEND ..\..\src\gtk1\main.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21198,7 +21198,7 @@ $(OBJS)\monolib_gtk1_main.obj :  .AUTODEPEND ..\..\src\gtk1\main.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_minifram.obj :  .AUTODEPEND ..\..\src\gtk1\minifram.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21207,7 +21207,7 @@ $(OBJS)\monolib_gtk1_minifram.obj :  .AUTODEPEND ..\..\src\gtk1\minifram.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_pen.obj :  .AUTODEPEND ..\..\src\gtk1\pen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21216,7 +21216,7 @@ $(OBJS)\monolib_gtk1_pen.obj :  .AUTODEPEND ..\..\src\gtk1\pen.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_popupwin.obj :  .AUTODEPEND ..\..\src\gtk1\popupwin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21225,7 +21225,7 @@ $(OBJS)\monolib_gtk1_popupwin.obj :  .AUTODEPEND ..\..\src\gtk1\popupwin.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_region.obj :  .AUTODEPEND ..\..\src\gtk1\region.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21234,7 +21234,7 @@ $(OBJS)\monolib_gtk1_region.obj :  .AUTODEPEND ..\..\src\gtk1\region.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_renderer.obj :  .AUTODEPEND ..\..\src\gtk1\renderer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21243,7 +21243,7 @@ $(OBJS)\monolib_gtk1_renderer.obj :  .AUTODEPEND ..\..\src\gtk1\renderer.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_settings.obj :  .AUTODEPEND ..\..\src\gtk1\settings.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21252,7 +21252,7 @@ $(OBJS)\monolib_gtk1_settings.obj :  .AUTODEPEND ..\..\src\gtk1\settings.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_timer.obj :  .AUTODEPEND ..\..\src\gtk1\timer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21261,7 +21261,7 @@ $(OBJS)\monolib_gtk1_timer.obj :  .AUTODEPEND ..\..\src\gtk1\timer.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_tooltip.obj :  .AUTODEPEND ..\..\src\gtk1\tooltip.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21270,7 +21270,7 @@ $(OBJS)\monolib_gtk1_tooltip.obj :  .AUTODEPEND ..\..\src\gtk1\tooltip.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_toplevel.obj :  .AUTODEPEND ..\..\src\gtk1\toplevel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21279,7 +21279,7 @@ $(OBJS)\monolib_gtk1_toplevel.obj :  .AUTODEPEND ..\..\src\gtk1\toplevel.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_utilsgtk.obj :  .AUTODEPEND ..\..\src\gtk1\utilsgtk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -21288,7 +21288,7 @@ $(OBJS)\monolib_gtk1_utilsgtk.obj :  .AUTODEPEND ..\..\src\gtk1\utilsgtk.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_win_gtk.obj :  .AUTODEPEND ..\..\src\gtk1\win_gtk.c
 	$(CC) -bt=nt -zq -fo=$^@ $(MONOLIB_CFLAGS) $<
@@ -21297,7 +21297,7 @@ $(OBJS)\monolib_gtk1_win_gtk.obj :  .AUTODEPEND ..\..\src\gtk1\win_gtk.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_window.obj :  .AUTODEPEND ..\..\src\gtk1\window.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -22349,7 +22349,7 @@ $(OBJS)\monolib_wrapdfb.obj :  .AUTODEPEND ..\..\src\dfb\wrapdfb.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
@@ -22365,7 +22365,7 @@ $(OBJS)\monolib_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
@@ -22397,7 +22397,7 @@ $(OBJS)\monolib_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
@@ -22427,7 +22427,7 @@ $(OBJS)\monolib_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
@@ -22450,7 +22450,7 @@ $(OBJS)\monolib_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
@@ -22482,7 +22482,7 @@ $(OBJS)\monolib_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
@@ -22940,7 +22940,7 @@ $(OBJS)\monolib_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_clrpickerg.obj :  .AUTODEPEND ..\..\src\generic\clrpickerg.cpp
@@ -22972,7 +22972,7 @@ $(OBJS)\monolib_clrpickerg.obj :  .AUTODEPEND ..\..\src\generic\clrpickerg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
@@ -23004,7 +23004,7 @@ $(OBJS)\monolib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -23029,7 +23029,7 @@ $(OBJS)\monolib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
@@ -23054,7 +23054,7 @@ $(OBJS)\monolib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
@@ -23081,7 +23081,7 @@ $(OBJS)\monolib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_fontpickerg.obj :  .AUTODEPEND ..\..\src\generic\fontpickerg.cpp
@@ -24677,7 +24677,7 @@ $(OBJS)\monolib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -24877,7 +24877,7 @@ $(OBJS)\monolib_unix_joystick.obj :  .AUTODEPEND ..\..\src\unix\joystick.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_unix_joystick.obj :  .AUTODEPEND ..\..\src\unix\joystick.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -24900,7 +24900,7 @@ $(OBJS)\monolib_unix_sound.obj :  .AUTODEPEND ..\..\src\unix\sound.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_unix_sound.obj :  .AUTODEPEND ..\..\src\unix\sound.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -24923,7 +24923,7 @@ $(OBJS)\monolib_taskbarx11.obj :  .AUTODEPEND ..\..\src\unix\taskbarx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_taskbarx11.obj :  .AUTODEPEND ..\..\src\unix\taskbarx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -24993,7 +24993,7 @@ $(OBJS)\monolib_hildon_notifmsg.obj :  .AUTODEPEND ..\..\src\gtk\hildon\notifmsg
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_eggtrayicon.obj :  .AUTODEPEND ..\..\src\gtk1\eggtrayicon.c
 	$(CC) -bt=nt -zq -fo=$^@ $(MONOLIB_CFLAGS) $<
@@ -25002,7 +25002,7 @@ $(OBJS)\monolib_gtk1_eggtrayicon.obj :  .AUTODEPEND ..\..\src\gtk1\eggtrayicon.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gtk1_taskbar.obj :  .AUTODEPEND ..\..\src\gtk1\taskbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -27879,7 +27879,7 @@ $(OBJS)\coredll_unix_dialup.obj :  .AUTODEPEND ..\..\src\unix\dialup.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_unix_dialup.obj :  .AUTODEPEND ..\..\src\unix\dialup.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -27902,7 +27902,7 @@ $(OBJS)\coredll_displayx11.obj :  .AUTODEPEND ..\..\src\unix\displayx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_displayx11.obj :  .AUTODEPEND ..\..\src\unix\displayx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -27925,7 +27925,7 @@ $(OBJS)\coredll_uiactionx11.obj :  .AUTODEPEND ..\..\src\unix\uiactionx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_uiactionx11.obj :  .AUTODEPEND ..\..\src\unix\uiactionx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -27948,7 +27948,7 @@ $(OBJS)\coredll_utilsx11.obj :  .AUTODEPEND ..\..\src\unix\utilsx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_utilsx11.obj :  .AUTODEPEND ..\..\src\unix\utilsx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -27978,7 +27978,7 @@ $(OBJS)\coredll_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmea
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmeasure.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -27999,7 +27999,7 @@ $(OBJS)\coredll_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmea
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_app.obj :  .AUTODEPEND ..\..\src\gtk1\app.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28008,7 +28008,7 @@ $(OBJS)\coredll_gtk1_app.obj :  .AUTODEPEND ..\..\src\gtk1\app.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_bitmap.obj :  .AUTODEPEND ..\..\src\gtk1\bitmap.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28017,7 +28017,7 @@ $(OBJS)\coredll_gtk1_bitmap.obj :  .AUTODEPEND ..\..\src\gtk1\bitmap.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_brush.obj :  .AUTODEPEND ..\..\src\gtk1\brush.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28026,7 +28026,7 @@ $(OBJS)\coredll_gtk1_brush.obj :  .AUTODEPEND ..\..\src\gtk1\brush.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_clipbrd.obj :  .AUTODEPEND ..\..\src\gtk1\clipbrd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28035,7 +28035,7 @@ $(OBJS)\coredll_gtk1_clipbrd.obj :  .AUTODEPEND ..\..\src\gtk1\clipbrd.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_colour.obj :  .AUTODEPEND ..\..\src\gtk1\colour.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28044,7 +28044,7 @@ $(OBJS)\coredll_gtk1_colour.obj :  .AUTODEPEND ..\..\src\gtk1\colour.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_cursor.obj :  .AUTODEPEND ..\..\src\gtk1\cursor.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28053,7 +28053,7 @@ $(OBJS)\coredll_gtk1_cursor.obj :  .AUTODEPEND ..\..\src\gtk1\cursor.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_data.obj :  .AUTODEPEND ..\..\src\gtk1\data.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28062,7 +28062,7 @@ $(OBJS)\coredll_gtk1_data.obj :  .AUTODEPEND ..\..\src\gtk1\data.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_dataobj.obj :  .AUTODEPEND ..\..\src\gtk1\dataobj.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28071,7 +28071,7 @@ $(OBJS)\coredll_gtk1_dataobj.obj :  .AUTODEPEND ..\..\src\gtk1\dataobj.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_dc.obj :  .AUTODEPEND ..\..\src\gtk1\dc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28080,7 +28080,7 @@ $(OBJS)\coredll_gtk1_dc.obj :  .AUTODEPEND ..\..\src\gtk1\dc.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_dcclient.obj :  .AUTODEPEND ..\..\src\gtk1\dcclient.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28089,7 +28089,7 @@ $(OBJS)\coredll_gtk1_dcclient.obj :  .AUTODEPEND ..\..\src\gtk1\dcclient.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_dcmemory.obj :  .AUTODEPEND ..\..\src\gtk1\dcmemory.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28098,7 +28098,7 @@ $(OBJS)\coredll_gtk1_dcmemory.obj :  .AUTODEPEND ..\..\src\gtk1\dcmemory.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_dcscreen.obj :  .AUTODEPEND ..\..\src\gtk1\dcscreen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28107,7 +28107,7 @@ $(OBJS)\coredll_gtk1_dcscreen.obj :  .AUTODEPEND ..\..\src\gtk1\dcscreen.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_dnd.obj :  .AUTODEPEND ..\..\src\gtk1\dnd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28116,7 +28116,7 @@ $(OBJS)\coredll_gtk1_dnd.obj :  .AUTODEPEND ..\..\src\gtk1\dnd.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_evtloop.obj :  .AUTODEPEND ..\..\src\gtk1\evtloop.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28125,7 +28125,7 @@ $(OBJS)\coredll_gtk1_evtloop.obj :  .AUTODEPEND ..\..\src\gtk1\evtloop.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_font.obj :  .AUTODEPEND ..\..\src\gtk1\font.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28134,7 +28134,7 @@ $(OBJS)\coredll_gtk1_font.obj :  .AUTODEPEND ..\..\src\gtk1\font.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_sockgtk.obj :  .AUTODEPEND ..\..\src\gtk1\sockgtk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28143,7 +28143,7 @@ $(OBJS)\coredll_gtk1_sockgtk.obj :  .AUTODEPEND ..\..\src\gtk1\sockgtk.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_main.obj :  .AUTODEPEND ..\..\src\gtk1\main.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28152,7 +28152,7 @@ $(OBJS)\coredll_gtk1_main.obj :  .AUTODEPEND ..\..\src\gtk1\main.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_minifram.obj :  .AUTODEPEND ..\..\src\gtk1\minifram.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28161,7 +28161,7 @@ $(OBJS)\coredll_gtk1_minifram.obj :  .AUTODEPEND ..\..\src\gtk1\minifram.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_pen.obj :  .AUTODEPEND ..\..\src\gtk1\pen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28170,7 +28170,7 @@ $(OBJS)\coredll_gtk1_pen.obj :  .AUTODEPEND ..\..\src\gtk1\pen.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_popupwin.obj :  .AUTODEPEND ..\..\src\gtk1\popupwin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28179,7 +28179,7 @@ $(OBJS)\coredll_gtk1_popupwin.obj :  .AUTODEPEND ..\..\src\gtk1\popupwin.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_region.obj :  .AUTODEPEND ..\..\src\gtk1\region.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28188,7 +28188,7 @@ $(OBJS)\coredll_gtk1_region.obj :  .AUTODEPEND ..\..\src\gtk1\region.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_renderer.obj :  .AUTODEPEND ..\..\src\gtk1\renderer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28197,7 +28197,7 @@ $(OBJS)\coredll_gtk1_renderer.obj :  .AUTODEPEND ..\..\src\gtk1\renderer.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_settings.obj :  .AUTODEPEND ..\..\src\gtk1\settings.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28206,7 +28206,7 @@ $(OBJS)\coredll_gtk1_settings.obj :  .AUTODEPEND ..\..\src\gtk1\settings.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_timer.obj :  .AUTODEPEND ..\..\src\gtk1\timer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28215,7 +28215,7 @@ $(OBJS)\coredll_gtk1_timer.obj :  .AUTODEPEND ..\..\src\gtk1\timer.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_tooltip.obj :  .AUTODEPEND ..\..\src\gtk1\tooltip.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28224,7 +28224,7 @@ $(OBJS)\coredll_gtk1_tooltip.obj :  .AUTODEPEND ..\..\src\gtk1\tooltip.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_toplevel.obj :  .AUTODEPEND ..\..\src\gtk1\toplevel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28233,7 +28233,7 @@ $(OBJS)\coredll_gtk1_toplevel.obj :  .AUTODEPEND ..\..\src\gtk1\toplevel.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_utilsgtk.obj :  .AUTODEPEND ..\..\src\gtk1\utilsgtk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -28242,7 +28242,7 @@ $(OBJS)\coredll_gtk1_utilsgtk.obj :  .AUTODEPEND ..\..\src\gtk1\utilsgtk.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_win_gtk.obj :  .AUTODEPEND ..\..\src\gtk1\win_gtk.c
 	$(CC) -bt=nt -zq -fo=$^@ $(COREDLL_CFLAGS) $<
@@ -28251,7 +28251,7 @@ $(OBJS)\coredll_gtk1_win_gtk.obj :  .AUTODEPEND ..\..\src\gtk1\win_gtk.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_gtk1_window.obj :  .AUTODEPEND ..\..\src\gtk1\window.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
@@ -29303,7 +29303,7 @@ $(OBJS)\coredll_wrapdfb.obj :  .AUTODEPEND ..\..\src\dfb\wrapdfb.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
@@ -29319,7 +29319,7 @@ $(OBJS)\coredll_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
@@ -29351,7 +29351,7 @@ $(OBJS)\coredll_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
@@ -29381,7 +29381,7 @@ $(OBJS)\coredll_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
@@ -29404,7 +29404,7 @@ $(OBJS)\coredll_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
@@ -29436,7 +29436,7 @@ $(OBJS)\coredll_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
@@ -29894,7 +29894,7 @@ $(OBJS)\coredll_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_clrpickerg.obj :  .AUTODEPEND ..\..\src\generic\clrpickerg.cpp
@@ -29926,7 +29926,7 @@ $(OBJS)\coredll_clrpickerg.obj :  .AUTODEPEND ..\..\src\generic\clrpickerg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
@@ -29958,7 +29958,7 @@ $(OBJS)\coredll_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -29983,7 +29983,7 @@ $(OBJS)\coredll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
@@ -30008,7 +30008,7 @@ $(OBJS)\coredll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
@@ -30035,7 +30035,7 @@ $(OBJS)\coredll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\coredll_fontpickerg.obj :  .AUTODEPEND ..\..\src\generic\fontpickerg.cpp
@@ -33174,7 +33174,7 @@ $(OBJS)\corelib_unix_dialup.obj :  .AUTODEPEND ..\..\src\unix\dialup.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_unix_dialup.obj :  .AUTODEPEND ..\..\src\unix\dialup.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33197,7 +33197,7 @@ $(OBJS)\corelib_displayx11.obj :  .AUTODEPEND ..\..\src\unix\displayx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_displayx11.obj :  .AUTODEPEND ..\..\src\unix\displayx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33220,7 +33220,7 @@ $(OBJS)\corelib_uiactionx11.obj :  .AUTODEPEND ..\..\src\unix\uiactionx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_uiactionx11.obj :  .AUTODEPEND ..\..\src\unix\uiactionx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33243,7 +33243,7 @@ $(OBJS)\corelib_utilsx11.obj :  .AUTODEPEND ..\..\src\unix\utilsx11.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_utilsx11.obj :  .AUTODEPEND ..\..\src\unix\utilsx11.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33273,7 +33273,7 @@ $(OBJS)\corelib_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmea
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmeasure.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33294,7 +33294,7 @@ $(OBJS)\corelib_generic_textmeasure.obj :  .AUTODEPEND ..\..\src\generic\textmea
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_app.obj :  .AUTODEPEND ..\..\src\gtk1\app.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33303,7 +33303,7 @@ $(OBJS)\corelib_gtk1_app.obj :  .AUTODEPEND ..\..\src\gtk1\app.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_bitmap.obj :  .AUTODEPEND ..\..\src\gtk1\bitmap.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33312,7 +33312,7 @@ $(OBJS)\corelib_gtk1_bitmap.obj :  .AUTODEPEND ..\..\src\gtk1\bitmap.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_brush.obj :  .AUTODEPEND ..\..\src\gtk1\brush.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33321,7 +33321,7 @@ $(OBJS)\corelib_gtk1_brush.obj :  .AUTODEPEND ..\..\src\gtk1\brush.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_clipbrd.obj :  .AUTODEPEND ..\..\src\gtk1\clipbrd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33330,7 +33330,7 @@ $(OBJS)\corelib_gtk1_clipbrd.obj :  .AUTODEPEND ..\..\src\gtk1\clipbrd.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_colour.obj :  .AUTODEPEND ..\..\src\gtk1\colour.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33339,7 +33339,7 @@ $(OBJS)\corelib_gtk1_colour.obj :  .AUTODEPEND ..\..\src\gtk1\colour.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_cursor.obj :  .AUTODEPEND ..\..\src\gtk1\cursor.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33348,7 +33348,7 @@ $(OBJS)\corelib_gtk1_cursor.obj :  .AUTODEPEND ..\..\src\gtk1\cursor.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_data.obj :  .AUTODEPEND ..\..\src\gtk1\data.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33357,7 +33357,7 @@ $(OBJS)\corelib_gtk1_data.obj :  .AUTODEPEND ..\..\src\gtk1\data.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_dataobj.obj :  .AUTODEPEND ..\..\src\gtk1\dataobj.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33366,7 +33366,7 @@ $(OBJS)\corelib_gtk1_dataobj.obj :  .AUTODEPEND ..\..\src\gtk1\dataobj.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_dc.obj :  .AUTODEPEND ..\..\src\gtk1\dc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33375,7 +33375,7 @@ $(OBJS)\corelib_gtk1_dc.obj :  .AUTODEPEND ..\..\src\gtk1\dc.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_dcclient.obj :  .AUTODEPEND ..\..\src\gtk1\dcclient.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33384,7 +33384,7 @@ $(OBJS)\corelib_gtk1_dcclient.obj :  .AUTODEPEND ..\..\src\gtk1\dcclient.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_dcmemory.obj :  .AUTODEPEND ..\..\src\gtk1\dcmemory.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33393,7 +33393,7 @@ $(OBJS)\corelib_gtk1_dcmemory.obj :  .AUTODEPEND ..\..\src\gtk1\dcmemory.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_dcscreen.obj :  .AUTODEPEND ..\..\src\gtk1\dcscreen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33402,7 +33402,7 @@ $(OBJS)\corelib_gtk1_dcscreen.obj :  .AUTODEPEND ..\..\src\gtk1\dcscreen.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_dnd.obj :  .AUTODEPEND ..\..\src\gtk1\dnd.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33411,7 +33411,7 @@ $(OBJS)\corelib_gtk1_dnd.obj :  .AUTODEPEND ..\..\src\gtk1\dnd.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_evtloop.obj :  .AUTODEPEND ..\..\src\gtk1\evtloop.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33420,7 +33420,7 @@ $(OBJS)\corelib_gtk1_evtloop.obj :  .AUTODEPEND ..\..\src\gtk1\evtloop.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_font.obj :  .AUTODEPEND ..\..\src\gtk1\font.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33429,7 +33429,7 @@ $(OBJS)\corelib_gtk1_font.obj :  .AUTODEPEND ..\..\src\gtk1\font.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_sockgtk.obj :  .AUTODEPEND ..\..\src\gtk1\sockgtk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33438,7 +33438,7 @@ $(OBJS)\corelib_gtk1_sockgtk.obj :  .AUTODEPEND ..\..\src\gtk1\sockgtk.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_main.obj :  .AUTODEPEND ..\..\src\gtk1\main.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33447,7 +33447,7 @@ $(OBJS)\corelib_gtk1_main.obj :  .AUTODEPEND ..\..\src\gtk1\main.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_minifram.obj :  .AUTODEPEND ..\..\src\gtk1\minifram.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33456,7 +33456,7 @@ $(OBJS)\corelib_gtk1_minifram.obj :  .AUTODEPEND ..\..\src\gtk1\minifram.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_pen.obj :  .AUTODEPEND ..\..\src\gtk1\pen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33465,7 +33465,7 @@ $(OBJS)\corelib_gtk1_pen.obj :  .AUTODEPEND ..\..\src\gtk1\pen.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_popupwin.obj :  .AUTODEPEND ..\..\src\gtk1\popupwin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33474,7 +33474,7 @@ $(OBJS)\corelib_gtk1_popupwin.obj :  .AUTODEPEND ..\..\src\gtk1\popupwin.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_region.obj :  .AUTODEPEND ..\..\src\gtk1\region.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33483,7 +33483,7 @@ $(OBJS)\corelib_gtk1_region.obj :  .AUTODEPEND ..\..\src\gtk1\region.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_renderer.obj :  .AUTODEPEND ..\..\src\gtk1\renderer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33492,7 +33492,7 @@ $(OBJS)\corelib_gtk1_renderer.obj :  .AUTODEPEND ..\..\src\gtk1\renderer.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_settings.obj :  .AUTODEPEND ..\..\src\gtk1\settings.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33501,7 +33501,7 @@ $(OBJS)\corelib_gtk1_settings.obj :  .AUTODEPEND ..\..\src\gtk1\settings.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_timer.obj :  .AUTODEPEND ..\..\src\gtk1\timer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33510,7 +33510,7 @@ $(OBJS)\corelib_gtk1_timer.obj :  .AUTODEPEND ..\..\src\gtk1\timer.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_tooltip.obj :  .AUTODEPEND ..\..\src\gtk1\tooltip.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33519,7 +33519,7 @@ $(OBJS)\corelib_gtk1_tooltip.obj :  .AUTODEPEND ..\..\src\gtk1\tooltip.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_toplevel.obj :  .AUTODEPEND ..\..\src\gtk1\toplevel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33528,7 +33528,7 @@ $(OBJS)\corelib_gtk1_toplevel.obj :  .AUTODEPEND ..\..\src\gtk1\toplevel.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_utilsgtk.obj :  .AUTODEPEND ..\..\src\gtk1\utilsgtk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -33537,7 +33537,7 @@ $(OBJS)\corelib_gtk1_utilsgtk.obj :  .AUTODEPEND ..\..\src\gtk1\utilsgtk.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_win_gtk.obj :  .AUTODEPEND ..\..\src\gtk1\win_gtk.c
 	$(CC) -bt=nt -zq -fo=$^@ $(CORELIB_CFLAGS) $<
@@ -33546,7 +33546,7 @@ $(OBJS)\corelib_gtk1_win_gtk.obj :  .AUTODEPEND ..\..\src\gtk1\win_gtk.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_gtk1_window.obj :  .AUTODEPEND ..\..\src\gtk1\window.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
@@ -34598,7 +34598,7 @@ $(OBJS)\corelib_wrapdfb.obj :  .AUTODEPEND ..\..\src\dfb\wrapdfb.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
@@ -34614,7 +34614,7 @@ $(OBJS)\corelib_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
@@ -34646,7 +34646,7 @@ $(OBJS)\corelib_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
@@ -34676,7 +34676,7 @@ $(OBJS)\corelib_filepickerg.obj :  .AUTODEPEND ..\..\src\generic\filepickerg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
@@ -34699,7 +34699,7 @@ $(OBJS)\corelib_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.c
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
@@ -34731,7 +34731,7 @@ $(OBJS)\corelib_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
@@ -35189,7 +35189,7 @@ $(OBJS)\corelib_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_clrpickerg.obj :  .AUTODEPEND ..\..\src\generic\clrpickerg.cpp
@@ -35221,7 +35221,7 @@ $(OBJS)\corelib_clrpickerg.obj :  .AUTODEPEND ..\..\src\generic\clrpickerg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
@@ -35253,7 +35253,7 @@ $(OBJS)\corelib_collpaneg.obj :  .AUTODEPEND ..\..\src\generic\collpaneg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -35278,7 +35278,7 @@ $(OBJS)\corelib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
@@ -35303,7 +35303,7 @@ $(OBJS)\corelib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
@@ -35330,7 +35330,7 @@ $(OBJS)\corelib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 !endif
 
 !ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION
+!ifeq TOOLKIT_VERSION 
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\corelib_fontpickerg.obj :  .AUTODEPEND ..\..\src\generic\fontpickerg.cpp
