@@ -905,7 +905,7 @@ bool wxThreadInternal::Suspend()
     DWORD nSuspendCount = ::SuspendThread(m_hThread);
     if ( nSuspendCount == (DWORD)-1 )
     {
-        wxLogSysError(_("Cannot suspend thread %x"), m_hThread);
+        wxLogSysError(_("Cannot suspend thread %lx"), GetThreadId(m_hThread));
 
         return false;
     }
@@ -920,7 +920,7 @@ bool wxThreadInternal::Resume()
     DWORD nSuspendCount = ::ResumeThread(m_hThread);
     if ( nSuspendCount == (DWORD)-1 )
     {
-        wxLogSysError(_("Cannot resume thread %x"), m_hThread);
+        wxLogSysError(_("Cannot resume thread %lx"), GetThreadId(m_hThread));
 
         return false;
     }
