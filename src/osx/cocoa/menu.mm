@@ -67,8 +67,8 @@
 - (void)menuNeedsUpdate:(NSMenu*)smenu;
 #else
 - (void)menuWillOpen:(NSMenu *)menu;
-- (void)menuDidClose:(NSMenu *)menu;
 #endif
+- (void)menuDidClose:(NSMenu *)menu;
 - (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)item;
 
 @end
@@ -105,6 +105,7 @@
             wxpeer->HandleMenuOpened();
     }
 }
+#endif
 
 - (void)menuDidClose:(NSMenu *)smenu
 {
@@ -117,7 +118,6 @@
             wxpeer->HandleMenuClosed();
     }
 }
-#endif
 
 - (void)menu:(NSMenu *)smenu willHighlightItem:(NSMenuItem *)item
 {
