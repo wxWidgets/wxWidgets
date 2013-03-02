@@ -232,7 +232,7 @@ public:
         }
     }
 
-    void SetPosition(wxRect* rect)
+    void SetPosition(const wxRect* rect)
     {
         wxPoint pos;
 
@@ -673,7 +673,7 @@ void wxRichToolTipGenericImpl::SetTitleFont(const wxFont& font)
     m_titleFont = font;
 }
 
-void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, wxRect* rect)
+void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, const wxRect* rect)
 {
     // Set the focus to the window the tooltip refers to to make it look active.
     win->SetFocus();

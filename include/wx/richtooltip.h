@@ -88,7 +88,7 @@ public:
     void SetTitleFont(const wxFont& font);
 
     // Show the tooltip for the given window and optionally a specified area.
-    void ShowFor(wxWindow* win, wxRect* rect = NULL);
+    void ShowFor(wxWindow* win, const wxRect* rect = NULL);
 
     // Non-virtual dtor as this class is not supposed to be derived from.
     ~wxRichToolTip();

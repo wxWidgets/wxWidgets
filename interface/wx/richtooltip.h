@@ -188,7 +188,7 @@ public:
 
         Parameter @a rect is new since wxWidgets 2.9.5.
      */
-    void ShowFor(wxWindow* win, wxRect* rect = NULL);
+    void ShowFor(wxWindow* win, const wxRect* rect = NULL);
 
     /**
         Destructor.

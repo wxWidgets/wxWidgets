@@ -42,7 +42,7 @@ public:
     virtual void SetTipKind(wxTipKind tipKind);
     virtual void SetTitleFont(const wxFont& font);
 
-    virtual void ShowFor(wxWindow* win, wxRect* rect = NULL);
+    virtual void ShowFor(wxWindow* win, const wxRect* rect = NULL);
 
 protected:
     wxString m_title,
