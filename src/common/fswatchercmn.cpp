@@ -100,7 +100,10 @@ bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
     }
     else
     {
-        wxLogError(_("Can't monitor non-existent path \"%s\" for changes."),
+        // Don't overreact to being passed a non-existent item. It may have
+        // only just been deleted, in which case doing nothing is correct
+        wxLogTrace(wxTRACE_FSWATCHER,
+                   "Can't monitor non-existent path \"%s\" for changes.",
                    path.GetFullPath());
         return false;
     }
