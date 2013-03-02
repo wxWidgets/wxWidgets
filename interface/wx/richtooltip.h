@@ -182,6 +182,8 @@ public:
         window which must be non-@NULL or, if @a rect is non-@NULL, the middle
         of the specified wxRect.
 
+        The coordinates of the @a rect parameter are relative to the given window.
+
         Currently the native MSW implementation is used only if @a win is a
         wxTextCtrl and @a rect is @NULL. This limitation may be removed in the
         future.

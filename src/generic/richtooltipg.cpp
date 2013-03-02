@@ -239,7 +239,7 @@ public:
         if ( !rect || rect->IsEmpty() )
             pos = GetTipPoint();
         else
-            pos = wxPoint( rect->x + rect->width / 2, rect->y + rect->height / 2 );
+            pos = GetParent()->ClientToScreen( wxPoint( rect->x + rect->width / 2, rect->y + rect->height / 2 ) );
 
         // We want our anchor point to coincide with this position so offset
         // the position of the top left corner passed to Move() accordingly.
