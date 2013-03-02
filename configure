@@ -1215,6 +1215,7 @@ enable_fontmap
 enable_fs_archive
 enable_fs_inet
 enable_fs_zip
+enable_fsvolume
 enable_fswatcher
 enable_geometry
 enable_log
@@ -2148,6 +2149,7 @@ Optional Features:
   --enable-fs_archive     use virtual archive filesystems
   --enable-fs_inet        use virtual HTTP/FTP filesystems
   --enable-fs_zip         now replaced by fs_archive
+  --enable-fsvolume       use wxFSVolume class
   --enable-fswatcher      use wxFileSystemWatcher class
   --enable-geometry       use geometry class
   --enable-log            use logging system
@@ -8612,6 +8614,50 @@ fi
             fi
           else
             result=$wxUSE_FS_ZIP
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-fsvolume" >&5
+$as_echo_n "checking for --${enablestring:-enable}-fsvolume... " >&6; }
+          # Check whether --enable-fsvolume was given.
+if test "${enable_fsvolume+set}" = set; then :
+  enableval=$enable_fsvolume;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_fsvolume='wxUSE_FSVOLUME=yes'
+                          else
+                            wx_cv_use_fsvolume='wxUSE_FSVOLUME=no'
+                          fi
+
+else
+
+                          wx_cv_use_fsvolume='wxUSE_FSVOLUME=${'DEFAULT_wxUSE_FSVOLUME":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_fsvolume"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_FSVOLUME = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_FSVOLUME
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -34689,6 +34735,11 @@ $as_echo "$as_me: WARNING: wxZipFSHandler requires wxArchiveFSHandler... disable
     $as_echo "#define wxUSE_FS_ZIP 1" >>confdefs.h
 
   fi
+fi
+
+if test "$wxUSE_FSVOLUME" = "yes"; then
+  $as_echo "#define wxUSE_FSVOLUME 1" >>confdefs.h
+
 fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
