@@ -1534,6 +1534,10 @@ void wxMenuBar::RebuildAccelTable()
 
         delete [] accelEntries;
     }
+    else // No (more) accelerators.
+    {
+        SetAcceleratorTable(wxAcceleratorTable());
+    }
 }
 
 #endif // wxUSE_ACCEL
