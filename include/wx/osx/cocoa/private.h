@@ -138,6 +138,8 @@ public :
 
     virtual void        SetupKeyEvent(wxKeyEvent &wxevent, NSEvent * nsEvent, NSString* charString = NULL);
     virtual void        SetupMouseEvent(wxMouseEvent &wxevent, NSEvent * nsEvent);
+    void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
+    virtual bool        SetupCursor(NSEvent* event);
 
 
 #if !wxOSX_USE_NATIVE_FLIPPED

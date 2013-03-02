@@ -462,11 +462,8 @@ bool g_lastButtonWasFakeRight = false ;
 - (CGFloat)scrollingDeltaY;
 @end
 
-void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
+void wxWidgetCocoaImpl::SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent* nsEvent)
 {
-    int eventType = [nsEvent type];
-    UInt32 modifiers = [nsEvent modifierFlags] ;
-
     NSPoint locationInWindow = [nsEvent locationInWindow];
     
     // adjust coordinates for the window of the target view
@@ -474,20 +471,30 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     {
         if ( [nsEvent window] != nil )
             locationInWindow = [[nsEvent window] convertBaseToScreen:locationInWindow];
-
+        
         if ( [m_osxView window] != nil )
             locationInWindow = [[m_osxView window] convertScreenToBase:locationInWindow];
     }
-
+    
     NSPoint locationInView = [m_osxView convertPoint:locationInWindow fromView:nil];
     wxPoint locationInViewWX = wxFromNSPoint( m_osxView, locationInView );
+        
+    x = locationInViewWX.x;
+    y = locationInViewWX.y;
+
+}
+
+void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
+{
+    int eventType = [nsEvent type];
+    UInt32 modifiers = [nsEvent modifierFlags] ;
+    
+    SetupCoordinates(wxevent.m_x, wxevent.m_y, nsEvent);
 
     // these parameters are not given for all events
     UInt32 button = [nsEvent buttonNumber];
     UInt32 clickCount = 0;
 
-    wxevent.m_x = locationInViewWX.x;
-    wxevent.m_y = locationInViewWX.y;
     wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
     wxevent.m_rawControlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
@@ -1176,19 +1183,39 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::cursorUpdate(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    NSCursor *cursor = (NSCursor*)GetWXPeer()->GetCursor().GetHCURSOR();
-    if (cursor == NULL)
+    if ( !SetupCursor(event) )
     {
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-        superimpl(slf, (SEL)_cmd, event);
+            superimpl(slf, (SEL)_cmd, event);
     }
-    else 
+ }
+
+bool wxWidgetCocoaImpl::SetupCursor(WX_NSEvent event)
+{
+    extern wxCursor gGlobalCursor;
+    
+    if ( gGlobalCursor.IsOk() )
     {
-        [cursor set];
+        gGlobalCursor.MacInstall();
+        return true;
+    }
+    else
+    {
+        wxWindow* cursorTarget = GetWXPeer();
+        wxCoord x,y;
+        SetupCoordinates(x, y, event);
+        wxPoint cursorPoint( x , y ) ;
+        
+        while ( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
+        {
+            cursorTarget = cursorTarget->GetParent() ;
+            if ( cursorTarget )
+                cursorPoint += cursorTarget->GetPosition();
+        }
+        
+        return cursorTarget != NULL;
     }
 }
-
-
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
@@ -2539,7 +2566,11 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
     SetupMouseEvent(wxevent , event) ;
-    return GetWXPeer()->HandleWindowEvent(wxevent);
+    bool result = GetWXPeer()->HandleWindowEvent(wxevent);
+    
+    (void)SetupCursor(event);
+
+    return result;
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow)
@@ -2656,11 +2687,13 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     {
         NSView* cv = [tlw contentView];
         c = new wxWidgetCocoaImpl( now, cv, true );
-        // increase ref count, because the impl destructor will decrement it again
-        CFRetain(cv);
-        if ( !now->IsShown() )
-            [cv setHidden:NO];
-        
+        if ( cv != nil )
+        {
+            // increase ref count, because the impl destructor will decrement it again
+            CFRetain(cv);
+            if ( !now->IsShown() )
+                [cv setHidden:NO];
+        }
     }
     else
     {
