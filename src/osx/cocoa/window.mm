@@ -293,58 +293,69 @@ long wxOSXTranslateCocoaKey( NSEvent* event, int eventType )
         case 48:
             retval = WXK_TAB;
             break;
-
-        case 75: // /
-            retval = WXK_NUMPAD_DIVIDE;
-            break;
-        case 67: // *
-            retval = WXK_NUMPAD_MULTIPLY;
-            break;
-        case 78: // -
-            retval = WXK_NUMPAD_SUBTRACT;
-            break;
-        case 69: // +
-            retval = WXK_NUMPAD_ADD;
-            break;
-        case 76: // Enter
-            retval = WXK_NUMPAD_ENTER;
-            break;
-        case 65: // .
-            retval = WXK_NUMPAD_DECIMAL;
-            break;
-        case 82: // 0
-            retval = WXK_NUMPAD0;
-            break;
-        case 83: // 1
-            retval = WXK_NUMPAD1;
-            break;
-        case 84: // 2
-            retval = WXK_NUMPAD2;
-            break;
-        case 85: // 3
-            retval = WXK_NUMPAD3;
-            break;
-        case 86: // 4
-            retval = WXK_NUMPAD4;
-            break;
-        case 87: // 5
-            retval = WXK_NUMPAD5;
-            break;
-        case 88: // 6
-            retval = WXK_NUMPAD6;
-            break;
-        case 89: // 7
-            retval = WXK_NUMPAD7;
-            break;
-        case 91: // 8
-            retval = WXK_NUMPAD8;
-            break;
-        case 92: // 9
-            retval = WXK_NUMPAD9;
-            break;
         default:
-            //retval = [event keyCode];
             break;
+    }
+    
+    // Check for NUMPAD keys.  For KEY_UP/DOWN events we need to use the
+    // WXK_NUMPAD constants, but for the CHAR event we want to use the
+    // standard ascii values
+    if ( eventType != wxEVT_CHAR )
+    {
+        switch( [event keyCode] )
+        {
+            case 75: // /
+                retval = WXK_NUMPAD_DIVIDE;
+                break;
+            case 67: // *
+                retval = WXK_NUMPAD_MULTIPLY;
+                break;
+            case 78: // -
+                retval = WXK_NUMPAD_SUBTRACT;
+                break;
+            case 69: // +
+                retval = WXK_NUMPAD_ADD;
+                break;
+            case 76: // Enter
+                retval = WXK_NUMPAD_ENTER;
+                break;
+            case 65: // .
+                retval = WXK_NUMPAD_DECIMAL;
+                break;
+            case 82: // 0
+                retval = WXK_NUMPAD0;
+                break;
+            case 83: // 1
+                retval = WXK_NUMPAD1;
+                break;
+            case 84: // 2
+                retval = WXK_NUMPAD2;
+                break;
+            case 85: // 3
+                retval = WXK_NUMPAD3;
+                break;
+            case 86: // 4
+                retval = WXK_NUMPAD4;
+                break;
+            case 87: // 5
+                retval = WXK_NUMPAD5;
+                break;
+            case 88: // 6
+                retval = WXK_NUMPAD6;
+                break;
+            case 89: // 7
+                retval = WXK_NUMPAD7;
+                break;
+            case 91: // 8
+                retval = WXK_NUMPAD8;
+                break;
+            case 92: // 9
+                retval = WXK_NUMPAD9;
+                break;
+            default:
+                //retval = [event keyCode];
+                break;
+        }
     }
     return retval;
 }
