@@ -621,7 +621,6 @@ All (GUI):
 - Add wxMask::GetBitmap() for wxMSW, wxGTK and wxOSX
 - Add wxCheckListBox::GetCheckedItems() (hartwigw).
 - Add wxAUI_TB_PLAIN_BACKGROUND wxAuiToolBar style (Allann Jones).
-- Fix off by 1 error in wxGenericListCtrl::HitTest() (Daniel Hyams).
 - Make wxGenericDataViewCtrl::SetFont() really work (Laurent Poujoulat).
 
 wxGTK:

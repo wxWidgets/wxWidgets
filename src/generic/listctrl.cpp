@@ -4144,10 +4144,6 @@ long wxListMainWindow::HitTest( int x, int y, int &flags ) const
 
     if ( InReportView() )
     {
-        // Account for the header height if it's present.
-        if ( HasHeader() )
-            y -= GetListCtrl()->m_headerWin->GetSize().y + 1;
-
         size_t current = y / GetLineHeight();
         if ( current < count )
         {
