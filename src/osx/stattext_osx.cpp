@@ -46,6 +46,14 @@ bool wxStaticText::Create( wxWindow *parent,
     MacPostControlCreate( pos, size );
 
     SetLabel(label);
+    if ( HasFlag(wxST_NO_AUTORESIZE) )
+    {
+        // Normally this is done in SetLabel() below but we avoid doing it when
+        // this style is used, so we need to explicitly do it in the ctor in
+        // this case or otherwise the control would retain its initial tiny size.
+        InvalidateBestSize();
+        SetInitialSize(size);
+    }
 
     return true;
 }
