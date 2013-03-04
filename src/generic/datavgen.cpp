@@ -4010,20 +4010,24 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    if (!col)
+    // Check if we clicked outside the item area.
+    if ((current >= GetRowCount()) || !col)
     {
+        // Follow Windows convention here: clicking either left or right (but
+        // not middle) button clears the existing selection.
+        if (m_owner && (event.LeftDown() || event.RightDown()))
+        {
+            if (!GetSelections().empty())
+            {
+                m_owner->UnselectAll();
+                SendSelectionChangedEvent(wxDataViewItem());
+            }
+        }
         event.Skip();
         return;
     }
 
     wxDataViewRenderer *cell = col->GetRenderer();
-    if ((current >= GetRowCount()) || (x > GetEndOfLastCol()))
-    {
-        // Unselect all if below the last row ?
-        event.Skip();
-        return;
-    }
-
     wxDataViewColumn* const
         expander = GetExpanderColumnOrFirstOne(GetOwner());
 
