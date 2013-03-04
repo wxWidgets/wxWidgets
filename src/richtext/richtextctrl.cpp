@@ -3890,12 +3890,15 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
 
         PrepareDC(dc);
         dc.SetFont(GetFont());
+        dc.SetUserScale(GetScale(), GetScale());
 
         wxRichTextDrawingContext context(& GetBuffer());
         GetBuffer().Defragment(context);
         GetBuffer().UpdateRanges();     // If items were deleted, ranges need recalculation
         GetBuffer().Layout(dc, context, availableSpace, availableSpace, flags);
         GetBuffer().Invalidate(wxRICHTEXT_NONE);
+
+        dc.SetUserScale(1.0, 1.0);
 
         if (!IsFrozen() && !onlyVisibleRect)
             SetupScrollbars();
