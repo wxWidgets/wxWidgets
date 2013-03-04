@@ -4437,6 +4437,7 @@ void wxDataViewCtrl::Init()
     m_sortingColumnIdx = wxNOT_FOUND;
 
     m_headerArea = NULL;
+    m_clientArea = NULL;
 
     m_colsDirty = false;
 }
