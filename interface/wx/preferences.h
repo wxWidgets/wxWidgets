@@ -112,8 +112,11 @@ public:
 class wxPreferencesPage
 {
 public:
+    /// Constructor.
+    wxPreferencesPage();
+
     /// Destructor.
-    virtual ~wxPreferencesPage() {}
+    virtual ~wxPreferencesPage();
 
     /**
         Return name of the page.
@@ -184,10 +187,10 @@ public:
     };
 
     /// Constructor.
-    wxStockPreferencesPage(Kind kind) : m_kind(kind) {}
+    wxStockPreferencesPage(Kind kind);
 
     /// Returns the page's kind.
-    Kind GetKind() const { return m_kind; }
+    Kind GetKind() const;
 
     /// Reimplemented to return suitable name for the page's kind.
     virtual wxString GetName() const;
