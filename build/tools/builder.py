@@ -1,5 +1,4 @@
 import os
-import string
 import subprocess
 import sys
 import time
@@ -179,7 +178,7 @@ class AutoconfBuilder(GNUMakeBuilder):
             sys.stderr.write("Could not find configure script at %r. Have you run autoconf?\n" % dir)
             return 1
 
-        optionsStr = string.join(options, " ") if options else ""
+        optionsStr = " ".join(options) if options else ""
         command = "%s %s" % (configure_cmd, optionsStr)
         print(command)
         result = os.system(command)
