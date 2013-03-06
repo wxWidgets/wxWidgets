@@ -809,6 +809,14 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 }
 #endif
 
+- (BOOL) canBecomeKeyView
+{
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( viewimpl && viewimpl->GetWXPeer() )
+        return viewimpl->GetWXPeer()->AcceptsFocus();
+    return NO;
+}
+
 @end // wxNSView
 
 //
