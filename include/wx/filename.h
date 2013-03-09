@@ -490,9 +490,9 @@ public:
 
     // Dir accessors
     size_t GetDirCount() const { return m_dirs.size(); }
-    void AppendDir(const wxString& dir);
+    bool AppendDir(const wxString& dir);
     void PrependDir(const wxString& dir);
-    void InsertDir(size_t before, const wxString& dir);
+    bool InsertDir(size_t before, const wxString& dir);
     void RemoveDir(size_t pos);
     void RemoveLastDir() { RemoveDir(GetDirCount() - 1); }
 

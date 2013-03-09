@@ -2034,10 +2034,12 @@ wxFileName::IsMSWUniqueVolumeNamePath(const wxString& path, wxPathFormat format)
     return true;
 }
 
-void wxFileName::AppendDir( const wxString& dir )
+bool wxFileName::AppendDir( const wxString& dir )
 {
-    if ( IsValidDirComponent(dir) )
-        m_dirs.Add( dir );
+    if (!IsValidDirComponent(dir))
+        return false;
+    m_dirs.Add(dir);
+    return true;
 }
 
 void wxFileName::PrependDir( const wxString& dir )
@@ -2045,10 +2047,12 @@ void wxFileName::PrependDir( const wxString& dir )
     InsertDir(0, dir);
 }
 
-void wxFileName::InsertDir(size_t before, const wxString& dir)
+bool wxFileName::InsertDir(size_t before, const wxString& dir)
 {
-    if ( IsValidDirComponent(dir) )
-        m_dirs.Insert(dir, before);
+    if (!IsValidDirComponent(dir))
+        return false;
+    m_dirs.Insert(dir, before);
+    return true;
 }
 
 void wxFileName::RemoveDir(size_t pos)

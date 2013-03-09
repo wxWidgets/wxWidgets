@@ -337,12 +337,17 @@ public:
                wxPathFormat format = wxPATH_NATIVE);
 
     /**
-        Appends a directory component to the path. This component should contain a
-        single directory name level, i.e. not contain any path or volume separators nor
-        should it be empty, otherwise the function does nothing (and generates an
-        assert failure in debug build).
+        Appends a directory component to the path.
+
+        This component should contain a single directory name level, i.e. not
+        contain any path or volume separators nor should it be empty, otherwise
+        the function does nothing and returns false (and generates an assert
+        failure in debug build).
+
+        Notice that the return value is only available in wxWidgets 2.9.5 or
+        later.
     */
-    void AppendDir(const wxString& dir);
+    bool AppendDir(const wxString& dir);
 
     /**
         Creates the file name from another filename object.
@@ -841,10 +846,16 @@ public:
     bool HasVolume() const;
 
     /**
-        Inserts a directory component before the zero-based position in the directory
-        list. Please see AppendDir() for important notes.
+        Inserts a directory component before the zero-based position in the
+        directory list.
+
+        As with AppendDir(), @a dir must be a single directory name and the
+        function returns @false and does nothing else if it isn't.
+
+        Notice that the return value is only available in wxWidgets 2.9.5 or
+        later.
     */
-    void InsertDir(size_t before, const wxString& dir);
+    bool InsertDir(size_t before, const wxString& dir);
 
     /**
         Returns @true if this filename is absolute.
