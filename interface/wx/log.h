@@ -950,12 +950,6 @@ public:
     virtual bool OnFrameClose(wxFrame* frame);
 
     /**
-        Called immediately after the log frame creation allowing for
-        any extra initializations.
-    */
-    virtual void OnFrameCreate(wxFrame* frame);
-
-    /**
         Called right before the log frame is going to be deleted: will
         always be called unlike OnFrameClose().
     */

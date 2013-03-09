@@ -529,8 +529,6 @@ wxLogFrame::wxLogFrame(wxWindow *pParent, wxLogWindow *log, const wxString& szTi
     // status bar for menu prompts
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
-
-    m_log->OnFrameCreate(this);
 }
 
 void wxLogFrame::DoClose()
@@ -642,10 +640,6 @@ void wxLogWindow::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
 wxFrame *wxLogWindow::GetFrame() const
 {
     return m_pLogFrame;
-}
-
-void wxLogWindow::OnFrameCreate(wxFrame * WXUNUSED(frame))
-{
 }
 
 bool wxLogWindow::OnFrameClose(wxFrame * WXUNUSED(frame))
