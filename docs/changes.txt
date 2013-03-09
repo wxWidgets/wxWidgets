@@ -566,6 +566,7 @@ All:
 - Add wxFile::ReadAll() for consistency with wxFFile.
 - Add wxDateTime::DiffAsDateSpan() and wxDateSpan::GetTotalMonths() (jonasr).
 - Add wxVector::assign() (Jonas Rydberg).
+- Add wx[F]File{Input,Output}Stream::GetFile() (troelsk).
 - Added Nepali translation (Him Prasad Gautam).
 
 All (GUI):

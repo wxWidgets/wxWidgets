@@ -42,6 +42,8 @@ public:
     virtual bool IsOk() const;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
+    wxFile* GetFile() const { return m_file; }
+
 protected:
     wxFileInputStream();
 
@@ -71,6 +73,8 @@ public:
     bool Ok() const { return IsOk(); }
     virtual bool IsOk() const;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
+
+    wxFile* GetFile() const { return m_file; }
 
 protected:
     wxFileOutputStream();
@@ -169,6 +173,8 @@ public:
     virtual bool IsOk() const;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
+    wxFFile* GetFile() const { return m_file; }
+
 protected:
     wxFFileInputStream();
 
@@ -198,6 +204,8 @@ public:
     bool Ok() const { return IsOk(); }
     virtual bool IsOk() const;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
+
+    wxFFile* GetFile() const { return m_file; }
 
 protected:
     wxFFileOutputStream();

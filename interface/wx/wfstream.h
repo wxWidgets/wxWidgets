@@ -98,6 +98,12 @@ public:
         Returns @true if the stream is initialized and ready.
     */
     bool IsOk() const;
+
+    /**
+        Returns the underlying file object.
+        @since 2.9.5
+    */
+    wxFFile* GetFile() const;
 };
 
 
@@ -147,6 +153,12 @@ public:
         Returns @true if the stream is initialized and ready.
     */
     bool IsOk() const;
+
+    /**
+        Returns the underlying file object.
+        @since 2.9.5
+    */
+    wxFile* GetFile() const;
 };
 
 
@@ -196,6 +208,12 @@ public:
         Returns @true if the stream is initialized and ready.
     */
     bool IsOk() const;
+
+    /**
+        Returns the underlying file object.
+        @since 2.9.5
+    */
+    wxFile* GetFile() const;
 };
 
 
@@ -246,6 +264,12 @@ public:
         Returns @true if the stream is initialized and ready.
     */
     bool IsOk() const;
+
+    /**
+        Returns the underlying file object.
+        @since 2.9.5
+    */
+    wxFFile* GetFile() const;
 };
 
 
