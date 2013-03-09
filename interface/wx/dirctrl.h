@@ -12,6 +12,8 @@ enum
     wxDIRCTRL_DIR_ONLY       = 0x0010,
     // When setting the default path, select the first file in the directory
     wxDIRCTRL_SELECT_FIRST   = 0x0020,
+    // Show the filter list
+    wxDIRCTRL_SHOW_FILTERS   = 0x0040,
     // Use 3D borders on internal controls
     wxDIRCTRL_3D_INTERNAL    = 0x0080,
     // Editable labels
@@ -38,6 +40,8 @@ enum
     @style{wxDIRCTRL_SELECT_FIRST}
            When setting the default path, select the first file in the
            directory.
+    @style{wxDIRCTRL_SHOW_FILTERS}
+           Show the drop-down filter list.
     @style{wxDIRCTRL_EDIT_LABELS}
            Allow the folder and file labels to be editable.
     @style{wxDIRCTRL_MULTIPLE}

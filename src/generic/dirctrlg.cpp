@@ -518,7 +518,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
                                 wxPoint(0,0), GetClientSize(), treeStyle);
 
-    if (!filter.empty())
+    if (!filter.empty() && (style & wxDIRCTRL_SHOW_FILTERS))
         m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL);
 
     m_defaultPath = dir;
@@ -1251,7 +1251,7 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
 {
     m_filter = filter;
 
-    if (!filter.empty() && !m_filterListCtrl)
+    if (!filter.empty() && !m_filterListCtrl && HasFlag(wxDIRCTRL_SHOW_FILTERS))
         m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL);
     else if (filter.empty() && m_filterListCtrl)
     {

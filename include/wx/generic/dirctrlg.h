@@ -39,10 +39,8 @@ enum
     wxDIRCTRL_DIR_ONLY       = 0x0010,
     // When setting the default path, select the first file in the directory
     wxDIRCTRL_SELECT_FIRST   = 0x0020,
-#if WXWIN_COMPATIBILITY_2_8
-    // Unused, for compatibility only
+    // Show the filter list
     wxDIRCTRL_SHOW_FILTERS   = 0x0040,
-#endif // WXWIN_COMPATIBILITY_2_8
     // Use 3D borders on internal controls
     wxDIRCTRL_3D_INTERNAL    = 0x0080,
     // Editable labels
