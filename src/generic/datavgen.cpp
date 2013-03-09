@@ -4000,10 +4000,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             le.SetItem( item );
             le.SetColumn( col->GetModelColumn() );
             le.SetDataViewColumn( col );
-
-            wxVariant value;
-            model->GetValue( value, item, col->GetModelColumn() );
-            le.SetValue(value);
         }
 
         parent->ProcessWindowEvent(le);
