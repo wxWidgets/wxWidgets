@@ -159,6 +159,7 @@ public:
     virtual void Show(wxWindow* parent)
     {
         wxScopedPtr<wxDialog> dlg(CreateWindow(parent));
+        dlg->Fit();
         dlg->ShowModal();
     }
 
