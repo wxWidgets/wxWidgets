@@ -377,15 +377,7 @@ wxPaintDCExImpl::wxPaintDCExImpl(wxDC *owner, wxWindow *window, WXHDC dc)
     wxCHECK_RET( dc, wxT("wxPaintDCEx requires an existing device context") );
 
     m_window = window;
-
-    m_hDC = FindDCInCache(m_window);
-    if ( !m_hDC )
-    {
-        // not in cache, record it there
-        gs_PaintDCInfos[m_window] = new wxPaintDCInfoExternal(dc);
-
-        m_hDC = dc;
-    }
+    m_hDC = dc;
 }
 
 wxPaintDCExImpl::~wxPaintDCExImpl()
