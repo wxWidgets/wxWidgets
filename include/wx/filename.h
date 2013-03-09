@@ -498,8 +498,8 @@ public:
 
     // Other accessors
     void SetExt( const wxString &ext )          { m_ext = ext; m_hasExt = !m_ext.empty(); }
-    void ClearExt()                             { m_ext = wxEmptyString; m_hasExt = false; }
-    void SetEmptyExt()                          { m_ext = wxT(""); m_hasExt = true; }
+    void ClearExt()                             { m_ext.clear(); m_hasExt = false; }
+    void SetEmptyExt()                          { m_ext.clear(); m_hasExt = true; }
     wxString GetExt() const                     { return m_ext; }
     bool HasExt() const                         { return m_hasExt; }
 
