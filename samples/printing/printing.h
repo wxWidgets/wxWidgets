@@ -49,7 +49,7 @@ public:
     void OnPrint(wxCommandEvent& event);
     void OnPrintPreview(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
-#if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
     void OnPrintPS(wxCommandEvent& event);
     void OnPrintPreviewPS(wxCommandEvent& event);
     void OnPageSetupPS(wxCommandEvent& event);

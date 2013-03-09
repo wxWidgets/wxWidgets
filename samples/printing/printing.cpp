@@ -25,10 +25,6 @@
     #error "You must set wxUSE_PRINTING_ARCHITECTURE to 1 in setup.h, and recompile the library."
 #endif
 
-// Set this to 1 if you want to test PostScript printing under MSW.
-// However, you'll also need to edit src/msw/makefile.nt.
-#define wxTEST_POSTSCRIPT_IN_MSW 0
-
 #include <ctype.h>
 #include "wx/metafile.h"
 #include "wx/print.h"
@@ -36,7 +32,7 @@
 #include "wx/image.h"
 #include "wx/accel.h"
 
-#if wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
     #include "wx/generic/printps.h"
     #include "wx/generic/prntdlgg.h"
 #endif
@@ -277,7 +273,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_PREVIEW, MyFrame::OnPrintPreview)
     EVT_MENU(WXPRINT_PAGE_SETUP, MyFrame::OnPageSetup)
     EVT_MENU(wxID_ABOUT, MyFrame::OnPrintAbout)
-#if defined(__WXMSW__) &&wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
     EVT_MENU(WXPRINT_PRINT_PS, MyFrame::OnPrintPS)
     EVT_MENU(WXPRINT_PREVIEW_PS, MyFrame::OnPrintPreviewPS)
     EVT_MENU(WXPRINT_PAGE_SETUP_PS, MyFrame::OnPageSetupPS)
@@ -331,7 +327,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const 
     SetAcceleratorTable(accel);
 #endif
 
-#if defined(__WXMSW__) &&wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
     file_menu->AppendSeparator();
     file_menu->Append(WXPRINT_PRINT_PS, wxT("Print PostScript..."),           wxT("Print (PostScript)"));
     file_menu->Append(WXPRINT_PAGE_SETUP_PS, wxT("Page Setup PostScript..."), wxT("Page setup (PostScript)"));
@@ -425,21 +421,23 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
     (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
-#if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
 void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 {
-    wxPostScriptPrinter printer(g_printData);
-    MyPrintout printout(wxT("My printout"));
+    wxPrintDialogData printDialogData(* g_printData);
+
+    wxPostScriptPrinter printer(&printDialogData);
+    MyPrintout printout(this, wxT("My printout"));
     printer.Print(this, &printout, true/*prompt*/);
 
-    (*g_printData) = printer.GetPrintData();
+    (*g_printData) = printer.GetPrintDialogData().GetPrintData();
 }
 
 void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
 {
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(* g_printData);
-    wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout, &printDialogData);
+    wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
     wxPreviewFrame *frame =
         new wxPreviewFrame(preview, this, wxT("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
