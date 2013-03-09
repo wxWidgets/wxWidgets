@@ -43,7 +43,7 @@ class wxSpinCtrlTextGeneric; // wxTextCtrl used for the wxSpinCtrlGenericBase
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxSpinCtrlGenericBase
-                : public wxCompositeWindow<wxSpinCtrlBase>
+                : public wxNavigationEnabled<wxCompositeWindow<wxSpinCtrlBase> >
 {
 public:
     wxSpinCtrlGenericBase() { Init(); }
@@ -87,6 +87,8 @@ public:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip);
 #endif // wxUSE_TOOLTIPS
+
+    virtual bool SetBackgroundColour(const wxColour& colour);
 
     // get the subcontrols
     wxTextCtrl   *GetText() const       { return m_textCtrl; }
