@@ -1178,6 +1178,15 @@ typedef BOOL (*wxOSX_FocusHandlerPtr)(NSView* self, SEL _cmd);
 
 void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
+    // we are getting moved events for all windows in the hierarchy, not something wx expects
+    // therefore we only handle it for the deepest child in the hierarchy
+    if ( [event type] == NSMouseMoved )
+    {
+        NSView* hitview = [[[slf window] contentView] hitTest:[event locationInWindow]];
+        if ( hitview == NULL || hitview != slf)
+            return;
+    }
+    
     if ( !DoHandleMouseEvent(event) )
     {
         // for plain NSView mouse events would propagate to parents otherwise
