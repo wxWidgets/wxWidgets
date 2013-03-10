@@ -80,7 +80,19 @@ static const int EXPANDER_OFFSET = 1;
 // For the generic implementation, both the leaf nodes and the nodes are sorted for
 // fast search when needed
 static wxDataViewModel* g_model;
-static int g_column = -2;
+
+// The column is either the index of the column to be used for sorting or one
+// of the special values in this enum:
+enum
+{
+    // Don't sort at all.
+    SortColumn_None = -2,
+
+    // Sort using the model default sort order.
+    SortColumn_Default = -1
+};
+
+static int g_column = SortColumn_None;
 static bool g_asending = true;
 
 // ----------------------------------------------------------------------------
@@ -588,9 +600,9 @@ public:
         if( !col )
         {
             if (g_model->HasDefaultCompare())
-                g_column = -1;
+                g_column = SortColumn_Default;
             else
-                g_column = -2;
+                g_column = SortColumn_None;
 
             g_asending = true;
             return;
