@@ -106,6 +106,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     NSAutoreleasePool *thePool;
     thePool = [[NSAutoreleasePool alloc] init];
 
+    [[NSColorPanel sharedColorPanel] setShowsAlpha:YES];
     if(m_colourData.GetColour().IsOk())
         [[NSColorPanel sharedColorPanel] setColor:
             [NSColor colorWithCalibratedRed:(CGFloat) (m_colourData.GetColour().Red() / 255.0)
