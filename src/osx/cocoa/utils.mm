@@ -278,6 +278,7 @@ bool wxApp::DoInitGui()
 
         appcontroller = OSXCreateAppController();
         [NSApp setDelegate:appcontroller];
+        [NSColor setIgnoresAlpha:NO];
 
         // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads
         // to the duplication of menus under 10.5 and a warning under 10.6
