@@ -85,6 +85,9 @@ static wxDataViewModel* g_model;
 // of the special values in this enum:
 enum
 {
+    // Sort when we're thawed later.
+    SortColumn_OnThaw = -3,
+
     // Don't sort at all.
     SortColumn_None = -2,
 
@@ -593,9 +596,32 @@ public:
         UpdateDisplay();
     }
 
+    // Override the base class method to resort if needed, i.e. if
+    // SortPrepare() was called -- and ignored -- while we were frozen.
+    virtual void DoThaw()
+    {
+        if ( g_column == SortColumn_OnThaw )
+        {
+            Resort();
+            g_column = SortColumn_None;
+        }
+
+        wxWindow::DoThaw();
+    }
+
     void SortPrepare()
     {
         g_model = GetModel();
+
+        // Avoid sorting while the window is frozen, this allows to quickly add
+        // many items without resorting after each addition and only resort
+        // them all at once when the window is finally thawed, see above.
+        if ( IsFrozen() )
+        {
+            g_column = SortColumn_OnThaw;
+            return;
+        }
+
         wxDataViewColumn* col = GetOwner()->GetSortingColumn();
         if( !col )
         {
