@@ -111,7 +111,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
             [NSColor colorWithCalibratedRed:(CGFloat) (m_colourData.GetColour().Red() / 255.0)
                                         green:(CGFloat) (m_colourData.GetColour().Green() / 255.0)
                                         blue:(CGFloat) (m_colourData.GetColour().Blue() / 255.0)
-                                        alpha:(CGFloat) 1.0]
+                                        alpha:(CGFloat) (m_colourData.GetColour().Alpha() / 255.0)]
         ];
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
@@ -167,8 +167,9 @@ int wxColourDialog::ShowModal()
     m_colourData.GetColour().Set(
                                 (unsigned char) ([theColor redComponent] * 255.0),
                                 (unsigned char) ([theColor greenComponent] * 255.0),
-                                (unsigned char) ([theColor blueComponent] * 255.0)
-                                   );
+                                (unsigned char) ([theColor blueComponent] * 255.0),
+                                (unsigned char) ([theColor alphaComponent] * 255.0)
+                                 );
 
     //Release the pool, we're done :)
     [thePool release];
