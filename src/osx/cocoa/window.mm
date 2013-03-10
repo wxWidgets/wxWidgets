@@ -1180,7 +1180,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     // we are getting moved events for all windows in the hierarchy, not something wx expects
     // therefore we only handle it for the deepest child in the hierarchy
-    if ( [event type] == NSMouseMoved )
+    if ( 1 /* [event type] == NSMouseMoved */ )
     {
         NSView* hitview = [[[slf window] contentView] hitTest:[event locationInWindow]];
         if ( hitview == NULL || hitview != slf)
