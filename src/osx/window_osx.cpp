@@ -1814,6 +1814,8 @@ bool wxWindowMac::MacSetupCursor( const wxPoint& pt )
     if ( wxRect2DInt( clientorigin.x , clientorigin.y , clientsize.x , clientsize.y ).Contains( wxPoint2DInt( pt ) ) )
     {
         wxSetCursorEvent event( pt.x , pt.y );
+        event.SetId(GetId());
+        event.SetEventObject(this);
 
         bool processedEvtSetCursor = HandleWindowEvent(event);
         if ( processedEvtSetCursor && event.HasCursor() )

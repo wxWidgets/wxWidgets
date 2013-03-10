@@ -1227,9 +1227,14 @@ bool wxWidgetCocoaImpl::SetupCursor(WX_NSEvent event)
         
         while ( cursorTarget && !cursorTarget->MacSetupCursor( cursorPoint ) )
         {
+            // at least in GTK cursor events are not propagated either ...
+#if 1
+            cursorTarget = NULL;
+#else
             cursorTarget = cursorTarget->GetParent() ;
             if ( cursorTarget )
                 cursorPoint += cursorTarget->GetPosition();
+#endif
         }
         
         return cursorTarget != NULL;
