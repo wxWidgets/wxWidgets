@@ -4678,10 +4678,14 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     int lineSpacing = 0;
 
     // Let's assume line spacing of 10 is normal, 15 is 1.5, 20 is 2, etc.
-    if (attr.HasLineSpacing() && attr.GetLineSpacing() > 0 && attr.GetFont().IsOk())
+    if (attr.HasLineSpacing() && attr.GetLineSpacing() > 0 && attr.HasFont())
     {
-        wxCheckSetFont(dc, attr.GetFont());
-        lineSpacing = (int) (double(dc.GetCharHeight()) * (double(attr.GetLineSpacing())/10.0 - 1.0));
+        wxFont font(buffer->GetFontTable().FindFont(attr));
+        if (font.IsOk())
+        {
+            wxCheckSetFont(dc, font);
+            lineSpacing = (int) (double(dc.GetCharHeight()) * (double(attr.GetLineSpacing())/10.0 - 1.0));
+        }
     }
 
     // Start position for each line relative to the paragraph
