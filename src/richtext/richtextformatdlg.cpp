@@ -80,6 +80,8 @@
 
 bool wxRichTextFormattingDialog::sm_showToolTips = false;
 
+IMPLEMENT_CLASS(wxRichTextDialogPage, wxPanel)
+
 IMPLEMENT_CLASS(wxRichTextFormattingDialog, wxPropertySheetDialog)
 
 BEGIN_EVENT_TABLE(wxRichTextFormattingDialog, wxPropertySheetDialog)
