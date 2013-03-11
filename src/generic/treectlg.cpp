@@ -3590,6 +3590,13 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         wxTreeEvent
             hevent(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP,  this, hoverItem);
 
+        // setting a tooltip upon leaving a view is getting the tooltip displayed
+        // on the neighbouring view ...
+#ifdef __WXOSX__
+        if ( event.Leaving() )
+            SetToolTip(NULL);
+        else
+#endif
         if ( GetEventHandler()->ProcessEvent(hevent) )
         {
             // If the user permitted the tooltip change, update it, otherwise

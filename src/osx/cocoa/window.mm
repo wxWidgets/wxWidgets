@@ -1180,7 +1180,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     // we are getting moved events for all windows in the hierarchy, not something wx expects
     // therefore we only handle it for the deepest child in the hierarchy
-    if ( 1 /* [event type] == NSMouseMoved */ )
+    if ( [event type] == NSMouseMoved )
     {
         NSView* hitview = [[[slf window] contentView] hitTest:[event locationInWindow]];
         if ( hitview == NULL || hitview != slf)
@@ -2522,7 +2522,7 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 
     }
     NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited|NSTrackingCursorUpdate|NSTrackingMouseMoved|NSTrackingActiveAlways|NSTrackingInVisibleRect;
-        NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: NSZeroRect options: options owner: m_osxView userInfo: nil];
+    NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: NSZeroRect options: options owner: m_osxView userInfo: nil];
     [m_osxView addTrackingArea: area];
     [area release];
  }
