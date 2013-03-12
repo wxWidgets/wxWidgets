@@ -76,11 +76,23 @@ public:
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
 
-    /// Show/hide position controls
+     /// Show/hide position controls
     void ShowPositionControls(bool show);
+
+    /// Show/hide position mode controls
+    void ShowPositionModeControls(bool show);
+
+    /// Show/hide right/bottom position controls
+    void ShowRightBottomPositionControls(bool show);
+
+    /// Show/hide floating and alignment controls
+    void ShowFloatingAndAlignmentControls(bool show);
 
     /// Show/hide floating controls
     void ShowFloatingControls(bool show);
+
+    /// Show/hide alignment controls
+    void ShowAlignmentControls(bool show);
 
 ////@begin wxRichTextSizePage event handler declarations
 
@@ -142,9 +154,10 @@ public:
 
 ////@begin wxRichTextSizePage member variables
     wxBoxSizer* m_parentSizer;
-    wxBoxSizer* m_floatingControls;
+    wxBoxSizer* m_floatingAlignmentSizer;
+    wxBoxSizer* m_floatingSizer;
     wxComboBox* m_float;
-    wxBoxSizer* m_alignmentControls;
+    wxBoxSizer* m_alignmentSizer;
     wxCheckBox* m_verticalAlignmentCheckbox;
     wxComboBox* m_verticalAlignmentComboBox;
     wxCheckBox* m_widthCheckbox;
@@ -167,7 +180,9 @@ public:
     wxComboBox* m_unitsMaxH;
     wxBoxSizer* m_positionControls;
     wxBoxSizer* m_moveObjectParentSizer;
+    wxBoxSizer* m_positionModeSizer;
     wxComboBox* m_positionModeCtrl;
+    wxFlexGridSizer* m_positionGridSizer;
     wxCheckBox* m_positionLeftCheckbox;
     wxTextCtrl* m_left;
     wxComboBox* m_unitsLeft;
@@ -175,9 +190,11 @@ public:
     wxTextCtrl* m_top;
     wxComboBox* m_unitsTop;
     wxCheckBox* m_positionRightCheckbox;
+    wxBoxSizer* m_rightPositionSizer;
     wxTextCtrl* m_right;
     wxComboBox* m_unitsRight;
     wxCheckBox* m_positionBottomCheckbox;
+    wxBoxSizer* m_bottomPositionSizer;
     wxTextCtrl* m_bottom;
     wxComboBox* m_unitsBottom;
     wxBoxSizer* m_moveObjectSizer;
