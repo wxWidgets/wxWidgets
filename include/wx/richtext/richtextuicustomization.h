@@ -24,9 +24,9 @@
 
     The application will typically have calls like this in its initialisation:
 
-    wxRichTextFormattingDialog::SetHelpId(ID_HELP_FORMATTINGDIALOG);
-    wxRichTextFormattingDialog::SetUICustomization(& wxGetApp().GetRichTextUICustomization());
-    wxRichTextBordersPage::SetHelpId(ID_HELP_BORDERSPAGE);
+    wxRichTextFormattingDialog::GetHelpInfo().SetHelpId(ID_HELP_FORMATTINGDIALOG);
+    wxRichTextFormattingDialog::GetHelpInfo().SetUICustomization(& wxGetApp().GetRichTextUICustomization());
+    wxRichTextBordersPage::GetHelpInfo().SetHelpId(ID_HELP_BORDERSPAGE);
     
     Only the wxRichTextFormattingDialog class needs to have its customization object and help id set,
     though the application set them for individual pages if it wants.
@@ -109,6 +109,8 @@ protected:
     virtual wxRichTextUICustomization* GetUICustomization() const { return sm_helpInfo.GetUICustomization(); } \
     virtual void SetUICustomization(wxRichTextUICustomization* customization) { sm_helpInfo.SetUICustomization(customization); } \
     virtual bool ShowHelp(wxWindow* win) { return sm_helpInfo.ShowHelp(win); } \
+public: \
+    static wxRichTextHelpInfo& GetHelpInfo() { return sm_helpInfo; }\
 protected: \
     static wxRichTextHelpInfo sm_helpInfo; \
 public:
