@@ -675,12 +675,6 @@ COND_wxUSE_LIBTIFF_builtin
 COND_wxUSE_LIBPNG_builtin
 COND_wxUSE_LIBJPEG_builtin
 COND_wxUSE_EXPAT_builtin
-COND_WXUSE_ZLIB_BUILTIN
-COND_WXUSE_REGEX_BUILTIN
-COND_WXUSE_LIBTIFF_BUILTIN
-COND_WXUSE_LIBPNG_BUILTIN
-COND_WXUSE_LIBJPEG_BUILTIN
-COND_WXUSE_EXPAT_BUILTIN
 COND_WXUNIV_1
 COND_WXUNIV_0
 COND_WITH_PLUGIN_SDL_1
@@ -703,9 +697,6 @@ COND_USE_OPENGL_1
 COND_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_USE_GUI_1_wxUSE_LIBJPEG_builtin
-COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN
-COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN
-COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN
 COND_USE_GUI_1_WXUNIV_1
 COND_USE_GUI_1_WXUNIV_0
 COND_USE_GUI_1_USE_OPENGL_1
@@ -795,7 +786,6 @@ COND_PLATFORM_MSDOS_1
 COND_PLATFORM_MSDOS_0
 COND_PLATFORM_MAC_1
 COND_PLATFORM_MAC_0
-COND_PLATFORM_MACOS_1
 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1
 COND_PLATFORM_MACOSX_1_USE_OPENGL_1
 COND_PLATFORM_MACOSX_1_USE_GUI_1
@@ -862,26 +852,11 @@ COND_DEPS_TRACKING_1
 COND_DEPS_TRACKING_0
 COND_DEBUG_INFO_1
 COND_DEBUG_INFO_0
-COND_DEBUG_FLAG_1
 COND_DEBUG_FLAG_0
-COND_BUILD_release_UNICODE_1
-COND_BUILD_release_UNICODE_0
 COND_BUILD_release_DEBUG_INFO_default
 COND_BUILD_release
-COND_BUILD_debug_UNICODE_1
-COND_BUILD_debug_UNICODE_0
 COND_BUILD_debug_DEBUG_INFO_default
-COND_BUILD_debug_DEBUG_FLAG_default
 COND_BUILD_debug
-COND_BUILD_RELEASE_UNICODE_1
-COND_BUILD_RELEASE_UNICODE_0
-COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT
-COND_BUILD_RELEASE
-COND_BUILD_DEBUG_UNICODE_1
-COND_BUILD_DEBUG_UNICODE_0
-COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT
-COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT
-COND_BUILD_DEBUG
 BK_MAKE_PCH
 ICC_PCH_USE_SWITCH
 ICC_PCH_CREATE_SWITCH
@@ -40070,74 +40045,14 @@ EOF
 
 
 
-    COND_BUILD_DEBUG="#"
-    if test "x$BUILD" = "xdebug" ; then
-        COND_BUILD_DEBUG=""
-    fi
-
-    COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT="#"
-    if test "x$BUILD" = "xdebug" -a "x$DEBUG_FLAG" = "xdefault" ; then
-        COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT=""
-    fi
-
-    COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT="#"
-    if test "x$BUILD" = "xdebug" -a "x$DEBUG_INFO" = "xdefault" ; then
-        COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT=""
-    fi
-
-    COND_BUILD_DEBUG_UNICODE_0="#"
-    if test "x$BUILD" = "xdebug" -a "x$UNICODE" = "x0" ; then
-        COND_BUILD_DEBUG_UNICODE_0=""
-    fi
-
-    COND_BUILD_DEBUG_UNICODE_1="#"
-    if test "x$BUILD" = "xdebug" -a "x$UNICODE" = "x1" ; then
-        COND_BUILD_DEBUG_UNICODE_1=""
-    fi
-
-    COND_BUILD_RELEASE="#"
-    if test "x$BUILD" = "xrelease" ; then
-        COND_BUILD_RELEASE=""
-    fi
-
-    COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT="#"
-    if test "x$BUILD" = "xrelease" -a "x$DEBUG_INFO" = "xdefault" ; then
-        COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT=""
-    fi
-
-    COND_BUILD_RELEASE_UNICODE_0="#"
-    if test "x$BUILD" = "xrelease" -a "x$UNICODE" = "x0" ; then
-        COND_BUILD_RELEASE_UNICODE_0=""
-    fi
-
-    COND_BUILD_RELEASE_UNICODE_1="#"
-    if test "x$BUILD" = "xrelease" -a "x$UNICODE" = "x1" ; then
-        COND_BUILD_RELEASE_UNICODE_1=""
-    fi
-
     COND_BUILD_debug="#"
     if test "x$BUILD" = "xdebug" ; then
         COND_BUILD_debug=""
     fi
 
-    COND_BUILD_debug_DEBUG_FLAG_default="#"
-    if test "x$BUILD" = "xdebug" -a "x$DEBUG_FLAG" = "xdefault" ; then
-        COND_BUILD_debug_DEBUG_FLAG_default=""
-    fi
-
     COND_BUILD_debug_DEBUG_INFO_default="#"
     if test "x$BUILD" = "xdebug" -a "x$DEBUG_INFO" = "xdefault" ; then
         COND_BUILD_debug_DEBUG_INFO_default=""
-    fi
-
-    COND_BUILD_debug_UNICODE_0="#"
-    if test "x$BUILD" = "xdebug" -a "x$UNICODE" = "x0" ; then
-        COND_BUILD_debug_UNICODE_0=""
-    fi
-
-    COND_BUILD_debug_UNICODE_1="#"
-    if test "x$BUILD" = "xdebug" -a "x$UNICODE" = "x1" ; then
-        COND_BUILD_debug_UNICODE_1=""
     fi
 
     COND_BUILD_release="#"
@@ -40150,24 +40065,9 @@ EOF
         COND_BUILD_release_DEBUG_INFO_default=""
     fi
 
-    COND_BUILD_release_UNICODE_0="#"
-    if test "x$BUILD" = "xrelease" -a "x$UNICODE" = "x0" ; then
-        COND_BUILD_release_UNICODE_0=""
-    fi
-
-    COND_BUILD_release_UNICODE_1="#"
-    if test "x$BUILD" = "xrelease" -a "x$UNICODE" = "x1" ; then
-        COND_BUILD_release_UNICODE_1=""
-    fi
-
     COND_DEBUG_FLAG_0="#"
     if test "x$DEBUG_FLAG" = "x0" ; then
         COND_DEBUG_FLAG_0=""
-    fi
-
-    COND_DEBUG_FLAG_1="#"
-    if test "x$DEBUG_FLAG" = "x1" ; then
-        COND_DEBUG_FLAG_1=""
     fi
 
     COND_DEBUG_INFO_0="#"
@@ -40498,11 +40398,6 @@ EOF
     COND_PLATFORM_MACOSX_1_USE_SOVERSION_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_SOVERSION" = "x1" ; then
         COND_PLATFORM_MACOSX_1_USE_SOVERSION_1=""
-    fi
-
-    COND_PLATFORM_MACOS_1="#"
-    if test "x$PLATFORM_MACOS" = "x1" ; then
-        COND_PLATFORM_MACOS_1=""
     fi
 
     COND_PLATFORM_MAC_0="#"
@@ -40950,21 +40845,6 @@ EOF
         COND_USE_GUI_1_WXUNIV_1=""
     fi
 
-    COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN="#"
-    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
-        COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN=""
-    fi
-
-    COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN="#"
-    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBPNG" = "xbuiltin" ; then
-        COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN=""
-    fi
-
-    COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN="#"
-    if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
-        COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN=""
-    fi
-
     COND_USE_GUI_1_wxUSE_LIBJPEG_builtin="#"
     if test "x$USE_GUI" = "x1" -a "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
         COND_USE_GUI_1_wxUSE_LIBJPEG_builtin=""
@@ -41073,36 +40953,6 @@ EOF
     COND_WXUNIV_1="#"
     if test "x$WXUNIV" = "x1" ; then
         COND_WXUNIV_1=""
-    fi
-
-    COND_WXUSE_EXPAT_BUILTIN="#"
-    if test "x$wxUSE_EXPAT" = "xbuiltin" ; then
-        COND_WXUSE_EXPAT_BUILTIN=""
-    fi
-
-    COND_WXUSE_LIBJPEG_BUILTIN="#"
-    if test "x$wxUSE_LIBJPEG" = "xbuiltin" ; then
-        COND_WXUSE_LIBJPEG_BUILTIN=""
-    fi
-
-    COND_WXUSE_LIBPNG_BUILTIN="#"
-    if test "x$wxUSE_LIBPNG" = "xbuiltin" ; then
-        COND_WXUSE_LIBPNG_BUILTIN=""
-    fi
-
-    COND_WXUSE_LIBTIFF_BUILTIN="#"
-    if test "x$wxUSE_LIBTIFF" = "xbuiltin" ; then
-        COND_WXUSE_LIBTIFF_BUILTIN=""
-    fi
-
-    COND_WXUSE_REGEX_BUILTIN="#"
-    if test "x$wxUSE_REGEX" = "xbuiltin" ; then
-        COND_WXUSE_REGEX_BUILTIN=""
-    fi
-
-    COND_WXUSE_ZLIB_BUILTIN="#"
-    if test "x$wxUSE_ZLIB" = "xbuiltin" ; then
-        COND_WXUSE_ZLIB_BUILTIN=""
     fi
 
     COND_wxUSE_EXPAT_builtin="#"
