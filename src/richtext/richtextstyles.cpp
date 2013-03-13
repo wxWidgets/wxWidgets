@@ -843,9 +843,9 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     bool hasItalic = false;
     bool hasUnderline = false;
 
-    if (attr.GetFontWeight() == wxBOLD)
+    if (attr.GetFontWeight() == wxFONTWEIGHT_BOLD)
         hasBold = true;
-    if (attr.GetFontStyle() == wxITALIC)
+    if (attr.GetFontStyle() == wxFONTSTYLE_ITALIC)
         hasItalic = true;
     if (attr.GetFontUnderlined())
         hasUnderline = true;

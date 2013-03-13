@@ -547,7 +547,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
 
     if (attr->HasFontWeight())
     {
-        if (attr->GetFontWeight() == wxBOLD)
+        if (attr->GetFontWeight() == wxFONTWEIGHT_BOLD)
             m_weightCtrl->SetSelection(2);
         else
             m_weightCtrl->SetSelection(1);
@@ -559,7 +559,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
 
     if (attr->HasFontItalic())
     {
-        if (attr->GetFontStyle() == wxITALIC)
+        if (attr->GetFontStyle() == wxFONTSTYLE_ITALIC)
             m_styleCtrl->SetSelection(2);
         else
             m_styleCtrl->SetSelection(1);
