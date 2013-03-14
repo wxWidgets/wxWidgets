@@ -3757,7 +3757,9 @@ void wxRichTextCtrl::PositionCaret(wxRichTextParagraphLayoutBox* container)
     wxRect caretRect;
     if (GetCaretPositionForIndex(GetCaretPosition(), caretRect, container))
     {
+#if !wxRICHTEXT_USE_OWN_CARET
         caretRect = GetScaledRect(caretRect);
+#endif
         int topMargin = (int) (0.5 + GetScale()*GetBuffer().GetTopMargin());
         int bottomMargin = (int) (0.5 + GetScale()*GetBuffer().GetBottomMargin());
         wxPoint newPt = caretRect.GetPosition();
@@ -4799,8 +4801,9 @@ void wxRichTextCaret::DoMove()
         {
             if (m_richTextCtrl && m_refreshEnabled)
             {
-                wxRect rect(GetPosition(), GetSize());
-                m_richTextCtrl->RefreshRect(rect, false);
+                wxRect rect(wxPoint(m_xOld, m_yOld), GetSize());
+                wxRect scaledRect = m_richTextCtrl->GetScaledRect(rect);
+                m_richTextCtrl->RefreshRect(scaledRect, false);
             }
         }
     }
@@ -4851,7 +4854,8 @@ void wxRichTextCaret::Refresh()
     if (m_richTextCtrl && m_refreshEnabled)
     {
         wxRect rect(GetPosition(), GetSize());
-        m_richTextCtrl->RefreshRect(rect, false);
+        wxRect rectScaled = m_richTextCtrl->GetScaledRect(rect);
+        m_richTextCtrl->RefreshRect(rectScaled, false);
     }
 }
 
