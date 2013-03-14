@@ -76,23 +76,23 @@ public:
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
 
-     /// Show/hide position controls
-    void ShowPositionControls(bool show);
+    /// Show/hide position controls
+    static void ShowPositionControls(bool show) { sm_showPositionControls = show; }
 
     /// Show/hide position mode controls
-    void ShowPositionModeControls(bool show);
+    static void ShowPositionModeControls(bool show) { sm_showPositionModeControls = show; }
 
     /// Show/hide right/bottom position controls
-    void ShowRightBottomPositionControls(bool show);
+    static void ShowRightBottomPositionControls(bool show) { sm_showRightBottomPositionControls = show; }
 
     /// Show/hide floating and alignment controls
-    void ShowFloatingAndAlignmentControls(bool show);
+    static void ShowFloatingAndAlignmentControls(bool show) { sm_showFloatingAndAlignmentControls = show; }
 
     /// Show/hide floating controls
-    void ShowFloatingControls(bool show);
+    static void ShowFloatingControls(bool show) { sm_showFloatingControls = show; }
 
     /// Show/hide alignment controls
-    void ShowAlignmentControls(bool show);
+    static void ShowAlignmentControls(bool show) { sm_showAlignmentControls = show; }
 
 ////@begin wxRichTextSizePage event handler declarations
 
@@ -156,10 +156,10 @@ public:
     wxBoxSizer* m_parentSizer;
     wxBoxSizer* m_floatingAlignmentSizer;
     wxBoxSizer* m_floatingSizer;
-    wxComboBox* m_float;
+    wxChoice* m_float;
     wxBoxSizer* m_alignmentSizer;
     wxCheckBox* m_verticalAlignmentCheckbox;
-    wxComboBox* m_verticalAlignmentComboBox;
+    wxChoice* m_verticalAlignmentComboBox;
     wxCheckBox* m_widthCheckbox;
     wxTextCtrl* m_width;
     wxComboBox* m_unitsW;
@@ -240,6 +240,13 @@ public:
         ID_RICHTEXT_PARA_DOWN = 10714
     };
 ////@end wxRichTextSizePage member variables
+
+    static bool sm_showFloatingControls;
+    static bool sm_showPositionControls;
+    static bool sm_showPositionModeControls;
+    static bool sm_showRightBottomPositionControls;
+    static bool sm_showAlignmentControls;
+    static bool sm_showFloatingAndAlignmentControls;
 };
 
 #endif

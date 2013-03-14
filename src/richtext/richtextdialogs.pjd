@@ -15227,7 +15227,7 @@
                   <string name="proxy-Member variable name">"m_floatingSizer"</string>
                   <string name="proxy-AlignH">"Expand"</string>
                   <string name="proxy-AlignV">"Centre"</string>
-                  <long name="proxy-Stretch factor">1</long>
+                  <long name="proxy-Stretch factor">0</long>
                   <long name="proxy-Border">5</long>
                   <bool name="proxy-wxLEFT">0</bool>
                   <bool name="proxy-wxRIGHT">0</bool>
@@ -15544,20 +15544,20 @@
                         <string name="proxy-Custom ctor arguments">""</string>
                       </document>
                       <document>
-                        <string name="title">"wxComboBox: ID_RICHTEXT_FLOATING_MODE"</string>
+                        <string name="title">"wxChoice: ID_RICHTEXT_FLOATING_MODE"</string>
                         <string name="type">"dialog-control-document"</string>
                         <string name="filename">""</string>
-                        <string name="icon-name">"combobox"</string>
+                        <string name="icon-name">"choice"</string>
                         <long name="is-transient">0</long>
                         <long name="owns-file">1</long>
                         <long name="title-mode">0</long>
                         <long name="locked">0</long>
-                        <string name="proxy-type">"wbComboBoxProxy"</string>
+                        <string name="proxy-type">"wbChoiceProxy"</string>
                         <string name="proxy-Id name">"ID_RICHTEXT_FLOATING_MODE"</string>
                         <long name="proxy-Id value">10701</long>
                         <string name="proxy-Name">""</string>
-                        <string name="proxy-Class">"wxComboBox"</string>
-                        <string name="proxy-Base class">"wxComboBox"</string>
+                        <string name="proxy-Class">"wxChoice"</string>
+                        <string name="proxy-Base class">"wxChoice"</string>
                         <bool name="proxy-External implementation">1</bool>
                         <bool name="proxy-Separate files">0</bool>
                         <string name="proxy-Implementation filename">""</string>
@@ -15580,11 +15580,6 @@
                         <string name="proxy-Data class implementation filename">""</string>
                         <string name="proxy-Data class header filename">""</string>
                         <string name="proxy-Data class manager window">""</string>
-                        <bool name="proxy-wxCB_SIMPLE">0</bool>
-                        <bool name="proxy-wxCB_DROPDOWN">0</bool>
-                        <bool name="proxy-wxCB_READONLY">1</bool>
-                        <bool name="proxy-wxCB_SORT">0</bool>
-                        <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                         <bool name="proxy-wxWANTS_CHARS">0</bool>
                         <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                         <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
@@ -15612,6 +15607,32 @@
                   </document>
                 </document>
                 <document>
+                  <string name="title">"Spacer"</string>
+                  <string name="type">"dialog-control-document"</string>
+                  <string name="filename">""</string>
+                  <string name="icon-name">"spacer"</string>
+                  <long name="is-transient">0</long>
+                  <long name="owns-file">1</long>
+                  <long name="title-mode">0</long>
+                  <long name="locked">0</long>
+                  <string name="proxy-type">"wbSpacerProxy"</string>
+                  <long name="proxy-Width">0</long>
+                  <long name="proxy-Height">0</long>
+                  <string name="proxy-AlignH">"Centre"</string>
+                  <string name="proxy-AlignV">"Centre"</string>
+                  <long name="proxy-Stretch factor">1</long>
+                  <long name="proxy-Border">5</long>
+                  <bool name="proxy-wxLEFT">0</bool>
+                  <bool name="proxy-wxRIGHT">0</bool>
+                  <bool name="proxy-wxTOP">0</bool>
+                  <bool name="proxy-wxBOTTOM">0</bool>
+                  <bool name="proxy-wxSHAPED">0</bool>
+                  <bool name="proxy-wxADJUST_MINSIZE">0</bool>
+                  <bool name="proxy-wxFIXED_MINSIZE">0</bool>
+                  <bool name="proxy-wxRESERVE_SPACE_EVEN_IF_HIDDEN">0</bool>
+                  <string name="proxy-Platform">"&lt;Any platform&gt;"</string>
+                </document>
+                <document>
                   <string name="title">"wxBoxSizer V"</string>
                   <string name="type">"dialog-control-document"</string>
                   <string name="filename">""</string>
@@ -15625,7 +15646,7 @@
                   <string name="proxy-Member variable name">"m_alignmentSizer"</string>
                   <string name="proxy-AlignH">"Expand"</string>
                   <string name="proxy-AlignV">"Centre"</string>
-                  <long name="proxy-Stretch factor">1</long>
+                  <long name="proxy-Stretch factor">0</long>
                   <long name="proxy-Border">5</long>
                   <bool name="proxy-wxLEFT">0</bool>
                   <bool name="proxy-wxRIGHT">0</bool>
@@ -15905,21 +15926,21 @@
                       <string name="proxy-Custom ctor arguments">""</string>
                     </document>
                     <document>
-                      <string name="title">"wxComboBox: ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX"</string>
+                      <string name="title">"wxChoice: ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX"</string>
                       <string name="type">"dialog-control-document"</string>
                       <string name="filename">""</string>
-                      <string name="icon-name">"combobox"</string>
+                      <string name="icon-name">"choice"</string>
                       <long name="is-transient">0</long>
                       <long name="owns-file">1</long>
                       <long name="title-mode">0</long>
                       <long name="locked">0</long>
-                      <string name="proxy-type">"wbComboBoxProxy"</string>
+                      <string name="proxy-type">"wbChoiceProxy"</string>
                       <string name="event-handler-0">"wxEVT_UPDATE_UI|OnRichtextVerticalAlignmentComboboxUpdate|NONE||wxRichTextSizePage"</string>
                       <string name="proxy-Id name">"ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX"</string>
                       <long name="proxy-Id value">10709</long>
                       <string name="proxy-Name">""</string>
-                      <string name="proxy-Class">"wxComboBox"</string>
-                      <string name="proxy-Base class">"wxComboBox"</string>
+                      <string name="proxy-Class">"wxChoice"</string>
+                      <string name="proxy-Base class">"wxChoice"</string>
                       <bool name="proxy-External implementation">1</bool>
                       <bool name="proxy-Separate files">0</bool>
                       <string name="proxy-Implementation filename">""</string>
@@ -15942,11 +15963,6 @@
                       <string name="proxy-Data class implementation filename">""</string>
                       <string name="proxy-Data class header filename">""</string>
                       <string name="proxy-Data class manager window">""</string>
-                      <bool name="proxy-wxCB_SIMPLE">0</bool>
-                      <bool name="proxy-wxCB_DROPDOWN">0</bool>
-                      <bool name="proxy-wxCB_READONLY">1</bool>
-                      <bool name="proxy-wxCB_SORT">0</bool>
-                      <bool name="proxy-wxTE_PROCESS_ENTER">0</bool>
                       <bool name="proxy-wxWANTS_CHARS">0</bool>
                       <bool name="proxy-wxNO_FULL_REPAINT_ON_RESIZE">0</bool>
                       <bool name="proxy-wxFULL_REPAINT_ON_RESIZE">0</bool>
