@@ -3739,7 +3739,7 @@ void wxRichTextCaret::DoMove()
         {
             if (m_richTextCtrl)
             {
-                wxRect rect(GetPosition(), GetSize());
+                wxRect rect(wxPoint(m_xOld, m_yOld), GetSize());
                 m_richTextCtrl->RefreshRect(rect, false);
             }
         }
