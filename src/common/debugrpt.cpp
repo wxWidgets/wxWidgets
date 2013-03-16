@@ -188,16 +188,14 @@ wxDebugReport::wxDebugReport()
     // directory, so do our best to create a unique name ourselves
     //
     // of course, this doesn't protect us against malicious users...
-    wxFileName fn;
-    fn.AssignTempFileName(appname);
 #if wxUSE_DATETIME
     m_dir.Printf(wxT("%s%c%s_dbgrpt-%lu-%s"),
-                 fn.GetPath().c_str(), wxFILE_SEP_PATH, appname.c_str(),
+                 wxFileName::GetTempDir(), wxFILE_SEP_PATH, appname,
                  wxGetProcessId(),
-                 wxDateTime::Now().Format(wxT("%Y%m%dT%H%M%S")).c_str());
+                 wxDateTime::Now().Format(wxT("%Y%m%dT%H%M%S")));
 #else
     m_dir.Printf(wxT("%s%c%s_dbgrpt-%lu"),
-                 fn.GetPath().c_str(), wxFILE_SEP_PATH, appname.c_str(),
+                 wxFileName::GetTempDir(), wxFILE_SEP_PATH, appname,
                  wxGetProcessId());
 #endif
 
