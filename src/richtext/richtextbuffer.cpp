@@ -5110,6 +5110,9 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         currentPosition.y += lineHeight;
         currentPosition.y += lineSpacing;
         lineCount ++;
+
+        // Apply paragraph styles such as alignment to the wrapped line
+        ApplyParagraphStyle(line, attr, availableRect, dc);
     }
 
     // Remove remaining unused line objects, if any
