@@ -832,9 +832,9 @@ wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_DROP;
            Currently only supported by the native GTK and OS X implementations
            but not by the generic one.
     @style{wxDV_HORIZ_RULES}
-           Display fine rules between row if supported.
+           Display the separator lines between rows.
     @style{wxDV_VERT_RULES}
-           Display fine rules between columns is supported.
+           Display the separator lines between columns.
     @style{wxDV_VARIABLE_LINE_HEIGHT}
            Allow variable line heights.
            This can be inefficient when displaying large number of items.
