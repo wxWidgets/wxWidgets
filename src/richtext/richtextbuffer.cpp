@@ -10038,7 +10038,7 @@ wxString wxRichTextImageBlock::GetExtension() const
  * The data object for a wxRichTextBuffer
  */
 
-const wxChar *wxRichTextBufferDataObject::ms_richTextBufferFormatId = wxT("wxShape");
+const wxChar *wxRichTextBufferDataObject::ms_richTextBufferFormatId = wxT("wxRichText");
 
 wxRichTextBufferDataObject::wxRichTextBufferDataObject(wxRichTextBuffer* richTextBuffer)
 {
