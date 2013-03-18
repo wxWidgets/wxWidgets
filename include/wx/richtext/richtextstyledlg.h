@@ -191,6 +191,9 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_DELETE
     void OnDeleteUpdate( wxUpdateUIEvent& event );
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_HELP
+    void OnHelpClick( wxCommandEvent& event );
+
 ////@end wxRichTextStyleOrganiserDialog event handler declarations
 
 ////@begin wxRichTextStyleOrganiserDialog member function declarations

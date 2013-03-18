@@ -44,28 +44,21 @@ BEGIN_EVENT_TABLE( wxRichTextStyleOrganiserDialog, wxDialog )
 ////@begin wxRichTextStyleOrganiserDialog event table entries
     EVT_BUTTON( ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_CHAR, wxRichTextStyleOrganiserDialog::OnNewCharClick )
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_CHAR, wxRichTextStyleOrganiserDialog::OnNewCharUpdate )
-
     EVT_BUTTON( ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_PARA, wxRichTextStyleOrganiserDialog::OnNewParaClick )
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_PARA, wxRichTextStyleOrganiserDialog::OnNewParaUpdate )
-
     EVT_BUTTON( ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_LIST, wxRichTextStyleOrganiserDialog::OnNewListClick )
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_LIST, wxRichTextStyleOrganiserDialog::OnNewListUpdate )
-
     EVT_BUTTON( ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_BOX, wxRichTextStyleOrganiserDialog::OnNewBoxClick )
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_BOX, wxRichTextStyleOrganiserDialog::OnNewBoxUpdate )
-
     EVT_BUTTON( ID_RICHTEXTSTYLEORGANISERDIALOG_APPLY, wxRichTextStyleOrganiserDialog::OnApplyClick )
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEORGANISERDIALOG_APPLY, wxRichTextStyleOrganiserDialog::OnApplyUpdate )
-
     EVT_BUTTON( ID_RICHTEXTSTYLEORGANISERDIALOG_RENAME, wxRichTextStyleOrganiserDialog::OnRenameClick )
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEORGANISERDIALOG_RENAME, wxRichTextStyleOrganiserDialog::OnRenameUpdate )
-
     EVT_BUTTON( ID_RICHTEXTSTYLEORGANISERDIALOG_EDIT, wxRichTextStyleOrganiserDialog::OnEditClick )
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEORGANISERDIALOG_EDIT, wxRichTextStyleOrganiserDialog::OnEditUpdate )
-
     EVT_BUTTON( ID_RICHTEXTSTYLEORGANISERDIALOG_DELETE, wxRichTextStyleOrganiserDialog::OnDeleteClick )
     EVT_UPDATE_UI( ID_RICHTEXTSTYLEORGANISERDIALOG_DELETE, wxRichTextStyleOrganiserDialog::OnDeleteUpdate )
-
+    EVT_BUTTON( wxID_HELP, wxRichTextStyleOrganiserDialog::OnHelpClick )
 ////@end wxRichTextStyleOrganiserDialog event table entries
 
 END_EVENT_TABLE()
@@ -975,6 +968,16 @@ void wxRichTextStyleOrganiserDialog::OnNewBoxClick( wxCommandEvent& WXUNUSED(eve
 void wxRichTextStyleOrganiserDialog::OnNewBoxUpdate( wxUpdateUIEvent& event )
 {
     event.Enable((GetFlags() & wxRICHTEXT_ORGANISER_CREATE_STYLES) != 0);
+}
+
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_HELP
+ */
+
+void wxRichTextStyleOrganiserDialog::OnHelpClick( wxCommandEvent& WXUNUSED(event) )
+{
+    if ((GetHelpId() != -1) && GetUICustomization())
+        ShowHelp(this);
 }
 
 #endif

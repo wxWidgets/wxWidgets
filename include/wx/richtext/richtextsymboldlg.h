@@ -127,6 +127,12 @@ public:
     /// wxEVT_UPDATE_UI event handler for wxID_OK
     void OnOkUpdate( wxUpdateUIEvent& event );
 
+    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_HELP
+    void OnHelpClick( wxCommandEvent& event );
+
+    /// wxEVT_UPDATE_UI event handler for wxID_HELP
+    void OnHelpUpdate( wxUpdateUIEvent& event );
+
 ////@end wxSymbolPickerDialog event handler declarations
 
 ////@begin wxSymbolPickerDialog member function declarations
@@ -134,14 +140,14 @@ public:
     wxString GetFontName() const { return m_fontName ; }
     void SetFontName(wxString value) { m_fontName = value ; }
 
-    wxString GetSymbol() const { return m_symbol ; }
-    void SetSymbol(wxString value) { m_symbol = value ; }
-
     bool GetFromUnicode() const { return m_fromUnicode ; }
     void SetFromUnicode(bool value) { m_fromUnicode = value ; }
 
     wxString GetNormalTextFontName() const { return m_normalTextFontName ; }
     void SetNormalTextFontName(wxString value) { m_normalTextFontName = value ; }
+
+    wxString GetSymbol() const { return m_symbol ; }
+    void SetSymbol(wxString value) { m_symbol = value ; }
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
@@ -163,9 +169,9 @@ public:
 #endif
     wxStdDialogButtonSizer* m_stdButtonSizer;
     wxString m_fontName;
-    wxString m_symbol;
     bool m_fromUnicode;
     wxString m_normalTextFontName;
+    wxString m_symbol;
     /// Control identifiers
     enum {
         ID_SYMBOLPICKERDIALOG = 10600,

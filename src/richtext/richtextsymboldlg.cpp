@@ -293,7 +293,6 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
 
 ////@begin wxSymbolPickerDialog event table entries
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_FONT, wxSymbolPickerDialog::OnFontCtrlSelected )
-
 #if defined(__UNICODE__)
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_SUBSET, wxSymbolPickerDialog::OnSubsetSelected )
     EVT_UPDATE_UI( ID_SYMBOLPICKERDIALOG_SUBSET, wxSymbolPickerDialog::OnSymbolpickerdialogSubsetUpdate )
@@ -304,7 +303,8 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
 #endif
 
     EVT_UPDATE_UI( wxID_OK, wxSymbolPickerDialog::OnOkUpdate )
-
+    EVT_BUTTON( wxID_HELP, wxSymbolPickerDialog::OnHelpClick )
+    EVT_UPDATE_UI( wxID_HELP, wxSymbolPickerDialog::OnHelpUpdate )
 ////@end wxSymbolPickerDialog event table entries
 
 END_EVENT_TABLE()
@@ -1292,4 +1292,24 @@ wxSymbolListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
     return wxListBox::GetClassDefaultAttributes(variant);
 }
 
-#endif // wxUSE_RICHTEXT
+/*!
+ * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_HELP
+ */
+
+void wxSymbolPickerDialog::OnHelpClick( wxCommandEvent& WXUNUSED(event) )
+{
+    if ((GetHelpInfo().GetHelpId() != -1) && GetHelpInfo().GetUICustomization())
+        ShowHelp(this);
+}
+
+/*!
+ * wxEVT_UPDATE_UI event handler for wxID_HELP
+ */
+
+void wxSymbolPickerDialog::OnHelpUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable((GetHelpInfo().GetHelpId() != -1) && GetHelpInfo().GetUICustomization());
+}
+
+#endif
+    // wxUSE_RICHTEXT
