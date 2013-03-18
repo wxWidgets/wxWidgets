@@ -21,9 +21,9 @@
 
 ////@begin includes
 #include "wx/statline.h"
-#include "wx/stattext.h"
 #include "wx/valgen.h"
 ////@end includes
+#include "wx/stattext.h"
 
 /*!
  * Forward declarations
