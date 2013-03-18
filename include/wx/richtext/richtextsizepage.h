@@ -21,6 +21,7 @@
 
 ////@begin includes
 #include "wx/statline.h"
+#include "wx/stattext.h"
 #include "wx/valgen.h"
 ////@end includes
 
