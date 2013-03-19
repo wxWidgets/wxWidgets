@@ -57,12 +57,6 @@
     #include "wx/univ/colschem.h"
 #endif // __WXUNIVERSAL__
 
-// FIXME-VC6: Only VC6 doesn't have this in its standard headers so this
-//            could be removed once support for it is dropped.
-#ifndef WM_UNINITMENUPOPUP
-    #define WM_UNINITMENUPOPUP 0x0125
-#endif
-
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------

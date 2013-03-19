@@ -63,6 +63,12 @@
     #define ICON_SMALL 0
 #endif
 
+// FIXME-VC6: Only VC6 doesn't have this in its standard headers so this
+//            could be removed once support for it is dropped.
+#ifndef WM_UNINITMENUPOPUP
+    #define WM_UNINITMENUPOPUP 0x0125
+#endif
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
