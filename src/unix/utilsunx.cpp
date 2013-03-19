@@ -844,11 +844,16 @@ wxString wxGetUserHome( const wxString &user )
 // the trailing newline
 static wxString wxGetCommandOutput(const wxString &cmd)
 {
-    FILE *f = popen(cmd.ToAscii(), "r");
+    // Suppress stderr from the shell to avoid outputting errors if the command
+    // doesn't exist.
+    FILE *f = popen((cmd + "2>/dev/null").ToAscii(), "r");
     if ( !f )
     {
-        wxLogSysError(wxT("Executing \"%s\" failed"), cmd.c_str());
-        return wxEmptyString;
+        // Notice that this doesn't happen simply if the command doesn't exist,
+        // but only in case of some really catastrophic failure inside popen()
+        // so we should really notify the user about this as this is not normal.
+        wxLogSysError(wxT("Executing \"%s\" failed"), cmd);
+        return wxString();
     }
 
     wxString s;
