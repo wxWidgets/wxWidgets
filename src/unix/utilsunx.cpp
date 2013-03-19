@@ -846,7 +846,7 @@ static wxString wxGetCommandOutput(const wxString &cmd)
 {
     // Suppress stderr from the shell to avoid outputting errors if the command
     // doesn't exist.
-    FILE *f = popen((cmd + "2>/dev/null").ToAscii(), "r");
+    FILE *f = popen((cmd + " 2>/dev/null").ToAscii(), "r");
     if ( !f )
     {
         // Notice that this doesn't happen simply if the command doesn't exist,
