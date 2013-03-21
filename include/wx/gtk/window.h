@@ -297,6 +297,18 @@ public:
     // methods for accessing it such gtk_entry_im_context_filter_keypress().
     virtual int GTKIMFilterKeypress(GdkEventKey* event) const;
 
+    // This method must be called from the derived classes "insert-text" signal
+    // handlers to check if the text is not being inserted by the IM and, if
+    // this is the case, generate appropriate wxEVT_CHAR events for it.
+    //
+    // Returns true if we did generate and process events corresponding to this
+    // text or false if we didn't handle it.
+    bool GTKOnInsertText(const char* text);
+
+    // This is just a helper of GTKOnInsertText() which is also used by GTK+
+    // "commit" signal handler.
+    bool GTKDoInsertTextFromIM(const char* text);
+
 
     // indices for the arrays below
     enum ScrollDir { ScrollDir_Horz, ScrollDir_Vert, ScrollDir_Max };

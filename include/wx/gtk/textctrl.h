@@ -166,6 +166,10 @@ protected:
 
     virtual void DoSetValue(const wxString &value, int flags = 0);
 
+    // Override this to use either GtkEntry or GtkTextView IME depending on the
+    // kind of control we are.
+    virtual int GTKIMFilterKeypress(GdkEventKey* event) const;
+
     virtual wxPoint DoPositionToCoords(long pos) const;
 
     // wrappers hiding the differences between functions doing the same thing

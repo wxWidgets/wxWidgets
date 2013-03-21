@@ -173,6 +173,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         g_signal_connect_after (entry, "changed",
                                 G_CALLBACK (gtkcombobox_text_changed_callback), this);
 
+        GTKConnectInsertTextSignal(entry);
         GTKConnectClipboardSignals(GTK_WIDGET(entry));
     }
 

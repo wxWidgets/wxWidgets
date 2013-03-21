@@ -461,6 +461,25 @@ au_check_range(GtkTextIter *s,
 //-----------------------------------------------------------------------------
 
 extern "C" {
+
+// Normal version used for detecting IME input and generating appropriate
+// events for it.
+void
+wx_insert_text_callback(GtkTextBuffer* buffer,
+                        GtkTextIter* WXUNUSED(end),
+                        gchar *text,
+                        gint WXUNUSED(len),
+                        wxTextCtrl *win)
+{
+    if ( win->GTKOnInsertText(text) )
+    {
+        // If we already handled the new text insertion, don't do it again.
+        g_signal_stop_emission_by_name (buffer, "insert_text");
+    }
+}
+
+
+// And an "after" version used for detecting URLs in the text.
 static void
 au_insert_text_callback(GtkTextBuffer * WXUNUSED(buffer),
                         GtkTextIter *end,
@@ -787,12 +806,19 @@ bool wxTextCtrl::Create( wxWindow *parent,
             gtk_text_buffer_get_end_iter(m_buffer, &end);
             au_check_range(&start, &end);
         }
+
+        // Also connect a normal (not "after") signal handler for checking for
+        // the IME-generated input.
+        g_signal_connect(m_buffer, "insert_text",
+                         G_CALLBACK(wx_insert_text_callback), this);
     }
     else // single line
     {
         // do the right thing with Enter presses depending on whether we have
         // wxTE_PROCESS_ENTER or not
         GTKSetActivatesDefault();
+
+        GTKConnectInsertTextSignal(GTK_ENTRY(m_text));
     }
 
 
@@ -813,6 +839,30 @@ GtkEditable *wxTextCtrl::GetEditable() const
 GtkEntry *wxTextCtrl::GetEntry() const
 {
     return GTK_ENTRY(m_text);
+}
+
+int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
+{
+#if GTK_CHECK_VERSION(2, 22, 0)
+    if ( gtk_check_version(2, 12, 0) == 0 )
+    {
+        if ( IsSingleLine() )
+        {
+            return wxTextEntry::GTKIMFilterKeypress(event);
+        }
+        else
+        {
+            return gtk_text_view_im_context_filter_keypress(
+                        GTK_TEXT_VIEW(m_text),
+                        event
+                    );
+        }
+    }
+#else // GTK+ < 2.22
+    wxUnusedVar(event);
+#endif // GTK+ 2.22+
+
+    return FALSE;
 }
 
 // ----------------------------------------------------------------------------

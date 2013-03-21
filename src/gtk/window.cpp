@@ -1070,23 +1070,31 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
                         const gchar  *str,
                         wxWindow     *window)
 {
+    // Ignore the return value here, it doesn't matter for the "commit" signal.
+    window->GTKDoInsertTextFromIM(str);
+}
+}
+
+bool wxWindowGTK::GTKDoInsertTextFromIM(const char* str)
+{
     wxKeyEvent event( wxEVT_CHAR );
 
     // take modifiers, cursor position, timestamp etc. from the last
     // key_press_event that was fed into Input Method:
-    if (window->m_imKeyEvent)
+    if ( m_imKeyEvent )
     {
-        wxFillOtherKeyEventFields(event, window, window->m_imKeyEvent);
+        wxFillOtherKeyEventFields(event, this, m_imKeyEvent);
     }
     else
     {
-        event.SetEventObject( window );
+        event.SetEventObject(this);
     }
 
     const wxString data(wxGTK_CONV_BACK_SYS(str));
     if( data.empty() )
-        return;
+        return false;
 
+    bool processed = false;
     for( wxString::const_iterator pstr = data.begin(); pstr != data.end(); ++pstr )
     {
 #if wxUSE_UNICODE
@@ -1100,9 +1108,22 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
 
         AdjustCharEventKeyCodes(event);
 
-        window->HandleWindowEvent(event);
+        if ( HandleWindowEvent(event) )
+            processed = true;
     }
+
+    return processed;
 }
+
+bool wxWindowGTK::GTKOnInsertText(const char* text)
+{
+    if ( !m_imKeyEvent )
+    {
+        // We're not inside IM key handling at all.
+        return false;
+    }
+
+    return GTKDoInsertTextFromIM(text);
 }
 
 

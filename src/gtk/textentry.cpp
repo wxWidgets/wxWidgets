@@ -56,27 +56,37 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
     const int text_max_length = entry->text_max_length;
 #endif
 
-    // we should only be called if we have a max len limit at all
-    wxCHECK_RET(text_max_length, "shouldn't be called");
+    bool handled = false;
 
-    // check that we don't overflow the max length limit
-
-    const int text_length = gtk_entry_get_text_length(entry);
-
-    // We can't use new_text_length as it is in bytes while we want to count
-    // characters (in first approximation, anyhow...).
-    if ( text_length + g_utf8_strlen(new_text, -1) > text_max_length )
+    // check that we don't overflow the max length limit if we have it
+    if ( text_max_length )
     {
-        // Prevent the new text from being inserted.
-        g_signal_stop_emission_by_name (editable, "insert_text");
+        const int text_length = gtk_entry_get_text_length(entry);
 
-        // Currently we don't insert anything at all, but it would be better to
-        // insert as many characters as would fit into the text control and
-        // only discard the rest.
+        // We can't use new_text_length as it is in bytes while we want to count
+        // characters (in first approximation, anyhow...).
+        if ( text_length + g_utf8_strlen(new_text, -1) > text_max_length )
+        {
+            // Prevent the new text from being inserted.
+            handled = true;
 
-        // Notify the user code about overflow.
-        text->SendMaxLenEvent();
+            // Currently we don't insert anything at all, but it would be better to
+            // insert as many characters as would fit into the text control and
+            // only discard the rest.
+
+            // Notify the user code about overflow.
+            text->SendMaxLenEvent();
+        }
     }
+
+    if ( !handled && text->GTKEntryOnInsertText(new_text) )
+    {
+        // If we already handled the new text insertion, don't do it again.
+        handled = true;
+    }
+
+    if ( handled )
+        g_signal_stop_emission_by_name (editable, "insert_text");
 }
 
 //-----------------------------------------------------------------------------
@@ -387,35 +397,6 @@ void wxTextEntry::SetMaxLength(unsigned long len)
         return;
 
     gtk_entry_set_max_length(entry, len);
-
-    // there is a bug in GTK+ 1.2.x: "changed" signal is emitted even if we had
-    // tried to enter more text than allowed by max text length and the text
-    // wasn't really changed
-    //
-    // to detect this and generate TEXT_MAXLEN event instead of TEXT_CHANGED
-    // one in this case we also catch "insert_text" signal
-    //
-    // when max len is set to 0 we disconnect our handler as it means that we
-    // shouldn't check anything any more
-    if ( len )
-    {
-        g_signal_connect
-        (
-            entry,
-            "insert_text",
-            G_CALLBACK(wx_gtk_insert_text_callback),
-            this
-        );
-    }
-    else // no max length
-    {
-        g_signal_handlers_disconnect_by_func
-        (
-            entry,
-            (gpointer)wx_gtk_insert_text_callback,
-            this
-        );
-    }
 }
 
 void wxTextEntry::SendMaxLenEvent()
@@ -429,6 +410,33 @@ void wxTextEntry::SendMaxLenEvent()
     event.SetEventObject(win);
     event.SetString(GetValue());
     win->HandleWindowEvent(event);
+}
+
+// ----------------------------------------------------------------------------
+// IM handling
+// ----------------------------------------------------------------------------
+
+int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
+{
+#if GTK_CHECK_VERSION(2, 22, 0)
+    if ( gtk_check_version(2, 12, 0) == 0 )
+        return gtk_entry_im_context_filter_keypress(GetEntry(), event);
+#else // GTK+ < 2.22
+    wxUnusedVar(event);
+#endif // GTK+ 2.22+
+
+    return FALSE;
+}
+
+void wxTextEntry::GTKConnectInsertTextSignal(GtkEntry* entry)
+{
+    g_signal_connect(entry, "insert_text",
+                     G_CALLBACK(wx_gtk_insert_text_callback), this);
+}
+
+bool wxTextEntry::GTKEntryOnInsertText(const char* text)
+{
+    return GetEditableWindow()->GTKOnInsertText(text);
 }
 
 // ----------------------------------------------------------------------------
