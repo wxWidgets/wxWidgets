@@ -218,6 +218,7 @@ enum
     StatusBar_SetPaneStyleNormal,
     StatusBar_SetPaneStyleFlat,
     StatusBar_SetPaneStyleRaised,
+    StatusBar_SetPaneStyleSunken,
 
     StatusBar_SetStyleSizeGrip,
     StatusBar_SetStyleEllipsizeStart,
@@ -256,6 +257,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_SetPaneStyleNormal, MyFrame::OnSetPaneStyle)
     EVT_MENU(StatusBar_SetPaneStyleFlat, MyFrame::OnSetPaneStyle)
     EVT_MENU(StatusBar_SetPaneStyleRaised, MyFrame::OnSetPaneStyle)
+    EVT_MENU(StatusBar_SetPaneStyleSunken, MyFrame::OnSetPaneStyle)
 
     EVT_MENU(StatusBar_SetStyleSizeGrip, MyFrame::OnSetStyle)
     EVT_MENU(StatusBar_SetStyleEllipsizeStart, MyFrame::OnSetStyle)
@@ -267,7 +269,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
                         MyFrame::OnUpdateForDefaultStatusbar)
     EVT_UPDATE_UI(StatusBar_Toggle, MyFrame::OnUpdateStatusBarToggle)
     EVT_UPDATE_UI_RANGE(StatusBar_SetPaneStyleNormal,
-                        StatusBar_SetPaneStyleRaised,
+                        StatusBar_SetPaneStyleSunken,
                         MyFrame::OnUpdateSetPaneStyle)
     EVT_UPDATE_UI_RANGE(StatusBar_SetStyleSizeGrip, StatusBar_SetStyleShowTips,
                         MyFrame::OnUpdateSetStyle)
@@ -395,6 +397,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
             StatusBar_SetPaneStyleRaised,
             wxT("&Raised"),
             wxT("Sets the style of the first field to raised look")
+        );
+    statbarPaneStyleMenu->AppendCheckItem
+        (
+            StatusBar_SetPaneStyleSunken,
+            wxT("&Sunken"),
+            wxT("Sets the style of the first field to sunken look")
         );
     statbarMenu->Append(StatusBar_SetPaneStyle, wxT("Field style"),
                         statbarPaneStyleMenu);
@@ -722,6 +730,9 @@ void MyFrame::OnUpdateSetPaneStyle(wxUpdateUIEvent& event)
         case StatusBar_SetPaneStyleRaised:
             event.Check(m_statbarPaneStyle == wxSB_RAISED);
             break;
+        case StatusBar_SetPaneStyleSunken:
+            event.Check(m_statbarPaneStyle == wxSB_SUNKEN);
+            break;
     }
 }
 
@@ -737,6 +748,9 @@ void MyFrame::OnSetPaneStyle(wxCommandEvent& event)
             break;
         case StatusBar_SetPaneStyleRaised:
             m_statbarPaneStyle = wxSB_RAISED;
+            break;
+        case StatusBar_SetPaneStyleSunken:
+            m_statbarPaneStyle = wxSB_SUNKEN;
             break;
     }
 

@@ -87,6 +87,8 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
                 style[i] = wxSB_FLAT;
             else if (first == wxT("wxSB_RAISED"))
                 style[i] = wxSB_RAISED;
+            else if (first == wxT("wxSB_SUNKEN"))
+                style[i] = wxSB_SUNKEN;
             else if (!first.empty())
             {
                 ReportParamError

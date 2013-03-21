@@ -275,6 +275,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
         style = SBT_NOBORDERS;
         break;
 
+    case wxSB_SUNKEN:
     case wxSB_NORMAL:
     default:
         style = 0;
@@ -553,6 +554,7 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
         case wxSB_FLAT:
             style = SBT_NOBORDERS;
             break;
+        case wxSB_SUNKEN:
         case wxSB_NORMAL:
         default:
             style = 0;
