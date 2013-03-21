@@ -22,6 +22,24 @@
     #include "../sample.xpm"
 #endif
 
+// IDs for menu items
+enum
+{
+    QuitID = wxID_EXIT,
+    ClearID = wxID_CLEAR,
+    SkipHook = 100,
+    SkipDown,
+
+    // These IDs must be in the same order as MyFrame::InputKind enum elements.
+    IDInputCustom,
+    IDInputEntry,
+    IDInputText,
+
+    TestAccelA,
+    TestAccelCtrlA,
+    TestAccelEsc
+};
+
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
@@ -33,7 +51,7 @@ private:
     void OnQuit(wxCommandEvent& WXUNUSED(event)) { Close(true); }
     void OnAbout(wxCommandEvent& event);
 
-    void OnUseTextCtrl(wxCommandEvent& event);
+    void OnInputWindowKind(wxCommandEvent& event);
 
     void OnTestAccelA(wxCommandEvent& WXUNUSED(event))
         { m_logText->AppendText("Test accelerator \"A\" used.\n"); }
@@ -75,8 +93,15 @@ private:
 
     void LogEvent(const wxString& name, wxKeyEvent& event);
 
-    // Set m_inputWin to either a new wxWindow or new wxTextCtrl.
-    void DoCreateInputWindow(bool text);
+    // Set m_inputWin to either a new window of the given kind:
+    enum InputKind
+    {
+        Input_Custom,   // Just a plain wxWindow
+        Input_Entry,    // Single-line wxTextCtrl
+        Input_Text      // Multi-line wxTextCtrl
+    };
+
+    void DoCreateInputWindow(InputKind inputKind);
 
     wxTextCtrl *m_logText;
     wxWindow *m_inputWin;
@@ -121,19 +146,6 @@ MyFrame::MyFrame(const wxString& title)
 {
     SetIcon(wxICON(sample));
 
-    // IDs for menu items
-    enum
-    {
-        QuitID = wxID_EXIT,
-        ClearID = wxID_CLEAR,
-        SkipHook = 100,
-        SkipDown,
-        UseTextCtrl,
-        TestAccelA,
-        TestAccelCtrlA,
-        TestAccelEsc
-    };
-
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
@@ -155,8 +167,14 @@ MyFrame::MyFrame(const wxString& title)
     menuFile->Check(SkipDown, true);
     menuFile->AppendSeparator();
 
-    menuFile->AppendCheckItem(UseTextCtrl, "Use &text control\tCtrl-T",
-        "Use wxTextCtrl or a simple wxWindow for input window"
+    menuFile->AppendRadioItem(IDInputCustom, "Use &custom control\tCtrl-C",
+        "Use custom wxWindow for input window"
+    );
+    menuFile->AppendRadioItem(IDInputEntry, "Use text &entry\tCtrl-E",
+        "Use single-line wxTextCtrl for input window"
+    );
+    menuFile->AppendRadioItem(IDInputText, "Use &text control\tCtrl-T",
+        "Use multi-line wxTextCtrl for input window"
     );
     menuFile->AppendSeparator();
 
@@ -174,7 +192,7 @@ MyFrame::MyFrame(const wxString& title)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
-    DoCreateInputWindow(false /* simple window initially */);
+    DoCreateInputWindow(Input_Custom);
 
     wxTextCtrl *headerText = new wxTextCtrl(this, wxID_ANY, "",
                                             wxDefaultPosition, wxDefaultSize,
@@ -221,8 +239,8 @@ MyFrame::MyFrame(const wxString& title)
     Connect(SkipDown, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnSkipDown));
 
-    Connect(UseTextCtrl, wxEVT_COMMAND_MENU_SELECTED,
-            wxCommandEventHandler(MyFrame::OnUseTextCtrl));
+    Connect(IDInputCustom, IDInputText, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(MyFrame::OnInputWindowKind));
 
     Connect(TestAccelA, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnTestAccelA));
@@ -256,16 +274,29 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxOK | wxICON_INFORMATION, this);
 }
 
-void MyFrame::DoCreateInputWindow(bool text)
+void MyFrame::DoCreateInputWindow(InputKind inputKind)
 {
     wxWindow* const oldWin = m_inputWin;
 
-    m_inputWin = text ? new wxTextCtrl(this, wxID_ANY, "Press keys here",
-                                       wxDefaultPosition, wxSize(-1, 50),
-                                       wxTE_MULTILINE)
-                      : new wxWindow(this, wxID_ANY,
-                                     wxDefaultPosition, wxSize(-1, 50),
-                                     wxRAISED_BORDER);
+    switch ( inputKind )
+    {
+        case Input_Custom:
+            m_inputWin = new wxWindow(this, wxID_ANY,
+                                      wxDefaultPosition, wxSize(-1, 50),
+                                      wxRAISED_BORDER);
+            break;
+
+        case Input_Entry:
+            m_inputWin = new wxTextCtrl(this, wxID_ANY, "Press keys here");
+            break;
+
+        case Input_Text:
+            m_inputWin = new wxTextCtrl(this, wxID_ANY, "Press keys here",
+                                        wxDefaultPosition, wxSize(-1, 50),
+                                        wxTE_MULTILINE);
+            break;
+    }
+
     m_inputWin->SetBackgroundColour(*wxBLUE);
     m_inputWin->SetForegroundColour(*wxWHITE);
 
@@ -277,7 +308,7 @@ void MyFrame::DoCreateInputWindow(bool text)
     m_inputWin->Connect(wxEVT_CHAR, wxKeyEventHandler(MyFrame::OnChar),
                         NULL, this);
 
-    if ( !text )
+    if ( inputKind == Input_Custom )
     {
         m_inputWin->Connect(wxEVT_PAINT,
                             wxPaintEventHandler(MyFrame::OnPaintInputWin),
@@ -292,9 +323,11 @@ void MyFrame::DoCreateInputWindow(bool text)
     }
 }
 
-void MyFrame::OnUseTextCtrl(wxCommandEvent& event)
+void MyFrame::OnInputWindowKind(wxCommandEvent& event)
 {
-    DoCreateInputWindow(event.IsChecked());
+    DoCreateInputWindow(
+        static_cast<InputKind>(event.GetId() - IDInputCustom)
+    );
 }
 
 void MyFrame::OnPaintInputWin(wxPaintEvent& WXUNUSED(event))
