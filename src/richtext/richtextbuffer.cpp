@@ -1447,7 +1447,6 @@ bool wxRichTextCompositeObject::Defragment(wxRichTextDrawingContext& context, co
                 if (node->GetNext())
                 {
                     wxRichTextObject* nextChild = node->GetNext()->GetData();
-                    wxRichTextObjectList::compatibility_iterator nextNode = node->GetNext();
                     
                     // First split child and nextChild so we have smaller fragments to merge.
                     // Then Merge only has to test per-object virtual attributes
