@@ -208,6 +208,38 @@ gboolean gtk_frame_focus_out_callback(GtkWidget * WXUNUSED(widget),
 }
 }
 
+// ----------------------------------------------------------------------------
+// key_press_event
+// ----------------------------------------------------------------------------
+extern "C" {
+static
+gint
+wxgtk_tlw_key_press_event(GtkWidget *widget, GdkEventKey *event)
+{
+    GtkWindow* const window = GTK_WINDOW(widget);
+
+    // By default GTK+ checks for the menu accelerators in this (top level)
+    // window first and then propagates the event to the currently focused
+    // child from where it bubbles up the window parent chain. In wxWidgets,
+    // however, we want the child window to have the event first but still
+    // handle it as an accelerator if it's not processed there, so we need to
+    // customize this by reversing the order of the steps done in the standard
+    // GTK+ gtk_window_key_press_event() handler.
+
+    if ( gtk_window_propagate_key_event(window, event) )
+        return TRUE;
+
+    if ( gtk_window_activate_key(window, event) )
+        return TRUE;
+
+    GtkObjectClass* parent_class = &GTK_WIDGET_GET_CLASS(widget)->parent_class;
+    if ( GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event) )
+        return TRUE;
+
+    return FALSE;
+}
+}
+
 //-----------------------------------------------------------------------------
 // "size_allocate" from m_wxwindow
 //-----------------------------------------------------------------------------
@@ -645,13 +677,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect_after (m_widget, "focus_out_event",
                       G_CALLBACK (gtk_frame_focus_out_callback), this);
 
-    // GTK processes key events at the top level first, which handles for
-    // menu accelerators and shortcuts before passing the event on to the
-    // focus child window to begin propagation. We want to propagate
-    // first, so we connect gtk_window_propagate_key_event to
-    // key_press_event.
+    // We need to customize the default GTK+ logic for key processing to make
+    // it conforming to wxWidgets event processing order.
     g_signal_connect (m_widget, "key_press_event",
-                      G_CALLBACK (gtk_window_propagate_key_event), NULL);
+                      G_CALLBACK (wxgtk_tlw_key_press_event), NULL);
 
 #ifdef GDK_WINDOWING_X11
 #ifdef __WXGTK3__

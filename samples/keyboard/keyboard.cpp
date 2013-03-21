@@ -53,7 +53,7 @@ private:
             event.Skip();
     }
     void OnKeyUp(wxKeyEvent& event) { LogEvent("KeyUp", event); }
-    void OnChar(wxKeyEvent& event) { LogEvent("Char", event); }
+    void OnChar(wxKeyEvent& event) { LogEvent("Char", event); event.Skip(); }
     void OnCharHook(wxKeyEvent& event)
     {
         // The logged messages can be confusing if the input window doesn't
