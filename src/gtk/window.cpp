@@ -859,22 +859,6 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 }
 
 
-struct wxGtkIMData
-{
-    GtkIMContext *context;
-    GdkEventKey  *lastKeyEvent;
-
-    wxGtkIMData()
-    {
-        context = gtk_im_multicontext_new();
-        lastKeyEvent = NULL;
-    }
-    ~wxGtkIMData()
-    {
-        g_object_unref (context);
-    }
-};
-
 namespace
 {
 
@@ -1008,17 +992,21 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         return_after_IM = true;
     }
 
-    if (!ret && win->m_imData)
+    if ( !ret )
     {
-        win->m_imData->lastKeyEvent = gdk_event;
+        // Indicate that IM handling is in process by setting this pointer
+        // (which will remain valid for all the code called during IM key
+        // handling).
+        win->m_imKeyEvent = gdk_event;
 
         // We should let GTK+ IM filter key event first. According to GTK+ 2.0 API
         // docs, if IM filter returns true, no further processing should be done.
         // we should send the key_down event anyway.
-        bool intercepted_by_IM =
-            gtk_im_context_filter_keypress(win->m_imData->context, gdk_event) != 0;
-        win->m_imData->lastKeyEvent = NULL;
-        if (intercepted_by_IM)
+        const int intercepted_by_IM = win->GTKIMFilterKeypress(gdk_event);
+
+        win->m_imKeyEvent = NULL;
+
+        if ( intercepted_by_IM )
         {
             wxLogTrace(TRACE_KEYS, wxT("Key event intercepted by IM"));
             return TRUE;
@@ -1070,6 +1058,12 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 }
 }
 
+int wxWindowGTK::GTKIMFilterKeypress(GdkEventKey* event) const
+{
+    return m_imContext ? gtk_im_context_filter_keypress(m_imContext, event)
+                       : FALSE;
+}
+
 extern "C" {
 static void
 gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
@@ -1080,10 +1074,9 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
 
     // take modifiers, cursor position, timestamp etc. from the last
     // key_press_event that was fed into Input Method:
-    if (window->m_imData->lastKeyEvent)
+    if (window->m_imKeyEvent)
     {
-        wxFillOtherKeyEventFields(event,
-                                  window, window->m_imData->lastKeyEvent);
+        wxFillOtherKeyEventFields(event, window, window->m_imKeyEvent);
     }
     else
     {
@@ -1984,11 +1977,11 @@ void wxWindowGTK::GTKHandleRealized()
 
     GdkWindow* const window = GTKGetDrawingWindow();
 
-    if (m_imData)
+    if (m_imContext)
     {
         gtk_im_context_set_client_window
         (
-            m_imData->context,
+            m_imContext,
             window ? window
                        : gtk_widget_get_window(m_widget)
         );
@@ -2051,8 +2044,8 @@ void wxWindowGTK::GTKHandleUnrealize()
 
     if (m_wxwindow)
     {
-        if (m_imData)
-            gtk_im_context_set_client_window(m_imData->context, NULL);
+        if (m_imContext)
+            gtk_im_context_set_client_window(m_imContext, NULL);
 
         if (IsTopLevel())
         {
@@ -2215,7 +2208,9 @@ void wxWindowGTK::Init()
 
     m_cursor = *wxSTANDARD_CURSOR;
 
-    m_imData = NULL;
+    m_imContext = NULL;
+    m_imKeyEvent = NULL;
+
     m_dirtyTabOrder = false;
 }
 
@@ -2405,8 +2400,11 @@ wxWindowGTK::~wxWindowGTK()
         Show( false );
 
     // delete before the widgets to avoid a crash on solaris
-    delete m_imData;
-    m_imData = NULL;
+    if ( m_imContext )
+    {
+        g_object_unref(m_imContext);
+        m_imContext = NULL;
+    }
 
     // avoid problem with GTK+ 2.18 where a frozen window causes the whole
     // TLW to be frozen, and if the window is then destroyed, nothing ever
@@ -2491,12 +2489,12 @@ void wxWindowGTK::PostCreation()
         }
 
         // Create input method handler
-        m_imData = new wxGtkIMData;
+        m_imContext = gtk_im_multicontext_new();
 
         // Cannot handle drawing preedited text yet
-        gtk_im_context_set_use_preedit( m_imData->context, FALSE );
+        gtk_im_context_set_use_preedit( m_imContext, FALSE );
 
-        g_signal_connect (m_imData->context, "commit",
+        g_signal_connect (m_imContext, "commit",
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
     }
 
@@ -3194,8 +3192,8 @@ bool wxWindowGTK::GTKHandleFocusIn()
                "handling focus_in event for %s(%p, %s)",
                GetClassInfo()->GetClassName(), this, GetLabel());
 
-    if (m_imData)
-        gtk_im_context_focus_in(m_imData->context);
+    if (m_imContext)
+        gtk_im_context_focus_in(m_imContext);
 
     gs_currentFocus = this;
     gs_pendingFocus = NULL;
@@ -3257,8 +3255,8 @@ void wxWindowGTK::GTKHandleFocusOutNoDeferring()
                "handling focus_out event for %s(%p, %s)",
                GetClassInfo()->GetClassName(), this, GetLabel());
 
-    if (m_imData)
-        gtk_im_context_focus_out(m_imData->context);
+    if (m_imContext)
+        gtk_im_context_focus_out(m_imContext);
 
     if ( gs_currentFocus != this )
     {
