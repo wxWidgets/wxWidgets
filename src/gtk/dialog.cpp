@@ -23,9 +23,7 @@
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private/gtk2-compat.h"
-
-// this is defined in src/gtk/toplevel.cpp
-extern int wxOpenModalDialogsCount;
+#include "wx/gtk/private/dialogcount.h"
 
 wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
 
@@ -172,7 +170,7 @@ int wxDialog::ShowModal()
 
     m_modalShowing = true;
 
-    wxOpenModalDialogsCount++;
+    wxOpenModalDialogLocker modalLock;
 
     // NOTE: gtk_window_set_modal internally calls gtk_grab_add() !
     gtk_window_set_modal(GTK_WINDOW(m_widget), TRUE);
@@ -189,8 +187,6 @@ int wxDialog::ShowModal()
 #endif
 
     gtk_window_set_modal(GTK_WINDOW(m_widget), FALSE);
-
-    wxOpenModalDialogsCount--;
 
     return GetReturnCode();
 }
