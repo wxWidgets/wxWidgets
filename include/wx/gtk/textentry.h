@@ -11,6 +11,7 @@
 #ifndef _WX_GTK_TEXTENTRY_H_
 #define _WX_GTK_TEXTENTRY_H_
 
+typedef struct _GdkEventKey GdkEventKey;
 typedef struct _GtkEditable GtkEditable;
 typedef struct _GtkEntry GtkEntry;
 
