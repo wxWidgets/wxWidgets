@@ -209,11 +209,11 @@ gboolean gtk_frame_focus_out_callback(GtkWidget * WXUNUSED(widget),
 }
 
 // ----------------------------------------------------------------------------
-// key_press_event
+// "key_press_event"
 // ----------------------------------------------------------------------------
+
 extern "C" {
-static
-gint
+static gboolean
 wxgtk_tlw_key_press_event(GtkWidget *widget, GdkEventKey *event)
 {
     GtkWindow* const window = GTK_WINDOW(widget);
@@ -232,8 +232,7 @@ wxgtk_tlw_key_press_event(GtkWidget *widget, GdkEventKey *event)
     if ( gtk_window_activate_key(window, event) )
         return TRUE;
 
-    GtkObjectClass* parent_class = &GTK_WIDGET_GET_CLASS(widget)->parent_class;
-    if ( GTK_WIDGET_CLASS(parent_class)->key_press_event(widget, event) )
+    if (GTK_WIDGET_GET_CLASS(widget)->key_press_event(widget, event))
         return TRUE;
 
     return FALSE;
