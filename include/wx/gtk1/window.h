@@ -16,10 +16,6 @@ typedef struct _GdkIC GdkIC;
 typedef struct _GdkICAttr GdkICAttr;
 #endif
 
-// helper structure that holds class that holds GtkIMContext object and
-// some additional data needed for key events processing
-struct wxGtkIMData;
-
 //-----------------------------------------------------------------------------
 // callback definition for inserting a window (internal)
 //-----------------------------------------------------------------------------

@@ -20,10 +20,6 @@
     #define WXUNUSED_IN_GTK3(x) x
 #endif
 
-// helper structure that holds class that holds GtkIMContext object and
-// some additional data needed for key events processing
-struct wxGtkIMData;
-
 typedef struct _GdkEventKey GdkEventKey;
 typedef struct _GtkIMContext GtkIMContext;
 
