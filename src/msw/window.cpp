@@ -6309,6 +6309,9 @@ int VKToWX(WXWORD vk, WXLPARAM lParam, wchar_t *uc)
 
         case VK_DELETE:
             wxk = ChooseNormalOrExtended(lParam, WXK_NUMPAD_DELETE, WXK_DELETE);
+
+            if ( uc )
+                *uc = WXK_DELETE;
             break;
 
         case VK_RETURN:
