@@ -6606,7 +6606,7 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     DWORD hiWord = HIWORD(lParam);
     if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
     {
-        wchar_t uc;
+        wchar_t uc = 0;
         int id = wxMSWKeyboard::VKToWX(wParam, lParam, &uc);
 
         // Don't intercept keyboard entry (notably Escape) if a modal window
