@@ -1241,6 +1241,15 @@ public:
     bool AlreadySaved() const;
 
     /**
+        Activate the first view of the document if any.
+
+        @see GetFirstView()
+
+        @since 2.9.5
+     */
+    void Activate() const;
+
+    /**
         Closes the document, by calling OnSaveModified() and then (if this
         returned @true) OnCloseDocument(). This does not normally delete the
         document object, use DeleteAllViews() to do this implicitly.

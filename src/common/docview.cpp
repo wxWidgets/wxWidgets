@@ -1407,9 +1407,9 @@ wxDocTemplateVector GetVisibleTemplates(const wxList& allTemplates)
 
 } // anonymous namespace
 
-void wxDocManager::ActivateDocument(wxDocument *doc)
+void wxDocument::Activate()
 {
-    wxView * const view = doc->GetFirstView();
+    wxView * const view = GetFirstView();
     if ( !view )
         return;
 
@@ -1472,7 +1472,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
             if ( fn == doc->GetFilename() )
             {
                 // file already open, just activate it and return
-                ActivateDocument(doc);
+                doc->Activate();
                 return doc;
             }
         }
@@ -1523,7 +1523,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
     // at least under Mac (where views are top level windows) it seems to be
     // necessary to manually activate the new document to bring it to the
     // forefront -- and it shouldn't hurt doing this under the other platforms
-    ActivateDocument(docNew);
+    docNew->Activate();
 
     return docNew;
 }

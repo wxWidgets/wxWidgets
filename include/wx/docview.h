@@ -86,6 +86,9 @@ public:
     bool GetDocumentSaved() const { return m_savedYet; }
     void SetDocumentSaved(bool saved = true) { m_savedYet = saved; }
 
+    // activate the first view of the document if any
+    void Activate();
+
     // return true if the document hasn't been modified since the last time it
     // was saved (implying that it returns false if it was never saved, even if
     // the document is not modified)
@@ -549,10 +552,6 @@ protected:
     // if the latter is NULL, it also checks if we don't have just a single
     // view and returns it then
     wxView *GetActiveView() const;
-
-    // activate the first view of the given document if any
-    void ActivateDocument(wxDocument *doc);
-
 
     int               m_defaultDocumentNameCounter;
     int               m_maxDocsOpen;
