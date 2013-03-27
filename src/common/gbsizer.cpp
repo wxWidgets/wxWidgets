@@ -312,27 +312,24 @@ bool wxGridBagSizer::SetItemPosition(size_t index, const wxGBPosition& pos)
 
 wxGBSpan wxGridBagSizer::GetItemSpan(wxWindow *window)
 {
-    wxGBSpan badspan(-1,-1);
     wxGBSizerItem* item = FindItem(window);
-    wxCHECK_MSG( item, badspan, wxT("Failed to find item.") );
+    wxCHECK_MSG( item, wxGBSpan::Invalid(), wxT("Failed to find item.") );
     return item->GetSpan();
 }
 
 
 wxGBSpan wxGridBagSizer::GetItemSpan(wxSizer *sizer)
 {
-    wxGBSpan badspan(-1,-1);
     wxGBSizerItem* item = FindItem(sizer);
-    wxCHECK_MSG( item, badspan, wxT("Failed to find item.") );
+    wxCHECK_MSG( item, wxGBSpan::Invalid(), wxT("Failed to find item.") );
     return item->GetSpan();
 }
 
 
 wxGBSpan wxGridBagSizer::GetItemSpan(size_t index)
 {
-    wxGBSpan badspan(-1,-1);
     wxSizerItemList::compatibility_iterator node = m_children.Item( index );
-    wxCHECK_MSG( node, badspan, wxT("Failed to find item.") );
+    wxCHECK_MSG( node, wxGBSpan::Invalid(), wxT("Failed to find item.") );
     wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
     return item->GetSpan();
 }
