@@ -446,6 +446,9 @@ public:
     // Find template from document class info, may return NULL.
     wxDocTemplate* FindTemplate(const wxClassInfo* documentClassInfo);
 
+    // Find document from file name, may return NULL.
+    wxDocument* FindDocumentByPath(const wxString& path) const;
+
     wxDocument *GetCurrentDocument() const;
 
     void SetMaxDocsOpen(int n) { m_maxDocsOpen = n; }

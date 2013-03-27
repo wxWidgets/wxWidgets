@@ -1418,6 +1418,19 @@ void wxDocument::Activate()
         win->Raise();
 }
 
+wxDocument* wxDocManager::FindDocumentByPath(const wxString& path) const
+{
+    const wxFileName fileName(path);
+    for ( wxList::const_iterator i = m_docs.begin(); i != m_docs.end(); ++i )
+    {
+        wxDocument * const doc = wxStaticCast(*i, wxDocument);
+
+        if ( fileName == wxFileName(doc->GetFilename()) )
+            return doc;
+    }
+    return NULL;
+}
+
 wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
 {
     // this ought to be const but SelectDocumentType/Path() are not
@@ -1464,20 +1477,14 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
     // check whether the document with this path is already opened
     if ( !path.empty() )
     {
-        const wxFileName fn(path);
-        for ( wxList::const_iterator i = m_docs.begin(); i != m_docs.end(); ++i )
+        wxDocument * const doc = FindDocumentByPath(path);
+        if (doc)
         {
-            wxDocument * const doc = (wxDocument*)*i;
-
-            if ( fn == doc->GetFilename() )
-            {
-                // file already open, just activate it and return
-                doc->Activate();
-                return doc;
-            }
+            // file already open, just activate it and return
+            doc->Activate();
+            return doc;
         }
     }
-
 
     // no, we need to create a new document
 

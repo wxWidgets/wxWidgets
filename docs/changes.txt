@@ -625,6 +625,7 @@ All (GUI):
 - Make wxGenericDataViewCtrl::SetFont() really work (Laurent Poujoulat).
 - Remove wxLogWindow::OnFrameCreate(), it was never called anyhow.
 - Added wxDocument::Activate() (troelsk).
+- Added wxDocManager::FindDocumentByPath() (troelsk).
 
 wxGTK:
 

@@ -414,6 +414,19 @@ public:
      */
     wxDocTemplate* FindTemplate(const wxClassInfo* classinfo);
 
+
+    /**
+        Search for the document corresponding to the given file.
+
+        @param path
+            Document file path.
+        @return
+            Pointer to a wxDocument, or @NULL if none found.
+
+        @since 2.9.5
+     */
+    wxDocument* FindDocumentByPath(const wxString& path) const;
+
     /**
         Closes the specified document.
 
