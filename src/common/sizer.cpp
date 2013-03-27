@@ -602,20 +602,10 @@ bool wxSizerItem::IsShown() const
             return m_window->IsShown();
 
         case Item_Sizer:
-        {
             // arbitrarily decide that if at least one of our elements is
             // shown, so are we (this arbitrariness is the reason for
             // deprecating this function)
-            for ( wxSizerItemList::compatibility_iterator
-                    node = m_sizer->GetChildren().GetFirst();
-                  node;
-                  node = node->GetNext() )
-            {
-                if ( node->GetData()->IsShown() )
-                    return true;
-            }
-            return false;
-        }
+            return m_sizer->AreAnyItemsShown();
 
         case Item_Spacer:
             return m_spacer->IsShown();
@@ -1288,6 +1278,19 @@ void wxSizer::ShowItems( bool show )
         node->GetData()->Show( show );
         node = node->GetNext();
     }
+}
+
+bool wxSizer::AreAnyItemsShown() const
+{
+    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        if ( node->GetData()->IsShown() )
+            return true;
+        node = node->GetNext();
+    }
+
+    return false;
 }
 
 bool wxSizer::IsShown( wxWindow *window ) const
@@ -2539,6 +2542,16 @@ void wxStaticBoxSizer::ShowItems( bool show )
 {
     m_staticBox->Show( show );
     wxBoxSizer::ShowItems( show );
+}
+
+bool wxStaticBoxSizer::AreAnyItemsShown() const
+{
+    // We don't need to check the status of our child items: if the box is
+    // shown, this sizer should be considered shown even if all its elements
+    // are hidden (or, more prosaically, there are no elements at all). And,
+    // conversely, if the box is hidden then all our items, which are its
+    // children, are hidden too.
+    return m_staticBox->IsShown();
 }
 
 bool wxStaticBoxSizer::Detach( wxWindow *window )
