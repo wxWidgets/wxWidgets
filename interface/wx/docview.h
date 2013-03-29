@@ -1256,6 +1256,20 @@ public:
     /**
         Activate the first view of the document if any.
 
+        This function simply calls the Raise() method of the frame of the first
+        view. You may need to override the Raise() method to get the desired
+        effect if you are not using a standard wxFrame for your view. For
+        instance, if your document is inside its own notebook tab you could
+        implement Raise() like this:
+
+        @code
+        void MyNotebookPage::Raise()
+        {
+            wxNotebook* notebook = wxStaticCast(GetParent(), wxNotebook);
+            notebook->SetSelection(notebook->FindPage(this));
+        }
+        @endcode
+
         @see GetFirstView()
 
         @since 2.9.5
