@@ -431,6 +431,18 @@ int wxBookCtrlBase::GetNextPage(bool forward) const
     return nPage;
 }
 
+int wxBookCtrlBase::FindPage(const wxWindow* page) const
+{
+    const size_t nCount = m_pages.size();
+    for ( size_t nPage = 0; nPage < nCount; nPage++ )
+    {
+        if ( m_pages[nPage] == page )
+            return (int)nPage;
+    }
+
+    return wxNOT_FOUND;
+}
+
 bool wxBookCtrlBase::DoSetSelectionAfterInsertion(size_t n, bool bSelect)
 {
     if ( bSelect )

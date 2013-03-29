@@ -193,6 +193,17 @@ public:
     */
     virtual int ChangeSelection(size_t page) = 0;
 
+    /**
+        Returns the index of the specified tab window or @c wxNOT_FOUND
+        if not found.
+
+        @param page One of the control pages.
+        @return The zero-based tab index or @c wxNOT_FOUND if not found.
+
+        @since 2.9.5
+    */
+    int FindPage(const wxWindow* page) const;
+
     //@}
 
 
