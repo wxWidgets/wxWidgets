@@ -167,7 +167,7 @@ public:
     wxWindow* GetCurrentPage() const;
 
     /**
-        Sets the selection for the given page, returning the previous selection.
+        Sets the selection to the given page, returning the previous selection.
 
         Notice that the call to this function generates the page changing
         events, use the ChangeSelection() function if you don't want these
@@ -184,7 +184,7 @@ public:
     void AdvanceSelection(bool forward = true);
 
     /**
-        Changes the selection for the given page, returning the previous selection.
+        Changes the selection to the given page, returning the previous selection.
 
         This function behaves as SetSelection() but does @em not generate the
         page changing events.
