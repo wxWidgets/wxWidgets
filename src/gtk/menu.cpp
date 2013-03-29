@@ -537,6 +537,14 @@ static void menuitem_activate(GtkWidget*, wxMenuItem* item)
 
     wxMenu* menu = item->GetMenu();
     menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
+
+    // A lot of existing code, including any program that closes its main
+    // window from a menu handler and expects the program to exit -- as our own
+    // minimal sample -- relies on getting an idle event after a menu event.
+    // But when using Ubuntu Unity detached menus, we get called from a DBUS
+    // handler called from g_timeout_dispatch() and Glib doesn't send us any
+    // idle events after it. So ask explicitly for an idle event to get one.
+    wxWakeUpIdle();
 }
 }
 
