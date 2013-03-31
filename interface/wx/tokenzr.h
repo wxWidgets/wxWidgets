@@ -175,7 +175,7 @@ public:
 
     @return The array with the parsed tokens.
 
-    @header{wx/string.h}
+    @header{wx/tokenzr.h}
 */
 wxArrayString 
 wxStringTokenize(const wxString& str,
