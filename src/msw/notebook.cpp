@@ -736,6 +736,14 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( m_pages.GetCount() == 1 || HasFlag(wxNB_MULTILINE) )
     {
         AdjustPageSize(pPage);
+
+        // Additionally, force the layout of the notebook itself by posting a
+        // size event to it. If we don't do it, notebooks with pages on the
+        // left or the right side may fail to account for the fact that they
+        // are now big enough to fit all all of their pages on one row and
+        // still reserve space for the second row of tabs, see #1792.
+        const wxSize s = GetSize();
+        ::PostMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED, MAKELPARAM(s.x, s.y));
     }
 
     // now deal with the selection
