@@ -1384,10 +1384,6 @@ typedef pid_t GPid;
 
 #ifdef __WIN32__
 
-/* we need to define wxUSE_XPM_IN_MSW for MSW compilation for compatibil
-      with wx/msw/setup.h */
-#define wxUSE_XPM_IN_MSW wxUSE_XPM
-
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 
 /* Define if the header pbt.h is missing.  */

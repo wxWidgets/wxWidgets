@@ -364,7 +364,6 @@ compilers. See also wxUSE_NO_MANIFEST.}
 @itemdef{wxUSE_UXTHEME, Enable support for XP themes.}
 @itemdef{wxUSE_WIN_METAFILES_ALWAYS, Use wxMetaFile even when wxUSE_ENH_METAFILE=1.}
 @itemdef{wxUSE_WXDIB, Use wxDIB class.}
-@itemdef{wxUSE_XPM_IN_MSW, See also wxUSE_XPM}
 @endDefList
 
 

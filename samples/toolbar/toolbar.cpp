@@ -43,10 +43,6 @@
     #define USE_XPM_BITMAPS 1
 #endif
 
-#if USE_XPM_BITMAPS && defined(__WXMSW__) && !wxUSE_XPM_IN_MSW
-    #error You need to enable XPM support to use XPM bitmaps with toolbar!
-#endif // USE_XPM_BITMAPS
-
 // If this is 1, the sample will test an extra toolbar identical to the
 // main one, but not managed by the frame. This can test subtle differences
 // in the way toolbars are handled, especially on Mac where there is one
