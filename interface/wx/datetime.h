@@ -818,7 +818,7 @@ public:
     /**
         Adds the given date span to this object.
     */
-    wxDateTime Add(const wxDateSpan& diff);
+    wxDateTime& Add(const wxDateSpan& diff);
     /**
         Adds the given time span to this object.
     */
@@ -864,17 +864,38 @@ public:
     */
     wxDateTime& operator+=(const wxDateSpan& diff);
     /**
+        Adds the given date span to this object.
+    */
+    wxDateTime operator+(const wxDateSpan& ds) const;
+    /**
         Subtracts the given date span from this object.
     */
     wxDateTime& operator-=(const wxDateSpan& diff);
+    /**
+        Subtracts the given date span from this object.
+    */
+    wxDateTime operator-(const wxDateSpan& ds) const;
     /**
         Adds the given time span to this object.
     */
     wxDateTime& operator+=(const wxTimeSpan& diff);
     /**
+        Adds the given time span to this object.
+    */
+    wxDateTime operator+(const wxTimeSpan& ts) const;
+    /**
         Subtracts the given time span from this object.
     */
     wxDateTime& operator-=(const wxTimeSpan& diff);
+    /**
+        Subtracts the given time span from this object.
+    */
+    wxDateTime operator-(const wxTimeSpan& ts) const;
+    /**
+        Subtracts another date from this one and returns the difference between
+        them as a wxTimeSpan.
+    */
+    wxTimeSpan operator-(const wxDateTime& dt2) const;
 
     //@}
 
