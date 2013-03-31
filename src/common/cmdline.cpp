@@ -1377,6 +1377,23 @@ static wxString GetLongOptionName(wxString::const_iterator p,
    Windows conventions for the command line handling, not Unix ones. For
    instance, backslash is not special except when it precedes double quote when
    it does quote it.
+
+   TODO: Rewrite this to follow the even more complicated rule used by Windows
+         CommandLineToArgv():
+
+    * A string of backslashes not followed by a quotation mark has no special
+      meaning.
+    * An even number of backslashes followed by a quotation mark is treated as
+      pairs of protected backslashes, followed by a word terminator.
+    * An odd number of backslashes followed by a quotation mark is treated as
+      pairs of protected backslashes, followed by a protected quotation mark.
+
+    See http://blogs.msdn.com/b/oldnewthing/archive/2010/09/17/10063629.aspx
+
+    It could also be useful to provide a converse function which is also
+    non-trivial, see
+
+    http://blogs.msdn.com/b/twistylittlepassagesallalike/archive/2011/04/23/everyone-quotes-arguments-the-wrong-way.aspx
  */
 
 /* static */
