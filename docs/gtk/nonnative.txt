@@ -1,5 +1,8 @@
 List of classes which should use their native GTK+ equivalents but don't:
 
+- wxSearchCtrl
+    Should use GtkSearchEntry (GTK+ 3.6+)
+
 - wxStatusBar:
     Problem with multiple fields, GtkStatusbar only seems to support one pane
 
