@@ -2383,6 +2383,8 @@ public:
 
     @library{wxadv}
     @category{ctrl,dvc}
+
+    @since 2.9.0
 */
 class wxDataViewListCtrl: public wxDataViewCtrl
 {
@@ -2693,6 +2695,9 @@ public:
 
     @library{wxadv}
     @category{ctrl,dvc}
+
+    @since 2.9.0
+
     @appearance{dataviewtreectrl}
 */
 class wxDataViewTreeCtrl : public wxDataViewCtrl
