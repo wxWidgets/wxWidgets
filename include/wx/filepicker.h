@@ -267,9 +267,6 @@ public:
 
 public:     // overrides
 
-    // return true if the given path is valid for this control
-    bool CheckPath(const wxString& path) const;
-
     // return the text control value in canonical form
     wxString GetTextCtrlValue() const;
 
@@ -370,8 +367,6 @@ public:
         { return wxFileName::DirName(GetPath()); }
 
 public:     // overrides
-
-    bool CheckPath(const wxString &path) const;
 
     wxString GetTextCtrlValue() const;
 
