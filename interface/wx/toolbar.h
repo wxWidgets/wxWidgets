@@ -18,12 +18,12 @@ enum wxToolBarToolStyle
 enum
 {
     /** lay out the toolbar horizontally */
-    wxTB_HORIZONTAL,
-    wxTB_TOP,
+    wxTB_HORIZONTAL  = wxHORIZONTAL,
+    wxTB_TOP         = wxTB_HORIZONTAL,
 
     /** lay out the toolbar vertically */
-    wxTB_VERTICAL,
-    wxTB_LEFT,
+    wxTB_VERTICAL    = wxVERTICAL,
+    wxTB_LEFT        = wxTB_VERTICAL,
 
     /** show 3D buttons (wxToolBarSimple only) */
     wxTB_3DBUTTONS,
@@ -48,7 +48,7 @@ enum
 
     /** show the text and the icons alongside, not vertically stacked (Win32/GTK) */
     wxTB_HORZ_LAYOUT,
-    wxTB_HORZ_TEXT,
+    wxTB_HORZ_TEXT   = wxTB_HORZ_LAYOUT | wxTB_TEXT,
 
     /** don't show the toolbar short help tooltips */
     wxTB_NO_TOOLTIPS,
@@ -57,7 +57,10 @@ enum
     wxTB_BOTTOM,
 
     /** lay out toolbar at the right edge of the window */
-    wxTB_RIGHT
+    wxTB_RIGHT,
+
+    /** flags that are closest to the native look*/
+    wxTB_DEFAULT_STYLE = wxTB_HORIZONTAL | wxTB_FLAT
 };
 
 
@@ -216,6 +219,9 @@ public:
         Align the toolbar at the bottom of parent window.
     @style{wxTB_RIGHT}
         Align the toolbar at the right side of parent window.
+    @style{wxTB_DEFAULT_STYLE}
+        Combination of @c wxTB_HORIZONTAL and @c wxTB_FLAT. This style is new
+        since wxWidgets 2.9.5.
     @endStyleTable
 
     See also @ref overview_windowstyles. Note that the wxMSW native toolbar

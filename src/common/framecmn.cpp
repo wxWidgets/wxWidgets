@@ -562,7 +562,7 @@ wxToolBar* wxFrameBase::CreateToolBar(long style,
         //      a) this allows us to have different defaults for different
         //         platforms (even if we don't have them right now)
         //      b) we don't need to include wx/toolbar.h in the header then
-        style = wxBORDER_NONE | wxTB_HORIZONTAL | wxTB_FLAT;
+        style = wxTB_DEFAULT_STYLE;
     }
 
     SetToolBar(OnCreateToolBar(style, id, name));

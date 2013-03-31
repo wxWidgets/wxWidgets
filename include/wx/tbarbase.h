@@ -609,6 +609,9 @@ public:
 #endif
 
 protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
     // to implement in derived classes
     // -------------------------------
 
