@@ -1304,7 +1304,6 @@ void wxWindowMac::MacHiliteChanged()
 
 void wxWindowMac::MacEnabledStateChanged()
 {
-    OnEnabled( GetPeer()->IsEnabled() );
 }
 
 //

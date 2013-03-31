@@ -145,11 +145,6 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
 protected:
-    // wxGTK-specific: called recursively by Enable,
-    // to give widgets an oppprtunity to correct their colours after they
-    // have been changed by Enable
-    virtual void OnEnabled(bool enable);
-
     // overridden wxWindow virtual methods
     virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);

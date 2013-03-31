@@ -1341,26 +1341,6 @@ bool wxTextCtrl::Enable( bool enable )
     return true;
 }
 
-// wxGTK-specific: called recursively by Enable,
-// to give widgets an opportunity to correct their colours after they
-// have been changed by Enable
-void wxTextCtrl::OnEnabled(bool WXUNUSED(enable))
-{
-    // If we have a custom background colour, we use this colour in both
-    // disabled and enabled mode, or we end up with a different colour under the
-    // text.
-    wxColour oldColour = GetBackgroundColour();
-    if (oldColour.IsOk())
-    {
-        // Need to set twice or it'll optimize the useful stuff out
-        if (oldColour == * wxWHITE)
-            SetBackgroundColour(*wxBLACK);
-        else
-            SetBackgroundColour(*wxWHITE);
-        SetBackgroundColour(oldColour);
-    }
-}
-
 void wxTextCtrl::MarkDirty()
 {
     m_modified = true;

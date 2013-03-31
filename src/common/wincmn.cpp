@@ -1149,8 +1149,6 @@ void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
     DoEnable(enabled);
 #endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 
-    OnEnabled(enabled);
-
     // Disabling a top level window is typically done when showing a modal
     // dialog and we don't need to disable its children in this case, they will
     // be logically disabled anyhow (i.e. their IsEnabled() will return false)
@@ -1166,9 +1164,7 @@ void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
     // they would still show as enabled even though they wouldn't actually
     // accept any input (at least under MSW where children don't accept input
     // if any of the windows in their parent chain is enabled).
-    //
-    // Notice that we must do this even for wxHAS_NATIVE_ENABLED_MANAGEMENT
-    // platforms as we still need to call the children OnEnabled() recursively.
+#ifndef wxHAS_NATIVE_ENABLED_MANAGEMENT
     for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
@@ -1177,6 +1173,7 @@ void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
         if ( !child->IsTopLevel() && child->IsThisEnabled() )
             child->NotifyWindowOnEnableChange(enabled);
     }
+#endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
 }
 
 bool wxWindowBase::Enable(bool enable)
