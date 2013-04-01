@@ -401,6 +401,8 @@ wxString wxGUIAppTraits::GetDesktopEnvironment() const
 
 #endif // __UNIX__ || __OS2__
 
+#ifdef __UNIX__
+
 // see the hack below in wxCmdLineParser::GetUsageString().
 // TODO: replace this hack with a g_option_group_get_entries()
 //       call as soon as such function exists;
@@ -427,6 +429,7 @@ struct _GOptionGroup
   GOptionErrorFunc error_func;
 };
 
+static
 wxString wxGetNameFromGtkOptionEntry(const GOptionEntry *opt)
 {
     wxString ret;
@@ -445,8 +448,6 @@ wxString wxGetNameFromGtkOptionEntry(const GOptionEntry *opt)
 
     return wxT("  ") + ret;
 }
-
-#ifdef __UNIX__
 
 wxString
 wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
