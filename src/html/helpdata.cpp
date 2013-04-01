@@ -508,6 +508,18 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                                   const wxString& indexfile, const wxString& deftopic,
                                   const wxString& path)
 {
+#if wxUSE_WCHAR_T
+        #if wxUSE_UNICODE
+            #define CORRECT_STR(str, conv) \
+                str = wxString((str).mb_str(wxConvISO8859_1), conv)
+        #else
+            #define CORRECT_STR(str, conv) \
+                str = wxString((str).wc_str(conv), wxConvLocal)
+        #endif
+#else
+    #define CORRECT_STR(str, conv)
+#endif
+
     wxFileSystem fsys;
     wxFSFile *fi;
     wxHtmlBookRecord *bookr;
@@ -525,13 +537,22 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
             return true; // book is (was) loaded
     }
 
-    bookr = new wxHtmlBookRecord(bookfile.GetLocation(), fsys.GetPath(), title, deftopic);
+    wxString title1 = title;
+    if (encoding != wxFONTENCODING_SYSTEM)
+    {
+        wxCSConv conv(encoding);
+        CORRECT_STR(title1, conv);
+        if (title1.IsEmpty() && !title.IsEmpty())
+            title1 = title;
+    }
+
+    bookr = new wxHtmlBookRecord(bookfile.GetLocation(), fsys.GetPath(), title1, deftopic);
 
     wxHtmlHelpDataItem *bookitem = new wxHtmlHelpDataItem;
     bookitem->level = 0;
     bookitem->id = 0;
     bookitem->page = deftopic;
-    bookitem->name = title;
+    bookitem->name = title; // Don't convert to correct encoding at this point, it will be done below.
     bookitem->book = bookr;
 
     // store the contents index for later
@@ -583,13 +604,6 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
     // differences here and also convert to wxConvLocal in ANSI build
     if (encoding != wxFONTENCODING_SYSTEM)
     {
-        #if wxUSE_UNICODE
-            #define CORRECT_STR(str, conv) \
-                str = wxString((str).mb_str(wxConvISO8859_1), conv)
-        #else
-            #define CORRECT_STR(str, conv) \
-                str = wxString((str).wc_str(conv), wxConvLocal)
-        #endif
         wxCSConv conv(encoding);
         size_t IndexCnt = m_index.size();
         size_t ContentsCnt = m_contents.size();
@@ -698,19 +712,6 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
     if (charset != wxEmptyString)
         enc = wxFontMapper::Get()->CharsetToEncoding(charset);
 #endif
-
-    // No conversion was done on the title yet; at least
-    // test for a common case.
-    if (charset == wxT("utf-8") && !title.IsEmpty())
-    {
-        char *buf = new char[title.Length()+1];
-        size_t i;
-        for (i = 0; i < title.Length(); i++)
-            buf[i] = (char) title[i];
-        buf[i] = 0;
-        title = wxString::FromUTF8(buf);
-        delete[] buf;
-    }
 
     bool rtval = AddBookParam(*fi, enc,
                               title, contents, index, start, fsys.GetPath());
