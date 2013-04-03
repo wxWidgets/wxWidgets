@@ -424,6 +424,11 @@ public:
     void SetHeight(int height);
 
     /**
+        Sets the position.
+    */
+    void SetPosition(const wxPoint& pos);
+
+    /**
         Sets the size.
 
         @see GetSize()
