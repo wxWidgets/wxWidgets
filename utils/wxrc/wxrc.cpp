@@ -356,7 +356,8 @@ void XmlResApp::CompileRes()
 {
     wxArrayString files = PrepareTempFiles();
 
-    wxRemoveFile(parOutput);
+    if ( wxFileExists(parOutput) )
+        wxRemoveFile(parOutput);
 
     if (!retCode)
     {
