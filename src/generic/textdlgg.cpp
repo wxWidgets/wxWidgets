@@ -105,11 +105,6 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
                     Expand().
                     TripleBorder(wxLEFT | wxRIGHT));
 
-#if wxUSE_VALIDATORS
-    wxTextValidator validator( wxFILTER_NONE, &m_value );
-    m_textctrl->SetValidator( validator );
-#endif // wxUSE_VALIDATORS
-
     // 3) buttons if any
     wxSizer *buttonSizer = CreateSeparatedButtonSizer(style & (wxOK | wxCANCEL));
     if ( buttonSizer )
@@ -134,19 +129,26 @@ bool wxTextEntryDialog::Create(wxWindow *parent,
     return true;
 }
 
+bool wxTextEntryDialog::TransferDataToWindow()
+{
+    m_textctrl->SetValue(m_value);
+
+    return wxDialog::TransferDataToWindow();
+}
+
+bool wxTextEntryDialog::TransferDataFromWindow()
+{
+    m_value = m_textctrl->GetValue();
+
+    return wxDialog::TransferDataFromWindow();
+}
+
 void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
 {
-#if wxUSE_VALIDATORS
-    if( Validate() && TransferDataFromWindow() )
+    if ( Validate() && TransferDataFromWindow() )
     {
         EndModal( wxID_OK );
     }
-#else
-    m_value = m_textctrl->GetValue();
-
-    EndModal(wxID_OK);
-#endif
-  // wxUSE_VALIDATORS
 }
 
 void wxTextEntryDialog::SetValue(const wxString& val)
@@ -167,8 +169,7 @@ void wxTextEntryDialog::SetTextValidator( long style )
 
 void wxTextEntryDialog::SetTextValidator( wxTextValidatorStyle style )
 {
-    wxTextValidator validator( style, &m_value );
-    m_textctrl->SetValidator( validator );
+    SetTextValidator(wxTextValidator(style));
 }
 
 void wxTextEntryDialog::SetTextValidator( const wxTextValidator& validator )
@@ -176,8 +177,7 @@ void wxTextEntryDialog::SetTextValidator( const wxTextValidator& validator )
     m_textctrl->SetValidator( validator );
 }
 
-#endif
-  // wxUSE_VALIDATORS
+#endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------
 // wxPasswordEntryDialog

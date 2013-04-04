@@ -69,8 +69,10 @@ public:
 #endif
     void SetTextValidator( wxTextValidatorStyle style = wxFILTER_NONE );
     wxTextValidator* GetTextValidator() { return (wxTextValidator*)m_textctrl->GetValidator(); }
-#endif
-  // wxUSE_VALIDATORS
+#endif // wxUSE_VALIDATORS
+
+    virtual bool TransferDataToWindow();
+    virtual bool TransferDataFromWindow();
 
     // implementation only
     void OnOK(wxCommandEvent& event);
