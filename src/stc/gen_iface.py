@@ -26,7 +26,7 @@ CPP_DEST      = os.path.abspath('./stc.cpp')
 if len(sys.argv) > 1 and sys.argv[1] == '--wxpython':
     DOCSTR_DEST   = os.path.abspath('../../../wxPython/src/_stc_gendocs.i')
 else:
-    DOCSTR_DEST   = '/dev/null'
+    DOCSTR_DEST   = None
 
 
 # Value prefixes to convert
@@ -999,7 +999,8 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     # write out destination files
     open(h_dest, 'w').write(h_text)
     open(cpp_dest, 'w').write(cpp_text)
-    open(docstr_dest, 'w').write(docstrings)
+    if docstr_dest:
+        open(docstr_dest, 'w').write(docstrings)
     open(ih_dest, 'w').write(ih_text)
 
 
