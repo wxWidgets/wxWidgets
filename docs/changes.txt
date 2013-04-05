@@ -627,6 +627,7 @@ All (GUI):
 - Added wxBookCtrlBase::FindPage() (troelsk).
 - Added wxDocument::Activate() (troelsk).
 - Added wxDocManager::FindDocumentByPath() (troelsk).
+- Added wxEVT_GRID_COL_AUTO_SIZE event (Igor Korot).
 
 wxGTK:
 

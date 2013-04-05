@@ -226,6 +226,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
     EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
+    EVT_GRID_COL_AUTO_SIZE( GridFrame::OnColAutoSize )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGING( GridFrame::OnCellValueChanging )
@@ -1174,6 +1175,21 @@ void GridFrame::OnColSize( wxGridSizeEvent& ev )
     ev.Skip();
 }
 
+void GridFrame::OnColAutoSize( wxGridSizeEvent &event )
+{
+    // Fit even-numbered columns to their contents while using the default
+    // behaviour for the odd-numbered ones to be able to see the difference.
+    int col = event.GetRowOrCol();
+    if ( col % 2 )
+    {
+        wxLogMessage("Auto-sizing column %d to fit its contents", col);
+        grid->AutoSizeColumn(col);
+    }
+    else
+    {
+        event.Skip();
+    }
+}
 
 void GridFrame::OnSelectCell( wxGridEvent& ev )
 {

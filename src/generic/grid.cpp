@@ -146,6 +146,7 @@ wxDEFINE_EVENT( wxEVT_GRID_LABEL_LEFT_DCLICK, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_LABEL_RIGHT_DCLICK, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_ROW_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SIZE, wxGridSizeEvent );
+wxDEFINE_EVENT( wxEVT_GRID_COL_AUTO_SIZE, wxGridSizeEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_MOVE, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_COL_SORT, wxGridEvent );
 wxDEFINE_EVENT( wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEvent );
@@ -3720,7 +3721,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             // adjust column width depending on label text
             //
             // TODO: generate RESIZING event, see #10754
-            AutoSizeColLabelSize( colEdge );
+            if ( !SendGridSizeEvent(wxEVT_GRID_COL_AUTO_SIZE, -1, colEdge, event) )
+                AutoSizeColLabelSize( colEdge );
 
             SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, colEdge, event);
 
@@ -4642,7 +4644,7 @@ wxGrid::DoAppendLines(bool (wxGridTableBase::*funcAppend)(size_t),
 // event generation helpers
 // ----------------------------------------------------------------------------
 
-void
+bool
 wxGrid::SendGridSizeEvent(wxEventType type,
                       int row, int col,
                       const wxMouseEvent& mouseEv)
@@ -4657,7 +4659,7 @@ wxGrid::SendGridSizeEvent(wxEventType type,
            mouseEv.GetY() + GetColLabelSize(),
            mouseEv);
 
-   GetEventHandler()->ProcessEvent(gridEvt);
+   return GetEventHandler()->ProcessEvent(gridEvt);
 }
 
 // Generate a grid event based on a mouse event and return:

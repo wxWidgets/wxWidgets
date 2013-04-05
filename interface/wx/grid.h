@@ -4707,6 +4707,13 @@ public:
         type.
     @event{EVT_GRID_COL_SIZE(func)}
         Same as EVT_GRID_CMD_COL_SIZE() but uses `wxID_ANY` id.
+    @event{EVT_GRID_COL_AUTO_SIZE(func)}
+        This event is sent when a column must be resized to its best size, e.g.
+        when the user double clicks the column divider. The default
+        implementation simply resizes the column to fit the column label (but
+        not its contents as this could be too slow for big grids). This macro
+        corresponds to @c wxEVT_GRID_COL_AUTO_SIZE event type and is new since
+        wxWidgets 2.9.5.
     @event{EVT_GRID_ROW_SIZE(func)}
         Same as EVT_GRID_CMD_ROW_SIZE() but uses `wxID_ANY` id.
     @endEventTable
@@ -4920,6 +4927,7 @@ wxEventType wxEVT_GRID_LABEL_LEFT_DCLICK;
 wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK;
 wxEventType wxEVT_GRID_ROW_SIZE;
 wxEventType wxEVT_GRID_COL_SIZE;
+wxEventType wxEVT_GRID_COL_AUTO_SIZE;
 wxEventType wxEVT_GRID_RANGE_SELECT;
 wxEventType wxEVT_GRID_CELL_CHANGING;
 wxEventType wxEVT_GRID_CELL_CHANGED;
