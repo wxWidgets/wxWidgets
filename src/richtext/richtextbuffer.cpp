@@ -3318,7 +3318,17 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                             wxRichTextRemoveStyle(child->GetAttributes(), style);
                         }
                         else if (resetExistingStyle)
+                        {
+                            // Preserve the URL as it's not really a formatting style but a property of the object
+                            wxString url;
+                            if (child->GetAttributes().HasURL() && !characterAttributes.HasURL())
+                                url = child->GetAttributes().GetURL();
+
                             child->GetAttributes() = characterAttributes;
+
+                            if (!url.IsEmpty())
+                                child->GetAttributes().SetURL(url);
+                        }
                         else
                         {
                             if (applyMinimal)
