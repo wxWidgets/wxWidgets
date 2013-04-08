@@ -91,7 +91,7 @@ library:
 @itemdef{wxUSE_DATAVIEWCTRL, Use wxDataViewCtrl class.}
 @itemdef{wxUSE_DATEPICKCTRL, Use wxDatePickerCtrl class.}
 @itemdef{wxUSE_DATETIME, Use wxDateTime and related classes.}
-@itemdef{wxUSE_DBGHELP, Use wxDbgHelpDLL class.}
+@itemdef{wxUSE_DBGHELP, Predefine as 0 to avoid using wxDbgHelpDLL and related classes.}
 @itemdef{wxUSE_DC_TRANSFORM_MATRIX, Use wxDC::SetTransformMatrix() and related methods.}
 @itemdef{wxUSE_DEBUG_CONTEXT, Use wxDebugContext class.}
 @itemdef{wxUSE_DEBUG_NEW_ALWAYS, See @ref overview_debugging}
