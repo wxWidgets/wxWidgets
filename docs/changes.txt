@@ -658,6 +658,7 @@ wxMSW:
 - Improve wxCURSOR_RIGHT_ARROW appearance (DoltAlya).
 - Generate menu highlight events for popup menus in wxDialog (Sam Partington).
 - Return more native shell icons from wxArtProvider (Markus Juergens).
+- Fix filter checks in wxDir::FindFirst/Next() (Catalin Raceanu).
 
 wxOSX/Cocoa:
 
