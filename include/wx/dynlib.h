@@ -359,7 +359,7 @@ public:
     // the returned handle reference count is not incremented so it doesn't
     // need to be freed using FreeLibrary() but it also means that it can
     // become invalid if the DLL is unloaded
-    static WXHMODULE MSWGetModuleHandle(const char *name, void *addr);
+    static WXHMODULE MSWGetModuleHandle(const wxString& name, void *addr);
 #endif // __WINDOWS__
 
 protected:
