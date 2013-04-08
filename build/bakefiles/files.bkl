@@ -1931,7 +1931,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/pencil.cur
     wx/msw/pntleft.cur
     wx/msw/pntright.cur
-    wx/msw/rightarr.cur
     wx/msw/roller.cur
     <!-- icons -->
     wx/msw/cdrom.ico

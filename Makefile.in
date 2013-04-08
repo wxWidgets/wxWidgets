@@ -3217,7 +3217,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/pencil.cur \
 	wx/msw/pntleft.cur \
 	wx/msw/pntright.cur \
-	wx/msw/rightarr.cur \
 	wx/msw/roller.cur \
 	wx/msw/cdrom.ico \
 	wx/msw/child.ico \
@@ -3735,7 +3734,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/pencil.cur \
 	wx/msw/pntleft.cur \
 	wx/msw/pntright.cur \
-	wx/msw/rightarr.cur \
 	wx/msw/roller.cur \
 	wx/msw/cdrom.ico \
 	wx/msw/child.ico \
