@@ -55,8 +55,9 @@ def numCPUs():
     return 1 # Default
 
 
-def getXcodePath():
-    return getoutput("xcode-select -print-path")
+def getXcodePaths():
+    base = getoutput("xcode-select -print-path")
+    return [base, base+"/Platforms/MacOSX.platform/Developer"]
 
 
 def getVisCVersion():
@@ -288,19 +289,20 @@ def main(scriptName, args):
         # but other cases it is optional and is left up to the developer.
         # TODO: there should be a command line option to set the SDK...
         if sys.platform.startswith("darwin"):
-            xcodePath = getXcodePath()
-            sdks = [
-                xcodePath+"/SDKs/MacOSX10.5.sdk",
-                xcodePath+"/SDKs/MacOSX10.6.sdk",
-                xcodePath+"/SDKs/MacOSX10.7.sdk",
-            ]
+            for xcodePath in getXcodePaths():
+                sdks = [
+                    xcodePath+"/SDKs/MacOSX10.5.sdk",
+                    xcodePath+"/SDKs/MacOSX10.6.sdk",
+                    xcodePath+"/SDKs/MacOSX10.7.sdk",
+                    xcodePath+"/SDKs/MacOSX10.8.sdk",
+                    ]
             
-            # use the lowest available sdk
-            for sdk in sdks:
-                if os.path.exists(sdk):
-                    wxpy_configure_opts.append(
-                        "--with-macosx-sdk=%s" % sdk)
-                    break
+                # use the lowest available sdk
+                for sdk in sdks:
+                    if os.path.exists(sdk):
+                        wxpy_configure_opts.append(
+                            "--with-macosx-sdk=%s" % sdk)
+                        break
 
         if not options.mac_framework:
             if installDir and not prefixDir:
@@ -624,7 +626,7 @@ def main(scriptName, args):
         os.makedirs(packagedir)
         basename = os.path.basename(prefixDir.split(".")[0])
         packageName = basename + "-" + getWxRelease()
-        packageMakerPath = getXcodePath()+"/usr/bin/packagemaker "
+        packageMakerPath = getXcodePaths()[0]+"/usr/bin/packagemaker "
         args = []
         args.append("--root %s" % options.installdir)
         args.append("--id org.wxwidgets.%s" % basename.lower())
