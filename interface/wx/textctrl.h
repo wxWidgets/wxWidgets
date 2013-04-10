@@ -1224,11 +1224,6 @@ public:
                 const wxString& name = wxTextCtrlNameStr);
 
     /**
-        Copies the selected text to the clipboard and removes the selection.
-    */
-    virtual void Cut();
-
-    /**
         Resets the internal modified flag as if the current changes had been
         saved.
     */
