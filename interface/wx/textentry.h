@@ -207,6 +207,11 @@ public:
     virtual void Copy();
 
     /**
+        Copies the selected text to the clipboard and removes it from the control.
+    */
+    virtual void Cut();
+
+    /**
         Returns the insertion point, or cursor, position.
 
         This is defined as the zero based index of the character position to
