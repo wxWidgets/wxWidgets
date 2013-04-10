@@ -628,6 +628,7 @@ All (GUI):
 - Added wxDocument::Activate() (troelsk).
 - Added wxDocManager::FindDocumentByPath() (troelsk).
 - Added wxEVT_GRID_COL_AUTO_SIZE event (Igor Korot).
+- Added chainable wxWizardPageSimple::Chain() overload.
 
 wxGTK:
 

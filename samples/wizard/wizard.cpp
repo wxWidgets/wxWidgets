@@ -414,8 +414,10 @@ MyWizard::MyWizard(wxFrame *frame, bool useSizer)
     wxValidationPage *page4 = new wxValidationPage(this);
 
     // set the page order using a convenience function - could also use
-    // SetNext/Prev directly as below
-    wxWizardPageSimple::Chain(page3, page4);
+    // SetNext/Prev directly as below, but Chain() is shorter, avoids the risk
+    // of an error and can itself be chained, e.g. you could write
+    // page3.Chain(page4).Chain(page5) and so on.
+    page3->Chain(page4);
 
     // this page is not a wxWizardPageSimple, so we use SetNext/Prev to insert
     // it into the chain of pages

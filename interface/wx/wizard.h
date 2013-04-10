@@ -227,6 +227,28 @@ public:
                 const wxBitmap& bitmap = wxNullBitmap);
 
     /**
+        A helper chaining this page with the next one.
+
+        Notice that this method returns a reference to the next page, so the
+        calls to it can, in turn, be chained:
+
+        @code
+        wxWizardPageSimple* firstPage = new FirstPage;
+        (*firstPage).Chain(new SecondPage)
+                    .Chain(new ThirdPage)
+                    .Chain(new LastPage);
+        @endcode
+
+        This makes this method the simplest way to define the order of changes
+        in fully static wizards, i.e. in those where the order doesn't depend
+        on the choices made by the user in the wizard pages during run-time.
+
+        @param next A non-@NULL pointer to the next page.
+        @return Reference to @a next on which Chain() can be called again.
+
+        @since 2.9.5
+     */
+    /**
         A convenience function to make the pages follow each other.
         Example:
 
