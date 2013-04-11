@@ -377,7 +377,7 @@ WXHMODULE wxDynamicLibrary::MSWGetModuleHandle(const wxString& name, void *addr)
             return hmod;
     }
 
-    return ::GetModuleHandle(name);
+    return ::GetModuleHandle(name.t_str());
 }
 
 #endif // wxUSE_DYNLIB_CLASS
