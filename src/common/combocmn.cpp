@@ -389,7 +389,7 @@ void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
     wxWindow* popup = m_combo->GetPopupControl()->GetControl();
     wxWindow* winpopup = m_combo->GetPopupWindow();
 
-    if (
+    if ( !winFocused || (
          winFocused != m_focusStart &&
          winFocused != popup &&
          winFocused->GetParent() != popup &&
@@ -398,6 +398,7 @@ void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
          winFocused != m_combo &&
          winFocused != m_combo->GetButton() // GTK (atleast) requires this
         )
+       )
     {
         m_combo->HidePopup(true);
     }
