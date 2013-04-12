@@ -2708,6 +2708,9 @@ void * wxMacCoreGraphicsContext::GetNativeContext()
 
 void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+    if (!EnsureIsValid())
+        return;
+
     if (m_composition == wxCOMPOSITION_DEST) 
         return; 
 
