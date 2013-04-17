@@ -1557,6 +1557,33 @@ public:
 
 
 
+wxEventType wxEVT_COMMAND_TEXT_UPDATED;
+wxEventType wxEVT_COMMAND_TEXT_ENTER;
+wxEventType wxEVT_COMMAND_TEXT_URL;
+wxEventType wxEVT_COMMAND_TEXT_MAXLEN;
+
+
+class wxTextUrlEvent : public wxCommandEvent
+{
+public:
+    wxTextUrlEvent(int winid, const wxMouseEvent& evtMouse,
+                   long start, long end);
+
+    wxTextUrlEvent(const wxTextUrlEvent& event);
+
+    // get the mouse event which happened over the URL
+    const wxMouseEvent& GetMouseEvent() const;
+
+    // get the start of the URL
+    long GetURLStart() const;
+
+    // get the end of the URL
+    long GetURLEnd() const;
+
+    virtual wxEvent *Clone() const;
+};
+
+
 /**
     @class wxStreamToTextRedirector
 
