@@ -138,7 +138,7 @@
           right click or by using the menu key.
           Processes a @c wxEVT_COMMAND_TREE_ITEM_MENU event type.
     @event{EVT_TREE_STATE_IMAGE_CLICK(id, func)}
-          The state image has been clicked. Windows only.
+          The state image has been clicked.
           Processes a @c wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK event type.
     @endEventTable
 
