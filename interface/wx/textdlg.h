@@ -160,6 +160,16 @@ public:
     //@}
 
     /**
+        This function sets the maximum number of characters the user can enter
+        into this dialog.
+
+        @see wxTextEntry::SetMaxLength()
+
+        @since 2.9.5
+    */
+    void SetMaxLength(unsigned long len);
+
+    /**
         Sets the default text value.
     */
     void SetValue(const wxString& value);

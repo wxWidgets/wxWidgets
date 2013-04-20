@@ -62,6 +62,8 @@ public:
     void SetValue(const wxString& val);
     wxString GetValue() const { return m_value; }
 
+    void SetMaxLength(unsigned long len);
+
 #if wxUSE_VALIDATORS
     void SetTextValidator( const wxTextValidator& validator );
 #if WXWIN_COMPATIBILITY_2_8

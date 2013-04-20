@@ -151,6 +151,11 @@ void wxTextEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+void wxTextEntryDialog::SetMaxLength(unsigned long len)
+{
+    m_textctrl->SetMaxLength(len);
+}
+
 void wxTextEntryDialog::SetValue(const wxString& val)
 {
     m_value = val;
