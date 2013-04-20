@@ -567,7 +567,7 @@ All:
 - Add wxDateTime::DiffAsDateSpan() and wxDateSpan::GetTotalMonths() (jonasr).
 - Add wxVector::assign() (Jonas Rydberg).
 - Add wx[F]File{Input,Output}Stream::GetFile() (troelsk).
-- Added Nepali translation (Him Prasad Gautam).
+- Add Nepali translation (Him Prasad Gautam).
 
 All (GUI):
 
@@ -609,9 +609,9 @@ All (GUI):
 - Allow specifying all wxFlexGridSizer parameters in XRC (Steffen Olszewski).
 - Close wxLogWindow automatically if it's the last remaining top level window.
 - Implement clipping for wxSVGFileDC (Steve Benbow).
-- Added wxDirCtrl::GetPath() (troelsk).
-- Added wxEVT_COMMAND_DIRCTRL_CHANGED event (troelsk).
-- Added wxControl::GetSizeFromTextSize() (Manuel Martin).
+- Add wxDirCtrl::GetPath() (troelsk).
+- Add wxEVT_COMMAND_DIRCTRL_CHANGED event (troelsk).
+- Add wxControl::GetSizeFromTextSize() (Manuel Martin).
 - Optionally allow showing tooltips for disabled ribbon buttons (wxBen).
 - Add wxTL_NO_HEADER style to wxTreeListCtrl (robboto).
 - Add possibility to delay showing wxRichToolTip (John Roberts).
@@ -624,11 +624,11 @@ All (GUI):
 - Add wxAUI_TB_PLAIN_BACKGROUND wxAuiToolBar style (Allann Jones).
 - Make wxGenericDataViewCtrl::SetFont() really work (Laurent Poujoulat).
 - Remove wxLogWindow::OnFrameCreate(), it was never called anyhow.
-- Added wxBookCtrlBase::FindPage() (troelsk).
-- Added wxDocument::Activate() (troelsk).
-- Added wxDocManager::FindDocumentByPath() (troelsk).
-- Added wxEVT_GRID_COL_AUTO_SIZE event (Igor Korot).
-- Added chainable wxWizardPageSimple::Chain() overload.
+- Add wxBookCtrlBase::FindPage() (troelsk).
+- Add wxDocument::Activate() (troelsk).
+- Add wxDocManager::FindDocumentByPath() (troelsk).
+- Add wxEVT_GRID_COL_AUTO_SIZE event (Igor Korot).
+- Add chainable wxWizardPageSimple::Chain() overload.
 
 wxGTK:
 
