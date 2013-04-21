@@ -1090,7 +1090,7 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& WXUNUSED(cell),
+bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& cellRect,
                                               wxDataViewModel *model,
                                               const wxDataViewItem& item,
                                               unsigned int col,
@@ -1098,8 +1098,16 @@ bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& WXUNUSED(cell),
 {
     if ( mouseEvent )
     {
-        // only react to clicks directly on the checkbox, not elsewhere in the same cell:
-        if ( !wxRect(GetSize()).Contains(mouseEvent->GetPosition()) )
+        // Only react to clicks directly on the checkbox, not elsewhere in the
+        // same cell.
+        //
+        // We suppose that the checkbox is centred in the total cell rectangle
+        // as this is how it's rendered, at least under MSW. If this turns out
+        // to be a wrong assumption, we probably would need to do the hit test
+        // checking in wxRendererNative but for now this simple solution works.
+        const wxRect checkRect = wxRect(GetSize()).CentreIn(cellRect);
+
+        if ( !checkRect.Contains(mouseEvent->GetPosition()) )
             return false;
     }
 
