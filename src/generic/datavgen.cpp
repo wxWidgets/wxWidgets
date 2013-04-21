@@ -161,6 +161,16 @@ void wxDataViewColumn::UpdateDisplay()
     }
 }
 
+void wxDataViewColumn::UnsetAsSortKey()
+{
+    m_sort = false;
+
+    if ( m_owner )
+        m_owner->SetSortingColumnIndex(wxNOT_FOUND);
+
+    UpdateDisplay();
+}
+
 void wxDataViewColumn::SetSortOrder(bool ascending)
 {
     if ( !m_owner )
@@ -613,6 +623,24 @@ public:
     {
         g_model = GetModel();
 
+        wxDataViewColumn* col = GetOwner()->GetSortingColumn();
+        if( !col )
+        {
+            if (g_model->HasDefaultCompare())
+            {
+                // See below for the explanation of IsFrozen() test.
+                if ( IsFrozen() )
+                    g_column = SortColumn_OnThaw;
+                else
+                    g_column = SortColumn_Default;
+            }
+            else
+                g_column = SortColumn_None;
+
+            g_asending = true;
+            return;
+        }
+
         // Avoid sorting while the window is frozen, this allows to quickly add
         // many items without resorting after each addition and only resort
         // them all at once when the window is finally thawed, see above.
@@ -622,17 +650,6 @@ public:
             return;
         }
 
-        wxDataViewColumn* col = GetOwner()->GetSortingColumn();
-        if( !col )
-        {
-            if (g_model->HasDefaultCompare())
-                g_column = SortColumn_Default;
-            else
-                g_column = SortColumn_None;
-
-            g_asending = true;
-            return;
-        }
         g_column = col->GetModelColumn();
         g_asending = col->IsSortOrderAscending();
     }

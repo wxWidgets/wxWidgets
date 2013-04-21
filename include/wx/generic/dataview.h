@@ -70,7 +70,7 @@ public:
 
     virtual bool IsSortKey() const { return m_sort; }
 
-    virtual void UnsetAsSortKey() { m_sort = false; UpdateDisplay(); }
+    virtual void UnsetAsSortKey();
 
     virtual void SetSortOrder(bool ascending);
 
