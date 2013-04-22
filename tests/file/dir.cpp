@@ -82,15 +82,19 @@ void DirTestCase::setUp()
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-    
+
     CreateTempFile(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
     CreateTempFile(DIRTEST_FOLDER + SEP + "dummy");
+    CreateTempFile(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo");
+    CreateTempFile(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo.bar");
 }
 
 void DirTestCase::tearDown()
 {
     wxRemove(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
     wxRemove(DIRTEST_FOLDER + SEP + "dummy");
+    wxRemove(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo");
+    wxRemove(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1" + SEP + "dummy.foo.bar");
     wxDir::Remove(DIRTEST_FOLDER, wxPATH_RMDIR_RECURSIVE);
 }
 
@@ -160,7 +164,10 @@ void DirTestCase::Traverse()
 {
     // enum all files
     wxArrayString files;
-    CPPUNIT_ASSERT_EQUAL(2, wxDir::GetAllFiles(DIRTEST_FOLDER, &files));
+    CPPUNIT_ASSERT_EQUAL(4, wxDir::GetAllFiles(DIRTEST_FOLDER, &files));
+
+    // enum all files according to the filter
+    CPPUNIT_ASSERT_EQUAL(1, wxDir::GetAllFiles(DIRTEST_FOLDER, &files, "*.foo"));
 
     // enum again with custom traverser
     wxDir dir(DIRTEST_FOLDER);
