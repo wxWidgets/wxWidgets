@@ -8,6 +8,16 @@
 
 
 /**
+    The type of the native socket.
+
+    Notice that the definition below is simplified and this type is not always
+    int, e.g. it is a 64 bit integer type under Win64.
+
+    @since 2.9.5
+  */
+typedef int wxSOCKET_T;
+
+/**
     @class wxIPaddress
 
     wxIPaddress is an abstract base class for all internet protocol address
@@ -1386,6 +1396,25 @@ public:
         For more information on socket events see @ref wxSocketEventFlags .
     */
     void SetNotify(wxSocketEventFlags flags);
+
+    /**
+        Returns the native socket descriptor.
+
+        This is intended to use with rarely used specific platform features
+        that can only be accessed via the actual socket descriptor.
+
+        Do not use this for reading or writing data from or to the socket as
+        this would almost surely interfere with wxSocket code logic and result
+        in unexpected behaviour.
+
+        The socket must be successfully initialized, e.g. connected for client
+        sockets, before this method can be called.
+
+        @return Returns the native socket descriptor.
+
+        @since 2.9.5
+    */
+    wxSOCKET_T GetSocket() const;
 
     //@}
 };

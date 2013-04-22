@@ -30,6 +30,16 @@ class wxSocketImpl;
 // Types and constants
 // ------------------------------------------------------------------------
 
+// Define the type of native sockets.
+#if defined(__WINDOWS__)
+    // Although socket descriptors are still 32 bit values, even under Win64,
+    // the socket type is 64 bit there.
+    typedef wxUIntPtr wxSOCKET_T;
+#else
+    typedef int wxSOCKET_T;
+#endif
+
+
 // Types of different socket notifications or events.
 //
 // NB: the values here should be consecutive and start with 0 as they are
@@ -186,6 +196,9 @@ public:
     void SetEventHandler(wxEvtHandler& handler, int id = wxID_ANY);
     void SetNotify(wxSocketEventFlags flags);
     void Notify(bool notify);
+
+    // Get the underlying socket descriptor.
+    wxSOCKET_T GetSocket() const;
 
     // initialize/shutdown the sockets (done automatically so there is no need
     // to call these functions usually)

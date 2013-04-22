@@ -526,7 +526,7 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
 {
     wxSockAddressStorage from;
     WX_SOCKLEN_T fromlen = sizeof(from);
-    const SOCKET fd = accept(m_fd, &from.addr, &fromlen);
+    const wxSOCKET_T fd = accept(m_fd, &from.addr, &fromlen);
 
     // accepting is similar to reading in the sense that it resets "ready for
     // read" flag on the socket
@@ -1826,9 +1826,9 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr,
         return;
     }
 
-    // Notice that we need a cast as SOCKET is 64 bit under Win64 and that the
-    // cast is safe because a SOCKET is a handle and so limited to 32 (or,
-    // actually, even 24) bit values anyhow.
+    // Notice that we need a cast as wxSOCKET_T is 64 bit under Win64 and that
+    // the cast is safe because a wxSOCKET_T is a handle and so limited to 32
+    // (or, actually, even 24) bit values anyhow.
     wxLogTrace( wxTRACE_Socket, wxT("wxSocketServer on fd %u"),
                 static_cast<unsigned>(m_impl->m_fd) );
 }
@@ -1893,6 +1893,14 @@ bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 {
     return DoWait(seconds, milliseconds, wxSOCKET_CONNECTION_FLAG) == 1;
 }
+
+wxSOCKET_T wxSocketBase::GetSocket() const
+{
+    wxASSERT_MSG( m_impl, wxS("Socket not initialised") );
+
+    return m_impl->m_fd;
+}
+
 
 bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
 {
