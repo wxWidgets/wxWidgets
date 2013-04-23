@@ -1105,7 +1105,11 @@ bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& cellRect,
         // as this is how it's rendered, at least under MSW. If this turns out
         // to be a wrong assumption, we probably would need to do the hit test
         // checking in wxRendererNative but for now this simple solution works.
-        const wxRect checkRect = wxRect(GetSize()).CentreIn(cellRect);
+        wxRect checkRect = wxRect(GetSize()).CentreIn(cellRect);
+
+        // After centering in cellRect, we need to pull it back to (0, 0) as
+        // the mouse coordinates passed to us are relative to cellRect already.
+        checkRect.Offset(-cellRect.GetPosition());
 
         if ( !checkRect.Contains(mouseEvent->GetPosition()) )
             return false;
