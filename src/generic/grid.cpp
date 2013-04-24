@@ -8163,12 +8163,9 @@ void wxGrid::SetRowSize( int row, int height )
         return;
 
     // The value of -1 is special and means to fit the height to the row label.
-    if ( height == -1 )
+    // As with the columns, ignore attempts to auto-size the hidden rows.
+    if ( height == -1 && GetRowHeight(row) != 0 )
     {
-        // As with the columns, ignore attempts to auto-size the hidden rows.
-        if ( GetRowHeight(row) == 0 )
-            return;
-
         long w, h;
         wxArrayString lines;
         wxClientDC dc(m_rowLabelWin);
@@ -8239,14 +8236,13 @@ void wxGrid::SetColSize( int col, int width )
         return;
 
     // The value of -1 is special and means to fit the width to the column label.
-    if ( width == -1 )
+    //
+    // Notice that we currently don't support auto-sizing hidden columns (we
+    // could, but it's not clear whether this is really needed and it would
+    // make the code more complex), and for them passing -1 simply means to
+    // show the column back using its old size.
+    if ( width == -1 && GetColWidth(col) != 0 )
     {
-        // We currently don't support auto-sizing hidden columns. We could, but
-        // it's not clear whether this is really needed and it would make the
-        // code more complex.
-        if ( GetColWidth(col) == 0 )
-            return;
-
         long w, h;
         wxArrayString lines;
         wxClientDC dc(m_colWindow);

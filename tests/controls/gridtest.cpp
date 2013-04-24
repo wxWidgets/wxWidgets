@@ -59,6 +59,7 @@ private:
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( AddRowCol );
         CPPUNIT_TEST( ColumnOrder );
+        CPPUNIT_TEST( ColumnVisibility );
         CPPUNIT_TEST( LineFormatting );
         CPPUNIT_TEST( SortSupport );
         CPPUNIT_TEST( Labels );
@@ -87,6 +88,7 @@ private:
     void Selection();
     void AddRowCol();
     void ColumnOrder();
+    void ColumnVisibility();
     void LineFormatting();
     void SortSupport();
     void Labels();
@@ -524,6 +526,19 @@ void GridTestCase::ColumnOrder()
     CPPUNIT_ASSERT_EQUAL(1, m_grid->GetColPos(1));
     CPPUNIT_ASSERT_EQUAL(2, m_grid->GetColPos(2));
     CPPUNIT_ASSERT_EQUAL(3, m_grid->GetColPos(3));
+}
+
+void GridTestCase::ColumnVisibility()
+{
+    m_grid->AppendCols(3);
+    CPPUNIT_ASSERT( m_grid->IsColShown(1) );
+
+    m_grid->HideCol(1);
+    CPPUNIT_ASSERT( !m_grid->IsColShown(1) );
+    CPPUNIT_ASSERT( m_grid->IsColShown(2) );
+
+    m_grid->ShowCol(1);
+    CPPUNIT_ASSERT( m_grid->IsColShown(1) );
 }
 
 void GridTestCase::LineFormatting()
