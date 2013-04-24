@@ -50,6 +50,18 @@ public:
 */
 class wxHtmlWinTagHandler : public wxHtmlTagHandler
 {
+public:
+    /**
+        Assigns @a parser to this handler. Each @b instance of handler
+        is guaranteed to be called only from the one parser.
+    */
+    virtual void SetParser(wxHtmlWinParser* parser);
+
+    /**
+       Returns the parser associated with this tag handler.
+    */
+    virtual wxHtmlWinParser* GetParser() const;
+
 protected:
     /**
         Value of this attribute is identical to value of m_Parser.
