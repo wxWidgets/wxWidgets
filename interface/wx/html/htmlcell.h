@@ -713,3 +713,53 @@ public:
     */
     wxHtmlWidgetCell(wxWindow* wnd, int w = 0);
 };
+
+
+
+/**
+    @class wxHtmlWordCell
+
+    This html cell represents a single word or text fragment in the document stream.
+
+    @library{wxhtml}
+    @category{html}
+*/
+class wxHtmlWordCell : public wxHtmlCell
+{
+public:
+    wxHtmlWordCell(const wxString& word, const wxDC& dc);
+};
+
+
+/**
+    @class wxHtmlWordWithTabsCell
+
+    wxHtmlWordCell is a specialization for storing text fragments with
+    embedded tab characters.
+
+    @library{wxhtml}
+    @category{html}
+*/
+class wxHtmlWordWithTabsCell : public wxHtmlWordCell
+{
+public:
+    wxHtmlWordWithTabsCell(const wxString& word,
+                           const wxString& wordOrig,
+                           size_t linepos,
+                           const wxDC& dc);
+};
+
+
+/**
+    @class wxHtmlFontCell
+
+    This cell represents a font change in the document stream.
+
+    @library{wxhtml}
+    @category{html}
+*/
+class wxHtmlFontCell : public wxHtmlCell
+{
+public:
+    wxHtmlFontCell(wxFont *font);
+};
