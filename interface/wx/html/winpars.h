@@ -52,6 +52,11 @@ class wxHtmlWinTagHandler : public wxHtmlTagHandler
 {
 public:
     /**
+        Constructor.
+    */
+    wxHtmlWinTagHandler();
+    
+    /**
         Assigns @a parser to this handler. Each @b instance of handler
         is guaranteed to be called only from the one parser.
     */
