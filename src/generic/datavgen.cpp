@@ -1090,7 +1090,7 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& cellRect,
+bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& WXUNUSED(cellRect),
                                               wxDataViewModel *model,
                                               const wxDataViewItem& item,
                                               unsigned int col,
@@ -1100,18 +1100,7 @@ bool wxDataViewToggleRenderer::WXActivateCell(const wxRect& cellRect,
     {
         // Only react to clicks directly on the checkbox, not elsewhere in the
         // same cell.
-        //
-        // We suppose that the checkbox is centred in the total cell rectangle
-        // as this is how it's rendered, at least under MSW. If this turns out
-        // to be a wrong assumption, we probably would need to do the hit test
-        // checking in wxRendererNative but for now this simple solution works.
-        wxRect checkRect = wxRect(GetSize()).CentreIn(cellRect);
-
-        // After centering in cellRect, we need to pull it back to (0, 0) as
-        // the mouse coordinates passed to us are relative to cellRect already.
-        checkRect.Offset(-cellRect.GetPosition());
-
-        if ( !checkRect.Contains(mouseEvent->GetPosition()) )
+        if ( !wxRect(GetSize()).Contains(mouseEvent->GetPosition()) )
             return false;
     }
 
@@ -4390,33 +4379,38 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                               GetLineHeight( current ) );
 
             // Report position relative to the cell's custom area, i.e.
-            // no the entire space as given by the control but the one
+            // not the entire space as given by the control but the one
             // used by the renderer after calculation of alignment etc.
+            //
+            // Notice that this results in negative coordinates when clicking
+            // in the upper left corner of a centre-aligned cell which doesn't
+            // fill its column entirely so this is somewhat surprising, but we
+            // do it like this for compatibility with the native GTK+ version,
+            // see #12270.
 
             // adjust the rectangle ourselves to account for the alignment
+            int align = cell->GetAlignment();
+            if ( align == wxDVR_DEFAULT_ALIGNMENT )
+                align = wxALIGN_CENTRE;
+
             wxRect rectItem = cell_rect;
-            const int align = cell->GetAlignment();
-            if ( align != wxDVR_DEFAULT_ALIGNMENT )
+            const wxSize size = cell->GetSize();
+            if ( size.x >= 0 && size.x < cell_rect.width )
             {
-                const wxSize size = cell->GetSize();
+                if ( align & wxALIGN_CENTER_HORIZONTAL )
+                    rectItem.x += (cell_rect.width - size.x)/2;
+                else if ( align & wxALIGN_RIGHT )
+                    rectItem.x += cell_rect.width - size.x;
+                // else: wxALIGN_LEFT is the default
+            }
 
-                if ( size.x >= 0 && size.x < cell_rect.width )
-                {
-                    if ( align & wxALIGN_CENTER_HORIZONTAL )
-                        rectItem.x += (cell_rect.width - size.x)/2;
-                    else if ( align & wxALIGN_RIGHT )
-                        rectItem.x += cell_rect.width - size.x;
-                    // else: wxALIGN_LEFT is the default
-                }
-
-                if ( size.y >= 0 && size.y < cell_rect.height )
-                {
-                    if ( align & wxALIGN_CENTER_VERTICAL )
-                        rectItem.y += (cell_rect.height - size.y)/2;
-                    else if ( align & wxALIGN_BOTTOM )
-                        rectItem.y += cell_rect.height - size.y;
-                    // else: wxALIGN_TOP is the default
-                }
+            if ( size.y >= 0 && size.y < cell_rect.height )
+            {
+                if ( align & wxALIGN_CENTER_VERTICAL )
+                    rectItem.y += (cell_rect.height - size.y)/2;
+                else if ( align & wxALIGN_BOTTOM )
+                    rectItem.y += cell_rect.height - size.y;
+                // else: wxALIGN_TOP is the default
             }
 
             wxMouseEvent event2(event);
