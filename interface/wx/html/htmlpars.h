@@ -72,8 +72,10 @@ public:
 
     /**
        Returns the parser associated with this tag handler.
+
+       @since 2.9.5
     */
-    virtual wxHtmlParser* GetParser() const;
+    wxHtmlParser* GetParser() const;
 
 
 protected:

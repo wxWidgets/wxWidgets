@@ -228,9 +228,9 @@ public:
     virtual void SetParser(wxHtmlParser *parser)
         { m_Parser = parser; }
 
-    virtual wxHtmlParser* GetParser() const
-        { return m_Parser; }
-    
+    // Get the parser associated with this tag handler.
+    wxHtmlParser* GetParser() const { return m_Parser; }
+
     // Returns list of supported tags. The list is in uppercase and
     // tags are delimited by ','.
     // Example : "I,B,FONT,P"
