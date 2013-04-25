@@ -1088,7 +1088,7 @@ void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
 {
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
-    wxLogMessage( "wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED, Column position: %d", pos );
+    wxLogMessage( "wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, Column position: %d", pos );
 }
 
 void MyFrame::OnSorted( wxDataViewEvent &event )

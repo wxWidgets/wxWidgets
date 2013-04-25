@@ -284,7 +284,7 @@ private:
 
     void OnRClick(wxHeaderCtrlEvent& event)
     {
-        if ( !SendEvent(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED,
+        if ( !SendEvent(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
                         event.GetColumn()) )
             event.Skip();
     }

@@ -2854,7 +2854,7 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
     if (gdk_event->button == 3)
     {
         wxDataViewCtrl *dv = column->GetOwner();
-        wxDataViewEvent event( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED, dv->GetId() );
+        wxDataViewEvent event( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dv->GetId() );
         event.SetDataViewColumn( column );
         event.SetModel( dv->GetModel() );
         if (dv->HandleWindowEvent( event ))
