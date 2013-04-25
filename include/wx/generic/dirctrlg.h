@@ -209,12 +209,10 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGenericDirCtrl);
 };
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_DIRCTRL_CHANGED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_CHANGED, wxTreeEvent );
 
-#define wx__DECLARE_DIRCTRL_EVT(evt, id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_DIRCTRL_ ## evt, id, wxTreeEventHandler(fn))
-
-#define EVT_DIRCTRL_CHANGED(id, fn) wx__DECLARE_DIRCTRL_EVT(CHANGED, id, fn)
+#define EVT_DIRCTRL_CHANGED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_DIRCTRL_CHANGED, id, wxTreeEventHandler(fn))
 
 //-----------------------------------------------------------------------------
 // wxDirFilterListCtrl
@@ -307,6 +305,9 @@ protected:
 extern WXDLLIMPEXP_DATA_CORE(wxFileIconsTable *) wxTheFileIconsTable;
 
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG || wxUSE_FILECTRL
+
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_DIRCTRL_CHANGED   wxEVT_DIRCTRL_CHANGED
 
 #endif
     // _WX_DIRCTRLG_H_

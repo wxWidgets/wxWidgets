@@ -138,7 +138,7 @@ void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
     s_closing.Append(this);
 
-    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+    wxCommandEvent cancelEvent(wxEVT_BUTTON, wxID_CANCEL);
     cancelEvent.SetEventObject( this );
     HandleWindowEvent(cancelEvent);
     s_closing.DeleteObject(this);

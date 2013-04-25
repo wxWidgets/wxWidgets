@@ -223,7 +223,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 #if !wxUSE_MODAL_ABOUT_DIALOG
     Connect(wxEVT_CLOSE_WINDOW,
             wxCloseEventHandler(wxGenericAboutDialog::OnCloseWindow));
-    Connect(wxID_OK, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(wxID_OK, wxEVT_BUTTON,
             wxCommandEventHandler(wxGenericAboutDialog::OnOK));
 #endif // !wxUSE_MODAL_ABOUT_DIALOG
 

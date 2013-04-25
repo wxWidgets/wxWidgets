@@ -390,7 +390,7 @@ void wxRadioBoxCallback (Widget w, XtPointer clientData,
   if (item->InSetValue())
     return;
 
-  wxCommandEvent event (wxEVT_COMMAND_RADIOBOX_SELECTED, item->GetId());
+  wxCommandEvent event (wxEVT_RADIOBOX, item->GetId());
   event.SetInt(sel);
   event.SetString(item->GetStringSelection());
   event.SetEventObject(item);

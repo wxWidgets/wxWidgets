@@ -3788,7 +3788,7 @@ void wxRichTextParagraphLayoutBox::Reset()
     wxRichTextBuffer* buffer = GetBuffer();
     if (buffer && buffer->GetRichTextCtrl())
     {
-        wxRichTextEvent event(wxEVT_COMMAND_RICHTEXT_BUFFER_RESET, buffer->GetRichTextCtrl()->GetId());
+        wxRichTextEvent event(wxEVT_RICHTEXT_BUFFER_RESET, buffer->GetRichTextCtrl()->GetId());
         event.SetEventObject(buffer->GetRichTextCtrl());
         event.SetContainer(this);
 
@@ -8603,7 +8603,7 @@ bool wxRichTextBuffer::SetStyleSheetAndNotify(wxRichTextStyleSheet* sheet)
     if (GetRichTextCtrl())
         winid = GetRichTextCtrl()->GetId();
 
-    wxRichTextEvent event(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, winid);
+    wxRichTextEvent event(wxEVT_RICHTEXT_STYLESHEET_REPLACING, winid);
     event.SetEventObject(GetRichTextCtrl());
     event.SetContainer(GetRichTextCtrl()->GetFocusObject());
     event.SetOldStyleSheet(oldSheet);
@@ -8623,7 +8623,7 @@ bool wxRichTextBuffer::SetStyleSheetAndNotify(wxRichTextStyleSheet* sheet)
 
     SetStyleSheet(sheet);
 
-    event.SetEventType(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED);
+    event.SetEventType(wxEVT_RICHTEXT_STYLESHEET_REPLACED);
     event.SetOldStyleSheet(NULL);
     event.Allow();
 
@@ -10625,7 +10625,7 @@ bool wxRichTextAction::Do()
             UpdateAppearance(newCaretPosition, true /* send update event */, & optimizationLineCharPositions, & optimizationLineYPositions, true /* do */);
 
             wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED,
+                wxEVT_RICHTEXT_CONTENT_INSERTED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());
@@ -10658,7 +10658,7 @@ bool wxRichTextAction::Do()
             UpdateAppearance(caretPos, true /* send update event */, & optimizationLineCharPositions, & optimizationLineYPositions, true /* do */);
 
             wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED,
+                wxEVT_RICHTEXT_CONTENT_DELETED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());
@@ -10687,7 +10687,7 @@ bool wxRichTextAction::Do()
             UpdateAppearance(GetPosition());
 
             wxRichTextEvent cmdEvent(
-                m_cmdId == wxRICHTEXT_CHANGE_STYLE ? wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED : wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED,
+                m_cmdId == wxRICHTEXT_CHANGE_STYLE ? wxEVT_RICHTEXT_STYLE_CHANGED : wxEVT_RICHTEXT_PROPERTIES_CHANGED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());
@@ -10719,7 +10719,7 @@ bool wxRichTextAction::Do()
             UpdateAppearance(GetPosition());
 
             wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED,
+                wxEVT_RICHTEXT_STYLE_CHANGED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());
@@ -10798,7 +10798,7 @@ bool wxRichTextAction::Undo()
             UpdateAppearance(newCaretPosition, true, /* send update event */ & optimizationLineCharPositions, & optimizationLineYPositions, false /* undo */);
 
             wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED,
+                wxEVT_RICHTEXT_CONTENT_DELETED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());
@@ -10828,7 +10828,7 @@ bool wxRichTextAction::Undo()
             UpdateAppearance(GetPosition(), true, /* send update event */ & optimizationLineCharPositions, & optimizationLineYPositions, false /* undo */);
 
             wxRichTextEvent cmdEvent(
-                wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED,
+                wxEVT_RICHTEXT_CONTENT_INSERTED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());
@@ -10850,7 +10850,7 @@ bool wxRichTextAction::Undo()
             UpdateAppearance(GetPosition());
 
             wxRichTextEvent cmdEvent(
-                m_cmdId == wxRICHTEXT_CHANGE_STYLE ? wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED : wxEVT_COMMAND_RICHTEXT_PROPERTIES_CHANGED,
+                m_cmdId == wxRICHTEXT_CHANGE_STYLE ? wxEVT_RICHTEXT_STYLE_CHANGED : wxEVT_RICHTEXT_PROPERTIES_CHANGED,
                 m_ctrl ? m_ctrl->GetId() : -1);
             cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
             cmdEvent.SetRange(GetRange());

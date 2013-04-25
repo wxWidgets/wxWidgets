@@ -120,7 +120,7 @@ void wxGenericHyperlinkCtrl::ConnectMenuHandlers()
 {
     // Connect the event handlers for the context menu.
     Connect( wxEVT_RIGHT_UP, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnRightUp) );
-    Connect( wxHYPERLINK_POPUP_COPY_ID, wxEVT_COMMAND_MENU_SELECTED,
+    Connect( wxHYPERLINK_POPUP_COPY_ID, wxEVT_MENU,
              wxCommandEventHandler(wxGenericHyperlinkCtrl::OnPopUpCopy) );
 }
 

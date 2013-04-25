@@ -364,7 +364,7 @@ bool wxChoice::OS2Command(
 
     if (n > -1)
     {
-        wxCommandEvent              vEvent( wxEVT_COMMAND_CHOICE_SELECTED
+        wxCommandEvent              vEvent( wxEVT_CHOICE
                                            ,m_windowId
                                           );
 

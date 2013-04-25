@@ -828,7 +828,7 @@ wxIcon wxRichTextFontPage::GetIconResource( const wxString& name )
 }
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTFONTPAGE_FACETEXTCTRL
+ * wxEVT_TEXT event handler for ID_RICHTEXTFONTPAGE_FACETEXTCTRL
  */
 
 void wxRichTextFontPage::OnFaceTextCtrlUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -863,7 +863,7 @@ void wxRichTextFontPage::OnFaceTextCtrlUpdated( wxCommandEvent& WXUNUSED(event) 
 
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTFONTPAGE_SIZETEXTCTRL
+ * wxEVT_TEXT event handler for ID_RICHTEXTFONTPAGE_SIZETEXTCTRL
  */
 
 void wxRichTextFontPage::OnSizeTextCtrlUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -879,7 +879,7 @@ void wxRichTextFontPage::OnSizeTextCtrlUpdated( wxCommandEvent& WXUNUSED(event) 
 
 
 /*!
- * wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_SIZELISTBOX
+ * wxEVT_LISTBOX event handler for ID_RICHTEXTFONTPAGE_SIZELISTBOX
  */
 
 void wxRichTextFontPage::OnSizeListBoxSelected( wxCommandEvent& event )
@@ -898,7 +898,7 @@ void wxRichTextFontPage::OnSizeListBoxSelected( wxCommandEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_FACELISTBOX
+ * wxEVT_LISTBOX event handler for ID_RICHTEXTFONTPAGE_FACELISTBOX
  */
 
 void wxRichTextFontPage::OnFaceListBoxSelected( wxCommandEvent& WXUNUSED(event) )
@@ -917,7 +917,7 @@ void wxRichTextFontPage::OnFaceListBoxSelected( wxCommandEvent& WXUNUSED(event) 
 }
 
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_STYLECTRL
+ * wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_STYLECTRL
  */
 
 void wxRichTextFontPage::OnStyleCtrlSelected( wxCommandEvent& WXUNUSED(event) )
@@ -930,7 +930,7 @@ void wxRichTextFontPage::OnStyleCtrlSelected( wxCommandEvent& WXUNUSED(event) )
 
 
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL
+ * wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL
  */
 
 void wxRichTextFontPage::OnUnderliningCtrlSelected( wxCommandEvent& WXUNUSED(event) )
@@ -943,7 +943,7 @@ void wxRichTextFontPage::OnUnderliningCtrlSelected( wxCommandEvent& WXUNUSED(eve
 
 
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_WEIGHTCTRL
+ * wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_WEIGHTCTRL
  */
 
 void wxRichTextFontPage::OnWeightCtrlSelected( wxCommandEvent& WXUNUSED(event) )
@@ -977,7 +977,7 @@ void wxRichTextFontPage::OnColourClicked( wxCommandEvent& event )
     UpdatePreview();
 }
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL
+ * wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL
  */
 
 void wxRichTextFontPage::OnStrikethroughctrlClick( wxCommandEvent& WXUNUSED(event) )
@@ -989,7 +989,7 @@ void wxRichTextFontPage::OnStrikethroughctrlClick( wxCommandEvent& WXUNUSED(even
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
+ * wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
  */
 
 void wxRichTextFontPage::OnCapsctrlClick( wxCommandEvent& WXUNUSED(event) )
@@ -1001,7 +1001,7 @@ void wxRichTextFontPage::OnCapsctrlClick( wxCommandEvent& WXUNUSED(event) )
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_SUPERSCRIPT
+ * wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_SUPERSCRIPT
  */
 
 void wxRichTextFontPage::OnRichtextfontpageSuperscriptClick( wxCommandEvent& WXUNUSED(event) )
@@ -1016,7 +1016,7 @@ void wxRichTextFontPage::OnRichtextfontpageSuperscriptClick( wxCommandEvent& WXU
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_SUBSCRIPT
+ * wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_SUBSCRIPT
  */
 
 void wxRichTextFontPage::OnRichtextfontpageSubscriptClick( wxCommandEvent& WXUNUSED(event) )
@@ -1031,7 +1031,7 @@ void wxRichTextFontPage::OnRichtextfontpageSubscriptClick( wxCommandEvent& WXUNU
 }
 
 /*!
- * wxEVT_COMMAND_CHOICE_SELECTED event handler for ID_RICHTEXTFONTPAGE_SIZE_UNITS
+ * wxEVT_CHOICE event handler for ID_RICHTEXTFONTPAGE_SIZE_UNITS
  */
 
 void wxRichTextFontPage::OnRichtextfontpageSizeUnitsSelected( wxCommandEvent& WXUNUSED(event) )
@@ -1043,7 +1043,7 @@ void wxRichTextFontPage::OnRichtextfontpageSizeUnitsSelected( wxCommandEvent& WX
 }
 
 /*!
- * wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_RICHTEXTFONTPAGE_SPINBUTTONS
+ * wxEVT_SPINCTRL event handler for ID_RICHTEXTFONTPAGE_SPINBUTTONS
  */
 
 void wxRichTextFontPage::OnRichtextfontpageSpinbuttonsUp( wxSpinEvent& WXUNUSED(event) )

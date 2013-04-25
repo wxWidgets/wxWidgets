@@ -100,7 +100,7 @@ void wxToolBarTool::Init()
 void wxToolBar::CocoaToolClickEnded()
 {
     wxASSERT(m_mouseDownTool);
-    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, m_mouseDownTool->GetId());
+    wxCommandEvent event(wxEVT_MENU, m_mouseDownTool->GetId());
     InitCommandEvent(event);
     Command(event);
 }

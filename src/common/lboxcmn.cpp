@@ -90,8 +90,8 @@ wxEND_FLAGS( wxListBoxStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControl, "wx/listbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxListBox)
-wxEVENT_PROPERTY( Select, wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEvent )
-wxEVENT_PROPERTY( DoubleClick, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEvent )
+wxEVENT_PROPERTY( Select, wxEVT_LISTBOX, wxCommandEvent )
+wxEVENT_PROPERTY( DoubleClick, wxEVT_LISTBOX_DCLICK, wxCommandEvent )
 
 wxPROPERTY( Font, wxFont, SetFont, GetFont , wxEMPTY_PARAMETER_VALUE, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
@@ -303,7 +303,7 @@ bool wxListBoxBase::CalcAndSendEvent()
 
     m_oldSelections = selections;
 
-    return SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, item, selected);
+    return SendEvent(wxEVT_LISTBOX, item, selected);
 }
 
 // ----------------------------------------------------------------------------

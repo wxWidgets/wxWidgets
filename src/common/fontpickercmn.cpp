@@ -42,7 +42,7 @@
 const char wxFontPickerCtrlNameStr[] = "fontpicker";
 const char wxFontPickerWidgetNameStr[] = "fontpickerwidget";
 
-wxDEFINE_EVENT(wxEVT_COMMAND_FONTPICKER_CHANGED, wxFontPickerEvent);
+wxDEFINE_EVENT(wxEVT_FONTPICKER_CHANGED, wxFontPickerEvent);
 IMPLEMENT_DYNAMIC_CLASS(wxFontPickerCtrl, wxPickerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxFontPickerEvent, wxCommandEvent)
 
@@ -71,7 +71,7 @@ bool wxFontPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     // complete sizer creation
     wxPickerBase::PostCreation();
 
-    m_picker->Connect(wxEVT_COMMAND_FONTPICKER_CHANGED,
+    m_picker->Connect(wxEVT_FONTPICKER_CHANGED,
             wxFontPickerEventHandler(wxFontPickerCtrl::OnFontChange),
             NULL, this);
 

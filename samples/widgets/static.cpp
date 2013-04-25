@@ -299,7 +299,7 @@ void StaticWidgetsPage::CreateContent()
 
     m_textBox = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
     wxButton *b1 = new wxButton(this, wxID_ANY, "Change &box label");
-    b1->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+    b1->Connect(wxEVT_BUTTON,
                 wxCommandEventHandler(StaticWidgetsPage::OnButtonBoxText),
                 NULL, this);
     sizerMiddle->Add(m_textBox, 0, wxEXPAND|wxALL, 5);
@@ -309,7 +309,7 @@ void StaticWidgetsPage::CreateContent()
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE|wxHSCROLL);
     wxButton *b2 = new wxButton(this, wxID_ANY, "Change &text label");
-    b2->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+    b2->Connect(wxEVT_BUTTON,
                 wxCommandEventHandler(StaticWidgetsPage::OnButtonLabelText),
                 NULL, this);
     sizerMiddle->Add(m_textLabel, 0, wxEXPAND|wxALL, 5);
@@ -321,7 +321,7 @@ void StaticWidgetsPage::CreateContent()
                                            wxTE_MULTILINE|wxHSCROLL);
 
     wxButton *b3 = new wxButton(this, wxID_ANY, "Change decorated text label");
-    b3->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+    b3->Connect(wxEVT_BUTTON,
                 wxCommandEventHandler(StaticWidgetsPage::OnButtonLabelWithMarkupText),
                 NULL, this);
     sizerMiddle->Add(m_textLabelWithMarkup, 0, wxEXPAND|wxALL, 5);

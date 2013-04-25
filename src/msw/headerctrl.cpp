@@ -475,18 +475,18 @@ wxEventType wxHeaderCtrl::GetClickEventType(bool dblclk, int button)
     switch ( button )
     {
         case 0:
-            evtType = dblclk ? wxEVT_COMMAND_HEADER_DCLICK
-                             : wxEVT_COMMAND_HEADER_CLICK;
+            evtType = dblclk ? wxEVT_HEADER_DCLICK
+                             : wxEVT_HEADER_CLICK;
             break;
 
         case 1:
-            evtType = dblclk ? wxEVT_COMMAND_HEADER_RIGHT_DCLICK
-                             : wxEVT_COMMAND_HEADER_RIGHT_CLICK;
+            evtType = dblclk ? wxEVT_HEADER_RIGHT_DCLICK
+                             : wxEVT_HEADER_RIGHT_CLICK;
             break;
 
         case 2:
-            evtType = dblclk ? wxEVT_COMMAND_HEADER_MIDDLE_DCLICK
-                             : wxEVT_COMMAND_HEADER_MIDDLE_CLICK;
+            evtType = dblclk ? wxEVT_HEADER_MIDDLE_DCLICK
+                             : wxEVT_HEADER_MIDDLE_CLICK;
             break;
 
         default:
@@ -554,7 +554,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 
         case HDN_DIVIDERDBLCLICK:
-            evtType = wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
+            evtType = wxEVT_HEADER_SEPARATOR_DCLICK;
             break;
 
 
@@ -573,7 +573,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 
-            evtType = wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
+            evtType = wxEVT_HEADER_BEGIN_RESIZE;
             // fall through
 
         case HDN_ENDTRACKA:
@@ -582,7 +582,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             if ( evtType == wxEVT_NULL )
             {
-                evtType = wxEVT_COMMAND_HEADER_END_RESIZE;
+                evtType = wxEVT_HEADER_END_RESIZE;
 
                 // don't generate events with invalid width
                 const int minWidth = GetColumn(idx).GetMinWidth();
@@ -612,7 +612,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // generate the resizing event from here as we don't seem
                     // to be getting HDN_TRACK events at all, at least with
                     // comctl32.dll v6
-                    evtType = wxEVT_COMMAND_HEADER_RESIZING;
+                    evtType = wxEVT_HEADER_RESIZING;
                 }
             }
             break;
@@ -643,7 +643,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
             }
 
-            evtType = wxEVT_COMMAND_HEADER_BEGIN_REORDER;
+            evtType = wxEVT_HEADER_BEGIN_REORDER;
             break;
 
         case HDN_ENDDRAG:
@@ -657,14 +657,14 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             order = MSWFromNativeOrder(order);
 
-            evtType = wxEVT_COMMAND_HEADER_END_REORDER;
+            evtType = wxEVT_HEADER_END_REORDER;
 
             // We (successfully) ended dragging the column.
             m_colBeingDragged = -1;
             break;
 
         case NM_RELEASEDCAPTURE:
-            evtType = wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED;
+            evtType = wxEVT_HEADER_DRAGGING_CANCELLED;
 
             // Dragging the column was cancelled.
             m_colBeingDragged = -1;
@@ -692,7 +692,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // special post-processing for HDN_ENDDRAG: we need to update the
             // internal column indices array if this is allowed to go ahead as
             // the native control is going to reorder its columns now
-            if ( evtType == wxEVT_COMMAND_HEADER_END_REORDER )
+            if ( evtType == wxEVT_HEADER_END_REORDER )
                 MoveColumnInOrderArray(m_colIndices, idx, order);
 
             if ( processed )

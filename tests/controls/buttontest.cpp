@@ -82,7 +82,7 @@ void ButtonTestCase::Click()
 {
     //We use the internal class EventCounter which handles connecting and
     //disconnecting the control to the wxTestableFrame
-    EventCounter clicked(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     wxUIActionSimulator sim;
 
@@ -99,7 +99,7 @@ void ButtonTestCase::Click()
 
 void ButtonTestCase::Disabled()
 {
-    EventCounter clicked(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     wxUIActionSimulator sim;
 

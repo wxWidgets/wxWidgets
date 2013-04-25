@@ -1141,7 +1141,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
             int command = ancestor->GetAcceleratorTable()->GetCommand( event );
             if (command != -1)
             {
-                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                wxCommandEvent command_event( wxEVT_MENU, command );
                 ret = ancestor->HandleWindowEvent( command_event );
                 break;
             }
@@ -1257,7 +1257,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
         if ( btnCancel )
         {
-            wxCommandEvent eventClick(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+            wxCommandEvent eventClick(wxEVT_BUTTON, wxID_CANCEL);
             eventClick.SetEventObject(btnCancel);
             ret = btnCancel->HandleWindowEvent(eventClick);
         }

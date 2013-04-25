@@ -1325,11 +1325,11 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   NMHDR* hdr = (NMHDR *)lParam;
   switch ( hdr->code ) {
     case TCN_SELCHANGE:
-      event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+      event.SetEventType(wxEVT_NOTEBOOK_PAGE_CHANGED);
       break;
 
     case TCN_SELCHANGING:
-      event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING);
+      event.SetEventType(wxEVT_NOTEBOOK_PAGE_CHANGING);
       break;
 
     default:

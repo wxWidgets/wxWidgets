@@ -179,7 +179,7 @@ bool wxSpinCtrl::ProcessTextCommand(WXWORD cmd, WXWORD WXUNUSED(id))
 {
     if ( (cmd == EN_CHANGE) && (!m_blockEvent ))
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+        wxCommandEvent event(wxEVT_TEXT, GetId());
         event.SetEventObject(this);
         wxString val = wxGetWindowText(m_hwndBuddy);
         event.SetString(val);
@@ -197,7 +197,7 @@ void wxSpinCtrl::OnChar(wxKeyEvent& event)
     {
         case WXK_RETURN:
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
                 InitCommandEvent(event);
                 wxString val = wxGetWindowText(m_hwndBuddy);
                 event.SetString(val);
@@ -669,7 +669,7 @@ void wxSpinCtrl::DoSetToolTip(wxToolTip *tip)
 
 void wxSpinCtrl::SendSpinUpdate(int value)
 {
-    wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
+    wxCommandEvent event(wxEVT_SPINCTRL, GetId());
     event.SetEventObject(this);
     event.SetInt(value);
 

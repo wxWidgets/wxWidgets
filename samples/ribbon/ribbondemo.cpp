@@ -970,7 +970,7 @@ void MyFrame::OnColourGalleryButton(wxCommandEvent& evt)
         gallery->SetSelection(item);
 
         // Send an event to respond to the selection change
-        wxRibbonGalleryEvent dummy(wxEVT_COMMAND_RIBBONGALLERY_SELECTED, gallery->GetId());
+        wxRibbonGalleryEvent dummy(wxEVT_RIBBONGALLERY_SELECTED, gallery->GetId());
         dummy.SetEventObject(gallery);
         dummy.SetGallery(gallery);
         dummy.SetGalleryItem(item);

@@ -45,7 +45,7 @@ private:
     // common part of all constructors
     void Init()
     {
-        m_evtType = wxEVT_COMMAND_CHECKBOX_CLICKED;
+        m_evtType = wxEVT_CHECKBOX;
     }
 
     virtual void DoSet3StateValue(wxCheckBoxState state);
@@ -54,7 +54,7 @@ private:
 
     // public for the callback
 public:
-    // either exEVT_COMMAND_CHECKBOX_CLICKED or ..._TOGGLEBUTTON_CLICKED
+    // either wxEVT_CHECKBOX or ..._TOGGLEBUTTON
     wxEventType m_evtType;
 };
 

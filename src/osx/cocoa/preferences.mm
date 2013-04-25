@@ -67,7 +67,7 @@ public:
         m_toolbar->OSXSetSelectableTools(true);
         SetToolBar(m_toolbar);
 
-        m_toolbar->Bind(wxEVT_COMMAND_TOOL_CLICKED,
+        m_toolbar->Bind(wxEVT_TOOL,
                         &wxCocoaPrefsWindow::OnPageChanged, this);
         Bind(wxEVT_CLOSE_WINDOW, &wxCocoaPrefsWindow::OnClose, this);
     }

@@ -62,7 +62,7 @@
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
         if ( wxpeer ) {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+            wxCommandEvent event(wxEVT_TEXT, wxpeer->GetId());
             event.SetEventObject( wxpeer );
             event.SetString( static_cast<wxComboBox*>(wxpeer)->GetValue() );
             wxpeer->HandleWindowEvent( event );
@@ -80,7 +80,7 @@
         if ( wxpeer ) {
             const int sel = wxpeer->GetSelection();
 
-            wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, wxpeer->GetId());
+            wxCommandEvent event(wxEVT_COMBOBOX, wxpeer->GetId());
             event.SetEventObject( wxpeer );
             event.SetInt( sel );
             event.SetString( wxpeer->GetString(sel) );

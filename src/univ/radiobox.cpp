@@ -63,7 +63,7 @@ public:
     virtual bool ProcessEvent(wxEvent& event)
     {
         // we intercept the command events from radio buttons
-        if ( event.GetEventType() == wxEVT_COMMAND_RADIOBUTTON_SELECTED )
+        if ( event.GetEventType() == wxEVT_RADIOBUTTON )
         {
             m_radio->OnRadioButton(event);
         }
@@ -261,7 +261,7 @@ void wxRadioBox::SendRadioEvent()
 {
     wxCHECK_RET( m_selection != -1, wxT("no active radio button") );
 
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_RADIOBOX, GetId());
     InitCommandEvent(event);
     event.SetInt(m_selection);
     event.SetString(GetString(m_selection));

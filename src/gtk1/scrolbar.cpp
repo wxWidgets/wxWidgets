@@ -79,7 +79,7 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust,
     win->HandleWindowEvent( event );
 
 /*
-    wxCommandEvent cevent( wxEVT_COMMAND_SCROLLBAR_UPDATED, win->GetId() );
+    wxCommandEvent cevent( wxEVT_SCROLLBAR, win->GetId() );
     cevent.SetEventObject( win );
     win->ProcessEvent( cevent );
 */

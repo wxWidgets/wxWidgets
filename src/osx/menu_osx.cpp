@@ -428,7 +428,7 @@ bool wxMenu::HandleCommandProcess( wxMenuItem* item, wxWindow* senderWindow )
     {
         if ( senderWindow != NULL )
         {
-            wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED , menuid);
+            wxCommandEvent event(wxEVT_MENU , menuid);
             event.SetEventObject(this);
             event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
 

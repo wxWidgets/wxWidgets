@@ -80,7 +80,7 @@ wxEND_FLAGS( wxHyperlinkStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI( wxHyperlinkCtrl, wxControl, "wx/hyperlink.h")
 
 IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
-wxDEFINE_EVENT( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEvent );
+wxDEFINE_EVENT( wxEVT_HYPERLINK, wxHyperlinkEvent );
 
 wxBEGIN_PROPERTIES_TABLE(wxHyperlinkCtrl)
 wxPROPERTY( Label, wxString, SetLabel, GetLabel, wxString(), \

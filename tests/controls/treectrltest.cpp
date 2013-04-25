@@ -239,8 +239,8 @@ void TreeCtrlTestCase::SelectItemMulti()
 void TreeCtrlTestCase::ItemClick()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter activated(m_tree, wxEVT_COMMAND_TREE_ITEM_ACTIVATED);
-    EventCounter rclick(m_tree, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK);
+    EventCounter activated(m_tree, wxEVT_TREE_ITEM_ACTIVATED);
+    EventCounter rclick(m_tree, wxEVT_TREE_ITEM_RIGHT_CLICK);
 
     wxUIActionSimulator sim;
 
@@ -266,7 +266,7 @@ void TreeCtrlTestCase::ItemClick()
 
 void TreeCtrlTestCase::DeleteItem()
 {
-    EventCounter deleteitem(m_tree, wxEVT_COMMAND_TREE_DELETE_ITEM);
+    EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
     m_tree->Delete(todelete);
@@ -280,8 +280,8 @@ void TreeCtrlTestCase::DeleteItem()
 
 void TreeCtrlTestCase::LabelEdit()
 {
-    EventCounter beginedit(m_tree, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT);
-    EventCounter endedit(m_tree, wxEVT_COMMAND_TREE_END_LABEL_EDIT);
+    EventCounter beginedit(m_tree, wxEVT_TREE_BEGIN_LABEL_EDIT);
+    EventCounter endedit(m_tree, wxEVT_TREE_END_LABEL_EDIT);
 
     wxUIActionSimulator sim;
 
@@ -301,7 +301,7 @@ void TreeCtrlTestCase::LabelEdit()
 
 void TreeCtrlTestCase::KeyDown()
 {
-    EventCounter keydown(m_tree, wxEVT_COMMAND_TREE_KEY_DOWN);
+    EventCounter keydown(m_tree, wxEVT_TREE_KEY_DOWN);
 
     wxUIActionSimulator sim;
 
@@ -318,10 +318,10 @@ void TreeCtrlTestCase::CollapseExpandEvents()
 {
     m_tree->CollapseAll();
 
-    EventCounter collapsed(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
-    EventCounter collapsing(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSING);
-    EventCounter expanded(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDED);
-    EventCounter expanding(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDING);
+    EventCounter collapsed(m_tree, wxEVT_TREE_ITEM_COLLAPSED);
+    EventCounter collapsing(m_tree, wxEVT_TREE_ITEM_COLLAPSING);
+    EventCounter expanded(m_tree, wxEVT_TREE_ITEM_EXPANDED);
+    EventCounter expanding(m_tree, wxEVT_TREE_ITEM_EXPANDING);
 
     wxUIActionSimulator sim;
 
@@ -352,8 +352,8 @@ void TreeCtrlTestCase::SelectionChange()
     m_tree->ExpandAll();
     m_tree->UnselectAll();
 
-    EventCounter changed(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGED);
-    EventCounter changing(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGING);
+    EventCounter changed(m_tree, wxEVT_TREE_SEL_CHANGED);
+    EventCounter changing(m_tree, wxEVT_TREE_SEL_CHANGING);
 
     wxUIActionSimulator sim;
 
@@ -385,7 +385,7 @@ void TreeCtrlTestCase::SelectionChange()
 
 void TreeCtrlTestCase::Menu()
 {
-    EventCounter menu(m_tree, wxEVT_COMMAND_TREE_ITEM_MENU);
+    EventCounter menu(m_tree, wxEVT_TREE_ITEM_MENU);
     wxUIActionSimulator sim;
 
     wxRect pos;

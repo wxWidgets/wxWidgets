@@ -49,8 +49,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxListbook, wxBookCtrlBase)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, wxBookCtrlEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_LISTBOOK_PAGE_CHANGING, wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_LISTBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
 
 BEGIN_EVENT_TABLE(wxListbook, wxBookCtrlBase)
     EVT_SIZE(wxListbook::OnSize)
@@ -303,12 +303,12 @@ void wxListbook::UpdateSelectedPage(size_t newsel)
 
 wxBookCtrlEvent* wxListbook::CreatePageChangingEvent() const
 {
-    return new wxBookCtrlEvent(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING, m_windowId);
+    return new wxBookCtrlEvent(wxEVT_LISTBOOK_PAGE_CHANGING, m_windowId);
 }
 
 void wxListbook::MakeChangedEvent(wxBookCtrlEvent &event)
 {
-    event.SetEventType(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED);
+    event.SetEventType(wxEVT_LISTBOOK_PAGE_CHANGED);
 }
 
 

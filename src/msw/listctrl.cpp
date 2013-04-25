@@ -700,7 +700,7 @@ wxTextCtrl* wxListCtrl::GetEditControl() const
     // first check corresponds to the case when the label editing was started
     // by user and hence m_textCtrl wasn't created by EditLabel() at all, while
     // the second case corresponds to us being called from inside EditLabel()
-    // (e.g. from a user wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT handler): in this
+    // (e.g. from a user wxEVT_LIST_BEGIN_LABEL_EDIT handler): in this
     // case EditLabel() did create the control but it didn't have an HWND to
     // initialize it with yet
     if ( !m_textCtrl || !m_textCtrl->GetHWND() )
@@ -1482,7 +1482,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     SetFocus();
 
     // create m_textCtrl here before calling ListView_EditLabel() because it
-    // generates wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT event from inside it and
+    // generates wxEVT_LIST_BEGIN_LABEL_EDIT event from inside it and
     // the user handler for it can call GetEditControl() resulting in an on
     // demand creation of a stock wxTextCtrl instead of the control of a
     // (possibly) custom wxClassInfo
@@ -1882,7 +1882,7 @@ bool wxListCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
         // conjunction with modifiers
         if ( msg->wParam == VK_RETURN && !wxIsAnyModifierDown() )
         {
-            // we need VK_RETURN to generate wxEVT_COMMAND_LIST_ITEM_ACTIVATED
+            // we need VK_RETURN to generate wxEVT_LIST_ITEM_ACTIVATED
             return false;
         }
     }
@@ -1894,7 +1894,7 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id_)
     const int id = (signed short)id_;
     if (cmd == EN_UPDATE)
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, id);
+        wxCommandEvent event(wxEVT_TEXT, id);
         event.SetEventObject( this );
         ProcessCommand(event);
         return true;
@@ -2003,7 +2003,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // need to use HDN_ITEMCHANGING instead of it
             case HDN_BEGINTRACKA:
             case HDN_BEGINTRACKW:
-                eventType = wxEVT_COMMAND_LIST_COL_BEGIN_DRAG;
+                eventType = wxEVT_LIST_COL_BEGIN_DRAG;
                 // fall through
 
             case HDN_ITEMCHANGING:
@@ -2028,14 +2028,14 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         break;
                     }
 
-                    eventType = wxEVT_COMMAND_LIST_COL_DRAGGING;
+                    eventType = wxEVT_LIST_COL_DRAGGING;
                 }
                 // fall through
 
             case HDN_ENDTRACKA:
             case HDN_ENDTRACKW:
                 if ( eventType == wxEVT_NULL )
-                    eventType = wxEVT_COMMAND_LIST_COL_END_DRAG;
+                    eventType = wxEVT_LIST_COL_END_DRAG;
 
                 event.m_item.m_width = nmHDR->pitem->cxy;
                 event.m_col = nmHDR->iItem;
@@ -2048,7 +2048,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 {
                     POINT ptClick;
 
-                    eventType = wxEVT_COMMAND_LIST_COL_RIGHT_CLICK;
+                    eventType = wxEVT_LIST_COL_RIGHT_CLICK;
                     event.m_col = wxMSWGetColumnClicked(nmhdr, &ptClick);
                     event.m_pointDrag.x = ptClick.x;
                     event.m_pointDrag.y = ptClick.y;
@@ -2098,13 +2098,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         switch ( nmhdr->code )
         {
             case LVN_BEGINRDRAG:
-                eventType = wxEVT_COMMAND_LIST_BEGIN_RDRAG;
+                eventType = wxEVT_LIST_BEGIN_RDRAG;
                 // fall through
 
             case LVN_BEGINDRAG:
                 if ( eventType == wxEVT_NULL )
                 {
-                    eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
+                    eventType = wxEVT_LIST_BEGIN_DRAG;
                 }
 
                 event.m_itemIndex = iItem;
@@ -2128,7 +2128,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         item.Init(((LV_DISPINFOW *)lParam)->item);
                     }
 
-                    eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
+                    eventType = wxEVT_LIST_BEGIN_LABEL_EDIT;
                     wxConvertFromMSWListItem(GetHwnd(), event.m_item, item);
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
@@ -2158,20 +2158,20 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         event.SetEditCanceled(true);
                     }
 
-                    eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
+                    eventType = wxEVT_LIST_END_LABEL_EDIT;
                     wxConvertFromMSWListItem(NULL, event.m_item, item);
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
                 break;
 
             case LVN_COLUMNCLICK:
-                eventType = wxEVT_COMMAND_LIST_COL_CLICK;
+                eventType = wxEVT_LIST_COL_CLICK;
                 event.m_itemIndex = -1;
                 event.m_col = nmLV->iSubItem;
                 break;
 
             case LVN_DELETEALLITEMS:
-                eventType = wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
+                eventType = wxEVT_LIST_DELETE_ALL_ITEMS;
                 event.m_itemIndex = -1;
                 break;
 
@@ -2183,13 +2183,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     return false;
                 }
 
-                eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
+                eventType = wxEVT_LIST_DELETE_ITEM;
                 event.m_itemIndex = iItem;
 
                 break;
 
             case LVN_INSERTITEM:
-                eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
+                eventType = wxEVT_LIST_INSERT_ITEM;
                 event.m_itemIndex = iItem;
                 break;
 
@@ -2215,7 +2215,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // has the focus changed?
                     if ( !(stOld & LVIS_FOCUSED) && (stNew & LVIS_FOCUSED) )
                     {
-                        eventType = wxEVT_COMMAND_LIST_ITEM_FOCUSED;
+                        eventType = wxEVT_LIST_ITEM_FOCUSED;
                         event.m_itemIndex = iItem;
                     }
 
@@ -2237,8 +2237,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         }
 
                         eventType = stNew & LVIS_SELECTED
-                                        ? wxEVT_COMMAND_LIST_ITEM_SELECTED
-                                        : wxEVT_COMMAND_LIST_ITEM_DESELECTED;
+                                        ? wxEVT_LIST_ITEM_SELECTED
+                                        : wxEVT_LIST_ITEM_DESELECTED;
                     }
                 }
 
@@ -2267,11 +2267,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                          (wVKey == VK_RETURN || wVKey == VK_SPACE) &&
                          !wxIsAnyModifierDown() )
                     {
-                        eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+                        eventType = wxEVT_LIST_ITEM_ACTIVATED;
                     }
                     else
                     {
-                        eventType = wxEVT_COMMAND_LIST_KEY_DOWN;
+                        eventType = wxEVT_LIST_KEY_DOWN;
 
                         event.m_code = wxMSWKeyboard::VKToWX(wVKey);
 
@@ -2304,7 +2304,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     return true;
                 }
 
-                // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
+                // else translate it into wxEVT_LIST_ITEM_ACTIVATED event
                 // if it happened on an item (and not on empty place)
                 if ( iItem == -1 )
                 {
@@ -2312,7 +2312,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     return false;
                 }
 
-                eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+                eventType = wxEVT_LIST_ITEM_ACTIVATED;
                 event.m_itemIndex = iItem;
                 event.m_item.m_text = GetItemText(iItem);
                 event.m_item.m_data = GetItemData(iItem);
@@ -2329,7 +2329,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     return true;
                 }
 
-                // else translate it into wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event
+                // else translate it into wxEVT_LIST_ITEM_RIGHT_CLICK event
                 LV_HITTESTINFO lvhti;
                 wxZeroMemory(lvhti);
 
@@ -2349,7 +2349,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 {
                     if ( lvhti.flags & LVHT_ONITEM )
                     {
-                        eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
+                        eventType = wxEVT_LIST_ITEM_RIGHT_CLICK;
                         event.m_itemIndex = lvhti.iItem;
                         event.m_pointDrag.x = lvhti.pt.x;
                         event.m_pointDrag.y = lvhti.pt.y;
@@ -2368,7 +2368,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 {
                     const NM_CACHEHINT *cacheHint = (NM_CACHEHINT *)lParam;
 
-                    eventType = wxEVT_COMMAND_LIST_CACHE_HINT;
+                    eventType = wxEVT_LIST_CACHE_HINT;
 
                     // we get some really stupid cache hints like ones for
                     // items in range 0..0 for an empty control or, after
@@ -3050,7 +3050,7 @@ wxListCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             // because this message is propagated upwards the child-parent
             // chain, we get it for the right clicks on the header window but
             // this is confusing in wx as right clicking there already
-            // generates a separate wxEVT_COMMAND_LIST_COL_RIGHT_CLICK event
+            // generates a separate wxEVT_LIST_COL_RIGHT_CLICK event
             // so just ignore them
             if ( (HWND)wParam == ListView_GetHeader(GetHwnd()) )
                 return 0;

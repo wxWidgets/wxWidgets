@@ -59,7 +59,7 @@ static pascal OSStatus wxMacComboBoxEventHandler( EventHandlerCallRef handler , 
             {
                 case kEventTextAccepted :
                     {
-                        wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, cb->GetId() );
+                        wxCommandEvent event( wxEVT_COMBOBOX, cb->GetId() );
                         event.SetInt( cb->GetSelection() );
                         event.SetString( cb->GetStringSelection() );
                         event.SetEventObject( cb );
@@ -120,7 +120,7 @@ protected:
                 // make Enter generate "selected" event if there is only one item
                 // in the combobox - without it, it's impossible to select it at
                 // all!
-                wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, m_cb->GetId() );
+                wxCommandEvent event( wxEVT_COMBOBOX, m_cb->GetId() );
                 event.SetInt( 0 );
                 event.SetString( value );
                 event.SetEventObject( m_cb );
@@ -135,7 +135,7 @@ protected:
                     m_cb->SetStringSelection(value);
 
                     // and generate the selected event for it
-                    wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, m_cb->GetId() );
+                    wxCommandEvent event( wxEVT_COMBOBOX, m_cb->GetId() );
                     event.SetInt( m_cb->GetCount() - 1 );
                     event.SetString( value );
                     event.SetEventObject( m_cb );
@@ -151,7 +151,7 @@ protected:
                     wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
-                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
                         return;
@@ -189,7 +189,7 @@ protected:
         wxString    s = e.GetString();
 
         m_cb->DelegateChoice( s );
-        wxCommandEvent event2(wxEVT_COMMAND_COMBOBOX_SELECTED, m_cb->GetId() );
+        wxCommandEvent event2(wxEVT_COMBOBOX, m_cb->GetId() );
         event2.SetInt(m_cb->GetSelection());
         event2.SetEventObject(m_cb);
         event2.SetString(m_cb->GetStringSelection());
@@ -775,7 +775,7 @@ bool wxComboBox::CanRedo() const
 
 bool wxComboBox::OSXHandleClicked( double timestampsec )
 {
-    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
+    wxCommandEvent event(wxEVT_COMBOBOX, m_windowId );
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());

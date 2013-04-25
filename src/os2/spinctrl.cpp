@@ -326,7 +326,7 @@ void wxSpinCtrl::OnChar (
     {
         case WXK_RETURN:
             {
-                wxCommandEvent              vEvent( wxEVT_COMMAND_TEXT_ENTER
+                wxCommandEvent              vEvent( wxEVT_TEXT_ENTER
                                                    ,m_windowId
                                                   );
                 wxString                    sVal = wxGetWindowText(m_hWndBuddy);
@@ -368,7 +368,7 @@ void wxSpinCtrl::OnSpinChange(
   wxSpinEvent&                      rEventSpin
 )
 {
-    wxCommandEvent                  vEvent( wxEVT_COMMAND_SPINCTRL_UPDATED
+    wxCommandEvent                  vEvent( wxEVT_SPINCTRL
                                            ,GetId()
                                           );
 
@@ -400,7 +400,7 @@ bool wxSpinCtrl::ProcessTextCommand( WXWORD wCmd,
     {
         case SPBN_CHANGE:
         {
-            wxCommandEvent vEvent( wxEVT_COMMAND_TEXT_UPDATED, GetId() );
+            wxCommandEvent vEvent( wxEVT_TEXT, GetId() );
             vEvent.SetEventObject(this);
 
             wxString sVal = wxGetWindowText(m_hWndBuddy);

@@ -44,7 +44,7 @@ public:
     void SetCollapsed(bool collapsed);
 };
 
-wxEventType wxEVT_COMMAND_COLLPANE_CHANGED;
+wxEventType wxEVT_COLLAPSIBLEPANE_CHANGED;
 
 /**
     @class wxCollapsiblePane

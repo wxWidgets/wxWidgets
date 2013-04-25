@@ -131,7 +131,7 @@ wxEND_FLAGS( wxFrameStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow, "wx/frame.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxFrame)
-wxEVENT_PROPERTY( Menu, wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent)
+wxEVENT_PROPERTY( Menu, wxEVT_MENU, wxCommandEvent)
 
 wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxString(), 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))

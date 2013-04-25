@@ -802,17 +802,17 @@ protected:
 
 class WXDLLIMPEXP_FWD_CORE wxTextUrlEvent;
 
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TEXT_URL, wxTextUrlEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TEXT_MAXLEN, wxCommandEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TEXT, wxCommandEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TEXT_ENTER, wxCommandEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TEXT_URL, wxTextUrlEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_TEXT_MAXLEN, wxCommandEvent);
 
 class WXDLLIMPEXP_CORE wxTextUrlEvent : public wxCommandEvent
 {
 public:
     wxTextUrlEvent(int winid, const wxMouseEvent& evtMouse,
                    long start, long end)
-        : wxCommandEvent(wxEVT_COMMAND_TEXT_URL, winid),
+        : wxCommandEvent(wxEVT_TEXT_URL, winid),
           m_evtMouse(evtMouse), m_start(start), m_end(end)
         { }
     wxTextUrlEvent(const wxTextUrlEvent& event)
@@ -855,12 +855,12 @@ typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
     wxEVENT_HANDLER_CAST(wxTextUrlEventFunction, func)
 
 #define wx__DECLARE_TEXTEVT(evt, id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_ ## evt, id, wxTextEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_TEXT_ ## evt, id, wxTextEventHandler(fn))
 
 #define wx__DECLARE_TEXTURLEVT(evt, id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_ ## evt, id, wxTextUrlEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_TEXT_ ## evt, id, wxTextUrlEventHandler(fn))
 
-#define EVT_TEXT(id, fn) wx__DECLARE_TEXTEVT(UPDATED, id, fn)
+#define EVT_TEXT(id, fn) wx__DECLARE_EVT1(wxEVT_TEXT, id, wxTextEventHandler(fn))
 #define EVT_TEXT_ENTER(id, fn) wx__DECLARE_TEXTEVT(ENTER, id, fn)
 #define EVT_TEXT_URL(id, fn) wx__DECLARE_TEXTURLEVT(URL, id, fn)
 #define EVT_TEXT_MAXLEN(id, fn) wx__DECLARE_TEXTEVT(MAXLEN, id, fn)
@@ -908,6 +908,12 @@ private:
 };
 
 #endif // wxHAS_TEXT_WINDOW_STREAM
+
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_TEXT_UPDATED   wxEVT_TEXT
+#define wxEVT_COMMAND_TEXT_ENTER     wxEVT_TEXT_ENTER
+#define wxEVT_COMMAND_TEXT_URL       wxEVT_TEXT_URL
+#define wxEVT_COMMAND_TEXT_MAXLEN    wxEVT_TEXT_MAXLEN
 
 #endif // wxUSE_TEXTCTRL
 

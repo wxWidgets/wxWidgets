@@ -805,7 +805,7 @@ void wxRichTextBordersPage::OnRichtextOutlineBottomUpdate( wxUpdateUIEvent& even
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXT_BORDER_LEFT_CHECKBOX
+ * wxEVT_CHECKBOX event handler for ID_RICHTEXT_BORDER_LEFT_CHECKBOX
  */
 
 void wxRichTextBordersPage::OnRichtextBorderCheckboxClick( wxCommandEvent& event )

@@ -70,7 +70,7 @@ void SpinCtrlDoubleTestCase::tearDown()
 void SpinCtrlDoubleTestCase::Arrows()
 {
 #ifndef __WXGTK__
-    EventCounter updated(m_spin, wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED);
+    EventCounter updated(m_spin, wxEVT_SPINCTRLDOUBLE);
 
     wxUIActionSimulator sim;
 

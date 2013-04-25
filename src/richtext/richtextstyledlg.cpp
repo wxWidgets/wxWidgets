@@ -577,7 +577,7 @@ wxIcon wxRichTextStyleOrganiserDialog::GetIconResource( const wxString& name )
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_APPLY
+ * wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_APPLY
  */
 
 void wxRichTextStyleOrganiserDialog::OnApplyClick( wxCommandEvent& WXUNUSED(event) )
@@ -596,7 +596,7 @@ void wxRichTextStyleOrganiserDialog::OnApplyUpdate( wxUpdateUIEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_CHAR
+ * wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_CHAR
  */
 
 void wxRichTextStyleOrganiserDialog::OnNewCharClick( wxCommandEvent& WXUNUSED(event) )
@@ -644,7 +644,7 @@ void wxRichTextStyleOrganiserDialog::OnNewCharUpdate( wxUpdateUIEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_PARA
+ * wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_PARA
  */
 
 void wxRichTextStyleOrganiserDialog::OnNewParaClick( wxCommandEvent& WXUNUSED(event) )
@@ -692,7 +692,7 @@ void wxRichTextStyleOrganiserDialog::OnNewParaUpdate( wxUpdateUIEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_EDIT
+ * wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_EDIT
  */
 
 void wxRichTextStyleOrganiserDialog::OnEditClick( wxCommandEvent& WXUNUSED(event) )
@@ -767,7 +767,7 @@ void wxRichTextStyleOrganiserDialog::OnEditUpdate( wxUpdateUIEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_DELETE
+ * wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_DELETE
  */
 
 void wxRichTextStyleOrganiserDialog::OnDeleteClick( wxCommandEvent& WXUNUSED(event) )
@@ -810,7 +810,7 @@ void wxRichTextStyleOrganiserDialog::OnDeleteUpdate( wxUpdateUIEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_LIST
+ * wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_LIST
  */
 
 void wxRichTextStyleOrganiserDialog::OnNewListClick( wxCommandEvent& WXUNUSED(event) )
@@ -876,7 +876,7 @@ void wxRichTextStyleOrganiserDialog::OnNewListUpdate( wxUpdateUIEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_RENAME
+ * wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_RENAME
  */
 
 void wxRichTextStyleOrganiserDialog::OnRenameClick( wxCommandEvent& WXUNUSED(event) )
@@ -924,7 +924,7 @@ void wxRichTextStyleOrganiserDialog::OnListSelection(wxCommandEvent& event)
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_BOX
+ * wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_BOX
  */
 
 void wxRichTextStyleOrganiserDialog::OnNewBoxClick( wxCommandEvent& WXUNUSED(event) )
@@ -971,7 +971,7 @@ void wxRichTextStyleOrganiserDialog::OnNewBoxUpdate( wxUpdateUIEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_HELP
+ * wxEVT_BUTTON event handler for wxID_HELP
  */
 
 void wxRichTextStyleOrganiserDialog::OnHelpClick( wxCommandEvent& WXUNUSED(event) )

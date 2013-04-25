@@ -601,15 +601,15 @@ public:
 
     @beginEventEmissionTable{wxAuiToolBarEvent}
     @event{EVT_AUITOOLBAR_TOOL_DROPDOWN(id, func)}
-        Process a wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN event
+        Process a wxEVT_AUITOOLBAR_TOOL_DROPDOWN event
     @event{EVT_AUITOOLBAR_OVERFLOW_CLICK(id, func)}
-        Process a wxEVT_COMMAND_AUITOOLBAR_OVERFLOW_CLICK event
+        Process a wxEVT_AUITOOLBAR_OVERFLOW_CLICK event
     @event{EVT_AUITOOLBAR_RIGHT_CLICK(id, func)}
-        Process a wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK event
+        Process a wxEVT_AUITOOLBAR_RIGHT_CLICK event
     @event{EVT_AUITOOLBAR_MIDDLE_CLICK(id, func)}
-        Process a wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK event
+        Process a wxEVT_AUITOOLBAR_MIDDLE_CLICK event
     @event{EVT_AUITOOLBAR_BEGIN_DRAG(id, func)}
-        Process a wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG event
+        Process a wxEVT_AUITOOLBAR_BEGIN_DRAG event
     @endEventTable
 
     @library{wxaui}

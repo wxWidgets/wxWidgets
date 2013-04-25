@@ -1565,7 +1565,7 @@ void wxTreeListCtrl::SendColumnEvent(wxEventType evt, wxDataViewEvent& eventDV)
 void
 wxTreeListCtrl::OnItemToggled(wxTreeListItem item, wxCheckBoxState stateOld)
 {
-    wxTreeListEvent event(wxEVT_COMMAND_TREELIST_ITEM_CHECKED, this, item);
+    wxTreeListEvent event(wxEVT_TREELIST_ITEM_CHECKED, this, item);
     event.SetOldCheckedState(stateOld);
 
     ProcessWindowEvent(event);
@@ -1573,32 +1573,32 @@ wxTreeListCtrl::OnItemToggled(wxTreeListItem item, wxCheckBoxState stateOld)
 
 void wxTreeListCtrl::OnSelectionChanged(wxDataViewEvent& event)
 {
-    SendItemEvent(wxEVT_COMMAND_TREELIST_SELECTION_CHANGED, event);
+    SendItemEvent(wxEVT_TREELIST_SELECTION_CHANGED, event);
 }
 
 void wxTreeListCtrl::OnItemExpanding(wxDataViewEvent& event)
 {
-    SendItemEvent(wxEVT_COMMAND_TREELIST_ITEM_EXPANDING, event);
+    SendItemEvent(wxEVT_TREELIST_ITEM_EXPANDING, event);
 }
 
 void wxTreeListCtrl::OnItemExpanded(wxDataViewEvent& event)
 {
-    SendItemEvent(wxEVT_COMMAND_TREELIST_ITEM_EXPANDED, event);
+    SendItemEvent(wxEVT_TREELIST_ITEM_EXPANDED, event);
 }
 
 void wxTreeListCtrl::OnItemActivated(wxDataViewEvent& event)
 {
-    SendItemEvent(wxEVT_COMMAND_TREELIST_ITEM_ACTIVATED, event);
+    SendItemEvent(wxEVT_TREELIST_ITEM_ACTIVATED, event);
 }
 
 void wxTreeListCtrl::OnItemContextMenu(wxDataViewEvent& event)
 {
-    SendItemEvent(wxEVT_COMMAND_TREELIST_ITEM_CONTEXT_MENU, event);
+    SendItemEvent(wxEVT_TREELIST_ITEM_CONTEXT_MENU, event);
 }
 
 void wxTreeListCtrl::OnColumnSorted(wxDataViewEvent& event)
 {
-    SendColumnEvent(wxEVT_COMMAND_TREELIST_COLUMN_SORTED, event);
+    SendColumnEvent(wxEVT_TREELIST_COLUMN_SORTED, event);
 }
 
 // ----------------------------------------------------------------------------
@@ -1666,7 +1666,7 @@ wxWindow* wxTreeListCtrl::GetView() const
 wxIMPLEMENT_DYNAMIC_CLASS(wxTreeListEvent, wxNotifyEvent)
 
 #define wxDEFINE_TREELIST_EVENT(name) \
-    wxDEFINE_EVENT(wxEVT_COMMAND_TREELIST_##name, wxTreeListEvent)
+    wxDEFINE_EVENT(wxEVT_TREELIST_##name, wxTreeListEvent)
 
 wxDEFINE_TREELIST_EVENT(SELECTION_CHANGED);
 wxDEFINE_TREELIST_EVENT(ITEM_EXPANDING);

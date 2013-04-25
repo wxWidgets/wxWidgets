@@ -45,8 +45,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolbook, wxBookCtrlBase)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, wxBookCtrlEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_TOOLBOOK_PAGE_CHANGING, wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_TOOLBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
 
 BEGIN_EVENT_TABLE(wxToolbook, wxBookCtrlBase)
     EVT_SIZE(wxToolbook::OnSize)
@@ -202,12 +202,12 @@ void wxToolbook::SetImageList(wxImageList *imageList)
 
 wxBookCtrlEvent* wxToolbook::CreatePageChangingEvent() const
 {
-    return new wxBookCtrlEvent(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, m_windowId);
+    return new wxBookCtrlEvent(wxEVT_TOOLBOOK_PAGE_CHANGING, m_windowId);
 }
 
 void wxToolbook::MakeChangedEvent(wxBookCtrlEvent &event)
 {
-    event.SetEventType(wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED);
+    event.SetEventType(wxEVT_TOOLBOOK_PAGE_CHANGED);
 }
 
 void wxToolbook::UpdateSelectedPage(size_t newsel)

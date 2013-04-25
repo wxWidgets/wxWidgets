@@ -135,7 +135,7 @@ void wxRadioButton::ClearValue()
 
 void wxRadioButton::SendEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_RADIOBUTTON, GetId());
     InitCommandEvent(event);
     event.SetInt(IsChecked());
     Command(event);

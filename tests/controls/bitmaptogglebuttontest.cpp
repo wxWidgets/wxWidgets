@@ -74,7 +74,7 @@ void BitmapToggleButtonTestCase::tearDown()
 void BitmapToggleButtonTestCase::Click()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter clicked(m_button, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_TOGGLEBUTTON);
 
     wxUIActionSimulator sim;
 
@@ -101,7 +101,7 @@ void BitmapToggleButtonTestCase::Click()
 
 void BitmapToggleButtonTestCase::Value()
 {
-    EventCounter clicked(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     m_button->SetValue(true);
 

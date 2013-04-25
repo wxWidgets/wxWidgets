@@ -26,8 +26,8 @@ enum
 #define wxNB_NOPAGETHEME      0x0400
 #define wxNB_FLAT             0x0800
 
-wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
-wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
+wxEventType wxEVT_NOTEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_NOTEBOOK_PAGE_CHANGING;
 
 
 /**
@@ -69,10 +69,10 @@ wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
     @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_NOTEBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
-        Processes a @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED event.
+        Processes a @c wxEVT_NOTEBOOK_PAGE_CHANGED event.
     @event{EVT_NOTEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed.
-        Processes a @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING event.
+        Processes a @c wxEVT_NOTEBOOK_PAGE_CHANGING event.
         This event can be vetoed.
     @endEventTable
 

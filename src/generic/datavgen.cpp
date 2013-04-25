@@ -249,7 +249,7 @@ private:
     {
         const unsigned idx = event.GetColumn();
 
-        if ( SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, idx) )
+        if ( SendEvent(wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, idx) )
             return;
 
         // default handling for the column click is to sort by this column or
@@ -279,12 +279,12 @@ private:
 
         owner->OnColumnChange(idx);
 
-        SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, idx);
+        SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, idx);
     }
 
     void OnRClick(wxHeaderCtrlEvent& event)
     {
-        if ( !SendEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
+        if ( !SendEvent(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED,
                         event.GetColumn()) )
             event.Skip();
     }
@@ -1571,7 +1571,7 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x,
 
     wxDataViewModel *model = GetModel();
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( model );
@@ -1615,7 +1615,7 @@ bool wxDataViewMainWindow::OnDrop( wxDataFormat format, wxCoord x, wxCoord y )
 
     wxDataViewModel *model = GetModel();
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( model );
@@ -1646,7 +1646,7 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
 
     wxCustomDataObject *obj = (wxCustomDataObject *) GetDropTarget()->GetDataObject();
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( model );
@@ -1805,7 +1805,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // Send the event to wxDataViewCtrl itself.
     wxWindow * const parent = GetParent();
-    wxDataViewEvent cache_event(wxEVT_COMMAND_DATAVIEW_CACHE_HINT, parent->GetId());
+    wxDataViewEvent cache_event(wxEVT_DATAVIEW_CACHE_HINT, parent->GetId());
     cache_event.SetEventObject(parent);
     cache_event.SetCache(item_start, item_last - 1);
     parent->ProcessWindowEvent(cache_event);
@@ -2490,7 +2490,7 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 
     // Send event
     wxWindow *parent = GetParent();
-    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, parent->GetId());
+    wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, parent->GetId());
     le.SetEventObject(parent);
     le.SetModel(GetModel());
     le.SetItem(item);
@@ -2531,7 +2531,7 @@ bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned i
 
     // Send event
     wxWindow *parent = GetParent();
-    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, parent->GetId());
+    wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, parent->GetId());
     le.SetEventObject(parent);
     le.SetModel(GetModel());
     le.SetItem(item);
@@ -2810,7 +2810,7 @@ bool wxDataViewMainWindow::IsRowSelected( unsigned int row )
 void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item)
 {
     wxWindow *parent = GetParent();
-    wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, parent->GetId());
+    wxDataViewEvent le(wxEVT_DATAVIEW_SELECTION_CHANGED, parent->GetId());
 
     le.SetEventObject(parent);
     le.SetModel(GetModel());
@@ -3161,7 +3161,7 @@ void wxDataViewMainWindow::Expand( unsigned int row )
 
     if (!node->IsOpen())
     {
-        if ( !SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem()) )
+        if ( !SendExpanderEvent(wxEVT_DATAVIEW_ITEM_EXPANDING, node->GetItem()) )
         {
             // Vetoed by the event handler.
             return;
@@ -3195,7 +3195,7 @@ void wxDataViewMainWindow::Expand( unsigned int row )
         m_count = -1;
         UpdateDisplay();
         // Send the expanded event
-        SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED,node->GetItem());
+        SendExpanderEvent(wxEVT_DATAVIEW_ITEM_EXPANDED,node->GetItem());
     }
 }
 
@@ -3213,7 +3213,7 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
 
         if (node->IsOpen())
         {
-            if ( !SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,node->GetItem()) )
+            if ( !SendExpanderEvent(wxEVT_DATAVIEW_ITEM_COLLAPSING,node->GetItem()) )
             {
                 // Vetoed by the event handler.
                 return;
@@ -3269,7 +3269,7 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
 
             m_count = -1;
             UpdateDisplay();
-            SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,node->GetItem());
+            SendExpanderEvent(wxEVT_DATAVIEW_ITEM_COLLAPSED,node->GetItem());
         }
 }
 
@@ -3696,13 +3696,13 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             }
             else
             {
-                // Enter activates the item, i.e. sends wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED to
+                // Enter activates the item, i.e. sends wxEVT_DATAVIEW_ITEM_ACTIVATED to
                 // it. Only if that event is not handled do we activate column renderer (which
                 // is normally done by Space) or even inline editing.
 
                 const wxDataViewItem item = GetItemByRow(m_currentRow);
 
-                wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
+                wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_ACTIVATED,
                                    parent->GetId());
                 le.SetItem(item);
                 le.SetEventObject(parent);
@@ -4058,7 +4058,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     if (event.RightUp())
     {
         wxWindow *parent = GetParent();
-        wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
+        wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, parent->GetId());
         le.SetEventObject(parent);
         le.SetModel(model);
 
@@ -4170,7 +4170,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             wxDataViewItem itemDragged = GetItemByRow( drag_item_row );
 
             // Notify cell about drag
-            wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
+            wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
             event.SetEventObject( m_owner );
             event.SetItem( itemDragged );
             event.SetModel( model );
@@ -4220,7 +4220,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         else if ( current == m_lineLastClicked )
         {
             wxWindow *parent = GetParent();
-            wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
+            wxDataViewEvent le(wxEVT_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
             le.SetItem( item );
             le.SetColumn( col->GetModelColumn() );
             le.SetDataViewColumn( col );

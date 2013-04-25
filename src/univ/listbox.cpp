@@ -1092,7 +1092,7 @@ void wxListBox::SelectAndNotify(int item)
 {
     DoSelect(item);
 
-    SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED);
+    SendEvent(wxEVT_LISTBOX);
 }
 
 void wxListBox::Activate(int item)
@@ -1111,7 +1111,7 @@ void wxListBox::Activate(int item)
     {
         DoSelect(item);
 
-        SendEvent(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
+        SendEvent(wxEVT_LISTBOX_DCLICK);
     }
 }
 

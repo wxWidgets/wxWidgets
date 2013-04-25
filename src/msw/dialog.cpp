@@ -336,7 +336,7 @@ bool wxDialog::DoOK()
     if ( EmulateButtonClickIfPresent(idOk) )
         return true;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetAffirmativeId());
+    wxCommandEvent event(wxEVT_BUTTON, GetAffirmativeId());
     event.SetEventObject(this);
 
     return HandleWindowEvent(event);

@@ -458,7 +458,7 @@ bool wxNotebook::OSXHandleClicked( double WXUNUSED(timestampsec) )
     if ( newSel != m_selection )
     {
         wxBookCtrlEvent changing(
-            wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId,
+            wxEVT_NOTEBOOK_PAGE_CHANGING, m_windowId,
             newSel , m_selection );
         changing.SetEventObject( this );
         HandleWindowEvent( changing );
@@ -466,7 +466,7 @@ bool wxNotebook::OSXHandleClicked( double WXUNUSED(timestampsec) )
         if ( changing.IsAllowed() )
         {
             wxBookCtrlEvent event(
-                wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, m_windowId,
+                wxEVT_NOTEBOOK_PAGE_CHANGED, m_windowId,
                 newSel, m_selection );
             event.SetEventObject( this );
             HandleWindowEvent( event );

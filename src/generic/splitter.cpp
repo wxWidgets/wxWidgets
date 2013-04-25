@@ -39,10 +39,10 @@
 
 #include <stdlib.h>
 
-wxDEFINE_EVENT( wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, wxSplitterEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, wxSplitterEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, wxSplitterEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_SPLITTER_UNSPLIT, wxSplitterEvent );
+wxDEFINE_EVENT( wxEVT_SPLITTER_SASH_POS_CHANGED, wxSplitterEvent );
+wxDEFINE_EVENT( wxEVT_SPLITTER_SASH_POS_CHANGING, wxSplitterEvent );
+wxDEFINE_EVENT( wxEVT_SPLITTER_DOUBLECLICKED, wxSplitterEvent );
+wxDEFINE_EVENT( wxEVT_SPLITTER_UNSPLIT, wxSplitterEvent );
 
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindow, wxWindow)
 
@@ -293,7 +293,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 m_windowOne = m_windowTwo;
                 m_windowTwo = NULL;
                 OnUnsplit(removedWindow);
-                wxSplitterEvent eventUnsplit(wxEVT_COMMAND_SPLITTER_UNSPLIT, this);
+                wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
                 (void)DoSendEvent(eventUnsplit);
                 SetSashPositionAndNotify(0);
@@ -304,7 +304,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 wxWindow *removedWindow = m_windowTwo;
                 m_windowTwo = NULL;
                 OnUnsplit(removedWindow);
-                wxSplitterEvent eventUnsplit(wxEVT_COMMAND_SPLITTER_UNSPLIT, this);
+                wxSplitterEvent eventUnsplit(wxEVT_SPLITTER_UNSPLIT, this);
                 eventUnsplit.m_data.win = removedWindow;
                 (void)DoSendEvent(eventUnsplit);
                 SetSashPositionAndNotify(0);
@@ -652,7 +652,7 @@ void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
     // must generate a CHANGED event at the end of resizing
     DoSetSashPosition(sashPos);
 
-    wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, this);
+    wxSplitterEvent event(wxEVT_SPLITTER_SASH_POS_CHANGED, this);
     event.m_data.pos = m_sashPosition;
 
     (void)DoSendEvent(event);
@@ -988,7 +988,7 @@ int wxSplitterWindow::OnSashPositionChanging(int newSashPosition)
     //
     // FIXME: shouldn't we do it before the adjustments above so as to ensure
     //        that the sash position is always reasonable?
-    wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, this);
+    wxSplitterEvent event(wxEVT_SPLITTER_SASH_POS_CHANGING, this);
     event.m_data.pos = newSashPosition;
 
     if ( !DoSendEvent(event) )
@@ -1012,7 +1012,7 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
     wxCHECK_RET(m_windowTwo, wxT("splitter: no window to remove"));
 
     // new code should handle events instead of using the virtual functions
-    wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, this);
+    wxSplitterEvent event(wxEVT_SPLITTER_DOUBLECLICKED, this);
     event.m_data.pt.x = x;
     event.m_data.pt.y = y;
     if ( DoSendEvent(event) )
@@ -1022,7 +1022,7 @@ void wxSplitterWindow::OnDoubleClickSash(int x, int y)
             wxWindow* win = m_windowTwo;
             if ( Unsplit(win) )
             {
-                wxSplitterEvent unsplitEvent(wxEVT_COMMAND_SPLITTER_UNSPLIT, this);
+                wxSplitterEvent unsplitEvent(wxEVT_SPLITTER_UNSPLIT, this);
                 unsplitEvent.m_data.win = win;
                 (void)DoSendEvent(unsplitEvent);
             }

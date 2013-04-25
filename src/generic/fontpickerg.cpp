@@ -59,7 +59,7 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
     }
 
     // and handle user clicks on it
-    Connect(GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(GetId(), wxEVT_BUTTON,
             wxCommandEventHandler(wxGenericFontButton::OnButtonClick),
             NULL, this);
 

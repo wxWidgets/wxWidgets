@@ -17,7 +17,7 @@
     @style{wxSP_WRAP}
         The value wraps at the minimum and maximum.
     @style{wxTE_PROCESS_ENTER}
-        Indicates that the control should generate @c wxEVT_COMMAND_TEXT_ENTER
+        Indicates that the control should generate @c wxEVT_TEXT_ENTER
         events. Using this style will prevent the user from using the Enter key
         for dialog navigation (e.g. activating the default button in the
         dialog) under MSW.
@@ -33,7 +33,7 @@
 
     @beginEventEmissionTable{wxSpinEvent}
     @event{EVT_SPINCTRL(id, func)}
-        Process a wxEVT_COMMAND_SPINCTRL_UPDATED event, which is generated
+        Process a wxEVT_SPINCTRL event, which is generated
         whenever the numeric value of the spin control is updated.
     @endEventTable
 
@@ -164,7 +164,7 @@ public:
 
         Notice that calling this method may change the value of the control if
         it's not inside the new valid range, e.g. it will become @a minVal if
-        it is less than it now. However no @c wxEVT_COMMAND_SPINCTRL_UPDATED
+        it is less than it now. However no @c wxEVT_SPINCTRL
         event is generated, even if it the value does change.
     */
     void SetRange(int minVal, int maxVal);
@@ -373,5 +373,5 @@ public:
     void SetValue(double value);
 };
 
-wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
-wxEventType wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED;
+wxEventType wxEVT_SPINCTRL;
+wxEventType wxEVT_SPINCTRLDOUBLE;

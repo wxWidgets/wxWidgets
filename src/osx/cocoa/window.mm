@@ -1295,14 +1295,14 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
     {
         wxEvtHandler * const handler = m_wxPeer->GetEventHandler();
         
-        wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+        wxCommandEvent command_event( wxEVT_MENU, command );
         command_event.SetEventObject( wxevent.GetEventObject() );
         handled = handler->ProcessEvent( command_event );
         
         if ( !handled )
         {
             // accelerators can also be used with buttons, try them too
-            command_event.SetEventType(wxEVT_COMMAND_BUTTON_CLICKED);
+            command_event.SetEventType(wxEVT_BUTTON);
             handled = handler->ProcessEvent( command_event );
         }
     }

@@ -69,7 +69,7 @@ template<> void wxCollectionToVariantArray( wxMenuItemList const &theList,
 #endif
 
 wxBEGIN_PROPERTIES_TABLE(wxMenu)
-wxEVENT_PROPERTY( Select, wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent)
+wxEVENT_PROPERTY( Select, wxEVT_MENU, wxCommandEvent)
 
 wxPROPERTY( Title, wxString, SetTitle, GetTitle, wxString(), \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
@@ -639,7 +639,7 @@ void wxMenuBase::UpdateUI(wxEvtHandler* source)
 
 bool wxMenuBase::SendEvent(int itemid, int checked)
 {
-    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, itemid);
+    wxCommandEvent event(wxEVT_MENU, itemid);
     event.SetEventObject(this);
     event.SetInt(checked);
 

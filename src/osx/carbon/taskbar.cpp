@@ -60,7 +60,7 @@ public:
         : wxTopLevelWindow(NULL, wxID_ANY, wxEmptyString), m_impl(impl)
     {
         Connect(
-            -1, wxEVT_COMMAND_MENU_SELECTED,
+            -1, wxEVT_MENU,
             wxCommandEventHandler(wxTaskBarIconWindow::OnMenuEvent) );
     }
 

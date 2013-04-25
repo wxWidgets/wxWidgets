@@ -45,7 +45,7 @@ bool wxComboBox::OS2Command( WXUINT uParam, WXWORD WXUNUSED(wId) )
         case CBN_LBSELECT:
             if (lSel > -1)
             {
-                wxCommandEvent vEvent( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );
+                wxCommandEvent vEvent( wxEVT_COMBOBOX, GetId() );
 
                 vEvent.SetInt(lSel);
                 vEvent.SetEventObject(this);
@@ -57,7 +57,7 @@ bool wxComboBox::OS2Command( WXUINT uParam, WXWORD WXUNUSED(wId) )
 
         case CBN_EFCHANGE:
             {
-                wxCommandEvent vEvent( wxEVT_COMMAND_TEXT_UPDATED, GetId() );
+                wxCommandEvent vEvent( wxEVT_TEXT, GetId() );
 
                 if (lSel == -1L)
                     sValue = GetValue();

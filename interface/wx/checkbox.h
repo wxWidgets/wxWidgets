@@ -63,7 +63,7 @@ enum wxCheckBoxState
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_CHECKBOX(id, func)}
-           Process a @c wxEVT_COMMAND_CHECKBOX_CLICKED event, when the checkbox
+           Process a @c wxEVT_CHECKBOX event, when the checkbox
            is clicked.
     @endEventTable
 
@@ -170,7 +170,7 @@ public:
 
     /**
         Sets the checkbox to the given state. This does not cause a
-        @c wxEVT_COMMAND_CHECKBOX_CLICKED event to get emitted.
+        @c wxEVT_CHECKBOX event to get emitted.
 
         @param state
             If @true, the check is on, otherwise it is off.
@@ -179,7 +179,7 @@ public:
 
     /**
         Sets the checkbox to the given state. This does not cause a
-        @c wxEVT_COMMAND_CHECKBOX_CLICKED event to get emitted.
+        @c wxEVT_CHECKBOX event to get emitted.
 
         Asserts when the checkbox is a 2-state checkbox and setting the state
         to wxCHK_UNDETERMINED.

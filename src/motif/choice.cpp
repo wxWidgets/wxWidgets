@@ -411,7 +411,7 @@ void wxChoiceCallback (Widget w, XtPointer clientData, XtPointer WXUNUSED(ptr))
         int n = item->GetWidgets().Index(w);
         if (n != wxNOT_FOUND)
         {
-            wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, item->GetId());
+            wxCommandEvent event(wxEVT_CHOICE, item->GetId());
             event.SetEventObject(item);
             event.SetInt(n);
             event.SetString( item->GetStrings().Item(n) );

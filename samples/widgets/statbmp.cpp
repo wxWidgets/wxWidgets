@@ -104,9 +104,9 @@ void StatBmpWidgetsPage::CreateContent()
 
     wxInitAllImageHandlers();
 
-    Connect(wxEVT_COMMAND_FILEPICKER_CHANGED,
+    Connect(wxEVT_FILEPICKER_CHANGED,
             wxFileDirPickerEventHandler(StatBmpWidgetsPage::OnFileChange));
-    Connect(wxEVT_COMMAND_RADIOBOX_SELECTED,
+    Connect(wxEVT_RADIOBOX,
             wxCommandEventHandler(StatBmpWidgetsPage::OnRadioChange));
 
     m_statbmp = NULL;

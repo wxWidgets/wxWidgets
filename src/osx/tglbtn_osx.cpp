@@ -31,7 +31,7 @@
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl)
-wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
 // ============================================================================
 // implementation
@@ -94,7 +94,7 @@ void wxToggleButton::Command(wxCommandEvent & event)
 
 bool wxToggleButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
-    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
+    wxCommandEvent event(wxEVT_TOGGLEBUTTON, m_windowId);
     event.SetInt(GetValue());
     event.SetEventObject(this);
     ProcessCommand(event);

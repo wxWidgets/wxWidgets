@@ -45,7 +45,7 @@ public:
 };
 
 
-wxEventType wxEVT_COMMAND_HYPERLINK;
+wxEventType wxEVT_HYPERLINK;
 
 /**
     @class wxHyperlinkCtrl

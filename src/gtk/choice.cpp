@@ -30,7 +30,7 @@ extern "C" {
 static void
 gtk_choice_changed_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
-    choice->SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
+    choice->SendSelectionChangedEvent(wxEVT_CHOICE);
 }
 
 }

@@ -60,7 +60,7 @@ ProcessScrollEvent(wxSlider *win, wxEventType evtType)
     }
 
     // and also generate a command event for compatibility
-    wxCommandEvent event( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
+    wxCommandEvent event( wxEVT_SLIDER, win->GetId() );
     event.SetEventObject( win );
     event.SetInt( value );
     win->HandleWindowEvent( event );

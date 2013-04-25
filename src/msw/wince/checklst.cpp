@@ -343,14 +343,14 @@ bool wxCheckListBox::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // Check image changed
                     if ((stOld & LVIS_STATEIMAGEMASK) != (stNew & LVIS_STATEIMAGEMASK))
                     {
-                        event.SetEventType(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED);
+                        event.SetEventType(wxEVT_CHECKLISTBOX);
                         event.SetInt(IsChecked(iItem));
                         (void) GetEventHandler()->ProcessEvent(event);
                     }
 
                     if ( (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED) )
                     {
-                        eventType = wxEVT_COMMAND_LISTBOX_SELECTED;
+                        eventType = wxEVT_LISTBOX;
 
                         event.SetExtraLong( (stNew & LVIS_SELECTED) != 0 ); // is a selection
                         event.SetInt(iItem);

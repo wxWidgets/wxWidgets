@@ -73,7 +73,7 @@ protected:
     // send an "item checked" event
     void SendEvent(unsigned int uiIndex)
     {
-        wxCommandEvent event(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId());
+        wxCommandEvent event(wxEVT_CHECKLISTBOX, GetId());
         event.SetInt(uiIndex);
         event.SetEventObject(this);
         event.SetString(GetString(uiIndex));

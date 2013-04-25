@@ -70,7 +70,7 @@ wxEND_FLAGS( wxChoiceStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControl, "wx/choice.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxChoice)
-wxEVENT_PROPERTY( Select, wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEvent )
+wxEVENT_PROPERTY( Select, wxEVT_CHOICE, wxCommandEvent )
 
 wxPROPERTY( Font, wxFont, SetFont, GetFont , wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group"))

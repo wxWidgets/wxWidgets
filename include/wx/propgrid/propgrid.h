@@ -1609,7 +1609,7 @@ public:
     */
     bool IsMainButtonEvent( const wxEvent& event )
     {
-        return (event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED)
+        return (event.GetEventType() == wxEVT_BUTTON)
                     && (m_wndSecId == event.GetId());
     }
 

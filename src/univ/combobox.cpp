@@ -180,7 +180,7 @@ void wxComboListBox::OnLeftUp(wxMouseEvent& event)
     m_combo->SetValue(wxListBox::GetStringSelection());
 
     // next let the user code have the event
-    wxCommandEvent evt(wxEVT_COMMAND_COMBOBOX_SELECTED,m_combo->GetId());
+    wxCommandEvent evt(wxEVT_COMBOBOX,m_combo->GetId());
     evt.SetInt(wxListBox::GetSelection());
     evt.SetEventObject(m_combo);
     m_combo->ProcessWindowEvent(evt);

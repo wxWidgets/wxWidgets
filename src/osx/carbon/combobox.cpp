@@ -75,7 +75,7 @@ protected:
 
         if ( event.GetKeyCode() == WXK_RETURN )
         {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_cb->GetId());
+            wxCommandEvent event(wxEVT_TEXT_ENTER, m_cb->GetId());
             event.SetString( GetValue() );
             event.SetInt( m_cb->GetSelection() );
             event.SetEventObject( m_cb );
@@ -90,7 +90,7 @@ protected:
                     wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
-                        wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        wxCommandEvent event( wxEVT_BUTTON, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
                     }
@@ -181,7 +181,7 @@ protected:
         wxString    s = e.GetString();
 
         m_cb->DelegateChoice( s );
-        wxCommandEvent event2(wxEVT_COMMAND_COMBOBOX_SELECTED, m_cb->GetId() );
+        wxCommandEvent event2(wxEVT_COMBOBOX, m_cb->GetId() );
         event2.SetInt(m_cb->GetSelection());
         event2.SetEventObject(m_cb);
         event2.SetString(m_cb->GetStringSelection());
@@ -189,7 +189,7 @@ protected:
 
         // For consistency with MSW and GTK, also send a text updated event
         // After all, the text is updated when a selection is made
-        wxCommandEvent TextEvent( wxEVT_COMMAND_TEXT_UPDATED, m_cb->GetId() );
+        wxCommandEvent TextEvent( wxEVT_TEXT, m_cb->GetId() );
         TextEvent.SetString( m_cb->GetStringSelection() );
         TextEvent.SetEventObject( m_cb );
         m_cb->ProcessCommand( TextEvent );
@@ -648,7 +648,7 @@ bool wxComboBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
 /*
     For consistency with other platforms, clicking in the text area does not constitute a selection
-    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
+    wxCommandEvent event(wxEVT_COMBOBOX, m_windowId );
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());

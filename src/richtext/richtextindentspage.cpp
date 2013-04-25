@@ -601,7 +601,7 @@ wxIcon wxRichTextIndentsSpacingPage::GetIconResource( const wxString& name )
 ////@end wxRichTextIndentsSpacingPage icon retrieval
 }
 /*!
- * wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_LEFT
+ * wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_LEFT
  */
 
 void wxRichTextIndentsSpacingPage::OnAlignmentLeftSelected( wxCommandEvent& WXUNUSED(event) )
@@ -612,7 +612,7 @@ void wxRichTextIndentsSpacingPage::OnAlignmentLeftSelected( wxCommandEvent& WXUN
 
 
 /*!
- * wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_RIGHT
+ * wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_RIGHT
  */
 
 void wxRichTextIndentsSpacingPage::OnAlignmentRightSelected( wxCommandEvent& WXUNUSED(event) )
@@ -623,7 +623,7 @@ void wxRichTextIndentsSpacingPage::OnAlignmentRightSelected( wxCommandEvent& WXU
 
 
 /*!
- * wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_JUSTIFIED
+ * wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_JUSTIFIED
  */
 
 void wxRichTextIndentsSpacingPage::OnAlignmentJustifiedSelected( wxCommandEvent& WXUNUSED(event) )
@@ -634,7 +634,7 @@ void wxRichTextIndentsSpacingPage::OnAlignmentJustifiedSelected( wxCommandEvent&
 
 
 /*!
- * wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_CENTRED
+ * wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_CENTRED
  */
 
 void wxRichTextIndentsSpacingPage::OnAlignmentCentredSelected( wxCommandEvent& WXUNUSED(event) )
@@ -645,7 +645,7 @@ void wxRichTextIndentsSpacingPage::OnAlignmentCentredSelected( wxCommandEvent& W
 
 
 /*!
- * wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_INDETERMINATE
+ * wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_INDETERMINATE
  */
 
 void wxRichTextIndentsSpacingPage::OnAlignmentIndeterminateSelected( wxCommandEvent& WXUNUSED(event) )
@@ -656,7 +656,7 @@ void wxRichTextIndentsSpacingPage::OnAlignmentIndeterminateSelected( wxCommandEv
 
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT
+ * wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT
  */
 
 void wxRichTextIndentsSpacingPage::OnIndentLeftUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -667,7 +667,7 @@ void wxRichTextIndentsSpacingPage::OnIndentLeftUpdated( wxCommandEvent& WXUNUSED
 
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST
+ * wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST
  */
 
 void wxRichTextIndentsSpacingPage::OnIndentLeftFirstUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -678,7 +678,7 @@ void wxRichTextIndentsSpacingPage::OnIndentLeftFirstUpdated( wxCommandEvent& WXU
 
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT
+ * wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT
  */
 
 void wxRichTextIndentsSpacingPage::OnIndentRightUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -689,7 +689,7 @@ void wxRichTextIndentsSpacingPage::OnIndentRightUpdated( wxCommandEvent& WXUNUSE
 
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE
+ * wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE
  */
 
 void wxRichTextIndentsSpacingPage::OnSpacingBeforeUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -700,7 +700,7 @@ void wxRichTextIndentsSpacingPage::OnSpacingBeforeUpdated( wxCommandEvent& WXUNU
 
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER
+ * wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER
  */
 
 void wxRichTextIndentsSpacingPage::OnSpacingAfterUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -710,7 +710,7 @@ void wxRichTextIndentsSpacingPage::OnSpacingAfterUpdated( wxCommandEvent& WXUNUS
 }
 
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE
+ * wxEVT_COMBOBOX event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE
  */
 
 void wxRichTextIndentsSpacingPage::OnSpacingLineSelected( wxCommandEvent& WXUNUSED(event) )
@@ -720,7 +720,7 @@ void wxRichTextIndentsSpacingPage::OnSpacingLineSelected( wxCommandEvent& WXUNUS
 }
 
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL
+ * wxEVT_COMBOBOX event handler for ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL
  */
 
 void wxRichTextIndentsSpacingPage::OnRichtextOutlinelevelSelected( wxCommandEvent& WXUNUSED(event) )

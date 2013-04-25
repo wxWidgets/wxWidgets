@@ -58,10 +58,10 @@ public:
         SetMenuBar(menuBar);
 
         Connect(wxID_PREFERENCES,
-                wxEVT_COMMAND_MENU_SELECTED,
+                wxEVT_MENU,
                 wxCommandEventHandler(MyFrame::OnPref), NULL, this);
         Connect(wxID_EXIT,
-                wxEVT_COMMAND_MENU_SELECTED,
+                wxEVT_MENU,
                 wxCommandEventHandler(MyFrame::OnExit), NULL, this);
         Connect(wxEVT_CLOSE_WINDOW,
                 wxCloseEventHandler(MyFrame::OnClose), NULL, this);
@@ -104,10 +104,10 @@ public:
         // immediately rather than after the OK or Apply button is pressed.
         if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
         {
-            m_useMarkdown->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED,
+            m_useMarkdown->Connect(wxEVT_CHECKBOX,
                                    wxCommandEventHandler(PrefsPageGeneralPanel::ChangedUseMarkdown),
                                    NULL, this);
-            m_spellcheck->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED,
+            m_spellcheck->Connect(wxEVT_CHECKBOX,
                                   wxCommandEventHandler(PrefsPageGeneralPanel::ChangedSpellcheck),
                                   NULL, this);
         }
@@ -173,7 +173,7 @@ public:
 
         if ( wxPreferencesEditor::ShouldApplyChangesImmediately() )
         {
-            m_fulltext->Connect(wxEVT_COMMAND_CHECKBOX_CLICKED,
+            m_fulltext->Connect(wxEVT_CHECKBOX,
                                 wxCommandEventHandler(PrefsPageTopicsPanel::ChangedFulltext),
                                 NULL, this);
         }

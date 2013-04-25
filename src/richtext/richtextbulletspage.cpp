@@ -622,7 +622,7 @@ wxIcon wxRichTextBulletsPage::GetIconResource( const wxString& name )
 }
 
 /*!
- * wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_STYLELISTBOX
+ * wxEVT_LISTBOX event handler for ID_RICHTEXTBULLETSPAGE_STYLELISTBOX
  */
 
 void wxRichTextBulletsPage::OnStylelistboxSelected( wxCommandEvent& WXUNUSED(event) )
@@ -639,7 +639,7 @@ void wxRichTextBulletsPage::OnStylelistboxSelected( wxCommandEvent& WXUNUSED(eve
 }
 
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
+ * wxEVT_COMBOBOX event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
  */
 
 void wxRichTextBulletsPage::OnSymbolctrlSelected( wxCommandEvent& WXUNUSED(event) )
@@ -652,7 +652,7 @@ void wxRichTextBulletsPage::OnSymbolctrlSelected( wxCommandEvent& WXUNUSED(event
 }
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
+ * wxEVT_TEXT event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
  */
 
 void wxRichTextBulletsPage::OnSymbolctrlUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -674,7 +674,7 @@ void wxRichTextBulletsPage::OnSymbolctrlUpdate( wxUpdateUIEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+ * wxEVT_SPINCTRL event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
  */
 
 void wxRichTextBulletsPage::OnNumberctrlUpdated( wxSpinEvent& WXUNUSED(event) )
@@ -713,7 +713,7 @@ void wxRichTextBulletsPage::OnNumberctrlDown( wxSpinEvent& WXUNUSED(event) )
 }
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+ * wxEVT_TEXT event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
  */
 
 void wxRichTextBulletsPage::OnNumberctrlTextUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -735,7 +735,7 @@ void wxRichTextBulletsPage::OnNumberctrlUpdate( wxUpdateUIEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL
+ * wxEVT_CHECKBOX event handler for ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL
  */
 
 void wxRichTextBulletsPage::OnParenthesesctrlClick( wxCommandEvent& WXUNUSED(event) )
@@ -760,7 +760,7 @@ void wxRichTextBulletsPage::OnParenthesesctrlUpdate( wxUpdateUIEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_PERIODCTRL
+ * wxEVT_CHECKBOX event handler for ID_RICHTEXTBULLETSPAGE_PERIODCTRL
  */
 
 void wxRichTextBulletsPage::OnPeriodctrlClick( wxCommandEvent& WXUNUSED(event) )
@@ -785,7 +785,7 @@ void wxRichTextBulletsPage::OnPeriodctrlUpdate( wxUpdateUIEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL
+ * wxEVT_BUTTON event handler for ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL
  */
 
 void wxRichTextBulletsPage::OnChooseSymbolClick( wxCommandEvent& WXUNUSED(event) )
@@ -820,7 +820,7 @@ void wxRichTextBulletsPage::OnChooseSymbolUpdate( wxUpdateUIEvent& event )
     OnSymbolUpdate(event);
 }
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
+ * wxEVT_COMBOBOX event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
  */
 
 void wxRichTextBulletsPage::OnSymbolfontctrlSelected( wxCommandEvent& WXUNUSED(event) )
@@ -831,7 +831,7 @@ void wxRichTextBulletsPage::OnSymbolfontctrlSelected( wxCommandEvent& WXUNUSED(e
 }
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
+ * wxEVT_TEXT event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
  */
 
 void wxRichTextBulletsPage::OnSymbolfontctrlUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -906,7 +906,7 @@ void wxRichTextBulletsPage::OnNamestaticUpdate( wxUpdateUIEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
+ * wxEVT_COMBOBOX event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
  */
 
 void wxRichTextBulletsPage::OnNamectrlSelected( wxCommandEvent& WXUNUSED(event) )
@@ -917,7 +917,7 @@ void wxRichTextBulletsPage::OnNamectrlSelected( wxCommandEvent& WXUNUSED(event) 
 }
 
 /*!
- * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
+ * wxEVT_TEXT event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
  */
 
 void wxRichTextBulletsPage::OnNamectrlUpdated( wxCommandEvent& WXUNUSED(event) )
@@ -938,7 +938,7 @@ void wxRichTextBulletsPage::OnNamectrlUIUpdate( wxUpdateUIEvent& event )
 
 #endif // wxUSE_RICHTEXT
 /*!
- * wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_RIGHT_PARENTHESIS_CTRL
+ * wxEVT_CHECKBOX event handler for ID_RICHTEXTBULLETSPAGE_RIGHT_PARENTHESIS_CTRL
  */
 
 void wxRichTextBulletsPage::OnRightParenthesisCtrlClick( wxCommandEvent& WXUNUSED(event) )
@@ -963,7 +963,7 @@ void wxRichTextBulletsPage::OnRightParenthesisCtrlUpdate( wxUpdateUIEvent& event
 }
 
 /*!
- * wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_COMBOBOX
+ * wxEVT_COMBOBOX event handler for ID_COMBOBOX
  */
 
 void wxRichTextBulletsPage::OnBulletAlignmentCtrlSelected( wxCommandEvent& WXUNUSED(event) )

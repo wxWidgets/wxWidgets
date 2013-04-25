@@ -1032,7 +1032,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxString target = wxStringWithNSString([frame name]);
-        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED,
+        wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATED,
                              webKitWindow->GetId(),
                              wxStringWithNSString( url ),
                              target);
@@ -1050,7 +1050,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
 
         wxString target = wxStringWithNSString([frame name]);
-        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_LOADED,
+        wxWebViewEvent event(wxEVT_WEBVIEW_LOADED,
                              webKitWindow->GetId(),
                              wxStringWithNSString( url ),
                              target);
@@ -1150,7 +1150,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
         wxWebViewNavigationError type;
         wxString description = nsErrorToWxHtmlError(error, &type);
-		wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR,
+		wxWebViewEvent event(wxEVT_WEBVIEW_ERROR,
 		                     webKitWindow->GetId(),
                              wxStringWithNSString( url ),
                              wxEmptyString);
@@ -1176,7 +1176,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 		wxWebViewNavigationError type;
         wxString description = nsErrorToWxHtmlError(error, &type);
-		wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR,
+		wxWebViewEvent event(wxEVT_WEBVIEW_ERROR,
 		                     webKitWindow->GetId(),
                              wxStringWithNSString( url ),
                              wxEmptyString);
@@ -1192,7 +1192,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                                          forFrame:(WebFrame *)frame
 {
     wxString target = wxStringWithNSString([frame name]);
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED,
+    wxWebViewEvent event(wxEVT_WEBVIEW_TITLE_CHANGED,
                          webKitWindow->GetId(),
                          webKitWindow->GetCurrentURL(),
                          target);
@@ -1224,7 +1224,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     webKitWindow->m_busy = true;
     NSString *url = [[request URL] absoluteString];
     wxString target = wxStringWithNSString([frame name]);
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATING,
+    wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
                          webKitWindow->GetId(),
                          wxStringWithNSString( url ), target);
 
@@ -1251,7 +1251,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     wxUnusedVar(actionInformation);
 
     NSString *url = [[request URL] absoluteString];
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NEWWINDOW,
+    wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
                          webKitWindow->GetId(),
                          wxStringWithNSString( url ), "");
 

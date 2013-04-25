@@ -764,7 +764,7 @@ void ODComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
     wxASSERT_MSG( s == m_combobox->GetValue(),
                   wxT("event and combobox values should be the same") );
 
-    if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
+    if (event.GetEventType() == wxEVT_TEXT_ENTER)
     {
         wxLogMessage(wxT("OwnerDrawnCombobox enter pressed (now '%s')"), s.c_str());
     }

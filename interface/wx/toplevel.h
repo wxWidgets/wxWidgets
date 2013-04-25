@@ -275,7 +275,7 @@ public:
 
         Returns a wxMenu pointer representing the system menu of the window
         under MSW. The returned wxMenu may be used, if non-@c NULL, to add
-        extra items to the system menu. The usual @c wxEVT_COMMAND_MENU_SELECTED
+        extra items to the system menu. The usual @c wxEVT_MENU
         events (that can be processed using @c EVT_MENU event table macro) will
         then be generated for them. All the other wxMenu methods may be used as
         well but notice that they won't allow you to access any standard system

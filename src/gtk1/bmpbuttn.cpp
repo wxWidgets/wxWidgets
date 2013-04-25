@@ -48,7 +48,7 @@ static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitma
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
+    wxCommandEvent event(wxEVT_BUTTON, button->GetId());
     event.SetEventObject(button);
     button->HandleWindowEvent(event);
 }

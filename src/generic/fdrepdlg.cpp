@@ -259,22 +259,22 @@ void wxGenericFindReplaceDialog::SendEvent(const wxEventType& evtType)
 
 void wxGenericFindReplaceDialog::OnFind(wxCommandEvent& WXUNUSED(event))
 {
-    SendEvent(wxEVT_COMMAND_FIND_NEXT);
+    SendEvent(wxEVT_FIND_NEXT);
 }
 
 void wxGenericFindReplaceDialog::OnReplace(wxCommandEvent& WXUNUSED(event))
 {
-    SendEvent(wxEVT_COMMAND_FIND_REPLACE);
+    SendEvent(wxEVT_FIND_REPLACE);
 }
 
 void wxGenericFindReplaceDialog::OnReplaceAll(wxCommandEvent& WXUNUSED(event))
 {
-    SendEvent(wxEVT_COMMAND_FIND_REPLACE_ALL);
+    SendEvent(wxEVT_FIND_REPLACE_ALL);
 }
 
 void wxGenericFindReplaceDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    SendEvent(wxEVT_COMMAND_FIND_CLOSE);
+    SendEvent(wxEVT_FIND_CLOSE);
 
     Show(false);
 }
@@ -287,7 +287,7 @@ void wxGenericFindReplaceDialog::OnUpdateFindUI(wxUpdateUIEvent &event)
 
 void wxGenericFindReplaceDialog::OnCloseWindow(wxCloseEvent &)
 {
-    SendEvent(wxEVT_COMMAND_FIND_CLOSE);
+    SendEvent(wxEVT_FIND_CLOSE);
 }
 
 #endif // wxUSE_FINDREPLDLG

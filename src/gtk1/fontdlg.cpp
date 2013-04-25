@@ -82,7 +82,7 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
 
     g_free( fontname );
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
+    wxCommandEvent event(wxEVT_BUTTON, wxID_OK);
     event.SetEventObject( dialog );
     dialog->HandleWindowEvent( event );
 }
@@ -99,7 +99,7 @@ void gtk_fontdialog_cancel_callback( GtkWidget *WXUNUSED(w), wxFontDialog *dialo
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+    wxCommandEvent event(wxEVT_BUTTON, wxID_CANCEL);
     event.SetEventObject( dialog );
     dialog->HandleWindowEvent( event );
 }

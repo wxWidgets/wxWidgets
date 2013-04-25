@@ -148,7 +148,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     int len = [*partialStringPtr length];
     if ( maxLength > 0 && len > maxLength )
     {
-        // TODO wxEVT_COMMAND_TEXT_MAXLEN
+        // TODO wxEVT_TEXT_MAXLEN
         return NO;
     }
     return YES;
@@ -206,7 +206,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
                     wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
-                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
                         handled = YES;
@@ -912,7 +912,7 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) )
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+        wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
         event.SetEventObject( wxpeer );
         event.SetString( GetTextEntry()->GetValue() );
         wxpeer->HandleWindowEvent( event );

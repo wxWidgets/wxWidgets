@@ -50,7 +50,7 @@ public:
 
     bool ProcessEvent(wxEvent& evt)
     {
-        if (evt.GetEventType() == wxEVT_COMMAND_MENU_SELECTED)
+        if (evt.GetEventType() == wxEVT_MENU)
         {
             m_lastId = evt.GetId();
             return true;

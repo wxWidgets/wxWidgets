@@ -793,7 +793,7 @@ void wxWidgetIPhoneImpl::controlTextDidChange()
     wxTextCtrl* wxpeer = wxDynamicCast((wxWindow*)GetWXPeer(),wxTextCtrl);
     if ( wxpeer ) 
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+        wxCommandEvent event(wxEVT_TEXT, wxpeer->GetId());
         event.SetEventObject( wxpeer );
         event.SetString( wxpeer->GetValue() );
         wxpeer->HandleWindowEvent( event );

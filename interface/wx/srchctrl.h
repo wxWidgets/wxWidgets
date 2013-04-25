@@ -14,7 +14,7 @@
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls).
     @style{wxTE_PROCESS_TAB}
@@ -167,5 +167,5 @@ public:
 };
 
 
-wxEventType  wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN;
-wxEventType  wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN;
+wxEventType  wxEVT_SEARCHCTRL_CANCEL_BTN;
+wxEventType  wxEVT_SEARCHCTRL_SEARCH_BTN;

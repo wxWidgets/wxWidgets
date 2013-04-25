@@ -38,22 +38,22 @@
 WX_DEFINE_OBJARRAY(wxAuiNotebookPageArray)
 WX_DEFINE_OBJARRAY(wxAuiTabContainerButtonArray)
 
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_CANCEL_DRAG, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, wxAuiNotebookEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_BUTTON, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_BEGIN_DRAG, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_END_DRAG, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_CANCEL_DRAG, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_DRAG_MOTION, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_ALLOW_DND, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_BG_DCLICK, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_DRAG_DONE, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP, wxAuiNotebookEvent);
+wxDEFINE_EVENT(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN, wxAuiNotebookEvent);
 
 IMPLEMENT_CLASS(wxAuiNotebook, wxControl)
 IMPLEMENT_CLASS(wxAuiTabCtrl, wxControl)
@@ -1049,7 +1049,7 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
         if ((new_selection != GetActivePage() ||
             wxDynamicCast(GetParent(), wxAuiNotebook)) && !m_hoverButton)
         {
-            wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
+            wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
             e.SetSelection(new_selection);
             e.SetOldSelection(GetActivePage());
             e.SetEventObject(this);
@@ -1076,7 +1076,7 @@ void wxAuiTabCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
     {
         m_isDragging = false;
 
-        wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_CANCEL_DRAG, m_windowId);
+        wxAuiNotebookEvent evt(wxEVT_AUINOTEBOOK_CANCEL_DRAG, m_windowId);
         evt.SetSelection(GetIdxFromWindow(m_clickTab));
         evt.SetOldSelection(evt.GetSelection());
         evt.SetEventObject(this);
@@ -1093,7 +1093,7 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
     {
         m_isDragging = false;
 
-        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, m_windowId);
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_END_DRAG, m_windowId);
         e.SetSelection(GetIdxFromWindow(m_clickTab));
         e.SetOldSelection(e.GetSelection());
         e.SetEventObject(this);
@@ -1121,7 +1121,7 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
 
         if (!(m_pressedButton->curState & wxAUI_BUTTON_STATE_DISABLED))
         {
-            wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, m_windowId);
+            wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BUTTON, m_windowId);
             e.SetSelection(GetIdxFromWindow(m_clickTab));
             e.SetInt(m_pressedButton->id);
             e.SetEventObject(this);
@@ -1142,7 +1142,7 @@ void wxAuiTabCtrl::OnMiddleUp(wxMouseEvent& evt)
     if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
         return;
 
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
     e.SetEventObject(this);
     e.SetSelection(GetIdxFromWindow(wnd));
     GetEventHandler()->ProcessEvent(e);
@@ -1154,7 +1154,7 @@ void wxAuiTabCtrl::OnMiddleDown(wxMouseEvent& evt)
     if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
         return;
 
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, m_windowId);
     e.SetEventObject(this);
     e.SetSelection(GetIdxFromWindow(wnd));
     GetEventHandler()->ProcessEvent(e);
@@ -1166,7 +1166,7 @@ void wxAuiTabCtrl::OnRightUp(wxMouseEvent& evt)
     if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
         return;
 
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP, m_windowId);
     e.SetEventObject(this);
     e.SetSelection(GetIdxFromWindow(wnd));
     GetEventHandler()->ProcessEvent(e);
@@ -1178,7 +1178,7 @@ void wxAuiTabCtrl::OnRightDown(wxMouseEvent& evt)
     if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
         return;
 
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN, m_windowId);
     e.SetEventObject(this);
     e.SetSelection(GetIdxFromWindow(wnd));
     GetEventHandler()->ProcessEvent(e);
@@ -1190,7 +1190,7 @@ void wxAuiTabCtrl::OnLeftDClick(wxMouseEvent& evt)
     wxAuiTabContainerButton* button;
     if (!TabHitTest(evt.m_x, evt.m_y, &wnd) && !ButtonHitTest(evt.m_x, evt.m_y, &button))
     {
-        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, m_windowId);
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BG_DCLICK, m_windowId);
         e.SetEventObject(this);
         GetEventHandler()->ProcessEvent(e);
     }
@@ -1253,7 +1253,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
 
     if (m_isDragging)
     {
-        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, m_windowId);
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_DRAG_MOTION, m_windowId);
         e.SetSelection(GetIdxFromWindow(m_clickTab));
         e.SetOldSelection(e.GetSelection());
         e.SetEventObject(this);
@@ -1268,7 +1268,7 @@ void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
     if (abs(pos.x - m_clickPt.x) > drag_x_threshold ||
         abs(pos.y - m_clickPt.y) > drag_y_threshold)
     {
-        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, m_windowId);
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BEGIN_DRAG, m_windowId);
         e.SetSelection(GetIdxFromWindow(m_clickTab));
         e.SetOldSelection(e.GetSelection());
         e.SetEventObject(this);
@@ -1317,7 +1317,7 @@ void wxAuiTabCtrl::OnButton(wxAuiNotebookEvent& event)
 
         if (idx != -1)
         {
-            wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
+            wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
             e.SetSelection(idx);
             e.SetOldSelection(GetActivePage());
             e.SetEventObject(this);
@@ -1453,7 +1453,7 @@ void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
 
     if (newPage != -1)
     {
-        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
         e.SetSelection(newPage);
         e.SetOldSelection(newPage);
         e.SetEventObject(this);
@@ -1614,37 +1614,37 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     EVT_SIZE(wxAuiNotebook::OnSize)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocusNotebook)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING,
+                      wxEVT_AUINOTEBOOK_PAGE_CHANGING,
                       wxAuiNotebook::OnTabClicked)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG,
+                      wxEVT_AUINOTEBOOK_BEGIN_DRAG,
                       wxAuiNotebook::OnTabBeginDrag)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_END_DRAG,
+                      wxEVT_AUINOTEBOOK_END_DRAG,
                       wxAuiNotebook::OnTabEndDrag)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_CANCEL_DRAG,
+                      wxEVT_AUINOTEBOOK_CANCEL_DRAG,
                       wxAuiNotebook::OnTabCancelDrag)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION,
+                      wxEVT_AUINOTEBOOK_DRAG_MOTION,
                       wxAuiNotebook::OnTabDragMotion)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_BUTTON,
+                      wxEVT_AUINOTEBOOK_BUTTON,
                       wxAuiNotebook::OnTabButton)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN,
+                      wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN,
                       wxAuiNotebook::OnTabMiddleDown)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP,
+                      wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP,
                       wxAuiNotebook::OnTabMiddleUp)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN,
+                      wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN,
                       wxAuiNotebook::OnTabRightDown)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP,
+                      wxEVT_AUINOTEBOOK_TAB_RIGHT_UP,
                       wxAuiNotebook::OnTabRightUp)
     EVT_AUI_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
-                      wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK,
+                      wxEVT_AUINOTEBOOK_BG_DCLICK,
                       wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
 END_EVENT_TABLE()
@@ -2496,7 +2496,7 @@ void wxAuiNotebook::OnTabBgDClick(wxAuiNotebookEvent& evt)
     }
 
     // notify owner that the tabbar background has been double-clicked
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_BG_DCLICK, m_windowId);
     e.SetEventObject(this);
     GetEventHandler()->ProcessEvent(e);
 }
@@ -2674,7 +2674,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             {
                 // find out from the destination control
                 // if it's ok to drop this tab here
-                wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, m_windowId);
+                wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_ALLOW_DND, m_windowId);
                 e.SetSelection(evt.GetSelection());
                 e.SetOldSelection(evt.GetSelection());
                 e.SetEventObject(this);
@@ -2747,7 +2747,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                 nb->SetSelectionToPage(page_info);
 
                 // notify owner that the tab has been dragged
-                wxAuiNotebookEvent e2(wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, m_windowId);
+                wxAuiNotebookEvent e2(wxEVT_AUINOTEBOOK_DRAG_DONE, m_windowId);
                 e2.SetSelection(evt.GetSelection());
                 e2.SetOldSelection(evt.GetSelection());
                 e2.SetEventObject(this);
@@ -2856,7 +2856,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
     }
 
     // notify owner that the tab has been dragged
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_DRAG_DONE, m_windowId);
     e.SetSelection(evt.GetSelection());
     e.SetOldSelection(evt.GetSelection());
     e.SetEventObject(this);
@@ -3099,7 +3099,7 @@ void wxAuiNotebook::OnTabButton(wxAuiNotebookEvent& evt)
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);
 
             // ask owner if it's ok to close the tab
-            wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
+            wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
             e.SetSelection(m_tabs.GetIdxFromWindow(close_wnd));
             const int idx = m_tabs.GetIdxFromWindow(close_wnd);
             e.SetSelection(idx);
@@ -3125,7 +3125,7 @@ void wxAuiNotebook::OnTabButton(wxAuiNotebookEvent& evt)
             }
 
             // notify owner that the tab has been closed
-            wxAuiNotebookEvent e2(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, m_windowId);
+            wxAuiNotebookEvent e2(wxEVT_AUINOTEBOOK_PAGE_CLOSED, m_windowId);
             e2.SetSelection(idx);
             e2.SetEventObject(this);
             GetEventHandler()->ProcessEvent(e2);
@@ -3140,7 +3140,7 @@ void wxAuiNotebook::OnTabMiddleDown(wxAuiNotebookEvent& evt)
     wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
     wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
 
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN, m_windowId);
     e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
     e.SetEventObject(this);
     GetEventHandler()->ProcessEvent(e);
@@ -3156,7 +3156,7 @@ void wxAuiNotebook::OnTabMiddleUp(wxAuiNotebookEvent& evt)
     wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
     wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
 
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
     e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
     e.SetEventObject(this);
     if (GetEventHandler()->ProcessEvent(e))
@@ -3179,7 +3179,7 @@ void wxAuiNotebook::OnTabRightDown(wxAuiNotebookEvent& evt)
     wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
     wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
 
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN, m_windowId);
     e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
     e.SetEventObject(this);
     GetEventHandler()->ProcessEvent(e);
@@ -3191,7 +3191,7 @@ void wxAuiNotebook::OnTabRightUp(wxAuiNotebookEvent& evt)
     wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
     wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
 
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, m_windowId);
+    wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_TAB_RIGHT_UP, m_windowId);
     e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
     e.SetEventObject(this);
     GetEventHandler()->ProcessEvent(e);
@@ -3258,7 +3258,7 @@ bool wxAuiNotebook::ShowWindowMenu()
 
     if (idx != -1)
     {
-        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, tabCtrl->GetId());
+        wxAuiNotebookEvent e(wxEVT_AUINOTEBOOK_PAGE_CHANGING, tabCtrl->GetId());
         e.SetSelection(idx);
         e.SetOldSelection(tabCtrl->GetActivePage());
         e.SetEventObject(tabCtrl);
@@ -3364,7 +3364,7 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
 
     bool vetoed = false;
 
-    wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
+    wxAuiNotebookEvent evt(wxEVT_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
 
     if(events)
     {
@@ -3383,7 +3383,7 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
         // program allows the page change
         if(events)
         {
-            evt.SetEventType(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED);
+            evt.SetEventType(wxEVT_AUINOTEBOOK_PAGE_CHANGED);
             (void)GetEventHandler()->ProcessEvent(evt);
         }
 

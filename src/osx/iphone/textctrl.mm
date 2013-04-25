@@ -189,7 +189,7 @@ protected :
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
         if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
         {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+            wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
             event.SetEventObject( wxpeer );
             event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
             wxpeer->HandleWindowEvent( event );
@@ -663,7 +663,7 @@ void wxUITextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) )
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+        wxCommandEvent event(wxEVT_TEXT_ENTER, wxpeer->GetId());
         event.SetEventObject( wxpeer );
         event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
         wxpeer->HandleWindowEvent( event );

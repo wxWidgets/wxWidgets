@@ -246,7 +246,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)GetBuddyHwnd(), 0);
 
     // do it after finishing with m_hwndBuddy creation to avoid generating
-    // initial wxEVT_COMMAND_TEXT_UPDATED message
+    // initial wxEVT_TEXT message
     ms_allChoiceSpins.Add(this);
 
     // initialize the controls contents
@@ -303,7 +303,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     int n = GetSelection();
     if (n > -1)
     {
-        wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
+        wxCommandEvent event(wxEVT_CHOICE, m_windowId);
         event.SetInt(n);
         event.SetEventObject(this);
         event.SetString(GetStringSelection());

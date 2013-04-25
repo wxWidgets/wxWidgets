@@ -873,7 +873,7 @@ public:
         if ( !BaseFrame::Create(frame, id, title, pos, size, style, name) )
             return false;
 
-        this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
+        this->Connect(wxID_EXIT, wxEVT_MENU,
                       wxCommandEventHandler(wxDocParentFrameAny::OnExit));
         this->Connect(wxEVT_CLOSE_WINDOW,
                       wxCloseEventHandler(wxDocParentFrameAny::OnCloseWindow));

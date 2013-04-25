@@ -47,10 +47,10 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTreebook, wxBookCtrlBase)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING,  wxBookCtrlEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED,   wxBookCtrlEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED, wxBookCtrlEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED,  wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_TREEBOOK_PAGE_CHANGING,  wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_TREEBOOK_PAGE_CHANGED,   wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_TREEBOOK_NODE_COLLAPSED, wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_TREEBOOK_NODE_EXPANDED,  wxBookCtrlEvent );
 
 BEGIN_EVENT_TABLE(wxTreebook, wxBookCtrlBase)
     EVT_TREE_SEL_CHANGED   (wxID_ANY, wxTreebook::OnTreeSelectionChange)
@@ -563,7 +563,7 @@ int wxTreebook::DoSetSelection(size_t pagePos, int flags)
     wxASSERT_MSG( GetPageCount() == DoInternalGetPageCount(),
                   wxT("wxTreebook logic error: m_treeIds and m_pages not in sync!"));
 
-    wxBookCtrlEvent event(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING, m_windowId);
+    wxBookCtrlEvent event(wxEVT_TREEBOOK_PAGE_CHANGING, m_windowId);
     const int oldSel = m_selection;
     wxTreeCtrl *tree = GetTreeCtrl();
     bool allowed = false;
@@ -618,7 +618,7 @@ int wxTreebook::DoSetSelection(size_t pagePos, int flags)
         if (flags & SetSelection_SendEvent)
         {
             // notify about the (now completed) page change
-            event.SetEventType(wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED);
+            event.SetEventType(wxEVT_TREEBOOK_PAGE_CHANGED);
             (void)GetEventHandler()->ProcessEvent(event);
         }
     }
@@ -702,8 +702,8 @@ void wxTreebook::OnTreeNodeExpandedCollapsed(wxTreeEvent & event)
     wxCHECK_RET( pagePos != wxNOT_FOUND, wxT("Internal problem in wxTreebook!..") );
 
     wxBookCtrlEvent ev(GetTreeCtrl()->IsExpanded(nodeId)
-            ? wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED
-            : wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED,
+            ? wxEVT_TREEBOOK_NODE_EXPANDED
+            : wxEVT_TREEBOOK_NODE_COLLAPSED,
         m_windowId);
 
     ev.SetSelection(pagePos);

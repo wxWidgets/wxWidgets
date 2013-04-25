@@ -650,7 +650,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
 
     // Before doing anything we send an event asking if editing of this item is really wanted.
-    wxDataViewEvent start_event( wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING, dv_ctrl->GetId() );
+    wxDataViewEvent start_event( wxEVT_DATAVIEW_ITEM_START_EDITING, dv_ctrl->GetId() );
     start_event.SetDataViewColumn( GetOwner() );
     start_event.SetModel( dv_ctrl->GetModel() );
     start_event.SetItem( item );
@@ -683,7 +683,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 #endif
 
     // Now we should send Editing Started event
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, dv_ctrl->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_STARTED, dv_ctrl->GetId() );
     event.SetDataViewColumn( GetOwner() );
     event.SetModel( dv_ctrl->GetModel() );
     event.SetItem( item );
@@ -737,7 +737,7 @@ bool wxDataViewRendererBase::FinishEditing()
     unsigned int col = GetOwner()->GetModelColumn();
 
     // Now we should send Editing Done event
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl->GetId() );
     event.SetDataViewColumn( GetOwner() );
     event.SetModel( dv_ctrl->GetModel() );
     event.SetItem( m_item );
@@ -1396,30 +1396,30 @@ void wxDataViewCtrlBase::StartEditor(const wxDataViewItem& item, unsigned int co
 
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewEvent,wxNotifyEvent)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_SELECTION_CHANGED, wxDataViewEvent );
 
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_ACTIVATED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_COLLAPSING, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_COLLAPSED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_EXPANDING, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_EXPANDED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_EDITING_STARTED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_START_EDITING, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_EDITING_DONE, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEvent );
 
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEvent );
 
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_COLUMN_SORTED, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent );
 
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_CACHE_HINT, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_CACHE_HINT, wxDataViewEvent );
 
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
+wxDEFINE_EVENT( wxEVT_DATAVIEW_ITEM_DROP, wxDataViewEvent );
 
 
 

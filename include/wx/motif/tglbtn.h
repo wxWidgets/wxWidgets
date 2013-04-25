@@ -47,7 +47,7 @@ private:
     // common part of all constructors
     void Init()
     {
-        m_evtType = wxEVT_COMMAND_TOGGLEBUTTON_CLICKED;
+        m_evtType = wxEVT_TOGGLEBUTTON;
     }
 };
 

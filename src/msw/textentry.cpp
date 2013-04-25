@@ -492,7 +492,7 @@ public:
                 // wxEVT_CHAR handler (as we must also let the other handlers
                 // defined at wx level run first).
                 //
-                // Notice that we can't use wxEVT_COMMAND_TEXT_UPDATED here
+                // Notice that we can't use wxEVT_TEXT here
                 // neither as, due to our use of ACO_AUTOAPPEND, we get
                 // EN_CHANGE notifications from the control every time
                 // IAutoComplete auto-appends something to it.

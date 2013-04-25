@@ -2209,26 +2209,26 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
 
     but = m_elb->GetNewButton();
     m_elbSubPanel = but->GetParent();
-    but->Connect(but->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+    but->Connect(but->GetId(), wxEVT_BUTTON,
         wxCommandEventHandler(wxPGArrayEditorDialog::OnAddClick),
         NULL, this);
 
     but = m_elb->GetDelButton();
-    but->Connect(but->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+    but->Connect(but->GetId(), wxEVT_BUTTON,
         wxCommandEventHandler(wxPGArrayEditorDialog::OnDeleteClick),
         NULL, this);
 
     but = m_elb->GetUpButton();
-    but->Connect(but->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+    but->Connect(but->GetId(), wxEVT_BUTTON,
         wxCommandEventHandler(wxPGArrayEditorDialog::OnUpClick),
         NULL, this);
 
     but = m_elb->GetDownButton();
-    but->Connect(but->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+    but->Connect(but->GetId(), wxEVT_BUTTON,
         wxCommandEventHandler(wxPGArrayEditorDialog::OnDownClick),
         NULL, this);
 
-    lc->Connect(lc->GetId(), wxEVT_COMMAND_LIST_END_LABEL_EDIT,
+    lc->Connect(lc->GetId(), wxEVT_LIST_END_LABEL_EDIT,
         wxListEventHandler(wxPGArrayEditorDialog::OnEndLabelEdit),
         NULL, this);
 

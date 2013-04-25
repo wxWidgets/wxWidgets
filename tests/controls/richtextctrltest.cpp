@@ -121,8 +121,8 @@ void RichTextCtrlTestCase::CharacterEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    EventCounter character(m_rich, wxEVT_COMMAND_RICHTEXT_CHARACTER);
-    EventCounter content(m_rich, wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED);
+    EventCounter character(m_rich, wxEVT_RICHTEXT_CHARACTER);
+    EventCounter content(m_rich, wxEVT_RICHTEXT_CONTENT_INSERTED);
 
     m_rich->SetFocus();
 
@@ -153,8 +153,8 @@ void RichTextCtrlTestCase::DeleteEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    EventCounter deleteevent(m_rich, wxEVT_COMMAND_RICHTEXT_DELETE);
-    EventCounter contentdelete(m_rich, wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED);
+    EventCounter deleteevent(m_rich, wxEVT_RICHTEXT_DELETE);
+    EventCounter contentdelete(m_rich, wxEVT_RICHTEXT_CONTENT_DELETED);
 
     m_rich->SetFocus();
 
@@ -177,7 +177,7 @@ void RichTextCtrlTestCase::ReturnEvent()
   // There seems to be an event sequence problem on GTK+ that causes the events
   // to be disconnected before they're processed, generating spurious errors.
 #if !defined(__WXGTK__)
-    EventCounter returnevent(m_rich, wxEVT_COMMAND_RICHTEXT_RETURN);
+    EventCounter returnevent(m_rich, wxEVT_RICHTEXT_RETURN);
 
     m_rich->SetFocus();
 
@@ -192,7 +192,7 @@ void RichTextCtrlTestCase::ReturnEvent()
 
 void RichTextCtrlTestCase::StyleEvent()
 {
-    EventCounter stylechanged(m_rich, wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED);
+    EventCounter stylechanged(m_rich, wxEVT_RICHTEXT_STYLE_CHANGED);
 
     m_rich->SetValue("Sometext");
     m_rich->SetStyle(0, 8, wxTextAttr(*wxRED, *wxWHITE));
@@ -202,7 +202,7 @@ void RichTextCtrlTestCase::StyleEvent()
 
 void RichTextCtrlTestCase::BufferResetEvent()
 {
-    EventCounter reset(m_rich, wxEVT_COMMAND_RICHTEXT_BUFFER_RESET);
+    EventCounter reset(m_rich, wxEVT_RICHTEXT_BUFFER_RESET);
 
     m_rich->AppendText("more text!");
     m_rich->SetValue("");
@@ -227,7 +227,7 @@ void RichTextCtrlTestCase::UrlEvent()
 #if wxUSE_UIACTIONSIMULATOR
     // Mouse up event not being caught on GTK+
 #if !defined(__WXGTK__)
-    EventCounter url(m_rich, wxEVT_COMMAND_TEXT_URL);
+    EventCounter url(m_rich, wxEVT_TEXT_URL);
 
     m_rich->BeginURL("http://www.wxwidgets.org");
     m_rich->WriteText("http://www.wxwidgets.org");
@@ -249,7 +249,7 @@ void RichTextCtrlTestCase::TextEvent()
 {
 #if wxUSE_UIACTIONSIMULATOR
 #if !defined(__WXGTK__)
-    EventCounter updated(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(m_rich, wxEVT_TEXT);
 
     m_rich->SetFocus();
 
@@ -409,7 +409,7 @@ void RichTextCtrlTestCase::Editable()
 {
 #if wxUSE_UIACTIONSIMULATOR
 #if !defined(__WXGTK__)
-    EventCounter updated(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(m_rich, wxEVT_TEXT);
 
     m_rich->SetFocus();
 

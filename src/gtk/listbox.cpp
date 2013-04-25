@@ -669,7 +669,7 @@ int wxListBox::FindString( const wxString &item, bool bCase ) const
 
 void wxListBox::GTKOnActivated(int item)
 {
-    SendEvent(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, item, IsSelected(item));
+    SendEvent(wxEVT_LISTBOX_DCLICK, item, IsSelected(item));
 }
 
 void wxListBox::GTKOnSelectionChanged()
@@ -682,7 +682,7 @@ void wxListBox::GTKOnSelectionChanged()
     {
         const int item = GetSelection();
         if ( DoChangeSingleSelection(item) )
-            SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, item, true);
+            SendEvent(wxEVT_LISTBOX, item, true);
     }
 }
 

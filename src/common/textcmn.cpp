@@ -103,8 +103,8 @@ wxEND_FLAGS( wxTextCtrlStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxTextCtrl, wxControl, "wx/textctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxTextCtrl)
-wxEVENT_PROPERTY( TextUpdated, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
-wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
+wxEVENT_PROPERTY( TextUpdated, wxEVT_TEXT, wxCommandEvent )
+wxEVENT_PROPERTY( TextEnter, wxEVT_TEXT_ENTER, wxCommandEvent )
 
 wxPROPERTY( Font, wxFont, SetFont, GetFont , wxEMPTY_PARAMETER_VALUE, \
            0 /*flags*/, wxT("Helpstring"), wxT("group") )
@@ -125,10 +125,10 @@ wxCONSTRUCTOR_6( wxTextCtrl, wxWindow*, Parent, wxWindowID, Id, \
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextUrlEvent, wxCommandEvent)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_URL, wxTextUrlEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_MAXLEN, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TEXT, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TEXT_ENTER, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TEXT_URL, wxTextUrlEvent );
+wxDEFINE_EVENT( wxEVT_TEXT_MAXLEN, wxCommandEvent );
 
 IMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl)
 
@@ -1213,6 +1213,6 @@ wxPoint wxTextAreaBase::DoPositionToCoords(long WXUNUSED(pos)) const
 // define this one even if !wxUSE_TEXTCTRL because it is also used by other
 // controls (wxComboBox and wxSpinCtrl)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TEXT, wxCommandEvent );
 
 #endif // wxUSE_TEXTCTRL/!wxUSE_TEXTCTRL

@@ -88,7 +88,7 @@ public:
 
 class WXDLLIMPEXP_FWD_ADV wxHyperlinkEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_HYPERLINK, wxHyperlinkEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_HYPERLINK, wxHyperlinkEvent );
 
 //
 // An event fired when the user clicks on the label in a hyperlink control.
@@ -99,7 +99,7 @@ class WXDLLIMPEXP_ADV wxHyperlinkEvent : public wxCommandEvent
 public:
     wxHyperlinkEvent() {}
     wxHyperlinkEvent(wxObject *generator, wxWindowID id, const wxString& url)
-        : wxCommandEvent(wxEVT_COMMAND_HYPERLINK, id),
+        : wxCommandEvent(wxEVT_HYPERLINK, id),
           m_url(url)
     {
         SetEventObject(generator);
@@ -132,7 +132,7 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     wxEVENT_HANDLER_CAST(wxHyperlinkEventFunction, func)
 
 #define EVT_HYPERLINK(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_HYPERLINK, id, wxHyperlinkEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_HYPERLINK, id, wxHyperlinkEventHandler(fn))
 
 
 #if defined(__WXGTK210__) && !defined(__WXUNIVERSAL__)
@@ -166,6 +166,8 @@ typedef void (wxEvtHandler::*wxHyperlinkEventFunction)(wxHyperlinkEvent&);
     };
 #endif
 
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_HYPERLINK   wxEVT_HYPERLINK
 
 #endif // wxUSE_HYPERLINKCTRL
 

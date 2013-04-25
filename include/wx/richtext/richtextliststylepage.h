@@ -87,7 +87,7 @@ public:
 
 ////@begin wxRichTextListStylePage event handler declarations
 
-    /// wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
+    /// wxEVT_SPINCTRL event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
     void OnLevelUpdated( wxSpinEvent& event );
 
     /// wxEVT_SCROLL_LINEUP event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
@@ -96,61 +96,61 @@ public:
     /// wxEVT_SCROLL_LINEDOWN event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
     void OnLevelDown( wxSpinEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
     void OnLevelTextUpdated( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_LEVEL
     void OnLevelUIUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_CHOOSE_FONT
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTLISTSTYLEPAGE_CHOOSE_FONT
     void OnChooseFontClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_STYLELISTBOX
+    /// wxEVT_LISTBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_STYLELISTBOX
     void OnStylelistboxSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL
     void OnPeriodctrlClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PERIODCTRL
     void OnPeriodctrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL
     void OnParenthesesctrlClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_PARENTHESESCTRL
     void OnParenthesesctrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_RIGHTPARENTHESISCTRL
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_RIGHTPARENTHESISCTRL
     void OnRightParenthesisCtrlClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_RIGHTPARENTHESISCTRL
     void OnRightParenthesisCtrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_BULLETALIGNMENTCTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_BULLETALIGNMENTCTRL
     void OnBulletAlignmentCtrlSelected( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLSTATIC
     void OnSymbolstaticUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL
     void OnSymbolctrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL
     void OnSymbolctrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLCTRL
     void OnSymbolctrlUIUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTLISTSTYLEPAGE_CHOOSE_SYMBOL
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTLISTSTYLEPAGE_CHOOSE_SYMBOL
     void OnChooseSymbolClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_CHOOSE_SYMBOL
     void OnChooseSymbolUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL
     void OnSymbolfontctrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL
     void OnSymbolfontctrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_SYMBOLFONTCTRL
@@ -159,46 +159,46 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMESTATIC
     void OnNamestaticUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
     void OnNamectrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
     void OnNamectrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTLISTSTYLEPAGE_NAMECTRL
     void OnNamectrlUIUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_ALIGNLEFT
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTLISTSTYLEPAGE_ALIGNLEFT
     void OnRichtextliststylepageAlignleftSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_ALIGNRIGHT
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTLISTSTYLEPAGE_ALIGNRIGHT
     void OnRichtextliststylepageAlignrightSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_JUSTIFIED
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTLISTSTYLEPAGE_JUSTIFIED
     void OnRichtextliststylepageJustifiedSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_CENTERED
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTLISTSTYLEPAGE_CENTERED
     void OnRichtextliststylepageCenteredSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_ALIGNINDETERMINATE
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTLISTSTYLEPAGE_ALIGNINDETERMINATE
     void OnRichtextliststylepageAlignindeterminateSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_INDENTLEFT
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_INDENTLEFT
     void OnIndentLeftUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_INDENTFIRSTLINE
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_INDENTFIRSTLINE
     void OnIndentFirstLineUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_INDENTRIGHT
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_INDENTRIGHT
     void OnIndentRightUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_SPACINGBEFORE
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_SPACINGBEFORE
     void OnSpacingBeforeUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTLISTSTYLEPAGE_SPACINGAFTER
+    /// wxEVT_TEXT event handler for ID_RICHTEXTLISTSTYLEPAGE_SPACINGAFTER
     void OnSpacingAfterUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTLISTSTYLEPAGE_LINESPACING
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTLISTSTYLEPAGE_LINESPACING
     void OnLineSpacingSelected( wxCommandEvent& event );
 
 ////@end wxRichTextListStylePage event handler declarations

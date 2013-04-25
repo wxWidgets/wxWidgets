@@ -102,7 +102,7 @@ void PlayerSelectionDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void PlayerSelectionDialog::SelectCallback(wxCommandEvent& event)
 {
-    if (event.GetEventType() == wxEVT_COMMAND_LISTBOX_SELECTED)
+    if (event.GetEventType() == wxEVT_LISTBOX)
     {
 //        if (event.IsSelection())
         m_textField->SetValue(event.GetString());

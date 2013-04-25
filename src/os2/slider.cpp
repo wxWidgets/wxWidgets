@@ -971,7 +971,7 @@ bool wxSlider::OS2OnScroll( int    WXUNUSED(nOrientation),
     vEvent.SetEventObject(this);
     HandleWindowEvent(vEvent);
 
-    wxCommandEvent vCevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
+    wxCommandEvent vCevent( wxEVT_SLIDER, GetId() );
 
     vCevent.SetInt(nNewPos);
     vCevent.SetEventObject(this);

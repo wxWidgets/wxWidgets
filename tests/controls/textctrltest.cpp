@@ -188,7 +188,7 @@ void TextCtrlTestCase::ReadOnly()
     delete m_text;
     CreateText(wxTE_READONLY);
 
-    EventCounter updated(m_text, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(m_text, wxEVT_TEXT);
 
     m_text->SetFocus();
 
@@ -213,8 +213,8 @@ void TextCtrlTestCase::ReadOnly()
 void TextCtrlTestCase::MaxLength()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter updated(m_text, wxEVT_COMMAND_TEXT_UPDATED);
-    EventCounter maxlen(m_text, wxEVT_COMMAND_TEXT_MAXLEN);
+    EventCounter updated(m_text, wxEVT_TEXT);
+    EventCounter maxlen(m_text, wxEVT_TEXT_MAXLEN);
 
     m_text->SetFocus();
     m_text->SetMaxLength(10);
@@ -319,7 +319,7 @@ void TextCtrlTestCase::ProcessEnter()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    EventCounter count(m_text, wxEVT_COMMAND_TEXT_ENTER);
+    EventCounter count(m_text, wxEVT_TEXT_ENTER);
 
     m_text->SetFocus();
 
@@ -327,7 +327,7 @@ void TextCtrlTestCase::ProcessEnter()
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_ENTER));
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_TEXT_ENTER));
 
     // we need a text control with wxTE_PROCESS_ENTER for this test
     delete m_text;
@@ -338,7 +338,7 @@ void TextCtrlTestCase::ProcessEnter()
     sim.Char(WXK_RETURN);
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_ENTER));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_TEXT_ENTER));
 #endif
 }
 #endif
@@ -349,7 +349,7 @@ void TextCtrlTestCase::Url()
     delete m_text;
     CreateText(wxTE_RICH | wxTE_AUTO_URL);
 
-    EventCounter url(m_text, wxEVT_COMMAND_TEXT_URL);
+    EventCounter url(m_text, wxEVT_TEXT_URL);
 
     m_text->AppendText("http://www.wxwidgets.org");
 

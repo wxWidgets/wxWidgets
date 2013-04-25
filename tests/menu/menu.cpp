@@ -411,7 +411,7 @@ void MenuTestCase::Events()
         MenuEventHandler(wxWindow* win)
             : m_win(win)
         {
-            m_win->Connect(wxEVT_COMMAND_MENU_SELECTED,
+            m_win->Connect(wxEVT_MENU,
                            wxCommandEventHandler(MenuEventHandler::OnMenu),
                            NULL,
                            this);
@@ -422,7 +422,7 @@ void MenuTestCase::Events()
 
         virtual ~MenuEventHandler()
         {
-            m_win->Disconnect(wxEVT_COMMAND_MENU_SELECTED,
+            m_win->Disconnect(wxEVT_MENU,
                               wxCommandEventHandler(MenuEventHandler::OnMenu),
                               NULL,
                               this);

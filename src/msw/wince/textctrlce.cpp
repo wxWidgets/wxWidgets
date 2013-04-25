@@ -258,7 +258,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)GetBuddyHwnd(), 0);
 
     // do it after finishing with m_hwndBuddy creation to avoid generating
-    // initial wxEVT_COMMAND_TEXT_UPDATED message
+    // initial wxEVT_TEXT message
     ms_allTextSpins.Add(this);
 
     return true;
@@ -873,7 +873,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         case WXK_RETURN:
             if ( !HasFlag(wxTE_MULTILINE) )
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
                 InitCommandEvent(event);
                 event.SetString(GetValue());
                 if ( GetEventHandler()->ProcessEvent(event) )
@@ -983,7 +983,7 @@ bool wxTextCtrl::SendUpdateEvent()
         return false;
     }
 
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+    wxCommandEvent event(wxEVT_TEXT, GetId());
     InitCommandEvent(event);
     event.SetString(GetValue());
 
@@ -1013,7 +1013,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             // the text size limit has been hit -- try to increase it
             if ( !AdjustSpaceLimit() )
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_MAXLEN, m_windowId);
                 InitCommandEvent(event);
                 event.SetString(GetValue());
                 ProcessCommand(event);

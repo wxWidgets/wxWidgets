@@ -7,10 +7,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED;
-wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING;
-wxEventType wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED;
-wxEventType wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED;
+wxEventType wxEVT_TREEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_TREEBOOK_PAGE_CHANGING;
+wxEventType wxEVT_TREEBOOK_NODE_COLLAPSED;
+wxEventType wxEVT_TREEBOOK_NODE_EXPANDED;
 
 /**
     @class wxTreebook
@@ -30,17 +30,17 @@ wxEventType wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED;
     @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_TREEBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
-        Processes a @c wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED event.
+        Processes a @c wxEVT_TREEBOOK_PAGE_CHANGED event.
     @event{EVT_TREEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed.
-        Processes a @c wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING event.
+        Processes a @c wxEVT_TREEBOOK_PAGE_CHANGING event.
         This event can be @ref wxNotifyEvent::Veto() "vetoed".
     @event{EVT_TREEBOOK_NODE_COLLAPSED(id, func)}
         The page node is going to be collapsed.
-        Processes a @c wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED event.
+        Processes a @c wxEVT_TREEBOOK_NODE_COLLAPSED event.
     @event{EVT_TREEBOOK_NODE_EXPANDED(id, func)}
         The page node is going to be expanded.
-        Processes a @c wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED event.
+        Processes a @c wxEVT_TREEBOOK_NODE_EXPANDED event.
     @endEventTable
 
     @library{wxcore}

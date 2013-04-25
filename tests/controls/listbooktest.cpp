@@ -36,10 +36,10 @@ private:
     virtual wxBookCtrlBase *GetBase() const { return m_listbook; }
 
     virtual wxEventType GetChangedEvent() const
-    { return wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED; }
+    { return wxEVT_LISTBOOK_PAGE_CHANGED; }
 
     virtual wxEventType GetChangingEvent() const
-    { return wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING; }
+    { return wxEVT_LISTBOOK_PAGE_CHANGING; }
 
     CPPUNIT_TEST_SUITE( ListbookTestCase );
         wxBOOK_CTRL_BASE_TESTS();

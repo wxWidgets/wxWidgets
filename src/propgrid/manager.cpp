@@ -355,7 +355,7 @@ private:
             int col = hcEvent.GetColumn();
             int evtType = event.GetEventType();
 
-            if ( evtType == wxEVT_COMMAND_HEADER_RESIZING )
+            if ( evtType == wxEVT_HEADER_RESIZING )
             {
                 int colWidth = hcEvent.GetWidth();
 
@@ -367,7 +367,7 @@ private:
 
                 return true;
             }
-            else if ( evtType == wxEVT_COMMAND_HEADER_BEGIN_RESIZE )
+            else if ( evtType == wxEVT_HEADER_BEGIN_RESIZE )
             {
                 // Never allow column resize if layout is static
                 if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
@@ -380,7 +380,7 @@ private:
 
                 return true;
             }
-            else if ( evtType == wxEVT_COMMAND_HEADER_END_RESIZE )
+            else if ( evtType == wxEVT_HEADER_END_RESIZE )
             {
                 pg->SendEvent(wxEVT_PG_COL_END_DRAG,
                               NULL, NULL, 0,
@@ -1032,7 +1032,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
 
             // Connect to toolbar button events.
             Connect(pageObj->m_toolId,
-                    wxEVT_COMMAND_TOOL_CLICKED,
+                    wxEVT_TOOL,
                     wxCommandEventHandler(
                         wxPropertyGridManager::OnToolbarClick));
 
@@ -1515,11 +1515,11 @@ void wxPropertyGridManager::RecreateControls()
                 m_pToolbar->Realize();
 
                 Connect(m_categorizedModeToolId,
-                        wxEVT_COMMAND_TOOL_CLICKED,
+                        wxEVT_TOOL,
                         wxCommandEventHandler(
                             wxPropertyGridManager::OnToolbarClick));
                 Connect(m_alphabeticModeToolId,
-                        wxEVT_COMMAND_TOOL_CLICKED,
+                        wxEVT_TOOL,
                         wxCommandEventHandler(
                             wxPropertyGridManager::OnToolbarClick));
             }

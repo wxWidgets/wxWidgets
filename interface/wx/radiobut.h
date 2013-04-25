@@ -29,7 +29,7 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_RADIOBUTTON(id, func)}
-           Process a @c wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the
+           Process a @c wxEVT_RADIOBUTTON event, when the
            radiobutton is clicked.
     @endEventTable
 
@@ -103,7 +103,7 @@ public:
 
     /**
         Sets the radio button to checked or unchecked status. This does not cause a
-        @c wxEVT_COMMAND_RADIOBUTTON_SELECTED event to get emitted.
+        @c wxEVT_RADIOBUTTON event to get emitted.
 
         If the radio button belongs to a radio group exactly one button in the
         group may be checked and so this method can be only called with @a

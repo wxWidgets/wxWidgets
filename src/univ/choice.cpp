@@ -81,7 +81,7 @@ void wxChoice::OnComboBox(wxCommandEvent& event)
 {
     if ( event.GetId() == GetId() )
     {
-        event.SetEventType(wxEVT_COMMAND_CHOICE_SELECTED);
+        event.SetEventType(wxEVT_CHOICE);
         event.Skip();
         GetEventHandler()->ProcessEvent(event);
     }

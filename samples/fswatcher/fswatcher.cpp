@@ -178,7 +178,7 @@ MyFrame::MyFrame(const wxString& title)
                                   _("If checked, dereference symlinks")
                                  );
     it->Check(false);
-    Connect(MENU_ID_DEREFERENCE, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(MENU_ID_DEREFERENCE, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnFollowLinks));
 #endif // __UNIX__
 
@@ -263,21 +263,21 @@ MyFrame::MyFrame(const wxString& title)
     // event handlers & show
 
     // menu
-    Connect(MENU_ID_CLEAR, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(MENU_ID_CLEAR, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnClear));
-    Connect(MENU_ID_QUIT, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(MENU_ID_QUIT, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnQuit));
-    Connect(MENU_ID_WATCH, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(MENU_ID_WATCH, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnWatch));
-    Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(wxID_ABOUT, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnAbout));
 
     // buttons
-    Connect(BTN_ID_ADD, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(BTN_ID_ADD, wxEVT_BUTTON,
             wxCommandEventHandler(MyFrame::OnAdd));
-    Connect(BTN_ID_ADD_TREE, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(BTN_ID_ADD_TREE, wxEVT_BUTTON,
             wxCommandEventHandler(MyFrame::OnAddTree));
-    Connect(BTN_ID_REMOVE, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(BTN_ID_REMOVE, wxEVT_BUTTON,
             wxCommandEventHandler(MyFrame::OnRemove));
     Connect(BTN_ID_REMOVE, wxEVT_UPDATE_UI,
             wxUpdateUIEventHandler(MyFrame::OnRemoveUpdateUI));

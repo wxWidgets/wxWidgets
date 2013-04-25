@@ -624,7 +624,7 @@ MyFrame::MyFrame(const wxString& title)
     m_infoBarAdvanced->AddButton(wxID_UNDO);
     m_infoBarAdvanced->AddButton(wxID_REDO);
 
-    m_infoBarAdvanced->Connect(wxID_REDO, wxEVT_COMMAND_BUTTON_CLICKED,
+    m_infoBarAdvanced->Connect(wxID_REDO, wxEVT_BUTTON,
                                 wxCommandEventHandler(MyFrame::OnInfoBarRedo),
                                 NULL,
                                 this);
@@ -671,7 +671,7 @@ MyFrame::MyFrame(const wxString& title)
         static const int DIALOGS_SYSTEM_ABOUT = 0x4010;
 
         menu->Append(DIALOGS_SYSTEM_ABOUT, "&About");
-        Connect(DIALOGS_SYSTEM_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+        Connect(DIALOGS_SYSTEM_ABOUT, wxEVT_MENU,
                 wxCommandEventHandler(MyFrame::ShowSimpleAboutDialog));
     }
 #endif // __WXMSW__
@@ -1345,7 +1345,7 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
     m_btn = new wxButton(this, -1, wxT("Custom Button"));
     m_btn->Enable(false);
     m_cb = new wxCheckBox(this, -1, wxT("Enable Custom Button"));
-    m_cb->Connect(wxID_ANY, wxEVT_COMMAND_CHECKBOX_CLICKED,
+    m_cb->Connect(wxID_ANY, wxEVT_CHECKBOX,
                   wxCommandEventHandler(MyExtraPanel::OnCheckBox), NULL, this);
     wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
     sizerTop->Add(m_cb, wxSizerFlags().Centre().Border());
@@ -1886,7 +1886,7 @@ public:
         // And connect the event handlers.
         btnShowText->Connect
                      (
-                        wxEVT_COMMAND_BUTTON_CLICKED,
+                        wxEVT_BUTTON,
                         wxCommandEventHandler(RichTipDialog::OnShowTipForText),
                         NULL,
                         this
@@ -1894,7 +1894,7 @@ public:
 
         btnShowBtn->Connect
                     (
-                        wxEVT_COMMAND_BUTTON_CLICKED,
+                        wxEVT_BUTTON,
                         wxCommandEventHandler(RichTipDialog::OnShowTipForBtn),
                         NULL,
                         this
@@ -2399,23 +2399,23 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
 {
     wxEventType type = event.GetEventType();
 
-    if ( type == wxEVT_COMMAND_FIND || type == wxEVT_COMMAND_FIND_NEXT )
+    if ( type == wxEVT_FIND || type == wxEVT_FIND_NEXT )
     {
         wxLogMessage(wxT("Find %s'%s' (flags: %s)"),
-                     type == wxEVT_COMMAND_FIND_NEXT ? wxT("next ") : wxT(""),
+                     type == wxEVT_FIND_NEXT ? wxT("next ") : wxT(""),
                      event.GetFindString().c_str(),
                      DecodeFindDialogEventFlags(event.GetFlags()).c_str());
     }
-    else if ( type == wxEVT_COMMAND_FIND_REPLACE ||
-                type == wxEVT_COMMAND_FIND_REPLACE_ALL )
+    else if ( type == wxEVT_FIND_REPLACE ||
+                type == wxEVT_FIND_REPLACE_ALL )
     {
         wxLogMessage(wxT("Replace %s'%s' with '%s' (flags: %s)"),
-                     type == wxEVT_COMMAND_FIND_REPLACE_ALL ? wxT("all ") : wxT(""),
+                     type == wxEVT_FIND_REPLACE_ALL ? wxT("all ") : wxT(""),
                      event.GetFindString().c_str(),
                      event.GetReplaceString().c_str(),
                      DecodeFindDialogEventFlags(event.GetFlags()).c_str());
     }
-    else if ( type == wxEVT_COMMAND_FIND_CLOSE )
+    else if ( type == wxEVT_FIND_CLOSE )
     {
         wxFindReplaceDialog *dlg = event.GetDialog();
 

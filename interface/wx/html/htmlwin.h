@@ -511,9 +511,9 @@ protected:
 
 
 
-wxEventType wxEVT_COMMAND_HTML_CELL_CLICKED;
-wxEventType wxEVT_COMMAND_HTML_CELL_HOVER;
-wxEventType wxEVT_COMMAND_HTML_LINK_CLICKED;
+wxEventType wxEVT_HTML_CELL_CLICKED;
+wxEventType wxEVT_HTML_CELL_HOVER;
+wxEventType wxEVT_HTML_LINK_CLICKED;
 
 
 /**

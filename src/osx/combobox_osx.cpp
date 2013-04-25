@@ -207,7 +207,7 @@ void wxComboBox::EnableTextChangedEvents(bool WXUNUSED(enable))
 
 bool wxComboBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
-    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
+    wxCommandEvent event(wxEVT_COMBOBOX, m_windowId );
     event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());

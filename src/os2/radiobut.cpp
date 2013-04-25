@@ -163,7 +163,7 @@ bool wxRadioButton::OS2Command( WXUINT wParam, WXWORD WXUNUSED(wId) )
             if (!bIsChecked )
                 SetValue(true);
         }
-        wxCommandEvent rEvent( wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId );
+        wxCommandEvent rEvent( wxEVT_RADIOBUTTON, m_windowId );
         rEvent.SetEventObject(this);
         ProcessCommand(rEvent);
     }

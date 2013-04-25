@@ -127,7 +127,7 @@ bool wxRadioButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 
     SetValue( true );
 
-    wxCommandEvent event2( wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId );
+    wxCommandEvent event2( wxEVT_RADIOBUTTON, m_windowId );
     event2.SetEventObject( this );
     event2.SetInt( true );
     ProcessCommand( event2 );

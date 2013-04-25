@@ -504,7 +504,7 @@ bool wxToolMenuBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id_)
             }
         }
 
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
+        wxCommandEvent event(wxEVT_MENU);
         event.SetEventObject(this);
         event.SetId(id);
         event.SetInt(checked);

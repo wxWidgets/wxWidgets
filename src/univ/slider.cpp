@@ -220,7 +220,7 @@ bool wxSlider::ChangeValueTo(int value)
     eventScroll.SetEventObject( this );
     (void)GetEventHandler()->ProcessEvent(eventScroll);
 
-    wxCommandEvent event(wxEVT_COMMAND_SLIDER_UPDATED, GetId());
+    wxCommandEvent event(wxEVT_SLIDER, GetId());
     event.SetInt(m_value);
     event.SetEventObject(this);
     (void)GetEventHandler()->ProcessEvent(event);

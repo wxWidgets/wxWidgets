@@ -63,7 +63,7 @@ ProcessScrollEvent(wxSlider *win, wxEventType evtType, double dvalue)
         win->HandleWindowEvent( event2 );
     }
 
-    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
+    wxCommandEvent cevent( wxEVT_SLIDER, win->GetId() );
     cevent.SetEventObject( win );
     cevent.SetInt( value );
     win->HandleWindowEvent( cevent );

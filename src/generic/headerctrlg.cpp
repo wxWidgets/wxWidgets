@@ -278,7 +278,7 @@ void wxHeaderCtrl::CancelDragging()
 
     unsigned int& col = IsResizing() ? m_colBeingResized : m_colBeingReordered;
 
-    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED, GetId());
+    wxHeaderCtrlEvent event(wxEVT_HEADER_DRAGGING_CANCELLED, GetId());
     event.SetEventObject(this);
     event.SetColumn(col);
 
@@ -303,8 +303,8 @@ int wxHeaderCtrl::ConstrainByMinWidth(unsigned int col, int& xPhysical)
 
 void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
 {
-    wxHeaderCtrlEvent event(IsResizing() ? wxEVT_COMMAND_HEADER_RESIZING
-                                         : wxEVT_COMMAND_HEADER_BEGIN_RESIZE,
+    wxHeaderCtrlEvent event(IsResizing() ? wxEVT_HEADER_RESIZING
+                                         : wxEVT_HEADER_BEGIN_RESIZE,
                             GetId());
     event.SetEventObject(this);
     event.SetColumn(col);
@@ -341,7 +341,7 @@ void wxHeaderCtrl::EndResizing(int xPhysical)
 
     ReleaseMouse();
 
-    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_RESIZE, GetId());
+    wxHeaderCtrlEvent event(wxEVT_HEADER_END_RESIZE, GetId());
     event.SetEventObject(this);
     event.SetColumn(m_colBeingResized);
     event.SetWidth(ConstrainByMinWidth(m_colBeingResized, xPhysical));
@@ -382,7 +382,7 @@ void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 
 void wxHeaderCtrl::StartReordering(unsigned int col, int xPhysical)
 {
-    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_BEGIN_REORDER, GetId());
+    wxHeaderCtrlEvent event(wxEVT_HEADER_BEGIN_REORDER, GetId());
     event.SetEventObject(this);
     event.SetColumn(col);
 
@@ -421,7 +421,7 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
 
     if ( colNew != colOld )
     {
-        wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_REORDER, GetId());
+        wxHeaderCtrlEvent event(wxEVT_HEADER_END_REORDER, GetId());
         event.SetEventObject(this);
         event.SetColumn(colOld);
 
@@ -680,23 +680,23 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
                 // treat left double clicks on separator specially
                 if ( onSeparator && dblclk )
                 {
-                    evtType = wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK;
+                    evtType = wxEVT_HEADER_SEPARATOR_DCLICK;
                 }
                 else // not double click on separator
                 {
-                    evtType = click ? wxEVT_COMMAND_HEADER_CLICK
-                                    : wxEVT_COMMAND_HEADER_DCLICK;
+                    evtType = click ? wxEVT_HEADER_CLICK
+                                    : wxEVT_HEADER_DCLICK;
                 }
                 break;
 
             case wxMOUSE_BTN_RIGHT:
-                evtType = click ? wxEVT_COMMAND_HEADER_RIGHT_CLICK
-                                : wxEVT_COMMAND_HEADER_RIGHT_DCLICK;
+                evtType = click ? wxEVT_HEADER_RIGHT_CLICK
+                                : wxEVT_HEADER_RIGHT_DCLICK;
                 break;
 
             case wxMOUSE_BTN_MIDDLE:
-                evtType = click ? wxEVT_COMMAND_HEADER_MIDDLE_CLICK
-                                : wxEVT_COMMAND_HEADER_MIDDLE_DCLICK;
+                evtType = click ? wxEVT_HEADER_MIDDLE_CLICK
+                                : wxEVT_HEADER_MIDDLE_DCLICK;
                 break;
 
             default:

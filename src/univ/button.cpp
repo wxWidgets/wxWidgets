@@ -278,7 +278,7 @@ void wxButton::Toggle()
 
 void wxButton::Click()
 {
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_BUTTON, GetId());
     InitCommandEvent(event);
     Command(event);
 }

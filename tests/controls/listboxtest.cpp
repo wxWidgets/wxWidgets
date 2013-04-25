@@ -184,8 +184,8 @@ void ListBoxTestCase::ClickEvents()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                               wxTestableFrame);
 
-    EventCounter selected(frame, wxEVT_COMMAND_LISTBOX_SELECTED);
-    EventCounter dclicked(frame, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
+    EventCounter selected(frame, wxEVT_LISTBOX);
+    EventCounter dclicked(frame, wxEVT_LISTBOX_DCLICK);
 
     wxUIActionSimulator sim;
 
@@ -220,8 +220,8 @@ void ListBoxTestCase::ClickNotOnItem()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                               wxTestableFrame);
 
-    EventCounter selected(frame, wxEVT_COMMAND_LISTBOX_SELECTED);
-    EventCounter dclicked(frame, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
+    EventCounter selected(frame, wxEVT_LISTBOX);
+    EventCounter dclicked(frame, wxEVT_LISTBOX_DCLICK);
 
     wxUIActionSimulator sim;
 

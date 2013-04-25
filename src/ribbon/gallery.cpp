@@ -30,9 +30,9 @@
 #include "wx/msw/private.h"
 #endif
 
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, wxRibbonGalleryEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONGALLERY_SELECTED, wxRibbonGalleryEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONGALLERY_CLICKED, wxRibbonGalleryEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONGALLERY_HOVER_CHANGED, wxRibbonGalleryEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONGALLERY_SELECTED, wxRibbonGalleryEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONGALLERY_CLICKED, wxRibbonGalleryEvent);
 
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonGalleryEvent, wxCommandEvent)
 IMPLEMENT_CLASS(wxRibbonGallery, wxRibbonControl)
@@ -197,7 +197,7 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
     {
         m_hovered_item = hovered_item;
         wxRibbonGalleryEvent notification(
-            wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, GetId());
+            wxEVT_RIBBONGALLERY_HOVER_CHANGED, GetId());
         notification.SetEventObject(this);
         notification.SetGallery(this);
         notification.SetGalleryItem(hovered_item);
@@ -251,7 +251,7 @@ void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
     {
         m_hovered_item = NULL;
         wxRibbonGalleryEvent notification(
-            wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, GetId());
+            wxEVT_RIBBONGALLERY_HOVER_CHANGED, GetId());
         notification.SetEventObject(this);
         notification.SetGallery(this);
         ProcessWindowEvent(notification);
@@ -341,7 +341,7 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
             else if(m_mouse_active_rect == &m_extension_button_rect)
             {
                 m_extension_button_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
-                wxCommandEvent notification(wxEVT_COMMAND_BUTTON_CLICKED,
+                wxCommandEvent notification(wxEVT_BUTTON,
                     GetId());
                 notification.SetEventObject(this);
                 ProcessWindowEvent(notification);
@@ -352,7 +352,7 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
                 {
                     m_selected_item = m_active_item;
                     wxRibbonGalleryEvent notification(
-                        wxEVT_COMMAND_RIBBONGALLERY_SELECTED, GetId());
+                        wxEVT_RIBBONGALLERY_SELECTED, GetId());
                     notification.SetEventObject(this);
                     notification.SetGallery(this);
                     notification.SetGalleryItem(m_selected_item);
@@ -360,7 +360,7 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
                 }
 
                 wxRibbonGalleryEvent notification(
-                    wxEVT_COMMAND_RIBBONGALLERY_CLICKED, GetId());
+                    wxEVT_RIBBONGALLERY_CLICKED, GetId());
                 notification.SetEventObject(this);
                 notification.SetGallery(this);
                 notification.SetGalleryItem(m_selected_item);

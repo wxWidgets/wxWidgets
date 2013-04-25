@@ -360,7 +360,7 @@ wxButton::SetDefaultStyle(wxButton *btn, bool on)
 
 bool wxButton::SendClickEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_BUTTON, GetId());
     event.SetEventObject(this);
 
     return ProcessCommand(event);

@@ -23,7 +23,7 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_RADIOBOX(id, func)}
-           Process a @c wxEVT_COMMAND_RADIOBOX_SELECTED event, when a radiobutton
+           Process a @c wxEVT_RADIOBOX event, when a radiobutton
            is clicked.
     @endEventTable
 

@@ -977,43 +977,43 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
     {
 #if wxUSE_NOTEBOOK
         {
-            wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
+            wxEVT_NOTEBOOK_PAGE_CHANGED,
+            wxEVT_NOTEBOOK_PAGE_CHANGING,
             wxT("wxNotebook")
         },
 #endif // wxUSE_NOTEBOOK
 #if wxUSE_LISTBOOK
         {
-            wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING,
+            wxEVT_LISTBOOK_PAGE_CHANGED,
+            wxEVT_LISTBOOK_PAGE_CHANGING,
             wxT("wxListbook")
         },
 #endif // wxUSE_LISTBOOK
 #if wxUSE_CHOICEBOOK
         {
-            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,
+            wxEVT_CHOICEBOOK_PAGE_CHANGED,
+            wxEVT_CHOICEBOOK_PAGE_CHANGING,
             wxT("wxChoicebook")
         },
 #endif // wxUSE_CHOICEBOOK
 #if wxUSE_TREEBOOK
         {
-            wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING,
+            wxEVT_TREEBOOK_PAGE_CHANGED,
+            wxEVT_TREEBOOK_PAGE_CHANGING,
             wxT("wxTreebook")
         },
 #endif // wxUSE_TREEBOOK
 #if wxUSE_TOOLBOOK
         {
-            wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING,
+            wxEVT_TOOLBOOK_PAGE_CHANGED,
+            wxEVT_TOOLBOOK_PAGE_CHANGING,
             wxT("wxToolbook")
         },
 #endif // wxUSE_TOOLBOOK
 #if wxUSE_AUI
         {
-            wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED,
-            wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING,
+            wxEVT_AUINOTEBOOK_PAGE_CHANGED,
+            wxEVT_AUINOTEBOOK_PAGE_CHANGING,
             wxT("wxAuiNotebook")
         },
 #endif // wxUSE_AUI

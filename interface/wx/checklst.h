@@ -17,7 +17,7 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_CHECKLISTBOX(id, func)}
-        Process a @c wxEVT_COMMAND_CHECKLISTBOX_TOGGLED event, when an item in
+        Process a @c wxEVT_CHECKLISTBOX event, when an item in
         the check list box is checked or unchecked. wxCommandEvent::GetInt()
         will contain the index of the item that was checked or unchecked.
         wxCommandEvent::IsChecked() is not valid! Use wxCheckListBox::IsChecked()
@@ -135,7 +135,7 @@ public:
 
     /**
         Checks the given item. Note that calling this method does not result in
-        a @c wxEVT_COMMAND_CHECKLISTBOX_TOGGLE event being emitted.
+        a @c wxEVT_CHECKLISTBOX event being emitted.
 
         @param item
             Index of item to check.

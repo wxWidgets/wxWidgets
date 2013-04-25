@@ -1485,7 +1485,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
                     wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
-                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
 
@@ -1496,7 +1496,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
             else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
             {
                 // generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs)
-                wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+                wxCommandEvent new_event(wxEVT_BUTTON,wxID_CANCEL);
                 new_event.SetEventObject( focus );
                 handled = focus->HandleWindowEvent( new_event );
             }

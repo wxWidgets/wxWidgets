@@ -117,7 +117,7 @@ private:
 
     // start (if m_colBeingResized is -1) or continue resizing the column
     //
-    // this generates wxEVT_COMMAND_HEADER_BEGIN_RESIZE/RESIZING events and can
+    // this generates wxEVT_HEADER_BEGIN_RESIZE/RESIZING events and can
     // cancel the operation if the user handler decides so
     void StartOrContinueResizing(unsigned int col, int xPhysical);
 

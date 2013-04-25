@@ -777,7 +777,7 @@ enum wxItemKind
 
     /**
         Normal tool button with a dropdown arrow next to it. Clicking the
-        dropdown arrow sends a @c wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED event and may
+        dropdown arrow sends a @c wxEVT_TOOL_DROPDOWN event and may
         also display the menu previously associated with the item with
         wxToolBar::SetDropdownMenu(). Currently this type of tools is supported
         under MSW and GTK.

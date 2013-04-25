@@ -614,7 +614,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
         // If it is attached then let the frame send the event.
         // Don't call frame->ProcessCommand(id) because it toggles
         // checkable items and we've already done that above.
-        wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
+        wxCommandEvent commandEvent(wxEVT_MENU, id);
         commandEvent.SetEventObject(frame);
         if (item->IsCheckable())
             commandEvent.SetInt(item->IsChecked());

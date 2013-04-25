@@ -41,7 +41,7 @@ void TextEntryTestCase::SetValue()
 
 void TextEntryTestCase::TextChangeEvents()
 {
-    EventCounter updated(GetTestWindow(), wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(GetTestWindow(), wxEVT_TEXT);
 
     wxTextEntry * const entry = GetTestEntry();
 
@@ -184,7 +184,7 @@ void TextEntryTestCase::Editable()
     wxTextEntry * const entry = GetTestEntry();
     wxWindow * const window = GetTestWindow();
 
-    EventCounter updated(window, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter updated(window, wxEVT_TEXT);
 
     window->SetFocus();
     wxYield();

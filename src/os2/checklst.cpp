@@ -214,7 +214,7 @@ void wxCheckListBoxItem::Check( bool bCheck )
     }
 
 
-    wxCommandEvent vEvent( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED,m_pParent->GetId());
+    wxCommandEvent vEvent( wxEVT_CHECKLISTBOX,m_pParent->GetId());
 
     vEvent.SetInt(m_nIndex);
     vEvent.SetEventObject(m_pParent);

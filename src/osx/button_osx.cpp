@@ -128,7 +128,7 @@ void wxButton::Command (wxCommandEvent & WXUNUSED(event))
 
 bool wxButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId);
+    wxCommandEvent event(wxEVT_BUTTON, m_windowId);
     event.SetEventObject(this);
     ProcessCommand(event);
     return true;
@@ -173,7 +173,7 @@ bool wxDisclosureTriangle::IsOpen() const
 bool wxDisclosureTriangle::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     // Just emit button event for now
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId);
+    wxCommandEvent event(wxEVT_BUTTON, m_windowId);
     event.SetEventObject(this);
     ProcessCommand(event);
 

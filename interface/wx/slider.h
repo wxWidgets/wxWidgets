@@ -117,7 +117,7 @@
     @event{EVT_COMMAND_SCROLL_CHANGED(func)}
         Process @c wxEVT_SCROLL_CHANGED end of scrolling events (MSW only).
     @event{EVT_SLIDER(id, func)}
-        Process @c wxEVT_COMMAND_SLIDER_UPDATED which is generated after any
+        Process @c wxEVT_SLIDER which is generated after any
         change of wxSlider position in addition to one of the events above.
     @endEventTable
 

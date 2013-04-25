@@ -873,7 +873,7 @@ bool wxSymbolListCtrl::DoSetCurrent(int current)
 
 void wxSymbolListCtrl::SendSelectedEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_LISTBOX, GetId());
     event.SetEventObject(this);
     event.SetInt(m_current);
 
@@ -1180,7 +1180,7 @@ void wxSymbolListCtrl::OnLeftDClick(wxMouseEvent& eventMouse)
         // this event as a left-click instead
         if ( item == m_current )
         {
-            wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, GetId());
+            wxCommandEvent event(wxEVT_LISTBOX_DCLICK, GetId());
             event.SetEventObject(this);
             event.SetInt(item);
 
@@ -1293,7 +1293,7 @@ wxSymbolListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_HELP
+ * wxEVT_BUTTON event handler for wxID_HELP
  */
 
 void wxSymbolPickerDialog::OnHelpClick( wxCommandEvent& WXUNUSED(event) )

@@ -38,7 +38,7 @@ void wxRadioBox::OnRadioButton( wxCommandEvent &outer )
 {
     if ( outer.IsChecked() )
     {
-        wxCommandEvent event( wxEVT_COMMAND_RADIOBOX_SELECTED, m_windowId );
+        wxCommandEvent event( wxEVT_RADIOBOX, m_windowId );
         int i = GetSelection() ;
         event.SetInt(i);
         event.SetString(GetString(i));
@@ -265,7 +265,7 @@ void wxRadioBox::SetString(unsigned int item,const wxString& label)
 }
 
 // Sets a button by passing the desired position. This does not cause
-// wxEVT_COMMAND_RADIOBOX_SELECTED event to get emitted
+// wxEVT_RADIOBOX event to get emitted
 //
 void wxRadioBox::SetSelection(int item)
 {

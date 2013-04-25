@@ -68,17 +68,17 @@ enum
         The sash position is in the process of being changed.
         May be used to modify the position of the tracking bar to properly
         reflect the position that would be set if the drag were to be completed
-        at this point. Processes a @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING event.
+        at this point. Processes a @c wxEVT_SPLITTER_SASH_POS_CHANGING event.
     @event{EVT_SPLITTER_SASH_POS_CHANGED(id, func)}
         The sash position was changed. May be used to modify the sash position
         before it is set, or to prevent the change from taking place.
-        Processes a @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED event.
+        Processes a @c wxEVT_SPLITTER_SASH_POS_CHANGED event.
     @event{EVT_SPLITTER_UNSPLIT(id, func)}
-        The splitter has been just unsplit. Processes a @c wxEVT_COMMAND_SPLITTER_UNSPLIT event.
+        The splitter has been just unsplit. Processes a @c wxEVT_SPLITTER_UNSPLIT event.
     @event{EVT_SPLITTER_DCLICK(id, func)}
         The sash was double clicked. The default behaviour is to unsplit the
         window when this happens (unless the minimum pane size has been set
-        to a value greater than zero). Processes a @c wxEVT_COMMAND_SPLITTER_DOUBLECLICKED event.
+        to a value greater than zero). Processes a @c wxEVT_SPLITTER_DOUBLECLICKED event.
     @endEventTable
 
 
@@ -475,17 +475,17 @@ public:
         The sash position is in the process of being changed.
         May be used to modify the position of the tracking bar to properly
         reflect the position that would be set if the drag were to be completed
-        at this point. Processes a @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING event.
+        at this point. Processes a @c wxEVT_SPLITTER_SASH_POS_CHANGING event.
     @event{EVT_SPLITTER_SASH_POS_CHANGED(id, func)}
         The sash position was changed. May be used to modify the sash position
         before it is set, or to prevent the change from taking place.
-        Processes a @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED event.
+        Processes a @c wxEVT_SPLITTER_SASH_POS_CHANGED event.
     @event{EVT_SPLITTER_UNSPLIT(id, func)}
-        The splitter has been just unsplit. Processes a @c wxEVT_COMMAND_SPLITTER_UNSPLIT event.
+        The splitter has been just unsplit. Processes a @c wxEVT_SPLITTER_UNSPLIT event.
     @event{EVT_SPLITTER_DCLICK(id, func)}
         The sash was double clicked. The default behaviour is to unsplit the
         window when this happens (unless the minimum pane size has been set
-        to a value greater than zero). Processes a @c wxEVT_COMMAND_SPLITTER_DOUBLECLICKED event.
+        to a value greater than zero). Processes a @c wxEVT_SPLITTER_DOUBLECLICKED event.
     @endEventTable
 
     @library{wxcore}
@@ -506,8 +506,8 @@ public:
         Returns the new sash position.
 
         May only be called while processing
-        @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING and
-        @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events.
+        @c wxEVT_SPLITTER_SASH_POS_CHANGING and
+        @c wxEVT_SPLITTER_SASH_POS_CHANGED events.
     */
     int GetSashPosition() const;
 
@@ -516,7 +516,7 @@ public:
         is unsplit.
 
         May only be called while processing
-        @c wxEVT_COMMAND_SPLITTER_UNSPLIT events.
+        @c wxEVT_SPLITTER_UNSPLIT events.
     */
     wxWindow* GetWindowBeingRemoved() const;
 
@@ -524,7 +524,7 @@ public:
         Returns the x coordinate of the double-click point.
 
         May only be called while processing
-        @c wxEVT_COMMAND_SPLITTER_DOUBLECLICKED events.
+        @c wxEVT_SPLITTER_DOUBLECLICKED events.
     */
     int GetX() const;
 
@@ -532,21 +532,21 @@ public:
         Returns the y coordinate of the double-click point.
 
         May only be called while processing
-        @c wxEVT_COMMAND_SPLITTER_DOUBLECLICKED events.
+        @c wxEVT_SPLITTER_DOUBLECLICKED events.
     */
     int GetY() const;
 
     /**
-        In the case of @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events,
+        In the case of @c wxEVT_SPLITTER_SASH_POS_CHANGED events,
         sets the new sash position.
-        In the case of @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING events,
+        In the case of @c wxEVT_SPLITTER_SASH_POS_CHANGING events,
         sets the new tracking bar position so visual feedback during dragging will
         represent that change that will actually take place. Set to -1 from
         the event handler code to prevent repositioning.
 
         May only be called while processing
-        @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING and
-        @c wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED events.
+        @c wxEVT_SPLITTER_SASH_POS_CHANGING and
+        @c wxEVT_SPLITTER_SASH_POS_CHANGED events.
 
         @param pos
             New sash position.
@@ -555,7 +555,7 @@ public:
 };
 
 
-wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED;
-wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING;
-wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED;
-wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT;
+wxEventType wxEVT_SPLITTER_SASH_POS_CHANGED;
+wxEventType wxEVT_SPLITTER_SASH_POS_CHANGING;
+wxEventType wxEVT_SPLITTER_DOUBLECLICKED;
+wxEventType wxEVT_SPLITTER_UNSPLIT;

@@ -1015,7 +1015,7 @@ wxgtk_tree_model_set_sort_column_id (GtkTreeSortable *sortable,
     if (gs_lastLeftClickHeader)
     {
         wxDataViewCtrl *dv = tree_model->internal->GetOwner();
-        wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, dv->GetId() );
+        wxDataViewEvent event( wxEVT_DATAVIEW_COLUMN_SORTED, dv->GetId() );
         event.SetDataViewColumn( gs_lastLeftClickHeader );
         event.SetModel( dv->GetModel() );
         dv->HandleWindowEvent( event );
@@ -1164,7 +1164,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
         item(column->GetOwner()->GTKPathToItem(wxGtkTreePath(path)));
 
     wxDataViewCtrl *dv = column->GetOwner();
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_START_EDITING, dv->GetId() );
     event.SetDataViewColumn( column );
     event.SetModel( dv->GetModel() );
     event.SetColumn( column->GetModelColumn() );
@@ -1785,7 +1785,7 @@ wxgtk_cell_editable_editing_done( GtkCellEditable *WXUNUSED(editable),
 {
     wxDataViewColumn *column = wxrenderer->GetOwner();
     wxDataViewCtrl *dv = column->GetOwner();
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_DONE, dv->GetId() );
     event.SetDataViewColumn( column );
     event.SetModel( dv->GetModel() );
     wxDataViewItem item( s_user_data );
@@ -1802,7 +1802,7 @@ wxgtk_renderer_editing_started( GtkCellRenderer *WXUNUSED(cell), GtkCellEditable
 
     wxDataViewColumn *column = wxrenderer->GetOwner();
     wxDataViewCtrl *dv = column->GetOwner();
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EDITING_STARTED, dv->GetId() );
     event.SetDataViewColumn( column );
     event.SetModel( dv->GetModel() );
     wxDataViewItem item(dv->GTKPathToItem(wxGtkTreePath(path)));
@@ -2844,7 +2844,7 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
         gs_lastLeftClickHeader = column;
 
         wxDataViewCtrl *dv = column->GetOwner();
-        wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, dv->GetId() );
+        wxDataViewEvent event( wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, dv->GetId() );
         event.SetDataViewColumn( column );
         event.SetModel( dv->GetModel() );
         if (dv->HandleWindowEvent( event ))
@@ -2854,7 +2854,7 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
     if (gdk_event->button == 3)
     {
         wxDataViewCtrl *dv = column->GetOwner();
-        wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, dv->GetId() );
+        wxDataViewEvent event( wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED, dv->GetId() );
         event.SetDataViewColumn( column );
         event.SetModel( dv->GetModel() );
         if (dv->HandleWindowEvent( event ))
@@ -3494,7 +3494,7 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     if ( !item )
         return FALSE;
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( m_wx_model );
@@ -3563,7 +3563,7 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
     if ( !item )
         return FALSE;
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( m_wx_model );
@@ -3588,7 +3588,7 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
     if ( !item )
         return FALSE;
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( m_wx_model );
@@ -3711,7 +3711,7 @@ bool wxDataViewCtrlInternal::ItemDeleted( const wxDataViewItem &parent, const wx
 
 bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetModel( m_owner->GetModel() );
     event.SetItem( item );
@@ -3722,7 +3722,7 @@ bool wxDataViewCtrlInternal::ItemChanged( const wxDataViewItem &item )
 
 bool wxDataViewCtrlInternal::ValueChanged( const wxDataViewItem &item, unsigned int view_column )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetModel( m_owner->GetModel() );
     event.SetColumn( view_column );
@@ -4260,7 +4260,7 @@ wxdataview_selection_changed_callback( GtkTreeSelection* WXUNUSED(selection), wx
     if (!gtk_widget_get_realized(dv->m_widget))
         return;
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_SELECTION_CHANGED, dv->GetId() );
     event.SetItem( dv->GetSelection() );
     event.SetModel( dv->GetModel() );
     dv->HandleWindowEvent( event );
@@ -4270,7 +4270,7 @@ static void
 wxdataview_row_activated_callback( GtkTreeView* WXUNUSED(treeview), GtkTreePath *path,
                                    GtkTreeViewColumn *WXUNUSED(column), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_ACTIVATED, dv->GetId() );
 
     wxDataViewItem item(dv->GTKPathToItem(path));
     event.SetItem( item );
@@ -4282,7 +4282,7 @@ static gboolean
 wxdataview_test_expand_row_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
                                      GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EXPANDING, dv->GetId() );
 
     wxDataViewItem item( (void*) iter->user_data );;
     event.SetItem( item );
@@ -4296,7 +4296,7 @@ static void
 wxdataview_row_expanded_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
                                   GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_EXPANDED, dv->GetId() );
 
     wxDataViewItem item( (void*) iter->user_data );;
     event.SetItem( item );
@@ -4308,7 +4308,7 @@ static gboolean
 wxdataview_test_collapse_row_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
                                        GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_COLLAPSING, dv->GetId() );
 
     wxDataViewItem item( (void*) iter->user_data );;
     event.SetItem( item );
@@ -4322,7 +4322,7 @@ static void
 wxdataview_row_collapsed_callback( GtkTreeView* WXUNUSED(treeview), GtkTreeIter* iter,
                                    GtkTreePath *WXUNUSED(path), wxDataViewCtrl *dv )
 {
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED, dv->GetId() );
+    wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_COLLAPSED, dv->GetId() );
 
     wxDataViewItem item( (void*) iter->user_data );;
     event.SetItem( item );
@@ -4438,7 +4438,7 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
             &cell_y
         );
 
-        wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, dv->GetId() );
+        wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv->GetId() );
         if (path)
             event.SetItem(dv->GTKPathToItem(path));
         event.SetModel( dv->GetModel() );

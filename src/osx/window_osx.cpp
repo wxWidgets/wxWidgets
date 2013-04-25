@@ -2740,13 +2740,13 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
             {
                 wxEvtHandler * const handler = ancestor->GetEventHandler();
 
-                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                wxCommandEvent command_event( wxEVT_MENU, command );
                 handled = handler->ProcessEvent( command_event );
 
                 if ( !handled )
                 {
                     // accelerators can also be used with buttons, try them too
-                    command_event.SetEventType(wxEVT_COMMAND_BUTTON_CLICKED);
+                    command_event.SetEventType(wxEVT_BUTTON);
                     handled = handler->ProcessEvent( command_event );
                 }
 

@@ -4387,7 +4387,7 @@ void wxStyledTextCtrl::DoSetValue(const wxString& value, int flags)
     else
         SetText(value);
 
-    // We don't send wxEVT_COMMAND_TEXT_UPDATED anyhow, so ignore the
+    // We don't send wxEVT_TEXT anyhow, so ignore the
     // SetValue_SendEvent bit of the flags
 }
 

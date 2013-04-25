@@ -338,7 +338,7 @@ void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
     wxMenuItem *item = (wxMenuItem *) clientData;
     if (item)
     {
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, item->GetId());
+        wxCommandEvent event(wxEVT_MENU, item->GetId());
         event.SetInt( item->GetId() );
 
         if (item->IsCheckable())

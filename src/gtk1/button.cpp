@@ -53,7 +53,7 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
+    wxCommandEvent event(wxEVT_BUTTON, button->GetId());
     event.SetEventObject(button);
     button->HandleWindowEvent(event);
 }

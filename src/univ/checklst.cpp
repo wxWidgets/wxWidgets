@@ -199,7 +199,7 @@ bool wxCheckListBox::PerformAction(const wxControlAction& action,
         {
             Check(sel, !IsChecked(sel));
 
-            SendEvent(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, sel);
+            SendEvent(wxEVT_CHECKLISTBOX, sel);
         }
     }
     else

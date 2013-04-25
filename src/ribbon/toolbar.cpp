@@ -57,8 +57,8 @@ public:
     wxSize size;
 };
 
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONTOOL_CLICKED, wxRibbonToolBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONTOOL_DROPDOWN_CLICKED, wxRibbonToolBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONTOOLBAR_CLICKED, wxRibbonToolBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED, wxRibbonToolBarEvent);
 
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonToolBarEvent, wxCommandEvent)
 IMPLEMENT_CLASS(wxRibbonToolBar, wxRibbonControl)
@@ -1133,9 +1133,9 @@ void wxRibbonToolBar::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
     {
         if(m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK)
         {
-            wxEventType evt_type = wxEVT_COMMAND_RIBBONTOOL_CLICKED;
+            wxEventType evt_type = wxEVT_RIBBONTOOLBAR_CLICKED;
             if(m_active_tool->state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE)
-                evt_type = wxEVT_COMMAND_RIBBONTOOL_DROPDOWN_CLICKED;
+                evt_type = wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED;
             wxRibbonToolBarEvent notification(evt_type, m_active_tool->id);
             if(m_active_tool->kind == wxRIBBON_BUTTON_TOGGLE)
             {

@@ -83,7 +83,7 @@ void CheckBoxTestCase::tearDown()
 
 void CheckBoxTestCase::Check()
 {
-    EventCounter clicked(m_check, wxEVT_COMMAND_CHECKBOX_CLICKED);
+    EventCounter clicked(m_check, wxEVT_CHECKBOX);
 
     //We should be unchecked by default
     CPPUNIT_ASSERT(!m_check->IsChecked());

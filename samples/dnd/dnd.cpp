@@ -1022,7 +1022,7 @@ DnDFrame::DnDFrame()
     m_ctrlDir->Connect
     (
         wxID_ANY,
-        wxEVT_COMMAND_TREE_BEGIN_DRAG,
+        wxEVT_TREE_BEGIN_DRAG,
         wxTreeEventHandler(DnDFrame::OnBeginDrag),
         NULL,
         this

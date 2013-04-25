@@ -95,7 +95,7 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_BUTTON(id, func)}
-           Process a @c wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.
+           Process a @c wxEVT_BUTTON event, when the button is clicked.
     @endEventTable
 
     @library{wxcore}

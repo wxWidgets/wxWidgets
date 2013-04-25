@@ -45,7 +45,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
 // ============================================================================
 // implementation
@@ -179,7 +179,7 @@ bool wxToggleButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     // auto checkboxes so do it ourselves in any case
     m_state = !m_state;
 
-    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
+    wxCommandEvent event(wxEVT_TOGGLEBUTTON, m_windowId);
     event.SetInt(GetValue());
     event.SetEventObject(this);
     ProcessCommand(event);

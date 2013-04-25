@@ -199,10 +199,10 @@ void ListBaseTestCase::ItemClick()
     list->SetItem(0, 1, "first column");
     list->SetItem(0, 2, "second column");
 
-    EventCounter selected(list, wxEVT_COMMAND_LIST_ITEM_SELECTED);
-    EventCounter focused(list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
-    EventCounter activated(list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
-    EventCounter rclick(list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
+    EventCounter selected(list, wxEVT_LIST_ITEM_SELECTED);
+    EventCounter focused(list, wxEVT_LIST_ITEM_FOCUSED);
+    EventCounter activated(list, wxEVT_LIST_ITEM_ACTIVATED);
+    EventCounter rclick(list, wxEVT_LIST_ITEM_RIGHT_CLICK);
 
     wxUIActionSimulator sim;
 
@@ -241,7 +241,7 @@ void ListBaseTestCase::KeyDown()
 #if wxUSE_UIACTIONSIMULATOR
     wxListCtrl* const list = GetList();
 
-    EventCounter keydown(list, wxEVT_COMMAND_LIST_KEY_DOWN);
+    EventCounter keydown(list, wxEVT_LIST_KEY_DOWN);
 
     wxUIActionSimulator sim;
 
@@ -258,8 +258,8 @@ void ListBaseTestCase::DeleteItems()
 #ifndef __WXOSX__
     wxListCtrl* const list = GetList();
 
-    EventCounter deleteitem(list, wxEVT_COMMAND_LIST_DELETE_ITEM);
-    EventCounter deleteall(list, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS);
+    EventCounter deleteitem(list, wxEVT_LIST_DELETE_ITEM);
+    EventCounter deleteall(list, wxEVT_LIST_DELETE_ALL_ITEMS);
 
 
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
@@ -296,7 +296,7 @@ void ListBaseTestCase::InsertItem()
 {
     wxListCtrl* const list = GetList();
 
-    EventCounter insert(list, wxEVT_COMMAND_LIST_INSERT_ITEM);
+    EventCounter insert(list, wxEVT_LIST_INSERT_ITEM);
 
     list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
 
@@ -391,8 +391,8 @@ void ListBaseTestCase::EditLabel()
     list->InsertItem(0, "Item 0");
     list->InsertItem(1, "Item 1");
 
-    EventCounter beginedit(list, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT);
-    EventCounter endedit(list, wxEVT_COMMAND_LIST_END_LABEL_EDIT);
+    EventCounter beginedit(list, wxEVT_LIST_BEGIN_LABEL_EDIT);
+    EventCounter endedit(list, wxEVT_LIST_END_LABEL_EDIT);
 
     wxUIActionSimulator sim;
 

@@ -406,14 +406,14 @@ bool wxPGTextCtrlEditor::OnTextCtrlEvent( wxPropertyGrid* propGrid,
     if ( !ctrl )
         return false;
 
-    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+    if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {
         if ( propGrid->IsEditorsValueModified() )
         {
             return true;
         }
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
+    else if ( event.GetEventType() == wxEVT_TEXT )
     {
         //
         // Pass this event outside wxPropertyGrid so that,
@@ -1129,7 +1129,7 @@ void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
 bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* property,
     wxWindow* ctrl, wxEvent& event ) const
 {
-    if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
         wxPGComboBox* cb = (wxPGComboBox*)ctrl;
         int index = cb->GetSelection();
@@ -1587,7 +1587,7 @@ void wxSimpleCheckBox::SetValue( int value )
     }
     Refresh();
 
-    wxCommandEvent evt(wxEVT_COMMAND_CHECKBOX_CLICKED,GetParent()->GetId());
+    wxCommandEvent evt(wxEVT_CHECKBOX,GetParent()->GetId());
 
     wxPropertyGrid* propGrid = (wxPropertyGrid*) GetParent();
     wxASSERT( wxDynamicCast(propGrid, wxPropertyGrid) );
@@ -1680,7 +1680,7 @@ void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
 bool wxPGCheckBoxEditor::OnEvent( wxPropertyGrid* WXUNUSED(propGrid), wxPGProperty* WXUNUSED(property),
     wxWindow* WXUNUSED(ctrl), wxEvent& event ) const
 {
-    if ( event.GetEventType() == wxEVT_COMMAND_CHECKBOX_CLICKED )
+    if ( event.GetEventType() == wxEVT_CHECKBOX )
     {
         return true;
     }

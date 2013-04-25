@@ -180,7 +180,7 @@ public:
         The insertion point is set to the start of the control (i.e. position
         0) by this function.
 
-        This functions does not generate the @c wxEVT_COMMAND_TEXT_UPDATED
+        This functions does not generate the @c wxEVT_TEXT
         event but otherwise is identical to SetValue().
 
         See @ref overview_events_prog for more information.
@@ -196,7 +196,7 @@ public:
     /**
         Clears the text in the control.
 
-        Note that this function will generate a @c wxEVT_COMMAND_TEXT_UPDATED
+        Note that this function will generate a @c wxEVT_TEXT
         event, i.e. its effect is identical to calling @c SetValue("").
     */
     virtual void Clear();
@@ -401,7 +401,7 @@ public:
         and the user may enter as much text as the underlying native text control widget
         supports (typically at least 32Kb).
         If the user tries to enter more characters into the text control when it
-        already is filled up to the maximal length, a @c wxEVT_COMMAND_TEXT_MAXLEN
+        already is filled up to the maximal length, a @c wxEVT_TEXT_MAXLEN
         event is sent to notify the program about it (giving it the possibility
         to show an explanatory message, for example) and the extra input is discarded.
 
@@ -524,7 +524,7 @@ public:
         0) by this function.
 
         Note that, unlike most other functions changing the controls values,
-        this function generates a @c wxEVT_COMMAND_TEXT_UPDATED event. To avoid
+        this function generates a @c wxEVT_TEXT event. To avoid
         this you can use ChangeValue() instead.
 
         @param value

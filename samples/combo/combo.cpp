@@ -939,15 +939,15 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
     if ( !event.GetEventObject()->IsKindOf(CLASSINFO(wxComboCtrl)) )
         return;
 
-    if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
         wxLogDebug(wxT("EVT_COMBOBOX(id=%i,selection=%i)"),event.GetId(),event.GetSelection());
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
+    else if ( event.GetEventType() == wxEVT_TEXT )
     {
         wxLogDebug(wxT("EVT_TEXT(id=%i,string=\"%s\")"),event.GetId(),event.GetString().c_str());
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+    else if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {
         wxLogDebug("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
                    event.GetId(), event.GetString().c_str());

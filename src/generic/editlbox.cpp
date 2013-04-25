@@ -350,9 +350,9 @@ void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
         // possible:
         m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), wxEmptyString);
 
-        // Simulate a wxEVT_COMMAND_LIST_ITEM_SELECTED event for the new item,
+        // Simulate a wxEVT_LIST_ITEM_SELECTED event for the new item,
         // so that the buttons are enabled/disabled properly
-        wxListEvent selectionEvent(wxEVT_COMMAND_LIST_ITEM_SELECTED, m_listCtrl->GetId());
+        wxListEvent selectionEvent(wxEVT_LIST_ITEM_SELECTED, m_listCtrl->GetId());
         selectionEvent.m_itemIndex = event.GetIndex();
         m_listCtrl->GetEventHandler()->ProcessEvent(selectionEvent);
     }

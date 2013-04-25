@@ -586,7 +586,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         if ( HasMultipleSelection() )
             return CalcAndSendEvent();
 
-        evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
+        evtType = wxEVT_LISTBOX;
     }
     else if ( param == LBN_DBLCLK )
     {
@@ -598,7 +598,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         if ( HitTest(ScreenToClient(pt)) == wxNOT_FOUND )
             return false;
 
-        evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+        evtType = wxEVT_LISTBOX_DCLICK;
     }
     else
     {

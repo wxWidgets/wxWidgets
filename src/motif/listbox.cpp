@@ -452,9 +452,9 @@ void wxListBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
     wxEventType evtType;
 
     if( cbs->reason == XmCR_DEFAULT_ACTION )
-        evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+        evtType = wxEVT_LISTBOX_DCLICK;
     else
-        evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
+        evtType = wxEVT_LISTBOX;
 
     int n = cbs->item_position - 1;
     wxCommandEvent event (evtType, item->GetId());

@@ -81,7 +81,7 @@ wxEND_FLAGS( wxRadioBoxStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioBox, wxControl,"wx/radiobox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxRadioBox)
-    wxEVENT_PROPERTY( Select , wxEVT_COMMAND_RADIOBOX_SELECTED , wxCommandEvent )
+    wxEVENT_PROPERTY( Select , wxEVT_RADIOBOX , wxCommandEvent )
     wxPROPERTY_FLAGS( WindowStyle , wxRadioBoxStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
@@ -377,7 +377,7 @@ void wxRadioBox::Command(wxCommandEvent & event)
 
 void wxRadioBox::SendNotificationEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, m_windowId);
+    wxCommandEvent event(wxEVT_RADIOBOX, m_windowId);
     event.SetInt( m_selectedButton );
     event.SetString(GetString(m_selectedButton));
     event.SetEventObject( this );

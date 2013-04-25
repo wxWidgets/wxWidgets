@@ -4709,7 +4709,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     {
         wxASSERT_MSG( IsEditable(), wxT("non editable control changed?") );
 
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+        wxCommandEvent event(wxEVT_TEXT, GetId());
         InitCommandEvent(event);
         GetEventHandler()->ProcessEvent(event);
 
@@ -4733,7 +4733,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         {
             if ( IsSingleLine() || (GetWindowStyle() & wxTE_PROCESS_ENTER) )
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, GetId());
+                wxCommandEvent event(wxEVT_TEXT_ENTER, GetId());
                 InitCommandEvent(event);
                 event.SetString(GetValue());
                 GetEventHandler()->ProcessEvent(event);

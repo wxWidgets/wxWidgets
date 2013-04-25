@@ -240,21 +240,21 @@ wxFindReplaceDialogImpl::FindMessageHandler(wxWindow * WXUNUSED(win),
         // 2 cases
         dialog->GetImpl()->SetClosedByUser();
 
-        evtType = wxEVT_COMMAND_FIND_CLOSE;
+        evtType = wxEVT_FIND_CLOSE;
     }
     else if ( pFR->Flags & FR_FINDNEXT )
     {
-        evtType = wxEVT_COMMAND_FIND_NEXT;
+        evtType = wxEVT_FIND_NEXT;
     }
     else if ( pFR->Flags & FR_REPLACE )
     {
-        evtType = wxEVT_COMMAND_FIND_REPLACE;
+        evtType = wxEVT_FIND_REPLACE;
 
         replace = true;
     }
     else if ( pFR->Flags & FR_REPLACEALL )
     {
-        evtType = wxEVT_COMMAND_FIND_REPLACE_ALL;
+        evtType = wxEVT_FIND_REPLACE_ALL;
 
         replace = true;
     }

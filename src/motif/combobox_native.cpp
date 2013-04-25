@@ -294,7 +294,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
     case XmCR_BROWSE_SELECT:
 #endif
         {
-            wxCommandEvent event (wxEVT_COMMAND_COMBOBOX_SELECTED,
+            wxCommandEvent event (wxEVT_COMBOBOX,
                                   item->GetId());
             int idx = cbs->item_position;
             event.SetInt(idx);
@@ -310,7 +310,7 @@ void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
         }
     case XmCR_VALUE_CHANGED:
         {
-            wxCommandEvent event (wxEVT_COMMAND_TEXT_UPDATED, item->GetId());
+            wxCommandEvent event (wxEVT_TEXT, item->GetId());
             event.SetInt(-1);
             event.SetString( item->GetValue() );
             event.SetExtraLong(true);

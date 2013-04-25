@@ -281,8 +281,8 @@ static /* const */ wxEventType gs_expandEvents[IDX_WHAT_MAX][IDX_HOW_MAX];
    but logically it's a const table with the following entries:
 =
 {
-    { wxEVT_COMMAND_TREE_ITEM_COLLAPSED, wxEVT_COMMAND_TREE_ITEM_COLLAPSING },
-    { wxEVT_COMMAND_TREE_ITEM_EXPANDED,  wxEVT_COMMAND_TREE_ITEM_EXPANDING  }
+    { wxEVT_TREE_ITEM_COLLAPSED, wxEVT_TREE_ITEM_COLLAPSING },
+    { wxEVT_TREE_ITEM_EXPANDED,  wxEVT_TREE_ITEM_EXPANDING  }
 };
 */
 
@@ -349,10 +349,10 @@ void wxTreeCtrl::Init ()
     // Initialize the global array of events now as it can't be done statically
     // with the wxEVT_XXX values being allocated during run-time only
     //
-    gs_expandEvents[IDX_COLLAPSE][IDX_DONE]  = wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
-    gs_expandEvents[IDX_COLLAPSE][IDX_DOING] = wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
-    gs_expandEvents[IDX_EXPAND][IDX_DONE]    = wxEVT_COMMAND_TREE_ITEM_EXPANDED;
-    gs_expandEvents[IDX_EXPAND][IDX_DOING]   = wxEVT_COMMAND_TREE_ITEM_EXPANDING;
+    gs_expandEvents[IDX_COLLAPSE][IDX_DONE]  = wxEVT_TREE_ITEM_COLLAPSED;
+    gs_expandEvents[IDX_COLLAPSE][IDX_DOING] = wxEVT_TREE_ITEM_COLLAPSING;
+    gs_expandEvents[IDX_EXPAND][IDX_DONE]    = wxEVT_TREE_ITEM_EXPANDED;
+    gs_expandEvents[IDX_EXPAND][IDX_DOING]   = wxEVT_TREE_ITEM_EXPANDING;
 } // end of wxTreeCtrl::Init
 
 bool wxTreeCtrl::Create (
@@ -1950,7 +1950,7 @@ bool wxTreeCtrl::OS2Command (
 {
     if (uCmd == CN_ENDEDIT)
     {
-        wxCommandEvent              vEvent( wxEVT_COMMAND_TEXT_UPDATED
+        wxCommandEvent              vEvent( wxEVT_TEXT
                                            ,wId
                                           );
 
@@ -2002,7 +2002,7 @@ MRESULT wxTreeCtrl::OS2WindowProc (
                     {
                         PMYRECORD       pRecord = (PMYRECORD)pDragInit->pRecord;
 
-                        vEventType = wxEVT_COMMAND_TREE_BEGIN_DRAG;
+                        vEventType = wxEVT_TREE_BEGIN_DRAG;
                         vEvent.m_item        = pRecord->m_ulItemId;
                         vEvent.m_pointDrag.x = pDragInit->x;
                         vEvent.m_pointDrag.y = pDragInit->y;
@@ -2015,7 +2015,7 @@ MRESULT wxTreeCtrl::OS2WindowProc (
                     {
                         PMYRECORD       pRecord = (PMYRECORD)pEditData->pRecord;
 
-                        vEventType = wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
+                        vEventType = wxEVT_TREE_BEGIN_LABEL_EDIT;
                         vEvent.m_item = pRecord->m_ulItemId;
                         vEvent.m_label = pRecord->m_vRecord.pszTree;
                         vEvent.m_editCancelled = false;
@@ -2028,7 +2028,7 @@ MRESULT wxTreeCtrl::OS2WindowProc (
                     {
                         PMYRECORD       pRecord = (PMYRECORD)pEditData->pRecord;
 
-                        vEventType = wxEVT_COMMAND_TREE_END_LABEL_EDIT;
+                        vEventType = wxEVT_TREE_END_LABEL_EDIT;
                         vEvent.m_item = pRecord->m_ulItemId;
                         vEvent.m_label = pRecord->m_vRecord.pszTree;
                         if (pRecord->m_vRecord.pszTree == NULL)

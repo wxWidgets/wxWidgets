@@ -58,35 +58,35 @@
 
     @beginEventEmissionTable{wxAuiNotebookEvent}
     @event{EVT_AUINOTEBOOK_PAGE_CLOSE(id, func)}
-        A page is about to be closed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE event.
+        A page is about to be closed. Processes a @c wxEVT_AUINOTEBOOK_PAGE_CLOSE event.
     @event{EVT_AUINOTEBOOK_PAGE_CLOSED(winid, fn)}
-        A page has been closed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED event.
+        A page has been closed. Processes a @c wxEVT_AUINOTEBOOK_PAGE_CLOSED event.
     @event{EVT_AUINOTEBOOK_PAGE_CHANGED(id, func)}
-        The page selection was changed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED event.
+        The page selection was changed. Processes a @c wxEVT_AUINOTEBOOK_PAGE_CHANGED event.
     @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
-        The page selection is about to be changed. Processes a  @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
+        The page selection is about to be changed. Processes a  @c wxEVT_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
     @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
-        The window list button has been pressed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_BUTTON event.
+        The window list button has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event.
     @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
-        Dragging is about to begin. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG event.
+        Dragging is about to begin. Processes a @c wxEVT_AUINOTEBOOK_BEGIN_DRAG event.
     @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}
-        Dragging has ended. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_END_DRAG event.
+        Dragging has ended. Processes a @c wxEVT_AUINOTEBOOK_END_DRAG event.
     @event{EVT_AUINOTEBOOK_DRAG_MOTION(id, func)}
-        Emitted during a drag and drop operation. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION event.
+        Emitted during a drag and drop operation. Processes a @c wxEVT_AUINOTEBOOK_DRAG_MOTION event.
     @event{EVT_AUINOTEBOOK_ALLOW_DND(id, func)}
-        Whether to allow a tab to be dropped. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND event. This event must be specially allowed.
+        Whether to allow a tab to be dropped. Processes a @c wxEVT_AUINOTEBOOK_ALLOW_DND event. This event must be specially allowed.
     @event{EVT_AUINOTEBOOK_DRAG_DONE(winid, fn)}
-        Notify that the tab has been dragged. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE event.
+        Notify that the tab has been dragged. Processes a @c wxEVT_AUINOTEBOOK_DRAG_DONE event.
     @event{EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN(winid, fn)}
-        The middle mouse button is pressed on a tab. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN event.
+        The middle mouse button is pressed on a tab. Processes a @c wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN event.
     @event{EVT_AUINOTEBOOK_TAB_MIDDLE_UP(winid, fn)}
-        The middle mouse button is released on a tab. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP event.
+        The middle mouse button is released on a tab. Processes a @c wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP event.
     @event{EVT_AUINOTEBOOK_TAB_RIGHT_DOWN(winid, fn)}
-        The right mouse button is pressed on a tab. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN event.
+        The right mouse button is pressed on a tab. Processes a @c wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN event.
     @event{EVT_AUINOTEBOOK_TAB_RIGHT_UP(winid, fn)}
-        The right mouse button is released on a tab. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP event.
+        The right mouse button is released on a tab. Processes a @c wxEVT_AUINOTEBOOK_TAB_RIGHT_UP event.
     @event{EVT_AUINOTEBOOK_BG_DCLICK(winid, fn)}
-        Double clicked on the tabs background area. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK event.
+        Double clicked on the tabs background area. Processes a @c wxEVT_AUINOTEBOOK_BG_DCLICK event.
     @endEventTable
 
     @library{wxaui}
@@ -602,35 +602,35 @@ public:
 
     @beginEventEmissionTable{wxAuiNotebookEvent}
     @event{EVT_AUINOTEBOOK_PAGE_CLOSE(id, func)}
-        A page is about to be closed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE event.
+        A page is about to be closed. Processes a @c wxEVT_AUINOTEBOOK_PAGE_CLOSE event.
     @event{EVT_AUINOTEBOOK_PAGE_CLOSED(winid, fn)}
-        A page has been closed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED event.
+        A page has been closed. Processes a @c wxEVT_AUINOTEBOOK_PAGE_CLOSED event.
     @event{EVT_AUINOTEBOOK_PAGE_CHANGED(id, func)}
-        The page selection was changed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED event.
+        The page selection was changed. Processes a @c wxEVT_AUINOTEBOOK_PAGE_CHANGED event.
     @event{EVT_AUINOTEBOOK_PAGE_CHANGING(id, func)}
-        The page selection is about to be changed. Processes a  @c wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
+        The page selection is about to be changed. Processes a  @c wxEVT_AUINOTEBOOK_PAGE_CHANGING event. This event can be vetoed.
     @event{EVT_AUINOTEBOOK_BUTTON(id, func)}
-        The window list button has been pressed. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_BUTTON event.
+        The window list button has been pressed. Processes a @c wxEVT_AUINOTEBOOK_BUTTON event.
     @event{EVT_AUINOTEBOOK_BEGIN_DRAG(id, func)}
-        Dragging is about to begin. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG event.
+        Dragging is about to begin. Processes a @c wxEVT_AUINOTEBOOK_BEGIN_DRAG event.
     @event{EVT_AUINOTEBOOK_END_DRAG(id, func)}
-        Dragging has ended. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_END_DRAG event.
+        Dragging has ended. Processes a @c wxEVT_AUINOTEBOOK_END_DRAG event.
     @event{EVT_AUINOTEBOOK_DRAG_MOTION(id, func)}
-        Emitted during a drag and drop operation. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION event.
+        Emitted during a drag and drop operation. Processes a @c wxEVT_AUINOTEBOOK_DRAG_MOTION event.
     @event{EVT_AUINOTEBOOK_ALLOW_DND(id, func)}
-        Whether to allow a tab to be dropped. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND event. This event must be specially allowed.
+        Whether to allow a tab to be dropped. Processes a @c wxEVT_AUINOTEBOOK_ALLOW_DND event. This event must be specially allowed.
     @event{EVT_AUINOTEBOOK_DRAG_DONE(winid, fn)}
-        Notify that the tab has been dragged. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE event.
+        Notify that the tab has been dragged. Processes a @c wxEVT_AUINOTEBOOK_DRAG_DONE event.
     @event{EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN(winid, fn)}
-        The middle mouse button is pressed on a tab. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN event.
+        The middle mouse button is pressed on a tab. Processes a @c wxEVT_AUINOTEBOOK_TAB_MIDDLE_DOWN event.
     @event{EVT_AUINOTEBOOK_TAB_MIDDLE_UP(winid, fn)}
-        The middle mouse button is released on a tab. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP event.
+        The middle mouse button is released on a tab. Processes a @c wxEVT_AUINOTEBOOK_TAB_MIDDLE_UP event.
     @event{EVT_AUINOTEBOOK_TAB_RIGHT_DOWN(winid, fn)}
-        The right mouse button is pressed on a tab. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN event.
+        The right mouse button is pressed on a tab. Processes a @c wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN event.
     @event{EVT_AUINOTEBOOK_TAB_RIGHT_UP(winid, fn)}
-        The right mouse button is released on a tab. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP event.
+        The right mouse button is released on a tab. Processes a @c wxEVT_AUINOTEBOOK_TAB_RIGHT_UP event.
     @event{EVT_AUINOTEBOOK_BG_DCLICK(winid, fn)}
-        Double clicked on the tabs background area. Processes a @c wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK event.
+        Double clicked on the tabs background area. Processes a @c wxEVT_AUINOTEBOOK_BG_DCLICK event.
     @endEventTable
 
     @library{wxaui}

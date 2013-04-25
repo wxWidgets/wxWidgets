@@ -128,7 +128,7 @@ bool wxSampleMultiButtonEditor::OnEvent( wxPropertyGrid* propGrid,
                                          wxWindow* ctrl,
                                          wxEvent& event ) const
 {
-    if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
+    if ( event.GetEventType() == wxEVT_BUTTON )
     {
         wxPGMultiButton* buttons = (wxPGMultiButton*) propGrid->GetEditorControlSecondary();
 

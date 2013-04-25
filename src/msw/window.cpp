@@ -5291,10 +5291,10 @@ bool wxWindowMSW::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
     // the messages sent from the in-place edit control used by the treectrl
     // for label editing have id == 0, but they should _not_ be treated as menu
     // messages (they are EN_XXX ones, in fact) so don't translate anything
-    // coming from a control to wxEVT_COMMAND_MENU_SELECTED
+    // coming from a control to wxEVT_MENU
     if ( !control )
     {
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id);
+        wxCommandEvent event(wxEVT_MENU, id);
         event.SetEventObject(this);
         event.SetInt(id);
 
@@ -5859,9 +5859,9 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
 
 bool wxWindowMSW::HandleClipboardEvent(WXUINT nMsg)
 {
-    const wxEventType type = nMsg == WM_CUT       ? wxEVT_COMMAND_TEXT_CUT
-                           : nMsg == WM_COPY      ? wxEVT_COMMAND_TEXT_COPY
-                           : /* nMsg == WM_PASTE */ wxEVT_COMMAND_TEXT_PASTE;
+    const wxEventType type = nMsg == WM_CUT       ? wxEVT_TEXT_CUT
+                           : nMsg == WM_COPY      ? wxEVT_TEXT_COPY
+                           : /* nMsg == WM_PASTE */ wxEVT_TEXT_PASTE;
     wxClipboardTextEvent evt(type, GetId());
 
     evt.SetEventObject(this);

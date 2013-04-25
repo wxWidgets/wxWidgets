@@ -719,7 +719,7 @@ bool wxRadioBox::OS2Command( WXUINT uCmd,
 void wxRadioBox::SendNotificationEvent()
 {
     wxCommandEvent vEvent(
-                       wxEVT_COMMAND_RADIOBOX_SELECTED,
+                       wxEVT_RADIOBOX,
                        m_windowId
                    );
 

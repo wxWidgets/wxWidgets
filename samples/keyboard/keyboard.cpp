@@ -225,30 +225,30 @@ MyFrame::MyFrame(const wxString& title)
 
     // connect menu event handlers
 
-    Connect(QuitID, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(QuitID, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnQuit));
 
-    Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(wxID_ABOUT, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnAbout));
 
-    Connect(ClearID, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(ClearID, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnClear));
 
-    Connect(SkipHook, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(SkipHook, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnSkipHook));
-    Connect(SkipDown, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(SkipDown, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnSkipDown));
 
-    Connect(IDInputCustom, IDInputText, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(IDInputCustom, IDInputText, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnInputWindowKind));
 
-    Connect(TestAccelA, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(TestAccelA, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnTestAccelA));
 
-    Connect(TestAccelCtrlA, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(TestAccelCtrlA, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnTestAccelCtrlA));
 
-    Connect(TestAccelEsc, wxEVT_COMMAND_MENU_SELECTED,
+    Connect(TestAccelEsc, wxEVT_MENU,
             wxCommandEventHandler(MyFrame::OnTestAccelEsc));
 
     // notice that we don't connect OnCharHook() to the input window, unlike

@@ -425,7 +425,7 @@ bool wxDialogBase::EmulateButtonClickIfPresent(int id)
     if ( !btn || !btn->IsEnabled() || !btn->IsShown() )
         return false;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, id);
+    wxCommandEvent event(wxEVT_BUTTON, id);
     event.SetEventObject(btn);
     btn->GetEventHandler()->ProcessEvent(event);
 

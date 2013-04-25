@@ -35,10 +35,10 @@ private:
     virtual wxBookCtrlBase *GetBase() const { return m_notebook; }
 
     virtual wxEventType GetChangedEvent() const
-    { return wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED; }
+    { return wxEVT_NOTEBOOK_PAGE_CHANGED; }
 
     virtual wxEventType GetChangingEvent() const
-    { return wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING; }
+    { return wxEVT_NOTEBOOK_PAGE_CHANGING; }
 
 
     CPPUNIT_TEST_SUITE( NotebookTestCase );

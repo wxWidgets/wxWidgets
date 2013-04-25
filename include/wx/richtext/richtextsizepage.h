@@ -157,10 +157,10 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_BOTTOM_UNITS
     void OnRichtextBottomUnitsUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXT_PARA_UP
+    /// wxEVT_BUTTON event handler for ID_RICHTEXT_PARA_UP
     void OnRichtextParaUpClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXT_PARA_DOWN
+    /// wxEVT_BUTTON event handler for ID_RICHTEXT_PARA_DOWN
     void OnRichtextParaDownClick( wxCommandEvent& event );
 
 ////@end wxRichTextSizePage event handler declarations

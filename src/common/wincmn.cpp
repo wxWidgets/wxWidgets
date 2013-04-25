@@ -2953,7 +2953,7 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 {
     gs_popupMenuSelection = wxID_NONE;
 
-    Connect(wxEVT_COMMAND_MENU_SELECTED,
+    Connect(wxEVT_MENU,
             wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
             NULL,
             this);
@@ -2976,7 +2976,7 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
                wxUpdateUIEventHandler(wxWindowBase::InternalOnPopupMenuUpdate),
                NULL,
                this);
-    Disconnect(wxEVT_COMMAND_MENU_SELECTED,
+    Disconnect(wxEVT_MENU,
                wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
                NULL,
                this);

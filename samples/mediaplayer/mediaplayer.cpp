@@ -471,7 +471,7 @@ bool wxMediaPlayerApp::OnInit()
         for ( size_t n = 0; n < m_params.size(); n++ )
             frame->AddToPlayList(m_params[n]);
 
-        wxCommandEvent theEvent(wxEVT_COMMAND_MENU_SELECTED, wxID_NEXT);
+        wxCommandEvent theEvent(wxEVT_MENU, wxID_NEXT);
         frame->AddPendingEvent(theEvent);
     }
 #endif // wxUSE_CMDLINE_PARSER
@@ -651,46 +651,46 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
     //
     // Menu events
     //
-    this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_EXIT, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnQuit));
 
-    this->Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_ABOUT, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnAbout));
 
-    this->Connect(wxID_LOOP, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_LOOP, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnLoop));
 
-    this->Connect(wxID_SHOWINTERFACE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_SHOWINTERFACE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnShowInterface));
 
-    this->Connect(wxID_OPENFILENEWPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_OPENFILENEWPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnOpenFileNewPage));
 
-    this->Connect(wxID_OPENFILESAMEPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_OPENFILESAMEPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnOpenFileSamePage));
 
-    this->Connect(wxID_OPENURLNEWPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_OPENURLNEWPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnOpenURLNewPage));
 
-    this->Connect(wxID_OPENURLSAMEPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_OPENURLSAMEPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnOpenURLSamePage));
 
-    this->Connect(wxID_CLOSECURRENTPAGE, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_CLOSECURRENTPAGE, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnCloseCurrentPage));
 
-    this->Connect(wxID_PLAY, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_PLAY, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnPlay));
 
-    this->Connect(wxID_STOP, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_STOP, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnStop));
 
-    this->Connect(wxID_NEXT, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_NEXT, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnNext));
 
-    this->Connect(wxID_PREV, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_PREV, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnPrev));
 
-    this->Connect(wxID_SELECTBACKEND, wxEVT_COMMAND_MENU_SELECTED,
+    this->Connect(wxID_SELECTBACKEND, wxEVT_MENU,
                   wxCommandEventHandler(wxMediaPlayerFrame::OnSelectBackend));
 
     //
@@ -1713,7 +1713,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     // ListCtrl events
     //
-    this->Connect( wxID_LISTCTRL, wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
+    this->Connect( wxID_LISTCTRL, wxEVT_LIST_ITEM_ACTIVATED,
         wxListEventHandler(wxMediaPlayerFrame::OnChangeSong),
         (wxObject*)0, parentFrame);
 
@@ -1747,22 +1747,22 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     // Button events
     //
-    this->Connect( wxID_BUTTONPREV, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONPREV, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnPrev),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONPLAY, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONPLAY, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnPlay),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONSTOP, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONSTOP, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnStop),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONNEXT, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONNEXT, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnNext),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONVD, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONVD, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnVolumeDown),
         (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONVU, wxEVT_COMMAND_BUTTON_CLICKED,
+    this->Connect( wxID_BUTTONVU, wxEVT_BUTTON,
         wxCommandEventHandler(wxMediaPlayerFrame::OnVolumeUp),
         (wxObject*)0, parentFrame);
 }

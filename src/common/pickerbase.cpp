@@ -92,7 +92,7 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
         // set the initial contents of the textctrl
         m_text->SetValue(text);
 
-        m_text->Connect(m_text->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
+        m_text->Connect(m_text->GetId(), wxEVT_TEXT,
                 wxCommandEventHandler(wxPickerBase::OnTextCtrlUpdate),
                 NULL, this);
         m_text->Connect(m_text->GetId(), wxEVT_KILL_FOCUS,

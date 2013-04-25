@@ -116,7 +116,7 @@ void wxCheckListBox::SetValueCallback( unsigned int n, wxListWidgetColumn* col ,
     {
         Check( n, value.IsChecked() );
 
-        wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId() );
+        wxCommandEvent event( wxEVT_CHECKLISTBOX, GetId() );
         event.SetInt( n );
         event.SetString( GetString( n ) );
         event.SetEventObject( this );

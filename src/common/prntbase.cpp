@@ -1112,7 +1112,7 @@ public:
 
         Connect(wxEVT_KILL_FOCUS,
                 wxFocusEventHandler(wxPrintPageTextCtrl::OnKillFocus));
-        Connect(wxEVT_COMMAND_TEXT_ENTER,
+        Connect(wxEVT_TEXT_ENTER,
                 wxCommandEventHandler(wxPrintPageTextCtrl::OnTextEnter));
     }
 

@@ -17,8 +17,8 @@
 #include "wx/dirdlg.h"
 
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_DIRPICKER_CHANGED, wxFileDirPickerEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRPICKER_CHANGED, wxFileDirPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FILEPICKER_CHANGED, wxFileDirPickerEvent );
 
 
 //-----------------------------------------------------------------------------
@@ -148,7 +148,7 @@ public:     // overridable
     virtual wxDialog *CreateDialog();
 
     wxEventType GetEventType() const
-        { return wxEVT_COMMAND_FILEPICKER_CHANGED; }
+        { return wxEVT_FILEPICKER_CHANGED; }
 
 protected:
     void UpdateDialogPath(wxDialog *p)
@@ -203,7 +203,7 @@ public:     // overridable
     virtual wxDialog *CreateDialog();
 
     wxEventType GetEventType() const
-        { return wxEVT_COMMAND_DIRPICKER_CHANGED; }
+        { return wxEVT_DIRPICKER_CHANGED; }
 
 protected:
     void UpdateDialogPath(wxDialog *p)
@@ -215,5 +215,8 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericDirButton)
 };
 
+// old wxEVT_COMMAND_* constants
+//#define wxEVT_COMMAND_DIRPICKER_CHANGED wxEVT_DIRPICKER_CHANGED
+//#define wxEVT_COMMAND_FILEPICKER_CHANGED wxEVT_FILEPICKER_CHANGED
 
 #endif // _WX_FILEDIRPICKER_H_

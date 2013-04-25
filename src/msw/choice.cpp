@@ -784,7 +784,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             {
                 // This can only happen in the case (B), so set the item
                 // selected in the drop down as our real selection.
-                SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
+                SendSelectionChangedEvent(wxEVT_CHOICE);
                 m_pendingSelection = wxID_NONE;
             }
             break;
@@ -795,7 +795,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             m_lastAcceptedSelection =
             m_pendingSelection = wxID_NONE;
 
-            SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
+            SendSelectionChangedEvent(wxEVT_CHOICE);
             break;
 
         case CBN_SELCHANGE:

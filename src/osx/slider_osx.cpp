@@ -299,7 +299,7 @@ void wxSlider::TriggerScrollEvent( wxEventType scrollEvent)
     event.SetEventObject( this );
     HandleWindowEvent( event );
 
-    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, m_windowId );
+    wxCommandEvent cevent( wxEVT_SLIDER, m_windowId );
     cevent.SetInt( value );
     cevent.SetEventObject( this );
     HandleWindowEvent( cevent );

@@ -81,7 +81,7 @@ BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
     EVT_MENU(Menu_Quit, OwnerDrawnFrame::OnQuit)
     EVT_LISTBOX(Control_Listbox, OwnerDrawnFrame::OnListboxSelect)
     EVT_CHECKLISTBOX(Control_Listbox, OwnerDrawnFrame::OnCheckboxToggle)
-    EVT_COMMAND(Control_Listbox, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
+    EVT_COMMAND(Control_Listbox, wxEVT_LISTBOX_DCLICK,
                 OwnerDrawnFrame::OnListboxDblClick)
 END_EVENT_TABLE()
 

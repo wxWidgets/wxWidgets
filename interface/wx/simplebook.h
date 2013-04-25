@@ -27,8 +27,8 @@
     appearance of its own.
 
     There are also no special events, this class reuses
-    @c wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING and @c
-    wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED events for the events it generates if
+    @c wxEVT_BOOKCTRL_PAGE_CHANGING and @c
+    wxEVT_BOOKCTRL_PAGE_CHANGED events for the events it generates if
     the program calls SetSelection().
 
     @library{none}

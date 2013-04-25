@@ -994,7 +994,7 @@ void wxPropertyGrid::DoBeginLabelEdit( unsigned int colIndex,
                                           colIndex);
 
     wxWindowID id = tc->GetId();
-    tc->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
+    tc->Connect(id, wxEVT_TEXT_ENTER,
         wxCommandEventHandler(wxPropertyGrid::OnLabelEditorEnterPress),
         NULL, this);
     tc->Connect(id, wxEVT_KEY_DOWN,
@@ -3560,7 +3560,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     //
     // Filter out excess wxTextCtrl modified events
-    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED && wnd )
+    if ( event.GetEventType() == wxEVT_TEXT && wnd )
     {
         if ( wxDynamicCast(wnd, wxTextCtrl) )
         {
@@ -3596,7 +3596,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     //
     // Try common button handling
-    if ( m_wndEditor2 && event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
+    if ( m_wndEditor2 && event.GetEventType() == wxEVT_BUTTON )
     {
         wxPGEditorDialogAdapter* adapter = selected->GetEditorDialog();
 
@@ -3604,7 +3604,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
         {
             buttonWasHandled = true;
             // Store as res2, as previously (and still currently alternatively)
-            // dialogs can be shown by handling wxEVT_COMMAND_BUTTON_CLICKED
+            // dialogs can be shown by handling wxEVT_BUTTON
             // in wxPGProperty::OnEvent().
             adapter->ShowDialog( this, selected );
             delete adapter;
@@ -3676,7 +3676,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
         // Regardless of editor type, unfocus editor on
         // text-editing related enter press.
-        if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+        if ( event.GetEventType() == wxEVT_TEXT_ENTER )
         {
             SetFocusOnCanvas();
         }
@@ -3687,16 +3687,16 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
         // Regardless of editor type, unfocus editor on
         // text-editing related enter press.
-        if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+        if ( event.GetEventType() == wxEVT_TEXT_ENTER )
         {
             SetFocusOnCanvas();
         }
 
         // Let unhandled button click events go to the parent
-        if ( !buttonWasHandled && event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
+        if ( !buttonWasHandled && event.GetEventType() == wxEVT_BUTTON )
         {
             result = true;
-            wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED,GetId());
+            wxCommandEvent evt(wxEVT_BUTTON,GetId());
             GetEventHandler()->AddPendingEvent(evt);
         }
     }
@@ -3891,7 +3891,7 @@ private:
         // NB: On wxMSW, a wxTextCtrl with wxTE_PROCESS_ENTER
         //     may beep annoyingly if that event is skipped
         //     and passed to parent event handler.
-        if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+        if ( event.GetEventType() == wxEVT_TEXT_ENTER )
             return true;
 
         return wxEvtHandler::ProcessEvent(event);
@@ -5774,7 +5774,7 @@ bool wxPropertyGrid::ButtonTriggerKeyTest( int action, wxKeyEvent& event )
     if ( action == wxPG_ACTION_PRESS_BUTTON &&
          m_wndEditor2 )
     {
-        wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, m_wndEditor2->GetId());
+        wxCommandEvent evt(wxEVT_BUTTON, m_wndEditor2->GetId());
         GetEventHandler()->AddPendingEvent(evt);
         return true;
     }

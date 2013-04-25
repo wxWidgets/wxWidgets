@@ -560,9 +560,9 @@ private:
 
 class WXDLLIMPEXP_FWD_HTML wxHtmlCellEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_COMMAND_HTML_CELL_CLICKED, wxHtmlCellEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_COMMAND_HTML_CELL_HOVER, wxHtmlCellEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_HTML_CELL_CLICKED, wxHtmlCellEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_HTML_CELL_HOVER, wxHtmlCellEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_HTML_LINK_CLICKED, wxHtmlLinkEvent );
 
 
 /*!
@@ -615,7 +615,7 @@ class WXDLLIMPEXP_HTML wxHtmlLinkEvent : public wxCommandEvent
 public:
     wxHtmlLinkEvent() {}
     wxHtmlLinkEvent(int id, const wxHtmlLinkInfo &linkinfo)
-        : wxCommandEvent(wxEVT_COMMAND_HTML_LINK_CLICKED, id)
+        : wxCommandEvent(wxEVT_HTML_LINK_CLICKED, id)
     {
         m_linkInfo = linkinfo;
     }
@@ -641,12 +641,17 @@ typedef void (wxEvtHandler::*wxHtmlLinkEventFunction)(wxHtmlLinkEvent&);
     wxEVENT_HANDLER_CAST(wxHtmlLinkEventFunction, func)
 
 #define EVT_HTML_CELL_CLICKED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_HTML_CELL_CLICKED, id, wxHtmlCellEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_HTML_CELL_CLICKED, id, wxHtmlCellEventHandler(fn))
 #define EVT_HTML_CELL_HOVER(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_HTML_CELL_HOVER, id, wxHtmlCellEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_HTML_CELL_HOVER, id, wxHtmlCellEventHandler(fn))
 #define EVT_HTML_LINK_CLICKED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_HTML_LINK_CLICKED, id, wxHtmlLinkEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_HTML_LINK_CLICKED, id, wxHtmlLinkEventHandler(fn))
 
+
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_HTML_CELL_CLICKED   wxEVT_HTML_CELL_CLICKED
+#define wxEVT_COMMAND_HTML_CELL_HOVER     wxEVT_HTML_CELL_HOVER
+#define wxEVT_COMMAND_HTML_LINK_CLICKED   wxEVT_HTML_LINK_CLICKED
 
 #endif // wxUSE_HTML
 

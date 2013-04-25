@@ -36,7 +36,7 @@ wxgtk_button_clicked_callback(GtkWidget *WXUNUSED(widget), wxButton *button)
     if ( button->GTKShouldIgnoreEvent() )
         return;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
+    wxCommandEvent event(wxEVT_BUTTON, button->GetId());
     event.SetEventObject(button);
     button->HandleWindowEvent(event);
 }

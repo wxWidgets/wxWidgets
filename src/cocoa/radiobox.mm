@@ -268,7 +268,7 @@ wxSize wxRadioBox::DoGetBestSize() const
 
 void wxRadioBox::CocoaTarget_action(void)
 {
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_RADIOBOX, GetId());
     InitCommandEvent(event);
     event.SetInt(GetSelection()); // i.e. SetSelection.
     Command(event);

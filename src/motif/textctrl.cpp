@@ -470,7 +470,7 @@ void wxTextCtrl::DoSendEvents(void *wxcbs, long keycode)
     if ( !InSetValue() && m_processedDefault )
     {
         // Can generate a command
-        wxCommandEvent commandEvent(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+        wxCommandEvent commandEvent(wxEVT_TEXT, GetId());
         commandEvent.SetEventObject(this);
         ProcessCommand(commandEvent);
     }
@@ -687,7 +687,7 @@ static void wxTextWindowActivateProc(Widget w, XtPointer clientData,
     if (tw->InSetValue())
         return;
 
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER);
+    wxCommandEvent event(wxEVT_TEXT_ENTER);
     event.SetId(tw->GetId());
     event.SetEventObject(tw);
     tw->ProcessCommand(event);

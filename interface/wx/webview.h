@@ -244,9 +244,9 @@ public:
     immediately and perform their work in the background. This includes
     functions such as LoadURL() and Reload(). To receive notification of the
     progress and completion of these functions you need to handle the events
-    that are provided. Specifically @c wxEVT_COMMAND_WEBVIEW_LOADED notifies
+    that are provided. Specifically @c wxEVT_WEBVIEW_LOADED notifies
     when the page or a sub-frame has finished loading and
-    @c wxEVT_COMMAND_WEBVIEW_ERROR notifies that an error has occurred.
+    @c wxEVT_WEBVIEW_ERROR notifies that an error has occurred.
 
     @section vfs Virtual File Systems and Custom Schemes
 
@@ -266,31 +266,31 @@ public:
 
     @beginEventEmissionTable{wxWebViewEvent}
     @event{EVT_WEBVIEW_NAVIGATING(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_NAVIGATING event, generated before trying
+       Process a @c wxEVT_WEBVIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
        resource. Note that if the displayed HTML document has several frames, one
        such event will be generated per frame.
     @event{EVT_WEBVIEW_NAVIGATED(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_NAVIGATED event generated after it was
+       Process a @c wxEVT_WEBVIEW_NAVIGATED event generated after it was
        confirmed that a resource would be requested. This event may not be vetoed.
        Note that if the displayed HTML document has several frames, one such event
        will be generated per frame.
     @event{EVT_WEBVIEW_LOADED(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_LOADED event generated when the document
+       Process a @c wxEVT_WEBVIEW_LOADED event generated when the document
        is fully loaded and displayed. Note that if the displayed HTML document has
        several frames, one such event will be generated per frame.
     @event{EVT_WEBVIEW_ERROR(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_ERROR event generated when a navigation
+       Process a @c wxEVT_WEBVIEW_ERROR event generated when a navigation
        error occurs.
        The integer associated with this event will be a wxWebNavigationError item.
        The string associated with this event may contain a backend-specific more
        precise error message/code.
     @event{EVT_WEBVIEW_NEWWINDOW(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_NEWWINDOW event, generated when a new
+       Process a @c wxEVT_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab.
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED event, generated when
+       Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
     @endEventTable
 
@@ -738,31 +738,31 @@ public:
 
     @beginEventEmissionTable{wxWebViewEvent}
     @event{EVT_WEBVIEW_NAVIGATING(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_NAVIGATING event, generated before trying
+       Process a @c wxEVT_WEBVIEW_NAVIGATING event, generated before trying
        to get a resource. This event may be vetoed to prevent navigating to this
        resource. Note that if the displayed HTML document has several frames, one
        such event will be generated per frame.
     @event{EVT_WEBVIEW_NAVIGATED(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_NAVIGATED event generated after it was
+       Process a @c wxEVT_WEBVIEW_NAVIGATED event generated after it was
        confirmed that a resource would be requested. This event may not be vetoed.
        Note that if the displayed HTML document has several frames, one such event
        will be generated per frame.
     @event{EVT_WEBVIEW_LOADED(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_LOADED event generated when the document
+       Process a @c wxEVT_WEBVIEW_LOADED event generated when the document
        is fully loaded and displayed. Note that if the displayed HTML document has
        several frames, one such event will be generated per frame.
     @event{EVT_WEBVIEW_ERROR(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_ERROR event generated when a navigation
+       Process a @c wxEVT_WEBVIEW_ERROR event generated when a navigation
        error occurs.
        The integer associated with this event will be a wxWebNavigationError item.
        The string associated with this event may contain a backend-specific more
        precise error message/code.
     @event{EVT_WEBVIEW_NEWWINDOW(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_NEWWINDOW event, generated when a new
+       Process a @c wxEVT_WEBVIEW_NEWWINDOW event, generated when a new
        window is created. You must handle this event if you want anything to
        happen, for example to load the page in a new window or tab.
     @event{EVT_WEBVIEW_TITLE_CHANGED(id, func)}
-       Process a @c wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED event, generated when
+       Process a @c wxEVT_WEBVIEW_TITLE_CHANGED event, generated when
        the page title changes. Use GetString to get the title.
     @endEventTable
 
@@ -793,9 +793,9 @@ public:
 };
 
 
-wxEventType wxEVT_COMMAND_WEBVIEW_NAVIGATING;
-wxEventType wxEVT_COMMAND_WEBVIEW_NAVIGATED;
-wxEventType wxEVT_COMMAND_WEBVIEW_LOADED;
-wxEventType wxEVT_COMMAND_WEBVIEW_ERROR;
-wxEventType wxEVT_COMMAND_WEBVIEW_NEWWINDOW;
-wxEventType wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED;
+wxEventType wxEVT_WEBVIEW_NAVIGATING;
+wxEventType wxEVT_WEBVIEW_NAVIGATED;
+wxEventType wxEVT_WEBVIEW_LOADED;
+wxEventType wxEVT_WEBVIEW_ERROR;
+wxEventType wxEVT_WEBVIEW_NEWWINDOW;
+wxEventType wxEVT_WEBVIEW_TITLE_CHANGED;

@@ -630,7 +630,7 @@ bool wxSpinCtrl::SetBase(int base)
 
 void wxSpinCtrl::DoSendEvent()
 {
-    wxSpinEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
+    wxSpinEvent event( wxEVT_SPINCTRL, GetId());
     event.SetEventObject( this );
     event.SetPosition((int)(m_value + 0.5)); // FIXME should be SetValue
     event.SetString(m_textCtrl->GetValue());
@@ -675,7 +675,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrlDouble, wxSpinCtrlGenericBase)
 
 void wxSpinCtrlDouble::DoSendEvent()
 {
-    wxSpinDoubleEvent event( wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, GetId());
+    wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, GetId());
     event.SetEventObject( this );
     event.SetValue(m_value);
     event.SetString(m_textCtrl->GetValue());

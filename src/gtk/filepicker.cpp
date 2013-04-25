@@ -86,7 +86,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         // we need to know when the dialog has been dismissed clicking OK...
         // NOTE: the "clicked" signal is not available for a GtkFileChooserButton
         //       thus we are forced to use wxFileDialog's event
-        m_dialog->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+        m_dialog->Connect(wxEVT_BUTTON,
                 wxCommandEventHandler(wxFileButton::OnDialogOK),
                 NULL, this);
 
@@ -115,7 +115,7 @@ void wxFileButton::OnDialogOK(wxCommandEvent& ev)
         UpdatePathFromDialog(m_dialog);
 
         // ...and fire an event
-        wxFileDirPickerEvent event(wxEVT_COMMAND_FILEPICKER_CHANGED, this, GetId(), m_path);
+        wxFileDirPickerEvent event(wxEVT_FILEPICKER_CHANGED, this, GetId(), m_path);
         HandleWindowEvent(event);
     }
 }
@@ -183,7 +183,7 @@ static void gtk_dirbutton_currentfolderchanged_callback(GtkFileChooserButton *wi
         chdir(filename);
 
     // ...and fire an event
-    wxFileDirPickerEvent event(wxEVT_COMMAND_DIRPICKER_CHANGED, p, p->GetId(), p->GetPath());
+    wxFileDirPickerEvent event(wxEVT_DIRPICKER_CHANGED, p, p->GetId(), p->GetPath());
     p->HandleWindowEvent(event);
 }
 }

@@ -175,14 +175,14 @@ private:
 // wxFontPickerEvent: used by wxFontPickerCtrl only
 // ----------------------------------------------------------------------------
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FONTPICKER_CHANGED, wxFontPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FONTPICKER_CHANGED, wxFontPickerEvent );
 
 class WXDLLIMPEXP_CORE wxFontPickerEvent : public wxCommandEvent
 {
 public:
     wxFontPickerEvent() {}
     wxFontPickerEvent(wxObject *generator, int id, const wxFont &f)
-        : wxCommandEvent(wxEVT_COMMAND_FONTPICKER_CHANGED, id),
+        : wxCommandEvent(wxEVT_FONTPICKER_CHANGED, id),
           m_font(f)
     {
         SetEventObject(generator);
@@ -210,7 +210,10 @@ typedef void (wxEvtHandler::*wxFontPickerEventFunction)(wxFontPickerEvent&);
     wxEVENT_HANDLER_CAST(wxFontPickerEventFunction, func)
 
 #define EVT_FONTPICKER_CHANGED(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_FONTPICKER_CHANGED, id, wxFontPickerEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_FONTPICKER_CHANGED, id, wxFontPickerEventHandler(fn))
+
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_FONTPICKER_CHANGED   wxEVT_FONTPICKER_CHANGED
 
 
 #endif // wxUSE_FONTPICKERCTRL

@@ -92,7 +92,7 @@ public:
         : wxButton(parent, BUTTON_ID, label)
     {
         // Add a dynamic handler for this button event to button itself
-        Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+        Connect(wxEVT_BUTTON,
                 wxCommandEventHandler(MyEvtTestButton::OnClickDynamicHandler));
     }
 
@@ -304,7 +304,7 @@ bool MyApp::OnInit()
     frame->Show(true);
 
     // Add a dynamic handler at the application level for the test button
-    Connect(MyEvtTestButton::BUTTON_ID, wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(MyEvtTestButton::BUTTON_ID, wxEVT_BUTTON,
             wxCommandEventHandler(MyApp::OnClickDynamicHandlerApp));
 
     // success: wxApp::OnRun() will be called which will enter the main message
@@ -316,7 +316,7 @@ bool MyApp::OnInit()
 // This is always the first to handle an event !
 int MyApp::FilterEvent(wxEvent& event)
 {
-    if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED &&
+    if ( event.GetEventType() == wxEVT_BUTTON &&
             event.GetId() == MyEvtTestButton::BUTTON_ID )
     {
         wxLogMessage("Step 0 in \"How Events are Processed\":\n"
@@ -424,12 +424,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // event handlers (see class definition);
 
     // Add a dynamic handler for this button event in the parent frame
-    Connect(m_testBtn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+    Connect(m_testBtn->GetId(), wxEVT_BUTTON,
             wxCommandEventHandler(MyFrame::OnClickDynamicHandlerFrame));
 
     // Bind a method of this frame (notice "this" argument!) to the button
     // itself
-    m_testBtn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+    m_testBtn->Connect(wxEVT_BUTTON,
                        wxCommandEventHandler(MyFrame::OnClickDynamicHandlerButton),
                        NULL,
                        this);
@@ -520,19 +520,19 @@ void MyFrame::OnBind(wxCommandEvent& event)
     {
         // as we bind directly to the button, there is no need to use an id
         // here: the button will only ever get its own events
-        m_btnDynamic->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MyFrame::OnDynamic,
+        m_btnDynamic->Bind(wxEVT_BUTTON, &MyFrame::OnDynamic,
                            this);
 
         // but we do need the id for the menu command as the frame gets all of
         // them
-        Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnDynamic, this,
+        Bind(wxEVT_MENU, &MyFrame::OnDynamic, this,
              Event_Dynamic);
     }
     else // disconnect
     {
-        m_btnDynamic->Unbind(wxEVT_COMMAND_BUTTON_CLICKED,
+        m_btnDynamic->Unbind(wxEVT_BUTTON,
                              &MyFrame::OnDynamic, this);
-        Unbind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnDynamic, this,
+        Unbind(wxEVT_MENU, &MyFrame::OnDynamic, this,
                Event_Dynamic);
     }
 
@@ -545,18 +545,18 @@ void MyFrame::OnConnect(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
     {
-        m_btnDynamic->Connect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,
+        m_btnDynamic->Connect(wxID_ANY, wxEVT_BUTTON,
                               wxCommandEventHandler(MyFrame::OnDynamic),
                               NULL, this);
-        Connect(Event_Dynamic, wxEVT_COMMAND_MENU_SELECTED,
+        Connect(Event_Dynamic, wxEVT_MENU,
                 wxCommandEventHandler(MyFrame::OnDynamic));
     }
     else // disconnect
     {
-        m_btnDynamic->Disconnect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,
+        m_btnDynamic->Disconnect(wxID_ANY, wxEVT_BUTTON,
                                  wxCommandEventHandler(MyFrame::OnDynamic),
                                  NULL, this);
-        Disconnect(Event_Dynamic, wxEVT_COMMAND_MENU_SELECTED,
+        Disconnect(Event_Dynamic, wxEVT_MENU,
                    wxCommandEventHandler(MyFrame::OnDynamic));
     }
 

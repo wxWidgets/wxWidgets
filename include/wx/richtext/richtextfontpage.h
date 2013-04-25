@@ -88,10 +88,10 @@ public:
     /// wxEVT_IDLE event handler for ID_RICHTEXTFONTPAGE
     void OnIdle( wxIdleEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTFONTPAGE_FACETEXTCTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTFONTPAGE_FACETEXTCTRL
     void OnFaceTextCtrlUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTFONTPAGE_SIZETEXTCTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTFONTPAGE_SIZETEXTCTRL
     void OnSizeTextCtrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_SCROLL_LINEUP event handler for ID_RICHTEXTFONTPAGE_SPINBUTTONS
@@ -100,31 +100,31 @@ public:
     /// wxEVT_SCROLL_LINEDOWN event handler for ID_RICHTEXTFONTPAGE_SPINBUTTONS
     void OnRichtextfontpageSpinbuttonsDown( wxSpinEvent& event );
 
-    /// wxEVT_COMMAND_CHOICE_SELECTED event handler for ID_RICHTEXTFONTPAGE_SIZE_UNITS
+    /// wxEVT_CHOICE event handler for ID_RICHTEXTFONTPAGE_SIZE_UNITS
     void OnRichtextfontpageSizeUnitsSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_SIZELISTBOX
+    /// wxEVT_LISTBOX event handler for ID_RICHTEXTFONTPAGE_SIZELISTBOX
     void OnSizeListBoxSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_STYLECTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_STYLECTRL
     void OnStyleCtrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_WEIGHTCTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_WEIGHTCTRL
     void OnWeightCtrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL
     void OnUnderliningCtrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL
     void OnStrikethroughctrlClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
     void OnCapsctrlClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_SUPERSCRIPT
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_SUPERSCRIPT
     void OnRichtextfontpageSuperscriptClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_SUBSCRIPT
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_SUBSCRIPT
     void OnRichtextfontpageSubscriptClick( wxCommandEvent& event );
 
 ////@end wxRichTextFontPage event handler declarations

@@ -78,40 +78,40 @@ public:
 
 ////@begin wxRichTextIndentsSpacingPage event handler declarations
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_LEFT
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_LEFT
     void OnAlignmentLeftSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_RIGHT
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_RIGHT
     void OnAlignmentRightSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_JUSTIFIED
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_JUSTIFIED
     void OnAlignmentJustifiedSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_CENTRED
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_CENTRED
     void OnAlignmentCentredSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_RADIOBUTTON_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_INDETERMINATE
+    /// wxEVT_RADIOBUTTON event handler for ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_INDETERMINATE
     void OnAlignmentIndeterminateSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT
+    /// wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT
     void OnIndentLeftUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST
+    /// wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST
     void OnIndentLeftFirstUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT
+    /// wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT
     void OnIndentRightUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL
     void OnRichtextOutlinelevelSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE
+    /// wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE
     void OnSpacingBeforeUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER
+    /// wxEVT_TEXT event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER
     void OnSpacingAfterUpdated( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE
     void OnSpacingLineSelected( wxCommandEvent& event );
 
 ////@end wxRichTextIndentsSpacingPage event handler declarations

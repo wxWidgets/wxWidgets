@@ -107,7 +107,7 @@ void SpinCtrlTestCase::NoEventsInCtor()
     delete m_spin;
     m_spin = new wxSpinCtrl;
 
-    EventCounter updated(m_spin, wxEVT_COMMAND_SPINCTRL_UPDATED);
+    EventCounter updated(m_spin, wxEVT_SPINCTRL);
 
     m_spin->Create(parent, wxID_ANY, "",
                    wxDefaultPosition, wxDefaultSize, 0,
@@ -119,7 +119,7 @@ void SpinCtrlTestCase::NoEventsInCtor()
 void SpinCtrlTestCase::Arrows()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    EventCounter updated(m_spin, wxEVT_COMMAND_SPINCTRL_UPDATED);
+    EventCounter updated(m_spin, wxEVT_SPINCTRL);
 
     wxUIActionSimulator sim;
 
@@ -177,7 +177,7 @@ void SpinCtrlTestCase::Range()
     // that this doesn't result in any events (as this is not something done by
     // the user).
     {
-        EventCounter updated(m_spin, wxEVT_COMMAND_SPINCTRL_UPDATED);
+        EventCounter updated(m_spin, wxEVT_SPINCTRL);
 
         m_spin->SetRange(1, 10);
         CPPUNIT_ASSERT_EQUAL(1, m_spin->GetValue());

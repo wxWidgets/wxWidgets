@@ -237,7 +237,7 @@ void wxVListBoxComboPopup::DismissWithEvent()
 
 void wxVListBoxComboPopup::SendComboBoxEvent( int selection )
 {
-    wxCommandEvent evt(wxEVT_COMMAND_COMBOBOX_SELECTED,m_combo->GetId());
+    wxCommandEvent evt(wxEVT_COMBOBOX,m_combo->GetId());
 
     evt.SetEventObject(m_combo);
 

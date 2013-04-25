@@ -59,7 +59,7 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
         }
 
         webKitCtrl->m_busy = false;
-        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_LOADED,
+        wxWebViewEvent event(wxEVT_WEBVIEW_LOADED,
                              webKitCtrl->GetId(),
                              url, target);
 
@@ -69,7 +69,7 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
     else if (status ==  WEBKIT_LOAD_COMMITTED)
     {
         webKitCtrl->m_busy = true;
-        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED,
+        wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATED,
                              webKitCtrl->GetId(),
                              url, target);
 
@@ -101,7 +101,7 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
     const gchar* uri = webkit_network_request_get_uri(request);
 
     wxString target = webkit_web_frame_get_name (frame);
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATING,
+    wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
                          webKitCtrl->GetId(),
                          wxString( uri, wxConvUTF8 ),
                          target);
@@ -274,7 +274,7 @@ wxgtk_webview_webkit_error(WebKitWebView*,
     }
     */
 
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR,
+    wxWebViewEvent event(wxEVT_WEBVIEW_ERROR,
                          webKitWindow->GetId(),
                          uri, "");
     event.SetString(description);
@@ -299,7 +299,7 @@ wxgtk_webview_webkit_new_window(WebKitWebView*,
     const gchar* uri = webkit_network_request_get_uri(request);
 
     wxString target = webkit_web_frame_get_name (frame);
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NEWWINDOW,
+    wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
                                        webKitCtrl->GetId(),
                                        wxString( uri, wxConvUTF8 ),
                                        target);
@@ -318,7 +318,7 @@ wxgtk_webview_webkit_title_changed(WebKitWebView*,
                                    gchar *title,
                                    wxWebViewWebKit *webKitCtrl)
 {
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_TITLE_CHANGED,
+    wxWebViewEvent event(wxEVT_WEBVIEW_TITLE_CHANGED,
                          webKitCtrl->GetId(),
                          webKitCtrl->GetCurrentURL(),
                          "");

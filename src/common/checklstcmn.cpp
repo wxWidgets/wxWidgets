@@ -87,7 +87,7 @@ wxEND_FLAGS( wxCheckListBoxStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckListBox, wxListBox, "wx/checklst.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxCheckListBox)
-    wxEVENT_PROPERTY( Toggle, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEvent )
+    wxEVENT_PROPERTY( Toggle, wxEVT_CHECKLISTBOX, wxCommandEvent )
     wxPROPERTY_FLAGS( WindowStyle, wxCheckListBoxStyle, long, SetWindowStyleFlag, \
                       GetWindowStyleFlag, wxEMPTY_PARAMETER_VALUE, wxLB_OWNERDRAW /*flags*/, \
                       wxT("Helpstring"), wxT("group")) // style

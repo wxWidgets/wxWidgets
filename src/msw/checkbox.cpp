@@ -261,7 +261,7 @@ bool wxCheckBox::MSWCommand(WXUINT cmd, WXWORD WXUNUSED(id))
 
 
     // generate the event
-    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId);
+    wxCommandEvent event(wxEVT_CHECKBOX, m_windowId);
 
     event.SetInt(state);
     event.SetEventObject(this);

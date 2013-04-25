@@ -49,7 +49,7 @@ ObjrefDialog::ObjrefDialog(wxWindow* parent)
     wxCHECK_RET(nb, "failed to find objref_notebook");
 
     // Connect different event handlers.
-    nb->Connect(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+    nb->Connect(wxEVT_NOTEBOOK_PAGE_CHANGED,
                 wxNotebookEventHandler(ObjrefDialog::OnNotebookPageChanged),
                 NULL, this);
 
@@ -74,11 +74,11 @@ ObjrefDialog::ObjrefDialog(wxWindow* parent)
     // Connect the id ranges, using the [start] and [end] 'typedefs'
     page = nb->GetPage(calc_page);
     page->Connect(XRCID("digits[start]"), XRCID("digits[end]"),
-                  wxEVT_COMMAND_BUTTON_CLICKED,
+                  wxEVT_BUTTON,
                   wxCommandEventHandler(ObjrefDialog::OnNumeralClick),
                   NULL, this);
     page->Connect(XRCID("operators[start]"), XRCID("operators[end]"),
-                  wxEVT_COMMAND_BUTTON_CLICKED,
+                  wxEVT_BUTTON,
                   wxCommandEventHandler(ObjrefDialog::OnOperatorClick),
                   NULL, this);
 

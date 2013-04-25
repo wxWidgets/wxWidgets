@@ -65,7 +65,7 @@ void CheckListBoxTestCase::tearDown()
 
 void CheckListBoxTestCase::Check()
 {
-    EventCounter toggled(m_check, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED);
+    EventCounter toggled(m_check, wxEVT_CHECKLISTBOX);
 
     wxArrayInt checkedItems;
     wxArrayString testitems;

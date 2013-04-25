@@ -159,13 +159,13 @@ void wxRadioButtonCallback (Widget WXUNUSED(w), XtPointer clientData,
 
     if ( old )
     {
-        wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED,
+        wxCommandEvent event(wxEVT_RADIOBUTTON,
                              old->GetId() );
         event.SetEventObject(old);
         event.SetInt( false );
         old->ProcessCommand(event);
     }
-    wxCommandEvent event2(wxEVT_COMMAND_RADIOBUTTON_SELECTED, item->GetId() );
+    wxCommandEvent event2(wxEVT_RADIOBUTTON, item->GetId() );
     event2.SetEventObject(item);
     event2.SetInt( true );
     item->ProcessCommand(event2);

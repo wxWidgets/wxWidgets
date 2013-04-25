@@ -330,7 +330,7 @@ struct wxComboCtrlFeatures
     @style{wxCB_SORT}
            Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls). Windows
            only.
@@ -345,15 +345,15 @@ struct wxComboCtrlFeatures
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}
-           Process a @c wxEVT_COMMAND_TEXT_UPDATED event, when the text changes.
+           Process a @c wxEVT_TEXT event, when the text changes.
     @event{EVT_TEXT_ENTER(id, func)}
-           Process a @c wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
+           Process a @c wxEVT_TEXT_ENTER event, when RETURN is pressed in
            the combo control.
     @event{EVT_COMBOBOX_DROPDOWN(id, func)}
-           Process a @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event, which is generated
+           Process a @c wxEVT_COMBOBOX_DROPDOWN event, which is generated
            when the popup window is shown (drops down).
     @event{EVT_COMBOBOX_CLOSEUP(id, func)}
-           Process a @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
+           Process a @c wxEVT_COMBOBOX_CLOSEUP event, which is generated
            when the popup window of the combo control disappears (closes up).
            You should avoid adding or deleting items in this event.
     @endEventTable
@@ -438,7 +438,7 @@ public:
         Dismisses the popup window.
 
         Notice that calling this function will generate a
-        @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+        @c wxEVT_COMBOBOX_CLOSEUP event.
 
         @since 2.9.2
     */
@@ -609,7 +609,7 @@ public:
 
         @param generateEvent
             Set this to @true in order to generate
-            @c wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
+            @c wxEVT_COMBOBOX_CLOSEUP event.
 
         @deprecated Use Dismiss() instead.
     */
@@ -652,7 +652,7 @@ public:
         Shows the popup portion of the combo control.
 
         Notice that calling this function will generate a
-        @c wxEVT_COMMAND_COMBOBOX_DROPDOWN event.
+        @c wxEVT_COMBOBOX_DROPDOWN event.
 
         @since 2.9.2
     */

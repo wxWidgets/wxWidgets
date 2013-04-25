@@ -15,8 +15,8 @@
 #define wxCHB_RIGHT            wxBK_RIGHT
 #define wxCHB_ALIGN_MASK       wxBK_ALIGN_MASK
 
-wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED;
-wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING;
+wxEventType wxEVT_CHOICEBOOK_PAGE_CHANGED;
+wxEventType wxEVT_CHOICEBOOK_PAGE_CHANGING;
 
 /**
     @class wxChoicebook
@@ -50,10 +50,10 @@ wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING;
     @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_CHOICEBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
-        Processes a @c wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED event.
+        Processes a @c wxEVT_CHOICEBOOK_PAGE_CHANGED event.
     @event{EVT_CHOICEBOOK_PAGE_CHANGING(id, func)}
         The page selection is about to be changed.
-        Processes a @c wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING event.
+        Processes a @c wxEVT_CHOICEBOOK_PAGE_CHANGING event.
         This event can be vetoed (using wxNotifyEvent::Veto()).
     @endEventTable
 

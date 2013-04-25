@@ -39,7 +39,7 @@ const char wxColourPickerWidgetNameStr[] = "colourpickerwidget";
 // implementation
 // ============================================================================
 
-wxDEFINE_EVENT(wxEVT_COMMAND_COLOURPICKER_CHANGED, wxColourPickerEvent);
+wxDEFINE_EVENT(wxEVT_COLOURPICKER_CHANGED, wxColourPickerEvent);
 IMPLEMENT_DYNAMIC_CLASS(wxColourPickerCtrl, wxPickerBase)
 IMPLEMENT_DYNAMIC_CLASS(wxColourPickerEvent, wxEvent)
 
@@ -68,7 +68,7 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     // complete sizer creation
     wxPickerBase::PostCreation();
 
-    m_picker->Connect(wxEVT_COMMAND_COLOURPICKER_CHANGED,
+    m_picker->Connect(wxEVT_COLOURPICKER_CHANGED,
             wxColourPickerEventHandler(wxColourPickerCtrl::OnColourChange),
             NULL, this);
 

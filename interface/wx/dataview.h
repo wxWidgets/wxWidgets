@@ -769,29 +769,29 @@ public:
 
 // events
 
-wxEventType wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED;
+wxEventType wxEVT_DATAVIEW_SELECTION_CHANGED;
 
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED;
+wxEventType wxEVT_DATAVIEW_ITEM_ACTIVATED;
+wxEventType wxEVT_DATAVIEW_ITEM_COLLAPSING;
+wxEventType wxEVT_DATAVIEW_ITEM_COLLAPSED;
+wxEventType wxEVT_DATAVIEW_ITEM_EXPANDING;
+wxEventType wxEVT_DATAVIEW_ITEM_EXPANDED;
+wxEventType wxEVT_DATAVIEW_ITEM_START_EDITING;
+wxEventType wxEVT_DATAVIEW_ITEM_EDITING_STARTED;
+wxEventType wxEVT_DATAVIEW_ITEM_EDITING_DONE;
+wxEventType wxEVT_DATAVIEW_ITEM_VALUE_CHANGED;
 
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU;
+wxEventType wxEVT_DATAVIEW_ITEM_CONTEXT_MENU;
 
-wxEventType wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK;
-wxEventType wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK;
-wxEventType wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED;
-wxEventType wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED;
-wxEventType wxEVT_COMMAND_DATAVIEW_CACHE_HINT;
+wxEventType wxEVT_DATAVIEW_COLUMN_HEADER_CLICK;
+wxEventType wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED;
+wxEventType wxEVT_DATAVIEW_COLUMN_SORTED;
+wxEventType wxEVT_DATAVIEW_COLUMN_REORDERED;
+wxEventType wxEVT_DATAVIEW_CACHE_HINT;
 
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE;
-wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_DROP;
+wxEventType wxEVT_DATAVIEW_ITEM_BEGIN_DRAG;
+wxEventType wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE;
+wxEventType wxEVT_DATAVIEW_ITEM_DROP;
 
 /**
     @class wxDataViewCtrl
@@ -844,51 +844,51 @@ wxEventType wxEVT_COMMAND_DATAVIEW_ITEM_DROP;
 
     @beginEventEmissionTable{wxDataViewEvent}
     @event{EVT_DATAVIEW_SELECTION_CHANGED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
+           Process a @c wxEVT_DATAVIEW_SELECTION_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_ACTIVATED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event. This event
+           Process a @c wxEVT_DATAVIEW_ITEM_ACTIVATED event. This event
            is triggered by double clicking an item or pressing some special key
            (usually "Enter") when it is focused.
     @event{EVT_DATAVIEW_ITEM_START_EDITING(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING event. This
+           Process a @c wxEVT_DATAVIEW_ITEM_START_EDITING event. This
            event can be vetoed in order to prevent editing on an item by item
            basis.
     @event{EVT_DATAVIEW_ITEM_EDITING_STARTED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_EDITING_STARTED event.
     @event{EVT_DATAVIEW_ITEM_EDITING_DONE(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event.
+           Process a @c wxEVT_DATAVIEW_ITEM_EDITING_DONE event.
     @event{EVT_DATAVIEW_ITEM_COLLAPSING(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING event.
+           Process a @c wxEVT_DATAVIEW_ITEM_COLLAPSING event.
     @event{EVT_DATAVIEW_ITEM_COLLAPSED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_COLLAPSED event.
     @event{EVT_DATAVIEW_ITEM_EXPANDING(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING event.
+           Process a @c wxEVT_DATAVIEW_ITEM_EXPANDING event.
     @event{EVT_DATAVIEW_ITEM_EXPANDED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_EXPANDED event.
     @event{EVT_DATAVIEW_ITEM_VALUE_CHANGED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_CONTEXT_MENU(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event
+           Process a @c wxEVT_DATAVIEW_ITEM_CONTEXT_MENU event
            generated when the user right clicks inside the control. Notice that
            this menu is generated even if the click didn't occur on any valid
            item, in this case wxDataViewEvent::GetItem() simply returns an
            invalid item.
     @event{EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK event.
+           Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK event.
+           Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
            Notice that currently this event is not generated in the native OS X
            versions of the control.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED event.
+           Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
+           Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE event.
+           Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
+           Process a @c wxEVT_DATAVIEW_ITEM_DROP event.
     @endEventTable
 
     Notice that this control doesn't allow to process generic mouse events such
@@ -1635,7 +1635,7 @@ enum wxDataViewCellMode
         mouse click.
 
         @note Do not confuse this with item activation in wxDataViewCtrl
-              and the wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event. That one is
+              and the wxEVT_DATAVIEW_ITEM_ACTIVATED event. That one is
               used for activating the item (or, to put it differently, the
               entire row) similarly to analogous messages in wxTreeCtrl and
               wxListCtrl, and the effect differs (play a song, open a file
@@ -2087,7 +2087,7 @@ public:
         @since 2.9.3
 
         @note Do not confuse this method with item activation in wxDataViewCtrl
-              and the wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event. That one is
+              and the wxEVT_DATAVIEW_ITEM_ACTIVATED event. That one is
               used for activating the item (or, to put it differently, the
               entire row) similarly to analogous messages in wxTreeCtrl and
               wxListCtrl, and the effect differs (play a song, open a file
@@ -3232,43 +3232,43 @@ public:
 
     @beginEventTable{wxDataViewEvent}
     @event{EVT_DATAVIEW_SELECTION_CHANGED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
+           Process a @c wxEVT_DATAVIEW_SELECTION_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_ACTIVATED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_ACTIVATED event.
     @event{EVT_DATAVIEW_ITEM_EDITING_STARTED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_EDITING_STARTED event.
     @event{EVT_DATAVIEW_ITEM_EDITING_DONE(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event.
+           Process a @c wxEVT_DATAVIEW_ITEM_EDITING_DONE event.
     @event{EVT_DATAVIEW_ITEM_COLLAPSING(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING event.
+           Process a @c wxEVT_DATAVIEW_ITEM_COLLAPSING event.
     @event{EVT_DATAVIEW_ITEM_COLLAPSED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_COLLAPSED event.
     @event{EVT_DATAVIEW_ITEM_EXPANDING(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING event.
+           Process a @c wxEVT_DATAVIEW_ITEM_EXPANDING event.
     @event{EVT_DATAVIEW_ITEM_EXPANDED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_EXPANDED event.
     @event{EVT_DATAVIEW_ITEM_VALUE_CHANGED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED event.
+           Process a @c wxEVT_DATAVIEW_ITEM_VALUE_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_CONTEXT_MENU(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event.
+           Process a @c wxEVT_DATAVIEW_ITEM_CONTEXT_MENU event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK event.
+           Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_CLICK event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
+           Process a @c wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED event.
+           Process a @c wxEVT_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
+           Process a @c wxEVT_DATAVIEW_COLUMN_REORDERED event.
            Currently this even is only generated when using the native OSX
            version.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_DATAVIEW_ITEM_BEGIN_DRAG event.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE event.
+           Process a @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
+           Process a @c wxEVT_DATAVIEW_ITEM_DROP event.
     @event{EVT_DATAVIEW_CACHE_HINT(id, func)}
-           Process a @c wxEVT_COMMAND_DATAVIEW_CACHE_HINT event.
+           Process a @c wxEVT_DATAVIEW_CACHE_HINT event.
     @endEventTable
 
     @library{wxadv}
@@ -3312,14 +3312,14 @@ public:
 
     /**
         Can be used to determine whether the new value is going to be accepted
-        in wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE handler.
+        in wxEVT_DATAVIEW_ITEM_EDITING_DONE handler.
 
         Returns @true if editing the item was cancelled or if the user tried to
         enter an invalid value (refused by wxDataViewRenderer::Validate()). If
         this method returns @false, it means that the value in the model is
         about to be changed to the new one.
 
-        Notice that wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event handler can
+        Notice that wxEVT_DATAVIEW_ITEM_EDITING_DONE event handler can
         call wxNotifyEvent::Veto() to prevent this from happening.
 
         Currently support for setting this field and for vetoing the change is
@@ -3373,7 +3373,7 @@ public:
     /**
         Specify the kind of the drag operation to perform.
 
-        This method can be used inside a wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG
+        This method can be used inside a wxEVT_DATAVIEW_ITEM_BEGIN_DRAG
         handler in order to configure the drag operation. Valid values are
         ::wxDrag_CopyOnly (default), ::wxDrag_AllowMove (allow the data to be
         moved) and ::wxDrag_DefaultMove.
@@ -3392,8 +3392,8 @@ public:
         Returns the effect the user requested to happen to the dropped data.
 
         This function can be used inside
-        wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE and
-        wxEVT_COMMAND_DATAVIEW_ITEM_DROP handlers and returns whether the user
+        wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE and
+        wxEVT_DATAVIEW_ITEM_DROP handlers and returns whether the user
         is trying to copy (the return value is ::wxDragCopy) or move (if the
         return value is ::wxDragMove) the data.
 

@@ -268,7 +268,7 @@ wxIcon wxRichTextTabsPage::GetIconResource( const wxString& name )
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTTABSPAGE_NEW_TAB
+ * wxEVT_BUTTON event handler for ID_RICHTEXTTABSPAGE_NEW_TAB
  */
 
 void wxRichTextTabsPage::OnNewTabClick( wxCommandEvent& WXUNUSED(event) )
@@ -305,7 +305,7 @@ void wxRichTextTabsPage::OnNewTabUpdate( wxUpdateUIEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTTABSPAGE_DELETE_TAB
+ * wxEVT_BUTTON event handler for ID_RICHTEXTTABSPAGE_DELETE_TAB
  */
 
 void wxRichTextTabsPage::OnDeleteTabClick( wxCommandEvent& WXUNUSED(event) )
@@ -327,7 +327,7 @@ void wxRichTextTabsPage::OnDeleteTabUpdate( wxUpdateUIEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTTABSPAGE_DELETE_ALL_TABS
+ * wxEVT_BUTTON event handler for ID_RICHTEXTTABSPAGE_DELETE_ALL_TABS
  */
 
 void wxRichTextTabsPage::OnDeleteAllTabsClick( wxCommandEvent& WXUNUSED(event) )
@@ -350,7 +350,7 @@ void wxRichTextTabsPage::OnDeleteAllTabsUpdate( wxUpdateUIEvent& event )
 
 
 /*!
- * wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTTABSPAGE_TABLIST
+ * wxEVT_LISTBOX event handler for ID_RICHTEXTTABSPAGE_TABLIST
  */
 
 void wxRichTextTabsPage::OnTablistSelected( wxCommandEvent& WXUNUSED(event) )

@@ -145,13 +145,13 @@ protected:
 
     virtual wxBookCtrlEvent* CreatePageChangingEvent() const
     {
-        return new wxBookCtrlEvent(wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING,
+        return new wxBookCtrlEvent(wxEVT_BOOKCTRL_PAGE_CHANGING,
                                    GetId());
     }
 
     virtual void MakeChangedEvent(wxBookCtrlEvent& event)
     {
-        event.SetEventType(wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED);
+        event.SetEventType(wxEVT_BOOKCTRL_PAGE_CHANGED);
     }
 
     virtual wxWindow *DoRemovePage(size_t page)

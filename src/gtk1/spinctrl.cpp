@@ -17,7 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
-    #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
+    #include "wx/textctrl.h"    // for wxEVT_TEXT
     #include "wx/math.h"
     #include "wx/crt.h"
 #endif
@@ -83,7 +83,7 @@ static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win 
     if (!win->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    wxCommandEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, win->GetId());
+    wxCommandEvent event( wxEVT_SPINCTRL, win->GetId());
     event.SetEventObject( win );
 
     // note that we don't use wxSpinCtrl::GetValue() here because it would
@@ -110,7 +110,7 @@ gtk_spinctrl_text_changed_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
+    wxCommandEvent event( wxEVT_TEXT, win->GetId() );
     event.SetEventObject( win );
 
     // see above
@@ -309,7 +309,7 @@ void wxSpinCtrl::OnChar( wxKeyEvent &event )
 
     if ((event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxTE_PROCESS_ENTER))
     {
-        wxCommandEvent evt( wxEVT_COMMAND_TEXT_ENTER, m_windowId );
+        wxCommandEvent evt( wxEVT_TEXT_ENTER, m_windowId );
         evt.SetEventObject(this);
         GtkSpinButton *gsb = GTK_SPIN_BUTTON(m_widget);
         wxString val = wxGTK_CONV_BACK( gtk_entry_get_text( &gsb->entry ) );

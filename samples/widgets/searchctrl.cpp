@@ -198,7 +198,7 @@ wxMenu* SearchCtrlWidgetsPage::CreateTestMenu()
 //     target->Connect(
 //         ID_SEARCHMENU,
 //         ID_SEARCHMENU+SEARCH_MENU_SIZE,
-//         wxEVT_COMMAND_MENU_SELECTED,
+//         wxEVT_MENU,
 //         wxCommandEventHandler(MySearchCtrl::OnSearchMenu)
 //         );
     return menu;

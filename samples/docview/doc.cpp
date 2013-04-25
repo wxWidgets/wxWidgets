@@ -196,7 +196,7 @@ bool wxTextDocument::OnCreate(const wxString& path, long flags)
     // when it's modified
     GetTextCtrl()->Connect
     (
-        wxEVT_COMMAND_TEXT_UPDATED,
+        wxEVT_TEXT,
         wxCommandEventHandler(wxTextDocument::OnTextChange),
         NULL,
         this

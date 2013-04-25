@@ -961,7 +961,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
             int command = ancestor->GetAcceleratorTable()->GetCommand( event );
             if (command != -1)
             {
-                wxCommandEvent menu_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                wxCommandEvent menu_event( wxEVT_MENU, command );
                 ret = ancestor->HandleWindowEvent( menu_event );
 
                 if ( !ret )
@@ -969,7 +969,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
                     // if the accelerator wasn't handled as menu event, try
                     // it as button click (for compatibility with other
                     // platforms):
-                    wxCommandEvent button_event( wxEVT_COMMAND_BUTTON_CLICKED, command );
+                    wxCommandEvent button_event( wxEVT_BUTTON, command );
                     ret = ancestor->HandleWindowEvent( button_event );
                 }
 

@@ -216,7 +216,7 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 
 #if wxUSE_TOGGLEBTN
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 IMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl)
 
 bool wxToggleButton::Create( wxWindow* parent, wxWindowID id,

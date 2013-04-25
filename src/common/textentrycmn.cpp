@@ -50,7 +50,7 @@ public:
                                 wxTextEntryHintData::OnSetFocus, this);
         wxBIND_OR_CONNECT_HACK(win, wxEVT_KILL_FOCUS, wxFocusEventHandler,
                                 wxTextEntryHintData::OnKillFocus, this);
-        wxBIND_OR_CONNECT_HACK(win, wxEVT_COMMAND_TEXT_UPDATED,
+        wxBIND_OR_CONNECT_HACK(win, wxEVT_TEXT,
                                 wxCommandEventHandler,
                                 wxTextEntryHintData::OnTextChanged, this);
     }
@@ -367,7 +367,7 @@ bool wxTextEntryBase::SendTextUpdatedEvent(wxWindow *win)
 {
     wxCHECK_MSG( win, false, "can't send an event without a window" );
 
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, win->GetId());
+    wxCommandEvent event(wxEVT_TEXT, win->GetId());
 
     // do not do this as it could be very inefficient if the text control
     // contains a lot of text and we're not using ref-counted wxString

@@ -32,7 +32,7 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/settings.h"
     #include "wx/log.h"
-    // for wxEVT_COMMAND_TEXT_ENTER
+    // for wxEVT_TEXT_ENTER
     #include "wx/textctrl.h"
     #include "wx/app.h"
     #include "wx/brush.h"
@@ -234,7 +234,7 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
                 if (SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0))
                     return false;
 
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
 
                 const int sel = GetSelection();
                 event.SetInt(sel);
@@ -275,7 +275,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // remember the last selection, just as wxChoice does
             m_lastAcceptedSelection = GetCurrentSelection();
             {
-                wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+                wxCommandEvent event(wxEVT_COMBOBOX_DROPDOWN, GetId());
                 event.SetEventObject(this);
                 ProcessCommand(event);
             }
@@ -285,11 +285,11 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // Do the same thing as in wxChoice but using different event type.
             if ( m_pendingSelection != wxID_NONE )
             {
-                SendSelectionChangedEvent(wxEVT_COMMAND_COMBOBOX_SELECTED);
+                SendSelectionChangedEvent(wxEVT_COMBOBOX);
                 m_pendingSelection = wxID_NONE;
             }
             {
-                wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_CLOSEUP, GetId());
+                wxCommandEvent event(wxEVT_COMBOBOX_CLOSEUP, GetId());
                 event.SetEventObject(this);
                 ProcessCommand(event);
             }
@@ -312,7 +312,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
             // could get a wrong value when it calls our GetValue()
             ::SetWindowText(GetHwnd(), value.t_str());
 
-            SendSelectionChangedEvent(wxEVT_COMMAND_COMBOBOX_SELECTED);
+            SendSelectionChangedEvent(wxEVT_COMBOBOX);
 
             // fall through: for compatibility with wxGTK, also send the text
             // update event when the selection changes (this also seems more
@@ -321,7 +321,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
         case CBN_EDITCHANGE:
             if ( m_allowTextEvents )
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+                wxCommandEvent event(wxEVT_TEXT, GetId());
 
                 // if sel != -1, value was already initialized above
                 if ( sel == -1 )

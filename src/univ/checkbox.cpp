@@ -298,7 +298,7 @@ void wxCheckBox::ChangeValue(bool value)
 
 void wxCheckBox::SendEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_CHECKBOX, GetId());
     InitCommandEvent(event);
     wxCheckBoxState state = Get3StateValue();
 

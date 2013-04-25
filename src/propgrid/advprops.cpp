@@ -1287,7 +1287,7 @@ bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid,
         // switched to one that has wxButton as well.
         askColour = true;
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    else if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
         // Must override index detection since at this point GetIndex()
         // will return old value.

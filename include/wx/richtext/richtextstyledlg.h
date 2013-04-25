@@ -143,55 +143,55 @@ public:
 
 ////@begin wxRichTextStyleOrganiserDialog event handler declarations
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_CHAR
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_CHAR
     void OnNewCharClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_CHAR
     void OnNewCharUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_PARA
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_PARA
     void OnNewParaClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_PARA
     void OnNewParaUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_LIST
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_LIST
     void OnNewListClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_LIST
     void OnNewListUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_BOX
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_BOX
     void OnNewBoxClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_BOX
     void OnNewBoxUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_APPLY
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_APPLY
     void OnApplyClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_APPLY
     void OnApplyUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_RENAME
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_RENAME
     void OnRenameClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_RENAME
     void OnRenameUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_EDIT
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_EDIT
     void OnEditClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_EDIT
     void OnEditUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_DELETE
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_DELETE
     void OnDeleteClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEORGANISERDIALOG_DELETE
     void OnDeleteUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_HELP
+    /// wxEVT_BUTTON event handler for wxID_HELP
     void OnHelpClick( wxCommandEvent& event );
 
 ////@end wxRichTextStyleOrganiserDialog event handler declarations

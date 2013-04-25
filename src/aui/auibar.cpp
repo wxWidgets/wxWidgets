@@ -44,11 +44,11 @@
 WX_DEFINE_OBJARRAY(wxAuiToolBarItemArray)
 
 
-wxDEFINE_EVENT( wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN, wxAuiToolBarEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_AUITOOLBAR_OVERFLOW_CLICK, wxAuiToolBarEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK, wxAuiToolBarEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG, wxAuiToolBarEvent );
+wxDEFINE_EVENT( wxEVT_AUITOOLBAR_TOOL_DROPDOWN, wxAuiToolBarEvent );
+wxDEFINE_EVENT( wxEVT_AUITOOLBAR_OVERFLOW_CLICK, wxAuiToolBarEvent );
+wxDEFINE_EVENT( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEvent );
+wxDEFINE_EVENT( wxEVT_AUITOOLBAR_MIDDLE_CLICK, wxAuiToolBarEvent );
+wxDEFINE_EVENT( wxEVT_AUITOOLBAR_BEGIN_DRAG, wxAuiToolBarEvent );
 
 
 IMPLEMENT_CLASS(wxAuiToolBar, wxControl)
@@ -101,7 +101,7 @@ public:
 
     bool ProcessEvent(wxEvent& evt)
     {
-        if (evt.GetEventType() == wxEVT_COMMAND_MENU_SELECTED)
+        if (evt.GetEventType() == wxEVT_MENU)
         {
             m_lastId = evt.GetId();
             return true;
@@ -2506,7 +2506,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
             m_overflowVisible &&
             overflow_rect.Contains(evt.m_x, evt.m_y))
         {
-            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_OVERFLOW_CLICK, -1);
+            wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_OVERFLOW_CLICK, -1);
             e.SetEventObject(this);
             e.SetToolId(-1);
             e.SetClickPoint(wxPoint(evt.GetX(), evt.GetY()));
@@ -2545,7 +2545,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
                 Refresh(false);
                 if (res != -1)
                 {
-                    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, res);
+                    wxCommandEvent event(wxEVT_MENU, res);
                     event.SetEventObject(this);
                     GetParent()->GetEventHandler()->ProcessEvent(event);
                 }
@@ -2571,7 +2571,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         UnsetToolTip();
 
         // fire the tool dropdown event
-        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_TOOL_DROPDOWN, m_actionItem->m_toolId);
+        wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_TOOL_DROPDOWN, m_actionItem->m_toolId);
         e.SetEventObject(this);
         e.SetToolId(m_actionItem->m_toolId);
 
@@ -2634,7 +2634,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
         {
             UnsetToolTip();
 
-            wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_actionItem->m_toolId);
+            wxCommandEvent e(wxEVT_MENU, m_actionItem->m_toolId);
             e.SetEventObject(this);
 
             if (hitItem->m_kind == wxITEM_CHECK || hitItem->m_kind == wxITEM_RADIO)
@@ -2713,7 +2713,7 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
 
     if (m_actionItem && hitItem == m_actionItem)
     {
-        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, m_actionItem->m_toolId);
+        wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_RIGHT_CLICK, m_actionItem->m_toolId);
         e.SetEventObject(this);
         e.SetToolId(m_actionItem->m_toolId);
         e.SetClickPoint(m_actionPos);
@@ -2723,7 +2723,7 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
     else
     {
         // right-clicked on the invalid area of the toolbar
-        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_RIGHT_CLICK, -1);
+        wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_RIGHT_CLICK, -1);
         e.SetEventObject(this);
         e.SetToolId(-1);
         e.SetClickPoint(m_actionPos);
@@ -2784,7 +2784,7 @@ void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
     {
         if (hitItem->m_kind == wxITEM_NORMAL)
         {
-            wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK, m_actionItem->m_toolId);
+            wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_MIDDLE_CLICK, m_actionItem->m_toolId);
             e.SetEventObject(this);
             e.SetToolId(m_actionItem->m_toolId);
             e.SetClickPoint(m_actionPos);
@@ -2808,7 +2808,7 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
     {
         // TODO: sending this event only makes sense if there is an 'END_DRAG'
         // event sent sometime in the future (see OnLeftUp())
-        wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG, GetId());
+        wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_BEGIN_DRAG, GetId());
         e.SetEventObject(this);
         e.SetToolId(m_actionItem->m_toolId);
         m_dragging = GetEventHandler()->ProcessEvent(e) && !e.GetSkipped();

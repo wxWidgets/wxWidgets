@@ -36,7 +36,7 @@ void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *r
 
     if (!gtk_toggle_button_get_active(button)) return;
 
-    wxCommandEvent event( wxEVT_COMMAND_RADIOBUTTON_SELECTED, rb->GetId());
+    wxCommandEvent event( wxEVT_RADIOBUTTON, rb->GetId());
     event.SetInt( rb->GetValue() );
     event.SetEventObject( rb );
     rb->HandleWindowEvent( event );

@@ -128,7 +128,7 @@ bool wxCheckBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
     
     if (sendEvent)
     {
-        wxCommandEvent event( wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
+        wxCommandEvent event( wxEVT_CHECKBOX, m_windowId );
         event.SetInt( newState );
         event.SetEventObject( this );
         ProcessCommand( event );

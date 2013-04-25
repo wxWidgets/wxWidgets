@@ -182,7 +182,7 @@ void wxRadioButton::Cocoa_wxNSButtonAction(void)
     {
         Cocoa_DeselectOtherButtonsInTheGroup();
     }
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_RADIOBUTTON, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
     event.SetInt(GetValue());
     Command(event);

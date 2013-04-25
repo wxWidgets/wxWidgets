@@ -127,7 +127,7 @@ bool wxOSXDataViewModelNotifier::ItemChanged(wxDataViewItem const& item)
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
    // sent the equivalent wxWidget event:
-    wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
+    wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
 
     dataViewEvent.SetEventObject(m_DataViewCtrlPtr);
     dataViewEvent.SetItem(item);
@@ -147,7 +147,7 @@ bool wxOSXDataViewModelNotifier::ItemsChanged(wxDataViewItemArray const& items)
 {
   size_t const noOfItems = items.GetCount();
 
-  wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
+  wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
 
 
   dataViewEvent.SetEventObject(m_DataViewCtrlPtr);
@@ -213,7 +213,7 @@ bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsign
   wxCHECK_MSG(GetOwner() != NULL,false,"Owner not initialized.");
   if (m_DataViewCtrlPtr->GetDataViewPeer()->Update(GetOwner()->GetParent(item),item))
   {
-    wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
+    wxDataViewEvent dataViewEvent(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED,m_DataViewCtrlPtr->GetId());
 
     dataViewEvent.SetEventObject(m_DataViewCtrlPtr);
     dataViewEvent.SetColumn(col);

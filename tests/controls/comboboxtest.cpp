@@ -129,8 +129,8 @@ void ComboBoxTestCase::Size()
 void ComboBoxTestCase::PopDismiss()
 {
 #if defined(__WXMSW__) || defined(__WXGTK210__)
-    EventCounter drop(m_combo, wxEVT_COMMAND_COMBOBOX_DROPDOWN);
-    EventCounter close(m_combo, wxEVT_COMMAND_COMBOBOX_CLOSEUP);
+    EventCounter drop(m_combo, wxEVT_COMBOBOX_DROPDOWN);
+    EventCounter close(m_combo, wxEVT_COMBOBOX_CLOSEUP);
 
     m_combo->Popup();
     m_combo->Dismiss();

@@ -182,10 +182,10 @@ protected:
 
     @beginEventEmissionTable
     @event{EVT_LISTBOX(id, func)}
-        Process a @c wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list
+        Process a @c wxEVT_LISTBOX event, when an item on the list
         is selected. See wxCommandEvent.
     @event{EVT_LISTBOX_DCLICK(id, func)}
-        Process a @c wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is
+        Process a @c wxEVT_LISTBOX_DCLICK event, when the listbox is
         double-clicked. See wxCommandEvent.
     @event{EVT_HTML_CELL_CLICKED(id, func)}
         A wxHtmlCell was clicked. See wxHtmlCellEvent.

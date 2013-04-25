@@ -173,20 +173,20 @@ public:
     // implementation only
     // -------------------
 
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for GetEditableWindow(),
+    // generate the wxEVT_TEXT event for GetEditableWindow(),
     // like SetValue() does and return true if the event was processed
     //
     // NB: this is public for wxRichTextCtrl use only right now, do not call it
     static bool SendTextUpdatedEvent(wxWindow *win);
 
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window
+    // generate the wxEVT_TEXT event for this window
     bool SendTextUpdatedEvent()
     {
         return SendTextUpdatedEvent(GetEditableWindow());
     }
 
 
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window if the
+    // generate the wxEVT_TEXT event for this window if the
     // events are not currently disabled
     void SendTextUpdatedEventIfAllowed()
     {

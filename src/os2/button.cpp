@@ -221,7 +221,7 @@ void wxButton::Command (
 
 bool wxButton::SendClickEvent()
 {
-    wxCommandEvent                  vEvent( wxEVT_COMMAND_BUTTON_CLICKED
+    wxCommandEvent                  vEvent( wxEVT_BUTTON
                                            ,GetId()
                                           );
 

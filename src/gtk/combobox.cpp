@@ -17,7 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/settings.h"
-    #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
+    #include "wx/textctrl.h"    // for wxEVT_TEXT
     #include "wx/arrstr.h"
 #endif
 
@@ -33,7 +33,7 @@ extern "C" {
 static void
 gtkcombobox_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+    wxCommandEvent event( wxEVT_TEXT, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );
     combo->HandleWindowEvent( event );
@@ -42,7 +42,7 @@ gtkcombobox_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *comb
 static void
 gtkcombobox_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    combo->SendSelectionChangedEvent(wxEVT_COMMAND_COMBOBOX_SELECTED);
+    combo->SendSelectionChangedEvent(wxEVT_COMBOBOX);
 }
 
 static void
@@ -52,8 +52,8 @@ gtkcombobox_popupshown_callback(GObject *WXUNUSED(gobject),
 {
     gboolean isShown;
     g_object_get( combo->m_widget, "popup-shown", &isShown, NULL );
-    wxCommandEvent event( isShown ? wxEVT_COMMAND_COMBOBOX_DROPDOWN
-                                  : wxEVT_COMMAND_COMBOBOX_CLOSEUP,
+    wxCommandEvent event( isShown ? wxEVT_COMBOBOX_DROPDOWN
+                                  : wxEVT_COMBOBOX_CLOSEUP,
                           combo->GetId() );
     event.SetEventObject( combo );
     combo->HandleWindowEvent( event );
@@ -216,7 +216,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
             if ( HasFlag(wxTE_PROCESS_ENTER) && GetEntry() )
             {
                 // GTK automatically selects an item if its in the list
-                wxCommandEvent eventEnter(wxEVT_COMMAND_TEXT_ENTER, GetId());
+                wxCommandEvent eventEnter(wxEVT_TEXT_ENTER, GetId());
                 eventEnter.SetString( GetValue() );
                 eventEnter.SetInt( GetSelection() );
                 eventEnter.SetEventObject( this );

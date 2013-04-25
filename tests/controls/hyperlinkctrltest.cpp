@@ -94,7 +94,7 @@ void HyperlinkCtrlTestCase::Url()
 void HyperlinkCtrlTestCase::Click()
 {
 #if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
-    EventCounter hyperlink(m_hyperlink, wxEVT_COMMAND_HYPERLINK);
+    EventCounter hyperlink(m_hyperlink, wxEVT_HYPERLINK);
 
     wxUIActionSimulator sim;
 

@@ -236,7 +236,7 @@ void * wxChoice::DoGetItemClientData(unsigned int n) const
 
 bool wxChoice::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
-    SendSelectionChangedEvent(wxEVT_COMMAND_CHOICE_SELECTED);
+    SendSelectionChangedEvent(wxEVT_CHOICE);
 
     return true ;
 }

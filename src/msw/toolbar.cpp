@@ -1391,7 +1391,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
     {
         LPNMTOOLBAR tbhdr = (LPNMTOOLBAR)lParam;
 
-        wxCommandEvent evt(wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, tbhdr->iItem);
+        wxCommandEvent evt(wxEVT_TOOL_DROPDOWN, tbhdr->iItem);
         if ( HandleWindowEvent(evt) )
         {
             // Event got handled, don't display default popup menu

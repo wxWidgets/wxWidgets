@@ -17,7 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/settings.h"
-    #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
+    #include "wx/textctrl.h"    // for wxEVT_TEXT
     #include "wx/arrstr.h"
 #endif
 
@@ -56,7 +56,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 
     if (!combo->m_hasVMT) return;
 
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+    wxCommandEvent event( wxEVT_TEXT, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );
     combo->HandleWindowEvent( event );
@@ -87,14 +87,14 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
 
     if ( hasChanged )
     {
-        wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
+        wxCommandEvent event( wxEVT_COMBOBOX, combo->GetId() );
         event.SetInt( curSelection );
         event.SetString( combo->GetStringSelection() );
         event.SetEventObject( combo );
         combo->HandleWindowEvent( event );
 
         // for consistency with the other ports, send TEXT event
-        wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+        wxCommandEvent event2( wxEVT_TEXT, combo->GetId() );
         event2.SetString( combo->GetStringSelection() );
         event2.SetEventObject( combo );
         combo->HandleWindowEvent( event2 );
@@ -150,7 +150,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     // and select other items ...
     if (g_SelectionBeforePopup == wxID_NONE)
     {
-        wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
+        wxCommandEvent event( wxEVT_COMBOBOX, combo->GetId() );
         event.SetInt( curSelection );
         event.SetString( combo->GetStringSelection() );
         event.SetEventObject( combo );
@@ -158,7 +158,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
 
         // for consistency with the other ports, don't generate text update
         // events while the user is browsing the combobox neither
-        wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+        wxCommandEvent event2( wxEVT_TEXT, combo->GetId() );
         event2.SetString( combo->GetValue() );
         event2.SetEventObject( combo );
         combo->HandleWindowEvent( event2 );
@@ -782,7 +782,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
     if ( event.GetKeyCode() == WXK_RETURN )
     {
         // GTK automatically selects an item if its in the list
-        wxCommandEvent eventEnter(wxEVT_COMMAND_TEXT_ENTER, GetId());
+        wxCommandEvent eventEnter(wxEVT_TEXT_ENTER, GetId());
         eventEnter.SetString( GetValue() );
         eventEnter.SetInt( GetSelection() );
         eventEnter.SetEventObject( this );

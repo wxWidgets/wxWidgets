@@ -298,7 +298,7 @@ void wxToolBarTool::CreateDropDown()
 void wxToolBarTool::ShowDropdown(GtkToggleButton* button)
 {
     wxToolBarBase* toolbar = GetToolBar();
-    wxCommandEvent event(wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_TOOL_DROPDOWN, GetId());
     if (!toolbar->HandleWindowEvent(event))
     {
         wxMenu* menu = GetDropdownMenu();

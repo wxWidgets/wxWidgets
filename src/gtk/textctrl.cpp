@@ -1618,7 +1618,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
     {
         if ( HasFlag(wxTE_PROCESS_ENTER) )
         {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+            wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
             event.SetEventObject(this);
             event.SetString(GetValue());
             if ( HandleWindowEvent(event) )

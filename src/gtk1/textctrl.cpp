@@ -114,11 +114,11 @@ gtk_insert_text_callback(GtkEditable *editable,
         gtk_signal_emit_stop_by_name(GTK_OBJECT(editable), "insert_text");
 
         // remember that the next changed signal is to be ignored to avoid
-        // generating a dummy wxEVT_COMMAND_TEXT_UPDATED event
+        // generating a dummy wxEVT_TEXT event
         win->IgnoreNextTextUpdate();
 
         // and generate the correct one ourselves
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, win->GetId());
+        wxCommandEvent event(wxEVT_TEXT_MAXLEN, win->GetId());
         event.SetEventObject(win);
         event.SetString(win->GetValue());
         win->HandleWindowEvent( event );
@@ -145,7 +145,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
     win->SetModified();
     win->UpdateFontIfNeeded();
 
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
+    wxCommandEvent event( wxEVT_TEXT, win->GetId() );
     event.SetEventObject( win );
     win->HandleWindowEvent( event );
 }
@@ -972,7 +972,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 
     if ((key_event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxTE_PROCESS_ENTER))
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+        wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
         event.SetEventObject(this);
         event.SetString(GetValue());
         if (HandleWindowEvent(event)) return;

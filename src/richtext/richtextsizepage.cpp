@@ -939,7 +939,7 @@ void wxRichTextSizePage::OnRichtextHeightUpdate( wxUpdateUIEvent& event )
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXT_PARA_UP
+ * wxEVT_BUTTON event handler for ID_RICHTEXT_PARA_UP
  */
 
 void wxRichTextSizePage::OnRichtextParaUpClick( wxCommandEvent& WXUNUSED(event) )
@@ -987,7 +987,7 @@ void wxRichTextSizePage::OnRichtextParaUpClick( wxCommandEvent& WXUNUSED(event) 
 }
 
 /*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXT_DOWN
+ * wxEVT_BUTTON event handler for ID_RICHTEXT_DOWN
  */
 
 void wxRichTextSizePage::OnRichtextParaDownClick( wxCommandEvent& WXUNUSED(event) )

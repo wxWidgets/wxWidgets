@@ -247,7 +247,7 @@ protected:
     // common part of all ctors
     void Init();
 
-    // send the wxEVT_COMMAND_LISTBOX_SELECTED event
+    // send the wxEVT_LISTBOX event
     void SendSelectedEvent();
     virtual void InitEvent(wxCommandEvent& event, int n);
 

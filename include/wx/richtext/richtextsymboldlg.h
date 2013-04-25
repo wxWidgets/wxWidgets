@@ -108,11 +108,11 @@ public:
 
 ////@begin wxSymbolPickerDialog event handler declarations
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_SYMBOLPICKERDIALOG_FONT
+    /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_FONT
     void OnFontCtrlSelected( wxCommandEvent& event );
 
 #if defined(__UNICODE__)
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_SYMBOLPICKERDIALOG_SUBSET
+    /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_SUBSET
     void OnSubsetSelected( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_SYMBOLPICKERDIALOG_SUBSET
@@ -120,14 +120,14 @@ public:
 
 #endif
 #if defined(__UNICODE__)
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_SYMBOLPICKERDIALOG_FROM
+    /// wxEVT_COMBOBOX event handler for ID_SYMBOLPICKERDIALOG_FROM
     void OnFromUnicodeSelected( wxCommandEvent& event );
 
 #endif
     /// wxEVT_UPDATE_UI event handler for wxID_OK
     void OnOkUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_HELP
+    /// wxEVT_BUTTON event handler for wxID_HELP
     void OnHelpClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for wxID_HELP
@@ -309,7 +309,7 @@ protected:
     // common part of all ctors
     void Init();
 
-    // send the wxEVT_COMMAND_LISTBOX_SELECTED event
+    // send the wxEVT_LISTBOX event
     void SendSelectedEvent();
 
     // change the current item (in single selection listbox it also implicitly

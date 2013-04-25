@@ -938,7 +938,7 @@ public:
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls).
     @style{wxTE_PROCESS_TAB}
@@ -1133,14 +1133,14 @@ public:
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}
-        Respond to a @c wxEVT_COMMAND_TEXT_UPDATED event, generated when the text
+        Respond to a @c wxEVT_TEXT event, generated when the text
         changes. Notice that this event will be sent when the text controls
         contents changes -- whether this is due to user input or comes from the
         program itself (for example, if wxTextCtrl::SetValue() is called); see
         wxTextCtrl::ChangeValue() for a function which does not send this event.
         This event is however not sent during the control creation.
     @event{EVT_TEXT_ENTER(id, func)}
-        Respond to a @c wxEVT_COMMAND_TEXT_ENTER event, generated when enter is
+        Respond to a @c wxEVT_TEXT_ENTER event, generated when enter is
         pressed in a text control which must have wxTE_PROCESS_ENTER style for
         this event to be generated.
     @event{EVT_TEXT_URL(id, func)}
@@ -1557,10 +1557,10 @@ public:
 
 
 
-wxEventType wxEVT_COMMAND_TEXT_UPDATED;
-wxEventType wxEVT_COMMAND_TEXT_ENTER;
-wxEventType wxEVT_COMMAND_TEXT_URL;
-wxEventType wxEVT_COMMAND_TEXT_MAXLEN;
+wxEventType wxEVT_TEXT;
+wxEventType wxEVT_TEXT_ENTER;
+wxEventType wxEVT_TEXT_URL;
+wxEventType wxEVT_TEXT_MAXLEN;
 
 
 class wxTextUrlEvent : public wxCommandEvent

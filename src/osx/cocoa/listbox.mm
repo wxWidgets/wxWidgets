@@ -303,7 +303,7 @@ protected:
         wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
         wxCHECK_RET( list != NULL , wxT("Listbox expected"));
         
-        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
+        wxCommandEvent event( wxEVT_LISTBOX, list->GetId() );
         
         if ((row < 0) || (row > (int) list->GetCount()))  // OS X can select an item below the last item
             return;

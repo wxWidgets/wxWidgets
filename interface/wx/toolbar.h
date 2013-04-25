@@ -230,27 +230,27 @@ public:
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOOL(id, func)}
-        Process a @c wxEVT_COMMAND_TOOL_CLICKED event (a synonym for @c
-        wxEVT_COMMAND_MENU_SELECTED). Pass the id of the tool.
+        Process a @c wxEVT_TOOL event (a synonym for @c
+        wxEVT_MENU). Pass the id of the tool.
     @event{EVT_MENU(id, func)}
         The same as EVT_TOOL().
     @event{EVT_TOOL_RANGE(id1, id2, func)}
-        Process a @c wxEVT_COMMAND_TOOL_CLICKED event for a range of
+        Process a @c wxEVT_TOOL event for a range of
         identifiers. Pass the ids of the tools.
     @event{EVT_MENU_RANGE(id1, id2, func)}
         The same as EVT_TOOL_RANGE().
     @event{EVT_TOOL_RCLICKED(id, func)}
-        Process a @c wxEVT_COMMAND_TOOL_RCLICKED event. Pass the id of the
+        Process a @c wxEVT_TOOL_RCLICKED event. Pass the id of the
         tool.  (Not available on wxOSX.)
     @event{EVT_TOOL_RCLICKED_RANGE(id1, id2, func)}
-        Process a @c wxEVT_COMMAND_TOOL_RCLICKED event for a range of ids. Pass
+        Process a @c wxEVT_TOOL_RCLICKED event for a range of ids. Pass
         the ids of the tools.  (Not available on wxOSX.)
     @event{EVT_TOOL_ENTER(id, func)}
-        Process a @c wxEVT_COMMAND_TOOL_ENTER event. Pass the id of the toolbar
+        Process a @c wxEVT_TOOL_ENTER event. Pass the id of the toolbar
         itself. The value of wxCommandEvent::GetSelection() is the tool id, or
         -1 if the mouse cursor has moved off a tool.  (Not available on wxOSX.)
     @event{EVT_TOOL_DROPDOWN(id, func)}
-        Process a @c wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED event. If unhandled,
+        Process a @c wxEVT_TOOL_DROPDOWN event. If unhandled,
         displays the default dropdown menu set using
         wxToolBar::SetDropdownMenu().
     @endEventTable

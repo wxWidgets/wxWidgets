@@ -242,7 +242,7 @@ void wxButtonCallback (Widget w, XtPointer clientData, XtPointer WXUNUSED(ptr))
         return;
 
     wxButton *item = (wxButton *) clientData;
-    wxCommandEvent event (wxEVT_COMMAND_BUTTON_CLICKED, item->GetId());
+    wxCommandEvent event (wxEVT_BUTTON, item->GetId());
     event.SetEventObject(item);
     item->ProcessCommand (event);
 }

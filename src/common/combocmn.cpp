@@ -72,8 +72,8 @@ wxEND_FLAGS( wxComboBoxStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl, "wx/combobox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxComboBox)
-wxEVENT_PROPERTY( Select, wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEvent )
-wxEVENT_PROPERTY( TextEnter, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
+wxEVENT_PROPERTY( Select, wxEVT_COMBOBOX, wxCommandEvent )
+wxEVENT_PROPERTY( TextEnter, wxEVT_TEXT_ENTER, wxCommandEvent )
 
 // TODO DELEGATES
 wxPROPERTY( Font, wxFont, SetFont, GetFont, wxEMPTY_PARAMETER_VALUE, \
@@ -1096,10 +1096,10 @@ wxComboCtrlBase::CreateTextCtrl(int style)
 
         // Connecting the events is currently the most reliable way
         wxWindowID id = m_text->GetId();
-        m_text->Connect(id, wxEVT_COMMAND_TEXT_UPDATED,
+        m_text->Connect(id, wxEVT_TEXT,
                         wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
                         NULL, this);
-        m_text->Connect(id, wxEVT_COMMAND_TEXT_ENTER,
+        m_text->Connect(id, wxEVT_TEXT_ENTER,
                         wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
                         NULL, this);
 
@@ -1788,7 +1788,7 @@ void wxComboCtrlBase::OnTextCtrlEvent(wxCommandEvent& event)
         return;
     }
 
-    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
+    if ( event.GetEventType() == wxEVT_TEXT )
     {
         if ( m_ignoreEvtText > 0 )
         {
@@ -2234,7 +2234,7 @@ void wxComboCtrlBase::OnButtonClick()
 
 void wxComboCtrlBase::Popup()
 {
-    wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+    wxCommandEvent event(wxEVT_COMBOBOX_DROPDOWN, GetId());
     event.SetEventObject(this);
     HandleWindowEvent(event);
 
@@ -2520,7 +2520,7 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
 
     if ( generateEvent )
     {
-        wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_CLOSEUP, GetId());
+        wxCommandEvent event(wxEVT_COMBOBOX_CLOSEUP, GetId());
         event.SetEventObject(this);
         HandleWindowEvent(event);
     }

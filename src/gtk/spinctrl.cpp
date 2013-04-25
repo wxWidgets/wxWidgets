@@ -16,7 +16,7 @@
 #include "wx/spinctrl.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
+    #include "wx/textctrl.h"    // for wxEVT_TEXT
     #include "wx/utils.h"
     #include "wx/wxcrtvararg.h"
 #endif
@@ -44,7 +44,7 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrlGTKBase* win)
 
     if (wxIsKindOf(win, wxSpinCtrl))
     {
-        wxSpinEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, win->GetId());
+        wxSpinEvent event(wxEVT_SPINCTRL, win->GetId());
         event.SetEventObject( win );
         event.SetPosition(static_cast<wxSpinCtrl*>(win)->GetValue());
         event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
@@ -52,7 +52,7 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrlGTKBase* win)
     }
     else // wxIsKindOf(win, wxSpinCtrlDouble)
     {
-        wxSpinDoubleEvent event( wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, win->GetId());
+        wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, win->GetId());
         event.SetEventObject( win );
         event.SetValue(static_cast<wxSpinCtrlDouble*>(win)->GetValue());
         event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
@@ -69,7 +69,7 @@ extern "C" {
 static void
 gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 {
-    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
+    wxCommandEvent event( wxEVT_TEXT, win->GetId() );
     event.SetEventObject( win );
     event.SetString(gtk_entry_get_text(GTK_ENTRY(spinbutton)));
     event.SetInt(win->GetValue());
@@ -309,7 +309,7 @@ void wxSpinCtrlGTKBase::OnChar( wxKeyEvent &event )
 
     if ((event.GetKeyCode() == WXK_RETURN) && (m_windowStyle & wxTE_PROCESS_ENTER))
     {
-        wxCommandEvent evt( wxEVT_COMMAND_TEXT_ENTER, m_windowId );
+        wxCommandEvent evt( wxEVT_TEXT_ENTER, m_windowId );
         evt.SetEventObject(this);
         GtkSpinButton *gsb = GTK_SPIN_BUTTON(m_widget);
         wxString val = wxGTK_CONV_BACK( gtk_entry_get_text( &gsb->entry ) );

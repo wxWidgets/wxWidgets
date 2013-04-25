@@ -474,7 +474,7 @@ public:
     If the menu is part of a menubar, then wxMenuBar event processing is used.
 
     With a popup menu (see wxWindow::PopupMenu), there is a variety of ways to
-    handle a menu selection event (@c wxEVT_COMMAND_MENU_SELECTED):
+    handle a menu selection event (@c wxEVT_MENU):
     - Provide @c EVT_MENU handlers in the window which pops up the menu, or in an
       ancestor of that window (the simplest method);
     - Derive a new class from wxMenu and define event table entries using the @c EVT_MENU macro;

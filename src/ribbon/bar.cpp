@@ -34,15 +34,15 @@
 
 WX_DEFINE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfoArray)
 
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGED, wxRibbonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGING, wxRibbonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_DOWN, wxRibbonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_UP, wxRibbonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_DOWN, wxRibbonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP, wxRibbonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_LEFT_DCLICK, wxRibbonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TOGGLED, wxRibbonBarEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_HELP_CLICKED, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGED, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_PAGE_CHANGING, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_TAB_MIDDLE_DOWN, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_TAB_MIDDLE_UP, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_TAB_RIGHT_DOWN, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_TAB_RIGHT_UP, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_TAB_LEFT_DCLICK, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_TOGGLED, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_RIBBONBAR_HELP_CLICK, wxRibbonBarEvent);
 
 IMPLEMENT_CLASS(wxRibbonBar, wxRibbonControl)
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent)
@@ -994,14 +994,14 @@ void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
     }
     if(tab && tab != &m_pages.Item(m_current_page))
     {
-        wxRibbonBarEvent query(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGING, GetId(), tab->page);
+        wxRibbonBarEvent query(wxEVT_RIBBONBAR_PAGE_CHANGING, GetId(), tab->page);
         query.SetEventObject(this);
         ProcessWindowEvent(query);
         if(query.IsAllowed())
         {
             SetActivePage(query.GetPage());
 
-            wxRibbonBarEvent notification(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGED, GetId(), m_pages.Item(m_current_page).page);
+            wxRibbonBarEvent notification(wxEVT_RIBBONBAR_PAGE_CHANGED, GetId(), m_pages.Item(m_current_page).page);
             notification.SetEventObject(this);
             ProcessWindowEvent(notification);
         }
@@ -1035,13 +1035,13 @@ void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
                     m_ribbon_state = wxRIBBON_BAR_MINIMIZED;
                 else
                     m_ribbon_state = wxRIBBON_BAR_PINNED;
-                wxRibbonBarEvent event(wxEVT_COMMAND_RIBBONBAR_TOGGLED, GetId());
+                wxRibbonBarEvent event(wxEVT_RIBBONBAR_TOGGLED, GetId());
                 event.SetEventObject(this);
                 ProcessWindowEvent(event);
             }
             if ( m_help_button_rect.Contains(position) )
             {
-                wxRibbonBarEvent event(wxEVT_COMMAND_RIBBONBAR_HELP_CLICKED, GetId());
+                wxRibbonBarEvent event(wxEVT_RIBBONBAR_HELP_CLICK, GetId());
                 event.SetEventObject(this);
                 ProcessWindowEvent(event);
             }
@@ -1143,22 +1143,22 @@ void wxRibbonBar::RefreshTabBar()
 
 void wxRibbonBar::OnMouseMiddleDown(wxMouseEvent& evt)
 {
-    DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_DOWN);
+    DoMouseButtonCommon(evt, wxEVT_RIBBONBAR_TAB_MIDDLE_DOWN);
 }
 
 void wxRibbonBar::OnMouseMiddleUp(wxMouseEvent& evt)
 {
-    DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_UP);
+    DoMouseButtonCommon(evt, wxEVT_RIBBONBAR_TAB_MIDDLE_UP);
 }
 
 void wxRibbonBar::OnMouseRightDown(wxMouseEvent& evt)
 {
-    DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_DOWN);
+    DoMouseButtonCommon(evt, wxEVT_RIBBONBAR_TAB_RIGHT_DOWN);
 }
 
 void wxRibbonBar::OnMouseRightUp(wxMouseEvent& evt)
 {
-    DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP);
+    DoMouseButtonCommon(evt, wxEVT_RIBBONBAR_TAB_RIGHT_UP);
 }
 
 void wxRibbonBar::OnMouseDoubleClick(wxMouseEvent& evt)

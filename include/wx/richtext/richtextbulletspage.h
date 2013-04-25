@@ -85,52 +85,52 @@ public:
 
 ////@begin wxRichTextBulletsPage event handler declarations
 
-    /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_STYLELISTBOX
+    /// wxEVT_LISTBOX event handler for ID_RICHTEXTBULLETSPAGE_STYLELISTBOX
     void OnStylelistboxSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_PERIODCTRL
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTBULLETSPAGE_PERIODCTRL
     void OnPeriodctrlClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_PERIODCTRL
     void OnPeriodctrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL
     void OnParenthesesctrlClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL
     void OnParenthesesctrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_RIGHTPARENTHESISCTRL
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTBULLETSPAGE_RIGHTPARENTHESISCTRL
     void OnRightParenthesisCtrlClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_RIGHTPARENTHESISCTRL
     void OnRightParenthesisCtrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_BULLETALIGNMENTCTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTBULLETSPAGE_BULLETALIGNMENTCTRL
     void OnBulletAlignmentCtrlSelected( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLSTATIC
     void OnSymbolstaticUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
     void OnSymbolctrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
     void OnSymbolctrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL
     void OnSymbolctrlUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL
     void OnChooseSymbolClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL
     void OnChooseSymbolUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
     void OnSymbolfontctrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
     void OnSymbolfontctrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL
@@ -139,10 +139,10 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NAMESTATIC
     void OnNamestaticUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
+    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
     void OnNamectrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
     void OnNamectrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NAMECTRL
@@ -151,7 +151,7 @@ public:
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NUMBERSTATIC
     void OnNumberstaticUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_SPINCTRL_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+    /// wxEVT_SPINCTRL event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
     void OnNumberctrlUpdated( wxSpinEvent& event );
 
     /// wxEVT_SCROLL_LINEUP event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
@@ -160,7 +160,7 @@ public:
     /// wxEVT_SCROLL_LINEDOWN event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
     void OnNumberctrlDown( wxSpinEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
+    /// wxEVT_TEXT event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL
     void OnNumberctrlTextUpdated( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTBULLETSPAGE_NUMBERCTRL

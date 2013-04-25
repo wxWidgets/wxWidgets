@@ -76,22 +76,22 @@ public:
 
 ////@begin wxRichTextTabsPage event handler declarations
 
-    /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTTABSPAGE_TABLIST
+    /// wxEVT_LISTBOX event handler for ID_RICHTEXTTABSPAGE_TABLIST
     void OnTablistSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTTABSPAGE_NEW_TAB
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTTABSPAGE_NEW_TAB
     void OnNewTabClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTTABSPAGE_NEW_TAB
     void OnNewTabUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTTABSPAGE_DELETE_TAB
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTTABSPAGE_DELETE_TAB
     void OnDeleteTabClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTTABSPAGE_DELETE_TAB
     void OnDeleteTabUpdate( wxUpdateUIEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_RICHTEXTTABSPAGE_DELETE_ALL_TABS
+    /// wxEVT_BUTTON event handler for ID_RICHTEXTTABSPAGE_DELETE_ALL_TABS
     void OnDeleteAllTabsClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTTABSPAGE_DELETE_ALL_TABS

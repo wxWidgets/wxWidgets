@@ -94,7 +94,7 @@ public:
 
 ////@begin wxRichTextBordersPage event handler declarations
 
-    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXT_BORDER_LEFT_CHECKBOX
+    /// wxEVT_CHECKBOX event handler for ID_RICHTEXT_BORDER_LEFT_CHECKBOX
     void OnRichtextBorderCheckboxClick( wxCommandEvent& event );
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_BORDER_LEFT
