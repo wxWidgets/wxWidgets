@@ -298,7 +298,7 @@ void ComboboxWidgetsPage::CreateContent()
     wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
     sizerLeft->Add(sizerLeftTop);
     sizerLeft->AddSpacer(10);
-    sizerLeft->Add(sizerLeftBottom);
+    sizerLeft->Add(sizerLeftBottom, wxSizerFlags().Expand());
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
