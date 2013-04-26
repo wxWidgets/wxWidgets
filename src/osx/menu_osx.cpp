@@ -888,6 +888,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         return false;
 
     m_rootMenu->Insert( pos+firstMenuPos, wxMenuItem::New( m_rootMenu, wxID_ANY, title, "", wxITEM_NORMAL, menu ) );
+    menu->SetTitle(title);
 
     return true;
 }
