@@ -153,7 +153,7 @@ protected:
     // the checkboxes for styles
     wxCheckBox *m_chkSort,
                *m_chkReadonly,
-               *m_chkFilename;
+               *m_chkProcessEnter;
 
     // the combobox itself and the sizer it is in
     wxComboBox *m_combobox;
@@ -243,7 +243,7 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_chkSort =
     m_chkReadonly =
-    m_chkFilename = (wxCheckBox *)NULL;
+    m_chkProcessEnter = (wxCheckBox *)NULL;
 
     m_combobox = (wxComboBox *)NULL;
     m_sizerCombo = (wxSizer *)NULL;
@@ -278,8 +278,7 @@ void ComboboxWidgetsPage::CreateContent()
 
     m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&Sort items"));
     m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&Read only"));
-    m_chkFilename = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&File name"));
-    m_chkFilename->Disable(); // not implemented yet
+    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("Process &Enter"));
 
     sizerLeftTop->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeftTop->Add(m_radioKind, 0, wxGROW | wxALL, 5);
@@ -404,7 +403,7 @@ void ComboboxWidgetsPage::Reset()
 {
     m_chkSort->SetValue(false);
     m_chkReadonly->SetValue(false);
-    m_chkFilename->SetValue(false);
+    m_chkProcessEnter->SetValue(false);
 }
 
 void ComboboxWidgetsPage::CreateCombo()
@@ -415,6 +414,9 @@ void ComboboxWidgetsPage::CreateCombo()
         flags |= wxCB_SORT;
     if ( m_chkReadonly->GetValue() )
         flags |= wxCB_READONLY;
+    if ( m_chkProcessEnter->GetValue() )
+        flags |= wxTE_PROCESS_ENTER;
+
 
     switch ( m_radioKind->GetSelection() )
     {
@@ -451,11 +453,6 @@ void ComboboxWidgetsPage::CreateCombo()
                                 wxDefaultPosition, wxDefaultSize,
                                 0, NULL,
                                 flags);
-
-#if 0
-    if ( m_chkFilename->GetValue() )
-        ;
-#endif // TODO
 
     unsigned int count = items.GetCount();
     for ( unsigned int n = 0; n < count; n++ )
@@ -594,7 +591,7 @@ void ComboboxWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( m_chkSort->GetValue() ||
                     m_chkReadonly->GetValue() ||
-                        m_chkFilename->GetValue() );
+                        m_chkProcessEnter->GetValue() );
 }
 
 void ComboboxWidgetsPage::OnUpdateUIInsert(wxUpdateUIEvent& event)
