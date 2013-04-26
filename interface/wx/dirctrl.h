@@ -277,3 +277,5 @@ public:
     //// Operations
     void FillFilterList(const wxString& filter, int defaultFilter);
 };
+
+wxEventType wxEVT_DIRCTRL_CHANGED;
