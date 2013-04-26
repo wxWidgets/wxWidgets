@@ -43,8 +43,7 @@
     @style{wxTE_PROCESS_ENTER}
            The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
-           control or used for navigation between dialog controls). Windows
-           only.
+           control or used for navigation between dialog controls).
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
