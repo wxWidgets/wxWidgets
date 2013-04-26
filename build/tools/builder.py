@@ -153,10 +153,13 @@ class AutoconfBuilder(GNUMakeBuilder):
     def __init__(self, formatName="autoconf"):
         GNUMakeBuilder.__init__(self, formatName=formatName)
 
-    def configure(self, dir=None, options=[]):
-        if not dir:
-            dir = os.getcwd()
+    def configure(self, dir=None, options=None):
+        #olddir = os.getcwd()
+        #os.chdir(dir)
+
         configdir = dir
+        if not dir:
+            configdir = os.getcwd()
 
         configure_cmd = ""
         while os.path.exists(configdir):
@@ -175,14 +178,11 @@ class AutoconfBuilder(GNUMakeBuilder):
             sys.stderr.write("Could not find configure script at %r. Have you run autoconf?\n" % dir)
             return 1
 
-        olddir = os.getcwd()
-        os.chdir(configdir)
-
         optionsStr = " ".join(options) if options else ""
-        command = "./configure %s" % optionsStr
+        command = "%s %s" % (configure_cmd, optionsStr)
         print(command)
         result = os.system(command)
-        os.chdir(olddir)
+        #os.chdir(olddir)
         return result
 
 
