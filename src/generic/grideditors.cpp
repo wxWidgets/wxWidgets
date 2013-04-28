@@ -67,27 +67,32 @@
 // implementation
 // ============================================================================
 
+wxDEFINE_EVENT( wxEVT_GRID_HIDE_EDITOR, wxCommandEvent );
+
 // ----------------------------------------------------------------------------
 // wxGridCellEditorEvtHandler
 // ----------------------------------------------------------------------------
 
 void wxGridCellEditorEvtHandler::OnKillFocus(wxFocusEvent& event)
 {
+    // We must let the native control have this event so in any case don't mark
+    // it as handled, otherwise various weird problems can happen (see #11681).
+    event.Skip();
+
     // Don't disable the cell if we're just starting to edit it
-    if ( m_inSetFocus )
-    {
-        event.Skip();
+    if (m_inSetFocus)
         return;
-    }
 
-    // accept changes
-    m_grid->DisableCellEditControl();
+    // Tell the grid to dismiss the control but don't do it immediately as it
+    // could result in the editor being destroyed right now and a crash in the
+    // code searching for the next event handler, so post an event asking the
+    // grid to do it slightly later instead.
 
-    // notice that we must not skip the event here because the call above may
-    // delete the control which received the kill focus event in the first
-    // place and if we pretend not having processed the event, the search for a
-    // handler for it will continue using the now deleted object resulting in a
-    // crash
+    // FIXME-VC6: Once we drop support for VC6, we should use a simpler
+    //            m_grid->CallAfter(&wxGrid::DisableCellEditControl) and get
+    //            rid of wxEVT_GRID_HIDE_EDITOR entirely.
+    m_grid->GetEventHandler()->
+        AddPendingEvent(wxCommandEvent(wxEVT_GRID_HIDE_EDITOR));
 }
 
 void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
@@ -394,10 +399,7 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
                                     wxEvtHandler* evtHandler,
                                     long style)
 {
-    // Use of wxTE_RICH2 is a strange hack to work around the bug #11681: a
-    // plain text control seems to lose its caret somehow when we hide it and
-    // show it again for a different cell.
-    style |= wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxNO_BORDER | wxTE_RICH2;
+    style |= wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxNO_BORDER;
 
     wxTextCtrl* const text = new wxTextCtrl(parent, id, wxEmptyString,
                                             wxDefaultPosition, wxDefaultSize,

@@ -2128,6 +2128,7 @@ protected:
     void OnKeyUp( wxKeyEvent& );
     void OnChar( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
+    void OnHideEditor( wxCommandEvent& );
 
 
     bool SetCurrentCell( const wxGridCellCoords& coords );

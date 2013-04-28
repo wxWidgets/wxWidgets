@@ -2159,6 +2159,7 @@ BEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_KEY_UP( wxGrid::OnKeyUp )
     EVT_CHAR ( wxGrid::OnChar )
     EVT_ERASE_BACKGROUND( wxGrid::OnEraseBackground )
+    EVT_COMMAND(wxID_ANY, wxEVT_GRID_HIDE_EDITOR, wxGrid::OnHideEditor )
 END_EVENT_TABLE()
 
 bool wxGrid::Create(wxWindow *parent, wxWindowID id,
@@ -6551,6 +6552,11 @@ void wxGrid::SaveEditControlValue()
         editor->DecRef();
         attr->DecRef();
     }
+}
+
+void wxGrid::OnHideEditor(wxCommandEvent& WXUNUSED(event))
+{
+    DisableCellEditControl();
 }
 
 //

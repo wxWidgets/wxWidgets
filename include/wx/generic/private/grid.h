@@ -16,6 +16,10 @@
 
 #if wxUSE_GRID
 
+// Internally used (and hence intentionally not exported) event telling wxGrid
+// to hide the currently shown editor.
+wxDECLARE_EVENT( wxEVT_GRID_HIDE_EDITOR, wxCommandEvent );
+
 // ----------------------------------------------------------------------------
 // array classes
 // ----------------------------------------------------------------------------
