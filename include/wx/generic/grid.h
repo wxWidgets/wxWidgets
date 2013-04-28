@@ -192,11 +192,11 @@ class WXDLLIMPEXP_ADV wxGridCellEditor : public wxGridCellWorker
 public:
     wxGridCellEditor();
 
-    bool IsCreated() { return m_control != NULL; }
-    wxControl* GetControl() { return m_control; }
+    bool IsCreated() const { return m_control != NULL; }
+    wxControl* GetControl() const { return m_control; }
     void SetControl(wxControl* control) { m_control = control; }
 
-    wxGridCellAttr* GetCellAttr() { return m_attr; }
+    wxGridCellAttr* GetCellAttr() const { return m_attr; }
     void SetCellAttr(wxGridCellAttr* attr) { m_attr = attr; }
 
     // Creates the actual edit control
