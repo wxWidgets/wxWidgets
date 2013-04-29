@@ -80,7 +80,7 @@ void WebTestCase::setUp()
     m_browser = wxWebView::New(wxTheApp->GetTopWindow(), wxID_ANY);
 
     m_loaded = new EventCounter(m_browser, wxEVT_WEBVIEW_LOADED);
-    m_browser->LoadURL("about:");
+    m_browser->LoadURL("about:blank");
     ENSURE_LOADED;
 }
 
