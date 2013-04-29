@@ -135,6 +135,7 @@ void wxBitmapComboBox::RecreateControl()
     size.y = GetBestSize().y;
     const wxArrayString strings = GetStrings();
     const unsigned numItems = strings.size();
+    unsigned i;
 
     // Save the client data pointers before clearing the control, if any.
     const wxClientDataType clientDataType = GetClientDataType();
@@ -147,14 +148,14 @@ void wxBitmapComboBox::RecreateControl()
 
         case wxClientData_Object:
             objectClientData.reserve(numItems);
-            for ( unsigned n = 0; n < numItems; ++n )
-                objectClientData.push_back(GetClientObject(n));
+            for ( i = 0; i < numItems; ++i )
+                objectClientData.push_back(GetClientObject(i));
             break;
 
         case wxClientData_Void:
             voidClientData.reserve(numItems);
-            for ( unsigned n = 0; n < numItems; ++n )
-                voidClientData.push_back(GetClientData(n));
+            for ( i = 0; i < numItems; ++i )
+                voidClientData.push_back(GetClientData(i));
             break;
     }
 
@@ -168,7 +169,7 @@ void wxBitmapComboBox::RecreateControl()
         return;
 
     // initialize the controls contents
-    for ( unsigned int i = 0; i < numItems; i++ )
+    for ( i = 0; i < numItems; i++ )
     {
         wxComboBox::Append(strings[i]);
 
