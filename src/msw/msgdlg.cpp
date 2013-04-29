@@ -629,6 +629,18 @@ int wxMessageDialog::ShowModal()
     return ShowMessageBox();
 }
 
+long wxMessageDialog::GetEffectiveIcon() const
+{
+    // only use the auth needed icon if available, otherwise fallback to the default logic
+    if ( (m_dialogStyle & wxICON_AUTH_NEEDED) &&
+        wxMSWMessageDialog::HasNativeTaskDialog() )
+    {
+        return wxICON_AUTH_NEEDED;
+    }
+
+    return wxMessageDialogBase::GetEffectiveIcon();
+}
+
 void wxMessageDialog::DoCentre(int dir)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
@@ -737,6 +749,10 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 
         case wxICON_INFORMATION:
             tdc.pszMainIcon = TD_INFORMATION_ICON;
+            break;
+
+        case wxICON_AUTH_NEEDED:
+            tdc.pszMainIcon = TD_SHIELD_ICON;
             break;
     }
 

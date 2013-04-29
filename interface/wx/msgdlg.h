@@ -68,6 +68,15 @@ const char wxMessageBoxCaptionStr[] = "Message";
         Displays an information symbol. This icon is used by default if
         @c wxYES_NO is not given so it is usually unnecessary to specify it
         explicitly.
+    @style{wxICON_AUTH_NEEDED}
+        Displays an authentication needed symbol. This style is only supported
+        for message dialogs under wxMSW when a task dialog is used to implement
+        them (i.e. when running under Windows Vista or later). In other cases
+        the default icon selection logic will be used. Note this can be
+        combined with other styles to provide a fallback. For instance, using
+        wxICON_AUTH_NEEDED | wxICON_QUESTION will show a shield symbol on
+        Windows Vista or above and a question symbol on other platforms.
+        @since 2.9.5
     @style{wxSTAY_ON_TOP}
         Makes the message box stay on top of all other windows and not only
         just its parent (currently implemented only under MSW and GTK).

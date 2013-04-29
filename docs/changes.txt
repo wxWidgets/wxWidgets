@@ -666,6 +666,7 @@ wxMSW:
 - Generate menu highlight events for popup menus in wxDialog (Sam Partington).
 - Return more native shell icons from wxArtProvider (Markus Juergens).
 - Fix filter checks in wxDir::FindFirst/Next() (Catalin Raceanu).
+- Add support for wxICON_AUTH_NEEDED to wxMessageDialog (Chris Spencer).
 
 wxOSX/Cocoa:
 

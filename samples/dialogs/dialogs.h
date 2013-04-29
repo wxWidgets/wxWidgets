@@ -249,6 +249,7 @@ private:
         MsgDlgIcon_Question,
         MsgDlgIcon_Warning,
         MsgDlgIcon_Error,
+        MsgDlgIcon_AuthNeeded,
         MsgDlgIcon_Max
     };
 

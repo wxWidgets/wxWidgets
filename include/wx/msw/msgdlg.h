@@ -27,6 +27,8 @@ public:
 
     virtual int ShowModal();
 
+    virtual long GetEffectiveIcon() const;
+
     // implementation-specific
 
     // return the font used for the text in the message box

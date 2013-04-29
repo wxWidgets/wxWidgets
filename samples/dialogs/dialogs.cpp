@@ -3005,7 +3005,8 @@ bool TestMessageBoxDialog::Create()
         "&Information icon",
         "&Question icon",
         "&Warning icon",
-        "&Error icon"
+        "&Error icon",
+        "A&uth needed icon"
     };
 
    wxCOMPILE_TIME_ASSERT( WXSIZEOF(icons) == MsgDlgIcon_Max, IconMismatch );
@@ -3105,6 +3106,10 @@ long TestMessageBoxDialog::GetStyle()
 
         case MsgDlgIcon_Error:
             style |= wxICON_ERROR;
+            break;
+
+        case MsgDlgIcon_AuthNeeded:
+            style |= wxICON_AUTH_NEEDED;
             break;
     }
 

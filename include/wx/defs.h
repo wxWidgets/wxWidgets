@@ -1924,9 +1924,10 @@ enum wxBorder
 #define wxMORE                  0x00010000
 #define wxSETUP                 0x00020000
 #define wxICON_NONE             0x00040000
+#define wxICON_AUTH_NEEDED      0x00080000
 
 #define wxICON_MASK \
-    (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION|wxICON_NONE)
+    (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION|wxICON_NONE|wxICON_AUTH_NEEDED)
 
 /*
  * Background styles. See wxWindow::SetBackgroundStyle
