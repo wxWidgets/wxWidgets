@@ -10322,6 +10322,7 @@ bool wxRichTextTable::AddRows(int startRow, int noRows, const wxRichTextAttr& at
             cell->GetAttributes() = attr;
 
             AppendChild(cell);
+            cell->AddParagraph(wxEmptyString);
             colArray.Add(cell);
         }
     }
@@ -10346,6 +10347,7 @@ bool wxRichTextTable::AddColumns(int startCol, int noCols, const wxRichTextAttr&
             cell->GetAttributes() = attr;
 
             AppendChild(cell);
+            cell->AddParagraph(wxEmptyString);
 
             if (startCol == m_colCount)
                 colArray.Add(cell);
