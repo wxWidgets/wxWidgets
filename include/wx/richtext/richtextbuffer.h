@@ -5577,7 +5577,7 @@ protected:
  */
 
 WX_DEFINE_ARRAY_PTR(wxRichTextObject*, wxRichTextObjectPtrArray);
-WX_DECLARE_OBJARRAY(wxRichTextObjectPtrArray, wxRichTextObjectPtrArrayArray);
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxRichTextObjectPtrArray, wxRichTextObjectPtrArrayArray, WXDLLIMPEXP_RICHTEXT);
 
 class WXDLLIMPEXP_RICHTEXT wxRichTextTable: public wxRichTextBox
 {
