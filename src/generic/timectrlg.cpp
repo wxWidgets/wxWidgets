@@ -480,6 +480,7 @@ private:
                 case Field_AMPM:
                 case Field_Max:
                     wxFAIL_MSG( "Invalid field" );
+                    return;
             }
 
             // Check if the new value is acceptable. If not, we just handle
