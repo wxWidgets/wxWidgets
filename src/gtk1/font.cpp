@@ -24,11 +24,11 @@
     #include "wx/log.h"
     #include "wx/settings.h"
     #include "wx/gdicmn.h"
-    #include "wx/encinfo.h"
     #include "wx/crt.h"
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/encinfo.h"
 #include "wx/utils.h"
 #include "wx/tokenzr.h"
 
