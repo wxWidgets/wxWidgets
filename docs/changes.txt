@@ -547,6 +547,10 @@ INCOMPATIBLE CHANGES SINCE 2.9.4:
   rather than a wxWebViewBackend enum value.
 - wxWebView identifiers of the form WEB_VIEW_* have been renamed to WEBVIEW_*
   for consistency with the rest of wxWidgets.
+- wxFont(int size, wxFontFamily family, int flags) ctor added in 2.9.4 was
+  removed to avoid ambiguities with the other existing ctors and replaced with
+  the new wxFont(wxFontInfo) ctor.
+
 
 All:
 

@@ -103,9 +103,6 @@ void FontTestCase::Construct()
     // compile because it's easy to introduce ambiguities due to the number of
     // overloaded wxFont ctors.
 
-    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT).IsOk() );
-    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT,
-                               wxFONTFLAG_DEFAULT).IsOk() );
     CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT,
                                wxFONTSTYLE_NORMAL,
                                wxFONTWEIGHT_NORMAL).IsOk() );
