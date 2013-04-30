@@ -82,7 +82,7 @@ enum wxRichTextCtrlSelectionState
     whose properties are available to be edited.
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextContextMenuPropertiesInfo
+class wxRichTextContextMenuPropertiesInfo
 {
 public:
     /**
@@ -188,13 +188,10 @@ public:
 
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxControl,
+class wxRichTextCtrl : public wxControl,
                                             public wxTextCtrlIface,
                                             public wxScrollHelper
 {
-    DECLARE_CLASS( wxRichTextCtrl )
-    DECLARE_EVENT_TABLE()
-
 public:
 // Constructors
 
@@ -2332,7 +2329,7 @@ protected:
     @category{events,richtext}
 */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextEvent : public wxNotifyEvent
+class wxRichTextEvent : public wxNotifyEvent
 {
 public:
     /**
@@ -2461,6 +2458,4 @@ protected:
     wxRichTextParagraphLayoutBox*   m_container;
     wxRichTextParagraphLayoutBox*   m_oldContainer;
 
-private:
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRichTextEvent)
 };
