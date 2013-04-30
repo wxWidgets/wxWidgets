@@ -19,7 +19,8 @@ class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 public:
     wxFont() { }
 
-    // wxGTK-specific
+    wxFont(const wxFontInfo& info);
+
     wxFont(const wxString& nativeFontInfoString)
     {
         Create(nativeFontInfoString);
@@ -62,12 +63,6 @@ public:
         Create(10, family, style, weight, underlined, face, encoding);
         SetPixelSize(pixelSize);
     }
-
-    wxFont(int pointSize,
-           wxFontFamily family,
-           int flags = wxFONTFLAG_DEFAULT,
-           const wxString& face = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     bool Create(int size,
                 wxFontFamily family,

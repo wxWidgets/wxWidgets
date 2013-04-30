@@ -278,18 +278,20 @@ wxFont::wxFont(const wxNativeFontInfo& info)
         SetStrikethrough(true);
 }
 
-wxFont::wxFont(int pointSize,
-               wxFontFamily family,
-               int flags,
-               const wxString& face,
-               wxFontEncoding encoding)
+wxFont::wxFont(const wxFontInfo& info)
 {
-    m_refData = new wxFontRefData(pointSize, family,
-                                  GetStyleFromFlags(flags),
-                                  GetWeightFromFlags(flags),
-                                  GetUnderlinedFromFlags(flags),
-                                  GetStrikethroughFromFlags(flags),
-                                  face, encoding);
+    m_refData = new wxFontRefData(info.GetPointSize(),
+                                  info.GetFamily(),
+                                  info.GetStyle(),
+                                  info.GetWeight(),
+                                  info.IsUnderlined(),
+                                  info.IsStrikethrough(),
+                                  info.GetFaceName(),
+                                  info.GetEncoding());
+
+    wxSize pixelSize = info.GetPixelSize();
+    if ( pixelSize != wxDefaultSize )
+        SetPixelSize(pixelSize);
 }
 
 bool wxFont::Create( int pointSize,

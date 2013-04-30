@@ -804,18 +804,18 @@ wxFont::wxFont(const wxString& fontdesc)
         (void)Create(info);
 }
 
-wxFont::wxFont(int pointSize,
-               wxFontFamily family,
-               int flags,
-               const wxString& face,
-               wxFontEncoding encoding)
+wxFont::wxFont(const wxFontInfo& info)
 {
-    m_refData = new wxFontRefData(pointSize, wxDefaultSize, false,
-                                  family,
-                                  GetStyleFromFlags(flags),
-                                  GetWeightFromFlags(flags),
-                                  GetUnderlinedFromFlags(flags),
-                                  false, face, encoding);
+    m_refData = new wxFontRefData(info.GetPointSize(),
+                                  info.GetPixelSize(),
+                                  info.IsUsingSizeInPixels(),
+                                  info.GetFamily(),
+                                  info.GetStyle(),
+                                  info.GetWeight(),
+                                  info.IsUnderlined(),
+                                  info.IsStrikethrough(),
+                                  info.GetFaceName(),
+                                  info.GetEncoding());
 }
 
 bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)

@@ -27,6 +27,20 @@ public:
     // ctors and such
     wxFont() { }
 
+    wxFont(const wxFontInfo& info)
+    {
+        Create(info.GetPointSize(),
+               info.GetFamily(),
+               info.GetStyle(),
+               info.GetWeight(),
+               info.IsUnderlined(),
+               info.GetFaceName(),
+               info.GetEncoding());
+
+        if ( info.IsUsingSizeInPixels() )
+            SetPixelSize(info.GetPixelSize());
+    }
+
 #if FUTURE_WXWIN_COMPATIBILITY_3_0
     wxFont(int size,
            int family,
@@ -61,19 +75,6 @@ public:
     {
         Create(10, family, style, weight, underlined, face, encoding);
         SetPixelSize(pixelSize);
-    }
-
-    wxFont(int pointSize,
-           wxFontFamily family,
-           int flags = wxFONTFLAG_DEFAULT,
-           const wxString& face = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
-    {
-        Create(pointSize, family,
-               GetStyleFromFlags(flags),
-               GetWeightFromFlags(flags),
-               GetUnderlinedFromFlags(flags),
-               face, encoding);
     }
 
     bool Create(int size,

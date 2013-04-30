@@ -24,6 +24,8 @@ public:
     // ctors and such
     wxFont() { }
 
+    wxFont(const wxFontInfo& info);
+
 #if FUTURE_WXWIN_COMPATIBILITY_3_0
     wxFont(int size,
            int family,
@@ -90,12 +92,6 @@ public:
     {
         Create(info, hFont);
     }
-
-    wxFont(int pointSize,
-           wxFontFamily family,
-           int flags = wxFONTFLAG_DEFAULT,
-           const wxString& face = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     wxFont(const wxString& fontDesc);
 

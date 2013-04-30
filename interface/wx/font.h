@@ -271,11 +271,154 @@ enum wxFontEncoding
 
 
 /**
+    Description of wxFont.
+
+    This class is a helper used for wxFont creation using named parameter
+    idiom: it allows to specify various wxFont attributes using the chained
+    calls to its clearly named methods instead of passing them in the fixed
+    order to wxFont constructors.
+
+    For example, to create an italic font with the given face name and size you
+    could use:
+    @code
+        wxFont font(wxFontInfo(12).FaceName().Italic());
+    @endcode
+
+    Notice that all of the methods of this object return a reference to the
+    object itself, allowing the calls to them to be chained as in the example
+    above.
+
+    All methods taking boolean parameters can be used to turn the specified
+    font attribute on or off and turn it on by default.
+
+    @since 2.9.5
+ */
+class wxFontInfo
+{
+public:
+    /**
+        Default constructor uses the default font size for the current
+        platform.
+     */
+    wxFontInfo();
+
+    /**
+        Constructor setting the font size in points to use.
+
+        @see wxFont::SetPointSize()
+     */
+    explicit wxFontInfo(int pointSize);
+
+    /**
+        Constructor setting the font size in pixels to use.
+
+        @see wxFont::SetPixelSize()
+     */
+    explicit wxFontInfo(const wxSize& pixelSize);
+
+    /**
+        Set the font family.
+
+        The family is a generic portable way of referring to fonts without
+        specifying a precise face name. This parameter must be one of the
+        ::wxFontFamily enumeration values.
+
+        If the FaceName() is used, then it overrides the font family.
+
+        @see wxFont::SetFamily()
+     */
+    wxFontInfo& Family(wxFontFamily family);
+
+    /**
+        Set the font face name to use.
+
+        Face names are not portable, so prefer to use Family() in portable
+        code.
+
+        @see wxFont::SetFaceName()
+     */
+    wxFontInfo& FaceName(const wxString& faceName);
+
+    /**
+        Use a bold version of the font.
+
+        @see ::wxFontWeight, wxFont::SetWeight()
+     */
+    wxFontInfo& Bold(bool bold = true);
+
+    /**
+        Use a lighter version of the font.
+
+        @see ::wxFontWeight, wxFont::SetWeight()
+     */
+    wxFontInfo& Light(bool light = true);
+
+    /**
+        Use an italic version of the font.
+
+        @see ::wxFontStyle, wxFont::SetStyle()
+     */
+    wxFontInfo& Italic(bool italic = true);
+
+    /**
+        Use a slanted version of the font.
+
+        @see ::wxFontStyle, wxFont::SetStyle()
+     */
+    wxFontInfo& Slant(bool slant = true);
+
+    /**
+        Set anti-aliasing flag.
+
+        Force the use of anti-aliasing on or off.
+
+        Currently this is not implemented, i.e. using this method doesn't do
+        anything.
+     */
+    wxFontInfo& AntiAliased(bool antiAliased = true);
+
+    /**
+        Use an underlined version of the font.
+     */
+    wxFontInfo& Underlined(bool underlined = true);
+
+    /**
+        Use a strike-through version of the font.
+
+        Currently this is only implemented in wxMSW and wxGTK.
+     */
+    wxFontInfo& Strikethrough(bool strikethrough = true);
+
+    /**
+        Set the font encoding to use.
+
+        This is mostly unneeded in Unicode builds of wxWidgets.
+
+        @see ::wxFontEncoding, wxFont::SetEncoding()
+     */
+    wxFontInfo& Encoding(wxFontEncoding encoding);
+
+    /**
+        Set all the font attributes at once.
+
+        See ::wxFontFlag for the various flags that can be used.
+     */
+    wxFontInfo& AllFlags(int flags);
+};
+
+/**
     @class wxFont
 
     A font is an object which determines the appearance of text.
+
     Fonts are used for drawing text to a device context, and setting the appearance
-    of a window's text.
+    of a window's text, see wxDC::SetFont() and wxWindow::SetFont().
+
+    The easiest way to create a custom font is to use wxFontInfo object to
+    specify the font attributes and then use wxFont::wxFont(const wxFontInfo&)
+    constructor. Alternatively, you could start with one of the pre-defined
+    fonts or use wxWindow::GetFont() and modify the font, e.g. by increasing
+    its size using MakeLarger() or changing its weight using MakeBold().
 
     This class uses @ref overview_refcount "reference counting and copy-on-write"
     internally so that assignments between two instances of this class are very
@@ -309,7 +452,34 @@ public:
     wxFont(const wxFont& font);
 
     /**
+        Creates a font object using the specified font description.
+
+        This is the preferred way to create font objects as using this ctor
+        results in more readable code and it is also extensible, e.g. it could
+        continue to be used if support for more font attributes is added in the
+        future. For example, this constructor provides the only way of creating
+        fonts with strike-through style.
+
+        Example of creating a font using this ctor:
+        @code
+            wxFont font(wxFontInfo(10).Bold().Underlined());
+        @endcode
+
+        @since 2.9.5
+     */
+    wxFont(const wxFontInfo& font);
+
+    /**
         Creates a font object with the specified attributes and size in points.
+
+        Notice that the use of this constructor is often more verbose and less
+        readable than the use of constructor from wxFontInfo, e.g. the example
+        in that constructor documentation would need to be written as
+        @code
+            wxFont font(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+                        wxFONTWEIGHT_BOLD, true);
+        @endcode
+        which is longer and less clear.
 
         @param pointSize
             Size in points. See SetPointSize() for more info.
@@ -357,6 +527,10 @@ public:
     /**
         Creates a font object with the specified attributes and size in pixels.
 
+        Notice that the use of this constructor is often more verbose and less
+        readable than the use of constructor from wxFontInfo, consider using
+        that constructor instead.
+
         @param pixelSize
             Size in pixels. See SetPixelSize() for more info.
         @param family
@@ -397,25 +571,6 @@ public:
     wxFont(const wxSize& pixelSize, wxFontFamily family,
            wxFontStyle style, wxFontWeight weight,
            bool underline = false,
-           const wxString& faceName = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-
-    /**
-        Creates a font object using font flags.
-
-        This constructor is similar to the constructors above except it
-        specifies the font styles such as underlined, italic, bold, ... in a
-        single @a flags argument instead of using separate arguments for them.
-        This parameter can be a combination of ::wxFontFlag enum elements.
-        The meaning of the remaining arguments is the same as in the other
-        constructors, please see their documentation for details.
-
-        Notice that this constructor provides the only way of creating fonts
-        with strike-through style.
-
-        @since 2.9.4
-     */
-    wxFont(int pointSize, wxFontFamily family, int flags,
            const wxString& faceName = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
@@ -844,7 +999,7 @@ public:
     /**
         Sets the point size.
 
-        The <em>point size</em> is defined as 1/72 of the anglo-Saxon inch
+        The <em>point size</em> is defined as 1/72 of the Anglo-Saxon inch
         (25.4 mm): it is approximately 0.0139 inch or 352.8 um.
 
         @param pointSize
@@ -981,6 +1136,9 @@ public:
         This function takes the same parameters as the relative
         @ref wxFont::wxFont "wxFont constructor" and returns a new font
         object allocated on the heap.
+
+        Their use is discouraged, use wxFont constructor from wxFontInfo
+        instead.
     */
     static wxFont* New(int pointSize, wxFontFamily family, wxFontStyle style,
                        wxFontWeight weight,
