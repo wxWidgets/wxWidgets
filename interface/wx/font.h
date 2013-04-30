@@ -271,7 +271,7 @@ enum wxFontEncoding
 
 
 /**
-    Description of wxFont.
+    @class wxFontInfo
 
     This class is a helper used for wxFont creation using named parameter
     idiom: it allows to specify various wxFont attributes using the chained
@@ -281,7 +281,7 @@ enum wxFontEncoding
     For example, to create an italic font with the given face name and size you
     could use:
     @code
-        wxFont font(wxFontInfo(12).FaceName().Italic());
+        wxFont font(wxFontInfo(12).FaceName("Helvetica").Italic());
     @endcode
 
     Notice that all of the methods of this object return a reference to the
