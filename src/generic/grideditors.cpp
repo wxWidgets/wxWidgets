@@ -382,9 +382,9 @@ void wxGridCellEditor::StartingClick()
 // wxGridCellTextEditor
 // ----------------------------------------------------------------------------
 
-wxGridCellTextEditor::wxGridCellTextEditor()
+wxGridCellTextEditor::wxGridCellTextEditor(size_t maxChars)
 {
-    m_maxChars = 0;
+    m_maxChars = maxChars;
 }
 
 void wxGridCellTextEditor::Create(wxWindow* parent,

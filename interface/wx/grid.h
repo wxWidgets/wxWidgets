@@ -625,9 +625,13 @@ class wxGridCellTextEditor : public wxGridCellEditor
 {
 public:
     /**
-        Default constructor.
+        Text cell editor constructor.
+
+        @param maxChars
+            Maximum width of text (this parameter is supported starting since
+            wxWidgets 2.9.5).
     */
-    wxGridCellTextEditor();
+    explicit wxGridCellTextEditor(size_t maxChars = 0);
 
     /**
         The parameters string format is "n" where n is a number representing
