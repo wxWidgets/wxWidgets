@@ -10,34 +10,275 @@
 /**
     @class wxString
 
-    The wxString class has been completely rewritten for wxWidgets 3.0
-    and this change was actually the main reason for the calling that
-    version wxWidgets 3.0.
+    String class for passing textual data to or receiving it from wxWidgets.
 
-    wxString is a class representing a Unicode character string.
-    wxString uses @c std::basic_string internally (even if @c wxUSE_STL is not defined)
-    to store its content (unless this is not supported by the compiler or disabled
-    specifically when building wxWidgets) and it therefore inherits
-    many features from @c std::basic_string. (Note that most implementations of
-    @c std::basic_string are thread-safe and don't use reference counting.)
+    @note
+    While the use of wxString is unavoidable in wxWidgets program, you are
+    encouraged to use the standard string classes @c std::string or @c
+    std::wstring in your applications and convert them to and from wxString
+    only when interacting with wxWidgets.
 
-    These @c std::basic_string standard functions are only listed here, but
-    they are not fully documented in this manual; see the STL documentation
-    (http://www.cppreference.com/wiki/string/start) for more info.
-    The behaviour of all these functions is identical to the behaviour
-    described there.
 
-    You may notice that wxString sometimes has several functions which do
-    the same thing like Length(), Len() and length() which all return the
-    string length. In all cases of such duplication the @c std::string
-    compatible methods should be used.
+    wxString is a class representing a Unicode character string but with
+    methods taking or returning both @c wchar_t wide characters and @c wchar_t*
+    wide strings and traditional @c char characters and @c char* strings. The
+    dual nature of wxString API makes it simple to use in all cases and,
+    importantly, allows the code written for either ANSI or Unicode builds of
+    the previous wxWidgets versions to compile and work correctly with the
+    single unified Unicode build of wxWidgets 3.0. It is also mostly
+    transparent when using wxString with the few exceptions described below.
 
-    For informations about the internal encoding used by wxString and
-    for important warnings and advices for using it, please read
-    the @ref overview_string.
 
-    Since wxWidgets 3.0 wxString always stores Unicode strings, so you should
-    be sure to read also @ref overview_unicode.
+    @section string_api API overview
+
+    wxString tries to be similar to both @c std::string and @c std::wstring and
+    can mostly be used as either class. It provides practically all of the
+    methods of these classes, which behave exactly the same as in the standard
+    C++, and so are not documented here (please see any standard library
+    documentation, for example http://en.cppreference.com/w/cpp/string for more
+    details).
+
+    In addition to these standard methods, wxString adds functions dealing with
+    the conversions between different string encodings, described below, as
+    well as many extra helpers such as functions for formatted output
+    (Printf(), Format(), ...), case conversion (MakeUpper(), Capitalize(), ...)
+    and various others (Trim(), StartsWith(), Matches(), ...). All of the
+    non-standard methods follow wxWidgets "CamelCase" naming convention and are
+    documented here.
+
+    Notice that some wxString methods exist in several versions for
+    compatibility reasons. For example all of length(), Length() and Len() are
+    provided. In such cases it is recommended to use the standard string-like
+    method, i.e. length() in this case.
+
+
+    @section string_conv Converting to and from wxString
+
+    wxString can be created from:
+        - ASCII string guaranteed to contain only 7 bit characters using
+        wxString::FromAscii().
+        - Narrow @c char* string in the current locale encoding using implicit
+        wxString::wxString(const char*) constructor.
+        - Narrow @c char* string in UTF-8 encoding using wxString::FromUTF8().
+        - Narrow @c char* string in the given encoding using
+        wxString::wxString(const char*, const wxMBConv&) constructor passing a
+        wxCSConv corresponding to the encoding as the second argument.
+        - Standard @c std::string using implicit wxString::wxString(const
+        std::string&) constructor. Notice that this constructor supposes that
+        the string contains data in the current locale encoding, use FromUTF8()
+        or the constructor taking wxMBConv if this is not the case.
+        - Wide @c wchar_t* string using implicit wxString::wxString(const
+        wchar_t*) constructor.
+        - Standard @c std::wstring using implicit wxString::wxString(const
+        std::wstring&) constructor.
+
+    Notice that many of the constructors are implicit, meaning that you don't
+    even need to write them at all to pass the existing string to some
+    wxWidgets function taking a wxString.
+
+    Similarly, wxString can be converted to:
+        - ASCII string using wxString::ToAscii(). This is a potentially
+        destructive operation as all non-ASCII string characters are replaced
+        with a placeholder character.
+        - String in the current locale encoding implicitly or using c_str() or
+        mb_str() methods. This is a potentially destructive operation as an @e
+        empty string is returned if the conversion fails.
+        - String in UTF-8 encoding using wxString::utf8_str().
+        - String in any given encoding using mb_str() with the appropriate
+        wxMBConv object. This is also a potentially destructive operation.
+        - Standard @c std::string using wxString::ToStdString(). The contents
+        of the returned string use the current locale encoding, so this
+        conversion is potentially destructive as well.
+        - Wide C string using wxString::wc_str().
+        - Standard @c std::wstring using wxString::ToStdWstring().
+
+    @note If you built wxWidgets with @c wxUSE_STL set to 1, the implicit
+        conversions to both narrow and wide C strings are disabled and replaced
+        with implicit conversions to @c std::string and @c std::wstring.
+
+    Please notice that the conversions marked as "potentially destructive"
+    above can result in loss of data if their result is not checked, so you
+    need to verify that converting the contents of a non-empty Unicode string
+    to a non-UTF-8 multibyte encoding results in non-empty string. The simplest
+    and best way to ensure that the conversion never fails is to always use
+    UTF-8.
+
+
+    @section string_gotchas Traps for the unwary
+
+    As mentioned above, wxString tries to be compatible with both narrow and
+    wide standard string classes and mostly does it transparently, but there
+    are some exceptions.
+
+    @subsection string_gotchas_element String element access
+
+    Some problems are caused by wxString::operator[]() which returns an object
+    of a special proxy class allowing to assign either a simple @c char or a @c
+    wchar_t to the given index. Because of this, the return type of this
+    operator is neither @c char nor @c wchar_t nor a reference to one of these
+    types but wxUniCharRef which is not a primitive type and hence can't be
+    used in the @c switch statement. So the following code does @e not compile
+        @code
+            wxString s(...);
+            switch ( s[n] ) {
+                case 'A':
+                    ...
+                    break;
+            }
+        @endcode
+    and you need to use
+        @code
+            switch ( s[n].GetValue() ) {
+                ...
+            }
+        @endcode
+    instead. Alternatively, you can use an explicit cast:
+        @code
+            switch ( static_cast<char>(s[n]) ) {
+                ...
+            }
+        @endcode
+    but notice that this will result in an assert failure if the character at
+    the given position is not representable as a single @c char in the current
+    encoding, so you may want to cast to @c int instead if non-ASCII values can
+    be used.
+
+    Another consequence of this unusual return type arises when it is used with
+    template deduction or C++11 @c auto keyword. Unlike with the normal
+    references which are deduced to be of the referenced type, the deduced type
+    for wxUniCharRef is wxUniCharRef itself. This results in potentially
+    unexpected behaviour, for example:
+        @code
+            wxString s("abc");
+            auto c = s[0];
+            c = 'x';            // Modifies the string!
+            wxASSERT( s == "xbc" );
+        @endcode
+    Due to this, either explicitly specify the variable type:
+        @code
+            int c = s[0];
+            c = 'x';            // Doesn't modify the string any more.
+            wxASSERT( s == "abc" );
+        @endcode
+    or explicitly convert the return value:
+        @code
+            auto c = s[0].GetValue();
+            c = 'x';            // Doesn't modify the string neither.
+            wxASSERT( s == "abc" );
+        @endcode
+
+
+    @subsection string_gotchas_conv Conversion to C string
+
+    A different class of problems happens due to the dual nature of the return
+    value of wxString::c_str() method, which is also used for implicit
+    conversions. The result of calls to this method is convertible to either
+    narrow @c char* string or wide @c wchar_t* string and so, again, has
+    neither the former nor the latter type. Usually, the correct type will be
+    chosen depending on how you use the result but sometimes the compiler can't
+    choose it because of an ambiguity, e.g.:
+        @code
+            // Some non-wxWidgets functions existing for both narrow and wide
+            // strings:
+            void dump_text(const char* text);       // Version (1)
+            void dump_text(const wchar_t* text);    // Version (2)
+
+            wxString s(...);
+            dump_text(s);           // ERROR: ambiguity.
+            dump_text(s.c_str());   // ERROR: still ambiguous.
+        @endcode
+    In this case you need to explicitly convert to the type that you need to
+    use or use a different, non-ambiguous, conversion function (which is
+    usually the best choice):
+        @code
+            dump_text(static_cast<const char*>(s));            // OK, calls (1)
+            dump_text(static_cast<const wchar_t*>(s.c_str())); // OK, calls (2)
+            dump_text(s.mb_str());                             // OK, calls (1)
+            dump_text(s.wc_str());                             // OK, calls (2)
+            dump_text(s.wx_str());                             // OK, calls ???
+        @endcode
+
+    @subsection string_vararg Using wxString with vararg functions
+
+    A special subclass of the problems arising due to the polymorphic nature of
+    wxString::c_str() result type happens when using functions taking an
+    arbitrary number of arguments, such as the standard @c printf(). Due to the
+    rules of the C++ language, the types for the "variable" arguments of such
+    functions are not specified and hence the compiler cannot convert wxString
+    objects, or the objects returned by wxString::c_str(), to these unknown
+    types automatically. Hence neither wxString objects nor the results of most
+    of the conversion functions can be passed as vararg arguments:
+        @code
+            // ALL EXAMPLES HERE DO NOT WORK, DO NOT USE THEM!
+            printf("Don't do this: %s", s);
+            printf("Don't do that: %s", s.c_str());
+            printf("Nor even this: %s", s.mb_str());
+            wprintf("And even not always this: %s", s.wc_str());
+        @endcode
+    Instead you need to either explicitly cast to the needed type:
+        @code
+            // These examples work but are not the best solution, see below.
+            printf("You can do this: %s", static_cast<const char*>(s));
+            printf("Or this: %s", static_cast<const char*>(s.c_str()));
+            printf("And this: %s", static_cast<const char*>(s.mb_str()));
+            wprintf("Or this: %s", static_cast<const wchar_t*>(s.wc_str()));
+        @endcode
+    But a better solution is to use wxWidgets-provided functions, if possible,
+    as is the case for @c printf family of functions:
+        @code
+            // This is the recommended way.
+            wxPrintf("You can do just this: %s", s);
+            wxPrintf("And this (but it is redundant): %s", s.c_str());
+            wxPrintf("And this (not using Unicode): %s", s.mb_str());
+            wxPrintf("And this (always Unicode): %s", s.wc_str());
+        @endcode
+    Notice that wxPrintf() replaces both @c printf() and @c wprintf() and
+    accepts wxString objects, results of c_str() calls but also @c char* and
+    @c wchar_t* strings directly.
+
+    wxWidgets provides wx-prefixed equivalents to all the standard vararg
+    functions and a few more, notably wxString::Format(), wxLogMessage(),
+    wxLogError() and other log functions. But if you can't use one of those
+    functions and need to pass wxString objects to non-wx vararg functions, you
+    need to use the explicit casts as explained above.
+
+
+    @section string_performance Performance characteristics
+
+    wxString uses @c std::basic_string internally to store its content (unless
+    this is not supported by the compiler or disabled specifically when
+    building wxWidgets) and it therefore inherits many features from @c
+    std::basic_string. In particular, most modern implementations of @c
+    std::basic_string are thread-safe and don't use reference counting (making
+    copying large strings potentially expensive) and so wxString has the same
+    characteristics.
+
+    By default, wxString uses @c std::basic_string specialized for the
+    platform-dependent @c wchar_t type, meaning that it is not memory-efficient
+    for ASCII strings, especially under Unix platforms where every ASCII
+    character, normally fitting in a byte, is represented by a 4 byte @c
+    wchar_t.
+
+    It is possible to build wxWidgets with @c wxUSE_UNICODE_UTF8 set to 1 in
+    which case an UTF-8-encoded string representation is stored in @c
+    std::basic_string specialized for @c char, i.e. the usual @c std::string.
+    In this case the memory efficiency problem mentioned above doesn't arise
+    but run-time performance of many wxString methods changes dramatically, in
+    particular accessing the N-th character of the string becomes an operation
+    taking O(N) time instead of O(1), i.e. constant, time by default. Thus, if
+    you do use this so called UTF-8 build, you should avoid using indices to
+    access the strings whenever possible and use the iterators instead. As an
+    example, traversing the string using iterators is an O(N), where N is the
+    string length, operation in both the normal ("wchar_t") and UTF-8 builds
+    but doing it using indices becomes O(N^2) in UTF-8 case meaning that simply
+    checking every character of a reasonably long (e.g. a couple of millions
+    elements) string can take an unreasonably long time.
+
+    However, if you do use iterators, UTF-8 build can be a better choice than
+    the default build, especially for the memory-constrained embedded systems.
+    Notice also that GTK+ and DirectFB use UTF-8 internally, so using this
+    build not only saves memory for ASCII strings but also avoids conversions
+    between wxWidgets and the underlying toolkit.
 
 
     @section string_index Index of the member groups
@@ -497,9 +738,12 @@ public:
     /**
         Converts the string to an ASCII, 7-bit string in the form of
         a wxCharBuffer (Unicode builds only) or a C string (ANSI builds).
-        Note that this conversion only works if the string contains only ASCII
-        characters. The @ref mb_str() "mb_str" method provides more
-        powerful means of converting wxString to C string.
+
+        Note that this conversion is only lossless if the string contains only
+        ASCII characters as all the non-ASCII ones are replaced with the @c '_'
+        (underscore) character.
+
+        Use mb_str() or utf8_str() to convert to other encodings.
     */
     const char* ToAscii() const;
 
