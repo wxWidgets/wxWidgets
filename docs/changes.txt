@@ -87,6 +87,19 @@ The "stc" and "svg" contribs instead have been moved respectively into a new
 Changes in behaviour not resulting in compilation errors, please read this!
 ---------------------------------------------------------------------------
 
+- Don't pass wxString::c_str() to vararg functions any more! Due to Unicode
+  changes, c_str() now returns an object and not a simple char pointer, so
+  using it with vararg functions does not work any more. The preferred
+  solution is to use wx-provided equivalents, e.g. wxPrintf() instead of
+  printf() which has the added benefit that you don't need to call c_str()
+  any more and can pass wxString objects directly. If this is impossible,
+  add explicit casts to "const char*" or "const wchar_t*". See wxString
+  documentation for more details.
+
+  Notice that using wxString::c_str() with vararg functions does result in
+  compilation errors with g++ and most other compilers but not MSVC. Try to
+  build your code with g++ to detect all such problems at compile-time.
+
 - Default location of wxFileConfig files has changed under Windows, you will
   need to update your code if you access these files directly.
 
