@@ -364,7 +364,12 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
 
 // Helper for checking that the menu event processing resulted in the expected
 // output from the handlers.
-void CheckMenuEvent(wxMenu* menu, const char* expected)
+//
+// Notice that this is supposed to be used with ASSERT_MENU_EVENT_RESULT()
+// macro to make the file name and line number of the caller appear in the
+// failure messages.
+void
+CheckMenuEvent(wxMenu* menu, const char* result, CppUnit::SourceLine sourceLine)
 {
     g_str.clear();
 
@@ -373,8 +378,11 @@ void CheckMenuEvent(wxMenu* menu, const char* expected)
     // wxMenuBase::SendEvent() from their respective menu event handlers.
     menu->SendEvent(wxID_NEW);
 
-    CPPUNIT_ASSERT_EQUAL( expected, g_str );
+    CPPUNIT_NS::assertEquals( result, g_str, sourceLine, "" );
 }
+
+#define ASSERT_MENU_EVENT_RESULT(menu, result) \
+    CheckMenuEvent((menu), (result), CPPUNIT_SOURCELINE())
 
 void EventPropagationTestCase::MenuEvent()
 {
@@ -389,7 +397,7 @@ void EventPropagationTestCase::MenuEvent()
     wxON_BLOCK_EXIT_OBJ1( *frame, wxFrame::SetMenuBar, (wxMenuBar*)NULL );
 
     // Check that wxApp gets the event exactly once.
-    CheckMenuEvent( menu, "aA" );
+    ASSERT_MENU_EVENT_RESULT( menu, "aA" );
 
 
     // Check that the menu event handler is called.
@@ -397,7 +405,7 @@ void EventPropagationTestCase::MenuEvent()
     menu->SetNextHandler(&hm);
     wxON_BLOCK_EXIT_OBJ1( *menu,
                           wxEvtHandler::SetNextHandler, (wxEvtHandler*)NULL );
-    CheckMenuEvent( menu, "aomA" );
+    ASSERT_MENU_EVENT_RESULT( menu, "aomA" );
 
 
     // Test that the event handler associated with the menu bar gets the event.
@@ -405,7 +413,7 @@ void EventPropagationTestCase::MenuEvent()
     mb->PushEventHandler(&hb);
     wxON_BLOCK_EXIT_OBJ1( *mb, wxWindow::PopEventHandler, false );
 
-    CheckMenuEvent( menu, "aomobA" );
+    ASSERT_MENU_EVENT_RESULT( menu, "aomobA" );
 
 
     // Also test that the window to which the menu belongs gets the event.
@@ -413,5 +421,5 @@ void EventPropagationTestCase::MenuEvent()
     frame->PushEventHandler(&hw);
     wxON_BLOCK_EXIT_OBJ1( *frame, wxWindow::PopEventHandler, false );
 
-    CheckMenuEvent( menu, "aomobowA" );
+    ASSERT_MENU_EVENT_RESULT( menu, "aomobowA" );
 }
