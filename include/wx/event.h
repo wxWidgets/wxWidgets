@@ -1000,6 +1000,24 @@ public:
         return false;
     }
 
+    // This is for internal use only and is used for setting, testing and
+    // resetting of m_willBeProcessedAgain flag.
+    void SetWillBeProcessedAgain()
+    {
+        m_willBeProcessedAgain = true;
+    }
+
+    bool WillBeProcessedAgain()
+    {
+        if ( m_willBeProcessedAgain )
+        {
+            m_willBeProcessedAgain = false;
+            return true;
+        }
+
+        return false;
+    }
+
     // This is also used only internally by ProcessEvent() to check if it
     // should process the event normally or only restrict the search for the
     // event handler to this object itself.
@@ -1046,6 +1064,11 @@ protected:
     // variable name: it becomes true after ProcessEvent() was called at least
     // once for this event
     bool m_wasProcessed;
+
+    // This one is initially false too, but can be set to true to indicate that
+    // the event will be passed to another handler if it's not processed in
+    // this one.
+    bool m_willBeProcessedAgain;
 
 protected:
     wxEvent(const wxEvent&);            // for implementing Clone()

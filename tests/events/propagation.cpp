@@ -24,6 +24,9 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/frame.h"
+#include "wx/menu.h"
+
 #include "wx/scopeguard.h"
 
 namespace
@@ -77,6 +80,14 @@ struct TestEvtHandler : TestEvtHandlerBase<wxCommandEvent>
 {
     TestEvtHandler(char tag)
         : TestEvtHandlerBase<wxCommandEvent>(TEST_EVT, tag)
+    {
+    }
+};
+
+struct TestMenuEvtHandler : TestEvtHandlerBase<wxCommandEvent>
+{
+    TestMenuEvtHandler(char tag)
+        : TestEvtHandlerBase<wxCommandEvent>(wxEVT_MENU, tag)
     {
     }
 };
@@ -144,7 +155,8 @@ private:
 
 int DoFilterEvent(wxEvent& event)
 {
-    if ( event.GetEventType() == TEST_EVT )
+    if ( event.GetEventType() == TEST_EVT ||
+            event.GetEventType() == wxEVT_MENU )
         g_str += 'a';
 
     return -1;
@@ -152,7 +164,8 @@ int DoFilterEvent(wxEvent& event)
 
 bool DoProcessEvent(wxEvent& event)
 {
-    if ( event.GetEventType() == TEST_EVT )
+    if ( event.GetEventType() == TEST_EVT ||
+            event.GetEventType() == wxEVT_MENU )
         g_str += 'A';
 
     return false;
@@ -181,6 +194,7 @@ private:
         CPPUNIT_TEST( ForwardEvent );
         CPPUNIT_TEST( ScrollWindowWithoutHandler );
         CPPUNIT_TEST( ScrollWindowWithHandler );
+        CPPUNIT_TEST( MenuEvent );
     CPPUNIT_TEST_SUITE_END();
 
     void OneHandler();
@@ -190,6 +204,7 @@ private:
     void ForwardEvent();
     void ScrollWindowWithoutHandler();
     void ScrollWindowWithHandler();
+    void MenuEvent();
 
     DECLARE_NO_COPY_CLASS(EventPropagationTestCase)
 };
@@ -347,3 +362,48 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
     CPPUNIT_ASSERT_EQUAL( "apA", g_str );
 }
 
+// Helper for checking that the menu event processing resulted in the expected
+// output from the handlers.
+void CheckMenuEvent(wxMenu* menu, const char* expected)
+{
+    g_str.clear();
+
+    // Trigger the menu event: this is more reliable than using
+    // wxUIActionSimulator and currently works in all ports as they all call
+    // wxMenuBase::SendEvent() from their respective menu event handlers.
+    menu->SendEvent(wxID_NEW);
+
+    CPPUNIT_ASSERT_EQUAL( expected, g_str );
+}
+
+void EventPropagationTestCase::MenuEvent()
+{
+    // Create a minimal menu bar.
+    wxMenu* const menu = new wxMenu;
+    menu->Append(wxID_NEW);
+    wxMenuBar* const mb = new wxMenuBar;
+    mb->Append(menu, "&Menu");
+
+    wxFrame* const frame = static_cast<wxFrame*>(wxTheApp->GetTopWindow());
+    frame->SetMenuBar(mb);
+    wxON_BLOCK_EXIT_OBJ1( *frame, wxFrame::SetMenuBar, (wxMenuBar*)NULL );
+
+    // Check that wxApp gets the event exactly once.
+    CheckMenuEvent( menu, "aA" );
+
+
+    // Check that the menu event handler is called.
+    TestMenuEvtHandler hm('m'); // 'm' for "menu"
+    menu->SetNextHandler(&hm);
+    wxON_BLOCK_EXIT_OBJ1( *menu,
+                          wxEvtHandler::SetNextHandler, (wxEvtHandler*)NULL );
+    CheckMenuEvent( menu, "aomA" );
+
+
+    // Also test that the window to which the menu belongs gets the event.
+    TestMenuEvtHandler hw('w'); // 'w' for "Window"
+    frame->PushEventHandler(&hw);
+    wxON_BLOCK_EXIT_OBJ1( *frame, wxWindow::PopEventHandler, false );
+
+    CheckMenuEvent( menu, "aomowA" );
+}
