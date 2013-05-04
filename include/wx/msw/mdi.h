@@ -110,9 +110,6 @@ public:
 #endif // wxUSE_MENUS
 
 protected:
-    // override to pass menu/toolbar events to the active child first
-    virtual bool TryBefore(wxEvent& event);
-
 #if wxUSE_MENUS_NATIVE
     virtual void InternalSetMenuBar();
 #endif // wxUSE_MENUS_NATIVE

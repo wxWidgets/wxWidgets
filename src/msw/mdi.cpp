@@ -577,6 +577,19 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
                     MSWDefWindowProc(message, wParam, lParam);
                     processed = true;
                 }
+                else // Not a system command.
+                {
+                    // Menu (and toolbar) events should be sent to the active
+                    // child first and only be processed by the parent frame if
+                    // they're not handled there.
+                    if ( wxMDIChildFrame* child = GetActiveChild() )
+                    {
+                        processed = child->MSWHandleMessage(&rc,
+                                                            message,
+                                                            wParam,
+                                                            lParam);
+                    }
+                }
             }
             break;
 
@@ -694,20 +707,6 @@ void wxMDIParentFrame::OnMDICommand(wxCommandEvent& event)
 }
 
 #endif // wxUSE_MENUS
-
-bool wxMDIParentFrame::TryBefore(wxEvent& event)
-{
-    // menu (and toolbar) events should be sent to the active child frame
-    // first, if any
-    if ( event.GetEventType() == wxEVT_MENU )
-    {
-        wxMDIChildFrame * const child = GetActiveChild();
-        if ( child && child->ProcessWindowEventLocally(event) )
-            return true;
-    }
-
-    return wxMDIParentFrameBase::TryBefore(event);
-}
 
 WXLRESULT wxMDIParentFrame::MSWDefWindowProc(WXUINT message,
                                         WXWPARAM wParam,
