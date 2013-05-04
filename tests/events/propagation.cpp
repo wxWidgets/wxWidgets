@@ -24,6 +24,7 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/docmdi.h"
 #include "wx/frame.h"
 #include "wx/menu.h"
 #include "wx/scopedptr.h"
@@ -98,6 +99,26 @@ struct TestPaintEvtHandler : TestEvtHandlerBase<wxPaintEvent>
         : TestEvtHandlerBase<wxPaintEvent>(wxEVT_PAINT, tag)
     {
     }
+};
+
+// Another custom event handler, suitable for use with Connect().
+struct TestEvtSink : wxEvtHandler
+{
+    TestEvtSink(char tag)
+        : m_tag(tag)
+    {
+    }
+
+    void Handle(wxEvent& event)
+    {
+        g_str += m_tag;
+
+        event.Skip();
+    }
+
+    const char m_tag;
+
+    wxDECLARE_NO_COPY_CLASS(TestEvtSink);
 };
 
 // a window handling the test event
@@ -195,6 +216,7 @@ private:
         CPPUNIT_TEST( ScrollWindowWithoutHandler );
         CPPUNIT_TEST( ScrollWindowWithHandler );
         CPPUNIT_TEST( MenuEvent );
+        CPPUNIT_TEST( DocView );
     CPPUNIT_TEST_SUITE_END();
 
     void OneHandler();
@@ -205,6 +227,7 @@ private:
     void ScrollWindowWithoutHandler();
     void ScrollWindowWithHandler();
     void MenuEvent();
+    void DocView();
 
     DECLARE_NO_COPY_CLASS(EventPropagationTestCase)
 };
@@ -433,4 +456,96 @@ void EventPropagationTestCase::MenuEvent()
     wxON_BLOCK_EXIT_OBJ1( *frame, wxWindow::PopEventHandler, false );
 
     ASSERT_MENU_EVENT_RESULT( menu, "aomobowA" );
+}
+
+// Minimal viable implementations of wxDocument and wxView.
+class EventTestDocument : public wxDocument
+{
+public:
+    EventTestDocument() { }
+
+    wxDECLARE_DYNAMIC_CLASS(EventTestDocument);
+};
+
+class EventTestView : public wxView
+{
+public:
+    EventTestView() { }
+
+    virtual void OnDraw(wxDC*) { }
+
+    wxDECLARE_DYNAMIC_CLASS(EventTestView);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(EventTestDocument, wxDocument);
+wxIMPLEMENT_DYNAMIC_CLASS(EventTestView, wxView);
+
+void EventPropagationTestCase::DocView()
+{
+    // Set up the parent frame and its menu bar.
+    wxDocManager docManager;
+
+    wxScopedPtr<wxDocMDIParentFrame>
+        parent(new wxDocMDIParentFrame(&docManager, NULL, wxID_ANY, "Parent"));
+
+    wxMenu* const menu = CreateTestMenu(parent.get());
+
+
+    // Set up the event handlers.
+    TestEvtSink sinkDM('m');
+    docManager.Connect(wxEVT_MENU,
+                       wxEventHandler(TestEvtSink::Handle), NULL, &sinkDM);
+
+    TestEvtSink sinkParent('p');
+    parent->Connect(wxEVT_MENU,
+                    wxEventHandler(TestEvtSink::Handle), NULL, &sinkParent);
+
+
+    // Check that wxDocManager and wxFrame get the event in order.
+    ASSERT_MENU_EVENT_RESULT( menu, "ampA" );
+
+
+    // Now check what happens if we have an active document.
+    wxDocTemplate docTemplate(&docManager, "Test", "", "", "",
+                              "Test Document", "Test View",
+                              wxCLASSINFO(EventTestDocument),
+                              wxCLASSINFO(EventTestView));
+    wxDocument* const doc = docTemplate.CreateDocument("");
+    wxView* const view = doc->GetFirstView();
+
+    wxScopedPtr<wxFrame>
+        child(new wxDocMDIChildFrame(doc, view, parent.get(), wxID_ANY, "Child"));
+
+    wxMenu* const menuChild = CreateTestMenu(child.get());
+
+#ifdef __WXGTK__
+    // There are a lot of hacks related to child frame menu bar handling in
+    // wxGTK and, in particular, the code in src/gtk/mdi.cpp relies on getting
+    // idle events to really put everything in place. Moreover, as wxGTK uses
+    // GtkNotebook as its MDI pages container, the frame must be shown for all
+    // this to work as gtk_notebook_set_current_page() doesn't do anything if
+    // called for a hidden window (this incredible fact cost me quite some time
+    // to find empirically -- only to notice its confirmation in GTK+
+    // documentation immediately afterwards). So just do whatever it takes to
+    // make things work "as usual".
+    child->Show();
+    parent->Show();
+    wxYield();
+#endif // __WXGTK__
+
+    TestEvtSink sinkDoc('d');
+    doc->Connect(wxEVT_MENU,
+                 wxEventHandler(TestEvtSink::Handle), NULL, &sinkDoc);
+
+    TestEvtSink sinkView('v');
+    view->Connect(wxEVT_MENU,
+                  wxEventHandler(TestEvtSink::Handle), NULL, &sinkView);
+
+    TestEvtSink sinkChild('c');
+    child->Connect(wxEVT_MENU,
+                   wxEventHandler(TestEvtSink::Handle), NULL, &sinkChild);
+
+    // Check that wxDocument, wxView, wxDocManager, child frame and the parent
+    // get the event in order.
+    ASSERT_MENU_EVENT_RESULT( menuChild, "advmcpA" );
 }

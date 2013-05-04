@@ -2014,6 +2014,26 @@ void wxDocManager::ActivateView(wxView *view, bool activate)
 // wxDocChildFrameAnyBase
 // ----------------------------------------------------------------------------
 
+bool wxDocChildFrameAnyBase::TryProcessEvent(wxEvent& event)
+{
+    if ( !m_childView )
+    {
+        // We must be being destroyed, don't forward events anywhere as
+        // m_childDocument could be invalid by now.
+        return false;
+    }
+
+    // Forward the event to the document manager which will, in turn, forward
+    // it to its active view which must be our m_childView.
+    //
+    // Notice that we do things in this roundabout way to guarantee the correct
+    // event handlers call order: first the document, then the new and then the
+    // document manager itself. And if we forwarded the event directly to the
+    // view, then the document manager would do it once again when we forwarded
+    // it to it.
+    return m_childDocument->GetDocumentManager()->ProcessEventLocally(event);
+}
+
 bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
 {
     if ( m_childView )
@@ -2044,6 +2064,35 @@ bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
 
 // ----------------------------------------------------------------------------
 // wxDocParentFrameAnyBase
+// ----------------------------------------------------------------------------
+
+bool wxDocParentFrameAnyBase::TryProcessEvent(wxEvent& event)
+{
+    if ( !m_docManager )
+        return false;
+
+    // If we have an active view, its associated child frame may have
+    // already forwarded the event to wxDocManager, check for this:
+    if ( wxView* const view = m_docManager->GetAnyUsableView() )
+    {
+        // Notice that we intentionally don't use wxGetTopLevelParent() here
+        // because we want to check both for the case of a child "frame" (e.g.
+        // MDI child frame or notebook page) inside this TLW and a separate
+        // child TLW frame (as used in the SDI mode) here.
+        for ( wxWindow* win = view->GetFrame(); win; win = win->GetParent() )
+        {
+            if ( win == m_frame )
+                return false;
+        }
+    }
+
+    // But forward the event to wxDocManager ourselves if there are no views at
+    // all or if we are the frame's view ourselves.
+    return m_docManager->ProcessEventLocally(event);
+}
+
+// ----------------------------------------------------------------------------
+// Printing support
 // ----------------------------------------------------------------------------
 
 #if wxUSE_PRINTING_ARCHITECTURE

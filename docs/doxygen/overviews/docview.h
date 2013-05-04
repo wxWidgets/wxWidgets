@@ -214,6 +214,30 @@ There may be multiple wxDocManager instances in an application. See the example
 application in @c samples/docview.
 
 
+@section overview_docview_events Event Propagation in Document/View framework
+
+While wxDocument, wxDocManager and wxView are abstract objects, with which the
+user can't interact directly, all of them derive from wxEvtHandler class and
+can handle events arising in the windows showing the document with which the
+user does interact. This is implemented by adding additional steps to the event
+handling process described in @ref overview_events_processing, so the full list
+of the handlers searched for an event occurring directly in wxDocChildFrame is:
+<ol>
+    <li>wxDocument opened in this frame.</li>
+    <li>wxView shown in this frame.</li>
+    <li>wxDocManager associated with the parent wxDocParentFrame.</li>
+    <li>wxDocChildFrame itself.</li>
+    <li>wxDocParentFrame, as per the usual event bubbling up to parent rules.</li>
+    <li>wxApp, again as the usual fallback for all events.</li>
+</ol>
+
+This is mostly useful to define handlers for some menu commands directly in
+wxDocument or wxView and is also used by the framework itself to define the
+handlers for several standard commands, such as wxID_NEW or wxID_SAVE, in
+wxDocManager itself. Notice that due to the order of the event handler search
+detailed above, the handling of these commands can @e not be overridden at
+wxDocParentFrame level but must be done at the level of wxDocManager itself.
+
 
 @section overview_docview_wxcommand wxCommand Overview
 

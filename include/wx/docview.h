@@ -643,10 +643,7 @@ protected:
     // we're not a wxEvtHandler but we provide this wxEvtHandler-like function
     // which is called from TryBefore() of the derived classes to give our view
     // a chance to process the message before the frame event handlers are used
-    bool TryProcessEvent(wxEvent& event)
-    {
-        return m_childView && m_childView->ProcessEventLocally(event);
-    }
+    bool TryProcessEvent(wxEvent& event);
 
     // called from EVT_CLOSE handler in the frame: check if we can close and do
     // cleanup if so; veto the event otherwise
@@ -830,11 +827,22 @@ private:
 class WXDLLIMPEXP_CORE wxDocParentFrameAnyBase
 {
 public:
-    wxDocParentFrameAnyBase() { m_docManager = NULL; }
+    wxDocParentFrameAnyBase(wxWindow* frame)
+        : m_frame(frame)
+    {
+        m_docManager = NULL;
+    }
 
     wxDocManager *GetDocumentManager() const { return m_docManager; }
 
 protected:
+    // This is similar to wxDocChildFrameAnyBase method with the same name:
+    // while we're not an event handler ourselves and so can't override
+    // TryBefore(), we provide a helper that the derived template class can use
+    // from its TryBefore() implementation.
+    bool TryProcessEvent(wxEvent& event);
+
+    wxWindow* const m_frame;
     wxDocManager *m_docManager;
 
     wxDECLARE_NO_COPY_CLASS(wxDocParentFrameAnyBase);
@@ -847,7 +855,7 @@ class WXDLLIMPEXP_CORE wxDocParentFrameAny : public BaseFrame,
                                              public wxDocParentFrameAnyBase
 {
 public:
-    wxDocParentFrameAny() { }
+    wxDocParentFrameAny() : wxDocParentFrameAnyBase(this) { }
     wxDocParentFrameAny(wxDocManager *manager,
                         wxFrame *frame,
                         wxWindowID id,
@@ -856,6 +864,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
                         const wxString& name = wxFrameNameStr)
+        : wxDocParentFrameAnyBase(this)
     {
         Create(manager, frame, id, title, pos, size, style, name);
     }
@@ -886,10 +895,7 @@ protected:
     // hook the document manager into event handling chain here
     virtual bool TryBefore(wxEvent& event)
     {
-        if ( m_docManager && m_docManager->ProcessEventLocally(event) )
-            return true;
-
-        return BaseFrame::TryBefore(event);
+        return TryProcessEvent(event) || BaseFrame::TryBefore(event);
     }
 
 private:
