@@ -1185,7 +1185,7 @@ void wxDocManager::OnMRUFileNotExist(unsigned n, const wxString& filename)
 
 void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
-    wxView *view = GetActiveView();
+    wxView *view = GetAnyUsableView();
     if (!view)
         return;
 
@@ -1219,7 +1219,7 @@ wxPreviewFrame* wxDocManager::CreatePreviewFrame(wxPrintPreviewBase* preview,
 void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 {
     wxBusyCursor busy;
-    wxView *view = GetActiveView();
+    wxView *view = GetAnyUsableView();
     if (!view)
         return;
 
@@ -1348,7 +1348,7 @@ void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
     cmdproc->SetMenuStrings();
 }
 
-wxView *wxDocManager::GetActiveView() const
+wxView *wxDocManager::GetAnyUsableView() const
 {
     wxView *view = GetCurrentView();
 
@@ -1374,7 +1374,7 @@ wxView *wxDocManager::GetActiveView() const
 
 bool wxDocManager::TryBefore(wxEvent& event)
 {
-    wxView * const view = GetActiveView();
+    wxView * const view = GetAnyUsableView();
     return view && view->ProcessEventLocally(event);
 }
 
@@ -1570,7 +1570,7 @@ bool wxDocManager::FlushDoc(wxDocument *WXUNUSED(doc))
 
 wxDocument *wxDocManager::GetCurrentDocument() const
 {
-    wxView * const view = GetActiveView();
+    wxView * const view = GetAnyUsableView();
     return view ? view->GetDocument() : NULL;
 }
 

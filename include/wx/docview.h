@@ -472,6 +472,12 @@ public:
     virtual void ActivateView(wxView *view, bool activate = true);
     virtual wxView *GetCurrentView() const { return m_currentView; }
 
+    // This method tries to find an active view harder than GetCurrentView():
+    // if the latter is NULL, it also checks if we don't have just a single
+    // view and returns it then.
+    wxView *GetAnyUsableView() const;
+
+
 #ifndef __VISUALC6__
     wxDocVector GetDocumentsVector() const;
     wxDocTemplateVector GetTemplatesVector() const;
@@ -550,11 +556,6 @@ protected:
 
     // return the command processor for the current document, if any
     wxCommandProcessor *GetCurrentCommandProcessor() const;
-
-    // this method tries to find an active view harder than GetCurrentView():
-    // if the latter is NULL, it also checks if we don't have just a single
-    // view and returns it then
-    wxView *GetActiveView() const;
 
     int               m_defaultDocumentNameCounter;
     int               m_maxDocsOpen;
