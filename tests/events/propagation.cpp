@@ -26,7 +26,7 @@
 
 #include "wx/frame.h"
 #include "wx/menu.h"
-
+#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 
 namespace
@@ -362,6 +362,19 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
     CPPUNIT_ASSERT_EQUAL( "apA", g_str );
 }
 
+// Create a menu bar with a single menu containing wxID_APPLY menu item and
+// attach it to the specified frame.
+wxMenu* CreateTestMenu(wxFrame* frame)
+{
+    wxMenu* const menu = new wxMenu;
+    menu->Append(wxID_APPLY);
+    wxMenuBar* const mb = new wxMenuBar;
+    mb->Append(menu, "&Menu");
+    frame->SetMenuBar(mb);
+
+    return menu;
+}
+
 // Helper for checking that the menu event processing resulted in the expected
 // output from the handlers.
 //
@@ -376,7 +389,7 @@ CheckMenuEvent(wxMenu* menu, const char* result, CppUnit::SourceLine sourceLine)
     // Trigger the menu event: this is more reliable than using
     // wxUIActionSimulator and currently works in all ports as they all call
     // wxMenuBase::SendEvent() from their respective menu event handlers.
-    menu->SendEvent(wxID_NEW);
+    menu->SendEvent(wxID_APPLY);
 
     CPPUNIT_NS::assertEquals( result, g_str, sourceLine, "" );
 }
@@ -386,14 +399,12 @@ CheckMenuEvent(wxMenu* menu, const char* result, CppUnit::SourceLine sourceLine)
 
 void EventPropagationTestCase::MenuEvent()
 {
-    // Create a minimal menu bar.
-    wxMenu* const menu = new wxMenu;
-    menu->Append(wxID_NEW);
-    wxMenuBar* const mb = new wxMenuBar;
-    mb->Append(menu, "&Menu");
-
     wxFrame* const frame = static_cast<wxFrame*>(wxTheApp->GetTopWindow());
-    frame->SetMenuBar(mb);
+
+    // Create a minimal menu bar.
+    wxMenu* const menu = CreateTestMenu(frame);
+    wxMenuBar* const mb = menu->GetMenuBar();
+    wxScopedPtr<wxMenuBar> ensureMenuBarDestruction(mb);
     wxON_BLOCK_EXIT_OBJ1( *frame, wxFrame::SetMenuBar, (wxMenuBar*)NULL );
 
     // Check that wxApp gets the event exactly once.
