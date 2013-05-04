@@ -643,7 +643,8 @@ bool wxMenuBase::SendEvent(int itemid, int checked)
     event.SetEventObject(this);
     event.SetInt(checked);
 
-    wxWindow * const win = GetWindow();
+    wxWindow* const win = GetWindow();
+    wxMenuBar* const mb = GetMenuBar();
 
     // Try the menu's event handler first
     wxEvtHandler *handler = GetEventHandler();
@@ -653,16 +654,21 @@ bool wxMenuBase::SendEvent(int itemid, int checked)
         // event to another handler if it's not processed here to prevent it
         // from passing the event to wxTheApp: this will be done below if we do
         // have the associated window.
-        if ( win )
+        if ( win || mb )
             event.SetWillBeProcessedAgain();
 
         if ( handler->SafelyProcessEvent(event) )
             return true;
     }
 
-    // Try the window the menu was popped up from or its menu bar belongs to
-    if ( win && win->HandleWindowEvent(event) )
-        return true;
+    // If this menu is part of the menu bar, process the event there: this will
+    // also propagate it upwards to the window containing the menu bar.
+    if ( mb )
+        return mb->HandleWindowEvent(event);
+
+    // Try the window the menu was popped up from.
+    if ( win )
+        return win->HandleWindowEvent(event);
 
     // Not processed.
     return false;

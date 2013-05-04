@@ -400,10 +400,18 @@ void EventPropagationTestCase::MenuEvent()
     CheckMenuEvent( menu, "aomA" );
 
 
+    // Test that the event handler associated with the menu bar gets the event.
+    TestMenuEvtHandler hb('b'); // 'b' for "menu Bar"
+    mb->PushEventHandler(&hb);
+    wxON_BLOCK_EXIT_OBJ1( *mb, wxWindow::PopEventHandler, false );
+
+    CheckMenuEvent( menu, "aomobA" );
+
+
     // Also test that the window to which the menu belongs gets the event.
     TestMenuEvtHandler hw('w'); // 'w' for "Window"
     frame->PushEventHandler(&hw);
     wxON_BLOCK_EXIT_OBJ1( *frame, wxWindow::PopEventHandler, false );
 
-    CheckMenuEvent( menu, "aomowA" );
+    CheckMenuEvent( menu, "aomobowA" );
 }
