@@ -925,6 +925,7 @@ void wxMenuBarBase::Attach(wxFrame *frame)
 {
     wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
 
+    SetParent(frame);
     m_menuBarFrame = frame;
 }
 
@@ -933,6 +934,7 @@ void wxMenuBarBase::Detach()
     wxASSERT_MSG( IsAttached(), wxT("detaching unattached menubar") );
 
     m_menuBarFrame = NULL;
+    SetParent(NULL);
 }
 
 // ----------------------------------------------------------------------------
