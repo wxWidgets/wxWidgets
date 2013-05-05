@@ -82,7 +82,32 @@ bool wxGtkFileChooser::SetPath( const wxString& path )
     if ( path.empty() )
         return true;
 
-    return gtk_file_chooser_set_filename( m_widget, path.utf8_str() ) != 0;
+    switch ( gtk_file_chooser_get_action( m_widget ) )
+    {
+        case GTK_FILE_CHOOSER_ACTION_SAVE:
+            {
+                wxFileName fn(path);
+
+                const wxString fname = fn.GetFullName();
+                gtk_file_chooser_set_current_name( m_widget, fname.utf8_str() );
+
+                // set the initial file name and/or directory
+                const wxString dir = fn.GetPath();
+                return gtk_file_chooser_set_current_folder( m_widget,
+                                                            dir.utf8_str() ) != 0;
+            }
+
+        case GTK_FILE_CHOOSER_ACTION_OPEN:
+            return gtk_file_chooser_set_filename( m_widget, path.utf8_str() ) != 0;
+
+        case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+        case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
+            break;
+    }
+
+    wxFAIL_MSG( "Unexpected file chooser type" );
+
+    return false;
 }
 
 bool wxGtkFileChooser::SetDirectory( const wxString& dir )
