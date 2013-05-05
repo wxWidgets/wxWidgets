@@ -30,6 +30,16 @@
 #include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 
+// FIXME: Currently under OS X testing paint event doesn't work because neither
+//        calling Refresh()+Update() nor even sending wxPaintEvent directly to
+//        the window doesn't result in calls to its event handlers, so disable
+//        some tests there. But this should be fixed and the tests reenabled
+//        because wxPaintEvent propagation in wxScrolledWindow is a perfect
+//        example of fragile code that could be broken under OS X.
+#ifndef __WXOSX__
+    #define CAN_TEST_PAINT_EVENTS
+#endif
+
 namespace
 {
 
@@ -157,6 +167,21 @@ public:
         : wxScrolledWindow(parent, wxID_ANY)
     {
         Connect(wxEVT_PAINT, wxPaintEventHandler(TestScrollWindow::OnPaint));
+    }
+
+    void GeneratePaintEvent()
+    {
+#ifdef __WXGTK__
+        // We need to map the window, otherwise we're not going to get any
+        // paint events for it.
+        wxYield();
+
+        // Ignore events generated during the initial mapping.
+        g_str.clear();
+#endif // __WXGTK__
+
+        Refresh();
+        Update();
     }
 
     virtual void OnDraw(wxDC& WXUNUSED(dc))
@@ -351,11 +376,11 @@ void EventPropagationTestCase::ScrollWindowWithoutHandler()
 
     TestScrollWindow * const win = new TestScrollWindow(parent);
 
-#if !defined(__WXOSX__) && !defined(__WXGTK3__)
-    wxPaintEvent event(win->GetId());
-    win->ProcessWindowEvent(event);
+#ifdef CAN_TEST_PAINT_EVENTS
+    win->GeneratePaintEvent();
     CPPUNIT_ASSERT_EQUAL( "PD", g_str );
 #endif
+
     g_str.clear();
     wxCommandEvent eventCmd(TEST_EVT);
     win->HandleWindowEvent(eventCmd);
@@ -369,13 +394,12 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
 
     TestScrollWindow * const win = new TestScrollWindow(parent);
 
-#if !defined(__WXOSX__) && !defined(__WXGTK3__)
+#ifdef CAN_TEST_PAINT_EVENTS
     TestPaintEvtHandler h('h');
     win->PushEventHandler(&h);
     wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
 
-    wxPaintEvent event(win->GetId());
-    win->ProcessWindowEvent(event);
+    win->GeneratePaintEvent();
     CPPUNIT_ASSERT_EQUAL( "ohPD", g_str );
 #endif
 
