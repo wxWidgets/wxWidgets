@@ -909,16 +909,16 @@ wxString wxWebViewWebKit::GetSelectedSource() const
                        "var element = document.createElement('div');"
                        "element.appendChild(range.cloneContents());"
                        "return element.innerHTML;");
-    id result = [[m_webView windowScriptObject]
-                   evaluateWebScript:wxNSStringWithWxString(script)];
-    return wxStringWithNSString([result stringValue]);
+    NSString *result = [m_webView stringByEvaluatingJavaScriptFromString:
+                                  wxNSStringWithWxString(script)];
+    return wxStringWithNSString(result);
 }
 
 wxString wxWebViewWebKit::GetPageText() const
 {
-    id result = [[m_webView windowScriptObject]
-                 evaluateWebScript:@"document.body.textContent"];
-    return wxStringWithNSString([result stringValue]);
+    NSString *result = [m_webView stringByEvaluatingJavaScriptFromString:
+                                  @"document.body.textContent"];
+    return wxStringWithNSString(result);
 }
 
 void wxWebViewWebKit::EnableHistory(bool enable)
