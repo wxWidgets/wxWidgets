@@ -1444,10 +1444,10 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
         // this were not the case.
         wxASSERT_MSG( strcmp(setlocale(LC_ALL, NULL), "C") == 0,
                       wxS("You probably called setlocale() directly instead ")
-                      wxS("of calling wxSetLocale() and now there is a ")
+                      wxS("of using wxLocale and now there is a ")
                       wxS("mismatch between C/C++ and Windows locale.\n")
-                      wxS("Things are going to break, use wxSetLocale() to ")
-                      wxS("avoid this!") );
+                      wxS("Things are going to break, please only change ")
+                      wxS("locale by creating wxLocale objects to avoid this!") );
 
 
         // Return the hard coded values for C locale. This is really the right
