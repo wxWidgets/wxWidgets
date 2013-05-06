@@ -57,24 +57,24 @@ public:
         order.
     */
     void BigEndianOrdered(bool be_order);
-    
+
     /**
        Returns the current text conversion class used for
        writing strings.
     */
     wxMBConv *GetConv() const;
 
-    /** 
+    /**
        Sets the text conversion class used for writing strings.
     */
     void SetConv( const wxMBConv &conv );
-    
+
     /**
         Writes the single byte @a i8 to the stream.
     */
     void Write8(wxUint8 i8);
     /**
-        Writes an array of bytes to the stream. The amount of bytes to write is
+        Writes an array of bytes to the stream. The number of bytes to write is
         specified with the @a size variable.
     */
     void Write8(const wxUint8* buffer, size_t size);
@@ -84,7 +84,7 @@ public:
     */
     void Write16(wxUint16 i16);
     /**
-        Writes an array of 16 bit unsigned integer to the stream. The amount of
+        Writes an array of 16 bit unsigned integer to the stream. The number of
         16 bit unsigned integer to write is specified with the @a size variable.
     */
     void Write16(const wxUint16* buffer, size_t size);
@@ -94,7 +94,7 @@ public:
     */
     void Write32(wxUint32 i32);
     /**
-        Writes an array of 32 bit unsigned integer to the stream. The amount of
+        Writes an array of 32 bit unsigned integer to the stream. The number of
         32 bit unsigned integer to write is specified with the @a size variable.
     */
     void Write32(const wxUint32* buffer, size_t size);
@@ -104,7 +104,7 @@ public:
     */
     void Write64(wxUint64 i64);
     /**
-        Writes an array of 64 bit unsigned integer to the stream. The amount of
+        Writes an array of 64 bit unsigned integer to the stream. The number of
         64 bit unsigned integer to write is specified with the @a size variable.
     */
     void Write64(const wxUint64* buffer, size_t size);
@@ -114,8 +114,8 @@ public:
     */
     void WriteDouble(double d);
     /**
-        Writes an array of double to the stream. The amount of double to write is
-        specified with the @a size variable.
+        Writes an array of double to the stream. The number of doubles to write is
+        specified by the @a size variable.
     */
     void WriteDouble(const double* buffer, size_t size);
 
@@ -204,19 +204,18 @@ public:
     */
     void BigEndianOrdered(bool be_order);
 
-    
     /**
        Returns the current text conversion class used for
        reading strings.
     */
     wxMBConv *GetConv() const;
-    
+
     /**
         Reads a single byte from the stream.
     */
     wxUint8 Read8();
     /**
-        Reads bytes from the stream in a specified buffer. The amount of bytes
+        Reads bytes from the stream in a specified buffer. The number of bytes
         to read is specified by the @a size variable.
     */
     void Read8(wxUint8* buffer, size_t size);
@@ -227,7 +226,7 @@ public:
     wxUint16 Read16();
     /**
         Reads 16 bit unsigned integers from the stream in a specified buffer.
-        The amount of 16 bit unsigned integers to read is specified by the
+        The number of 16 bit unsigned integers to read is specified by the
         @a size variable.
     */
     void Read16(wxUint16* buffer, size_t size);
@@ -238,7 +237,7 @@ public:
     wxUint32 Read32();
     /**
         Reads 32 bit unsigned integers from the stream in a specified buffer.
-        The amount of 32 bit unsigned integers to read is specified by the
+        The number of 32 bit unsigned integers to read is specified by the
         @a size variable.
     */
     void Read32(wxUint32* buffer, size_t size);
@@ -249,7 +248,7 @@ public:
     wxUint64 Read64();
     /**
         Reads 64 bit unsigned integers from the stream in a specified buffer.
-        The amount of 64 bit unsigned integers to read is specified by the
+        The number of 64 bit unsigned integers to read is specified by the
         @a size variable.
     */
     void Read64(wxUint64* buffer, size_t size);
@@ -260,7 +259,8 @@ public:
     double ReadDouble();
     /**
         Reads double data (IEEE encoded) from the stream in a specified buffer.
-        The amount of doubles to read is specified by the @a size variable.
+
+        The number of doubles to read is specified by the @a size variable.
     */
     void ReadDouble(double* buffer, size_t size);
 
@@ -279,7 +279,7 @@ public:
     */
     wxString ReadString();
 
-    /** 
+    /**
        Sets the text conversion class used for reading strings.
     */
     void SetConv( const wxMBConv &conv );
