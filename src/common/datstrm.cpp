@@ -24,6 +24,24 @@
     #include "wx/math.h"
 #endif //WX_PRECOMP
 
+namespace
+{
+
+// helper unions used to swap bytes of floats and doubles
+union Float32Data
+{
+    wxFloat32 f;
+    wxUint32 i;
+};
+
+union Float64Data
+{
+    wxFloat64 f;
+    wxUint32 i[2];
+};
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxDataStreamBase
 // ----------------------------------------------------------------------------
@@ -37,6 +55,12 @@ wxDataStreamBase::wxDataStreamBase(const wxMBConv& conv)
     wxUnusedVar(conv);
 
     m_be_order = false;
+
+    // For compatibility with the existing data files, we use extended
+    // precision if it is available, i.e. if wxUSE_APPLE_IEEE is on.
+#if wxUSE_APPLE_IEEE
+    m_useExtendedPrecision = true;
+#endif // wxUSE_APPLE_IEEE
 }
 
 #if wxUSE_UNICODE
@@ -108,13 +132,48 @@ wxUint8 wxDataInputStream::Read8()
 double wxDataInputStream::ReadDouble()
 {
 #if wxUSE_APPLE_IEEE
-  char buf[10];
+    if ( m_useExtendedPrecision )
+    {
+        char buf[10];
 
-  m_input->Read(buf, 10);
-  return wxConvertFromIeeeExtended((const wxInt8 *)buf);
-#else
-  return 0.0;
-#endif
+        m_input->Read(buf, 10);
+        return wxConvertFromIeeeExtended((const wxInt8 *)buf);
+    }
+    else
+#endif // wxUSE_APPLE_IEEE
+    {
+        Float64Data floatData;
+
+        if ( m_be_order == (wxBYTE_ORDER == wxBIG_ENDIAN) )
+        {
+            floatData.i[0] = Read32();
+            floatData.i[1] = Read32();
+        }
+        else
+        {
+            floatData.i[1] = Read32();
+            floatData.i[0] = Read32();
+        }
+
+        return static_cast<double>(floatData.f);
+    }
+}
+
+float wxDataInputStream::ReadFloat()
+{
+#if wxUSE_APPLE_IEEE
+    if ( m_useExtendedPrecision )
+    {
+        return (float)ReadDouble();
+    }
+    else
+#endif // wxUSE_APPLE_IEEE
+    {
+        Float32Data floatData;
+
+        floatData.i = Read32();
+        return static_cast<float>(floatData.f);
+    }
 }
 
 wxString wxDataInputStream::ReadString()
@@ -388,6 +447,14 @@ void wxDataInputStream::ReadDouble(double *buffer, size_t size)
   }
 }
 
+void wxDataInputStream::ReadFloat(float *buffer, size_t size)
+{
+  for (wxUint32 i=0; i<size; i++)
+  {
+    *(buffer++) = ReadFloat();
+  }
+}
+
 wxDataInputStream& wxDataInputStream::operator>>(wxString& s)
 {
   s = ReadString();
@@ -466,7 +533,7 @@ wxDataInputStream& wxDataInputStream::operator>>(double& d)
 
 wxDataInputStream& wxDataInputStream::operator>>(float& f)
 {
-  f = (float)ReadDouble();
+  f = ReadFloat();
   return *this;
 }
 
@@ -535,22 +602,49 @@ void wxDataOutputStream::WriteString(const wxString& string)
 
 void wxDataOutputStream::WriteDouble(double d)
 {
-  char buf[10];
-
 #if wxUSE_APPLE_IEEE
-  wxConvertToIeeeExtended(d, (wxInt8 *)buf);
-#else
-  wxUnusedVar(d);
-#if !defined(__VMS__) && !defined(__GNUG__)
-#ifdef _MSC_VER
-# pragma message("wxDataOutputStream::WriteDouble() not using IeeeExtended - will not work!")
-#else
-# pragma warning "wxDataOutputStream::WriteDouble() not using IeeeExtended - will not work!"
-#endif
-#endif
-   buf[0] = '\0';
-#endif
-  m_output->Write(buf, 10);
+    if ( m_useExtendedPrecision )
+    {
+        char buf[10];
+
+        wxConvertToIeeeExtended(d, (wxInt8 *)buf);
+        m_output->Write(buf, 10);
+    }
+    else
+#endif // wxUSE_APPLE_IEEE
+    {
+        Float64Data floatData;
+
+        floatData.f = (wxFloat64)d;
+
+        if ( m_be_order == (wxBYTE_ORDER == wxBIG_ENDIAN) )
+        {
+            Write32(floatData.i[0]);
+            Write32(floatData.i[1]);
+        }
+        else
+        {
+            Write32(floatData.i[1]);
+            Write32(floatData.i[0]);
+        }
+    }
+}
+
+void wxDataOutputStream::WriteFloat(float f)
+{
+#if wxUSE_APPLE_IEEE
+    if ( m_useExtendedPrecision )
+    {
+        WriteDouble((double)f);
+    }
+    else
+#endif // wxUSE_APPLE_IEEE
+    {
+        Float32Data floatData;
+
+        floatData.f = (wxFloat32)f;
+        Write32(floatData.i);
+    }
 }
 
 #if wxHAS_INT64
@@ -664,6 +758,14 @@ void wxDataOutputStream::WriteDouble(const double *buffer, size_t size)
   }
 }
 
+void wxDataOutputStream::WriteFloat(const float *buffer, size_t size)
+{
+  for (wxUint32 i=0; i<size; i++)
+  {
+    WriteFloat(*(buffer++));
+  }
+}
+
 wxDataOutputStream& wxDataOutputStream::operator<<(const wxString& string)
 {
   WriteString(string);
@@ -742,7 +844,7 @@ wxDataOutputStream& wxDataOutputStream::operator<<(double d)
 
 wxDataOutputStream& wxDataOutputStream::operator<<(float f)
 {
-  WriteDouble((double)f);
+  WriteFloat(f);
   return *this;
 }
 

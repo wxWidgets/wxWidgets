@@ -59,7 +59,7 @@ library:
 @itemdef{wxUSE_ARTPROVIDER_STD, Use standard low quality icons in wxArtProvider.}
 @itemdef{wxUSE_ARTPROVIDER_TANGO, Use Tango icons in wxArtProvider.}
 @itemdef{wxUSE_ANY, Use wxAny class.}
-@itemdef{wxUSE_APPLE_IEEE, IEEE Extended to/from double routines; see src/common/extended.c file.}
+@itemdef{wxUSE_APPLE_IEEE, IEEE Extended to/from double routines, see wxDataOutputStream.}
 @itemdef{wxUSE_ARCHIVE_STREAMS, Enable streams for archive formats.}
 @itemdef{wxUSE_AUI, Use AUI (dockable windows) library.}
 @itemdef{wxUSE_BASE64, Enables Base64 support.}

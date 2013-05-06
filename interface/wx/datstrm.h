@@ -10,8 +10,19 @@
     @class wxDataOutputStream
 
     This class provides functions that write binary data types in a portable
-    way. Data can be written in either big-endian or little-endian format,
-    little-endian being the default on all architectures.
+    way.
+
+    Data can be written in either big-endian or little-endian format,
+    little-endian being the default on all architectures but BigEndianOrdered()
+    can be used to change this. The default format for the floating point types
+    is 80 bit "extended precision" unless @c wxUSE_APPLE_IEEE was turned off
+    during the library compilation, in which case extended precision is not
+    available at all. You can call UseBasicPrecisions() to change this and
+    use the standard IEEE 754 32 bit single precision format for floats and
+    standard 64 bit double precision format for doubles. This is recommended
+    for the new code for better interoperability with other software that
+    typically uses standard IEEE 754 formats for its data, the use of extended
+    precision by default is solely due to backwards compatibility.
 
     If you want to write data to text files (or streams) use wxTextOutputStream
     instead.
@@ -70,6 +81,40 @@ public:
     void SetConv( const wxMBConv &conv );
 
     /**
+        Disables the use of extended precision format for floating point
+        numbers.
+
+        This method disables the use of 80 bit extended precision format for
+        the @c float and @c double values written to the stream, which is used
+        by default (unless @c wxUSE_APPLE_IEEE was set to @c 0 when building
+        the library, in which case the extended format support is not available
+        at all and this function does nothing).
+
+        After calling it, @c float values will be written out in one of IEEE
+        754 "basic formats", i.e. 32 bit single precision format for floats and
+        64 bit double precision format for doubles.
+
+        @since 2.9.5
+    */
+    void UseBasicPrecisions();
+
+    /**
+        Explicitly request the use of extended precision for floating point
+        numbers.
+
+        This function allows the application code to explicitly request the use
+        of 80 bit extended precision format for the floating point numbers.
+        This is the case by default but using this function explicitly ensures
+        that the compilation of code relying on producing the output stream
+        using extended precision would fail when using a version of wxWidgets
+        compiled with @c wxUSE_APPLE_IEEE==0 and so not supporting this format
+        at all.
+
+        @since 2.9.5
+     */
+    void UseExtendedPrecision();
+
+    /**
         Writes the single byte @a i8 to the stream.
     */
     void Write8(wxUint8 i8);
@@ -110,9 +155,34 @@ public:
     void Write64(const wxUint64* buffer, size_t size);
 
     /**
-        Writes the double @a d to the stream using the IEEE format.
+        Writes the float @a f to the stream.
+
+        If UseBasicPrecisions() had been called, the value is written out using
+        the standard IEEE 754 32 bit single precision format. Otherwise, this
+        method uses the same format as WriteDouble(), i.e. 80 bit extended
+        precision representation.
+
+        @since 2.9.5
+    */
+    void WriteFloat(float f);
+
+    /**
+        Writes an array of float to the stream. The number of floats to write is
+        specified by the @a size variable.
+
+        @since 2.9.5
+    */
+    void WriteFloat(const float* buffer, size_t size);
+
+    /**
+        Writes the double @a d to the stream.
+
+        The output format is either 80 bit extended precision or, if
+        UseBasicPrecisions() had been called, standard IEEE 754 64 bit double
+        precision.
     */
     void WriteDouble(double d);
+
     /**
         Writes an array of double to the stream. The number of doubles to write is
         specified by the @a size variable.
@@ -140,8 +210,10 @@ public:
     @class wxDataInputStream
 
     This class provides functions that read binary data types in a portable
-    way. Data can be read in either big-endian or little-endian format,
-    little-endian being the default on all architectures.
+    way.
+
+    Please see wxDataOutputStream for the discussion of the format expected by
+    this stream on input, notably for the floating point values.
 
     If you want to read data from text files (or streams) use wxTextInputStream
     instead.
@@ -254,11 +326,37 @@ public:
     void Read64(wxUint64* buffer, size_t size);
 
     /**
-        Reads a double (IEEE encoded) from the stream.
+        Reads a float from the stream.
+
+        Notice that if UseBasicPrecisions() hadn't been called, this function
+        simply reads a double and truncates it to float as by default the same
+        (80 bit extended precision) representation is used for both float and
+        double values.
+
+        @since 2.9.5
+    */
+    float ReadFloat();
+
+    /**
+        Reads float data from the stream in a specified buffer.
+
+        The number of floats to read is specified by the @a size variable.
+
+        @since 2.9.5
+    */
+    void ReadFloat(float* buffer, size_t size);
+
+    /**
+        Reads a double from the stream.
+
+        The expected format is either 80 bit extended precision or, if
+        UseBasicPrecisions() had been called, standard IEEE 754 64 bit double
+        precision.
     */
     double ReadDouble();
+
     /**
-        Reads double data (IEEE encoded) from the stream in a specified buffer.
+        Reads double data  from the stream in a specified buffer.
 
         The number of doubles to read is specified by the @a size variable.
     */
@@ -283,5 +381,39 @@ public:
        Sets the text conversion class used for reading strings.
     */
     void SetConv( const wxMBConv &conv );
+
+    /**
+        Disables the use of extended precision format for floating point
+        numbers.
+
+        This method disables the use of 80 bit extended precision format for
+        the @c float and @c double values read from the stream, which is used
+        by default (unless @c wxUSE_APPLE_IEEE was set to @c 0 when building
+        the library, in which case the extended format support is not available
+        at all and this function does nothing).
+
+        After calling it, @c float values will be expected to appear in one of
+        IEEE 754 "basic formats", i.e. 32 bit single precision format for
+        floats and 64 bit double precision format for doubles in the input.
+
+        @since 2.9.5
+    */
+    void UseBasicPrecisions();
+
+    /**
+        Explicitly request the use of extended precision for floating point
+        numbers.
+
+        This function allows the application code to explicitly request the use
+        of 80 bit extended precision format for the floating point numbers.
+        This is the case by default but using this function explicitly ensures
+        that the compilation of code relying on reading the input containing
+        numbers in extended precision format would fail when using a version of
+        wxWidgets compiled with @c wxUSE_APPLE_IEEE==0 and so not supporting
+        this format at all.
+
+        @since 2.9.5
+     */
+    void UseExtendedPrecision();
 };
 
