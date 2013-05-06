@@ -47,7 +47,12 @@ private:
         CPPUNIT_TEST( Int64RW );
 #endif
         CPPUNIT_TEST( NaNRW );
+        CPPUNIT_TEST( PseudoTest_UseBigEndian );
+        CPPUNIT_TEST( FloatRW );
+        CPPUNIT_TEST( DoubleRW );
     CPPUNIT_TEST_SUITE_END();
+
+    wxFloat64 TestFloatRW(wxFloat64 fValue);
 
     void FloatRW();
     void DoubleRW();
@@ -59,6 +64,10 @@ private:
 #endif
     void NaNRW();
 
+    void PseudoTest_UseBigEndian() { ms_useBigEndianFormat = true; }
+
+    static bool ms_useBigEndianFormat;
+
     DECLARE_NO_COPY_CLASS(DataStreamTestCase)
 };
 
@@ -68,22 +77,27 @@ CPPUNIT_TEST_SUITE_REGISTRATION( DataStreamTestCase );
 // also include in its own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DataStreamTestCase, "DataStreamTestCase" );
 
+bool DataStreamTestCase::ms_useBigEndianFormat = false;
+
 DataStreamTestCase::DataStreamTestCase()
 {
 }
 
-static
-wxFloat64 TestFloatRW(wxFloat64 fValue)
+wxFloat64 DataStreamTestCase::TestFloatRW(wxFloat64 fValue)
 {
     {
         wxFileOutputStream pFileOutput( wxT("mytext.dat") );
         wxDataOutputStream pDataOutput( pFileOutput );
+        if ( ms_useBigEndianFormat )
+            pDataOutput.BigEndianOrdered(true);
 
         pDataOutput << fValue;
     }
 
     wxFileInputStream pFileInput( wxT("mytext.dat") );
     wxDataInputStream pDataInput( pFileInput );
+    if ( ms_useBigEndianFormat )
+        pDataInput.BigEndianOrdered(true);
 
     wxFloat64 fInFloat;
 
