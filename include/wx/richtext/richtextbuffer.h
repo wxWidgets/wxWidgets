@@ -5962,6 +5962,12 @@ public:
     wxRichTextObject* GetObject() const { return m_object; }
 
     /**
+        Stores the object to replace the one at the position defined by the container address
+        without making an address for it (cf SetObject() and MakeObject()).
+    */
+    void StoreObject(wxRichTextObject* obj) { m_object = obj; }
+
+    /**
         Sets the object to replace the one at the position defined by the container address
         and the action's range start position.
     */

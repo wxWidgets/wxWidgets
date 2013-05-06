@@ -62,6 +62,7 @@ private:
         CPPUNIT_TEST( Font );
         CPPUNIT_TEST( Delete );
         CPPUNIT_TEST( Url );
+        CPPUNIT_TEST( Table );
     CPPUNIT_TEST_SUITE_END();
 
     void CharacterEvent();
@@ -91,6 +92,7 @@ private:
     void Font();
     void Delete();
     void Url();
+    void Table();
 
     wxRichTextCtrl* m_rich;
 
@@ -753,6 +755,132 @@ void RichTextCtrlTestCase::Url()
 
     CPPUNIT_ASSERT(url.HasURL());
     CPPUNIT_ASSERT_EQUAL("http://www.wxwidgets.org", url.GetURL());
+}
+
+    // Helper function for ::Table()
+wxRichTextTable* GetCurrentTableInstance(wxRichTextParagraph* para)
+{
+    wxRichTextTable* table = wxDynamicCast(para->FindObjectAtPosition(0), wxRichTextTable);
+    CPPUNIT_ASSERT(table);
+    return table;
+}
+
+void RichTextCtrlTestCase::Table()
+{
+    m_rich->BeginSuppressUndo();
+    wxRichTextTable* table = m_rich->WriteTable(1, 1);
+    m_rich->EndSuppressUndo();
+    CPPUNIT_ASSERT(table);
+    CPPUNIT_ASSERT(m_rich->CanUndo() == false);
+
+    // Run the tests twice: first for the original table, then for a contained one
+    for (int t = 0; t < 2; ++t)
+    {           
+        // Undo() and Redo() switch table instances, so invalidating 'table'
+        // The containing paragraph isn't altered, and so can be used to find the current object
+        wxRichTextParagraph* para = wxDynamicCast(table->GetParent(), wxRichTextParagraph);
+        CPPUNIT_ASSERT(para);
+
+        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
+        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+
+        // Test adding columns and rows
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->BeginBatchUndo("Add col and row");
+
+            table->AddColumns(0, 1);
+            table->AddRows(0, 1);
+            
+            m_rich->EndBatchUndo();
+        }
+        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
+        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+
+        // Test deleting columns and rows
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->BeginBatchUndo("Delete col and row");
+
+            table->DeleteColumns(table->GetColumnCount() - 1, 1);
+            table->DeleteRows(table->GetRowCount() - 1, 1);
+            
+            m_rich->EndBatchUndo();
+        }
+        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
+        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+
+        // Test undo, first of the deletions...
+        CPPUNIT_ASSERT(m_rich->CanUndo());
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->Undo();
+        }
+        table = GetCurrentTableInstance(para);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
+        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+
+        // ...then the additions
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->Undo();
+        }
+        table = GetCurrentTableInstance(para);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
+        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+        CPPUNIT_ASSERT(m_rich->CanUndo() == false);
+
+        // Similarly test redo. Additions:
+        CPPUNIT_ASSERT(m_rich->CanRedo());
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->Redo();
+        }
+        table = GetCurrentTableInstance(para);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
+        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+
+        // Deletions:
+        for (size_t n = 0; n < 3; ++n)
+        {
+            m_rich->Redo();
+        }
+        table = GetCurrentTableInstance(para);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 1);
+        CPPUNIT_ASSERT(table->GetRowCount() == 1);
+        CPPUNIT_ASSERT(m_rich->CanRedo() == false);
+
+        // Now test multiple addition and deletion, and also suppression
+        m_rich->BeginSuppressUndo();
+        table->AddColumns(0, 3);
+        table->AddRows(0, 3);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 4);
+        CPPUNIT_ASSERT(table->GetRowCount() == 4);
+
+        // Only delete 2 of these. This makes it easy to be sure we're dealing with the child table when we loop
+        table->DeleteColumns(0, 2);
+        table->DeleteRows(0, 2);
+        CPPUNIT_ASSERT(table->GetColumnCount() == 2);
+        CPPUNIT_ASSERT(table->GetRowCount() == 2);
+        m_rich->EndSuppressUndo();
+        
+        m_rich->GetCommandProcessor()->ClearCommands(); // otherwise the command-history from this loop will cause CPPUNIT_ASSERT failures in the next one
+
+        if (t == 0)
+        {
+            // For round 2, re-run the tests on another table inside the last cell of the first one
+            wxRichTextCell* cell = table->GetCell(table->GetRowCount() - 1, table->GetColumnCount() - 1);
+            CPPUNIT_ASSERT(cell);
+            m_rich->SetFocusObject(cell);
+            m_rich->BeginSuppressUndo();
+            table = m_rich->WriteTable(1, 1);
+            m_rich->EndSuppressUndo();
+            CPPUNIT_ASSERT(table);
+        }
+    }
+
+    m_rich->Clear();
+    m_rich->SetFocusObject(NULL);
 }
 
 #endif //wxUSE_RICHTEXT

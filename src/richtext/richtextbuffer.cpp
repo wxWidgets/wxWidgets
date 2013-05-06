@@ -10245,6 +10245,19 @@ bool wxRichTextTable::DeleteRows(int startRow, int noRows)
     if ((startRow + noRows) > m_rowCount)
         return false;
 
+    wxRichTextBuffer* buffer = GetBuffer();
+    wxRichTextAction* action = NULL;
+    wxRichTextTable* clone = NULL;
+    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    {
+        // Create a clone containing the current state of the table. It will be used to Undo the action
+        clone = wxStaticCast(this->Clone(), wxRichTextTable);
+        clone->SetParent(GetParent());
+        action = new wxRichTextAction(NULL, _("Delete row"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
+        action->SetObject(this);
+        action->SetPosition(GetRange().GetStart());
+    }
+
     int i, j;
     for (i = startRow; i < (startRow+noRows); i++)
     {
@@ -10262,6 +10275,13 @@ bool wxRichTextTable::DeleteRows(int startRow, int noRows)
 
     m_rowCount = m_rowCount - noRows;
 
+    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    {
+        buffer->SubmitAction(action);
+        // Finally store the original-state clone; doing so earlier would cause various failures
+        action->StoreObject(clone);
+    }
+
     return true;
 }
 
@@ -10270,6 +10290,19 @@ bool wxRichTextTable::DeleteColumns(int startCol, int noCols)
     wxASSERT((startCol + noCols) <= m_colCount);
     if ((startCol + noCols) > m_colCount)
         return false;
+
+    wxRichTextBuffer* buffer = GetBuffer();
+    wxRichTextAction* action = NULL;
+    wxRichTextTable* clone = NULL;
+    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    {
+        // Create a clone containing the current state of the table. It will be used to Undo the action
+        clone = wxStaticCast(this->Clone(), wxRichTextTable);
+        clone->SetParent(GetParent());
+        action = new wxRichTextAction(NULL, _("Delete column"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
+        action->SetObject(this);
+        action->SetPosition(GetRange().GetStart());
+    }
 
     bool deleteRows = (noCols == m_colCount);
 
@@ -10292,6 +10325,13 @@ bool wxRichTextTable::DeleteColumns(int startCol, int noCols)
         m_rowCount = 0;
     m_colCount = m_colCount - noCols;
 
+    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    {
+        buffer->SubmitAction(action);
+        // Finally store the original-state clone; doing so earlier would cause various failures
+        action->StoreObject(clone);
+    }
+
     return true;
 }
 
@@ -10300,6 +10340,19 @@ bool wxRichTextTable::AddRows(int startRow, int noRows, const wxRichTextAttr& at
     wxASSERT(startRow <= m_rowCount);
     if (startRow > m_rowCount)
         return false;
+
+    wxRichTextBuffer* buffer = GetBuffer();
+    wxRichTextAction* action = NULL;
+    wxRichTextTable* clone = NULL;
+    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    {
+        // Create a clone containing the current state of the table. It will be used to Undo the action
+        clone = wxStaticCast(this->Clone(), wxRichTextTable);
+        clone->SetParent(GetParent());
+        action = new wxRichTextAction(NULL, _("Add row"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
+        action->SetObject(this);
+        action->SetPosition(GetRange().GetStart());
+    }
 
     int i, j;
     for (i = 0; i < noRows; i++)
@@ -10329,6 +10382,14 @@ bool wxRichTextTable::AddRows(int startRow, int noRows, const wxRichTextAttr& at
     }
 
     m_rowCount = m_rowCount + noRows;
+
+    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    {
+        buffer->SubmitAction(action);
+        // Finally store the original-state clone; doing so earlier would cause various failures
+        action->StoreObject(clone);
+    }
+
     return true;
 }
 
@@ -10337,6 +10398,19 @@ bool wxRichTextTable::AddColumns(int startCol, int noCols, const wxRichTextAttr&
     wxASSERT(startCol <= m_colCount);
     if (startCol > m_colCount)
         return false;
+
+    wxRichTextBuffer* buffer = GetBuffer();
+    wxRichTextAction* action = NULL;
+    wxRichTextTable* clone = NULL;
+    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    {
+        // Create a clone containing the current state of the table. It will be used to Undo the action
+        clone = wxStaticCast(this->Clone(), wxRichTextTable);
+        clone->SetParent(GetParent());
+        action = new wxRichTextAction(NULL, _("Add column"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
+        action->SetObject(this);
+        action->SetPosition(GetRange().GetStart());
+    }
 
     int i, j;
     for (i = 0; i < m_rowCount; i++)
@@ -10358,6 +10432,13 @@ bool wxRichTextTable::AddColumns(int startCol, int noCols, const wxRichTextAttr&
     }
 
     m_colCount = m_colCount + noCols;
+
+    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    {
+        buffer->SubmitAction(action);
+        // Finally store the original-state clone; doing so earlier would cause various failures
+        action->StoreObject(clone);
+    }
 
     return true;
 }
@@ -10736,10 +10817,18 @@ bool wxRichTextAction::Do()
     case wxRICHTEXT_CHANGE_OBJECT:
         {
             wxRichTextObject* obj = m_objectAddress.GetObject(m_buffer);
-            // wxRichTextObject* obj = container->GetChildAtPosition(GetRange().GetStart());
-            if (obj && m_object)
+            if (obj && m_object && m_ctrl)
             {
-                wxRichTextObjectList::compatibility_iterator node = container->GetChildren().Find(obj);
+                // If the cloned object is unparented it will cause layout asserts later
+                // An alternative (would it always be valid?) could be to do: m_object->SetParent(obj->GetParent())
+                wxCHECK_MSG(m_object->GetParent(), false, "The stored object must have a valid parent");
+
+                // The plan is to swap the current object with the stored, previous-state, clone
+                // We can't get 'node' from the containing buffer (as it doesn't directly store objects)
+                // so use the parent paragraph
+                wxRichTextParagraph* para = wxDynamicCast(obj->GetParent(), wxRichTextParagraph);
+                wxCHECK_MSG(para, false, "Invalid parent paragraph");
+                wxRichTextObjectList::compatibility_iterator node = para->GetChildren().Find(obj);
                 if (node)
                 {
                     wxRichTextObject* obj = node->GetData();
