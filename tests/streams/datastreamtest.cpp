@@ -75,23 +75,19 @@ DataStreamTestCase::DataStreamTestCase()
 static
 wxFloat64 TestFloatRW(wxFloat64 fValue)
 {
-    wxFileOutputStream* pFileOutput = new wxFileOutputStream( wxT("mytext.dat") );
-    wxDataOutputStream* pDataOutput = new wxDataOutputStream( *pFileOutput );
+    {
+        wxFileOutputStream pFileOutput( wxT("mytext.dat") );
+        wxDataOutputStream pDataOutput( pFileOutput );
 
-    *pDataOutput << fValue;
+        pDataOutput << fValue;
+    }
 
-    delete pDataOutput;
-    delete pFileOutput;
-
-    wxFileInputStream* pFileInput = new wxFileInputStream( wxT("mytext.dat") );
-    wxDataInputStream* pDataInput = new wxDataInputStream( *pFileInput );
+    wxFileInputStream pFileInput( wxT("mytext.dat") );
+    wxDataInputStream pDataInput( pFileInput );
 
     wxFloat64 fInFloat;
 
-    *pDataInput >> fInFloat;
-
-    delete pDataInput;
-    delete pFileInput;
+    pDataInput >> fInFloat;
 
     return fInFloat;
 }
