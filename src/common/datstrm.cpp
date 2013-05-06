@@ -24,34 +24,45 @@
     #include "wx/math.h"
 #endif //WX_PRECOMP
 
-// ---------------------------------------------------------------------------
-// wxDataInputStream
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxDataStreamBase
+// ----------------------------------------------------------------------------
 
+wxDataStreamBase::wxDataStreamBase(const wxMBConv& conv)
 #if wxUSE_UNICODE
-wxDataInputStream::wxDataInputStream(wxInputStream& s, const wxMBConv& conv)
-  : m_input(&s), m_be_order(false), m_conv(conv.Clone())
-#else
-wxDataInputStream::wxDataInputStream(wxInputStream& s)
-  : m_input(&s), m_be_order(false)
-#endif
+    : m_conv(conv.Clone())
+#endif // wxUSE_UNICODE
 {
+    // It is unused in non-Unicode build, so suppress a warning there.
+    wxUnusedVar(conv);
+
+    m_be_order = false;
 }
 
-wxDataInputStream::~wxDataInputStream()
+#if wxUSE_UNICODE
+void wxDataStreamBase::SetConv( const wxMBConv &conv )
+{
+    delete m_conv;
+    m_conv = conv.Clone();
+}
+#endif
+
+wxDataStreamBase::~wxDataStreamBase()
 {
 #if wxUSE_UNICODE
     delete m_conv;
 #endif // wxUSE_UNICODE
 }
 
-#if wxUSE_UNICODE
-void wxDataInputStream::SetConv( const wxMBConv &conv )
+// ---------------------------------------------------------------------------
+// wxDataInputStream
+// ---------------------------------------------------------------------------
+
+wxDataInputStream::wxDataInputStream(wxInputStream& s, const wxMBConv& conv)
+  : wxDataStreamBase(conv),
+    m_input(&s)
 {
-    delete m_conv;
-    m_conv = conv.Clone();
 }
-#endif
 
 #if wxHAS_INT64
 wxUint64 wxDataInputStream::Read64()
@@ -463,30 +474,11 @@ wxDataInputStream& wxDataInputStream::operator>>(float& f)
 // wxDataOutputStream
 // ---------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s, const wxMBConv& conv)
-  : m_output(&s), m_be_order(false), m_conv(conv.Clone())
-#else
-wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)
-  : m_output(&s), m_be_order(false)
-#endif
+  : wxDataStreamBase(conv),
+    m_output(&s)
 {
 }
-
-wxDataOutputStream::~wxDataOutputStream()
-{
-#if wxUSE_UNICODE
-    delete m_conv;
-#endif // wxUSE_UNICODE
-}
-
-#if wxUSE_UNICODE
-void wxDataOutputStream::SetConv( const wxMBConv &conv )
-{
-    delete m_conv;
-    m_conv = conv.Clone();
-}
-#endif
 
 #if wxHAS_INT64
 void wxDataOutputStream::Write64(wxUint64 i)

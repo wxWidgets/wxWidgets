@@ -18,15 +18,38 @@
 
 #if wxUSE_STREAMS
 
-class WXDLLIMPEXP_BASE wxDataInputStream
+// Common wxDataInputStream and wxDataOutputStream parameters.
+class WXDLLIMPEXP_BASE wxDataStreamBase
 {
 public:
+    void BigEndianOrdered(bool be_order) { m_be_order = be_order; }
+
 #if wxUSE_UNICODE
-    wxDataInputStream(wxInputStream& s, const wxMBConv& conv = wxConvUTF8 );
-#else
-    wxDataInputStream(wxInputStream& s);
+    void SetConv( const wxMBConv &conv );
+    wxMBConv *GetConv() const { return m_conv; }
 #endif
-    ~wxDataInputStream();
+
+protected:
+    // Ctor and dtor are both protected, this class is never used directly but
+    // only by its derived classes.
+    wxDataStreamBase(const wxMBConv& conv);
+    ~wxDataStreamBase();
+
+
+    bool m_be_order;
+
+#if wxUSE_UNICODE
+    wxMBConv *m_conv;
+#endif
+
+    wxDECLARE_NO_COPY_CLASS(wxDataStreamBase);
+};
+
+
+class WXDLLIMPEXP_BASE wxDataInputStream : public wxDataStreamBase
+{
+public:
+    wxDataInputStream(wxInputStream& s, const wxMBConv& conv = wxConvUTF8);
 
     bool IsOk() { return m_input->IsOk(); }
 
@@ -77,32 +100,16 @@ public:
     wxDataInputStream& operator>>(double& i);
     wxDataInputStream& operator>>(float& f);
 
-    void BigEndianOrdered(bool be_order) { m_be_order = be_order; }
-
-#if wxUSE_UNICODE
-    void SetConv( const wxMBConv &conv );
-    wxMBConv *GetConv() const { return m_conv; }
-#endif
-
 protected:
     wxInputStream *m_input;
-    bool m_be_order;
-#if wxUSE_UNICODE
-    wxMBConv *m_conv;
-#endif
 
     wxDECLARE_NO_COPY_CLASS(wxDataInputStream);
 };
 
-class WXDLLIMPEXP_BASE wxDataOutputStream
+class WXDLLIMPEXP_BASE wxDataOutputStream : public wxDataStreamBase
 {
 public:
-#if wxUSE_UNICODE
-    wxDataOutputStream(wxOutputStream& s, const wxMBConv& conv = wxConvUTF8 );
-#else
-    wxDataOutputStream(wxOutputStream& s);
-#endif
-    ~wxDataOutputStream();
+    wxDataOutputStream(wxOutputStream& s, const wxMBConv& conv = wxConvUTF8);
 
     bool IsOk() { return m_output->IsOk(); }
 
@@ -155,19 +162,8 @@ public:
     wxDataOutputStream& operator<<(double f);
     wxDataOutputStream& operator<<(float f);
 
-    void BigEndianOrdered(bool be_order) { m_be_order = be_order; }
-
-#if wxUSE_UNICODE
-    void SetConv( const wxMBConv &conv );
-    wxMBConv *GetConv() const { return m_conv; }
-#endif
-
 protected:
     wxOutputStream *m_output;
-    bool m_be_order;
-#if wxUSE_UNICODE
-    wxMBConv *m_conv;
-#endif
 
     wxDECLARE_NO_COPY_CLASS(wxDataOutputStream);
 };
