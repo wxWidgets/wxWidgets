@@ -10241,8 +10241,8 @@ bool wxRichTextTable::SetCellStyle(const wxRichTextSelection& selection, const w
 
 bool wxRichTextTable::DeleteRows(int startRow, int noRows)
 {
-    wxASSERT((startRow + noRows) < m_rowCount);
-    if ((startRow + noRows) >= m_rowCount)
+    wxASSERT((startRow + noRows) <= m_rowCount);
+    if ((startRow + noRows) > m_rowCount)
         return false;
 
     int i, j;
@@ -10267,8 +10267,8 @@ bool wxRichTextTable::DeleteRows(int startRow, int noRows)
 
 bool wxRichTextTable::DeleteColumns(int startCol, int noCols)
 {
-    wxASSERT((startCol + noCols) < m_colCount);
-    if ((startCol + noCols) >= m_colCount)
+    wxASSERT((startCol + noCols) <= m_colCount);
+    if ((startCol + noCols) > m_colCount)
         return false;
 
     bool deleteRows = (noCols == m_colCount);
@@ -10277,10 +10277,11 @@ bool wxRichTextTable::DeleteColumns(int startCol, int noCols)
     for (i = 0; i < m_rowCount; i++)
     {
         wxRichTextObjectPtrArray& colArray = m_cells[deleteRows ? 0 : i];
-        for (j = startCol; j < (startCol+noCols); j++)
+        for (j = 0; j < noCols; j++) 
         {
-            wxRichTextObject* cell = colArray[j];
+            wxRichTextObject* cell = colArray[startCol];
             RemoveChild(cell, true);
+            colArray.RemoveAt(startCol);
         }
 
         if (deleteRows)
