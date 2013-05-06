@@ -110,9 +110,9 @@ public:
     void Write64(const wxUint64* buffer, size_t size);
 
     /**
-        Writes the double @a f to the stream using the IEEE format.
+        Writes the double @a d to the stream using the IEEE format.
     */
-    void WriteDouble(double f);
+    void WriteDouble(double d);
     /**
         Writes an array of double to the stream. The amount of double to write is
         specified with the @a size variable.

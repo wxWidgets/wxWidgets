@@ -97,7 +97,7 @@ public:
     wxDataInputStream& operator>>(wxULongLong& i);
     wxDataInputStream& operator>>(wxLongLong& i);
 #endif
-    wxDataInputStream& operator>>(double& i);
+    wxDataInputStream& operator>>(double& d);
     wxDataInputStream& operator>>(float& f);
 
 protected:
@@ -159,7 +159,7 @@ public:
     wxDataOutputStream& operator<<(const wxULongLong &i);
     wxDataOutputStream& operator<<(const wxLongLong &i);
 #endif
-    wxDataOutputStream& operator<<(double f);
+    wxDataOutputStream& operator<<(double d);
     wxDataOutputStream& operator<<(float f);
 
 protected:

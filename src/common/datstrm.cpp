@@ -458,9 +458,9 @@ wxDataInputStream& wxDataInputStream::operator>>(wxLongLong& i)
 }
 #endif // wxLongLong_t
 
-wxDataInputStream& wxDataInputStream::operator>>(double& i)
+wxDataInputStream& wxDataInputStream::operator>>(double& d)
 {
-  i = ReadDouble();
+  d = ReadDouble();
   return *this;
 }
 
@@ -734,9 +734,9 @@ wxDataOutputStream& wxDataOutputStream::operator<<(const wxLongLong &i)
 }
 #endif // wxLongLong_t
 
-wxDataOutputStream& wxDataOutputStream::operator<<(double f)
+wxDataOutputStream& wxDataOutputStream::operator<<(double d)
 {
-  WriteDouble(f);
+  WriteDouble(d);
   return *this;
 }
 
