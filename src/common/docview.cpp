@@ -2075,15 +2075,24 @@ bool wxDocParentFrameAnyBase::TryProcessEvent(wxEvent& event)
     // already forwarded the event to wxDocManager, check for this:
     if ( wxView* const view = m_docManager->GetAnyUsableView() )
     {
-        // Notice that we intentionally don't use wxGetTopLevelParent() here
-        // because we want to check both for the case of a child "frame" (e.g.
-        // MDI child frame or notebook page) inside this TLW and a separate
-        // child TLW frame (as used in the SDI mode) here.
-        for ( wxWindow* win = view->GetFrame(); win; win = win->GetParent() )
+        wxWindow* win = view->GetFrame();
+        if ( win != m_frame )
         {
-            if ( win == m_frame )
-                return false;
+            // Notice that we intentionally don't use wxGetTopLevelParent()
+            // here because we want to check both for the case of a child
+            // "frame" (e.g. MDI child frame or notebook page) inside this TLW
+            // and a separate child TLW frame (as used in the SDI mode) here.
+            for ( win = win->GetParent(); win; win = win->GetParent() )
+            {
+                if ( win == m_frame )
+                    return false;
+            }
         }
+        //else: This view is directly associated with the parent frame (which
+        //      can happen in the so called "single" mode in which only one
+        //      document can be opened and so is managed by the parent frame
+        //      itself), there can be no child frame in play so we must forward
+        //      the event to wxDocManager ourselves.
     }
 
     // But forward the event to wxDocManager ourselves if there are no views at
