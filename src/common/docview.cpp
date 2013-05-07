@@ -2076,7 +2076,7 @@ bool wxDocParentFrameAnyBase::TryProcessEvent(wxEvent& event)
     if ( wxView* const view = m_docManager->GetAnyUsableView() )
     {
         wxWindow* win = view->GetFrame();
-        if ( win != m_frame )
+        if ( win && win != m_frame )
         {
             // Notice that we intentionally don't use wxGetTopLevelParent()
             // here because we want to check both for the case of a child
