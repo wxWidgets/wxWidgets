@@ -2872,8 +2872,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxXmlResourceModule, wxModule)
 void wxXmlInitResourceModule()
 {
     wxModule* module = new wxXmlResourceModule;
-    module->Init();
     wxModule::RegisterModule(module);
+    wxModule::InitializeModules();
 }
 
 #endif // wxUSE_XRC

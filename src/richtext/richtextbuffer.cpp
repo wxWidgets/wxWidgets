@@ -10507,8 +10507,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichTextModule, wxModule)
 void wxRichTextModuleInit()
 {
     wxModule* module = new wxRichTextModule;
-    module->Init();
     wxModule::RegisterModule(module);
+    wxModule::InitializeModules();
 }
 
 

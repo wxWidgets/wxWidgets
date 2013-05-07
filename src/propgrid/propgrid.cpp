@@ -159,8 +159,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxPGGlobalVarsClassManager, wxModule)
 void wxPGInitResourceModule()
 {
     wxModule* module = new wxPGGlobalVarsClassManager;
-    module->Init();
     wxModule::RegisterModule(module);
+    wxModule::InitializeModules();
 }
 
 wxPGGlobalVarsClass* wxPGGlobalVars = NULL;
