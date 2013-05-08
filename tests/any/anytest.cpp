@@ -35,11 +35,11 @@ private:
     CPPUNIT_TEST_SUITE( wxAnyTestCase );
         CPPUNIT_TEST( CheckType );
         CPPUNIT_TEST( Equality );
+        CPPUNIT_TEST( As );
         // FIXME: One of these tests might result in heap corruption under PPC
         //        OS X, disable them to at least allow the subsequent tests to
         //        run as otherwise the test program just crashes.
 #ifndef __WXOSX__
-        CPPUNIT_TEST( As );
         CPPUNIT_TEST( GetAs );
         CPPUNIT_TEST( Null );
         CPPUNIT_TEST( wxVariantConversions );
