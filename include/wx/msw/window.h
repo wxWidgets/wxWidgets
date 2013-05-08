@@ -351,7 +351,7 @@ public:
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam);
-#if wxUSE_ACCEL
+#if wxUSE_HOTKEY
     bool HandleHotKey(WXWPARAM wParam, WXLPARAM lParam);
 #endif
 #ifdef __WIN32__

@@ -7306,8 +7306,6 @@ bool wxWindowMSW::UnregisterHotKey(int hotkeyId)
     return true;
 }
 
-#if wxUSE_ACCEL
-
 bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 {
     int win_modifiers = LOWORD(lParam);
@@ -7321,8 +7319,6 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 
     return HandleWindowEvent(event);
 }
-
-#endif // wxUSE_ACCEL
 
 #endif // wxUSE_HOTKEY
 
