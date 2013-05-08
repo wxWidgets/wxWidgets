@@ -3433,6 +3433,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 #if !defined(__WXWINCE__)
         case WM_CONTEXTMENU:
             {
+                // As with WM_HELP above, this message is propagated upwards
+                // the parent chain by DefWindowProc() itself, so we should
+                // always mark it as processed to prevent it from doing this
+                // as this would result in duplicate calls to event handlers.
+                processed = true;
+
                 // we don't convert from screen to client coordinates as
                 // the event may be handled by a parent window
                 wxPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
@@ -3452,7 +3458,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     win = this;
 
                 evtCtx.SetEventObject(win);
-                processed = win->HandleWindowEvent(evtCtx);
+                win->HandleWindowEvent(evtCtx);
             }
             break;
 #endif
