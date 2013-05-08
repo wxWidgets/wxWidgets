@@ -40,7 +40,7 @@ private:
         // FIXME: One of these tests might result in heap corruption under PPC
         //        OS X, disable them to at least allow the subsequent tests to
         //        run as otherwise the test program just crashes.
-#ifdef __WXOSX__
+#ifndef __WXOSX__
         CPPUNIT_TEST( Null );
         CPPUNIT_TEST( wxVariantConversions );
         CPPUNIT_TEST( CustomTemplateSpecialization );
