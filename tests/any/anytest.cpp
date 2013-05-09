@@ -41,11 +41,11 @@ private:
         //        run as otherwise the test program just crashes.
 #ifndef __WXOSX__
         CPPUNIT_TEST( GetAs );
+#endif // __WXOSX__
         CPPUNIT_TEST( Null );
         CPPUNIT_TEST( wxVariantConversions );
         CPPUNIT_TEST( CustomTemplateSpecialization );
         CPPUNIT_TEST( Misc );
-#endif // __WXOSX__
     CPPUNIT_TEST_SUITE_END();
 
     void CheckType();
