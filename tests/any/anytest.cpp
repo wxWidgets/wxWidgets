@@ -36,12 +36,7 @@ private:
         CPPUNIT_TEST( CheckType );
         CPPUNIT_TEST( Equality );
         CPPUNIT_TEST( As );
-        // FIXME: One of these tests might result in heap corruption under PPC
-        //        OS X, disable them to at least allow the subsequent tests to
-        //        run as otherwise the test program just crashes.
-#ifndef __WXOSX__
         CPPUNIT_TEST( GetAs );
-#endif // __WXOSX__
         CPPUNIT_TEST( Null );
         CPPUNIT_TEST( wxVariantConversions );
         CPPUNIT_TEST( CustomTemplateSpecialization );
@@ -364,6 +359,10 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&f));
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&b));
 
+    // FIXME: Something in this test results in heap corruption under PPC
+    //        OS X, disable it to at least allow the subsequent tests to run as
+    //        otherwise the test program just crashes.
+#ifndef __WXOSX__
     // Let's test some other conversions from string that should work.
     wxAny anyString;
 
@@ -411,6 +410,7 @@ void wxAnyTestCase::GetAs()
     res = s.ToDouble(&d2);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(d2, TEST_FLOAT_CONST, FEQ_DELTA);
+#endif // __WXOSX__
 }
 
 
