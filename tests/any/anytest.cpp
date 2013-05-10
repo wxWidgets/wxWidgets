@@ -352,14 +352,14 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(b == true);
 
-    // FIXME: Something in this test results in heap corruption under PPC
-    //        OS X, disable it to at least allow the subsequent tests to run as
-    //        otherwise the test program just crashes.
-#ifndef __WXOSX__
     // Conversions from default "abc" string to other types
     // should not work.
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&l));
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&ul));
+    // FIXME: Something in this test results in heap corruption under PPC
+    //        OS X, disable it to at least allow the subsequent tests to run as
+    //        otherwise the test program just crashes.
+#ifndef __WXOSX__
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&f));
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&b));
 
