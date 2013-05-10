@@ -204,11 +204,7 @@ void TextEntryTestCase::Editable()
            !IsAutomaticTest() )
 #endif // __WGTKK__
     {
-    WX_ASSERT_EQUAL_MESSAGE
-    (
-        ("While testing %s", GetTestWindow()->GetClassInfo()->GetClassName()),
-        "abcdef", entry->GetValue()
-    );
+    CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
 
     updated.Clear();
