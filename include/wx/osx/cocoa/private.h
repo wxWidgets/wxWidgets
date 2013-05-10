@@ -341,6 +341,18 @@ public:
 
     @end
 
+    @interface wxNSComboBox : NSComboBox
+    {
+        wxNSTextFieldEditor* fieldEditor;
+    }
+
+    - (wxNSTextFieldEditor*) fieldEditor;
+    - (void) setFieldEditor:(wxNSTextFieldEditor*) fieldEditor;
+
+    @end
+
+
+
     @interface wxNSMenu : NSMenu
     {
        wxMenuImpl* impl;
