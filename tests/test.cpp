@@ -423,7 +423,9 @@ extern bool IsAutomaticTest()
         if ( !wxGetEnv("WX_TEST_USER", &username) )
             username = wxGetUserId();
 
-        s_isAutomatic = username.Lower().Matches("buildslave*");
+        username.MakeLower();
+        s_isAutomatic = username.Matches("buildslave*") ||
+                            username.Matches("buildbot*");
     }
 
     return s_isAutomatic == 1;
@@ -477,7 +479,9 @@ bool TestApp::OnInit()
 #else
     cout << "Test program for wxWidgets non-GUI features\n"
 #endif
-         << "build: " << WX_BUILD_OPTIONS_SIGNATURE << std::endl;
+         << "build: " << WX_BUILD_OPTIONS_SIGNATURE << "\n"
+         << "running under " << wxGetOsDescription()
+         << " as " << wxGetUserId() << std::endl;
 
     if ( m_detail )
     {
