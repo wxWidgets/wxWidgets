@@ -20,7 +20,7 @@ set failure=0
 
 for /d %%x in (*) do @(
     if exist %%x\test.exe (
-        %%x\test.exe >tmp
+        %%x\test.exe -t >tmp
         
         REM show the output of the test in the buildbot log:
         type tmp
@@ -40,7 +40,7 @@ for /d %%x in (*) do @(
     )
     
     if exist %%x\test_gui.exe (
-        %%x\test_gui.exe >tmp
+        %%x\test_gui.exe -t >tmp
         
         REM show the output of the test in the buildbot log:
         type tmp
