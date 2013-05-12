@@ -457,8 +457,8 @@ private:
             // The first digit simply replaces the existing field contents,
             // but the second one should be combined with the previous one,
             // otherwise entering 2-digit numbers would be impossible.
-            int currentValue wxDUMMY_INITIALIZE(0),
-                maxValue wxDUMMY_INITIALIZE(0);
+            int currentValue = 0,
+                maxValue  = 0;
 
             switch ( m_currentField )
             {
