@@ -313,10 +313,17 @@ void wxAnyTestCase::GetAs()
     short int si = 0;
     unsigned long ul = 0;
     wxString s;
+#if defined(__POWERPC__)
+    // FIXME: under wxOSX using float instead of double results in the heap
+    //        corruption, at least in the builds under PPC architecture for
+    //        some reason, disable them temporarily until this can be found.
+    double f = 0.0;
+#else
     // Let's test against float instead of double, since the former
     // is not the native underlying type the code converts to, but
     // should still work, all the same.
     float f = 0.0;
+#endif
     bool b = false;
 
     // Conversions from signed long type
@@ -357,10 +364,6 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&l));
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&ul));
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&f));
-    // FIXME: Something in this test results in heap corruption under PPC
-    //        OS X, disable it to at least allow the subsequent tests to run as
-    //        otherwise the test program just crashes.
-#ifndef __WXOSX__
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&b));
 
     // Let's test some other conversions from string that should work.
@@ -410,7 +413,6 @@ void wxAnyTestCase::GetAs()
     res = s.ToDouble(&d2);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(d2, TEST_FLOAT_CONST, FEQ_DELTA);
-#endif // __WXOSX__
 }
 
 
