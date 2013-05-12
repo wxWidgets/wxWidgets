@@ -356,11 +356,11 @@ void wxAnyTestCase::GetAs()
     // should not work.
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&l));
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&ul));
+    CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&f));
     // FIXME: Something in this test results in heap corruption under PPC
     //        OS X, disable it to at least allow the subsequent tests to run as
     //        otherwise the test program just crashes.
 #ifndef __WXOSX__
-    CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&f));
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&b));
 
     // Let's test some other conversions from string that should work.
