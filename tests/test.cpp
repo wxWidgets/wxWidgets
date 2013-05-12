@@ -425,7 +425,7 @@ extern bool IsAutomaticTest()
 
         username.MakeLower();
         s_isAutomatic = username.Matches("buildslave*") ||
-                            username.Matches("buildbot*");
+                            username.Matches("sandbox*");
     }
 
     return s_isAutomatic == 1;
