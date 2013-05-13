@@ -369,6 +369,7 @@ void wxAnyTestCase::GetAs()
 #endif // !wxDONT_TEST
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&b));
 
+#ifndef wxDONT_TEST
     // Let's test some other conversions from string that should work.
     wxAny anyString;
 
@@ -379,11 +380,9 @@ void wxAnyTestCase::GetAs()
     res = anyString.GetAs(&ul);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_EQUAL(ul, static_cast<unsigned long>(15));
-#ifndef wxDONT_TEST
     res = anyString.GetAs(&f);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0, FEQ_DELTA);
-#endif // !wxDONT_TEST
     anyString = "TRUE";
     res = anyString.GetAs(&b);
     CPPUNIT_ASSERT(res);
@@ -403,7 +402,6 @@ void wxAnyTestCase::GetAs()
     res = m_anyBool1.GetAs(&s);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(s == "true");
-#ifndef wxDONT_TEST
     CPPUNIT_ASSERT(!m_anyBool1.GetAs(&f));
 #endif // !wxDONT_TEST
 
