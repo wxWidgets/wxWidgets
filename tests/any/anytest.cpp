@@ -403,7 +403,6 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(s == "true");
     CPPUNIT_ASSERT(!m_anyBool1.GetAs(&f));
-#endif // !wxDONT_TEST
 
     // Conversions from floating point type
     res = m_anyDoubleDouble1.GetAs(&l);
@@ -418,6 +417,7 @@ void wxAnyTestCase::GetAs()
     res = s.ToDouble(&d2);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(d2, TEST_FLOAT_CONST, FEQ_DELTA);
+#endif // !wxDONT_TEST
 }
 
 
