@@ -778,7 +778,7 @@ inline bool wxRect2DInt::operator != (const wxRect2DInt& rect) const
     return !(*this == rect);
 }
 
-class wxTransform2D
+class WXDLLIMPEXP_CORE wxTransform2D
 {
 public :
     virtual ~wxTransform2D() { }
@@ -792,24 +792,6 @@ public :
     virtual wxPoint2DInt    InverseTransform( const wxPoint2DInt &pt ) const ;
     virtual wxRect2DInt        InverseTransform( const wxRect2DInt &r ) const ;
 };
-
-inline void    wxTransform2D::Transform( wxRect2DInt* r ) const
-    { wxPoint2DInt a = r->GetLeftTop() , b = r->GetRightBottom(); Transform( &a ); Transform( &b ); *r = wxRect2DInt( a , b ); }
-
-inline wxPoint2DInt    wxTransform2D::Transform( const wxPoint2DInt &pt ) const
-    { wxPoint2DInt res = pt; Transform( &res ); return res; }
-
-inline wxRect2DInt     wxTransform2D::Transform( const wxRect2DInt &r ) const
-    { wxRect2DInt res = r; Transform( &res ); return res; }
-
-inline void    wxTransform2D::InverseTransform( wxRect2DInt* r ) const
-    { wxPoint2DInt a = r->GetLeftTop() , b = r->GetRightBottom(); InverseTransform( &a ); InverseTransform( &b ); *r = wxRect2DInt( a , b ); }
-
-inline wxPoint2DInt    wxTransform2D::InverseTransform( const wxPoint2DInt &pt ) const
-    { wxPoint2DInt res = pt; InverseTransform( &res ); return res; }
-
-inline wxRect2DInt     wxTransform2D::InverseTransform( const wxRect2DInt &r ) const
-    { wxRect2DInt res = r; InverseTransform( &res ); return res; }
 
 
 #endif // wxUSE_GEOMETRY
