@@ -194,7 +194,7 @@ void TextEntryTestCase::Editable()
     {
         return;
     }
-#endif // __WGTKK__
+#endif // __WGTK__
 
     wxTextEntry * const entry = GetTestEntry();
     wxWindow * const window = GetTestWindow();
