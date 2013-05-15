@@ -393,7 +393,6 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(b == false);
 
-#ifndef wxDONT_TEST
     // Conversions from bool type
     res = m_anyBool1.GetAs(&l);
     CPPUNIT_ASSERT(res);
@@ -406,6 +405,7 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(s == "true");
     CPPUNIT_ASSERT(!m_anyBool1.GetAs(&f));
 
+#ifndef wxDONT_TEST
     // Conversions from floating point type
     res = m_anyDoubleDouble1.GetAs(&l);
     CPPUNIT_ASSERT(res);
