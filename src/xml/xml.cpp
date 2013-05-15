@@ -97,8 +97,12 @@ wxXmlNode::~wxXmlNode()
 
 wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
 {
-    DoFree();
-    DoCopy(node);
+    if ( &node != this )
+    {
+        DoFree();
+        DoCopy(node);
+    }
+
     return *this;
 }
 
