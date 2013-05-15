@@ -405,11 +405,11 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(s == "true");
     CPPUNIT_ASSERT(!m_anyBool1.GetAs(&f));
 
-#ifndef wxDONT_TEST
     // Conversions from floating point type
     res = m_anyDoubleDouble1.GetAs(&l);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(l == static_cast<signed long>(123));
+#ifndef wxDONT_TEST
     res = m_anyDoubleDouble1.GetAs(&ul);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_EQUAL(ul, static_cast<unsigned long>(123));
