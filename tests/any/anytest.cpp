@@ -383,6 +383,7 @@ void wxAnyTestCase::GetAs()
     res = anyString.GetAs(&f);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0, FEQ_DELTA);
+#endif // !wxDONT_TEST
     anyString = "TRUE";
     res = anyString.GetAs(&b);
     CPPUNIT_ASSERT(res);
@@ -392,6 +393,7 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(b == false);
 
+#ifndef wxDONT_TEST
     // Conversions from bool type
     res = m_anyBool1.GetAs(&l);
     CPPUNIT_ASSERT(res);
