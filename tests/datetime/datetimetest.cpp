@@ -222,6 +222,7 @@ private:
         CPPUNIT_TEST( TestTimeWDays );
         CPPUNIT_TEST( TestTimeDST );
         CPPUNIT_TEST( TestTimeFormat );
+        CPPUNIT_TEST( TestTimeParse );
         CPPUNIT_TEST( TestTimeSpanFormat );
         CPPUNIT_TEST( TestTimeTicks );
         CPPUNIT_TEST( TestParceRFC822 );
@@ -240,6 +241,7 @@ private:
     void TestTimeWDays();
     void TestTimeDST();
     void TestTimeFormat();
+    void TestTimeParse();
     void TestTimeSpanFormat();
     void TestTimeTicks();
     void TestParceRFC822();
@@ -861,6 +863,24 @@ void DateTimeTestCase::TestTimeFormat()
     CPPUNIT_ASSERT( !dt.ParseFormat(wxT("foo"), spec) );
     CPPUNIT_ASSERT( !dt.ParseFormat(s, spec) );
     dt.ParseFormat(s.c_str(), spec);
+}
+
+// Test parsing time in free format.
+void DateTimeTestCase::TestTimeParse()
+{
+    wxDateTime dt;
+
+    // Parsing standard formats should work.
+    CPPUNIT_ASSERT( dt.ParseTime("12:34:56") );
+    CPPUNIT_ASSERT_EQUAL( "12:34:56", dt.FormatISOTime() );
+
+    // Parsing just hours should work too.
+    dt.ResetTime();
+    CPPUNIT_ASSERT( dt.ParseTime("17") );
+    CPPUNIT_ASSERT_EQUAL( "17:00:00", dt.FormatISOTime() );
+
+    // Parsing gibberish shouldn't work.
+    CPPUNIT_ASSERT( !dt.ParseTime("bloordyblop") );
 }
 
 void DateTimeTestCase::TestTimeSpanFormat()
