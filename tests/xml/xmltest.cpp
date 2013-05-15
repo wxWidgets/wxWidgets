@@ -82,6 +82,7 @@ private:
         CPPUNIT_TEST( DetachRoot );
         CPPUNIT_TEST( AppendToProlog );
         CPPUNIT_TEST( SetRoot );
+        CPPUNIT_TEST( CopyNode );
     CPPUNIT_TEST_SUITE_END();
 
     void InsertChild();
@@ -93,6 +94,7 @@ private:
     void DetachRoot();
     void AppendToProlog();
     void SetRoot();
+    void CopyNode();
 
     DECLARE_NO_COPY_CLASS(XmlTestCase)
 };
@@ -468,4 +470,41 @@ void XmlTestCase::SetRoot()
     CPPUNIT_ASSERT( !doc.IsOk() );
     doc.SetRoot(root);
     CPPUNIT_ASSERT( doc.IsOk() );
+}
+
+void XmlTestCase::CopyNode()
+{
+    const char *xmlText =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<root>\n"
+"  <first><sub1/><sub2/><sub3/></first>\n"
+"  <second/>\n"
+"</root>\n"
+    ;
+    wxXmlDocument doc;
+    wxStringInputStream sis(xmlText);
+    CPPUNIT_ASSERT( doc.Load(sis) );
+
+    wxXmlNode* const root = doc.GetRoot();
+    CPPUNIT_ASSERT( root );
+
+    wxXmlNode* const first = root->GetChildren();
+    CPPUNIT_ASSERT( first );
+
+    wxXmlNode* const second = first->GetNext();
+    CPPUNIT_ASSERT( second );
+
+    *first = *second;
+
+    wxStringOutputStream sos;
+    CPPUNIT_ASSERT( doc.Save(sos) );
+
+    const char *xmlTextResult =
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<root>\n"
+"  <second/>\n"
+"  <second/>\n"
+"</root>\n"
+    ;
+    CPPUNIT_ASSERT_EQUAL( xmlTextResult, sos.GetString() );
 }

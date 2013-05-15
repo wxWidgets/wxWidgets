@@ -92,6 +92,18 @@ wxXmlNode::wxXmlNode(const wxXmlNode& node)
 
 wxXmlNode::~wxXmlNode()
 {
+    DoFree();
+}
+
+wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
+{
+    DoFree();
+    DoCopy(node);
+    return *this;
+}
+
+void wxXmlNode::DoFree()
+{
     wxXmlNode *c, *c2;
     for (c = m_children; c; c = c2)
     {
@@ -105,14 +117,6 @@ wxXmlNode::~wxXmlNode()
         p2 = p->GetNext();
         delete p;
     }
-}
-
-wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
-{
-    wxDELETE(m_attrs);
-    wxDELETE(m_children);
-    DoCopy(node);
-    return *this;
 }
 
 void wxXmlNode::DoCopy(const wxXmlNode& node)

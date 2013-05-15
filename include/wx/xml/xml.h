@@ -216,6 +216,7 @@ private:
     int m_lineNo; // line number in original file, or -1
     bool m_noConversion; // don't do encoding conversion - node is plain text
 
+    void DoFree();
     void DoCopy(const wxXmlNode& node);
 };
 
