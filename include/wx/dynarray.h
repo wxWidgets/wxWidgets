@@ -274,8 +274,13 @@ protected:                                                          \
   void pop_back() { RemoveAt(size() - 1); }                         \
   void push_back(const value_type& v) { Add(v); }                   \
   void reserve(size_type n) { Alloc(n); }                           \
-  void resize(size_type n, value_type v = value_type())             \
-    { SetCount(n, v); }                                             \
+  void resize(size_type count, value_type defval = value_type())    \
+  {                                                                 \
+    if ( count < m_nCount )                                         \
+      m_nCount = count;                                             \
+    else                                                            \
+      SetCount(count, defval);                                      \
+  }                                                                 \
                                                                     \
   iterator begin() { return m_pItems; }                             \
   iterator end() { return m_pItems + m_nCount; }                    \
