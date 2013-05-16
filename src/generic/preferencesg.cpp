@@ -79,7 +79,7 @@ public:
     }
 
 protected:
-    virtual wxDialog *CreateWindow(wxWindow *parent)
+    wxGenericPrefsDialog *CreateDialog(wxWindow *parent)
     {
         wxGenericPrefsDialog *dlg = new wxGenericPrefsDialog(parent);
 
@@ -124,7 +124,7 @@ public:
     {
         if ( !m_win )
         {
-            wxWindow *win = CreateWindow(parent);
+            wxWindow *win = CreateDialog(parent);
             win->Show();
             m_win = win;
         }
@@ -158,7 +158,7 @@ class wxModalPreferencesEditorImpl : public wxGenericPreferencesEditorImplBase
 public:
     virtual void Show(wxWindow* parent)
     {
-        wxScopedPtr<wxDialog> dlg(CreateWindow(parent));
+        wxScopedPtr<wxGenericPrefsDialog> dlg(CreateDialog(parent));
         dlg->Fit();
         dlg->ShowModal();
     }
