@@ -65,6 +65,16 @@ public:
         m_notebook->AddPage(win, page->GetName());
     }
 
+    int GetSelectedPage() const
+    {
+        return m_notebook->GetSelection();
+    }
+
+    void SelectPage(int page)
+    {
+        m_notebook->ChangeSelection(page);
+    }
+
 private:
     wxNotebook *m_notebook;
 };
@@ -156,17 +166,32 @@ private:
 class wxModalPreferencesEditorImpl : public wxGenericPreferencesEditorImplBase
 {
 public:
+    wxModalPreferencesEditorImpl()
+    {
+        m_currentPage = -1;
+    }
+
     virtual void Show(wxWindow* parent)
     {
         wxScopedPtr<wxGenericPrefsDialog> dlg(CreateDialog(parent));
         dlg->Fit();
-        dlg->ShowModal();
+
+        // Restore the previously selected page, if any.
+        if ( m_currentPage != -1 )
+            dlg->SelectPage(m_currentPage);
+
+        // Don't remember the last selected page if the dialog was cancelled.
+        if ( dlg->ShowModal() != wxID_CANCEL )
+            m_currentPage = dlg->GetSelectedPage();
     }
 
     virtual void Dismiss()
     {
         // nothing to do
     }
+
+private:
+    int m_currentPage;
 };
 
 #endif // !wxHAS_PREF_EDITOR_MODELESS
