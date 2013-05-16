@@ -710,6 +710,8 @@ public:
     static void *PthreadStart(wxThread *thread);
 
     // thread actions
+         // create the thread
+    wxThreadError Create(wxThread *thread, unsigned int stackSize);
         // start the thread
     wxThreadError Run();
         // unblock the thread allowing it to run
@@ -973,6 +975,131 @@ wxThreadInternal::~wxThreadInternal()
 {
 }
 
+#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
+    #define WXUNUSED_STACKSIZE(identifier)  identifier
+#else
+    #define WXUNUSED_STACKSIZE(identifier)  WXUNUSED(identifier)
+#endif
+
+wxThreadError wxThreadInternal::Create(wxThread *thread,
+                                       unsigned int WXUNUSED_STACKSIZE(stackSize))
+{
+    if ( GetState() != STATE_NEW )
+    {
+        // don't recreate thread
+        return wxTHREAD_RUNNING;
+    }
+
+    // set up the thread attribute: right now, we only set thread priority
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+
+#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
+    if (stackSize)
+      pthread_attr_setstacksize(&attr, stackSize);
+#endif
+
+#ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
+    int policy;
+    if ( pthread_attr_getschedpolicy(&attr, &policy) != 0 )
+    {
+        wxLogError(_("Cannot retrieve thread scheduling policy."));
+    }
+
+#ifdef __VMS__
+   /* the pthread.h contains too many spaces. This is a work-around */
+# undef sched_get_priority_max
+#undef sched_get_priority_min
+#define sched_get_priority_max(_pol_) \
+     (_pol_ == SCHED_OTHER ? PRI_FG_MAX_NP : PRI_FIFO_MAX)
+#define sched_get_priority_min(_pol_) \
+     (_pol_ == SCHED_OTHER ? PRI_FG_MIN_NP : PRI_FIFO_MIN)
+#endif
+
+    int max_prio = sched_get_priority_max(policy),
+        min_prio = sched_get_priority_min(policy),
+        prio = GetPriority();
+
+    if ( min_prio == -1 || max_prio == -1 )
+    {
+        wxLogError(_("Cannot get priority range for scheduling policy %d."),
+                   policy);
+    }
+    else if ( max_prio == min_prio )
+    {
+        if ( prio != wxPRIORITY_DEFAULT )
+        {
+            // notify the programmer that this doesn't work here
+            wxLogWarning(_("Thread priority setting is ignored."));
+        }
+        //else: we have default priority, so don't complain
+
+        // anyhow, don't do anything because priority is just ignored
+    }
+    else
+    {
+        struct sched_param sp;
+        if ( pthread_attr_getschedparam(&attr, &sp) != 0 )
+        {
+            wxFAIL_MSG(wxT("pthread_attr_getschedparam() failed"));
+        }
+
+        sp.sched_priority = min_prio + (prio*(max_prio - min_prio))/100;
+
+        if ( pthread_attr_setschedparam(&attr, &sp) != 0 )
+        {
+            wxFAIL_MSG(wxT("pthread_attr_setschedparam(priority) failed"));
+        }
+    }
+#endif // HAVE_THREAD_PRIORITY_FUNCTIONS
+
+#ifdef HAVE_PTHREAD_ATTR_SETSCOPE
+    // this will make the threads created by this process really concurrent
+    if ( pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM) != 0 )
+    {
+        wxFAIL_MSG(wxT("pthread_attr_setscope(PTHREAD_SCOPE_SYSTEM) failed"));
+    }
+#endif // HAVE_PTHREAD_ATTR_SETSCOPE
+
+    // VZ: assume that this one is always available (it's rather fundamental),
+    //     if this function is ever missing we should try to use
+    //     pthread_detach() instead (after thread creation)
+    if ( thread->IsDetached() )
+    {
+        if ( pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED) != 0 )
+        {
+            wxFAIL_MSG(wxT("pthread_attr_setdetachstate(DETACHED) failed"));
+        }
+
+        // never try to join detached threads
+        Detach();
+    }
+    //else: threads are created joinable by default, it's ok
+
+    // create the new OS thread object
+    int rc = pthread_create
+             (
+                GetIdPtr(),
+                &attr,
+                wxPthreadStart,
+                (void *)thread
+             );
+
+    if ( pthread_attr_destroy(&attr) != 0 )
+    {
+        wxFAIL_MSG(wxT("pthread_attr_destroy() failed"));
+    }
+
+    if ( rc != 0 )
+    {
+        SetState(STATE_EXITED);
+
+        return wxTHREAD_NO_RESOURCE;
+    }
+
+    return wxTHREAD_NO_ERROR;
+}
+
 wxThreadError wxThreadInternal::Run()
 {
     wxCHECK_MSG( GetState() == STATE_NEW, wxTHREAD_RUNNING,
@@ -1183,130 +1310,11 @@ wxThread::wxThread(wxThreadKind kind)
     m_isDetached = kind == wxTHREAD_DETACHED;
 }
 
-#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
-    #define WXUNUSED_STACKSIZE(identifier)  identifier
-#else
-    #define WXUNUSED_STACKSIZE(identifier)  WXUNUSED(identifier)
-#endif
-
-wxThreadError wxThread::Create(unsigned int WXUNUSED_STACKSIZE(stackSize))
+wxThreadError wxThread::Create(unsigned int stackSize)
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    if ( m_internal->GetState() != STATE_NEW )
-    {
-        // don't recreate thread
-        return wxTHREAD_RUNNING;
-    }
-
-    // set up the thread attribute: right now, we only set thread priority
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
-
-#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
-    if (stackSize)
-      pthread_attr_setstacksize(&attr, stackSize);
-#endif
-
-#ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
-    int policy;
-    if ( pthread_attr_getschedpolicy(&attr, &policy) != 0 )
-    {
-        wxLogError(_("Cannot retrieve thread scheduling policy."));
-    }
-
-#ifdef __VMS__
-   /* the pthread.h contains too many spaces. This is a work-around */
-# undef sched_get_priority_max
-#undef sched_get_priority_min
-#define sched_get_priority_max(_pol_) \
-     (_pol_ == SCHED_OTHER ? PRI_FG_MAX_NP : PRI_FIFO_MAX)
-#define sched_get_priority_min(_pol_) \
-     (_pol_ == SCHED_OTHER ? PRI_FG_MIN_NP : PRI_FIFO_MIN)
-#endif
-
-    int max_prio = sched_get_priority_max(policy),
-        min_prio = sched_get_priority_min(policy),
-        prio = m_internal->GetPriority();
-
-    if ( min_prio == -1 || max_prio == -1 )
-    {
-        wxLogError(_("Cannot get priority range for scheduling policy %d."),
-                   policy);
-    }
-    else if ( max_prio == min_prio )
-    {
-        if ( prio != wxPRIORITY_DEFAULT )
-        {
-            // notify the programmer that this doesn't work here
-            wxLogWarning(_("Thread priority setting is ignored."));
-        }
-        //else: we have default priority, so don't complain
-
-        // anyhow, don't do anything because priority is just ignored
-    }
-    else
-    {
-        struct sched_param sp;
-        if ( pthread_attr_getschedparam(&attr, &sp) != 0 )
-        {
-            wxFAIL_MSG(wxT("pthread_attr_getschedparam() failed"));
-        }
-
-        sp.sched_priority = min_prio + (prio*(max_prio - min_prio))/100;
-
-        if ( pthread_attr_setschedparam(&attr, &sp) != 0 )
-        {
-            wxFAIL_MSG(wxT("pthread_attr_setschedparam(priority) failed"));
-        }
-    }
-#endif // HAVE_THREAD_PRIORITY_FUNCTIONS
-
-#ifdef HAVE_PTHREAD_ATTR_SETSCOPE
-    // this will make the threads created by this process really concurrent
-    if ( pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM) != 0 )
-    {
-        wxFAIL_MSG(wxT("pthread_attr_setscope(PTHREAD_SCOPE_SYSTEM) failed"));
-    }
-#endif // HAVE_PTHREAD_ATTR_SETSCOPE
-
-    // VZ: assume that this one is always available (it's rather fundamental),
-    //     if this function is ever missing we should try to use
-    //     pthread_detach() instead (after thread creation)
-    if ( m_isDetached )
-    {
-        if ( pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED) != 0 )
-        {
-            wxFAIL_MSG(wxT("pthread_attr_setdetachstate(DETACHED) failed"));
-        }
-
-        // never try to join detached threads
-        m_internal->Detach();
-    }
-    //else: threads are created joinable by default, it's ok
-
-    // create the new OS thread object
-    int rc = pthread_create
-             (
-                m_internal->GetIdPtr(),
-                &attr,
-                wxPthreadStart,
-                (void *)this
-             );
-
-    if ( pthread_attr_destroy(&attr) != 0 )
-    {
-        wxFAIL_MSG(wxT("pthread_attr_destroy() failed"));
-    }
-
-    if ( rc != 0 )
-    {
-        m_internal->SetState(STATE_EXITED);
-
-        return wxTHREAD_NO_RESOURCE;
-    }
-
-    return wxTHREAD_NO_ERROR;
+    return m_internal->Create(this, stackSize);
 }
 
 wxThreadError wxThread::Run()
