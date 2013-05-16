@@ -131,6 +131,12 @@ public:
     // it, SetImpl() needs to be called as done by wxXmlResource::AddHandler().
     wxXmlResourceHandler()
     {
+        m_node = NULL;
+        m_parent =
+        m_instance = NULL;
+        m_parentAsWindow = NULL;
+        m_resource = NULL;
+
         m_impl = NULL;
     }
 
