@@ -77,7 +77,7 @@ public:
         @param parent The window that invokes the preferences.
                       Call Dismiss() before it's destroyed.
      */
-    void Show(wxWindow* parent);
+    virtual void Show(wxWindow* parent);
 
     /**
         Hide the currently shown dialog, if any.

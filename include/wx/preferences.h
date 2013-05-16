@@ -98,7 +98,7 @@ public:
     // Show the preferences dialog or bring it to the top if it's already
     // shown. Notice that this method may or may not block depending on the
     // platform, i.e. depending on whether the dialog is modal or not.
-    void Show(wxWindow* parent);
+    virtual void Show(wxWindow* parent);
 
     // Hide the currently shown dialog, if any. This doesn't do anything on the
     // platforms using modal preferences dialogs but should be called to
