@@ -34,11 +34,14 @@
 #include "wx/scopedptr.h"
 #include "wx/vector.h"
 
+namespace
+{
+
 class wxGenericPrefsDialog : public wxDialog
 {
 public:
-    wxGenericPrefsDialog(wxWindow *parent)
-        : wxDialog(parent, wxID_ANY, _("Preferences"),
+    wxGenericPrefsDialog(wxWindow *parent, const wxString& title)
+        : wxDialog(parent, wxID_ANY, title,
                    wxDefaultPosition, wxDefaultSize,
                    wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX | wxMINIMIZE_BOX))
     {
@@ -83,6 +86,11 @@ private:
 class wxGenericPreferencesEditorImplBase : public wxPreferencesEditorImpl
 {
 public:
+    void SetTitle(const wxString& title)
+    {
+        m_title = title;
+    }
+
     virtual void AddPage(wxPreferencesPage* page)
     {
         m_pages.push_back(wxSharedPtr<wxPreferencesPage>(page));
@@ -91,7 +99,10 @@ public:
 protected:
     wxGenericPrefsDialog *CreateDialog(wxWindow *parent)
     {
-        wxGenericPrefsDialog *dlg = new wxGenericPrefsDialog(parent);
+        if ( m_title.empty() )
+            m_title = _("Preferences");
+
+        wxGenericPrefsDialog *dlg = new wxGenericPrefsDialog(parent, m_title);
 
         // TODO: Don't create all pages immediately like this, do it on demand
         //       when a page is selected in the notebook (as is done on OS X).
@@ -113,6 +124,8 @@ protected:
     typedef wxVector< wxSharedPtr<wxPreferencesPage> > Pages;
     Pages m_pages;
 
+private:
+    wxString m_title;
 };
 
 
@@ -161,6 +174,12 @@ private:
     wxWeakRef<wxWindow> m_win;
 };
 
+inline
+wxGenericPreferencesEditorImplBase* NewGenericImpl()
+{
+    return new wxModelessPreferencesEditorImpl;
+}
+
 #else // !wxHAS_PREF_EDITOR_MODELESS
 
 class wxModalPreferencesEditorImpl : public wxGenericPreferencesEditorImplBase
@@ -194,17 +213,24 @@ private:
     int m_currentPage;
 };
 
+inline
+wxGenericPreferencesEditorImplBase* NewGenericImpl()
+{
+    return new wxModalPreferencesEditorImpl;
+}
+
 #endif // !wxHAS_PREF_EDITOR_MODELESS
 
+} // anonymous namespace
 
 /*static*/
-wxPreferencesEditorImpl* wxPreferencesEditorImpl::Create()
+wxPreferencesEditorImpl* wxPreferencesEditorImpl::Create(const wxString& title)
 {
-#ifdef wxHAS_PREF_EDITOR_MODELESS
-    return new wxModelessPreferencesEditorImpl();
-#else
-    return new wxModalPreferencesEditorImpl();
-#endif
+    wxGenericPreferencesEditorImplBase* const impl = NewGenericImpl();
+
+    impl->SetTitle(title);
+
+    return impl;
 }
 
 #endif // !wxHAS_PREF_EDITOR_NATIVE

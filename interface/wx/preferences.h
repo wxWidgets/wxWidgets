@@ -38,8 +38,13 @@ public:
         Constructor.
 
         Creates an empty editor, use AddPage() to add controls to it.
+
+        @param title The title overriding the default title of the top level
+            window used by the editor. It is recommended to not specify this
+            parameter to use the native convention for the preferences dialogs
+            instead.
      */
-    wxPreferencesEditor();
+    wxPreferencesEditor(const wxString& title = wxString());
 
     /**
         Destructor.

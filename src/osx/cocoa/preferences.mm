@@ -54,8 +54,8 @@ wxBitmap wxStockPreferencesPage::GetLargeIcon() const
 class wxCocoaPrefsWindow : public wxFrame
 {
 public:
-    wxCocoaPrefsWindow()
-        : wxFrame(NULL, wxID_ANY, _("Preferences"),
+    wxCocoaPrefsWindow(const wxString& title)
+        : wxFrame(NULL, wxID_ANY, title,
                   wxDefaultPosition, wxDefaultSize,
                   wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX | wxMINIMIZE_BOX)),
           m_toolbarRealized(false),
@@ -191,7 +191,8 @@ private:
 class wxCocoaPreferencesEditorImpl : public wxPreferencesEditorImpl
 {
 public:
-    wxCocoaPreferencesEditorImpl() : m_win(NULL)
+    wxCocoaPreferencesEditorImpl(const wxString& title)
+        : m_win(NULL), m_title(title)
     {
     }
 
@@ -232,17 +233,25 @@ private:
     wxCocoaPrefsWindow* GetWin()
     {
         if ( !m_win )
-            m_win = new wxCocoaPrefsWindow();
+        {
+            if ( m_title.empty() )
+                m_title = _("Preferences");
+
+            m_win = new wxCocoaPrefsWindow(m_title);
+        }
+
         return m_win;
     }
 
     wxWeakRef<wxCocoaPrefsWindow> m_win;
+
+    wxString m_title;
 };
 
 /*static*/
-wxPreferencesEditorImpl* wxPreferencesEditorImpl::Create()
+wxPreferencesEditorImpl* wxPreferencesEditorImpl::Create(const wxString& title)
 {
-    return new wxCocoaPreferencesEditorImpl();
+    return new wxCocoaPreferencesEditorImpl(title);
 }
 
 #endif // wxHAS_PREF_EDITOR_NATIVE

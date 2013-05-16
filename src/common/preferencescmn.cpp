@@ -42,8 +42,8 @@ wxString wxStockPreferencesPage::GetName() const
     return wxString(); // silence compiler warning
 }
 
-wxPreferencesEditor::wxPreferencesEditor()
-    : m_impl(wxPreferencesEditorImpl::Create())
+wxPreferencesEditor::wxPreferencesEditor(const wxString& title)
+    : m_impl(wxPreferencesEditorImpl::Create(title))
 {
 }
 
