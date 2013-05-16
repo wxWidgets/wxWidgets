@@ -24,9 +24,13 @@ class wxPreferencesEditorImpl;
     #define wxHAS_PREF_EDITOR_ICONS
     // Changes should be applied immediately
     #define wxHAS_PREF_EDITOR_APPLY_IMMEDIATELY
+    // The dialog is shown non-modally.
+    #define wxHAS_PREF_EDITOR_MODELESS
 #elif defined(__WXGTK__)
     // Changes should be applied immediately
     #define wxHAS_PREF_EDITOR_APPLY_IMMEDIATELY
+    // The dialog is shown non-modally.
+    #define wxHAS_PREF_EDITOR_MODELESS
 #endif
 
 // ----------------------------------------------------------------------------
@@ -114,6 +118,16 @@ public:
         return true;
 #else
         return false;
+#endif
+    }
+
+    // Whether the dialog is shown modally, i.e. Show() blocks, or not.
+    static bool ShownModally()
+    {
+#ifdef wxHAS_PREF_EDITOR_MODELESS
+        return false;
+#else
+        return true;
 #endif
     }
 

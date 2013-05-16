@@ -17,10 +17,6 @@
     #define wxHAS_PREF_EDITOR_NATIVE
 #endif
 
-#if defined(__WXOSX__) || defined(__WXGTK__)
-    #define wxHAS_PREF_EDITOR_MODELESS
-#endif
-
 // ----------------------------------------------------------------------------
 // wxPreferencesEditorImpl: defines wxPreferencesEditor implementation.
 // ----------------------------------------------------------------------------

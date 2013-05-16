@@ -98,6 +98,23 @@ public:
         in this case as well.
      */
     static bool ShouldApplyChangesImmediately()
+
+    /**
+        Returns whether the preferences dialog is shown modally.
+
+        If this method returns false, as it currently does in wxGTK and wxOSX,
+        Show() simply makes the dialog visible and returns immediately. If it
+        returns true, as it does in wxMSW and under the other platforms, then
+        the dialog is shown modally, i.e. Show() blocks until the user
+        dismisses it.
+
+        Notice that it isn't necessary to test the return value of this method
+        to use this class normally, its interface is designed to work in both
+        cases. However it can sometimes be necessary to call it if the program
+        needs to handle modal dialogs specially, e.g. perhaps to block some
+        periodic background update operation while a modal dialog is shown.
+     */
+    static bool ShownModally();
 };
 
 
