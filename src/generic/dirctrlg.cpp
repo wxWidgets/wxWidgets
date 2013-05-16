@@ -106,7 +106,7 @@ bool wxIsDriveAvailable(const wxString& dirName);
 // events
 // ----------------------------------------------------------------------------
 
-wxDEFINE_EVENT( wxEVT_DIRCTRL_CHANGED, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
 
 // ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, DOS, OS2, MAC, UNIX (returns "/")
@@ -703,7 +703,7 @@ void wxGenericDirCtrl::OnEndEditItem(wxTreeEvent &event)
 
 void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
 {
-    wxTreeEvent changedEvent(wxEVT_DIRCTRL_CHANGED, GetId());
+    wxTreeEvent changedEvent(wxEVT_DIRCTRL_SELECTIONCHANGED, GetId());
 
     changedEvent.SetEventObject(this);
     changedEvent.SetItem(event.GetItem());

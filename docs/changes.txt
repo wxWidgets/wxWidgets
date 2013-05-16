@@ -634,7 +634,7 @@ All (GUI):
 - Close wxLogWindow automatically if it's the last remaining top level window.
 - Implement clipping for wxSVGFileDC (Steve Benbow).
 - Add wxDirCtrl::GetPath() (troelsk).
-- Add wxEVT_COMMAND_DIRCTRL_CHANGED event (troelsk).
+- Add wxEVT_DIRCTRL_SELECTIONCHANGED event (troelsk).
 - Add wxControl::GetSizeFromTextSize() (Manuel Martin).
 - Optionally allow showing tooltips for disabled ribbon buttons (wxBen).
 - Add wxTL_NO_HEADER style to wxTreeListCtrl (robboto).
