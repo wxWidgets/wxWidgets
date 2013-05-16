@@ -296,6 +296,27 @@ public:
     */
     virtual void SetLineSize(int lineSize);
 
+
+    /**
+        Sets the minimum slider value.
+
+        @param minValue
+            The new bottom end of the slider range.
+            
+        @see GetMin(), SetRange()
+    */
+    void SetMin( int minValue );
+
+    /**
+        Sets the maximum slider value.
+
+        @param maxValue
+            The new top end of the slider range.
+            
+        @see GetMax(), SetRange()
+    */
+    void SetMax( int maxValue );
+
     /**
         Sets the page size for the slider.
 
