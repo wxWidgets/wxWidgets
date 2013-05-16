@@ -107,6 +107,7 @@ bool wxIsDriveAvailable(const wxString& dirName);
 // ----------------------------------------------------------------------------
 
 wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
 
 // ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, DOS, OS2, MAC, UNIX (returns "/")
@@ -448,6 +449,7 @@ BEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
   EVT_TREE_BEGIN_LABEL_EDIT   (wxID_TREECTRL, wxGenericDirCtrl::OnBeginEditItem)
   EVT_TREE_END_LABEL_EDIT     (wxID_TREECTRL, wxGenericDirCtrl::OnEndEditItem)
   EVT_TREE_SEL_CHANGED        (wxID_TREECTRL, wxGenericDirCtrl::OnTreeSelChange)
+  EVT_TREE_ITEM_ACTIVATED     (wxID_TREECTRL, wxGenericDirCtrl::OnItemActivated)
   EVT_SIZE                    (wxGenericDirCtrl::OnSize)
 END_EVENT_TABLE()
 
@@ -710,12 +712,34 @@ void wxGenericDirCtrl::OnTreeSelChange(wxTreeEvent &event)
     changedEvent.SetClientObject(m_treeCtrl->GetItemData(event.GetItem()));
 
     if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
-    {
         event.Veto();
+    else
+        event.Skip();
+}
+
+void wxGenericDirCtrl::OnItemActivated(wxTreeEvent &event)
+{
+    wxTreeItemId treeid = event.GetItem();
+    const wxDirItemData *data = GetItemData(treeid);
+
+    if (data->m_isDir)
+    {
+        // is dir
+        event.Skip();
     }
     else
     {
-        event.Skip();
+        // is file
+        wxTreeEvent changedEvent(wxEVT_DIRCTRL_FILEACTIVATED, GetId());
+
+        changedEvent.SetEventObject(this);
+        changedEvent.SetItem(treeid);
+        changedEvent.SetClientObject(m_treeCtrl->GetItemData(treeid));
+
+        if (GetEventHandler()->SafelyProcessEvent(changedEvent) && !changedEvent.IsAllowed())
+            event.Veto();
+        else
+            event.Skip();
     }
 }
 

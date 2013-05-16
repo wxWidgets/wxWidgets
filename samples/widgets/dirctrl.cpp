@@ -113,6 +113,7 @@ protected:
     void OnCheckBox(wxCommandEvent& event);
     void OnRadioBox(wxCommandEvent& event);
     void OnSelChanged(wxTreeEvent& event);
+    void OnFileActivated(wxTreeEvent& event);
 
     // reset the control parameters
     void Reset();
@@ -157,6 +158,7 @@ BEGIN_EVENT_TABLE(DirCtrlWidgetsPage, WidgetsPage)
     EVT_CHECKBOX(wxID_ANY, DirCtrlWidgetsPage::OnCheckBox)
     EVT_RADIOBOX(wxID_ANY, DirCtrlWidgetsPage::OnRadioBox)
     EVT_DIRCTRL_SELECTIONCHANGED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnSelChanged)
+    EVT_DIRCTRL_FILEACTIVATED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnFileActivated)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -371,6 +373,17 @@ void DirCtrlWidgetsPage::OnSelChanged(wxTreeEvent& event)
     if ( m_dirCtrl )
     {
         wxLogMessage("Selection changed to \"%s\"",
+                     m_dirCtrl->GetPath(event.GetItem()));
+    }
+
+    event.Skip();
+}
+
+void DirCtrlWidgetsPage::OnFileActivated(wxTreeEvent& event)
+{
+    if ( m_dirCtrl )
+    {
+        wxLogMessage("File activated \"%s\"",
                      m_dirCtrl->GetPath(event.GetItem()));
     }
 

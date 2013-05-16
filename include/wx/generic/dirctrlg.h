@@ -110,6 +110,7 @@ public:
     void OnBeginEditItem(wxTreeEvent &event );
     void OnEndEditItem(wxTreeEvent &event );
     void OnTreeSelChange(wxTreeEvent &event);
+    void OnItemActivated(wxTreeEvent &event);
     void OnSize(wxSizeEvent &event );
 
     // Try to expand as much of the given path as possible.
@@ -210,11 +211,13 @@ private:
 };
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
 
 #define wx__DECLARE_DIRCTRL_EVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_DIRCTRL_ ## evt, id, wxTreeEventHandler(fn))
 
 #define EVT_DIRCTRL_SELECTIONCHANGED(id, fn) wx__DECLARE_DIRCTRL_EVT(SELECTIONCHANGED, id, fn)
+#define EVT_DIRCTRL_FILEACTIVATED(id, fn) wx__DECLARE_DIRCTRL_EVT(FILEACTIVATED, id, fn)
 
 //-----------------------------------------------------------------------------
 // wxDirFilterListCtrl
@@ -310,6 +313,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxFileIconsTable *) wxTheFileIconsTable;
 
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_DIRCTRL_SELECTIONCHANGED wxEVT_DIRCTRL_SELECTIONCHANGED
+#define wxEVT_COMMAND_DIRCTRL_FILEACTIVATED   wxEVT_DIRCTRL_FILEACTIVATED
 
 #endif
     // _WX_DIRCTRLG_H_

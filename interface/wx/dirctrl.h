@@ -57,6 +57,9 @@ enum
           Notice that this event is generated even for the changes done by the
           program itself and not only those done by the user.
           @since 2.9.5
+    @event{EVT_DIRCTRL_FILEACTIVATED(id, func)}
+          The user activated a file by double-clicking or pressing Enter.
+          @since 2.9.5
 */
 class wxGenericDirCtrl : public wxControl
 {
@@ -279,3 +282,4 @@ public:
 };
 
 wxEventType wxEVT_DIRCTRL_SELECTIONCHANGED;
+wxEventType wxEVT_DIRCTRL_FILEACTIVATED;
