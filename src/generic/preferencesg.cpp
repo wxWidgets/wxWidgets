@@ -27,6 +27,7 @@
 
 #ifndef wxHAS_PREF_EDITOR_NATIVE
 
+#include "wx/app.h"
 #include "wx/dialog.h"
 #include "wx/notebook.h"
 #include "wx/sizer.h"
@@ -100,7 +101,12 @@ protected:
     wxGenericPrefsDialog *CreateDialog(wxWindow *parent)
     {
         if ( m_title.empty() )
-            m_title = _("Preferences");
+        {
+            // Use the default title, which should include the application name
+            // under both MSW and GTK (and OSX uses its own native
+            // implementation anyhow).
+            m_title.Printf(_("%s Preferences"), wxTheApp->GetAppDisplayName());
+        }
 
         wxGenericPrefsDialog *dlg = new wxGenericPrefsDialog(parent, m_title);
 

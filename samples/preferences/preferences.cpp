@@ -224,6 +224,11 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    // This will be used in the title of the preferences dialog under some
+    // platforms, don't leave it as default "Preferences" because this would
+    // result in rather strange "Preferences Preferences" title.
+    SetAppDisplayName("wxWidgets Sample");
+
     MyFrame *frame = new MyFrame();
     frame->Show(true);
 
