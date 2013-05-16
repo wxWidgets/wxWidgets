@@ -1191,6 +1191,8 @@ wxThread::wxThread(wxThreadKind kind)
 
 wxThreadError wxThread::Create(unsigned int WXUNUSED_STACKSIZE(stackSize))
 {
+    wxCriticalSectionLocker lock(m_critsect);
+
     if ( m_internal->GetState() != STATE_NEW )
     {
         // don't recreate thread
