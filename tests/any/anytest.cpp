@@ -412,9 +412,9 @@ void wxAnyTestCase::GetAs()
     res = m_anyDoubleDouble1.GetAs(&ul);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_EQUAL(ul, static_cast<unsigned long>(123));
-#ifndef wxDONT_TEST
     res = m_anyDoubleDouble1.GetAs(&s);
     CPPUNIT_ASSERT(res);
+#ifndef wxDONT_TEST
     double d2;
     res = s.ToDouble(&d2);
     CPPUNIT_ASSERT(res);
