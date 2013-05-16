@@ -655,6 +655,7 @@ All (GUI):
 - Add chainable wxWizardPageSimple::Chain() overload.
 - Add wxTextEntryDialog::SetMaxLength() (derEine).
 - Fix maximum width support in wxGridCellTextEditor (derEine).
+- Allow associating a validator with wxGridCellTextEditor (derEine).
 - Add more convenient wxFont(wxFontInfo) ctor.
 - Pass menu events to the handler in the associated wxMenuBar.
 

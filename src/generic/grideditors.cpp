@@ -416,6 +416,11 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
     {
         Text()->SetMaxLength(m_maxChars);
     }
+    // validate text in textctrl, if validator is set
+    if ( m_validator )
+    {
+        Text()->SetValidator(*m_validator);
+    }
 
     wxGridCellEditor::Create(parent, id, evtHandler);
 }
@@ -632,6 +637,21 @@ void wxGridCellTextEditor::SetParameters(const wxString& params)
             wxLogDebug( wxT("Invalid wxGridCellTextEditor parameter string '%s' ignored"), params.c_str() );
         }
     }
+}
+
+void wxGridCellTextEditor::SetValidator(const wxValidator& validator)
+{
+    m_validator.reset(static_cast<wxValidator*>(validator.Clone()));
+}
+
+wxGridCellEditor *wxGridCellTextEditor::Clone() const
+{
+    wxGridCellTextEditor* editor = new wxGridCellTextEditor(m_maxChars);
+    if ( m_validator )
+    {
+        editor->SetValidator(*m_validator);
+    }
+    return editor;
 }
 
 // return the value in the text control

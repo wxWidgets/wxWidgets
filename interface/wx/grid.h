@@ -638,6 +638,13 @@ public:
         the maximum width.
     */
     virtual void SetParameters(const wxString& params);
+
+    /**
+        Set validator to validate user input.
+
+        @since 2.9.5
+    */
+    virtual void SetValidator(const wxValidator& validator);
 };
 
 /**
