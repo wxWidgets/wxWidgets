@@ -33,6 +33,7 @@
 #include "wx/sizer.h"
 #include "wx/sharedptr.h"
 #include "wx/scopedptr.h"
+#include "wx/scopeguard.h"
 #include "wx/vector.h"
 
 namespace
@@ -193,12 +194,19 @@ class wxModalPreferencesEditorImpl : public wxGenericPreferencesEditorImplBase
 public:
     wxModalPreferencesEditorImpl()
     {
+        m_dlg = NULL;
         m_currentPage = -1;
     }
 
     virtual void Show(wxWindow* parent)
     {
         wxScopedPtr<wxGenericPrefsDialog> dlg(CreateDialog(parent));
+
+        // Store it for Dismiss() but ensure that the pointer is reset to NULL
+        // when the dialog is destroyed on leaving this function.
+        m_dlg = dlg.get();
+        wxON_BLOCK_EXIT_NULL(m_dlg);
+
         dlg->Fit();
 
         // Restore the previously selected page, if any.
@@ -212,11 +220,18 @@ public:
 
     virtual void Dismiss()
     {
-        // nothing to do
+        if ( m_dlg )
+        {
+            m_dlg->EndModal(wxID_CANCEL);
+            m_dlg = NULL;
+        }
     }
 
 private:
+    wxGenericPrefsDialog* m_dlg;
     int m_currentPage;
+
+    wxDECLARE_NO_COPY_CLASS(wxModalPreferencesEditorImpl);
 };
 
 inline

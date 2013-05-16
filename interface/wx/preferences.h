@@ -82,9 +82,8 @@ public:
     /**
         Hide the currently shown dialog, if any.
 
-        This doesn't do anything on the platforms using modal preferences
-        dialogs (e.g. Windows) but should be called to dismiss the dialog if
-        the object whose preferences it is editing was closed.
+        This is typically called to dismiss the dialog if the object whose
+        preferences it is editing was closed.
      */
     void Dismiss();
 

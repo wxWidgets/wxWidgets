@@ -104,8 +104,7 @@ public:
     // platform, i.e. depending on whether the dialog is modal or not.
     virtual void Show(wxWindow* parent);
 
-    // Hide the currently shown dialog, if any. This doesn't do anything on the
-    // platforms using modal preferences dialogs but should be called to
+    // Hide the currently shown dialog, if any. This is typically used to
     // dismiss the dialog if the object whose preferences it is editing was
     // closed.
     void Dismiss();
