@@ -30,9 +30,9 @@ public:
     // precision (64 bits) is used for doubles.
     void UseBasicPrecisions()
     {
-#if !wxUSE_APPLE_IEEE
+#if wxUSE_APPLE_IEEE
         m_useExtendedPrecision = false;
-#endif // !wxUSE_APPLE_IEEE
+#endif // wxUSE_APPLE_IEEE
     }
 
     // UseExtendedPrecision() is not very useful as it corresponds to the
