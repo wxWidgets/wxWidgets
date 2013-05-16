@@ -656,6 +656,9 @@ bool wxThreadInternal::Create( wxThread *thread, unsigned int stackSize )
     wxASSERT_MSG( m_state == STATE_NEW && !m_tid,
                     wxT("Create()ing thread twice?") );
 
+    if ( thread->IsDetached() )
+        Detach();
+
     OSStatus err = noErr;
     m_thread = thread;
 
@@ -868,13 +871,9 @@ wxThreadError wxThread::Create( unsigned int stackSize )
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    if ( m_isDetached )
-        m_internal->Detach() ;
-
     if ( !m_internal->Create(this, stackSize) )
     {
         m_internal->SetState( STATE_EXITED );
-
         return wxTHREAD_NO_RESOURCE;
     }
 
@@ -884,6 +883,17 @@ wxThreadError wxThread::Create( unsigned int stackSize )
 wxThreadError wxThread::Run()
 {
     wxCriticalSectionLocker lock(m_critsect);
+
+    // Create the thread if it wasn't created yet with an explicit
+    // Create() call:
+    if ( m_internal->GetId() == kInvalidID )
+    {
+        if ( !m_internal->Create(this, stackSize) )
+        {
+            m_internal->SetState( STATE_EXITED );
+            return wxTHREAD_NO_RESOURCE;
+        }
+    }
 
     wxCHECK_MSG( m_internal->GetId(), wxTHREAD_MISC_ERROR,
                  wxT("must call wxThread::Create() first") );

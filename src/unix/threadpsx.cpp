@@ -749,6 +749,8 @@ public:
         // id
     pthread_t GetId() const { return m_threadId; }
     pthread_t *GetIdPtr() { return &m_threadId; }
+        // "created" flag
+    bool WasCreated() const { return m_created; }
         // "cancelled" flag
     void SetCancelFlag() { m_cancelled = true; }
     bool WasCancelled() const { return m_cancelled; }
@@ -778,6 +780,9 @@ private:
     pthread_t     m_threadId;   // id of the thread
     wxThreadState m_state;      // see wxThreadState enum
     int           m_prio;       // in wxWidgets units: from 0 to 100
+
+    // this flag is set when the thread was successfully created
+    bool m_created;
 
     // this flag is set when the thread should terminate
     bool m_cancelled;
@@ -958,6 +963,7 @@ void wxThreadInternal::Cleanup(wxThread *thread)
 wxThreadInternal::wxThreadInternal()
 {
     m_state = STATE_NEW;
+    m_created = false;
     m_cancelled = false;
     m_prio = wxPRIORITY_DEFAULT;
     m_threadId = 0;
@@ -1097,6 +1103,7 @@ wxThreadError wxThreadInternal::Create(wxThread *thread,
         return wxTHREAD_NO_RESOURCE;
     }
 
+    m_created = true;
     return wxTHREAD_NO_ERROR;
 }
 
@@ -1321,8 +1328,14 @@ wxThreadError wxThread::Run()
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    wxCHECK_MSG( m_internal->GetId(), wxTHREAD_MISC_ERROR,
-                 wxT("must call wxThread::Create() first") );
+    // Create the thread if it wasn't created yet with an explicit
+    // Create() call:
+    if ( !m_internal->WasCreated() )
+    {
+        wxThreadError rv = m_internal->Create(this, 0);
+        if ( rv != wxTHREAD_NO_ERROR )
+            return rv;
+    }
 
     return m_internal->Run();
 }

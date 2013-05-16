@@ -1107,6 +1107,14 @@ wxThreadError wxThread::Run()
 {
     wxCriticalSectionLocker lock(m_critsect);
 
+    // Create the thread if it wasn't created yet with an explicit
+    // Create() call:
+    if ( !m_internal->GetHandle() )
+    {
+        if ( !m_internal->Create(this, 0) )
+            return wxTHREAD_NO_RESOURCE;
+    }
+
     wxCHECK_MSG( m_internal->GetState() == STATE_NEW, wxTHREAD_RUNNING,
              wxT("thread may only be started once after Create()") );
 

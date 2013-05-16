@@ -626,6 +626,14 @@ wxThreadError wxThread::Run()
 {
     wxCriticalSectionLocker         lock((wxCriticalSection &)m_critsect);
 
+    // Create the thread if it wasn't created yet with an explicit
+    // Create() call:
+    if ( !m_internal->GetHandle() )
+    {
+        if ( !m_internal->Create(this, 0) )
+            return wxTHREAD_NO_RESOURCE;
+    }
+
     if ( m_internal->GetState() != STATE_NEW )
     {
         // actually, it may be almost any state at all, not only STATE_RUNNING
