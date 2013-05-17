@@ -93,7 +93,9 @@ class WXDLLIMPEXP_CORE wxPreferencesEditor
 public:
     // Ctor creates an empty editor, use AddPage() to add controls to it.
     wxPreferencesEditor(const wxString& title = wxString());
-    ~wxPreferencesEditor();
+
+    // Dtor destroys the dialog if still shown.
+    virtual ~wxPreferencesEditor();
 
     // Add a new page to the editor. The editor takes ownership of the page
     // and won't delete it until it is destroyed itself.
