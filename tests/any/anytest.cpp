@@ -306,14 +306,6 @@ void wxAnyTestCase::Null()
 
 void wxAnyTestCase::GetAs()
 {
-    // FIXME: Parts of this test result in heap corruption in wxOSX/PPC builds
-    //        for some unknown reason, disable them to at least allow running
-    //        the other tests.
-#if defined(__WXOSX__) && defined(__POWERPC__)
-    #warning "Disabling some tests under PPC, please consider debugging them."
-    #define wxDONT_TEST
-#endif // OSX/PPC
-
     //
     // Test dynamic conversion
     bool res;
@@ -364,9 +356,7 @@ void wxAnyTestCase::GetAs()
     // should not work.
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&l));
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&ul));
-#ifndef wxDONT_TEST
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&f));
-#endif // !wxDONT_TEST
     CPPUNIT_ASSERT(!m_anyStringString1.GetAs(&b));
 
     // Let's test some other conversions from string that should work.
@@ -379,11 +369,9 @@ void wxAnyTestCase::GetAs()
     res = anyString.GetAs(&ul);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_EQUAL(ul, static_cast<unsigned long>(15));
-#ifndef wxDONT_TEST
     res = anyString.GetAs(&f);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(f, 15.0, FEQ_DELTA);
-#endif // !wxDONT_TEST
     anyString = "TRUE";
     res = anyString.GetAs(&b);
     CPPUNIT_ASSERT(res);
