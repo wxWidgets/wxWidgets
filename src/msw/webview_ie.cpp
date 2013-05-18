@@ -940,19 +940,19 @@ wxCOMPtr<IHTMLDocument2> wxWebViewIE::GetDocument() const
     return document;
 }
 
-bool wxWebViewIE::IsElementVisible(IHTMLElement* elm)
+bool wxWebViewIE::IsElementVisible(wxCOMPtr<IHTMLElement> elm)
 {
-    wxIHTMLCurrentStyle* style;
-    IHTMLElement *elm1 = elm;
-    wxIHTMLElement2 *elm2;
+    wxCOMPtr<IHTMLElement> elm1 = elm;
     BSTR tmp_bstr;
     bool is_visible = true;
     //This method is not perfect but it does discover most of the hidden elements.
     //so if a better solution is found, then please do improve.
     while(elm1)
     {
+        wxCOMPtr<wxIHTMLElement2> elm2;
         if(SUCCEEDED(elm1->QueryInterface(wxIID_IHTMLElement2, (void**) &elm2)))
         {
+            wxCOMPtr<wxIHTMLCurrentStyle> style;
             if(SUCCEEDED(elm2->get_currentStyle(&style)))
             {
                 //Check if the object has the style display:none.
@@ -976,7 +976,6 @@ bool wxWebViewIE::IsElementVisible(IHTMLElement* elm)
         IHTMLElement* parent;
         if(is_visible && SUCCEEDED(elm1->get_parentElement(&parent)))
         {
-            elm1->Release();
             elm1 = parent;
         }
         else
@@ -990,17 +989,17 @@ bool wxWebViewIE::IsElementVisible(IHTMLElement* elm)
 
 void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_flag)
 {
-    wxIMarkupServices *pIMS;
-    wxIMarkupContainer *pIMC;
-    wxIMarkupPointer *ptrBegin, *ptrEnd;
-    IHTMLElement* elm;
     long find_flag = 0;
-    IHTMLDocument2 *document = GetDocument();
+    wxCOMPtr<wxIMarkupServices> pIMS;
+    wxCOMPtr<IHTMLDocument2> document = GetDocument();
+
     //This function does the acutal work.
-    if(SUCCEEDED(document->QueryInterface(wxIID_IMarkupServices, (void **)&pIMS)))
+    if(document && SUCCEEDED(document->QueryInterface(wxIID_IMarkupServices, (void **)&pIMS)))
     {
+        wxCOMPtr<wxIMarkupContainer> pIMC;
         if(SUCCEEDED(document->QueryInterface(wxIID_IMarkupContainer, (void **)&pIMC)))
         {
+            wxCOMPtr<wxIMarkupPointer> ptrBegin, ptrEnd;
             BSTR attr_bstr = SysAllocString(L"style=\"background-color:#ffff00\"");
             BSTR text_bstr = SysAllocString(text.wc_str());
             pIMS->CreateMarkupPointer(&ptrBegin);
@@ -1026,6 +1025,7 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
 
             while(ptrBegin->FindText(text_bstr, find_flag, ptrEnd, NULL) == S_OK)
             {
+                wxCOMPtr<IHTMLElement> elm;
                 if(ptrBegin->CurrentScope(&elm) == S_OK)
                 {
                     if(IsElementVisible(elm))
@@ -1054,20 +1054,14 @@ void wxWebViewIE::FindInternal(const wxString& text, int flags, int internal_fla
                             m_findPointers.push_back(wxFindPointers(cptrBegin,cptrEnd));
                         }
                     }
-                    elm->Release();
                 }
                 ptrBegin->MoveToPointer(ptrEnd);
             }
             //Clean up.
             SysFreeString(text_bstr);
             SysFreeString(attr_bstr);
-            pIMC->Release();
-            ptrBegin->Release();
-            ptrEnd->Release();
         }
-        pIMS->Release();
     }
-    document->Release();
 }
 
 long wxWebViewIE::FindNext(int direction)
@@ -1111,20 +1105,21 @@ long wxWebViewIE::FindNext(int direction)
             return wxNOT_FOUND;
         }
     }
-    //some variables to use later on.
-    IHTMLElement *body_element;
-    IHTMLBodyElement *body;
-    wxIHTMLTxtRange *range = NULL;
-    wxIMarkupServices *pIMS;
-    IHTMLDocument2 *document = GetDocument();
+
+    wxCOMPtr<IHTMLDocument2> document = GetDocument();
+    wxCOMPtr<IHTMLElement> body_element;
+
     long ret = -1;
     //Now try to create a range from the body.
-    if(SUCCEEDED(document->get_body(&body_element)))
+    if(document && SUCCEEDED(document->get_body(&body_element)))
     {
+        wxCOMPtr<IHTMLBodyElement> body;
         if(SUCCEEDED(body_element->QueryInterface(IID_IHTMLBodyElement,(void**)&body)))
         {
+            wxCOMPtr<wxIHTMLTxtRange> range;
             if(SUCCEEDED(body->createTextRange((IHTMLTxtRange**)(&range))))
             {
+                wxCOMPtr<wxIMarkupServices> pIMS;
                 //So far so good, now we try to position our find pointers.
                 if(SUCCEEDED(document->QueryInterface(wxIID_IMarkupServices,(void **)&pIMS)))
                 {
@@ -1133,15 +1128,10 @@ long wxWebViewIE::FindNext(int direction)
                     {
                         ret = m_findPosition;
                     }
-                    pIMS->Release();
                 }
-                range->Release();
             }
-            body->Release();
         }
-        body_element->Release();
     }
-    document->Release();
     return ret;
 }
 

@@ -184,7 +184,7 @@ private:
     bool CanExecCommand(wxString command) const;
     void ExecCommand(wxString command);
     wxCOMPtr<IHTMLDocument2> GetDocument() const;
-    bool IsElementVisible(IHTMLElement* elm);
+    bool IsElementVisible(wxCOMPtr<IHTMLElement> elm);
     //Find helper functions.
     void FindInternal(const wxString& text, int flags, int internal_flag);
     long FindNext(int direction = 1);
