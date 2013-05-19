@@ -2700,6 +2700,11 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl we need to hack around this
             ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
+
+        dnl If libtiff configure detects lzma library, it enables support for
+        dnl LZMA compression and using it requires linking with liblzma.
+        AC_CHECK_LIB(lzma, lzma_code, [LIBS="$LIBS -llzma"])
+
         AC_CONFIG_SUBDIRS([src/tiff])
     fi
 fi
