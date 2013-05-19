@@ -45,6 +45,8 @@ public:
     wxUniChar(unsigned long int c);
     wxUniChar(short int c);
     wxUniChar(unsigned short int c);
+    wxUniChar(wxLongLong_t c);
+    wxUniChar(wxULongLong_t c);
 
     wxUniChar(const wxUniCharRef& c);
 
@@ -97,6 +99,8 @@ public:
     operator unsigned long int() const;
     operator short int() const;
     operator unsigned short int() const;
+    operator wxLongLong_t() const;
+    operator wxULongLong_t() const;
     //@}
 
     //@{
@@ -114,6 +118,8 @@ public:
     wxUniChar& operator=(unsigned long int c);
     wxUniChar& operator=(short int c);
     wxUniChar& operator=(unsigned short int c);
+    wxUniChar& operator=(wxLongLong_t c);
+    wxUniChar& operator=(wxULongLong_t c);
     //@}
 };
 

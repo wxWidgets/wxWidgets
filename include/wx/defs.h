@@ -1115,6 +1115,17 @@ typedef wxUint32 wxDword;
 
 #endif
 
+/*
+    Helper macro for conditionally compiling some code only if wxLongLong_t is
+    available and is a type different from the other integer types (i.e. not
+    long).
+ */
+#ifdef wxHAS_LONG_LONG_T_DIFFERENT_FROM_LONG
+    #define wxIF_LONG_LONG_TYPE(x) x
+#else
+    #define wxIF_LONG_LONG_TYPE(x)
+#endif
+
 
 /* Make sure ssize_t is defined (a signed type the same size as size_t). */
 /* (HAVE_SSIZE_T is not already defined by configure) */
@@ -1305,6 +1316,63 @@ typedef double wxDouble;
 #else
     typedef wxUint32 wxChar32;
 #endif
+
+
+/*
+    Helper macro expanding into the given "m" macro invoked with each of the
+    integer types as parameter (notice that this does not include char/unsigned
+    char and bool but does include wchar_t).
+ */
+#define wxDO_FOR_INT_TYPES(m) \
+    m(short) \
+    m(unsigned short) \
+    m(int) \
+    m(unsigned int) \
+    m(long) \
+    m(unsigned long) \
+    wxIF_LONG_LONG_TYPE( m(wxLongLong_t) ) \
+    wxIF_LONG_LONG_TYPE( m(wxULongLong_t) ) \
+    wxIF_WCHAR_T_TYPE( m(wchar_t) )
+
+/*
+    Same as wxDO_FOR_INT_TYPES() but does include char and unsigned char.
+
+    Notice that we use "char" and "unsigned char" here but not "signed char"
+    which would be more correct as "char" could be unsigned by default. But
+    wxWidgets code currently supposes that char is signed and we'd need to
+    clean up assumptions about it, notably in wx/unichar.h, to be able to use
+    "signed char" here.
+ */
+#define wxDO_FOR_CHAR_INT_TYPES(m) \
+    m(char) \
+    m(unsigned char) \
+    wxDO_FOR_INT_TYPES(m)
+
+/*
+    Same as wxDO_FOR_INT_TYPES() above except that m macro takes the
+    type as the first argument and some extra argument, passed from this macro
+    itself, as the second one.
+ */
+#define wxDO_FOR_INT_TYPES_1(m, arg) \
+    m(short, arg) \
+    m(unsigned short, arg) \
+    m(int, arg) \
+    m(unsigned int, arg) \
+    m(long, arg) \
+    m(unsigned long, arg) \
+    wxIF_LONG_LONG_TYPE( m(wxLongLong_t, arg) ) \
+    wxIF_LONG_LONG_TYPE( m(wxULongLong_t, arg) ) \
+    wxIF_WCHAR_T_TYPE( m(wchar_t, arg) )
+
+/*
+    Combination of wxDO_FOR_CHAR_INT_TYPES() and wxDO_FOR_INT_TYPES_1():
+    invokes the given macro with the specified argument as its second parameter
+    for all char and int types.
+ */
+#define wxDO_FOR_CHAR_INT_TYPES_1(m, arg) \
+    m(char, arg) \
+    m(unsigned char, arg) \
+    wxDO_FOR_INT_TYPES_1(m, arg)
 
 
 /*  ---------------------------------------------------------------------------- */
