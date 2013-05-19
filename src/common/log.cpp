@@ -902,7 +902,14 @@ wxLogChain::wxLogChain(wxLog *logger)
     m_bPassMessages = true;
 
     m_logNew = logger;
-    m_logOld = wxLog::SetActiveTarget(this);
+
+    // Notice that we use GetActiveTarget() here instead of directly calling
+    // SetActiveTarget() to trigger wxLog auto-creation: if we're created as
+    // the first logger, we should still chain with the standard, implicit and
+    // possibly still not created standard logger instead of disabling normal
+    // logging entirely.
+    m_logOld = wxLog::GetActiveTarget();
+    wxLog::SetActiveTarget(this);
 }
 
 wxLogChain::~wxLogChain()
