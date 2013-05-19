@@ -103,6 +103,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
 
 wxFileButton::~wxFileButton()
 {
+    delete m_dialog;
 }
 
 void wxFileButton::OnDialogOK(wxCommandEvent& ev)
@@ -258,6 +259,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
 
 wxDirButton::~wxDirButton()
 {
+    delete m_dialog;
 }
 
 void wxDirButton::GTKUpdatePath(const char *gtkpath)

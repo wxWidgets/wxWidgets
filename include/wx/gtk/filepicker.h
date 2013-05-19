@@ -34,13 +34,6 @@
         return NULL;                                                          \
     }                                                                         \
                                                                               \
-    virtual bool Destroy()                                                    \
-    {                                                                         \
-        if (m_dialog)                                                         \
-            m_dialog->Destroy();                                              \
-        return wxButton::Destroy();                                           \
-    }                                                                         \
-                                                                              \
     /* even if wx derive from wxGenericFileButton, i.e. from wxButton, our */ \
     /* native GTK+ widget does not derive from GtkButton thus *all* uses   */ \
     /* GTK_BUTTON(m_widget) macro done by wxButton must be bypassed to     */ \
