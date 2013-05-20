@@ -917,7 +917,7 @@ bool wxInputStream::ReadAll(void *buffer_, size_t size)
 {
     char* buffer = static_cast<char*>(buffer_);
 
-    m_lastcount = 0;
+    size_t totalCount = 0;
 
     for ( ;; )
     {
@@ -928,7 +928,7 @@ bool wxInputStream::ReadAll(void *buffer_, size_t size)
         if ( !lastCount )
             break;
 
-        m_lastcount += lastCount;
+        totalCount += lastCount;
 
         // ... Or if an error occurred on the stream.
         if ( !IsOk() )
@@ -939,14 +939,19 @@ bool wxInputStream::ReadAll(void *buffer_, size_t size)
         // "==" test, but be safe and avoid overflowing size even in case of
         // bugs in LastRead()).
         if ( lastCount >= size )
-            return true;
+        {
+            size = 0;
+            break;
+        }
 
         // Advance the buffer before trying to read the rest of data.
         size -= lastCount;
         buffer += lastCount;
     }
 
-    return false;
+    m_lastcount = totalCount;
+
+    return size == 0;
 }
 
 wxFileOffset wxInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
@@ -1071,7 +1076,7 @@ bool wxOutputStream::WriteAll(const void *buffer_, size_t size)
     // This exactly mirrors ReadAll(), see there for more comments.
     const char* buffer = static_cast<const char*>(buffer_);
 
-    m_lastcount = 0;
+    size_t totalCount = 0;
 
     for ( ;; )
     {
@@ -1079,19 +1084,23 @@ bool wxOutputStream::WriteAll(const void *buffer_, size_t size)
         if ( !lastCount )
             break;
 
-        m_lastcount += lastCount;
+        totalCount += lastCount;
 
         if ( !IsOk() )
             break;
 
         if ( lastCount >= size )
-            return true;
+        {
+            size = 0;
+            break;
+        }
 
         size -= lastCount;
         buffer += lastCount;
     }
 
-    return false;
+    m_lastcount = totalCount;
+    return size == 0;
 }
 
 wxFileOffset wxOutputStream::TellO() const
