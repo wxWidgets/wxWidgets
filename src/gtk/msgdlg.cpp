@@ -24,7 +24,7 @@
     #include "wx/intl.h"
 #endif
 
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
@@ -276,7 +276,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
 
 int wxMessageDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     // break the mouse capture as it would interfere with modal dialog (see
     // wxDialog::ShowModal)

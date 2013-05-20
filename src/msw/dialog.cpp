@@ -25,7 +25,7 @@
 #endif
 
 #include "wx/dialog.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcdlg.h"
@@ -198,7 +198,7 @@ bool wxDialog::Show(bool show)
 // show dialog modally
 int wxDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxASSERT_MSG( !IsModal(), wxT("ShowModal() can't be called twice") );
 

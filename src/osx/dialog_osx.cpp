@@ -13,7 +13,7 @@
 
 #include "wx/dialog.h"
 #include "wx/evtloop.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -138,7 +138,7 @@ bool wxDialog::Show(bool show)
 // Replacement for Show(true) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     m_modality = wxDIALOG_MODALITY_APP_MODAL;
 

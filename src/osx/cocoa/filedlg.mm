@@ -38,7 +38,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/sysopt.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include <mach-o/dyld.h>
 
@@ -501,7 +501,7 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 
 int wxFileDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxCFEventLoopPauseIdleEvents pause;
 

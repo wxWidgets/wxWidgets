@@ -39,7 +39,7 @@
 #include <string.h>
 
 #include "wx/tokenzr.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #define wxMAXPATH                    1024
 #define wxMAXFILE                    1024
@@ -105,7 +105,7 @@ void wxFileDialog::GetPaths (
 
 int wxFileDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxString                        sTheFilter;
     wxString                        sFilterBuffer;

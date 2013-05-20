@@ -553,6 +553,9 @@
 				RelativePath="..\..\src\common\menucmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\modalhook.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\mousemanager.cpp">
 			</File>
 			<File
@@ -2284,6 +2287,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\minifram.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\modalhook.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\mousemanager.h">

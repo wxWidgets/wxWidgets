@@ -39,7 +39,7 @@
 #include "wx/msw/printdlg.h"
 #include "wx/msw/dcprint.h"
 #include "wx/paper.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include <stdlib.h>
 
@@ -739,7 +739,7 @@ wxWindowsPrintDialog::~wxWindowsPrintDialog()
 
 int wxWindowsPrintDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     ConvertToNative( m_printDialogData );
 
@@ -960,7 +960,7 @@ wxWindowsPageSetupDialog::~wxWindowsPageSetupDialog()
 
 int wxWindowsPageSetupDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     ConvertToNative( m_pageSetupData );
 

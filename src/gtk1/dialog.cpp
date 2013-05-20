@@ -19,7 +19,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/evtloop.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -183,7 +183,7 @@ void wxDialog::SetModal( bool WXUNUSED(flag) )
 
 int wxDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     if (IsModal())
     {

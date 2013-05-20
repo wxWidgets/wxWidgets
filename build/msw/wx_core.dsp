@@ -8,21 +8,21 @@
 CFG=core - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "wx_core.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "wx_core.mak" CFG="core - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "core - Win32 DLL Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "core - Win32 DLL Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "core - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "core - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -475,6 +475,10 @@ SOURCE=..\..\src\common\matrix.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\menucmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\modalhook.cpp
 # End Source File
 # Begin Source File
 
@@ -1362,25 +1366,25 @@ SOURCE=..\..\include\wx\univ\setup.h
 
 !IF  "$(CFG)" == "core - Win32 DLL Release"
 
-# Begin Custom Build - 
+# Begin Custom Build -
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
 
-# Begin Custom Build - 
+# Begin Custom Build -
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "core - Win32 Release"
 
-# Begin Custom Build - 
+# Begin Custom Build -
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "core - Win32 Debug"
 
-# Begin Custom Build - 
+# Begin Custom Build -
 
 # End Custom Build
 
@@ -2800,6 +2804,10 @@ SOURCE=..\..\include\wx\minifram.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\modalhook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\mousemanager.h
 # End Source File
 # Begin Source File
@@ -3605,4 +3613,3 @@ SOURCE=..\..\src\xrc\xmlreshandler.cpp
 # End Group
 # End Target
 # End Project
-

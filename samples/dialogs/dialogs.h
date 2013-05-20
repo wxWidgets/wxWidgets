@@ -475,6 +475,7 @@ public:
     void OnStandardButtonsSizerDialog(wxCommandEvent& event);
 
     void OnTestDefaultActionDialog(wxCommandEvent& event);
+    void OnModalHook(wxCommandEvent& event);
 
     void OnExit(wxCommandEvent& event);
 
@@ -588,7 +589,8 @@ enum
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,
     DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
     DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,
-    DIALOGS_TEST_DEFAULT_ACTION
+    DIALOGS_TEST_DEFAULT_ACTION,
+    DIALOGS_MODAL_HOOK
 };
 
 #endif

@@ -19,7 +19,7 @@
 #endif
 
 #include "wx/thread.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 #include "wx/osx/uma.h"
 
 
@@ -37,7 +37,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 
 int wxMessageDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     int resultbutton = wxID_CANCEL;
 

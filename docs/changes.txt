@@ -601,6 +601,7 @@ All (GUI):
 - Add support for wxRibbonBar and related controls to XRC (Armel Asselin).
 - Add wxBITMAP_PNG() macro similar to wxBITMAP() but for PNG files.
 - Add new wxSimplebook class.
+- Implement possibility to hook all modal dialog calls.
 - Support hexadecimal numbers in wxSpinCtrl.
 - Respect window max size in wxBoxSizer (Nathan Ridge).
 - Add support for searching in wxWebView for MSW and GTK (Allonii).

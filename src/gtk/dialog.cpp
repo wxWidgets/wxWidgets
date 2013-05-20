@@ -19,7 +19,7 @@
 #include "wx/evtloop.h"
 
 #include "wx/scopedptr.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private/gtk2-compat.h"
@@ -133,7 +133,7 @@ realize_hook(GSignalInvocationHint*, unsigned, const GValue* param_values, void*
 
 int wxDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxASSERT_MSG( !IsModal(), "ShowModal() can't be called twice" );
 

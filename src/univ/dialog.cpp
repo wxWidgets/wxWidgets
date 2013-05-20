@@ -29,7 +29,7 @@
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 //-----------------------------------------------------------------------------
 // wxDialog
@@ -166,7 +166,7 @@ bool wxDialog::IsModal() const
 
 int wxDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     if ( IsModal() )
     {

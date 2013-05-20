@@ -21,7 +21,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/filename.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #include "wx/osx/private.h"
 
@@ -73,7 +73,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
 
 int wxDirDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     NavDialogRef dialog = NULL;
     NavDialogCreationOptions options;

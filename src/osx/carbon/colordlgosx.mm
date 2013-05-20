@@ -22,7 +22,7 @@
 
 #include "wx/colordlg.h"
 #include "wx/fontdlg.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 // ============================================================================
 // implementation
@@ -124,7 +124,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 }
 int wxColourDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     //Start the pool.  Required for carbon interaction
     //(For those curious, the only thing that happens

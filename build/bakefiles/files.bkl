@@ -709,6 +709,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/markupparser.cpp
     src/common/matrix.cpp
     src/common/menucmn.cpp
+    src/common/modalhook.cpp
     src/common/mousemanager.cpp
     src/common/nbkbase.cpp
     src/common/overlaycmn.cpp
@@ -867,6 +868,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/listbox.h
     wx/mdi.h
     wx/menu.h
+    wx/modalhook.h
     wx/mousemanager.h
     wx/msgdlg.h
     wx/nativewin.h

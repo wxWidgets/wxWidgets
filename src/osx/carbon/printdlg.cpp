@@ -28,11 +28,11 @@
 #include "wx/osx/private/print.h"
 #include "wx/osx/private.h"
 #include "wx/statline.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 int wxMacPrintDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     m_printDialogData.GetPrintData().ConvertToNative();
     ((wxOSXPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferFrom( &m_printDialogData );
@@ -77,7 +77,7 @@ int wxMacPrintDialog::ShowModal()
 
 int wxMacPageSetupDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     m_pageSetupData.GetPrintData().ConvertToNative();
     wxOSXPrintData* nativeData = (wxOSXPrintData*)m_pageSetupData.GetPrintData().GetNativeData();

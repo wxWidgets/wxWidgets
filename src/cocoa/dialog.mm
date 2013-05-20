@@ -19,7 +19,7 @@
     #include "wx/settings.h"
 #endif //WX_PRECOMP
 
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 
@@ -128,7 +128,7 @@ bool wxDialog::Show(bool show)
 // is stopped (via EndModal()) it returns the exit code.
 int wxDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxCHECK_MSG(!IsModal(),GetReturnCode(),wxT("wxDialog::ShowModal called within its own modal loop"));
 

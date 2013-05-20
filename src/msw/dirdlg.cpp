@@ -30,7 +30,7 @@
     (defined(__HANDHELDPC__) && (_WIN32_WCE >= 500)))
 
 #include "wx/dirdlg.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -221,7 +221,7 @@ void wxDirDialog::SetPath(const wxString& path)
 
 int wxDirDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     wxWindow* const parent = GetParent();
     WXHWND hWndParent = parent ? GetHwndOf(parent) : NULL;

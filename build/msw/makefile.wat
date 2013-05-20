@@ -382,6 +382,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_markupparser.obj &
 	$(OBJS)\monodll_matrix.obj &
 	$(OBJS)\monodll_menucmn.obj &
+	$(OBJS)\monodll_modalhook.obj &
 	$(OBJS)\monodll_mousemanager.obj &
 	$(OBJS)\monodll_nbkbase.obj &
 	$(OBJS)\monodll_overlaycmn.obj &
@@ -605,6 +606,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_markupparser.obj &
 	$(OBJS)\monodll_matrix.obj &
 	$(OBJS)\monodll_menucmn.obj &
+	$(OBJS)\monodll_modalhook.obj &
 	$(OBJS)\monodll_mousemanager.obj &
 	$(OBJS)\monodll_nbkbase.obj &
 	$(OBJS)\monodll_overlaycmn.obj &
@@ -1808,6 +1810,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_markupparser.obj &
 	$(OBJS)\monolib_matrix.obj &
 	$(OBJS)\monolib_menucmn.obj &
+	$(OBJS)\monolib_modalhook.obj &
 	$(OBJS)\monolib_mousemanager.obj &
 	$(OBJS)\monolib_nbkbase.obj &
 	$(OBJS)\monolib_overlaycmn.obj &
@@ -2031,6 +2034,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_markupparser.obj &
 	$(OBJS)\monolib_matrix.obj &
 	$(OBJS)\monolib_menucmn.obj &
+	$(OBJS)\monolib_modalhook.obj &
 	$(OBJS)\monolib_mousemanager.obj &
 	$(OBJS)\monolib_nbkbase.obj &
 	$(OBJS)\monolib_overlaycmn.obj &
@@ -3159,6 +3163,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_markupparser.obj &
 	$(OBJS)\coredll_matrix.obj &
 	$(OBJS)\coredll_menucmn.obj &
+	$(OBJS)\coredll_modalhook.obj &
 	$(OBJS)\coredll_mousemanager.obj &
 	$(OBJS)\coredll_nbkbase.obj &
 	$(OBJS)\coredll_overlaycmn.obj &
@@ -3382,6 +3387,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_markupparser.obj &
 	$(OBJS)\coredll_matrix.obj &
 	$(OBJS)\coredll_menucmn.obj &
+	$(OBJS)\coredll_modalhook.obj &
 	$(OBJS)\coredll_mousemanager.obj &
 	$(OBJS)\coredll_nbkbase.obj &
 	$(OBJS)\coredll_overlaycmn.obj &
@@ -4223,6 +4229,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_markupparser.obj &
 	$(OBJS)\corelib_matrix.obj &
 	$(OBJS)\corelib_menucmn.obj &
+	$(OBJS)\corelib_modalhook.obj &
 	$(OBJS)\corelib_mousemanager.obj &
 	$(OBJS)\corelib_nbkbase.obj &
 	$(OBJS)\corelib_overlaycmn.obj &
@@ -4446,6 +4453,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_markupparser.obj &
 	$(OBJS)\corelib_matrix.obj &
 	$(OBJS)\corelib_menucmn.obj &
+	$(OBJS)\corelib_modalhook.obj &
 	$(OBJS)\corelib_mousemanager.obj &
 	$(OBJS)\corelib_nbkbase.obj &
 	$(OBJS)\corelib_overlaycmn.obj &
@@ -16966,6 +16974,11 @@ $(OBJS)\monodll_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_modalhook.obj :  .AUTODEPEND ..\..\src\common\modalhook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_mousemanager.obj :  .AUTODEPEND ..\..\src\common\mousemanager.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -23931,6 +23944,11 @@ $(OBJS)\monolib_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_modalhook.obj :  .AUTODEPEND ..\..\src\common\modalhook.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -30901,6 +30919,11 @@ $(OBJS)\coredll_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_modalhook.obj :  .AUTODEPEND ..\..\src\common\modalhook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_mousemanager.obj :  .AUTODEPEND ..\..\src\common\mousemanager.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -36204,6 +36227,11 @@ $(OBJS)\corelib_matrix.obj :  .AUTODEPEND ..\..\src\common\matrix.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_menucmn.obj :  .AUTODEPEND ..\..\src\common\menucmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_modalhook.obj :  .AUTODEPEND ..\..\src\common\modalhook.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

@@ -23,7 +23,7 @@
 #endif
 
 #include "wx/fontutil.h"
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 #define INCL_PM
 #include <os2.h>
@@ -37,7 +37,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 int wxFontDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     FONTDLG      vFontDlg;
     char         zCurrentFont[FACESIZE];

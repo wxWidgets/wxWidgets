@@ -29,7 +29,7 @@
 #include "wx/filename.h" // wxFilename
 #include "wx/tokenzr.h" // wxStringTokenizer
 #include "wx/filefn.h" // ::wxGetCwd
-#include "wx/testing.h"
+#include "wx/modalhook.h"
 
 extern "C"
 {
@@ -320,7 +320,7 @@ void wxFileDialog::GTKOnCancel()
 
 int wxFileDialog::ShowModal()
 {
-    WX_TESTING_SHOW_MODAL_HOOK();
+    WX_HOOK_MODAL_DIALOG();
 
     CreateExtraControl();
 

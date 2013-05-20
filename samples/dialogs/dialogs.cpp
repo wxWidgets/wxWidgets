@@ -32,6 +32,7 @@
 #include "wx/minifram.h"
 #include "wx/sysopt.h"
 #include "wx/notifmsg.h"
+#include "wx/modalhook.h"
 
 #if wxUSE_RICHMSGDLG
     #include "wx/richmsgdlg.h"
@@ -249,6 +250,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,  MyFrame::OnStandardButtonsSizerDialog)
     EVT_MENU(DIALOGS_TEST_DEFAULT_ACTION,           MyFrame::OnTestDefaultActionDialog)
+    EVT_MENU(DIALOGS_MODAL_HOOK,                    MyFrame::OnModalHook)
 
     EVT_MENU(DIALOGS_REQUEST,                       MyFrame::OnRequestUserAttention)
 #if wxUSE_NOTIFICATION_MESSAGE
@@ -538,6 +540,7 @@ bool MyApp::OnInit()
 
     menuDlg->Append(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG, wxT("&Standard Buttons Sizer Dialog"));
     menuDlg->Append(DIALOGS_TEST_DEFAULT_ACTION, wxT("&Test dialog default action"));
+    menuDlg->AppendCheckItem(DIALOGS_MODAL_HOOK, "Enable modal dialog hook");
 
     menuDlg->AppendSeparator();
     menuDlg->Append(wxID_EXIT, wxT("E&xit\tAlt-X"));
@@ -2103,6 +2106,32 @@ void MyFrame::OnTestDefaultActionDialog(wxCommandEvent& WXUNUSED(event))
 {
     TestDefaultActionDialog dialog( this );
     dialog.ShowModal();
+}
+
+void MyFrame::OnModalHook(wxCommandEvent& event)
+{
+    class TestModalHook : public wxModalDialogHook
+    {
+    protected:
+        virtual int Enter(wxDialog* dialog)
+        {
+            wxLogStatus("Showing %s modal dialog",
+                        dialog->GetClassInfo()->GetClassName());
+            return wxID_NONE;
+        }
+
+        virtual void Exit(wxDialog* dialog)
+        {
+            wxLogStatus("Leaving %s modal dialog",
+                        dialog->GetClassInfo()->GetClassName());
+        }
+    };
+
+    static TestModalHook s_hook;
+    if ( event.IsChecked() )
+        s_hook.Register();
+    else
+        s_hook.Unregister();
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
