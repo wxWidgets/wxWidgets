@@ -128,6 +128,11 @@ public:
     // it means that EOF has been reached.
     virtual wxInputStream& Read(void *buffer, size_t size);
 
+    // Read exactly the given number of bytes, unlike Read(), which may read
+    // less than the requested amount of data without returning an error, this
+    // method either reads all the data or returns false.
+    bool ReadAll(void *buffer, size_t size);
+
     // copy the entire contents of this stream into streamOut, stopping only
     // when EOF is reached or an error occurs
     wxInputStream& Read(wxOutputStream& streamOut);
@@ -233,6 +238,12 @@ public:
 
     void PutC(char c);
     virtual wxOutputStream& Write(const void *buffer, size_t size);
+
+    // This is ReadAll() equivalent for Write(): it either writes exactly the
+    // given number of bytes or returns false, unlike Write() which can write
+    // less data than requested but still return without error.
+    bool WriteAll(const void *buffer, size_t size);
+
     wxOutputStream& Write(wxInputStream& stream_in);
 
     virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
