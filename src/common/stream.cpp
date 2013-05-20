@@ -1117,22 +1117,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxCountingOutputStream, wxOutputStream)
 
 wxCountingOutputStream::wxCountingOutputStream ()
 {
-     m_currentPos = 0;
+    m_currentPos =
+    m_lastPos = 0;
 }
 
 wxFileOffset wxCountingOutputStream::GetLength() const
 {
-    return m_lastcount;
+    return m_lastPos;
 }
 
 size_t wxCountingOutputStream::OnSysWrite(const void *WXUNUSED(buffer),
                                           size_t size)
 {
     m_currentPos += size;
-    if (m_currentPos > m_lastcount)
-        m_lastcount = m_currentPos;
+    if ( m_currentPos > m_lastPos )
+        m_lastPos = m_currentPos;
 
-    return m_currentPos;
+    return size;
 }
 
 wxFileOffset wxCountingOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
@@ -1146,12 +1147,12 @@ wxFileOffset wxCountingOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode
             break;
 
         case wxFromEnd:
-            new_pos = m_lastcount + new_pos;
-            wxCHECK_MSG( (wxFileOffset)new_pos == (wxFileOffset)(m_lastcount + pos), wxInvalidOffset, wxT("huge position not supported") );
+            new_pos += m_lastPos;
+            wxCHECK_MSG( (wxFileOffset)new_pos == (wxFileOffset)(m_lastPos + pos), wxInvalidOffset, wxT("huge position not supported") );
             break;
 
         case wxFromCurrent:
-            new_pos = m_currentPos + new_pos;
+            new_pos += m_currentPos;
             wxCHECK_MSG( (wxFileOffset)new_pos == (wxFileOffset)(m_currentPos + pos), wxInvalidOffset, wxT("huge position not supported") );
             break;
 
@@ -1162,8 +1163,8 @@ wxFileOffset wxCountingOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode
 
     m_currentPos = new_pos;
 
-    if (m_currentPos > m_lastcount)
-        m_lastcount = m_currentPos;
+    if ( m_currentPos > m_lastPos )
+        m_lastPos = m_currentPos;
 
     return m_currentPos;
 }

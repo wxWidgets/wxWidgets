@@ -577,6 +577,7 @@ All:
 - Allow testing for symlink/FIFO/socket existence in wxFileName (David Hart).
 - Many important bug fixes in wxFileSystemWatcher (David Hart).
 - Add wxInputStream::ReadAll() and wxOutputStream::WriteAll() (Catalin Raceanu).
+- Fix wxCountingOutputStream::LastWrite() return value (Catalin Raceanu).
 - Add new wxFSW_EVENT_ATTRIB and wxFSW_EVENT_UNMOUNT flags (David Hart).
 - Add separate read/written bytes counters and per-direction NOWAIT and WAITALL
   flags to wxSocket (Rob Bresalier).

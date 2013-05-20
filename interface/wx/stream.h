@@ -753,9 +753,11 @@ public:
     virtual ~wxCountingOutputStream();
 
     /**
-        Returns the current size of the stream.
+        Returns the current length of the stream.
+
+        This is the amount of data written to the stream so far, in bytes.
     */
-    size_t GetSize() const;
+    virtual wxFileOffset GetLength() const;
 };
 
 

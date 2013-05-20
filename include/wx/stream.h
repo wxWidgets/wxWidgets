@@ -281,16 +281,17 @@ class WXDLLIMPEXP_BASE wxCountingOutputStream : public wxOutputStream
 public:
     wxCountingOutputStream();
 
-    wxFileOffset GetLength() const;
+    virtual wxFileOffset GetLength() const;
     bool Ok() const { return IsOk(); }
-    bool IsOk() const { return true; }
+    virtual bool IsOk() const { return true; }
 
 protected:
     virtual size_t OnSysWrite(const void *buffer, size_t size);
     virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
     virtual wxFileOffset OnSysTell() const;
 
-    size_t m_currentPos;
+    size_t m_currentPos,
+           m_lastPos;
 
     DECLARE_DYNAMIC_CLASS(wxCountingOutputStream)
     wxDECLARE_NO_COPY_CLASS(wxCountingOutputStream);
