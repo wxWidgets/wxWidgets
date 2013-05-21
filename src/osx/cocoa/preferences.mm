@@ -129,6 +129,7 @@ private:
         {
             info->win = info->page->CreateWindow(this);
             info->win->Hide();
+            info->win->Fit();
             // fill the page with data using wxEVT_INIT_DIALOG/TransferDataToWindow:
             info->win->InitDialog();
         }
