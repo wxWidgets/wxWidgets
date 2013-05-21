@@ -125,6 +125,8 @@ protected:
             dlg->AddPage(i->get());
         }
 
+        dlg->Fit();
+
         return dlg;
     }
 
@@ -206,8 +208,6 @@ public:
         // when the dialog is destroyed on leaving this function.
         m_dlg = dlg.get();
         wxON_BLOCK_EXIT_NULL(m_dlg);
-
-        dlg->Fit();
 
         // Restore the previously selected page, if any.
         if ( m_currentPage != -1 )
