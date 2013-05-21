@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.8.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-27 11:51+0200\n"
-"PO-Revision-Date: 2012-03-03 22:34+0200\n"
-"Last-Translator: Kaya Zeren <kaya.zeren@zeron.net>\n"
-"Language-Team: Hakki Dogusan <dogusanh@tr.net>\n"
-"Language: \n"
+"PO-Revision-Date: 2013-05-21 12:16+0200\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
+"Language-Team: Hakki Dogusan <translator@zeron.net>\n"
+"Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Turkish\n"
-"X-Poedit-Country: TURKEY\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../src/common/debugrpt.cpp:582
 msgid ""
@@ -32,9 +31,9 @@ msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Teşekkürler, yaşadığınız sorun için özür dileriz!\n"
 
 #: ../src/common/prntbase.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "Sayfa %d / %d"
+msgstr "(kopya %d / %d)"
 
 #: ../src/common/log.cpp:428
 #, c-format
@@ -521,9 +520,8 @@ msgid "&Position (tenths of a mm):"
 msgstr "&Konum (1/10mm):"
 
 #: ../src/richtext/richtextsizepage.cpp:476
-#, fuzzy
 msgid "&Position mode:"
-msgstr "&Kayan kip:"
+msgstr "&Konum kipi:"
 
 #: ../src/common/stockitem.cpp:182
 msgid "&Preferences"
@@ -1166,7 +1164,7 @@ msgstr "%s Hakkında "
 
 #: ../src/richtext/richtextsizepage.cpp:482
 msgid "Absolute"
-msgstr ""
+msgstr "Mutlak"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"
@@ -2409,9 +2407,8 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "'%s' içinden ses verisi yüklenemiyor."
 
 #: ../src/msw/dirdlg.cpp:439
-#, fuzzy
 msgid "Couldn't obtain folder name"
-msgstr "Zamanlayıcı oluşturulamadı"
+msgstr "Klasör adı alınamadı"
 
 #: ../src/unix/sound_sdl.cpp:226
 #, c-format
@@ -2649,9 +2646,9 @@ msgid "Did you know..."
 msgstr "Biliyor musunuz..."
 
 #: ../src/dfb/wrapdfb.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
-msgstr "DirectFB %d hatası oluştu."
+msgstr "%d DirectFB hatası oluştu."
 
 #: ../src/motif/filedlg.cpp:217
 msgid "Directories"
@@ -2717,9 +2714,8 @@ msgid "Do you want to save changes to %s?"
 msgstr "%s üzerinde yapılan değişiklikleri kaydetmek istiyor musunuz?"
 
 #: ../src/common/prntbase.cpp:526
-#, fuzzy
 msgid "Document:"
-msgstr "Belgeleyen"
+msgstr "Belge:"
 
 #: ../src/generic/aboutdlgg.cpp:74
 msgid "Documentation by "
@@ -3233,14 +3229,14 @@ msgid "Failed to kill process %d"
 msgstr "%d işi öldürülemedi"
 
 #: ../src/common/image.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "%d görseli akıştan yüklenemedi."
+msgstr "\"%s\" görseli kaynaklardan yüklenemedi."
 
 #: ../src/common/image.cpp:2270
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "%d görseli akıştan yüklenemedi."
+msgstr "\"%s\" simgesi kaynaklardan yüklenemedi."
 
 #: ../src/common/iconbndl.cpp:183
 #, c-format
@@ -3344,9 +3340,9 @@ msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Çoğul-formlar ayrıştırılamadı: '%s'"
 
 #: ../src/unix/mediactrl.cpp:1269
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "\"%s\" görüntüsü açılamadı."
+msgstr "\"%s\" oynatmaya hazırlanamadı."
 
 #: ../src/msw/clipbrd.cpp:648
 msgid "Failed to put data on the clipboard"
@@ -3479,9 +3475,9 @@ msgid "Failed to set text in the text control."
 msgstr "Metin denetime yerleştirilemedi."
 
 #: ../src/unix/threadpsx.cpp:1141
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "%d iş parçacığı önceliği ayarlanamadı."
+msgstr "%lu iş parçacığı öncelik düzeyi ayarlanamadı."
 
 #: ../src/unix/threadpsx.cpp:1338 ../src/unix/threadpsx.cpp:1348
 #, c-format
@@ -3645,9 +3641,8 @@ msgid "First page"
 msgstr "İlk sayfa"
 
 #: ../src/richtext/richtextsizepage.cpp:483
-#, fuzzy
 msgid "Fixed"
-msgstr "Sabit yazı tipi:"
+msgstr "Sabit"
 
 #: ../src/html/helpwnd.cpp:1220
 msgid "Fixed font:"
@@ -4089,9 +4084,8 @@ msgid "Insert"
 msgstr "Ekle"
 
 #: ../src/richtext/richtextbuffer.cpp:7246
-#, fuzzy
 msgid "Insert Field"
-msgstr "Metin Ekle"
+msgstr "Alan Ekleyin"
 
 #: ../src/richtext/richtextbuffer.cpp:7157
 #: ../src/richtext/richtextbuffer.cpp:8063
@@ -4728,7 +4722,7 @@ msgstr "En büyük genişlik:"
 #: ../src/unix/mediactrl.cpp:1007
 #, c-format
 msgid "Media playback error: %s"
-msgstr ""
+msgstr "Ortam oynatma hatası: %s"
 
 #: ../src/common/fs_mem.cpp:176
 #, c-format
@@ -5334,9 +5328,8 @@ msgid "Passing a already registered object to SetObject"
 msgstr "SetObject işlevi kayıtlı bir nesne ile çağrıldı"
 
 #: ../src/common/xtistrm.cpp:481
-#, fuzzy
 msgid "Passing an unknown object to GetObject"
-msgstr "GetObject işlevi bilinmeyen bir nesne ile çağrıldı"
+msgstr "GetObject işlevine bilinmeyen bir nesne gönderildi"
 
 #: ../src/richtext/richtextctrl.cpp:3082 ../src/common/stockitem.cpp:181
 #: ../src/stc/stc_i18n.cpp:20
@@ -5396,9 +5389,8 @@ msgid "Please select the columns to show and define their order:"
 msgstr "Lütfen gösterilecek sütunları ve sıralarını seçin:"
 
 #: ../src/common/prntbase.cpp:522
-#, fuzzy
 msgid "Please wait while printing..."
-msgstr "Yazdırılıyor, lütfen bekleyin\n"
+msgstr "Yazdırılıyor, lütfen bekleyin..."
 
 #: ../src/propgrid/advprops.cpp:632
 msgid "Point Size"
@@ -5443,7 +5435,7 @@ msgstr "Ayarlar..."
 
 #: ../src/common/prntbase.cpp:530
 msgid "Preparing"
-msgstr ""
+msgstr "Hazırlanıyor"
 
 #: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:574
 #: ../src/html/helpwnd.cpp:1236
@@ -5483,9 +5475,8 @@ msgid "Print in colour"
 msgstr "Renkli yazdır"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print previe&w..."
-msgstr "Baskı önizleme"
+msgstr "Baskı ö&nizleme..."
 
 #: ../src/gtk/gnome/gprint.cpp:940
 msgid "Print preview"
@@ -5496,9 +5487,8 @@ msgid "Print preview creation failed."
 msgstr "Baskı ön izleme oluşturulamadı."
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print preview..."
-msgstr "Baskı ön izleme"
+msgstr "Baskı önizleme..."
 
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Print spooling"
@@ -5554,9 +5544,9 @@ msgid "Printing Error"
 msgstr "Yazdırma Hatası"
 
 #: ../src/common/prntbase.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d of %d"
-msgstr "Yazdırılan sayfa %d..."
+msgstr "Yazdırılan sayfa %d / %d..."
 
 #: ../src/generic/printps.cpp:202
 #, c-format
@@ -5585,7 +5575,7 @@ msgstr "İlerleme göstergesi güncellenemiyor; değer; değer tipi:"
 
 #: ../src/common/prntbase.cpp:529
 msgid "Progress:"
-msgstr ""
+msgstr "İşlem:"
 
 #: ../src/common/stockitem.cpp:185
 msgid "Properties"
@@ -5685,9 +5675,8 @@ msgid "Regular"
 msgstr "Normal"
 
 #: ../src/richtext/richtextsizepage.cpp:481
-#, fuzzy
 msgid "Relative"
-msgstr "Süslü"
+msgstr "Bağıl"
 
 #: ../src/generic/helpext.cpp:463
 msgid "Relevant entries:"
@@ -5698,9 +5687,8 @@ msgid "Remove"
 msgstr "Sil"
 
 #: ../src/richtext/richtextctrl.cpp:1420
-#, fuzzy
 msgid "Remove Bullet"
-msgstr "Sil"
+msgstr "İmi Kaldırın"
 
 #: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
@@ -6102,9 +6090,8 @@ msgstr "Statement, 5 1/2 x 8 1/2 inç"
 #: ../src/richtext/richtextsizepage.cpp:480
 #: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:485
-#, fuzzy
 msgid "Static"
-msgstr "Durum:"
+msgstr "Durağan"
 
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Status:"
@@ -6265,9 +6252,8 @@ msgstr "Alt yastıklama boyutu."
 #: ../src/richtext/richtextsizepage.cpp:579
 #: ../src/richtext/richtextsizepage.cpp:587
 #: ../src/richtext/richtextsizepage.cpp:589
-#, fuzzy
 msgid "The bottom position."
-msgstr "Sekme konumu."
+msgstr "Alt konum."
 
 #: ../src/richtext/richtextliststylepage.cpp:255
 #: ../src/richtext/richtextliststylepage.cpp:257
@@ -6371,9 +6357,8 @@ msgstr "Punto olarak yazı tipi boyutu."
 
 #: ../src/richtext/richtextfontpage.cpp:188
 #: ../src/richtext/richtextfontpage.cpp:190
-#, fuzzy
 msgid "The font size units, points or pixels."
-msgstr "Punto olarak yazı tipi boyutu."
+msgstr "Yazı tipi boyutu birimi, punto ya da piksel."
 
 #: ../src/generic/fontdlgg.cpp:387 ../src/generic/fontdlgg.cpp:389
 msgid "The font style."
@@ -6409,9 +6394,8 @@ msgstr "Sol yastıklama boyutu."
 #: ../src/richtext/richtextsizepage.cpp:495
 #: ../src/richtext/richtextsizepage.cpp:503
 #: ../src/richtext/richtextsizepage.cpp:505
-#, fuzzy
 msgid "The left position."
-msgstr "Sekme konumu."
+msgstr "Sol konum."
 
 #: ../src/richtext/richtextindentspage.cpp:313
 #: ../src/richtext/richtextindentspage.cpp:315
@@ -6446,7 +6430,6 @@ msgstr "En büyük nesne genişliği."
 
 #: ../src/richtext/richtextsizepage.cpp:382
 #: ../src/richtext/richtextsizepage.cpp:384
-#, fuzzy
 msgid "The object minimum height."
 msgstr "En küçük nesne yüksekliği."
 
@@ -6520,9 +6503,8 @@ msgstr "Sağ yastıklama boyutu."
 #: ../src/richtext/richtextsizepage.cpp:551
 #: ../src/richtext/richtextsizepage.cpp:559
 #: ../src/richtext/richtextsizepage.cpp:561
-#, fuzzy
 msgid "The right position."
-msgstr "Sekme konumu."
+msgstr "Sağ konum."
 
 #: ../src/richtext/richtextindentspage.cpp:292
 #: ../src/richtext/richtextliststylepage.cpp:440
@@ -6583,9 +6565,8 @@ msgstr "Üst yastıklama boyutu."
 #: ../src/richtext/richtextsizepage.cpp:523
 #: ../src/richtext/richtextsizepage.cpp:531
 #: ../src/richtext/richtextsizepage.cpp:533
-#, fuzzy
 msgid "The top position."
-msgstr "Sekme konumu."
+msgstr "Üst konum."
 
 #: ../src/common/cmdline.cpp:1054
 #, c-format
@@ -6993,9 +6974,8 @@ msgstr "Alt yastıklama için birimler."
 
 #: ../src/richtext/richtextsizepage.cpp:598
 #: ../src/richtext/richtextsizepage.cpp:600
-#, fuzzy
 msgid "Units for the bottom position."
-msgstr "Alt yastıklama için birimler."
+msgstr "Alt konumun birimleri."
 
 #: ../src/richtext/richtextborderspage.cpp:283
 #: ../src/richtext/richtextborderspage.cpp:285
@@ -7019,9 +6999,8 @@ msgstr "Sol yastıklama için birimler."
 
 #: ../src/richtext/richtextsizepage.cpp:514
 #: ../src/richtext/richtextsizepage.cpp:516
-#, fuzzy
 msgid "Units for the left position."
-msgstr "Sol yastıklama için birimler."
+msgstr "Sol konumun birimleri."
 
 #: ../src/richtext/richtextsizepage.cpp:447
 #: ../src/richtext/richtextsizepage.cpp:449
@@ -7075,9 +7054,8 @@ msgstr "Sağ yastıklama için birimler."
 
 #: ../src/richtext/richtextsizepage.cpp:570
 #: ../src/richtext/richtextsizepage.cpp:572
-#, fuzzy
 msgid "Units for the right position."
-msgstr "Sağ yastıklama için birimler."
+msgstr "Sağ konumun birimleri."
 
 #: ../src/richtext/richtextborderspage.cpp:343
 #: ../src/richtext/richtextborderspage.cpp:345
@@ -7101,9 +7079,8 @@ msgstr "Üst yastıklama için birimler."
 
 #: ../src/richtext/richtextsizepage.cpp:542
 #: ../src/richtext/richtextsizepage.cpp:544
-#, fuzzy
 msgid "Units for the top position."
-msgstr "Üst yastıklama için birimler."
+msgstr "Üst konumun birimleri."
 
 #: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
 msgid "Unknown"
@@ -7394,9 +7371,8 @@ msgid "Windows Japanese (CP 932) or Shift-JIS"
 msgstr "Windows Japonca (CP 932) ya da Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:181
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows Arapça (CP 1256)"
+msgstr "Windows Johab (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:170
 msgid "Windows Korean (CP 949)"
@@ -7432,9 +7408,8 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Türkçe (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Windows Yunanca (CP 1253)"
+msgstr "Windows Vietnamca (CP 1258)"
 
 #: ../src/msw/utils.cpp:1296
 msgid "Windows Vista"
@@ -8084,7 +8059,7 @@ msgstr "işlem bağlam tanımı"
 #: ../src/richtext/richtextfontpage.cpp:184
 #: ../src/richtext/richtextfontpage.cpp:187
 msgid "pt"
-msgstr ""
+msgstr "pt"
 
 #: ../src/richtext/richtextfontpage.cpp:185
 #: ../src/richtext/richtextborderspage.cpp:279
