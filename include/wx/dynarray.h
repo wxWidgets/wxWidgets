@@ -128,6 +128,8 @@ public:                                                             \
   name() : std::vector<T>() { }                                     \
   name(size_type n) : std::vector<T>(n) { }                         \
   name(size_type n, const_reference v) : std::vector<T>(n, v) { }   \
+  template <class InputIterator>                                    \
+  name(InputIterator first, InputIterator last) : std::vector<T>(first, last) { } \
                                                                     \
   void Empty() { clear(); }                                         \
   void Clear() { clear(); }                                         \
