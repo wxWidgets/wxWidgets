@@ -52,6 +52,19 @@ public:
     wxVector(size_type size, const value_type& value);
 
     /**
+        Constructor initializing the vector with the elements in the given
+        range.
+
+        The @a InputIterator template parameter must be an input iterator type.
+        This constructor adds all elements from @a first until, not not
+        including, @a last to the vector.
+
+        @since 2.9.5
+     */
+    template <class InputIterator>
+    wxVector(InputIterator first, InputIterator last);
+
+    /**
         Copy constructor.
     */
     wxVector(const wxVector<T>& c);
@@ -69,6 +82,18 @@ public:
         @since 2.9.5
      */
     void assign(size_type n, const value_type& v);
+
+    /**
+        Assigns the elements in the given range to the vector.
+
+        The @a InputIterator template parameter must be an input iterator type.
+        This method clears the vector and then adds all elements from @a first
+        until, not not including, @a last to it.
+
+        @since 2.9.5
+     */
+    template <class InputIterator>
+    void assign(InputIterator first, InputIterator last);
 
     /**
         Returns item at position @a idx.

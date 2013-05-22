@@ -255,6 +255,13 @@ public:
         Copy(c);
     }
 
+    template <class InputIterator>
+    wxVector(InputIterator first, InputIterator last)
+        : m_size(0), m_capacity(0), m_values(NULL)
+    {
+        assign(first, last);
+    }
+
     ~wxVector()
     {
         clear();
@@ -266,6 +273,19 @@ public:
         reserve(p_size);
         for ( size_t n = 0; n < p_size; n++ )
             push_back(v);
+    }
+
+    template <class InputIterator>
+    void assign(InputIterator first, InputIterator last)
+    {
+        clear();
+
+        // Notice that it would be nice to call reserve() here but we can't do
+        // it for arbitrary input iterators, we should have a dispatch on
+        // iterator type and call it if possible.
+
+        for ( InputIterator it = first; it != last; ++it )
+            push_back(*it);
     }
 
     void swap(wxVector& v)
