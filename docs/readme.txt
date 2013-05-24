@@ -133,6 +133,7 @@ For licensing information, please see the files:
   docs/licendoc.txt
   docs/gpl.txt
   docs/lgpl.txt
+  docs/xserver.txt
 
 Although this may seem complex, it is there to allow authors of
 proprietary/commercial applications to use wxWidgets in addition
