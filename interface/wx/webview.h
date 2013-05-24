@@ -755,7 +755,7 @@ public:
     @event{EVT_WEBVIEW_ERROR(id, func)}
        Process a @c wxEVT_WEBVIEW_ERROR event generated when a navigation
        error occurs.
-       The integer associated with this event will be a wxWebNavigationError item.
+       The integer associated with this event will be a #wxWebViewNavigationError item.
        The string associated with this event may contain a backend-specific more
        precise error message/code.
     @event{EVT_WEBVIEW_NEWWINDOW(id, func)}
