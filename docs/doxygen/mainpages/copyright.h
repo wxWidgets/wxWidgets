@@ -22,6 +22,7 @@ recognition of the new name by OSI.
 
 @li @subpage page_copyright_wxlicense
 @li @subpage page_copyright_gnulicense
+@li @subpage page_copyright_xserver
 
 
 @page page_copyright_wxlicense wxWindows Library Licence
@@ -32,5 +33,9 @@ recognition of the new name by OSI.
 @page page_copyright_gnulicense GNU Library General Public License
 
 @verbinclude "lgpl.txt"
+
+@page page_copyright_xserver The Open Group and DEC License
+ 
+@verbinclude "xserver.txt"
 
 */
