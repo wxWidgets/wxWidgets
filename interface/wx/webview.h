@@ -466,8 +466,9 @@ public:
         @param html    The string that contains the HTML data to display.
         @param baseUrl URL assigned to the HTML data, to be used to resolve
                     relative paths, for instance.
-        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
-              page to finish loading before calling SetPage().
+        @note When using @c wxWEBVIEW_BACKEND_IE you must wait for the current
+              page to finish loading before calling SetPage(). The baseURL
+              parameter is not used in this backend.
     */
     virtual void SetPage(const wxString& html, const wxString& baseUrl) = 0;
 
