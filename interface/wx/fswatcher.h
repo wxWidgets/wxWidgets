@@ -157,7 +157,7 @@ public:
 class wxFileSystemWatcherEvent : public wxEvent
 {
 public:
-    wxFileSystemWatcherEvent(int changeType, int watchid = wxID_ANY);
+    wxFileSystemWatcherEvent(int changeType = 0, int watchid = wxID_ANY);
     wxFileSystemWatcherEvent(int changeType, const wxString& errorMsg,
                              int watchid = wxID_ANY);
     wxFileSystemWatcherEvent(int changeType,

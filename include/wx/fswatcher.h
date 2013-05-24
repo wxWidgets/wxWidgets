@@ -78,7 +78,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_BASE, wxEVT_FSWATCHER,
 class WXDLLIMPEXP_BASE wxFileSystemWatcherEvent: public wxEvent
 {
 public:
-    wxFileSystemWatcherEvent(int changeType, int watchid = wxID_ANY) :
+    wxFileSystemWatcherEvent(int changeType = 0, int watchid = wxID_ANY) :
         wxEvent(watchid, wxEVT_FSWATCHER),
         m_changeType(changeType)
     {
@@ -179,6 +179,8 @@ protected:
     wxFileName m_path;
     wxFileName m_newPath;
     wxString m_errorMsg;
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFileSystemWatcherEvent)
 };
 
 typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
