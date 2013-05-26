@@ -152,6 +152,18 @@ wxMenuBar::wxMenuBar()
 namespace
 {
 
+// This should be called when detaching menus to ensure that they don't keep
+// focus grab, because if they do, they continue getting all GTK+ messages
+// which they can't process any more in their (soon to be) unrealized state.
+void
+EnsureNoGrab(GtkWidget* widget)
+{
+#if !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
+    gtk_widget_hide(widget);
+    gtk_grab_remove(widget);
+#endif // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
+}
+
 void
 DetachFromFrame(wxMenu* menu, wxFrame* frame)
 {
@@ -173,6 +185,8 @@ DetachFromFrame(wxMenu* menu, wxFrame* frame)
             DetachFromFrame(menuitem->GetSubMenu(), frame);
         node = node->GetNext();
     }
+
+    EnsureNoGrab(menu->m_menu);
 }
 
 void
@@ -259,6 +273,8 @@ void wxMenuBar::Detach()
         DetachFromFrame( menu, m_menuBarFrame );
         node = node->GetNext();
     }
+
+    EnsureNoGrab(m_widget);
 
     wxMenuBarBase::Detach();
 }
