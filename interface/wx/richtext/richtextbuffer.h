@@ -5506,6 +5506,11 @@ public:
     */
     virtual bool GetCellRowColumnPosition(long pos, int& row, int& col) const;
 
+    /**
+        Returns the coordinates of the cell with keyboard focus, or (-1,-1) if none.
+    */    
+    virtual wxPosition GetFocusedCell() const;
+
 // Operations
 
     /**

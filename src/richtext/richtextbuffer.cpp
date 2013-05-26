@@ -10241,21 +10241,64 @@ bool wxRichTextTable::SetCellStyle(const wxRichTextSelection& selection, const w
     return true;
 }
 
+wxPosition wxRichTextTable::GetFocusedCell() const
+{
+    wxPosition position(-1, -1);
+    const wxRichTextObject* focus = GetBuffer()->GetRichTextCtrl()->GetFocusObject();
+
+    for (int row = 0; row < GetRowCount(); ++row)
+    {
+        for (int col = 0; col < GetColumnCount(); ++col)
+        {
+            if (GetCell(row, col) == focus)
+            {
+              position.SetRow(row);
+              position.SetCol(col);
+              return position;
+            }
+        }
+    }
+
+    return position;
+}
+
 bool wxRichTextTable::DeleteRows(int startRow, int noRows)
 {
     wxASSERT((startRow + noRows) <= m_rowCount);
     if ((startRow + noRows) > m_rowCount)
         return false;
 
+    wxCHECK_MSG(noRows != m_rowCount, false, "Trying to delete all the cells in a table");
+
     wxRichTextBuffer* buffer = GetBuffer();
+    wxRichTextCtrl* rtc = buffer->GetRichTextCtrl();
+
+    wxPosition position = GetFocusedCell();
+    int focusCol = position.GetCol();
+    int focusRow = position.GetRow();
+    if (focusRow >= startRow && focusRow < (startRow+noRows))
+    {
+        // Deleting a focused cell causes a segfault later when laying out, due to GetFocusedObject() returning an invalid object
+        if ((startRow + noRows) < m_rowCount)
+        {
+            // There are more rows after the one(s) to be deleted, so set focus in the first of them
+            rtc->SetFocusObject(GetCell(startRow + noRows, focusCol));
+        }
+        else
+        {
+            // Otherwise set focus in the preceding row
+            rtc->SetFocusObject(GetCell(startRow - 1, focusCol));
+        }
+    }
+
     wxRichTextAction* action = NULL;
     wxRichTextTable* clone = NULL;
-    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    if (!rtc->SuppressingUndo())
     {
         // Create a clone containing the current state of the table. It will be used to Undo the action
         clone = wxStaticCast(this->Clone(), wxRichTextTable);
         clone->SetParent(GetParent());
-        action = new wxRichTextAction(NULL, _("Delete row"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
+        action = new wxRichTextAction(NULL, _("Delete row"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, rtc);
         action->SetObject(this);
         action->SetPosition(GetRange().GetStart());
     }
@@ -10277,7 +10320,7 @@ bool wxRichTextTable::DeleteRows(int startRow, int noRows)
 
     m_rowCount = m_rowCount - noRows;
 
-    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    if (!rtc->SuppressingUndo())
     {
         buffer->SubmitAction(action);
         // Finally store the original-state clone; doing so earlier would cause various failures
@@ -10293,15 +10336,37 @@ bool wxRichTextTable::DeleteColumns(int startCol, int noCols)
     if ((startCol + noCols) > m_colCount)
         return false;
 
+    wxCHECK_MSG(noCols != m_colCount, false, "Trying to delete all the cells in a table");
+
     wxRichTextBuffer* buffer = GetBuffer();
+    wxRichTextCtrl* rtc = buffer->GetRichTextCtrl();
+
+    wxPosition position = GetFocusedCell();
+    int focusCol = position.GetCol();
+    int focusRow = position.GetRow();
+    if (focusCol >= startCol && focusCol < (startCol+noCols))
+    {
+        // Deleting a focused cell causes a segfault later when laying out, due to GetFocusedObject() returning an invalid object
+        if ((startCol + noCols) < m_colCount)
+        {
+            // There are more columns after the one(s) to be deleted, so set focus in the first of them
+            rtc->SetFocusObject(GetCell(focusRow, startCol + noCols));
+        }
+        else
+        {
+            // Otherwise set focus in the preceding column
+            rtc->SetFocusObject(GetCell(focusRow, startCol - 1));
+        }
+    }
+
     wxRichTextAction* action = NULL;
     wxRichTextTable* clone = NULL;
-    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    if (!rtc->SuppressingUndo())
     {
         // Create a clone containing the current state of the table. It will be used to Undo the action
         clone = wxStaticCast(this->Clone(), wxRichTextTable);
         clone->SetParent(GetParent());
-        action = new wxRichTextAction(NULL, _("Delete column"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
+        action = new wxRichTextAction(NULL, _("Delete column"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, rtc);
         action->SetObject(this);
         action->SetPosition(GetRange().GetStart());
     }
@@ -10327,7 +10392,7 @@ bool wxRichTextTable::DeleteColumns(int startCol, int noCols)
         m_rowCount = 0;
     m_colCount = m_colCount - noCols;
 
-    if (!buffer->GetRichTextCtrl()->SuppressingUndo())
+    if (!rtc->SuppressingUndo())
     {
         buffer->SubmitAction(action);
         // Finally store the original-state clone; doing so earlier would cause various failures

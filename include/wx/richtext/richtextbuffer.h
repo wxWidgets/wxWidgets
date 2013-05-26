@@ -66,6 +66,7 @@
 #include "wx/cmdproc.h"
 #include "wx/txtstrm.h"
 #include "wx/variant.h"
+#include "wx/position.h"
 
 #if wxUSE_DATAOBJ
 #include "wx/dataobj.h"
@@ -5682,6 +5683,11 @@ public:
         Returns the row/column for a given character position.
     */
     virtual bool GetCellRowColumnPosition(long pos, int& row, int& col) const;
+
+    /**
+        Returns the coordinates of the cell with keyboard focus, or (-1,-1) if none.
+    */    
+    virtual wxPosition GetFocusedCell() const;
 
 // Operations
 
