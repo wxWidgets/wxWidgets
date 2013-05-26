@@ -453,7 +453,7 @@ bool wxAnyValueTypeImplDouble::ConvertValue(const wxAnyValueBuffer& src,
     }
     else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxString) )
     {
-        wxString s = wxString::Format(wxS("%.14g"), value);
+        wxString s = wxString::FromCDouble(value, 14);
         wxAnyValueTypeImpl<wxString>::SetValue(s, dst);
     }
     else

@@ -48,6 +48,11 @@
     object in heap for large objects (i.e. ones with size more than
     WX_ANY_VALUE_BUFFER_SIZE, which at the time of writing is 16 bytes).
 
+    @note When performing conversions between strings and floating point
+        numbers, the representation of numbers in C locale is always used.
+        I.e. @code wxAny("1.23").GetAs<double>() @endcode will always work,
+        even if the current locale uses comma as decimal separator.
+
     @library{wxbase}
     @category{data}
 

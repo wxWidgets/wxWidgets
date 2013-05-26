@@ -236,6 +236,9 @@ Changes in behaviour not resulting in compilation errors, please read this!
   GetEventObject() in all ports but the frame the menu was attached to in wxMSW.
   Now all ports return the menu that was opened or closed as the event object.
 
+- wxAny now uses C locale format for the floating point numbers and not the
+  current locale one, i.e. decimal point is always used.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
