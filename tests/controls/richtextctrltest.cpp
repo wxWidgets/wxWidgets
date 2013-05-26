@@ -881,6 +881,12 @@ void RichTextCtrlTestCase::Table()
         }
     }
 
+    // Test ClearTable()
+    table->ClearTable();
+    CPPUNIT_ASSERT_EQUAL(0, table->GetCells().GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, table->GetColumnCount());
+    CPPUNIT_ASSERT_EQUAL(0, table->GetRowCount());
+
     m_rich->Clear();
     m_rich->SetFocusObject(NULL);
 }

@@ -10087,6 +10087,8 @@ void wxRichTextTable::ClearTable()
 {
     m_cells.Clear();
     DeleteChildren();
+    m_rowCount = 0;
+    m_colCount = 0;
 }
 
 bool wxRichTextTable::CreateTable(int rows, int cols)
