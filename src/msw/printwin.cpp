@@ -196,7 +196,14 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         maxPageNum = m_printDialogData.GetToPage();
     }
 
-    const int maxCopyCount = m_printDialogData.GetNoCopies();
+    // The dc we get from the PrintDialog will do multiple copies without help
+    // if the device supports it. Loop only if we have created a dc from our
+    // own m_printDialogData or the device does not support multiple copies.
+    // m_printDialogData.GetPrintData().GetNoCopies() is set from device
+    // devMode in printdlg.cpp/wxWindowsPrintDialog::ConvertFromNative()
+    const int maxCopyCount = !prompt ||
+                             !m_printDialogData.GetPrintData().GetNoCopies()
+                             ? m_printDialogData.GetNoCopies() : 1;
     for ( int copyCount = 1; copyCount <= maxCopyCount; copyCount++ )
     {
         if ( !printout->OnBeginDocument(minPageNum, maxPageNum) )
