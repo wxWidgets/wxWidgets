@@ -390,8 +390,14 @@ void wxApp::MacReopenApp()
 
         if ( firstIconized )
             firstIconized->Iconize( false ) ;
+        
+        // showing hidden windows is not really always a good solution, also non-modal dialogs when closed end up
+        // as hidden tlws, we don't want to reshow those, so let's just reopen the minimized a.k.a. iconized tlws
+        // unless we find a regression ...
+#if 0
         else if ( firstHidden )
             firstHidden->Show( true );
+#endif
     }
 }
 
