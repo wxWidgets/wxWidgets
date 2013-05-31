@@ -148,6 +148,7 @@ public:
     
         @see GetMajorAxis()
         @see ScrollPixels()
+        @see ScrollSections()
     */
     virtual bool ScrollLines(int lines);
   
@@ -165,8 +166,26 @@ public:
     
         @see GetMajorAxis()
         @see ScrollLines()
+        @see ScrollSections()
     */
     bool ScrollPixels(int pixels);
+
+    /**
+        Scroll the page by an entire child section.
+
+        The @a sections parameter value should be 1 or -1. This will scroll
+        enough to uncover a partially visible child section or totally uncover
+        the next child section that may not be visible at all.
+
+        @return @true if the page scrolled at least one pixel in the given
+            direction, @false if it did not scroll.
+
+        @see ScrollPixels()
+        @see ScrollSections()
+
+        @since 2.9.5
+    */
+    bool ScrollSections(int sections);
 
     /**
         Get the direction in which ribbon panels are stacked within the page.

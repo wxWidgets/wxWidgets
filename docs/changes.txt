@@ -645,6 +645,7 @@ All (GUI):
 - Add wxEVT_DIRCTRL_FILEACTIVATED event (troelsk).
 - Add wxControl::GetSizeFromTextSize() (Manuel Martin).
 - Optionally allow showing tooltips for disabled ribbon buttons (wxBen).
+- Improve horizontal scrolling in wxRibbonControl (wxBen).
 - Add wxTL_NO_HEADER style to wxTreeListCtrl (robboto).
 - Add possibility to delay showing wxRichToolTip (John Roberts).
 - Add "rect" paramerer to wxRichToolTip::ShowFor() (John Roberts).

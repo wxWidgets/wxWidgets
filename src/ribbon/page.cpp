@@ -135,11 +135,11 @@ void wxRibbonPageScrollButton::OnMouseUp(wxMouseEvent& WXUNUSED(evt))
         {
         case wxRIBBON_SCROLL_BTN_DOWN:
         case wxRIBBON_SCROLL_BTN_RIGHT:
-            m_sibling->ScrollLines(1);
+            m_sibling->ScrollSections(1);
             break;
         case wxRIBBON_SCROLL_BTN_UP:
         case wxRIBBON_SCROLL_BTN_LEFT:
-            m_sibling->ScrollLines(-1);
+            m_sibling->ScrollSections(-1);
             break;
         default:
             break;
@@ -334,6 +334,124 @@ bool wxRibbonPage::ScrollPixels(int pixels)
     ShowScrollButtons();
     Refresh();
     return true;
+}
+
+bool wxRibbonPage::ScrollSections(int sections)
+{
+    // Currently the only valid values are -1 and 1 for scrolling left and
+    // right, respectively.
+    const bool scrollForward = sections >= 1;
+
+    // Determine by how many pixels to scroll. If something on the page
+    // is partially visible, scroll to make it fully visible. Otherwise
+    // find the next item that will become visible and scroll to make it
+    // fully visible. The ScrollPixel call will correct if we scroll too
+    // much if the available width is smaller than the items.
+
+    // Scroll at minimum the same amount as ScrollLines(1):
+    int minscroll = sections * 8;
+    // How many pixels to scroll:
+    int pixels = 0;
+
+    // Determine the scroll position, that is, the page border where items
+    // are appearing.
+    int scrollpos = 0;
+
+    wxOrientation major_axis = GetMajorAxis();
+    int gap = 0;
+
+    int width = 0;
+    int height = 0;
+    int x = 0;
+    int y = 0;
+    GetSize(&width, &height);
+    GetPosition(&x, &y);
+    if(major_axis == wxHORIZONTAL)
+    {
+        gap = m_art->GetMetric(wxRIBBON_ART_PANEL_X_SEPARATION_SIZE);
+        if (scrollForward)
+        {
+            scrollpos = width - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
+        }
+        else
+        {
+            scrollpos = m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE);
+        }
+    }
+    else
+    {
+        gap = m_art->GetMetric(wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE);
+        if (scrollForward)
+        {
+            scrollpos = width - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
+        }
+        else
+        {
+            scrollpos = m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE);
+        }
+    }
+
+    // Find the child that is partially shown or just beyond the scroll position
+    for(wxWindowList::compatibility_iterator
+            node = scrollForward ? GetChildren().GetFirst()
+                                 : GetChildren().GetLast();
+        node;
+        node = scrollForward ? node->GetNext()
+                             : node->GetPrevious())
+    {
+        wxWindow* child = node->GetData();
+        child->GetSize(&width, &height);
+        child->GetPosition(&x, &y);
+        int pos0 = 0;
+        int pos1 = 0;
+        if (major_axis == wxHORIZONTAL)
+        {
+            pos0 = x;
+            pos1 = x + width + gap;
+        }
+        else
+        {
+            pos0 = y;
+            pos1 = y + height + gap;
+        }
+        if (scrollpos >= pos0 && scrollpos <= pos1)
+        {
+            // This section is partially visible, scroll to make it fully visible.
+            if (scrollForward)
+            {
+                pixels += pos1 - scrollpos;
+            }
+            else
+            {
+                pixels += pos0 - scrollpos;
+            }
+            if (abs(pixels) >= abs(minscroll))
+                break;
+        }
+        if (scrollpos <= pos0 && scrollForward)
+        {
+            // This section is next, scroll the entire section width
+            pixels += (pos1 - pos0);
+            break;
+        }
+        if (scrollpos >= pos1 && !scrollForward)
+        {
+            // This section is next, scroll the entire section width
+            pixels += (pos0 - pos1);
+            break;
+        }
+    }
+    // Do a final safety sanity check, should not be necessary, but will not hurt either.
+    if (pixels == 0)
+    {
+        pixels = minscroll;
+    }
+    if (pixels * minscroll < 0)
+    {
+        pixels = -pixels;
+    }
+
+    return ScrollPixels(pixels);
 }
 
 void wxRibbonPage::SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height)
