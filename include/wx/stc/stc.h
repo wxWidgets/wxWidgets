@@ -4577,7 +4577,10 @@ public:
 
     */
 
-    virtual void SetInsertionPoint(long pos) { SetCurrentPos(pos); }
+    virtual void SetInsertionPoint(long pos)
+    {
+        SetCurrentPos(pos == -1 ? GetLastPosition() : pos);
+    }
     virtual long GetInsertionPoint() const { return GetCurrentPos(); }
     virtual long GetLastPosition() const { return GetTextLength(); }
 

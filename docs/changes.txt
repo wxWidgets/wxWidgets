@@ -668,6 +668,7 @@ All (GUI):
 - Add more convenient wxFont(wxFontInfo) ctor.
 - Pass menu events to the handler in the associated wxMenuBar.
 - Add wxWindow::BeginRepositioningChildren() and EndRepositioningChildren().
+- Fix wxStyledTextCtrl::SetInsertionPointEnd() (troelsk).
 
 wxGTK:
 
