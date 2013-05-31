@@ -517,10 +517,37 @@ wxMenuBar* wxMenuBar::s_macCommonMenuBar = NULL ;
 bool     wxMenuBar::s_macAutoWindowMenu = true ;
 WXHMENU  wxMenuBar::s_macWindowMenuHandle = NULL ;
 
+
+wxMenu* emptyMenuBar = NULL;
+
 const int firstMenuPos = 1; // to account for the 0th application menu on mac
 
 void wxMenuBar::Init()
 {
+    if ( emptyMenuBar == NULL )
+    {
+        emptyMenuBar = new wxMenu();
+        
+        wxMenu* appleMenu = new wxMenu();
+        appleMenu->SetAllowRearrange(false);
+#if !wxOSX_USE_CARBON
+        // standard menu items, handled in wxMenu::HandleCommandProcess(), see above:
+        wxString hideLabel;
+        hideLabel = wxString::Format(_("Hide %s"), wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
+        appleMenu->Append( wxID_OSX_HIDE, hideLabel + "\tCtrl+H" );
+        appleMenu->Append( wxID_OSX_HIDEOTHERS, _("Hide Others")+"\tAlt+Ctrl+H" );
+        appleMenu->Append( wxID_OSX_SHOWALL, _("Show All") );
+        appleMenu->AppendSeparator();
+        
+        // Do always add "Quit" item unconditionally however, it can't be disabled.
+        wxString quitLabel;
+        quitLabel = wxString::Format(_("Quit %s"), wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
+        appleMenu->Append( wxApp::s_macExitMenuItemId, quitLabel + "\tCtrl+Q" );
+#endif // !wxOSX_USE_CARBON
+
+        emptyMenuBar->AppendSubMenu(appleMenu, "\x14") ;
+    }
+    
     m_eventHandler = this;
     m_menuBarFrame = NULL;
     m_rootMenu = new wxMenu();
@@ -598,8 +625,16 @@ wxMenuBar::~wxMenuBar()
 
     if (s_macInstalledMenuBar == this)
     {
+        emptyMenuBar->GetPeer()->MakeRoot();
         s_macInstalledMenuBar = NULL;
     }
+    wxDELETE( m_rootMenu );
+    // apple menu is a submenu, therefore we don't have to delete it
+    m_appleMenu = NULL;
+
+    // deleting the root menu also removes all its wxMenu* submenus, therefore
+    // we must avoid double deleting them in the superclass destructor
+    m_menus.clear();
 }
 
 void wxMenuBar::Refresh(bool WXUNUSED(eraseBackground), const wxRect *WXUNUSED(rect))
