@@ -100,30 +100,30 @@
 
 /**
     wxChar is defined to be
-    - @c char when <tt>wxUSE_UNICODE==0</tt>
-    - @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    \- @c char when <tt>wxUSE_UNICODE==0</tt>
+    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
 */
 typedef wxUSE_UNICODE_dependent wxChar;
 
 /**
     wxSChar is defined to be
-    - <tt>signed char</tt> when <tt>wxUSE_UNICODE==0</tt>
-    - @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    \- <tt>signed char</tt> when <tt>wxUSE_UNICODE==0</tt>
+    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
 */
 typedef wxUSE_UNICODE_dependent wxSChar;
 
 /**
     wxUChar is defined to be
-    - <tt>unsigned char</tt> when <tt>wxUSE_UNICODE==0</tt>
-    - @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
+    \- <tt>unsigned char</tt> when <tt>wxUSE_UNICODE==0</tt>
+    \- @c wchar_t when <tt>wxUSE_UNICODE==1</tt> (the default).
 */
 typedef wxUSE_UNICODE_dependent wxUChar;
 
 /**
     wxStringCharType is defined to be:
-    - @c char when <tt>wxUSE_UNICODE==0</tt>
-    - @c char when <tt>wxUSE_UNICODE_WCHAR==0</tt> and <tt>wxUSE_UNICODE==1</tt>
-    - @c wchar_t when <tt>wxUSE_UNICODE_WCHAR==1</tt> and <tt>wxUSE_UNICODE==1</tt>
+    \- @c char when <tt>wxUSE_UNICODE==0</tt>
+    \- @c char when <tt>wxUSE_UNICODE_WCHAR==0</tt> and <tt>wxUSE_UNICODE==1</tt>
+    \- @c wchar_t when <tt>wxUSE_UNICODE_WCHAR==1</tt> and <tt>wxUSE_UNICODE==1</tt>
 
     The @c wxUSE_UNICODE_WCHAR symbol is defined to @c 1 when building on
     Windows while it's defined to @c 0 when building on Unix, Linux or OS X.

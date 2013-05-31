@@ -2110,7 +2110,7 @@ public:
     virtual bool FindPosition(wxDC& dc, wxRichTextDrawingContext& context, long index, wxPoint& pt, int* height, bool forceLineStart);
 
     /**
-        Returns the best size, i.e. the ideal starting size for this object irrespective
+        Returns the best size, i.e.\ the ideal starting size for this object irrespective
         of available space. For a short text string, it will be the size that exactly encloses
         the text. For a longer string, it might use the parent width for example.
     */
@@ -2208,7 +2208,7 @@ public:
     virtual wxString GetPropertiesMenuLabel() const { return wxEmptyString; }
 
     /**
-        Returns @true if objects of this class can accept the focus, i.e. a call to SetFocusObject
+        Returns @true if objects of this class can accept the focus, i.e.\ a call to SetFocusObject
         is possible. For example, containers supporting text, such as a text box object, can accept the focus,
         but a table can't (set the focus to individual cells instead).
     */
@@ -2503,7 +2503,7 @@ public:
     wxString GetName() const { return m_properties.GetPropertyString(wxT("name")); }
 
     /**
-        Returns @true if this object is top-level, i.e. contains its own paragraphs, such as a text box.
+        Returns @true if this object is top-level, i.e.\ contains its own paragraphs, such as a text box.
     */
     virtual bool IsTopLevel() const { return false; }
 
@@ -3578,7 +3578,7 @@ public:
     virtual bool UpdateField(wxRichTextBuffer* buffer, wxRichTextField* obj) { return false; }
 
     /**
-        Returns @true if this object is top-level, i.e. contains its own paragraphs, such as a text box.
+        Returns @true if this object is top-level, i.e.\ contains its own paragraphs, such as a text box.
     */
     virtual bool IsTopLevel(wxRichTextField* obj) const { return true; }
 
