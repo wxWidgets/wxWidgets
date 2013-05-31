@@ -44,6 +44,9 @@ public:
     // called from the hook procedure on CDN_INITDONE reception
     virtual void MSWOnInitDone(WXHWND hDlg);
 
+    // called from the hook procedure on CDN_SELCHANGE.
+    void MSWOnSelChange(WXHWND hDlg);
+
 protected:
 
 #if !(defined(__SMARTPHONE__) && defined(__WXWINCE__))

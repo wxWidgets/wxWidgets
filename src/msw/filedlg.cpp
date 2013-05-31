@@ -173,13 +173,23 @@ wxFileDialogHookFunction(HWND      hDlg,
 
         case WM_NOTIFY:
             {
-                OFNOTIFY *pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
-                if ( pNotifyCode->hdr.code == CDN_INITDONE )
+                OFNOTIFY* const
+                    pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
+                wxFileDialog* const
+                    dialog = reinterpret_cast<wxFileDialog *>(
+                                    pNotifyCode->lpOFN->lCustData
+                                );
+
+                switch ( pNotifyCode->hdr.code )
                 {
-                    reinterpret_cast<wxFileDialog *>(
-                                        pNotifyCode->lpOFN->lCustData)
-                        ->MSWOnInitDone((WXHWND)hDlg);
-                 }
+                    case CDN_INITDONE:
+                        dialog->MSWOnInitDone((WXHWND)hDlg);
+                        break;
+
+                    case CDN_SELCHANGE:
+                        dialog->MSWOnSelChange((WXHWND)hDlg);
+                        break;
+                }
             }
             break;
 
@@ -323,8 +333,27 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
         SetPosition(gs_rectDialog.GetPosition());
     }
 
+    // Call selection change handler so that update handler will be
+    // called once with no selection.
+    MSWOnSelChange(hDlg);
+
     // we shouldn't destroy this HWND
     SetHWND(NULL);
+}
+
+void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
+{
+    TCHAR buf[MAX_PATH];
+    LRESULT len = SendMessage(::GetParent(hDlg), CDM_GETFILEPATH,
+                              MAX_PATH, reinterpret_cast<LPARAM>(buf));
+
+    if ( len > 0 )
+        m_currentlySelectedFilename = buf;
+    else
+        m_currentlySelectedFilename.clear();
+
+    if ( m_extraControl )
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
 // helper used below in ShowCommFileDialog(): style is used to determine

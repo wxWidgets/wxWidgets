@@ -58,6 +58,9 @@ public:
 
     virtual bool SupportsExtraControl() const { return true; }
 
+    // Implementation only.
+    void GTKSelectionChanged(const wxString& filename);
+
 
 protected:
     // override this from wxTLW since the native

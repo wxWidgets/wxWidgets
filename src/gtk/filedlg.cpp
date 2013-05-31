@@ -116,6 +116,15 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
         gtk_filedialog_cancel_callback(w, dialog);
 }
 
+static void gtk_filedialog_selchanged_callback(GtkFileChooser *chooser,
+                                               wxFileDialog *dialog)
+{
+    wxGtkString filename(gtk_file_chooser_get_preview_filename(chooser));
+
+    dialog->GTKSelectionChanged(wxString::FromUTF8(filename));
+}
+
+
 static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
                                                    gpointer user_data)
 {
@@ -249,6 +258,8 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     g_signal_connect (m_widget, "response",
         G_CALLBACK (gtk_filedialog_response_callback), this);
 
+    g_signal_connect (m_widget, "selection-changed",
+        G_CALLBACK (gtk_filedialog_selchanged_callback), this);
 
     // deal with extensions/filters
     SetWildcard(wildCard);
@@ -461,6 +472,14 @@ void wxFileDialog::SetFilterIndex(int filterIndex)
 int wxFileDialog::GetFilterIndex() const
 {
     return m_fc.GetFilterIndex();
+}
+
+void wxFileDialog::GTKSelectionChanged(const wxString& filename)
+{
+    m_currentlySelectedFilename = filename;
+
+    if (m_extraControl)
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
 #endif // wxUSE_FILEDLG

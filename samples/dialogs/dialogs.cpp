@@ -25,6 +25,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/datetime.h"
+#include "wx/filename.h"
 #include "wx/image.h"
 #include "wx/bookctrl.h"
 #include "wx/artprov.h"
@@ -1332,14 +1333,34 @@ class MyExtraPanel : public wxPanel
 {
 public:
     MyExtraPanel(wxWindow *parent);
-    void OnCheckBox(wxCommandEvent& event) { m_btn->Enable(event.IsChecked()); }
     wxString GetInfo() const
     {
         return wxString::Format("checkbox value = %d", (int) m_cb->GetValue());
     }
+
 private:
+    void OnCheckBox(wxCommandEvent& event) { m_btn->Enable(event.IsChecked()); }
+    void OnUpdateLabelUI(wxUpdateUIEvent& event)
+    {
+        wxFileDialog* const dialog = wxStaticCast(GetParent(), wxFileDialog);
+        const wxString fn = dialog->GetCurrentlySelectedFilename();
+
+        wxString msg;
+        if ( fn.empty() )
+            msg = "Nothing";
+        else if ( wxFileName::FileExists(fn) )
+            msg = "File";
+        else if ( wxFileName::DirExists(fn) )
+            msg = "Directory";
+        else
+            msg = "Something else";
+
+        event.SetText(msg + " selected");
+    }
+
     wxButton *m_btn;
     wxCheckBox *m_cb;
+    wxStaticText *m_label;
 };
 
 MyExtraPanel::MyExtraPanel(wxWindow *parent)
@@ -1348,12 +1369,20 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
     m_btn = new wxButton(this, -1, wxT("Custom Button"));
     m_btn->Enable(false);
     m_cb = new wxCheckBox(this, -1, wxT("Enable Custom Button"));
-    m_cb->Connect(wxID_ANY, wxEVT_CHECKBOX,
+    m_cb->Connect(wxEVT_CHECKBOX,
                   wxCommandEventHandler(MyExtraPanel::OnCheckBox), NULL, this);
+    m_label = new wxStaticText(this, wxID_ANY, "Nothing selected");
+    m_label->Connect(wxEVT_UPDATE_UI,
+                     wxUpdateUIEventHandler(MyExtraPanel::OnUpdateLabelUI),
+                     NULL, this);
+
     wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
     sizerTop->Add(m_cb, wxSizerFlags().Centre().Border());
     sizerTop->AddStretchSpacer();
-    sizerTop->Add(m_btn, wxSizerFlags().Right().Border());
+    sizerTop->Add(m_btn, wxSizerFlags().Centre().Border());
+    sizerTop->AddStretchSpacer();
+    sizerTop->Add(m_label, wxSizerFlags().Centre().Border());
+
     SetSizerAndFit(sizerTop);
 }
 

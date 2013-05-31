@@ -669,6 +669,7 @@ All (GUI):
 - Pass menu events to the handler in the associated wxMenuBar.
 - Add wxWindow::BeginRepositioningChildren() and EndRepositioningChildren().
 - Fix wxStyledTextCtrl::SetInsertionPointEnd() (troelsk).
+- Add wxFileDialog::GetCurrentlySelectedFilename() (Carl Godkin).
 
 wxGTK:
 
