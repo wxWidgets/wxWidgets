@@ -2610,6 +2610,8 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
     wxLayoutConstraints *constr = GetConstraints();
     if ( constr && constr->AreSatisfied() )
     {
+        ChildrenRepositioningGuard repositionGuard(this);
+
         int x = constr->left.GetValue();
         int y = constr->top.GetValue();
         int w = constr->width.GetValue();

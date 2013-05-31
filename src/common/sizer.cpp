@@ -976,6 +976,8 @@ void wxSizer::Layout()
     CalcMin();
 
     // Applies the layout and repositions/resizes the items
+    wxWindow::ChildrenRepositioningGuard repositionGuard(m_containingWindow);
+
     RecalcSizes();
 }
 
