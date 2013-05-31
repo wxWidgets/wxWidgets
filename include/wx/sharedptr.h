@@ -115,8 +115,7 @@ private:
     {
         if (m_ref)
         {
-            wxAtomicDec( m_ref->m_count );
-            if (m_ref->m_count == 0)
+            if (!wxAtomicDec( m_ref->m_count ))
             {
                 delete m_ref->m_ptr;
                 delete m_ref;
