@@ -3932,23 +3932,42 @@ void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 // doesn't seem to do anything in other ones (e.g. under Windows 7 the tree
 // control keeps updating its scrollbars while the items are added to it,
 // resulting in horrible flicker when adding even a couple of dozen items).
-// So we hide it instead of freezing -- this still flickers, but actually not
-// as badly as it would if we didn't do it.
+// So we resize it to the smallest possible size instead of freezing -- this
+// still flickers, but actually not as badly as it would if we didn't do it.
 
 void wxTreeCtrl::DoFreeze()
 {
-    // Notice that we don't call wxWindow::Hide() here as we want the window to
-    // remain shown from wxWidgets point of view and also because
-    // wxWindowMSW::Show() calls Do{Freeze,Thaw}() itself, so we'd get into
-    // infinite recursion this way.
     if ( IsShown() )
-        ::ShowWindow(GetHwnd(), SW_HIDE);
+    {
+        RECT rc;
+        ::GetWindowRect(GetHwnd(), &rc);
+        m_thawnSize = wxRectFromRECT(rc).GetSize();
+
+        ::SetWindowPos(GetHwnd(), 0, 0, 0, 1, 1,
+                       SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW | SWP_NOACTIVATE);
+    }
 }
 
 void wxTreeCtrl::DoThaw()
 {
     if ( IsShown() )
-        ::ShowWindow(GetHwnd(), SW_SHOW);
+    {
+        if ( m_thawnSize != wxDefaultSize )
+        {
+            ::SetWindowPos(GetHwnd(), 0, 0, 0, m_thawnSize.x, m_thawnSize.y,
+                           SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+        }
+    }
+}
+
+// We also need to override DoSetSize() to ensure that m_thawnSize is reset if
+// the window is resized while being frozen -- in this case, we need to avoid
+// resizing it back to its original, pre-freeze, size when it's thawed.
+void wxTreeCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    m_thawnSize = wxDefaultSize;
+
+    wxTreeCtrlBase::DoSetSize(x, y, width, height, sizeFlags);
 }
 
 #endif // wxUSE_TREECTRL

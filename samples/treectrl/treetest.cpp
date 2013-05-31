@@ -30,6 +30,7 @@
 #include "wx/treectrl.h"
 #include "wx/math.h"
 #include "wx/renderer.h"
+#include "wx/wupdlock.h"
 
 #ifdef __WIN32__
     // this is not supported by native control
@@ -122,6 +123,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(EnsureVisible)
     MENU_LINK(SetFocus)
     MENU_LINK(AddItem)
+    MENU_LINK(AddManyItems)
     MENU_LINK(InsertItem)
     MENU_LINK(IncIndent)
     MENU_LINK(DecIndent)
@@ -264,6 +266,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_CollapseAndReset, wxT("C&ollapse and reset"));
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_AddItem, wxT("Append a &new item"));
+    tree_menu->Append(TreeTest_AddManyItems, wxT("Appends &many items"));
     tree_menu->Append(TreeTest_InsertItem, wxT("&Insert a new item"));
     tree_menu->Append(TreeTest_Delete, wxT("&Delete this item"));
     tree_menu->Append(TreeTest_DeleteChildren, wxT("Delete &children"));
@@ -780,6 +783,17 @@ void MyFrame::OnAddItem(wxCommandEvent& WXUNUSED(event))
     m_treeCtrl->AppendItem(m_treeCtrl->GetRootItem(),
                            text /*,
                            MyTreeCtrl::TreeCtrlIcon_File */ );
+}
+
+void MyFrame::OnAddManyItems(wxCommandEvent& WXUNUSED(event))
+{
+    wxWindowUpdateLocker lockUpdates(this);
+
+    const wxTreeItemId root = m_treeCtrl->GetRootItem();
+    for ( int n = 0; n < 1000; n++ )
+    {
+        m_treeCtrl->AppendItem(root, wxString::Format("Item #%03d", n));
+    }
 }
 
 void MyFrame::OnIncIndent(wxCommandEvent& WXUNUSED(event))
