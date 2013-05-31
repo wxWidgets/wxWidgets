@@ -666,6 +666,7 @@ All (GUI):
 - Allow associating a validator with wxGridCellTextEditor (derEine).
 - Add more convenient wxFont(wxFontInfo) ctor.
 - Pass menu events to the handler in the associated wxMenuBar.
+- Add wxWindow::BeginRepositioningChildren() and EndRepositioningChildren().
 
 wxGTK:
 

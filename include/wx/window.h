@@ -555,6 +555,43 @@ public:
     // this is the same as SendSizeEventToParent() but using PostSizeEvent()
     void PostSizeEventToParent() { SendSizeEventToParent(wxSEND_EVENT_POST); }
 
+    // These functions should be used before repositioning the children of
+    // this window to reduce flicker or, in MSW case, even avoid display
+    // corruption in some situations (so they're more than just optimization).
+    //
+    // EndRepositioningChildren() should be called if and only if
+    // BeginRepositioningChildren() returns true. To ensure that this is always
+    // done automatically, use ChildrenRepositioningGuard class below.
+    virtual bool BeginRepositioningChildren() { return false; }
+    virtual void EndRepositioningChildren() { }
+
+    // A simple helper which ensures that EndRepositioningChildren() is called
+    // from its dtor if and only if calling BeginRepositioningChildren() from
+    // the ctor returned true.
+    class ChildrenRepositioningGuard
+    {
+    public:
+        // Notice that window can be NULL here, for convenience. In this case
+        // this class simply doesn't do anything.
+        wxEXPLICIT ChildrenRepositioningGuard(wxWindowBase* win)
+            : m_win(win),
+              m_callEnd(win && win->BeginRepositioningChildren())
+        {
+        }
+
+        ~ChildrenRepositioningGuard()
+        {
+            if ( m_callEnd )
+                m_win->EndRepositioningChildren();
+        }
+
+    private:
+        wxWindowBase* const m_win;
+        const bool m_callEnd;
+
+        wxDECLARE_NO_COPY_CLASS(ChildrenRepositioningGuard);
+    };
+
 
     // window state
     // ------------

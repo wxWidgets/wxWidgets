@@ -67,6 +67,9 @@ public:
     virtual void Raise();
     virtual void Lower();
 
+    virtual bool BeginRepositioningChildren();
+    virtual void EndRepositioningChildren();
+
     virtual bool Show(bool show = true);
     virtual bool ShowWithEffect(wxShowEffect effect,
                                 unsigned timeout = 0)

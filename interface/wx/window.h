@@ -767,6 +767,70 @@ public:
     //@{
 
     /**
+        Helper for ensuring EndRepositioningChildren() is called correctly.
+
+        This class wraps the calls to BeginRepositioningChildren() and
+        EndRepositioningChildren() by performing the former in its constructor
+        and the latter in its destructor if, and only if, the first call
+        returned @true. This is the simplest way to call these methods and if
+        this class is created as a local variable, it also ensures that
+        EndRepositioningChildren() is correctly called (or not) on scope exit,
+        so its use instead of calling these methods manually is highly
+        recommended.
+
+        @since 2.9.5
+     */
+    class ChildrenRepositioningGuard
+    {
+    public:
+        /**
+            Constructor calls wxWindow::BeginRepositioningChildren().
+
+            @param win The window to call BeginRepositioningChildren() on. If
+                it is @NULL, nothing is done.
+         */
+        explicit ChildrenRepositioningGuard(wxWindow* win);
+
+        /**
+            Destructor calls wxWindow::EndRepositioningChildren() if necessary.
+
+            EndRepositioningChildren() is called only if a valid window was
+            passed to the constructor and if BeginRepositioningChildren()
+            returned @true.
+         */
+        ~ChildrenRepositioningGuard();
+    };
+
+    /**
+        Prepare for changing positions of multiple child windows.
+
+        This method should be called before changing positions of multiple
+        child windows to reduce flicker and, in MSW case, even avoid display
+        corruption in some cases. It is used internally by wxWidgets and called
+        automatically when the window size changes but it can also be useful to
+        call it from outside of the library if a repositioning involving
+        multiple children is done without changing the window size.
+
+        If this method returns @true, then EndRepositioningChildren() must be
+        called after setting all children positions. Use
+        ChildrenRepositioningGuard class to ensure that this requirement is
+        satisfied.
+
+        @since 2.9.5
+     */
+    bool BeginRepositioningChildren();
+
+    /**
+        Fix child window positions after setting all of them at once.
+
+        This method must be called if and only if the previous call to
+        BeginRepositioningChildren() returned @true.
+
+        @since 2.9.5
+     */
+    void EndRepositioningChildren();
+
+    /**
         Sets the cached best size value.
 
         @see GetBestSize()
