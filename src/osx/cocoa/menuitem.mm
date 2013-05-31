@@ -311,6 +311,10 @@ bool wxMenuItemCocoaImpl::DoDefault()
         [theNSApplication unhideAllApplications:nil];
         handled=true;
     }
+    else if (menuid == wxApp::s_macExitMenuItemId)
+    {
+        wxTheApp->ExitMainLoop();
+    }
     return handled;
 }
 
