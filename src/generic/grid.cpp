@@ -2945,8 +2945,6 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             int numCols = msg.GetCommandInt();
             int oldNumCols = m_numCols;
             m_numCols += numCols;
-            if ( m_useNativeHeader )
-                GetGridColHeader()->SetColumnCount(m_numCols);
 
             if ( !m_colAt.IsEmpty() )
             {
@@ -2977,6 +2975,12 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                     m_colRights[i] = right;
                 }
             }
+
+            // Notice that this must be called after updating m_colWidths above
+            // as the native grid control will check whether the new columns
+            // are shown which results in accessing m_colWidths array.
+            if ( m_useNativeHeader )
+                GetGridColHeader()->SetColumnCount(m_numCols);
 
             if ( m_currentCellCoords == wxGridNoCellCoords )
             {
