@@ -58,7 +58,7 @@ protected:
 class MyFlexSizerFrame : public wxFrame
 {
 public:
-    MyFlexSizerFrame(const wxString &title, int x, int y );
+    MyFlexSizerFrame(wxFrame* parent);
 
 private:
     void InitFlexSizer(wxFlexGridSizer *sizer, wxWindow* parent);
@@ -77,7 +77,7 @@ public:
 class MyGridBagSizerFrame : public wxFrame
 {
 public:
-    MyGridBagSizerFrame(const wxString &title, int x, int y );
+    MyGridBagSizerFrame(wxFrame* parent);
 
     void OnHideBtn(wxCommandEvent&);
     void OnShowBtn(wxCommandEvent&);
@@ -102,7 +102,7 @@ private:
 class MySimpleSizerFrame : public wxFrame
 {
 public:
-    MySimpleSizerFrame(const wxString &title, int x, int y );
+    MySimpleSizerFrame(wxFrame* parent);
 
     void OnSetSmallSize( wxCommandEvent &event);
     void OnSetBigSize( wxCommandEvent &event);
@@ -120,7 +120,7 @@ private:
 class MyNestedSizerFrame : public wxFrame
 {
 public:
-    MyNestedSizerFrame(const wxString &title, int x, int y );
+    MyNestedSizerFrame(wxFrame* parent);
 
 
 private:
@@ -132,7 +132,7 @@ private:
 class MyWrapSizerFrame: public wxFrame
 {
 public:
-    MyWrapSizerFrame(const wxString &title, int x, int y );
+    MyWrapSizerFrame(wxFrame* parent);
 
 private:
     void OnAddCheckbox(wxCommandEvent& event);

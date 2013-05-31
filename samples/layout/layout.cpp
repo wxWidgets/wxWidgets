@@ -203,8 +203,7 @@ void MyFrame::TestProportions(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::TestFlexSizers(wxCommandEvent& WXUNUSED(event) )
 {
-    MyFlexSizerFrame *newFrame = new MyFlexSizerFrame(wxT("Flex Sizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MyFlexSizerFrame(this))->Show();
 }
 
 void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
@@ -216,20 +215,17 @@ void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestSetMinimal(wxCommandEvent& WXUNUSED(event) )
 {
-    MySimpleSizerFrame *newFrame = new MySimpleSizerFrame(wxT("Simple Sizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MySimpleSizerFrame(this))->Show();
 }
 
 void MyFrame::TestNested(wxCommandEvent& WXUNUSED(event) )
 {
-    MyNestedSizerFrame *newFrame = new MyNestedSizerFrame(wxT("Nested Sizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MyNestedSizerFrame(this))->Show();
 }
 
 void MyFrame::TestWrap(wxCommandEvent& WXUNUSED(event) )
 {
-    MyWrapSizerFrame *newFrame = new MyWrapSizerFrame(wxT("Wrap Sizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MyWrapSizerFrame(this))->Show();
 }
 
 
@@ -241,9 +237,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestGridBagSizer(wxCommandEvent& WXUNUSED(event) )
 {
-    MyGridBagSizerFrame *newFrame = new
-        MyGridBagSizerFrame(wxT("wxGridBagSizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MyGridBagSizerFrame(this))->Show();
 }
 
 // ----------------------------------------------------------------------------
@@ -327,8 +321,8 @@ void MyFlexSizerFrame::InitFlexSizer(wxFlexGridSizer *sizer, wxWindow* parent)
     }
 }
 
-MyFlexSizerFrame::MyFlexSizerFrame(const wxString &title, int x, int y )
-            : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y) )
+MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
+            : wxFrame(parent, wxID_ANY, "Flex Sizer Test Frame")
 {
     wxFlexGridSizer *sizerFlex;
     wxPanel* p = new wxPanel(this, wxID_ANY);
@@ -480,8 +474,8 @@ BEGIN_EVENT_TABLE(MyGridBagSizerFrame, wxFrame)
 END_EVENT_TABLE()
 
 
-MyGridBagSizerFrame::MyGridBagSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
+MyGridBagSizerFrame::MyGridBagSizerFrame(wxFrame* parent)
+    : wxFrame(parent, wxID_ANY, "wxGridBagSizer Test Frame")
 {
     wxPanel* p = new wxPanel(this, wxID_ANY);
     m_panel = p;
@@ -594,8 +588,8 @@ BEGIN_EVENT_TABLE(MySimpleSizerFrame, wxFrame)
     EVT_MENU( ID_SET_BIG, MySimpleSizerFrame::OnSetBigSize)
 END_EVENT_TABLE()
 
-MySimpleSizerFrame::MySimpleSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
+MySimpleSizerFrame::MySimpleSizerFrame(wxFrame* parent)
+    : wxFrame(parent, wxID_ANY, "Simple Sizer Test Frame")
 {
     wxMenu *menu = new wxMenu;
 
@@ -640,8 +634,8 @@ void MySimpleSizerFrame::OnSetBigSize( wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 
 
-MyNestedSizerFrame::MyNestedSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
+MyNestedSizerFrame::MyNestedSizerFrame(wxFrame* parent)
+    : wxFrame(parent, wxID_ANY, "Nested Sizer Test Frame")
 {
     wxMenu *menu = new wxMenu;
 
@@ -686,8 +680,9 @@ BEGIN_EVENT_TABLE(MyWrapSizerFrame, wxFrame)
     EVT_MENU(wxID_REMOVE, MyWrapSizerFrame::OnRemoveCheckbox)
 END_EVENT_TABLE()
 
-MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y), wxSize(200,-1) )
+MyWrapSizerFrame::MyWrapSizerFrame(wxFrame* parent)
+    : wxFrame(parent, wxID_ANY, "Wrap Sizer Test Frame",
+              wxDefaultPosition, wxSize(200,-1))
 {
     wxMenu *menu = new wxMenu;
 
