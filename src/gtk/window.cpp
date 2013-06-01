@@ -1924,6 +1924,12 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
         if (w < 0) w = 0;
         if (h < 0) h = 0;
     }
+    GtkAllocation a;
+    gtk_widget_get_allocation(win->m_widget, &a);
+    // update position for widgets in native containers, such as wxToolBar
+    // (for widgets in a wxPizza, the values should already be the same)
+    win->m_x = a.x;
+    win->m_y = a.y;
     win->m_useCachedClientSize = true;
     if (win->m_clientWidth != w || win->m_clientHeight != h)
     {
@@ -1931,8 +1937,6 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxWindow* win)
         win->m_clientHeight = h;
         // this callback can be connected to m_wxwindow,
         // so always get size from m_widget->allocation
-        GtkAllocation a;
-        gtk_widget_get_allocation(win->m_widget, &a);
         win->m_width  = a.width;
         win->m_height = a.height;
         if (!win->m_nativeSizeEvent)
