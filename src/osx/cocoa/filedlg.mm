@@ -196,6 +196,7 @@ wxFileDialog::wxFileDialog(
     m_filterIndex = -1;
     m_sheetDelegate = [[ModalDialogDelegate alloc] init];
     [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
+    m_delegate = nil;
 }
 
 wxFileDialog::~wxFileDialog()
@@ -463,7 +464,6 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     }
 
     NSView* accView = nil;
-    m_delegate = nil;
 
     if ( m_useFileTypeFilter )
     {
