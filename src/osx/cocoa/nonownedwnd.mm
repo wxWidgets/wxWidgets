@@ -784,7 +784,8 @@ void wxNonOwnedWindowCocoaImpl::SetExtraStyle( long exStyle )
 
 void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
 {
-    if (m_macWindow)
+    // don't mess with native wrapped windows, they might throw an exception when their level is changed
+    if (!m_wxPeer->IsNativeWindowWrapper() && m_macWindow)
     {
         CGWindowLevel level = kCGNormalWindowLevel;
         
