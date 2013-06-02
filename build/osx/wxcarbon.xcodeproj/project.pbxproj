@@ -173,6 +173,8 @@
 		16D334945B1E30AFB80B356D /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D35F1F29F9D33C2B9730D4EE /* window.cpp */; };
 		1710A4BB0E6339558A187F8D /* xmlres.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 087B66573CD33DA99DA82B1C /* xmlres.cpp */; };
 		1710A4BB0E6339558A187F8E /* xmlres.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 087B66573CD33DA99DA82B1C /* xmlres.cpp */; };
+		171F09F8DD553FA5B4B3FAE2 /* modalhook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58E7C516E2453A269280A404 /* modalhook.cpp */; };
+		171F09F8DD553FA5B4B3FAE3 /* modalhook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58E7C516E2453A269280A404 /* modalhook.cpp */; };
 		1749412E53B9311DABA71DDC /* bmpbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE191DC59F362AAED2CDC1 /* bmpbase.cpp */; };
 		1749412E53B9311DABA71DDD /* bmpbase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8EE191DC59F362AAED2CDC1 /* bmpbase.cpp */; };
 		17F0494F87533196904F5313 /* xh_toolbk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B17FC30EF9D035689B68C955 /* xh_toolbk.cpp */; };
@@ -623,6 +625,8 @@
 		61FEDBF2D47A3B4E861F8297 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2ACC8667173D3AB09F6214F4 /* sound.cpp */; };
 		62757F24C4EE3B84B6AE3F14 /* textdlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D529E2668C23D94A7706C8A /* textdlgg.cpp */; };
 		62757F24C4EE3B84B6AE3F15 /* textdlgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D529E2668C23D94A7706C8A /* textdlgg.cpp */; };
+		6292B023DBF4337A91404AD0 /* preferencescmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A046179831F63824A67B509B /* preferencescmn.cpp */; };
+		6292B023DBF4337A91404AD1 /* preferencescmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A046179831F63824A67B509B /* preferencescmn.cpp */; };
 		62F1DC80D631335B892610A8 /* splitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C125FA3837C631A9BE0ED5E7 /* splitter.cpp */; };
 		62F1DC80D631335B892610A9 /* splitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C125FA3837C631A9BE0ED5E7 /* splitter.cpp */; };
 		633DD2E870263F42A8DBF9BF /* markuptext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D4FC6F0AB2AC34D2B26F8ED8 /* markuptext.cpp */; };
@@ -1019,6 +1023,8 @@
 		A0FCE3CF565C3F84B63712AD /* LexCPP.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 9EF09C7CC5413CC6A5E7B21B /* LexCPP.cxx */; };
 		A139B846584436BCBEBAE3BF /* grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76337016F2CA3C85831702E6 /* grid.cpp */; };
 		A139B846584436BCBEBAE3C0 /* grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76337016F2CA3C85831702E6 /* grid.cpp */; };
+		A1A7B833061C35B4AABD093C /* preferencesg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F06DEA1AA339ED819B3812 /* preferencesg.cpp */; };
+		A1A7B833061C35B4AABD093D /* preferencesg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F06DEA1AA339ED819B3812 /* preferencesg.cpp */; };
 		A1AF8FF873D6383996995ECF /* statusbr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 071FEABEA61E3B559A47A7DB /* statusbr.cpp */; };
 		A1AF8FF873D6383996995ED0 /* statusbr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 071FEABEA61E3B559A47A7DB /* statusbr.cpp */; };
 		A212431902B8343CA6D229D3 /* jcphuff.c in Sources */ = {isa = PBXBuildFile; fileRef = E38569D873B6394F9E5B821C /* jcphuff.c */; };
@@ -1918,6 +1924,7 @@
 		580AFC66F3003582B43043B1 /* animateg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animateg.cpp; path = ../../src/generic/animateg.cpp; sourceTree = "<group>"; };
 		58421C141C9E31C6A7A3C183 /* filefn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filefn.cpp; path = ../../src/common/filefn.cpp; sourceTree = "<group>"; };
 		58E1F571B01F34D4AB70CA18 /* property.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = property.cpp; path = ../../src/propgrid/property.cpp; sourceTree = "<group>"; };
+		58E7C516E2453A269280A404 /* modalhook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modalhook.cpp; path = ../../src/common/modalhook.cpp; sourceTree = "<group>"; };
 		58EFF24DE2E737CA8A164F5C /* LexEScript.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexEScript.cxx; path = ../../src/stc/scintilla/lexers/LexEScript.cxx; sourceTree = "<group>"; };
 		59255501B8053FEE8F258873 /* dirdlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dirdlg.cpp; path = ../../src/osx/carbon/dirdlg.cpp; sourceTree = "<group>"; };
 		59572A234F0636D78BFD9F6B /* spinctlg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinctlg.cpp; path = ../../src/generic/spinctlg.cpp; sourceTree = "<group>"; };
@@ -2154,6 +2161,7 @@
 		9FBCD305199836939824BF97 /* libwx_osx_carbon.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libwx_osx_carbon.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FDDE855D9F83E4891362EB4 /* bar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bar.cpp; path = ../../src/ribbon/bar.cpp; sourceTree = "<group>"; };
 		9FEB8204E530329FA085E5B8 /* strconv.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = strconv.cpp; path = ../../src/common/strconv.cpp; sourceTree = "<group>"; };
+		A046179831F63824A67B509B /* preferencescmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = preferencescmn.cpp; path = ../../src/common/preferencescmn.cpp; sourceTree = "<group>"; };
 		A05AEAB07C613BE2A0357BD8 /* spinbutt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = spinbutt.cpp; path = ../../src/osx/carbon/spinbutt.cpp; sourceTree = "<group>"; };
 		A06AB1974DB93EE2999EC75C /* pngrio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pngrio.c; path = ../../src/png/pngrio.c; sourceTree = "<group>"; };
 		A0DCC5EF59143640BE13AD73 /* jidctfst.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jidctfst.c; path = ../../src/jpeg/jidctfst.c; sourceTree = "<group>"; };
@@ -2356,6 +2364,7 @@
 		D784A32C094730FEAA391A9B /* sckstrm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sckstrm.cpp; path = ../../src/common/sckstrm.cpp; sourceTree = "<group>"; };
 		D7B3307E56B332769901E99F /* filehistorycmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = filehistorycmn.cpp; path = ../../src/common/filehistorycmn.cpp; sourceTree = "<group>"; };
 		D87406BCF3E833369E12D89A /* LexHTML.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexHTML.cxx; path = ../../src/stc/scintilla/lexers/LexHTML.cxx; sourceTree = "<group>"; };
+		D8F06DEA1AA339ED819B3812 /* preferencesg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = preferencesg.cpp; path = ../../src/generic/preferencesg.cpp; sourceTree = "<group>"; };
 		D9016355F66D3125919E017D /* listctrl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = listctrl.cpp; path = ../../src/generic/listctrl.cpp; sourceTree = "<group>"; };
 		D922063B2F2536629EEEAAF0 /* popupcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = popupcmn.cpp; path = ../../src/common/popupcmn.cpp; sourceTree = "<group>"; };
 		D92E3EEACA2132609CA3D28F /* evtloop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = evtloop.cpp; path = ../../src/osx/carbon/evtloop.cpp; sourceTree = "<group>"; };
@@ -3076,6 +3085,7 @@
 				A1CB6A4171D4343BB0A9858A /* msgdlgg.cpp */,
 				69A7F3F58B1E3812A055C84F /* numdlgg.cpp */,
 				BEA102FF0FFC33DEAEF2FE14 /* progdlgg.cpp */,
+				D8F06DEA1AA339ED819B3812 /* preferencesg.cpp */,
 				AF76670146413EEFA005206A /* printps.cpp */,
 				49CABA38E78D34DFA260AA06 /* renderg.cpp */,
 				E9977457BC7F3A1D93C18A02 /* richmsgdlgg.cpp */,
@@ -3683,6 +3693,7 @@
 				DA7F7633279936EFA0B9C5CF /* markupparser.cpp */,
 				EF330EAACFA53877BE289896 /* matrix.cpp */,
 				F175D6E8E5723FC797701275 /* menucmn.cpp */,
+				58E7C516E2453A269280A404 /* modalhook.cpp */,
 				D037EA567C253DEEA17E822B /* mousemanager.cpp */,
 				B901252876603DCEA4C66D89 /* nbkbase.cpp */,
 				303ACF199BE431BD891C9301 /* overlaycmn.cpp */,
@@ -3692,6 +3703,7 @@
 				22D9626646773CED82449D5D /* persist.cpp */,
 				1FBC22BAD63D3A1AB78F5F82 /* pickerbase.cpp */,
 				D922063B2F2536629EEEAAF0 /* popupcmn.cpp */,
+				A046179831F63824A67B509B /* preferencescmn.cpp */,
 				242BF97B558634A79322052C /* prntbase.cpp */,
 				B890199A37723EFD86C0ADA5 /* quantize.cpp */,
 				724927B0045F3CC0884878BB /* radiobtncmn.cpp */,
@@ -4317,6 +4329,7 @@
 				2F7F5B9BBCD83D90B237A1A1 /* markupparser.cpp in Sources */,
 				9A83D365AD1F37FA9C7030C3 /* matrix.cpp in Sources */,
 				E3A4615870B139D29FE727C2 /* menucmn.cpp in Sources */,
+				171F09F8DD553FA5B4B3FAE3 /* modalhook.cpp in Sources */,
 				BD49EC50CB363642BDBF25C9 /* mousemanager.cpp in Sources */,
 				7A84B9471A3238B4B66B1777 /* nbkbase.cpp in Sources */,
 				AC6AC589EFB233C7B65A3225 /* overlaycmn.cpp in Sources */,
@@ -4326,6 +4339,7 @@
 				4279D39CAAF834F6A5B99197 /* persist.cpp in Sources */,
 				AF1E3338E892336E924AF632 /* pickerbase.cpp in Sources */,
 				6E68759BC2E63CA59C12FDC1 /* popupcmn.cpp in Sources */,
+				6292B023DBF4337A91404AD1 /* preferencescmn.cpp in Sources */,
 				1C52CB9487DF3AB9AF243B48 /* prntbase.cpp in Sources */,
 				0B98B6721DEE37A1ADEA382C /* quantize.cpp in Sources */,
 				AE5286C71D1130EAA368A1C5 /* radiobtncmn.cpp in Sources */,
@@ -4378,6 +4392,7 @@
 				745C39E90E8C3C08A887B51D /* msgdlgg.cpp in Sources */,
 				1AF2B2346C9639DAA4D15F31 /* numdlgg.cpp in Sources */,
 				4D0BA8B9F72C3C31BC170CE3 /* progdlgg.cpp in Sources */,
+				A1A7B833061C35B4AABD093D /* preferencesg.cpp in Sources */,
 				DEB35F871F8E3B90AD207AEF /* printps.cpp in Sources */,
 				96927C5A21FD3ACF936CDF6D /* renderg.cpp in Sources */,
 				F72020415D713C1BA41C17D0 /* richmsgdlgg.cpp in Sources */,
@@ -5146,6 +5161,7 @@
 				2F7F5B9BBCD83D90B237A1A0 /* markupparser.cpp in Sources */,
 				9A83D365AD1F37FA9C7030C2 /* matrix.cpp in Sources */,
 				E3A4615870B139D29FE727C1 /* menucmn.cpp in Sources */,
+				171F09F8DD553FA5B4B3FAE2 /* modalhook.cpp in Sources */,
 				BD49EC50CB363642BDBF25C8 /* mousemanager.cpp in Sources */,
 				7A84B9471A3238B4B66B1776 /* nbkbase.cpp in Sources */,
 				AC6AC589EFB233C7B65A3224 /* overlaycmn.cpp in Sources */,
@@ -5155,6 +5171,7 @@
 				4279D39CAAF834F6A5B99196 /* persist.cpp in Sources */,
 				AF1E3338E892336E924AF631 /* pickerbase.cpp in Sources */,
 				6E68759BC2E63CA59C12FDC0 /* popupcmn.cpp in Sources */,
+				6292B023DBF4337A91404AD0 /* preferencescmn.cpp in Sources */,
 				1C52CB9487DF3AB9AF243B47 /* prntbase.cpp in Sources */,
 				0B98B6721DEE37A1ADEA382B /* quantize.cpp in Sources */,
 				AE5286C71D1130EAA368A1C4 /* radiobtncmn.cpp in Sources */,
@@ -5207,6 +5224,7 @@
 				745C39E90E8C3C08A887B51C /* msgdlgg.cpp in Sources */,
 				1AF2B2346C9639DAA4D15F30 /* numdlgg.cpp in Sources */,
 				4D0BA8B9F72C3C31BC170CE2 /* progdlgg.cpp in Sources */,
+				A1A7B833061C35B4AABD093C /* preferencesg.cpp in Sources */,
 				DEB35F871F8E3B90AD207AEE /* printps.cpp in Sources */,
 				96927C5A21FD3ACF936CDF6C /* renderg.cpp in Sources */,
 				F72020415D713C1BA41C17CF /* richmsgdlgg.cpp in Sources */,
