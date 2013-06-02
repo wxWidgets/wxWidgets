@@ -2190,7 +2190,8 @@ bool wxWindowMac::MacHasScrollBarCorner() const
             const wxFrame *frame = wxDynamicCast( win, wxFrame ) ;
             if ( frame )
             {
-                if ( frame->GetWindowStyleFlag() & wxRESIZE_BORDER )
+                // starting from 10.7 there are no resize indicators anymore
+                if ( (frame->GetWindowStyleFlag() & wxRESIZE_BORDER) && UMAGetSystemVersion() < 0x1070)
                 {
                     // Parent frame has resize handle
                     wxPoint frameBottomRight = frame->GetScreenRect().GetBottomRight();
