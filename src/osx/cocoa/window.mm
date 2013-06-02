@@ -1190,7 +1190,8 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     if ( !DoHandleMouseEvent(event) )
     {
         // for plain NSView mouse events would propagate to parents otherwise
-        if (!IsUserPane())
+        // scrollwheel events have to be propagated if not handled in all cases
+        if (!IsUserPane() || [event type] == NSScrollWheel )
         {
             wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
             superimpl(slf, (SEL)_cmd, event);
