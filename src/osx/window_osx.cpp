@@ -614,12 +614,14 @@ void wxWindowMac::OSXSimulateFocusEvents()
         {
             wxFocusEvent event( wxEVT_KILL_FOCUS, former->GetId());
             event.SetEventObject(former);
+            event.SetWindow(this);
             former->HandleWindowEvent(event) ;
         }
 
         {
             wxFocusEvent event(wxEVT_SET_FOCUS, former->GetId());
             event.SetEventObject(former);
+            event.SetWindow(this);
             former->HandleWindowEvent(event);
         }
     }
