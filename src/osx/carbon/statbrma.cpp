@@ -114,7 +114,11 @@ void wxStatusBarMac::DoUpdateStatusText(int number)
     rect.height = h ;
 
     Refresh( true, &rect );
+    // we should have to force the update here
+    // TODO Remove if no regressions occur
+#if 0
     Update();
+#endif
 }
 
 void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
