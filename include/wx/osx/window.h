@@ -55,6 +55,8 @@ public:
                 long style = 0,
                 const wxString& name = wxPanelNameStr );
 
+    virtual void SendSizeEvent(int flags = 0);
+    
     // implement base class pure virtuals
     virtual void SetLabel( const wxString& label );
     virtual wxString GetLabel() const;
