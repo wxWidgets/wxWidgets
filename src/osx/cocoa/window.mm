@@ -1349,21 +1349,19 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     BOOL r = superimpl(slf, (SEL)_cmd);
  
     NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-    NSView* otherView = [responder isKindOfClass:[NSView class]] ? (NSView*)responder : nil;
+    NSView* otherView = GetViewFromResponder(responder);
 
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
-
-    // CS: the fix for #12267 leads to missed focus events like in #14938 , as #12267 doesn't seem to happen anymore even
-    // without the fix, I'm turning it off, if it still is needed we should only use it in case of the wxGridCellTextEditor 
-#if 0
-    // It doesn't make sense to notify about the loss of focus if we're not
-    // really losing it and the window which has just gained focus is the same
-    // one as this window itself. Of course, this should never happen in the
-    // first place but somehow it does in wxGrid code and without this check we
-    // enter into an infinite recursion, see #12267.
+    
+    // NSScrollViews can have their subviews like NSClipView getting focus
+    // therefore check and use the NSScrollView peer in that case
+    if ( otherWindow == NULL && [[otherView superview] isKindOfClass:[NSScrollView class]])
+        otherWindow = FindFromWXWidget([otherView superview]);
+    
+    // It doesn't make sense to notify about the loss of focus if it's the same
+    // control in the end, and just a different subview
     if ( otherWindow == this )
         return r;
-#endif
     
     // NSTextViews have an editor as true responder, therefore the might get the
     // resign notification if their editor takes over, don't trigger any event then
