@@ -1745,7 +1745,6 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
     wxUnusedVar(progress);
 
     m_win->SendSizeEvent();
-    m_win->MacOnInternalSize();
 }
 
 - (void)animationDidEnd:(NSAnimation*)animation
@@ -1922,7 +1921,6 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
         // refresh it once again after the end to ensure that everything is in
         // place
         win->SendSizeEvent();
-        win->MacOnInternalSize();
     }
 
     [anim setDelegate:nil];
