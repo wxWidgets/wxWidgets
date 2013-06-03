@@ -163,13 +163,13 @@ void wxCFEventLoop::CommonModeObserverCallBack(CFRunLoopObserverRef WXUNUSED(obs
         // and this input is only removed from it when pending event handlers are
         // executed)
 
-        if ( wxTheApp )
+        if ( wxTheApp && ShouldProcessIdleEvents() )
             wxTheApp->ProcessPendingEvents();
     }
 
     if ( activity & kCFRunLoopBeforeWaiting )
     {
-        if ( m_processIdleEvents && ProcessIdle() )
+        if ( ShouldProcessIdleEvents() && ProcessIdle() )
         {
             WakeUp();
         }
@@ -445,14 +445,19 @@ wxCFEventLoopPauseIdleEvents::wxCFEventLoopPauseIdleEvents()
 {
     wxCFEventLoop* cfl = dynamic_cast<wxCFEventLoop*>(wxEventLoopBase::GetActive());
     if ( cfl )
+    {
+        m_formerState = cfl->ShouldProcessIdleEvents();
         cfl->SetProcessIdleEvents(false);
+    }
+    else
+        m_formerState = true;
 }
 
 wxCFEventLoopPauseIdleEvents::~wxCFEventLoopPauseIdleEvents()
 {
     wxCFEventLoop* cfl = dynamic_cast<wxCFEventLoop*>(wxEventLoopBase::GetActive());
     if ( cfl )
-        cfl->SetProcessIdleEvents(true);
+        cfl->SetProcessIdleEvents(m_formerState);
 }
 
 // TODO Move to thread_osx.cpp
