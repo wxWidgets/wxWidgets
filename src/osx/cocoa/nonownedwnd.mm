@@ -568,11 +568,11 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     if ( style & wxFRAME_TOOL_WINDOW || ( style & wxPOPUP_WINDOW ) ||
             GetWXPeer()->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
-    {
         m_macWindow = [wxNSPanel alloc];
-    }
     else
         m_macWindow = [wxNSWindow alloc];
+
+    [m_macWindow setAcceptsMouseMovedEvents:YES];
 
     CGWindowLevel level = kCGNormalWindowLevel;
 
