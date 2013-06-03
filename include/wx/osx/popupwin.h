@@ -27,8 +27,6 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
-    virtual bool Show(bool show = true);
-
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow)
 };
 
