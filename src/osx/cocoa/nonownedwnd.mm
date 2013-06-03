@@ -145,6 +145,8 @@ bool shouldHandleSelector(SEL selector)
 // wx native implementation 
 //
 
+static NSResponder* s_nextFirstResponder = NULL;
+
 @interface wxNSWindow : NSWindow
 {
 }
@@ -152,6 +154,7 @@ bool shouldHandleSelector(SEL selector)
 - (void) sendEvent:(NSEvent *)event;
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)noResponderFor: (SEL) selector;
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder;
 @end
 
 @implementation wxNSWindow
@@ -206,6 +209,14 @@ bool shouldHandleSelector(SEL selector)
     return YES;
 }
 
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder
+{
+    s_nextFirstResponder = aResponder;
+    BOOL retval = [super makeFirstResponder:aResponder];
+    s_nextFirstResponder = nil;
+    return retval;
+}
+
 @end
 
 @interface wxNSPanel : NSPanel
@@ -215,6 +226,7 @@ bool shouldHandleSelector(SEL selector)
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)noResponderFor: (SEL) selector;
 - (void)sendEvent:(NSEvent *)event;
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder;
 @end
 
 @implementation wxNSPanel
@@ -263,6 +275,14 @@ bool shouldHandleSelector(SEL selector)
         if (wxTheApp)
             wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
     }
+}
+
+- (BOOL)makeFirstResponder:(NSResponder *)aResponder
+{
+    s_nextFirstResponder = aResponder;
+    BOOL retval = [super makeFirstResponder:aResponder];
+    s_nextFirstResponder = nil;
+    return retval;
 }
 
 @end
@@ -1040,6 +1060,12 @@ void wxNonOwnedWindowCocoaImpl::RestoreWindowLevel()
     if ( [m_macWindow level] != m_macWindowLevel )
         [m_macWindow setLevel:m_macWindowLevel];
 }
+
+WX_NSResponder wxNonOwnedWindowCocoaImpl::GetNextFirstResponder()
+{
+    return s_nextFirstResponder;
+}
+
 
 //
 //

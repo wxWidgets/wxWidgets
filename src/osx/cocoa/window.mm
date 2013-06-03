@@ -1347,10 +1347,10 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
-    // get the current focus after running resignFirstResponder
-    // note that this value isn't reliable, it might return the same view that
-    // is resigning
-    NSView* otherView = FindFocus();
+ 
+    NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
+    NSView* otherView = [responder isKindOfClass:[NSView class]] ? (NSView*)responder : nil;
+
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
 
     // CS: the fix for #12267 leads to missed focus events like in #14938 , as #12267 doesn't seem to happen anymore even
