@@ -341,9 +341,16 @@ public :
 
     // static methods for associating native controls and their implementations
 
+    // finds the impl associated with this native control
     static wxWidgetImpl*
                         FindFromWXWidget(WXWidget control);
 
+    // finds the impl associated with this native control, if the native control itself is not known
+    // also checks whether its parent is eg a registered scrollview, ie whether the control is a native subpart
+    // of a known control
+    static wxWidgetImpl*
+                        FindBestFromWXWidget(WXWidget control);
+    
     static void         RemoveAssociations( wxWidgetImpl* impl);
 
     static void         Associate( WXWidget control, wxWidgetImpl *impl );

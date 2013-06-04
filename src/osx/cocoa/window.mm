@@ -71,8 +71,21 @@ NSView* GetFocusedViewInWindow( NSWindow* keyWindow )
 
 WXWidget wxWidgetImpl::FindFocus()
 {
-    return GetFocusedViewInWindow( [NSApp keyWindow] );
+    return GetFocusedViewInWindow( [NSApp keyWindow] );;
 }
+
+wxWidgetImpl* wxWidgetImpl::FindBestFromWXWidget(WXWidget control)
+{
+    wxWidgetImpl* impl = FindFromWXWidget(control);
+    
+    // NSScrollViews can have their subviews like NSClipView
+    // therefore check and use the NSScrollView peer in that case
+    if ( impl == NULL && [[control superview] isKindOfClass:[NSScrollView class]])
+        impl = FindFromWXWidget([control superview]);
+    
+    return impl;
+}
+
 
 NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
 {

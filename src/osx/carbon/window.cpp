@@ -87,6 +87,12 @@ WXWidget wxWidgetImpl::FindFocus()
     return control;
 }
 
+// no compositing to take into account under carbon
+wxWidgetImpl* wxWidgetImpl::FindBestFromWXWidget(WXWidget control)
+{
+    return FindFromWXWidget(control);
+}
+
 // ---------------------------------------------------------------------------
 // Carbon Events
 // ---------------------------------------------------------------------------
