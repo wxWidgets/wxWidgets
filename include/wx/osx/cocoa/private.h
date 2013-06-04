@@ -296,6 +296,8 @@ public:
     NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size ,
         bool adjustForOrigin = true );
 
+    WXDLLIMPEXP_CORE NSView* wxOSXGetViewFromResponder( NSResponder* responder );
+
     // used for many wxControls
 
     @interface wxNSButton : NSButton

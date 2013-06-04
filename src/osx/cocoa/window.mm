@@ -41,7 +41,7 @@
 
 // Get the window with the focus
 
-NSView* GetViewFromResponder( NSResponder* responder )
+NSView* wxOSXGetViewFromResponder( NSResponder* responder )
 {
     NSView* view = nil;
     if ( [responder isKindOfClass:[NSTextView class]] )
@@ -64,7 +64,7 @@ NSView* GetFocusedViewInWindow( NSWindow* keyWindow )
 {
     NSView* focusedView = nil;
     if ( keyWindow != nil )
-        focusedView = GetViewFromResponder([keyWindow firstResponder]);
+        focusedView = wxOSXGetViewFromResponder([keyWindow firstResponder]);
 
     return focusedView;
 }
@@ -1362,7 +1362,7 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     BOOL r = superimpl(slf, (SEL)_cmd);
  
     NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-    NSView* otherView = GetViewFromResponder(responder);
+    NSView* otherView = wxOSXGetViewFromResponder(responder);
 
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     
