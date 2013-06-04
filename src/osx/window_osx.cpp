@@ -2774,6 +2774,10 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 // wxWidgetImpl
 //
 
+// we are maintaining a n:1 map from native controls (ControlRef / NSView*) to their wxWidgetImpl
+// n:1 because we might have an embedded view eg within a scrollview, both being part of the same impl
+// the impl is calling Associate with its newly created native control(s), e.g. in InstallHandler
+
 WX_DECLARE_HASH_MAP(WXWidget, wxWidgetImpl*, wxPointerHash, wxPointerEqual, MacControlMap);
 
 static MacControlMap wxWinMacControlList;
