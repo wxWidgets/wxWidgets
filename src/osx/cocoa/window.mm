@@ -1364,12 +1364,7 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
     NSView* otherView = wxOSXGetViewFromResponder(responder);
 
-    wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
-    
-    // NSScrollViews can have their subviews like NSClipView getting focus
-    // therefore check and use the NSScrollView peer in that case
-    if ( otherWindow == NULL && [[otherView superview] isKindOfClass:[NSScrollView class]])
-        otherWindow = FindFromWXWidget([otherView superview]);
+    wxWidgetImpl* otherWindow = FindBestFromWXWidget(otherView);
     
     // It doesn't make sense to notify about the loss of focus if it's the same
     // control in the end, and just a different subview

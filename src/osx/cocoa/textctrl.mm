@@ -183,9 +183,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if ( impl )
     {
         NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-        NSView* otherView = [responder isKindOfClass:[NSView class]] ? (NSView*)responder : nil;
+        NSView* otherView = wxOSXGetViewFromResponder(responder);
         
-        wxWidgetImpl* otherWindow = impl->FindFromWXWidget(otherView);
+        wxWidgetImpl* otherWindow = impl->FindBestFromWXWidget(otherView);
         impl->DoNotifyFocusEvent( false, otherWindow );
     }
 }
@@ -341,9 +341,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     if ( impl )
     {
         NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-        NSView* otherView = [responder isKindOfClass:[NSView class]] ? (NSView*)responder : nil;
+        NSView* otherView = wxOSXGetViewFromResponder(responder);
         
-        wxWidgetImpl* otherWindow = impl->FindFromWXWidget(otherView);
+        wxWidgetImpl* otherWindow = impl->FindBestFromWXWidget(otherView);
         impl->DoNotifyFocusEvent( false, otherWindow );
     }
 }
@@ -515,9 +515,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
         }
 
         NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-        NSView* otherView = [responder isKindOfClass:[NSView class]] ? (NSView*)responder : nil;
+        NSView* otherView = wxOSXGetViewFromResponder(responder);
         
-        wxWidgetImpl* otherWindow = impl->FindFromWXWidget(otherView);
+        wxWidgetImpl* otherWindow = impl->FindBestFromWXWidget(otherView);
         impl->DoNotifyFocusEvent( false, otherWindow );
     }
 }
