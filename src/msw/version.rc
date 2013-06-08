@@ -53,15 +53,12 @@ BEGIN
             VALUE "Comments", "wxWidgets cross-platform GUI framework\0"
             VALUE "CompanyName", "wxWidgets development team\0"
             VALUE "FileDescription", "wxWidgets for MSW\0"
-            VALUE "FileVersion", "wxWidgets Library " wxVERSION_NUM_DOT_STRING "\0"
-            VALUE "InternalName", "wxMSW\0"
+            VALUE "FileVersion", wxVERSION_NUM_DOT_STRING "\0"
+            VALUE "InternalName", wxSTRINGIZE(WXDLLNAME) "\0"
             VALUE "LegalCopyright", "Copyright © 1993-2013 wxWidgets development team\0"
-            VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", wxSTRINGIZE(WXDLLNAME) ".dll\0"
-            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "wxWidgets\0"
             VALUE "ProductVersion", wxVERSION_NUM_DOT_STRING "\0"
-            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
