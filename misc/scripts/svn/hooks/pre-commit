@@ -23,6 +23,7 @@ all_changed_files=`svnl changed | \
                     egrep -v "branches/WX_2_" | \
                     egrep -v "wxWidgets/vendor" | \
                     egrep -v "src/(tiff|regex|jpeg|stc/scintilla)" | \
+                    egrep -v "src/msw/version.rc" | \
                     egrep -v "_wrap.cpp" | \
                     egrep -v "wxPython/.*/docs/.*\.html$"`
 
