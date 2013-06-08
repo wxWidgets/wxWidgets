@@ -6095,8 +6095,8 @@ protected:
 class wxRichTextPlainTextHandler: public wxRichTextFileHandler
 {
 public:
-    wxRichTextPlainTextHandler(const wxString& name = wxT("Text"),
-                               const wxString& ext = wxT("txt"),
+    wxRichTextPlainTextHandler(const wxString& name = "Text",
+                               const wxString& ext = "txt",
                                wxRichTextFileType type = wxRICHTEXT_TYPE_TEXT)
         : wxRichTextFileHandler(name, ext, type)
         { }
