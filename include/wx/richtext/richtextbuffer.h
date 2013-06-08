@@ -3563,8 +3563,8 @@ protected:
     covers common needs especially for simple, static fields using text or a bitmap.
 
     Register field types on application initialisation with the static function
-    wxRichTextParagraphLayoutBox::AddFieldType. They will be deleted automatically
-    on application exit.
+    wxRichTextBuffer::AddFieldType. They will be deleted automatically on 
+    application exit.
 
     An application can write a field to a control with wxRichTextCtrl::WriteField,
     taking a field type, the properties for the field, and optional attributes.
@@ -3650,8 +3650,8 @@ protected:
     property editing functionality for a field.
 
     Register field types on application initialisation with the static function
-    wxRichTextParagraphLayoutBox::AddFieldType. They will be deleted automatically
-    on application exit.
+    wxRichTextBuffer::AddFieldType. They will be deleted automatically on
+    application exit.
 
     @library{wxrichtext}
     @category{richtext}
