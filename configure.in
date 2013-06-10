@@ -2705,6 +2705,9 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         dnl LZMA compression and using it requires linking with liblzma.
         AC_CHECK_LIB(lzma, lzma_code, [LIBS="$LIBS -llzma"])
 
+        dnl Similarly for jbig
+        AC_CHECK_LIB(jbig, jbg_dec_init, [LIBS="$LIBS -ljbig"])
+
         AC_CONFIG_SUBDIRS([src/tiff])
     fi
 fi
