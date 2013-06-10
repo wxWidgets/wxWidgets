@@ -10886,15 +10886,18 @@ bool wxRichTextAction::Do()
             wxRichTextObject* obj = m_objectAddress.GetObject(m_buffer);
             if (obj && m_object && m_ctrl)
             {
-                // If the cloned object is unparented it will cause layout asserts later
-                // An alternative (would it always be valid?) could be to do: m_object->SetParent(obj->GetParent())
-                wxCHECK_MSG(m_object->GetParent(), false, "The stored object must have a valid parent");
-
                 // The plan is to swap the current object with the stored, previous-state, clone
                 // We can't get 'node' from the containing buffer (as it doesn't directly store objects)
                 // so use the parent paragraph
                 wxRichTextParagraph* para = wxDynamicCast(obj->GetParent(), wxRichTextParagraph);
                 wxCHECK_MSG(para, false, "Invalid parent paragraph");
+
+                // The stored object, m_object, may have a stale parent paragraph. This would cause
+                // a crash during layout, so use obj's parent para, which should be the correct one.
+                // (An alternative would be to return the parent too from m_objectAddress.GetObject(),
+                // or to set obj's parent there before returning)
+                m_object->SetParent(para);
+
                 wxRichTextObjectList::compatibility_iterator node = para->GetChildren().Find(obj);
                 if (node)
                 {
