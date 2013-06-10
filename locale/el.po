@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 2.5.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-27 11:51+0200\n"
+"POT-Creation-Date: 2013-06-10 17:19+0200\n"
 "PO-Revision-Date: 2005-02-16 09:03+0200\n"
 "Last-Translator: InterZone <info@interzone.gr>\n"
 "Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>, Nassos Yiannopoulos "
@@ -12,14 +12,14 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/common/debugrpt.cpp:582
+#: ../src/common/debugrpt.cpp:580
 msgid ""
 "\n"
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:218
-#: ../src/richtext/richtextstyledlg.cpp:230
+#: ../src/richtext/richtextstyledlg.cpp:211
+#: ../src/richtext/richtextstyledlg.cpp:223
 msgid " "
 msgstr " "
 
@@ -42,7 +42,7 @@ msgstr " (σφάλμα %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "tiff module: %s"
 
-#: ../src/common/docview.cpp:1615
+#: ../src/common/docview.cpp:1620
 msgid " - "
 msgstr " - "
 
@@ -85,24 +85,24 @@ msgstr "#14 Φάκελος, 5 x 11 1/2 ίντσες"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 Φάκελος, 3 7/8 x 8 7/8 ίντσες"
 
-#: ../src/html/helpwnd.cpp:1045
+#: ../src/html/helpwnd.cpp:1044
 #, fuzzy, c-format
 msgid "%d of %lu"
 msgstr "%i από %i"
 
-#: ../src/html/helpwnd.cpp:1682 ../src/html/helpwnd.cpp:1720
+#: ../src/html/helpwnd.cpp:1681 ../src/html/helpwnd.cpp:1719
 #, c-format
 msgid "%i of %i"
 msgstr "%i από %i"
 
-#: ../src/generic/filectrlg.cpp:309
+#: ../src/generic/filectrlg.cpp:316
 #, fuzzy, c-format
 msgid "%ld byte"
 msgid_plural "%ld bytes"
 msgstr[0] "%ld bytes"
 msgstr[1] "%ld bytes"
 
-#: ../src/html/helpwnd.cpp:1047
+#: ../src/html/helpwnd.cpp:1046
 #, fuzzy, c-format
 msgid "%lu of %lu"
 msgstr "%i από %i"
@@ -121,6 +121,11 @@ msgstr "%s Σφάλμα"
 #, c-format
 msgid "%s Information"
 msgstr "%s Πληροφορίες"
+
+#: ../src/generic/preferencesg.cpp:109
+#, fuzzy, c-format
+msgid "%s Preferences"
+msgstr "&Προτιμήσεις"
 
 #: ../src/generic/logg.cpp:235
 #, c-format
@@ -160,12 +165,12 @@ msgstr "Στοίχιση Αριστερά"
 msgid "&Apply"
 msgstr "&Εφαρμογή"
 
-#: ../src/richtext/richtextstyledlg.cpp:259
+#: ../src/richtext/richtextstyledlg.cpp:252
 #, fuzzy
 msgid "&Apply Style"
 msgstr "&Εφαρμογή"
 
-#: ../src/msw/mdi.cpp:168
+#: ../src/msw/mdi.cpp:176
 msgid "&Arrange Icons"
 msgstr "&Τακτοποίηση εικονιδίων"
 
@@ -185,7 +190,7 @@ msgstr ""
 msgid "&Before a paragraph:"
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:269
+#: ../src/richtext/richtextfontpage.cpp:272
 #, fuzzy
 msgid "&Bg colour:"
 msgstr "&Χρώμα:"
@@ -202,11 +207,12 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:575
+#: ../src/richtext/richtextsizepage.cpp:634
+#: ../src/richtext/richtextsizepage.cpp:641
 msgid "&Bottom:"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:3464
+#: ../include/wx/richtext/richtextbuffer.h:3524
 #, fuzzy
 msgid "&Box"
 msgstr "&Έντονο"
@@ -221,16 +227,16 @@ msgid "&CD-Rom"
 msgstr ""
 
 #: ../src/generic/wizard.cpp:433 ../src/generic/fontdlgg.cpp:471
-#: ../src/generic/fontdlgg.cpp:490 ../src/osx/carbon/fontdlg.cpp:586
+#: ../src/generic/fontdlgg.cpp:490 ../src/osx/carbon/fontdlg.cpp:589
 #: ../src/common/stockitem.cpp:146
 msgid "&Cancel"
 msgstr "&Ακυρο"
 
-#: ../src/msw/mdi.cpp:164
+#: ../src/msw/mdi.cpp:172
 msgid "&Cascade"
 msgstr "&Επικάλυψη"
 
-#: ../include/wx/richtext/richtextbuffer.h:5476
+#: ../include/wx/richtext/richtextbuffer.h:5561
 #, fuzzy
 msgid "&Cell"
 msgstr "&Ακυρο"
@@ -243,7 +249,7 @@ msgstr ""
 msgid "&Clear"
 msgstr "&Καθαρισμός"
 
-#: ../src/generic/logg.cpp:520 ../src/common/stockitem.cpp:149
+#: ../src/generic/logg.cpp:523 ../src/common/stockitem.cpp:149
 #: ../src/common/prntbase.cpp:1571 ../src/univ/themes/win32.cpp:3757
 #: ../src/html/helpfrm.cpp:140
 msgid "&Close"
@@ -254,7 +260,7 @@ msgstr "&Κλείσιμο"
 msgid "&Color"
 msgstr "&Χρώμα:"
 
-#: ../src/richtext/richtextfontpage.cpp:256
+#: ../src/richtext/richtextfontpage.cpp:259
 #, fuzzy
 msgid "&Colour:"
 msgstr "&Χρώμα:"
@@ -265,7 +271,7 @@ msgid "&Convert"
 msgstr "Περιεχόμενα"
 
 #: ../src/richtext/richtextctrl.cpp:325 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2223
+#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2285
 msgid "&Copy"
 msgstr "&Αντιγραφή"
 
@@ -285,11 +291,11 @@ msgstr ""
 
 #: ../src/richtext/richtexttabspage.cpp:143
 #: ../src/richtext/richtextctrl.cpp:327 ../src/osx/textctrl_osx.cpp:586
-#: ../src/common/stockitem.cpp:153 ../src/msw/textctrl.cpp:2225
+#: ../src/common/stockitem.cpp:153 ../src/msw/textctrl.cpp:2287
 msgid "&Delete"
 msgstr "&Διαγραφή"
 
-#: ../src/richtext/richtextstyledlg.cpp:277
+#: ../src/richtext/richtextstyledlg.cpp:270
 #, fuzzy
 msgid "&Delete Style..."
 msgstr "Διαγραφή στοιχείου"
@@ -298,7 +304,7 @@ msgstr "Διαγραφή στοιχείου"
 msgid "&Descending"
 msgstr ""
 
-#: ../src/generic/logg.cpp:692
+#: ../src/generic/logg.cpp:689
 msgid "&Details"
 msgstr "&Λεπτομέρειες"
 
@@ -310,7 +316,7 @@ msgstr "&Κάτω"
 msgid "&Edit"
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:271
+#: ../src/richtext/richtextstyledlg.cpp:264
 #, fuzzy
 msgid "&Edit Style..."
 msgstr "Επεξεργασία στοιχείου"
@@ -336,7 +342,7 @@ msgstr "&Τέλος"
 msgid "&First"
 msgstr "πρώτο"
 
-#: ../src/richtext/richtextsizepage.cpp:222
+#: ../src/richtext/richtextsizepage.cpp:241
 msgid "&Floating mode:"
 msgstr ""
 
@@ -358,7 +364,7 @@ msgstr "Οικογένεια γραμματοσειράς:"
 msgid "&Font for Level..."
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:154
+#: ../src/richtext/richtextfontpage.cpp:157
 #: ../src/richtext/richtextsymboldlg.cpp:401
 #, fuzzy
 msgid "&Font:"
@@ -377,13 +383,14 @@ msgstr "Από:"
 msgid "&Harddisk"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:348
+#: ../src/richtext/richtextsizepage.cpp:355
 #, fuzzy
 msgid "&Height:"
 msgstr "&Βάρος:"
 
-#: ../src/generic/wizard.cpp:436 ../src/richtext/richtextstyledlg.cpp:311
-#: ../src/richtext/richtextsymboldlg.cpp:480 ../src/osx/menu_osx.cpp:685
+#: ../src/generic/wizard.cpp:436 ../src/richtext/richtextstyledlg.cpp:304
+#: ../src/richtext/richtextsymboldlg.cpp:480 ../src/osx/menu_osx.cpp:719
 #: ../src/common/stockitem.cpp:164 ../src/html/helpfrm.cpp:148
 msgid "&Help"
 msgstr "&Βοήθεια"
@@ -447,7 +454,8 @@ msgstr ""
 #: ../src/richtext/richtextliststylepage.cpp:382
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:491
+#: ../src/richtext/richtextsizepage.cpp:529
+#: ../src/richtext/richtextsizepage.cpp:536
 msgid "&Left:"
 msgstr ""
 
@@ -455,7 +463,7 @@ msgstr ""
 msgid "&List level:"
 msgstr ""
 
-#: ../src/generic/logg.cpp:521
+#: ../src/generic/logg.cpp:524
 msgid "&Log"
 msgstr "&Καταγραφή"
 
@@ -463,7 +471,7 @@ msgstr "&Καταγραφή"
 msgid "&Move"
 msgstr "&Μετακίνηση"
 
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:669
 msgid "&Move the object to:"
 msgstr ""
 
@@ -476,8 +484,8 @@ msgstr "&Νέο"
 msgid "&New"
 msgstr "&Νέο"
 
-#: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:169
+#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
+#: ../src/msw/mdi.cpp:177
 msgid "&Next"
 msgstr "&Επόμενο"
 
@@ -485,7 +493,7 @@ msgstr "&Επόμενο"
 msgid "&Next >"
 msgstr "&Επόμενο >"
 
-#: ../src/richtext/richtextsizepage.cpp:615
+#: ../src/richtext/richtextsizepage.cpp:678
 msgid "&Next Paragraph"
 msgstr ""
 
@@ -498,7 +506,7 @@ msgstr "&Επόμενο Tip"
 msgid "&Next style:"
 msgstr "&Επόμενο >"
 
-#: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:476
+#: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:477
 msgid "&No"
 msgstr "&Όχι"
 
@@ -512,7 +520,7 @@ msgid "&Number:"
 msgstr ""
 
 #: ../src/generic/fontdlgg.cpp:476 ../src/generic/fontdlgg.cpp:483
-#: ../src/osx/carbon/fontdlg.cpp:592 ../src/common/stockitem.cpp:179
+#: ../src/osx/carbon/fontdlg.cpp:595 ../src/common/stockitem.cpp:179
 msgid "&OK"
 msgstr "&OK"
 
@@ -530,11 +538,11 @@ msgid "&Page Break"
 msgstr ""
 
 #: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:181 ../src/msw/textctrl.cpp:2224
+#: ../src/common/stockitem.cpp:181 ../src/msw/textctrl.cpp:2286
 msgid "&Paste"
 msgstr "&Επικόληση"
 
-#: ../include/wx/richtext/richtextbuffer.h:4580
+#: ../include/wx/richtext/richtextbuffer.h:4649
 msgid "&Picture"
 msgstr ""
 
@@ -546,7 +554,7 @@ msgstr "Μέγεθος κουκίδας:"
 msgid "&Position (tenths of a mm):"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:476
+#: ../src/richtext/richtextsizepage.cpp:511
 #, fuzzy
 msgid "&Position mode:"
 msgstr "Ερώτημα"
@@ -555,12 +563,12 @@ msgstr "Ερώτημα"
 msgid "&Preferences"
 msgstr "&Προτιμήσεις"
 
-#: ../src/aui/tabmdi.cpp:111 ../src/generic/mdig.cpp:102
-#: ../src/msw/mdi.cpp:170
+#: ../src/aui/tabmdi.cpp:113 ../src/generic/mdig.cpp:102
+#: ../src/msw/mdi.cpp:178
 msgid "&Previous"
 msgstr "&Προηγούμενο"
 
-#: ../src/richtext/richtextsizepage.cpp:609
+#: ../src/richtext/richtextsizepage.cpp:672
 #, fuzzy
 msgid "&Previous Paragraph"
 msgstr "Προηγούμενη σελίδα"
@@ -569,7 +577,7 @@ msgstr "Προηγούμενη σελίδα"
 msgid "&Print..."
 msgstr "&Εκτύπωση..."
 
-#: ../src/richtext/richtextctrl.cpp:331 ../src/richtext/richtextctrl.cpp:4888
+#: ../src/richtext/richtextctrl.cpp:331 ../src/richtext/richtextctrl.cpp:4915
 #: ../src/common/stockitem.cpp:185
 msgid "&Properties"
 msgstr "&Ιδιότητες"
@@ -580,7 +588,7 @@ msgstr "Έ&ξοδος"
 
 #: ../src/richtext/richtextctrl.cpp:322 ../src/osx/textctrl_osx.cpp:581
 #: ../src/common/stockitem.cpp:186 ../src/common/cmdproc.cpp:294
-#: ../src/common/cmdproc.cpp:301 ../src/msw/textctrl.cpp:2220
+#: ../src/common/cmdproc.cpp:301 ../src/msw/textctrl.cpp:2282
 msgid "&Redo"
 msgstr "&Επανάληψη"
 
@@ -588,7 +596,7 @@ msgstr "&Επανάληψη"
 msgid "&Redo "
 msgstr "&Επανάληψη "
 
-#: ../src/richtext/richtextstyledlg.cpp:265
+#: ../src/richtext/richtextstyledlg.cpp:258
 msgid "&Rename Style..."
 msgstr ""
 
@@ -596,7 +604,7 @@ msgstr ""
 msgid "&Replace"
 msgstr "&Αντικατάσταση"
 
-#: ../src/richtext/richtextstyledlg.cpp:295
+#: ../src/richtext/richtextstyledlg.cpp:288
 msgid "&Restart numbering"
 msgstr ""
 
@@ -616,7 +624,8 @@ msgstr "Απαλό(light)"
 #: ../src/richtext/richtextliststylepage.cpp:400
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:599
+#: ../src/richtext/richtextsizepage.cpp:606
 #, fuzzy
 msgid "&Right:"
 msgstr "&Βάρος:"
@@ -643,7 +652,7 @@ msgstr "&Εμφάνιση tips κατά την εκκίνηση"
 msgid "&Size"
 msgstr "&Μέγεθος"
 
-#: ../src/richtext/richtextfontpage.cpp:166
+#: ../src/richtext/richtextfontpage.cpp:169
 #, fuzzy
 msgid "&Size:"
 msgstr "&Μέγεθος"
@@ -666,7 +675,7 @@ msgstr ""
 msgid "&Stop"
 msgstr "&Διακοπή"
 
-#: ../src/richtext/richtextfontpage.cpp:282 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextfontpage.cpp:285 ../src/common/stockitem.cpp:200
 msgid "&Strikethrough"
 msgstr ""
 
@@ -674,7 +683,7 @@ msgstr ""
 msgid "&Style:"
 msgstr "&Στυλ:"
 
-#: ../src/richtext/richtextstyledlg.cpp:206
+#: ../src/richtext/richtextstyledlg.cpp:199
 #, fuzzy
 msgid "&Styles:"
 msgstr "&Στυλ:"
@@ -689,7 +698,7 @@ msgstr ""
 msgid "&Symbol:"
 msgstr "&Στυλ:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5558
+#: ../include/wx/richtext/richtextbuffer.h:5643
 msgid "&Table"
 msgstr ""
 
@@ -702,7 +711,8 @@ msgstr "&Αντιγραφή"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:519
+#: ../src/richtext/richtextsizepage.cpp:564
+#: ../src/richtext/richtextsizepage.cpp:571
 #, fuzzy
 msgid "&Top:"
 msgstr "Πρός:"
@@ -711,14 +721,14 @@ msgstr "Πρός:"
 msgid "&Underline"
 msgstr "&Υπογράμμιση"
 
-#: ../src/richtext/richtextfontpage.cpp:241
+#: ../src/richtext/richtextfontpage.cpp:244
 #, fuzzy
 msgid "&Underlining:"
 msgstr "&Υπογράμμιση"
 
 #: ../src/richtext/richtextctrl.cpp:321 ../src/osx/textctrl_osx.cpp:580
 #: ../src/common/stockitem.cpp:204 ../src/common/cmdproc.cpp:272
-#: ../src/msw/textctrl.cpp:2219
+#: ../src/msw/textctrl.cpp:2281
 msgid "&Undo"
 msgstr "&Αναίρεση"
 
@@ -734,7 +744,7 @@ msgstr "Α&ποστοίχιση"
 msgid "&Up"
 msgstr "&Επάνω"
 
-#: ../src/richtext/richtextsizepage.cpp:254
+#: ../src/richtext/richtextsizepage.cpp:275
 #, fuzzy
 msgid "&Vertical alignment:"
 msgstr "Στοίχιση Αριστερά"
@@ -748,19 +758,20 @@ msgstr "&Ανοιγμα..."
 msgid "&Weight:"
 msgstr "&Βάρος:"
 
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:314
+#: ../src/richtext/richtextsizepage.cpp:321
 #, fuzzy
 msgid "&Width:"
 msgstr "&Βάρος:"
 
-#: ../src/aui/tabmdi.cpp:303 ../src/aui/tabmdi.cpp:319
-#: ../src/aui/tabmdi.cpp:321 ../src/generic/mdig.cpp:295
+#: ../src/aui/tabmdi.cpp:312 ../src/aui/tabmdi.cpp:328
+#: ../src/aui/tabmdi.cpp:330 ../src/generic/mdig.cpp:295
 #: ../src/generic/mdig.cpp:311 ../src/generic/mdig.cpp:315
-#: ../src/msw/mdi.cpp:70
+#: ../src/msw/mdi.cpp:78
 msgid "&Window"
 msgstr "&Παράθυρο"
 
-#: ../src/common/stockitem.cpp:207 ../src/msw/msgdlg.cpp:476
+#: ../src/common/stockitem.cpp:207 ../src/msw/msgdlg.cpp:477
 msgid "&Yes"
 msgstr "&Ναι"
 
@@ -784,7 +795,7 @@ msgstr "'%s' δεν ισχύει"
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' δεν είναι μία σωστή αριθμητική τιμή για την επιλογή '%s'."
 
-#: ../src/common/translation.cpp:930
+#: ../src/common/translation.cpp:1080
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' δεν είναι ένας σωστός κατάλογος μηνυμάτων."
@@ -824,7 +835,7 @@ msgstr "'%s' πρέπει να περιέχει ASCII χαρακτήρες."
 msgid "(*)"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:977
+#: ../src/html/helpwnd.cpp:976
 msgid "(Help)"
 msgstr "(Βοήθεια)"
 
@@ -838,8 +849,8 @@ msgstr ""
 msgid "(Normal text)"
 msgstr "Κανονική γραμματοσειρά:"
 
-#: ../src/html/helpwnd.cpp:427 ../src/html/helpwnd.cpp:1120
-#: ../src/html/helpwnd.cpp:1746
+#: ../src/html/helpwnd.cpp:426 ../src/html/helpwnd.cpp:1119
+#: ../src/html/helpwnd.cpp:1745
 msgid "(bookmarks)"
 msgstr "(σελιδοδείκτες)"
 
@@ -849,10 +860,10 @@ msgstr "(σελιδοδείκτες)"
 #: ../src/richtext/richtextindentspage.cpp:299
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:312
-#: ../src/richtext/richtextformatdlg.cpp:828
-#: ../src/richtext/richtextfontpage.cpp:322
-#: ../src/richtext/richtextfontpage.cpp:326
-#: ../src/richtext/richtextfontpage.cpp:330
+#: ../src/richtext/richtextformatdlg.cpp:830
+#: ../src/richtext/richtextfontpage.cpp:332
+#: ../src/richtext/richtextfontpage.cpp:336
+#: ../src/richtext/richtextfontpage.cpp:340
 #: ../src/richtext/richtextliststylepage.cpp:449
 #: ../src/richtext/richtextliststylepage.cpp:461
 #: ../src/richtext/richtextliststylepage.cpp:462
@@ -875,7 +886,7 @@ msgstr ""
 msgid "+"
 msgstr ""
 
-#: ../src/msw/utils.cpp:1324
+#: ../src/msw/utils.cpp:1325
 msgid ", 64-bit edition"
 msgstr ""
 
@@ -888,10 +899,6 @@ msgstr ""
 #, fuzzy
 msgid "..."
 msgstr ".."
-
-#: ../src/richtext/richtextindentspage.cpp:240
-msgid "1"
-msgstr ""
 
 #: ../src/richtext/richtextindentspage.cpp:301
 #: ../src/richtext/richtextliststylepage.cpp:451
@@ -938,10 +945,6 @@ msgstr ""
 msgid "1.9"
 msgstr ""
 
-#: ../src/richtext/richtextindentspage.cpp:249
-msgid "10"
-msgstr ""
-
 #: ../src/common/paper.cpp:142
 #, fuzzy
 msgid "10 x 11 in"
@@ -965,43 +968,14 @@ msgstr "10 x 14 ίντσες"
 msgid "15 x 11 in"
 msgstr "10 x 14 ίντσες"
 
-#: ../src/richtext/richtextindentspage.cpp:241
 #: ../src/richtext/richtextindentspage.cpp:310
 #: ../src/richtext/richtextliststylepage.cpp:460
 msgid "2"
 msgstr ""
 
-#: ../src/richtext/richtextindentspage.cpp:242
-msgid "3"
-msgstr ""
-
-#: ../src/richtext/richtextindentspage.cpp:243
-msgid "4"
-msgstr ""
-
-#: ../src/richtext/richtextindentspage.cpp:244
-msgid "5"
-msgstr ""
-
-#: ../src/richtext/richtextindentspage.cpp:245
-msgid "6"
-msgstr ""
-
 #: ../src/common/paper.cpp:134
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 msgstr "6 3/4 Φάκελος, 3 5/8 x 6 1/2 ίντσες"
-
-#: ../src/richtext/richtextindentspage.cpp:246
-msgid "7"
-msgstr ""
-
-#: ../src/richtext/richtextindentspage.cpp:247
-msgid "8"
-msgstr ""
-
-#: ../src/richtext/richtextindentspage.cpp:248
-msgid "9"
-msgstr ""
 
 #: ../src/common/paper.cpp:141
 #, fuzzy
@@ -1024,71 +998,71 @@ msgstr ": άγνωστη κωδικοποίηση"
 msgid "< &Back"
 msgstr "< &Πίσω"
 
-#: ../src/osx/carbon/fontdlg.cpp:606 ../src/osx/carbon/fontdlg.cpp:813
-#: ../src/osx/carbon/fontdlg.cpp:833
+#: ../src/osx/carbon/fontdlg.cpp:609 ../src/osx/carbon/fontdlg.cpp:816
+#: ../src/osx/carbon/fontdlg.cpp:836
 #, fuzzy
 msgid "<Any Decorative>"
 msgstr "Διακοσμητικός"
 
-#: ../src/osx/carbon/fontdlg.cpp:607 ../src/osx/carbon/fontdlg.cpp:815
-#: ../src/osx/carbon/fontdlg.cpp:835
+#: ../src/osx/carbon/fontdlg.cpp:610 ../src/osx/carbon/fontdlg.cpp:818
+#: ../src/osx/carbon/fontdlg.cpp:838
 #, fuzzy
 msgid "<Any Modern>"
 msgstr "Μοντέρνο"
 
-#: ../src/osx/carbon/fontdlg.cpp:605 ../src/osx/carbon/fontdlg.cpp:811
-#: ../src/osx/carbon/fontdlg.cpp:831
+#: ../src/osx/carbon/fontdlg.cpp:608 ../src/osx/carbon/fontdlg.cpp:814
+#: ../src/osx/carbon/fontdlg.cpp:834
 #, fuzzy
 msgid "<Any Roman>"
 msgstr "Ρωμαϊκό"
 
-#: ../src/osx/carbon/fontdlg.cpp:608 ../src/osx/carbon/fontdlg.cpp:817
-#: ../src/osx/carbon/fontdlg.cpp:837
+#: ../src/osx/carbon/fontdlg.cpp:611 ../src/osx/carbon/fontdlg.cpp:820
+#: ../src/osx/carbon/fontdlg.cpp:840
 #, fuzzy
 msgid "<Any Script>"
 msgstr "Χειρόγραφο(Script)"
 
-#: ../src/osx/carbon/fontdlg.cpp:609 ../src/osx/carbon/fontdlg.cpp:822
-#: ../src/osx/carbon/fontdlg.cpp:841
+#: ../src/osx/carbon/fontdlg.cpp:612 ../src/osx/carbon/fontdlg.cpp:825
+#: ../src/osx/carbon/fontdlg.cpp:844
 #, fuzzy
 msgid "<Any Swiss>"
 msgstr "Ελβετικό(Swiss)"
 
-#: ../src/osx/carbon/fontdlg.cpp:610 ../src/osx/carbon/fontdlg.cpp:819
-#: ../src/osx/carbon/fontdlg.cpp:839
+#: ../src/osx/carbon/fontdlg.cpp:613 ../src/osx/carbon/fontdlg.cpp:822
+#: ../src/osx/carbon/fontdlg.cpp:842
 #, fuzzy
 msgid "<Any Teletype>"
 msgstr "Τηλέτυπο"
 
-#: ../src/osx/carbon/fontdlg.cpp:604
+#: ../src/osx/carbon/fontdlg.cpp:607
 msgid "<Any>"
 msgstr ""
 
-#: ../src/generic/filectrlg.cpp:280 ../src/generic/filectrlg.cpp:303
+#: ../src/generic/filectrlg.cpp:287 ../src/generic/filectrlg.cpp:310
 msgid "<DIR>"
 msgstr "<ΚΑΤΑΛΟΓΟΣ>"
 
-#: ../src/generic/filectrlg.cpp:284 ../src/generic/filectrlg.cpp:307
+#: ../src/generic/filectrlg.cpp:291 ../src/generic/filectrlg.cpp:314
 msgid "<DRIVE>"
 msgstr "<ΟΔΗΓΟΣ>"
 
-#: ../src/generic/filectrlg.cpp:282 ../src/generic/filectrlg.cpp:305
+#: ../src/generic/filectrlg.cpp:289 ../src/generic/filectrlg.cpp:312
 msgid "<LINK>"
 msgstr "<ΣΥΝΔΕΣΗ>"
 
-#: ../src/html/helpwnd.cpp:1280
+#: ../src/html/helpwnd.cpp:1279
 msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr "<b><i>Εντονη πλάγια όψη.</i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1284
+#: ../src/html/helpwnd.cpp:1283
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
 msgstr "<b><i>έντονα πλάγια <u>υπογραμμισμένα</u></i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1279
+#: ../src/html/helpwnd.cpp:1278
 msgid "<b>Bold face.</b> "
 msgstr "<b>Έντονη όψη</b>"
 
-#: ../src/html/helpwnd.cpp:1278
+#: ../src/html/helpwnd.cpp:1277
 msgid "<i>Italic face.</i> "
 msgstr "<i>Πλάγια όψη."
 
@@ -1102,7 +1076,7 @@ msgstr ">>"
 msgid "A debug report has been generated in the directory\n"
 msgstr ""
 
-#: ../src/common/debugrpt.cpp:569
+#: ../src/common/debugrpt.cpp:567
 msgid "A debug report has been generated. It can be found in"
 msgstr ""
 
@@ -1210,8 +1184,8 @@ msgstr "10 x 14 ίντσες"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "Φύλλο A5, 148 x 210 mm"
 
-#: ../src/generic/fontdlgg.cpp:84 ../src/richtext/richtextformatdlg.cpp:525
-#: ../src/osx/carbon/fontdlg.cpp:337
+#: ../src/generic/fontdlgg.cpp:84 ../src/richtext/richtextformatdlg.cpp:527
+#: ../src/osx/carbon/fontdlg.cpp:340
 msgid "ABCDEFGabcdefg12345"
 msgstr "ΑΒΓΔΕΖαβγδεζ12345"
 
@@ -1223,7 +1197,7 @@ msgstr ""
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:537 ../src/common/stockitem.cpp:140
+#: ../src/osx/menu_osx.cpp:564 ../src/common/stockitem.cpp:140
 #, fuzzy
 msgid "About"
 msgstr "&Περί"
@@ -1233,7 +1207,7 @@ msgstr "&Περί"
 msgid "About %s"
 msgstr "&Περί..."
 
-#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:517
 msgid "Absolute"
 msgstr ""
 
@@ -1246,9 +1220,17 @@ msgstr "&Πραγματικό μέγεθος"
 msgid "Add"
 msgstr "Προσθήκη"
 
-#: ../src/html/helpwnd.cpp:440
+#: ../src/richtext/richtextbuffer.cpp:10477
+msgid "Add column"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "Προσθήκη της τρέχουσας σελίδας στους σελιδοδείκτες"
+
+#: ../src/richtext/richtextbuffer.cpp:10419
+msgid "Add row"
+msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:284
 msgid "Add to custom colours"
@@ -1275,6 +1257,10 @@ msgstr ""
 msgid "Adding flavor utxt failed"
 msgstr ""
 
+#: ../src/common/preferencescmn.cpp:40
+msgid "Advanced"
+msgstr ""
+
 #: ../src/richtext/richtextliststylepage.cpp:436
 msgid "After a paragraph:"
 msgstr ""
@@ -1287,7 +1273,7 @@ msgstr "Στοίχιση Αριστερά"
 msgid "Align Right"
 msgstr "Στοίχιση Δεξιά"
 
-#: ../src/richtext/richtextsizepage.cpp:242
+#: ../src/richtext/richtextsizepage.cpp:263
 #, fuzzy
 msgid "Alignment"
 msgstr "Στοίχιση Αριστερά"
@@ -1296,24 +1282,24 @@ msgstr "Στοίχιση Αριστερά"
 msgid "All"
 msgstr "Όλα"
 
-#: ../src/generic/filectrlg.cpp:1199 ../src/common/fldlgcmn.cpp:90
+#: ../src/generic/filectrlg.cpp:1206 ../src/common/fldlgcmn.cpp:90
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Όλα τα αρχεία (%s)|%s"
 
-#: ../include/wx/defs.h:2774
+#: ../include/wx/defs.h:2864
 msgid "All files (*)|*"
 msgstr "Όλα τα αρχεία (*)|*"
 
-#: ../include/wx/defs.h:2771
+#: ../include/wx/defs.h:2861
 msgid "All files (*.*)|*.*"
 msgstr "Όλα τα αρχεία (*.*)|*.*"
 
-#: ../src/richtext/richtextstyles.cpp:1041
+#: ../src/richtext/richtextstyles.cpp:1045
 msgid "All styles"
 msgstr ""
 
-#: ../src/propgrid/manager.cpp:1495
+#: ../src/propgrid/manager.cpp:1497
 msgid "Alphabetic Mode"
 msgstr ""
 
@@ -1329,7 +1315,7 @@ msgstr "Γίνεται ήδη κλήση προς τον παροχέα Internet
 msgid "Alt+"
 msgstr ""
 
-#: ../src/common/debugrpt.cpp:572
+#: ../src/common/debugrpt.cpp:570
 msgid "And includes the following files:\n"
 msgstr ""
 
@@ -1338,14 +1324,15 @@ msgstr ""
 msgid "Animation file is not of type %ld."
 msgstr "Αρχείο εικόνας δεν είναι τύπυ %d."
 
-#: ../src/generic/logg.cpp:1038
+#: ../src/generic/logg.cpp:1035
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr ""
 "Να γίνει προσάρτηση(append) της καταγραφής(log) στο αρχείο '%s' (Επιλέγοντας "
 "[Όχι] θα το επικαλύψει(overwrite));"
 
-#: ../src/osx/menu_osx.cpp:556 ../src/osx/menu_osx.cpp:564
+#: ../src/osx/menu_osx.cpp:536 ../src/osx/menu_osx.cpp:544
+#: ../src/osx/menu_osx.cpp:583 ../src/osx/menu_osx.cpp:591
 #, fuzzy
 msgid "Application"
 msgstr "Τμήματα"
@@ -1364,7 +1351,7 @@ msgstr ""
 msgid "Arabic (ISO-8859-6)"
 msgstr "Αραβικό (ISO-8859-6)"
 
-#: ../src/msw/ole/automtn.cpp:656
+#: ../src/msw/ole/automtn.cpp:662
 #, fuzzy, c-format
 msgid "Argument %u not found."
 msgstr "αρχείο καταλόγου για την περιοχή (domain) '%s' δεν βρέθηκε."
@@ -1378,7 +1365,7 @@ msgstr ""
 msgid "Ascending"
 msgstr "γίνεται ανάγνωση"
 
-#: ../src/generic/filectrlg.cpp:462
+#: ../src/generic/filectrlg.cpp:469
 msgid "Attributes"
 msgstr "Χαρακτηριστικά"
 
@@ -1477,7 +1464,7 @@ msgid "Back"
 msgstr "&Πίσω"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
-#: ../src/richtext/richtextformatdlg.cpp:373
+#: ../src/richtext/richtextformatdlg.cpp:375
 #, fuzzy
 msgid "Background"
 msgstr "Πίσω"
@@ -1486,7 +1473,7 @@ msgstr "Πίσω"
 msgid "Background &colour:"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:404
+#: ../src/osx/carbon/fontdlg.cpp:407
 msgid "Background colour"
 msgstr ""
 
@@ -1511,8 +1498,8 @@ msgstr ""
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:334 ../src/richtext/richtextfontpage.cpp:328
-#: ../src/osx/carbon/fontdlg.cpp:538 ../src/common/stockitem.cpp:144
+#: ../src/generic/fontdlgg.cpp:334 ../src/richtext/richtextfontpage.cpp:338
+#: ../src/osx/carbon/fontdlg.cpp:541 ../src/common/stockitem.cpp:144
 msgid "Bold"
 msgstr "Έντονο"
 
@@ -1522,12 +1509,12 @@ msgstr "Έντονο"
 msgid "Border"
 msgstr "Μοντέρνο"
 
-#: ../src/richtext/richtextformatdlg.cpp:367
+#: ../src/richtext/richtextformatdlg.cpp:369
 #, fuzzy
 msgid "Borders"
 msgstr "Μοντέρνο"
 
-#: ../src/richtext/richtextsizepage.cpp:264 ../src/common/stockitem.cpp:145
+#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:145
 msgid "Bottom"
 msgstr ""
 
@@ -1535,12 +1522,12 @@ msgstr ""
 msgid "Bottom margin (mm):"
 msgstr "Κάτω περιθώριο (mm)"
 
-#: ../src/richtext/richtextbuffer.cpp:8431
+#: ../src/richtext/richtextbuffer.cpp:8858
 #, fuzzy
 msgid "Box Properties"
 msgstr "&Ιδιότητες"
 
-#: ../src/richtext/richtextstyles.cpp:1045
+#: ../src/richtext/richtextstyles.cpp:1049
 #, fuzzy
 msgid "Box styles"
 msgstr "&Επόμενο >"
@@ -1558,7 +1545,7 @@ msgstr ""
 msgid "Bullet style"
 msgstr ""
 
-#: ../src/richtext/richtextformatdlg.cpp:341
+#: ../src/richtext/richtextformatdlg.cpp:343
 msgid "Bullets"
 msgstr ""
 
@@ -1566,7 +1553,7 @@ msgstr ""
 msgid "C sheet, 17 x 22 in"
 msgstr "Φύλλο C, 17 x 22 ίντσες"
 
-#: ../src/generic/logg.cpp:518
+#: ../src/generic/logg.cpp:521
 msgid "C&lear"
 msgstr "&Καθάρισμα"
 
@@ -1606,7 +1593,7 @@ msgstr ""
 msgid "CD-Rom"
 msgstr ""
 
-#: ../src/html/chm.cpp:818 ../src/html/chm.cpp:877
+#: ../src/html/chm.cpp:816 ../src/html/chm.cpp:875
 msgid "CHM handler currently supports only local files!"
 msgstr "ο χειριστής CHM προς το παρόν υποστηρίζει μόνο τοπικά αρχεία!"
 
@@ -1618,7 +1605,7 @@ msgstr ""
 msgid "COMMAND"
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:289
+#: ../src/richtext/richtextfontpage.cpp:292
 msgid "Ca&pitals"
 msgstr ""
 
@@ -1626,7 +1613,7 @@ msgstr ""
 msgid "Can't &Undo "
 msgstr "Δεν είναι δυνατή η αναίρεση"
 
-#: ../src/common/image.cpp:2579
+#: ../src/common/image.cpp:2582
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
 
@@ -1645,11 +1632,11 @@ msgstr "Δεν είναι δυνατή η αντιγραφή τιμών μη υ�
 msgid "Can't create registry key '%s'"
 msgstr "Δεν είναι δυνατή η δημιουργία του κλειδιού μητρώου(registry key) '%s'"
 
-#: ../src/msw/thread.cpp:696 ../src/os2/thread.cpp:495
+#: ../src/msw/thread.cpp:697 ../src/os2/thread.cpp:495
 msgid "Can't create thread"
 msgstr "Δεν είναι δυνατή η δημιουργία του νήματος εκτέλεσης (thread)"
 
-#: ../src/msw/window.cpp:3780
+#: ../src/msw/window.cpp:3774
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Δεν είναι δυνατή η δημιουργία παραθύρου τάξεως %s"
@@ -1684,7 +1671,7 @@ msgstr "Δεν είναι δυνατή η απαρίθμηση των τιμών
 msgid "Can't export value of unsupported type %d."
 msgstr "Δεν είναι δυνατή η εξαγωγή τιμών μη υποστηριζομένου τύπου %d."
 
-#: ../src/common/ffile.cpp:235
+#: ../src/common/ffile.cpp:237
 #, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "Δεν είναι δυνατή η εύρεση της τρέχουσας θέσης στο αρχείου '%s'"
@@ -1703,14 +1690,9 @@ msgstr "Δεν είναι δυνατή η αρχικοποίηση της ροή
 msgid "Can't initialize zlib inflate stream."
 msgstr "Δεν είναι δυνατή η αρχικοποίηση της ροής zlib inflate."
 
-#: ../src/msw/fswatcher.cpp:429
+#: ../src/msw/fswatcher.cpp:433
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
-msgstr ""
-
-#: ../src/common/fswatchercmn.cpp:93
-#, c-format
-msgid "Can't monitor non-existent path \"%s\" for changes."
 msgstr ""
 
 #: ../src/msw/registry.cpp:453
@@ -1739,19 +1721,19 @@ msgstr "Δεν είναι δυνατή η ανάγνωση της τιμής τ�
 msgid "Can't read value of key '%s'"
 msgstr "Δεν είναι δυνατή η ανάγνωση της τιμής του κλειδιού '%s'"
 
-#: ../src/common/image.cpp:2376
+#: ../src/common/image.cpp:2379
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr ""
 "Δεν είναι δυνατή η αποθήκευση της εικόνας στο αρχείο '%s': άγνωστη επέκταση"
 
-#: ../src/generic/logg.cpp:579 ../src/generic/logg.cpp:1000
+#: ../src/generic/logg.cpp:580 ../src/generic/logg.cpp:997
 msgid "Can't save log contents to file."
 msgstr ""
 "Δεν είναι δυνατή η αποθήκευση των περιεχομένων της καταγραφής(log) στο "
 "αρχείο."
 
-#: ../src/msw/thread.cpp:652 ../src/os2/thread.cpp:478
+#: ../src/msw/thread.cpp:653 ../src/os2/thread.cpp:478
 msgid "Can't set thread priority"
 msgstr "Δεν είναι δυνατή η θέση προτεραιότητας του νήματος εκτέλεσης (thread)"
 
@@ -1761,7 +1743,7 @@ msgstr "Δεν είναι δυνατή η θέση προτεραιότητας 
 msgid "Can't set value of '%s'"
 msgstr "Δεν είναι δυνατή η ανάθεση τιμής του '%s'"
 
-#: ../src/unix/utilsunx.cpp:352
+#: ../src/unix/utilsunx.cpp:356
 #, fuzzy
 msgid "Can't write to child process's stdin"
 msgstr "Αποτυχία θανάτωσης της διαδικασίας(process) %d"
@@ -1771,10 +1753,10 @@ msgstr "Αποτυχία θανάτωσης της διαδικασίας(proces
 msgid "Can't write to deflate stream: %s"
 msgstr "Δεν είναι δυνατή η εγγραφή στην ροή deflate: %s"
 
-#: ../src/generic/dirdlgg.cpp:108 ../src/richtext/richtextstyledlg.cpp:308
-#: ../src/common/stockitem.cpp:146 ../src/msw/msgdlg.cpp:489
+#: ../src/generic/dirdlgg.cpp:108 ../src/richtext/richtextstyledlg.cpp:301
+#: ../src/common/stockitem.cpp:146 ../src/msw/msgdlg.cpp:490
 #: ../src/msw/progdlg.cpp:674 ../src/gtk1/fontdlg.cpp:145
-#: ../src/motif/msgdlg.cpp:194
+#: ../src/motif/msgdlg.cpp:197
 msgid "Cancel"
 msgstr "Ακυρο"
 
@@ -1786,12 +1768,12 @@ msgstr "Δεν είναι δυνατή η δημιουργία του mutex."
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr ""
 
-#: ../src/common/filefn.cpp:1330
+#: ../src/common/filefn.cpp:1331
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "Δεν είναι δυνατή η απαρίθμηση των αρχείων '%s'"
 
-#: ../src/msw/dir.cpp:211
+#: ../src/msw/dir.cpp:251
 #, c-format
 msgid "Cannot enumerate files in directory '%s'"
 msgstr "Δεν είναι δυνατή η απαρίθμηση των αρχείων στον κατάλογο '%s'"
@@ -1805,21 +1787,21 @@ msgstr "Δεν είναι δυνατή η εύρεση της ενεργού τ�
 msgid "Cannot find the location of address book file"
 msgstr "Δεν είναι δυνατή η εύρεση της θέσης του αρχείου βιβλίου διευθύνσεων"
 
-#: ../src/msw/ole/automtn.cpp:557
+#: ../src/msw/ole/automtn.cpp:563
 #, fuzzy, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "Δεν είναι δυνατή η εύρεση της ενεργού τηλεφωνικής συνδέσεως: %s"
 
-#: ../src/unix/threadpsx.cpp:1213
+#: ../src/unix/threadpsx.cpp:1031
 #, fuzzy, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Δεν είναι δυνατή η ανάγνωση του εύρους προτεραιοτήτων"
 
-#: ../src/unix/utilsunx.cpp:878
+#: ../src/unix/utilsunx.cpp:909
 msgid "Cannot get the hostname"
 msgstr "Δεν είναι δυνατή η ανάγνωση του ονόματος διακομιστή(hostname)"
 
-#: ../src/unix/utilsunx.cpp:914
+#: ../src/unix/utilsunx.cpp:945
 msgid "Cannot get the official hostname"
 msgstr ""
 "Δεν είναι δυνατή η ανάγνωση του επισήμου ονόματος διακομιστή(official "
@@ -1835,12 +1817,12 @@ msgstr ""
 msgid "Cannot initialize OLE"
 msgstr "Δεν είναι δυνατή η αρχικοποίηση του OLE"
 
-#: ../src/common/socket.cpp:844
+#: ../src/common/socket.cpp:848
 #, fuzzy
 msgid "Cannot initialize sockets"
 msgstr "Δεν είναι δυνατή η αρχικοποίηση του OLE"
 
-#: ../src/msw/volume.cpp:620
+#: ../src/msw/volume.cpp:621
 #, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Δεν είναι δυνατή η φόρτωση εικονιδίου από το '%s'"
@@ -1850,7 +1832,7 @@ msgstr "Δεν είναι δυνατή η φόρτωση εικονιδίου α
 msgid "Cannot load resources from '%s'."
 msgstr "Δεν είναι δυνατή η φόρτωση πόρων(resources) από το αρχείο '%s'"
 
-#: ../src/xrc/xmlres.cpp:745
+#: ../src/xrc/xmlres.cpp:747
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "Δεν είναι δυνατή η φόρτωση πόρων(resources) από το αρχείο '%s'"
@@ -1860,7 +1842,7 @@ msgstr "Δεν είναι δυνατή η φόρτωση πόρων(resources) �
 msgid "Cannot open HTML document: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα εγγράφου HTML: %s"
 
-#: ../src/html/helpdata.cpp:651
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα βιβλίου βοήθειας HTML: %s"
@@ -1870,7 +1852,7 @@ msgstr "Δεν είναι δυνατό το άνοιγμα βιβλίου βοή
 msgid "Cannot open contents file: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα των περιεχομένων του αρχείου: %s"
 
-#: ../src/generic/dcpsg.cpp:1719
+#: ../src/generic/dcpsg.cpp:1752
 msgid "Cannot open file for PostScript printing!"
 msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου για εκτύπωση PostScript!"
 
@@ -1879,12 +1861,12 @@ msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου
 msgid "Cannot open index file: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα του αρχείου ευρετηρίου(index): %s"
 
-#: ../src/xrc/xmlres.cpp:727
+#: ../src/xrc/xmlres.cpp:729
 #, fuzzy, c-format
 msgid "Cannot open resources file '%s'."
 msgstr "Δεν είναι δυνατή η φόρτωση πόρων(resources) από το αρχείο '%s'"
 
-#: ../src/html/helpwnd.cpp:1538
+#: ../src/html/helpwnd.cpp:1537
 msgid "Cannot print empty page."
 msgstr "Δεν είναι δυνατή η εκτύπωση άδειας σελίδας."
 
@@ -1898,12 +1880,12 @@ msgstr "Δεν είναι δυνατή η ανάγνωση ονομάτων τύ
 msgid "Cannot resume thread %lu"
 msgstr "Δεν είναι δυνατή η συνέχιση(resume) του νήματος(thread) %lu"
 
-#: ../src/msw/thread.cpp:922
-#, c-format
-msgid "Cannot resume thread %x"
+#: ../src/msw/thread.cpp:924
+#, fuzzy, c-format
+msgid "Cannot resume thread %lx"
 msgstr "Δεν είναι δυνατή η συνέχιση(resume) του νήματος(thread) %x"
 
-#: ../src/unix/threadpsx.cpp:1194
+#: ../src/unix/threadpsx.cpp:1012
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "Δεν είναι δυνατή η ανάκτηση της thread scheduling policy."
 
@@ -1912,7 +1894,7 @@ msgstr "Δεν είναι δυνατή η ανάκτηση της thread schedul
 msgid "Cannot set locale to language \"%s\"."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:818 ../src/msw/thread.cpp:570
+#: ../src/unix/threadpsx.cpp:832 ../src/msw/thread.cpp:570
 msgid "Cannot start thread: error writing TLS."
 msgstr ""
 "Δεν είναι δυνατή η εκκίνηση του νήματος(thread): Σφάλμα κατά την εγγραφή του "
@@ -1923,26 +1905,26 @@ msgstr ""
 msgid "Cannot suspend thread %lu"
 msgstr "Δεν είναι δυνατή η αναστολή εκτέλεσης(suspend) του νήματος(thread) %lu"
 
-#: ../src/msw/thread.cpp:907
-#, c-format
-msgid "Cannot suspend thread %x"
+#: ../src/msw/thread.cpp:908
+#, fuzzy, c-format
+msgid "Cannot suspend thread %lx"
 msgstr "Δεν είναι δυνατή η αναστολή εκτέλεσης(suspend) του νήματος(thread) %x"
 
-#: ../src/msw/thread.cpp:830
+#: ../src/msw/thread.cpp:831
 msgid "Cannot wait for thread termination"
 msgstr ""
 "Δεν είναι δυνατή η αναμονή(wait) για τον τερματισμό του νήματος εκτέλεσης"
 "(thread)"
 
-#: ../src/html/helpwnd.cpp:547
+#: ../src/html/helpwnd.cpp:546
 msgid "Case sensitive"
 msgstr "Διάκριση κεφαλαίων-πεζών"
 
-#: ../src/propgrid/manager.cpp:1494
+#: ../src/propgrid/manager.cpp:1496
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8843
+#: ../src/richtext/richtextbuffer.cpp:9270
 #, fuzzy
 msgid "Cell Properties"
 msgstr "&Ιδιότητες"
@@ -1979,7 +1961,7 @@ msgstr "Στο κέντρο"
 msgid "Centre text."
 msgstr "Δεν είναι δυνατή η δημιουργία του mutex."
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:284
 #, fuzzy
 msgid "Centred"
 msgstr "Στο κέντρο"
@@ -1990,20 +1972,20 @@ msgstr "Στο κέντρο"
 msgid "Ch&oose..."
 msgstr "&Μετάβαση..."
 
-#: ../src/richtext/richtextbuffer.cpp:3936
+#: ../src/richtext/richtextbuffer.cpp:4030
 msgid "Change List Style"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:3300
+#: ../src/richtext/richtextbuffer.cpp:3381
 msgid "Change Object Style"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:3566
+#: ../src/richtext/richtextbuffer.cpp:3647
 #, fuzzy
 msgid "Change Properties"
 msgstr "&Ιδιότητες"
 
-#: ../src/richtext/richtextbuffer.cpp:3127
+#: ../src/richtext/richtextbuffer.cpp:3198
 msgid "Change Style"
 msgstr ""
 
@@ -2012,7 +1994,7 @@ msgstr ""
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr ""
 
-#: ../src/richtext/richtextstyles.cpp:1043
+#: ../src/richtext/richtextstyles.cpp:1047
 msgid "Character styles"
 msgstr ""
 
@@ -2037,46 +2019,52 @@ msgstr ""
 msgid "Check to enclose the bullet in parentheses."
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:540 ../src/osx/carbon/fontdlg.cpp:542
+#: ../src/osx/carbon/fontdlg.cpp:543 ../src/osx/carbon/fontdlg.cpp:545
 #, fuzzy
 msgid "Check to make the font bold."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/osx/carbon/fontdlg.cpp:547 ../src/osx/carbon/fontdlg.cpp:549
+#: ../src/osx/carbon/fontdlg.cpp:550 ../src/osx/carbon/fontdlg.cpp:552
 #, fuzzy
 msgid "Check to make the font italic."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/osx/carbon/fontdlg.cpp:556 ../src/osx/carbon/fontdlg.cpp:558
+#: ../src/osx/carbon/fontdlg.cpp:559 ../src/osx/carbon/fontdlg.cpp:561
 #, fuzzy
 msgid "Check to make the font underlined."
 msgstr "Επιλογή εαν η γραμματοσειρά είναι υπογραμμισμένη ή όχι."
 
-#: ../src/richtext/richtextstyledlg.cpp:297
-#: ../src/richtext/richtextstyledlg.cpp:299
+#: ../src/richtext/richtextstyledlg.cpp:290
+#: ../src/richtext/richtextstyledlg.cpp:292
 msgid "Check to restart numbering."
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:284
-#: ../src/richtext/richtextfontpage.cpp:286
+#: ../src/richtext/richtextfontpage.cpp:287
+#: ../src/richtext/richtextfontpage.cpp:289
 #, fuzzy
 msgid "Check to show a line through the text."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextfontpage.cpp:291
-#: ../src/richtext/richtextfontpage.cpp:293
+#: ../src/richtext/richtextfontpage.cpp:294
+#: ../src/richtext/richtextfontpage.cpp:296
 #, fuzzy
 msgid "Check to show the text in capitals."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextfontpage.cpp:305
-#: ../src/richtext/richtextfontpage.cpp:307
+#: ../src/richtext/richtextfontpage.cpp:301
+#: ../src/richtext/richtextfontpage.cpp:303
+#, fuzzy
+msgid "Check to show the text in small capitals."
+msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
+
+#: ../src/richtext/richtextfontpage.cpp:315
+#: ../src/richtext/richtextfontpage.cpp:317
 #, fuzzy
 msgid "Check to show the text in subscript."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextfontpage.cpp:298
-#: ../src/richtext/richtextfontpage.cpp:300
+#: ../src/richtext/richtextfontpage.cpp:308
+#: ../src/richtext/richtextfontpage.cpp:310
 #, fuzzy
 msgid "Check to show the text in superscript."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
@@ -2095,11 +2083,11 @@ msgstr "Δημιουργία καταλόγου"
 msgid "Choose a file"
 msgstr "Επιλέξτε γραμματοσειρά"
 
-#: ../src/generic/colrdlgg.cpp:145 ../src/gtk/colordlg.cpp:62
+#: ../src/generic/colrdlgg.cpp:145 ../src/gtk/colordlg.cpp:64
 msgid "Choose colour"
 msgstr "Επιλέξτε χρώμα"
 
-#: ../src/generic/fontpickerg.cpp:51 ../src/gtk/fontdlg.cpp:99
+#: ../src/generic/fontpickerg.cpp:51 ../src/gtk/fontdlg.cpp:76
 #: ../src/gtk1/fontdlg.cpp:126
 msgid "Choose font"
 msgstr "Επιλέξτε γραμματοσειρά"
@@ -2109,11 +2097,11 @@ msgstr "Επιλέξτε γραμματοσειρά"
 msgid "Circular dependency involving module \"%s\" detected."
 msgstr ""
 
-#: ../src/aui/tabmdi.cpp:107 ../src/generic/mdig.cpp:98
+#: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:98
 msgid "Cl&ose"
 msgstr "&Κλείσιμο"
 
-#: ../src/msw/ole/automtn.cpp:668
+#: ../src/msw/ole/automtn.cpp:674
 #, fuzzy
 msgid "Class not registered."
 msgstr "Δεν είναι δυνατή η δημιουργία του νήματος εκτέλεσης (thread)"
@@ -2123,12 +2111,12 @@ msgstr "Δεν είναι δυνατή η δημιουργία του νήματ
 msgid "Clear"
 msgstr "&Καθαρισμός"
 
-#: ../src/generic/logg.cpp:518
+#: ../src/generic/logg.cpp:521
 msgid "Clear the log contents"
 msgstr "Καθαρισμός περιεχομένων καταγραφής(log)"
 
-#: ../src/richtext/richtextstyledlg.cpp:260
-#: ../src/richtext/richtextstyledlg.cpp:262
+#: ../src/richtext/richtextstyledlg.cpp:253
+#: ../src/richtext/richtextstyledlg.cpp:255
 #, fuzzy
 msgid "Click to apply the selected style."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
@@ -2140,7 +2128,7 @@ msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογ
 msgid "Click to browse for a symbol."
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:587 ../src/osx/carbon/fontdlg.cpp:589
+#: ../src/osx/carbon/fontdlg.cpp:590 ../src/osx/carbon/fontdlg.cpp:592
 #, fuzzy
 msgid "Click to cancel changes to the font."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
@@ -2149,19 +2137,19 @@ msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογ
 msgid "Click to cancel the font selection."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/osx/carbon/fontdlg.cpp:568 ../src/osx/carbon/fontdlg.cpp:570
+#: ../src/osx/carbon/fontdlg.cpp:571 ../src/osx/carbon/fontdlg.cpp:573
 #, fuzzy
 msgid "Click to change the font colour."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextfontpage.cpp:274
-#: ../src/richtext/richtextfontpage.cpp:276
+#: ../src/richtext/richtextfontpage.cpp:277
+#: ../src/richtext/richtextfontpage.cpp:279
 #, fuzzy
 msgid "Click to change the text background colour."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextfontpage.cpp:261
-#: ../src/richtext/richtextfontpage.cpp:263
+#: ../src/richtext/richtextfontpage.cpp:264
+#: ../src/richtext/richtextfontpage.cpp:266
 #, fuzzy
 msgid "Click to change the text colour."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
@@ -2172,13 +2160,13 @@ msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογ
 msgid "Click to choose the font for this level."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:287
-#: ../src/richtext/richtextstyledlg.cpp:289
+#: ../src/richtext/richtextstyledlg.cpp:280
+#: ../src/richtext/richtextstyledlg.cpp:282
 #, fuzzy
 msgid "Click to close this window."
 msgstr "Κλείσιμο αυτού του παραθύρου."
 
-#: ../src/osx/carbon/fontdlg.cpp:594 ../src/osx/carbon/fontdlg.cpp:596
+#: ../src/osx/carbon/fontdlg.cpp:597 ../src/osx/carbon/fontdlg.cpp:599
 #, fuzzy
 msgid "Click to confirm changes to the font."
 msgstr "Κάνετε κλικ για να επιβεβαιώσετε την επιλογή γραμματοσειράς."
@@ -2188,25 +2176,25 @@ msgstr "Κάνετε κλικ για να επιβεβαιώσετε την επ
 msgid "Click to confirm the font selection."
 msgstr "Κάνετε κλικ για να επιβεβαιώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:252
-#: ../src/richtext/richtextstyledlg.cpp:254
+#: ../src/richtext/richtextstyledlg.cpp:245
+#: ../src/richtext/richtextstyledlg.cpp:247
 #, fuzzy
 msgid "Click to create a new box style."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:234
-#: ../src/richtext/richtextstyledlg.cpp:236
+#: ../src/richtext/richtextstyledlg.cpp:227
+#: ../src/richtext/richtextstyledlg.cpp:229
 msgid "Click to create a new character style."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:246
-#: ../src/richtext/richtextstyledlg.cpp:248
+#: ../src/richtext/richtextstyledlg.cpp:239
+#: ../src/richtext/richtextstyledlg.cpp:241
 #, fuzzy
 msgid "Click to create a new list style."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:240
-#: ../src/richtext/richtextstyledlg.cpp:242
+#: ../src/richtext/richtextstyledlg.cpp:233
+#: ../src/richtext/richtextstyledlg.cpp:235
 msgid "Click to create a new paragraph style."
 msgstr ""
 
@@ -2222,8 +2210,8 @@ msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογ
 msgid "Click to delete all tab positions."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:278
-#: ../src/richtext/richtextstyledlg.cpp:280
+#: ../src/richtext/richtextstyledlg.cpp:271
+#: ../src/richtext/richtextstyledlg.cpp:273
 #, fuzzy
 msgid "Click to delete the selected style."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
@@ -2234,27 +2222,27 @@ msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογ
 msgid "Click to delete the selected tab position."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:272
-#: ../src/richtext/richtextstyledlg.cpp:274
+#: ../src/richtext/richtextstyledlg.cpp:265
+#: ../src/richtext/richtextstyledlg.cpp:267
 #, fuzzy
 msgid "Click to edit the selected style."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:266
-#: ../src/richtext/richtextstyledlg.cpp:268
+#: ../src/richtext/richtextstyledlg.cpp:259
+#: ../src/richtext/richtextstyledlg.cpp:261
 #, fuzzy
 msgid "Click to rename the selected style."
 msgstr "Κάνετε κλικ για να ακυρώσετε την επιλογή γραμματοσειράς."
 
 #: ../src/generic/dbgrptg.cpp:94 ../src/generic/progdlgg.cpp:805
-#: ../src/generic/progdlgg.cpp:810 ../src/richtext/richtextstyledlg.cpp:285
+#: ../src/generic/progdlgg.cpp:810 ../src/richtext/richtextstyledlg.cpp:278
 #: ../src/richtext/richtextsymboldlg.cpp:477 ../src/common/stockitem.cpp:149
 #: ../src/msw/progdlg.cpp:171 ../src/msw/progdlg.cpp:680
 #: ../src/html/helpdlg.cpp:91
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: ../src/aui/tabmdi.cpp:108 ../src/generic/mdig.cpp:99
+#: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:99
 msgid "Close All"
 msgstr "Κλείσιμο"
 
@@ -2262,7 +2250,7 @@ msgstr "Κλείσιμο"
 msgid "Close current document"
 msgstr ""
 
-#: ../src/generic/logg.cpp:520
+#: ../src/generic/logg.cpp:523
 msgid "Close this window"
 msgstr "Κλείσιμο αυτού του παραθύρου."
 
@@ -2271,17 +2259,17 @@ msgstr "Κλείσιμο αυτού του παραθύρου."
 msgid "Color"
 msgstr "&Χρώμα:"
 
-#: ../src/richtext/richtextformatdlg.cpp:722
+#: ../src/richtext/richtextformatdlg.cpp:724
 #, fuzzy
 msgid "Colour"
 msgstr "&Χρώμα:"
 
-#: ../src/msw/colordlg.cpp:154
+#: ../src/msw/colordlg.cpp:157
 #, fuzzy, c-format
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Η εκτέλεση της εντολής '%s' απέτυχε με σφάλμα: %ul"
 
-#: ../src/osx/carbon/fontdlg.cpp:564
+#: ../src/osx/carbon/fontdlg.cpp:567
 #, fuzzy
 msgid "Colour:"
 msgstr "&Χρώμα:"
@@ -2308,29 +2296,29 @@ msgstr ""
 msgid "Column width could not be set."
 msgstr ""
 
-#: ../src/common/init.cpp:185
+#: ../src/common/init.cpp:189
 #, c-format
 msgid ""
 "Command line argument %d couldn't be converted to Unicode and will be "
 "ignored."
 msgstr ""
 
-#: ../src/msw/fontdlg.cpp:117
+#: ../src/msw/fontdlg.cpp:120
 #, fuzzy, c-format
 msgid "Common dialog failed with error code %0lx."
 msgstr "Η εκτέλεση της εντολής '%s' απέτυχε με σφάλμα: %ul"
 
-#: ../src/gtk/window.cpp:4228
+#: ../src/gtk/window.cpp:4283
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:1555
+#: ../src/html/helpwnd.cpp:1554
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Αρχείο βοήθειας συμπιεσμένης HTML (*.chm)|*.chm|"
 
-#: ../src/generic/dirctrlg.cpp:536
+#: ../src/generic/dirctrlg.cpp:545
 msgid "Computer"
 msgstr "Υπολογιστής"
 
@@ -2341,11 +2329,11 @@ msgstr ""
 "Το όνομα εισόδου διαμόρφωσης (Config entry name) δεν μπορεί να αρχίζει με "
 "'%c'"
 
-#: ../src/gtk/filedlg.cpp:59
+#: ../src/gtk/filedlg.cpp:60
 msgid "Confirm"
 msgstr "Επιβεβαίωση"
 
-#: ../src/msw/mimetype.cpp:715
+#: ../src/msw/mimetype.cpp:735
 msgid "Confirm registry update"
 msgstr "Επιβεβαίωση ενημέρωσης μητρώου(registry update)"
 
@@ -2353,11 +2341,11 @@ msgstr "Επιβεβαίωση ενημέρωσης μητρώου(registry upda
 msgid "Connecting..."
 msgstr "Γίνεται σύνδεση..."
 
-#: ../src/html/helpwnd.cpp:483
+#: ../src/html/helpwnd.cpp:482
 msgid "Contents"
 msgstr "Περιεχόμενα"
 
-#: ../src/common/strconv.cpp:2263
+#: ../src/common/strconv.cpp:2262
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Η μετατροπή στο σετ χαρακτήρων '%s' δεν λειτουργεί"
@@ -2386,7 +2374,7 @@ msgstr "&Αντιγραφή"
 msgid "Copy selection"
 msgstr "Τμήματα"
 
-#: ../src/html/chm.cpp:721
+#: ../src/html/chm.cpp:719
 #, c-format
 msgid "Could not create temporary file '%s'"
 msgstr "Δεν είναι δυνατή η δημιουργία του προσωρινού αρχείου '%s'"
@@ -2466,7 +2454,7 @@ msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωση
 msgid "Could not set column width."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της προεπισκόπησης εγγράφου."
 
-#: ../src/common/filefn.cpp:1565
+#: ../src/common/filefn.cpp:1564
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "Αποτυχία λήψης καταλόγου εργασίας (working directory)"
@@ -2500,12 +2488,12 @@ msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωση
 msgid "Could not start document preview."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της προεπισκόπησης εγγράφου."
 
-#: ../src/generic/printps.cpp:179 ../src/msw/printwin.cpp:204
-#: ../src/gtk/print.cpp:1079 ../src/gtk/gnome/gprint.cpp:918
+#: ../src/generic/printps.cpp:179 ../src/msw/printwin.cpp:211
+#: ../src/gtk/print.cpp:1087 ../src/gtk/gnome/gprint.cpp:923
 msgid "Could not start printing."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/common/wincmn.cpp:2024
+#: ../src/common/wincmn.cpp:2104
 msgid "Could not transfer data to window"
 msgstr "Δεν ήταν δυνατή η μεταφορά δεδομένων στο παράθυρο."
 
@@ -2528,7 +2516,7 @@ msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακ�
 msgid "Couldn't create the overlay window"
 msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακόπτη (timer)"
 
-#: ../src/common/translation.cpp:1853
+#: ../src/common/translation.cpp:2015
 #, fuzzy
 msgid "Couldn't enumerate translations"
 msgstr "Δεν ήταν δυνατός ο τερματισμός του thread"
@@ -2539,11 +2527,11 @@ msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr ""
 "Δεν ήταν δυνατός ο εντοπισμός του συμβόλου '%s' σε μια δυναμική βιβλιοθήκη."
 
-#: ../src/gtk/print.cpp:2027
+#: ../src/gtk/print.cpp:2024
 msgid "Couldn't get hatch style from wxBrush."
 msgstr ""
 
-#: ../src/msw/thread.cpp:948
+#: ../src/msw/thread.cpp:951
 msgid "Couldn't get the current thread pointer"
 msgstr ""
 "Δεν ήταν δυνατή η ανάκτηση toy τρέχοντος δείκτη νήματος εκτέλεσης(thread)"
@@ -2570,7 +2558,7 @@ msgstr ""
 msgid "Couldn't load sound data from '%s'."
 msgstr "Δεν ήταν δυνατή η φόρτωση δεδομένων ήχου από το '%s'"
 
-#: ../src/msw/dirdlg.cpp:439
+#: ../src/msw/dirdlg.cpp:442
 #, fuzzy
 msgid "Couldn't obtain folder name"
 msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακόπτη (timer)"
@@ -2580,7 +2568,7 @@ msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακ�
 msgid "Couldn't open audio: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα του ήχου: %s"
 
-#: ../src/msw/ole/dataobj.cpp:160
+#: ../src/msw/ole/dataobj.cpp:351
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr ""
@@ -2601,7 +2589,7 @@ msgstr ""
 msgid "Couldn't save PNG image."
 msgstr "Δεν ήταν δυνατή η αποθήκευση εικόνας PNG."
 
-#: ../src/msw/thread.cpp:715
+#: ../src/msw/thread.cpp:716
 msgid "Couldn't terminate thread"
 msgstr "Δεν ήταν δυνατός ο τερματισμός του thread"
 
@@ -2614,7 +2602,7 @@ msgstr "Η παράμετρος Create δεν βρέθηκε στις δηλωμ
 msgid "Create directory"
 msgstr "Δημιουργία καταλόγου"
 
-#: ../src/generic/filedlgg.cpp:228 ../src/generic/dirdlgg.cpp:132
+#: ../src/generic/filedlgg.cpp:229 ../src/generic/dirdlgg.cpp:132
 msgid "Create new directory"
 msgstr "Δημιουργία νέου καταλόγου"
 
@@ -2624,15 +2612,15 @@ msgid "Ctrl+"
 msgstr "ctrl"
 
 #: ../src/richtext/richtextctrl.cpp:324 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2222
+#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2284
 msgid "Cu&t"
 msgstr "Απο&κοπή"
 
-#: ../src/generic/filectrlg.cpp:950
+#: ../src/generic/filectrlg.cpp:957
 msgid "Current directory:"
 msgstr "Τρέχον κατάλογος:"
 
-#: ../src/gtk/print.cpp:764
+#: ../src/gtk/print.cpp:769
 #, fuzzy
 msgid "Custom size"
 msgstr "μέγεθος γραμματοσειράς"
@@ -2676,25 +2664,25 @@ msgstr ""
 msgid "DELETE"
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1045
+#: ../src/common/imagbmp.cpp:1093
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB Header: Η κωδικοποίηση δεν ταιρίζει με το βάθος bit."
 
-#: ../src/common/imagbmp.cpp:1000
+#: ../src/common/imagbmp.cpp:1041
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr ""
 "DIB Header: Το ύψος της εικόνας είναι > 32767 εικονοστοιχεία για το αρχείο."
 
-#: ../src/common/imagbmp.cpp:992
+#: ../src/common/imagbmp.cpp:1033
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr ""
 "DIB Header: Το πλάτος της εικόνας είναι > 32767 εικονοστοιχεία για το αρχείο."
 
-#: ../src/common/imagbmp.cpp:1016
+#: ../src/common/imagbmp.cpp:1061
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB Header: Αγνωστο βάθος bit στο αρχείο."
 
-#: ../src/common/imagbmp.cpp:1028
+#: ../src/common/imagbmp.cpp:1075
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB Header: Αγνωστη κωδικοποίηση στο αρχείο."
 
@@ -2729,12 +2717,12 @@ msgstr ""
 msgid "Debug report \"%s\""
 msgstr ""
 
-#: ../src/common/debugrpt.cpp:209
+#: ../src/common/debugrpt.cpp:207
 #, fuzzy
 msgid "Debug report couldn't be created."
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
 
-#: ../src/common/debugrpt.cpp:549
+#: ../src/common/debugrpt.cpp:547
 msgid "Debug report generation has failed."
 msgstr ""
 
@@ -2755,7 +2743,7 @@ msgstr "Προκαθορισμένος εκτυπωτής"
 msgid "Default printer"
 msgstr "Προκαθορισμένος εκτυπωτής"
 
-#: ../src/richtext/richtextbuffer.cpp:7367 ../src/common/stockitem.cpp:153
+#: ../src/richtext/richtextbuffer.cpp:7794 ../src/common/stockitem.cpp:153
 #: ../src/stc/stc_i18n.cpp:21
 #, fuzzy
 msgid "Delete"
@@ -2766,26 +2754,36 @@ msgstr "&Διαγραφή"
 msgid "Delete A&ll"
 msgstr "Επιλογή &Ολων"
 
-#: ../src/richtext/richtextstyledlg.cpp:787
+#: ../src/richtext/richtextstyledlg.cpp:780
 #, fuzzy
 msgid "Delete Style"
 msgstr "Διαγραφή στοιχείου"
 
-#: ../src/richtext/richtextctrl.cpp:1221 ../src/richtext/richtextctrl.cpp:1442
+#: ../src/richtext/richtextctrl.cpp:1230 ../src/richtext/richtextctrl.cpp:1451
 #, fuzzy
 msgid "Delete Text"
 msgstr "Διαγραφή στοιχείου"
 
+#: ../src/richtext/richtextbuffer.cpp:10369
+#, fuzzy
+msgid "Delete column"
+msgstr "Τμήματα"
+
 #: ../src/generic/editlbox.cpp:275
 msgid "Delete item"
 msgstr "Διαγραφή στοιχείου"
+
+#: ../src/richtext/richtextbuffer.cpp:10301
+#, fuzzy
+msgid "Delete row"
+msgstr "&Διαγραφή"
 
 #: ../src/common/stockitem.cpp:261
 #, fuzzy
 msgid "Delete selection"
 msgstr "Τμήματα"
 
-#: ../src/richtext/richtextstyledlg.cpp:787
+#: ../src/richtext/richtextstyledlg.cpp:780
 #, fuzzy, c-format
 msgid "Delete style %s?"
 msgstr "Διαγραφή στοιχείου"
@@ -2805,7 +2803,7 @@ msgstr ""
 msgid "Descending"
 msgstr "Προκαθορισμένη κωδικοποίηση"
 
-#: ../src/generic/dirctrlg.cpp:618
+#: ../src/generic/dirctrlg.cpp:627
 msgid "Desktop"
 msgstr ""
 
@@ -2835,17 +2833,17 @@ msgstr "Γνωρίζατε ότι..."
 msgid "DirectFB error %d occurred."
 msgstr ""
 
-#: ../src/motif/filedlg.cpp:217
+#: ../src/motif/filedlg.cpp:220
 #, fuzzy
 msgid "Directories"
 msgstr "Διακοσμητικός"
 
-#: ../src/common/filefn.cpp:1245
+#: ../src/common/filefn.cpp:1246
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
 
-#: ../src/common/filefn.cpp:1265
+#: ../src/common/filefn.cpp:1266
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
@@ -2854,15 +2852,15 @@ msgstr "Δεν ήταν δυνατή η δημιουργία του καταλό
 msgid "Directory does not exist"
 msgstr "Ο κατάλογος δεν υπάρχει"
 
-#: ../src/generic/filectrlg.cpp:1406
+#: ../src/generic/filectrlg.cpp:1413
 msgid "Directory doesn't exist."
 msgstr "Ο κατάλογος δεν υπάρχει."
 
-#: ../src/common/docview.cpp:458
+#: ../src/common/docview.cpp:456
 msgid "Discard changes and reload the last saved version?"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:513
+#: ../src/html/helpwnd.cpp:512
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
@@ -2870,7 +2868,7 @@ msgstr ""
 "Εμφάνιση όλων των στοιχείων του ευρετηρίου δεδομένου substring. Η αναζήτηση "
 "διακρίνει μεταξύ κεφαλαίων/πεζών."
 
-#: ../src/html/helpwnd.cpp:693
+#: ../src/html/helpwnd.cpp:692
 msgid "Display options dialog"
 msgstr "Εμφάνιση του διαλόγου επιλογών"
 
@@ -2878,7 +2876,7 @@ msgstr "Εμφάνιση του διαλόγου επιλογών"
 msgid "Displays help as you browse the books on the left."
 msgstr ""
 
-#: ../src/msw/mimetype.cpp:708
+#: ../src/msw/mimetype.cpp:728
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
 "\" ?\n"
@@ -2894,7 +2892,7 @@ msgstr ""
 "Η νέα τιμή είναι \n"
 "%s %1"
 
-#: ../src/common/docview.cpp:534
+#: ../src/common/docview.cpp:532
 #, fuzzy, c-format
 msgid "Do you want to save changes to %s?"
 msgstr "Θέλετε να αποθηκεύσετε τις αλλαγές στο έγγραφο %s ;"
@@ -2911,11 +2909,11 @@ msgstr ""
 msgid "Documentation writers"
 msgstr ""
 
-#: ../src/common/sizer.cpp:2657
+#: ../src/common/sizer.cpp:2681
 msgid "Don't Save"
 msgstr ""
 
-#: ../src/msw/frame.cpp:129 ../src/html/htmlwin.cpp:607
+#: ../src/msw/frame.cpp:123 ../src/html/htmlwin.cpp:607
 msgid "Done"
 msgstr "Έτοιμο"
 
@@ -2946,7 +2944,7 @@ msgstr "Id χρησιμοποιούμενο δύο φορές : %d"
 msgid "Down"
 msgstr "Κάτω"
 
-#: ../src/richtext/richtextctrl.cpp:804
+#: ../src/richtext/richtextctrl.cpp:813
 msgid "Drag"
 msgstr ""
 
@@ -2962,7 +2960,7 @@ msgstr ""
 msgid "ENTER"
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:358
+#: ../src/unix/fswatcher_inotify.cpp:536
 #, fuzzy
 msgid "EOF while reading from inotify descriptor"
 msgstr "αδύνατη η ανάγνωση από περiγραφέα (descriptor) αρχείου %d"
@@ -2988,37 +2986,37 @@ msgstr "Επεξεργασία στοιχείου"
 msgid "Edit item"
 msgstr "Επεξεργασία στοιχείου"
 
-#: ../src/richtext/richtextsizepage.cpp:319
-#: ../src/richtext/richtextsizepage.cpp:321
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:350
+#: ../src/richtext/richtextsizepage.cpp:352
+#: ../src/richtext/richtextsizepage.cpp:462
+#: ../src/richtext/richtextsizepage.cpp:464
 msgid "Enable the height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:435
+#: ../src/richtext/richtextsizepage.cpp:437
 #, fuzzy
 msgid "Enable the maximum width value."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:408
+#: ../src/richtext/richtextsizepage.cpp:410
 msgid "Enable the minimum height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:346
-#: ../src/richtext/richtextsizepage.cpp:348
+#: ../src/richtext/richtextsizepage.cpp:381
+#: ../src/richtext/richtextsizepage.cpp:383
 #, fuzzy
 msgid "Enable the minimum width value."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/richtext/richtextsizepage.cpp:292
-#: ../src/richtext/richtextsizepage.cpp:294
+#: ../src/richtext/richtextsizepage.cpp:316
+#: ../src/richtext/richtextsizepage.cpp:318
 msgid "Enable the width value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:256
-#: ../src/richtext/richtextsizepage.cpp:258
+#: ../src/richtext/richtextsizepage.cpp:277
+#: ../src/richtext/richtextsizepage.cpp:279
 #, fuzzy
 msgid "Enable vertical alignment."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
@@ -3028,25 +3026,25 @@ msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωση
 msgid "Enables a background colour."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:939
+#: ../src/richtext/richtextstyledlg.cpp:932
 #, fuzzy
 msgid "Enter a box style name"
 msgstr "Το στυλ της γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:604
 msgid "Enter a character style name"
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:818
 msgid "Enter a list style name"
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:898
+#: ../src/richtext/richtextstyledlg.cpp:891
 #, fuzzy
 msgid "Enter a new style name"
 msgstr "Το στυλ της γραμματοσειράς."
 
-#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:652
 msgid "Enter a paragraph style name"
 msgstr ""
 
@@ -3072,12 +3070,12 @@ msgstr ""
 "Η επέκταση μεταβλητών περιβάλλοντος απέτυχε: λείπει το '%c' στην θέση %d στο "
 "'%s'."
 
-#: ../src/generic/dirctrlg.cpp:662 ../src/generic/dirctrlg.cpp:680
-#: ../src/generic/dirctrlg.cpp:691 ../src/generic/dirdlgg.cpp:353
-#: ../src/generic/filectrlg.cpp:671 ../src/generic/filectrlg.cpp:785
-#: ../src/generic/filectrlg.cpp:799 ../src/generic/filectrlg.cpp:815
-#: ../src/generic/filectrlg.cpp:1375 ../src/generic/filectrlg.cpp:1406
-#: ../src/gtk/filedlg.cpp:73 ../src/gtk1/fontdlg.cpp:75
+#: ../src/generic/dirctrlg.cpp:671 ../src/generic/dirctrlg.cpp:689
+#: ../src/generic/dirctrlg.cpp:700 ../src/generic/dirdlgg.cpp:353
+#: ../src/generic/filectrlg.cpp:678 ../src/generic/filectrlg.cpp:792
+#: ../src/generic/filectrlg.cpp:806 ../src/generic/filectrlg.cpp:822
+#: ../src/generic/filectrlg.cpp:1382 ../src/generic/filectrlg.cpp:1413
+#: ../src/gtk/filedlg.cpp:74 ../src/gtk1/fontdlg.cpp:75
 msgid "Error"
 msgstr "Σφάλμα"
 
@@ -3095,12 +3093,12 @@ msgstr "Σφάλμα κατα τη δημιουργία καταλόγου"
 msgid "Error creating directory"
 msgstr "Σφάλμα κατα τη δημιουργία καταλόγου"
 
-#: ../src/common/imagbmp.cpp:1056
+#: ../src/common/imagbmp.cpp:1104
 #, fuzzy
 msgid "Error in reading image DIB."
 msgstr "Σφάλμα κατά την ανάγνωση εικόνας DIB."
 
-#: ../src/propgrid/propgrid.cpp:6565
+#: ../src/propgrid/propgrid.cpp:6564
 #, c-format
 msgid "Error in resource: %s"
 msgstr ""
@@ -3113,7 +3111,7 @@ msgstr "Σφάλμα κατά την ανάγνωση των ρυθμίσεων.
 msgid "Error saving user configuration data."
 msgstr "Σφάλμα κατά την εγγραφή των ρυθμίσεων χρήστη."
 
-#: ../src/gtk/print.cpp:678
+#: ../src/gtk/print.cpp:681
 #, fuzzy
 msgid "Error while printing: "
 msgstr "Σφάλμα κατά την αναμονή στη σημαφόρο"
@@ -3126,7 +3124,7 @@ msgstr "Σφάλμα: "
 msgid "Esperanto (ISO-8859-3)"
 msgstr "Εσπεράντο (ISO-8859-3)"
 
-#: ../src/unix/fswatcher_inotify.cpp:441
+#: ../src/unix/fswatcher_inotify.cpp:640
 msgid "Event queue overflowed"
 msgstr ""
 
@@ -3139,7 +3137,7 @@ msgstr "Όλα τα αρχεία (*.*)|*.*"
 msgid "Execute"
 msgstr ""
 
-#: ../src/msw/utilsexc.cpp:899
+#: ../src/msw/utilsexc.cpp:931
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Η εκτέλεση της εντολής '%s' απέτυχε"
@@ -3163,7 +3161,7 @@ msgstr ""
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
 msgstr "Εκτεταμένη Κωδικοσελίδα Unix για Ιαπωνικά (EUC-JP)"
 
-#: ../src/html/chm.cpp:728
+#: ../src/html/chm.cpp:726
 #, c-format
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Η εξαγωγή του '%s' στο '%s' απέτυχε"
@@ -3200,17 +3198,17 @@ msgstr "Αποτυχία δημιουργίας δείκτη."
 msgid "Failed to change video mode"
 msgstr "Αποτυχία αλλαγής της κατάστασης οθόνης"
 
-#: ../src/common/image.cpp:3036
+#: ../src/common/image.cpp:3035
 #, fuzzy, c-format
 msgid "Failed to check format of image file \"%s\"."
 msgstr "Αποτυχία αποθήκευσης της εικόνας στο αρχείο \"%s\"."
 
-#: ../src/common/debugrpt.cpp:243
+#: ../src/common/debugrpt.cpp:241
 #, fuzzy, c-format
 msgid "Failed to clean up debug report directory \"%s\""
 msgstr "Απέτυχε η δημιουργία καταλόγου '%s'/.gnome."
 
-#: ../src/common/filename.cpp:209
+#: ../src/common/filename.cpp:211
 msgid "Failed to close file handle"
 msgstr "Αποτυχία κλεισίματος του χειριστηρίου του αρχείου(file handle)"
 
@@ -3242,7 +3240,7 @@ msgstr ""
 msgid "Failed to convert file \"%s\" to Unicode."
 msgstr "Αποτυχία κλεισίματος του χειριστηρίου του αρχείου(file handle)"
 
-#: ../src/generic/logg.cpp:980
+#: ../src/generic/logg.cpp:977
 #, fuzzy
 msgid "Failed to copy dialog contents to the clipboard."
 msgstr "Αποτυχία ανοίγματος του προχείρου (clipboard)."
@@ -3258,7 +3256,7 @@ msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr ""
 "Αποτυχία αντιγραφής των περιεχομένων του κλειδιού μητρώου '%s' στο '%s'."
 
-#: ../src/common/filefn.cpp:1053
+#: ../src/common/filefn.cpp:1054
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "Αποτυχία αντιγραφής του αρχείου '%s' στο '%s'"
@@ -3272,19 +3270,19 @@ msgstr "Αποτυχία της αντιγραφής του υποκλειδιο
 msgid "Failed to create DDE string"
 msgstr "Απέτυχε η δημιουργεία ενός DDE αλφαρηθμιτικού (string)"
 
-#: ../src/msw/mdi.cpp:579
+#: ../src/msw/mdi.cpp:601
 msgid "Failed to create MDI parent frame."
 msgstr "Αποτυχία δημιουργίας ενός γονεικού περιγράμματος (parent frame) MDI."
 
-#: ../src/common/filename.cpp:1019
+#: ../src/common/filename.cpp:1099
 msgid "Failed to create a temporary file name"
 msgstr "Αποτυχία δημιουργίας ονόματος προσωρινού αρχείου"
 
-#: ../src/msw/utilsexc.cpp:269
+#: ../src/msw/utilsexc.cpp:278
 msgid "Failed to create an anonymous pipe"
 msgstr "Αποτυχία δημιουργίας ενός ανώνυμου pipe"
 
-#: ../src/msw/ole/automtn.cpp:517
+#: ../src/msw/ole/automtn.cpp:523
 #, fuzzy, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr "Απέτυχε η δημιουργία καταλόγου '%s'/.gnome."
@@ -3300,7 +3298,7 @@ msgstr ""
 msgid "Failed to create cursor."
 msgstr "Αποτυχία δημιουργίας δείκτη."
 
-#: ../src/common/debugrpt.cpp:208
+#: ../src/common/debugrpt.cpp:206
 #, fuzzy, c-format
 msgid "Failed to create directory \"%s\""
 msgstr "Απέτυχε η δημιουργία καταλόγου '%s'/.gnome."
@@ -3337,7 +3335,7 @@ msgstr ""
 msgid "Failed to create wake up pipe used by event loop."
 msgstr "Αποτυχία δημιουργίας μιας μπάρας κατάστασης (status bar)"
 
-#: ../src/html/winpars.cpp:737
+#: ../src/html/winpars.cpp:740
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Απέτυχε η προβολή του εγγράφου HTML στην κωδικοποίηση %s"
@@ -3359,16 +3357,16 @@ msgstr "Αποτυχία επίτευξης βρόχου advise με τον δι
 msgid "Failed to establish dialup connection: %s"
 msgstr "Αποτυχία %s της σύνδεσης μέσω τηλεφώνου : %s"
 
-#: ../src/unix/utilsunx.cpp:528 ../src/unix/utilsunx.cpp:542
+#: ../src/unix/utilsunx.cpp:532 ../src/unix/utilsunx.cpp:546
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Αποτυχία εκτέλεσης του '%s'\n"
 
-#: ../src/common/debugrpt.cpp:700
+#: ../src/common/debugrpt.cpp:698
 msgid "Failed to execute curl, please install it in PATH."
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:500
+#: ../src/msw/ole/automtn.cpp:506
 #, fuzzy, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
@@ -3385,7 +3383,7 @@ msgstr ""
 msgid "Failed to get ISP names: %s"
 msgstr "Αποτυχία κατά την λήψη των ονομάτων των ISP: %s"
 
-#: ../src/msw/ole/automtn.cpp:569
+#: ../src/msw/ole/automtn.cpp:575
 #, fuzzy, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr "Απέτυχε η δημιουργία καταλόγου '%s'/.gnome."
@@ -3398,7 +3396,7 @@ msgstr "Αποτυχία λήψης δεδομένων απο το πρόχει�
 msgid "Failed to get the local system time"
 msgstr "Αποτυχία καθορισμού της ώρας του τοπικού συστήματος"
 
-#: ../src/common/filefn.cpp:1449
+#: ../src/common/filefn.cpp:1448
 msgid "Failed to get the working directory"
 msgstr "Αποτυχία λήψης καταλόγου εργασίας (working directory)"
 
@@ -3419,7 +3417,7 @@ msgstr "Απέτυχε η αρχικοποίηση του OpenGL"
 msgid "Failed to initiate dialup connection: %s"
 msgstr "Αποτυχία τερματισμού της σύνδεσης μέσω τηλεφώνου : %s"
 
-#: ../src/gtk/textctrl.cpp:1059
+#: ../src/gtk/textctrl.cpp:1118
 #, fuzzy
 msgid "Failed to insert text in the control."
 msgstr "Αποτυχία λήψης καταλόγου εργασίας (working directory)"
@@ -3434,7 +3432,7 @@ msgstr "Αποτυχία επιθεώρησης του αρχείου 'κλει�
 msgid "Failed to install signal handler"
 msgstr "Αποτυχία κλεισίματος του χειριστηρίου του αρχείου(file handle)"
 
-#: ../src/unix/threadpsx.cpp:1010
+#: ../src/unix/threadpsx.cpp:1163
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -3442,7 +3440,7 @@ msgstr ""
 "Απέτυχε η συνένωση(join) ενός νήματος εκτέλεσης (thread), πιθανή διαρροή "
 "μνήμης εντοπίστηκε - παρακαλώ επανεκκινήστε το πρόγραμμα"
 
-#: ../src/msw/utils.cpp:745
+#: ../src/msw/utils.cpp:746
 #, c-format
 msgid "Failed to kill process %d"
 msgstr "Αποτυχία θανάτωσης της διαδικασίας(process) %d"
@@ -3467,7 +3465,7 @@ msgstr "Αποτυχία φόρτωσης της εικόνας %d από το �
 msgid "Failed to load image %d from stream."
 msgstr "Αποτυχία φόρτωσης της εικόνας %d από το αρχείο '%s'."
 
-#: ../src/common/image.cpp:2343 ../src/common/image.cpp:2362
+#: ../src/common/image.cpp:2346 ../src/common/image.cpp:2365
 #, fuzzy, c-format
 msgid "Failed to load image from file \"%s\"."
 msgstr "Αποτυχία φόρτωσης της εικόνας %d από το αρχείο '%s'."
@@ -3481,7 +3479,7 @@ msgstr "Αποτυχία φόρτωσης της μετα-εικόνας από 
 msgid "Failed to load mpr.dll."
 msgstr "Αποτυχία φόρτωσης του mpr.dll."
 
-#: ../src/msw/utils.cpp:1120
+#: ../src/msw/utils.cpp:1121
 #, fuzzy, c-format
 msgid "Failed to load resource \"%s\"."
 msgstr "Αποτυχία φόρτωσης της μετα-εικόνας από το αρχείο '%s'."
@@ -3491,7 +3489,7 @@ msgstr "Αποτυχία φόρτωσης της μετα-εικόνας από 
 msgid "Failed to load shared library '%s'"
 msgstr "Αποτυχία φόρτωσης της κοινής βιβλιοθήκης (shared library) '%s'"
 
-#: ../src/msw/utils.cpp:1127
+#: ../src/msw/utils.cpp:1128
 #, fuzzy, c-format
 msgid "Failed to lock resource \"%s\"."
 msgstr "Αποτυχία κλειδώματος του αρχείου 'κλειδωνιά'(lock file) '%s'"
@@ -3506,7 +3504,7 @@ msgstr "Αποτυχία κλειδώματος του αρχείου 'κλει�
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr ""
 
-#: ../src/common/filename.cpp:2573
+#: ../src/common/filename.cpp:2669
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Αποτυχία τροποποίησης ώρας του αρχείου '%s'"
@@ -3515,12 +3513,12 @@ msgstr "Αποτυχία τροποποίησης ώρας του αρχείου
 msgid "Failed to monitor I/O channels"
 msgstr ""
 
-#: ../src/common/filename.cpp:192
+#: ../src/common/filename.cpp:194
 #, fuzzy, c-format
 msgid "Failed to open '%s' for reading"
 msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
 
-#: ../src/common/filename.cpp:197
+#: ../src/common/filename.cpp:199
 #, fuzzy, c-format
 msgid "Failed to open '%s' for writing"
 msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
@@ -3530,7 +3528,7 @@ msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
 msgid "Failed to open CHM archive '%s'."
 msgstr "Αποτυχία ανοίγματος του arxe;ioy CHM '%s'."
 
-#: ../src/common/utilscmn.cpp:1137
+#: ../src/common/utilscmn.cpp:1135
 #, fuzzy, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
@@ -3545,7 +3543,7 @@ msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
 msgid "Failed to open display \"%s\"."
 msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
 
-#: ../src/common/filename.cpp:1054
+#: ../src/common/filename.cpp:1134
 msgid "Failed to open temporary file."
 msgstr "Αποτυχία ανοίγματος προσωρινού αρχείου"
 
@@ -3553,7 +3551,7 @@ msgstr "Αποτυχία ανοίγματος προσωρινού αρχείο�
 msgid "Failed to open the clipboard."
 msgstr "Αποτυχία ανοίγματος του προχείρου (clipboard)."
 
-#: ../src/common/translation.cpp:1014
+#: ../src/common/translation.cpp:1164
 #, fuzzy, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Δεν είναι δυνατή η ανάγνωση Plural-Forms:'%s'."
@@ -3576,7 +3574,7 @@ msgstr "Απέτυχε η ανάγνωση PID από αρχείο κλειδω�
 msgid "Failed to read config options."
 msgstr "Σφάλμα κατά την ανάγνωση των ρυθμίσεων."
 
-#: ../src/common/docview.cpp:681
+#: ../src/common/docview.cpp:679
 #, fuzzy, c-format
 msgid "Failed to read document from the file \"%s\"."
 msgstr "Αποτυχία φόρτωσης της μετα-εικόνας από το αρχείο '%s'."
@@ -3591,13 +3589,13 @@ msgstr "Απέτυχε η ανάγνωση PID από αρχείο κλειδω�
 msgid "Failed to read from wake-up pipe"
 msgstr "Απέτυχε η ανάγνωση PID από αρχείο κλειδωνιά(lock file)."
 
-#: ../src/unix/utilsunx.cpp:588
+#: ../src/unix/utilsunx.cpp:614
 msgid "Failed to redirect child process input/output"
 msgstr ""
 "Αποτυχία στην ανακατεύθυνση της εισόδου/εξόδου διεργασίας απογόνου (child "
 "process input/output)"
 
-#: ../src/msw/utilsexc.cpp:731
+#: ../src/msw/utilsexc.cpp:740
 msgid "Failed to redirect the child process IO"
 msgstr ""
 "Αποτυχία στην ανακατεύθυνση του IO διεργασίας απογόνου (child process IO)"
@@ -3613,7 +3611,7 @@ msgid "Failed to remember the encoding for the charset '%s'."
 msgstr ""
 "Αποτυχία ανάμνησης της κωδικοποίησης για το συνολο χαρακτήρων (charset) '%s'."
 
-#: ../src/common/debugrpt.cpp:226
+#: ../src/common/debugrpt.cpp:224
 #, fuzzy, c-format
 msgid "Failed to remove debug report file \"%s\""
 msgstr "Αποτυχία απομάκρυνσης του αρχείου 'κλειδωνιά'(lock file) '%s'"
@@ -3635,7 +3633,7 @@ msgstr ""
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Αποτυχία της μετονομασίας της τιμής μητρώου '%s' σε '%s'."
 
-#: ../src/common/filefn.cpp:1163
+#: ../src/common/filefn.cpp:1164
 #, c-format
 msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
@@ -3651,7 +3649,7 @@ msgstr "Αποτυχία της μετονομασίας του κλειδιού
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Αποτυχία κατά την ανάκτηση δεδομένων από το πρόχειρο (clipboard)."
 
-#: ../src/common/filename.cpp:2669
+#: ../src/common/filename.cpp:2765
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Αποτυχία λήψης της ώρας του αρχείου '%s'"
@@ -3666,7 +3664,7 @@ msgstr ""
 "Αποτυχία στην ανάκτηση των υποστηριζομένων μορφών προχείρου (clipboard "
 "formats)"
 
-#: ../src/common/docview.cpp:652
+#: ../src/common/docview.cpp:650
 #, fuzzy, c-format
 msgid "Failed to save document to the file \"%s\"."
 msgstr "Αποτυχία αποθήκευσης της εικόνας στο αρχείο \"%s\"."
@@ -3694,26 +3692,31 @@ msgstr "Αποτυχία θέσης δεδομένων προχείρου (clipb
 msgid "Failed to set permissions on lock file '%s'"
 msgstr "Αδύνατος ο ορισμός των δικαιωμάτων για το αρχείο 'κλειδωνιά' '%s'"
 
-#: ../src/common/file.cpp:549
+#: ../src/unix/utilsunx.cpp:603
+#, fuzzy
+msgid "Failed to set process priority"
+msgstr "Δεν είναι δυνατή η θέση προτεραιότητας του thread"
+
+#: ../src/common/file.cpp:577
 msgid "Failed to set temporary file permissions"
 msgstr "Αποτυχία θέσπισης δικαιωμάτων προσωρινού αρχείου"
 
-#: ../src/gtk/textctrl.cpp:1000
+#: ../src/gtk/textctrl.cpp:1059
 #, fuzzy
 msgid "Failed to set text in the text control."
 msgstr "Αποτυχία καθορισμού της ώρας του UTC συστήματος"
 
-#: ../src/unix/threadpsx.cpp:1141
+#: ../src/unix/threadpsx.cpp:1294
 #, fuzzy, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "Δεν είναι δυνατή η θέση προτεραιότητας του thread"
 
-#: ../src/unix/threadpsx.cpp:1338 ../src/unix/threadpsx.cpp:1348
+#: ../src/unix/threadpsx.cpp:1378 ../src/unix/threadpsx.cpp:1388
 #, fuzzy, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Δεν είναι δυνατή η θέση προτεραιότητας του thread"
 
-#: ../src/unix/utilsunx.cpp:709
+#: ../src/unix/utilsunx.cpp:735
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 
@@ -3730,7 +3733,7 @@ msgstr ""
 msgid "Failed to switch wake up pipe to non-blocking mode"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1530
+#: ../src/unix/threadpsx.cpp:1570
 msgid "Failed to terminate a thread."
 msgstr "Αποτυχία τερματισμού του thread"
 
@@ -3743,7 +3746,7 @@ msgstr "Αποτυχία τερματισμού του advise loop με τον D
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Αποτυχία τερματισμού της σύνδεσης μέσω τηλεφώνου : %s"
 
-#: ../src/common/filename.cpp:2588
+#: ../src/common/filename.cpp:2684
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Αποτυχία αγγίγματος (touch) του αρχείου '%s'"
@@ -3768,7 +3771,7 @@ msgstr "Αποτυχία κατά την ανάκτηση δεδομένων α�
 msgid "Failed to update user configuration file."
 msgstr "Αποτυχία ανανέωσης του αρχείου ρυθμίσεων του χρήστη."
 
-#: ../src/common/debugrpt.cpp:713
+#: ../src/common/debugrpt.cpp:711
 #, fuzzy, c-format
 msgid "Failed to upload the debug report (error code %d)."
 msgstr ""
@@ -3790,26 +3793,26 @@ msgstr "Αρχείο"
 msgid "Family"
 msgstr "Οικογένεια γραμματοσειράς:"
 
-#: ../src/common/stockitem.cpp:158 ../src/msw/wince/filedlgwce.cpp:119
+#: ../src/common/stockitem.cpp:158 ../src/msw/wince/filedlgwce.cpp:122
 msgid "File"
 msgstr "Αρχείο"
 
-#: ../src/common/docview.cpp:669
+#: ../src/common/docview.cpp:667
 #, fuzzy, c-format
 msgid "File \"%s\" could not be opened for reading."
 msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
 
-#: ../src/common/docview.cpp:646
+#: ../src/common/docview.cpp:644
 #, fuzzy, c-format
 msgid "File \"%s\" could not be opened for writing."
 msgstr "Αποτυχία ανοίγματος του '%s' για το '%s'"
 
-#: ../src/gtk/filedlg.cpp:56
+#: ../src/gtk/filedlg.cpp:57
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Το αρχείο '%s' υπάρχει ήδη, πραγματικά θέλετε να επικαλυφτεί;"
 
-#: ../src/os2/filedlg.cpp:308
+#: ../src/os2/filedlg.cpp:311
 #, c-format
 msgid ""
 "File '%s' already exists.\n"
@@ -3818,53 +3821,49 @@ msgstr ""
 "Το αρχείο '%s' υπάρχει ήδη.\n"
 "Θέλετε να αντικατασταθεί;"
 
-#: ../src/common/filefn.cpp:1201
+#: ../src/common/filefn.cpp:1202
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
 
-#: ../src/common/filefn.cpp:1182
+#: ../src/common/filefn.cpp:1183
 #, fuzzy, c-format
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
 
-#: ../src/richtext/richtextctrl.cpp:2664 ../src/common/textcmn.cpp:920
+#: ../src/richtext/richtextctrl.cpp:2687 ../src/common/textcmn.cpp:920
 msgid "File couldn't be loaded."
 msgstr "Το αρχείο δεν μπόρεσε να φορτωθεί."
 
-#: ../src/msw/filedlg.cpp:429
+#: ../src/msw/filedlg.cpp:459
 #, fuzzy, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr "Η εκτέλεση της εντολής '%s' απέτυχε με σφάλμα: %ul"
 
-#: ../src/common/docview.cpp:1762
+#: ../src/common/docview.cpp:1767
 msgid "File error"
 msgstr "Σφάλμα αρχείου"
 
-#: ../src/generic/dirctrlg.cpp:680 ../src/generic/filectrlg.cpp:799
+#: ../src/generic/dirctrlg.cpp:689 ../src/generic/filectrlg.cpp:806
 msgid "File name exists already."
 msgstr "Το όνομα αρχείου υπάρχει ήδη."
 
-#: ../src/unix/fswatcher_inotify.cpp:439
-msgid "File system containing watched object was unmounted"
-msgstr ""
-
-#: ../src/motif/filedlg.cpp:218
+#: ../src/motif/filedlg.cpp:221
 #, fuzzy
 msgid "Files"
 msgstr "Αρχείο"
 
-#: ../src/common/filefn.cpp:1753
+#: ../src/common/filefn.cpp:1756
 #, c-format
 msgid "Files (%s)"
 msgstr "Αρχεία (%s)"
 
-#: ../src/motif/filedlg.cpp:216
+#: ../src/motif/filedlg.cpp:219
 #, fuzzy
 msgid "Filter"
 msgstr "Αρχείο"
 
-#: ../src/common/stockitem.cpp:159 ../src/html/helpwnd.cpp:501
+#: ../src/common/stockitem.cpp:159 ../src/html/helpwnd.cpp:500
 msgid "Find"
 msgstr "Εύρεση"
 
@@ -3878,20 +3877,20 @@ msgstr "πρώτο"
 msgid "First page"
 msgstr "Επόμενη σελίδα"
 
-#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:518
 #, fuzzy
 msgid "Fixed"
 msgstr "Γραμματοσειρά σταθερού μεγέθους:"
 
-#: ../src/html/helpwnd.cpp:1220
+#: ../src/html/helpwnd.cpp:1219
 msgid "Fixed font:"
 msgstr "Γραμματοσειρά σταθερού μεγέθους:"
 
-#: ../src/html/helpwnd.cpp:1283
+#: ../src/html/helpwnd.cpp:1282
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Όψη σταθερού μεγέθους.<br> <b>έντονη</b> <i>πλάγια</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:207
+#: ../src/richtext/richtextsizepage.cpp:226
 msgid "Floating"
 msgstr ""
 
@@ -3904,26 +3903,26 @@ msgstr "&Αντιγραφή"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 ίντσες"
 
-#: ../src/richtext/richtextformatdlg.cpp:323 ../src/osx/carbon/fontdlg.cpp:471
+#: ../src/richtext/richtextformatdlg.cpp:325 ../src/osx/carbon/fontdlg.cpp:474
 #: ../src/common/stockitem.cpp:195
 msgid "Font"
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:228
+#: ../src/richtext/richtextfontpage.cpp:231
 #, fuzzy
 msgid "Font &weight:"
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/html/helpwnd.cpp:1221
+#: ../src/html/helpwnd.cpp:1220
 msgid "Font size:"
 msgstr "Μέγεθος γραμματοσειράς:"
 
-#: ../src/richtext/richtextfontpage.cpp:215
+#: ../src/richtext/richtextfontpage.cpp:218
 #, fuzzy
 msgid "Font st&yle:"
 msgstr "Μέγεθος γραμματοσειράς:"
 
-#: ../src/osx/carbon/fontdlg.cpp:513
+#: ../src/osx/carbon/fontdlg.cpp:516
 #, fuzzy
 msgid "Font:"
 msgstr "Μέγεθος γραμματοσειράς:"
@@ -3933,7 +3932,7 @@ msgstr "Μέγεθος γραμματοσειράς:"
 msgid "Fonts index file %s disappeared while loading fonts."
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:561
+#: ../src/unix/utilsunx.cpp:580
 msgid "Fork failed"
 msgstr "Fork απέτυχε"
 
@@ -3946,7 +3945,7 @@ msgstr "&Εμπρός"
 msgid "Forward hrefs are not supported"
 msgstr "Οι forward hrefs δεν υποστηρίζονται"
 
-#: ../src/html/helpwnd.cpp:889
+#: ../src/html/helpwnd.cpp:888
 #, c-format
 msgid "Found %i matches"
 msgstr "Βρέθηκαν %i αντιστοιχίες"
@@ -3975,7 +3974,7 @@ msgstr "GIF: ανεπαρκής μνήμη."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: άγνωστο λάθος!!!"
 
-#: ../src/gtk/window.cpp:4210
+#: ../src/gtk/window.cpp:4265
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3984,6 +3983,10 @@ msgstr ""
 #: ../src/univ/themes/gtk.cpp:526
 msgid "GTK+ theme"
 msgstr "Θέμα GTK+"
+
+#: ../src/common/preferencescmn.cpp:38
+msgid "General"
+msgstr ""
 
 #: ../src/common/prntbase.cpp:244
 msgid "Generic PostScript"
@@ -4009,23 +4012,23 @@ msgstr "Η GetPropertyCollection κλήθηκε σε έναν γενικό acces
 msgid "GetPropertyCollection called w/o valid collection getter"
 msgstr "Η GetPropertyCollection κλήθηκε χωρίς έγκυρο collection getter"
 
-#: ../src/html/helpwnd.cpp:674
+#: ../src/html/helpwnd.cpp:673
 msgid "Go back"
 msgstr "Πήγαινε πίσω"
 
-#: ../src/html/helpwnd.cpp:675
+#: ../src/html/helpwnd.cpp:674
 msgid "Go forward"
 msgstr "Πήγαινε εμπρός"
 
-#: ../src/html/helpwnd.cpp:677
+#: ../src/html/helpwnd.cpp:676
 msgid "Go one level up in document hierarchy"
 msgstr "Πήγαινε ένα επίπεδο πάνω στην ιεραρχεία του εγγράφου"
 
-#: ../src/generic/filedlgg.cpp:223 ../src/generic/dirdlgg.cpp:137
+#: ../src/generic/filedlgg.cpp:224 ../src/generic/dirdlgg.cpp:137
 msgid "Go to home directory"
 msgstr "Προς κεντρικό κατάλογο"
 
-#: ../src/generic/filedlgg.cpp:219
+#: ../src/generic/filedlgg.cpp:220
 msgid "Go to parent directory"
 msgstr "Προς πατρικό κατάλογο"
 
@@ -4053,7 +4056,7 @@ msgstr ""
 msgid "HOME"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:1553
+#: ../src/html/helpwnd.cpp:1552
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "Εργασία HTML βοήθειας (*.hhp)|*.hhp|"
 
@@ -4062,7 +4065,7 @@ msgstr "Εργασία HTML βοήθειας (*.hhp)|*.hhp|"
 msgid "HTML anchor %s does not exist."
 msgstr "Η HTML άγκυρα %s δεν υπάρχει."
 
-#: ../src/html/helpwnd.cpp:1551
+#: ../src/html/helpwnd.cpp:1550
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "Αρχεία HTML (*.html;*.htm)|*.html;*.htm|"
 
@@ -4079,7 +4082,7 @@ msgstr "Εβραϊκό (ISO-8859-8)"
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: ../src/html/helpwnd.cpp:1214
+#: ../src/html/helpwnd.cpp:1213
 msgid "Help Browser Options"
 msgstr "Επιλογές Περιηγητή Βοηθείας"
 
@@ -4087,15 +4090,15 @@ msgstr "Επιλογές Περιηγητή Βοηθείας"
 msgid "Help Index"
 msgstr "Ευρετήριο Βοηθείας"
 
-#: ../src/html/helpwnd.cpp:1535
+#: ../src/html/helpwnd.cpp:1534
 msgid "Help Printing"
 msgstr "Βοήθεια Εκτύπωσης"
 
-#: ../src/html/helpwnd.cpp:815
+#: ../src/html/helpwnd.cpp:814
 msgid "Help Topics"
 msgstr "Θέματα Βοήθειας"
 
-#: ../src/html/helpwnd.cpp:1552
+#: ../src/html/helpwnd.cpp:1551
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "Βιβλία βοήθειας (*.htb)|*.htb|Αρχεία βοήθειας (*.zip)|*.zip|"
 
@@ -4114,16 +4117,16 @@ msgstr "αρχείο καταλόγου για την περιοχή (domain) '%
 msgid "Help: %s"
 msgstr "Βοήθεια: %s"
 
-#: ../src/osx/menu_osx.cpp:556
+#: ../src/osx/menu_osx.cpp:536 ../src/osx/menu_osx.cpp:583
 #, fuzzy, c-format
 msgid "Hide %s"
 msgstr "Βοήθεια: %s"
 
-#: ../src/osx/menu_osx.cpp:558
+#: ../src/osx/menu_osx.cpp:538 ../src/osx/menu_osx.cpp:585
 msgid "Hide Others"
 msgstr ""
 
-#: ../src/generic/infobar.cpp:139
+#: ../src/generic/infobar.cpp:86
 msgid "Hide this notification message."
 msgstr ""
 
@@ -4131,35 +4134,35 @@ msgstr ""
 msgid "Home"
 msgstr "Αρχική σελίδα"
 
-#: ../src/generic/dirctrlg.cpp:616
+#: ../src/generic/dirctrlg.cpp:625
 msgid "Home directory"
 msgstr "Αρχικός κατάλογος"
 
-#: ../src/richtext/richtextsizepage.cpp:231
-#: ../src/richtext/richtextsizepage.cpp:233
+#: ../src/richtext/richtextsizepage.cpp:250
+#: ../src/richtext/richtextsizepage.cpp:252
 msgid "How the object will float relative to the text."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1071
+#: ../src/common/imagbmp.cpp:1119
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: Σφάλμα στην ανάγνωση μάσκας DIB."
 
-#: ../src/common/imagbmp.cpp:1187 ../src/common/imagbmp.cpp:1248
-#: ../src/common/imagbmp.cpp:1259 ../src/common/imagbmp.cpp:1272
-#: ../src/common/imagbmp.cpp:1318 ../src/common/imagbmp.cpp:1330
-#: ../src/common/imagbmp.cpp:1341
+#: ../src/common/imagbmp.cpp:1234 ../src/common/imagbmp.cpp:1295
+#: ../src/common/imagbmp.cpp:1306 ../src/common/imagbmp.cpp:1319
+#: ../src/common/imagbmp.cpp:1364 ../src/common/imagbmp.cpp:1376
+#: ../src/common/imagbmp.cpp:1387
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Σφάλμα κατά την εγγραφή του αρχείου εικόνας!"
 
-#: ../src/common/imagbmp.cpp:1151
+#: ../src/common/imagbmp.cpp:1199
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Εικόνα πολύ ψηλή για εικονίδιο(icon)."
 
-#: ../src/common/imagbmp.cpp:1159
+#: ../src/common/imagbmp.cpp:1207
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Εικόνα πολύ πλατιά για εικονίδιο(icon)."
 
-#: ../src/common/imagbmp.cpp:1416
+#: ../src/common/imagbmp.cpp:1467
 msgid "ICO: Invalid icon index."
 msgstr "ICO: Λανθασμένος δείκτης(index) εικονιδίου(icon)."
 
@@ -4232,11 +4235,11 @@ msgstr "Εσφαλμένος αριθμός παραμέτρων για μέθο
 msgid "Illegal Parameter Count for Create Method"
 msgstr "Εσφαλμένος αριθμός παραμέτρων για μέθοδο Create"
 
-#: ../src/generic/dirctrlg.cpp:662 ../src/generic/filectrlg.cpp:785
+#: ../src/generic/dirctrlg.cpp:671 ../src/generic/filectrlg.cpp:792
 msgid "Illegal directory name."
 msgstr "Μη έγκυρο όνομα καταλόγου."
 
-#: ../src/generic/filectrlg.cpp:1374
+#: ../src/generic/filectrlg.cpp:1381
 msgid "Illegal file specification."
 msgstr "Μη έγκυρος προσδιορισμός αρχείου."
 
@@ -4244,17 +4247,17 @@ msgstr "Μη έγκυρος προσδιορισμός αρχείου."
 msgid "Image and mask have different sizes."
 msgstr "Εικόνα και μάσκα έχουν διαφορετικά μεγέθη."
 
-#: ../src/common/image.cpp:2502
+#: ../src/common/image.cpp:2505
 #, fuzzy, c-format
 msgid "Image file is not of type %d."
 msgstr "Αρχείο εικόνας δεν είναι τύπυ %d."
 
-#: ../src/common/image.cpp:2632
+#: ../src/common/image.cpp:2635
 #, fuzzy, c-format
 msgid "Image is not of type %s."
 msgstr "Αρχείο εικόνας δεν είναι τύπυ %d."
 
-#: ../src/msw/textctrl.cpp:399
+#: ../src/msw/textctrl.cpp:400
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -4263,21 +4266,21 @@ msgstr ""
 "γίνεται χρήση του simpe text στοιχείου ελέγχου. Παρακαλώ επανεγκαταστήστε το "
 "riched32.dll"
 
-#: ../src/unix/utilsunx.cpp:302
+#: ../src/unix/utilsunx.cpp:306
 msgid "Impossible to get child process input"
 msgstr "Αδύνατη η λήψη της εισόδου της διεργασίας (process) απογόνου(child)"
 
-#: ../src/common/filefn.cpp:1069
+#: ../src/common/filefn.cpp:1070
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "Αδύνατη η λήψη των δικαιωμάτων για το αρχείο '%s'"
 
-#: ../src/common/filefn.cpp:1083
+#: ../src/common/filefn.cpp:1084
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "Αδύνατη η επικάλυψη του αρχείου '%s'"
 
-#: ../src/common/filefn.cpp:1137
+#: ../src/common/filefn.cpp:1138
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Αδύνατος ο ορισμός των δικαιωμάτων για το αρχείο '%s'"
@@ -4287,7 +4290,7 @@ msgstr "Αδύνατος ο ορισμός των δικαιωμάτων για 
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:619
+#: ../src/msw/ole/automtn.cpp:625
 msgid "Incorrect number of arguments."
 msgstr ""
 
@@ -4295,11 +4298,11 @@ msgstr ""
 msgid "Indent"
 msgstr "Στοίχιση"
 
-#: ../src/richtext/richtextformatdlg.cpp:329
+#: ../src/richtext/richtextformatdlg.cpp:331
 msgid "Indents && Spacing"
 msgstr ""
 
-#: ../src/common/stockitem.cpp:167 ../src/html/helpwnd.cpp:526
+#: ../src/common/stockitem.cpp:167 ../src/html/helpwnd.cpp:525
 msgid "Index"
 msgstr "Ευρετήριο"
 
@@ -4311,7 +4314,7 @@ msgstr "Ινδικό (ISO-8859-12)"
 msgid "Info"
 msgstr ""
 
-#: ../src/common/init.cpp:273
+#: ../src/common/init.cpp:277
 msgid "Initialization failed in post init, aborting."
 msgstr ""
 
@@ -4320,25 +4323,25 @@ msgstr ""
 msgid "Insert"
 msgstr "Στοίχιση"
 
-#: ../src/richtext/richtextbuffer.cpp:7246
+#: ../src/richtext/richtextbuffer.cpp:7673
 #, fuzzy
 msgid "Insert Field"
 msgstr "Στοίχιση"
 
-#: ../src/richtext/richtextbuffer.cpp:7157
-#: ../src/richtext/richtextbuffer.cpp:8063
+#: ../src/richtext/richtextbuffer.cpp:7584
+#: ../src/richtext/richtextbuffer.cpp:8490
 msgid "Insert Image"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7204
+#: ../src/richtext/richtextbuffer.cpp:7631
 #, fuzzy
 msgid "Insert Object"
 msgstr "Στοίχιση"
 
-#: ../src/richtext/richtextctrl.cpp:1162 ../src/richtext/richtextctrl.cpp:1352
-#: ../src/richtext/richtextbuffer.cpp:7002
-#: ../src/richtext/richtextbuffer.cpp:7029
-#: ../src/richtext/richtextbuffer.cpp:7073
+#: ../src/richtext/richtextctrl.cpp:1171 ../src/richtext/richtextctrl.cpp:1361
+#: ../src/richtext/richtextbuffer.cpp:7429
+#: ../src/richtext/richtextbuffer.cpp:7456
+#: ../src/richtext/richtextbuffer.cpp:7500
 msgid "Insert Text"
 msgstr ""
 
@@ -4352,7 +4355,7 @@ msgstr ""
 msgid "Inset"
 msgstr "Στοίχιση"
 
-#: ../src/gtk/app.cpp:432
+#: ../src/gtk/app.cpp:430
 #, c-format
 msgid "Invalid GTK+ command line option, use \"%s --help\""
 msgstr ""
@@ -4377,12 +4380,17 @@ msgstr ""
 msgid "Invalid geometry specification '%s'"
 msgstr "Λανθασμένος γεωμετρικός καθορισμός(specification) '%s'"
 
+#: ../src/unix/fswatcher_inotify.cpp:299
+#, c-format
+msgid "Invalid inotify event for \"%s\""
+msgstr ""
+
 #: ../src/unix/snglinst.cpp:307
 #, c-format
 msgid "Invalid lock file '%s'."
 msgstr "Λανθασμένο αρχείο κλειδαριά (lock file) '%s'."
 
-#: ../src/common/translation.cpp:955
+#: ../src/common/translation.cpp:1105
 #, fuzzy
 msgid "Invalid message catalog."
 msgstr "'%s' δεν είναι ένας σωστός κατάλογος μηνυμάτων."
@@ -4405,8 +4413,8 @@ msgstr "Λανθασμένη κανονική έκφραση (regular expression
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:330 ../src/richtext/richtextfontpage.cpp:324
-#: ../src/osx/carbon/fontdlg.cpp:545 ../src/common/stockitem.cpp:169
+#: ../src/generic/fontdlgg.cpp:330 ../src/richtext/richtextfontpage.cpp:334
+#: ../src/osx/carbon/fontdlg.cpp:548 ../src/common/stockitem.cpp:169
 msgid "Italic"
 msgstr "Πλάγια"
 
@@ -4632,7 +4640,7 @@ msgstr "Ledger, 17 x 11 ίντσες"
 #: ../src/richtext/richtextbulletspage.cpp:200
 #: ../src/richtext/richtextbulletspage.cpp:203
 #: ../src/richtext/richtextbulletspage.cpp:204
-#: ../src/richtext/richtextsizepage.cpp:227
+#: ../src/richtext/richtextsizepage.cpp:246
 msgid "Left"
 msgstr ""
 
@@ -4710,25 +4718,25 @@ msgstr ""
 msgid "Line spacing:"
 msgstr ""
 
-#: ../src/html/chm.cpp:841
+#: ../src/html/chm.cpp:839
 msgid "Link contained '//', converted to absolute link."
 msgstr "Η σύνδεση που περιείχε '//', μετατράπηκε σε απόλυτη σύνδεση."
 
-#: ../src/richtext/richtextformatdlg.cpp:348
+#: ../src/richtext/richtextformatdlg.cpp:350
 msgid "List Style"
 msgstr ""
 
-#: ../src/richtext/richtextstyles.cpp:1044
+#: ../src/richtext/richtextstyles.cpp:1048
 msgid "List styles"
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:204
-#: ../src/richtext/richtextfontpage.cpp:206
+#: ../src/richtext/richtextfontpage.cpp:207
+#: ../src/richtext/richtextfontpage.cpp:209
 msgid "Lists font sizes in points."
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:197
-#: ../src/richtext/richtextfontpage.cpp:199
+#: ../src/richtext/richtextfontpage.cpp:200
+#: ../src/richtext/richtextfontpage.cpp:202
 #, fuzzy
 msgid "Lists the available fonts."
 msgstr "Το Tip δεν είναι διαθέσιμο, συγγνώμη!"
@@ -4752,7 +4760,7 @@ msgstr "Το αρχείο 'κλειδωνιά' '%s' έχει λανθασμέν�
 msgid "Lock file '%s' has incorrect permissions."
 msgstr "Το αρχείο 'κλειδωνιά' '%s' έχει λανθασμένα δικαιώματα."
 
-#: ../src/generic/logg.cpp:582
+#: ../src/generic/logg.cpp:583
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Η καταγραφή (log) αποθηκεύτηκε στο αρχείο '%s'"
@@ -4956,7 +4964,7 @@ msgstr ""
 msgid "Make a selection:"
 msgstr "Τμήματα"
 
-#: ../src/richtext/richtextformatdlg.cpp:361
+#: ../src/richtext/richtextformatdlg.cpp:363
 #: ../src/richtext/richtextmarginspage.cpp:172
 msgid "Margins"
 msgstr ""
@@ -4965,12 +4973,12 @@ msgstr ""
 msgid "Match case"
 msgstr "Ταίριασμα πεζών/κεφαλαίων"
 
-#: ../src/richtext/richtextsizepage.cpp:425
+#: ../src/richtext/richtextsizepage.cpp:460
 #, fuzzy
 msgid "Max height:"
 msgstr "&Βάρος:"
 
-#: ../src/richtext/richtextsizepage.cpp:398
+#: ../src/richtext/richtextsizepage.cpp:433
 #, fuzzy
 msgid "Max width:"
 msgstr "Αντικατάσταση με:"
@@ -4985,7 +4993,7 @@ msgstr ""
 msgid "Memory VFS already contains file '%s'!"
 msgstr "VFS μνήμης ήδη περιέχει το αρχείο '%s'!"
 
-#: ../src/msw/frame.cpp:354
+#: ../src/msw/frame.cpp:348
 msgid "Menu"
 msgstr "Μενού"
 
@@ -4998,7 +5006,7 @@ msgstr "%s μήνυμα"
 msgid "Metal theme"
 msgstr "Μεταλλικό θέμα"
 
-#: ../src/msw/ole/automtn.cpp:636
+#: ../src/msw/ole/automtn.cpp:642
 msgid "Method or property not found."
 msgstr ""
 
@@ -5006,16 +5014,16 @@ msgstr ""
 msgid "Mi&nimize"
 msgstr "Ελα&χιστοποίηση"
 
-#: ../src/richtext/richtextsizepage.cpp:371
+#: ../src/richtext/richtextsizepage.cpp:406
 #, fuzzy
 msgid "Min height:"
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:344
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Min width:"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:652
+#: ../src/msw/ole/automtn.cpp:658
 msgid "Missing a required parameter."
 msgstr ""
 
@@ -5023,7 +5031,7 @@ msgstr ""
 msgid "Modern"
 msgstr "Μοντέρνο"
 
-#: ../src/generic/filectrlg.cpp:456
+#: ../src/generic/filectrlg.cpp:463
 msgid "Modified"
 msgstr "Τροποποιημένο"
 
@@ -5048,17 +5056,17 @@ msgstr "Μετακίνηση κάτω"
 msgid "Move up"
 msgstr "Μετακίνηση επάνω"
 
-#: ../src/richtext/richtextsizepage.cpp:616
-#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:679
+#: ../src/richtext/richtextsizepage.cpp:681
 msgid "Moves the object to the next paragraph."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:610
-#: ../src/richtext/richtextsizepage.cpp:612
+#: ../src/richtext/richtextsizepage.cpp:673
+#: ../src/richtext/richtextsizepage.cpp:675
 msgid "Moves the object to the previous paragraph."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8841
+#: ../src/richtext/richtextbuffer.cpp:9268
 msgid "Multiple Cell Properties"
 msgstr ""
 
@@ -5066,7 +5074,7 @@ msgstr ""
 msgid "NUM_LOCK"
 msgstr ""
 
-#: ../src/generic/filectrlg.cpp:453
+#: ../src/generic/filectrlg.cpp:460
 msgid "Name"
 msgstr "Όνομα"
 
@@ -5079,33 +5087,33 @@ msgstr ""
 msgid "New"
 msgstr "&Νέο"
 
-#: ../src/richtext/richtextstyledlg.cpp:251
+#: ../src/richtext/richtextstyledlg.cpp:244
 #, fuzzy
 msgid "New &Box Style..."
 msgstr "Νέο στοιχείο"
 
-#: ../src/richtext/richtextstyledlg.cpp:233
+#: ../src/richtext/richtextstyledlg.cpp:226
 msgid "New &Character Style..."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:245
+#: ../src/richtext/richtextstyledlg.cpp:238
 msgid "New &List Style..."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:239
+#: ../src/richtext/richtextstyledlg.cpp:232
 msgid "New &Paragraph Style..."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:611
-#: ../src/richtext/richtextstyledlg.cpp:616
-#: ../src/richtext/richtextstyledlg.cpp:659
-#: ../src/richtext/richtextstyledlg.cpp:664
-#: ../src/richtext/richtextstyledlg.cpp:825
-#: ../src/richtext/richtextstyledlg.cpp:830
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:906
-#: ../src/richtext/richtextstyledlg.cpp:939
-#: ../src/richtext/richtextstyledlg.cpp:944
+#: ../src/richtext/richtextstyledlg.cpp:604
+#: ../src/richtext/richtextstyledlg.cpp:609
+#: ../src/richtext/richtextstyledlg.cpp:652
+#: ../src/richtext/richtextstyledlg.cpp:657
+#: ../src/richtext/richtextstyledlg.cpp:818
+#: ../src/richtext/richtextstyledlg.cpp:823
+#: ../src/richtext/richtextstyledlg.cpp:891
+#: ../src/richtext/richtextstyledlg.cpp:899
+#: ../src/richtext/richtextstyledlg.cpp:932
+#: ../src/richtext/richtextstyledlg.cpp:937
 #, fuzzy
 msgid "New Style"
 msgstr "Νέο στοιχείο"
@@ -5119,7 +5127,7 @@ msgid "New item"
 msgstr "Νέο στοιχείο"
 
 #: ../src/generic/dirdlgg.cpp:327 ../src/generic/dirdlgg.cpp:337
-#: ../src/generic/filectrlg.cpp:647 ../src/generic/filectrlg.cpp:656
+#: ../src/generic/filectrlg.cpp:654 ../src/generic/filectrlg.cpp:663
 msgid "NewName"
 msgstr "ΝέοΌνομα"
 
@@ -5127,11 +5135,11 @@ msgstr "ΝέοΌνομα"
 msgid "Next"
 msgstr "Επόμενο"
 
-#: ../src/common/prntbase.cpp:1538 ../src/html/helpwnd.cpp:679
+#: ../src/common/prntbase.cpp:1538 ../src/html/helpwnd.cpp:678
 msgid "Next page"
 msgstr "Επόμενη σελίδα"
 
-#: ../src/common/stockitem.cpp:178 ../src/motif/msgdlg.cpp:194
+#: ../src/common/stockitem.cpp:178 ../src/motif/msgdlg.cpp:197
 msgid "No"
 msgstr "Όχι"
 
@@ -5157,7 +5165,7 @@ msgstr ""
 msgid "No column for the specified column position existing."
 msgstr ""
 
-#: ../src/common/utilscmn.cpp:1051
+#: ../src/common/utilscmn.cpp:1049
 msgid "No default application configured for HTML files."
 msgstr ""
 
@@ -5197,22 +5205,22 @@ msgstr ""
 msgid "No handler found for animation type."
 msgstr "Δεν βρέθηκε χειριστής για τύπο εικόνας."
 
-#: ../src/common/image.cpp:2484
+#: ../src/common/image.cpp:2487
 msgid "No handler found for image type."
 msgstr "Δεν βρέθηκε χειριστής για τύπο εικόνας."
 
-#: ../src/common/image.cpp:2492 ../src/common/image.cpp:2603
-#: ../src/common/image.cpp:2656
+#: ../src/common/image.cpp:2495 ../src/common/image.cpp:2606
+#: ../src/common/image.cpp:2659
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "Δεν έχει οριστεί χειριστής εικόνας για τον τύπο %d."
 
-#: ../src/common/image.cpp:2626 ../src/common/image.cpp:2670
+#: ../src/common/image.cpp:2629 ../src/common/image.cpp:2673
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "Δεν έχει οριστεί χειριστής εικόνας για τον τύπο %s."
 
-#: ../src/html/helpwnd.cpp:872
+#: ../src/html/helpwnd.cpp:871
 msgid "No matching page found yet"
 msgstr "Δεν βρέθηκε ακόμα σελίδα που να ταιράζει"
 
@@ -5233,7 +5241,7 @@ msgid "No unused colour in image being masked."
 msgstr ""
 "Δεν υπάρχει μη χρησιμοποιούμενο χρώμα στην εικόνα που εφααρμόζεται η μάσκα"
 
-#: ../src/common/image.cpp:3133
+#: ../src/common/image.cpp:3132
 msgid "No unused colour in image."
 msgstr "Δεν υπάρχει μη χρησιμοποιούμενο χρώμα στην εικόνα"
 
@@ -5243,9 +5251,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:226
-#: ../src/richtext/richtextsizepage.cpp:229
-#: ../src/richtext/richtextsizepage.cpp:230
+#: ../src/richtext/richtextsizepage.cpp:245
+#: ../src/richtext/richtextsizepage.cpp:249
 #, fuzzy
 msgid "None"
 msgstr "Έτοιμο"
@@ -5258,11 +5265,11 @@ msgstr "Νορδικό (ISO-8859-10)"
 msgid "Normal"
 msgstr "Κανονικό"
 
-#: ../src/html/helpwnd.cpp:1277
+#: ../src/html/helpwnd.cpp:1276
 msgid "Normal face<br>and <u>underlined</u>. "
 msgstr "Κανονική όψη<br>και <u>υπογραμμισμένη</u>."
 
-#: ../src/html/helpwnd.cpp:1219
+#: ../src/html/helpwnd.cpp:1218
 msgid "Normal font:"
 msgstr "Κανονική γραμματοσειρά:"
 
@@ -5271,12 +5278,12 @@ msgstr "Κανονική γραμματοσειρά:"
 msgid "Not %s"
 msgstr "&Περί..."
 
-#: ../include/wx/filename.h:558 ../include/wx/filename.h:563
+#: ../include/wx/filename.h:594 ../include/wx/filename.h:599
 #, fuzzy
 msgid "Not available"
 msgstr "Δεν υπάρχει μονάδα(facility) XBM διαθέσιμη!"
 
-#: ../src/richtext/richtextfontpage.cpp:331
+#: ../src/richtext/richtextfontpage.cpp:341
 #, fuzzy
 msgid "Not underlined"
 msgstr "υπογεγραμμένο"
@@ -5300,13 +5307,13 @@ msgstr "Το αρχείο δεν μπόρεσε να φορτωθεί."
 msgid "Numbered outline"
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:305 ../src/common/stockitem.cpp:179
-#: ../src/msw/msgdlg.cpp:489 ../src/msw/msgdlg.cpp:777
-#: ../src/msw/dialog.cpp:120 ../src/gtk1/fontdlg.cpp:139
+#: ../src/richtext/richtextstyledlg.cpp:298 ../src/common/stockitem.cpp:179
+#: ../src/msw/msgdlg.cpp:490 ../src/msw/msgdlg.cpp:796
+#: ../src/msw/dialog.cpp:121 ../src/gtk1/fontdlg.cpp:139
 msgid "OK"
 msgstr "OK"
 
-#: ../src/msw/ole/automtn.cpp:676
+#: ../src/msw/ole/automtn.cpp:682
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr ""
@@ -5316,7 +5323,7 @@ msgstr ""
 msgid "Object Properties"
 msgstr "&Ιδιότητες"
 
-#: ../src/msw/ole/automtn.cpp:644
+#: ../src/msw/ole/automtn.cpp:650
 msgid "Object implementation does not support named arguments."
 msgstr ""
 
@@ -5324,11 +5331,11 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Τα αντικείμενα πρέπει να έχουν ένα χαρακτηριστικό id"
 
-#: ../src/common/docview.cpp:1746 ../src/common/docview.cpp:1788
+#: ../src/common/docview.cpp:1751 ../src/common/docview.cpp:1793
 msgid "Open File"
 msgstr "Ανοιγμα Αρχείου"
 
-#: ../src/html/helpwnd.cpp:685 ../src/html/helpwnd.cpp:1558
+#: ../src/html/helpwnd.cpp:684 ../src/html/helpwnd.cpp:1557
 msgid "Open HTML document"
 msgstr "’νοιγμα εγγράφου HTML"
 
@@ -5347,8 +5354,8 @@ msgstr "&Ανοιγμα..."
 msgid "OpenGL function \"%s\" failed: %s (error %d)"
 msgstr ""
 
-#: ../src/generic/dirctrlg.cpp:691 ../src/generic/dirdlgg.cpp:353
-#: ../src/generic/filectrlg.cpp:671 ../src/generic/filectrlg.cpp:815
+#: ../src/generic/dirctrlg.cpp:700 ../src/generic/dirdlgg.cpp:353
+#: ../src/generic/filectrlg.cpp:678 ../src/generic/filectrlg.cpp:822
 msgid "Operation not permitted."
 msgstr "Λειτουργία δεν ειπιτρέπετε."
 
@@ -5388,7 +5395,7 @@ msgstr ""
 msgid "Outset"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:640
+#: ../src/msw/ole/automtn.cpp:646
 msgid "Overflow while coercing argument values."
 msgstr ""
 
@@ -5592,12 +5599,12 @@ msgstr "Σελίδα %d"
 msgid "Page %d of %d"
 msgstr "Σελίδα %d από %d"
 
-#: ../src/gtk/print.cpp:779
+#: ../src/gtk/print.cpp:784
 msgid "Page Setup"
 msgstr "Οργάνωση(setup) Σελίδας"
 
 #: ../src/generic/prntdlgg.cpp:834 ../src/common/prntbase.cpp:468
-#: ../src/gtk/gnome/gprint.cpp:708
+#: ../src/gtk/gnome/gprint.cpp:711
 msgid "Page setup"
 msgstr "Ρύθμιση(setup) Σελίδας"
 
@@ -5611,7 +5618,7 @@ msgstr "Σελίδες"
 msgid "Paper size"
 msgstr "Μέγεθος χαρτιού"
 
-#: ../src/richtext/richtextstyles.cpp:1042
+#: ../src/richtext/richtextstyles.cpp:1046
 msgid "Paragraph styles"
 msgstr ""
 
@@ -5624,7 +5631,7 @@ msgstr "Δόθηκε ένα ήδη registered αντικείμενο στην Se
 msgid "Passing an unknown object to GetObject"
 msgstr "Δόθηκε ένα άγνωστο αντικείμενο στην GetObject"
 
-#: ../src/richtext/richtextctrl.cpp:3082 ../src/common/stockitem.cpp:181
+#: ../src/richtext/richtextctrl.cpp:3101 ../src/common/stockitem.cpp:181
 #: ../src/stc/stc_i18n.cpp:20
 #, fuzzy
 msgid "Paste"
@@ -5640,11 +5647,11 @@ msgstr "Τμήματα"
 msgid "Peri&od"
 msgstr ""
 
-#: ../src/generic/filectrlg.cpp:459
+#: ../src/generic/filectrlg.cpp:466
 msgid "Permissions"
 msgstr "Δικαιώματα"
 
-#: ../src/richtext/richtextbuffer.cpp:10953
+#: ../src/richtext/richtextbuffer.cpp:11568
 #, fuzzy
 msgid "Picture Properties"
 msgstr "&Ιδιότητες"
@@ -5657,11 +5664,11 @@ msgstr "Δημιουργία pipe απέτυχε"
 msgid "Please choose a valid font."
 msgstr "Παρακαλώ επιλέξτε μία αποδεκτή γραμματοσειρά."
 
-#: ../src/gtk/filedlg.cpp:72
+#: ../src/gtk/filedlg.cpp:73
 msgid "Please choose an existing file."
 msgstr "Παρακλώ επιλέξτε ένα υπάρχον αρχείο."
 
-#: ../src/html/helpwnd.cpp:814
+#: ../src/html/helpwnd.cpp:813
 msgid "Please choose the page to display:"
 msgstr "Παρακλώ επιλέξτε την σελίδα για απεικόνιση:"
 
@@ -5717,7 +5724,7 @@ msgstr ""
 msgid "Portrait"
 msgstr "Πορτραίτο"
 
-#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:493
 #, fuzzy
 msgid "Position"
 msgstr "Ερώτημα"
@@ -5731,7 +5738,7 @@ msgstr "Αρχείο PostScript"
 msgid "Preferences"
 msgstr "&Προτιμήσεις"
 
-#: ../src/osx/menu_osx.cpp:550
+#: ../src/osx/menu_osx.cpp:577
 #, fuzzy
 msgid "Preferences..."
 msgstr "&Προτιμήσεις"
@@ -5740,23 +5747,23 @@ msgstr "&Προτιμήσεις"
 msgid "Preparing"
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:574
-#: ../src/html/helpwnd.cpp:1236
+#: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:577
+#: ../src/html/helpwnd.cpp:1235
 msgid "Preview:"
 msgstr "Προεπισκόπηση:"
 
-#: ../src/common/prntbase.cpp:1524 ../src/html/helpwnd.cpp:678
+#: ../src/common/prntbase.cpp:1524 ../src/html/helpwnd.cpp:677
 msgid "Previous page"
 msgstr "Προηγούμενη σελίδα"
 
 #: ../src/generic/prntdlgg.cpp:149 ../src/generic/prntdlgg.cpp:163
 #: ../src/common/prntbase.cpp:410 ../src/common/prntbase.cpp:1512
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:594 ../src/gtk/print.cpp:607
+#: ../src/gtk/gnome/gprint.cpp:538 ../src/gtk/gnome/gprint.cpp:550
 msgid "Print"
 msgstr "Εκτύπωση"
 
-#: ../include/wx/prntbase.h:396 ../src/common/docview.cpp:1247
+#: ../include/wx/prntbase.h:396 ../src/common/docview.cpp:1245
 msgid "Print Preview"
 msgstr "Προεπισκόπηση Εκτύπωσης"
 
@@ -5782,11 +5789,11 @@ msgstr "Εγχρωμη εκτύπωση"
 msgid "Print previe&w..."
 msgstr "Π&ροεπισκόπηση εκτύπωσης"
 
-#: ../src/gtk/gnome/gprint.cpp:940
+#: ../src/gtk/gnome/gprint.cpp:945
 msgid "Print preview"
 msgstr "Προεπισκόπηση εκτύπωσης"
 
-#: ../src/common/docview.cpp:1241
+#: ../src/common/docview.cpp:1239
 #, fuzzy
 msgid "Print preview creation failed."
 msgstr "Δημιουργία pipe απέτυχε"
@@ -5800,7 +5807,7 @@ msgstr "Προεπισκόπηση εκτύπωσης"
 msgid "Print spooling"
 msgstr "Spooling εκτύπωσης"
 
-#: ../src/html/helpwnd.cpp:689
+#: ../src/html/helpwnd.cpp:688
 msgid "Print this page"
 msgstr "Εκτύπωση αυτής της σελίδας"
 
@@ -5866,12 +5873,12 @@ msgid "Printing..."
 msgstr "Γίνεται εκτύπωση..."
 
 #: ../include/wx/richtext/richtextprint.h:110 ../include/wx/prntbase.h:264
-#: ../src/common/docview.cpp:2057
+#: ../src/common/docview.cpp:2120
 #, fuzzy
 msgid "Printout"
 msgstr "Εκτύπωση"
 
-#: ../src/common/debugrpt.cpp:556
+#: ../src/common/debugrpt.cpp:554
 #, c-format
 msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
@@ -5904,7 +5911,7 @@ msgstr "Σφάλμα Εκτύπωσης"
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1040
+#: ../src/generic/logg.cpp:1037
 msgid "Question"
 msgstr "Ερώτημα"
 
@@ -5913,7 +5920,7 @@ msgstr "Ερώτημα"
 msgid "Quit"
 msgstr "Έ&ξοδος"
 
-#: ../src/osx/menu_osx.cpp:564
+#: ../src/osx/menu_osx.cpp:544 ../src/osx/menu_osx.cpp:591
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "Έ&ξοδος"
@@ -5936,7 +5943,7 @@ msgstr ""
 msgid "RawCtrl+"
 msgstr "ctrl"
 
-#: ../src/common/ffile.cpp:114 ../src/common/ffile.cpp:133
+#: ../src/common/ffile.cpp:114 ../src/common/ffile.cpp:135
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "Λάθος ανάγνωσης στο αρχείο '%s'"
@@ -5985,12 +5992,12 @@ msgstr ""
 msgid "Registry value '%s' already exists."
 msgstr "Η τιμή μητρώου '%s' υπάρχει ήδη."
 
-#: ../src/richtext/richtextfontpage.cpp:323
-#: ../src/richtext/richtextfontpage.cpp:327
+#: ../src/richtext/richtextfontpage.cpp:333
+#: ../src/richtext/richtextfontpage.cpp:337
 msgid "Regular"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:516
 #, fuzzy
 msgid "Relative"
 msgstr "Διακοσμητικός"
@@ -6003,12 +6010,12 @@ msgstr "Σχετικές εγγραφές:"
 msgid "Remove"
 msgstr "Απομάκρυνση"
 
-#: ../src/richtext/richtextctrl.cpp:1420
+#: ../src/richtext/richtextctrl.cpp:1429
 #, fuzzy
 msgid "Remove Bullet"
 msgstr "Απομάκρυνση"
 
-#: ../src/html/helpwnd.cpp:441
+#: ../src/html/helpwnd.cpp:440
 msgid "Remove current page from bookmarks"
 msgstr "Αφαίρεση τρέχουσας σελίδας από τους σελιδοδείκτες"
 
@@ -6023,7 +6030,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Η δημιουργία timer απέτυχε."
 
-#: ../src/richtext/richtextbuffer.cpp:4109
+#: ../src/richtext/richtextbuffer.cpp:4203
 msgid "Renumber List"
 msgstr ""
 
@@ -6031,7 +6038,7 @@ msgstr ""
 msgid "Rep&lace"
 msgstr "&Αντικατάσταση"
 
-#: ../src/richtext/richtextctrl.cpp:3242 ../src/common/stockitem.cpp:189
+#: ../src/richtext/richtextctrl.cpp:3261 ../src/common/stockitem.cpp:189
 #, fuzzy
 msgid "Replace"
 msgstr "&Αντικατάσταση"
@@ -6053,7 +6060,7 @@ msgstr "Αντικατάσταση με:"
 msgid "Required information entry is empty."
 msgstr ""
 
-#: ../src/common/translation.cpp:1804
+#: ../src/common/translation.cpp:1966
 #, fuzzy, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "'%s' δεν είναι ένας σωστός κατάλογος μηνυμάτων."
@@ -6069,7 +6076,7 @@ msgstr "Απαλό(light)"
 
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextbulletspage.cpp:202
-#: ../src/richtext/richtextsizepage.cpp:228
+#: ../src/richtext/richtextsizepage.cpp:247
 #, fuzzy
 msgid "Right"
 msgstr "Απαλό(light)"
@@ -6122,7 +6129,7 @@ msgstr ""
 msgid "SUBTRACT"
 msgstr ""
 
-#: ../src/common/stockitem.cpp:191 ../src/common/sizer.cpp:2655
+#: ../src/common/stockitem.cpp:191 ../src/common/sizer.cpp:2679
 msgid "Save"
 msgstr "Αποθήκευση"
 
@@ -6131,11 +6138,11 @@ msgstr "Αποθήκευση"
 msgid "Save %s file"
 msgstr "Αποθήκευση %s αρχείου"
 
-#: ../src/generic/logg.cpp:516
+#: ../src/generic/logg.cpp:519
 msgid "Save &As..."
 msgstr "Αποθήκευση &ως..."
 
-#: ../src/common/docview.cpp:363
+#: ../src/common/docview.cpp:361
 msgid "Save As"
 msgstr "Αποθήκευση ως"
 
@@ -6153,7 +6160,7 @@ msgstr "Επιλέξτε μια προβολή εγγράφων"
 msgid "Save current document with a different filename"
 msgstr ""
 
-#: ../src/generic/logg.cpp:516
+#: ../src/generic/logg.cpp:519
 msgid "Save log contents to file"
 msgstr "Αποθήκευση περιεχομένων καταγραφής(log) σε αρχείο"
 
@@ -6161,12 +6168,12 @@ msgstr "Αποθήκευση περιεχομένων καταγραφής(log) 
 msgid "Script"
 msgstr "Χειρόγραφο(Script)"
 
-#: ../src/generic/srchctlg.cpp:68 ../src/html/helpwnd.cpp:549
-#: ../src/html/helpwnd.cpp:564
+#: ../src/generic/srchctlg.cpp:68 ../src/html/helpwnd.cpp:548
+#: ../src/html/helpwnd.cpp:563
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: ../src/html/helpwnd.cpp:551
+#: ../src/html/helpwnd.cpp:550
 #, fuzzy
 msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
@@ -6183,30 +6190,30 @@ msgstr "Κατεύθυνση αναζήτησης"
 msgid "Search for:"
 msgstr "Αναζήτηση για:"
 
-#: ../src/html/helpwnd.cpp:1066
+#: ../src/html/helpwnd.cpp:1065
 msgid "Search in all books"
 msgstr "Εύρεση σε όλα τα βιβλία"
 
-#: ../src/html/helpwnd.cpp:871
+#: ../src/html/helpwnd.cpp:870
 msgid "Searching..."
 msgstr "Γίνεται αναζήτηση..."
 
-#: ../src/generic/dirctrlg.cpp:538
+#: ../src/generic/dirctrlg.cpp:547
 msgid "Sections"
 msgstr "Τμήματα"
 
-#: ../src/common/ffile.cpp:219
+#: ../src/common/ffile.cpp:221
 #, c-format
 msgid "Seek error on file '%s'"
 msgstr "Λάθος ανίχνευσης (seek error) στο αρχείο '%s'."
 
-#: ../src/common/ffile.cpp:209
+#: ../src/common/ffile.cpp:211
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr ""
 
 #: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:588
-#: ../src/common/stockitem.cpp:193 ../src/msw/textctrl.cpp:2227
+#: ../src/common/stockitem.cpp:193 ../src/msw/textctrl.cpp:2289
 msgid "Select &All"
 msgstr "Επιλογή &Ολων"
 
@@ -6215,30 +6222,30 @@ msgstr "Επιλογή &Ολων"
 msgid "Select All"
 msgstr "Επιλογή &Ολων"
 
-#: ../src/common/docview.cpp:1868
+#: ../src/common/docview.cpp:1873
 msgid "Select a document template"
 msgstr "Επιλέξτε ένα πρότυπα εγγράφου"
 
-#: ../src/common/docview.cpp:1942
+#: ../src/common/docview.cpp:1947
 msgid "Select a document view"
 msgstr "Επιλέξτε μια προβολή εγγράφων"
 
-#: ../src/richtext/richtextfontpage.cpp:233
-#: ../src/richtext/richtextfontpage.cpp:235
+#: ../src/richtext/richtextfontpage.cpp:236
+#: ../src/richtext/richtextfontpage.cpp:238
 msgid "Select regular or bold."
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:220
-#: ../src/richtext/richtextfontpage.cpp:222
+#: ../src/richtext/richtextfontpage.cpp:223
+#: ../src/richtext/richtextfontpage.cpp:225
 msgid "Select regular or italic style."
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:246
-#: ../src/richtext/richtextfontpage.cpp:248
+#: ../src/richtext/richtextfontpage.cpp:249
+#: ../src/richtext/richtextfontpage.cpp:251
 msgid "Select underlining or no underlining."
 msgstr ""
 
-#: ../src/motif/filedlg.cpp:218
+#: ../src/motif/filedlg.cpp:221
 #, fuzzy
 msgid "Selection"
 msgstr "Τμήματα"
@@ -6253,7 +6260,7 @@ msgstr ""
 msgid "Separator expected after the option '%s'."
 msgstr "Αναμενόταν διαχωριστικό μετά την επιλογή '%s'."
 
-#: ../src/richtext/richtextbuffer.cpp:9797
+#: ../src/richtext/richtextbuffer.cpp:10226
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "Διαγραφή στοιχείου"
@@ -6262,7 +6269,7 @@ msgstr "Διαγραφή στοιχείου"
 msgid "SetProperty called w/o valid setter"
 msgstr "Η SetProperty κλήθηκε χωρίς έγκυρο θέτη"
 
-#: ../src/common/filename.cpp:2524
+#: ../src/common/filename.cpp:2620
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
@@ -6286,12 +6293,12 @@ msgstr "shift"
 msgid "Show &hidden directories"
 msgstr "Εμφάνιση κρυφών καταλόγων"
 
-#: ../src/generic/filectrlg.cpp:997
+#: ../src/generic/filectrlg.cpp:1004
 #, fuzzy
 msgid "Show &hidden files"
 msgstr "Εμφάνιση κρυφών αρχείων."
 
-#: ../src/osx/menu_osx.cpp:559
+#: ../src/osx/menu_osx.cpp:539 ../src/osx/menu_osx.cpp:586
 #, fuzzy
 msgid "Show All"
 msgstr "Εμφάνιση όλων"
@@ -6300,11 +6307,11 @@ msgstr "Εμφάνιση όλων"
 msgid "Show about dialog"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:503
+#: ../src/html/helpwnd.cpp:502
 msgid "Show all"
 msgstr "Εμφάνιση όλων"
 
-#: ../src/html/helpwnd.cpp:514
+#: ../src/html/helpwnd.cpp:513
 msgid "Show all items in index"
 msgstr "Εμφάνιση όλων των στοιχείων στο ευρετήριο"
 
@@ -6312,7 +6319,7 @@ msgstr "Εμφάνιση όλων των στοιχείων στο ευρετή�
 msgid "Show hidden directories"
 msgstr "Εμφάνιση κρυφών καταλόγων"
 
-#: ../src/html/helpwnd.cpp:672
+#: ../src/html/helpwnd.cpp:671
 msgid "Show/hide navigation panel"
 msgstr "Εμφλανιση/Κρύψιμο πλαίσιο πλοήγησης (navigation panel)"
 
@@ -6328,12 +6335,12 @@ msgstr ""
 msgid "Shows a preview of the bullet settings."
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:313
-#: ../src/richtext/richtextfontpage.cpp:315
+#: ../src/richtext/richtextfontpage.cpp:323
+#: ../src/richtext/richtextfontpage.cpp:325
 msgid "Shows a preview of the font settings."
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:578 ../src/osx/carbon/fontdlg.cpp:580
+#: ../src/osx/carbon/fontdlg.cpp:581 ../src/osx/carbon/fontdlg.cpp:583
 msgid "Shows a preview of the font."
 msgstr ""
 
@@ -6355,12 +6362,12 @@ msgstr ""
 msgid "Single"
 msgstr ""
 
-#: ../src/generic/filectrlg.cpp:454 ../src/richtext/richtextformatdlg.cpp:355
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/generic/filectrlg.cpp:461 ../src/richtext/richtextformatdlg.cpp:357
+#: ../src/richtext/richtextsizepage.cpp:296
 msgid "Size"
 msgstr "Μέγεθος"
 
-#: ../src/osx/carbon/fontdlg.cpp:523
+#: ../src/osx/carbon/fontdlg.cpp:526
 #, fuzzy
 msgid "Size:"
 msgstr "Μέγεθος"
@@ -6374,12 +6381,16 @@ msgstr "Παράλειψη"
 msgid "Slant"
 msgstr "Κλήση"
 
+#: ../src/richtext/richtextfontpage.cpp:299
+msgid "Small C&apitals"
+msgstr ""
+
 #: ../src/richtext/richtextborderspage.cpp:543
 #, fuzzy
 msgid "Solid"
 msgstr "Έντονο"
 
-#: ../src/common/docview.cpp:1764
+#: ../src/common/docview.cpp:1769
 msgid "Sorry, could not open this file."
 msgstr "Συγγνώμη, δεν μπόρεσε να ανοιχθεί αυτό το αρχείο."
 
@@ -6387,15 +6398,15 @@ msgstr "Συγγνώμη, δεν μπόρεσε να ανοιχθεί αυτό �
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Συγγνώμη, δεν υπάρχει αρκετή μνήμη για την δημιουργία προεπισκόπησης."
 
-#: ../src/richtext/richtextstyledlg.cpp:616
-#: ../src/richtext/richtextstyledlg.cpp:664
-#: ../src/richtext/richtextstyledlg.cpp:830
-#: ../src/richtext/richtextstyledlg.cpp:906
-#: ../src/richtext/richtextstyledlg.cpp:944
+#: ../src/richtext/richtextstyledlg.cpp:609
+#: ../src/richtext/richtextstyledlg.cpp:657
+#: ../src/richtext/richtextstyledlg.cpp:823
+#: ../src/richtext/richtextstyledlg.cpp:899
+#: ../src/richtext/richtextstyledlg.cpp:937
 msgid "Sorry, that name is taken. Please choose another."
 msgstr ""
 
-#: ../src/common/docview.cpp:1787
+#: ../src/common/docview.cpp:1792
 msgid "Sorry, the format for this file is unknown."
 msgstr "Συγγνώμη, η μορφή αυτού του αρχείου είναι άγνωστη."
 
@@ -6426,9 +6437,8 @@ msgstr ""
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Δήλωση, 5 1/2 x 8 1/2 ίντσες"
 
-#: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:484
-#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:515
+#: ../src/richtext/richtextsizepage.cpp:520
 #, fuzzy
 msgid "Static"
 msgstr "Κατάσταση: "
@@ -6451,7 +6461,7 @@ msgstr ""
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "String To Colour : Λανθασμένος καθορισμός χρώματος: %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:317 ../src/propgrid/advprops.cpp:648
+#: ../src/richtext/richtextformatdlg.cpp:319 ../src/propgrid/advprops.cpp:648
 #, fuzzy
 msgid "Style"
 msgstr "&Στυλ:"
@@ -6460,17 +6470,17 @@ msgstr "&Στυλ:"
 msgid "Style Organiser"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:532
+#: ../src/osx/carbon/fontdlg.cpp:535
 #, fuzzy
 msgid "Style:"
 msgstr "&Στυλ:"
 
-#: ../src/richtext/richtextfontpage.cpp:303
+#: ../src/richtext/richtextfontpage.cpp:313
 #, fuzzy
 msgid "Subscrip&t"
 msgstr "Χειρόγραφο(Script)"
 
-#: ../src/richtext/richtextfontpage.cpp:296
+#: ../src/richtext/richtextfontpage.cpp:306
 #, fuzzy
 msgid "Supe&rscript"
 msgstr "Χειρόγραφο(Script)"
@@ -6527,7 +6537,7 @@ msgstr "TIFF: Λάθος κατα την εγγραφή εικόνας."
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9938
+#: ../src/richtext/richtextbuffer.cpp:10516
 #, fuzzy
 msgid "Table Properties"
 msgstr "&Ιδιότητες"
@@ -6541,7 +6551,7 @@ msgstr "11 x 17 ίντσες"
 msgid "Tabloid, 11 x 17 in"
 msgstr "11 x 17 ίντσες"
 
-#: ../src/richtext/richtextformatdlg.cpp:335
+#: ../src/richtext/richtextformatdlg.cpp:337
 msgid "Tabs"
 msgstr ""
 
@@ -6549,7 +6559,7 @@ msgstr ""
 msgid "Teletype"
 msgstr "Τηλέτυπο"
 
-#: ../src/common/docview.cpp:1869
+#: ../src/common/docview.cpp:1874
 msgid "Templates"
 msgstr "Πρότυπα"
 
@@ -6577,8 +6587,8 @@ msgstr "Ο διακομιστής FTP δεν υποστηρίζει την εν�
 msgid "The available bullet styles."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:210
-#: ../src/richtext/richtextstyledlg.cpp:212
+#: ../src/richtext/richtextstyledlg.cpp:203
+#: ../src/richtext/richtextstyledlg.cpp:205
 #, fuzzy
 msgid "The available styles."
 msgstr "Το στυλ της γραμματοσειράς."
@@ -6601,10 +6611,10 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The bottom padding size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextsizepage.cpp:577
-#: ../src/richtext/richtextsizepage.cpp:579
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:589
+#: ../src/richtext/richtextsizepage.cpp:636
+#: ../src/richtext/richtextsizepage.cpp:638
+#: ../src/richtext/richtextsizepage.cpp:650
+#: ../src/richtext/richtextsizepage.cpp:652
 #, fuzzy
 msgid "The bottom position."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6636,7 +6646,7 @@ msgstr ""
 "ένα άλλο σύνολο χαρακτήρων να το αντικαταστήσει ή διαλέξτε\n"
 "[Ακύρωση] εάν δεν μπορεί να αντικατασταθεί"
 
-#: ../src/msw/ole/dataobj.cpp:177
+#: ../src/msw/ole/dataobj.cpp:368
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "O τύπος προχείρου(clipboard format) '%d' δεν υπάρχει."
@@ -6664,7 +6674,7 @@ msgid ""
 "Would you like to proceed with printing it nevertheless?"
 msgstr ""
 
-#: ../src/common/docview.cpp:1181
+#: ../src/common/docview.cpp:1179
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -6681,7 +6691,7 @@ msgstr ""
 msgid "The first line indent."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/gtk/utilsgtk.cpp:478
+#: ../src/gtk/utilsgtk.cpp:464
 msgid "The following standard GTK+ options are also supported:\n"
 msgstr ""
 
@@ -6703,13 +6713,13 @@ msgstr ""
 msgid "The font point size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/osx/carbon/fontdlg.cpp:527 ../src/osx/carbon/fontdlg.cpp:529
+#: ../src/osx/carbon/fontdlg.cpp:530 ../src/osx/carbon/fontdlg.cpp:532
 #, fuzzy
 msgid "The font size in points."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextfontpage.cpp:188
-#: ../src/richtext/richtextfontpage.cpp:190
+#: ../src/richtext/richtextfontpage.cpp:191
+#: ../src/richtext/richtextfontpage.cpp:193
 #, fuzzy
 msgid "The font size units, points or pixels."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6722,7 +6732,7 @@ msgstr "Το στυλ της γραμματοσειράς."
 msgid "The font weight."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/common/docview.cpp:1449
+#: ../src/common/docview.cpp:1460
 #, fuzzy, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
@@ -6747,10 +6757,10 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The left padding size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextsizepage.cpp:493
-#: ../src/richtext/richtextsizepage.cpp:495
-#: ../src/richtext/richtextsizepage.cpp:503
-#: ../src/richtext/richtextsizepage.cpp:505
+#: ../src/richtext/richtextsizepage.cpp:531
+#: ../src/richtext/richtextsizepage.cpp:533
+#: ../src/richtext/richtextsizepage.cpp:545
+#: ../src/richtext/richtextsizepage.cpp:547
 #, fuzzy
 msgid "The left position."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6767,42 +6777,42 @@ msgstr ""
 msgid "The list item number."
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:648
+#: ../src/msw/ole/automtn.cpp:654
 msgid "The locale ID is unknown."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:328
-#: ../src/richtext/richtextsizepage.cpp:330
+#: ../src/richtext/richtextsizepage.cpp:363
+#: ../src/richtext/richtextsizepage.cpp:365
 #, fuzzy
 msgid "The object height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:436
-#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:471
+#: ../src/richtext/richtextsizepage.cpp:473
 #, fuzzy
 msgid "The object maximum height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:409
-#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:444
+#: ../src/richtext/richtextsizepage.cpp:446
 #, fuzzy
 msgid "The object maximum width."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:382
-#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:417
+#: ../src/richtext/richtextsizepage.cpp:419
 #, fuzzy
 msgid "The object minimum height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:355
-#: ../src/richtext/richtextsizepage.cpp:357
+#: ../src/richtext/richtextsizepage.cpp:390
+#: ../src/richtext/richtextsizepage.cpp:392
 #, fuzzy
 msgid "The object minimum width."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:303
+#: ../src/richtext/richtextsizepage.cpp:329
+#: ../src/richtext/richtextsizepage.cpp:331
 #, fuzzy
 msgid "The object width."
 msgstr "Το βάρος της γραμματοσειράς."
@@ -6824,7 +6834,7 @@ msgstr[1] ""
 msgid "The previous message repeated once."
 msgstr ""
 
-#: ../src/gtk/print.cpp:933 ../src/gtk/print.cpp:1116
+#: ../src/gtk/print.cpp:941 ../src/gtk/print.cpp:1124
 msgid "The print dialog returned an error."
 msgstr ""
 
@@ -6864,10 +6874,10 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The right padding size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextsizepage.cpp:549
-#: ../src/richtext/richtextsizepage.cpp:551
-#: ../src/richtext/richtextsizepage.cpp:559
-#: ../src/richtext/richtextsizepage.cpp:561
+#: ../src/richtext/richtextsizepage.cpp:601
+#: ../src/richtext/richtextsizepage.cpp:603
+#: ../src/richtext/richtextsizepage.cpp:615
+#: ../src/richtext/richtextsizepage.cpp:617
 #, fuzzy
 msgid "The right position."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6896,13 +6906,13 @@ msgstr "Το στυλ της γραμματοσειράς."
 msgid "The style on which this style is based."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:222
-#: ../src/richtext/richtextstyledlg.cpp:224
+#: ../src/richtext/richtextstyledlg.cpp:215
+#: ../src/richtext/richtextstyledlg.cpp:217
 #, fuzzy
 msgid "The style preview."
 msgstr "Εμφανίζει την προεπισκόπηση της γραμματοσειράς"
 
-#: ../src/msw/ole/automtn.cpp:664
+#: ../src/msw/ole/automtn.cpp:670
 msgid "The system cannot find the file specified."
 msgstr ""
 
@@ -6917,7 +6927,7 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The tab positions."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextctrl.cpp:2681
+#: ../src/richtext/richtextctrl.cpp:2704
 msgid "The text couldn't be saved."
 msgstr "Το κείμενο δεν μπόρεσε να αποθυκευτεί."
 
@@ -6933,10 +6943,10 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The top padding size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextsizepage.cpp:521
-#: ../src/richtext/richtextsizepage.cpp:523
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
+#: ../src/richtext/richtextsizepage.cpp:566
+#: ../src/richtext/richtextsizepage.cpp:568
+#: ../src/richtext/richtextsizepage.cpp:580
+#: ../src/richtext/richtextsizepage.cpp:582
 #, fuzzy
 msgid "The top position."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6956,7 +6966,7 @@ msgstr ""
 "(remote access service, RAS) είναι πολύ παλία, παρακαλώ αναβαθμίστε (η "
 "ακόλουθη απαραίτητη συνάρτηση λείπει: %s)."
 
-#: ../src/gtk/print.cpp:961
+#: ../src/gtk/print.cpp:969
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr ""
 
@@ -6977,16 +6987,16 @@ msgid ""
 "when it is printed."
 msgstr ""
 
-#: ../src/common/image.cpp:2609
+#: ../src/common/image.cpp:2612
 #, fuzzy, c-format
 msgid "This is not a %s."
 msgstr "PCX: αυτό δεν είναι αρχείο PCX."
 
-#: ../src/common/wincmn.cpp:1633
+#: ../src/common/wincmn.cpp:1637
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4239
+#: ../src/gtk/window.cpp:4294
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6998,7 +7008,7 @@ msgid ""
 "comctl32.dll"
 msgstr ""
 
-#: ../src/msw/thread.cpp:1290
+#: ../src/msw/thread.cpp:1301
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
@@ -7006,13 +7016,13 @@ msgstr ""
 "Η αρχικοποίηση μονάδας νήματος εκτέλεσης (thread module) απέτυχε: αδύνατη η "
 "αποθήκευση τιμής στην τοπική αποθήκευση νήματος (thread local storage)"
 
-#: ../src/unix/threadpsx.cpp:1719
+#: ../src/unix/threadpsx.cpp:1759
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 "Η αρχικοποίηση μονάδας νήματος εκτέλεσης (thread module) απέτυχε: αποτυχία "
 "δημιουργίας κλειδιού νήματος (thread key)"
 
-#: ../src/msw/thread.cpp:1278
+#: ../src/msw/thread.cpp:1289
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -7021,15 +7031,15 @@ msgstr ""
 "δεσμευτεί (allocate) δείκτης (index) στην στην τοπική αποθήκευση νήματος "
 "(thread local storage)"
 
-#: ../src/unix/threadpsx.cpp:1221
+#: ../src/unix/threadpsx.cpp:1039
 msgid "Thread priority setting is ignored."
 msgstr "Η ρύθμιση προτεραιότητας του νήματος εκτέλεσης (thread) αγνοήθηκε. "
 
-#: ../src/msw/mdi.cpp:165
+#: ../src/msw/mdi.cpp:173
 msgid "Tile &Horizontally"
 msgstr "Οριζόντια παράθεση"
 
-#: ../src/msw/mdi.cpp:166
+#: ../src/msw/mdi.cpp:174
 msgid "Tile &Vertically"
 msgstr "Κατακόρυφη παράθεση"
 
@@ -7059,7 +7069,7 @@ msgstr "Πρός:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7926
 msgid "Too many EndStyle calls!"
 msgstr ""
 
@@ -7067,9 +7077,8 @@ msgstr ""
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Πάρα πολλά χρώματα στο PNG, η εικόνα μπορεί να είναι λίγο θολή."
 
-#: ../src/richtext/richtextsizepage.cpp:262
-#: ../src/richtext/richtextsizepage.cpp:265
-#: ../src/richtext/richtextsizepage.cpp:266 ../src/common/stockitem.cpp:201
+#: ../src/richtext/richtextsizepage.cpp:283
+#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:201
 #, fuzzy
 msgid "Top"
 msgstr "Πρός:"
@@ -7101,22 +7110,22 @@ msgstr ""
 msgid "Turkish (ISO-8859-9)"
 msgstr "Τουρκικό (ISO-8859-9)"
 
-#: ../src/generic/filectrlg.cpp:455
+#: ../src/generic/filectrlg.cpp:462
 msgid "Type"
 msgstr "Τύπος"
 
-#: ../src/richtext/richtextfontpage.cpp:158
-#: ../src/richtext/richtextfontpage.cpp:160
+#: ../src/richtext/richtextfontpage.cpp:161
+#: ../src/richtext/richtextfontpage.cpp:163
 #, fuzzy
 msgid "Type a font name."
 msgstr "Η οικογένεια της γραμματοσειρας."
 
-#: ../src/richtext/richtextfontpage.cpp:173
-#: ../src/richtext/richtextfontpage.cpp:175
+#: ../src/richtext/richtextfontpage.cpp:176
+#: ../src/richtext/richtextfontpage.cpp:178
 msgid "Type a size in points."
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:660
+#: ../src/msw/ole/automtn.cpp:666
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr ""
@@ -7210,11 +7219,11 @@ msgstr ""
 msgid "Unable to handle native drag&drop data"
 msgstr ""
 
-#: ../src/gtk/app.cpp:442
+#: ../src/gtk/app.cpp:440
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
 msgstr ""
 
-#: ../src/gtk/app.cpp:275
+#: ../src/gtk/app.cpp:277
 #, fuzzy
 msgid "Unable to initialize Hildon program"
 msgstr "Απέτυχε η αρχικοποίηση του OpenGL"
@@ -7237,7 +7246,7 @@ msgstr "Αδύνατη η ασύγχρονη αναπαραγωγή ήχου."
 msgid "Unable to post completion status"
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:353
+#: ../src/unix/fswatcher_inotify.cpp:531
 #, fuzzy
 msgid "Unable to read from inotify descriptor"
 msgstr "αδύνατη η ανάγνωση από περiγραφέα (descriptor) αρχείου %d"
@@ -7268,7 +7277,7 @@ msgstr "Αναίρεση διαγραφής"
 msgid "Underline"
 msgstr "&Υπογράμμιση"
 
-#: ../src/richtext/richtextfontpage.cpp:332 ../src/osx/carbon/fontdlg.cpp:554
+#: ../src/richtext/richtextfontpage.cpp:342 ../src/osx/carbon/fontdlg.cpp:557
 #: ../src/propgrid/advprops.cpp:656
 #, fuzzy
 msgid "Underlined"
@@ -7287,6 +7296,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Unexpected characters following option '%s'."
 msgstr "Απροσδόκητη παράμετρος '%s'"
+
+#: ../src/unix/fswatcher_inotify.cpp:262
+#, c-format
+msgid "Unexpected event for \"%s\": no matching watch descriptor."
+msgstr ""
 
 #: ../src/common/cmdline.cpp:1017
 #, c-format
@@ -7368,8 +7382,8 @@ msgstr ""
 msgid "Units for the bottom padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:598
-#: ../src/richtext/richtextsizepage.cpp:600
+#: ../src/richtext/richtextsizepage.cpp:661
+#: ../src/richtext/richtextsizepage.cpp:663
 #, fuzzy
 msgid "Units for the bottom position."
 msgstr ""
@@ -7396,45 +7410,45 @@ msgstr ""
 msgid "Units for the left padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:514
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:558
 #, fuzzy
 msgid "Units for the left position."
 msgstr ""
 "Δεν είναι δυνατή η αναμονή(wait) για τον τερματισμό του νήματος εκτέλεσης"
 "(thread)"
 
-#: ../src/richtext/richtextsizepage.cpp:447
-#: ../src/richtext/richtextsizepage.cpp:449
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:484
 #, fuzzy
 msgid "Units for the maximum object height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:420
-#: ../src/richtext/richtextsizepage.cpp:422
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:457
 #, fuzzy
 msgid "Units for the maximum object width."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:393
-#: ../src/richtext/richtextsizepage.cpp:395
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:430
 #, fuzzy
 msgid "Units for the minimum object height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:366
-#: ../src/richtext/richtextsizepage.cpp:368
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:403
 #, fuzzy
 msgid "Units for the minimum object width."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:376
 msgid "Units for the object height."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:312
-#: ../src/richtext/richtextsizepage.cpp:314
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:342
 msgid "Units for the object width."
 msgstr ""
 
@@ -7458,8 +7472,8 @@ msgstr ""
 msgid "Units for the right padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:570
-#: ../src/richtext/richtextsizepage.cpp:572
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:628
 #, fuzzy
 msgid "Units for the right position."
 msgstr ""
@@ -7489,8 +7503,8 @@ msgstr ""
 msgid "Units for the top padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:544
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:593
 #, fuzzy
 msgid "Units for the top position."
 msgstr ""
@@ -7540,17 +7554,17 @@ msgstr ""
 msgid "Unknown encoding (%d)"
 msgstr "’γνωστη κωδικοποίηση (%d)"
 
-#: ../src/msw/ole/automtn.cpp:672
+#: ../src/msw/ole/automtn.cpp:678
 #, fuzzy, c-format
 msgid "Unknown error %08x"
 msgstr "’γνωστο σφάλμα DDE %08x"
 
-#: ../src/msw/ole/automtn.cpp:631
+#: ../src/msw/ole/automtn.cpp:637
 #, fuzzy
 msgid "Unknown exception"
 msgstr "’γνωστη επιλογή '%s'"
 
-#: ../src/common/image.cpp:2594
+#: ../src/common/image.cpp:2597
 #, fuzzy
 msgid "Unknown image data format."
 msgstr "σφάλμα στη μορφή των δεδομένων"
@@ -7560,7 +7574,7 @@ msgstr "σφάλμα στη μορφή των δεδομένων"
 msgid "Unknown long option '%s'"
 msgstr "’γνωστη επιλογή long '%s'"
 
-#: ../src/msw/ole/automtn.cpp:615
+#: ../src/msw/ole/automtn.cpp:621
 msgid "Unknown name or named argument."
 msgstr ""
 
@@ -7651,21 +7665,21 @@ msgstr "Δώστε έναν αριθμό σελίδας μεταξύ %d και %
 msgid "Version "
 msgstr "Δικαιώματα"
 
-#: ../src/richtext/richtextsizepage.cpp:267
-#: ../src/richtext/richtextsizepage.cpp:269
+#: ../src/richtext/richtextsizepage.cpp:288
+#: ../src/richtext/richtextsizepage.cpp:290
 #, fuzzy
 msgid "Vertical alignment."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/generic/filedlgg.cpp:216
+#: ../src/generic/filedlgg.cpp:217
 msgid "View files as a detailed view"
 msgstr "Εμφάνιση αρχείων σε προβολή με λεπτομέρειες"
 
-#: ../src/generic/filedlgg.cpp:214
+#: ../src/generic/filedlgg.cpp:215
 msgid "View files as a list view"
 msgstr "Εμφάνιση αρχείων σε προβολή λίστας"
 
-#: ../src/common/docview.cpp:1943
+#: ../src/common/docview.cpp:1948
 msgid "Views"
 msgstr "Προβολές"
 
@@ -7711,7 +7725,7 @@ msgstr "Επιλογή εαν η γραμματοσειρά είναι υπογ�
 msgid "Whole word"
 msgstr "Ολόκληρη λέξη"
 
-#: ../src/html/helpwnd.cpp:548
+#: ../src/html/helpwnd.cpp:547
 msgid "Whole words only"
 msgstr "Ολόκληρες λέξεις μόνο"
 
@@ -7719,37 +7733,37 @@ msgstr "Ολόκληρες λέξεις μόνο"
 msgid "Win32 theme"
 msgstr "Win32 θέμα"
 
-#: ../src/msw/utils.cpp:1220
+#: ../src/msw/utils.cpp:1221
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s σε Windows 3.1"
 
-#: ../src/msw/utils.cpp:1270
+#: ../src/msw/utils.cpp:1271
 #, fuzzy
 msgid "Windows 2000"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1302
+#: ../src/msw/utils.cpp:1303
 #, fuzzy
 msgid "Windows 7"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1234
+#: ../src/msw/utils.cpp:1235
 msgid "Windows 95"
 msgstr "Windows 95"
 
-#: ../src/msw/utils.cpp:1230
+#: ../src/msw/utils.cpp:1231
 msgid "Windows 95 OSR2"
 msgstr "Windows 95 OSR2"
 
-#: ../src/msw/utils.cpp:1245
+#: ../src/msw/utils.cpp:1246
 msgid "Windows 98"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1241
+#: ../src/msw/utils.cpp:1242
 msgid "Windows 98 SE"
 msgstr "Windows 98 SE"
 
-#: ../src/msw/utils.cpp:1252
+#: ../src/msw/utils.cpp:1253
 #, c-format
 msgid "Windows 9x (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
@@ -7762,7 +7776,7 @@ msgstr "Windows Αραβικό (CP 1256)"
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Βαλτικό (CP 1257)"
 
-#: ../src/msw/utils.cpp:1214
+#: ../src/msw/utils.cpp:1215
 #, fuzzy, c-format
 msgid "Windows CE (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
@@ -7807,26 +7821,26 @@ msgstr "Windows Αραβικό (CP 1256)"
 msgid "Windows Korean (CP 949)"
 msgstr "Windows Κορεάτικο (CP 949)"
 
-#: ../src/msw/utils.cpp:1249
+#: ../src/msw/utils.cpp:1250
 msgid "Windows ME"
 msgstr "Windows ME"
 
-#: ../src/msw/utils.cpp:1310
+#: ../src/msw/utils.cpp:1311
 #, fuzzy, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "Windows 9x (%d.%d)"
 
-#: ../src/msw/utils.cpp:1279
+#: ../src/msw/utils.cpp:1280
 #, fuzzy
 msgid "Windows Server 2003"
 msgstr "Windows Ελληνικό (CP 1253)"
 
-#: ../src/msw/utils.cpp:1295
+#: ../src/msw/utils.cpp:1296
 #, fuzzy
 msgid "Windows Server 2008"
 msgstr "Windows 98"
 
-#: ../src/msw/utils.cpp:1301
+#: ../src/msw/utils.cpp:1302
 #, fuzzy
 msgid "Windows Server 2008 R2"
 msgstr "Windows Εβραϊκό (CP 1255)"
@@ -7845,7 +7859,7 @@ msgstr "Windows Τουρκικό (CP 1254)"
 msgid "Windows Vietnamese (CP 1258)"
 msgstr "Windows Ελληνικό (CP 1253)"
 
-#: ../src/msw/utils.cpp:1296
+#: ../src/msw/utils.cpp:1297
 #, fuzzy
 msgid "Windows Vista"
 msgstr "Windows 95"
@@ -7854,7 +7868,7 @@ msgstr "Windows 95"
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows Δυτικο-Ευρωπαϊκό (CP 1252)"
 
-#: ../src/msw/utils.cpp:1285
+#: ../src/msw/utils.cpp:1286
 #, fuzzy
 msgid "Windows XP"
 msgstr "Windows 95"
@@ -7868,12 +7882,12 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
 msgstr "Windows Κυριλικό (CP 1251)"
 
-#: ../src/common/ffile.cpp:147
+#: ../src/common/ffile.cpp:149
 #, c-format
 msgid "Write error on file '%s'"
 msgstr "Σφάλμα εγγραφής (write error) στο αρχείο '%s'"
 
-#: ../src/xml/xml.cpp:837
+#: ../src/xml/xml.cpp:845
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "XML σφάλμα ανάγνωσης (parsing error): '%s' στη γραμμή %d"
@@ -7905,7 +7919,7 @@ msgstr ""
 msgid "XPM: truncated image data at line %d!"
 msgstr ""
 
-#: ../src/common/stockitem.cpp:207 ../src/motif/msgdlg.cpp:194
+#: ../src/common/stockitem.cpp:207 ../src/motif/msgdlg.cpp:197
 msgid "Yes"
 msgstr "Ναι"
 
@@ -8096,7 +8110,7 @@ msgstr "έντονο"
 msgid "buffer is too small for Windows directory."
 msgstr ""
 
-#: ../src/msw/utils.cpp:1316
+#: ../src/msw/utils.cpp:1317
 #, c-format
 msgid "build %lu"
 msgstr ""
@@ -8111,7 +8125,7 @@ msgstr "δεν είναι δυνατό το κλείσιμο του αρχείο
 msgid "can't close file descriptor %d"
 msgstr "αδύνατο το κλείσιμο περιγραφέα (descriptor) αρχείου %d"
 
-#: ../src/common/file.cpp:577
+#: ../src/common/file.cpp:605
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "αδύνατη η δέσμευση των αλλαγών στο αρχείο '%s'"
@@ -8126,7 +8140,7 @@ msgstr "δεν είναι δυνατή η δημιουργία του αρχεί
 msgid "can't delete user configuration file '%s'"
 msgstr "Δεν είναι δυνατή η διαγραφή του αρχείου ρυθμίσεων '%s' του χρήστη"
 
-#: ../src/common/file.cpp:480
+#: ../src/common/file.cpp:512
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr ""
@@ -8143,7 +8157,7 @@ msgid "can't find central directory in zip"
 msgstr ""
 "Δεν είναι δυνατή η εύρεση του κεντρικού καταλόγου στο συμπιεσμένο αρχείο"
 
-#: ../src/common/file.cpp:450
+#: ../src/common/file.cpp:482
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr ""
@@ -8155,13 +8169,13 @@ msgid "can't find user's HOME, using current directory."
 msgstr ""
 "αδύνατη η εύρεση του HOME του χρήστη, γίνεται χρήση τρέχοντος καταλόγου."
 
-#: ../src/common/file.cpp:351
+#: ../src/common/file.cpp:383
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr ""
 "δεν μπορεί να πραγματοποιηθεί το άδειασμα (flush) του περιγραφέα αρχείου %d"
 
-#: ../src/common/file.cpp:407 ../src/msw/wince/filefnwce.cpp:199
+#: ../src/common/file.cpp:439 ../src/msw/wince/filefnwce.cpp:199
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr ""
@@ -8199,22 +8213,22 @@ msgstr "Δεν είναι δυνατή η αρχικοποίηση της ροή
 msgid "can't re-initialize zlib inflate stream"
 msgstr "Δεν είναι δυνατή η αρχικοποίηση της ροής zlib inflate."
 
-#: ../src/common/file.cpp:303
+#: ../src/common/file.cpp:335
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "αδύνατη η ανάγνωση από περiγραφέα (descriptor) αρχείου %d"
 
-#: ../src/common/file.cpp:572
+#: ../src/common/file.cpp:600
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "δεν είναι δυνατό το σβήσιμο του αρχείου '%s'"
 
-#: ../src/common/file.cpp:589
+#: ../src/common/file.cpp:617
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "δεν είναι δυνατό το σβήσιμο του προσωρινού αρχείου '%s'"
 
-#: ../src/common/file.cpp:393 ../src/msw/wince/filefnwce.cpp:185
+#: ../src/common/file.cpp:425 ../src/msw/wince/filefnwce.cpp:185
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "αδύνατη η αναζήτηση(seek) στον περγραφέα(descriptor) αρχείου %d"
@@ -8224,7 +8238,7 @@ msgstr "αδύνατη η αναζήτηση(seek) στον περγραφέα(d
 msgid "can't write buffer '%s' to disk."
 msgstr "αδύνατη η εγγραφή της προσωρινής μνήμης (buffer) '%s' στο δίσκο."
 
-#: ../src/common/file.cpp:319
+#: ../src/common/file.cpp:351
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "δεν είναι δυνατή η εγγραφή του περιγραφέα αρχείου(file descriptor) %d"
@@ -8257,16 +8271,16 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:308
-#: ../src/richtext/richtextsizepage.cpp:335
-#: ../src/richtext/richtextsizepage.cpp:362
-#: ../src/richtext/richtextsizepage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:416
-#: ../src/richtext/richtextsizepage.cpp:443
-#: ../src/richtext/richtextsizepage.cpp:510
-#: ../src/richtext/richtextsizepage.cpp:538
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:336
+#: ../src/richtext/richtextsizepage.cpp:370
+#: ../src/richtext/richtextsizepage.cpp:397
+#: ../src/richtext/richtextsizepage.cpp:424
+#: ../src/richtext/richtextsizepage.cpp:451
+#: ../src/richtext/richtextsizepage.cpp:478
+#: ../src/richtext/richtextsizepage.cpp:552
+#: ../src/richtext/richtextsizepage.cpp:587
+#: ../src/richtext/richtextsizepage.cpp:622
+#: ../src/richtext/richtextsizepage.cpp:657
 msgid "cm"
 msgstr ""
 
@@ -8290,7 +8304,7 @@ msgstr "ημερομηνία"
 msgid "decompression error"
 msgstr "σφάλμα αποσυμπίεσης"
 
-#: ../src/richtext/richtextstyles.cpp:768 ../src/common/fmapbase.cpp:821
+#: ../src/richtext/richtextstyles.cpp:772 ../src/common/fmapbase.cpp:821
 msgid "default"
 msgstr "προκαθορισμένο"
 
@@ -8298,7 +8312,7 @@ msgstr "προκαθορισμένο"
 msgid "double"
 msgstr ""
 
-#: ../src/common/debugrpt.cpp:534
+#: ../src/common/debugrpt.cpp:532
 msgid "dump of the process state (binary)"
 msgstr ""
 
@@ -8345,7 +8359,7 @@ msgstr "σφάλμα κατά την ανάγνωση τοπικής κεφαλ�
 msgid "error writing zip entry '%s': bad crc or length"
 msgstr "σφάλμα κατά την εγγραφή αρχείου zip '%s': εσφαλμένο crc ή μήκος"
 
-#: ../src/common/ffile.cpp:169
+#: ../src/common/ffile.cpp:171
 #, c-format
 msgid "failed to flush the file '%s'"
 msgstr "Αποτυχία αδειάσματος buffer (flush) του αρχείου '%s'"
@@ -8385,7 +8399,7 @@ msgstr "αρχείο '%s', γραμμή %d: τιμή για αμετάβλητο
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "αρχείο '%s': απροσδόκητος χαρακτήρας %c στη γραμμή %d."
 
-#: ../src/richtext/richtextbuffer.cpp:7874
+#: ../src/richtext/richtextbuffer.cpp:8301
 #, fuzzy
 msgid "files"
 msgstr "Αρχείο"
@@ -8394,7 +8408,7 @@ msgstr "Αρχείο"
 msgid "first"
 msgstr "πρώτο"
 
-#: ../src/html/helpwnd.cpp:1266
+#: ../src/html/helpwnd.cpp:1265
 msgid "font size"
 msgstr "μέγεθος γραμματοσειράς"
 
@@ -8406,12 +8420,12 @@ msgstr "δέκατο τέταρτο"
 msgid "fourth"
 msgstr "τέταρτο"
 
-#: ../src/common/appbase.cpp:679
+#: ../src/common/appbase.cpp:680
 msgid "generate verbose log messages"
 msgstr "δημιουργία αναλυτικών (verbose) μηνυμάτων καταγραφής (log)"
 
-#: ../src/richtext/richtextbuffer.cpp:11223
-#: ../src/richtext/richtextbuffer.cpp:11333
+#: ../src/richtext/richtextbuffer.cpp:11838
+#: ../src/richtext/richtextbuffer.cpp:11948
 #, fuzzy
 msgid "image"
 msgstr "Ώρα"
@@ -8432,7 +8446,7 @@ msgstr ""
 msgid "invalid data in extended tar header"
 msgstr ""
 
-#: ../src/generic/logg.cpp:1054
+#: ../src/generic/logg.cpp:1051
 msgid "invalid message box return value"
 msgstr "μη αποδεκτή τιμή επιστροφής παράθυρου μηνύματος"
 
@@ -8478,7 +8492,7 @@ msgstr "κανένα λάθος"
 msgid "no fonts found in %s, using builtin font"
 msgstr ""
 
-#: ../src/html/helpdata.cpp:641
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "ανώνυμο"
 
@@ -8486,12 +8500,12 @@ msgstr "ανώνυμο"
 msgid "noon"
 msgstr "μεσημέρι"
 
-#: ../src/richtext/richtextstyles.cpp:767
+#: ../src/richtext/richtextstyles.cpp:771
 #, fuzzy
 msgid "normal"
 msgstr "Κανονικό"
 
-#: ../src/gtk/print.cpp:1231 ../src/gtk/print.cpp:1336
+#: ../src/gtk/print.cpp:1228 ../src/gtk/print.cpp:1333
 msgid "not implemented"
 msgstr ""
 
@@ -8507,29 +8521,29 @@ msgstr "τα αντικείμενα δεν μπορούν να έχουν XML κ
 msgid "out of memory"
 msgstr "ανεπαρκής μνήμη"
 
-#: ../src/richtext/richtextsizepage.cpp:309
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:511
-#: ../src/richtext/richtextsizepage.cpp:539
-#: ../src/richtext/richtextsizepage.cpp:567
-#: ../src/richtext/richtextsizepage.cpp:595
+#: ../src/richtext/richtextsizepage.cpp:337
+#: ../src/richtext/richtextsizepage.cpp:371
+#: ../src/richtext/richtextsizepage.cpp:398
+#: ../src/richtext/richtextsizepage.cpp:425
+#: ../src/richtext/richtextsizepage.cpp:452
+#: ../src/richtext/richtextsizepage.cpp:479
+#: ../src/richtext/richtextsizepage.cpp:553
+#: ../src/richtext/richtextsizepage.cpp:588
+#: ../src/richtext/richtextsizepage.cpp:623
+#: ../src/richtext/richtextsizepage.cpp:658
 msgid "percent"
 msgstr ""
 
-#: ../src/common/debugrpt.cpp:510
+#: ../src/common/debugrpt.cpp:508
 msgid "process context description"
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:184
 #: ../src/richtext/richtextfontpage.cpp:187
+#: ../src/richtext/richtextfontpage.cpp:190
 msgid "pt"
 msgstr ""
 
-#: ../src/richtext/richtextfontpage.cpp:185
+#: ../src/richtext/richtextfontpage.cpp:188
 #: ../src/richtext/richtextborderspage.cpp:279
 #: ../src/richtext/richtextborderspage.cpp:281
 #: ../src/richtext/richtextborderspage.cpp:282
@@ -8578,36 +8592,36 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:307
-#: ../src/richtext/richtextsizepage.cpp:310
-#: ../src/richtext/richtextsizepage.cpp:311
-#: ../src/richtext/richtextsizepage.cpp:334
-#: ../src/richtext/richtextsizepage.cpp:337
+#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:361
-#: ../src/richtext/richtextsizepage.cpp:364
-#: ../src/richtext/richtextsizepage.cpp:365
-#: ../src/richtext/richtextsizepage.cpp:388
-#: ../src/richtext/richtextsizepage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:392
-#: ../src/richtext/richtextsizepage.cpp:415
-#: ../src/richtext/richtextsizepage.cpp:418
-#: ../src/richtext/richtextsizepage.cpp:419
-#: ../src/richtext/richtextsizepage.cpp:442
-#: ../src/richtext/richtextsizepage.cpp:445
-#: ../src/richtext/richtextsizepage.cpp:446
-#: ../src/richtext/richtextsizepage.cpp:509
-#: ../src/richtext/richtextsizepage.cpp:512
-#: ../src/richtext/richtextsizepage.cpp:513
-#: ../src/richtext/richtextsizepage.cpp:537
-#: ../src/richtext/richtextsizepage.cpp:540
-#: ../src/richtext/richtextsizepage.cpp:541
-#: ../src/richtext/richtextsizepage.cpp:565
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:569
-#: ../src/richtext/richtextsizepage.cpp:593
-#: ../src/richtext/richtextsizepage.cpp:596
-#: ../src/richtext/richtextsizepage.cpp:597
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:372
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:399
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:426
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:453
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:480
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:554
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:589
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:624
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:659
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "px"
 msgstr ""
 
@@ -8654,7 +8668,7 @@ msgstr "έβδομο"
 msgid "shift"
 msgstr "shift"
 
-#: ../src/common/appbase.cpp:669
+#: ../src/common/appbase.cpp:670
 msgid "show this help message"
 msgstr "εμφάνιση αυτού του μηνύματος βοηθείας"
 
@@ -8675,23 +8689,23 @@ msgstr ""
 msgid "specify the theme to use"
 msgstr "καθορίστε το θέμα που θα χρησιμοποιηθεί"
 
-#: ../src/richtext/richtextbuffer.cpp:8388
+#: ../src/richtext/richtextbuffer.cpp:8815
 msgid "standard/circle"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8389
+#: ../src/richtext/richtextbuffer.cpp:8816
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8391
+#: ../src/richtext/richtextbuffer.cpp:8818
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8390
+#: ../src/richtext/richtextbuffer.cpp:8817
 msgid "standard/square"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8392
+#: ../src/richtext/richtextbuffer.cpp:8819
 msgid "standard/triangle"
 msgstr ""
 
@@ -8795,11 +8809,11 @@ msgstr "άγνωστη αφετηρία(origin) αναζήτησης(seek)"
 msgid "unknown-%d"
 msgstr "άγνωστο-%d"
 
-#: ../src/common/docview.cpp:510
+#: ../src/common/docview.cpp:508
 msgid "unnamed"
 msgstr "απροσδιόριστο"
 
-#: ../src/common/docview.cpp:1597
+#: ../src/common/docview.cpp:1602
 #, c-format
 msgid "unnamed%d"
 msgstr "απροσδιόριστο%d"
@@ -8808,7 +8822,7 @@ msgstr "απροσδιόριστο%d"
 msgid "unsupported Zip compression method"
 msgstr "μη υποστηριζόμενη μέθοδος συμπίεσης Zip"
 
-#: ../src/common/translation.cpp:1724
+#: ../src/common/translation.cpp:1886
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "χρήση καταλόγου '%s' από '%s'"
@@ -8821,7 +8835,7 @@ msgstr "σφάλμα εγγραφής"
 msgid "wxGetTimeOfDay failed."
 msgstr "το wxGetTimeOfDay απέτυχε."
 
-#: ../src/gtk/print.cpp:989
+#: ../src/gtk/print.cpp:997
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr ""
 
