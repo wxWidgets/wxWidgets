@@ -237,16 +237,16 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 
     wxArrayString m_outlineLevelCtrlStrings;
     m_outlineLevelCtrlStrings.Add(_("(none)"));
-    m_outlineLevelCtrlStrings.Add(_("1"));
-    m_outlineLevelCtrlStrings.Add(_("2"));
-    m_outlineLevelCtrlStrings.Add(_("3"));
-    m_outlineLevelCtrlStrings.Add(_("4"));
-    m_outlineLevelCtrlStrings.Add(_("5"));
-    m_outlineLevelCtrlStrings.Add(_("6"));
-    m_outlineLevelCtrlStrings.Add(_("7"));
-    m_outlineLevelCtrlStrings.Add(_("8"));
-    m_outlineLevelCtrlStrings.Add(_("9"));
-    m_outlineLevelCtrlStrings.Add(_("10"));
+    m_outlineLevelCtrlStrings.Add("1");
+    m_outlineLevelCtrlStrings.Add("2");
+    m_outlineLevelCtrlStrings.Add("3");
+    m_outlineLevelCtrlStrings.Add("4");
+    m_outlineLevelCtrlStrings.Add("5");
+    m_outlineLevelCtrlStrings.Add("6");
+    m_outlineLevelCtrlStrings.Add("7");
+    m_outlineLevelCtrlStrings.Add("8");
+    m_outlineLevelCtrlStrings.Add("9");
+    m_outlineLevelCtrlStrings.Add("10");
     m_outlineLevelCtrl = new wxComboBox( itemRichTextDialogPage1, ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL, _("(none)"), wxDefaultPosition, wxSize(85, -1), m_outlineLevelCtrlStrings, wxCB_READONLY );
     m_outlineLevelCtrl->SetStringSelection(_("(none)"));
     m_outlineLevelCtrl->SetHelpText(_("The outline level."));
