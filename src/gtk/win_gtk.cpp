@@ -379,7 +379,10 @@ void wxPizza::move(GtkWidget* widget, int x, int y, int width, int height)
 
 void wxPizza::put(GtkWidget* widget, int x, int y, int width, int height)
 {
-    gtk_fixed_put(GTK_FIXED(this), widget, 0, 0);
+    // Re-parenting a TLW under a child window is possible at wx level but
+    // using a TLW as child at GTK+ level results in problems, so don't do it.
+    if (!gtk_widget_is_toplevel(GTK_WIDGET(widget)))
+        gtk_fixed_put(GTK_FIXED(this), widget, 0, 0);
 
     wxPizzaChild* child = new wxPizzaChild;
     child->widget = widget;
