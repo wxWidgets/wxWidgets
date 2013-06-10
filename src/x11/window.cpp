@@ -1486,6 +1486,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent,
                     button = xevent->xbutton.button;
 
                     wxevent.m_linesPerAction = 3;
+                    wxevent.m_columnsPerAction = 3;
                     wxevent.m_wheelDelta = WHEEL_DELTA;
 
                     // Button 4 means mousewheel up, 5 means down

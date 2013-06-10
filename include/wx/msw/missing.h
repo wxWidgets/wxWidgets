@@ -86,6 +86,9 @@
     #ifndef SPI_GETWHEELSCROLLLINES
         #define SPI_GETWHEELSCROLLLINES 104
     #endif
+    #ifndef SPI_GETWHEELSCROLLCHARS
+        #define SPI_GETWHEELSCROLLCHARS 108
+    #endif
 #endif // wxUSE_MOUSEWHEEL
 
 // Needed by window.cpp

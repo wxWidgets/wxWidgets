@@ -1332,6 +1332,7 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     if (event.GetEventType() == wxEVT_MOUSEWHEEL)
     {
        event.m_linesPerAction = 3;
+       event.m_columnsPerAction = 3;
        event.m_wheelDelta = 120;
        if (((GdkEventButton*)gdk_event)->button == 4)
            event.m_wheelRotation = 120;

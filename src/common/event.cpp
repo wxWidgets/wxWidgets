@@ -565,6 +565,7 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_wheelRotation = 0;
     m_wheelDelta = 0;
     m_linesPerAction = 0;
+    m_columnsPerAction = 0;
 }
 
 void wxMouseEvent::Assign(const wxMouseEvent& event)
@@ -587,6 +588,7 @@ void wxMouseEvent::Assign(const wxMouseEvent& event)
     m_wheelRotation = event.m_wheelRotation;
     m_wheelDelta = event.m_wheelDelta;
     m_linesPerAction = event.m_linesPerAction;
+    m_columnsPerAction = event.m_columnsPerAction;
     m_wheelAxis = event.m_wheelAxis;
 }
 

@@ -542,6 +542,7 @@ WXDLLEXPORT void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEve
             wxevent.m_wheelRotation = delta;
             wxevent.m_wheelDelta = 1;
             wxevent.m_linesPerAction = 1;
+            wxevent.m_columnsPerAction = 1;
             if ( axis == kEventMouseWheelAxisX )
                 wxevent.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
         }

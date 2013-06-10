@@ -2725,9 +2725,25 @@ public:
 
     /**
         Returns the configured number of lines (or whatever) to be scrolled per
-        wheel action. Defaults to three.
+        wheel action.
+
+        Default value under most platforms is three.
+
+        @see GetColumnsPerAction()
     */
     int GetLinesPerAction() const;
+
+    /**
+        Returns the configured number of columns (or whatever) to be scrolled per
+        wheel action.
+
+        Default value under most platforms is three.
+
+        @see GetLinesPerAction()
+
+        @since 2.9.5
+    */
+    int GetColumnsPerAction() const;
 
     /**
         Returns the logical mouse position in pixels (i.e.\ translated according to the

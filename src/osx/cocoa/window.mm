@@ -682,6 +682,7 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
             
             wxevent.m_wheelDelta = 10;
             wxevent.m_linesPerAction = 1;
+            wxevent.m_columnsPerAction = 1;
                 
             if ( fabs(deltaX) > fabs(deltaY) )
             {

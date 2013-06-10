@@ -670,6 +670,7 @@ All (GUI):
 - Add wxWindow::BeginRepositioningChildren() and EndRepositioningChildren().
 - Fix wxStyledTextCtrl::SetInsertionPointEnd() (troelsk).
 - Add wxFileDialog::GetCurrentlySelectedFilename() (Carl Godkin).
+- Add wxMouseEvent::GetColumnsPerAction() (toiffel).
 
 wxGTK:
 

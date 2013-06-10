@@ -1649,6 +1649,7 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 
     // FIXME: Get these values from GTK or GDK
     event.m_linesPerAction = 3;
+    event.m_columnsPerAction = 3;
     event.m_wheelDelta = 120;
 
     // Determine the scroll direction.
