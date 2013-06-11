@@ -54,10 +54,6 @@ WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray)
 // wxDynamicLibrary
 // ---------------------------------------------------------------------------
 
-#if defined(__WXPM__) || defined(__EMX__)
-    const wxString wxDynamicLibrary::ms_dllext(wxT(".dll"));
-#endif
-
 // for MSW/Unix it is defined in platform-specific file
 #if !(defined(__WINDOWS__) || defined(__UNIX__)) || defined(__EMX__)
 
@@ -83,7 +79,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
         wxFileName::SplitPath(libname, NULL, NULL, &ext);
         if ( ext.empty() )
         {
-            libname += GetDllExt();
+            libname += GetDllExt(wxDL_MODULE);
         }
     }
 
@@ -167,6 +163,29 @@ void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
 // ----------------------------------------------------------------------------
 
 /*static*/
+wxString wxDynamicLibrary::GetDllExt(wxDynamicLibraryCategory cat)
+{
+    wxUnusedVar(cat);
+#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
+    return ".dll";
+#elif defined(__HPUX__)
+    return ".sl";
+#elif defined(__DARWIN__)
+    switch ( cat )
+    {
+        case wxDL_LIBRARY:
+            return ".dylib";
+        case wxDL_MODULE:
+            return ".bundle";
+    }
+    wxFAIL_MSG("unreachable");
+    return wxString(); // silence gcc warning
+#else
+    return ".so";
+#endif
+}
+
+/*static*/
 wxString
 wxDynamicLibrary::CanonicalizeName(const wxString& name,
                                    wxDynamicLibraryCategory cat)
@@ -177,24 +196,18 @@ wxDynamicLibrary::CanonicalizeName(const wxString& name,
 #if defined(__UNIX__) && !defined(__EMX__)
     switch ( cat )
     {
-        default:
-            wxFAIL_MSG( wxT("unknown wxDynamicLibraryCategory value") );
-            // fall through
-
-        case wxDL_MODULE:
-            // don't do anything for modules, their names are arbitrary
-            break;
-
         case wxDL_LIBRARY:
-            // library names should start with "lib" under Unix
-            nameCanonic = wxT("lib");
+            // Library names should start with "lib" under Unix.
+            nameCanonic = "lib";
+            break;
+        case wxDL_MODULE:
+            // Module names are arbitrary and should have no prefix added.
             break;
     }
-#else // !__UNIX__
-    wxUnusedVar(cat);
-#endif // __UNIX__/!__UNIX__
+#endif
 
-    nameCanonic << name << GetDllExt();
+    nameCanonic << name << GetDllExt(cat);
+
     return nameCanonic;
 }
 

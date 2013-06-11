@@ -29,8 +29,6 @@
 #include "wx/msw/debughlp.h"
 #include "wx/filename.h"
 
-const wxString wxDynamicLibrary::ms_dllext(wxT(".dll"));
-
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------

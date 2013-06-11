@@ -232,7 +232,7 @@ public:
     static wxDllType         GetProgramHandle();
 
     // return the platform standard DLL extension (with leading dot)
-    static const wxString& GetDllExt() { return ms_dllext; }
+    static wxString GetDllExt(wxDynamicLibraryCategory cat = wxDL_LIBRARY);
 
     wxDynamicLibrary() : m_handle(0) { }
     wxDynamicLibrary(const wxString& libname, int flags = wxDL_DEFAULT)
@@ -371,9 +371,6 @@ protected:
     static void Error();
 #endif // wxHAVE_DYNLIB_ERROR
 
-
-    // platform specific shared lib suffix.
-    static const wxString ms_dllext;
 
     // the handle to DLL or NULL
     wxDllType m_handle;

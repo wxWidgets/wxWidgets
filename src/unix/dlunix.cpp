@@ -65,15 +65,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// standard shared libraries extensions for different Unix versions
-#if defined(__HPUX__)
-    const wxString wxDynamicLibrary::ms_dllext(".sl");
-#elif defined(__DARWIN__)
-    const wxString wxDynamicLibrary::ms_dllext(".bundle");
-#else
-    const wxString wxDynamicLibrary::ms_dllext(".so");
-#endif
-
 // ============================================================================
 // wxDynamicLibrary implementation
 // ============================================================================
