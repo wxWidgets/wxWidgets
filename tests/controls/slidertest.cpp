@@ -198,13 +198,7 @@ void SliderTestCase::Thumb()
     sim.MouseMove(m_slider->ClientToScreen(wxPoint(10, 10)));
     wxYield();
 
-    sim.MouseDown();
-    wxYield();
-
-    sim.MouseMove(m_slider->ClientToScreen(wxPoint(50, 10)));
-    wxYield();
-
-    sim.MouseUp();
+    sim.MouseClickAndDragTo(m_slider->ClientToScreen(wxPoint(50, 10)));
     wxYield();
 
     CPPUNIT_ASSERT(track.GetCount() != 0);
