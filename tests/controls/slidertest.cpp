@@ -33,9 +33,11 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( SliderTestCase );
+#ifndef __WXOSX__
         WXUISIM_TEST( PageUpDown );
         WXUISIM_TEST( LineUpDown );
         WXUISIM_TEST( LinePageSize );
+#endif
         CPPUNIT_TEST( Value );
         CPPUNIT_TEST( Range );
         WXUISIM_TEST( Thumb );
