@@ -359,7 +359,7 @@ void TreeCtrlTestCase::SelectionChange()
 
     wxRect poschild1, poschild2;
     m_tree->GetBoundingRect(m_child1, poschild1, true);
-    m_tree->GetBoundingRect(m_child1, poschild2, true);
+    m_tree->GetBoundingRect(m_child2, poschild2, true);
 
     // We move in slightly so we are not on the edge
     wxPoint point1 = m_tree->ClientToScreen(poschild1.GetPosition()) + wxPoint(4, 4);
