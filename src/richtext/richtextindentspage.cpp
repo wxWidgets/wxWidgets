@@ -27,29 +27,17 @@ BEGIN_EVENT_TABLE( wxRichTextIndentsSpacingPage, wxRichTextDialogPage )
 
 ////@begin wxRichTextIndentsSpacingPage event table entries
     EVT_RADIOBUTTON( ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_LEFT, wxRichTextIndentsSpacingPage::OnAlignmentLeftSelected )
-
     EVT_RADIOBUTTON( ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_RIGHT, wxRichTextIndentsSpacingPage::OnAlignmentRightSelected )
-
     EVT_RADIOBUTTON( ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_JUSTIFIED, wxRichTextIndentsSpacingPage::OnAlignmentJustifiedSelected )
-
     EVT_RADIOBUTTON( ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_CENTRED, wxRichTextIndentsSpacingPage::OnAlignmentCentredSelected )
-
     EVT_RADIOBUTTON( ID_RICHTEXTINDENTSSPACINGPAGE_ALIGNMENT_INDETERMINATE, wxRichTextIndentsSpacingPage::OnAlignmentIndeterminateSelected )
-
     EVT_TEXT( ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT, wxRichTextIndentsSpacingPage::OnIndentLeftUpdated )
-
     EVT_TEXT( ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST, wxRichTextIndentsSpacingPage::OnIndentLeftFirstUpdated )
-
     EVT_TEXT( ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT, wxRichTextIndentsSpacingPage::OnIndentRightUpdated )
-
     EVT_COMBOBOX( ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL, wxRichTextIndentsSpacingPage::OnRichtextOutlinelevelSelected )
-
     EVT_TEXT( ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE, wxRichTextIndentsSpacingPage::OnSpacingBeforeUpdated )
-
     EVT_TEXT( ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER, wxRichTextIndentsSpacingPage::OnSpacingAfterUpdated )
-
     EVT_COMBOBOX( ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE, wxRichTextIndentsSpacingPage::OnSpacingLineSelected )
-
 ////@end wxRichTextIndentsSpacingPage event table entries
 
 END_EVENT_TABLE()
@@ -236,19 +224,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemFlexGridSizer22->Add(itemStaticText29, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_outlineLevelCtrlStrings;
-    m_outlineLevelCtrlStrings.Add(_("(none)"));
-    m_outlineLevelCtrlStrings.Add("1");
-    m_outlineLevelCtrlStrings.Add("2");
-    m_outlineLevelCtrlStrings.Add("3");
-    m_outlineLevelCtrlStrings.Add("4");
-    m_outlineLevelCtrlStrings.Add("5");
-    m_outlineLevelCtrlStrings.Add("6");
-    m_outlineLevelCtrlStrings.Add("7");
-    m_outlineLevelCtrlStrings.Add("8");
-    m_outlineLevelCtrlStrings.Add("9");
-    m_outlineLevelCtrlStrings.Add("10");
-    m_outlineLevelCtrl = new wxComboBox( itemRichTextDialogPage1, ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL, _("(none)"), wxDefaultPosition, wxSize(85, -1), m_outlineLevelCtrlStrings, wxCB_READONLY );
-    m_outlineLevelCtrl->SetStringSelection(_("(none)"));
+    m_outlineLevelCtrl = new wxComboBox( itemRichTextDialogPage1, ID_RICHTEXTINDENTSSPACINGPAGE_OUTLINELEVEL, wxEmptyString, wxDefaultPosition, wxSize(85, -1), m_outlineLevelCtrlStrings, wxCB_READONLY );
     m_outlineLevelCtrl->SetHelpText(_("The outline level."));
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
         m_outlineLevelCtrl->SetToolTip(_("The outline level."));
@@ -331,6 +307,24 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer3->Add(m_previewCtrl, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
 ////@end wxRichTextIndentsSpacingPage content construction
+
+    wxArrayString outlineLevelCtrlStrings;
+    outlineLevelCtrlStrings.Add(_("(none)"));
+    outlineLevelCtrlStrings.Add("1");
+    outlineLevelCtrlStrings.Add("2");
+    outlineLevelCtrlStrings.Add("3");
+    outlineLevelCtrlStrings.Add("4");
+    outlineLevelCtrlStrings.Add("5");
+    outlineLevelCtrlStrings.Add("6");
+    outlineLevelCtrlStrings.Add("7");
+    outlineLevelCtrlStrings.Add("8");
+    outlineLevelCtrlStrings.Add("9");
+    outlineLevelCtrlStrings.Add("10");
+    
+    m_outlineLevelCtrl->Freeze();
+    m_outlineLevelCtrl->Append(outlineLevelCtrlStrings);
+    m_outlineLevelCtrl->Thaw();
+    m_outlineLevelCtrl->SetStringSelection(_("(none)"));
 }
 
 wxRichTextAttr* wxRichTextIndentsSpacingPage::GetAttributes()
