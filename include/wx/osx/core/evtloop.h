@@ -55,6 +55,13 @@ public:
 #endif // wxUSE_EVENTLOOP_SOURCE
 
     bool ShouldProcessIdleEvents() const { return m_processIdleEvents ; }
+    
+#if wxUSE_UIACTIONSIMULATOR
+    // notifies Yield and Dispatch to wait for at least one event before
+    // returning, this is necessary, because the synthesized events need to be
+    // converted by the OS before being available on the native event queue
+    void SetShouldWaitForEvent(bool should) { m_shouldWaitForEvent = should; }
+#endif
 protected:
     void CommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
     void DefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
@@ -92,6 +99,9 @@ protected:
     // set to false to avoid idling at unexpected moments - eg when having native message boxes
     bool m_processIdleEvents;
 
+#if wxUSE_UIACTIONSIMULATOR
+    bool m_shouldWaitForEvent;
+#endif
 private:
     // process all already pending events and dispatch a new one (blocking
     // until it appears in the event queue if necessary)
