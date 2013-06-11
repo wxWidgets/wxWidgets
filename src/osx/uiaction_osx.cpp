@@ -26,6 +26,8 @@
 #include "wx/osx/private.h"
 #include "wx/osx/core/cfref.h"
 
+#include "wx/evtloop.h"
+
 namespace
 {
     
@@ -77,7 +79,39 @@ bool wxUIActionSimulator::MouseDown(int button)
 
     CGEventSetType(event, type);
     CGEventPost(tap, event);
+    wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
+    if (loop)
+        loop->SetShouldWaitForEvent(true);
+    
+    return true;
+}
 
+bool wxUIActionSimulator::MouseDblClick(int button)
+{
+    CGEventType downtype = CGEventTypeForMouseButton(button, true);
+    CGEventType uptype = CGEventTypeForMouseButton(button, false);
+    wxCFRef<CGEventRef> event(
+                              CGEventCreateMouseEvent(NULL, downtype, GetMousePosition(), button));
+    
+    if ( !event )
+        return false;
+    
+    CGEventSetType(event,downtype);
+    CGEventPost(tap, event);
+
+    CGEventSetType(event, uptype);
+    CGEventPost(tap, event);
+    
+    CGEventSetIntegerValueField(event, kCGMouseEventClickState, 2);
+    CGEventSetType(event, downtype);
+    CGEventPost(tap, event);
+    
+    CGEventSetType(event, uptype);
+    CGEventPost(tap, event);
+    wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
+    if (loop)
+        loop->SetShouldWaitForEvent(true);
+    
     return true;
 }
 
@@ -96,7 +130,10 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
 
     CGEventSetType(event, type);
     CGEventPost(tap, event);
-
+    wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
+    if (loop)
+        loop->SetShouldWaitForEvent(true);
+    
     return true;
 }
 
@@ -111,7 +148,10 @@ bool wxUIActionSimulator::MouseUp(int button)
 
     CGEventSetType(event, type);
     CGEventPost(tap, event);
-
+    wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
+    if (loop)
+        loop->SetShouldWaitForEvent(true);
+    
     return true;
 }
 
@@ -126,6 +166,10 @@ wxUIActionSimulator::DoKey(int keycode, int WXUNUSED(modifiers), bool isDown)
         return false;
 
     CGEventPost(kCGHIDEventTap, event);
+    wxCFEventLoop* loop = dynamic_cast<wxCFEventLoop*>(wxEventLoop::GetActive());
+    if (loop)
+        loop->SetShouldWaitForEvent(true);
+
     return true;
 }
 
