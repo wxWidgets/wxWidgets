@@ -11087,13 +11087,16 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
                 // find the first line which is being drawn at the same position as it was
                 // before. Since we're talking about a simple insertion, we can assume
                 // that the rest of the window does not need to be redrawn.
+                long pos = GetRange().GetStart();
 
-                wxRichTextParagraph* para = container->GetParagraphAtPosition(GetPosition());
+                wxRichTextParagraph* para = container->GetParagraphAtPosition(pos, false /* is not caret pos */);
                 // Since we support floating layout, we should redraw the whole para instead of just
                 // the first line touching the invalid range.
                 if (para)
                 {
-                    firstY = para->GetPosition().y;
+                    // In case something was drawn above the paragraph,
+                    // such as a line break, allow a little extra.
+                    firstY = para->GetPosition().y - 4;
                 }
 
                 wxRichTextObjectList::compatibility_iterator node = container->GetChildren().Find(para);
@@ -11141,7 +11144,7 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
                                     // Stop, we're now the same as we were
                                     foundEnd = true;
 
-                                    lastY = pt.y;
+                                    lastY = pt.y + line->GetSize().y;
 
                                     node2 = wxRichTextLineList::compatibility_iterator();
                                     node = wxRichTextObjectList::compatibility_iterator();
