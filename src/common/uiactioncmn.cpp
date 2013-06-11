@@ -37,6 +37,14 @@ bool wxUIActionSimulator::MouseDblClick(int button)
     return true;
 }
 
+bool wxUIActionSimulator::MouseClickAndDragTo(long x, long y, int button)
+{
+    MouseDown(button);
+    MouseMove(x,y);
+    MouseUp(button);
+    return true;
+}
+
 #endif
 
 bool
