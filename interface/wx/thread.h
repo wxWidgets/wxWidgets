@@ -277,7 +277,7 @@ public:
 
     Example:
     @code
-        wxDECLARE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent);
+        wxDECLARE_EVENT(myEVT_THREAD_UPDATE, wxThreadEvent);
 
         class MyFrame : public wxFrame, public wxThreadHelper
         {
@@ -310,9 +310,9 @@ public:
             wxDECLARE_EVENT_TABLE();
         };
 
-        wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent)
+        wxDEFINE_EVENT(myEVT_THREAD_UPDATE, wxThreadEvent)
         wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-            EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, MyFrame::OnThreadUpdate)
+            EVT_THREAD(wxID_ANY, myEVT_THREAD_UPDATE, MyFrame::OnThreadUpdate)
             EVT_CLOSE(MyFrame::OnClose)
         wxEND_EVENT_TABLE()
 
