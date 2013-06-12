@@ -108,14 +108,9 @@
             // For some reason, wxComboBox::GetValue will not return the newly selected item 
             // while we're inside this callback, so use AddPendingEvent to make sure
             // GetValue() returns the right value.
-            wxEventLoop* const loop = (wxEventLoop*) wxEventLoopBase::GetActive();
-            if ( loop )
-                loop->OSXUseLowLevelWakeup(true);
 
             wxpeer->GetEventHandler()->AddPendingEvent( event );
 
-            if ( loop )
-                loop->OSXUseLowLevelWakeup(false);
         }
     }
 }
@@ -129,6 +124,30 @@ wxNSComboBoxControl::wxNSComboBoxControl( wxComboBox *wxPeer, WXWidget w )
 
 wxNSComboBoxControl::~wxNSComboBoxControl()
 {
+}
+
+void wxNSComboBoxControl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
+{
+    // NSComboBox has its own event loop, which reacts very badly to our synthetic
+    // events used to signal when a wxEvent is posted, so during that time we switch
+    // the wxEventLoop::WakeUp implementation to a lower-level version
+    
+    bool reset = false;
+    wxEventLoop* const loop = (wxEventLoop*) wxEventLoopBase::GetActive();
+
+    if ( loop != NULL && [event type] == NSLeftMouseDown )
+    {
+        reset = true;
+        loop->OSXUseLowLevelWakeup(true);
+    }
+    
+    wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+    superimpl(slf, (SEL)_cmd, event);
+ 
+    if ( reset )
+    {
+        loop->OSXUseLowLevelWakeup(true);
+    }
 }
 
 int wxNSComboBoxControl::GetSelectedItem() const
@@ -214,8 +233,9 @@ void wxNSComboBoxControl::SetEditable(bool editable)
 {
     // TODO: unfortunately this does not work, setEditable just means the same as CB_READONLY
     // I don't see a way to access the text field directly
-    NSComboBoxCell* c = [m_comboBox cell];
-    [c setEditable:editable];
+    
+    // Behavior NONE <- SELECTECTABLE
+    [m_comboBox setEditable:editable];
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer, 
