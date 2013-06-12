@@ -115,6 +115,8 @@ public :
     virtual void Popup();
     virtual void Dismiss();
 
+    virtual void SetEditable(bool editable);
+
 private:
     NSComboBox* m_comboBox;
 };

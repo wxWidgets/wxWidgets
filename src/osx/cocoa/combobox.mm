@@ -210,6 +210,14 @@ void wxNSComboBoxControl::Dismiss()
     [ax accessibilitySetValue: [NSNumber numberWithBool: NO] forAttribute: NSAccessibilityExpandedAttribute];
 }
 
+void wxNSComboBoxControl::SetEditable(bool editable)
+{
+    // TODO: unfortunately this does not work, setEditable just means the same as CB_READONLY
+    // I don't see a way to access the text field directly
+    NSComboBoxCell* c = [m_comboBox cell];
+    [c setEditable:editable];
+}
+
 wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer, 
                                     wxWindowMac* WXUNUSED(parent), 
                                     wxWindowID WXUNUSED(id), 
