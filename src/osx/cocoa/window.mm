@@ -17,6 +17,7 @@
     #include "wx/log.h"
     #include "wx/textctrl.h"
     #include "wx/combobox.h"
+    #include "wx/radiobut.h"
 #endif
 
 #ifdef __WXMAC__
