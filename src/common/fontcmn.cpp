@@ -842,7 +842,7 @@ wxString wxNativeFontInfo::ToUserString() const
             // that the different words which compose this facename are
             // not different adjectives or other data but rather all parts
             // of the facename
-            desc << wxT(" '") << face << _("'");
+            desc << wxT(" '") << face << wxT("'");
         }
         else
             desc << wxT(' ') << face;
