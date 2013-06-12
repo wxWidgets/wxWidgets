@@ -1185,11 +1185,6 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     return result != wxDragNone;
 }
 
-typedef void (*wxOSX_TextEventHandlerPtr)(NSView* self, SEL _cmd, NSString *event);
-typedef void (*wxOSX_EventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
-typedef BOOL (*wxOSX_PerformKeyEventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
-typedef BOOL (*wxOSX_FocusHandlerPtr)(NSView* self, SEL _cmd);
-
 void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     // we are getting moved events for all windows in the hierarchy, not something wx expects
@@ -2524,7 +2519,13 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
     if ([c respondsToSelector:@selector(setAction:)])
     {
         [c setTarget: c];
-        [c setAction: @selector(controlAction:)];
+        if ( dynamic_cast<wxRadioButton*>(GetWXPeer()) )
+        {
+            // everything already set up
+        }
+        else
+            [c setAction: @selector(controlAction:)];
+        
         if ([c respondsToSelector:@selector(setDoubleAction:)])
         {
             [c setDoubleAction: @selector(controlDoubleAction:)];
