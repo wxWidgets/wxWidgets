@@ -78,7 +78,12 @@ public:
 
     virtual void SetDateTime(const wxDateTime& dt)
     {
-        [View() setDateValue: NSDateFromWX(dt)];
+        wxDateTime dtFrom, dtTo;
+        
+        if ( GetDateRange(&dtFrom,&dtTo) == false ||
+            ( (!dtFrom.IsValid() || dtFrom <= dt) &&
+             (!dtTo.IsValid() || dt <= dtTo ) ) )
+            [View() setDateValue: NSDateFromWX(dt)];
     }
 
     virtual wxDateTime GetDateTime() const
