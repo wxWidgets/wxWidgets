@@ -201,6 +201,11 @@ void TextCtrlTestCase::ReadOnly()
 
     // SetEditable() is supposed to override wxTE_READONLY
     m_text->SetEditable(true);
+    
+#ifdef __WXOSX__
+    // a ready only text field might not have been focusable at all
+    m_text->SetFocus();
+#endif
 
     sim.Text("abcdef");
     wxYield();
