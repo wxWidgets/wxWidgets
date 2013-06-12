@@ -189,6 +189,14 @@ wxString wxComboBox::GetStringSelection() const
     return sel == wxNOT_FOUND ? wxString() : GetString(sel);
 }
 
+void wxComboBox::SetValue(const wxString& value)
+{
+    if ( HasFlag(wxCB_READONLY) )
+        SetStringSelection( value ) ;
+    else
+        wxTextEntry::SetValue( value );
+}
+
 void wxComboBox::SetString(unsigned int n, const wxString& s)
 {
     // Notice that we shouldn't delete and insert the item in this control

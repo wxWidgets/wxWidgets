@@ -104,10 +104,10 @@ class WXDLLIMPEXP_CORE wxComboBox :
 
     virtual unsigned int GetCount() const;
 
+    virtual void SetValue(const wxString& value);
 // these methods are provided by wxTextEntry for the native impl.
 #if wxOSX_USE_CARBON
     // Text field functions
-    virtual void SetValue(const wxString& value);
     virtual wxString GetValue() const;
     virtual void WriteText(const wxString& text);
 
