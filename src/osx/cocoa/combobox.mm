@@ -177,6 +177,7 @@ void wxNSComboBoxControl::Clear()
 {
     SendEvents(false);
     [m_comboBox removeAllItems];
+    [m_comboBox setStringValue:@""];
     SendEvents(true);
 }
 
