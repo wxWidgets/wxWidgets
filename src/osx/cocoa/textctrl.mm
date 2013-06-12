@@ -111,6 +111,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 @interface wxMaximumLengthFormatter : NSFormatter
 {
     int maxLength;
+    wxTextEntry* field;
 }
 
 @end
@@ -148,10 +149,15 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     int len = [*partialStringPtr length];
     if ( maxLength > 0 && len > maxLength )
     {
-        // TODO wxEVT_TEXT_MAXLEN
+        field->SendMaxLenEvent();
         return NO;
     }
     return YES;
+}
+
+- (void) setTextEntry:(wxTextEntry*) tf
+{
+    field = tf;
 }
 
 @end
@@ -805,6 +811,7 @@ void wxNSTextFieldControl::SetMaxLength(unsigned long len)
 {
     wxMaximumLengthFormatter* formatter = [[[wxMaximumLengthFormatter alloc] init] autorelease];
     [formatter setMaxLength:len];
+    [formatter setTextEntry:GetTextEntry()];
     [m_textField setFormatter:formatter];
 }
 
