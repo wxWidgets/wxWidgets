@@ -169,7 +169,6 @@ void ComboBoxTestCase::Sort()
 
 void ComboBoxTestCase::ReadOnly()
 {
-#ifndef __WXOSX__
     wxArrayString testitems;
     testitems.Add("item 1");
     testitems.Add("item 2");
@@ -190,7 +189,6 @@ void ComboBoxTestCase::ReadOnly()
     m_combo->SetValue("ITEM 2");
 
     CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetValue());
-#endif
 }
 
 void ComboBoxTestCase::IsEmpty()
