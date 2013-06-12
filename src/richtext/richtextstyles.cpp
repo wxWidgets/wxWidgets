@@ -740,11 +740,20 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     if (attr.HasAlignment() && attr.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         isCentred = true;
 
+    str << wxT("<html><head></head>");
+    str << wxT("<body");
+    if (attr.GetBackgroundColour().Ok())
+        str << wxT(" bgcolor=\"#") << ColourToHexString(attr.GetBackgroundColour()) << wxT("\"");
+    str << wxT(">");
+
     if (isCentred)
         str << wxT("<center>");
 
+    str << wxT("<table");
+    if (attr.GetBackgroundColour().Ok())
+        str << wxT(" bgcolor=\"#") << ColourToHexString(attr.GetBackgroundColour()) << wxT("\"");
 
-    str << wxT("<table><tr>");
+    str << wxT("><tr>");
 
     if (attr.GetLeftIndent() > 0)
     {
@@ -837,6 +846,9 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     if (attr.GetTextColour().IsOk())
         str << wxT(" color=\"#") << ColourToHexString(attr.GetTextColour()) << wxT("\"");
 
+    if (attr.GetBackgroundColour().Ok())
+        str << wxT(" bgcolor=\"#") << ColourToHexString(attr.GetBackgroundColour()) << wxT("\"");
+
     str << wxT(">");
 
     bool hasBold = false;
@@ -876,6 +888,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     if (isCentred)
         str << wxT("</center>");
 
+    str << wxT("</body></html>");
     return str;
 }
 
