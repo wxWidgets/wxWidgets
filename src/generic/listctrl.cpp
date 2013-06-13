@@ -5299,34 +5299,6 @@ bool wxGenericListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
 #endif
 }
 
-void wxGenericListCtrl::DoClientToScreen( int *x, int *y ) const
-{
-    // having (0,0) at the origin of the m_mainWin seems wrong compared to
-    // the other code like in Refresh
-#if 0
-    // It's not clear whether this can be called before m_mainWin is created
-    // but it seems better to be on the safe side and check.
-    if ( m_mainWin )
-        m_mainWin->DoClientToScreen(x, y);
-    else
-#endif
-        wxListCtrlBase::DoClientToScreen(x, y);
-}
-
-void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
-{
-    // having (0,0) at the origin of the m_mainWin seems wrong compared to
-    // the other code like in Refresh
-#if 0
-    // At least in wxGTK/Univ build this method can be called before m_mainWin
-    // is created so avoid crashes in this case.
-    if ( m_mainWin )
-        m_mainWin->DoScreenToClient(x, y);
-    else
-#endif
-        wxListCtrlBase::DoScreenToClient(x, y);
-}
-
 wxSize wxGenericListCtrl::DoGetBestClientSize() const
 {
     // The base class version can compute the best size in report view only.

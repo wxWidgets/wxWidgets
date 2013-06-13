@@ -211,11 +211,6 @@ protected:
 
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
 
-    // take into account the coordinates difference between the container
-    // window and the list control window itself here
-    virtual void DoClientToScreen( int *x, int *y ) const;
-    virtual void DoScreenToClient( int *x, int *y ) const;
-
     virtual wxSize DoGetBestClientSize() const;
 
     // return the text for the given column of the given item
