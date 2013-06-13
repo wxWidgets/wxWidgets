@@ -847,9 +847,47 @@ public:
     virtual void PopState() = 0;
 
 
+    virtual bool ShouldOffset() const;
     virtual void EnableOffset(bool enable = true);
     void DisableOffset();
     bool OffsetEnabled();
+
+    /**
+       Begin a new document (relevant only for printing / pdf etc.)
+       If there is a progress dialog, message will be shown.
+    */
+    virtual bool StartDoc( const wxString& message );
+
+    /**
+       Done with that document (relevant only for printing / pdf etc.)
+    */
+    virtual void EndDoc();
+
+    /**
+       Opens a new page (relevant only for printing / pdf etc.) with the given
+       size in points.  (If both are null the default page size will be used.)
+    */
+    virtual void StartPage( wxDouble width = 0, wxDouble height = 0 );
+
+    /**
+       Ends the current page  (relevant only for printing / pdf etc.)
+    */
+    virtual void EndPage();
+
+    /**
+       Make sure that the current content of this context is immediately visible.
+    */
+    virtual void Flush();
+
+    /**
+       Returns the size of the graphics context in device coordinates.
+    */
+    void GetSize(wxDouble* width, wxDouble* height) const;
+    
+    /**
+       Returns the resolution of the graphics context in device points per inch.
+    */
+    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
 
 };
 
