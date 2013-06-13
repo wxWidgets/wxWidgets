@@ -56,7 +56,20 @@ private:
     }
 
     CPPUNIT_TEST_SUITE( ComboBoxTestCase );
+#ifdef __WXOSX__
+    CPPUNIT_TEST( SetValue );
+    CPPUNIT_TEST( TextChangeEvents );
+    CPPUNIT_TEST( Selection );
+    CPPUNIT_TEST( InsertionPoint );
+    CPPUNIT_TEST( Replace );
+//  TODO on OS X only works interactively
+//   WXUISIM_TEST( Editable );
+    CPPUNIT_TEST( Hint );
+    CPPUNIT_TEST( CopyPaste ); 
+    CPPUNIT_TEST( UndoRedo );
+#else
         wxTEXT_ENTRY_TESTS();
+#endif
         wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Size );
         CPPUNIT_TEST( PopDismiss );

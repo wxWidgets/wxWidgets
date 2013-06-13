@@ -153,7 +153,9 @@ void GridTestCase::tearDown()
 
 void GridTestCase::CellEdit()
 {
-#if wxUSE_UIACTIONSIMULATOR
+    // TODO on OSX when running the grid test suite solo this works
+    // but not when running it together with other tests
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXOSX__)
     EventCounter changing(m_grid, wxEVT_GRID_CELL_CHANGING);
     EventCounter changed(m_grid, wxEVT_GRID_CELL_CHANGED);
     EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
@@ -332,7 +334,8 @@ void GridTestCase::SortClick()
 
 void GridTestCase::Size()
 {
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
+    // TODO on OSX resizing interactively works, but not automated
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__) && !defined(__WXOSX__) 
     EventCounter colsize(m_grid, wxEVT_GRID_COL_SIZE);
     EventCounter rowsize(m_grid, wxEVT_GRID_ROW_SIZE);
 
