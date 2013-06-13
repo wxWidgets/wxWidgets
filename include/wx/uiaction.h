@@ -49,10 +49,6 @@ public:
                        int button = wxMOUSE_BTN_LEFT)
     { return MouseDragDrop(p1.x, p1.y, p2.x, p2.y, button); }
 
-    bool MouseClickAndDragTo(long x, long y, int button = wxMOUSE_BTN_LEFT);
-    bool MouseClickAndDragTo(const wxPoint& point, int button = wxMOUSE_BTN_LEFT)
-    { return MouseClickAndDragTo(point.x, point.y, button); }
-
     // Keyboard simulation
     // -------------------
 

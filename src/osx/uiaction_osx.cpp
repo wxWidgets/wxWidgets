@@ -202,27 +202,34 @@ bool wxUIActionSimulator::MouseDblClick(int button)
     return true;
 }
 
-bool wxUIActionSimulator::MouseClickAndDragTo(long x, long y, int button)
+bool wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2,
+                                        int button)
 {
+    CGPoint pos1,pos2;
+    pos1.x = x1;
+    pos1.y = y1;
+    pos2.x = x2;
+    pos2.y = y2;
+
     CGEventType downtype = CGEventTypeForMouseButton(button, true);
     CGEventType uptype = CGEventTypeForMouseButton(button, false);
     CGEventType dragtype = CGEventTypeForMouseDrag(button) ;
 
     wxCFRef<CGEventRef> event(
-                              CGEventCreateMouseEvent(NULL, downtype, GetMousePosition(), CGButtonForMouseButton(button)));
+                              CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, pos1, CGButtonForMouseButton(button)));
     
     if ( !event )
         return false;
     
+    CGEventSetType(event,kCGEventMouseMoved);
+    CGEventPost(tap, event);
+    
     CGEventSetType(event,downtype);
     CGEventPost(tap, event);
     
-    CGPoint pos;
-    pos.x = x;
-    pos.y = y;
     
     CGEventSetType(event, dragtype);
-    CGEventSetLocation(event,pos);
+    CGEventSetLocation(event,pos2);
     CGEventPost(tap, event);
     
     CGEventSetType(event, uptype);
