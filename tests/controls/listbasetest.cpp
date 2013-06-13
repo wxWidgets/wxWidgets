@@ -131,6 +131,21 @@ void ListBaseTestCase::ItemRect()
 
     WX_ASSERT_FAILS_WITH_ASSERT( list->GetSubItemRect(0, 3, r) );
 
+
+    // As we have a header, the top item shouldn't be at (0, 0), but somewhere
+    // below the header.
+    //
+    // Notice that we consider that the header can't be less than 10 pixels
+    // because we don't know its exact height.
+    CPPUNIT_ASSERT( list->GetItemRect(0, r) );
+    CPPUNIT_ASSERT( r.y >= 10 );
+
+    // However if we remove the header now, the item should be at (0, 0).
+    list->SetWindowStyle(wxLC_REPORT | wxLC_NO_HEADER);
+    CPPUNIT_ASSERT( list->GetItemRect(0, r) );
+    CPPUNIT_ASSERT_EQUAL( 0, r.y );
+
+
     //tidy up when we are finished
     list->ClearAll();
 }
