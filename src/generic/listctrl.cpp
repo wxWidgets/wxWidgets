@@ -952,15 +952,17 @@ wxListHeaderWindow::wxListHeaderWindow()
     m_resizeCursor = NULL;
 }
 
-wxListHeaderWindow::wxListHeaderWindow( wxWindow *win,
-                                        wxWindowID id,
-                                        wxListMainWindow *owner,
-                                        const wxPoint& pos,
-                                        const wxSize& size,
-                                        long style,
-                                        const wxString &name )
-                  : wxWindow( win, id, pos, size, style, name )
+bool wxListHeaderWindow::Create( wxWindow *win,
+                                 wxWindowID id,
+                                 wxListMainWindow *owner,
+                                 const wxPoint& pos,
+                                 const wxSize& size,
+                                 long style,
+                                 const wxString &name )
 {
+    if ( !wxWindow::Create(win, id, pos, size, style, name) )
+        return false;
+
     Init();
 
     m_owner = owner;
@@ -978,6 +980,8 @@ wxListHeaderWindow::wxListHeaderWindow( wxWindow *win,
     if (!m_hasFont)
         SetOwnFont( wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT ));
 #endif
+
+    return true;
 }
 
 wxListHeaderWindow::~wxListHeaderWindow()
@@ -4509,18 +4513,13 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
 
     if (needs_header)
     {
-        // since there is no separate Create method for the wxListHeaderWindow
-        // we have to guard against reentrancy which happens via new wxListHeaderWindow ->
-        // wxNavigationEnabled::AddChild -> ToggleWindowStyle -> SetWindowStyleFlag
-        // since has_header is still false then
-        static bool blockreentrancy = false;
-        
-        if ( blockreentrancy )
-            return;
-
-        blockreentrancy = true;
-
-        m_headerWin = new wxListHeaderWindow
+        // Notice that we must initialize m_headerWin first, and create the
+        // real window only later, so that the test in the beginning of the
+        // function blocks repeated creation of the header as it could happen
+        // before via wxNavigationEnabled::AddChild() -> ToggleWindowStyle() ->
+        // SetWindowStyleFlag().
+        m_headerWin = new wxListHeaderWindow();
+        m_headerWin->Create
                       (
                         this, wxID_ANY, m_mainWin,
                         wxPoint(0,0),
@@ -4531,7 +4530,6 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
                         ),
                         wxTAB_TRAVERSAL
                       );
-        blockreentrancy = false;
         
 #if defined( __WXMAC__ )
         static wxFont font( wxOSX_SYSTEM_FONT_SMALL );

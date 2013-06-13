@@ -336,13 +336,16 @@ protected:
 public:
     wxListHeaderWindow();
 
-    wxListHeaderWindow( wxWindow *win,
-                        wxWindowID id,
-                        wxListMainWindow *owner,
-                        const wxPoint &pos = wxDefaultPosition,
-                        const wxSize &size = wxDefaultSize,
-                        long style = 0,
-                        const wxString &name = wxT("wxlistctrlcolumntitles") );
+    // We provide only Create(), not the ctor, because we need to create the
+    // C++ object before creating the window, see the explanations in
+    // CreateOrDestroyHeaderWindowAsNeeded()
+    bool Create( wxWindow *win,
+                 wxWindowID id,
+                 wxListMainWindow *owner,
+                 const wxPoint &pos = wxDefaultPosition,
+                 const wxSize &size = wxDefaultSize,
+                 long style = 0,
+                 const wxString &name = wxT("wxlistctrlcolumntitles") );
 
     virtual ~wxListHeaderWindow();
 
