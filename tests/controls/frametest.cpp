@@ -56,7 +56,7 @@ void FrameTestCase::setUp()
 
 void FrameTestCase::tearDown()
 {
-    wxDELETE(m_frame);
+    m_frame->Destroy();
 }
 
 void FrameTestCase::Iconize()
