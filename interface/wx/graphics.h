@@ -406,6 +406,11 @@ public:
     static wxGraphicsContext* Create(wxImage& image);
 
     /**
+       Create a lightweight context that can be used only for measuring text.
+    */
+    static wxGraphicsContext* Create();
+
+    /**
         Clips drawings to the specified region.
     */
     virtual void Clip(const wxRegion& region) = 0;
