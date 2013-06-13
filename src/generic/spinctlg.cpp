@@ -533,9 +533,11 @@ bool wxSpinCtrlGenericBase::DoSetValue(double val)
 {
     wxCHECK_MSG( m_textCtrl, false, wxT("invalid call to wxSpinCtrl::SetValue") );
 
-    if (!InRange(val))
-        return false;
-
+    if ( val < m_min )
+        val = m_min;
+    if ( val > m_max )
+        val = m_max;
+    
     if ( m_snap_to_ticks && (m_increment != 0) )
     {
         double snap_value = val / m_increment;
@@ -577,7 +579,11 @@ double wxSpinCtrlGenericBase::AdjustToFitInRange(double value) const
 void wxSpinCtrlGenericBase::DoSetRange(double min, double max)
 {
     m_min = min;
+    if ( m_value < m_min )
+        DoSetValue(m_min);
     m_max = max;
+    if ( m_value > m_max )
+        DoSetValue(m_max);
 }
 
 void wxSpinCtrlGenericBase::DoSetIncrement(double inc)
