@@ -4509,6 +4509,17 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
 
     if (needs_header)
     {
+        // since there is no separate Create method for the wxListHeaderWindow
+        // we have to guard against reentrancy which happens via new wxListHeaderWindow ->
+        // wxNavigationEnabled::AddChild -> ToggleWindowStyle -> SetWindowStyleFlag
+        // since has_header is still false then
+        static bool blockreentrancy = false;
+        
+        if ( blockreentrancy )
+            return;
+
+        blockreentrancy = true;
+
         m_headerWin = new wxListHeaderWindow
                       (
                         this, wxID_ANY, m_mainWin,
@@ -4520,7 +4531,8 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
                         ),
                         wxTAB_TRAVERSAL
                       );
-
+        blockreentrancy = false;
+        
 #if defined( __WXMAC__ )
         static wxFont font( wxOSX_SYSTEM_FONT_SMALL );
         m_headerWin->SetFont( font );
@@ -5291,21 +5303,29 @@ bool wxGenericListCtrl::DoPopupMenu( wxMenu *menu, int x, int y )
 
 void wxGenericListCtrl::DoClientToScreen( int *x, int *y ) const
 {
+    // having (0,0) at the origin of the m_mainWin seems wrong compared to
+    // the other code like in Refresh
+#if 0
     // It's not clear whether this can be called before m_mainWin is created
     // but it seems better to be on the safe side and check.
     if ( m_mainWin )
         m_mainWin->DoClientToScreen(x, y);
     else
+#endif
         wxListCtrlBase::DoClientToScreen(x, y);
 }
 
 void wxGenericListCtrl::DoScreenToClient( int *x, int *y ) const
 {
+    // having (0,0) at the origin of the m_mainWin seems wrong compared to
+    // the other code like in Refresh
+#if 0
     // At least in wxGTK/Univ build this method can be called before m_mainWin
     // is created so avoid crashes in this case.
     if ( m_mainWin )
         m_mainWin->DoScreenToClient(x, y);
     else
+#endif
         wxListCtrlBase::DoScreenToClient(x, y);
 }
 
