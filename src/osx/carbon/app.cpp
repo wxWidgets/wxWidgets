@@ -1138,7 +1138,7 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
         case WXK_RETURN:      keycode = kVK_Return; break;
         case WXK_ESCAPE:      keycode = kVK_Escape; break;
         case WXK_SPACE:       keycode = kVK_Space; break;
-        case WXK_DELETE:      keycode = kVK_Delete; break;
+        case WXK_DELETE:      keycode = kVK_ForwardDelete; break;
             
         case WXK_SHIFT:       keycode = kVK_Shift; break;
         case WXK_ALT:         keycode = kVK_Option; break;
