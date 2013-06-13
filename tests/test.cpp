@@ -497,6 +497,14 @@ bool TestApp::OnInit()
 
     m_eventloop = new wxEventLoop;
     wxEventLoop::SetActive(m_eventloop);
+
+#ifdef __WXOSX__
+    // we need to wait until the window is activated and fully ready
+    // otherwise no events can be posted
+    m_eventloop->DispatchTimeout(1000);
+    m_eventloop->Yield();
+#endif
+    
 #endif // wxUSE_GUI
 
     return true;
