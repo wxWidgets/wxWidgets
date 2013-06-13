@@ -304,11 +304,13 @@ int wxCFEventLoop::DoProcessEvents()
 {
     if ( m_shouldWaitForEvent )
     {
-        int  handled = DispatchTimeout( 10000 );
+        int  handled = DispatchTimeout( 1000 );
         wxASSERT_MSG( handled == 1, "No Event Available");
         m_shouldWaitForEvent = false;
+        return handled;
     }
-    return DispatchTimeout( 0 );
+    else
+        return DispatchTimeout( 0 );
 }
 
 bool wxCFEventLoop::Dispatch()
