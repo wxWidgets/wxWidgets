@@ -272,10 +272,12 @@ public:
         NSTabViewItem* hitItem = [slf tabViewItemAtPoint:nspt];
         
         if (!hitItem) {
-            *flags = wxBK_HITTEST_NOWHERE;
+            if ( flags )
+                *flags = wxBK_HITTEST_NOWHERE;
         } else {
             retval = [slf indexOfTabViewItem:hitItem];
-            *flags = wxBK_HITTEST_ONLABEL;
+            if ( flags )
+                *flags = wxBK_HITTEST_ONLABEL;
         }
         
         return retval; 
