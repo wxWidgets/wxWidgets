@@ -1291,9 +1291,23 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     NSURLRequest *request = [self request];
 	NSString* path = [[request URL] absoluteString];
 
+    id<NSURLProtocolClient> client = [self client];
+
     wxString wxpath = wxStringWithNSString(path);
     wxString scheme = wxStringWithNSString([[request URL] scheme]);
     wxFSFile* file = g_stringHandlerMap[scheme]->GetFile(wxpath);
+
+    if (!file)
+    {
+        NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
+                            code:NSURLErrorFileDoesNotExist
+                            userInfo:nil];
+
+        [client URLProtocol:self didFailWithError:error];
+
+        return;
+    }
+
     size_t length = file->GetStream()->GetLength();
 
 
@@ -1306,8 +1320,6 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     void* buffer = malloc(length);
     file->GetStream()->Read(buffer, length);
     NSData *data = [[NSData alloc] initWithBytesNoCopy:buffer length:length];
-
-    id<NSURLProtocolClient> client = [self client];
 
     //We do not support caching anything yet
 	[client URLProtocol:self didReceiveResponse:response
