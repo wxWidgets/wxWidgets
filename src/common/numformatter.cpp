@@ -210,8 +210,7 @@ wxString wxNumberFormatter::ToString(wxLongLong_t val, int style)
 
 wxString wxNumberFormatter::ToString(double val, int precision, int style)
 {
-    const wxString fmt = wxString::Format("%%.%df", precision);
-    wxString s = wxString::Format(fmt, val);
+    wxString s = wxString::FromDouble(val,precision);
 
     if ( style & Style_WithThousandsSep )
         AddThousandsSeparators(s);
