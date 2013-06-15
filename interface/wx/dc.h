@@ -678,6 +678,9 @@ public:
         - wxFLOOD_BORDER: The area to be flooded is bounded by the given
           colour.
 
+        Currently this method is not implemented in wxOSX and does nothing
+        there.
+
         @return @false if the operation failed.
 
         @note The present implementation for non-Windows platforms may fail to
