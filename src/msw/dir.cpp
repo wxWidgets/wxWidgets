@@ -77,8 +77,22 @@ const wxChar *GetNameFromFindData(const FIND_STRUCT *finddata)
 inline bool
 CheckFoundMatch(const FIND_STRUCT* finddata, const wxString& filter)
 {
-    return filter.empty() ||
-                wxString(GetNameFromFindData(finddata)).Matches(filter);
+    // If there is no filter, the found file must be the one we really are
+    // looking for.
+    if ( filter.empty() )
+        return true;
+
+    // Otherwise do check the match validity. Notice that we must do it
+    // case-insensitively because the case of the file names is not supposed to
+    // matter under Windows.
+    wxString fn(GetNameFromFindData(finddata));
+
+    // However if the filter contains only special characters (which is a
+    // common case), we can skip the case conversion.
+    if ( filter.find_first_not_of(wxS("*?.")) == wxString::npos )
+        return fn.Matches(filter);
+
+    return fn.MakeUpper().Matches(filter.Upper());
 }
 
 inline bool
