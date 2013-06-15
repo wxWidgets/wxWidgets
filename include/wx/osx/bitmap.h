@@ -107,6 +107,9 @@ public:
     wxBitmap(CGImageRef image);
     wxBitmap(WX_NSImage image);
 
+    // Create a bitmap compatible with the given DC
+    wxBitmap(int width, int height, const wxDC& dc);
+    
     // If depth is omitted, will create a bitmap compatible with the display
     wxBitmap(int width, int height, int depth = -1) { (void)Create(width, height, depth); }
     wxBitmap(const wxSize& sz, int depth = -1) { (void)Create(sz, depth); }

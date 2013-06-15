@@ -939,6 +939,11 @@ wxBitmap::wxBitmap(const void* data, wxBitmapType type, int width, int height, i
     (void) Create(data, type, width, height, depth);
 }
 
+wxBitmap::wxBitmap(int width, int height, const wxDC& WXUNUSED(dc))
+{
+    (void) Create(width, height);
+}
+
 wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 {
     LoadFile(filename, type);
@@ -1112,7 +1117,6 @@ bool wxBitmap::Create(int w, int h, int d)
 
     return M_BITMAPDATA->IsOk() ;
 }
-
 
 bool wxBitmap::Create(CGImageRef image)
 {
