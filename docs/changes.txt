@@ -671,6 +671,7 @@ All (GUI):
 - Fix wxStyledTextCtrl::SetInsertionPointEnd() (troelsk).
 - Add wxFileDialog::GetCurrentlySelectedFilename() (Carl Godkin).
 - Add wxMouseEvent::GetColumnsPerAction() (toiffel).
+- Improve wrapping of cell contents in wxGrid (nmset).
 
 wxGTK:
 

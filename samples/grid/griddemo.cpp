@@ -450,6 +450,21 @@ GridFrame::GridFrame()
 
     grid->SetCellValue( 0, 4, wxT("Can veto edit this cell") );
 
+    grid->SetColSize(10, 150);
+    wxString longtext = wxT("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\n\n");
+    longtext += wxT("With tabs :\n");
+    longtext += wxT("Home,\t\thome\t\t\tagain\n");
+    longtext += wxT("Long word at start :\n");
+    longtext += wxT("ILikeToBeHereWhen I can\n");
+    longtext += wxT("Long word in the middle :\n");
+    longtext += wxT("When IComeHome,ColdAnd tired\n");
+    longtext += wxT("Long last word :\n");
+    longtext += wxT("It's GoodToWarmMyBonesBesideTheFire");
+    grid->SetCellValue( 0, 10, longtext );
+    grid->SetCellRenderer(0 , 10, new wxGridCellAutoWrapStringRenderer);
+    grid->SetCellEditor( 0,  10 , new wxGridCellAutoWrapStringEditor);
+    grid->SetCellValue( 0, 11, wxT("K1 cell editor blocker") );
+
     grid->SetCellValue( 0, 5, wxT("Press\nCtrl+arrow\nto skip over\ncells") );
 
     grid->SetRowSize( 99, 60 );
