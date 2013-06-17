@@ -245,7 +245,7 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
 
 wxString wxHtmlBookRecord::GetFullPath(const wxString &page) const
 {
-    if (wxIsAbsolutePath(page))
+    if (wxIsAbsolutePath(page) || page.Find(wxT("file:")) == 0)
         return page;
     else
         return m_BasePath + page;
