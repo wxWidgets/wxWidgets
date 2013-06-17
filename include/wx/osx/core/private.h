@@ -873,6 +873,8 @@ public :
     virtual void ScreenToWindow( int *x, int *y ) = 0;
 
     virtual void WindowToScreen( int *x, int *y ) = 0;
+    
+    virtual double GetMagnificationFactor() const { return 1.0; }
 
     virtual bool IsActive() = 0;
 

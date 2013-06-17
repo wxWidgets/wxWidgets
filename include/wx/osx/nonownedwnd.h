@@ -65,6 +65,8 @@ public:
     virtual void UnsubclassWin();
 
     virtual wxPoint GetClientAreaOrigin() const;
+    
+    virtual double GetMagnificationFactor() const;
 
     // implement base class pure virtuals
 

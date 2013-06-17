@@ -1035,6 +1035,11 @@ void wxNonOwnedWindowCocoaImpl::WindowToScreen( int *x, int *y )
         *y = p.y;
 }
 
+double wxNonOwnedWindowCocoaImpl::GetMagnificationFactor() const
+{
+    return [m_macWindow backingScaleFactor];
+}
+
 bool wxNonOwnedWindowCocoaImpl::IsActive()
 {
     return [m_macWindow isKeyWindow];

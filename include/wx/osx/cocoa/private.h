@@ -247,6 +247,8 @@ public :
 
     virtual void WindowToScreen( int *x, int *y );
 
+    virtual double GetMagnificationFactor() const;
+
     virtual bool IsActive();
 
     virtual void SetModified(bool modified);
