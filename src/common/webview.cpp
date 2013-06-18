@@ -89,9 +89,8 @@ void wxWebView::RegisterFactory(const wxString& backend,
 // static 
 wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backend)
 {
-    // Initialise the map if needed
-    if(m_factoryMap.empty())
-        InitFactoryMap();
+    // Initialise the map, it checks internally for existing factories
+    InitFactoryMap();
 
     return m_factoryMap.find(backend);
 }
@@ -100,10 +99,12 @@ wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backe
 void wxWebView::InitFactoryMap()
 {
 #ifdef __WXMSW__
-    RegisterFactory(wxWebViewBackendIE, wxSharedPtr<wxWebViewFactory>
+    if(m_factoryMap.find(wxWebViewBackendIE) == m_factoryMap.end())
+        RegisterFactory(wxWebViewBackendIE, wxSharedPtr<wxWebViewFactory>
                                                    (new wxWebViewFactoryIE));
 #else
-    RegisterFactory(wxWebViewBackendWebKit, wxSharedPtr<wxWebViewFactory>
+    if(m_factoryMap.find(wxWebViewBackendWebKit) == m_factoryMap.end())
+        RegisterFactory(wxWebViewBackendWebKit, wxSharedPtr<wxWebViewFactory>
                                                        (new wxWebViewFactoryWebKit));
 #endif
 }
