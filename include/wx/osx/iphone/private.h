@@ -61,7 +61,7 @@ public :
     virtual void        GetPosition( int &x, int &y ) const;
     virtual void        GetSize( int &width, int &height ) const;
     virtual void        SetControlSize( wxWindowVariant variant );
-    virtual float       GetContentScaleFactor() const ;
+    virtual double      GetContentScaleFactor() const ;
     
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
     virtual bool        GetNeedsDisplay() const;

@@ -66,8 +66,6 @@ public:
 
     virtual wxPoint GetClientAreaOrigin() const;
     
-    virtual double GetMagnificationFactor() const;
-
     // implement base class pure virtuals
 
     virtual bool SetTransparent(wxByte alpha);

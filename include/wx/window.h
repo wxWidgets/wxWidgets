@@ -521,9 +521,9 @@ public:
         return wxSize( wxMax( client.x, best.x ), wxMax( client.y, best.y ) );
     }
 
-    // returns the magnification of the backing store of this window
+    // returns the magnification of the content of this window
     // eg 2.0 for a window on a retina screen
-    virtual double GetMagnificationFactor() const
+    virtual double GetContentScaleFactor() const
     { return 1.0; }
     
     // return the size of the left/right and top/bottom borders in x and y

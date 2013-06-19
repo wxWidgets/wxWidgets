@@ -98,8 +98,6 @@ public:
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
     
-    virtual double GetMagnificationFactor() const;
-
 public:
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true );
@@ -294,7 +292,7 @@ public:
 
     bool                IsNativeWindowWrapper() const { return m_isNativeWindowWrapper; }
     
-    float               GetContentScaleFactor() const ;
+    double              GetContentScaleFactor() const ;
     
     // internal response to size events
     virtual void MacOnInternalSize() {}
