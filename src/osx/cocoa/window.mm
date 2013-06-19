@@ -1703,6 +1703,17 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
     [m_osxView setHidden:(visible ? NO:YES)];
 }
 
+double wxWidgetCocoaImpl::GetContentScaleFactor() const
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+    NSWindow* tlw = [m_osxView window];
+    if ( [ tlw respondsToSelector:@selector(backingScaleFactor) ] )
+        return [tlw backingScaleFactor];
+    else
+#endif
+        return 1.0;
+}
+
 // ----------------------------------------------------------------------------
 // window animation stuff
 // ----------------------------------------------------------------------------

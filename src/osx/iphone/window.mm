@@ -609,7 +609,7 @@ void wxWidgetIPhoneImpl::SetControlSize( wxWindowVariant variant )
 {
 }
 
-float wxWidgetIPhoneImpl::GetContentScaleFactor() const 
+double wxWidgetIPhoneImpl::GetContentScaleFactor() const 
 {
     if ( [m_osxView respondsToSelector:@selector(contentScaleFactor) ])
         return [m_osxView contentScaleFactor];

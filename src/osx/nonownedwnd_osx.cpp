@@ -478,11 +478,6 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
        *height = h ;
 }
 
-double wxNonOwnedWindow::GetMagnificationFactor() const
-{
-    return m_nowpeer->GetMagnificationFactor();
-}
-
 void wxNonOwnedWindow::WindowWasPainted()
 {
     s_lastFlush = clock();

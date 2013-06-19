@@ -877,13 +877,6 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
        *y = hh;
 }
 
-double wxWindowMac::GetMagnificationFactor() const
-{
-    wxNonOwnedWindow* tlw = MacGetTopLevelWindow() ;
-    wxCHECK_MSG( tlw , 1.0, wxT("TopLevel Window missing") ) ;
-    return tlw->GetMagnificationFactor();    
-}
-
 bool wxWindowMac::SetCursor(const wxCursor& cursor)
 {
     if (m_cursor.IsSameAs(cursor))
@@ -1226,7 +1219,7 @@ void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
     }
 }
 
-float wxWindowMac::GetContentScaleFactor() const 
+double wxWindowMac::GetContentScaleFactor() const 
 {
     return GetPeer()->GetContentScaleFactor();
 }
