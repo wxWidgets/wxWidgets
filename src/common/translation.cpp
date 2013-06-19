@@ -155,13 +155,13 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
                 {
                     wxString lang(*j);
                     lang.Replace("-", "_");
-                    if ( available.Index(lang) != wxNOT_FOUND )
+                    if ( available.Index(lang, /*bCase=*/false) != wxNOT_FOUND )
                         return lang;
                     size_t pos = lang.find('_');
                     if ( pos != wxString::npos )
                     {
                         lang = lang.substr(0, pos);
-                        if ( available.Index(lang) != wxNOT_FOUND )
+                        if ( available.Index(lang, /*bCase=*/false) != wxNOT_FOUND )
                             return lang;
                     }
                 }
