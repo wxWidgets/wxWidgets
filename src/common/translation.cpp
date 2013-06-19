@@ -1764,13 +1764,13 @@ wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
     //    breaking apps after they are recompiled against the latest wx
     // b) it makes it possible to package app's support files in the same
     //    way on all target platforms
-    const wxString pathPrefix = wxFileName(prefix, lang).GetFullPath();
+    const wxString prefixAndLang = wxFileName(prefix, lang).GetFullPath();
 
     wxString searchPath;
-    searchPath.reserve(4*pathPrefix.length());
-    searchPath << pathPrefix << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
-            << prefix << wxFILE_SEP_PATH << wxPATH_SEP
-            << pathPrefix;
+    searchPath.reserve(4*prefixAndLang.length());
+    searchPath << prefixAndLang << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
+               << prefixAndLang << wxPATH_SEP
+               << prefix;
 
     return searchPath;
 }
