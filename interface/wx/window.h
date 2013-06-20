@@ -1119,7 +1119,7 @@ public:
 
        @since 2.9.5
     */
-    virtual double GetMagnificationFactor() const;
+    virtual double GetContentScaleFactor() const;
     
     /**
         Returns the size of the left/right and top/bottom borders of this window in x
