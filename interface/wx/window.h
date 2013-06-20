@@ -53,6 +53,16 @@ enum wxShowEffect
 };
 
 
+/**
+   flags for SendSizeEvent()
+*/
+enum
+{
+    wxSEND_EVENT_POST = 1
+};
+
+
+
 
 /**
     Struct containing all the visual attributes of a control.
