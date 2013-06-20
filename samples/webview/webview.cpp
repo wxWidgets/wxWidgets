@@ -341,7 +341,7 @@ WebFrame::WebFrame(const wxString& url) :
     SetSize(wxSize(800, 600));
 
     // Create a log window
-    new wxLogWindow(this, _("Logging"));
+    new wxLogWindow(this, _("Logging"), true, false);
 
     // Create the Tools menu
     m_tools_menu = new wxMenu();
