@@ -213,7 +213,11 @@ bool wxSoundBackendSDL::OpenAudio()
         {
 #if wxUSE_LOG_DEBUG
             char driver[256];
+#if SDL_MAJOR_VERSION == 1
             SDL_AudioDriverName(driver, 256);
+#elif SDL_MAJOR_VERSION > 1            
+            strncpy(driver, SDL_GetCurrentAudioDriver(), 256);
+#endif
             wxLogTrace(wxT("sound"), wxT("opened audio, driver '%s'"),
                        wxString(driver, wxConvLocal).c_str());
 #endif
