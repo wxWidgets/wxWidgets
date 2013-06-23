@@ -702,7 +702,8 @@ bool wxMDIParentFrame::TryBefore(wxEvent& event)
 {
     // menu (and toolbar) events should be sent to the active child frame
     // first, if any
-    if ( event.GetEventType() == wxEVT_MENU )
+    if ( event.GetEventType() == wxEVT_MENU ||
+            event.GetEventType() == wxEVT_UPDATE_UI )
     {
         wxMDIChildFrame * const child = GetActiveChild();
         if ( child && child->ProcessWindowEventLocally(event) )
