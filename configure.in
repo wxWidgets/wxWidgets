@@ -585,6 +585,8 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_WITHOUT(libjbig,    [  --without-libjbig       don't use libjbig in libtiff even if available)], wxUSE_LIBJBIG)
+WX_ARG_WITHOUT(liblzma,    [  --without-liblzma       don't use liblzma in libtiff even if available)], wxUSE_LIBLZMA)
 WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file format)], wxUSE_LIBXPM)
 WX_ARG_WITH(libiconv,      [  --with-libiconv         use libiconv (character conversion)], wxUSE_LIBICONV)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
@@ -2701,12 +2703,22 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
 
-        dnl If libtiff configure detects lzma library, it enables support for
-        dnl LZMA compression and using it requires linking with liblzma.
-        AC_CHECK_LIB(lzma, lzma_code, [LIBS="$LIBS -llzma"])
+        if test "$wxUSE_LIBLZMA" = "yes"; then
+            dnl If libtiff configure detects lzma library, it enables support for
+            dnl LZMA compression and using it requires linking with liblzma.
+            AC_CHECK_LIB(lzma, lzma_code, [LIBS="$LIBS -llzma"])
+        else
+            dnl Prevent libtiff configure from looking for liblzma if it's
+            dnl explicitly disabled.
+            ac_configure_args="$ac_configure_args --disable-lzma"
+        fi
 
         dnl Similarly for jbig
-        AC_CHECK_LIB(jbig, jbg_dec_init, [LIBS="$LIBS -ljbig"])
+        if test "$wxUSE_LIBJBIG" = "yes"; then
+            AC_CHECK_LIB(jbig, jbg_dec_init, [LIBS="$LIBS -ljbig"])
+        else
+            ac_configure_args="$ac_configure_args --disable-jbig"
+        fi
 
         AC_CONFIG_SUBDIRS([src/tiff])
     fi

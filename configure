@@ -1104,6 +1104,8 @@ enable_gpe
 with_libpng
 with_libjpeg
 with_libtiff
+with_libjbig
+with_liblzma
 with_libxpm
 with_libiconv
 with_libmspack
@@ -2332,6 +2334,8 @@ Optional Packages:
   --with-libpng           use libpng (PNG image format)
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
+  --without-libjbig       don't use libjbig in libtiff even if available)
+  --without-liblzma       don't use liblzma in libtiff even if available)
   --with-libxpm           use libxpm (XPM file format)
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
@@ -4909,6 +4913,94 @@ $as_echo "builtin version" >&6; }
           else
             as_fn_error $? "Invalid value for --with-libtiff: should be yes, no, sys, or builtin" "$LINENO" 5
           fi
+
+
+          withstring=without
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${withstring:-with}-libjbig" >&5
+$as_echo_n "checking for --${withstring:-with}-libjbig... " >&6; }
+
+# Check whether --with-libjbig was given.
+if test "${with_libjbig+set}" = set; then :
+  withval=$with_libjbig;
+                        if test "$withval" = yes; then
+                          wx_cv_use_libjbig='wxUSE_LIBJBIG=yes'
+                        else
+                          wx_cv_use_libjbig='wxUSE_LIBJBIG=no'
+                        fi
+
+else
+
+                        wx_cv_use_libjbig='wxUSE_LIBJBIG=${'DEFAULT_wxUSE_LIBJBIG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_libjbig"
+
+          if test x"$withstring" = xwithout; then
+            if test $wxUSE_LIBJBIG = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_LIBJBIG
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+
+          withstring=without
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${withstring:-with}-liblzma" >&5
+$as_echo_n "checking for --${withstring:-with}-liblzma... " >&6; }
+
+# Check whether --with-liblzma was given.
+if test "${with_liblzma+set}" = set; then :
+  withval=$with_liblzma;
+                        if test "$withval" = yes; then
+                          wx_cv_use_liblzma='wxUSE_LIBLZMA=yes'
+                        else
+                          wx_cv_use_liblzma='wxUSE_LIBLZMA=no'
+                        fi
+
+else
+
+                        wx_cv_use_liblzma='wxUSE_LIBLZMA=${'DEFAULT_wxUSE_LIBLZMA":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_liblzma"
+
+          if test x"$withstring" = xwithout; then
+            if test $wxUSE_LIBLZMA = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_LIBLZMA
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
 
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --with-libxpm" >&5
@@ -22875,7 +22967,8 @@ $as_echo "$as_me: WARNING: system tiff library not found, will use built-in inst
                                                                                     ac_configure_args="$ac_configure_args --disable-jpeg"
         fi
 
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
+        if test "$wxUSE_LIBLZMA" = "yes"; then
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
 $as_echo_n "checking for lzma_code in -llzma... " >&6; }
 if ${ac_cv_lib_lzma_lzma_code+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -22915,8 +23008,12 @@ if test "x$ac_cv_lib_lzma_lzma_code" = xyes; then :
   LIBS="$LIBS -llzma"
 fi
 
+        else
+                                    ac_configure_args="$ac_configure_args --disable-lzma"
+        fi
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jbg_dec_init in -ljbig" >&5
+                if test "$wxUSE_LIBJBIG" = "yes"; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jbg_dec_init in -ljbig" >&5
 $as_echo_n "checking for jbg_dec_init in -ljbig... " >&6; }
 if ${ac_cv_lib_jbig_jbg_dec_init+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -22956,6 +23053,9 @@ if test "x$ac_cv_lib_jbig_jbg_dec_init" = xyes; then :
   LIBS="$LIBS -ljbig"
 fi
 
+        else
+            ac_configure_args="$ac_configure_args --disable-jbig"
+        fi
 
 
 
