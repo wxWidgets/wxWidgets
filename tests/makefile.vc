@@ -175,6 +175,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_rearrangelisttest.obj \
 	$(OBJS)\test_gui_richtextctrltest.obj \
 	$(OBJS)\test_gui_searchctrltest.obj \
+	$(OBJS)\test_gui_simplebooktest.obj \
 	$(OBJS)\test_gui_slidertest.obj \
 	$(OBJS)\test_gui_spinctrldbltest.obj \
 	$(OBJS)\test_gui_spinctrltest.obj \
@@ -1029,6 +1030,9 @@ $(OBJS)\test_gui_richtextctrltest.obj: .\controls\richtextctrltest.cpp
 
 $(OBJS)\test_gui_searchctrltest.obj: .\controls\searchctrltest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\searchctrltest.cpp
+
+$(OBJS)\test_gui_simplebooktest.obj: .\controls\simplebooktest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\simplebooktest.cpp
 
 $(OBJS)\test_gui_slidertest.obj: .\controls\slidertest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\controls\slidertest.cpp

@@ -173,6 +173,7 @@
             controls/rearrangelisttest.cpp
             controls/richtextctrltest.cpp
             controls/searchctrltest.cpp
+            controls/simplebooktest.cpp
             controls/slidertest.cpp
             controls/spinctrldbltest.cpp
             controls/spinctrltest.cpp

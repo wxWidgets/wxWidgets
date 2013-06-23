@@ -393,6 +393,10 @@ SOURCE=.\misc\settings.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\simplebooktest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\size.cpp
 # End Source File
 # Begin Source File

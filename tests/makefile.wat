@@ -447,6 +447,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_rearrangelisttest.obj &
 	$(OBJS)\test_gui_richtextctrltest.obj &
 	$(OBJS)\test_gui_searchctrltest.obj &
+	$(OBJS)\test_gui_simplebooktest.obj &
 	$(OBJS)\test_gui_slidertest.obj &
 	$(OBJS)\test_gui_spinctrldbltest.obj &
 	$(OBJS)\test_gui_spinctrltest.obj &
@@ -937,6 +938,9 @@ $(OBJS)\test_gui_richtextctrltest.obj :  .AUTODEPEND .\controls\richtextctrltest
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_searchctrltest.obj :  .AUTODEPEND .\controls\searchctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_simplebooktest.obj :  .AUTODEPEND .\controls\simplebooktest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_slidertest.obj :  .AUTODEPEND .\controls\slidertest.cpp

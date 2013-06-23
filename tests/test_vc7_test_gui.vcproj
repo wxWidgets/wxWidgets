@@ -509,6 +509,9 @@
 				RelativePath=".\misc\settings.cpp">
 			</File>
 			<File
+				RelativePath=".\controls\simplebooktest.cpp">
+			</File>
+			<File
 				RelativePath=".\geometry\size.cpp">
 			</File>
 			<File
