@@ -428,11 +428,14 @@ void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
 
 wxMenuItem *wxMDIParentFrame::FindItemInMenuBar(int menuId) const
 {
-    wxMenuItem *item = wxFrame::FindItemInMenuBar(menuId);
-    if ( !item && GetActiveChild() )
-    {
-        item = GetActiveChild()->FindItemInMenuBar(menuId);
-    }
+    // We must look in the child menu first: if it has an item with the same ID
+    // as in our own menu bar, the child item should be used to determine
+    // whether it's currently enabled.
+    wxMenuItem *item = GetActiveChild()
+                            ? GetActiveChild()->FindItemInMenuBar(menuId)
+                            : NULL;
+    if ( !item )
+        item = wxFrame::FindItemInMenuBar(menuId);
 
     if ( !item && m_windowMenu )
         item = m_windowMenu->FindItem(menuId);
