@@ -41,6 +41,8 @@ private:
     virtual wxEventType GetChangingEvent() const
     { return wxEVT_TOOLBOOK_PAGE_CHANGING; }
 
+    virtual void Realize() { m_toolbook->GetToolBar()->Realize(); }
+
     CPPUNIT_TEST_SUITE( ToolbookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
         CPPUNIT_TEST( ToolBar );

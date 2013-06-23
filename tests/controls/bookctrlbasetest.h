@@ -48,6 +48,9 @@ protected:
     //the ctrl.
     void AddPanels();
 
+    // Override this to call Realize() on the toolbar in the wxToolbook test.
+    virtual void Realize() { }
+
     wxPanel* m_panel1;
     wxPanel* m_panel2;
     wxPanel* m_panel3;
