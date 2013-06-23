@@ -156,8 +156,15 @@ protected:
 
     virtual wxWindow *DoRemovePage(size_t page)
     {
-        m_pageTexts.erase(m_pageTexts.begin() + page);
-        return wxBookCtrlBase::DoRemovePage(page);
+        wxWindow* const win = wxBookCtrlBase::DoRemovePage(page);
+        if ( win )
+        {
+            m_pageTexts.erase(m_pageTexts.begin() + page);
+
+            DoSetSelectionAfterRemoval(page);
+        }
+
+        return win;
     }
 
     virtual void DoSize()

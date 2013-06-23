@@ -95,19 +95,25 @@ void BookCtrlBaseTestCase::PageManagement()
     CPPUNIT_ASSERT_EQUAL(0, base->GetSelection());
     CPPUNIT_ASSERT_EQUAL(4, base->GetPageCount());
 
+    // Change the selection to verify that deleting a page before the currently
+    // selected one correctly updates the selection.
+    base->SetSelection(2);
+    CPPUNIT_ASSERT_EQUAL(2, base->GetSelection());
+
     base->DeletePage(1);
 
     CPPUNIT_ASSERT_EQUAL(3, base->GetPageCount());
+    CPPUNIT_ASSERT_EQUAL(1, base->GetSelection());
 
     base->RemovePage(0);
 
     CPPUNIT_ASSERT_EQUAL(2, base->GetPageCount());
+    CPPUNIT_ASSERT_EQUAL(0, base->GetSelection());
 
     base->DeleteAllPages();
 
     CPPUNIT_ASSERT_EQUAL(0, base->GetPageCount());
-
-    AddPanels();
+    CPPUNIT_ASSERT_EQUAL(-1, base->GetSelection());
 }
 
 void BookCtrlBaseTestCase::ChangeEvents()

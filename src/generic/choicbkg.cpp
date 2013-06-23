@@ -209,22 +209,7 @@ wxWindow *wxChoicebook::DoRemovePage(size_t page)
     {
         GetChoiceCtrl()->Delete(page);
 
-        if ( m_selection >= (int)page )
-        {
-            // ensure that the selection is valid
-            int sel;
-            if ( GetPageCount() == 0 )
-                sel = wxNOT_FOUND;
-            else
-                sel = m_selection ? m_selection - 1 : 0;
-
-            // if deleting current page we shouldn't try to hide it
-            m_selection = m_selection == (int)page ? wxNOT_FOUND
-                                                   : m_selection - 1;
-
-            if ( sel != wxNOT_FOUND && sel != m_selection )
-                SetSelection(sel);
-        }
+        DoSetSelectionAfterRemoval(page);
     }
 
     return win;

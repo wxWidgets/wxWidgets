@@ -456,6 +456,26 @@ bool wxBookCtrlBase::DoSetSelectionAfterInsertion(size_t n, bool bSelect)
     return true;
 }
 
+void wxBookCtrlBase::DoSetSelectionAfterRemoval(size_t n)
+{
+    if ( m_selection >= (int)n )
+    {
+        // ensure that the selection is valid
+        int sel;
+        if ( GetPageCount() == 0 )
+            sel = wxNOT_FOUND;
+        else
+            sel = m_selection ? m_selection - 1 : 0;
+
+        // if deleting current page we shouldn't try to hide it
+        m_selection = m_selection == (int)n ? wxNOT_FOUND
+                                            : m_selection - 1;
+
+        if ( sel != wxNOT_FOUND && sel != m_selection )
+            SetSelection(sel);
+    }
+}
+
 int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
 {
     wxCHECK_MSG( n < GetPageCount(), wxNOT_FOUND,
