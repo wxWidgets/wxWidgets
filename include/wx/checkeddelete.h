@@ -30,13 +30,13 @@
 
 #define wxCHECKED_DELETE(ptr)                                                 \
     wxSTATEMENT_MACRO_BEGIN                                                   \
-        typedef char complete[sizeof(*ptr)];                                  \
+        typedef char complete[sizeof(*ptr)] WX_ATTRIBUTE_UNUSED;              \
         delete ptr;                                                           \
     wxSTATEMENT_MACRO_END
 
 #define wxCHECKED_DELETE_ARRAY(ptr)                                           \
     wxSTATEMENT_MACRO_BEGIN                                                   \
-        typedef char complete[sizeof(*ptr)];                                  \
+        typedef char complete[sizeof(*ptr)] WX_ATTRIBUTE_UNUSED;              \
         delete [] ptr;                                                        \
     wxSTATEMENT_MACRO_END
 
