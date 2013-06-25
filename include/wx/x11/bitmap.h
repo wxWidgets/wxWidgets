@@ -88,6 +88,8 @@ public:
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH)
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
+    bool Create(int width, int height, const wxDC& WXUNUSED(dc))
+        { return Create(width,height); }
 
     bool Create(const void* data, wxBitmapType type,
                 int width, int height, int depth = -1);
