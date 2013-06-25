@@ -58,10 +58,17 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     if ( cg == NULL )
     {
         SetGraphicsContext( wxGraphicsContext::Create( window ) ) ;
+        m_contentScaleFactor = window->GetContentScaleFactor();
         SetDeviceOrigin(-window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize());
     }
     else
     {
+        // determine content scale
+        CGRect userrect = CGRectMake(0, 0, 10, 10);
+        CGRect devicerect;
+        devicerect = CGContextConvertRectToDeviceSpace(cg, userrect);
+        m_contentScaleFactor = devicerect.size.height / userrect.size.height;
+
         CGContextSaveGState( cg );
         m_release = true ;
         // make sure the context is having its origin at the wx-window coordinates of the
