@@ -9301,6 +9301,29 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
         return false;
 }
 
+// The next 2 methods return span values. Note that the default is 1, not 0
+int wxRichTextCell::GetColspan() const
+{
+    int span = 1;
+    if (GetProperties().HasProperty(wxT("colspan")))
+    {
+        span = GetProperties().GetPropertyLong(wxT("colspan"));
+    }
+
+    return span;
+}
+
+int wxRichTextCell::GetRowspan() const
+{
+    int span = 1;
+    if (GetProperties().HasProperty(wxT("rowspan")))
+    {
+        span = GetProperties().GetPropertyLong(wxT("rowspan"));
+    }
+
+    return span;
+}
+
 WX_DEFINE_OBJARRAY(wxRichTextObjectPtrArrayArray)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextTable, wxRichTextBox)
@@ -9329,7 +9352,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 {
     SetPosition(rect.GetPosition());
 
-    // TODO: the meaty bit. Calculate sizes of all cells and rows. Try to use
+    // The meaty bit. Calculate sizes of all cells and rows. Try to use
     // minimum size if within alloted size, then divide up remaining size
     // between rows/cols.
 
@@ -9445,12 +9468,9 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     {
         for (i = 0; i < m_colCount; i++)
         {
-            wxRichTextBox* cell = GetCell(j, i);
-            int colSpan = 1, rowSpan = 1;
-            if (cell->GetProperties().HasProperty(wxT("colspan")))
-                colSpan = cell->GetProperties().GetPropertyLong(wxT("colspan"));
-            if (cell->GetProperties().HasProperty(wxT("rowspan")))
-                rowSpan = cell->GetProperties().GetPropertyLong(wxT("rowspan"));
+            wxRichTextCell* cell = GetCell(j, i);
+            int colSpan = cell->GetColspan();
+            int rowSpan = cell->GetRowspan();
             if (colSpan > 1 || rowSpan > 1)
             {
                 rectArray.Add(wxRect(i, j, colSpan, rowSpan));
@@ -9462,18 +9482,16 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     {
         for (i = 0; i < m_colCount; i++)
         {
-            wxRichTextBox* cell = GetCell(j, i);
+            wxRichTextCell* cell = GetCell(j, i);
             if (rectArray.GetCount() == 0)
             {
                 cell->Show(true);
             }
             else
             {
-                int colSpan = 1, rowSpan = 1;
-                if (cell->GetProperties().HasProperty(wxT("colspan")))
-                    colSpan = cell->GetProperties().GetPropertyLong(wxT("colspan"));
-                if (cell->GetProperties().HasProperty(wxT("rowspan")))
-                    rowSpan = cell->GetProperties().GetPropertyLong(wxT("rowspan"));
+                int colSpan = cell->GetColspan();
+                int rowSpan = cell->GetRowspan();
+
                 if (colSpan > 1 || rowSpan > 1)
                 {
                     // Assume all spanning cells are shown
@@ -9496,7 +9514,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
         }
     }
 
-    // TODO: find the first spanned cell in each row that spans the most columns and doesn't
+    // Find the first spanned cell in each row that spans the most columns and doesn't
     // overlap with a spanned cell starting at a previous column position.
     // This means we need to keep an array of rects so we can check. However
     // it does also mean that some spans simply may not be taken into account
@@ -9536,12 +9554,10 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
         for (i = 0; i < m_colCount; i++)
         {
-            wxRichTextBox* cell = GetCell(j, i);
+            wxRichTextCell* cell = GetCell(j, i);
             if (cell->IsShown())
             {
-                int colSpan = 1;
-                if (cell->GetProperties().HasProperty(wxT("colspan")))
-                    colSpan = cell->GetProperties().GetPropertyLong(wxT("colspan"));
+                int colSpan = cell->GetColspan();
 
                 // Lay out cell to find min/max widths
                 cell->Invalidate(wxRICHTEXT_ALL);
@@ -9661,13 +9677,10 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
         for (i = 0; i < m_colCount; i++)
         {
-            wxRichTextBox* cell = GetCell(j, i);
+            wxRichTextCell* cell = GetCell(j, i);
             if (cell->IsShown())
             {
-                int colSpan = 1;
-                if (cell->GetProperties().HasProperty(wxT("colspan")))
-                    colSpan = cell->GetProperties().GetPropertyLong(wxT("colspan"));
-
+                int colSpan = cell->GetColspan();
                 if (colSpan > 1)
                 {
                     int spans = wxMin(colSpan, m_colCount - i);
@@ -9750,7 +9763,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     int stretchColCount = 0;
     for (i = 0; i < m_colCount; i++)
     {
-        // TODO: we need to take into account min widths.
         // Subtract min width from width left, then
         // add the colShare to the min width
         if (colWidths[i] > 0) // absolute or proportional width has been specified
@@ -9856,19 +9868,16 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
                 if (colWidths[i] > 0) // absolute or proportional width has been specified
                 {
-                    int colSpan = 1;
-                    if (cell->GetProperties().HasProperty(wxT("colspan")))
-                        colSpan = cell->GetProperties().GetPropertyLong(wxT("colspan"));
-
+                    int colSpan = cell->GetColspan();
                     wxRect availableCellSpace;
 
-                    // TODO: take into acount spans
+                    // Take into account spans
                     if (colSpan > 1)
                     {
                         // Calculate the size of this spanning cell from its constituent columns
-                        int xx = x;
+                        int xx = 0;
                         int spans = wxMin(colSpan, m_colCount - i);
-                        for (k = i; k < spans; k++)
+                        for (k = i; k < (i+spans); k++)
                         {
                             if (k != i)
                                 xx += paddingX;
