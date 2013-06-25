@@ -423,7 +423,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     size_t button_count = m_buttons.GetCount();
 
     // create off-screen bitmap
-    bmp.Create(m_rect.GetWidth(), m_rect.GetHeight());
+    bmp.Create(m_rect.GetWidth(), m_rect.GetHeight(),*raw_dc);
     dc.SelectObject(bmp);
 
     if (!dc.IsOk())
