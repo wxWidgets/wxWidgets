@@ -9343,6 +9343,157 @@ bool wxRichTextTable::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
 WX_DECLARE_OBJARRAY(wxRect, wxRichTextRectArray);
 WX_DEFINE_OBJARRAY(wxRichTextRectArray);
 
+
+    // Helper function for Layout() that clears the space needed by a cell with rowspan > 1
+int GetRowspanDisplacement(const wxRichTextTable* table, int row, int col, int paddingX, const wxArrayInt& colWidths)
+{
+    // If one or more cells above-left of this one has rowspan > 1, the affected cells below it
+    // will have been hidden and have width 0. As a result they are ignored by the layout algorithm,
+    // and all cells to their right are effectively shifted left. As a result there's no hole for
+    // the spanning cell to fill.
+    // So search back along the current row for hidden cells. However there's also the annoying issue of a 
+    // rowspanning cell that also has colspam. So we can't rely on the rowspanning cell being directly above
+    // the first hidden one we come to. We also can't rely on a cell being hidden only by one type of span;
+    // there's nothing to stop a cell being hidden by colspan, and then again hidden from above by rowspan.
+    // The answer is to look above each hidden cell in turn, which I think covers all bases.
+    int deltaX = 0;
+    for (int prevcol = 0; prevcol < col; ++prevcol)
+    {
+        if (!table->GetCell(row, prevcol)->IsShown())
+        {
+            // We've found a hidden cell. If it's hidden because of colspan to its left, it's
+            // already been taken into account; but not if there's a rowspanning cell above
+            for (int prevrow = row-1; prevrow >= 0; --prevrow)
+            {
+                wxRichTextCell* cell = table->GetCell(prevrow, prevcol);
+                if (cell && cell->IsShown())
+                {
+                    int rowSpan = cell->GetRowspan();
+                    if (rowSpan > 1 && rowSpan > (row-prevrow))
+                    {
+                        // There is a rowspanning cell above above the hidden one, so we need
+                        // to right-shift the index cell by this column's width. Furthermore, 
+                        // if the cell also colspans, we need to shift by all affected columns
+                        for (int colSpan = 0; colSpan < cell->GetColspan(); ++colSpan)
+                            deltaX += (colWidths[prevcol+colSpan] + paddingX);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return deltaX;
+}
+
+    // Helper function for Layout() that expands any cell with rowspan > 1
+void ExpandCellsWithRowspan(const wxRichTextTable* table, int paddingY, int& bottomY, wxDC& dc, wxRichTextDrawingContext& context, const wxRect& availableSpace, int style)
+{
+    // This is called when the table's cell layout is otherwise complete.
+    // For any cell with rowspan > 1, expand downwards into the row(s) below.
+    
+    // Start by finding the current 'y' of the top of each row, plus the bottom of the available area for cells.
+    // Deduce this from the top of a visible cell in the row below. (If none are visible, the row will be invisible anyway and can be ignored.)
+    const int rowCount = table->GetRowCount();
+    const int colCount = table->GetColumnCount();
+    wxArrayInt rowTops;
+    rowTops.Add(0, rowCount+1);
+    for (int row = 0; row < rowCount; ++row)
+    {
+        for (int column = 0; column < colCount; ++column)
+        {
+            wxRichTextCell* cell = table->GetCell(row, column);
+            if (cell && cell->IsShown())
+            {
+                rowTops[row] = cell->GetPosition().y;
+                break;
+            }
+        }
+    }
+    rowTops[rowCount] = bottomY + paddingY;  // The table bottom, which was passed to us
+    
+    bool needsRelay = false;
+
+    int row, col;
+    for (row = 0; row < rowCount-1; ++row) // -1 as the bottom row can't rowspan
+    {
+        for (col = 0; col < colCount; ++col)
+        {
+            wxRichTextCell* cell = table->GetCell(row, col);
+            if (cell && cell->IsShown())
+            {
+                int span = cell->GetRowspan();
+                if (span > 1)
+                {
+                    span = wxMin(span, rowCount-row); // Don't try to span below the table!
+                    if (span < 2)
+                        continue;
+                    
+                    int availableHeight = rowTops[row+span] - rowTops[row] - paddingY;
+                    wxSize newSize = wxSize(cell->GetCachedSize().GetWidth(), availableHeight);
+                    wxRect availableCellSpace = wxRect(cell->GetPosition(), newSize);
+                    cell->Invalidate(wxRICHTEXT_ALL);
+                    cell->Layout(dc, context, availableCellSpace, availableSpace, style);
+                    // Ensure there's room in the span to display its contents, else it'll overwrite lower rows
+                    int overhang = cell->GetCachedSize().GetHeight() - availableHeight;
+                    cell->SetCachedSize(newSize);
+
+                    if (overhang > 0)
+                    {
+                        // There are 3 things to get right:
+                        // 1) The easiest is the rows below the span: they need to be downshifted by the overhang, and so does the table bottom itself
+                        // 2) The rows within the span, including the one holding this cell, need to be deepened by their share of the overhang
+                        //    e.g. if rowspan == 3, each row should increase in depth by 1/3rd of the overhang.
+                        // 3) The cell with the rowspan shouldn't be touched in 2); its height will be set to the whole span later.
+                        int deltaY = overhang / span;
+                        int spare  = overhang % span;
+                        
+                        // Each row in the span needs to by deepened by its share of the overhang (give the first row any spare).
+                        // This is achieved by increasing the value stored in the following row's rowTops
+                        for (int spannedRows = 0; spannedRows < span; ++spannedRows)
+                        {
+                            rowTops[row+spannedRows+1] += ((deltaY * (spannedRows+1))  + (spannedRows == 0 ? spare:0));
+                        }
+                        
+                        // Any rows below the span need shifting down
+                        for (int rowsBelow = row + span+1; rowsBelow <= rowCount; ++rowsBelow)
+                        {
+                            rowTops[rowsBelow] += overhang;
+                        }                        
+
+                        needsRelay = true;
+                    }
+                }
+            }
+        }
+    }
+   
+    if (!needsRelay)
+        return;
+
+    // There were overflowing rowspanning cells, so layout yet again to make the increased row depths show
+    for (row = 0; row < rowCount; ++row)
+    {
+        for (col = 0; col < colCount; ++col)
+        {
+            wxRichTextCell* cell = table->GetCell(row, col);
+            if (cell && cell->IsShown())
+            {
+                wxPoint position(cell->GetPosition().x, rowTops[row]);
+
+                // GetRowspan() will usually return 1, but may be greater
+                wxSize size(cell->GetCachedSize().GetWidth(), rowTops[row + cell->GetRowspan()] - rowTops[row] - paddingY);
+
+                wxRect availableCellSpace = wxRect(position, size);
+                cell->Invalidate(wxRICHTEXT_ALL);
+                cell->Layout(dc, context, availableCellSpace, availableSpace, style);
+                cell->SetCachedSize(size);
+            }
+        }
+        
+        bottomY = rowTops[rowCount] - paddingY;
+    }
+}
+
 // Lays the object out. rect is the space available for layout. Often it will
 // be the specified overall space for this object, if trying to constrain
 // layout to a particular size, or it could be the total space available in the
@@ -9891,6 +10042,10 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                     // Store actual width so we can force cell to be the appropriate width on the final loop
                     actualWidths[i] = availableCellSpace.GetWidth();
 
+                    // We now need to shift right by the width of any rowspanning cells above-left of us
+                    int deltaX = GetRowspanDisplacement(this, j, i, paddingX, colWidths);
+                    availableCellSpace.SetX(availableCellSpace.GetX() + deltaX);
+
                     // Lay out cell
                     cell->Invalidate(wxRICHTEXT_ALL);
                     cell->Layout(dc, context, availableCellSpace, availableSpace, style);
@@ -9898,7 +10053,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                     // TODO: use GetCachedSize().x to compute 'natural' size
 
                     x += (availableCellSpace.GetWidth() + paddingX);
-                    if (cell->GetCachedSize().y > maxCellHeight)
+                    if ((cell->GetCachedSize().y > maxCellHeight) && (cell->GetRowspan() < 2))
                         maxCellHeight = cell->GetCachedSize().y;
                 }
             }
@@ -9928,6 +10083,9 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
         if (j < (m_rowCount-1))
             y += paddingY;
     }
+    
+    // Finally we need to expand any cell with rowspan > 1. We couldn't earlier; lower rows' heights weren't known
+    ExpandCellsWithRowspan(this, paddingY, y, dc, context, availableSpace, style);
 
     // We need to add back the margins etc.
     {
