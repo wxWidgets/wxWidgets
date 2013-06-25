@@ -87,6 +87,11 @@ IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxObject)
 
 wxList wxBitmapBase::sm_handlers;
 
+bool wxBitmapBase::Create(int width, int height, const wxDC& WXUNUSED(dc))
+{
+    return Create(width,height);
+}
+
 void wxBitmapBase::AddHandler(wxBitmapHandler *handler)
 {
     sm_handlers.Append(handler);

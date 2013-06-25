@@ -26,6 +26,7 @@ class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxMask;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxDC;
 
 // ----------------------------------------------------------------------------
 // wxVariant support
@@ -174,6 +175,8 @@ public:
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
+    // Create a bitmap compatible with the given DC, inheriting its magnification factor
+    virtual bool Create(int width, int height, const wxDC& dc);
 
     virtual int GetHeight() const = 0;
     virtual int GetWidth() const = 0;
@@ -183,9 +186,9 @@ public:
         { return wxSize(GetWidth(), GetHeight()); }
 
     // support for scaled bitmaps
-    virtual double GetScale() const { return 1.0; }
-    virtual double GetScaledWidth() const { return GetWidth() / GetScale(); }
-    virtual double GetScaledHeight() const { return GetHeight() / GetScale(); }
+    virtual double GetScaleFactor() const { return 1.0; }
+    virtual double GetScaledWidth() const { return GetWidth() / GetScaleFactor(); }
+    virtual double GetScaledHeight() const { return GetHeight() / GetScaleFactor(); }
     virtual wxSize GetScaledSize() const
     { return wxSize(GetScaledWidth(), GetScaledHeight()); }
 
