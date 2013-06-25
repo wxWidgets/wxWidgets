@@ -135,6 +135,12 @@ public:
     bool Create( CGImageRef image );
     bool Create( WX_NSImage image );
     
+    // Create a bitmap compatible with the given DC, inheriting its magnification factor
+    bool Create(int width, int height, const wxDC& dc);
+
+    // Create a bitmap with a scale factor, width and height are multiplied with that factor
+    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale);
+    
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
@@ -197,6 +203,7 @@ public:
     void *BeginRawAccess() ;
     void EndRawAccess() ;
 
+    double GetScaleFactor() const;
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
