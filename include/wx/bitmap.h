@@ -182,6 +182,13 @@ public:
     wxSize GetSize() const
         { return wxSize(GetWidth(), GetHeight()); }
 
+    // support for scaled bitmaps
+    virtual double GetScale() const { return 1.0; }
+    virtual double GetScaledWidth() const { return GetWidth() / GetScale(); }
+    virtual double GetScaledHeight() const { return GetHeight() / GetScale(); }
+    virtual wxSize GetScaledSize() const
+    { return wxSize(GetScaledWidth(), GetScaledHeight()); }
+
 #if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const = 0;
 
