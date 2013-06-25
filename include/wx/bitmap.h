@@ -176,7 +176,6 @@ public:
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) = 0;
     // Create a bitmap compatible with the given DC, inheriting its magnification factor
-    virtual bool Create(int width, int height, const wxDC& dc);
 
     virtual int GetHeight() const = 0;
     virtual int GetWidth() const = 0;
