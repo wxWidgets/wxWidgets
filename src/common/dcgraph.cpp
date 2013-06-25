@@ -396,7 +396,7 @@ void wxGCDCImpl::ComputeScaleAndOrigin()
 
         // the logical origin sets the origin to have new coordinates
         m_matrixCurrent.Translate( m_deviceOriginX - m_logicalOriginX * m_signX * m_scaleX,
-                                   m_deviceOriginY-m_logicalOriginY * m_signY * m_scaleY);
+                                   m_deviceOriginY - m_logicalOriginY * m_signY * m_scaleY);
 
         m_matrixCurrent.Scale( m_scaleX * m_signX, m_scaleY * m_signY );
 
