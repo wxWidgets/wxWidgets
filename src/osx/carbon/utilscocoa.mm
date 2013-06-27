@@ -428,7 +428,7 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
     CGContextRef hbitmap = NULL;
     if (nsimage != nil)
     {
-        CGFloat scale = [[NSScreen mainScreen] backingScaleFactor];
+        double scale = wxOSXGetMainScreenContentScaleFactor();
         
         NSSize imageSize = [nsimage size];
         
@@ -444,6 +444,16 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
         [NSGraphicsContext setCurrentContext:nsGraphicsContext];
     }
     return hbitmap;
+}
+
+double WXDLLIMPEXP_CORE wxOSXGetMainScreenContentScaleFactor()
+{
+#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
+    if ( [ [NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)] )
+        return [[NSScreen mainScreen] backingScaleFactor];
+    else
+#endif
+        return 1.0;
 }
 
 CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage, double *scaleptr )
