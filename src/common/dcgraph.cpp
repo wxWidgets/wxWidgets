@@ -227,8 +227,8 @@ void wxGCDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y,
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid DC") );
     wxCHECK_RET( bmp.IsOk(), wxT("wxGCDC(cg)::DoDrawBitmap - invalid bitmap") );
 
-    int w = bmp.GetWidth();
-    int h = bmp.GetHeight();
+    int w = bmp.GetScaledWidth();
+    int h = bmp.GetScaledHeight();
     if ( bmp.GetDepth() == 1 )
     {
         m_graphicContext->SetPen(*wxTRANSPARENT_PEN);
