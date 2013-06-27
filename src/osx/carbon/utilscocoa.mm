@@ -388,18 +388,17 @@ wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, c
 wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(size))
 {
     wxCFStringRef cfname(name);
-    wxCFRef<CGImageRef> image( wxOSXCreateCGImageFromNSImage([NSImage imageNamed:cfname.AsNSString()]) );
-    return wxBitmap( image );
+    return wxBitmap( [NSImage imageNamed:cfname.AsNSString()] );
 }
 
 //  From "Cocoa Drawing Guide:Working with Images"
-WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image )
+WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor )
 {
     NSRect      imageRect    = NSMakeRect(0.0, 0.0, 0.0, 0.0);
 
     // Get the image dimensions.
-    imageRect.size.height = CGImageGetHeight(image);
-    imageRect.size.width = CGImageGetWidth(image);
+    imageRect.size.height = CGImageGetHeight(image)/scaleFactor;
+    imageRect.size.width = CGImageGetWidth(image)/scaleFactor;
 
     // Create a new image to receive the Quartz image data.
     NSImage  *newImage = [[NSImage alloc] initWithSize:imageRect.size];
@@ -422,22 +421,47 @@ WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image )
     return( newImage );
 }
 
-CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage )
+CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage nsimage)
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
-
-    CGImageRef image = NULL;
+    
+    CGContextRef hbitmap = NULL;
     if (nsimage != nil)
     {
+        CGFloat scale = [[NSScreen mainScreen] backingScaleFactor];
+        
         NSSize imageSize = [nsimage size];
-        CGContextRef context = CGBitmapContextCreate(NULL, imageSize.width, imageSize.height, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst); 
-        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
+        
+        hbitmap = CGBitmapContextCreate(NULL, imageSize.width*scale, imageSize.height*scale, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
+        CGContextScaleCTM( hbitmap, scale, scale );
+    
+        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:hbitmap flipped:NO];
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:nsGraphicsContext];
         [[NSColor whiteColor] setFill];
         NSRectFill(NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height));
         [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
         [NSGraphicsContext setCurrentContext:nsGraphicsContext];
+    }
+    return hbitmap;
+}
+
+CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage, double *scaleptr )
+{
+    // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
+
+    CGImageRef image = NULL;
+    if (nsimage != nil)
+    {        
+        CGContextRef context = wxOSXCreateBitmapContextFromNSImage(nsimage);
+        if ( scaleptr )
+        {
+            // determine content scale
+            CGRect userrect = CGRectMake(0, 0, 10, 10);
+            CGRect devicerect;
+            devicerect = CGContextConvertRectToDeviceSpace(context, userrect);
+            *scaleptr = devicerect.size.height / userrect.size.height;
+        }
         image = CGBitmapContextCreateImage(context);
         CFRelease(context);
     }
