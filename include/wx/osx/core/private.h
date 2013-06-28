@@ -122,7 +122,9 @@ WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRe
 WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
 
-CGColorSpaceRef WXDLLIMPEXP_CORE wxMacGetGenericRGBColorSpace(void);
+WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
+
+WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 
 class wxWindowMac;
 // to

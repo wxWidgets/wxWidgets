@@ -381,6 +381,33 @@ wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, c
 #endif
 }
 
+double wxOSXGetMainScreenContentScaleFactor()
+{
+    double scale;
+  
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+    {
+        scale=[[UIScreen mainScreen] scale];
+    }
+    else
+#endif
+    {
+        scale=1.0;
+    }
+    
+    return scale;
+}
+
+#endif
+
+#if wxOSX_USE_CARBON
+
+double wxOSXGetMainScreenContentScaleFactor()
+{
+    return 1.0;
+}
+
 #endif
 
 #if wxOSX_USE_COCOA
@@ -446,7 +473,7 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
     return hbitmap;
 }
 
-double WXDLLIMPEXP_CORE wxOSXGetMainScreenContentScaleFactor()
+double wxOSXGetMainScreenContentScaleFactor()
 {
 #if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
     if ( [ [NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)] )

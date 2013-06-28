@@ -1857,13 +1857,11 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
     
     wxCFRef<CFURLRef> imageURL;
     
-#if wxOSX_USE_COCOA
     if ( wxOSXGetMainScreenContentScaleFactor() > 1.9 )
     {
         imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname2x, restype, NULL));
         scale = 2.0;
     }
-#endif
     
     if ( imageURL.get() == NULL )
     {
