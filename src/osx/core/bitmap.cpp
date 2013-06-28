@@ -1851,9 +1851,25 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
 {
     wxString ext = GetExtension().Lower();
     wxCFStringRef resname(name);
+    wxCFStringRef resname2x(name+"@2x");
     wxCFStringRef restype(ext);
+    double scale = 1.0;
     
-    wxCFRef<CFURLRef> imageURL(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
+    wxCFRef<CFURLRef> imageURL;
+    
+#if wxOSX_USE_COCOA
+    if ( wxOSXGetMainScreenContentScaleFactor() > 1.9 )
+    {
+        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname2x, restype, NULL));
+        scale = 2.0;
+    }
+#endif
+    
+    if ( imageURL.get() == NULL )
+    {
+        imageURL.reset(CFBundleCopyResourceURL(CFBundleGetMainBundle(), resname, restype, NULL));
+        scale = 1.0;
+    }
     
     if ( imageURL.get() != NULL )
     {
@@ -1869,7 +1885,7 @@ bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
                                                        kCGRenderingIntentDefault);
         if ( image != NULL )
         {
-            bitmap->Create(image);
+            bitmap->Create(image,scale);
             CGImageRelease(image);
         }
     }
