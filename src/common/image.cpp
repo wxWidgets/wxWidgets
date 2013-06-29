@@ -443,13 +443,6 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
     if ( old_width == width && old_height == height )
         return *this;
 
-    if (quality == wxIMAGE_QUALITY_HIGH)
-    {
-        quality = (width < old_width && height < old_height)
-            ? wxIMAGE_QUALITY_BOX_AVERAGE
-            : wxIMAGE_QUALITY_BICUBIC;
-    }
-
     // Resample the image using the method as specified.
     switch ( quality )
     {
@@ -473,6 +466,12 @@ wxImage::Scale( int width, int height, wxImageResizeQuality quality ) const
 
         case wxIMAGE_QUALITY_BOX_AVERAGE:
             image = ResampleBox(width, height);
+            break;
+
+        case wxIMAGE_QUALITY_HIGH:
+            image = width < old_width && height < old_height
+                        ? ResampleBox(width, height)
+                        : ResampleBicubic(width, height);
             break;
     }
 
