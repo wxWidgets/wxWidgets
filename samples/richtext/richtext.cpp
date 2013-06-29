@@ -538,7 +538,9 @@ bool MyApp::OnInit()
 #endif
 
     // create the main application window
-    MyFrame *frame = new MyFrame(wxT("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, wxSize(700, 600));
+    wxSize size = wxGetDisplaySize();
+    size.Scale(0.75, 0.75);
+    MyFrame *frame = new MyFrame(wxT("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, size);
 
     m_printing->SetParentWindow(frame);
 
@@ -875,14 +877,14 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     toolBar->Realize();
 
-    wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxSize(100,100), wxSP_LIVE_UPDATE);
+    wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE);
     sizer->Add(splitter, 1, wxEXPAND);
 
     wxFont textFont = wxFont(12, wxROMAN, wxNORMAL, wxNORMAL);
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
-    m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxSize(200, 200), wxVSCROLL|wxHSCROLL|wxWANTS_CHARS);
+    m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL|wxWANTS_CHARS);
     wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
 
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
@@ -908,7 +910,9 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     }
     else
     {
-        splitter->SplitVertically(m_richTextCtrl, styleListCtrl, 500);
+        int width = GetClientSize().GetWidth() * 0.8;
+        splitter->SplitVertically(m_richTextCtrl, styleListCtrl, width);
+        splitter->SetSashGravity(0.8);
     }
 
     Layout();
@@ -1181,8 +1185,8 @@ void MyFrame::WriteInitialText()
         cellAttr.GetTextBoxAttr().GetWidth().SetValue(200, wxTEXT_ATTR_UNITS_PIXELS);
         cellAttr.GetTextBoxAttr().GetHeight().SetValue(150, wxTEXT_ATTR_UNITS_PIXELS);
 
-        //wxRichTextTable* table = r.WriteTable(3, 2, attr, cellAttr);
-        wxRichTextTable* table = r.WriteTable(24, 2, attr, cellAttr);
+        wxRichTextTable* table = r.WriteTable(6, 4, attr, cellAttr);
+
         int i, j;
         for (j = 0; j < table->GetRowCount(); j++)
         {
@@ -1193,12 +1197,33 @@ void MyFrame::WriteInitialText()
                 r.WriteText(msg);
             }
         }
+        
+        // Demonstrate colspan and rowspan
+        wxRichTextCell* cell = table->GetCell(1, 0);
+        cell->SetColspan(2);
+        r.SetFocusObject(cell);
+        cell->Clear();
+        r.WriteText("This cell spans 2 columns");
+        
+        cell = table->GetCell(1, 3);
+        cell->SetRowspan(2);
+        r.SetFocusObject(cell);
+        cell->Clear();
+        r.WriteText("This cell spans 2 rows");
+
+        cell = table->GetCell(2, 1);
+        cell->SetColspan(2);
+        cell->SetRowspan(3);
+        r.SetFocusObject(cell);
+        cell->Clear();
+        r.WriteText("This cell spans 2 columns and 3 rows");
+                
         r.SetFocusObject(NULL); // Set the focus back to the main buffer
         r.SetInsertionPointEnd();
     }
 #endif
 
-    r.Newline();
+    r.Newline(); r.Newline();
 
     wxRichTextProperties properties;
     r.WriteText(wxT("This is a rectangle field: "));

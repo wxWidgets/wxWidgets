@@ -5373,7 +5373,14 @@ protected:
 /**
     @class wxRichTextCell
 
-    wxRichTextCell is the cell in a table.
+    wxRichTextCell is the cell in a table, in which the user can type. As well as
+    text, it can also contain objects e.g. an image, or even another wxRichTextTable.
+    
+    A cell's appearance can be changed via its associated wxRichTextAttr; for example
+    its size altered or its background colour set. It also has the properties of
+    column- and row-span. By default these are 1, meaning that the cell only spans
+    itself, but can be increased using the SetColspan() and SetRowspan() methods.
+    Attempts to set too large a span are silently truncated to the table edge.
  */
 
 class wxRichTextCell: public wxRichTextBox
@@ -5406,6 +5413,52 @@ public:
     virtual wxString GetPropertiesMenuLabel() const { return _("&Cell"); }
 
 // Accessors
+
+    /**
+        Returns the number of columns spanned by the cell.
+        
+        By default a cell doesn't span extra columns, so this function returns 1.
+        
+        @since 2.9.5
+        
+        @see SetColspan(), GetRowspan()
+    */
+    int GetColspan() const;
+
+    /**
+        Set the number of columns spanned by the cell.
+        
+        By default colspan is 1 i.e. a cell doesn't span extra columns. Pass a value >1
+        to change this. Attempting to set a colspan <1 will assert and be ignored.
+        
+        @since 2.9.5
+        
+        @see GetColspan(), SetRowspan()
+    */
+    void SetColspan(long span);
+
+    /**
+        Returns the number of rows spanned by the cell.
+        
+        By default a cell doesn't span extra rows, so this function returns 1.
+        
+        @since 2.9.5
+        
+        @see SetRowspan(), GetColspan()
+    */
+    int GetRowspan() const;
+
+    /**
+        Set the number of rows spanned by the cell.
+        
+        By default colspan is 1 i.e. a cell doesn't span extra rows. Pass a value >1
+        to change this. Attempting to set a rowspan <1 will assert and be ignored.
+        
+        @since 2.9.5
+        
+        @see GetRowspan(), SetColspan()
+    */
+    void SetRowspan(long span);
 
 // Operations
 
