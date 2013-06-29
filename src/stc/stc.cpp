@@ -4695,9 +4695,11 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
-    m_swx->DoMouseWheel(evt.GetWheelRotation(),
+    m_swx->DoMouseWheel(evt.GetWheelAxis(),
+                        evt.GetWheelRotation(),
                         evt.GetWheelDelta(),
                         evt.GetLinesPerAction(),
+                        evt.GetColumnsPerAction(),
                         evt.ControlDown(),
                         evt.IsPageScroll());
 }

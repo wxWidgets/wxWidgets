@@ -152,7 +152,9 @@ public:
     void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
     void DoLeftButtonMove(Point pt);
     void DoMiddleButtonUp(Point pt);
-    void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown, bool isPageScroll);
+    void DoMouseWheel(wxMouseWheelAxis axis, int rotation, int delta,
+                      int linesPerAction, int columnsPerAction,
+                      bool ctrlDown, bool isPageScroll);
     void DoAddChar(int key);
     int  DoKeyDown(const wxKeyEvent& event, bool* consumed);
     void DoTick() { Tick(); }
@@ -191,7 +193,8 @@ private:
     wxDragResult        dragResult;
 #endif
 
-    int                 wheelRotation;
+    int                 wheelVRotation;
+    int                 wheelHRotation;
 
     // For use in creating a system caret
     bool HasCaretSizeChanged();
