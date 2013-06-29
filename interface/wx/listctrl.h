@@ -324,7 +324,7 @@ public:
         @since 2.9.4
      */
     long AppendColumn(const wxString& heading,
-                      int format = wxLIST_FORMAT_LEFT,
+                      wxListColumnFormat format = wxLIST_FORMAT_LEFT,
                       int width = -1);
 
     /**

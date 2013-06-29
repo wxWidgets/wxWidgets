@@ -415,7 +415,7 @@ public:
     //
     // Returns the index of the newly inserted column or -1 on error.
     long AppendColumn(const wxString& heading,
-                      int format = wxLIST_FORMAT_LEFT,
+                      wxListColumnFormat format = wxLIST_FORMAT_LEFT,
                       int width = -1);
 
     // Add a new column to the control at the position "col".
