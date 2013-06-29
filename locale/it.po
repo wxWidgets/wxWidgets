@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: $Id$\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-10 17:19+0200\n"
-"PO-Revision-Date: 2012-09-06 16:02+0100\n"
+"PO-Revision-Date: 2013-06-23 19:24+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Italian\n"
-"X-Poedit-Country: ITALY\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.5.3\n"
 
 #: ../src/common/debugrpt.cpp:580
 msgid ""
@@ -124,9 +123,9 @@ msgid "%s Information"
 msgstr "%s: informazione"
 
 #: ../src/generic/preferencesg.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "Preferenze"
+msgstr "Preferenze %s"
 
 #: ../src/generic/logg.cpp:235
 #, c-format
@@ -1152,7 +1151,7 @@ msgstr "Aggiungi"
 
 #: ../src/richtext/richtextbuffer.cpp:10477
 msgid "Add column"
-msgstr ""
+msgstr "Aggiungi colonna"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1160,7 +1159,7 @@ msgstr "Aggiungi la pagina corrente ai segnalibri"
 
 #: ../src/richtext/richtextbuffer.cpp:10419
 msgid "Add row"
-msgstr ""
+msgstr "Aggiungi riga"
 
 #: ../src/generic/colrdlgg.cpp:284
 msgid "Add to custom colours"
@@ -1189,7 +1188,7 @@ msgstr "Aggiunta utxt fallita"
 
 #: ../src/common/preferencescmn.cpp:40
 msgid "Advanced"
-msgstr ""
+msgstr "Avanzate"
 
 #: ../src/richtext/richtextliststylepage.cpp:436
 msgid "After a paragraph:"
@@ -1794,9 +1793,9 @@ msgid "Cannot resume thread %lu"
 msgstr "Impossibile riprendere il thread %lu"
 
 #: ../src/msw/thread.cpp:924
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "Impossibile riprendere il thread %x"
+msgstr "Impossibile riprendere il thread %lx"
 
 #: ../src/unix/threadpsx.cpp:1012
 msgid "Cannot retrieve thread scheduling policy."
@@ -1817,9 +1816,9 @@ msgid "Cannot suspend thread %lu"
 msgstr "Impossibile sospendere il thread %lu"
 
 #: ../src/msw/thread.cpp:908
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
-msgstr "Impossibile sospendere il thread %x"
+msgstr "Impossibile sospendere il thread %lx"
 
 #: ../src/msw/thread.cpp:831
 msgid "Cannot wait for thread termination"
@@ -1952,9 +1951,8 @@ msgstr "Spunta per visualizzare il testo in maiuscolo."
 
 #: ../src/richtext/richtextfontpage.cpp:301
 #: ../src/richtext/richtextfontpage.cpp:303
-#, fuzzy
 msgid "Check to show the text in small capitals."
-msgstr "Spunta per visualizzare il testo in maiuscolo."
+msgstr "Spunta per visualizzare il testo in maiuscoletto."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
@@ -2597,18 +2595,16 @@ msgid "Delete Text"
 msgstr "Elimina testo"
 
 #: ../src/richtext/richtextbuffer.cpp:10369
-#, fuzzy
 msgid "Delete column"
-msgstr "Elimina selezione"
+msgstr "Elimina colonna"
 
 #: ../src/generic/editlbox.cpp:275
 msgid "Delete item"
 msgstr "Elimina elemento"
 
 #: ../src/richtext/richtextbuffer.cpp:10301
-#, fuzzy
 msgid "Delete row"
-msgstr "Cancella"
+msgstr "Elimina riga"
 
 #: ../src/common/stockitem.cpp:261
 msgid "Delete selection"
@@ -3493,9 +3489,8 @@ msgid "Failed to set permissions on lock file '%s'"
 msgstr "Impossibile impostare i permessi per il file di lock '%s'"
 
 #: ../src/unix/utilsunx.cpp:603
-#, fuzzy
 msgid "Failed to set process priority"
-msgstr "Impossibile assegnare la priorità %d al thread."
+msgstr "Impossibile impostare la priorità"
 
 #: ../src/common/file.cpp:577
 msgid "Failed to set temporary file permissions"
@@ -3773,7 +3768,7 @@ msgstr "Tema GTK+"
 
 #: ../src/common/preferencescmn.cpp:38
 msgid "General"
-msgstr ""
+msgstr "Generale"
 
 #: ../src/common/prntbase.cpp:244
 msgid "Generic PostScript"
@@ -4171,7 +4166,7 @@ msgstr "Specifica della posizione e/o dimensioni '%s' non valida."
 #: ../src/unix/fswatcher_inotify.cpp:299
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "Evento inotify non valido per \"%s\""
 
 #: ../src/unix/snglinst.cpp:307
 #, c-format
@@ -6091,9 +6086,8 @@ msgid "Slant"
 msgstr "Slant"
 
 #: ../src/richtext/richtextfontpage.cpp:299
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "&Maiuscole"
+msgstr "M&aiuscoletto"
 
 #: ../src/richtext/richtextborderspage.cpp:543
 msgid "Solid"
@@ -6972,6 +6966,7 @@ msgstr "Caratteri non attesi dopo l'opzione '%s'."
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
+"Evento inaspettato per \"%s\": nessun descrittore monitoraggio corrispondente"
 
 #: ../src/common/cmdline.cpp:1017
 #, c-format
