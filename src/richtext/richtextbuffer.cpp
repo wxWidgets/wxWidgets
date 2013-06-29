@@ -9397,7 +9397,8 @@ void ExpandCellsWithRowspan(const wxRichTextTable* table, int paddingY, int& bot
     const int colCount = table->GetColumnCount();
     wxArrayInt rowTops;
     rowTops.Add(0, rowCount+1);
-    for (int row = 0; row < rowCount; ++row)
+    int row;
+    for (row = 0; row < rowCount; ++row)
     {
         for (int column = 0; column < colCount; ++column)
         {
@@ -9413,10 +9414,9 @@ void ExpandCellsWithRowspan(const wxRichTextTable* table, int paddingY, int& bot
     
     bool needsRelay = false;
 
-    int row, col;
     for (row = 0; row < rowCount-1; ++row) // -1 as the bottom row can't rowspan
     {
-        for (col = 0; col < colCount; ++col)
+        for (int col = 0; col < colCount; ++col)
         {
             wxRichTextCell* cell = table->GetCell(row, col);
             if (cell && cell->IsShown())
@@ -9473,7 +9473,7 @@ void ExpandCellsWithRowspan(const wxRichTextTable* table, int paddingY, int& bot
     // There were overflowing rowspanning cells, so layout yet again to make the increased row depths show
     for (row = 0; row < rowCount; ++row)
     {
-        for (col = 0; col < colCount; ++col)
+        for (int col = 0; col < colCount; ++col)
         {
             wxRichTextCell* cell = table->GetCell(row, col);
             if (cell && cell->IsShown())
