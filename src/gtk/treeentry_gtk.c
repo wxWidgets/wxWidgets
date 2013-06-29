@@ -149,14 +149,17 @@ static void gtk_tree_entry_string_transform_func(const GValue *src_value,
                                                  GValue *dest_value)
 {
     GtkTreeEntry *entry;
+    void* src_ptr = g_value_peek_pointer(src_value);
+
+    /* can be NULL if transform is requested before entry is set */
+    if (src_ptr == NULL)
+        return;
 
     /* Make sure src is a treeentry and dest can hold a string */
-    g_assert(GTK_IS_TREE_ENTRY(src_value->data[0].v_pointer));
+    g_assert(GTK_IS_TREE_ENTRY(src_ptr));
     g_assert(G_VALUE_HOLDS(dest_value, G_TYPE_STRING));
 
-    /* TODO: Use strdup here or just pass it? */
-    entry = GTK_TREE_ENTRY(src_value->data[0].v_pointer);
-
+    entry = GTK_TREE_ENTRY(src_ptr);
     g_value_set_string(dest_value, entry->label);
 }
 
