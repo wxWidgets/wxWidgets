@@ -123,6 +123,10 @@ public:
     virtual wxMDIClientWindow *OnCreateClient();
 
 protected:
+    // Override to pass menu/toolbar events to the active child first.
+    virtual bool TryBefore(wxEvent& event);
+
+
     // This is wxMDIClientWindow for all the native implementations but not for
     // the generic MDI version which has its own wxGenericMDIClientWindow and
     // so we store it as just a base class pointer because we don't need its
@@ -367,6 +371,21 @@ public:
 inline wxMDIClientWindow *wxMDIParentFrameBase::OnCreateClient()
 {
     return new wxMDIClientWindow;
+}
+
+inline bool wxMDIParentFrameBase::TryBefore(wxEvent& event)
+{
+    // Menu (and toolbar) events should be sent to the active child frame
+    // first, if any.
+    if ( event.GetEventType() == wxEVT_MENU ||
+            event.GetEventType() == wxEVT_UPDATE_UI )
+    {
+        wxMDIChildFrame * const child = GetActiveChild();
+        if ( child && child->ProcessWindowEventLocally(event) )
+            return true;
+    }
+
+    return wxFrame::TryBefore(event);
 }
 
 #endif // wxUSE_MDI

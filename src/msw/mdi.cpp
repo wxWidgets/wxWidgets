@@ -698,21 +698,6 @@ void wxMDIParentFrame::OnMDICommand(wxCommandEvent& event)
 
 #endif // wxUSE_MENUS
 
-bool wxMDIParentFrame::TryBefore(wxEvent& event)
-{
-    // menu (and toolbar) events should be sent to the active child frame
-    // first, if any
-    if ( event.GetEventType() == wxEVT_MENU ||
-            event.GetEventType() == wxEVT_UPDATE_UI )
-    {
-        wxMDIChildFrame * const child = GetActiveChild();
-        if ( child && child->ProcessWindowEventLocally(event) )
-            return true;
-    }
-
-    return wxMDIParentFrameBase::TryBefore(event);
-}
-
 WXLRESULT wxMDIParentFrame::MSWDefWindowProc(WXUINT message,
                                         WXWPARAM wParam,
                                         WXLPARAM lParam)
