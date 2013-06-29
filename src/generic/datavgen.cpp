@@ -4062,6 +4062,58 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
+#if wxUSE_DRAG_AND_DROP
+    if (event.Dragging() || ((m_dragCount > 0) && event.Leaving()))
+    {
+        if (m_dragCount == 0)
+        {
+            // we have to report the raw, physical coords as we want to be
+            // able to call HitTest(event.m_pointDrag) from the user code to
+            // get the item being dragged
+            m_dragStart = event.GetPosition();
+        }
+
+        m_dragCount++;
+        if ((m_dragCount < 3) && (event.Leaving()))
+            m_dragCount = 3;
+        else if (m_dragCount != 3)
+            return;
+
+        if (event.LeftIsDown())
+        {
+            m_owner->CalcUnscrolledPosition( m_dragStart.x, m_dragStart.y,
+                                             &m_dragStart.x, &m_dragStart.y );
+            unsigned int drag_item_row = GetLineAt( m_dragStart.y );
+            wxDataViewItem itemDragged = GetItemByRow( drag_item_row );
+
+            // Notify cell about drag
+            wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
+            event.SetEventObject( m_owner );
+            event.SetItem( itemDragged );
+            event.SetModel( model );
+            if (!m_owner->HandleWindowEvent( event ))
+                return;
+
+            if (!event.IsAllowed())
+                return;
+
+            wxDataObject *obj = event.GetDataObject();
+            if (!obj)
+                return;
+
+            wxDataViewDropSource drag( this, drag_item_row );
+            drag.SetData( *obj );
+            /* wxDragResult res = */ drag.DoDragDrop(event.GetDragFlags());
+            delete obj;
+        }
+        return;
+    }
+    else
+    {
+        m_dragCount = 0;
+    }
+#endif // wxUSE_DRAG_AND_DROP
+
     // Check if we clicked outside the item area.
     if ((current >= GetRowCount()) || !col)
     {
@@ -4134,57 +4186,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             m_underMouse = NULL;
         }
     }
-
-#if wxUSE_DRAG_AND_DROP
-    if (event.Dragging())
-    {
-        if (m_dragCount == 0)
-        {
-            // we have to report the raw, physical coords as we want to be
-            // able to call HitTest(event.m_pointDrag) from the user code to
-            // get the item being dragged
-            m_dragStart = event.GetPosition();
-        }
-
-        m_dragCount++;
-
-        if (m_dragCount != 3)
-            return;
-
-        if (event.LeftIsDown())
-        {
-            m_owner->CalcUnscrolledPosition( m_dragStart.x, m_dragStart.y,
-                                             &m_dragStart.x, &m_dragStart.y );
-            unsigned int drag_item_row = GetLineAt( m_dragStart.y );
-            wxDataViewItem itemDragged = GetItemByRow( drag_item_row );
-
-            // Notify cell about drag
-            wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
-            event.SetEventObject( m_owner );
-            event.SetItem( itemDragged );
-            event.SetModel( model );
-            if (!m_owner->HandleWindowEvent( event ))
-                return;
-
-            if (!event.IsAllowed())
-                return;
-
-            wxDataObject *obj = event.GetDataObject();
-            if (!obj)
-                return;
-
-            wxDataViewDropSource drag( this, drag_item_row );
-            drag.SetData( *obj );
-            /* wxDragResult res = */ drag.DoDragDrop(event.GetDragFlags());
-            delete obj;
-        }
-        return;
-    }
-    else
-    {
-        m_dragCount = 0;
-    }
-#endif // wxUSE_DRAG_AND_DROP
 
     bool simulateClick = false;
 
