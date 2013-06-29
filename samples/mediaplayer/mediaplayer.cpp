@@ -1620,9 +1620,9 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //  Column two is the name of the file
     //
     //  Column three is the length in seconds of the file
-    m_playlist->InsertColumn(0,_(""), wxLIST_FORMAT_CENTER, 20);
-    m_playlist->InsertColumn(1,_("File"), wxLIST_FORMAT_LEFT, /*wxLIST_AUTOSIZE_USEHEADER*/305);
-    m_playlist->InsertColumn(2,_("Length"), wxLIST_FORMAT_CENTER, 75);
+    m_playlist->AppendColumn(_(""), wxLIST_FORMAT_CENTER, 20);
+    m_playlist->AppendColumn(_("File"), wxLIST_FORMAT_LEFT, /*wxLIST_AUTOSIZE_USEHEADER*/305);
+    m_playlist->AppendColumn(_("Length"), wxLIST_FORMAT_CENTER, 75);
 
 #if wxUSE_DRAG_AND_DROP
     m_playlist->SetDropTarget(new wxPlayListDropTarget(*m_playlist));
