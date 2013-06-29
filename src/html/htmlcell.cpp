@@ -716,7 +716,7 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_AlignVer = wxHTML_ALIGN_BOTTOM;
     m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
     m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
-    m_UseBkColour = false;
+    m_BkColour = wxNullColour;
     m_Border = 0;
     m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
@@ -1096,7 +1096,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
     int xlocal = x + m_PosX;
     int ylocal = y + m_PosY;
 
-    if (m_UseBkColour)
+    if (m_BkColour.IsOk())
     {
         wxBrush myb = wxBrush(m_BkColour, wxBRUSHSTYLE_SOLID);
 
@@ -1217,10 +1217,7 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y,
 
 wxColour wxHtmlContainerCell::GetBackgroundColour()
 {
-    if (m_UseBkColour)
-        return m_BkColour;
-    else
-        return wxNullColour;
+    return m_BkColour;
 }
 
 

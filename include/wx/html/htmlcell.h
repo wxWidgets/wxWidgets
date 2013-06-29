@@ -477,7 +477,7 @@ public:
     // sets minimal height of this container.
     void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP) {m_MinHeight = h; m_MinHeightAlign = align; m_LastLayout = -1;}
 
-    void SetBackgroundColour(const wxColour& clr) {m_UseBkColour = true; m_BkColour = clr;}
+    void SetBackgroundColour(const wxColour& clr) {m_BkColour = clr;}
     // returns background colour (of wxNullColour if none set), so that widgets can
     // adapt to it:
     wxColour GetBackgroundColour();
@@ -537,7 +537,6 @@ protected:
             // alignment horizontal and vertical (left, center, right)
     int m_WidthFloat, m_WidthFloatUnits;
             // width float is used in adjustWidth
-    bool m_UseBkColour;
     wxColour m_BkColour;
             // background color of this container
     int m_Border;
