@@ -673,6 +673,7 @@ All (GUI):
 - Add wxMouseEvent::GetColumnsPerAction() (toiffel).
 - Add support for horizontal mouse wheel scrolling in wxSTC (toiffel).
 - Improve wrapping of cell contents in wxGrid (nmset).
+- Big speed up in wxImage::Scale(wxIMAGE_QUALITY_HIGH) (Hsilgos).
 
 wxGTK:
 

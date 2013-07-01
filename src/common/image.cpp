@@ -551,6 +551,42 @@ wxImage wxImage::ResampleNearest(int width, int height) const
     return image;
 }
 
+namespace
+{
+
+struct BoxPrecalc
+{
+    int boxStart;
+    int boxEnd;
+};
+
+inline int BoxBetween(int value, int low, int high)
+{
+    return wxMax(wxMin(value, high), low);
+}
+
+void ResampleBoxPrecalc(wxVector<BoxPrecalc>& boxes, int oldDim)
+{
+    const int newDim = boxes.size();
+    const double scale_factor_1 = double(oldDim) / newDim;
+    const int scale_factor_2 = (int)(scale_factor_1 / 2);
+
+    for ( int dst = 0; dst < newDim; ++dst )
+    {
+        // Source pixel in the Y direction
+        const int src_p = int(dst * scale_factor_1);
+
+        BoxPrecalc& precalc = boxes[dst];
+        precalc.boxStart = BoxBetween(int(src_p - scale_factor_1/2.0 + 1),
+                                      0, oldDim - 1);
+        precalc.boxEnd = BoxBetween(wxMax(precalc.boxStart + 1,
+                                          int(src_p + scale_factor_2)),
+                                    0, oldDim - 1);
+    }
+}
+
+} // anonymous namespace
+
 wxImage wxImage::ResampleBox(int width, int height) const
 {
     // This function implements a simple pre-blur/box averaging method for
@@ -560,11 +596,12 @@ wxImage wxImage::ResampleBox(int width, int height) const
 
     wxImage ret_image(width, height, false);
 
-    const double scale_factor_x = double(M_IMGDATA->m_width) / width;
-    const double scale_factor_y = double(M_IMGDATA->m_height) / height;
+    wxVector<BoxPrecalc> vPrecalcs(height);
+    wxVector<BoxPrecalc> hPrecalcs(width);
 
-    const int scale_factor_x_2 = (int)(scale_factor_x / 2);
-    const int scale_factor_y_2 = (int)(scale_factor_y / 2);
+    ResampleBoxPrecalc(vPrecalcs, M_IMGDATA->m_height);
+    ResampleBoxPrecalc(hPrecalcs, M_IMGDATA->m_width);
+
 
     const unsigned char* src_data = M_IMGDATA->m_data;
     const unsigned char* src_alpha = M_IMGDATA->m_alpha;
@@ -583,33 +620,21 @@ wxImage wxImage::ResampleBox(int width, int height) const
     for ( int y = 0; y < height; y++ )         // Destination image - Y direction
     {
         // Source pixel in the Y direction
-        int src_y = (int)(y * scale_factor_y);
+        const BoxPrecalc& vPrecalc = vPrecalcs[y];
 
         for ( int x = 0; x < width; x++ )      // Destination image - X direction
         {
             // Source pixel in the X direction
-            int src_x = (int)(x * scale_factor_x);
+            const BoxPrecalc& hPrecalc = hPrecalcs[x];
 
             // Box of pixels to average
             averaged_pixels = 0;
             sum_r = sum_g = sum_b = sum_a = 0.0;
 
-            for ( int j = int(src_y - scale_factor_y/2.0 + 1), k = j;
-                  j <= int(src_y + scale_factor_y_2) || j < k + 2;
-                  j++ )
+            for ( int j = vPrecalc.boxStart; j <= vPrecalc.boxEnd; ++j )
             {
-                // We don't care to average pixels that don't exist (edges)
-                if ( j < 0 || j > M_IMGDATA->m_height - 1 )
-                    continue;
-
-                for ( int i = int(src_x - scale_factor_x/2.0 + 1), e = i;
-                      i <= src_x + scale_factor_x_2 || i < e + 2;
-                      i++ )
+                for ( int i = hPrecalc.boxStart; i <= hPrecalc.boxEnd; ++i )
                 {
-                    // Don't average edge pixels
-                    if ( i < 0 || i > M_IMGDATA->m_width - 1 )
-                        continue;
-
                     // Calculate the actual index in our source pixels
                     src_pixel_index = j * M_IMGDATA->m_width + i;
 
@@ -636,6 +661,49 @@ wxImage wxImage::ResampleBox(int width, int height) const
     return ret_image;
 }
 
+namespace
+{
+
+struct BilinearPrecalc
+{
+    int offset1;
+    int offset2;
+    double dd;
+    double dd1;
+};
+
+void ResampleBilinearPrecalc(wxVector<BilinearPrecalc>& precalcs, int oldDim)
+{
+    const int newDim = precalcs.size();
+    const double scale_factor = double(oldDim) / newDim;
+    const int srcpixmax = oldDim - 1;
+
+    for ( int dsty = 0; dsty < newDim; dsty++ )
+    {
+        // We need to calculate the source pixel to interpolate from - Y-axis
+        double srcpix = double(dsty) * scale_factor;
+        double srcpix1 = int(srcpix);
+        double srcpix2 = srcpix1 == srcpixmax ? srcpix1 : srcpix1 + 1.0;
+
+        BilinearPrecalc& precalc = precalcs[dsty];
+
+        precalc.dd = srcpix - (int)srcpix;
+        precalc.dd1 = 1.0 - precalc.dd;
+        precalc.offset1 = srcpix1 < 0.0
+                            ? 0
+                            : srcpix1 > srcpixmax
+                                ? srcpixmax
+                                : (int)srcpix1;
+        precalc.offset2 = srcpix2 < 0.0
+                            ? 0
+                            : srcpix2 > srcpixmax
+                                ? srcpixmax
+                                : (int)srcpix2;
+    }
+}
+
+} // anonymous namespace
+
 wxImage wxImage::ResampleBilinear(int width, int height) const
 {
     // This function implements a Bilinear algorithm for resampling.
@@ -650,14 +718,11 @@ wxImage wxImage::ResampleBilinear(int width, int height) const
         ret_image.SetAlpha();
         dst_alpha = ret_image.GetAlpha();
     }
-    double HFactor = double(M_IMGDATA->m_height) / height;
-    double WFactor = double(M_IMGDATA->m_width) / width;
 
-    int srcpixymax = M_IMGDATA->m_height - 1;
-    int srcpixxmax = M_IMGDATA->m_width - 1;
-
-    double srcpixy, srcpixy1, srcpixy2, dy, dy1;
-    double srcpixx, srcpixx1, srcpixx2, dx, dx1;
+    wxVector<BilinearPrecalc> vPrecalcs(height);
+    wxVector<BilinearPrecalc> hPrecalcs(width);
+    ResampleBilinearPrecalc(vPrecalcs, M_IMGDATA->m_height);
+    ResampleBilinearPrecalc(hPrecalcs, M_IMGDATA->m_width);
 
     // initialize alpha values to avoid g++ warnings about possibly
     // uninitialized variables
@@ -667,26 +732,22 @@ wxImage wxImage::ResampleBilinear(int width, int height) const
     for ( int dsty = 0; dsty < height; dsty++ )
     {
         // We need to calculate the source pixel to interpolate from - Y-axis
-        srcpixy = double(dsty) * HFactor;
-        srcpixy1 = int(srcpixy);
-        srcpixy2 = ( srcpixy1 == srcpixymax ) ? srcpixy1 : srcpixy1 + 1.0;
-        dy = srcpixy - (int)srcpixy;
-        dy1 = 1.0 - dy;
+        const BilinearPrecalc& vPrecalc = vPrecalcs[dsty];
+        const int y_offset1 = vPrecalc.offset1;
+        const int y_offset2 = vPrecalc.offset2;
+        const double dy = vPrecalc.dd;
+        const double dy1 = vPrecalc.dd1;
 
 
         for ( int dstx = 0; dstx < width; dstx++ )
         {
             // X-axis of pixel to interpolate from
-            srcpixx = double(dstx) * WFactor;
-            srcpixx1 = int(srcpixx);
-            srcpixx2 = ( srcpixx1 == srcpixxmax ) ? srcpixx1 : srcpixx1 + 1.0;
-            dx = srcpixx - (int)srcpixx;
-            dx1 = 1.0 - dx;
+            const BilinearPrecalc& hPrecalc = hPrecalcs[dstx];
 
-            int x_offset1 = srcpixx1 < 0.0 ? 0 : srcpixx1 > srcpixxmax ? srcpixxmax : (int)srcpixx1;
-            int x_offset2 = srcpixx2 < 0.0 ? 0 : srcpixx2 > srcpixxmax ? srcpixxmax : (int)srcpixx2;
-            int y_offset1 = srcpixy1 < 0.0 ? 0 : srcpixy1 > srcpixymax ? srcpixymax : (int)srcpixy1;
-            int y_offset2 = srcpixy2 < 0.0 ? 0 : srcpixy2 > srcpixymax ? srcpixymax : (int)srcpixy2;
+            const int x_offset1 = hPrecalc.offset1;
+            const int x_offset2 = hPrecalc.offset2;
+            const double dx = hPrecalc.dd;
+            const double dx1 = hPrecalc.dd1;
 
             int src_pixel_index00 = y_offset1 * M_IMGDATA->m_width + x_offset1;
             int src_pixel_index01 = y_offset1 * M_IMGDATA->m_width + x_offset2;
@@ -737,6 +798,42 @@ static inline double spline_weight(double value)
             4 * spline_cube(value - 1)) / 6;
 }
 
+
+namespace
+{
+
+struct BicubicPrecalc
+{
+    double weight[4];
+    int offset[4];
+};
+
+void ResampleBicubicPrecalc(wxVector<BicubicPrecalc> &aWeight, int oldDim)
+{
+    const int newDim = aWeight.size();
+    for ( int dstd = 0; dstd < newDim; dstd++ )
+    {
+        // We need to calculate the source pixel to interpolate from - Y-axis
+        const double srcpixd = static_cast<double>(dstd * oldDim) / newDim;
+        const double dd = srcpixd - static_cast<int>(srcpixd);
+
+        BicubicPrecalc &precalc = aWeight[dstd];
+
+        for ( int k = -1; k <= 2; k++ )
+        {
+            precalc.offset[k + 1] = srcpixd + k < 0.0
+                ? 0
+                : srcpixd + k >= oldDim
+                    ? oldDim - 1
+                    : static_cast<int>(srcpixd + k);
+
+            precalc.weight[k + 1] = spline_weight(k - dd);
+        }
+    }
+}
+
+} // anonymous namespace
+
 // This is the bicubic resampling algorithm
 wxImage wxImage::ResampleBicubic(int width, int height) const
 {
@@ -781,17 +878,22 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
         dst_alpha = ret_image.GetAlpha();
     }
 
+    // Precalculate weights
+    wxVector<BicubicPrecalc> vPrecalcs(height);
+    wxVector<BicubicPrecalc> hPrecalcs(width);
+
+    ResampleBicubicPrecalc(vPrecalcs, M_IMGDATA->m_height);
+    ResampleBicubicPrecalc(hPrecalcs, M_IMGDATA->m_width);
+
     for ( int dsty = 0; dsty < height; dsty++ )
     {
         // We need to calculate the source pixel to interpolate from - Y-axis
-        double srcpixy = double(dsty * M_IMGDATA->m_height) / height;
-        double dy = srcpixy - (int)srcpixy;
+        const BicubicPrecalc& vPrecalc = vPrecalcs[dsty];
 
         for ( int dstx = 0; dstx < width; dstx++ )
         {
             // X-axis of pixel to interpolate from
-            double srcpixx = double(dstx * M_IMGDATA->m_width) / width;
-            double dx = srcpixx - (int)srcpixx;
+            const BicubicPrecalc& hPrecalc = hPrecalcs[dstx];
 
             // Sums for each color channel
             double sum_r = 0, sum_g = 0, sum_b = 0, sum_a = 0;
@@ -800,21 +902,13 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
             for ( int k = -1; k <= 2; k++ )
             {
                 // Y offset
-                int y_offset = srcpixy + k < 0.0
-                                ? 0
-                                : srcpixy + k >= M_IMGDATA->m_height
-                                       ? M_IMGDATA->m_height - 1
-                                       : (int)(srcpixy + k);
+                const int y_offset = vPrecalc.offset[k + 1];
 
                 // Loop across the X axis
                 for ( int i = -1; i <= 2; i++ )
                 {
                     // X offset
-                    int x_offset = srcpixx + i < 0.0
-                                    ? 0
-                                    : srcpixx + i >= M_IMGDATA->m_width
-                                            ? M_IMGDATA->m_width - 1
-                                            : (int)(srcpixx + i);
+                    const int x_offset = hPrecalc.offset[i + 1];
 
                     // Calculate the exact position where the source data
                     // should be pulled from based on the x_offset and y_offset
@@ -823,8 +917,8 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
                     // Calculate the weight for the specified pixel according
                     // to the bicubic b-spline kernel we're using for
                     // interpolation
-                    double
-                        pixel_weight = spline_weight(i - dx)*spline_weight(k - dy);
+                    const double
+                        pixel_weight = vPrecalc.weight[k + 1] * hPrecalc.weight[i + 1];
 
                     // Create a sum of all velues for each color channel
                     // adjusted for the pixel's calculated weight
