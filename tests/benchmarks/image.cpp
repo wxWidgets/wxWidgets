@@ -55,3 +55,36 @@ BENCHMARK_FUNC(LoadTIFF)
     wxImage image;
     return image.LoadFile("horse.tif");
 }
+
+static const wxImage& GetTestImage()
+{
+    static wxImage s_image;
+    static bool s_triedToLoad = false;
+    if ( !s_triedToLoad )
+    {
+        s_triedToLoad = true;
+        s_image.LoadFile("horse.bmp");
+    }
+
+    return s_image;
+}
+
+BENCHMARK_FUNC(EnlargeNormal)
+{
+    return GetTestImage().Scale(300, 300, wxIMAGE_QUALITY_NORMAL).IsOk();
+}
+
+BENCHMARK_FUNC(EnlargeHighQuality)
+{
+    return GetTestImage().Scale(300, 300, wxIMAGE_QUALITY_HIGH).IsOk();
+}
+
+BENCHMARK_FUNC(ShrinkNormal)
+{
+    return GetTestImage().Scale(50, 50, wxIMAGE_QUALITY_NORMAL).IsOk();
+}
+
+BENCHMARK_FUNC(ShrinkHighQuality)
+{
+    return GetTestImage().Scale(50, 50, wxIMAGE_QUALITY_HIGH).IsOk();
+}
