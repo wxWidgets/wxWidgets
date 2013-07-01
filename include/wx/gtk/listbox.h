@@ -111,6 +111,7 @@ protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
                               void **clientData, wxClientDataType type);
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos);
 
     virtual void DoSetFirstItem(int n);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);

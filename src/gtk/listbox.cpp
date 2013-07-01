@@ -454,38 +454,26 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
     wxCHECK_MSG( m_treeview != NULL, wxNOT_FOUND, wxT("invalid listbox") );
 
     InvalidateBestSize();
-
-    GtkTreeIter* pIter = NULL; // append by default
-    GtkTreeIter iter;
-    if ( pos != GetCount() )
-    {
-        wxCHECK_MSG( GTKGetIteratorFor(pos, &iter), wxNOT_FOUND,
-                     wxT("internal wxListBox error in insertion") );
-
-        pIter = &iter;
-    }
-
-    const unsigned int numItems = items.GetCount();
-    for ( unsigned int i = 0; i < numItems; ++i )
-    {
-        wxGtkObject<GtkTreeEntry> entry(gtk_tree_entry_new());
-        gtk_tree_entry_set_label(entry, wxGTK_CONV(items[i]));
-        gtk_tree_entry_set_destroy_func(entry,
-                (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb,
-                            this);
-
-        GtkTreeIter itercur;
-        gtk_list_store_insert_before(m_liststore, &itercur, pIter);
-
-        GTKSetItem(itercur, entry);
-
-        if (clientData)
-            AssignNewItemClientData(GTKGetIndexFor(itercur), clientData, i, type);
-    }
-
+    int n = DoInsertItemsInLoop(items, pos, clientData, type);
     UpdateOldSelections();
+    return n;
+}
 
-    return pos + numItems - 1;
+int wxListBox::DoInsertOneItem(const wxString& item, unsigned int pos)
+{
+    GtkTreeEntry* entry = gtk_tree_entry_new();
+    gtk_tree_entry_set_label(entry, wxGTK_CONV(item));
+    gtk_tree_entry_set_destroy_func(entry, (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb, this);
+
+#if wxUSE_CHECKLISTBOX
+    int entryCol = int(m_hasCheckBoxes);
+#else
+    int entryCol = 0;
+#endif
+    gtk_list_store_insert_with_values(m_liststore, NULL, pos, entryCol, entry, -1);
+    g_object_unref(entry);
+
+    return pos;
 }
 
 // ----------------------------------------------------------------------------
