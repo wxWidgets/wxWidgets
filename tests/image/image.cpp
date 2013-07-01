@@ -79,6 +79,7 @@ private:
         CPPUNIT_TEST( GIFComment );
         CPPUNIT_TEST( DibPadding );
         CPPUNIT_TEST( BMPFlippingAndRLECompression );
+        CPPUNIT_TEST( ScaleCompare );
     CPPUNIT_TEST_SUITE_END();
 
     void LoadFromSocketStream();
@@ -94,6 +95,7 @@ private:
     void GIFComment();
     void DibPadding();
     void BMPFlippingAndRLECompression();
+    void ScaleCompare();
 
     DECLARE_NO_COPY_CLASS(ImageTestCase)
 };
@@ -1343,6 +1345,48 @@ void ImageTestCase::BMPFlippingAndRLECompression()
 
     CompareBMPImage("image/horse_rle4.bmp", "image/horse_rle4_flipped.bmp");
 }
+
+
+#define ASSERT_IMAGE_EQUAL_TO_FILE(image, file) \
+    { \
+        wxImage imageFromFile(file); \
+        CPPUNIT_ASSERT_MESSAGE( "Failed to load " file, imageFromFile.IsOk() ); \
+        CPPUNIT_ASSERT_EQUAL( imageFromFile, image ); \
+    }
+
+void ImageTestCase::ScaleCompare()
+{
+    wxImage original;
+    CPPUNIT_ASSERT(original.LoadFile("horse.bmp"));
+
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale( 50,  50, wxIMAGE_QUALITY_BICUBIC),
+                               "image/horse_bicubic_50x50.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(100, 100, wxIMAGE_QUALITY_BICUBIC),
+                               "image/horse_bicubic_100x100.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(150, 150, wxIMAGE_QUALITY_BICUBIC),
+                               "image/horse_bicubic_150x150.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(300, 300, wxIMAGE_QUALITY_BICUBIC),
+                               "image/horse_bicubic_300x300.png");
+
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale( 50,  50, wxIMAGE_QUALITY_BOX_AVERAGE),
+                               "image/horse_box_average_50x50.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(100, 100, wxIMAGE_QUALITY_BOX_AVERAGE),
+                               "image/horse_box_average_100x100.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(150, 150, wxIMAGE_QUALITY_BOX_AVERAGE),
+                               "image/horse_box_average_150x150.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(300, 300, wxIMAGE_QUALITY_BOX_AVERAGE),
+                               "image/horse_box_average_300x300.png");
+
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale( 50,  50, wxIMAGE_QUALITY_BILINEAR),
+                               "image/horse_bilinear_50x50.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(100, 100, wxIMAGE_QUALITY_BILINEAR),
+                               "image/horse_bilinear_100x100.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(150, 150, wxIMAGE_QUALITY_BILINEAR),
+                               "image/horse_bilinear_150x150.png");
+    ASSERT_IMAGE_EQUAL_TO_FILE(original.Scale(300, 300, wxIMAGE_QUALITY_BILINEAR),
+                               "image/horse_bilinear_300x300.png");
+}
+
 #endif //wxUSE_IMAGE
 
 
