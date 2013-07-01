@@ -21,14 +21,13 @@ LIBDIRNAME = \
 	.\..\..\lib\$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-BENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
-	$(GCCFLAGS) -DHAVE_W32API_H -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
-	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES_p) -W -Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	$(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy \
-	$(CXXFLAGS_GTK_WINDOWS_GCC) $(CPPFLAGS) $(CXXFLAGS)
+BENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
+	-I. $(__DLLFLAG_p) -DwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CXXFLAGS_GTK_WINDOWS_GCC) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.o \
 	$(OBJS)\bench_datetime.o \
@@ -40,6 +39,18 @@ BENCH_OBJECTS =  \
 	$(OBJS)\bench_strings.o \
 	$(OBJS)\bench_tls.o \
 	$(OBJS)\bench_printfbench.o
+BENCH_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
+	$(GCCFLAGS) -DHAVE_W32API_H -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CXXFLAGS_GTK_WINDOWS_GCC) $(CPPFLAGS) $(CXXFLAGS)
+BENCH_GUI_OBJECTS =  \
+	$(OBJS)\bench_gui_sample_rc.o \
+	$(OBJS)\bench_gui_bench.o \
+	$(OBJS)\bench_gui_image.o
 
 ### Conditionally set variables: ###
 
@@ -91,23 +102,83 @@ endif
 ifeq ($(TOOLKIT),GTK)
 CXXFLAGS_GTK_WINDOWS_GCC = -mms-bitfields
 endif
-ifeq ($(BUILD),debug)
-__OPTIMIZEFLAG_2 = -O0
+ifeq ($(TOOLKIT),GTK)
+ifeq ($(TOOLKIT_VERSION),2)
+LIB_GTK = gtk-win32-2.0.lib gdk-win32-2.0.lib pangocairo-1.0.lib \
+	gdk_pixbuf-2.0.lib cairo.lib pango-1.0.lib gobject-2.0.lib gthread-2.0.lib \
+	glib-2.0.lib
+endif
+endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_NET_p = \
+	-lwxbase$(WXBASEPORT)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
+endif
+ifeq ($(MONOLITHIC),1)
+__LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
+endif
+ifeq ($(USE_GUI),1)
+__bench_gui___depname = $(OBJS)\bench_gui.exe
+endif
+ifeq ($(WXUNIV),1)
+__WXUNIV_DEFINE_p_3 = --define __WXUNIVERSAL__
+endif
+ifeq ($(DEBUG_FLAG),0)
+__DEBUG_DEFINE_p_3 = --define wxDEBUG_LEVEL=0
 endif
 ifeq ($(BUILD),release)
-__OPTIMIZEFLAG_2 = -O2
-endif
-ifeq ($(USE_RTTI),0)
-__RTTIFLAG_5 = -fno-rtti
-endif
-ifeq ($(USE_RTTI),1)
-__RTTIFLAG_5 = 
+__NDEBUG_DEFINE_p_3 = --define NDEBUG
 endif
 ifeq ($(USE_EXCEPTIONS),0)
-__EXCEPTIONSFLAG_6 = -fno-exceptions
+__EXCEPTIONS_DEFINE_p_3 = --define wxNO_EXCEPTIONS
+endif
+ifeq ($(USE_RTTI),0)
+__RTTI_DEFINE_p_3 = --define wxNO_RTTI
+endif
+ifeq ($(USE_THREADS),0)
+__THREAD_DEFINE_p_3 = --define wxNO_THREADS
+endif
+ifeq ($(UNICODE),0)
+__UNICODE_DEFINE_p_3 = --define wxUSE_UNICODE=0
+endif
+ifeq ($(UNICODE),1)
+__UNICODE_DEFINE_p_3 = --define _UNICODE
+endif
+ifeq ($(MSLU),1)
+__MSLU_DEFINE_p_3 = --define wxUSE_UNICODE_MSLU=1
+endif
+ifeq ($(USE_CAIRO),1)
+__CAIRO_INCLUDEDIR_p_1 = --include-dir $(CAIRO_ROOT)/include/cairo
+endif
+ifeq ($(SHARED),1)
+__DLLFLAG_p_3 = --define WXUSINGDLL
+endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_CORE_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core
+endif
+ifeq ($(USE_GUI),1)
+__LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
+endif
+ifeq ($(USE_GUI),1)
+__LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
+endif
+ifeq ($(BUILD),debug)
+__OPTIMIZEFLAG = -O0
+endif
+ifeq ($(BUILD),release)
+__OPTIMIZEFLAG = -O2
+endif
+ifeq ($(USE_RTTI),0)
+__RTTIFLAG = -fno-rtti
+endif
+ifeq ($(USE_RTTI),1)
+__RTTIFLAG =
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG_6 = 
+__EXCEPTIONSFLAG =
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -137,14 +208,10 @@ ifeq ($(MSLU),1)
 __MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 endif
 ifeq ($(USE_CAIRO),1)
-____CAIRO_INCLUDEDIR_FILENAMES_p = -I$(CAIRO_ROOT)\include\cairo
+____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
 endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
-endif
-ifeq ($(MONOLITHIC),0)
-__WXLIB_NET_p = \
-	-lwxbase$(WXBASEPORT)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = \
@@ -153,9 +220,6 @@ endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
-endif
-ifeq ($(MONOLITHIC),1)
-__LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
 endif
 ifeq ($(USE_GUI),1)
 __LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
@@ -167,7 +231,7 @@ ifeq ($(USE_CAIRO),1)
 __CAIRO_LIB_p = -lcairo
 endif
 ifeq ($(USE_CAIRO),1)
-____CAIRO_LIBDIR_FILENAMES_p = -L$(CAIRO_ROOT)\lib
+____CAIRO_LIBDIR_FILENAMES = -L$(CAIRO_ROOT)\lib
 endif
 ifeq ($(BUILD),debug)
 ifeq ($(DEBUG_INFO),default)
@@ -199,19 +263,29 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\bench.exe data
+all: $(OBJS)\bench.exe data $(__bench_gui___depname) data-image
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\bench.exe del $(OBJS)\bench.exe
+	-if exist $(OBJS)\bench_gui.exe del $(OBJS)\bench_gui.exe
 
 $(OBJS)\bench.exe: $(BENCH_OBJECTS)
-	$(CXX) -o $@ $(BENCH_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+	$(CXX) -o $@ $(BENCH_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %%f in (htmltest.html) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\bench_gui.exe: $(BENCH_GUI_OBJECTS) $(OBJS)\bench_gui_sample_rc.o
+	$(CXX) -o $@ $(BENCH_GUI_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(LIB_GTK)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+endif
+
+data-image:
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %%f in (../../samples/image/horse.bmp ../../samples/image/horse.jpg ../../samples/image/horse.png ../../samples/image/horse.tif) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\bench_bench.o: ./bench.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
@@ -243,7 +317,16 @@ $(OBJS)\bench_tls.o: ./tls.cpp
 $(OBJS)\bench_printfbench.o: ./printfbench.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean data
+$(OBJS)\bench_gui_sample_rc.o: ./../../samples/sample.rc
+	windres --use-temp-file -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../../samples --define NOPCH
+
+$(OBJS)\bench_gui_bench.o: ./bench.cpp
+	$(CXX) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_gui_image.o: ./image.cpp
+	$(CXX) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+.PHONY: all clean data data-image
 
 
 SHELL := $(COMSPEC)

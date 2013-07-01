@@ -29,7 +29,6 @@
         <files>htmltest.html</files>
     </wx-data>
 
-    <!-- this is unused yet
     <exe id="bench_gui" template="wx_sample,wx_bench"
                        template_append="wx_append"
          cond="USE_GUI=='1'">
@@ -38,9 +37,18 @@
 
         <sources>
             bench.cpp
+            image.cpp
         </sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
-    -->
+
+    <wx-data id="data-image">
+        <files>
+            ../../samples/image/horse.bmp
+            ../../samples/image/horse.jpg
+            ../../samples/image/horse.png
+            ../../samples/image/horse.tif
+        </files>
+    </wx-data>
 </makefile>

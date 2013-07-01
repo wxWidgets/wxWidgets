@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="bench"
-	ProjectGUID="{B5A0DEAC-4B91-5F56-9192-C86A1ED7DA2F}"
+	Name="bench_gui"
+	ProjectGUID="{9B5F97AF-C174-572F-9134-D2E56F7810BE}"
 	>
 	<Platforms>
 		<Platform
@@ -24,7 +24,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="vc_mswud"
-			IntermediateDirectory="vc_mswud\bench"
+			IntermediateDirectory="vc_mswud\bench_gui"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -44,22 +44,22 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;."
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
+				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;."
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswud\bench\"
-				ProgramDataBaseFileName="vc_mswud\bench.pdb"
+				ObjectFile="vc_mswud\bench_gui\"
+				ProgramDataBaseFileName="vc_mswud\bench_gui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -69,9 +69,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;."
+				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswud;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -79,14 +79,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxbase29ud_net.lib  wxbase29ud.lib    wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswud\bench.exe"
+				AdditionalDependencies="wxmsw29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswud\bench_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswud\bench.pdb"
+				ProgramDatabaseFile="vc_mswud\bench_gui.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -101,7 +101,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswud\bench_vc9.bsc"
+				OutputFile="vc_mswud\bench_vc9_bench_gui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -117,7 +117,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="vc_mswu"
-			IntermediateDirectory="vc_mswu\bench"
+			IntermediateDirectory="vc_mswu\bench_gui"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -137,20 +137,20 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;."
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
+				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;."
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;.;.\..\..\samples"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswu\bench\"
-				ProgramDataBaseFileName="vc_mswu\bench.pdb"
+				ObjectFile="vc_mswu\bench_gui\"
+				ProgramDataBaseFileName="vc_mswu\bench_gui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -160,9 +160,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;."
+				AdditionalIncludeDirectories=".\..\..\lib\vc_lib\mswu;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -170,14 +170,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxbase29u_net.lib  wxbase29u.lib    wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswu\bench.exe"
+				AdditionalDependencies="wxmsw29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswu\bench_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswu\bench.pdb"
+				ProgramDatabaseFile="vc_mswu\bench_gui.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 				OptimizeReferences="2"
@@ -194,7 +194,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswu\bench_vc9.bsc"
+				OutputFile="vc_mswu\bench_vc9_bench_gui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -210,7 +210,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="vc_mswuddll"
-			IntermediateDirectory="vc_mswuddll\bench"
+			IntermediateDirectory="vc_mswuddll\bench_gui"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -230,22 +230,22 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;."
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;."
-				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;.;.\..\..\samples"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswuddll\bench\"
-				ProgramDataBaseFileName="vc_mswuddll\bench.pdb"
+				ObjectFile="vc_mswuddll\bench_gui\"
+				ProgramDataBaseFileName="vc_mswuddll\bench_gui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -255,9 +255,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;."
+				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswud;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -265,14 +265,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxbase29ud_net.lib  wxbase29ud.lib    wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswuddll\bench.exe"
+				AdditionalDependencies="wxmsw29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswuddll\bench_gui.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswuddll\bench.pdb"
+				ProgramDatabaseFile="vc_mswuddll\bench_gui.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -287,7 +287,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswuddll\bench_vc9.bsc"
+				OutputFile="vc_mswuddll\bench_vc9_bench_gui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -303,7 +303,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="vc_mswudll"
-			IntermediateDirectory="vc_mswudll\bench"
+			IntermediateDirectory="vc_mswudll\bench_gui"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -323,20 +323,20 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;."
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;."
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;.;.\..\..\samples"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
-				ObjectFile="vc_mswudll\bench\"
-				ProgramDataBaseFileName="vc_mswudll\bench.pdb"
+				ObjectFile="vc_mswudll\bench_gui\"
+				ProgramDataBaseFileName="vc_mswudll\bench_gui.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -346,9 +346,9 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
-				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;."
+				AdditionalIncludeDirectories=".\..\..\lib\vc_dll\mswu;.\..\..\include;.;.\..\..\samples"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -356,14 +356,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxbase29u_net.lib  wxbase29u.lib    wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswudll\bench.exe"
+				AdditionalDependencies="wxmsw29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswudll\bench_gui.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="vc_mswudll\bench.pdb"
+				ProgramDatabaseFile="vc_mswudll\bench_gui.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 				OptimizeReferences="2"
@@ -380,7 +380,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="vc_mswudll\bench_vc9.bsc"
+				OutputFile="vc_mswudll\bench_vc9_bench_gui.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -408,39 +408,17 @@
 				>
 			</File>
 			<File
-				RelativePath=".\datetime.cpp"
+				RelativePath=".\image.cpp"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
 			<File
-				RelativePath=".\htmlparser\htmlpars.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\htmlparser\htmltag.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ipcclient.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\log.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mbconv.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\printfbench.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\strings.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\tls.cpp"
+				RelativePath="..\..\samples\sample.rc"
 				>
 			</File>
 		</Filter>

@@ -2,7 +2,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 # WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
 
 ###############################################################################
-Project: "bench"=bench.dsp - Package Owner=<4>
+Project: "bench"=bench_bench.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -12,6 +12,24 @@ Package=<4>
 {{{
 Begin Project Dependency
 Project_Dep_Name net
+End Project Dependency
+Begin Project Dependency
+Project_Dep_Name base
+End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "bench_gui"=bench_bench_gui.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+Begin Project Dependency
+Project_Dep_Name core
 End Project Dependency
 Begin Project Dependency
 Project_Dep_Name base
@@ -44,3 +62,14 @@ Package=<4>
 
 ###############################################################################
 
+Project: "core"=..\..\build\msw\wx_core.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################

@@ -20,17 +20,15 @@ LIBDIRNAME = \
 	.\..\..\lib\$(COMPILER_PREFIX)$(COMPILER_VERSION)$(ARCH_SUFFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-BENCH_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME_4) /DWIN32 \
-	$(__DEBUGINFO_0) /Fd$(OBJS)\bench.pdb $(____DEBUGRUNTIME_3_p) \
-	$(__OPTIMIZEFLAG_6) /D_CRT_SECURE_NO_DEPRECATE=1 \
-	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
-	$(__NO_VC_CRTDBG_p) /D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
-	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE \
-	/DwxUSE_GUI=0 $(__RTTIFLAG_11) $(__EXCEPTIONSFLAG_12) $(CPPFLAGS) \
-	$(CXXFLAGS)
+BENCH_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\bench.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
+	/D_CRT_SECURE_NO_DEPRECATE=1 /D_CRT_NON_CONFORMING_SWPRINTFS=1 \
+	/D_SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p) /D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE \
+	/DwxUSE_GUI=0 $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_OBJECTS =  \
 	$(OBJS)\bench_bench.obj \
 	$(OBJS)\bench_datetime.obj \
@@ -42,6 +40,21 @@ BENCH_OBJECTS =  \
 	$(OBJS)\bench_strings.obj \
 	$(OBJS)\bench_tls.obj \
 	$(OBJS)\bench_printfbench.obj
+BENCH_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_26)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\bench_gui.pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
+	/D_CRT_NON_CONFORMING_SWPRINTFS=1 /D_SCL_SECURE_NO_WARNINGS=1 \
+	$(__NO_VC_CRTDBG_p) /D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /I.\..\..\samples \
+	/DNOPCH /D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+BENCH_GUI_OBJECTS =  \
+	$(OBJS)\bench_gui_bench.obj \
+	$(OBJS)\bench_gui_image.obj
+BENCH_GUI_RESOURCES =  \
+	$(OBJS)\bench_gui_sample.res
 
 ### Conditionally set variables: ###
 
@@ -126,107 +139,204 @@ EXTRALIBS_FOR_BASE =
 !if "$(MONOLITHIC)" == "1"
 EXTRALIBS_FOR_BASE =   
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_0 = /Zi
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_0 = 
-!endif
-!if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_0 = 
-!endif
-!if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_0 = /Zi
+!if "$(TOOLKIT)" == "GTK" && "$(TOOLKIT_VERSION)" == "2"
+LIB_GTK = gtk-win32-2.0.lib gdk-win32-2.0.lib pangocairo-1.0.lib \
+	gdk_pixbuf-2.0.lib cairo.lib pango-1.0.lib gobject-2.0.lib gthread-2.0.lib \
+	glib-2.0.lib
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_1 = /DEBUG
+__DEBUGINFO_2 = $(__DEBUGRUNTIME_0)
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_1 = 
+__DEBUGINFO_2 =
 !endif
 !if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_1 = 
+__DEBUGINFO_2 =
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_1 = /DEBUG
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_2 = $(__DEBUGRUNTIME_5)
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_2 = 
-!endif
-!if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_2 = 
-!endif
-!if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_2 = $(__DEBUGRUNTIME_5)
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_3_p = /D_DEBUG
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME_3_p = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_3_p = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME_3_p = /D_DEBUG
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_4 = d
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_4 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_4 = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_4 = d
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_5 = 
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_5 = /opt:ref /opt:icf
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_5 = /opt:ref /opt:icf
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_5 = 
-!endif
-!if "$(BUILD)" == "debug"
-__OPTIMIZEFLAG_6 = /Od
-!endif
-!if "$(BUILD)" == "release"
-__OPTIMIZEFLAG_6 = /O2
-!endif
-!if "$(USE_THREADS)" == "0"
-__THREADSFLAG_9 = L
-!endif
-!if "$(USE_THREADS)" == "1"
-__THREADSFLAG_9 = T
+__DEBUGINFO_2 = $(__DEBUGRUNTIME_0)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_10 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_10 = $(__THREADSFLAG_9)
+__RUNTIME_LIBS_10 = $(__THREADSFLAG)
 !endif
-!if "$(USE_RTTI)" == "0"
-__RTTIFLAG_11 = 
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_NET_p = \
+	wxbase$(WXBASEPORT)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
 !endif
-!if "$(USE_RTTI)" == "1"
-__RTTIFLAG_11 = /GR
+!if "$(MONOLITHIC)" == "1"
+__LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
+!endif
+!if "$(USE_GUI)" == "1"
+__bench_gui___depname = $(OBJS)\bench_gui.exe
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_18 = $(__DEBUGRUNTIME_0)
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_18 =
+!endif
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO_18 =
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO_18 = $(__DEBUGRUNTIME_0)
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_19_p_1 = /d _DEBUG
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME_19_p_1 =
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME_19_p_1 =
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME_19_p_1 = /d _DEBUG
+!endif
+!if "$(RUNTIME_LIBS)" == "dynamic"
+__RUNTIME_LIBS_26 = D
+!endif
+!if "$(RUNTIME_LIBS)" == "static"
+__RUNTIME_LIBS_26 = $(__THREADSFLAG)
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NO_VC_CRTDBG_p_3 = /d __NO_VC_CRTDBG__
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
+__NO_VC_CRTDBG_p_3 = /d __NO_VC_CRTDBG__
+!endif
+!if "$(WXUNIV)" == "1"
+__WXUNIV_DEFINE_p_3 = /d __WXUNIVERSAL__
+!endif
+!if "$(DEBUG_FLAG)" == "0"
+__DEBUG_DEFINE_p_3 = /d wxDEBUG_LEVEL=0
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__NDEBUG_DEFINE_p_3 = /d NDEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NDEBUG_DEFINE_p_3 = /d NDEBUG
 !endif
 !if "$(USE_EXCEPTIONS)" == "0"
-__EXCEPTIONSFLAG_12 = 
+__EXCEPTIONS_DEFINE_p_3 = /d wxNO_EXCEPTIONS
+!endif
+!if "$(USE_RTTI)" == "0"
+__RTTI_DEFINE_p_3 = /d wxNO_RTTI
+!endif
+!if "$(USE_THREADS)" == "0"
+__THREAD_DEFINE_p_3 = /d wxNO_THREADS
+!endif
+!if "$(UNICODE)" == "0"
+__UNICODE_DEFINE_p_3 = /d wxUSE_UNICODE=0
+!endif
+!if "$(UNICODE)" == "1"
+__UNICODE_DEFINE_p_3 = /d _UNICODE
+!endif
+!if "$(MSLU)" == "1"
+__MSLU_DEFINE_p_3 = /d wxUSE_UNICODE_MSLU=1
+!endif
+!if "$(USE_CAIRO)" == "1"
+____CAIRO_INCLUDEDIR_FILENAMES_3_p = /i $(CAIRO_ROOT)\include\cairo
+!endif
+!if "$(SHARED)" == "1"
+__DLLFLAG_p_3 = /d WXUSINGDLL
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_CORE_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
+!endif
+!if "$(USE_GUI)" == "1"
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
+!endif
+!if "$(USE_GUI)" == "1"
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO = /Zi
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO =
+!endif
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO =
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO = /Zi
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_1 = /DEBUG
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_1 =
+!endif
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO_1 =
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO_1 = /DEBUG
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME = /D_DEBUG
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME =
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME =
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME = /D_DEBUG
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME = d
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME =
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME =
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME = d
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_0 =
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_0 = /opt:ref /opt:icf
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME_0 = /opt:ref /opt:icf
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME_0 =
+!endif
+!if "$(BUILD)" == "debug"
+__OPTIMIZEFLAG = /Od
+!endif
+!if "$(BUILD)" == "release"
+__OPTIMIZEFLAG = /O2
+!endif
+!if "$(USE_THREADS)" == "0"
+__THREADSFLAG = L
+!endif
+!if "$(USE_THREADS)" == "1"
+__THREADSFLAG = T
+!endif
+!if "$(USE_RTTI)" == "0"
+__RTTIFLAG =
+!endif
+!if "$(USE_RTTI)" == "1"
+__RTTIFLAG = /GR
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG =
 !endif
 !if "$(USE_EXCEPTIONS)" == "1"
-__EXCEPTIONSFLAG_12 = /EHsc
+__EXCEPTIONSFLAG = /EHsc
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
 __NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
@@ -265,14 +375,10 @@ __UNICODE_DEFINE_p = /D_UNICODE
 __MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
 !endif
 !if "$(USE_CAIRO)" == "1"
-____CAIRO_INCLUDEDIR_FILENAMES_p = /I$(CAIRO_ROOT)\include\cairo
+____CAIRO_INCLUDEDIR_FILENAMES = /I$(CAIRO_ROOT)\include\cairo
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL
-!endif
-!if "$(MONOLITHIC)" == "0"
-__WXLIB_NET_p = \
-	wxbase$(WXBASEPORT)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = \
@@ -281,9 +387,6 @@ __WXLIB_BASE_p = \
 !if "$(MONOLITHIC)" == "1"
 __WXLIB_MONO_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-!if "$(MONOLITHIC)" == "1"
-__LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
@@ -295,7 +398,7 @@ __UNICOWS_LIB_p = unicows.lib
 __CAIRO_LIB_p = cairo.lib
 !endif
 !if "$(USE_CAIRO)" == "1"
-____CAIRO_LIBDIR_FILENAMES_p = /LIBPATH:$(CAIRO_ROOT)\lib
+____CAIRO_LIBDIR_FILENAMES = /LIBPATH:$(CAIRO_ROOT)\lib
 !endif
 
 
@@ -305,7 +408,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\bench.exe data
+all: $(OBJS)\bench.exe data $(__bench_gui___depname) data-image
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -314,15 +417,29 @@ clean:
 	-if exist $(OBJS)\bench.exe del $(OBJS)\bench.exe
 	-if exist $(OBJS)\bench.ilk del $(OBJS)\bench.ilk
 	-if exist $(OBJS)\bench.pdb del $(OBJS)\bench.pdb
+	-if exist $(OBJS)\bench_gui.exe del $(OBJS)\bench_gui.exe
+	-if exist $(OBJS)\bench_gui.ilk del $(OBJS)\bench_gui.ilk
+	-if exist $(OBJS)\bench_gui.pdb del $(OBJS)\bench_gui.pdb
 
 $(OBJS)\bench.exe: $(BENCH_OBJECTS)
-	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\bench.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
+	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\bench.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
 	$(BENCH_OBJECTS)   $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
 <<
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (htmltest.html) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\bench_gui.exe: $(BENCH_GUI_OBJECTS) $(OBJS)\bench_gui_sample.res
+	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\bench_gui.pdb" $(__DEBUGINFO_18)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
+	$(BENCH_GUI_OBJECTS) $(BENCH_GUI_RESOURCES)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(LIB_GTK)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
+<<
+!endif
+
+data-image:
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (../../samples/image/horse.bmp ../../samples/image/horse.jpg ../../samples/image/horse.png ../../samples/image/horse.tif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\bench_bench.obj: .\bench.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_CXXFLAGS) .\bench.cpp
@@ -354,3 +471,11 @@ $(OBJS)\bench_tls.obj: .\tls.cpp
 $(OBJS)\bench_printfbench.obj: .\printfbench.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_CXXFLAGS) .\printfbench.cpp
 
+$(OBJS)\bench_gui_sample.res: .\..\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_19_p_1) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_3)  /d __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) /i . $(__DLLFLAG_p_3) /i .\..\..\samples /d NOPCH /d _CONSOLE .\..\..\samples\sample.rc
+
+$(OBJS)\bench_gui_bench.obj: .\bench.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_GUI_CXXFLAGS) .\bench.cpp
+
+$(OBJS)\bench_gui_image.obj: .\image.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_GUI_CXXFLAGS) .\image.cpp

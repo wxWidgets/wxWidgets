@@ -20,6 +20,10 @@
 #include "wx/cmdline.h"
 #include "wx/stopwatch.h"
 
+#if wxUSE_GUI
+    #include "wx/frame.h"
+#endif
+
 #include "bench.h"
 
 // ----------------------------------------------------------------------------
