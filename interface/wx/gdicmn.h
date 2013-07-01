@@ -1157,14 +1157,33 @@ void wxSetCursor(const wxCursor& cursor);
 /** @addtogroup group_funcmacro_gdi */
 //@{
 /**
+    Returns the dimensions of the work area on the display.
+
+    This is the same as wxGetClientDisplayRect() but allows to retrieve the
+    individual components instead of the entire rectangle.
+
+    Any of the output pointers can be @NULL if the corresponding value is not
+    needed by the caller.
+
+    @see wxDisplay
+
+    @header{wx/gdicmn.h}
+*/
+void wxClientDisplayRect(int* x, int* y, int* width, int* height);
+//@}
+
+/** @addtogroup group_funcmacro_gdi */
+//@{
+/**
     Returns the dimensions of the work area on the display. On Windows this
     means the area not covered by the taskbar, etc. Other platforms are
     currently defaulting to the whole display until a way is found to provide
     this info for all window managers, etc.
 
+    @see wxDisplay
+
     @header{wx/gdicmn.h}
 */
-void wxClientDisplayRect(int* x, int* y, int* width, int* height);
 wxRect wxGetClientDisplayRect();
 //@}
 
@@ -1178,6 +1197,8 @@ wxRect wxGetClientDisplayRect();
 
     @header{wx/gdicmn.h}
 
+    @see wxDisplay
+
     @since 2.9.0
 */
 wxSize wxGetDisplayPPI();
@@ -1188,12 +1209,25 @@ wxSize wxGetDisplayPPI();
 /**
     Returns the display size in pixels.
 
-    For the version taking @a width and @a header arguments, either of them
-    can be @NULL if the caller is not interested in the returned value.
+    Either of output pointers can be @NULL if the caller is not interested in
+    the corresponding value.
+
+    @see wxGetDisplaySize(), wxDisplay
 
     @header{wx/gdicmn.h}
 */
 void wxDisplaySize(int* width, int* height);
+//@}
+
+/** @addtogroup group_funcmacro_gdi */
+//@{
+/**
+    Returns the display size in pixels.
+
+    @see wxDisplay
+
+    @header{wx/gdicmn.h}
+*/
 wxSize wxGetDisplaySize();
 //@}
 
@@ -1202,14 +1236,25 @@ wxSize wxGetDisplaySize();
 /**
     Returns the display size in millimeters.
 
-    For the version taking @a width and @a header arguments, either of them
-    can be @NULL if the caller is not interested in the returned value.
+    Either of output pointers can be @NULL if the caller is not interested in
+    the corresponding value.
 
-    @see wxGetDisplayPPI()
+    @see wxGetDisplaySizeMM(), wxDisplay
 
     @header{wx/gdicmn.h}
 */
 void wxDisplaySizeMM(int* width, int* height);
+//@}
+
+/** @addtogroup group_funcmacro_gdi */
+//@{
+/**
+    Returns the display size in millimeters.
+
+    @see wxDisplay
+
+    @header{wx/gdicmn.h}
+*/
 wxSize wxGetDisplaySizeMM();
 //@}
 
