@@ -272,7 +272,14 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
         // won't do it for us by default (unlike e.g. MSW)
         const wxFileName fnWC(m_fc.GetCurrentWildCard());
         if ( fnWC.HasExt() )
-            defaultFileNameWithExt << "." << fnWC.GetExt();
+        {
+            // Notice that we shouldn't append the extension if it's a wildcard
+            // because this is not useful: the user would need to change it to use
+            // some fixed extension anyhow.
+            const wxString& ext = fnWC.GetExt();
+            if ( ext.find_first_of("?*") == wxString::npos )
+                defaultFileNameWithExt << "." << ext;
+        }
     }
 
 
