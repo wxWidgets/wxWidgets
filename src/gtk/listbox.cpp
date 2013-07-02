@@ -598,22 +598,20 @@ void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 
 void wxListBox::SetString(unsigned int n, const wxString& label)
 {
-    wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetString") );
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
-    GtkTreeEntry* entry = GTKGetEntry(n);
-    wxCHECK_RET( entry, wxT("wrong listbox index") );
+    GtkTreeIter iter;
+    wxCHECK_RET(GTKGetIteratorFor(n, &iter), "invalid index");
+    wxGtkObject<GtkTreeEntry> entry(GetEntry(m_liststore, &iter, this));
 
     // update the item itself
     gtk_tree_entry_set_label(entry, wxGTK_CONV(label));
 
-    // and update the model which will refresh the tree too
-    GtkTreeIter iter;
-    wxCHECK_RET( GTKGetIteratorFor(n, &iter), wxT("failed to get iterator") );
-
-    // FIXME: this resets the checked status of a wxCheckListBox item
-
-    GTKSetItem(iter, entry);
+    // signal row changed
+    GtkTreeModel* tree_model = GTK_TREE_MODEL(m_liststore);
+    GtkTreePath* path = gtk_tree_model_get_path(tree_model, &iter);
+    gtk_tree_model_row_changed(tree_model, path, &iter);
+    gtk_tree_path_free(path);
 }
 
 wxString wxListBox::GetString(unsigned int n) const
