@@ -29,6 +29,7 @@
 #include "wx/menu.h"
 #include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
+#include "wx/uiaction.h"
 
 // FIXME: Currently under OS X testing paint event doesn't work because neither
 //        calling Refresh()+Update() nor even sending wxPaintEvent directly to
@@ -242,6 +243,7 @@ private:
         CPPUNIT_TEST( ScrollWindowWithHandler );
         CPPUNIT_TEST( MenuEvent );
         CPPUNIT_TEST( DocView );
+        WXUISIM_TEST( ContextMenuEvent );
     CPPUNIT_TEST_SUITE_END();
 
     void OneHandler();
@@ -253,6 +255,7 @@ private:
     void ScrollWindowWithHandler();
     void MenuEvent();
     void DocView();
+    void ContextMenuEvent();
 
     DECLARE_NO_COPY_CLASS(EventPropagationTestCase)
 };
@@ -573,3 +576,67 @@ void EventPropagationTestCase::DocView()
     // get the event in order.
     ASSERT_MENU_EVENT_RESULT( menuChild, "advmcpA" );
 }
+
+#if wxUSE_UIACTIONSIMULATOR
+
+class ContextMenuTestWindow : public wxWindow
+{
+public:
+    ContextMenuTestWindow(wxWindow *parent, char tag)
+        : wxWindow(parent, wxID_ANY),
+          m_tag(tag)
+    {
+        Connect(wxEVT_CONTEXT_MENU,
+                wxContextMenuEventHandler(ContextMenuTestWindow::OnMenu));
+    }
+
+private:
+    void OnMenu(wxContextMenuEvent& event)
+    {
+        g_str += m_tag;
+
+        event.Skip();
+    }
+
+    const char m_tag;
+
+    wxDECLARE_NO_COPY_CLASS(ContextMenuTestWindow);
+};
+
+void EventPropagationTestCase::ContextMenuEvent()
+{
+    ContextMenuTestWindow * const
+        parent = new ContextMenuTestWindow(wxTheApp->GetTopWindow(), 'p');
+    wxON_BLOCK_EXIT_OBJ0( *parent, wxWindow::Destroy );
+
+    ContextMenuTestWindow * const
+        child = new ContextMenuTestWindow(parent, 'c');
+    parent->SetSize(100, 100);
+    child->SetSize(0, 0, 50, 50);
+    child->SetFocus();
+
+    wxUIActionSimulator sim;
+    const wxPoint origin = parent->ClientToScreen(wxPoint(0, 0));
+
+    // Right clicking in the child should generate an event for it and the
+    // parent.
+    g_str.clear();
+    sim.MouseMove(origin + wxPoint(10, 10));
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+
+    // At least with MSW, for WM_CONTEXTMENU to be synthesized by the system
+    // from the right mouse click event, we must dispatch the mouse messages.
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL( "cp", g_str );
+
+    // Right clicking outside the child should generate the event just in the
+    // parent.
+    g_str.clear();
+    sim.MouseMove(origin + wxPoint(60, 60));
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+    CPPUNIT_ASSERT_EQUAL( "p", g_str );
+}
+
+#endif // wxUSE_UIACTIONSIMULATOR

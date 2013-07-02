@@ -3433,32 +3433,31 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 #if !defined(__WXWINCE__)
         case WM_CONTEXTMENU:
             {
-                // As with WM_HELP above, this message is propagated upwards
-                // the parent chain by DefWindowProc() itself, so we should
-                // always mark it as processed to prevent it from doing this
-                // as this would result in duplicate calls to event handlers.
-                processed = true;
+                // Ignore the events that are propagated from a child window by
+                // DefWindowProc(): as wxContextMenuEvent is already propagated
+                // upwards the window hierarchy by us, not doing this would
+                // result in duplicate events being sent.
+                WXHWND hWnd = (WXHWND)wParam;
+                if ( hWnd != m_hWnd )
+                {
+                    wxWindowMSW *win = FindItemByHWND(hWnd);
+                    if ( win && IsDescendant(win) )
+                    {
+                        // We had already generated wxContextMenuEvent when we
+                        // got WM_CONTEXTMENU for that window.
+                        processed = true;
+                        break;
+                    }
+                }
 
                 // we don't convert from screen to client coordinates as
                 // the event may be handled by a parent window
                 wxPoint pt(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 
                 wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU, GetId(), pt);
+                evtCtx.SetEventObject(this);
 
-                // we could have got an event from our child, reflect it back
-                // to it if this is the case
-                wxWindowMSW *win = NULL;
-                WXHWND hWnd = (WXHWND)wParam;
-                if ( hWnd != m_hWnd )
-                {
-                    win = FindItemByHWND(hWnd);
-                }
-
-                if ( !win )
-                    win = this;
-
-                evtCtx.SetEventObject(win);
-                win->HandleWindowEvent(evtCtx);
+                processed = HandleWindowEvent(evtCtx);
             }
             break;
 #endif
