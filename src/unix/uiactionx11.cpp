@@ -16,6 +16,8 @@
 #if wxUSE_UIACTIONSIMULATOR
 
 #include "wx/uiaction.h"
+#include "wx/event.h"
+#include "wx/evtloop.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -87,6 +89,15 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
 
     Window root = display.DefaultRoot();
     XWarpPointer(display, None, root, 0, 0, 0, 0, x, y);
+
+    // At least with wxGTK we must always process the pending events before the
+    // mouse position change really takes effect, so just do it from here
+    // instead of forcing the client code using this function to always use
+    // wxYield() which is unnecessary under the other platforms.
+    if ( wxEventLoopBase* const loop = wxEventLoop::GetActive() )
+    {
+        loop->YieldFor(wxEVT_CATEGORY_USER_INPUT);
+    }
 
     return true;
 }
