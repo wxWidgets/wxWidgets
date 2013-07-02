@@ -124,9 +124,6 @@ protected:
     // get the index for the given iterator, return wxNOT_FOUND on failure
     int GTKGetIndexFor(_GtkTreeIter& iter) const;
 
-    // set the specified item
-    void GTKSetItem(_GtkTreeIter& iter, const _GtkTreeEntry *entry);
-
     // common part of DoSetFirstItem() and EnsureVisible()
     void DoScrollToCell(int n, float alignY, float alignX);
 

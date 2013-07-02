@@ -555,23 +555,6 @@ GtkTreeEntry *wxListBox::GTKGetEntry(unsigned n) const
     return GetEntry(m_liststore, &iter, this);
 }
 
-void wxListBox::GTKSetItem(GtkTreeIter& iter, const GtkTreeEntry *entry)
-{
-#if wxUSE_CHECKLISTBOX
-    if ( m_hasCheckBoxes )
-    {
-        gtk_list_store_set(m_liststore, &iter,
-                           0, FALSE, // FALSE == not toggled
-                           1, entry,
-                           -1);
-    }
-    else
-#endif // wxUSE_CHECKLISTBOX
-    {
-        gtk_list_store_set(m_liststore, &iter, 0, entry, -1);
-    }
-}
-
 // ----------------------------------------------------------------------------
 // client data
 // ----------------------------------------------------------------------------
