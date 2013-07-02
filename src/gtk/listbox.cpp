@@ -69,8 +69,6 @@ namespace
 {
 
 // Return the entry for the given listbox item.
-//
-// Return value must be released by caller if non-NULL.
 GtkTreeEntry *
 GetEntry(GtkListStore *store, GtkTreeIter *iter, const wxListBox *listbox)
 {
@@ -80,7 +78,7 @@ GetEntry(GtkListStore *store, GtkTreeIter *iter, const wxListBox *listbox)
                        WXLISTBOX_DATACOLUMN_ARG(listbox),
                        &entry,
                        -1);
-
+    g_object_unref(entry);
     return entry;
 }
 
@@ -203,10 +201,10 @@ static gint gtk_listbox_sort_callback(GtkTreeModel * WXUNUSED(model),
                                       GtkTreeIter  *b,
                                       wxListBox    *listbox)
 {
-    wxGtkObject<GtkTreeEntry> entry1(GetEntry(listbox->m_liststore, a, listbox));
+    GtkTreeEntry* entry1 = GetEntry(listbox->m_liststore, a, listbox);
     wxCHECK_MSG(entry1, 0, wxT("Could not get first entry"));
 
-    wxGtkObject<GtkTreeEntry> entry2(GetEntry(listbox->m_liststore, b, listbox));
+    GtkTreeEntry* entry2 = GetEntry(listbox->m_liststore, b, listbox);
     wxCHECK_MSG(entry2, 0, wxT("Could not get second entry"));
 
     //We compare collate keys here instead of calling g_utf8_collate
@@ -227,8 +225,7 @@ static gboolean gtk_listbox_searchequal_callback(GtkTreeModel * WXUNUSED(model),
                                                  GtkTreeIter* iter,
                                                  wxListBox* listbox)
 {
-    wxGtkObject<GtkTreeEntry>
-        entry(GetEntry(listbox->m_liststore, iter, listbox));
+    GtkTreeEntry* entry = GetEntry(listbox->m_liststore, iter, listbox);
     wxCHECK_MSG(entry, 0, wxT("Could not get entry"));
 
     wxGtkString keycollatekey(g_utf8_collate_key(key, -1));
@@ -561,7 +558,7 @@ GtkTreeEntry *wxListBox::GTKGetEntry(unsigned n) const
 
 void* wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
+    GtkTreeEntry* entry = GTKGetEntry(n);
     wxCHECK_MSG(entry, NULL, wxT("could not get entry"));
 
     return gtk_tree_entry_get_userdata( entry );
@@ -569,7 +566,7 @@ void* wxListBox::DoGetItemClientData(unsigned int n) const
 
 void wxListBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
+    GtkTreeEntry* entry = GTKGetEntry(n);
     wxCHECK_RET(entry, wxT("could not get entry"));
 
     gtk_tree_entry_set_userdata( entry, clientData );
@@ -585,7 +582,7 @@ void wxListBox::SetString(unsigned int n, const wxString& label)
 
     GtkTreeIter iter;
     wxCHECK_RET(GTKGetIteratorFor(n, &iter), "invalid index");
-    wxGtkObject<GtkTreeEntry> entry(GetEntry(m_liststore, &iter, this));
+    GtkTreeEntry* entry = GetEntry(m_liststore, &iter, this);
 
     // update the item itself
     gtk_tree_entry_set_label(entry, wxGTK_CONV(label));
@@ -601,7 +598,7 @@ wxString wxListBox::GetString(unsigned int n) const
 {
     wxCHECK_MSG( m_treeview != NULL, wxEmptyString, wxT("invalid listbox") );
 
-    wxGtkObject<GtkTreeEntry> entry(GTKGetEntry(n));
+    GtkTreeEntry* entry = GTKGetEntry(n);
     wxCHECK_MSG( entry, wxEmptyString, wxT("wrong listbox index") );
 
     return wxGTK_CONV_BACK( gtk_tree_entry_get_label(entry) );
