@@ -32,7 +32,7 @@ typedef pid_t GPid;
 */
 
 /* forwards */
-static void gtk_tree_entry_class_init(GtkTreeEntryClass* klass);
+static void gtk_tree_entry_class_init(void* g_class, void* class_data);
 static void gtk_tree_entry_init (GTypeInstance* instance, gpointer g_class);
 static void gtk_tree_entry_string_transform_func(const GValue *src_value,
                                                  GValue *dest_value);
@@ -58,7 +58,7 @@ gtk_tree_entry_get_type ()
             sizeof (GtkTreeEntryClass),
             NULL,           /* base_init */
             NULL,           /* base_finalize */
-            (GClassInitFunc) gtk_tree_entry_class_init,  /* class_init */
+            gtk_tree_entry_class_init,
             NULL,           /* class_finalize */
             NULL,           /* class_data */
             sizeof (GtkTreeEntry),
@@ -127,9 +127,9 @@ void   gtk_tree_entry_set_destroy_func  (GtkTreeEntry* entry,
 }
 
 /* private */
-static void gtk_tree_entry_class_init(GtkTreeEntryClass* klass)
+static void gtk_tree_entry_class_init(void* g_class, void* class_data)
 {
-    GObjectClass* gobject_class = G_OBJECT_CLASS(klass);
+    GObjectClass* gobject_class = G_OBJECT_CLASS(g_class);
     gobject_class->dispose = gtk_tree_entry_dispose;
 }
 
