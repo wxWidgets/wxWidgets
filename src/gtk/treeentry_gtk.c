@@ -38,6 +38,7 @@ static void gtk_tree_entry_string_transform_func(const GValue *src_value,
                                                  GValue *dest_value);
 static void gtk_tree_entry_dispose(GObject* obj);
 
+static GObjectClass* parent_class;
 
 /* public */
 GtkTreeEntry*
@@ -131,6 +132,7 @@ static void gtk_tree_entry_class_init(void* g_class, void* class_data)
 {
     GObjectClass* gobject_class = G_OBJECT_CLASS(g_class);
     gobject_class->dispose = gtk_tree_entry_dispose;
+    parent_class = G_OBJECT_CLASS(g_type_class_peek_parent(g_class));
 }
 
 static void gtk_tree_entry_init (GTypeInstance* instance, gpointer g_class)
@@ -186,4 +188,6 @@ static void gtk_tree_entry_dispose(GObject* obj)
 
     /* clear userdata */
     entry->userdata = NULL;
+
+    parent_class->dispose(obj);
 }
