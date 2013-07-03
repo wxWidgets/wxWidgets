@@ -83,7 +83,7 @@ wxGUIEventLoop::wxGUIEventLoop()
 {
 }
 
-void wxGUIEventLoop::DoRun()
+void wxGUIEventLoop::OSXDoRun()
 {
     if ( IsMain() )
     {
@@ -93,7 +93,7 @@ void wxGUIEventLoop::DoRun()
     }
     else 
     {
-        wxCFEventLoop::DoRun();
+        wxCFEventLoop::OSXDoRun();
     }
 }
 
@@ -102,9 +102,9 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
     return wxCFEventLoop::DoDispatchTimeout(timeout);
 }
 
-void wxGUIEventLoop::DoStop()
+void wxGUIEventLoop::OSXDoStop()
 {
-    return wxCFEventLoop::DoStop();
+    return wxCFEventLoop::OSXDoStop();
 }
 
 CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
@@ -136,12 +136,12 @@ wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 // END move into a evtloop_osx.cpp
 
 
-void wxModalEventLoop::DoRun()
+void wxModalEventLoop::OSXDoRun()
 {
     // presentModalViewController:animated:
 }
 
-void wxModalEventLoop::DoStop()
+void wxModalEventLoop::OSXDoStop()
 {
     // (void)dismissModalViewControllerAnimated:(BOOL)animated
 }

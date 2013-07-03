@@ -240,13 +240,13 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
     }
 }
 
-void wxGUIEventLoop::DoRun()
+void wxGUIEventLoop::OSXDoRun()
 {
     wxMacAutoreleasePool autoreleasepool;
     [NSApp run];
 }
 
-void wxGUIEventLoop::DoStop()
+void wxGUIEventLoop::OSXDoStop()
 {
     // only calling stop: is not enough when called from a runloop-observer,
     // therefore add a dummy event, to make sure the runloop gets another round
@@ -305,7 +305,7 @@ wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 
 // END move into a evtloop_osx.cpp
 
-void wxModalEventLoop::DoRun()
+void wxModalEventLoop::OSXDoRun()
 {
     wxMacAutoreleasePool pool;
 
@@ -324,7 +324,7 @@ void wxModalEventLoop::DoRun()
     [NSApp runModalForWindow:m_modalNativeWindow];
 }
 
-void wxModalEventLoop::DoStop()
+void wxModalEventLoop::OSXDoStop()
 {
     [NSApp abortModal];
 }
