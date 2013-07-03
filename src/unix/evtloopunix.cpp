@@ -36,6 +36,7 @@
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private/wakeuppipe.h"
 #include "wx/private/selectdispatcher.h"
+#include "wx/private/fdioeventloopsourcehandler.h"
 
 #if wxUSE_EVENTLOOP_SOURCE
     #include "wx/evtloopsrc.h"
@@ -85,33 +86,6 @@ wxConsoleEventLoop::~wxConsoleEventLoop()
 //-----------------------------------------------------------------------------
 
 #if wxUSE_EVENTLOOP_SOURCE
-
-// This class is a temporary bridge between event loop sources and
-// FDIODispatcher. It is going to be removed soon, when all subject interfaces
-// are modified
-class wxFDIOEventLoopSourceHandler : public wxFDIOHandler
-{
-public:
-    wxFDIOEventLoopSourceHandler(wxEventLoopSourceHandler* handler) :
-        m_impl(handler) { }
-
-    virtual void OnReadWaiting()
-    {
-        m_impl->OnReadWaiting();
-    }
-    virtual void OnWriteWaiting()
-    {
-        m_impl->OnWriteWaiting();
-    }
-
-    virtual void OnExceptionWaiting()
-    {
-        m_impl->OnExceptionWaiting();
-    }
-
-protected:
-    wxEventLoopSourceHandler* m_impl;
-};
 
 wxEventLoopSource *
 wxConsoleEventLoop::AddSourceForFD(int fd,
