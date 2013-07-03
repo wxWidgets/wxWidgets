@@ -116,7 +116,6 @@
 #include <errno.h>
 #include <netdb.h>
 #include <signal.h>
-#include <fcntl.h>          // for O_WRONLY and friends
 #include <time.h>           // nanosleep() and/or usleep()
 #include <ctype.h>          // isspace()
 #include <sys/time.h>       // needed for FD_SETSIZE
