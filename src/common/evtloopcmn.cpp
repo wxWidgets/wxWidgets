@@ -30,6 +30,8 @@ wxEventLoopBase *wxEventLoopBase::ms_activeLoop = NULL;
 
 wxEventLoopBase::wxEventLoopBase()
 {
+    m_shouldExit = false;
+
     m_isInsideYield = false;
     m_eventsToProcessInsideYield = wxEVT_CATEGORY_ALL;
 }
@@ -91,7 +93,6 @@ bool wxEventLoopBase::Yield(bool onlyIfNeeded)
 wxEventLoopManual::wxEventLoopManual()
 {
     m_exitcode = 0;
-    m_shouldExit = false;
 }
 
 bool wxEventLoopManual::ProcessEvents()

@@ -177,6 +177,9 @@ protected:
     // the pointer to currently active loop
     static wxEventLoopBase *ms_activeLoop;
 
+    // should we exit the loop?
+    bool m_shouldExit;
+
     // YieldFor() helpers:
     bool m_isInsideYield;
     long m_eventsToProcessInsideYield;
@@ -211,9 +214,6 @@ protected:
 
     // the loop exit code
     int m_exitcode;
-
-    // should we exit the loop?
-    bool m_shouldExit;
 
 private:
     // process all already pending events and dispatch a new one (blocking
