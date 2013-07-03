@@ -2,10 +2,10 @@
 // Name:        src/cocoa/evtloop.mm
 // Purpose:     implements wxEventLoop for Cocoa
 // Author:      David Elliott
-// Modified by:
 // Created:     2003/10/02
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott <dfe@cox.net>
+//              (c) 2013 Rob Bresalier
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

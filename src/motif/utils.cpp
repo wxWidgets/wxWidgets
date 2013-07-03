@@ -42,8 +42,6 @@
 #pragma message disable nosimpint
 #endif
 
-#include "wx/unix/execute.h"
-
 #include <Xm/Xm.h>
 #include <Xm/Frame.h>
 
@@ -77,34 +75,6 @@ void wxFlushEvents(WXDisplay* wxdisplay)
         XFlush (display);
         evtLoop.Dispatch();
     }
-}
-
-// ----------------------------------------------------------------------------
-// wxExecute stuff
-// ----------------------------------------------------------------------------
-
-static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
-                                  XtInputId *id)
-{
-    wxEndProcessData *proc_data = (wxEndProcessData *)data;
-
-    wxHandleProcessTermination(proc_data);
-
-    // VZ: I think they should be the same...
-    wxASSERT( (int)*id == proc_data->tag );
-
-    XtRemoveInput(*id);
-}
-
-int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
-{
-    XtInputId id = XtAppAddInput((XtAppContext) wxTheApp->GetAppContext(),
-                                 fd,
-                                 (XtPointer *) XtInputReadMask,
-                                 (XtInputCallbackProc) xt_notify_end_process,
-                                 (XtPointer) proc_data);
-
-    return (int)id;
 }
 
 // ----------------------------------------------------------------------------

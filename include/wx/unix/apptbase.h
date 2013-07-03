@@ -12,8 +12,10 @@
 #ifndef _WX_UNIX_APPTBASE_H_
 #define _WX_UNIX_APPTBASE_H_
 
-struct wxEndProcessData;
-struct wxExecuteData;
+#include "wx/evtloop.h"
+#include "wx/evtloopsrc.h"
+
+class wxExecuteData;
 class wxFDIOManager;
 class wxEventLoopSourcesManagerBase;
 
@@ -27,22 +29,12 @@ public:
     // wxExecute() support methods
     // ---------------------------
 
-    // wait for the process termination, return whatever wxExecute() must
-    // return
+    // Wait for the process termination and return its exit code or -1 on error.
     //
-    // base class implementation handles all cases except wxEXEC_SYNC without
-    // wxEXEC_NOEVENTS one which is implemented at the GUI level
+    // Notice that this is only used when execData.flags contains wxEXEC_SYNC
+    // and does not contain wxEXEC_NOEVENTS, i.e. when we need to really wait
+    // until the child process exit and dispatch the events while doing it.
     virtual int WaitForChild(wxExecuteData& execData);
-
-    // integrate the monitoring of the given fd with the port-specific event
-    // loop: when this fd, which corresponds to a dummy pipe opened between the
-    // parent and child processes, is closed by the child, the parent is
-    // notified about this via a call to wxHandleProcessTermination() function
-    //
-    // the default implementation uses wxFDIODispatcher and so is suitable for
-    // the console applications or ports which don't have any specific event
-    // loop
-    virtual int AddProcessCallback(wxEndProcessData *data, int fd);
 
 #if wxUSE_SOCKETS
     // return a pointer to the object which should be used to integrate
@@ -62,10 +54,12 @@ public:
     virtual wxEventLoopSourcesManagerBase* GetEventLoopSourcesManager();
 
 protected:
-    // a helper for the implementation of WaitForChild() in wxGUIAppTraits:
-    // checks the streams used for redirected IO in execData and returns true
-    // if there is any activity in them
-    bool CheckForRedirectedIO(wxExecuteData& execData);
+    // Wait for the process termination by running the given event loop until
+    // this happens.
+    //
+    // This is used by the public WaitForChild() after creating the event loop
+    // of the appropriate kind.
+    int RunLoopUntilChildExit(wxExecuteData& execData, wxEventLoopBase& loop);
 };
 
 #endif // _WX_UNIX_APPTBASE_H_

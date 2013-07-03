@@ -574,6 +574,7 @@ All:
   event type constants to make using Bind() less verbose. E.g.
   wxEVT_COMMAND_MENU_SELECTED is now wxEVT_MENU (but the old name remains
   available for compatibility) (Catalin Raceanu).
+- Fix wxExecute() implementation under Unix (Rob Bresalier).
 - Add wxEvtHandler::CallAfter() method for asynchronous method calls.
 - Add support for symlinks to wxFileName (David Hart).
 - Add wxDIR_NO_FOLLOW flag for wxDir traversal (David Hart).

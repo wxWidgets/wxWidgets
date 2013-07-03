@@ -23,8 +23,6 @@
 #include "wx/evtloop.h"
 #include "wx/process.h"
 
-#include "wx/unix/execute.h"
-
 #include <stdarg.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -125,34 +123,6 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 // ----------------------------------------------------------------------------
 // subprocess routines
 // ----------------------------------------------------------------------------
-
-extern "C" {
-static
-void GTK_EndProcessDetector(gpointer data, gint source,
-                            GdkInputCondition WXUNUSED(condition) )
-{
-    wxEndProcessData * const
-        proc_data = static_cast<wxEndProcessData *>(data);
-
-    // child exited, end waiting
-    close(source);
-
-    // don't call us again!
-    gdk_input_remove(proc_data->tag);
-
-    wxHandleProcessTermination(proc_data);
-}
-}
-
-int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
-{
-    int tag = gdk_input_add(fd,
-                            GDK_INPUT_READ,
-                            GTK_EndProcessDetector,
-                            (gpointer)proc_data);
-
-    return tag;
-}
 
 #if wxUSE_TIMER
 

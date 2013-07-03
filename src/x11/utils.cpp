@@ -58,8 +58,6 @@
 #pragma message disable nosimpint
 #endif
 
-#include "wx/unix/execute.h"
-
 #include "wx/x11/private.h"
 
 #include "X11/Xutil.h"

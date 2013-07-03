@@ -5,6 +5,7 @@
 // Created:     2009-10-18
 // RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
+//              (c) 2013 Rob Bresalier
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

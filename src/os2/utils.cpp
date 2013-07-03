@@ -636,12 +636,3 @@ wxString wxPMErrorToStr(ERRORID vError)
     }
     return sError;
 } // end of wxPMErrorToStr
-
-// replacement for implementation in unix/utilsunx.cpp,
-// to be used by all X11 based ports.
-struct wxEndProcessData;
-
-void wxHandleProcessTermination(wxEndProcessData *WXUNUSED(proc_data))
-{
-    // For now, just do nothing. To be filled in as needed.
-}

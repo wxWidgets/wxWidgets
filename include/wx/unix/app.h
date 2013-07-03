@@ -47,7 +47,7 @@ public:
 
     // Register the signal wake up pipe with the given dispatcher.
     //
-    // This is not used anywhere yet but will be soon.
+    // This is used by wxExecute(wxEXEC_NOEVENTS) implementation only.
     //
     // The pointer to the handler used for processing events on this descriptor
     // is returned so that it can be deleted when we no longer needed it.

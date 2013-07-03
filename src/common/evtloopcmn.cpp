@@ -2,10 +2,10 @@
 // Name:        src/common/evtloopcmn.cpp
 // Purpose:     common wxEventLoop-related stuff
 // Author:      Vadim Zeitlin
-// Modified by:
 // Created:     2006-01-12
 // RCS-ID:      $Id$
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006, 2013 Vadim Zeitlin <vadim@wxwindows.org>
+//              (c) 2013 Rob Bresalier
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

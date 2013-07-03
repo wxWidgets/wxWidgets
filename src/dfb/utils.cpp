@@ -18,7 +18,6 @@
 #include "wx/utils.h"
 #include "wx/evtloop.h"
 #include "wx/apptrait.h"
-#include "wx/unix/execute.h"
 #include "wx/unix/private/timer.h"
 
 #ifndef WX_PRECOMP
