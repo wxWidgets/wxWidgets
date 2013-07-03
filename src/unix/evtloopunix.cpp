@@ -28,160 +28,18 @@
     #include "wx/log.h"
 #endif
 
-#include <errno.h>
 #include "wx/apptrait.h"
 #include "wx/scopedptr.h"
 #include "wx/thread.h"
 #include "wx/module.h"
-#include "wx/unix/pipe.h"
 #include "wx/unix/private/timer.h"
 #include "wx/unix/private/epolldispatcher.h"
+#include "wx/unix/private/wakeuppipe.h"
 #include "wx/private/selectdispatcher.h"
 
 #if wxUSE_EVENTLOOP_SOURCE
     #include "wx/evtloopsrc.h"
 #endif // wxUSE_EVENTLOOP_SOURCE
-
-#define TRACE_EVENTS wxT("events")
-
-// ===========================================================================
-// wxEventLoop::PipeIOHandler implementation
-// ===========================================================================
-
-namespace wxPrivate
-{
-
-// pipe used for wake up messages: when a child thread wants to wake up
-// the event loop in the main thread it writes to this pipe
-class PipeIOHandler : public wxFDIOHandler
-{
-public:
-    // default ctor does nothing, call Create() to really initialize the
-    // object
-    PipeIOHandler() : m_pipeIsEmpty(true) { }
-
-    bool Create();
-
-    // this method can be, and normally is, called from another thread
-    void WakeUp();
-
-    int GetReadFd() { return m_pipe[wxPipe::Read]; }
-
-    // implement wxFDIOHandler pure virtual methods
-    virtual void OnReadWaiting();
-    virtual void OnWriteWaiting() { }
-    virtual void OnExceptionWaiting() { }
-
-private:
-    wxPipe m_pipe;
-
-    // Protects access to m_pipeIsEmpty.
-    wxCriticalSection m_pipeLock;
-
-    // This flag is set to true after writing to the pipe and reset to false
-    // after reading from it in the main thread. Having it allows us to avoid
-    // overflowing the pipe with too many writes if the main thread can't keep
-    // up with reading from it.
-    bool m_pipeIsEmpty;
-};
-
-// ----------------------------------------------------------------------------
-// initialization
-// ----------------------------------------------------------------------------
-
-bool PipeIOHandler::Create()
-{
-    if ( !m_pipe.Create() )
-    {
-        wxLogError(_("Failed to create wake up pipe used by event loop."));
-        return false;
-    }
-
-
-    if ( !m_pipe.MakeNonBlocking(wxPipe::Read) )
-    {
-        wxLogSysError(_("Failed to switch wake up pipe to non-blocking mode"));
-        return false;
-    }
-
-    wxLogTrace(TRACE_EVENTS, wxT("Wake up pipe (%d, %d) created"),
-               m_pipe[wxPipe::Read], m_pipe[wxPipe::Write]);
-
-    return true;
-}
-
-// ----------------------------------------------------------------------------
-// wakeup handling
-// ----------------------------------------------------------------------------
-
-void PipeIOHandler::WakeUp()
-{
-    wxCriticalSectionLocker lock(m_pipeLock);
-
-    // No need to do anything if the pipe already contains something.
-    if ( !m_pipeIsEmpty )
-      return;
-
-    if ( write(m_pipe[wxPipe::Write], "s", 1) != 1 )
-    {
-        // don't use wxLog here, we can be in another thread and this could
-        // result in dead locks
-        perror("write(wake up pipe)");
-    }
-    else
-    {
-        // We just wrote to it, so it's not empty any more.
-        m_pipeIsEmpty = false;
-    }
-}
-
-void PipeIOHandler::OnReadWaiting()
-{
-    // got wakeup from child thread, remove the data that provoked it from the
-    // pipe
-
-    wxCriticalSectionLocker lock(m_pipeLock);
-
-    char buf[4];
-    for ( ;; )
-    {
-        const int size = read(GetReadFd(), buf, WXSIZEOF(buf));
-
-        if ( size > 0 )
-        {
-            wxASSERT_MSG( size == 1, "Too many writes to wake-up pipe?" );
-
-            break;
-        }
-
-        if ( size == 0 || (size == -1 && errno == EAGAIN) )
-        {
-            // No data available, not an error (but still surprising,
-            // spurious wakeup?)
-            break;
-        }
-
-        if ( errno == EINTR )
-        {
-            // We were interrupted, try again.
-            continue;
-        }
-
-        wxLogSysError(_("Failed to read from wake-up pipe"));
-
-        return;
-    }
-
-    // The pipe is empty now, so future calls to WakeUp() would need to write
-    // to it again.
-    m_pipeIsEmpty = true;
-
-    // writing to the wake up pipe will make wxConsoleEventLoop return from
-    // wxFDIODispatcher::Dispatch() it might be currently blocking in, nothing
-    // else needs to be done
-}
-
-} // namespace wxPrivate
 
 // ===========================================================================
 // wxEventLoop implementation
@@ -193,8 +51,9 @@ void PipeIOHandler::OnReadWaiting()
 
 wxConsoleEventLoop::wxConsoleEventLoop()
 {
-    m_wakeupPipe = new wxPrivate::PipeIOHandler();
-    if ( !m_wakeupPipe->Create() )
+    m_wakeupPipe = new wxWakeUpPipe;
+    const int pipeFD = m_wakeupPipe->GetReadFd();
+    if ( pipeFD == wxPipe::INVALID_FD )
     {
         wxDELETE(m_wakeupPipe);
         m_dispatcher = NULL;
@@ -205,12 +64,7 @@ wxConsoleEventLoop::wxConsoleEventLoop()
     if ( !m_dispatcher )
         return;
 
-    m_dispatcher->RegisterFD
-                  (
-                    m_wakeupPipe->GetReadFd(),
-                    m_wakeupPipe,
-                    wxFDIO_INPUT
-                  );
+    m_dispatcher->RegisterFD(pipeFD, m_wakeupPipe, wxFDIO_INPUT);
 }
 
 wxConsoleEventLoop::~wxConsoleEventLoop()

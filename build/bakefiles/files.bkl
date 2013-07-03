@@ -73,6 +73,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/timerunx.cpp
     src/unix/threadpsx.cpp
     src/unix/utilsunx.cpp
+    src/unix/wakeuppipe.cpp
     src/unix/fswatcher_kqueue.cpp
 </set>
 

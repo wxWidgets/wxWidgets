@@ -836,6 +836,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/unix/fswatcher_inotify.cpp \
@@ -2240,6 +2241,7 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp
 @COND_TOOLKIT_OSX_CARBON@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
@@ -2263,6 +2265,7 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
@@ -2286,6 +2289,7 @@ COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp
 @COND_TOOLKIT_OSX_IPHONE@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_IPHONE_BASE_OSX_SRC)
 COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
@@ -2303,6 +2307,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2326,6 +2331,7 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2349,6 +2355,7 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2372,6 +2379,7 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2395,6 +2403,7 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/wakeuppipe.cpp \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -4499,6 +4508,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_timerunx.o \
 	monodll_threadpsx.o \
 	monodll_utilsunx.o \
+	monodll_wakeuppipe.o \
 	monodll_fswatcher_kqueue.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS = \
@@ -4533,6 +4543,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_timerunx.o \
 	monodll_threadpsx.o \
 	monodll_utilsunx.o \
+	monodll_wakeuppipe.o \
 	monodll_fswatcher_kqueue.o \
 	monodll_unix_mimetype.o \
 	monodll_fswatcher_inotify.o
@@ -6745,6 +6756,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_timerunx.o \
 	monolib_threadpsx.o \
 	monolib_utilsunx.o \
+	monolib_wakeuppipe.o \
 	monolib_fswatcher_kqueue.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
@@ -6779,6 +6791,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_timerunx.o \
 	monolib_threadpsx.o \
 	monolib_utilsunx.o \
+	monolib_wakeuppipe.o \
 	monolib_fswatcher_kqueue.o \
 	monolib_unix_mimetype.o \
 	monolib_fswatcher_inotify.o
@@ -9044,6 +9057,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_timerunx.o \
 	basedll_threadpsx.o \
 	basedll_utilsunx.o \
+	basedll_wakeuppipe.o \
 	basedll_fswatcher_kqueue.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
@@ -9078,6 +9092,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_timerunx.o \
 	basedll_threadpsx.o \
 	basedll_utilsunx.o \
+	basedll_wakeuppipe.o \
 	basedll_fswatcher_kqueue.o \
 	basedll_unix_mimetype.o \
 	basedll_fswatcher_inotify.o
@@ -9144,6 +9159,7 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_timerunx.o \
 	baselib_threadpsx.o \
 	baselib_utilsunx.o \
+	baselib_wakeuppipe.o \
 	baselib_fswatcher_kqueue.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
@@ -9178,6 +9194,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_timerunx.o \
 	baselib_threadpsx.o \
 	baselib_utilsunx.o \
+	baselib_wakeuppipe.o \
 	baselib_fswatcher_kqueue.o \
 	baselib_unix_mimetype.o \
 	baselib_fswatcher_inotify.o
@@ -18931,6 +18948,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@monodll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
+@COND_PLATFORM_UNIX_1@monodll_wakeuppipe.o: $(srcdir)/src/unix/wakeuppipe.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/wakeuppipe.cpp
+
+@COND_PLATFORM_MACOSX_1@monodll_wakeuppipe.o: $(srcdir)/src/unix/wakeuppipe.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/wakeuppipe.cpp
+
 @COND_PLATFORM_UNIX_1@monodll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
@@ -24790,6 +24813,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@monolib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
+@COND_PLATFORM_UNIX_1@monolib_wakeuppipe.o: $(srcdir)/src/unix/wakeuppipe.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/wakeuppipe.cpp
+
+@COND_PLATFORM_MACOSX_1@monolib_wakeuppipe.o: $(srcdir)/src/unix/wakeuppipe.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/wakeuppipe.cpp
+
 @COND_PLATFORM_UNIX_1@monolib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
@@ -29062,6 +29091,12 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@basedll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
+@COND_PLATFORM_UNIX_1@basedll_wakeuppipe.o: $(srcdir)/src/unix/wakeuppipe.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/wakeuppipe.cpp
+
+@COND_PLATFORM_MACOSX_1@basedll_wakeuppipe.o: $(srcdir)/src/unix/wakeuppipe.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/wakeuppipe.cpp
+
 @COND_PLATFORM_UNIX_1@basedll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
@@ -29568,6 +29603,12 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@baselib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_wakeuppipe.o: $(srcdir)/src/unix/wakeuppipe.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/wakeuppipe.cpp
+
+@COND_PLATFORM_MACOSX_1@baselib_wakeuppipe.o: $(srcdir)/src/unix/wakeuppipe.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/wakeuppipe.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
