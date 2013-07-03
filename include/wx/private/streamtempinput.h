@@ -91,6 +91,19 @@ public:
         return !m_stream || m_stream->Eof();
     }
 
+    // read everything remaining until the EOF, this should only be called once
+    // the child process terminates and we know that no more data is coming
+    bool ReadAll()
+    {
+        while ( !Eof() )
+        {
+            if ( !Update() )
+                return false;
+        }
+
+        return true;
+    }
+
     // dtor puts the data buffered during this object lifetime into the
     // associated stream
     ~wxStreamTempInputBuffer()
