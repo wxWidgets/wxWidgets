@@ -133,7 +133,7 @@ void wxAppConsole::CheckSignal()
 
 wxFDIOHandler* wxAppConsole::RegisterSignalWakeUpPipe(wxFDIODispatcher& dispatcher)
 {
-    wxCHECK_MSG( m_signalWakeUpPipe, false, "Should be allocated" );
+    wxCHECK_MSG( m_signalWakeUpPipe, NULL, "Should be allocated" );
 
     // we need a bridge to wxFDIODispatcher
     //
