@@ -544,6 +544,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\exec\exec.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\font\fonttest.cpp"
 				>
 			</File>

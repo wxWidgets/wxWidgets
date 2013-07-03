@@ -233,6 +233,10 @@ SOURCE=.\events\evtlooptest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\exec\exec.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\font\fonttest.cpp
 # End Source File
 # Begin Source File

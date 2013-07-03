@@ -212,6 +212,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_evtlooptest.o \
 	test_gui_propagation.o \
 	test_gui_keyboard.o \
+	test_gui_exec.o \
 	test_gui_fonttest.o \
 	test_gui_image.o \
 	test_gui_rawbmp.o \
@@ -894,6 +895,9 @@ test_gui_propagation.o: $(srcdir)/events/propagation.cpp $(TEST_GUI_ODEP)
 
 test_gui_keyboard.o: $(srcdir)/events/keyboard.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/keyboard.cpp
+
+test_gui_exec.o: $(srcdir)/exec/exec.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/exec/exec.cpp
 
 test_gui_fonttest.o: $(srcdir)/font/fonttest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/font/fonttest.cpp

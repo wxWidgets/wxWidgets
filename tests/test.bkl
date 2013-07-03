@@ -196,6 +196,11 @@
             events/evtlooptest.cpp
             events/propagation.cpp
             events/keyboard.cpp
+            <!--
+                And duplicate this one too as wxExecute behaves differently in
+                console and GUI applications.
+             -->
+            exec/exec.cpp
             font/fonttest.cpp
             image/image.cpp
             image/rawbmp.cpp
