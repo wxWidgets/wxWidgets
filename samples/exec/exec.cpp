@@ -962,11 +962,8 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
         wxLogStatus("Command \"%s\" terminated after %ldms; exit code %d.",
                     cmd, sw.Time(), code);
 
-        if ( code != -1 )
-        {
-            ShowOutput(cmd, output, wxT("Output"));
-            ShowOutput(cmd, errors, wxT("Errors"));
-        }
+        ShowOutput(cmd, output, wxT("Output"));
+        ShowOutput(cmd, errors, wxT("Errors"));
     }
     else // async exec
     {

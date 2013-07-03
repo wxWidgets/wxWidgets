@@ -618,13 +618,15 @@ bool wxGetEnvMap(wxEnvVariableHashMap *map)
 // wxExecute
 // ----------------------------------------------------------------------------
 
-// wxDoExecuteWithCapture() helper: reads an entire stream into one array
+// wxDoExecuteWithCapture() helper: reads an entire stream into one array if
+// the stream is non-NULL (it doesn't do anything if it's NULL).
 //
 // returns true if ok, false if error
 #if wxUSE_STREAMS
 static bool ReadAll(wxInputStream *is, wxArrayString& output)
 {
-    wxCHECK_MSG( is, false, wxT("NULL stream in wxExecute()?") );
+    if ( !is )
+        return true;
 
     // the stream could be already at EOF or in wxSTREAM_BROKEN_PIPE state
     is->Reset();
@@ -671,17 +673,16 @@ static long wxDoExecuteWithCapture(const wxString& command,
     long rc = wxExecute(command, wxEXEC_SYNC | flags, process, env);
 
 #if wxUSE_STREAMS
-    if ( rc != -1 )
+    // Notice that while -1 indicates an error exit code for us, a program
+    // exiting with this code could still have written something to its stdout
+    // and, especially, stderr, so we still need to read from them.
+    if ( !ReadAll(process->GetInputStream(), output) )
+        rc = -1;
+
+    if ( error )
     {
-        if ( !ReadAll(process->GetInputStream(), output) )
+        if ( !ReadAll(process->GetErrorStream(), *error) )
             rc = -1;
-
-        if ( error )
-        {
-            if ( !ReadAll(process->GetErrorStream(), *error) )
-                rc = -1;
-        }
-
     }
 #else
     wxUnusedVar(output);

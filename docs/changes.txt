@@ -575,6 +575,7 @@ All:
   wxEVT_COMMAND_MENU_SELECTED is now wxEVT_MENU (but the old name remains
   available for compatibility) (Catalin Raceanu).
 - Fix wxExecute() implementation under Unix (Rob Bresalier).
+- Also fix reading output from children exiting with -1 () (Jonathan Dagresta).
 - Add wxEvtHandler::CallAfter() method for asynchronous method calls.
 - Add support for symlinks to wxFileName (David Hart).
 - Add wxDIR_NO_FOLLOW flag for wxDir traversal (David Hart).
