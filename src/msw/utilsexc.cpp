@@ -202,10 +202,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxExecuteModule, wxModule)
 #if wxUSE_STREAMS && !defined(__WXWINCE__)
 
 #include "wx/private/pipestream.h"
-
-// define this to let wxexec.cpp know that we know what we're doing
-#define _WX_USED_BY_WXEXECUTE_
-#include "../common/execcmn.cpp"
+#include "wx/private/streamtempinput.h"
 
 // ----------------------------------------------------------------------------
 // wxPipe represents a Win32 anonymous pipe
