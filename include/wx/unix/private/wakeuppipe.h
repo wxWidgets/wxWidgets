@@ -11,9 +11,8 @@
 #ifndef _WX_UNIX_PRIVATE_WAKEUPPIPE_H_
 #define _WX_UNIX_PRIVATE_WAKEUPPIPE_H_
 
-#include "wx/private/fdiohandler.h"
-
 #include "wx/unix/pipe.h"
+#include "wx/evtloopsrc.h"
 
 // ----------------------------------------------------------------------------
 // wxWakeUpPipe: allows to wake up the event loop by writing to it
@@ -22,7 +21,7 @@
 // This class is not MT-safe, see wxWakeUpPipeMT below for a wake up pipe
 // usable from other threads.
 
-class wxWakeUpPipe : public wxFDIOHandler
+class wxWakeUpPipe : public wxEventLoopSourceHandler
 {
 public:
     // Create and initialize the pipe.
@@ -45,7 +44,7 @@ public:
     int GetReadFd() { return m_pipe[wxPipe::Read]; }
 
 
-    // implement wxFDIOHandler pure virtual methods
+    // Implement wxEventLoopSourceHandler pure virtual methods
     virtual void OnReadWaiting();
     virtual void OnWriteWaiting() { }
     virtual void OnExceptionWaiting() { }

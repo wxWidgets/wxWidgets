@@ -126,8 +126,4 @@ void wxWakeUpPipe::OnReadWaiting()
     // The pipe is empty now, so future calls to WakeUp() would need to write
     // to it again.
     m_pipeIsEmpty = true;
-
-    // writing to the wake up pipe will make wxConsoleEventLoop return from
-    // wxFDIODispatcher::Dispatch() it might be currently blocking in, nothing
-    // else needs to be done
 }

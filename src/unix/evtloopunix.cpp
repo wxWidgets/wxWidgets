@@ -54,30 +54,44 @@
 
 wxConsoleEventLoop::wxConsoleEventLoop()
 {
-    m_wakeupPipe = new wxWakeUpPipeMT;
-    const int pipeFD = m_wakeupPipe->GetReadFd();
+    // Be pessimistic initially and assume that we failed to initialize.
+    m_dispatcher = NULL;
+    m_wakeupPipe = NULL;
+    m_wakeupSource = NULL;
+
+    // Create the pipe.
+    wxScopedPtr<wxWakeUpPipeMT> wakeupPipe(new wxWakeUpPipeMT);
+    const int pipeFD = wakeupPipe->GetReadFd();
     if ( pipeFD == wxPipe::INVALID_FD )
-    {
-        wxDELETE(m_wakeupPipe);
-        m_dispatcher = NULL;
         return;
-    }
 
+    // And start monitoring it in our event loop.
+    m_wakeupSource = wxEventLoopBase::AddSourceForFD
+                                      (
+                                        pipeFD,
+                                        wakeupPipe.get(),
+                                        wxFDIO_INPUT
+                                      );
+
+    if ( !m_wakeupSource )
+        return;
+
+    // This is a bit ugly but we know that AddSourceForFD() used the currently
+    // active dispatcher to register this source, so use the same one for our
+    // other operations. Of course, currently the dispatcher returned by
+    // wxFDIODispatcher::Get() is always the same one anyhow so it doesn't
+    // really matter, but if we started returning different things later, it
+    // would.
     m_dispatcher = wxFDIODispatcher::Get();
-    if ( !m_dispatcher )
-        return;
 
-    m_dispatcher->RegisterFD(pipeFD, m_wakeupPipe, wxFDIO_INPUT);
+    m_wakeupPipe = wakeupPipe.release();
 }
 
 wxConsoleEventLoop::~wxConsoleEventLoop()
 {
     if ( m_wakeupPipe )
     {
-        if ( m_dispatcher )
-        {
-            m_dispatcher->UnregisterFD(m_wakeupPipe->GetReadFd());
-        }
+        delete m_wakeupSource;
 
         delete m_wakeupPipe;
     }
