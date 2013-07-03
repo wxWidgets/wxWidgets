@@ -28,7 +28,6 @@
 
 #include <sys/wait.h>
 
-#include <CoreFoundation/CFFileDescriptor.h>
 #include <CoreFoundation/CFSocket.h>
 
 /*!
@@ -114,34 +113,36 @@ int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 namespace
 {
 
-void EnableDescriptorCallBacks(CFFileDescriptorRef cffd, int flags)
-{
-    if ( flags & wxEVENT_SOURCE_INPUT )
-        CFFileDescriptorEnableCallBacks(cffd, kCFFileDescriptorReadCallBack);
-    if ( flags & wxEVENT_SOURCE_OUTPUT )
-        CFFileDescriptorEnableCallBacks(cffd, kCFFileDescriptorWriteCallBack);
-}
-
+extern "C"
 void
-wx_cffiledescriptor_callback(CFFileDescriptorRef cffd,
-                             CFOptionFlags flags,
-                             void *ctxData)
+wx_socket_callback(CFSocketRef WXUNUSED(s),
+                   CFSocketCallBackType callbackType,
+                   CFDataRef WXUNUSED(address),
+                   void const *WXUNUSED(data),
+                   void *ctxData)
 {
     wxLogTrace(wxTRACE_EVT_SOURCE,
-               "CFFileDescriptor callback, flags=%d", flags);
+               "CFSocket callback, type=%d", callbackType);
 
     wxCFEventLoopSource * const
         source = static_cast<wxCFEventLoopSource *>(ctxData);
 
     wxEventLoopSourceHandler * const
         handler = source->GetHandler();
-    if ( flags & kCFFileDescriptorReadCallBack )
-        handler->OnReadWaiting();
-    if ( flags & kCFFileDescriptorWriteCallBack )
-        handler->OnWriteWaiting();
 
-    // we need to re-enable callbacks to be called again
-    EnableDescriptorCallBacks(cffd, source->GetFlags());
+    switch ( callbackType )
+    {
+        case kCFSocketReadCallBack:
+            handler->OnReadWaiting();
+            break;
+
+        case kCFSocketWriteCallBack:
+            handler->OnWriteWaiting();
+            break;
+
+        default:
+            wxFAIL_MSG( "Unexpected callback type." );
+    }
 }
 
 } // anonymous namespace
@@ -157,31 +158,63 @@ public:
         wxScopedPtr<wxCFEventLoopSource>
             source(new wxCFEventLoopSource(handler, flags));
 
-        CFFileDescriptorContext ctx = { 0, source.get(), NULL, NULL, NULL };
-        wxCFRef<CFFileDescriptorRef>
-            cffd(CFFileDescriptorCreate
-                 (
-                      kCFAllocatorDefault,
-                      fd,
-                      true,   // close on invalidate
-                      wx_cffiledescriptor_callback,
-                      &ctx
-                 ));
-        if ( !cffd )
+        CFSocketContext context = { 0, source.get(), NULL, NULL, NULL };
+
+        int callbackTypes = 0;
+        if ( flags & wxEVENT_SOURCE_INPUT )
+            callbackTypes |= kCFSocketReadCallBack;
+        if ( flags & wxEVENT_SOURCE_OUTPUT )
+            callbackTypes |= kCFSocketWriteCallBack;
+
+        wxCFRef<CFSocketRef>
+            cfSocket(CFSocketCreateWithNative
+                     (
+                        kCFAllocatorDefault,
+                        fd,
+                        callbackTypes,
+                        &wx_socket_callback,
+                        &context
+                      ));
+
+        if ( !cfSocket )
+        {
+            wxLogError(wxS("Failed to create event loop source socket."));
             return NULL;
+        }
+
+        // Adjust the socket options to suit our needs:
+        CFOptionFlags sockopt = CFSocketGetSocketFlags(cfSocket);
+
+        // First, by default, write callback is not called repeatedly when data
+        // can be written to the socket but we need this behaviour so request
+        // it explicitly.
+        if ( flags & wxEVENT_SOURCE_OUTPUT )
+            sockopt |= kCFSocketAutomaticallyReenableWriteCallBack;
+
+        // Second, we use the socket to monitor the FD but it doesn't own it,
+        // so prevent the FD from being closed when the socket is invalidated.
+        sockopt &= ~kCFSocketCloseOnInvalidate;
+
+        CFSocketSetSocketFlags(cfSocket, sockopt);
 
         wxCFRef<CFRunLoopSourceRef>
-            cfsrc(CFFileDescriptorCreateRunLoopSource(kCFAllocatorDefault, cffd, 0));
-        if ( !cfsrc )
+            runLoopSource(CFSocketCreateRunLoopSource
+                          (
+                            kCFAllocatorDefault,
+                            cfSocket,
+                            0 // Lowest index means highest priority
+                          ));
+        if ( !runLoopSource )
+        {
+            wxLogError(wxS("Failed to create low level event loop source."));
+            CFSocketInvalidate(cfSocket);
             return NULL;
+        }
 
-        CFRunLoopRef cfloop = CFRunLoopGetCurrent();
-        CFRunLoopAddSource(cfloop, cfsrc, kCFRunLoopDefaultMode);
+        // Save the socket so that we can remove it later if asked to.
+        source->InitSourceSocket(cfSocket.release());
 
-        // Enable the callbacks initially.
-        EnableDescriptorCallBacks(cffd, source->GetFlags());
-
-        source->SetFileDescriptor(cffd.release());
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
 
         return source.release();
     }

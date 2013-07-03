@@ -42,23 +42,28 @@
     #include "wx/nonownedwnd.h"
 #endif
 
+#include <CoreFoundation/CFSocket.h>
+
 // ============================================================================
 // wxCFEventLoopSource and wxCFEventLoop implementation
 // ============================================================================
 
 #if wxUSE_EVENTLOOP_SOURCE
 
-void wxCFEventLoopSource::SetFileDescriptor(CFFileDescriptorRef cffd)
+void wxCFEventLoopSource::InitSourceSocket(CFSocketRef cfSocket)
 {
-    wxASSERT_MSG( !m_cffd, "shouldn't be called more than once" );
+    wxASSERT_MSG( !m_cfSocket, "shouldn't be called more than once" );
 
-    m_cffd = cffd;
+    m_cfSocket = cfSocket;
 }
 
 wxCFEventLoopSource::~wxCFEventLoopSource()
 {
-    if ( m_cffd )
-        CFRelease(m_cffd);
+    if ( m_cfSocket )
+    {
+        CFSocketInvalidate(m_cfSocket);
+        CFRelease(m_cfSocket);
+    }
 }
 
 #endif // wxUSE_EVENTLOOP_SOURCE
