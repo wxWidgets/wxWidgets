@@ -49,6 +49,15 @@
 
 #define SLEEP_END_STRING "Done sleeping"
 
+namespace
+{
+    enum AsyncExecLoopExitEnum
+    {
+        AsyncExec_DontExitLoop,
+        AsyncExec_ExitLoop
+    };
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -93,12 +102,6 @@ private:
     void DoTestAsyncRedirect(const wxString& command,
                              CheckStream check,
                              const char* expectedContaining);
-
-    enum AsyncExecLoopExitEnum
-    {
-        AsyncExec_DontExitLoop,
-        AsyncExec_ExitLoop
-    };
 
     // This class is used as a helper in order to run wxExecute(ASYNC)
     // inside of an event loop.
