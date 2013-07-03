@@ -124,14 +124,24 @@ static gboolean wx_on_channel_event(GIOChannel *channel,
     wxEventLoopSourceHandler * const
         handler = static_cast<wxEventLoopSourceHandler *>(data);
 
-    if (condition & G_IO_IN || condition & G_IO_PRI)
+    if ( (condition & G_IO_IN) || (condition & G_IO_PRI) || (condition & G_IO_HUP) )
         handler->OnReadWaiting();
+
     if (condition & G_IO_OUT)
         handler->OnWriteWaiting();
-    else if (condition & G_IO_ERR || condition & G_IO_NVAL)
+
+    if ( (condition & G_IO_ERR) || (condition & G_IO_NVAL) )
         handler->OnExceptionWaiting();
 
     // we never want to remove source here, so always return true
+    //
+    // The source may have been removed by the handler, so it may be
+    // a good idea to return FALSE when the source has already been
+    // removed.  However, that would involve somehow informing this function
+    // that the source was removed, which is not trivial to implement
+    // and handle all cases.  It has been found through testing
+    // that if the source was removed by the handler, that even if we
+    // return TRUE here, the source/callback will not get called again.
     return TRUE;
 }
 }
