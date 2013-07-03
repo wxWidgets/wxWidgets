@@ -63,6 +63,8 @@
 
 #if HAS_PIPE_STREAMS
 
+#include "wx/private/pipestream.h"
+
 // define this to let wxexec.cpp know that we know what we're doing
 #define _WX_USED_BY_WXEXECUTE_
 #include "../common/execcmn.cpp"

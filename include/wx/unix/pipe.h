@@ -98,41 +98,5 @@ private:
     int m_fds[2];
 };
 
-#if wxUSE_STREAMS && wxUSE_FILE
-
-#include "wx/wfstream.h"
-
-// ----------------------------------------------------------------------------
-// wxPipeInputStream: stream for reading from a pipe
-// ----------------------------------------------------------------------------
-
-class wxPipeInputStream : public wxFileInputStream
-{
-public:
-    wxPipeInputStream(int fd) : wxFileInputStream(fd) { }
-
-    // return TRUE if the pipe is still opened
-    bool IsOpened() const { return !Eof(); }
-
-    // return TRUE if we have anything to read, don't block
-    virtual bool CanRead() const;
-};
-
-// ----------------------------------------------------------------------------
-// wxPipeOutputStream: stream for writing to a pipe
-// ----------------------------------------------------------------------------
-
-class wxPipeOutputStream : public wxFileOutputStream
-{
-public:
-    wxPipeOutputStream(int fd) : wxFileOutputStream(fd) { }
-
-    // Override the base class version to ignore "pipe full" errors: this is
-    // not an error for this class.
-    size_t OnSysWrite(const void *buffer, size_t size);
-};
-
-#endif // wxUSE_STREAMS && wxUSE_FILE
-
 #endif // _WX_UNIX_PIPE_H_
 

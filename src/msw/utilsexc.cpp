@@ -201,46 +201,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxExecuteModule, wxModule)
 
 #if wxUSE_STREAMS && !defined(__WXWINCE__)
 
-// ----------------------------------------------------------------------------
-// wxPipeStreams
-// ----------------------------------------------------------------------------
-
-class wxPipeInputStream: public wxInputStream
-{
-public:
-    wxPipeInputStream(HANDLE hInput);
-    virtual ~wxPipeInputStream();
-
-    // returns true if the pipe is still opened
-    bool IsOpened() const { return m_hInput != INVALID_HANDLE_VALUE; }
-
-    // returns true if there is any data to be read from the pipe
-    virtual bool CanRead() const;
-
-protected:
-    size_t OnSysRead(void *buffer, size_t len);
-
-protected:
-    HANDLE m_hInput;
-
-    wxDECLARE_NO_COPY_CLASS(wxPipeInputStream);
-};
-
-class wxPipeOutputStream: public wxOutputStream
-{
-public:
-    wxPipeOutputStream(HANDLE hOutput);
-    virtual ~wxPipeOutputStream() { Close(); }
-    bool Close();
-
-protected:
-    size_t OnSysWrite(const void *buffer, size_t len);
-
-protected:
-    HANDLE m_hOutput;
-
-    wxDECLARE_NO_COPY_CLASS(wxPipeOutputStream);
-};
+#include "wx/private/pipestream.h"
 
 // define this to let wxexec.cpp know that we know what we're doing
 #define _WX_USED_BY_WXEXECUTE_
