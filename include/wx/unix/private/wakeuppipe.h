@@ -19,6 +19,9 @@
 // wxWakeUpPipe: allows to wake up the event loop by writing to it
 // ----------------------------------------------------------------------------
 
+// This class is not MT-safe, see wxWakeUpPipeMT below for a wake up pipe
+// usable from other threads.
+
 class wxWakeUpPipe : public wxFDIOHandler
 {
 public:
@@ -32,9 +35,11 @@ public:
     //
     // It simply writes to the write end of the pipe.
     //
-    // Notice that this method can be, and often is, called from another
-    // thread.
-    void WakeUp();
+    // As indicated by its name, this method does no locking and so can be
+    // called only from the main thread.
+    void WakeUpNoLock();
+
+    // Same as WakeUp() but without locking.
 
     // Return the read end of the pipe.
     int GetReadFd() { return m_pipe[wxPipe::Read]; }
@@ -48,14 +53,44 @@ public:
 private:
     wxPipe m_pipe;
 
-    // Protects access to m_pipeIsEmpty.
-    wxCriticalSection m_pipeLock;
-
     // This flag is set to true after writing to the pipe and reset to false
     // after reading from it in the main thread. Having it allows us to avoid
     // overflowing the pipe with too many writes if the main thread can't keep
     // up with reading from it.
     bool m_pipeIsEmpty;
+};
+
+// ----------------------------------------------------------------------------
+// wxWakeUpPipeMT: thread-safe version of wxWakeUpPipe
+// ----------------------------------------------------------------------------
+
+// This class can be used from multiple threads, i.e. its WakeUp() can be
+// called concurrently.
+
+class wxWakeUpPipeMT : public wxWakeUpPipe
+{
+public:
+    wxWakeUpPipeMT() { }
+
+    // Thread-safe wrapper around WakeUpNoLock(): can be called from another
+    // thread to wake up the main one.
+    void WakeUp()
+    {
+        wxCriticalSectionLocker lock(m_pipeLock);
+
+        WakeUpNoLock();
+    }
+
+    virtual void OnReadWaiting()
+    {
+        wxCriticalSectionLocker lock(m_pipeLock);
+
+        wxWakeUpPipe::OnReadWaiting();
+    }
+
+private:
+    // Protects access to m_pipeIsEmpty.
+    wxCriticalSection m_pipeLock;
 };
 
 #endif // _WX_UNIX_PRIVATE_WAKEUPPIPE_H_

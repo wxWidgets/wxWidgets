@@ -51,7 +51,7 @@
 
 wxConsoleEventLoop::wxConsoleEventLoop()
 {
-    m_wakeupPipe = new wxWakeUpPipe;
+    m_wakeupPipe = new wxWakeUpPipeMT;
     const int pipeFD = m_wakeupPipe->GetReadFd();
     if ( pipeFD == wxPipe::INVALID_FD )
     {

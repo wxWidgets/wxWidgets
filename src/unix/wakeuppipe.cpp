@@ -69,10 +69,8 @@ wxWakeUpPipe::wxWakeUpPipe()
 // wakeup handling
 // ----------------------------------------------------------------------------
 
-void wxWakeUpPipe::WakeUp()
+void wxWakeUpPipe::WakeUpNoLock()
 {
-    wxCriticalSectionLocker lock(m_pipeLock);
-
     // No need to do anything if the pipe already contains something.
     if ( !m_pipeIsEmpty )
       return;
@@ -94,8 +92,6 @@ void wxWakeUpPipe::OnReadWaiting()
 {
     // got wakeup from child thread, remove the data that provoked it from the
     // pipe
-
-    wxCriticalSectionLocker lock(m_pipeLock);
 
     char buf[4];
     for ( ;; )
