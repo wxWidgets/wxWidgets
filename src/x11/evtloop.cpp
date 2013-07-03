@@ -125,14 +125,9 @@ wxGUIEventLoop::~wxGUIEventLoop()
     wxASSERT_MSG( !m_impl, wxT("should have been deleted in Run()") );
 }
 
-int wxGUIEventLoop::Run()
+int wxGUIEventLoop::DoRun()
 {
-    // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !m_impl, -1, wxT("can't reenter a message loop") );
-
     m_impl = new wxEventLoopImpl;
-
-    wxEventLoopActivator activate(this);
 
     m_impl->m_keepGoing = true;
     while ( m_impl->m_keepGoing )

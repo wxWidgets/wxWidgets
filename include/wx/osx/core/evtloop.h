@@ -24,10 +24,6 @@ public:
     wxCFEventLoop();
     virtual ~wxCFEventLoop();
 
-    // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
-    // terminating when Exit() is called
-    virtual int Run();
-
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
     virtual void Exit(int rc = 0);
@@ -63,6 +59,10 @@ public:
     void SetShouldWaitForEvent(bool should) { m_shouldWaitForEvent = should; }
 #endif
 protected:
+    // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
+    // terminating when Exit() is called
+    virtual int DoRun();
+
     void CommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
     void DefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
 

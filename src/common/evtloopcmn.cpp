@@ -52,6 +52,24 @@ void wxEventLoopBase::SetActive(wxEventLoopBase* loop)
         wxTheApp->OnEventLoopEnter(loop);
 }
 
+int wxEventLoopBase::Run()
+{
+    // event loops are not recursive, you need to create another loop!
+    wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
+
+    // ProcessIdle() and ProcessEvents() below may throw so the code here should
+    // be exception-safe, hence we must use local objects for all actions we
+    // should undo
+    wxEventLoopActivator activate(this);
+
+    // We might be called again, after a previous call to ScheduleExit(), so
+    // reset this flag.
+    m_shouldExit = false;
+
+    // Finally really run the loop.
+    return DoRun();
+}
+
 void wxEventLoopBase::OnExit()
 {
     if (wxTheApp)
@@ -118,16 +136,8 @@ bool wxEventLoopManual::ProcessEvents()
     return Dispatch();
 }
 
-int wxEventLoopManual::Run()
+int wxEventLoopManual::DoRun()
 {
-    // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
-
-    // ProcessIdle() and ProcessEvents() below may throw so the code here should
-    // be exception-safe, hence we must use local objects for all actions we
-    // should undo
-    wxEventLoopActivator activate(this);
-
     // we must ensure that OnExit() is called even if an exception is thrown
     // from inside ProcessEvents() but we must call it from Exit() in normal
     // situations because it is supposed to be called synchronously,

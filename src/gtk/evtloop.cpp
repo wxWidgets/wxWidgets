@@ -50,13 +50,8 @@ wxGUIEventLoop::wxGUIEventLoop()
     m_exitcode = 0;
 }
 
-int wxGUIEventLoop::Run()
+int wxGUIEventLoop::DoRun()
 {
-    // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, "can't reenter a message loop" );
-
-    wxEventLoopActivator activate(this);
-
     gtk_main();
 
     OnExit();

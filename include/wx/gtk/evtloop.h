@@ -22,7 +22,6 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 public:
     wxGUIEventLoop();
 
-    virtual int Run();
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
@@ -37,6 +36,9 @@ public:
 
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
         { m_arrGdkEvents.Add(ev); }
+
+protected:
+    virtual int DoRun();
 
 private:
     // the exit code of this event loop

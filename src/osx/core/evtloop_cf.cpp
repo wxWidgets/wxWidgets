@@ -392,16 +392,8 @@ void wxCFEventLoop::OSXDoStop()
 
 // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
 // terminating when Exit() is called
-int wxCFEventLoop::Run()
+int wxCFEventLoop::DoRun()
 {
-    // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
-
-    // ProcessIdle() and ProcessEvents() below may throw so the code here should
-    // be exception-safe, hence we must use local objects for all actions we
-    // should undo
-    wxEventLoopActivator activate(this);
-
     // we must ensure that OnExit() is called even if an exception is thrown
     // from inside ProcessEvents() but we must call it from Exit() in normal
     // situations because it is supposed to be called synchronously,

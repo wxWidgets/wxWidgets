@@ -30,13 +30,8 @@
 // wxGUIEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-int wxGUIEventLoop::Run()
+int wxGUIEventLoop::DoRun()
 {
-    // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
-
-    wxEventLoopActivator activate(this);
-
     [[NSApplication sharedApplication] run];
 
     OnExit();

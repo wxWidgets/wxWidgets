@@ -88,7 +88,10 @@ public:
     // -------------------
 
     // start the event loop, return the exit code when it is finished
-    virtual int Run() = 0;
+    //
+    // notice that wx ports should override DoRun(), this method is virtual
+    // only to allow overriding it in the user code for custom event loops
+    virtual int Run();
 
     // is this event loop running now?
     //
@@ -169,6 +172,9 @@ public:
 
 
 protected:
+    // real implementation of Run()
+    virtual int DoRun() = 0;
+
     // this function should be called before the event loop terminates, whether
     // this happens normally (because of Exit() call) or abnormally (because of
     // an exception thrown from inside the loop)
@@ -198,15 +204,15 @@ class WXDLLIMPEXP_BASE wxEventLoopManual : public wxEventLoopBase
 public:
     wxEventLoopManual();
 
-    // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
-    // terminating when Exit() is called
-    virtual int Run();
-
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
     virtual void Exit(int rc = 0);
 
 protected:
+    // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
+    // terminating when Exit() is called
+    virtual int DoRun();
+
     // may be overridden to perform some action at the start of each new event
     // loop iteration
     virtual void OnNextIteration() { }
@@ -285,7 +291,6 @@ public:
     }
 #endif // wxUSE_EVENTLOOP_SOURCE
 
-    virtual int Run();
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
@@ -307,6 +312,8 @@ public:
     virtual bool YieldFor(long eventsToProcess);
 
 protected:
+    virtual int DoRun();
+
     // the pointer to the port specific implementation class
     wxEventLoopImpl *m_impl;
 
