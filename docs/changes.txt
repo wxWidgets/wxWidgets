@@ -597,6 +597,7 @@ All:
 - Add IEEE 754 single/double precision support to wxDataStream classes (net147).
 - Add wxVector<>::const_reverse_iterator (troelsk).
 - Fix thread-safety issue in wxSharedPtr<> (plorkyeran).
+- Add wxTimer::StartOnce().
 - Add Nepali translation (Him Prasad Gautam).
 
 All (GUI):

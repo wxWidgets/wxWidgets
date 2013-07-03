@@ -81,6 +81,10 @@ public:
     // timer if it is already running
     virtual bool Start(int milliseconds = -1, bool oneShot = false);
 
+    // start the timer for one iteration only, this is just a simple wrapper
+    // for Start()
+    bool StartOnce(int milliseconds = -1) { return Start(milliseconds, true); }
+
     // stop the timer, does nothing if the timer is not running
     virtual void Stop();
 

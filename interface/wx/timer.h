@@ -128,10 +128,21 @@ public:
         To make your code more readable you may also use the following symbolic constants:
         - wxTIMER_CONTINUOUS: Start a normal, continuously running, timer
         - wxTIMER_ONE_SHOT: Start a one shot timer
+        Alternatively, use StartOnce().
+
         If the timer was already running, it will be stopped by this method before
         restarting it.
     */
-    virtual bool Start(int milliseconds = -1, bool oneShot = false);
+    virtual bool Start(int milliseconds = -1, bool oneShot = wxTIMER_CONTINUOUS);
+
+    /**
+        Starts the timer for a once-only notification.
+
+        This is a simple wrapper for Start() with @c wxTIMER_ONE_SHOT parameter.
+
+        @since 2.9.5
+     */
+    bool StartOnce(int milliseconds = -1);
 
     /**
         Stops the timer.
