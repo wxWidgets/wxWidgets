@@ -88,6 +88,8 @@ public:
 #endif
 
 #endif // wxUSE_SOCKETS
+
+    virtual wxEventLoopSourcesManagerBase* GetEventLoopSourcesManager();
 };
 
 #endif // wxUSE_GUI

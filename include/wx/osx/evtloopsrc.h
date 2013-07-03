@@ -17,7 +17,7 @@ typedef struct __CFFileDescriptor *CFFileDescriptorRef;
 // wxCFEventLoopSource: CoreFoundation-based wxEventLoopSource for OS X
 // ----------------------------------------------------------------------------
 
-class wxCFEventLoopSource : public wxEventLoopSource
+class WXDLLIMPEXP_BASE wxCFEventLoopSource : public wxEventLoopSource
 {
 public:
     wxCFEventLoopSource(wxEventLoopSourceHandler *handler, int flags)

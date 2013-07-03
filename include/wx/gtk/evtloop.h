@@ -29,11 +29,6 @@ public:
     virtual void WakeUp();
     virtual bool YieldFor(long eventsToProcess);
 
-#if wxUSE_EVENTLOOP_SOURCE
-    virtual wxEventLoopSource *
-      AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
-#endif // wxUSE_EVENTLOOP_SOURCE
-
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
         { m_arrGdkEvents.Add(ev); }
 

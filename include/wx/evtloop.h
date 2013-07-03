@@ -79,9 +79,9 @@ public:
 
 #if wxUSE_EVENTLOOP_SOURCE
     // create a new event loop source wrapping the given file descriptor and
-    // start monitoring it
-    virtual wxEventLoopSource *
-      AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags) = 0;
+    // monitor it for events occurring on this descriptor in all event loops
+    static wxEventLoopSource *
+      AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
 #endif // wxUSE_EVENTLOOP_SOURCE
 
     // dispatch&processing
@@ -295,19 +295,6 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 public:
     wxGUIEventLoop() { m_impl = NULL; }
     virtual ~wxGUIEventLoop();
-
-#if wxUSE_EVENTLOOP_SOURCE
-    // We need to define a base class pure virtual method but we can't provide
-    // a generic implementation for it so simply fail.
-    virtual wxEventLoopSource *
-    AddSourceForFD(int WXUNUSED(fd),
-                   wxEventLoopSourceHandler * WXUNUSED(handler),
-                   int WXUNUSED(flags))
-    {
-        wxFAIL_MSG( "support for event loop sources not implemented" );
-        return NULL;
-    }
-#endif // wxUSE_EVENTLOOP_SOURCE
 
     virtual void ScheduleExit(int rc = 0);
     virtual bool Pending() const;

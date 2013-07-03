@@ -15,6 +15,7 @@
 struct wxEndProcessData;
 struct wxExecuteData;
 class wxFDIOManager;
+class wxEventLoopSourcesManagerBase;
 
 // ----------------------------------------------------------------------------
 // wxAppTraits: the Unix version adds extra hooks needed by Unix code
@@ -55,6 +56,10 @@ public:
     // static variable
     virtual wxFDIOManager *GetFDIOManager();
 #endif // wxUSE_SOCKETS
+
+    // Return a non-NULL pointer to the object responsible for managing the
+    // event loop sources in this kind of application.
+    virtual wxEventLoopSourcesManagerBase* GetEventLoopSourcesManager();
 
 protected:
     // a helper for the implementation of WaitForChild() in wxGUIAppTraits:

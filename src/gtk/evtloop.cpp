@@ -32,6 +32,9 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/private/eventloopsourcesmanager.h"
+#include "wx/apptrait.h"
+
 #include <gtk/gtk.h>
 #include <glib.h>
 
@@ -133,41 +136,50 @@ static gboolean wx_on_channel_event(GIOChannel *channel,
 }
 }
 
-wxEventLoopSource *
-wxGUIEventLoop::AddSourceForFD(int fd,
-                               wxEventLoopSourceHandler *handler,
-                               int flags)
+class wxGUIEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
 {
-    wxCHECK_MSG( fd != -1, NULL, "can't monitor invalid fd" );
+public:
+    virtual wxEventLoopSource*
+    AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags)
+    {
+        wxCHECK_MSG( fd != -1, NULL, "can't monitor invalid fd" );
 
-    int condition = 0;
-    if (flags & wxEVENT_SOURCE_INPUT)
-        condition |= G_IO_IN | G_IO_PRI;
-    if (flags & wxEVENT_SOURCE_OUTPUT)
-        condition |= G_IO_OUT;
-    if (flags & wxEVENT_SOURCE_EXCEPTION)
-        condition |= G_IO_ERR | G_IO_HUP | G_IO_NVAL;
+        int condition = 0;
+        if ( flags & wxEVENT_SOURCE_INPUT )
+            condition |= G_IO_IN | G_IO_PRI | G_IO_HUP;
+        if ( flags & wxEVENT_SOURCE_OUTPUT )
+            condition |= G_IO_OUT;
+        if ( flags & wxEVENT_SOURCE_EXCEPTION )
+            condition |= G_IO_ERR | G_IO_NVAL;
 
-    GIOChannel* channel = g_io_channel_unix_new(fd);
-    const unsigned sourceId  = g_io_add_watch
-                               (
-                                channel,
-                                (GIOCondition)condition,
-                                &wx_on_channel_event,
-                                handler
-                               );
-    // it was ref'd by g_io_add_watch() so we can unref it here
-    g_io_channel_unref(channel);
+        GIOChannel* channel = g_io_channel_unix_new(fd);
+        const unsigned sourceId  = g_io_add_watch
+                                   (
+                                    channel,
+                                    (GIOCondition)condition,
+                                    &wx_on_channel_event,
+                                    handler
+                                   );
+        // it was ref'd by g_io_add_watch() so we can unref it here
+        g_io_channel_unref(channel);
 
-    if ( !sourceId )
-        return NULL;
+        if ( !sourceId )
+            return NULL;
 
-    wxLogTrace(wxTRACE_EVT_SOURCE,
-               "Adding event loop source for fd=%d with GTK id=%u",
-               fd, sourceId);
+        wxLogTrace(wxTRACE_EVT_SOURCE,
+                   "Adding event loop source for fd=%d with GTK id=%u",
+                   fd, sourceId);
 
 
-    return new wxGTKEventLoopSource(sourceId, handler, flags);
+        return new wxGTKEventLoopSource(sourceId, handler, flags);
+    }
+};
+
+wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
+{
+    static wxGUIEventLoopSourcesManager s_eventLoopSourcesManager;
+
+    return &s_eventLoopSourcesManager;
 }
 
 wxGTKEventLoopSource::~wxGTKEventLoopSource()

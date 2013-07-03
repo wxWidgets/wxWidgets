@@ -45,11 +45,6 @@ public:
 
     virtual bool YieldFor(long eventsToProcess);
 
-#if wxUSE_EVENTLOOP_SOURCE
-    virtual wxEventLoopSource *
-      AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
-#endif // wxUSE_EVENTLOOP_SOURCE
-
     bool ShouldProcessIdleEvents() const { return m_processIdleEvents ; }
     
 #if wxUSE_UIACTIONSIMULATOR

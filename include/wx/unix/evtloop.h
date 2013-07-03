@@ -41,11 +41,6 @@ public:
     virtual bool IsOk() const { return m_dispatcher != NULL; }
     virtual bool YieldFor(long WXUNUSED(eventsToProcess)) { return true; }
 
-#if wxUSE_EVENTLOOP_SOURCE
-    virtual wxEventLoopSource *
-      AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
-#endif // wxUSE_EVENTLOOP_SOURCE
-
 protected:
     virtual void OnNextIteration();
 

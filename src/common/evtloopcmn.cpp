@@ -23,6 +23,8 @@
 #endif //WX_PRECOMP
 
 #include "wx/scopeguard.h"
+#include "wx/apptrait.h"
+#include "wx/private/eventloopsourcesmanager.h"
 
 // ----------------------------------------------------------------------------
 // wxEventLoopBase
@@ -114,6 +116,29 @@ bool wxEventLoopBase::Yield(bool onlyIfNeeded)
 
     return YieldFor(wxEVT_CATEGORY_ALL);
 }
+
+#if wxUSE_EVENTLOOP_SOURCE
+
+wxEventLoopSource*
+wxEventLoopBase::AddSourceForFD(int fd,
+                                wxEventLoopSourceHandler *handler,
+                                int flags)
+{
+    // Ensure that we have some valid traits.
+    wxConsoleAppTraits traitsConsole;
+    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    if ( !traits )
+        traits = &traitsConsole;
+
+    // And delegate to the event loop sources manager defined by it.
+    wxEventLoopSourcesManagerBase* const
+        manager = traits->GetEventLoopSourcesManager();
+    wxCHECK_MSG( manager, NULL, wxS("Must have wxEventLoopSourcesManager") );
+
+    return manager->AddSourceForFD(fd, handler, flags);
+}
+
+#endif // wxUSE_EVENTLOOP_SOURCE
 
 // wxEventLoopManual is unused in the other ports
 #if defined(__WINDOWS__) || defined(__WXDFB__) || ( ( defined(__UNIX__) && !defined(__WXOSX__) ) && wxUSE_BASE)

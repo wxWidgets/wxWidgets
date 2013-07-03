@@ -36,7 +36,9 @@
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private/wakeuppipe.h"
 #include "wx/private/selectdispatcher.h"
+#include "wx/private/eventloopsourcesmanager.h"
 #include "wx/private/fdioeventloopsourcehandler.h"
+#include "wx/private/eventloopsourcesmanager.h"
 
 #if wxUSE_EVENTLOOP_SOURCE
     #include "wx/evtloopsrc.h"
@@ -87,27 +89,37 @@ wxConsoleEventLoop::~wxConsoleEventLoop()
 
 #if wxUSE_EVENTLOOP_SOURCE
 
-wxEventLoopSource *
-wxConsoleEventLoop::AddSourceForFD(int fd,
-                                   wxEventLoopSourceHandler *handler,
-                                   int flags)
+class wxConsoleEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
 {
-    wxCHECK_MSG( fd != -1, NULL, "can't monitor invalid fd" );
+public:
+    wxEventLoopSource* AddSourceForFD( int fd,
+                                       wxEventLoopSourceHandler *handler,
+                                       int flags)
+    {
+        wxCHECK_MSG( fd != -1, NULL, "can't monitor invalid fd" );
 
-    wxLogTrace(wxTRACE_EVT_SOURCE,
-                "Adding event loop source for fd=%d", fd);
+        wxLogTrace(wxTRACE_EVT_SOURCE,
+                    "Adding event loop source for fd=%d", fd);
 
-    // we need a bridge to wxFDIODispatcher
-    //
-    // TODO: refactor the code so that only wxEventLoopSourceHandler is used
-    wxScopedPtr<wxFDIOHandler>
-        fdioHandler(new wxFDIOEventLoopSourceHandler(handler));
+        // we need a bridge to wxFDIODispatcher
+        //
+        // TODO: refactor the code so that only wxEventLoopSourceHandler is used
+        wxScopedPtr<wxFDIOHandler>
+            fdioHandler(new wxFDIOEventLoopSourceHandler(handler));
 
-    if ( !m_dispatcher->RegisterFD(fd, fdioHandler.get(), flags) )
-        return NULL;
+        if ( !wxFDIODispatcher::Get()->RegisterFD(fd, fdioHandler.get(), flags) )
+            return NULL;
 
-    return new wxUnixEventLoopSource(m_dispatcher, fdioHandler.release(),
-                                     fd, handler, flags);
+        return new wxUnixEventLoopSource(wxFDIODispatcher::Get(), fdioHandler.release(),
+                                         fd, handler, flags);
+    }
+};
+
+wxEventLoopSourcesManagerBase* wxAppTraits::GetEventLoopSourcesManager()
+{
+    static wxConsoleEventLoopSourcesManager s_eventLoopSourcesManager;
+
+    return &s_eventLoopSourcesManager;
 }
 
 wxUnixEventLoopSource::~wxUnixEventLoopSource()
