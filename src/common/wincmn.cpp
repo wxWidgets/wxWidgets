@@ -3370,7 +3370,7 @@ bool wxWindowBase::TryAfter(wxEvent& event)
             wxWindow *parent = GetParent();
             if ( parent && !parent->IsBeingDeleted() )
             {
-                wxPropagateOnce propagateOnce(event);
+                wxPropagateOnce propagateOnce(event, this);
 
                 return parent->GetEventHandler()->ProcessEvent(event);
             }

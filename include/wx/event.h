@@ -986,6 +986,9 @@ public:
         m_propagationLevel = propagationLevel;
     }
 
+    // This method is for internal use only and allows to get the object that
+    // is propagating this event upwards the window hierarchy, if any.
+    wxEvtHandler* GetPropagatedFrom() const { return m_propagatedFrom; }
 
     // This is for internal use only and is only called by
     // wxEvtHandler::ProcessEvent() to check whether it's the first time this
@@ -1056,6 +1059,10 @@ protected:
     // the parent window (if any)
     int               m_propagationLevel;
 
+    // The object that the event is being propagated from, initially NULL and
+    // only set by wxPropagateOnce.
+    wxEvtHandler*     m_propagatedFrom;
+
     bool              m_skipped;
     bool              m_isCommandEvent;
 
@@ -1075,7 +1082,7 @@ protected:
     wxEvent& operator=(const wxEvent&); // for derived classes operator=()
 
 private:
-    // it needs to access our m_propagationLevel
+    // It needs to access our m_propagationLevel and m_propagatedFrom fields.
     friend class WXDLLIMPEXP_FWD_BASE wxPropagateOnce;
 
     // and this one needs to access our m_handlerToProcessOnlyIn
@@ -1109,26 +1116,35 @@ private:
 };
 
 /*
- * Another one to temporarily lower propagation level.
+ * Helper used to indicate that an event is propagated upwards the window
+ * hierarchy by the given window.
  */
 class WXDLLIMPEXP_BASE wxPropagateOnce
 {
 public:
-    wxPropagateOnce(wxEvent& event) : m_event(event)
+    // The handler argument should normally be non-NULL to allow the parent
+    // event handler to know that it's being used to process an event coming
+    // from the child, it's only NULL by default for backwards compatibility.
+    wxPropagateOnce(wxEvent& event, wxEvtHandler* handler = NULL)
+        : m_event(event),
+          m_propagatedFromOld(event.m_propagatedFrom)
     {
         wxASSERT_MSG( m_event.m_propagationLevel > 0,
                         wxT("shouldn't be used unless ShouldPropagate()!") );
 
         m_event.m_propagationLevel--;
+        m_event.m_propagatedFrom = handler;
     }
 
     ~wxPropagateOnce()
     {
+        m_event.m_propagatedFrom = m_propagatedFromOld;
         m_event.m_propagationLevel++;
     }
 
 private:
     wxEvent& m_event;
+    wxEvtHandler* const m_propagatedFromOld;
 
     wxDECLARE_NO_COPY_CLASS(wxPropagateOnce);
 };

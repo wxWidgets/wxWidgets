@@ -381,8 +381,18 @@ inline bool wxMDIParentFrameBase::TryBefore(wxEvent& event)
             event.GetEventType() == wxEVT_UPDATE_UI )
     {
         wxMDIChildFrame * const child = GetActiveChild();
-        if ( child && child->ProcessWindowEventLocally(event) )
-            return true;
+        if ( child )
+        {
+            // However avoid sending the event back to the child if it's
+            // currently being propagated to us from it.
+            wxWindow* const
+                from = static_cast<wxWindow*>(event.GetPropagatedFrom());
+            if ( !from || !from->IsDescendant(child) )
+            {
+                if ( child->ProcessWindowEventLocally(event) )
+                    return true;
+            }
+        }
     }
 
     return wxFrame::TryBefore(event);

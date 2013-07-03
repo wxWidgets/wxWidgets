@@ -369,6 +369,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType)
     m_handlerToProcessOnlyIn = NULL;
     m_isCommandEvent = false;
     m_propagationLevel = wxEVENT_PROPAGATE_NONE;
+    m_propagatedFrom = NULL;
     m_wasProcessed = false;
     m_willBeProcessedAgain = false;
 }
@@ -382,6 +383,7 @@ wxEvent::wxEvent(const wxEvent& src)
     , m_callbackUserData(src.m_callbackUserData)
     , m_handlerToProcessOnlyIn(NULL)
     , m_propagationLevel(src.m_propagationLevel)
+    , m_propagatedFrom(NULL)
     , m_skipped(src.m_skipped)
     , m_isCommandEvent(src.m_isCommandEvent)
     , m_wasProcessed(false)
@@ -400,6 +402,7 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
     m_callbackUserData = src.m_callbackUserData;
     m_handlerToProcessOnlyIn = NULL;
     m_propagationLevel = src.m_propagationLevel;
+    m_propagatedFrom = NULL;
     m_skipped = src.m_skipped;
     m_isCommandEvent = src.m_isCommandEvent;
 
