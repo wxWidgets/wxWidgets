@@ -228,6 +228,14 @@ public:
     // for it
     static wxAppTraits *GetTraitsIfExists();
 
+    // Return some valid traits object.
+    //
+    // This method checks if we have wxTheApp and returns its traits if it does
+    // exist and the traits are non-NULL, similarly to GetTraitsIfExists(), but
+    // falls back to wxConsoleAppTraits to ensure that it always returns
+    // something valid.
+    static wxAppTraits& GetValidTraits();
+
     // returns the main event loop instance, i.e. the event loop which is started
     // by OnRun() and which dispatches all events sent from the native toolkit
     // to the application (except when new event loops are temporarily set-up).

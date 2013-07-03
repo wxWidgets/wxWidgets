@@ -304,6 +304,15 @@ wxAppTraits *wxAppConsoleBase::GetTraitsIfExists()
     return app ? app->GetTraits() : NULL;
 }
 
+/* static */
+wxAppTraits& wxAppConsoleBase::GetValidTraits()
+{
+    static wxConsoleAppTraits s_traitsConsole;
+    wxAppTraits* const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+
+    return traits ? *traits : s_traitsConsole;
+}
+
 // ----------------------------------------------------------------------------
 // wxEventLoop redirection
 // ----------------------------------------------------------------------------

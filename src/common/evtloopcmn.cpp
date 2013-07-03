@@ -124,15 +124,9 @@ wxEventLoopBase::AddSourceForFD(int fd,
                                 wxEventLoopSourceHandler *handler,
                                 int flags)
 {
-    // Ensure that we have some valid traits.
-    wxConsoleAppTraits traitsConsole;
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    if ( !traits )
-        traits = &traitsConsole;
-
-    // And delegate to the event loop sources manager defined by it.
+    // Delegate to the event loop sources manager defined by it.
     wxEventLoopSourcesManagerBase* const
-        manager = traits->GetEventLoopSourcesManager();
+        manager = wxApp::GetValidTraits().GetEventLoopSourcesManager();
     wxCHECK_MSG( manager, NULL, wxS("Must have wxEventLoopSourcesManager") );
 
     return manager->AddSourceForFD(fd, handler, flags);
