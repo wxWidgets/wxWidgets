@@ -540,10 +540,13 @@ void EventPropagationTestCase::DocView()
     wxDocument* const doc = docTemplate.CreateDocument("");
     wxView* const view = doc->GetFirstView();
 
-    wxScopedPtr<wxFrame>
+    wxScopedPtr<wxMDIChildFrame>
         child(new wxDocMDIChildFrame(doc, view, parent.get(), wxID_ANY, "Child"));
 
     wxMenu* const menuChild = CreateTestMenu(child.get());
+
+    // Ensure that the child that we've just created is the active one.
+    child->Activate();
 
 #ifdef __WXGTK__
     // There are a lot of hacks related to child frame menu bar handling in
