@@ -43,6 +43,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_regconf.o \
 	$(OBJS)\test_datetimetest.o \
 	$(OBJS)\test_evthandler.o \
+	$(OBJS)\test_evtlooptest.o \
 	$(OBJS)\test_evtsource.o \
 	$(OBJS)\test_stopwatch.o \
 	$(OBJS)\test_timertest.o \
@@ -188,6 +189,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_windowtest.o \
 	$(OBJS)\test_gui_dialogtest.o \
 	$(OBJS)\test_gui_clone.o \
+	$(OBJS)\test_gui_evtlooptest.o \
 	$(OBJS)\test_gui_propagation.o \
 	$(OBJS)\test_gui_keyboard.o \
 	$(OBJS)\test_gui_fonttest.o \
@@ -518,6 +520,9 @@ $(OBJS)\test_datetimetest.o: ./datetime/datetimetest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_evthandler.o: ./events/evthandler.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_evtlooptest.o: ./events/evtlooptest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_evtsource.o: ./events/evtsource.cpp
@@ -926,6 +931,9 @@ $(OBJS)\test_gui_dialogtest.o: ./controls/dialogtest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_clone.o: ./events/clone.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_evtlooptest.o: ./events/evtlooptest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_propagation.o: ./events/propagation.cpp

@@ -229,6 +229,10 @@ SOURCE=.\graphics\ellipsization.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\events\evtlooptest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\font\fonttest.cpp
 # End Source File
 # Begin Source File

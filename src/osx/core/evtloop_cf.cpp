@@ -440,7 +440,7 @@ int wxCFEventLoop::DoRun()
 
 // sets the "should exit" flag and wakes up the loop so that it terminates
 // soon
-void wxCFEventLoop::Exit(int rc)
+void wxCFEventLoop::ScheduleExit(int rc)
 {
     m_exitcode = rc;
     m_shouldExit = true;

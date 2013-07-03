@@ -162,7 +162,7 @@ int wxGUIEventLoop::DoRun()
     return exitcode;
 }
 
-void wxGUIEventLoop::Exit(int rc)
+void wxGUIEventLoop::ScheduleExit(int rc)
 {
     if ( m_impl )
     {

@@ -23,6 +23,19 @@
     You can create your own event loop if you need, provided that you restore
     the main event loop once yours is destroyed (see wxEventLoopActivator).
 
+    Notice that there can be more than one event loop at any given moment, e.g.
+    an event handler called from the main loop can show a modal dialog, which
+    starts its own loop resulting in two nested loops, with the modal dialog
+    being the active one (its IsRunning() returns @true). And a handler for a
+    button inside the modal dialog can, of course, create another modal dialog
+    with its own event loop and so on. So in general event loops form a stack
+    and only the event loop at the top of the stack is considered to be active.
+    It is also the only loop that can be directly asked to terminate by calling
+    Exit() (which is done by wxDialog::EndModal()), an outer event loop can't
+    be stopped while an inner one is still running. It is however possible to
+    ask an outer event loop to terminate as soon as all its nested loops exit
+    and the control returns back to it by using ScheduleExit().
+
     @library{wxbase}
     @category{appmanagement}
 
@@ -90,9 +103,32 @@ public:
     virtual bool IsOk() const;
 
     /**
-        Exit from the loop with the given exit code.
+        Exit the currently running loop with the given exit code.
+
+        The loop will exit, i.e. its Run() method will return, during the next
+        event loop iteration.
+
+        Notice that this method can only be used if this event loop is the
+        currently running one, i.e. its IsRunning() returns @true. If this is
+        not the case, an assert failure is triggered and nothing is done as
+        outer event loops can't be exited from immediately. Use ScheduleExit()
+        if you'd like to exit this loop even if it doesn't run currently.
      */
-    virtual void Exit(int rc = 0) = 0;
+    virtual void Exit(int rc = 0);
+
+    /**
+        Schedule an exit from the loop with the given exit code.
+
+        This method is similar to Exit() but can be called even if this event
+        loop is not the currently running one -- and if it is the active loop,
+        then it works in exactly the same way as Exit().
+
+        The loop will exit as soon as the control flow returns to it, i.e.
+        after any nested loops terminate.
+
+        @since 2.9.5
+     */
+    virtual void ScheduleExit(int rc = 0) = 0;
 
     /**
         Return true if any events are available.

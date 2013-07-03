@@ -96,7 +96,15 @@ void wxGUIEventLoop::WakeUp()
 void wxGUIEventLoop::OSXDoRun()
 {
     wxMacAutoreleasePool autoreleasepool;
-    RunApplicationEventLoop();
+
+    while (!m_shouldExit)
+    {
+        RunApplicationEventLoop();
+    }
+
+    // Force enclosing event loop to temporarily exit and check
+    // if it should be stopped.
+    QuitApplicationEventLoop();
 }
 
 void wxGUIEventLoop::OSXDoStop()

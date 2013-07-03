@@ -389,6 +389,9 @@
 				RelativePath=".\graphics\ellipsization.cpp">
 			</File>
 			<File
+				RelativePath=".\events\evtlooptest.cpp">
+			</File>
+			<File
 				RelativePath=".\font\fonttest.cpp">
 			</File>
 			<File

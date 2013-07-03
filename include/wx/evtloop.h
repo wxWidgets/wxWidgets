@@ -100,7 +100,15 @@ public:
     bool IsRunning() const;
 
     // exit from the loop with the given exit code
-    virtual void Exit(int rc = 0) = 0;
+    //
+    // this can be only used to exit the currently running loop, use
+    // ScheduleExit() if this might not be the case
+    virtual void Exit(int rc = 0);
+
+    // ask the event loop to exit with the given exit code, can be used even if
+    // this loop is not running right now but the loop must have been started,
+    // i.e. Run() should have been already called
+    virtual void ScheduleExit(int rc = 0) = 0;
 
     // return true if any events are available
     virtual bool Pending() const = 0;
@@ -180,6 +188,12 @@ protected:
     // an exception thrown from inside the loop)
     virtual void OnExit();
 
+    // Return true if we're currently inside our Run(), even if another nested
+    // event loop is currently running, unlike IsRunning() (which should have
+    // been really called IsActive() but it's too late to change this now).
+    bool IsInsideRun() const { return m_isInsideRun; }
+
+
     // the pointer to currently active loop
     static wxEventLoopBase *ms_activeLoop;
 
@@ -189,6 +203,10 @@ protected:
     // YieldFor() helpers:
     bool m_isInsideYield;
     long m_eventsToProcessInsideYield;
+
+private:
+    // this flag is set on entry into Run() and reset before leaving it
+    bool m_isInsideRun;
 
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
@@ -206,7 +224,7 @@ public:
 
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
-    virtual void Exit(int rc = 0);
+    virtual void ScheduleExit(int rc = 0);
 
 protected:
     // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
@@ -291,7 +309,7 @@ public:
     }
 #endif // wxUSE_EVENTLOOP_SOURCE
 
-    virtual void Exit(int rc = 0);
+    virtual void ScheduleExit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout)

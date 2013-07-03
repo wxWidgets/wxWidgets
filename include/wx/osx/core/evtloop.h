@@ -26,7 +26,7 @@ public:
 
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
-    virtual void Exit(int rc = 0);
+    virtual void ScheduleExit(int rc = 0);
 
     // return true if any events are available
     virtual bool Pending() const;

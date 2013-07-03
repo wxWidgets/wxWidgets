@@ -20,7 +20,7 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 public:
     wxGUIEventLoop() { m_exitcode = 0; }
 
-    virtual void Exit(int rc = 0);
+    virtual void ScheduleExit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);

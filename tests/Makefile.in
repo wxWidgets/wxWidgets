@@ -65,6 +65,7 @@ TEST_OBJECTS =  \
 	test_regconf.o \
 	test_datetimetest.o \
 	test_evthandler.o \
+	test_evtlooptest.o \
 	test_evtsource.o \
 	test_stopwatch.o \
 	test_timertest.o \
@@ -208,6 +209,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_windowtest.o \
 	test_gui_dialogtest.o \
 	test_gui_clone.o \
+	test_gui_evtlooptest.o \
 	test_gui_propagation.o \
 	test_gui_keyboard.o \
 	test_gui_fonttest.o \
@@ -475,6 +477,9 @@ test_datetimetest.o: $(srcdir)/datetime/datetimetest.cpp $(TEST_ODEP)
 
 test_evthandler.o: $(srcdir)/events/evthandler.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/evthandler.cpp
+
+test_evtlooptest.o: $(srcdir)/events/evtlooptest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/evtlooptest.cpp
 
 test_evtsource.o: $(srcdir)/events/evtsource.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/evtsource.cpp
@@ -880,6 +885,9 @@ test_gui_dialogtest.o: $(srcdir)/controls/dialogtest.cpp $(TEST_GUI_ODEP)
 
 test_gui_clone.o: $(srcdir)/events/clone.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/clone.cpp
+
+test_gui_evtlooptest.o: $(srcdir)/events/evtlooptest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/evtlooptest.cpp
 
 test_gui_propagation.o: $(srcdir)/events/propagation.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/propagation.cpp

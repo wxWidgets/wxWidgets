@@ -205,6 +205,10 @@ SOURCE=.\events\evthandler.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\events\evtlooptest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\events\evtsource.cpp
 # End Source File
 # Begin Source File

@@ -530,6 +530,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\events\evtlooptest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\events\evtsource.cpp"
 				>
 			</File>

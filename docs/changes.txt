@@ -584,6 +584,7 @@ All:
 - Add new wxFSW_EVENT_ATTRIB and wxFSW_EVENT_UNMOUNT flags (David Hart).
 - Add separate read/written bytes counters and per-direction NOWAIT and WAITALL
   flags to wxSocket (Rob Bresalier).
+- Add wxEventLoop::ScheduleExit() (Rob Bresalier).
 - Add wxProcess::SetPriority() (Marian Meravy).
 - Add wxDir::Close() method (Silverstorm82).
 - Fix wxDateTime::GetWeekOfYear() for the last week of year (aimo).

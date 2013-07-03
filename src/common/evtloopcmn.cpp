@@ -22,6 +22,8 @@
     #include "wx/app.h"
 #endif //WX_PRECOMP
 
+#include "wx/scopeguard.h"
+
 // ----------------------------------------------------------------------------
 // wxEventLoopBase
 // ----------------------------------------------------------------------------
@@ -30,6 +32,7 @@ wxEventLoopBase *wxEventLoopBase::ms_activeLoop = NULL;
 
 wxEventLoopBase::wxEventLoopBase()
 {
+    m_isInsideRun = false;
     m_shouldExit = false;
 
     m_isInsideYield = false;
@@ -55,7 +58,7 @@ void wxEventLoopBase::SetActive(wxEventLoopBase* loop)
 int wxEventLoopBase::Run()
 {
     // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
+    wxCHECK_MSG( !IsInsideRun(), -1, wxT("can't reenter a message loop") );
 
     // ProcessIdle() and ProcessEvents() below may throw so the code here should
     // be exception-safe, hence we must use local objects for all actions we
@@ -66,8 +69,19 @@ int wxEventLoopBase::Run()
     // reset this flag.
     m_shouldExit = false;
 
+    // Set this variable to true for the duration of this method.
+    m_isInsideRun = true;
+    wxON_BLOCK_EXIT_SET(m_isInsideRun, false);
+
     // Finally really run the loop.
     return DoRun();
+}
+
+void wxEventLoopBase::Exit(int rc)
+{
+    wxCHECK_RET( IsRunning(), wxS("Use ScheduleExit() on not running loop") );
+
+    ScheduleExit(rc);
 }
 
 void wxEventLoopBase::OnExit()
@@ -231,9 +245,9 @@ int wxEventLoopManual::DoRun()
     return m_exitcode;
 }
 
-void wxEventLoopManual::Exit(int rc)
+void wxEventLoopManual::ScheduleExit(int rc)
 {
-    wxCHECK_RET( IsRunning(), wxT("can't call Exit() if not running") );
+    wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not running") );
 
     m_exitcode = rc;
     m_shouldExit = true;

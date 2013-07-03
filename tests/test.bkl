@@ -40,6 +40,7 @@
             config/regconf.cpp
             datetime/datetimetest.cpp
             events/evthandler.cpp
+            events/evtlooptest.cpp
             events/evtsource.cpp
             events/stopwatch.cpp
             events/timertest.cpp
@@ -189,6 +190,10 @@
             controls/windowtest.cpp
             controls/dialogtest.cpp
             events/clone.cpp
+            <!--
+                Duplicate this file here to test GUI event loops too.
+             -->
+            events/evtlooptest.cpp
             events/propagation.cpp
             events/keyboard.cpp
             font/fonttest.cpp

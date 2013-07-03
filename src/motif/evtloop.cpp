@@ -121,9 +121,9 @@ int wxGUIEventLoop::DoRun()
     return exitcode;
 }
 
-void wxGUIEventLoop::Exit(int rc)
+void wxGUIEventLoop::SchduleExit(int rc)
 {
-    wxCHECK_RET( IsRunning(), wxT("can't call Exit() if not running") );
+    wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not started") );
 
     m_impl->SetExitCode(rc);
     m_impl->SetKeepGoing( false );
