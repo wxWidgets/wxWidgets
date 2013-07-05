@@ -4863,8 +4863,15 @@ void wxRichTextCaret::Refresh()
 
 void wxRichTextCaret::DoDraw(wxDC *dc)
 {
-    dc->SetBrush((m_hasFocus ? m_caretBrush : *wxTRANSPARENT_BRUSH));
-    dc->SetPen(m_caretPen);
+    wxBrush brush(m_caretBrush);
+    wxPen pen(m_caretPen);
+    if (m_richTextCtrl && m_richTextCtrl->GetBasicStyle().HasTextColour())
+    {
+        brush = wxBrush(m_richTextCtrl->GetBasicStyle().GetTextColour());
+        pen = wxPen(m_richTextCtrl->GetBasicStyle().GetTextColour());
+    }
+    dc->SetBrush((m_hasFocus ? brush : *wxTRANSPARENT_BRUSH));
+    dc->SetPen(pen);
 
     wxPoint pt(m_x, m_y);
 
