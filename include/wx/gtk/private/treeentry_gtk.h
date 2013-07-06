@@ -16,8 +16,6 @@ extern "C" {
 
 #include <gtk/gtk.h> /* for gpointer and gchar* etc. */
 
-#include "wx/dlimpexp.h"
-
 #define GTK_TYPE_TREE_ENTRY          (gtk_tree_entry_get_type())
 #define GTK_TREE_ENTRY(obj)          (G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_tree_entry_get_type (), GtkTreeEntry))
 #define GTK_IS_TREE_ENTRY(obj)       (G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_tree_entry_get_type ()))
@@ -36,28 +34,20 @@ struct _GtkTreeEntry
     gpointer destroy_func_data;         /* context passed to destroy_func */
 };
 
-WXDLLIMPEXP_CORE
 GtkTreeEntry* gtk_tree_entry_new        (void);
 
-WXDLLIMPEXP_CORE
 GType    gtk_tree_entry_get_type      (void);
 
-WXDLLIMPEXP_CORE
 gchar*     gtk_tree_entry_get_collate_key     (GtkTreeEntry* entry);
 
-WXDLLIMPEXP_CORE
 gchar*     gtk_tree_entry_get_label     (GtkTreeEntry* entry);
 
-WXDLLIMPEXP_CORE
 gpointer   gtk_tree_entry_get_userdata  (GtkTreeEntry* entry);
 
-WXDLLIMPEXP_CORE
 void     gtk_tree_entry_set_label       (GtkTreeEntry* entry, const gchar* label);
 
-WXDLLIMPEXP_CORE
 void   gtk_tree_entry_set_userdata      (GtkTreeEntry* entry, gpointer userdata);
 
-WXDLLIMPEXP_CORE
 void   gtk_tree_entry_set_destroy_func (GtkTreeEntry* entry,
                                         GtkTreeEntryDestroy destroy_func,
                                         gpointer destroy_func_data);
