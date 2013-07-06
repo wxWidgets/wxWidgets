@@ -40,9 +40,6 @@ CPP ?= $(CC) -E
 # What type of library to build? [0,1]
 SHARED ?= 0
 
-# Used toolkit [MSW,GTK]
-TOOLKIT ?= MSW
-
 # GTK+ toolkit version [,2]
 TOOLKIT_VERSION ?= 
 

@@ -35,10 +35,6 @@ CPP = $(CC) -p
 #   1 - DLL
 SHARED = 0
 
-# Used toolkit [MSW,GTK]
-#   GTK - GTK+
-TOOLKIT = MSW
-
 # GTK+ toolkit version [,2]
 TOOLKIT_VERSION = 
 

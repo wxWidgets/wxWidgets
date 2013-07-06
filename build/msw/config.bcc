@@ -50,11 +50,6 @@ CPP = cpp32 -Sr -oCON
 SHARED = 0
 !endif
 
-# Used toolkit [MSW,GTK]
-!ifndef TOOLKIT
-TOOLKIT = MSW
-!endif
-
 # GTK+ toolkit version [,2]
 !ifndef TOOLKIT_VERSION
 TOOLKIT_VERSION = 
