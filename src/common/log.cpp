@@ -856,8 +856,10 @@ wxLogStderr::wxLogStderr(FILE *fp)
 
 void wxLogStderr::DoLogText(const wxString& msg)
 {
-    wxFputs(msg + '\n', m_fp);
-    fflush(m_fp);
+    // First send it to stderr, even if we don't have it (e.g. in a Windows GUI
+    // application under) it's not a problem to try to use it and it's easier
+    // than determining whether we do have it or not.
+    wxMessageOutputStderr(m_fp).Output(msg);
 
     // under GUI systems such as Windows or Mac, programs usually don't have
     // stderr at all, so show the messages also somewhere else, typically in
