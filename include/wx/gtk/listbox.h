@@ -10,7 +10,7 @@
 #ifndef _WX_GTK_LISTBOX_H_
 #define _WX_GTK_LISTBOX_H_
 
-struct _GtkTreeEntry;
+struct _wxTreeEntry;
 struct _GtkTreeIter;
 
 //-----------------------------------------------------------------------------
@@ -91,7 +91,7 @@ public:
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
 
-    struct _GtkTreeEntry* GTKGetEntry(unsigned pos) const;
+    struct _wxTreeEntry* GTKGetEntry(unsigned pos) const;
 
     void GTKDisableEvents();
     void GTKEnableEvents();
