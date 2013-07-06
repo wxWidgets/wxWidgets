@@ -550,7 +550,7 @@ Major new features in this release
   was added.
 
 
-2.9.5: (released ????-??-??)
+2.9.5: (released 2013-07-15)
 ----------------------------
 
 INCOMPATIBLE CHANGES SINCE 2.9.4:

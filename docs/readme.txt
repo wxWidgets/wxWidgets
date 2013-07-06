@@ -50,11 +50,14 @@ when using a release build of the library, was much improved making
 it less likely that you use the library incorrectly. Many new GUI
 and base classes have been added or improved.
 
-Compared to the previous 2.9.3 release the most important change is
-the addition of new, still experimental, GTK+ 3 support in wxGTK.
-But the main focus of this release is on incremental improvements
-and fixing defects in preparation for 3.0 release. In particular,
-wxOSX/Cocoa port has been significantly improved.
+Compared to the previous 2.9.4 release the most important change at
+the API level is the introduction of new, shorter constants for the
+event types making code using Bind() for dynamic event handling easier
+to both write and read. But the main focus of this release is on
+incremental improvements and fixing defects in preparation for 3.0
+release. In particular, wxOSX/Cocoa port has been significantly
+improved. And there were fixes to the still exprimental wxGTK3 port
+which now also support GTK+ Broadway (HTML5-based) backend.
 
 Please see the file docs/changes.txt for more details and make sure
 to read the section "Incompatible changes since 2.8" if you upgrade
@@ -74,7 +77,7 @@ wxWidgets currently supports the following primary platforms:
 
 - Windows 95/98/ME, NT, 2000, XP, Vista, 7
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
-- Mac OS X (10.4 or newer) using either Carbon or Cocoa
+- Mac OS X (10.5 or newer) using either Carbon or Cocoa
 
 There is some support for the following platforms:
 
@@ -213,4 +216,4 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, July 2012
+The wxWidgets Team, July 2013

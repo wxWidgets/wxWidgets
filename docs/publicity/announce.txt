@@ -1,13 +1,13 @@
-July 9, 2012 -- The wxWidgets team is pleased to announce the
-latest 2.9.4 release of wxWidgets library.
+July 15, 2013 -- The wxWidgets team is pleased to announce the
+latest 2.9.5 release of wxWidgets library.
 
-wxWidgets 2.9.4 is available at
+wxWidgets 2.9.5 is available at
 
-        https://sourceforge.net/downloads/wxwindows/2.9.4/
+        https://sourceforge.net/downloads/wxwindows/2.9.5/
 
 and soon will also appear at our FTP mirror at
 
-        ftp://ftp.wxwidgets.org/pub/2.9.4/
+        ftp://ftp.wxwidgets.org/pub/2.9.5/
 
 Please choose the archive format suitable for your platform, i.e. 7z
 or ZIP for Windows platforms and tar.bz2 for the Unix systems
@@ -18,28 +18,28 @@ the Windows installer (.exe file) you still need to build wxWidgets
 as only sources, not binaries, are installed.
 
 However, for the first time ever, we also experimentally provide the
-pre-built versions of wxMSW libraries built with several version of
+pre-built versions of wxMSW libraries built with several versions of
 Microsoft Visual C++ compiler. You can download them from
 
-        https://sourceforge.net/downloads/wxwindows/2.9.4/binaries/
+        https://sourceforge.net/downloads/wxwindows/2.9.5/binaries/
 
 Please see the README file there for the descriptions of the
 individual files.
 
 
 This release mostly focuses on bug fixes in preparation for 3.0
-release, in particular there are a lot of improvements in wxOSX/Cocoa
-port. The most important new feature in this release is experimental
-support for building wxGTK with GTK+ 3 version of the toolkit. Other
-noteworthy additions are:
+release, in particular there were a lot of improvements in wxOSX/Cocoa
+port. Some of other noteworthy changes were:
 
-- Transparent background is now support for wxGTK windows.
-- New style directory selection dialog is now used in wxMSW.
-- Native wxDatePickerCtrl and wxTimePickerCtrl for wxOSX.
-- wxFSInputStream stream class for reading data from wxFileSystem.
-- wxGrid::Render() method allows to print or save wxGrid contents.
-- Strike-through fonts are now supported.
-- Horizontal mouse wheel events are now generated.
+- Introduction of short event names (e.g. wxEVT_BUTTON instead of
+  wxEVT_COMMAND_BUTTON_SELECTED) to make the code using Bind() for
+  dynamic event handling easier to both write and read.
+- Support for hooking any modal dialogs shown by wxWidgets, which is
+  especially used for non-interactive testing.
+- New wxSimplebook class.
+- Many enhancements in wxWebView and related classes.
+- Addition of special files support to wxFileName under Unix.
+
 
 
 The list of of changes since the 2.8 series is much too long to be
@@ -47,6 +47,7 @@ listed here but the most important ones are:
 
 - Completely overhauled Unicode support which is much easier to use.
 - New Cocoa-based wxOSX port for Mac OS X for both 32 and 64 bits.
+- New wxGTK3 port, including support for Broadway (HTML5) backend.
 - New property grid and ribbon libraries are now included in wxWidgets.
 - Better interoperability with standard library classes.
 - Totally revised and more readable manual.
@@ -54,12 +55,14 @@ listed here but the most important ones are:
 
 Please see the changes.txt file in the "docs" subdirectory of
 wxWidgets distribution or also available online at
-https://sourceforge.net/projects/wxwindows/files/2.9.4/changes.txt/docs/changes.txt
-for more details and http://docs.wxwidgets.org/2.9.4/overview_changes_since28.html
-if you are upgrading from wxWidgets 2.8.
+https://sourceforge.net/projects/wxwindows/files/2.9.5/changes.txt
+for more details and please read the "INCOMPATIBLE CHANGES" section
+in its beginning for a brief description of changes if you are
+upgrading from wxWidgets 2.8. For more details, please see
+http://docs.wxwidgets.org/2.9.5/overview_changes_since28.html
 
 
-Note about naming: while 2.9.4 is called a "development" release,
+Note about naming: while 2.9.5 is called a "development" release,
 this only means that API is not guaranteed to remain unchanged in
 the subsequent 2.9.x releases (although it is very unlikely to change
 in incompatible ways at this stage), unlike in the stable 2.8.x branch
