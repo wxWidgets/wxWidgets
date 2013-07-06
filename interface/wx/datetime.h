@@ -482,7 +482,7 @@ public:
 
     /**
         Constructs the object from @a timet value holding the number of seconds
-        since Jan 1, 1970.
+        since Jan 1, 1970 UTC.
 
         If @a timet is invalid, i.e. @code (time_t)-1 @endcode, wxDateTime
         becomes invalid too, i.e. its IsValid() will return @false.
@@ -668,8 +668,10 @@ public:
     unsigned short GetSecond(const TimeZone& tz = Local) const;
 
     /**
-        Returns the number of seconds since Jan 1, 1970. An assert failure will
-        occur if the date is not in the range covered by @c time_t type.
+        Returns the number of seconds since Jan 1, 1970 UTC.
+
+        An assert failure will occur if the date is not in the range covered by
+        @c time_t type, use GetValue() if you work with dates outside of it.
     */
     time_t GetTicks() const;
 
