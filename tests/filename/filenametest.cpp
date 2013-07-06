@@ -685,7 +685,11 @@ void FileNameTestCase::TestSetTimes()
     CPPUNIT_ASSERT( fn.GetTimes(&dtAccess2, &dtModify2, &dtCreate2) );
     CPPUNIT_ASSERT_EQUAL( dtAccess, dtAccess2 );
     CPPUNIT_ASSERT_EQUAL( dtModify, dtModify2 );
+
+    // Under Unix the creation time can't be set.
+#ifdef __WINDOWS__
     CPPUNIT_ASSERT_EQUAL( dtCreate, dtCreate2 );
+#endif // __WINDOWS__
 }
 
 void FileNameTestCase::TestExists()

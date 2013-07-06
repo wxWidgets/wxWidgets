@@ -1260,6 +1260,10 @@ public:
     /**
         Sets the file creation and last access/modification times (any of the pointers
         may be @NULL).
+
+        Notice that the file creation time can't be changed under Unix, so @a
+        dtCreate is ignored there (but @true is still returned). Under Windows
+        all three times can be set.
     */
     bool SetTimes(const wxDateTime* dtAccess,
                   const wxDateTime* dtMod,
