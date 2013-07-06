@@ -33,7 +33,6 @@ typedef pid_t GPid;
 
 /* forwards */
 static void gtk_tree_entry_class_init(void* g_class, void* class_data);
-static void gtk_tree_entry_init (GTypeInstance* instance, gpointer g_class);
 static void gtk_tree_entry_string_transform_func(const GValue *src_value,
                                                  GValue *dest_value);
 static void gtk_tree_entry_dispose(GObject* obj);
@@ -64,7 +63,7 @@ gtk_tree_entry_get_type ()
             NULL,           /* class_data */
             sizeof (GtkTreeEntry),
             16,             /* n_preallocs */
-            (GInstanceInitFunc) gtk_tree_entry_init, /*instance_init*/
+            NULL,           /* instance_init */
             NULL            /* value_table */
         };
         tree_entry_type = g_type_register_static (G_TYPE_OBJECT, "GtkTreeEntry",
@@ -136,18 +135,6 @@ static void gtk_tree_entry_class_init(void* g_class, void* class_data)
     GObjectClass* gobject_class = G_OBJECT_CLASS(g_class);
     gobject_class->dispose = gtk_tree_entry_dispose;
     parent_class = G_OBJECT_CLASS(g_type_class_peek_parent(g_class));
-}
-
-static void gtk_tree_entry_init (GTypeInstance* instance, gpointer g_class)
-{
-    GtkTreeEntry* entry = (GtkTreeEntry*) instance;
-
-    /* clear */
-    entry->label = NULL;
-    entry->collate_key = NULL;
-    entry->userdata = NULL;
-    entry->destroy_func_data = NULL;
-    entry->destroy_func = NULL;
 }
 
 static void gtk_tree_entry_string_transform_func(const GValue *src_value,
