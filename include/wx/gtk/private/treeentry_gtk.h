@@ -16,40 +16,40 @@ extern "C" {
 
 #include <gtk/gtk.h> /* for gpointer and gchar* etc. */
 
-#define GTK_TYPE_TREE_ENTRY          (gtk_tree_entry_get_type())
-#define GTK_TREE_ENTRY(obj)          (G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_tree_entry_get_type (), GtkTreeEntry))
-#define GTK_IS_TREE_ENTRY(obj)       (G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_tree_entry_get_type ()))
+#define WX_TYPE_TREE_ENTRY          wx_tree_entry_get_type()
+#define WX_TREE_ENTRY(obj)          G_TYPE_CHECK_INSTANCE_CAST(obj, wx_tree_entry_get_type(), wxTreeEntry)
+#define WX_IS_TREE_ENTRY(obj)       G_TYPE_CHECK_INSTANCE_TYPE(obj, wx_tree_entry_get_type())
 
-typedef struct _GtkTreeEntry        GtkTreeEntry;
+typedef struct _wxTreeEntry wxTreeEntry;
 
-typedef void (*GtkTreeEntryDestroy) (GtkTreeEntry* entry, gpointer context);
+typedef void (*wxTreeEntryDestroy)(wxTreeEntry* entry, void* context);
 
-struct _GtkTreeEntry
+struct _wxTreeEntry
 {
     GObject parent;                     /* object instance */
     gchar*  label;                      /* label - always copied by this object except on get */
     gchar*  collate_key;                /* collate key used for string comparisons/sorting */
     gpointer userdata;                  /* untouched userdata */
-    GtkTreeEntryDestroy destroy_func;   /* called upon destruction - use for freeing userdata etc. */
+    wxTreeEntryDestroy destroy_func;    /* called upon destruction - use for freeing userdata etc. */
     gpointer destroy_func_data;         /* context passed to destroy_func */
 };
 
-GtkTreeEntry* gtk_tree_entry_new        (void);
+wxTreeEntry* wx_tree_entry_new(void);
 
-GType    gtk_tree_entry_get_type      (void);
+GType wx_tree_entry_get_type(void);
 
-gchar*     gtk_tree_entry_get_collate_key     (GtkTreeEntry* entry);
+char* wx_tree_entry_get_collate_key(wxTreeEntry* entry);
 
-gchar*     gtk_tree_entry_get_label     (GtkTreeEntry* entry);
+char* wx_tree_entry_get_label(wxTreeEntry* entry);
 
-gpointer   gtk_tree_entry_get_userdata  (GtkTreeEntry* entry);
+void* wx_tree_entry_get_userdata(wxTreeEntry* entry);
 
-void     gtk_tree_entry_set_label       (GtkTreeEntry* entry, const gchar* label);
+void wx_tree_entry_set_label(wxTreeEntry* entry, const char* label);
 
-void   gtk_tree_entry_set_userdata      (GtkTreeEntry* entry, gpointer userdata);
+void wx_tree_entry_set_userdata(wxTreeEntry* entry, void* userdata);
 
-void   gtk_tree_entry_set_destroy_func (GtkTreeEntry* entry,
-                                        GtkTreeEntryDestroy destroy_func,
+void wx_tree_entry_set_destroy_func(wxTreeEntry* entry,
+                                        wxTreeEntryDestroy destroy_func,
                                         gpointer destroy_func_data);
 
 #ifdef __cplusplus
