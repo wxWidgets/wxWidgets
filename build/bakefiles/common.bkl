@@ -636,7 +636,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     </set>
 
     <set var="LIB_SCINTILLA_IF_MONO">
-        <if cond="MONOLITHIC=='1'">$(LIB_SCINTILLA)</if>
+        <if cond="MONOLITHIC=='1' and USE_STC=='1'">$(LIB_SCINTILLA)</if>
     </set>
 
     <template id="wx_append_base" template_append="wx_append_base_nomono">
