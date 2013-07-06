@@ -206,7 +206,11 @@ wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 
 void wxLocale::DoCommonInit()
 {
-    m_pszOldLocale = NULL;
+    // Store the current locale in order to be able to restore it in the dtor.
+    m_pszOldLocale = wxSetlocale(LC_ALL, NULL);
+    if ( m_pszOldLocale )
+        m_pszOldLocale = wxStrdup(m_pszOldLocale);
+
 
     m_pOldLocale = wxSetLocale(this);
 
@@ -285,13 +289,7 @@ bool wxLocale::DoInit(const wxString& name,
                     wxS("no locale to set in wxLocale::Init()") );
     }
 
-    const char *oldLocale = wxSetlocale(LC_ALL, szLocale);
-    if ( oldLocale )
-        m_pszOldLocale = wxStrdup(oldLocale);
-    else
-        m_pszOldLocale = NULL;
-
-    if ( m_pszOldLocale == NULL )
+    if ( !wxSetlocale(LC_ALL, szLocale) )
     {
         wxLogError(_("locale '%s' cannot be set."), szLocale);
     }
