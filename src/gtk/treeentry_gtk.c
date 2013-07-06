@@ -79,6 +79,12 @@ gtk_tree_entry_get_type ()
 
 gchar*     gtk_tree_entry_get_collate_key (GtkTreeEntry* entry)
 {
+    if (entry->collate_key == NULL)
+    {
+        char* temp = g_utf8_casefold(entry->label, -1);
+        entry->collate_key = g_utf8_collate_key(temp, -1);
+        g_free(temp);
+    }
     return entry->collate_key;
 }
 
@@ -96,7 +102,6 @@ gpointer   gtk_tree_entry_get_userdata  (GtkTreeEntry* entry)
 
 void     gtk_tree_entry_set_label       (GtkTreeEntry* entry, const gchar* label)
 {
-    gchar *temp;
     g_assert(GTK_IS_TREE_ENTRY(entry));
 
     /* free previous if it exists */
@@ -107,9 +112,7 @@ void     gtk_tree_entry_set_label       (GtkTreeEntry* entry, const gchar* label
     }
 
     entry->label = g_strdup(label);
-    temp = g_utf8_casefold(label, -1); /* -1 == null terminated */
-    entry->collate_key = g_utf8_collate_key(temp, -1); /* -1 == null terminated */
-    g_free( temp );
+    entry->collate_key = NULL;
 }
 
 void   gtk_tree_entry_set_userdata      (GtkTreeEntry* entry, gpointer userdata)
