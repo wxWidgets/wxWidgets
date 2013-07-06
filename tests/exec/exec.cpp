@@ -436,7 +436,7 @@ void ExecTestCase::TestOverlappedSyncExecute()
     //
     // Too bad you can't just register one test case of a test suite as a
     // "fixme".
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
     // Simple helper delaying the call to wxExecute(): instead of running it
     // immediately, it runs it when we re-enter the event loop.
     class DelayedExecuteTimer : public wxTimer
@@ -495,5 +495,5 @@ void ExecTestCase::TestOverlappedSyncExecute()
 
     CPPUNIT_ASSERT( !longSleepOutput.empty() );
     CPPUNIT_ASSERT_EQUAL( SLEEP_END_STRING, longSleepOutput.Last() );
-#endif // !__WXMSW__
+#endif // !__WINDOWS__
 }
