@@ -35,7 +35,6 @@ typedef __CFBundle * wxCFBundleRef;
 class WXDLLIMPEXP_BASE wxStandardPathsCF : public wxStandardPathsCFBase
 {
 public:
-    wxStandardPathsCF();
     virtual ~wxStandardPathsCF();
 
     // wxMac specific: allow user to specify a different bundle
@@ -57,6 +56,10 @@ public:
     virtual wxString GetDocumentsDir() const;
 
 protected:
+    // Ctor is protected, use wxStandardPaths::Get() instead of instantiating
+    // objects of this class directly.
+    wxStandardPathsCF();
+
     // this function can be called with any of CFBundleCopyXXXURL function
     // pointer as parameter
     wxString GetFromFunc(wxCFURLRef (*func)(wxCFBundleRef)) const;

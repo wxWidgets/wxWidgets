@@ -408,6 +408,10 @@ Changes in behaviour which may result in compilation errors
   any more. Use wxBookCtrlEvent in your code if you need to forward-declare
   it or just include the appropriate header instead of forward declaration.
 
+- wxStandardPaths class can't be created now. This was never the right thing
+  to do, wxStandardPaths::Get() always had to be used to access the global
+  object of the correct type but now doing it results in a compilation error.
+
 
 Deprecated methods and their replacements
 -----------------------------------------

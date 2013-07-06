@@ -51,6 +51,11 @@ public:
     virtual wxString GetDocumentsDir() const;
 #endif
 
+protected:
+    // Ctor is protected, use wxStandardPaths::Get() instead of instantiating
+    // objects of this class directly.
+    wxStandardPaths() { }
+
 private:
     wxString m_prefix;
 };

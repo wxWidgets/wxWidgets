@@ -36,7 +36,21 @@
 // module globals
 // ----------------------------------------------------------------------------
 
-static wxStandardPaths gs_stdPaths;
+namespace
+{
+
+// Derive a class just to be able to create it: wxStandardPaths ctor is
+// protected to prevent its misuse, but it also means we can't create an object
+// of this class directly.
+class wxStandardPathsDefault : public wxStandardPaths
+{
+public:
+    wxStandardPathsDefault() { }
+};
+
+static wxStandardPathsDefault gs_stdPaths;
+
+} // anonymous namespace
 
 // ============================================================================
 // implementation

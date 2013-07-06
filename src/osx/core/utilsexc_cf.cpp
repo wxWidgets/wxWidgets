@@ -156,9 +156,19 @@ wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
 // NOTE: This doesn't really belong here but this was a handy file to
 // put it in because it's already compiled for wxCocoa and wxMac GUI lib.
 #if wxUSE_STDPATHS
-static wxStandardPathsCF gs_stdPaths;
 wxStandardPaths& wxGUIAppTraits::GetStandardPaths()
 {
+    // Derive a class just to be able to create it: wxStandardPaths ctor is
+    // protected to prevent its misuse, but it also means we can't create an
+    // object of this class directly.
+    class wxStandardPathsDefault : public wxStandardPathsCF
+    {
+    public:
+        wxStandardPathsDefault() { }
+    };
+
+    static wxStandardPathsDefault gs_stdPaths;
+
     return gs_stdPaths;
 }
 #endif

@@ -142,9 +142,6 @@ public:
     virtual wxString GetTempDir() const;
 
 
-    // ctor for the base class
-    wxStandardPathsBase();
-
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();
 
@@ -158,6 +155,10 @@ public:
 
 
 protected:
+    // Ctor is protected as this is a base class which should never be created
+    // directly.
+    wxStandardPathsBase();
+
     // append the path component, with a leading path separator if a
     // path separator or dot (.) is not already at the end of dir
     static wxString AppendPathComponent(const wxString& dir, const wxString& component);
@@ -209,6 +210,12 @@ public:
     virtual wxString GetUserDataDir() const { return m_prefix; }
     virtual wxString GetPluginsDir() const { return m_prefix; }
     virtual wxString GetDocumentsDir() const { return m_prefix; }
+
+protected:
+    // Ctor is protected because wxStandardPaths::Get() should always be used
+    // to access the global wxStandardPaths object of the correct type instead
+    // of creating one of a possibly wrong type yourself.
+    wxStandardPaths() { }
 
 private:
     wxString m_prefix;
