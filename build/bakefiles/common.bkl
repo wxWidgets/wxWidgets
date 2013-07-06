@@ -635,6 +635,10 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="MONOLITHIC=='1'">$(LIB_PNG)</if>
     </set>
 
+    <set var="LIB_SCINTILLA_IF_MONO">
+        <if cond="MONOLITHIC=='1'">$(LIB_SCINTILLA)</if>
+    </set>
+
     <template id="wx_append_base" template_append="wx_append_base_nomono">
         <!-- Always link against the full wx library in monolithic build and
              also against the PNG one as core code references it for Tango
@@ -645,6 +649,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     <template id="wx_append" template_append="wx_append_nomono">
         <!-- Always link against the wxWin library in monolithic build: -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
+        <sys-lib>$(LIB_SCINTILLA_IF_MONO)</sys-lib>
     </template>
 
 

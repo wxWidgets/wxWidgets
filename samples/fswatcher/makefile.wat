@@ -156,6 +156,10 @@ __WXLIB_MONO_p =
 __WXLIB_MONO_p = &
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
+__LIB_SCINTILLA_IF_MONO_p =
+!ifeq MONOLITHIC 1
+__LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
+!endif
 __LIB_TIFF_p =
 !ifeq USE_GUI 1
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
@@ -260,7 +264,7 @@ $(OBJS)\fswatcher.exe :  $(FSWATCHER_OBJECTS) $(OBJS)\fswatcher_sample.res
 	@%append $(OBJS)\fswatcher.lbc option caseexact
 	@%append $(OBJS)\fswatcher.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
 	@for %i in ($(FSWATCHER_OBJECTS)) do @%append $(OBJS)\fswatcher.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\fswatcher.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\fswatcher.lbc library %i
 	@%append $(OBJS)\fswatcher.lbc option resource=$(OBJS)\fswatcher_sample.res
 	@for %i in () do @%append $(OBJS)\fswatcher.lbc option stack=%i
 	wlink @$(OBJS)\fswatcher.lbc

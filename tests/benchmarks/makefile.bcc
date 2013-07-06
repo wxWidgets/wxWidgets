@@ -140,6 +140,9 @@ __DLLFLAG_p_3 = -dWXUSINGDLL
 __WXLIB_CORE_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
+!if "$(MONOLITHIC)" == "1"
+__LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
+!endif
 !if "$(USE_GUI)" == "1"
 __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
@@ -280,7 +283,7 @@ data:
 !if "$(USE_GUI)" == "1"
 $(OBJS)\bench_gui.exe: $(BENCH_GUI_OBJECTS)  $(OBJS)\bench_gui_sample.res
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(BENCH_GUI_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\bench_gui_sample.res
+	c0x32.obj $(BENCH_GUI_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\bench_gui_sample.res
 |
 !endif
 

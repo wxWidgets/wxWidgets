@@ -151,6 +151,8 @@ COND_PLATFORM_OS2_1___ipcserver___os2_emxbindcmd = $(NM) ipcserver$(EXEEXT) | \
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
+@COND_MONOLITHIC_1@__LIB_SCINTILLA_IF_MONO_p = \
+@COND_MONOLITHIC_1@	-lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@__LIB_TIFF_p \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	-lwxtiff$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -207,7 +209,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 @COND_USE_GUI_1@ipcclient$(EXEEXT): $(IPCCLIENT_OBJECTS) $(__ipcclient___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(IPCCLIENT_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(IPCCLIENT_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 @COND_USE_GUI_1@	
 @COND_USE_GUI_1@	$(__ipcclient___mac_setfilecmd)
 @COND_USE_GUI_1@	$(__ipcclient___os2_emxbindcmd)
@@ -235,7 +237,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@ipcclient_bundle: $(____ipcclient_BUNDLE_TGT_REF_DEP)
 
 @COND_USE_GUI_1@ipcserver$(EXEEXT): $(IPCSERVER_OBJECTS) $(__ipcserver___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(IPCSERVER_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(IPCSERVER_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 @COND_USE_GUI_1@	
 @COND_USE_GUI_1@	$(__ipcserver___mac_setfilecmd)
 @COND_USE_GUI_1@	$(__ipcserver___os2_emxbindcmd)
