@@ -55,7 +55,7 @@ gtk_tree_entry_get_type ()
     {
         const GTypeInfo tree_entry_info =
         {
-            sizeof (GtkTreeEntryClass),
+            sizeof(GObjectClass),
             NULL,           /* base_init */
             NULL,           /* base_finalize */
             gtk_tree_entry_class_init,

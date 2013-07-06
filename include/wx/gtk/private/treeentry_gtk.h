@@ -1,5 +1,5 @@
 /* ///////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk/treeentry_gtk.h
+// Name:        wx/gtk/private/treeentry_gtk.h
 // Purpose:     GtkTreeEntry - a string/userdata combo for use with treeview
 // Author:      Ryan Norton
 // Id:          $Id$
@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef __GTK_TREE_ENTRY_H__
-#define __GTK_TREE_ENTRY_H__
+#ifndef _WX_GTK_TREE_ENTRY_H_
+#define _WX_GTK_TREE_ENTRY_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,11 +20,9 @@ extern "C" {
 
 #define GTK_TYPE_TREE_ENTRY          (gtk_tree_entry_get_type())
 #define GTK_TREE_ENTRY(obj)          (G_TYPE_CHECK_INSTANCE_CAST (obj, gtk_tree_entry_get_type (), GtkTreeEntry))
-#define GTK_TREE_ENTRY_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST (klass, gtk_tree_entry_get_type (), GtkTreeEntryClass))
 #define GTK_IS_TREE_ENTRY(obj)       (G_TYPE_CHECK_INSTANCE_TYPE (obj, gtk_tree_entry_get_type ()))
 
 typedef struct _GtkTreeEntry        GtkTreeEntry;
-typedef struct _GtkTreeEntryClass   GtkTreeEntryClass;
 
 typedef void (*GtkTreeEntryDestroy) (GtkTreeEntry* entry, gpointer context);
 
@@ -36,11 +34,6 @@ struct _GtkTreeEntry
     gpointer userdata;                  /* untouched userdata */
     GtkTreeEntryDestroy destroy_func;   /* called upon destruction - use for freeing userdata etc. */
     gpointer destroy_func_data;         /* context passed to destroy_func */
-};
-
-struct _GtkTreeEntryClass
-{
-    GObjectClass parent;
 };
 
 WXDLLIMPEXP_CORE
@@ -73,4 +66,4 @@ void   gtk_tree_entry_set_destroy_func (GtkTreeEntry* entry,
 }
 #endif /* __cplusplus */
 
-#endif /* __GTK_TREE_ENTRY_H__ */
+#endif /* _WX_GTK_TREE_ENTRY_H_ */
