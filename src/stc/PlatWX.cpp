@@ -1410,7 +1410,7 @@ ColourDesired Platform::ChromeHighlight() {
 
 const char *Platform::DefaultFont() {
     static char buf[128];
-    strcpy(buf, wxNORMAL_FONT->GetFaceName().mbc_str());
+    wxStrlcpy(buf, wxNORMAL_FONT->GetFaceName().mbc_str(), WXSIZEOF(buf));
     return buf;
 }
 
