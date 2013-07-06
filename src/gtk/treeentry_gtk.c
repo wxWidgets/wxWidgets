@@ -14,7 +14,7 @@ typedef pid_t GPid;
 #define GSEAL(x) x
 #endif
 
-#include "wx/gtk/treeentry_gtk.h"
+#include "wx/gtk/private/treeentry_gtk.h"
 
 /*
         GtkTreeEntry

@@ -2991,7 +2991,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/textctrl.h \
 	wx/gtk/textentry.h \
 	wx/gtk/tglbtn.h \
-	wx/gtk/treeentry_gtk.h \
 	wx/generic/fontdlgg.h \
 	wx/gtk/gnome/gprint.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
@@ -3045,8 +3044,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
 	wx/gtk/toolbar.h \
 	wx/gtk/textctrl.h \
 	wx/gtk/textentry.h \
-	wx/gtk/tglbtn.h \
-	wx/gtk/treeentry_gtk.h
+	wx/gtk/tglbtn.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR)
 COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/clrpickerg.h \

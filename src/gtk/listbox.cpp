@@ -33,7 +33,7 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/object.h"
-#include "wx/gtk/treeentry_gtk.h"
+#include "wx/gtk/private/treeentry_gtk.h"
 
 #include <gdk/gdkkeysyms.h>
 #ifdef __WXGTK3__
