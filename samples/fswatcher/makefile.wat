@@ -31,23 +31,12 @@ WATCOM_CWD = $+ $(%cdrive):$(%cwd) $-
 
 ### Conditionally set variables: ###
 
-WIN32_TOOLKIT_LOWERCASE =
-!ifeq TOOLKIT GTK
-WIN32_TOOLKIT_LOWERCASE = gtk
-!endif
-!ifeq TOOLKIT MSW
-WIN32_TOOLKIT_LOWERCASE = msw
-!endif
 PORTNAME =
 !ifeq USE_GUI 0
 PORTNAME = base
 !endif
 !ifeq USE_GUI 1
-PORTNAME = $(WIN32_TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
-!endif
-WXBASEPORT =
-!ifeq TOOLKIT MAC
-WXBASEPORT = _carbon
+PORTNAME = msw$(TOOLKIT_VERSION)
 !endif
 COMPILER_VERSION =
 !ifeq OFFICIAL_BUILD 1
@@ -82,14 +71,6 @@ EXTRALIBS_FOR_BASE =
 !endif
 !ifeq MONOLITHIC 1
 EXTRALIBS_FOR_BASE =   
-!endif
-LIB_GTK =
-!ifeq TOOLKIT GTK
-!ifeq TOOLKIT_VERSION 2
-LIB_GTK = gtk-win32-2.0.lib gdk-win32-2.0.lib pangocairo-1.0.lib &
-	gdk_pixbuf-2.0.lib cairo.lib pango-1.0.lib gobject-2.0.lib gthread-2.0.lib &
-	glib-2.0.lib
-!endif
 !endif
 __DEBUGINFO_0 =
 !ifeq BUILD debug
@@ -168,7 +149,7 @@ __WXLIB_CORE_p = &
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
 __WXLIB_BASE_p = &
-	wxbase$(WXBASEPORT)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
@@ -246,12 +227,12 @@ LIBDIRNAME = &
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 FSWATCHER_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
-	$(__RUNTIME_LIBS_6) -d__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) &
-	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) &
-	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) &
-	-i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
-	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples &
-	-dNOPCH $(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
+	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) &
+	-i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 -wcd=656 &
+	-wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH &
+	$(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 FSWATCHER_OBJECTS =  &
 	$(OBJS)\fswatcher_fswatcher.obj
 
@@ -279,13 +260,13 @@ $(OBJS)\fswatcher.exe :  $(FSWATCHER_OBJECTS) $(OBJS)\fswatcher_sample.res
 	@%append $(OBJS)\fswatcher.lbc option caseexact
 	@%append $(OBJS)\fswatcher.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
 	@for %i in ($(FSWATCHER_OBJECTS)) do @%append $(OBJS)\fswatcher.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(LIB_GTK)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\fswatcher.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\fswatcher.lbc library %i
 	@%append $(OBJS)\fswatcher.lbc option resource=$(OBJS)\fswatcher_sample.res
 	@for %i in () do @%append $(OBJS)\fswatcher.lbc option stack=%i
 	wlink @$(OBJS)\fswatcher.lbc
 
 $(OBJS)\fswatcher_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
 $(OBJS)\fswatcher_fswatcher.obj :  .AUTODEPEND .\fswatcher.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(FSWATCHER_CXXFLAGS) $<
