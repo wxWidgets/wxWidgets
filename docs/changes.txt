@@ -711,6 +711,7 @@ wxMSW:
 - Fix filter checks in wxDir::FindFirst/Next() (Catalin Raceanu).
 - Add support for wxICON_AUTH_NEEDED to wxMessageDialog (Chris Spencer).
 - Fix printing too many copies of the document in some cases (John Roberts).
+- Fix DST confusion in wxFileName::{Set,Get}Times().
 
 wxOSX/Cocoa:
 

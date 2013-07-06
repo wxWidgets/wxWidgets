@@ -93,6 +93,7 @@
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/dynlib.h"
 #include "wx/dir.h"
+#include "wx/longlong.h"
 
 #if defined(__WIN32__) && defined(__MINGW32__)
     #include "wx/msw/gccpriv.h"
@@ -231,49 +232,30 @@ private:
 
 #if wxUSE_DATETIME && defined(__WIN32__) && !defined(__WXMICROWIN__)
 
-// convert between wxDateTime and FILETIME which is a 64-bit value representing
-// the number of 100-nanosecond intervals since January 1, 1601.
+// Convert between wxDateTime and FILETIME which is a 64-bit value representing
+// the number of 100-nanosecond intervals since January 1, 1601 UTC.
+//
+// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
+static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
 
 static void ConvertFileTimeToWx(wxDateTime *dt, const FILETIME &ft)
 {
-    FILETIME ftcopy = ft;
-    FILETIME ftLocal;
-    if ( !::FileTimeToLocalFileTime(&ftcopy, &ftLocal) )
-    {
-        wxLogLastError(wxT("FileTimeToLocalFileTime"));
-    }
+    wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
+    t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
+    t -= EPOCH_OFFSET_IN_MSEC;
 
-    SYSTEMTIME st;
-    if ( !::FileTimeToSystemTime(&ftLocal, &st) )
-    {
-        wxLogLastError(wxT("FileTimeToSystemTime"));
-    }
-
-    dt->Set(st.wDay, wxDateTime::Month(st.wMonth - 1), st.wYear,
-            st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+    *dt = wxDateTime(t);
 }
 
 static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
 {
-    SYSTEMTIME st;
-    st.wDay = dt.GetDay();
-    st.wMonth = (WORD)(dt.GetMonth() + 1);
-    st.wYear = (WORD)dt.GetYear();
-    st.wHour = dt.GetHour();
-    st.wMinute = dt.GetMinute();
-    st.wSecond = dt.GetSecond();
-    st.wMilliseconds = dt.GetMillisecond();
+    // Undo the conversions above.
+    wxLongLong t(dt.GetValue());
+    t += EPOCH_OFFSET_IN_MSEC;
+    t *= 10000;
 
-    FILETIME ftLocal;
-    if ( !::SystemTimeToFileTime(&st, &ftLocal) )
-    {
-        wxLogLastError(wxT("SystemTimeToFileTime"));
-    }
-
-    if ( !::LocalFileTimeToFileTime(&ftLocal, ft) )
-    {
-        wxLogLastError(wxT("LocalFileTimeToFileTime"));
-    }
+    ft->dwHighDateTime = t.GetHi();
+    ft->dwLowDateTime = t.GetLo();
 }
 
 #endif // wxUSE_DATETIME && __WIN32__

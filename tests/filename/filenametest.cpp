@@ -35,6 +35,7 @@
 #endif // __UNIX__
 
 #include "testfile.h"
+#include "testdate.h"
 
 // ----------------------------------------------------------------------------
 // test data
@@ -139,6 +140,7 @@ private:
         CPPUNIT_TEST( TestVolumeUniqueName );
         CPPUNIT_TEST( TestCreateTempFileName );
         CPPUNIT_TEST( TestGetTimes );
+        CPPUNIT_TEST( TestSetTimes );
         CPPUNIT_TEST( TestExists );
         CPPUNIT_TEST( TestIsSame );
 #if defined(__UNIX__)
@@ -161,6 +163,7 @@ private:
     void TestVolumeUniqueName();
     void TestCreateTempFileName();
     void TestGetTimes();
+    void TestSetTimes();
     void TestExists();
     void TestIsSame();
 #if defined(__UNIX__)
@@ -662,6 +665,27 @@ void FileNameTestCase::TestGetTimes()
     CPPUNIT_ASSERT(dtCreate.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
     CPPUNIT_ASSERT(dtMod.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
     CPPUNIT_ASSERT(dtAccess.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+}
+
+void FileNameTestCase::TestSetTimes()
+{
+    wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
+    CPPUNIT_ASSERT( fn.IsOk() );
+    wxON_BLOCK_EXIT1( wxRemoveFile, fn.GetFullPath() );
+
+    const wxDateTime dtAccess(1, wxDateTime::Jan, 2013);
+    const wxDateTime dtModify(1, wxDateTime::Feb, 2013);
+    const wxDateTime dtCreate(1, wxDateTime::Mar, 2013);
+
+    CPPUNIT_ASSERT( fn.SetTimes(&dtAccess, &dtModify, &dtCreate) );
+
+    wxDateTime dtAccess2,
+               dtModify2,
+               dtCreate2;
+    CPPUNIT_ASSERT( fn.GetTimes(&dtAccess2, &dtModify2, &dtCreate2) );
+    CPPUNIT_ASSERT_EQUAL( dtAccess, dtAccess2 );
+    CPPUNIT_ASSERT_EQUAL( dtModify, dtModify2 );
+    CPPUNIT_ASSERT_EQUAL( dtCreate, dtCreate2 );
 }
 
 void FileNameTestCase::TestExists()
