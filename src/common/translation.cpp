@@ -101,7 +101,7 @@ void LogTraceArray(const char *prefix, const wxArrayString& arr)
     wxLogTrace(TRACE_I18N, "%s: [%s]", prefix, wxJoin(arr, ','));
 }
 
-void LogTraceLargeArray(const char *prefix, const wxArrayString& arr)
+void LogTraceLargeArray(const wxString& prefix, const wxArrayString& arr)
 {
     wxLogTrace(TRACE_I18N, "%s:", prefix);
     for ( wxArrayString::const_iterator i = arr.begin(); i != arr.end(); ++i )
