@@ -103,8 +103,9 @@ public:
         states.
 
         @param bitmap
-            The bitmap to display in the button. May be invalid to remove any
-            currently displayed bitmap.
+            The bitmap to display in the button. Under wxGTK the bitmap can be
+            invalid to remove the currently displayed bitmap, however this is
+            not supported in wxMSW currently.
         @param dir
             The position of the bitmap inside the button. By default it is
             positioned to the left of the text, near to the left button border.
