@@ -436,21 +436,10 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
                 </set>
             </if>
             <if cond="FORMAT!='msevc4prj'">
-                <!-- Unfortunately we have to include wx/univ/setup.h in both
-                     cases because WXUNIV==1 is not a weak condition, but at
-                     least don't include wxGTK setup.h when building wxMSW. -->
-                <if cond="TOOLKIT=='MSW'">
-                    <msvc-headers-setup-h>
-                        msw/setup.h
-                        univ/setup.h
-                    </msvc-headers-setup-h>
-                </if>
-                <if cond="TOOLKIT=='GTK'">
-                    <msvc-headers-setup-h>
-                        gtk/setup.h
-                        univ/setup.h
-                    </msvc-headers-setup-h>
-                </if>
+                <msvc-headers-setup-h>
+                    msw/setup.h
+                    univ/setup.h
+                </msvc-headers-setup-h>
                 <set var="_custom_build_include_wx_msw_setup_h">
                     <if cond="WXUNIV=='0' and TOOLKIT=='MSW'">
                         $(msvc_copy_setup_h_script % 'msw\setup.h')
