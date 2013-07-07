@@ -337,9 +337,10 @@ public:
     This is the default unless you change the loader with
     wxTranslations::SetLoader().
 
-    Catalogs are searched for in standard places (current directory first, then
-    the system one), but you may also prepend additional directories to the
-    search path with AddCatalogLookupPathPrefix().
+    Catalogs are searched for in standard places (system locales directory,
+    `LC_PATH` on Unix systems, Resources folder on OS X, executable's directory
+    on Windows), but you may also prepend additional directories to the search
+    path with AddCatalogLookupPathPrefix().
 
     @since 2.9.1
  */
