@@ -187,8 +187,8 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_zip.obj
 WXEXPAT_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I$(LIBDIRNAME) \
-	-DCOMPILED_FROM_DSP -DXML_STATIC -w-8004 -w-8008 -w-8012 -w-8057 -w-8066 \
-	$(CPPFLAGS) $(CFLAGS)
+	-DCOMPILED_FROM_DSP -w-8004 -w-8008 -w-8012 -w-8057 -w-8066 $(CPPFLAGS) \
+	$(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \

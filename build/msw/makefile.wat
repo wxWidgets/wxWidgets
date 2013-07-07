@@ -3803,8 +3803,8 @@ WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_write.obj &
 	$(OBJS)\wxtiff_tif_zip.obj
 WXEXPAT_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -dNDEBUG -i=$(LIBDIRNAME) -dCOMPILED_FROM_DSP -dXML_STATIC &
-	$(CPPFLAGS) $(CFLAGS)
+	$(__RUNTIME_LIBS) -dNDEBUG -i=$(LIBDIRNAME) -dCOMPILED_FROM_DSP $(CPPFLAGS) &
+	$(CFLAGS)
 WXEXPAT_OBJECTS =  &
 	$(OBJS)\wxexpat_xmlparse.obj &
 	$(OBJS)\wxexpat_xmlrole.obj &
