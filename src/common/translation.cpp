@@ -1761,7 +1761,7 @@ wxArrayString gs_searchPrefixes;
 wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
 {
     // Search first in Unix-standard prefix/lang/LC_MESSAGES, then in
-    // prefix/lang and finally in just prefix.
+    // prefix/lang.
     //
     // Note that we use LC_MESSAGES on all platforms and not just Unix, because
     // it doesn't cost much to look into one more directory and doing it this
@@ -1775,9 +1775,15 @@ wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
 
     wxString searchPath;
     searchPath.reserve(4*prefixAndLang.length());
-    searchPath << prefixAndLang << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
+
+    searchPath
+#ifdef __WXOSX__
+               << prefixAndLang << ".lproj/LC_MESSAGES" << wxPATH_SEP
+               << prefixAndLang << ".lproj" << wxPATH_SEP
+#endif
+               << prefixAndLang << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
                << prefixAndLang << wxPATH_SEP
-               << prefix;
+               ;
 
     return searchPath;
 }
@@ -1790,7 +1796,7 @@ bool HasMsgCatalogInDir(const wxString& dir, const wxString& domain)
 
 // get prefixes to locale directories; if lang is empty, don't point to
 // OSX's .lproj bundles
-wxArrayString GetSearchPrefixes(const wxString& lang = wxString())
+wxArrayString GetSearchPrefixes()
 {
     wxArrayString paths;
 
@@ -1800,15 +1806,7 @@ wxArrayString GetSearchPrefixes(const wxString& lang = wxString())
 #if wxUSE_STDPATHS
     // then look in the standard location
     wxString stdp;
-    if ( lang.empty() )
-    {
-        stdp = wxStandardPaths::Get().GetResourcesDir();
-    }
-    else
-    {
-        stdp = wxStandardPaths::Get().
-            GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
-    }
+    stdp = wxStandardPaths::Get().GetResourcesDir();
     if ( paths.Index(stdp) == wxNOT_FOUND )
         paths.Add(stdp);
 #endif // wxUSE_STDPATHS
@@ -1844,7 +1842,7 @@ wxString GetFullSearchPath(const wxString& lang)
     wxString searchPath;
     searchPath.reserve(500);
 
-    const wxArrayString prefixes = GetSearchPrefixes(lang);
+    const wxArrayString prefixes = GetSearchPrefixes();
 
     for ( wxArrayString::const_iterator i = prefixes.begin();
           i != prefixes.end();
