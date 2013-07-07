@@ -28,6 +28,9 @@
         <dirname>$(LIBDIRNAME)</dirname>
         <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
         <include cond="FORMAT=='autoconf'">$(BUILDDIR)/src/expat</include>
+        <define cond="FORMAT=='autoconf'">
+            HAVE_EXPAT_CONFIG_H
+        </define>
         <define cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             COMPILED_FROM_DSP
         </define>

@@ -2,6 +2,8 @@
    See the file COPYING for copying permission.
 */
 
+#include <stddef.h>
+
 #ifdef COMPILED_FROM_DSP
 #include "winconfig.h"
 #elif defined(OS2_32)
@@ -10,10 +12,17 @@
 #include "dosconfig.h"
 #elif defined(MACOS_CLASSIC)
 #include "macconfig.h"
+#elif defined(__amigaos__)
+#include "amigaconfig.h"
+#elif defined(__WATCOMC__)
+#include "watcomconfig.h"
 #else
-#include "expat_config.h"
+#ifdef HAVE_EXPAT_CONFIG_H
+#include <expat_config.h>
+#endif
 #endif /* ndef COMPILED_FROM_DSP */
 
+#include "expat_external.h"
 #include "internal.h"
 #include "xmltok.h"
 #include "nametab.h"
@@ -292,7 +301,9 @@ sb_charMatches(const ENCODING *enc, const char *p, int c)
 #endif
 
 #define PREFIX(ident) normal_ ## ident
+#define XML_TOK_IMPL_C
 #include "xmltok_impl.c"
+#undef XML_TOK_IMPL_C
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -689,7 +700,9 @@ little2_isNmstrtMin(const ENCODING *enc, const char *p)
 #define IS_NMSTRT_CHAR(enc, p, n) (0)
 #define IS_NMSTRT_CHAR_MINBPC(enc, p) LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
+#define XML_TOK_IMPL_C
 #include "xmltok_impl.c"
+#undef XML_TOK_IMPL_C
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -828,7 +841,9 @@ big2_isNmstrtMin(const ENCODING *enc, const char *p)
 #define IS_NMSTRT_CHAR(enc, p, n) (0)
 #define IS_NMSTRT_CHAR_MINBPC(enc, p) BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
+#define XML_TOK_IMPL_C
 #include "xmltok_impl.c"
+#undef XML_TOK_IMPL_C
 
 #undef MINBPC
 #undef BYTE_TYPE
@@ -1235,7 +1250,7 @@ XmlUtf16Encode(int charNum, unsigned short *buf)
 
 struct unknown_encoding {
   struct normal_encoding normal;
-  int (*convert)(void *userData, const char *p);
+  CONVERTER convert;
   void *userData;
   unsigned short utf16[256];
   char utf8[256][4];
@@ -1450,7 +1465,7 @@ static const char KW_UTF_16LE[] = {
 static int FASTCALL
 getEncodingIndex(const char *name)
 {
-  static const char *encodingNames[] = {
+  static const char * const encodingNames[] = {
     KW_ISO_8859_1,
     KW_US_ASCII,
     KW_UTF_8,
@@ -1483,7 +1498,7 @@ getEncodingIndex(const char *name)
 
 
 static int
-initScan(const ENCODING **encodingTable,
+initScan(const ENCODING * const *encodingTable,
          const INIT_ENCODING *enc,
          int state,
          const char *ptr,
@@ -1607,7 +1622,9 @@ initScan(const ENCODING **encodingTable,
 
 #define NS(x) x
 #define ns(x) x
+#define XML_TOK_NS_C
 #include "xmltok_ns.c"
+#undef XML_TOK_NS_C
 #undef NS
 #undef ns
 
@@ -1616,7 +1633,9 @@ initScan(const ENCODING **encodingTable,
 #define NS(x) x ## NS
 #define ns(x) x ## _ns
 
+#define XML_TOK_NS_C
 #include "xmltok_ns.c"
+#undef XML_TOK_NS_C
 
 #undef NS
 #undef ns

@@ -207,7 +207,8 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_warning.o \
 	wxtiff_tif_write.o \
 	wxtiff_tif_zip.o
-WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat -DHAVE_EXPAT_CONFIG_H $(____SHARED) \
+	$(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \

@@ -18,9 +18,6 @@
 /* Define to `unsigned' if <sys/types.h> doesn't define.  */
 #undef size_t
 
-/* Define if you have the ANSI C header files.  */
-#define STDC_HEADERS 1
-
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
@@ -28,14 +25,8 @@
 /* Define if you have the bcopy function.  */
 #undef HAVE_BCOPY
 
-/* Define if you have the getpagesize function.  */
-#undef HAVE_GETPAGESIZE
-
 /* Define if you have the memmove function.  */
 #define HAVE_MEMMOVE 1
-
-/* Define if you have the <fcntl.h> header file.  */
-#undef HAVE_FCNTL_H
 
 /* Define if you have the <unistd.h> header file.  */
 #define HAVE_UNISTD_H 1

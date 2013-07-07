@@ -67,6 +67,10 @@ EXPORTS
   _XML_MemMalloc @60
   _XML_MemRealloc @61
   _XML_MemFree @62
+; added with version 1.95.8
+  _XML_StopParser @63
+  _XML_ResumeParser @64
+  _XML_GetParsingStatus @65
 
 ; Aliases for MS compatible names
   XML_DefaultCurrent = _XML_DefaultCurrent
@@ -131,3 +135,6 @@ EXPORTS
   XML_MemMalloc = _XML_MemMalloc
   XML_MemRealloc = _XML_MemRealloc
   XML_MemFree = _XML_MemFree
+  XML_StopParser = _XML_StopParser
+  XML_ResumeParser = _XML_ResumeParser
+  XML_GetParsingStatus = _XML_GetParsingStatus
