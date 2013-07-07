@@ -101,6 +101,13 @@ void LogTraceArray(const char *prefix, const wxArrayString& arr)
     wxLogTrace(TRACE_I18N, "%s: [%s]", prefix, wxJoin(arr, ','));
 }
 
+void LogTraceLargeArray(const char *prefix, const wxArrayString& arr)
+{
+    wxLogTrace(TRACE_I18N, "%s:", prefix);
+    for ( wxArrayString::const_iterator i = arr.begin(); i != arr.end(); ++i )
+        wxLogTrace(TRACE_I18N, "    %s", *i);
+}
+
 // Use locale-based detection as a fallback
 wxString GetPreferredUILanguageFallback(const wxArrayString& WXUNUSED(available))
 {
@@ -1871,8 +1878,11 @@ wxMsgCatalog *wxFileTranslationsLoader::LoadCatalog(const wxString& domain,
 {
     wxString searchPath = GetFullSearchPath(lang);
 
-    wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
-                domain, searchPath);
+    LogTraceLargeArray
+    (
+        wxString::Format("looking for \"%s.mo\" in search path", domain),
+        wxSplit(searchPath, wxPATH_SEP[0])
+    );
 
     wxFileName fn(domain);
     fn.SetExt(wxS("mo"));
@@ -1894,9 +1904,11 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
     wxArrayString langs;
     const wxArrayString prefixes = GetSearchPrefixes();
 
-    wxLogTrace(TRACE_I18N,
-               "looking for available translations of \"%s\" in search path \"%s\"",
-               domain, wxJoin(prefixes, wxPATH_SEP[0]));
+    LogTraceLargeArray
+    (
+        wxString::Format("looking for available translations of \"%s\" in search path", domain),
+        prefixes
+    );
 
     for ( wxArrayString::const_iterator i = prefixes.begin();
           i != prefixes.end();
@@ -1923,7 +1935,8 @@ wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString&
 #endif // __WXOSX__
 
                 wxLogTrace(TRACE_I18N,
-                           "found %s translation of \"%s\"", lang, domain);
+                           "found %s translation of \"%s\" in %s",
+                           lang, domain, langdir);
                 langs.push_back(lang);
             }
         }
