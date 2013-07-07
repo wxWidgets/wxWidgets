@@ -54,15 +54,54 @@ Translating your application involves several steps:
     language(s). It involves editing the .po file.
 @li Compiling the .po file into .mo file to be used by the program.
 @li Installing the .mo files with your application in the appropriate location
-    for the target system which is the one returned by
-    wxStandardPaths::GetLocalizedResourcesDir(
-    wxStandardPaths::ResourceCat_Messages ). If the message catalogs are not
-    installed in this default location you may explicitly use
-    wxLocale::AddCatalogLookupPathPrefix() to still allow wxWidgets to find
-    them but it is strongly recommended to use the default directory.
+    for the target system (@see overview_i18n_menuaccel).
 @li Setting the appropriate locale in your program to use the strings for the
     given language: see wxLocale.
 
+
+@section overview_i18n_mofiles Installing translation catalogs
+
+The .mo files with compiled catalogs must be included with the application.
+By default, wxFileTranslationsLoader is used to load them from files installed
+alongside the application (although you could use wxResourceTranslationsLoader
+or some custom loader too).
+
+The files are expected to be in the resources directory (as returned by
+wxStandardPaths::GetLocalizedResourcesDir(wxStandardPaths::ResourceCat_Messages).
+If the message catalogs are not installed in this default location you may
+explicitly use wxFileTranslationsLoader::AddCatalogLookupPathPrefix() to still
+allow wxWidgets to find them, but it is recommended to use the default
+locations when possible.
+
+Depending on the platform, the default location differs. On Windows, it is
+alongside the executable. On Unix, translations are expected to be in
+"$prefix/share/locale". On OS X, application bundle's @em Resources subdirectory
+is used.
+
+In all cases, translations are searched for in subdirectories named using the
+languages codes from ISO 639. The .mo file(s) should be located either directly
+in that directory or in LC_MESSAGES subdirectory. On OS X, ".lproj" extension
+is used for the per-languages Resources subdirectories.
+
+Here's how an app would typically install the files on Unix:
+@code
+/usr/bin/myapp
+/usr/share/locale/de/LC_MESSAGES/myapp.mo
+/usr/share/locale/fr/LC_MESSAGES/myapp.mo
+@endcode
+And on OS X:
+@code
+MyApp.app/Contents/MacOS/MyApp
+MyApp.app/Contents/Resources/de.lproj/myapp.mo
+MyApp.app/Contents/Resources/fr.lproj/myapp.mo
+@endcode
+And on Windows:
+@code
+C:\Program Files\MyApp\myapp.exe
+C:\Program Files\MyApp\de\myapp.mo
+C:\Program Files\MyApp\fr\myapp.mo
+@endcode
+It is of course possible to use the Unix layout everywhere instead.
 
 
 @section overview_i18n_menuaccel Translating Menu Accelerators
