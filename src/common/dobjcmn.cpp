@@ -448,7 +448,10 @@ bool wxTextDataObject::SetData(size_t len, const void *buf)
 
 size_t wxHTMLDataObject::GetDataSize() const
 {
-    const wxScopedCharBuffer buffer(GetHTML().utf8_str());
+    // Ensure that the temporary string returned by GetHTML() is kept alive for
+    // as long as we need it here.
+    const wxString& htmlStr = GetHTML();
+    const wxScopedCharBuffer buffer(htmlStr.utf8_str());
 
     size_t size = buffer.length();
 
@@ -467,7 +470,8 @@ bool wxHTMLDataObject::GetDataHere(void *buf) const
         return false;
 
     // Windows and Mac always use UTF-8, and docs suggest GTK does as well.
-    const wxScopedCharBuffer html(GetHTML().utf8_str());
+    const wxString& htmlStr = GetHTML();
+    const wxScopedCharBuffer html(htmlStr.utf8_str());
     if ( !html )
         return false;
 
