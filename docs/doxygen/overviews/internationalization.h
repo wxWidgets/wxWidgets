@@ -54,7 +54,7 @@ Translating your application involves several steps:
     language(s). It involves editing the .po file.
 @li Compiling the .po file into .mo file to be used by the program.
 @li Installing the .mo files with your application in the appropriate location
-    for the target system (@see overview_i18n_menuaccel).
+    for the target system (@see overview_i18n_mofiles).
 @li Setting the appropriate locale in your program to use the strings for the
     given language: see wxLocale.
 
