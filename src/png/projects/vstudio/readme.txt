@@ -1,7 +1,7 @@
 
 VisualStudio instructions
 
-libpng version 1.5.7 - December 15, 2011
+libpng version 1.6.2 - April 25, 2013
 
 Copyright (c) 1998-2010 Glenn Randers-Pehrson
 
@@ -33,14 +33,14 @@ optimization level (e.g. /Od.)
 Linking your application
 ========================
 Normally you should link against the 'release' configuration.  This builds a
-DLL for libpng 1.5 with the default runtime options used by Visual Studio
-2010.  In particular the runtime library is the "MultiThreaded DLL" version.
+DLL for libpng with the default runtime options used by Visual Studio 2010.
+In particular the runtime library is the "MultiThreaded DLL" version.
 If you use Visual Studio defaults to build your application you will have no
 problems.
 
 If you don't use the Visual Studio defaults your application must still be built
 with the default runtime option (/MD).  If, for some reason, it is not then your
-application will crash inside libpng15.dll as soon as libpng tries to read
+application will crash inside libpng16.dll as soon as libpng tries to read
 from a file handle you pass in.
 
 If you do not want to use the DLL, for example for a very small application,
@@ -58,7 +58,8 @@ Debug versions have limited support
 This solution includes limited support for debug versions of libpng.  You
 do not need these unless your own solution itself uses debug builds (it is
 far more effective to debug on the release builds, there is no point building
-a special debug build.)
+a special debug build unless you have heap corruption problems that you can't
+track down.)
 
 The debug build of libpng is minimally supported.  Support for debug builds of
 zlib is also minimal.  You really don't want to do this.

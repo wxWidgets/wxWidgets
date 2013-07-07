@@ -3,12 +3,21 @@
  *
  * Copyright (c) 2011 Glenn Randers-Pehrson
  * Written by Mans Rullgard, 2011.
+ * Last changed in libpng 1.5.7 [December 15, 2011]
  *
  * This code is released under the libpng license.
  * For conditions of distribution and use, see the disclaimer
  * and license in png.h
  */
 
+/* This is required to get the symbol renames, which are #defines, and also
+ * includes the value of PNG_FILTER_OPTIMIZATIONS.
+ */
+#define PNG_VERSION_INFO_ONLY
+#include "../pngpriv.h"
+
+#if defined(PNG_FILTER_OPTIMIZATIONS) && defined(__arm__) && \
+   defined(__ARM_NEON__)
 #if defined(__linux__) && defined(__ELF__)
 .section .note.GNU-stack,"",%progbits /* mark stack as non-executable */
 #endif
@@ -223,3 +232,4 @@ func    png_read_filter_row_paeth3_neon, export=1
 
         pop             {r4,pc}
 endfunc
+#endif /* FILTER_OPTIMIZATIONS && __arm__ && __ARM_NEON__ */

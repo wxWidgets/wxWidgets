@@ -2,7 +2,7 @@
 <!--
  * zlib.props - location of zlib source
  *
- * libpng version 1.5.7 - December 15, 2011
+ * libpng version 1.6.2 - April 25, 2013
  *
  * Copyright (c) 1998-2011 Glenn Randers-Pehrson
  *
@@ -33,5 +33,13 @@
 	 below:
      -->
     <ZLibSrcDir>..\..\..\..\zlib-1.2.5</ZLibSrcDir>
+
+    <!-- The following line allows compilation for an ARM target with Visual
+         Studio 2012.  Notice that this is not supported by the Visual Studio
+         2012 IDE and that the programs that result cannot be run unless they
+         signed by Microsoft.  This is therefore untested; only Microsoft can
+         test it:
+     -->
+    <WindowsSDKDesktopARMSupport>true</WindowsSDKDesktopARMSupport>
   </PropertyGroup>
 </Project>

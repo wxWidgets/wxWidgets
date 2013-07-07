@@ -9,18 +9,11 @@
  * and license in png.h
  */
 
-#define HEADER PNG_DEFN_MAGIC-PNGLIB_LIBNAME {global:-PNG_DEFN_END
-
-/* NOTE: PNG_JOIN is interpreted by the calling script as a signal to
- * join the two things on either side, so we can do symbol
- * substitution within the name, regular C ## joins the pp-tokens,
- * not their final values.
- */
 #define PNG_EXPORTA(ordinal, type, name, args, attributes)\
-	PNG_DEFN_MAGIC- SYMBOL_PREFIX PNG_JOIN name;-PNG_DEFN_END
+        PNG_DFN " @" SYMBOL_PREFIX "@@" name "@;"
 
-#define TRAILER PNG_DEFN_MAGIC-local: *; };-PNG_DEFN_END
+PNG_DFN "@" PNGLIB_LIBNAME "@ {global:"
 
-HEADER
 #include "../png.h"
-TRAILER
+
+PNG_DFN "local: *; };"

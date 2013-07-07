@@ -15,9 +15,6 @@
 /* Define to 1 if you have the `z' library (-lz). */
 #undef HAVE_LIBZ
 
-/* Define to 1 if you have the <malloc.h> header file. */
-#undef HAVE_MALLOC_H
-
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
@@ -73,11 +70,17 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Align row buffers */
-#undef PNG_ALIGNED_MEMORY_SUPPORTED
+/* Turn on ARM Neon optimizations at run-time */
+#undef PNG_ARM_NEON_API_SUPPORTED
 
-/* Enable ARM NEON optimizations */
-#undef PNG_ARM_NEON
+/* Check for ARM Neon support at run-time */
+#undef PNG_ARM_NEON_CHECK_SUPPORTED
+
+/* Enable ARM Neon optimizations */
+#undef PNG_ARM_NEON_SUPPORTED
+
+/* Disable ARM Neon optimizations */
+#undef PNG_NO_ARM_NEON
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

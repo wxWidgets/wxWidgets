@@ -8,7 +8,7 @@
 # For conditions of distribution and use, see the disclaimer
 # and license in png.h
 
-# You should also run makefile.ne15bsd
+# You should also run makefile.ne16bsd
 
 LOCALBASE?=/usr/local
 LIBDIR=	${LOCALBASE}/lib
@@ -16,8 +16,8 @@ MANDIR= ${LOCALBASE}/man
 INCSDIR=${LOCALBASE}/include
 
 LIB=	png
-SHLIB_MAJOR=	15
-SHLIB_MINOR=	1.5.7
+SHLIB_MAJOR=	16
+SHLIB_MINOR=	1.6.2
 SRCS=	png.c pngset.c pngget.c pngrutil.c pngtrans.c pngwutil.c \
 	pngread.c pngrio.c pngwio.c pngwrite.c pngrtran.c \
 	pngwtran.c pngmem.c pngerror.c pngpread.c

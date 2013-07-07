@@ -22,16 +22,16 @@
 # make clean
 
 VERMAJ = 1
-VERMIN = 5
-VERMIC = 7
+VERMIN = 6
+VERMIC = 2
 VER = $(VERMAJ).$(VERMIN).$(VERMIC)
 NAME = libpng
 PACKAGE = $(NAME)-$(VER)
 
-BIN = libpng15-0.dll
-LIB = libpng15.a libpng15.dll.a libpng.a libpng.dll.a
-INCLUDE = png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h pnginfo.h pngdebug.h
-PC = libpng15.pc libpng.pc
+BIN = libpng16-0.dll
+LIB = libpng16.a libpng16.dll.a libpng.a libpng.dll.a
+INCLUDE = png.h pngconf.h pnglibconf.h pngpriv.h pngstruct.h             pnginfo.h pngdebug.h
+PC = libpng16.pc libpng.pc
 
 MANIFESTVERBIN = "Libpng-$(VER): Binary files"
 MANIFESTVERDEV = "Libpng-$(VER): Developer files"

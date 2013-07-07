@@ -14,63 +14,101 @@ dnl Makefile.am to upgrade the package name.
 dnl This is here to prevent earlier autoconf from being used, it
 dnl should not be necessary to regenerate configure if the time
 dnl stamps are correct
-AC_PREREQ(2.59)
+AC_PREREQ([2.68])
 
 dnl Version number stuff here:
 
-AC_INIT([libpng], [1.5.7], [png-mng-implement@lists.sourceforge.net])
-AM_INIT_AUTOMAKE
-dnl stop configure from automagically running automake
+AC_INIT([libpng],[1.6.2],[png-mng-implement@lists.sourceforge.net])
+AC_CONFIG_MACRO_DIR([scripts])
+
+# libpng does not follow GNU file name conventions (hence 'foreign')
+# color-tests requires automake 1.11 or later
+# silent-rules requires automake 1.11 or later
+# dist-xz requires automake 1.11 or later
+# 1.12.2 fixes a security issue in 1.11.2 and 1.12.1
+# 1.13 is required for parallel tests
+AM_INIT_AUTOMAKE([1.13 foreign dist-xz color-tests silent-rules])
+# The following line causes --disable-maintainer-mode to be the default to
+# configure, this is necessary because libpng distributions cannot rely on the
+# time stamps of the autotools generated files being correct
 AM_MAINTAINER_MODE
 
-PNGLIB_VERSION=1.5.7
+dnl configure.ac and Makefile.am expect automake 1.11.2 or a compatible later
+dnl version; aclocal.m4 will generate a failure if you use a prior version of
+dnl automake, so the following is not necessary (and is not defined anyway):
+dnl AM_PREREQ([1.11.2])
+dnl stop configure from automagically running automake
+
+PNGLIB_VERSION=1.6.2
 PNGLIB_MAJOR=1
-PNGLIB_MINOR=5
-PNGLIB_RELEASE=7
+PNGLIB_MINOR=6
+PNGLIB_RELEASE=2
 
 dnl End of version number stuff
 
 AC_CONFIG_SRCDIR([pngget.c])
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_LANG([C])
 AC_PROG_CC
 AM_PROG_AS
-AC_PROG_LD
+LT_PATH_LD
 AC_PROG_CPP
-AC_CHECK_TOOL(SED, sed, :)
-AC_CHECK_TOOL(AWK, awk, :)
+AC_PROG_AWK
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-LT_INIT([win32-dll])
 
-# On Solaris 10 and 12 CPP gets set to cc -E, however this still
-# does some input parsing.  We need strict ANSI-C style tokenization,
-# check this:
-AC_REQUIRE_CPP
-AC_MSG_CHECKING([for a C preprocessor that does not parse its input])
-AC_TRY_CPP([1.5.0 16BIT],
-   [DFNCPP="$CPP"],
-   [DFNCPP=""
-   sav_CPP="$CPP"
-   for CPP in "${CC-cc} -E" "${CC-cc} -E -traditional-cpp" "/lib/cpp" "cpp"; do
-      AC_TRY_CPP([1.5.0 16BIT],
-         [DFNCPP="$CPP"]
-         [break],,)
-   done
-   CPP="$sav_CPP"])
-if test -n "$DFNCPP"; then
-   AC_MSG_RESULT([$DFNCPP])
-   AC_SUBST(DFNCPP)
+dnl libtool/libtoolize; version 2.4.2 is the tested version, this or any
+dnl compatible later version may be used
+LT_INIT([win32-dll])
+LT_PREREQ([2.4.2])
+
+# Some awks crash when confronted with pnglibconf.dfa, do a test run now
+# to make sure this doesn't happen
+AC_MSG_CHECKING([that AWK works])
+if ${AWK} -f ${srcdir}/scripts/options.awk out="/dev/null" version=search\
+   ${srcdir}/pngconf.h ${srcdir}/scripts/pnglibconf.dfa\
+   ${srcdir}/pngusr.dfa 1>&2
+then
+   AC_MSG_RESULT([ok])
 else
-   AC_MSG_FAILURE([not found], 1)
+   AC_MSG_FAILURE([failed], 1)
 fi
+
+# This is a remnant of the old cc -E validation, where it may have been
+# necessary to use a different preprocessor for .dfn files
+DFNCPP="$CPP"
+AC_SUBST(DFNCPP)
+
+# -Werror cannot be passed to GCC in CFLAGS because configure will fail (it
+# checks the compiler with a program that generates a warning), add the
+# following option to deal with this
+AC_ARG_VAR(PNG_COPTS,
+   [additional flags for the C compiler, use this for options that would]
+   [cause configure itself to fail])
+AC_ARG_ENABLE(werror,
+   AS_HELP_STRING([[[--enable-werror[=OPT]]]],
+      [Pass -Werror or the given argument to the compiler if it is supported]),
+   [test "$enable_werror" = "yes" && enable_werror="-Werror"
+    if test "$enable_werror" != "no"; then
+      sav_CFLAGS="$CFLAGS"
+      CFLAGS="$enable_werror $CFLAGS"
+      AC_MSG_CHECKING([if the compiler allows $enable_werror])
+      AC_COMPILE_IFELSE(
+         [AC_LANG_SOURCE([
+            [int main(int argc, char **argv){]
+            [return argv[argc-1][0];]
+            [}]])],
+         AC_MSG_RESULT(yes)
+         PNG_COPTS="$PNG_COPTS $enable_werror",
+         AC_MSG_RESULT(no))
+      CFLAGS="$sav_CFLAGS"
+    fi],)
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([malloc.h stdlib.h string.h strings.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -80,28 +118,21 @@ AC_C_RESTRICT
 
 # Checks for library functions.
 AC_FUNC_STRTOD
-AC_CHECK_FUNCS([memset], , AC_ERROR([memset not found in libc]))
-AC_CHECK_FUNCS([pow], , AC_CHECK_LIB(m, pow, , AC_ERROR([cannot find pow])) )
+AC_CHECK_FUNCS([memset], , AC_MSG_ERROR(memset not found in libc))
+AC_CHECK_FUNCS([pow], , AC_CHECK_LIB(m, pow, , AC_MSG_ERROR(cannot find pow)) )
 AC_ARG_WITH(zlib-prefix,
-   AC_HELP_STRING([--with-zlib-prefix],
-                  [prefix that may have been used in installed zlib]),
-                  [ZPREFIX=${withval}],
-                  [ZPREFIX='z_'])
+   AS_HELP_STRING([[[--with-zlib-prefix]]],
+      [prefix that may have been used in installed zlib]),
+      [ZPREFIX=${withval}],
+      [ZPREFIX='z_'])
 AC_CHECK_LIB(z, zlibVersion, ,
-    AC_CHECK_LIB(z, ${ZPREFIX}zlibVersion, ,
-                 AC_ERROR([zlib not installed])))
+    AC_CHECK_LIB(z, ${ZPREFIX}zlibVersion, , AC_MSG_ERROR(zlib not installed)))
 
 # The following is for pngvalid, to ensure it catches FP errors even on
 # platforms that don't enable FP exceptions, the function appears in the math
 # library (typically), it's not an error if it is not found.
 AC_CHECK_LIB([m], [feenableexcept])
 AC_CHECK_FUNCS([feenableexcept])
-
-LIBPNG_DEFINES=-DPNG_CONFIGURE_LIBPNG
-LIBPNG_DEFINES=$LIBPNG_DEFINES
-AC_SUBST(LIBPNG_DEFINES)
-
-AC_MSG_CHECKING([if libraries can be versioned])
 
 AC_MSG_CHECKING([if using Solaris linker])
 SLD=`$LD --version 2>&1 | grep Solaris`
@@ -114,6 +145,7 @@ else
 fi
 AM_CONDITIONAL(HAVE_SOLARIS_LD, test "$have_solaris_ld" = "yes")
 
+AC_MSG_CHECKING([if libraries can be versioned])
 # Special case for PE/COFF platforms: ld reports
 # support for version-script, but doesn't actually
 # DO anything with it.
@@ -146,9 +178,9 @@ AM_CONDITIONAL(HAVE_LD_VERSION_SCRIPT, test "$have_ld_version_script" = "yes")
 if test "$have_ld_version_script" = "yes"; then
     AC_MSG_CHECKING([for symbol prefix])
     SYMBOL_PREFIX=`echo "PREFIX=__USER_LABEL_PREFIX__" \
-                   | ${CPP-${CC-gcc} -E} - 2>&1 \
-                   | ${EGREP-grep} "^PREFIX=" \
-                   | ${SED-sed} "s:^PREFIX=::"`
+                  | ${CPP-${CC-gcc} -E} - 2>&1 \
+                  | ${EGREP-grep} "^PREFIX=" \
+                  | ${SED-sed} -e "s:^PREFIX=::" -e "s:__USER_LABEL_PREFIX__::"`
     AC_SUBST(SYMBOL_PREFIX)
     AC_MSG_RESULT($SYMBOL_PREFIX)
 fi
@@ -162,44 +194,73 @@ AC_SUBST(PNGLIB_RELEASE)
 # Additional arguments (and substitutions)
 # Allow the pkg-config directory to be set
 AC_ARG_WITH(pkgconfigdir,
-	AC_HELP_STRING([--with-pkgconfigdir],
-	[Use the specified pkgconfig dir (default is libdir/pkgconfig)]),
-	[pkgconfigdir=${withval}],
-	[pkgconfigdir='${libdir}/pkgconfig'])
+   AS_HELP_STRING([[[--with-pkgconfigdir]]],
+      [Use the specified pkgconfig dir (default is libdir/pkgconfig)]),
+   [pkgconfigdir=${withval}],
+   [pkgconfigdir='${libdir}/pkgconfig'])
 
 AC_SUBST([pkgconfigdir])
-AC_MSG_NOTICE([pkgconfig directory is ${pkgconfigdir}])
+AC_MSG_NOTICE([[pkgconfig directory is ${pkgconfigdir}]])
 
 # Make the *-config binary config scripts optional
 AC_ARG_WITH(binconfigs,
-	AC_HELP_STRING([--with-binconfigs],
-		[Generate shell libpng-config scripts as well as pkg-config data]
-		[@<:@default=yes@:>@]),
-	[if test "${withval}" = no; then
-		binconfigs=
-		AC_MSG_NOTICE([libpng-config scripts will not be built])
-	else
-		binconfigs='${binconfigs}'
-	fi],
-	[binconfigs='${binconfigs}'])
+   AS_HELP_STRING([[[--with-binconfigs]]],
+      [Generate shell libpng-config scripts as well as pkg-config data]
+      [@<:@default=yes@:>@]),
+   [if test "${withval}" = no; then
+      binconfigs=
+      AC_MSG_NOTICE([[libpng-config scripts will not be built]])
+    else
+      binconfigs='${binconfigs}'
+    fi],
+   [binconfigs='${binconfigs}'])
 AC_SUBST([binconfigs])
+
+# Support for prefixes to the API function names; this will generate defines
+# at the start of the build to rename exported library functions
+AC_ARG_WITH(libpng-prefix,
+   AS_HELP_STRING([[[--with-libpng-prefix]]],
+      [prefix libpng exported function (API) names with the given value]),
+   [if test "${withval:-no}" != "no"; then
+      AC_SUBST([PNG_PREFIX], [${withval}])
+    fi])
+AM_CONDITIONAL([DO_PNG_PREFIX], [test "${with_libpng_prefix:-no}" != "no"])
 
 # Because GCC by default assembles code with an executable stack, even though it
 # compiles C code with a non-executable stack, it is necessary to do a fixup
 # here (this may by GCC specific)
-AC_SUBST([AM_CCASFLAGS], [-Wa,--noexecstack])
+# AC_SUBST([AM_CCASFLAGS], [-Wa,--noexecstack])
 
 AC_ARG_ENABLE([arm-neon],
-	AC_HELP_STRING([--enable-arm-neon], [Enable ARM NEON optimizations]),
-	[if test "${enableval}" = yes; then
-		AC_DEFINE([PNG_ARM_NEON], [1], [Enable ARM NEON optimizations])
-		AC_DEFINE([PNG_ALIGNED_MEMORY_SUPPORTED], [1], [Align row buffers])
-	fi])
-AM_CONDITIONAL([PNG_ARM_NEON], [test "${enable_arm_neon:-no}" = yes])
+   AS_HELP_STRING([[[--enable-arm-neon]]],
+      [Enable ARM NEON optimizations: =off, check, api, on:]
+      [off: disable the optimizations; check: use internal checking code]
+      [(deprecated and poorly supported); api: disable by default, enable by]
+      [a call to png_set_option; on: turn on unconditionally.  The]
+      [default is 'on' if __ARM_NEON__ is defined, otherwise 'off'.]),
+   [case "$enableval" in
+      off)
+         AC_DEFINE([PNG_NO_ARM_NEON], [],
+                   [Disable ARM Neon optimizations]);;
+      check)
+         AC_DEFINE([PNG_ARM_NEON_CHECK_SUPPORTED], [],
+                   [Check for ARM Neon support at run-time]);;
+      api)
+         AC_DEFINE([PNG_ARM_NEON_API_SUPPORTED], [],
+                   [Turn on ARM Neon optimizations at run-time]);;
+      on)
+         AC_DEFINE([PNG_ARM_NEON_SUPPORTED], [],
+                   [Enable ARM Neon optimizations]);;
+      *)
+         AC_MSG_ERROR([arm-neon: option value required (off/check/api/on)]);;
+   esac])
+AM_CONDITIONAL([PNG_ARM_NEON], [test "${enable_arm_neon:-no}" != "no"])
+
+AC_MSG_NOTICE([[Extra options for compiler: $PNG_COPTS]])
 
 # Config files, substituting as above
 AC_CONFIG_FILES([Makefile libpng.pc:libpng.pc.in])
 AC_CONFIG_FILES([libpng-config:libpng-config.in],
-		[chmod +x libpng-config])
+   [chmod +x libpng-config])
 
 AC_OUTPUT

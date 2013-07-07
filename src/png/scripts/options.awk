@@ -30,22 +30,33 @@
 # are copied to the preprocessed file).
 
 BEGIN{
-   out="/dev/null"              # intermediate, preprocessed, file
+   out=""                       # intermediate, preprocessed, file
    pre=-1                       # preprocess (first line)
    version="libpng version unknown" # version information
    version_file=""              # where to find the version
    err=0                        # in-line exit sets this
-   start="PNG_DEFN_MAGIC-"      # Arbitrary start
-   end="-PNG_DEFN_END"          # Arbitrary end
-   ct="PNG_JOIN"                # Join two tokens
-   cx= "/" ct "*"               # Open C comment for output file
-   comment=start cx             # Comment start
+   # The following definitions prevent the C preprocessor noticing the lines
+   # that will be in the final output file.  Some C preprocessors tokenise
+   # the lines, for example by inserting spaces around operators, and all
+   # C preprocessors notice lines that start with '#', most remove comments.
+   # The technique adopted here is to make the final output lines into
+   # C strings (enclosed in double quotes), preceeded by PNG_DFN.  As a
+   # consequence the output cannot contain a 'raw' double quote - instead put
+   # @' in, this will be replaced by a single " afterward.  See the parser
+   # script dfn.awk for more capabilities (not required here).  Note that if
+   # you need a " in a 'setting' in pnglibconf.dfa it must also be @'!
+   dq="@'"                      # For a single double quote
+   start=" PNG_DFN \""          # Start stuff to output (can't contain a "!)
+   end="\" "                    # End stuff to output
+   subs="@\" "                  # Substitute start (substitute a C macro)
+   sube=" \"@"                  # Substitute end
+   comment=start "/*"           # Comment start
    cend="*/" end                # Comment end
-   def=start "#define PNG_" ct  # Arbitrary define
-   sup=ct "_SUPPORTED" end      # end supported option
-   und=comment "#undef PNG_" ct # Unsupported option
-   une=ct "_SUPPORTED" cend     # end unsupported option
-   error=start "ERROR:"         # error message
+   def=start "#define PNG_"     # Arbitrary define
+   sup="_SUPPORTED" end         # end supported option
+   und=comment "#undef PNG_"    # Unsupported option
+   une="_SUPPORTED" cend        # end unsupported option
+   error=start "ERROR:"         # error message, terminate with 'end'
 
    # Variables
    deb=0                        # debug - set on command line
@@ -53,11 +64,15 @@ BEGIN{
    logunsupported=0             # write unsupported options too
 
    # Precreate arrays
+   # for each option:
    option[""] = ""    # list of all options: default enabled/disabled
    done[""] = 1       # marks option as having been output
    requires[""] = ""  # requires by option
    iffs[""] = ""      # if by option
    enabledby[""] = "" # options that enable it by option
+   sets[""] = ""      # settings set by each option
+   setval[""] = ""    # value to set (indexed: 'option sets[option]')
+   # for each setting:
    setting[""] = ""   # requires by setting
    defaults[""] = ""  # used for a defaulted value
    doneset[""] = 1    # marks setting as having been output
@@ -68,7 +83,7 @@ BEGIN{
 }
 
 # The output file must be specified before any input:
-out == "/dev/null" {
+out == "" {
    print "out=output.file must be given on the command line"
    err = 1
    exit 1
@@ -189,7 +204,7 @@ $1 == "com"{
    if (NF > 1) {
       # sub(/^[ 	]*com[ 	]*/, "")
       $1 = ""
-      print comment, $0, cend >out
+      print comment $0, cend >out
    } else
       print start end >out
    next
@@ -226,7 +241,9 @@ $1 == "file" && NF >= 2{
    next
 }
 
-# option NAME ( (requires|enables|if) NAME* | on | off | disabled )*
+# option NAME ( (requires|enables|if) NAME* | on | off | disabled |
+#                sets SETTING VALUE+ )*
+#     
 #   Declares an option 'NAME' and describes its default setting (disabled)
 #   and its relationship to other options.  The option is disabled
 #   unless *all* the options listed after 'requires' are set and at
@@ -241,95 +258,152 @@ $1 == "file" && NF >= 2{
 #   be later) entry may turn an option on or off explicitly.
 
 $1 == "option" && NF >= 2{
-   onoff = option[$2]  # records current (and the default is "", enabled)
+   opt = $2
+   sub(/,$/,"",opt)
+   onoff = option[opt]  # records current (and the default is "", enabled)
    key = ""
-   for (i=3; i<=NF; ++i) {
-      if ($(i) == "on" || $(i) == "off" || $(i) == "disabled") {
-         key = ""
-         if (onoff != $(i)) {
-            # on or off can zap disabled or enabled:
-            if (onoff == "" || (onoff == "disabled" || onoff == "enabled") && ($(i) == "on" || $(i) == "off")) {
-               # It's easy to mis-spell the option when turning it
-               # on or off, so warn about it here:
-               if (onoff == "" && ($(i) == "on" || $(i) == "off")) {
-                  print $2 ": ERROR: turning unrecognized option", $(i)
-                  # For the moment error out - it is safer
-                  err = 1 # prevent END{} running
-                  exit 1
-               }
-               onoff = $(i)
-            } else {
-               # Print a message, otherwise the error
-               # below is incomprehensible
-               print $2 ": currently", onoff ": attempt to turn", $(i)
-               break
-            }
+   istart = 3
+   do {
+      if (istart == 1) {     # continuation line
+         val = getline
+
+         if (val != 1) { # error reading it
+            if (val == 0)
+               print "option", opt ": ERROR: missing contination line"
+            else
+               print "option", opt ": ERROR: error reading continuation line"
+
+            # This is a hard error
+            err = 1 # prevent END{} running
+            exit 1
          }
-      } else if ($(i) == "requires" || $(i) == "if" || $(i) == "enables") {
-         key = $(i)
-      } else if (key == "requires") {
-         requires[$2] = requires[$2] " " $(i)
-      } else if (key == "if") {
-         iffs[$2] = iffs[$2] " " $(i)
-      } else if (key == "enables") {
-         enabledby[$(i)] = enabledby[$(i)] " " $2
-      } else
-         break # bad line format
-   }
+      }
+
+      for (i=istart; i<=NF; ++i) {
+         val=$(i)
+         sub(/,$/,"",val)
+         if (val == "on" || val == "off" || val == "disabled") {
+            key = ""
+            if (onoff != val) {
+               # on or off can zap disabled or enabled:
+               if (onoff == "" || (onoff == "disabled" || onoff == "enabled") &&
+                   (val == "on" || val == "off")) {
+                  # It's easy to mis-spell the option when turning it
+                  # on or off, so warn about it here:
+                  if (onoff == "" && (val == "on" || val == "off")) {
+                     print "option", opt ": ERROR: turning unrecognized option", val
+                     # For the moment error out - it is safer
+                     err = 1 # prevent END{} running
+                     exit 1
+                  }
+                  onoff = val
+               } else {
+                  # Print a message, otherwise the error
+                  # below is incomprehensible
+                  print "option", opt ": currently", onoff ": attempt to turn", val
+                  break
+               }
+            }
+         } else if (val == "requires" || val == "if" || val == "enables" || val =="sets") {
+            key = val
+         } else if (key == "requires") {
+            requires[opt] = requires[opt] " " val
+         } else if (key == "if") {
+            iffs[opt] = iffs[opt] " " val
+         } else if (key == "enables") {
+            enabledby[val] = enabledby[val] " " opt
+         } else if (key == "sets") {
+            sets[opt] = sets[opt] " " val
+            key = "setval"
+            set = val
+         } else if (key == "setval") {
+            setval[opt " " set] = setval[opt " " set] " " val
+         } else
+            break # bad line format
+      }
+
+      istart = 1
+   } while (i > NF && $0 ~ /,$/)
 
    if (i > NF) {
       # Set the option, defaulting to 'enabled'
       if (onoff == "") onoff = "enabled"
-      option[$2] = onoff
+      option[opt] = onoff
       next
    }
    # Else fall through to the error handler
 }
 
-# chunk NAME [requires OPT] [on|off|disabled]
+# chunk NAME [requires OPT] [enables LIST] [on|off|disabled]
 #   Expands to the 'option' settings appropriate to the reading and
 #   writing of an ancilliary PNG chunk 'NAME':
 #
 #   option READ_NAME requires READ_ANCILLARY_CHUNKS [READ_OPT]
-#   option READ_NAME enables NAME
+#   option READ_NAME enables NAME LIST
 #   [option READ_NAME off]
 #   option WRITE_NAME requires WRITE_ANCILLARY_CHUNKS [WRITE_OPT]
-#   option WRITE_NAME enables NAME
+#   option WRITE_NAME enables NAME LIST
 #   [option WRITE_NAME off]
 
 pre != 0 && $1 == "chunk" && NF >= 2{
    # 'chunk' is handled on the first pass by writing appropriate
    # 'option' lines into the intermediate file.
+   opt = $2
+   sub(/,$/,"",opt)
    onoff = ""
    reqread = ""
    reqwrite = ""
-   i = 3 # indicates format error
-   if (NF > 2) {
+   enables = ""
+   req = 0
+   istart = 3
+   do {
+      if (istart == 1) {     # continuation line
+         val = getline
+
+         if (val != 1) { # error reading it
+            if (val == 0)
+               print "chunk", opt ": ERROR: missing contination line"
+            else
+               print "chunk", opt ": ERROR: error reading continuation line"
+
+            # This is a hard error
+            err = 1 # prevent END{} running
+            exit 1
+         }
+      }
+
       # read the keywords/additional OPTS
-      req = 0
-      for (i=3; i<=NF; ++i) {
-         if ($(i) == "on" || $(i) == "off" || $(i) == "disabled") {
-            if (onoff != $(i)) {
+      for (i=istart; i<=NF; ++i) {
+         val = $(i)
+         sub(/,$/,"",val)
+         if (val == "on" || val == "off" || val == "disabled") {
+            if (onoff != val) {
                if (onoff == "")
-                  onoff = $(i)
+                  onoff = val
                else
                   break # on/off conflict
             }
-         } else if ($(i) == "requires")
+            req = 0
+         } else if (val == "requires")
             req = 1
-         else if (req != 1)
+         else if (val == "enables")
+            req = 2
+         else if (req == 1){
+            reqread = reqread " READ_" val
+            reqwrite = reqwrite " WRITE_" val
+         } else if (req == 2)
+            enables = enables " " val
+         else
             break # bad line: handled below
-         else {
-            reqread = reqread " READ_" $(i)
-            reqwrite = reqwrite " WRITE_" $(i)
-         }
       }
-   }
+
+      istart = 1
+   } while (i > NF && $0 ~ /,$/)
 
    if (i > NF) {
       # Output new 'option' lines to the intermediate file (out)
-      print "option READ_" $2, "requires READ_ANCILLARY_CHUNKS" reqread, "enables", $2, onoff >out
-      print "option WRITE_" $2, "requires WRITE_ANCILLARY_CHUNKS" reqwrite, "enables", $2, onoff >out
+      print "option READ_" opt, "requires READ_ANCILLARY_CHUNKS" reqread, "enables", opt enables , onoff >out
+      print "option WRITE_" opt, "requires WRITE_ANCILLARY_CHUNKS" reqwrite, "enables", opt enables, onoff >out
       next
    }
    # Else hit the error handler below - bad line format!
@@ -460,72 +534,7 @@ END{
       exit 0
    }
 
-   # Do the 'setting' values first, the algorithm the standard
-   # tree walk (O(1)) done in an O(2) while/for loop; interations
-   # settings x depth, outputing the deepest required macros
-   # first.
-   print "" >out
-   print "/* SETTINGS */" >out
-   print comment, "settings", cend >out
-   finished = 0
-   while (!finished) {
-      finished = 1
-      movement = 0 # done nothing
-      for (i in setting) if (!doneset[i]) {
-         nreqs = split(setting[i], r)
-         if (nreqs > 0) {
-            for (j=1; j<=nreqs; ++j) if (!doneset[r[j]]) {
-               break
-            }
-            if (j<=nreqs) {
-               finished = 0
-               continue # try a different setting
-            }
-         }
-
-         # All the requirements have been processed, output
-         # this setting.
-         if (deb) print "setting", i
-         print "" >out
-         print "/* setting: ", i >out
-         print " *   requires:" setting[i] >out
-         print " *   default: ", defaults[i], "*/" >out
-         if (defaults[i] == "") { # no default, only check if defined
-            print "#ifdef PNG_" i >out
-         }
-         for (j=1; j<=nreqs; ++j) {
-            print "# ifndef PNG_" r[j] >out
-            print error, i, "requires", r[j] end >out
-            print "# endif" >out
-         }
-         if (defaults[i] != "") { # default handling
-            print "#ifdef PNG_" i >out
-         }
-         print def i, "PNG_" i end >out
-         if (defaults[i] != "") {
-            print "#else /*default*/" >out
-            # And add the default definition for the benefit
-            # of later settings an options test:
-            print "# define PNG_" i defaults[i] >out
-            print def i defaults[i] end >out
-         }
-         print "#endif" >out
-
-         doneset[i] = 1
-         ++movement
-      }
-
-      if (!finished && !movement) {
-         print "setting: loop or missing setting in 'requires', cannot process:"
-         for (i in setting) if (!doneset[i]) {
-            print "  setting", i, "requires" setting[i]
-         }
-         exit 1
-      }
-   }
-   print comment, "end of settings", cend >out
-
-   # Now do the options - somewhat more complex.  The dependency
+   # Do the options first (allowing options to set settings).  The dependency
    # tree is thus:
    #
    #   name     >     name
@@ -617,6 +626,9 @@ END{
    }
    if (err) exit 1
 
+   # Sort options:
+   print "PNG_DFN_START_SORT 2" >out
+
    # option[i] is now the complete list of all the tokens we may
    # need to output, go through it as above, depth first.
    finished = 0
@@ -654,8 +666,9 @@ END{
          print "" >out
          print "/* option:", i, option[i] >out
          print " *   requires:  " requires[i] >out
-         print " *   if:      " iffs[i] >out
-         print " *   enabled-by:" enabledby[i], "*/" >out
+         print " *   if:        " iffs[i] >out
+         print " *   enabled-by:" enabledby[i] >out
+         print " *   sets:      " sets[i], "*/" >out
          print "#undef PNG_on" >out
          print "#define PNG_on 1" >out
 
@@ -738,6 +751,21 @@ END{
             print error, i, "is on: enabled by:" iffs[i] enabledby[i] ", requires" requires[i] end >out
          } else if (i !~ /^ok_/) {
             print def i sup >out
+            # Supported option, set required settings
+            nreqs = split(sets[i], r)
+            for (j=1; j<=nreqs; ++j) {
+               print "#    ifdef PNG_set_" r[j] >out
+               # Some other option has already set a value:
+               print error, i, "sets", r[j] ": duplicate setting" end >out
+               print error, "   previous value: " end "PNG_set_" r[j] >out
+               print "#    else" >out
+               # Else set the default: note that this won't accept arbitrary
+               # values, the setval string must be acceptable to all the C
+               # compilers we use.  That means it must be VERY simple; a number,
+               # a name or a string.
+               print "#     define PNG_set_" r[j], setval[i " " r[j]] >out
+               print "#    endif" >out
+            }
          }
          print "#   endif /* definition */" >out
          print "#endif /*requires, if*/" >out
@@ -768,10 +796,98 @@ END{
          exit 1
       }
    }
+   print "PNG_DFN_END_SORT" >out
    print comment, "end of options", cend >out
+
+   # Do the 'setting' values second, the algorithm the standard
+   # tree walk (O(1)) done in an O(2) while/for loop; interations
+   # settings x depth, outputing the deepest required macros
+   # first.
+   print "" >out
+   print "/* SETTINGS */" >out
+   print comment, "settings", cend >out
+   # Sort (in dfn.awk) on field 2, the setting name
+   print "PNG_DFN_START_SORT 2" >out
+   finished = 0
+   while (!finished) {
+      finished = 1
+      movement = 0 # done nothing
+      for (i in setting) if (!doneset[i]) {
+         nreqs = split(setting[i], r)
+         if (nreqs > 0) {
+            # By default assume the requires values are options, but if there
+            # is no option with that name check for a setting
+            for (j=1; j<=nreqs; ++j) if (option[r[j]] == "" && !doneset[r[j]]) {
+               break
+            }
+            if (j<=nreqs) {
+               finished = 0
+               continue # try a different setting
+            }
+         }
+
+         # All the requirements have been processed, output
+         # this setting.
+         if (deb) print "setting", i
+         deflt = defaults[i]
+         # Remove any spurious trailing spaces
+         sub(/ *$/,"",deflt)
+         # A leading @ means leave it unquoted so the preprocessor
+         # can substitute the build time value
+         if (deflt ~ /^ @/)
+            deflt = " " subs substr(deflt, 3) sube
+         print "" >out
+         print "/* setting: ", i >out
+         print " *   requires:" setting[i] >out
+         print " *   default: ", defaults[i] deflt, "*/" >out
+         for (j=1; j<=nreqs; ++j) {
+            if (option[r[j]] != "")
+               print "#ifndef PNG_" r[j] "_SUPPORTED" >out
+            else
+               print "#ifndef PNG_" r[j] >out
+            print error, i, "requires", r[j] end >out
+            print "# endif" >out
+         }
+         # The precedence is:
+         #
+         #  1) External definition; trumps:
+         #  2) Option 'sets' value; trumps:
+         #  3) Setting 'default'
+         #
+         print "#ifdef PNG_" i >out
+         # PNG_<i> is defined, so substitute the value:
+         print def i, subs "PNG_" i sube end >out
+         print "#else /* use default */" >out
+         print "# ifdef PNG_set_" i >out
+         # Value from an option 'sets' argument
+         print def i, subs "PNG_set_" i sube end >out
+         # This is so that subsequent tests on the setting work:
+         print "#  define PNG_" i, "1" >out
+         if (defaults[i] != "") {
+            print "# else /*default*/" >out
+            print def i deflt end >out
+            print "#  define PNG_" i, "1" >out
+         }
+         print "# endif /* defaults */" >out
+         print "#endif /* setting", i, "*/" >out
+
+         doneset[i] = 1
+         ++movement
+      }
+
+      if (!finished && !movement) {
+         print "setting: loop or missing setting in 'requires', cannot process:"
+         for (i in setting) if (!doneset[i]) {
+            print "  setting", i, "requires" setting[i]
+         }
+         exit 1
+      }
+   }
+   print "PNG_DFN_END_SORT" >out
+   print comment, "end of settings", cend >out
 
    # Regular end - everything looks ok
    if (protect != "") {
-      print start "#endif", cx, protect, "*/" end >out
+      print start "#endif", "/*", protect, "*/" end >out
    }
 }

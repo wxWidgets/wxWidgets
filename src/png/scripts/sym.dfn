@@ -10,6 +10,6 @@
  */
 
 #define PNG_EXPORTA(ordinal, type, name, args, attributes)\
-	PNG_DEFN_MAGIC-SYMBOL_PREFIX PNG_JOIN name-PNG_DEFN_END
+        PNG_DFN "@" SYMBOL_PREFIX "@@" name "@"
 
 #include "../png.h"

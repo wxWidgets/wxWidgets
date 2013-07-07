@@ -17,11 +17,11 @@
  */
 
 #define PNG_EXPORTA(ordinal, type, name, args, attributes)\
-	PNG_DEFN_MAGIC-name @ordinal-PNG_DEFN_END
+        PNG_DFN "@" name "@ @@" ordinal "@"
 #define PNG_REMOVED(ordinal, type, name, args, attributes)\
-	PNG_DEFN_MAGIC-; name @ordinal-PNG_DEFN_END
+        PNG_DFN "; @" name "@ @@" ordinal "@"
 #define PNG_EXPORT_LAST_ORDINAL(ordinal)\
-	PNG_DEFN_MAGIC-; @ordinal-PNG_DEFN_END
+        PNG_DFN "; @@" ordinal "@"
 
 /* Read the defaults, but use scripts/pnglibconf.h.prebuilt; the 'standard'
  * header file.
@@ -35,13 +35,14 @@
  * defaulted to 'off' in scripts/pnglibconf.dfa
  *
  * Maintenance: if scripts/pnglibconf.dfa options are changed
- * from, or to, 'off' this needs updating!
+ * from, or to, 'disabled' this needs updating!
  */
 #define PNG_BENIGN_ERRORS_SUPPORTED
 #define PNG_ERROR_NUMBERS_SUPPORTED
 #define PNG_READ_BIG_ENDIAN_SUPPORTED  /* should do nothing! */
 #define PNG_INCH_CONVERSIONS_SUPPORTED
 #define PNG_READ_16_TO_8_ACCURATE_SCALE_SUPPORTED
+#define PNG_SET_OPTION_SUPPORTED
 
 #undef PNG_H
 #include "../png.h"

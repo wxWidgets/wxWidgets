@@ -1,3 +1,4 @@
+;Version 1.6.2
 ;--------------------------------------------------------------
 ; LIBPNG symbol list as a Win32 DEF file
 ; Contains all the symbols that can be exported from libpng
@@ -5,7 +6,6 @@
 LIBRARY
 
 EXPORTS
-;Version 1.5.7
  png_access_version_number @1
  png_set_sig_bytes @2
  png_sig_cmp @3
@@ -205,7 +205,6 @@ EXPORTS
  png_get_y_offset_inches @197
  png_get_pHYs_dpi @198
  png_get_io_state @199
- png_get_io_chunk_name @200
  png_get_uint_32 @201
  png_get_uint_16 @202
  png_get_int_32 @203
@@ -239,3 +238,14 @@ EXPORTS
  png_get_cHRM_XYZ_fixed @231
  png_set_cHRM_XYZ @232
  png_set_cHRM_XYZ_fixed @233
+ png_image_begin_read_from_file @234
+ png_image_begin_read_from_stdio @235
+ png_image_begin_read_from_memory @236
+ png_image_finish_read @237
+ png_image_free @238
+ png_image_write_to_file @239
+ png_image_write_to_stdio @240
+ png_convert_to_rfc1123_buffer @241
+ png_set_check_for_invalid_index @242
+ png_get_palette_max @243
+ png_set_option @244

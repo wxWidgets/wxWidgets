@@ -9,16 +9,16 @@ On Unix/Linux and similar systems, you can simply type
 
 and ignore the rest of this document.
 
-If configure does not work on your system and you have a reasonably
-up-to-date set of tools, running ./autogen.sh before running ./configure
-may fix the problem.  You can also run the individual commands in
-autogen.sh with the --force option, if supported by your version of
-the tools.  To be really sure that you aren't using any of the included
-pre-built scripts, you can do this:
+If configure does not work on your system, or if you have a need to
+change configure.ac or Makefile.am, and you have a reasonably
+up-to-date set of tools, running ./autogen.sh in a git clone before
+running ./configure may fix the problem.  To be really sure that you
+aren't using any of the included pre-built scripts, you can do this:
 
     ./configure --enable-maintainer-mode
     make maintainer-clean
-    ./autogen.sh
+    ./autogen.sh --maintainer --clean
+    ./autogen.sh --maintainer
     ./configure [--prefix=/path] [other options]
     make
     make install
@@ -41,19 +41,33 @@ is not already on your system.  zlib can usually be found
 wherever you got libpng.  zlib can be placed in another directory,
 at the same level as libpng.
 
+If your system already has a preinstalled zlib you will still need
+to have access to the zlib.h and zconf.h include files that
+correspond to the version of zlib that's installed.
+
+If you wish to test with a particular zlib that is not first in the
+standard library search path, put ZLIBLIB, ZLIBINC, CPPFLAGS, LDFLAGS,
+and LD_LIBRARY_PATH in your environment before running "make test"
+or "make distcheck":
+
+ZLIBLIB=/path/to/lib export ZLIBLIB
+ZLIBINC=/path/to/include export ZLIBINC
+CPPFLAGS="-I$ZLIBINC" export CPPFLAGS
+LDFLAGS="-L$ZLIBLIB" export LDFLAGS
+LD_LIBRARY_PATH="$ZLIBLIB:$LD_LIBRARY_PATH" export LD_LIBRARY_PATH
+
+If you are using one of the makefile scripts, put ZLIBLIB and ZLIBINC
+in your environment and type "make ZLIBLIB=$ZLIBLIB ZLIBINC=$ZLIBINC test".
+
 If you want to use "cmake" (see www.cmake.org), type
 
    cmake . -DCMAKE_INSTALL_PREFIX=/path
    make
    make install
 
-If your system already has a preinstalled zlib you will still need
-to have access to the zlib.h and zconf.h include files that
-correspond to the version of zlib that's installed.
-
 You can rename the directories that you downloaded (they
-might be called "libpng-x.y.z" or "libpngNN" and "zlib-1.2.5"
-or "zlib125") so that you have directories called "zlib" and "libpng".
+might be called "libpng-x.y.z" or "libpngNN" and "zlib-1.2.7"
+or "zlib127") so that you have directories called "zlib" and "libpng".
 
 Your directory structure should look like this:
 
@@ -71,6 +85,7 @@ Your directory structure should look like this:
              depcomp, install-sh, mkinstalldirs, test-pngtest.sh
           contrib
              gregbook
+             libtests
              pngminim
              pngminus
              pngsuite

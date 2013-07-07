@@ -1,5 +1,5 @@
 
-Libpng 1.5.7 - December 15, 2011
+Libpng 1.6.2 - April 25, 2013
 
 This is a public release of libpng, intended for use in production codes.
 
@@ -8,86 +8,37 @@ Files available for download:
 Source files with LF line endings (for Unix/Linux) and with a
 "configure" script
 
-   libpng-1.5.7.tar.xz (LZMA-compressed, recommended)
-   libpng-1.5.7.tar.gz
-   libpng-1.5.7.tar.bz2
+   libpng-1.6.2.tar.xz (LZMA-compressed, recommended)
+   libpng-1.6.2.tar.gz
 
 Source files with CRLF line endings (for Windows), without the
 "configure" script
 
-   lpng157.7z  (LZMA-compressed, recommended)
-   lpng157.zip
+   lpng162.7z  (LZMA-compressed, recommended)
+   lpng162.zip
 
 Other information:
 
-   libpng-1.5.7-README.txt
-   libpng-1.5.7-LICENSE.txt
+   libpng-1.6.2-README.txt
+   libpng-1.6.2-LICENSE.txt
 
-Changes since the last public release (1.5.6):
-  Added support for ARM processor (Mans Rullgard)
-  Fixed bug in pngvalid on early allocation failure; fixed type cast in
-    pngmem.c; pngvalid would attempt to call png_error() if the allocation
-    of a png_struct or png_info failed. This would probably have led to a
-    crash.  The pngmem.c implementation of png_malloc() included a cast
-    to png_size_t which would fail on large allocations on 16-bit systems.
-  Fix for the preprocessor of the Intel C compiler. The preprocessor
-    splits adjacent @ signs with a space; this changes the concatentation
-    token from @-@-@ to PNG_JOIN; that should work with all compiler
-    preprocessors.
-  Paeth filter speed improvements from work by Siarhei Siamashka. This
-    changes the 'Paeth' reconstruction function to improve the GCC code
-    generation on x86. The changes are only part of the suggested ones;
-    just the changes that definitely improve speed and remain simple.
-    The changes also slightly increase the clarity of the code.
-  Check compression_type parameter in png_get_iCCP and remove spurious
-    casts. The compression_type parameter is always assigned to, so must
-    be non-NULL. The cast of the profile length potentially truncated the
-    value unnecessarily on a 16-bit int system, so the cast of the (byte)
-    compression type to (int) is specified by ANSI-C anyway.
-  Fixed FP division by zero in pngvalid.c; the 'test_pixel' code left
-    the sBIT fields in the test pixel as 0, which resulted in a floating
-    point division by zero which was irrelevant but causes systems where
-    FP exceptions cause a crash. Added code to pngvalid to turn on FP
-    exceptions if the appropriate glibc support is there to ensure this is
-    tested in the future.
-  Added versioning to pnglibconf.h comments.
-  Installed more accurate linear to sRGB conversion tables. The slightly
-    modified tables reduce the number of 16-bit values that
-    convert to an off-by-one 8-bit value.  The "makesRGB.c" code that was used
-    to generate the tables is now in a contrib/sRGBtables sub-directory.
-  Added run-time detection of NEON support.
-  Multiple transform bug fixes plus a work-round for double gamma correction.
-    libpng does not support more than one transform that requires linear data
-    at once - if this is tried typically the results is double gamma
-    correction. Since the simplified APIs can need rgb to gray combined with
-    a compose operation it is necessary to do one of these outside the main
-    libpng transform code. This check-in also contains fixes to various bugs
-    in compose and rgb to gray (on palette).
-  Fixes for C++ compilation using g++ When libpng source is compiled
-    using g++. The compiler imposes C++ rules on the C source; thus it
-    is desireable to make the source work with either C or C++ rules
-    without throwing away useful error information.  This change adds
-    png_voidcast to allow C semantic (void*) cases or the corresponding
-    C++ static_cast operation, as appropriate.
-  Added --noexecstack to assembler file compilation. GCC does not set
-    this on assembler compilation, even though it does on C compilation.
-    This creates security issues if assembler code is enabled; the
-    work-around is to set it by default in the flags for $(CCAS)
-  Removed "zTXt" from warning in generic chunk decompression function.
-  Validate time settings passed to pngset() and png_convert_to_rfc1123()
-    (Frank Busse).
-  Added MINGW support to CMakeLists.txt
-  Reject invalid compression flag or method when reading the iTXt chunk.
-  Moved pngvalid.c into contrib/libtests
-  Rebuilt Makefile.in, configure, etc., with autoconf-2.68
-  Replaced an "#if" with "#ifdef" in pngrtran.c
-  Revised #if PNG_DO_BC block in png.c (use #ifdef and add #else)
-  Revised pngconf.h to use " __declspec(restrict)" only when MSC_VER >= 1400,
-    as in libpng-1.5.4.
-  Put CRLF line endings in the owatcom project files.
-  Updated CMakeLists.txt to account for the relocation of pngvalid.c
-  Minor fixes to pngvalid.c for gcc 4.6.2 compatibility to remove warnings
-    reported by earlier versions.
+Changes since the last public release (1.6.1):
+
+  Updated documentation of 1.5.x to 1.6.x changes in iCCP chunk handling.
+  Fixed incorrect warning of excess deflate data. End condition - the
+    warning would be produced if the end of the deflate stream wasn't read
+    in the last row.  The warning is harmless.
+  Corrected the test on user transform changes on read. It was in the
+    png_set of the transform function, but that doesn't matter unless the
+    transform function changes the rowbuf size, and that is only valid if
+    transform_info is called.
+  Corrected a misplaced closing bracket in contrib/libtests/pngvalid.c
+    (Flavio Medeiros).
+  Corrected length written to uncompressed iTXt chunks (Samuli Suominen).
+  Added contrib/tools/fixitxt.c, to repair the erroneous iTXt chunk length
+    written by libpng-1.6.0 and 1.6.1.
+  Disallow storing sRGB information when the sRGB is not supported.
+  Merge pngtest.c with libpng-1.7.0
 
 Send comments/corrections/commendations to png-mng-implement at lists.sf.net
 (subscription required; visit
