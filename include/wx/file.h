@@ -77,7 +77,7 @@ public:
     // returns the number of bytes written
   size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
-  bool Write(const wxString& s, const wxMBConv& conv = wxMBConvUTF8());
+  bool Write(const wxString& s, const wxMBConv& conv = wxConvAuto());
     // flush data not yet written
   bool Flush();
 
