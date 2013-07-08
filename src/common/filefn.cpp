@@ -743,11 +743,13 @@ wxPathOnly (wxChar *path)
     {
         static wxChar buf[_MAXPATHLEN];
 
-        // Local copy
-        wxStrcpy (buf, path);
-
         int l = wxStrlen(path);
         int i = l - 1;
+        if ( i >= _MAXPATHLEN )
+            return NULL;
+
+        // Local copy
+        wxStrcpy (buf, path);
 
         // Search backward for a backward or forward slash
         while (i > -1)
@@ -789,11 +791,14 @@ wxString wxPathOnly (const wxString& path)
     {
         wxChar buf[_MAXPATHLEN];
 
-        // Local copy
-        wxStrcpy(buf, path);
-
         int l = path.length();
         int i = l - 1;
+
+        if ( i >= _MAXPATHLEN )
+            return wxString();
+
+        // Local copy
+        wxStrcpy(buf, path);
 
         // Search backward for a backward or forward slash
         while (i > -1)
