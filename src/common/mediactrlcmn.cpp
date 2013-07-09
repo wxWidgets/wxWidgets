@@ -547,7 +547,7 @@ void wxMediaBackendCommonBase::QueueStopEvent()
 #ifdef __WXMSW__ // MSW has huge backends so we do it separately
 FORCE_LINK(wxmediabackend_am)
 FORCE_LINK(wxmediabackend_wmp10)
-#elif !defined(__WXOSX_COCOA__)
+#else
 FORCE_LINK(basewxmediabackends)
 #endif
 
