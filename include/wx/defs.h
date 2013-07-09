@@ -359,7 +359,6 @@ typedef short int WXTYPE;
 #ifndef HAVE_TR1_TYPE_TRAITS
     #if defined(__has_include) && __has_include(<tr1/type_traits>)
         #define HAVE_TR1_TYPE_TRAITS
-    #endif
     #elif defined(__VISUALC__) && (_MSC_FULL_VER >= 150030729)
         #define HAVE_TR1_TYPE_TRAITS
     #endif
