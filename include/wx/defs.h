@@ -350,43 +350,37 @@ typedef short int WXTYPE;
     #endif
 #endif
 
-#ifndef HAVE_TYPE_TRAITS
-    #if defined(__has_include) && __has_include(<type_traits>)
+#ifndef HAVE_TR1_TYPE_TRAITS
+    #if defined(__VISUALC__) && (_MSC_FULL_VER >= 150030729)
+        #define HAVE_TR1_TYPE_TRAITS
+    #endif
+#endif
+
+#if defined(__has_include)
+    #if !defined(HAVE_TYPE_TRAITS) && __has_include(<type_traits>)
         #define HAVE_TYPE_TRAITS
     #endif
-#endif
 
-#ifndef HAVE_TR1_TYPE_TRAITS
-    #if defined(__has_include) && __has_include(<tr1/type_traits>)
-        #define HAVE_TR1_TYPE_TRAITS
-    #elif defined(__VISUALC__) && (_MSC_FULL_VER >= 150030729)
+    #if !defined(HAVE_TR1_TYPE_TRAITS) && __has_include(<tr1/type_traits>)
         #define HAVE_TR1_TYPE_TRAITS
     #endif
-#endif
 
-#ifndef HAVE_STD_UNORDERED_MAP
-    #if defined(__has_include) && __has_include(<unordered_map>)
+    #if !defined(HAVE_STD_UNORDERED_MAP) && __has_include(<unordered_map>)
         #define HAVE_STD_UNORDERED_MAP
     #endif
-#endif
 
-#ifndef HAVE_TR1_UNORDERED_MAP
-    #if defined(__has_include) && __has_include(<tr1/unordered_map>)
+    #if !defined(HAVE_TR1_UNORDERED_MAP) && __has_include(<tr1/unordered_map>)
         #define HAVE_TR1_UNORDERED_MAP
     #endif
-#endif
 
-#ifndef HAVE_STD_UNORDERED_SET
-    #if defined(__has_include) && __has_include(<unordered_set>)
+    #if !defined(HAVE_STD_UNORDERED_SET) && __has_include(<unordered_set>)
         #define HAVE_STD_UNORDERED_SET
     #endif
-#endif
 
-#ifndef HAVE_TR1_UNORDERED_SET
-    #if defined(__has_include) && __has_include(<tr1/unordered_set>)
+    #if !defined(HAVE_TR1_UNORDERED_SET) && __has_include(<tr1/unordered_set>)
         #define HAVE_TR1_UNORDERED_SET
     #endif
-#endif
+#endif // defined(__has_include)
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 
