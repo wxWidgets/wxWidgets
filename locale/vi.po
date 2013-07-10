@@ -1,21 +1,22 @@
 # wxWidgets trasnlation for Vietnamese.
 # This file is distributed under the same license as the wxWidgets package.
-# First translator Trần Ngọc Quân <vnwildman@gmail.com>, 2008-2012.
+# First translator Trần Ngọc Quân <vnwildman@gmail.com>, 2008-2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxstd-2.9.3\n"
+"Project-Id-Version: wxstd-2.9.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-10 17:19+0200\n"
-"PO-Revision-Date: 2012-09-25 15:10+0700\n"
+"PO-Revision-Date: 2013-07-10 08:33+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
-"Language: vi_VN\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=1;\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../src/common/debugrpt.cpp:580
 msgid ""
@@ -68,7 +69,7 @@ msgstr " nghiêng"
 
 #: ../src/common/fontcmn.cpp:808
 msgid " light"
-msgstr " ánh sáng"
+msgstr " sáng"
 
 #: ../src/common/paper.cpp:119
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
@@ -128,9 +129,9 @@ msgid "%s Information"
 msgstr "%s Thông tin"
 
 #: ../src/generic/preferencesg.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "Sở thích riêng"
+msgstr "Cá nhân hóa %s"
 
 #: ../src/generic/logg.cpp:235
 #, c-format
@@ -940,7 +941,7 @@ msgstr "9 x 11 in"
 
 #: ../src/html/htmprint.cpp:432
 msgid ": file does not exist!"
-msgstr ": tập tin chưa tồn tại!"
+msgstr ": tập tin không tồn tại!"
 
 #: ../src/common/fontmap.cpp:200
 msgid ": unknown charset"
@@ -948,7 +949,7 @@ msgstr ": không rõ bộ ký tự"
 
 #: ../src/common/fontmap.cpp:414
 msgid ": unknown encoding"
-msgstr ":không hiểu mã hóa"
+msgstr ": không hiểu bảng mã"
 
 #: ../src/generic/wizard.cpp:438
 msgid "< &Back"
@@ -1156,7 +1157,7 @@ msgstr "Thêm"
 
 #: ../src/richtext/richtextbuffer.cpp:10477
 msgid "Add column"
-msgstr ""
+msgstr "Thêm cột"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1164,11 +1165,11 @@ msgstr "Thêm trang hiện thời vào dấu trang"
 
 #: ../src/richtext/richtextbuffer.cpp:10419
 msgid "Add row"
-msgstr ""
+msgstr "Thêm hàng"
 
 #: ../src/generic/colrdlgg.cpp:284
 msgid "Add to custom colours"
-msgstr "Thêm vào màu người dùng"
+msgstr "Thêm vào màu tự chọn"
 
 #: ../include/wx/xtiprop.h:260
 msgid "AddToPropertyCollection called on a generic accessor"
@@ -1193,7 +1194,7 @@ msgstr "Việc thêm flavor utxt gặp lỗi"
 
 #: ../src/common/preferencescmn.cpp:40
 msgid "Advanced"
-msgstr ""
+msgstr "Cao cấp"
 
 #: ../src/richtext/richtextliststylepage.cpp:436
 msgid "After a paragraph:"
@@ -1797,9 +1798,9 @@ msgid "Cannot resume thread %lu"
 msgstr "Không thể phục hồi tuyến trình %lu"
 
 #: ../src/msw/thread.cpp:924
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "Không thể phục hồi tuyến trình %x"
+msgstr "Không thể phục hồi tuyến trình %lx"
 
 #: ../src/unix/threadpsx.cpp:1012
 msgid "Cannot retrieve thread scheduling policy."
@@ -1820,9 +1821,9 @@ msgid "Cannot suspend thread %lu"
 msgstr "Không thể đình chỉ tuyến trình %lu"
 
 #: ../src/msw/thread.cpp:908
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
-msgstr "Không thể đình chỉ tuyến trình %x"
+msgstr "Không thể đình chỉ tuyến trình %lx"
 
 #: ../src/msw/thread.cpp:831
 msgid "Cannot wait for thread termination"
@@ -1954,9 +1955,8 @@ msgstr "Đánh dấu kiểm để chữ được viết hoa."
 
 #: ../src/richtext/richtextfontpage.cpp:301
 #: ../src/richtext/richtextfontpage.cpp:303
-#, fuzzy
 msgid "Check to show the text in small capitals."
-msgstr "Đánh dấu kiểm để chữ được viết hoa."
+msgstr "Đánh dấu kiểm để chữ được viết HOA nhưng dạng nhỏ hơn."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
@@ -2593,18 +2593,16 @@ msgid "Delete Text"
 msgstr "Xóa Chữ"
 
 #: ../src/richtext/richtextbuffer.cpp:10369
-#, fuzzy
 msgid "Delete column"
-msgstr "Xóa bỏ vùng chọn"
+msgstr "Xóa cột"
 
 #: ../src/generic/editlbox.cpp:275
 msgid "Delete item"
 msgstr "Xóa bỏ mục tin"
 
 #: ../src/richtext/richtextbuffer.cpp:10301
-#, fuzzy
 msgid "Delete row"
-msgstr "Xóa bỏ"
+msgstr "Xóa hàng"
 
 #: ../src/common/stockitem.cpp:261
 msgid "Delete selection"
@@ -2784,7 +2782,7 @@ msgstr "ENTER"
 
 #: ../src/unix/fswatcher_inotify.cpp:536
 msgid "EOF while reading from inotify descriptor"
-msgstr "Việc đọc inotify gặp lỗi EOF"
+msgstr "Việc đọc bộ mô tả inotify gặp lỗi EOF"
 
 #: ../src/common/accelcmn.cpp:65
 msgid "ESC"
@@ -3477,9 +3475,8 @@ msgid "Failed to set permissions on lock file '%s'"
 msgstr "Đặt quyền trên tập tin khóa '%s' gặp lỗi"
 
 #: ../src/unix/utilsunx.cpp:603
-#, fuzzy
 msgid "Failed to set process priority"
-msgstr "Đặt mức ưu tiên tuyến trình %d gặp lỗi."
+msgstr "Gặp lỗi khi đặt mức ưu tiên tuyến trình"
 
 #: ../src/common/file.cpp:577
 msgid "Failed to set temporary file permissions"
@@ -3759,7 +3756,7 @@ msgstr "Giao diện hiển thị GTK+"
 
 #: ../src/common/preferencescmn.cpp:38
 msgid "General"
-msgstr ""
+msgstr "Chung"
 
 #: ../src/common/prntbase.cpp:244
 msgid "Generic PostScript"
@@ -4160,7 +4157,7 @@ msgstr "Chi tiết hình học '%s' không hợp lệ"
 #: ../src/unix/fswatcher_inotify.cpp:299
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "Sự kiện inotify (theo dõi tập tin) dành cho \"%s\" không hợp lệ"
 
 #: ../src/unix/snglinst.cpp:307
 #, c-format
@@ -4796,7 +4793,7 @@ msgstr "Hiện đại"
 
 #: ../src/generic/filectrlg.cpp:463
 msgid "Modified"
-msgstr "Đã chỉnh sửa"
+msgstr "Đã bị sửa"
 
 #: ../src/common/module.cpp:134
 #, c-format
@@ -5070,7 +5067,7 @@ msgstr "Đồng ý"
 #: ../src/msw/ole/automtn.cpp:682
 #, c-format
 msgid "OLE Automation error in %s: %s"
-msgstr "Hoạt hình OLE lỗi trong %s: %s"
+msgstr "Lỗi hoạt hình OLE trong %s: %s"
 
 #: ../include/wx/richtext/richtextimagedlg.h:39
 msgid "Object Properties"
@@ -5458,11 +5455,11 @@ msgstr "tập tin PostScript"
 
 #: ../src/common/stockitem.cpp:182
 msgid "Preferences"
-msgstr "Sở thích riêng"
+msgstr "Cá nhân hóa"
 
 #: ../src/osx/menu_osx.cpp:577
 msgid "Preferences..."
-msgstr "Sở thích riêng..."
+msgstr "Cá nhân hóa..."
 
 #: ../src/common/prntbase.cpp:530
 msgid "Preparing"
@@ -5853,7 +5850,7 @@ msgstr "Ghi Lại Bằng Tên Mới"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Save current document"
-msgstr "Ghi lại tài liệu hiện hành"
+msgstr "Ghi lại tài liệu hiện tại"
 
 #: ../src/common/stockitem.cpp:269
 msgid "Save current document with a different filename"
@@ -6075,9 +6072,8 @@ msgid "Slant"
 msgstr "Nghiêng"
 
 #: ../src/richtext/richtextfontpage.cpp:299
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "Chữ viết &hoa"
+msgstr "Chữ viết &HOA nhỏ"
 
 #: ../src/richtext/richtextborderspage.cpp:543
 msgid "Solid"
@@ -6186,7 +6182,7 @@ msgstr "Swiss"
 #: ../src/richtext/richtextliststylepage.cpp:489
 #: ../src/richtext/richtextbulletspage.cpp:294
 msgid "Symbol"
-msgstr "Ký hiệu đặc biệt"
+msgstr "Ký hiệu"
 
 #: ../src/richtext/richtextliststylepage.cpp:289
 #: ../src/richtext/richtextbulletspage.cpp:241
@@ -6609,7 +6605,7 @@ msgstr "Kích thước đệm trên."
 #: ../src/richtext/richtextsizepage.cpp:580
 #: ../src/richtext/richtextsizepage.cpp:582
 msgid "The top position."
-msgstr "Vị trí trên."
+msgstr "Vị trí trên cùng."
 
 #: ../src/common/cmdline.cpp:1054
 #, c-format
@@ -6949,6 +6945,8 @@ msgstr "Không mong đợi ký tự đi sau tùy chọn '%s'."
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
+"Gặp sự kiện bất ngờ dành cho \"%s\": không có bộ mô tả theo dõi nào tương "
+"ứng với nó."
 
 #: ../src/common/cmdline.cpp:1017
 #, c-format
@@ -7243,7 +7241,7 @@ msgstr "Đổi thành chữ số La Mã in hoa"
 #: ../src/common/cmdline.cpp:1148
 #, c-format
 msgid "Usage: %s"
-msgstr "Cách sử dụng: %s"
+msgstr "Cách dùng: %s"
 
 #: ../src/richtext/richtextindentspage.cpp:182
 #: ../src/richtext/richtextindentspage.cpp:184
@@ -7339,11 +7337,11 @@ msgstr "Không biết phông chữ có gạch chân hay không."
 
 #: ../src/generic/fdrepdlg.cpp:145
 msgid "Whole word"
-msgstr "Tất cả các từ"
+msgstr "Toàn bộ từ"
 
 #: ../src/html/helpwnd.cpp:547
 msgid "Whole words only"
-msgstr "Toàn bộ các từ"
+msgstr "Chỉ khi khớp cả từ"
 
 #: ../src/univ/themes/win32.cpp:1103
 msgid "Win32 theme"
@@ -8083,7 +8081,7 @@ msgstr "chưa thi hành đầy đủ."
 
 #: ../src/common/cmdline.cpp:1308
 msgid "num"
-msgstr "num"
+msgstr "số"
 
 #: ../src/common/xtixml.cpp:260
 msgid "objects cannot have XML Text Nodes"
@@ -8380,12 +8378,12 @@ msgstr "không hiểu-%d"
 
 #: ../src/common/docview.cpp:508
 msgid "unnamed"
-msgstr "không tên"
+msgstr "không_tên"
 
 #: ../src/common/docview.cpp:1602
 #, c-format
 msgid "unnamed%d"
-msgstr "Không tên%d"
+msgstr "Không_tên%d"
 
 #: ../src/common/zipstrm.cpp:1797 ../src/common/zipstrm.cpp:2185
 msgid "unsupported Zip compression method"
