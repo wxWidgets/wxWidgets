@@ -1,20 +1,20 @@
 # translation of wxstd.pot to Ukrainian
 # This file is distributed under the same license as the wxWidgets package.
-# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2010, 2011, 2012.
 #
+# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2010, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-10 17:19+0200\n"
-"PO-Revision-Date: 2012-08-23 14:04+0300\n"
+"POT-Creation-Date: 2013-07-10 18:53+0300\n"
+"PO-Revision-Date: 2013-07-10 20:12+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -33,12 +33,12 @@ msgstr " "
 
 #: ../src/generic/dbgrptg.cpp:323
 msgid "              Thank you and we're sorry for the inconvenience!\n"
-msgstr "              Дякуємо Вам і вибачте за незручності!\n"
+msgstr "              Дякуємо вам і вибачте за незручності!\n"
 
 #: ../src/common/prntbase.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "Сторінка %d з %d"
+msgstr " (копія %d з %d)"
 
 #: ../src/common/log.cpp:428
 #, c-format
@@ -52,9 +52,9 @@ msgstr " (у модулі «%s»)"
 
 #: ../src/common/docview.cpp:1620
 msgid " - "
-msgstr " - "
+msgstr " — "
 
-#: ../src/richtext/richtextprint.cpp:585 ../src/html/htmprint.cpp:705
+#: ../src/html/htmprint.cpp:705 ../src/richtext/richtextprint.cpp:585
 msgid " Preview"
 msgstr " Перегляд"
 
@@ -129,9 +129,9 @@ msgid "%s Information"
 msgstr "Інформація %s"
 
 #: ../src/generic/preferencesg.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "Налаштування"
+msgstr "Налаштування %s"
 
 #: ../src/generic/logg.cpp:235
 #, c-format
@@ -157,11 +157,11 @@ msgstr "&Про програму"
 msgid "&Actual Size"
 msgstr "&Справжній розмір"
 
-#: ../src/richtext/richtextindentspage.cpp:287
+#: ../src/richtext/richtextindentspage.cpp:263
 msgid "&After a paragraph:"
 msgstr "&Після абзацу:"
 
-#: ../src/richtext/richtextindentspage.cpp:141
+#: ../src/richtext/richtextindentspage.cpp:129
 #: ../src/richtext/richtextliststylepage.cpp:320
 msgid "&Alignment"
 msgstr "&Вирівнювання"
@@ -190,7 +190,7 @@ msgstr "&Назад"
 msgid "&Based on:"
 msgstr "На &основі:"
 
-#: ../src/richtext/richtextindentspage.cpp:278
+#: ../src/richtext/richtextindentspage.cpp:254
 msgid "&Before a paragraph:"
 msgstr "Пе&ред абзацом:"
 
@@ -206,10 +206,10 @@ msgstr "&Жирний"
 msgid "&Bottom"
 msgstr "В&низу"
 
-#: ../src/richtext/richtextborderspage.cpp:359
-#: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
+#: ../src/richtext/richtextborderspage.cpp:359
+#: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextsizepage.cpp:634
 #: ../src/richtext/richtextsizepage.cpp:641
 msgid "&Bottom:"
@@ -219,8 +219,8 @@ msgstr "&Нижнє:"
 msgid "&Box"
 msgstr "&Рамка"
 
-#: ../src/richtext/richtextliststylepage.cpp:211
 #: ../src/richtext/richtextbulletspage.cpp:160
+#: ../src/richtext/richtextliststylepage.cpp:211
 msgid "&Bullet style:"
 msgstr "Стиль &позначки:"
 
@@ -228,9 +228,9 @@ msgstr "Стиль &позначки:"
 msgid "&CD-Rom"
 msgstr "&CD-ROM"
 
+#: ../src/common/stockitem.cpp:146 ../src/osx/carbon/fontdlg.cpp:589
 #: ../src/generic/wizard.cpp:433 ../src/generic/fontdlgg.cpp:471
-#: ../src/generic/fontdlgg.cpp:490 ../src/osx/carbon/fontdlg.cpp:589
-#: ../src/common/stockitem.cpp:146
+#: ../src/generic/fontdlgg.cpp:490
 msgid "&Cancel"
 msgstr "&Скасувати"
 
@@ -250,9 +250,9 @@ msgstr "Код &символу:"
 msgid "&Clear"
 msgstr "О&чистити"
 
-#: ../src/generic/logg.cpp:523 ../src/common/stockitem.cpp:149
-#: ../src/common/prntbase.cpp:1571 ../src/univ/themes/win32.cpp:3757
-#: ../src/html/helpfrm.cpp:140
+#: ../src/univ/themes/win32.cpp:3757 ../src/common/prntbase.cpp:1571
+#: ../src/common/stockitem.cpp:149 ../src/html/helpfrm.cpp:140
+#: ../src/generic/logg.cpp:523
 msgid "&Close"
 msgstr "&Закрити"
 
@@ -268,8 +268,8 @@ msgstr "&Колір:"
 msgid "&Convert"
 msgstr "Пе&ретворити"
 
-#: ../src/richtext/richtextctrl.cpp:325 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2285
+#: ../src/msw/textctrl.cpp:2285 ../src/common/stockitem.cpp:151
+#: ../src/osx/textctrl_osx.cpp:584 ../src/richtext/richtextctrl.cpp:325
 msgid "&Copy"
 msgstr "&Копія"
 
@@ -285,9 +285,9 @@ msgstr "&Налаштувати…"
 msgid "&Debug report preview:"
 msgstr "Попередній перегляд звіту про &помилку:"
 
-#: ../src/richtext/richtexttabspage.cpp:143
-#: ../src/richtext/richtextctrl.cpp:327 ../src/osx/textctrl_osx.cpp:586
-#: ../src/common/stockitem.cpp:153 ../src/msw/textctrl.cpp:2287
+#: ../src/msw/textctrl.cpp:2287 ../src/common/stockitem.cpp:153
+#: ../src/osx/textctrl_osx.cpp:586 ../src/richtext/richtexttabspage.cpp:143
+#: ../src/richtext/richtextctrl.cpp:327
 msgid "&Delete"
 msgstr "&Вилучити"
 
@@ -355,8 +355,8 @@ msgstr "&Гарнітура шрифту:"
 msgid "&Font for Level..."
 msgstr "&Шрифт для рівня…"
 
-#: ../src/richtext/richtextfontpage.cpp:157
 #: ../src/richtext/richtextsymboldlg.cpp:401
+#: ../src/richtext/richtextfontpage.cpp:157
 msgid "&Font:"
 msgstr "&Шрифт:"
 
@@ -377,9 +377,10 @@ msgstr "&Жорсткий диск"
 msgid "&Height:"
 msgstr "&Висота:"
 
-#: ../src/generic/wizard.cpp:436 ../src/richtext/richtextstyledlg.cpp:304
-#: ../src/richtext/richtextsymboldlg.cpp:480 ../src/osx/menu_osx.cpp:719
 #: ../src/common/stockitem.cpp:164 ../src/html/helpfrm.cpp:148
+#: ../src/osx/menu_osx.cpp:719 ../src/generic/wizard.cpp:436
+#: ../src/richtext/richtextstyledlg.cpp:304
+#: ../src/richtext/richtextsymboldlg.cpp:480
 msgid "&Help"
 msgstr "&Довідка"
 
@@ -391,12 +392,12 @@ msgstr "С&ховати подробиці"
 msgid "&Home"
 msgstr "&Домівка"
 
-#: ../src/richtext/richtextindentspage.cpp:197
+#: ../src/richtext/richtextindentspage.cpp:185
 #: ../src/richtext/richtextliststylepage.cpp:373
 msgid "&Indentation (tenths of a mm)"
 msgstr "&Відступ (у десятках мм)"
 
-#: ../src/richtext/richtextindentspage.cpp:180
+#: ../src/richtext/richtextindentspage.cpp:168
 #: ../src/richtext/richtextliststylepage.cpp:357
 msgid "&Indeterminate"
 msgstr "&Зняти визначене"
@@ -417,7 +418,7 @@ msgstr "&Курсив"
 msgid "&Jump to"
 msgstr "Пере&йти до"
 
-#: ../src/richtext/richtextindentspage.cpp:166
+#: ../src/richtext/richtextindentspage.cpp:154
 #: ../src/richtext/richtextliststylepage.cpp:343
 msgid "&Justified"
 msgstr "&Вирівняне"
@@ -426,17 +427,17 @@ msgstr "&Вирівняне"
 msgid "&Last"
 msgstr "&Останній"
 
-#: ../src/richtext/richtextindentspage.cpp:152
+#: ../src/richtext/richtextindentspage.cpp:140
 #: ../src/richtext/richtextliststylepage.cpp:329
 msgid "&Left"
 msgstr "&Ліворуч"
 
-#: ../src/richtext/richtextindentspage.cpp:208
+#: ../src/richtext/richtextindentspage.cpp:196
+#: ../src/richtext/richtextmarginspage.cpp:187
+#: ../src/richtext/richtextmarginspage.cpp:301
 #: ../src/richtext/richtextborderspage.cpp:269
 #: ../src/richtext/richtextborderspage.cpp:413
 #: ../src/richtext/richtextliststylepage.cpp:382
-#: ../src/richtext/richtextmarginspage.cpp:187
-#: ../src/richtext/richtextmarginspage.cpp:301
 #: ../src/richtext/richtextsizepage.cpp:529
 #: ../src/richtext/richtextsizepage.cpp:536
 msgid "&Left:"
@@ -462,12 +463,12 @@ msgstr "Місце п&ересування об’єкта:"
 msgid "&Network"
 msgstr "&Мережа"
 
-#: ../src/richtext/richtexttabspage.cpp:137 ../src/common/stockitem.cpp:177
+#: ../src/common/stockitem.cpp:177 ../src/richtext/richtexttabspage.cpp:137
 msgid "&New"
 msgstr "&Створити"
 
-#: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
-#: ../src/msw/mdi.cpp:177
+#: ../src/msw/mdi.cpp:177 ../src/generic/mdig.cpp:101
+#: ../src/aui/tabmdi.cpp:112
 msgid "&Next"
 msgstr "&Наступний"
 
@@ -487,7 +488,7 @@ msgstr "&Наступна підказка"
 msgid "&Next style:"
 msgstr "&Наступний стиль:"
 
-#: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:477
+#: ../src/msw/msgdlg.cpp:477 ../src/common/stockitem.cpp:178
 msgid "&No"
 msgstr "&Ні"
 
@@ -499,26 +500,26 @@ msgstr "&Помітки:"
 msgid "&Number:"
 msgstr "&Номер:"
 
+#: ../src/common/stockitem.cpp:179 ../src/osx/carbon/fontdlg.cpp:595
 #: ../src/generic/fontdlgg.cpp:476 ../src/generic/fontdlgg.cpp:483
-#: ../src/osx/carbon/fontdlg.cpp:595 ../src/common/stockitem.cpp:179
 msgid "&OK"
 msgstr "&Гаразд"
 
-#: ../src/generic/dbgrptg.cpp:339 ../src/common/stockitem.cpp:180
-#: ../src/html/helpfrm.cpp:138
+#: ../src/common/stockitem.cpp:180 ../src/html/helpfrm.cpp:138
+#: ../src/generic/dbgrptg.cpp:339
 msgid "&Open..."
 msgstr "&Відкрити…"
 
-#: ../src/richtext/richtextindentspage.cpp:235
+#: ../src/richtext/richtextindentspage.cpp:223
 msgid "&Outline level:"
 msgstr "&Рівень відступу:"
 
-#: ../src/richtext/richtextindentspage.cpp:318
+#: ../src/richtext/richtextindentspage.cpp:294
 msgid "&Page Break"
 msgstr "&Розрив сторінки"
 
-#: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:181 ../src/msw/textctrl.cpp:2286
+#: ../src/msw/textctrl.cpp:2286 ../src/common/stockitem.cpp:181
+#: ../src/osx/textctrl_osx.cpp:585 ../src/richtext/richtextctrl.cpp:326
 msgid "&Paste"
 msgstr "&Вставити"
 
@@ -535,16 +536,15 @@ msgid "&Position (tenths of a mm):"
 msgstr "&Розміщення (у десятках мм):"
 
 #: ../src/richtext/richtextsizepage.cpp:511
-#, fuzzy
 msgid "&Position mode:"
-msgstr "&Рухомий режим:"
+msgstr "Режим &позиції:"
 
 #: ../src/common/stockitem.cpp:182
 msgid "&Preferences"
 msgstr "&Налаштування"
 
-#: ../src/aui/tabmdi.cpp:113 ../src/generic/mdig.cpp:102
-#: ../src/msw/mdi.cpp:178
+#: ../src/msw/mdi.cpp:178 ../src/generic/mdig.cpp:102
+#: ../src/aui/tabmdi.cpp:113
 msgid "&Previous"
 msgstr "Попереднє"
 
@@ -556,8 +556,8 @@ msgstr "&Попередній абзац"
 msgid "&Print..."
 msgstr "&Друкувати…"
 
-#: ../src/richtext/richtextctrl.cpp:331 ../src/richtext/richtextctrl.cpp:4915
-#: ../src/common/stockitem.cpp:185
+#: ../src/common/stockitem.cpp:185 ../src/richtext/richtextctrl.cpp:331
+#: ../src/richtext/richtextctrl.cpp:4915
 msgid "&Properties"
 msgstr "&Властивості"
 
@@ -565,9 +565,9 @@ msgstr "&Властивості"
 msgid "&Quit"
 msgstr "&Вихід"
 
-#: ../src/richtext/richtextctrl.cpp:322 ../src/osx/textctrl_osx.cpp:581
-#: ../src/common/stockitem.cpp:186 ../src/common/cmdproc.cpp:294
-#: ../src/common/cmdproc.cpp:301 ../src/msw/textctrl.cpp:2282
+#: ../src/msw/textctrl.cpp:2282 ../src/common/cmdproc.cpp:294
+#: ../src/common/cmdproc.cpp:301 ../src/common/stockitem.cpp:186
+#: ../src/osx/textctrl_osx.cpp:581 ../src/richtext/richtextctrl.cpp:322
 msgid "&Redo"
 msgstr "&Переробити"
 
@@ -591,17 +591,17 @@ msgstr "&Почати відлік з початку"
 msgid "&Restore"
 msgstr "&Відновити"
 
-#: ../src/richtext/richtextindentspage.cpp:159
+#: ../src/richtext/richtextindentspage.cpp:147
 #: ../src/richtext/richtextliststylepage.cpp:336
 msgid "&Right"
 msgstr "&Праворуч"
 
-#: ../src/richtext/richtextindentspage.cpp:226
+#: ../src/richtext/richtextindentspage.cpp:214
+#: ../src/richtext/richtextmarginspage.cpp:212
+#: ../src/richtext/richtextmarginspage.cpp:326
 #: ../src/richtext/richtextborderspage.cpp:299
 #: ../src/richtext/richtextborderspage.cpp:443
 #: ../src/richtext/richtextliststylepage.cpp:400
-#: ../src/richtext/richtextmarginspage.cpp:212
-#: ../src/richtext/richtextmarginspage.cpp:326
 #: ../src/richtext/richtextsizepage.cpp:599
 #: ../src/richtext/richtextsizepage.cpp:606
 msgid "&Right:"
@@ -635,7 +635,7 @@ msgstr "&Розмір:"
 msgid "&Skip"
 msgstr "Проп&устити"
 
-#: ../src/richtext/richtextindentspage.cpp:267
+#: ../src/richtext/richtextindentspage.cpp:243
 #: ../src/richtext/richtextliststylepage.cpp:418
 msgid "&Spacing (tenths of a mm)"
 msgstr "&Проміжок (у десятках мм)"
@@ -648,7 +648,7 @@ msgstr "П&еревірити правопис"
 msgid "&Stop"
 msgstr "&Зупинити"
 
-#: ../src/richtext/richtextfontpage.cpp:285 ../src/common/stockitem.cpp:200
+#: ../src/common/stockitem.cpp:200 ../src/richtext/richtextfontpage.cpp:285
 msgid "&Strikethrough"
 msgstr "П&ерекреслення"
 
@@ -664,8 +664,8 @@ msgstr "&Стилі:"
 msgid "&Subset:"
 msgstr "&Підмножина:"
 
-#: ../src/richtext/richtextliststylepage.cpp:269
 #: ../src/richtext/richtextbulletspage.cpp:223
+#: ../src/richtext/richtextliststylepage.cpp:269
 msgid "&Symbol:"
 msgstr "&Символ:"
 
@@ -677,16 +677,16 @@ msgstr "&Таблиця"
 msgid "&Top"
 msgstr "&Згори"
 
-#: ../src/richtext/richtextborderspage.cpp:329
-#: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
+#: ../src/richtext/richtextborderspage.cpp:329
+#: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextsizepage.cpp:564
 #: ../src/richtext/richtextsizepage.cpp:571
 msgid "&Top:"
 msgstr "В&ерхнє:"
 
-#: ../src/generic/fontdlgg.cpp:445 ../src/common/stockitem.cpp:203
+#: ../src/common/stockitem.cpp:203 ../src/generic/fontdlgg.cpp:445
 msgid "&Underline"
 msgstr "&Підкреслення"
 
@@ -694,9 +694,9 @@ msgstr "&Підкреслення"
 msgid "&Underlining:"
 msgstr "&Підкреслення:"
 
-#: ../src/richtext/richtextctrl.cpp:321 ../src/osx/textctrl_osx.cpp:580
-#: ../src/common/stockitem.cpp:204 ../src/common/cmdproc.cpp:272
-#: ../src/msw/textctrl.cpp:2281
+#: ../src/msw/textctrl.cpp:2281 ../src/common/cmdproc.cpp:272
+#: ../src/common/stockitem.cpp:204 ../src/osx/textctrl_osx.cpp:580
+#: ../src/richtext/richtextctrl.cpp:321
 msgid "&Undo"
 msgstr "В&ідмінити"
 
@@ -729,22 +729,18 @@ msgstr "&Вага:"
 msgid "&Width:"
 msgstr "&Ширина:"
 
-#: ../src/aui/tabmdi.cpp:312 ../src/aui/tabmdi.cpp:328
-#: ../src/aui/tabmdi.cpp:330 ../src/generic/mdig.cpp:295
+#: ../src/msw/mdi.cpp:78 ../src/generic/mdig.cpp:295
 #: ../src/generic/mdig.cpp:311 ../src/generic/mdig.cpp:315
-#: ../src/msw/mdi.cpp:78
+#: ../src/aui/tabmdi.cpp:312 ../src/aui/tabmdi.cpp:328
+#: ../src/aui/tabmdi.cpp:330
 msgid "&Window"
 msgstr "&Вікно"
 
-#: ../src/common/stockitem.cpp:207 ../src/msw/msgdlg.cpp:477
+#: ../src/msw/msgdlg.cpp:477 ../src/common/stockitem.cpp:207
 msgid "&Yes"
 msgstr "&Так"
 
-#: ../src/common/fontcmn.cpp:845
-msgid "'"
-msgstr "'"
-
-#: ../src/common/config.cpp:524 ../src/msw/regconf.cpp:259
+#: ../src/msw/regconf.cpp:259 ../src/common/config.cpp:524
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "«%s» містить додаткові «..», проігноровано."
@@ -758,17 +754,17 @@ msgstr "«%s» помилкове"
 #: ../src/common/cmdline.cpp:941 ../src/common/cmdline.cpp:959
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
-msgstr "«%s» - помилкове числове значення для параметра «%s»."
+msgstr "«%s» — помилкове числове значення для параметра «%s»."
 
 #: ../src/common/translation.cpp:1080
 #, c-format
 msgid "'%s' is not a valid message catalog."
-msgstr "«%s» помилковий каталог повідомлень."
+msgstr "«%s» — помилковий каталог повідомлень."
 
 #: ../src/common/textbuf.cpp:240
 #, c-format
 msgid "'%s' is probably a binary buffer."
-msgstr "«%s» можливо бінарний файл."
+msgstr "«%s» — можливо бінарний файл."
 
 #: ../src/common/valtext.cpp:248
 #, c-format
@@ -795,8 +791,8 @@ msgstr "«%s» має містити тільки символи алфавіт�
 msgid "'%s' should only contain digits."
 msgstr "«%s» має містити лише цифри."
 
-#: ../src/richtext/richtextliststylepage.cpp:230
 #: ../src/richtext/richtextbulletspage.cpp:180
+#: ../src/richtext/richtextliststylepage.cpp:230
 msgid "(*)"
 msgstr "(*)"
 
@@ -804,8 +800,8 @@ msgstr "(*)"
 msgid "(Help)"
 msgstr "(Довідка)"
 
-#: ../src/richtext/richtextliststylepage.cpp:482
 #: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextliststylepage.cpp:482
 msgid "(None)"
 msgstr "(Відсутній)"
 
@@ -818,34 +814,33 @@ msgstr "(Звичайний шрифт)"
 msgid "(bookmarks)"
 msgstr "(закладки)"
 
-#: ../src/richtext/richtextindentspage.cpp:239
-#: ../src/richtext/richtextindentspage.cpp:250
-#: ../src/richtext/richtextindentspage.cpp:251
-#: ../src/richtext/richtextindentspage.cpp:299
-#: ../src/richtext/richtextindentspage.cpp:311
+#: ../src/richtext/richtextindentspage.cpp:275
+#: ../src/richtext/richtextindentspage.cpp:287
+#: ../src/richtext/richtextindentspage.cpp:288
 #: ../src/richtext/richtextindentspage.cpp:312
+#: ../src/richtext/richtextindentspage.cpp:327
 #: ../src/richtext/richtextformatdlg.cpp:830
-#: ../src/richtext/richtextfontpage.cpp:332
-#: ../src/richtext/richtextfontpage.cpp:336
-#: ../src/richtext/richtextfontpage.cpp:340
 #: ../src/richtext/richtextliststylepage.cpp:449
 #: ../src/richtext/richtextliststylepage.cpp:461
 #: ../src/richtext/richtextliststylepage.cpp:462
+#: ../src/richtext/richtextfontpage.cpp:332
+#: ../src/richtext/richtextfontpage.cpp:336
+#: ../src/richtext/richtextfontpage.cpp:340
 msgid "(none)"
 msgstr "(нічого)"
 
-#: ../src/richtext/richtextliststylepage.cpp:493
 #: ../src/richtext/richtextbulletspage.cpp:298
+#: ../src/richtext/richtextliststylepage.cpp:493
 msgid "*"
 msgstr "*"
 
-#: ../src/richtext/richtextliststylepage.cpp:237
 #: ../src/richtext/richtextbulletspage.cpp:187
+#: ../src/richtext/richtextliststylepage.cpp:237
 msgid "*)"
 msgstr "*)"
 
-#: ../src/richtext/richtextliststylepage.cpp:496
 #: ../src/richtext/richtextbulletspage.cpp:301
+#: ../src/richtext/richtextliststylepage.cpp:496
 msgid "+"
 msgstr "+"
 
@@ -853,8 +848,8 @@ msgstr "+"
 msgid ", 64-bit edition"
 msgstr ", 64-бітова версія"
 
-#: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:299
+#: ../src/richtext/richtextliststylepage.cpp:494
 msgid "-"
 msgstr "-"
 
@@ -862,47 +857,47 @@ msgstr "-"
 msgid "..."
 msgstr "…"
 
-#: ../src/richtext/richtextindentspage.cpp:301
+#: ../src/richtext/richtextindentspage.cpp:277
 #: ../src/richtext/richtextliststylepage.cpp:451
 msgid "1.1"
 msgstr "1,1"
 
-#: ../src/richtext/richtextindentspage.cpp:302
+#: ../src/richtext/richtextindentspage.cpp:278
 #: ../src/richtext/richtextliststylepage.cpp:452
 msgid "1.2"
 msgstr "1,2"
 
-#: ../src/richtext/richtextindentspage.cpp:303
+#: ../src/richtext/richtextindentspage.cpp:279
 #: ../src/richtext/richtextliststylepage.cpp:453
 msgid "1.3"
 msgstr "1,3"
 
-#: ../src/richtext/richtextindentspage.cpp:304
+#: ../src/richtext/richtextindentspage.cpp:280
 #: ../src/richtext/richtextliststylepage.cpp:454
 msgid "1.4"
 msgstr "1,4"
 
-#: ../src/richtext/richtextindentspage.cpp:305
+#: ../src/richtext/richtextindentspage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:455
 msgid "1.5"
 msgstr "1,5"
 
-#: ../src/richtext/richtextindentspage.cpp:306
+#: ../src/richtext/richtextindentspage.cpp:282
 #: ../src/richtext/richtextliststylepage.cpp:456
 msgid "1.6"
 msgstr "1,6"
 
-#: ../src/richtext/richtextindentspage.cpp:307
+#: ../src/richtext/richtextindentspage.cpp:283
 #: ../src/richtext/richtextliststylepage.cpp:457
 msgid "1.7"
 msgstr "1,7"
 
-#: ../src/richtext/richtextindentspage.cpp:308
+#: ../src/richtext/richtextindentspage.cpp:284
 #: ../src/richtext/richtextliststylepage.cpp:458
 msgid "1.8"
 msgstr "1,8"
 
-#: ../src/richtext/richtextindentspage.cpp:309
+#: ../src/richtext/richtextindentspage.cpp:285
 #: ../src/richtext/richtextliststylepage.cpp:459
 msgid "1.9"
 msgstr "1,9"
@@ -927,7 +922,7 @@ msgstr "12 x 11 дюймів"
 msgid "15 x 11 in"
 msgstr "15 x 11 дюймів"
 
-#: ../src/richtext/richtextindentspage.cpp:310
+#: ../src/richtext/richtextindentspage.cpp:286
 #: ../src/richtext/richtextliststylepage.cpp:460
 msgid "2"
 msgstr "2"
@@ -964,12 +959,12 @@ msgstr "<Будь-який декоративний>"
 #: ../src/osx/carbon/fontdlg.cpp:610 ../src/osx/carbon/fontdlg.cpp:818
 #: ../src/osx/carbon/fontdlg.cpp:838
 msgid "<Any Modern>"
-msgstr "<Будь-який Модерний>"
+msgstr "<Будь-який модерний>"
 
 #: ../src/osx/carbon/fontdlg.cpp:608 ../src/osx/carbon/fontdlg.cpp:814
 #: ../src/osx/carbon/fontdlg.cpp:834
 msgid "<Any Roman>"
-msgstr "<Будь-який Романський>"
+msgstr "<Будь-який романський>"
 
 #: ../src/osx/carbon/fontdlg.cpp:611 ../src/osx/carbon/fontdlg.cpp:820
 #: ../src/osx/carbon/fontdlg.cpp:840
@@ -984,7 +979,7 @@ msgstr "<Будь-який Swiss>"
 #: ../src/osx/carbon/fontdlg.cpp:613 ../src/osx/carbon/fontdlg.cpp:822
 #: ../src/osx/carbon/fontdlg.cpp:842
 msgid "<Any Teletype>"
-msgstr "<Будь-який Телетайп>"
+msgstr "<Будь-який машинописний>"
 
 #: ../src/osx/carbon/fontdlg.cpp:607
 msgid "<Any>"
@@ -1000,7 +995,7 @@ msgstr "<ДИСК>"
 
 #: ../src/generic/filectrlg.cpp:289 ../src/generic/filectrlg.cpp:312
 msgid "<LINK>"
-msgstr "<LINK>"
+msgstr "<ПОСИЛАННЯ>"
 
 #: ../src/html/helpwnd.cpp:1279
 msgid "<b><i>Bold italic face.</i></b><br>"
@@ -1018,8 +1013,8 @@ msgstr "<b>Жирний шрифт.</b> "
 msgid "<i>Italic face.</i> "
 msgstr "<i>Курсивний шрифт.</i> "
 
-#: ../src/richtext/richtextliststylepage.cpp:495
 #: ../src/richtext/richtextbulletspage.cpp:300
+#: ../src/richtext/richtextliststylepage.cpp:495
 msgid ">"
 msgstr ">"
 
@@ -1035,10 +1030,10 @@ msgstr "Було створено звіт про помилку. Його зб�
 msgid "A non empty collection must consist of 'element' nodes"
 msgstr "Непорожня колекція має складатися з вузлів-\"елементів\""
 
-#: ../src/richtext/richtextliststylepage.cpp:305
-#: ../src/richtext/richtextliststylepage.cpp:307
 #: ../src/richtext/richtextbulletspage.cpp:258
 #: ../src/richtext/richtextbulletspage.cpp:260
+#: ../src/richtext/richtextliststylepage.cpp:305
+#: ../src/richtext/richtextliststylepage.cpp:307
 msgid "A standard bullet name."
 msgstr "Назва стандартної позначки."
 
@@ -1122,8 +1117,8 @@ msgstr "A6 105 x 148 мм"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 Повернутий 148 x 105 мм"
 
-#: ../src/generic/fontdlgg.cpp:84 ../src/richtext/richtextformatdlg.cpp:527
-#: ../src/osx/carbon/fontdlg.cpp:340
+#: ../src/osx/carbon/fontdlg.cpp:340 ../src/generic/fontdlgg.cpp:84
+#: ../src/richtext/richtextformatdlg.cpp:527
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
@@ -1131,22 +1126,22 @@ msgstr "ABCDEFGabcdefg12345"
 msgid "ADD"
 msgstr "ДОДАТИ"
 
-#: ../src/richtext/richtextsymboldlg.cpp:459 ../src/common/ftp.cpp:406
+#: ../src/common/ftp.cpp:406 ../src/richtext/richtextsymboldlg.cpp:459
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:564 ../src/common/stockitem.cpp:140
+#: ../src/common/stockitem.cpp:140 ../src/osx/menu_osx.cpp:564
 msgid "About"
 msgstr "Про програму"
 
-#: ../src/generic/aboutdlgg.cpp:141 ../src/msw/aboutdlg.cpp:65
+#: ../src/msw/aboutdlg.cpp:65 ../src/generic/aboutdlgg.cpp:141
 #, c-format
 msgid "About %s"
 msgstr "Про %s"
 
 #: ../src/richtext/richtextsizepage.cpp:517
 msgid "Absolute"
-msgstr ""
+msgstr "Абсолютна"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Actual Size"
@@ -1158,7 +1153,7 @@ msgstr "Додати"
 
 #: ../src/richtext/richtextbuffer.cpp:10477
 msgid "Add column"
-msgstr ""
+msgstr "Додати стовпчик"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1166,7 +1161,7 @@ msgstr "Додати цю сторінку до закладок"
 
 #: ../src/richtext/richtextbuffer.cpp:10419
 msgid "Add row"
-msgstr ""
+msgstr "Додати рядок"
 
 #: ../src/generic/colrdlgg.cpp:284
 msgid "Add to custom colours"
@@ -1183,7 +1178,7 @@ msgstr "AddToPropertyCollection викликано без коректного �
 #: ../src/html/helpctrl.cpp:160
 #, c-format
 msgid "Adding book %s"
-msgstr "Додання книги %s"
+msgstr "Додавання книги %s"
 
 #: ../src/osx/carbon/dataview.cpp:1934
 msgid "Adding flavor TEXT failed"
@@ -1195,7 +1190,7 @@ msgstr "Спроба додавання варіанта utxt зазнала н�
 
 #: ../src/common/preferencescmn.cpp:40
 msgid "Advanced"
-msgstr ""
+msgstr "Додатково"
 
 #: ../src/richtext/richtextliststylepage.cpp:436
 msgid "After a paragraph:"
@@ -1217,20 +1212,20 @@ msgstr "Вирівнювання"
 msgid "All"
 msgstr "Всі"
 
-#: ../src/generic/filectrlg.cpp:1206 ../src/common/fldlgcmn.cpp:90
+#: ../src/common/fldlgcmn.cpp:90 ../src/generic/filectrlg.cpp:1206
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Всі файли (%s)|%s"
 
-#: ../include/wx/defs.h:2864
+#: ../include/wx/defs.h:2870
 msgid "All files (*)|*"
 msgstr "Всі файли (*)|*"
 
-#: ../include/wx/defs.h:2861
+#: ../include/wx/defs.h:2867
 msgid "All files (*.*)|*.*"
 msgstr " Всі файли (*)|*"
 
-#: ../src/richtext/richtextstyles.cpp:1045
+#: ../src/richtext/richtextstyles.cpp:1058
 msgid "All styles"
 msgstr "Всі стилі"
 
@@ -1246,7 +1241,7 @@ msgstr "До SetObjectClassInfo передано повідомлення Об'�
 msgid "Already dialling ISP."
 msgstr "Вже дзвонимо ISP."
 
-#: ../src/common/accelcmn.cpp:321 ../src/univ/themes/win32.cpp:3757
+#: ../src/univ/themes/win32.cpp:3757 ../src/common/accelcmn.cpp:321
 msgid "Alt+"
 msgstr "Alt+"
 
@@ -1273,8 +1268,8 @@ msgstr "Програма"
 msgid "Apply"
 msgstr "Застосувати"
 
-#: ../src/richtext/richtextliststylepage.cpp:483
 #: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextliststylepage.cpp:483
 msgid "Arabic"
 msgstr "Арабські"
 
@@ -1299,9 +1294,9 @@ msgstr "За зростанням"
 msgid "Attributes"
 msgstr "Атрибути"
 
-#: ../src/richtext/richtextliststylepage.cpp:295
 #: ../src/richtext/richtextbulletspage.cpp:246
 #: ../src/richtext/richtextbulletspage.cpp:248
+#: ../src/richtext/richtextliststylepage.cpp:295
 msgid "Available fonts."
 msgstr "Доступні шрифти."
 
@@ -1390,8 +1385,8 @@ msgstr " BMP: wxImage не має свого wxPalette."
 msgid "Back"
 msgstr "Назад"
 
-#: ../src/richtext/richtextbackgroundpage.cpp:119
 #: ../src/richtext/richtextformatdlg.cpp:375
+#: ../src/richtext/richtextbackgroundpage.cpp:119
 msgid "Background"
 msgstr "Тло"
 
@@ -1415,8 +1410,8 @@ msgstr "Baltic (старе) (ISO-8859-4)"
 msgid "Before a paragraph:"
 msgstr "Перед абзацом:"
 
-#: ../src/richtext/richtextliststylepage.cpp:490
 #: ../src/richtext/richtextbulletspage.cpp:295
+#: ../src/richtext/richtextliststylepage.cpp:490
 msgid "Bitmap"
 msgstr "Растровий"
 
@@ -1425,8 +1420,8 @@ msgid "Bitmap renderer cannot render value; value type: "
 msgstr ""
 "Інструменту обробки растру не вдалося обробити значення; тип значення: "
 
+#: ../src/common/stockitem.cpp:144 ../src/osx/carbon/fontdlg.cpp:541
 #: ../src/generic/fontdlgg.cpp:334 ../src/richtext/richtextfontpage.cpp:338
-#: ../src/osx/carbon/fontdlg.cpp:541 ../src/common/stockitem.cpp:144
 msgid "Bold"
 msgstr "Жирний"
 
@@ -1439,7 +1434,7 @@ msgstr "Рамка"
 msgid "Borders"
 msgstr "Рамки"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:145
+#: ../src/common/stockitem.cpp:145 ../src/richtext/richtextsizepage.cpp:285
 msgid "Bottom"
 msgstr "Внизу"
 
@@ -1451,7 +1446,7 @@ msgstr "Нижнє поле (мм):"
 msgid "Box Properties"
 msgstr "Властивості рамок"
 
-#: ../src/richtext/richtextstyles.cpp:1049
+#: ../src/richtext/richtextstyles.cpp:1062
 msgid "Box styles"
 msgstr "Стилі рамок"
 
@@ -1459,8 +1454,8 @@ msgstr "Стилі рамок"
 msgid "Browse"
 msgstr "Навігація"
 
-#: ../src/richtext/richtextliststylepage.cpp:246
 #: ../src/richtext/richtextbulletspage.cpp:196
+#: ../src/richtext/richtextliststylepage.cpp:246
 msgid "Bullet &Alignment:"
 msgstr "&Вирівнювання позначки:"
 
@@ -1557,7 +1552,7 @@ msgstr "Не вдалося копіювати значення непідтри
 msgid "Can't create registry key '%s'"
 msgstr "Не вдалося створити ключ реєстру «%s»"
 
-#: ../src/msw/thread.cpp:697 ../src/os2/thread.cpp:495
+#: ../src/os2/thread.cpp:495 ../src/msw/thread.cpp:697
 msgid "Can't create thread"
 msgstr "Не вдалося створити нитку"
 
@@ -1571,7 +1566,7 @@ msgstr "Не вдалося створити вікно класу %s"
 msgid "Can't delete key '%s'"
 msgstr "Не вдалося вилучити ключ «%s»"
 
-#: ../src/msw/iniconf.cpp:459 ../src/os2/iniconf.cpp:472
+#: ../src/os2/iniconf.cpp:472 ../src/msw/iniconf.cpp:459
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Не вдалося вилучити INI-файл «%s»"
@@ -1622,7 +1617,7 @@ msgstr "Спостереження за змінами у каталозі «%s�
 #: ../src/msw/registry.cpp:453
 #, c-format
 msgid "Can't open registry key '%s'"
-msgstr "Не вдалося відкрити ключ registry «%s»"
+msgstr "Не вдалося відкрити ключ реєстру «%s»"
 
 #: ../src/common/zstream.cpp:253
 #, c-format
@@ -1644,18 +1639,18 @@ msgstr "Не вдалося прочитати значення «%s»"
 #: ../src/msw/registry.cpp:972
 #, c-format
 msgid "Can't read value of key '%s'"
-msgstr "Не вдалося прочитати значення ключу «%s»"
+msgstr "Не вдалося прочитати значення ключа «%s»"
 
 #: ../src/common/image.cpp:2379
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
-msgstr "Не вдалося записати зображення в файл «%s»: невідоме розширення."
+msgstr "Не вдалося записати зображення до файла «%s»: невідомий суфікс назви."
 
 #: ../src/generic/logg.cpp:580 ../src/generic/logg.cpp:997
 msgid "Can't save log contents to file."
 msgstr "Не можу записати вміст журналу в файл."
 
-#: ../src/msw/thread.cpp:653 ../src/os2/thread.cpp:478
+#: ../src/os2/thread.cpp:478 ../src/msw/thread.cpp:653
 msgid "Can't set thread priority"
 msgstr "Не вдалося встановити пріоритет нитки"
 
@@ -1674,10 +1669,10 @@ msgstr "Запис до стандартного входу дочірнього
 msgid "Can't write to deflate stream: %s"
 msgstr "Не вдалося записати до потоку розпакування: %s"
 
-#: ../src/generic/dirdlgg.cpp:108 ../src/richtext/richtextstyledlg.cpp:301
-#: ../src/common/stockitem.cpp:146 ../src/msw/msgdlg.cpp:490
-#: ../src/msw/progdlg.cpp:674 ../src/gtk1/fontdlg.cpp:145
-#: ../src/motif/msgdlg.cpp:197
+#: ../src/msw/msgdlg.cpp:490 ../src/msw/progdlg.cpp:674
+#: ../src/common/stockitem.cpp:146 ../src/gtk1/fontdlg.cpp:145
+#: ../src/motif/msgdlg.cpp:197 ../src/generic/dirdlgg.cpp:108
+#: ../src/richtext/richtextstyledlg.cpp:301
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -1696,10 +1691,10 @@ msgstr ""
 msgid "Cannot enumerate files '%s'"
 msgstr "Не можу перелічити файли «%s»"
 
-#: ../src/msw/dir.cpp:251
+#: ../src/msw/dir.cpp:265
 #, c-format
 msgid "Cannot enumerate files in directory '%s'"
-msgstr " Не можу перелічити файли в каталозі «%s»"
+msgstr "Не можу перелічити файли в каталозі «%s»"
 
 #: ../src/msw/dialup.cpp:543
 #, c-format
@@ -1730,7 +1725,7 @@ msgstr "Не вдалося отримати офіційне назву вуз�
 
 #: ../src/msw/dialup.cpp:950
 msgid "Cannot hang up - no active dialup connection."
-msgstr "Не вдалося повісити трубку - немає з'єднання."
+msgstr "Не вдалося повісити трубку — немає з'єднання."
 
 #: ../include/wx/msw/ole/oleutils.h:53
 msgid "Cannot initialize OLE"
@@ -1758,7 +1753,7 @@ msgstr "Не вдалося завантажити ресурси з файла 
 #: ../src/html/htmlfilt.cpp:138
 #, c-format
 msgid "Cannot open HTML document: %s"
-msgstr "Не вдалося відкрити HTML документ: %s"
+msgstr "Не вдалося відкрити документ HTML: %s"
 
 #: ../src/html/helpdata.cpp:665
 #, c-format
@@ -1799,9 +1794,9 @@ msgid "Cannot resume thread %lu"
 msgstr "Не вдалося відновити нитку %lu"
 
 #: ../src/msw/thread.cpp:924
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "Не вдалося відновити нитку %x"
+msgstr "Не вдалося відновити нитку %lx"
 
 #: ../src/unix/threadpsx.cpp:1012
 msgid "Cannot retrieve thread scheduling policy."
@@ -1812,23 +1807,23 @@ msgstr "Не вдалося встановити порядок нитки."
 msgid "Cannot set locale to language \"%s\"."
 msgstr "Не вдалося встановити локаль у значення «%s»."
 
-#: ../src/unix/threadpsx.cpp:832 ../src/msw/thread.cpp:570
+#: ../src/msw/thread.cpp:570 ../src/unix/threadpsx.cpp:832
 msgid "Cannot start thread: error writing TLS."
-msgstr " Не вдалося запустити нитку: помилка запису TLS."
+msgstr "Не вдалося запустити нитку: помилка запису TLS."
 
 #: ../src/os2/thread.cpp:514
 #, c-format
 msgid "Cannot suspend thread %lu"
-msgstr " Не вдалося призупинити нитку %lu"
+msgstr "Не вдалося призупинити нитку %lu"
 
 #: ../src/msw/thread.cpp:908
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
-msgstr " Не вдалося зупинити нитку %x"
+msgstr "Не вдалося зупинити нитку %lx"
 
 #: ../src/msw/thread.cpp:831
 msgid "Cannot wait for thread termination"
-msgstr " Не вдалося дочекатись закінчення нитки"
+msgstr "Не вдалося дочекатись закінчення нитки"
 
 #: ../src/html/helpwnd.cpp:546
 msgid "Case sensitive"
@@ -1846,7 +1841,7 @@ msgstr "Властивості комірки"
 msgid "Celtic (ISO-8859-14)"
 msgstr "Кельтська (ISO-8859-13)"
 
-#: ../src/richtext/richtextindentspage.cpp:173
+#: ../src/richtext/richtextindentspage.cpp:161
 #: ../src/richtext/richtextliststylepage.cpp:350
 msgid "Cen&tred"
 msgstr "Цент&роване"
@@ -1859,13 +1854,13 @@ msgstr "Центроване"
 msgid "Central European (ISO-8859-2)"
 msgstr "Центральний європейський (ISO-8859-2)"
 
-#: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
+#: ../src/richtext/richtextliststylepage.cpp:251
 msgid "Centre"
 msgstr "Центр"
 
-#: ../src/richtext/richtextindentspage.cpp:175
-#: ../src/richtext/richtextindentspage.cpp:177
+#: ../src/richtext/richtextindentspage.cpp:163
+#: ../src/richtext/richtextindentspage.cpp:165
 #: ../src/richtext/richtextliststylepage.cpp:352
 #: ../src/richtext/richtextliststylepage.cpp:354
 msgid "Centre text."
@@ -1875,8 +1870,8 @@ msgstr "Текст по центру."
 msgid "Centred"
 msgstr "За центром"
 
-#: ../src/richtext/richtextliststylepage.cpp:281
 #: ../src/richtext/richtextbulletspage.cpp:233
+#: ../src/richtext/richtextliststylepage.cpp:281
 msgid "Ch&oose..."
 msgstr "Об&рати…"
 
@@ -1899,30 +1894,30 @@ msgstr "Змінити стиль"
 #: ../src/common/fileconf.cpp:373
 #, c-format
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
-msgstr "Зміни не буде збережено, щоб уникнути перезапису існуючого файла «%s»"
+msgstr "Зміни не буде збережено, щоб уникнути перезапису наявного файла «%s»"
 
-#: ../src/richtext/richtextstyles.cpp:1047
+#: ../src/richtext/richtextstyles.cpp:1060
 msgid "Character styles"
 msgstr "Стиль символів"
 
-#: ../src/richtext/richtextliststylepage.cpp:225
-#: ../src/richtext/richtextliststylepage.cpp:227
 #: ../src/richtext/richtextbulletspage.cpp:175
 #: ../src/richtext/richtextbulletspage.cpp:177
+#: ../src/richtext/richtextliststylepage.cpp:225
+#: ../src/richtext/richtextliststylepage.cpp:227
 msgid "Check to add a period after the bullet."
 msgstr "Позначте, щоб додати точку після позначки."
 
-#: ../src/richtext/richtextliststylepage.cpp:239
-#: ../src/richtext/richtextliststylepage.cpp:241
 #: ../src/richtext/richtextbulletspage.cpp:189
 #: ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/richtext/richtextliststylepage.cpp:239
+#: ../src/richtext/richtextliststylepage.cpp:241
 msgid "Check to add a right parenthesis."
 msgstr "Позначте, щоб додати праву дужку"
 
-#: ../src/richtext/richtextliststylepage.cpp:232
-#: ../src/richtext/richtextliststylepage.cpp:234
 #: ../src/richtext/richtextbulletspage.cpp:182
 #: ../src/richtext/richtextbulletspage.cpp:184
+#: ../src/richtext/richtextliststylepage.cpp:232
+#: ../src/richtext/richtextliststylepage.cpp:234
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Позначте, щоб додати до позначки дужку."
 
@@ -1955,9 +1950,8 @@ msgstr "Позначте, щоб текст було показано пропи
 
 #: ../src/richtext/richtextfontpage.cpp:301
 #: ../src/richtext/richtextfontpage.cpp:303
-#, fuzzy
 msgid "Check to show the text in small capitals."
-msgstr "Позначте, щоб текст було показано прописними літерами."
+msgstr "Позначте, щоб текст було показано малими прописними літерами."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
@@ -1981,21 +1975,21 @@ msgstr "Виберіть каталог:"
 msgid "Choose a file"
 msgstr "Виберіть файл"
 
-#: ../src/generic/colrdlgg.cpp:145 ../src/gtk/colordlg.cpp:64
+#: ../src/gtk/colordlg.cpp:64 ../src/generic/colrdlgg.cpp:145
 msgid "Choose colour"
 msgstr "Оберіть колір"
 
-#: ../src/generic/fontpickerg.cpp:51 ../src/gtk/fontdlg.cpp:76
-#: ../src/gtk1/fontdlg.cpp:126
+#: ../src/gtk1/fontdlg.cpp:126 ../src/gtk/fontdlg.cpp:76
+#: ../src/generic/fontpickerg.cpp:51
 msgid "Choose font"
 msgstr "Виберіть шрифт"
 
 #: ../src/common/module.cpp:75
 #, c-format
 msgid "Circular dependency involving module \"%s\" detected."
-msgstr "Виявлено кругову залежність, що містить модуль «%s»."
+msgstr "Виявлено циклічну залежність, що містить модуль «%s»."
 
-#: ../src/aui/tabmdi.cpp:109 ../src/generic/mdig.cpp:98
+#: ../src/generic/mdig.cpp:98 ../src/aui/tabmdi.cpp:109
 msgid "Cl&ose"
 msgstr "Закрити"
 
@@ -2016,10 +2010,10 @@ msgstr "Почистити записи в журналі"
 msgid "Click to apply the selected style."
 msgstr "Клацніть, щоб застосувати обраний стиль."
 
-#: ../src/richtext/richtextliststylepage.cpp:282
-#: ../src/richtext/richtextliststylepage.cpp:284
 #: ../src/richtext/richtextbulletspage.cpp:234
 #: ../src/richtext/richtextbulletspage.cpp:236
+#: ../src/richtext/richtextliststylepage.cpp:282
+#: ../src/richtext/richtextliststylepage.cpp:284
 msgid "Click to browse for a symbol."
 msgstr "Клацніть, щоб відшукати символ."
 
@@ -2114,15 +2108,15 @@ msgstr "Клацніть, щоб редагувати обраний стиль.
 msgid "Click to rename the selected style."
 msgstr "Клацніть, щоб перейменувати обраний стиль."
 
-#: ../src/generic/dbgrptg.cpp:94 ../src/generic/progdlgg.cpp:805
-#: ../src/generic/progdlgg.cpp:810 ../src/richtext/richtextstyledlg.cpp:278
-#: ../src/richtext/richtextsymboldlg.cpp:477 ../src/common/stockitem.cpp:149
 #: ../src/msw/progdlg.cpp:171 ../src/msw/progdlg.cpp:680
-#: ../src/html/helpdlg.cpp:91
+#: ../src/common/stockitem.cpp:149 ../src/html/helpdlg.cpp:91
+#: ../src/generic/progdlgg.cpp:805 ../src/generic/progdlgg.cpp:810
+#: ../src/generic/dbgrptg.cpp:94 ../src/richtext/richtextstyledlg.cpp:278
+#: ../src/richtext/richtextsymboldlg.cpp:477
 msgid "Close"
 msgstr "Закрити"
 
-#: ../src/aui/tabmdi.cpp:110 ../src/generic/mdig.cpp:99
+#: ../src/generic/mdig.cpp:99 ../src/aui/tabmdi.cpp:110
 msgid "Close All"
 msgstr "Закрити все"
 
@@ -2185,7 +2179,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Помилка типового діалогового вікна з кодом %0lx."
 
-#: ../src/gtk/window.cpp:4283
+#: ../src/gtk/window.cpp:4284
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2226,7 +2220,7 @@ msgstr "Зміст"
 #: ../src/common/strconv.cpp:2262
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
-msgstr "Конвертація до charset «%s» не працює"
+msgstr "Перетворення до набору символів «%s» не працює."
 
 #: ../src/common/stockitem.cpp:150
 msgid "Convert"
@@ -2235,19 +2229,19 @@ msgstr "Перетворити"
 #: ../src/html/htmlwin.cpp:1053
 #, c-format
 msgid "Copied to clipboard:\"%s\""
-msgstr "Скопійовано до буферу:«%s»"
+msgstr "Скопійовано до буфера: «%s»"
 
 #: ../src/generic/prntdlgg.cpp:253
 msgid "Copies:"
 msgstr "Копії:"
 
-#: ../src/common/stockitem.cpp:151 ../src/stc/stc_i18n.cpp:19
+#: ../src/stc/stc_i18n.cpp:19 ../src/common/stockitem.cpp:151
 msgid "Copy"
 msgstr "Копіювати"
 
 #: ../src/common/stockitem.cpp:259
 msgid "Copy selection"
-msgstr "Копіювати обране"
+msgstr "Копіювати позначене"
 
 #: ../src/html/chm.cpp:719
 #, c-format
@@ -2277,7 +2271,7 @@ msgstr "Не вдалося розпакувати %s до %s: %s"
 
 #: ../src/generic/tabg.cpp:1049
 msgid "Could not find tab for id"
-msgstr "Не вдалося знайти tab для id"
+msgstr "Не вдалося знайти вкладку для ідентифікатора"
 
 #: ../src/osx/carbon/dataview.cpp:2557 ../src/osx/carbon/dataview.cpp:2592
 #: ../src/osx/carbon/dataview.cpp:2616 ../src/osx/carbon/dataview.cpp:2637
@@ -2346,8 +2340,8 @@ msgstr "Не вдалося встановити прапорці властив
 msgid "Could not start document preview."
 msgstr "Не вдалося почати попередній перегляд документа."
 
-#: ../src/generic/printps.cpp:179 ../src/msw/printwin.cpp:211
-#: ../src/gtk/print.cpp:1087 ../src/gtk/gnome/gprint.cpp:923
+#: ../src/msw/printwin.cpp:211 ../src/gtk/print.cpp:1087
+#: ../src/gtk/gnome/gprint.cpp:923 ../src/generic/printps.cpp:179
 msgid "Could not start printing."
 msgstr "Не вдалося почати друк."
 
@@ -2359,13 +2353,13 @@ msgstr "Не вдалося передати дані в вікно"
 msgid "Couldn't acquire a mutex lock"
 msgstr "Не вдалося опитати замок семафора"
 
+#: ../src/msw/dragimag.cpp:194 ../src/msw/dragimag.cpp:233
 #: ../src/msw/imaglist.cpp:167 ../src/msw/imaglist.cpp:198
-#: ../src/msw/imaglist.cpp:210 ../src/msw/dragimag.cpp:194
-#: ../src/msw/dragimag.cpp:233
+#: ../src/msw/imaglist.cpp:210
 msgid "Couldn't add an image to the image list."
 msgstr "Не вдалося додати зображення до списку зображень."
 
-#: ../src/msw/timer.cpp:135 ../src/os2/timer.cpp:114
+#: ../src/os2/timer.cpp:114 ../src/msw/timer.cpp:135
 msgid "Couldn't create a timer"
 msgstr "Не вдалося створити таймер"
 
@@ -2373,11 +2367,11 @@ msgstr "Не вдалося створити таймер"
 msgid "Couldn't create the overlay window"
 msgstr "Не вдалося створити вікно оверлею"
 
-#: ../src/common/translation.cpp:2015
+#: ../src/common/translation.cpp:2014
 msgid "Couldn't enumerate translations"
 msgstr "Не вдалося пронумерувати переклади"
 
-#: ../src/common/dynlib.cpp:157
+#: ../src/common/dynlib.cpp:153
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Не вдалося знайти символ «%s» в динамічній бібліотеці"
@@ -2401,7 +2395,7 @@ msgstr "Не вдалося ініціалізувати таблицю хеші
 #: ../src/common/imagpng.cpp:658
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
 msgstr ""
-"Не вдалося завантажити зображення PNG ? можливо файл пошкоджений або не "
+"Не вдалося завантажити зображення PNG. Можливо файл пошкоджено або не "
 "вистачає пам'яті."
 
 #: ../src/unix/sound.cpp:471
@@ -2410,11 +2404,10 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "Не вдалося завантажити піктограму з «%s»."
 
 #: ../src/msw/dirdlg.cpp:442
-#, fuzzy
 msgid "Couldn't obtain folder name"
-msgstr "Не вдалося створити таймер"
+msgstr "Не вдалося отримати назву теки"
 
-#: ../src/unix/sound_sdl.cpp:226
+#: ../src/unix/sound_sdl.cpp:230
 #, c-format
 msgid "Couldn't open audio: %s"
 msgstr "Не вдалося відкрити аудіо: «%s»"
@@ -2459,8 +2452,8 @@ msgstr "Створити новий каталог"
 msgid "Ctrl+"
 msgstr "Ctrl+"
 
-#: ../src/richtext/richtextctrl.cpp:324 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2284
+#: ../src/msw/textctrl.cpp:2284 ../src/common/stockitem.cpp:152
+#: ../src/osx/textctrl_osx.cpp:583 ../src/richtext/richtextctrl.cpp:324
 msgid "Cu&t"
 msgstr "В&ирізати"
 
@@ -2476,13 +2469,13 @@ msgstr "Нетиповий розмір"
 msgid "Customize Columns"
 msgstr "Налаштувати стовпчики"
 
-#: ../src/common/stockitem.cpp:152 ../src/stc/stc_i18n.cpp:18
+#: ../src/stc/stc_i18n.cpp:18 ../src/common/stockitem.cpp:152
 msgid "Cut"
 msgstr "Вирізати"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Cut selection"
-msgstr "Вирізати обране"
+msgstr "Вирізати позначене"
 
 #: ../src/common/fmapbase.cpp:153
 msgid "Cyrillic (ISO-8859-5)"
@@ -2518,15 +2511,15 @@ msgstr "Заголовок DIB: Висота картинки у файлі > 32
 
 #: ../src/common/imagbmp.cpp:1033
 msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "Заголовок DIB: Ширина картинки у файлі > 32767 пікселів."
+msgstr "Заголовок DIB: ширина картинки у файлі > 32767 пікселів."
 
 #: ../src/common/imagbmp.cpp:1061
 msgid "DIB Header: Unknown bitdepth in file."
-msgstr "Заголовок DIB: Невідома бітова глибина файла."
+msgstr "Заголовок DIB: невідома бітова глибина даних у файлі."
 
 #: ../src/common/imagbmp.cpp:1075
 msgid "DIB Header: Unknown encoding in file."
-msgstr "Заголовок DIB: Невідоме кодування файла."
+msgstr "Заголовок DIB: невідоме кодування файла."
 
 #: ../src/common/accelcmn.cpp:81
 msgid "DIVIDE"
@@ -2581,8 +2574,8 @@ msgstr "Типовий шрифт"
 msgid "Default printer"
 msgstr "Типова друкарка"
 
-#: ../src/richtext/richtextbuffer.cpp:7794 ../src/common/stockitem.cpp:153
-#: ../src/stc/stc_i18n.cpp:21
+#: ../src/stc/stc_i18n.cpp:21 ../src/common/stockitem.cpp:153
+#: ../src/richtext/richtextbuffer.cpp:7794
 msgid "Delete"
 msgstr "Вилучити"
 
@@ -2599,18 +2592,16 @@ msgid "Delete Text"
 msgstr "Вилучити текст"
 
 #: ../src/richtext/richtextbuffer.cpp:10369
-#, fuzzy
 msgid "Delete column"
-msgstr "Вилучити позначене"
+msgstr "Вилучити стовпчик"
 
 #: ../src/generic/editlbox.cpp:275
 msgid "Delete item"
 msgstr "Вилучити елемент"
 
 #: ../src/richtext/richtextbuffer.cpp:10301
-#, fuzzy
 msgid "Delete row"
-msgstr "Вилучити"
+msgstr "Вилучити рядок"
 
 #: ../src/common/stockitem.cpp:261
 msgid "Delete selection"
@@ -2652,7 +2643,8 @@ msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
 msgstr ""
-"Сервіс віддаленого з'єднання (RAS) не встановлений на цій машині. Будь ласка "
+"Службу віддаленого з'єднання (RAS) на цьому комп’ютері не встановлено. Будь "
+"ласка, "
 "встановіть його."
 
 #: ../src/generic/tipdlg.cpp:231
@@ -2660,7 +2652,7 @@ msgid "Did you know..."
 msgstr "А ви знали що…"
 
 #: ../src/dfb/wrapdfb.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
 msgstr "У DirectFB сталася помилка %d."
 
@@ -2715,8 +2707,8 @@ msgid ""
 "New value is \n"
 "%s %1"
 msgstr ""
-"Ви бажаєте перезаписати команду використану для %s файлів з розширенням \"%s"
-"\" ?\n"
+"Ви бажаєте перезаписати команду використану для %s файлів з суфіксом назви «%"
+"s»?\n"
 "Поточне значення \n"
 "%s, \n"
 "Нове значення \n"
@@ -2728,9 +2720,8 @@ msgid "Do you want to save changes to %s?"
 msgstr "Записати зміни до %s?"
 
 #: ../src/common/prntbase.cpp:526
-#, fuzzy
 msgid "Document:"
-msgstr "Документація від "
+msgstr "Документ:"
 
 #: ../src/generic/aboutdlgg.cpp:74
 msgid "Documentation by "
@@ -2748,7 +2739,7 @@ msgstr "Не зберігати"
 msgid "Done"
 msgstr "Зроблено"
 
-#: ../src/generic/progdlgg.cpp:482 ../src/msw/progdlg.cpp:408
+#: ../src/msw/progdlg.cpp:408 ../src/generic/progdlgg.cpp:482
 msgid "Done."
 msgstr "Зроблено."
 
@@ -2769,7 +2760,7 @@ msgstr "Подвійна японська листівка повернута 14
 msgid "Doubly used id : %d"
 msgstr "Двічі використаний id : %d"
 
-#: ../src/generic/fdrepdlg.cpp:153 ../src/common/stockitem.cpp:154
+#: ../src/common/stockitem.cpp:154 ../src/generic/fdrepdlg.cpp:153
 msgid "Down"
 msgstr "Донизу"
 
@@ -2891,12 +2882,12 @@ msgstr ""
 "Розкриття змінної оточення зазнало невдачі: відсутнє '%c' на позиції %u у "
 "'%s'."
 
-#: ../src/generic/dirctrlg.cpp:671 ../src/generic/dirctrlg.cpp:689
-#: ../src/generic/dirctrlg.cpp:700 ../src/generic/dirdlgg.cpp:353
+#: ../src/gtk1/fontdlg.cpp:75 ../src/gtk/filedlg.cpp:74
 #: ../src/generic/filectrlg.cpp:678 ../src/generic/filectrlg.cpp:792
 #: ../src/generic/filectrlg.cpp:806 ../src/generic/filectrlg.cpp:822
 #: ../src/generic/filectrlg.cpp:1382 ../src/generic/filectrlg.cpp:1413
-#: ../src/gtk/filedlg.cpp:74 ../src/gtk1/fontdlg.cpp:75
+#: ../src/generic/dirctrlg.cpp:671 ../src/generic/dirctrlg.cpp:689
+#: ../src/generic/dirctrlg.cpp:700 ../src/generic/dirdlgg.cpp:353
 msgid "Error"
 msgstr "Помилка"
 
@@ -3081,7 +3072,7 @@ msgstr "Не вдалося копіювати підключ реєстру «%
 msgid "Failed to create DDE string"
 msgstr "Помилка створення рядка DDE"
 
-#: ../src/msw/mdi.cpp:601
+#: ../src/msw/mdi.cpp:591
 msgid "Failed to create MDI parent frame."
 msgstr "Помилка створення батьківського фрейма MDI."
 
@@ -3145,7 +3136,7 @@ msgstr ""
 #: ../src/html/winpars.cpp:740
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
-msgstr "Не вдалося відобразити документ HTML у кодуванні %s"
+msgstr "Не вдалося показати документ HTML у кодуванні %s"
 
 #: ../src/msw/clipbrd.cpp:128
 msgid "Failed to empty the clipboard."
@@ -3250,14 +3241,14 @@ msgid "Failed to kill process %d"
 msgstr "Не вдалося вбити процес %d"
 
 #: ../src/common/image.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "Не вдалося завантажити зображення %d з потоку даних."
+msgstr "Не вдалося завантажити растрове зображення «%s» з ресурсів."
 
 #: ../src/common/image.cpp:2270
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "Не вдалося завантажити зображення %d з потоку даних."
+msgstr "Не вдалося завантажити піктограму «%s» з ресурсів."
 
 #: ../src/common/iconbndl.cpp:183
 #, c-format
@@ -3288,7 +3279,7 @@ msgstr "Не вдалося завантажити mpr.dll."
 msgid "Failed to load resource \"%s\"."
 msgstr "Не вдалося завантажити ресурс «%s»."
 
-#: ../src/common/dynlib.cpp:105
+#: ../src/common/dynlib.cpp:101
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Не вдалося завантажити динамічну бібліотеку «%s»"
@@ -3361,9 +3352,9 @@ msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Не вдалося обробити форми множини: «%s»"
 
 #: ../src/unix/mediactrl.cpp:1269
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "Не вдалося відкрити дисплей «%s»."
+msgstr "Не вдалося приготувати «%s» до відтворення."
 
 #: ../src/msw/clipbrd.cpp:648
 msgid "Failed to put data on the clipboard"
@@ -3488,9 +3479,8 @@ msgid "Failed to set permissions on lock file '%s'"
 msgstr "Не вдалося встановити дозволи на файл замка «%s»"
 
 #: ../src/unix/utilsunx.cpp:603
-#, fuzzy
 msgid "Failed to set process priority"
-msgstr "Не вдалося встановити пріоритет нитки %d."
+msgstr "Не вдалося встановити пріоритет процесу"
 
 #: ../src/common/file.cpp:577
 msgid "Failed to set temporary file permissions"
@@ -3501,9 +3491,9 @@ msgid "Failed to set text in the text control."
 msgstr "Не вдалося встановити текст у контрол тексту."
 
 #: ../src/unix/threadpsx.cpp:1294
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "Не вдалося встановити пріоритет нитки %d."
+msgstr "Не вдалося встановити рівень пріоритетності нитки у значення %lu"
 
 #: ../src/unix/threadpsx.cpp:1378 ../src/unix/threadpsx.cpp:1388
 #, c-format
@@ -3555,7 +3545,7 @@ msgstr "Не вдалося відімкнути файл замка «%s»"
 #: ../src/msw/dde.cpp:315
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "Не вдалося відреєструвати DDE сервер «%s»"
+msgstr "Не вдалося скасувати реєстрацію сервера DDE «%s»"
 
 #: ../src/unix/epolldispatcher.cpp:156
 #, c-format
@@ -3585,7 +3575,7 @@ msgstr "Ні"
 msgid "Family"
 msgstr "Гарнітура"
 
-#: ../src/common/stockitem.cpp:158 ../src/msw/wince/filedlgwce.cpp:122
+#: ../src/msw/wince/filedlgwce.cpp:122 ../src/common/stockitem.cpp:158
 msgid "File"
 msgstr "Файл"
 
@@ -3623,7 +3613,7 @@ msgstr "Не вдалося вилучити файл «%s»"
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "Не вдалося перейменувати файл «%s» на «%s»"
 
-#: ../src/richtext/richtextctrl.cpp:2687 ../src/common/textcmn.cpp:920
+#: ../src/common/textcmn.cpp:920 ../src/richtext/richtextctrl.cpp:2687
 msgid "File couldn't be loaded."
 msgstr "Файл не можна завантажити."
 
@@ -3636,7 +3626,7 @@ msgstr "Помилка діалогового вікна роботи з фай�
 msgid "File error"
 msgstr "Помилка файла"
 
-#: ../src/generic/dirctrlg.cpp:689 ../src/generic/filectrlg.cpp:806
+#: ../src/generic/filectrlg.cpp:806 ../src/generic/dirctrlg.cpp:689
 msgid "File name exists already."
 msgstr "Файл з такою назвою вже існує."
 
@@ -3666,9 +3656,8 @@ msgid "First page"
 msgstr "Перша сторінка"
 
 #: ../src/richtext/richtextsizepage.cpp:518
-#, fuzzy
 msgid "Fixed"
-msgstr "Фіксований шрифт:"
+msgstr "Фіксована"
 
 #: ../src/html/helpwnd.cpp:1219
 msgid "Fixed font:"
@@ -3690,8 +3679,8 @@ msgstr "Дискета"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 дюйм"
 
-#: ../src/richtext/richtextformatdlg.cpp:325 ../src/osx/carbon/fontdlg.cpp:474
-#: ../src/common/stockitem.cpp:195
+#: ../src/common/stockitem.cpp:195 ../src/osx/carbon/fontdlg.cpp:474
+#: ../src/richtext/richtextformatdlg.cpp:325
 msgid "Font"
 msgstr "Шрифт"
 
@@ -3757,7 +3746,7 @@ msgstr "GIF: нестача пам'яті."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: невідома помилка!!!"
 
-#: ../src/gtk/window.cpp:4265
+#: ../src/gtk/window.cpp:4266
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3772,7 +3761,7 @@ msgstr "GTK+ мотив"
 
 #: ../src/common/preferencescmn.cpp:38
 msgid "General"
-msgstr ""
+msgstr "Загальне"
 
 #: ../src/common/prntbase.cpp:244
 msgid "Generic PostScript"
@@ -3863,8 +3852,8 @@ msgstr "Жорсткий диск"
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebrew (ISO-8859-8)"
 
-#: ../src/osx/button_osx.cpp:40 ../src/common/stockitem.cpp:164
-#: ../src/html/helpdlg.cpp:67 ../src/html/helpfrm.cpp:117
+#: ../src/common/stockitem.cpp:164 ../src/html/helpdlg.cpp:67
+#: ../src/html/helpfrm.cpp:117 ../src/osx/button_osx.cpp:40
 msgid "Help"
 msgstr "Довідка"
 
@@ -3916,7 +3905,7 @@ msgstr "Сховати решту"
 msgid "Hide this notification message."
 msgstr "Сховати це сповіщення."
 
-#: ../src/generic/dirdlgg.cpp:99 ../src/common/stockitem.cpp:165
+#: ../src/common/stockitem.cpp:165 ../src/generic/dirdlgg.cpp:99
 msgid "Home"
 msgstr "Домівка"
 
@@ -4030,7 +4019,7 @@ msgstr "Неправильна кількість параметрів у мет
 msgid "Illegal Parameter Count for Create Method"
 msgstr "Неправильна кількість параметрів у методі Create"
 
-#: ../src/generic/dirctrlg.cpp:671 ../src/generic/filectrlg.cpp:792
+#: ../src/generic/filectrlg.cpp:792 ../src/generic/dirctrlg.cpp:671
 msgid "Illegal directory name."
 msgstr "Неправильне назва теки."
 
@@ -4057,8 +4046,9 @@ msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
 msgstr ""
-"Не вдалося створити контрол rich edit, натомість використовується звичайний "
-"контрол тексту. Будь ласка перевстановіть riched32.dll"
+"Не вдалося створити модуль редагування з форматуванням, натомість "
+"використовується звичайний модуль показу тексту. Будь ласка, перевстановіть "
+"riched32.dll"
 
 #: ../src/unix/utilsunx.cpp:306
 msgid "Impossible to get child process input"
@@ -4117,9 +4107,8 @@ msgid "Insert"
 msgstr "Вставити"
 
 #: ../src/richtext/richtextbuffer.cpp:7673
-#, fuzzy
 msgid "Insert Field"
-msgstr "Вставити текст"
+msgstr "Вставити поле"
 
 #: ../src/richtext/richtextbuffer.cpp:7584
 #: ../src/richtext/richtextbuffer.cpp:8490
@@ -4130,15 +4119,15 @@ msgstr "Вставити картинку"
 msgid "Insert Object"
 msgstr "Вставити об’єкт"
 
-#: ../src/richtext/richtextctrl.cpp:1171 ../src/richtext/richtextctrl.cpp:1361
 #: ../src/richtext/richtextbuffer.cpp:7429
 #: ../src/richtext/richtextbuffer.cpp:7456
 #: ../src/richtext/richtextbuffer.cpp:7500
+#: ../src/richtext/richtextctrl.cpp:1171 ../src/richtext/richtextctrl.cpp:1361
 msgid "Insert Text"
 msgstr "Вставити текст"
 
-#: ../src/richtext/richtextindentspage.cpp:320
-#: ../src/richtext/richtextindentspage.cpp:322
+#: ../src/richtext/richtextindentspage.cpp:296
+#: ../src/richtext/richtextindentspage.cpp:298
 msgid "Inserts a page break before the paragraph."
 msgstr "Додає розрив сторінки до абзацу."
 
@@ -4174,7 +4163,7 @@ msgstr "Неправильна специфікація геометрії «%s�
 #: ../src/unix/fswatcher_inotify.cpp:299
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "Некоректна подія inotify для «%s»"
 
 #: ../src/unix/snglinst.cpp:307
 #, c-format
@@ -4205,8 +4194,8 @@ msgstr "Неправильний регулярний вираз «%s»: %s"
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr "Некоректне значення %ld булевого ключа «%s» у файлі налаштувань."
 
+#: ../src/common/stockitem.cpp:169 ../src/osx/carbon/fontdlg.cpp:548
 #: ../src/generic/fontdlgg.cpp:330 ../src/richtext/richtextfontpage.cpp:334
-#: ../src/osx/carbon/fontdlg.cpp:548 ../src/common/stockitem.cpp:169
 msgid "Italic"
 msgstr "Курсив"
 
@@ -4216,7 +4205,7 @@ msgstr "Італійський Конверт, 110 x 230 мм"
 
 #: ../src/common/imagjpeg.cpp:256
 msgid "JPEG: Couldn't load - file is probably corrupted."
-msgstr "JPEG: Не вдалося завантажити - можливо файл пошкоджено."
+msgstr "JPEG: Не вдалося завантажити — можливо файл пошкоджено."
 
 #: ../src/common/imagjpeg.cpp:435
 msgid "JPEG: Couldn't save image."
@@ -4282,8 +4271,8 @@ msgstr "Перейти до"
 msgid "Justified"
 msgstr "Вирівняний"
 
-#: ../src/richtext/richtextindentspage.cpp:168
-#: ../src/richtext/richtextindentspage.cpp:170
+#: ../src/richtext/richtextindentspage.cpp:156
+#: ../src/richtext/richtextindentspage.cpp:158
 #: ../src/richtext/richtextliststylepage.cpp:345
 #: ../src/richtext/richtextliststylepage.cpp:347
 msgid "Justify text left and right."
@@ -4393,7 +4382,7 @@ msgstr "KP_TAB"
 msgid "KP_UP"
 msgstr "KP_UP"
 
-#: ../src/richtext/richtextindentspage.cpp:295
+#: ../src/richtext/richtextindentspage.cpp:271
 msgid "L&ine spacing:"
 msgstr "Ін&тервал між рядками:"
 
@@ -4403,7 +4392,7 @@ msgstr "LEFT"
 
 #: ../src/generic/prntdlgg.cpp:619 ../src/generic/prntdlgg.cpp:874
 msgid "Landscape"
-msgstr "Пейзаж"
+msgstr "Альбомна"
 
 #: ../src/common/stockitem.cpp:175
 msgid "Last"
@@ -4425,17 +4414,17 @@ msgstr[2] "Останні повторені повідомлення («%s», %
 msgid "Ledger, 17 x 11 in"
 msgstr "Ledger, 17 x 11 дюйм"
 
-#: ../src/richtext/richtextliststylepage.cpp:250
-#: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextbulletspage.cpp:200
 #: ../src/richtext/richtextbulletspage.cpp:203
 #: ../src/richtext/richtextbulletspage.cpp:204
+#: ../src/richtext/richtextliststylepage.cpp:250
+#: ../src/richtext/richtextliststylepage.cpp:253
+#: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextsizepage.cpp:246
 msgid "Left"
 msgstr "Ліворуч"
 
-#: ../src/richtext/richtextindentspage.cpp:217
+#: ../src/richtext/richtextindentspage.cpp:205
 #: ../src/richtext/richtextliststylepage.cpp:391
 msgid "Left (&first line):"
 msgstr "Ліворуч (&перший рядок):"
@@ -4444,8 +4433,8 @@ msgstr "Ліворуч (&перший рядок):"
 msgid "Left margin (mm):"
 msgstr "Ліве поле (мм):"
 
-#: ../src/richtext/richtextindentspage.cpp:154
-#: ../src/richtext/richtextindentspage.cpp:156
+#: ../src/richtext/richtextindentspage.cpp:142
+#: ../src/richtext/richtextindentspage.cpp:144
 #: ../src/richtext/richtextliststylepage.cpp:331
 #: ../src/richtext/richtextliststylepage.cpp:333
 msgid "Left-align text."
@@ -4512,7 +4501,7 @@ msgstr "Посилання, що містило '//', перетворено н�
 msgid "List Style"
 msgstr "Стиль списку"
 
-#: ../src/richtext/richtextstyles.cpp:1048
+#: ../src/richtext/richtextstyles.cpp:1061
 msgid "List styles"
 msgstr "Стилі списку"
 
@@ -4550,17 +4539,17 @@ msgstr "Файл блокування «%s» має помилкові дозв�
 msgid "Log saved to the file '%s'."
 msgstr "Журнал записаний в файл «%s»."
 
-#: ../src/richtext/richtextliststylepage.cpp:485
 #: ../src/richtext/richtextbulletspage.cpp:290
+#: ../src/richtext/richtextliststylepage.cpp:485
 msgid "Lower case letters"
 msgstr "Літери нижнього регістру"
 
-#: ../src/richtext/richtextliststylepage.cpp:487
 #: ../src/richtext/richtextbulletspage.cpp:292
+#: ../src/richtext/richtextliststylepage.cpp:487
 msgid "Lower case roman numerals"
 msgstr "Римські цифри у нижньому регістрі"
 
-#: ../src/gtk/mdi.cpp:423 ../src/gtk1/mdi.cpp:432
+#: ../src/gtk1/mdi.cpp:432 ../src/gtk/mdi.cpp:423
 msgid "MDI child"
 msgstr "Нащадок MDI"
 
@@ -4764,7 +4753,7 @@ msgstr "Макс. ширина:"
 #: ../src/unix/mediactrl.cpp:1007
 #, c-format
 msgid "Media playback error: %s"
-msgstr ""
+msgstr "Помилка відтворення мультимедійних даних: %s"
 
 #: ../src/common/fs_mem.cpp:176
 #, c-format
@@ -4900,8 +4889,8 @@ msgstr "Створити теку"
 msgid "New item"
 msgstr "Новий елемент"
 
-#: ../src/generic/dirdlgg.cpp:327 ../src/generic/dirdlgg.cpp:337
 #: ../src/generic/filectrlg.cpp:654 ../src/generic/filectrlg.cpp:663
+#: ../src/generic/dirdlgg.cpp:327 ../src/generic/dirdlgg.cpp:337
 msgid "NewName"
 msgstr "НоваНазва"
 
@@ -4955,9 +4944,9 @@ msgid ""
 "Do you want to use this encoding (otherwise you will have to choose another "
 "one)?"
 msgstr ""
-"Не знайдено шрифту для відображення тексту у кодуванні «%s».\n"
+"Не знайдено шрифту для показу тексту у кодуванні «%s».\n"
 "але доступне альтернативне кодування «%s».\n"
-"Хочете використовувати це кодування (інакше Вам слід буде обрати інше)?"
+"Хочете використовувати це кодування (інакше вам доведеться вибрати інше)?"
 
 #: ../src/common/fontmap.cpp:427
 #, c-format
@@ -4966,8 +4955,8 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
-"Відсутній шрифт для відображення тексту у кодуванні «%s».\n"
-"Ви бажаєте обрати шрифт для використання з цим кодуванням\n"
+"Немає шрифту для показу тексту у кодуванні «%s».\n"
+"Ви бажаєте вибрати шрифт для використання з цим кодуванням\n"
 "(інакше текст у цьому кодуванні не буде показано вірно)?"
 
 #: ../src/generic/animateg.cpp:143
@@ -4991,7 +4980,7 @@ msgstr "Не знайдено жодного обробника для зобр�
 
 #: ../src/html/helpwnd.cpp:871
 msgid "No matching page found yet"
-msgstr "Жодна відповідна сторінка доки не знайдена"
+msgstr "Відповідної сторінки ще не знайдено"
 
 #: ../src/osx/carbon/dataview.cpp:1677 ../src/osx/carbon/dataview.cpp:1787
 msgid "No renderer or invalid renderer type specified for custom data column."
@@ -5028,7 +5017,7 @@ msgstr "Немає"
 
 #: ../src/common/fmapbase.cpp:158
 msgid "Nordic (ISO-8859-10)"
-msgstr "Nordic (ISO-8859-10)"
+msgstr "Нордичне (ISO-8859-10)"
 
 #: ../src/generic/fontdlgg.cpp:329 ../src/generic/fontdlgg.cpp:332
 msgid "Normal"
@@ -5067,14 +5056,14 @@ msgstr "Зауваження"
 msgid "Number of columns could not be determined."
 msgstr "Не вдалося визначити кількість стовпчиків."
 
-#: ../src/richtext/richtextliststylepage.cpp:488
 #: ../src/richtext/richtextbulletspage.cpp:293
+#: ../src/richtext/richtextliststylepage.cpp:488
 msgid "Numbered outline"
 msgstr "Нумерована структура"
 
-#: ../src/richtext/richtextstyledlg.cpp:298 ../src/common/stockitem.cpp:179
 #: ../src/msw/msgdlg.cpp:490 ../src/msw/msgdlg.cpp:796
-#: ../src/msw/dialog.cpp:121 ../src/gtk1/fontdlg.cpp:139
+#: ../src/msw/dialog.cpp:121 ../src/common/stockitem.cpp:179
+#: ../src/gtk1/fontdlg.cpp:139 ../src/richtext/richtextstyledlg.cpp:298
 msgid "OK"
 msgstr "Гаразд"
 
@@ -5117,10 +5106,10 @@ msgstr "Відкрити…"
 msgid "OpenGL function \"%s\" failed: %s (error %d)"
 msgstr "Помилка у функції OpenGL «%s»: %s (помилка %d)"
 
-#: ../src/generic/dirctrlg.cpp:700 ../src/generic/dirdlgg.cpp:353
 #: ../src/generic/filectrlg.cpp:678 ../src/generic/filectrlg.cpp:822
+#: ../src/generic/dirctrlg.cpp:700 ../src/generic/dirdlgg.cpp:353
 msgid "Operation not permitted."
-msgstr "Операція не дозволена."
+msgstr "Заборонена дія."
 
 #: ../src/common/cmdline.cpp:728
 #, c-format
@@ -5186,7 +5175,7 @@ msgstr "PCX: формат не підтримується"
 
 #: ../src/common/imagpcx.cpp:480
 msgid "PCX: invalid image"
-msgstr "PCX: Неправильне зображення"
+msgstr "PCX: некоректне зображення"
 
 #: ../src/common/imagpcx.cpp:443
 msgid "PCX: this is not a PCX file."
@@ -5194,7 +5183,7 @@ msgstr "PCX: це не файл PCX."
 
 #: ../src/common/imagpcx.cpp:460 ../src/common/imagpcx.cpp:482
 msgid "PCX: unknown error !!!"
-msgstr "PCX: Невідома помилка !!!"
+msgstr "PCX: невідома помилка !!!"
 
 #: ../src/common/imagpcx.cpp:459
 msgid "PCX: version number too low"
@@ -5210,16 +5199,16 @@ msgstr "PGUP"
 
 #: ../src/common/imagpnm.cpp:92
 msgid "PNM: Couldn't allocate memory."
-msgstr "PCX: Не вдалося виділити пам'ять."
+msgstr "PCX: не вдалося виділити пам'ять."
 
 #: ../src/common/imagpnm.cpp:74
 msgid "PNM: File format is not recognized."
-msgstr "PNM: Формат ще не розпізнається."
+msgstr "PNM: формат файла не розпізнано."
 
 #: ../src/common/imagpnm.cpp:113 ../src/common/imagpnm.cpp:135
 #: ../src/common/imagpnm.cpp:157
 msgid "PNM: File seems truncated."
-msgstr "PNM: Файл здається обірваним."
+msgstr "PNM: файл здається обірваним."
 
 #: ../src/common/paper.cpp:189
 msgid "PRC 16K 146 x 215 mm"
@@ -5347,8 +5336,8 @@ msgstr "Сторінка %d з %d"
 msgid "Page Setup"
 msgstr "Налаштування сторінки"
 
-#: ../src/generic/prntdlgg.cpp:834 ../src/common/prntbase.cpp:468
-#: ../src/gtk/gnome/gprint.cpp:711
+#: ../src/common/prntbase.cpp:468 ../src/gtk/gnome/gprint.cpp:711
+#: ../src/generic/prntdlgg.cpp:834
 msgid "Page setup"
 msgstr "Налаштування сторінки"
 
@@ -5362,7 +5351,7 @@ msgstr "Сторінки"
 msgid "Paper size"
 msgstr "Розмір паперу"
 
-#: ../src/richtext/richtextstyles.cpp:1046
+#: ../src/richtext/richtextstyles.cpp:1059
 msgid "Paragraph styles"
 msgstr "Стилі абзаців"
 
@@ -5371,21 +5360,20 @@ msgid "Passing a already registered object to SetObject"
 msgstr "Передача вже зареєстрованого об'єкта до SetObject"
 
 #: ../src/common/xtistrm.cpp:481
-#, fuzzy
 msgid "Passing an unknown object to GetObject"
-msgstr "Передача невідомого об'єкта до GetObject"
+msgstr "GetObject передано невідомий об’єкт"
 
-#: ../src/richtext/richtextctrl.cpp:3101 ../src/common/stockitem.cpp:181
-#: ../src/stc/stc_i18n.cpp:20
+#: ../src/stc/stc_i18n.cpp:20 ../src/common/stockitem.cpp:181
+#: ../src/richtext/richtextctrl.cpp:3101
 msgid "Paste"
 msgstr "Вставити"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Paste selection"
-msgstr "Вставити обране"
+msgstr "Вставити позначене"
 
-#: ../src/richtext/richtextliststylepage.cpp:223
 #: ../src/richtext/richtextbulletspage.cpp:173
+#: ../src/richtext/richtextliststylepage.cpp:223
 msgid "Peri&od"
 msgstr "То&чка"
 
@@ -5393,7 +5381,7 @@ msgstr "То&чка"
 msgid "Permissions"
 msgstr "Дозволи"
 
-#: ../src/richtext/richtextbuffer.cpp:11568
+#: ../src/richtext/richtextbuffer.cpp:11574
 msgid "Picture Properties"
 msgstr "Властивості малюнка"
 
@@ -5403,19 +5391,19 @@ msgstr "Помилка створення потоку вводу-виводу"
 
 #: ../src/gtk1/fontdlg.cpp:75
 msgid "Please choose a valid font."
-msgstr "Будь ласка виберіть дозволений шрифт."
+msgstr "Будь ласка, виберіть коректний шрифт."
 
 #: ../src/gtk/filedlg.cpp:73
 msgid "Please choose an existing file."
-msgstr "Будь ласка виберіть існуючий файл."
+msgstr "Будь ласка, виберіть наявний файл."
 
 #: ../src/html/helpwnd.cpp:813
 msgid "Please choose the page to display:"
-msgstr "Будь ласка оберіть сторінку для відображення:"
+msgstr "Будь ласка, виберіть сторінку для показу:"
 
 #: ../src/msw/dialup.cpp:786
 msgid "Please choose which ISP do you want to connect to"
-msgstr "Будь ласка виберіть ISP"
+msgstr "Будь ласка, виберіть надавача послуг інтернету, з яким слід з’єднатися"
 
 #: ../src/msw/listctrl.cpp:373
 #, c-format
@@ -5424,18 +5412,17 @@ msgid ""
 "(at least version 4.70 is required but you have %d.%02d)\n"
 "or this program won't operate correctly."
 msgstr ""
-"Будь ласка встановіть новішу версію comctl32.dll\n"
-"(потрібна принаймні версія 4.70, а ви маєте лише %d.%02d)\n"
-"або ця програма працюватиме некоректно."
+"Будь ласка, встановіть новішу версію comctl32.dll\n"
+"(потрібна принаймні версія 4.70, а ви маєте лише %d.%02d),\n"
+"інакше ця програма працюватиме некоректно."
 
 #: ../src/common/headerctrlcmn.cpp:60
 msgid "Please select the columns to show and define their order:"
 msgstr "Вкажіть стовпчики, які слід показувати, і порядок показу:"
 
 #: ../src/common/prntbase.cpp:522
-#, fuzzy
 msgid "Please wait while printing..."
-msgstr "Будь ласка зачекайте - друкую\n"
+msgstr "Будь ласка, зачекайте на завершення друку…"
 
 #: ../src/propgrid/advprops.cpp:632
 msgid "Point Size"
@@ -5462,7 +5449,7 @@ msgstr "Встановлено помилкове значення вказів�
 
 #: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
 msgid "Portrait"
-msgstr "Портрет"
+msgstr "Книжкова"
 
 #: ../src/richtext/richtextsizepage.cpp:493
 msgid "Position"
@@ -5482,10 +5469,10 @@ msgstr "Налаштування…"
 
 #: ../src/common/prntbase.cpp:530
 msgid "Preparing"
-msgstr ""
+msgstr "Приготування"
 
-#: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:577
-#: ../src/html/helpwnd.cpp:1235
+#: ../src/html/helpwnd.cpp:1235 ../src/osx/carbon/fontdlg.cpp:577
+#: ../src/generic/fontdlgg.cpp:456
 msgid "Preview:"
 msgstr "Передогляд:"
 
@@ -5493,10 +5480,10 @@ msgstr "Передогляд:"
 msgid "Previous page"
 msgstr "Попередня сторінка"
 
-#: ../src/generic/prntdlgg.cpp:149 ../src/generic/prntdlgg.cpp:163
 #: ../src/common/prntbase.cpp:410 ../src/common/prntbase.cpp:1512
 #: ../src/gtk/print.cpp:594 ../src/gtk/print.cpp:607
 #: ../src/gtk/gnome/gprint.cpp:538 ../src/gtk/gnome/gprint.cpp:550
+#: ../src/generic/prntdlgg.cpp:149 ../src/generic/prntdlgg.cpp:163
 msgid "Print"
 msgstr "Друк"
 
@@ -5522,9 +5509,8 @@ msgid "Print in colour"
 msgstr "Друк в кольорі"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print previe&w..."
-msgstr "Попередній перегл&яд друку"
+msgstr "П&ерегляд друку…"
 
 #: ../src/gtk/gnome/gprint.cpp:945
 msgid "Print preview"
@@ -5535,9 +5521,8 @@ msgid "Print preview creation failed."
 msgstr "Не вдалося створити зображення попереднього перегляду друку."
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print preview..."
-msgstr "Попередній перегляд друку"
+msgstr "Перегляд друку…"
 
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Print spooling"
@@ -5593,9 +5578,9 @@ msgid "Printing Error"
 msgstr "Помилка друку"
 
 #: ../src/common/prntbase.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d of %d"
-msgstr "Друк сторінки %d…"
+msgstr "Друкуємо сторінку %d з %d"
 
 #: ../src/generic/printps.cpp:202
 #, c-format
@@ -5606,7 +5591,7 @@ msgstr "Друк сторінки %d…"
 msgid "Printing..."
 msgstr "Друк…"
 
-#: ../include/wx/richtext/richtextprint.h:110 ../include/wx/prntbase.h:264
+#: ../include/wx/prntbase.h:264 ../include/wx/richtext/richtextprint.h:110
 #: ../src/common/docview.cpp:2120
 msgid "Printout"
 msgstr "Відбиток"
@@ -5626,7 +5611,7 @@ msgstr ""
 
 #: ../src/common/prntbase.cpp:529
 msgid "Progress:"
-msgstr ""
+msgstr "Поступ:"
 
 #: ../src/common/stockitem.cpp:185
 msgid "Properties"
@@ -5682,7 +5667,7 @@ msgstr "Помилка читання файла «%s»"
 msgid "Ready"
 msgstr "Готова"
 
-#: ../src/common/stockitem.cpp:186 ../src/stc/stc_i18n.cpp:17
+#: ../src/stc/stc_i18n.cpp:17 ../src/common/stockitem.cpp:186
 msgid "Redo"
 msgstr "Повторити"
 
@@ -5726,9 +5711,8 @@ msgid "Regular"
 msgstr "Звичайний"
 
 #: ../src/richtext/richtextsizepage.cpp:516
-#, fuzzy
 msgid "Relative"
-msgstr "Декоративний"
+msgstr "Відносна"
 
 #: ../src/generic/helpext.cpp:463
 msgid "Relevant entries:"
@@ -5739,9 +5723,8 @@ msgid "Remove"
 msgstr "Вилучити"
 
 #: ../src/richtext/richtextctrl.cpp:1429
-#, fuzzy
 msgid "Remove Bullet"
-msgstr "Вилучити"
+msgstr "Вилучити позначку"
 
 #: ../src/html/helpwnd.cpp:440
 msgid "Remove current page from bookmarks"
@@ -5765,7 +5748,7 @@ msgstr "Перенумерувати список"
 msgid "Rep&lace"
 msgstr "&Замінити"
 
-#: ../src/richtext/richtextctrl.cpp:3261 ../src/common/stockitem.cpp:189
+#: ../src/common/stockitem.cpp:189 ../src/richtext/richtextctrl.cpp:3261
 msgid "Replace"
 msgstr "Замінити"
 
@@ -5775,7 +5758,7 @@ msgstr "Замінити всі"
 
 #: ../src/common/stockitem.cpp:262
 msgid "Replace selection"
-msgstr "Замінити обране"
+msgstr "Замінити позначене"
 
 #: ../src/generic/fdrepdlg.cpp:125
 msgid "Replace with:"
@@ -5785,7 +5768,7 @@ msgstr "Замінити на:"
 msgid "Required information entry is empty."
 msgstr "Потрібний запис даних виявився порожнім."
 
-#: ../src/common/translation.cpp:1966
+#: ../src/common/translation.cpp:1965
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "Ресурс «%s» не є коректним каталогом повідомлень."
@@ -5798,8 +5781,8 @@ msgstr "Повернутися до збереженого"
 msgid "Ridge"
 msgstr "Гребінь"
 
-#: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextbulletspage.cpp:202
+#: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextsizepage.cpp:247
 msgid "Right"
 msgstr "Праворуч"
@@ -5808,8 +5791,8 @@ msgstr "Праворуч"
 msgid "Right margin (mm):"
 msgstr "Права межа (мм):"
 
-#: ../src/richtext/richtextindentspage.cpp:161
-#: ../src/richtext/richtextindentspage.cpp:163
+#: ../src/richtext/richtextindentspage.cpp:149
+#: ../src/richtext/richtextindentspage.cpp:151
 #: ../src/richtext/richtextliststylepage.cpp:338
 #: ../src/richtext/richtextliststylepage.cpp:340
 msgid "Right-align text."
@@ -5819,8 +5802,8 @@ msgstr "Текст вирівняний праворуч."
 msgid "Roman"
 msgstr "Roman"
 
-#: ../src/richtext/richtextliststylepage.cpp:300
 #: ../src/richtext/richtextbulletspage.cpp:253
+#: ../src/richtext/richtextliststylepage.cpp:300
 msgid "S&tandard bullet name:"
 msgstr "Назва ста&ндартної позначки:"
 
@@ -5852,7 +5835,7 @@ msgstr "SPECIAL"
 msgid "SUBTRACT"
 msgstr "МІНУС"
 
-#: ../src/common/stockitem.cpp:191 ../src/common/sizer.cpp:2679
+#: ../src/common/sizer.cpp:2679 ../src/common/stockitem.cpp:191
 msgid "Save"
 msgstr "Зберегти"
 
@@ -5883,14 +5866,14 @@ msgstr "Зберегти поточний документ з іншою наз�
 
 #: ../src/generic/logg.cpp:519
 msgid "Save log contents to file"
-msgstr "Зберегти вміст журналу до файл"
+msgstr "Зберегти вміст журналу до файла"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Script"
-msgstr "Скрипт"
+msgstr "Рукописний"
 
-#: ../src/generic/srchctlg.cpp:68 ../src/html/helpwnd.cpp:548
-#: ../src/html/helpwnd.cpp:563
+#: ../src/html/helpwnd.cpp:548 ../src/html/helpwnd.cpp:563
+#: ../src/generic/srchctlg.cpp:68
 msgid "Search"
 msgstr "Пошук"
 
@@ -5930,12 +5913,12 @@ msgstr "Помилка пошуку в файлі «%s»"
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr "Помилка пошуку на файлі «%s» (великі файли не підтримуються stdio)"
 
-#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:588
-#: ../src/common/stockitem.cpp:193 ../src/msw/textctrl.cpp:2289
+#: ../src/msw/textctrl.cpp:2289 ../src/common/stockitem.cpp:193
+#: ../src/osx/textctrl_osx.cpp:588 ../src/richtext/richtextctrl.cpp:329
 msgid "Select &All"
-msgstr "Вибрати все"
+msgstr "В&ибрати все"
 
-#: ../src/common/stockitem.cpp:193 ../src/stc/stc_i18n.cpp:22
+#: ../src/stc/stc_i18n.cpp:22 ../src/common/stockitem.cpp:193
 msgid "Select All"
 msgstr "Вибрати все"
 
@@ -5960,11 +5943,11 @@ msgstr "Оберіть звичайний або курсивний стиль."
 #: ../src/richtext/richtextfontpage.cpp:249
 #: ../src/richtext/richtextfontpage.cpp:251
 msgid "Select underlining or no underlining."
-msgstr "Оберіть чи буде текст підкреслено."
+msgstr "Виберіть, чи буде текст підкреслено."
 
 #: ../src/motif/filedlg.cpp:221
 msgid "Selection"
-msgstr "Обране"
+msgstr "Позначене"
 
 #: ../src/richtext/richtextliststylepage.cpp:188
 #: ../src/richtext/richtextliststylepage.cpp:190
@@ -5996,7 +5979,8 @@ msgstr "Налаштування…"
 
 #: ../src/msw/dialup.cpp:564
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr "Декілька активних з'єднань знайдено, випадково вибираємо одне."
+msgstr ""
+"Знайдено декілька активних комутованих з'єднань, випадково вибираємо одне."
 
 #: ../src/common/accelcmn.cpp:325
 msgid "Shift+"
@@ -6039,10 +6023,10 @@ msgstr "Показати/сховати навігаційну панель"
 msgid "Shows a Unicode subset."
 msgstr "Показує підмножину Unicode."
 
-#: ../src/richtext/richtextliststylepage.cpp:473
-#: ../src/richtext/richtextliststylepage.cpp:475
 #: ../src/richtext/richtextbulletspage.cpp:277
 #: ../src/richtext/richtextbulletspage.cpp:279
+#: ../src/richtext/richtextliststylepage.cpp:473
+#: ../src/richtext/richtextliststylepage.cpp:475
 msgid "Shows a preview of the bullet settings."
 msgstr "Показує попередній перегляд параметрів для позначок."
 
@@ -6055,8 +6039,8 @@ msgstr "Показує попередній перегляд для параме
 msgid "Shows a preview of the font."
 msgstr "Показує попередній перегляд шрифту."
 
-#: ../src/richtext/richtextindentspage.cpp:328
-#: ../src/richtext/richtextindentspage.cpp:330
+#: ../src/richtext/richtextindentspage.cpp:304
+#: ../src/richtext/richtextindentspage.cpp:306
 msgid "Shows a preview of the paragraph settings."
 msgstr "Показує попередній перегляд параметрів абзацу."
 
@@ -6068,7 +6052,7 @@ msgstr "Попередній перегляд шрифту."
 msgid "Simple monochrome theme"
 msgstr "Проста чорно-біла тема"
 
-#: ../src/richtext/richtextindentspage.cpp:300
+#: ../src/richtext/richtextindentspage.cpp:276
 #: ../src/richtext/richtextliststylepage.cpp:450
 msgid "Single"
 msgstr "Одинарний"
@@ -6082,8 +6066,8 @@ msgstr "Розмір"
 msgid "Size:"
 msgstr "Розмір:"
 
-#: ../src/generic/progdlgg.cpp:263 ../src/generic/progdlgg.cpp:774
-#: ../src/msw/progdlg.cpp:802
+#: ../src/msw/progdlg.cpp:802 ../src/generic/progdlgg.cpp:263
+#: ../src/generic/progdlgg.cpp:774
 msgid "Skip"
 msgstr "Пропустити"
 
@@ -6092,9 +6076,8 @@ msgid "Slant"
 msgstr "Нахилений"
 
 #: ../src/richtext/richtextfontpage.cpp:299
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "Пр&описні"
+msgstr "&Мала капітель"
 
 #: ../src/richtext/richtextborderspage.cpp:543
 msgid "Solid"
@@ -6102,7 +6085,7 @@ msgstr "Суцільна"
 
 #: ../src/common/docview.cpp:1769
 msgid "Sorry, could not open this file."
-msgstr "Цей файл не може бути відкритий."
+msgstr "Вибачте, не вдалося відкрити цей файл."
 
 #: ../src/common/prntbase.cpp:2028 ../src/common/prntbase.cpp:2036
 msgid "Sorry, not enough memory to create a preview."
@@ -6114,7 +6097,7 @@ msgstr "Нестача пам'яті для створення зони попе
 #: ../src/richtext/richtextstyledlg.cpp:899
 #: ../src/richtext/richtextstyledlg.cpp:937
 msgid "Sorry, that name is taken. Please choose another."
-msgstr "Вибачте, цю назву вже використано. Будь ласка оберіть іншу."
+msgstr "Вибачте, цю назву вже використано. Будь ласка, виберіть іншу."
 
 #: ../src/common/docview.cpp:1792
 msgid "Sorry, the format for this file is unknown."
@@ -6137,8 +6120,8 @@ msgstr "Проміжки"
 msgid "Spell Check"
 msgstr "Перевірка правопису"
 
-#: ../src/richtext/richtextliststylepage.cpp:491
 #: ../src/richtext/richtextbulletspage.cpp:296
+#: ../src/richtext/richtextliststylepage.cpp:491
 msgid "Standard"
 msgstr "Стандартна"
 
@@ -6148,9 +6131,8 @@ msgstr "Statement, 5 1/2 x 8 1/2 дюйм"
 
 #: ../src/richtext/richtextsizepage.cpp:515
 #: ../src/richtext/richtextsizepage.cpp:520
-#, fuzzy
 msgid "Static"
-msgstr "Статус:"
+msgstr "Статична"
 
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Status:"
@@ -6169,7 +6151,7 @@ msgstr "Перекреслення"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Рядок для кольору : Некоректна специфікація кольору : %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:319 ../src/propgrid/advprops.cpp:648
+#: ../src/propgrid/advprops.cpp:648 ../src/richtext/richtextformatdlg.cpp:319
 msgid "Style"
 msgstr "Стиль"
 
@@ -6201,13 +6183,13 @@ msgstr "SuperB/SuperB/A3 305 x 487 мм"
 msgid "Swiss"
 msgstr "Swiss"
 
-#: ../src/richtext/richtextliststylepage.cpp:489
 #: ../src/richtext/richtextbulletspage.cpp:294
+#: ../src/richtext/richtextliststylepage.cpp:489
 msgid "Symbol"
 msgstr "Символ"
 
-#: ../src/richtext/richtextliststylepage.cpp:289
 #: ../src/richtext/richtextbulletspage.cpp:241
+#: ../src/richtext/richtextliststylepage.cpp:289
 msgid "Symbol &font:"
 msgstr "Шрифт для &символів:"
 
@@ -6281,10 +6263,10 @@ msgstr "Сервер FTP не підтримує пасивний режим."
 msgid "The FTP server doesn't support the PORT command."
 msgstr "Сервер FTP не підтримує команду PORT."
 
-#: ../src/richtext/richtextliststylepage.cpp:216
-#: ../src/richtext/richtextliststylepage.cpp:218
 #: ../src/richtext/richtextbulletspage.cpp:165
 #: ../src/richtext/richtextbulletspage.cpp:167
+#: ../src/richtext/richtextliststylepage.cpp:216
+#: ../src/richtext/richtextliststylepage.cpp:218
 msgid "The available bullet styles."
 msgstr "Доступні стилі позначок."
 
@@ -6312,18 +6294,17 @@ msgstr "Ширина нижньої фаски."
 #: ../src/richtext/richtextsizepage.cpp:638
 #: ../src/richtext/richtextsizepage.cpp:650
 #: ../src/richtext/richtextsizepage.cpp:652
-#, fuzzy
 msgid "The bottom position."
-msgstr "Позиція табуляції."
+msgstr "Нижня позиція."
 
-#: ../src/richtext/richtextliststylepage.cpp:255
-#: ../src/richtext/richtextliststylepage.cpp:257
-#: ../src/richtext/richtextliststylepage.cpp:276
-#: ../src/richtext/richtextliststylepage.cpp:278
 #: ../src/richtext/richtextbulletspage.cpp:205
 #: ../src/richtext/richtextbulletspage.cpp:207
 #: ../src/richtext/richtextbulletspage.cpp:228
 #: ../src/richtext/richtextbulletspage.cpp:230
+#: ../src/richtext/richtextliststylepage.cpp:255
+#: ../src/richtext/richtextliststylepage.cpp:257
+#: ../src/richtext/richtextliststylepage.cpp:276
+#: ../src/richtext/richtextliststylepage.cpp:278
 msgid "The bullet character."
 msgstr "Символ позначки."
 
@@ -6384,8 +6365,8 @@ msgstr ""
 "Файла «%s» не існує, отже його неможливо відкрити.\n"
 "Його було вилучено зі списку нещодавно використаних."
 
-#: ../src/richtext/richtextindentspage.cpp:221
-#: ../src/richtext/richtextindentspage.cpp:223
+#: ../src/richtext/richtextindentspage.cpp:209
+#: ../src/richtext/richtextindentspage.cpp:211
 #: ../src/richtext/richtextliststylepage.cpp:395
 #: ../src/richtext/richtextliststylepage.cpp:397
 msgid "The first line indent."
@@ -6419,9 +6400,8 @@ msgstr "Розмір шрифту у пунктах."
 
 #: ../src/richtext/richtextfontpage.cpp:191
 #: ../src/richtext/richtextfontpage.cpp:193
-#, fuzzy
 msgid "The font size units, points or pixels."
-msgstr "Розмір шрифту у пунктах."
+msgstr "Одиниці виміру розміру символів шрифту, пункти або пікселі."
 
 #: ../src/generic/fontdlgg.cpp:387 ../src/generic/fontdlgg.cpp:389
 msgid "The font style."
@@ -6436,8 +6416,8 @@ msgstr "Вага шрифту."
 msgid "The format of file '%s' couldn't be determined."
 msgstr "Не вдалося визначити формат файла «%s»."
 
-#: ../src/richtext/richtextindentspage.cpp:212
-#: ../src/richtext/richtextindentspage.cpp:214
+#: ../src/richtext/richtextindentspage.cpp:200
+#: ../src/richtext/richtextindentspage.cpp:202
 #: ../src/richtext/richtextliststylepage.cpp:386
 #: ../src/richtext/richtextliststylepage.cpp:388
 msgid "The left indent."
@@ -6457,12 +6437,11 @@ msgstr "Ширина лівої фаски."
 #: ../src/richtext/richtextsizepage.cpp:533
 #: ../src/richtext/richtextsizepage.cpp:545
 #: ../src/richtext/richtextsizepage.cpp:547
-#, fuzzy
 msgid "The left position."
-msgstr "Позиція табуляції."
+msgstr "Ліва позиція."
 
-#: ../src/richtext/richtextindentspage.cpp:313
-#: ../src/richtext/richtextindentspage.cpp:315
+#: ../src/richtext/richtextindentspage.cpp:289
+#: ../src/richtext/richtextindentspage.cpp:291
 #: ../src/richtext/richtextliststylepage.cpp:463
 #: ../src/richtext/richtextliststylepage.cpp:465
 msgid "The line spacing."
@@ -6494,7 +6473,6 @@ msgstr "Максимальна ширина об’єкта."
 
 #: ../src/richtext/richtextsizepage.cpp:417
 #: ../src/richtext/richtextsizepage.cpp:419
-#, fuzzy
 msgid "The object minimum height."
 msgstr "Мінімальна висота об’єкта."
 
@@ -6508,8 +6486,8 @@ msgstr "Мінімальна ширина об’єкта."
 msgid "The object width."
 msgstr "Ширина об’єкта."
 
-#: ../src/richtext/richtextindentspage.cpp:252
-#: ../src/richtext/richtextindentspage.cpp:254
+#: ../src/richtext/richtextindentspage.cpp:228
+#: ../src/richtext/richtextindentspage.cpp:230
 msgid "The outline level."
 msgstr "Рівень відступу."
 
@@ -6549,8 +6527,8 @@ msgstr ""
 msgid "The required parameter '%s' was not specified."
 msgstr "Обов'язковий параметр «%s» не вказаний."
 
-#: ../src/richtext/richtextindentspage.cpp:230
-#: ../src/richtext/richtextindentspage.cpp:232
+#: ../src/richtext/richtextindentspage.cpp:218
+#: ../src/richtext/richtextindentspage.cpp:220
 #: ../src/richtext/richtextliststylepage.cpp:404
 #: ../src/richtext/richtextliststylepage.cpp:406
 msgid "The right indent."
@@ -6570,18 +6548,17 @@ msgstr "Ширина правої фаски."
 #: ../src/richtext/richtextsizepage.cpp:603
 #: ../src/richtext/richtextsizepage.cpp:615
 #: ../src/richtext/richtextsizepage.cpp:617
-#, fuzzy
 msgid "The right position."
-msgstr "Позиція табуляції."
+msgstr "Права позиція."
 
-#: ../src/richtext/richtextindentspage.cpp:292
+#: ../src/richtext/richtextindentspage.cpp:268
 #: ../src/richtext/richtextliststylepage.cpp:440
 #: ../src/richtext/richtextliststylepage.cpp:442
 msgid "The spacing after the paragraph."
 msgstr "Проміжок після абзацу."
 
-#: ../src/richtext/richtextindentspage.cpp:282
-#: ../src/richtext/richtextindentspage.cpp:284
+#: ../src/richtext/richtextindentspage.cpp:258
+#: ../src/richtext/richtextindentspage.cpp:260
 #: ../src/richtext/richtextliststylepage.cpp:431
 #: ../src/richtext/richtextliststylepage.cpp:433
 msgid "The spacing before the paragraph."
@@ -6633,9 +6610,8 @@ msgstr "Ширина верхньої фаски."
 #: ../src/richtext/richtextsizepage.cpp:568
 #: ../src/richtext/richtextsizepage.cpp:580
 #: ../src/richtext/richtextsizepage.cpp:582
-#, fuzzy
 msgid "The top position."
-msgstr "Позиція табуляції."
+msgstr "Верхня позиція."
 
 #: ../src/common/cmdline.cpp:1054
 #, c-format
@@ -6661,12 +6637,12 @@ msgstr ""
 "Для вказаного номера стовпчика не передбачено стовпчика або інструменту "
 "обробки."
 
-#: ../src/richtext/richtextprint.cpp:611 ../src/html/htmprint.cpp:736
+#: ../src/html/htmprint.cpp:736 ../src/richtext/richtextprint.cpp:611
 msgid ""
 "There was a problem during page setup: you may need to set a default printer."
 msgstr ""
-"Під час створення сторінки виникла проблема: можливо, Вам слід встановити "
-"типову друкарку."
+"Під час створення сторінки виникла проблема: можливо, вам слід встановити "
+"типовий принтер."
 
 #: ../src/html/htmprint.cpp:256
 msgid ""
@@ -6685,7 +6661,7 @@ msgstr "Це не %s."
 msgid "This platform does not support background transparency."
 msgstr "На цій платформі підтримки прозорості тла не передбачено."
 
-#: ../src/gtk/window.cpp:4294
+#: ../src/gtk/window.cpp:4295
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6767,8 +6743,8 @@ msgstr "Забагато викликів EndStyle!"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Забагато кольорів у PNG, картинка може бути трохи змазаною."
 
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:201
+#: ../src/common/stockitem.cpp:201 ../src/richtext/richtextsizepage.cpp:283
+#: ../src/richtext/richtextsizepage.cpp:287
 msgid "Top"
 msgstr "Вгорі"
 
@@ -6817,10 +6793,10 @@ msgstr "Наберіть розмір у пунктах."
 msgid "Type mismatch in argument %u."
 msgstr "Невідповідність типів у аргументі %u."
 
-#: ../src/common/xtixml.cpp:357 ../src/common/xtixml.cpp:510
-#: ../src/common/xtistrm.cpp:323
+#: ../src/common/xtistrm.cpp:323 ../src/common/xtixml.cpp:357
+#: ../src/common/xtixml.cpp:510
 msgid "Type must have enum - long conversion"
-msgstr "Тип має містити перетворення enum - long"
+msgstr "Тип має містити перетворення enum — long"
 
 #: ../src/propgrid/propgridiface.cpp:383
 #, c-format
@@ -6957,12 +6933,12 @@ msgstr "Скасувати вилучення"
 msgid "Underline"
 msgstr "Підкреслити"
 
-#: ../src/richtext/richtextfontpage.cpp:342 ../src/osx/carbon/fontdlg.cpp:557
-#: ../src/propgrid/advprops.cpp:656
+#: ../src/propgrid/advprops.cpp:656 ../src/osx/carbon/fontdlg.cpp:557
+#: ../src/richtext/richtextfontpage.cpp:342
 msgid "Underlined"
 msgstr "Підкреслене"
 
-#: ../src/common/stockitem.cpp:204 ../src/stc/stc_i18n.cpp:16
+#: ../src/stc/stc_i18n.cpp:16 ../src/common/stockitem.cpp:204
 msgid "Undo"
 msgstr "Вернути"
 
@@ -6979,6 +6955,7 @@ msgstr "За параметром «%s» слідують неочікувані
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
+"Неочікувана подія для «%s»: немає відповідного дескриптора спостереження."
 
 #: ../src/common/cmdline.cpp:1017
 #, c-format
@@ -7057,9 +7034,8 @@ msgstr "Одиниці виміру нижньої фаски."
 
 #: ../src/richtext/richtextsizepage.cpp:661
 #: ../src/richtext/richtextsizepage.cpp:663
-#, fuzzy
 msgid "Units for the bottom position."
-msgstr "Одиниці виміру нижньої фаски."
+msgstr "Одиниці виміру нижньої позиції."
 
 #: ../src/richtext/richtextborderspage.cpp:283
 #: ../src/richtext/richtextborderspage.cpp:285
@@ -7083,9 +7059,8 @@ msgstr "Одиниці виміру лівої фаски."
 
 #: ../src/richtext/richtextsizepage.cpp:556
 #: ../src/richtext/richtextsizepage.cpp:558
-#, fuzzy
 msgid "Units for the left position."
-msgstr "Одиниці виміру лівої фаски."
+msgstr "Одиниці виміру лівої позиції."
 
 #: ../src/richtext/richtextsizepage.cpp:482
 #: ../src/richtext/richtextsizepage.cpp:484
@@ -7139,9 +7114,8 @@ msgstr "Одиниці виміру правої фаски."
 
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:628
-#, fuzzy
 msgid "Units for the right position."
-msgstr "Одиниці виміру правої фаски."
+msgstr "Одиниці виміру правої позиції."
 
 #: ../src/richtext/richtextborderspage.cpp:343
 #: ../src/richtext/richtextborderspage.cpp:345
@@ -7165,9 +7139,8 @@ msgstr "Одиниці виміру верхньої фаски."
 
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:593
-#, fuzzy
 msgid "Units for the top position."
-msgstr "Одиниці виміру верхньої фаски."
+msgstr "Одиниці виміру верхньої позиції."
 
 #: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
 msgid "Unknown"
@@ -7201,7 +7174,7 @@ msgstr "Невідому одиницю роздільної здатності 
 msgid "Unknown data format"
 msgstr "Невідомий формат даних"
 
-#: ../src/unix/dlunix.cpp:335
+#: ../src/unix/dlunix.cpp:326
 msgid "Unknown dynamic library error"
 msgstr "Невідома помилка динамічної бібліотеки"
 
@@ -7260,17 +7233,17 @@ msgstr "Непідтримуваний формат clipboard."
 msgid "Unsupported theme '%s'."
 msgstr "Непідтримувана тема «%s»."
 
-#: ../src/generic/fdrepdlg.cpp:153 ../src/common/stockitem.cpp:206
+#: ../src/common/stockitem.cpp:206 ../src/generic/fdrepdlg.cpp:153
 msgid "Up"
 msgstr "Вверх"
 
-#: ../src/richtext/richtextliststylepage.cpp:484
 #: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextliststylepage.cpp:484
 msgid "Upper case letters"
 msgstr "Літери у верхньому регістрі"
 
-#: ../src/richtext/richtextliststylepage.cpp:486
 #: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextliststylepage.cpp:486
 msgid "Upper case roman numerals"
 msgstr "Римські цифри у верхньому регістрі"
 
@@ -7279,8 +7252,8 @@ msgstr "Римські цифри у верхньому регістрі"
 msgid "Usage: %s"
 msgstr "Використання: %s"
 
-#: ../src/richtext/richtextindentspage.cpp:182
-#: ../src/richtext/richtextindentspage.cpp:184
+#: ../src/richtext/richtextindentspage.cpp:170
+#: ../src/richtext/richtextindentspage.cpp:172
 #: ../src/richtext/richtextliststylepage.cpp:359
 #: ../src/richtext/richtextliststylepage.cpp:361
 msgid "Use the current alignment setting."
@@ -7459,9 +7432,8 @@ msgid "Windows Japanese (CP 932) or Shift-JIS"
 msgstr "Японська Windows (CP 932) або Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:181
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Арабська Windows (CP 1256)"
+msgstr "Корейська Windows (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:170
 msgid "Windows Korean (CP 949)"
@@ -7497,9 +7469,8 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Турецька Windows (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Грецька Windows (CP 1253)"
+msgstr "В’єтнамська Windows (CP 1258)"
 
 #: ../src/msw/utils.cpp:1297
 msgid "Windows Vista"
@@ -7587,11 +7558,11 @@ msgstr "&Збільшити"
 msgid "Zoom &Out"
 msgstr "З&меншити"
 
-#: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1565
+#: ../src/common/prntbase.cpp:1565 ../src/common/stockitem.cpp:210
 msgid "Zoom In"
 msgstr "Збільшити"
 
-#: ../src/common/stockitem.cpp:211 ../src/common/prntbase.cpp:1551
+#: ../src/common/prntbase.cpp:1551 ../src/common/stockitem.cpp:211
 msgid "Zoom Out"
 msgstr "Зменшити"
 
@@ -7633,23 +7604,24 @@ msgstr "параметр не пройшов перевірку DDEML."
 
 #: ../src/msw/dde.cpp:1124
 msgid "a request for a synchronous advise transaction has timed out."
-msgstr "запит на синхронну транзакцію поради перевищив границю часу"
+msgstr "запит на синхронну дію з надання поради перевищив границю часу"
 
 #: ../src/msw/dde.cpp:1130
 msgid "a request for a synchronous data transaction has timed out."
-msgstr "запит на синхронну транзакцію даних перечекався"
+msgstr "строк виконання запиту на синхронне передавання даних вичерпано."
 
 #: ../src/msw/dde.cpp:1139
 msgid "a request for a synchronous execute transaction has timed out."
-msgstr "запит на синхронну транзакцію запуску перечекався"
+msgstr "строк виконання запиту на синхронну дію з виконання вичерпано."
 
 #: ../src/msw/dde.cpp:1157
 msgid "a request for a synchronous poke transaction has timed out."
-msgstr "запит на синхронну транзакцію перегляду перевищив границю часу."
+msgstr ""
+"строк виконання запиту на синхронну дію з запису елемента даних вичерпано."
 
 #: ../src/msw/dde.cpp:1172
 msgid "a request to end an advise transaction has timed out."
-msgstr "запит на закінчення синхронної транзакції поради перечекався"
+msgstr "строк виконання запиту щодо завершення дії з надання поради вичерпано."
 
 #: ../src/msw/dde.cpp:1166
 msgid ""
@@ -7657,13 +7629,13 @@ msgid ""
 "that was terminated by the client, or the server\n"
 "terminated before completing a transaction."
 msgstr ""
-"виконано спробу транзакції з боку сервера під час обміну даними,\n"
+"виконано спробу дії з боку сервера під час обміну даними,\n"
 "її перервано клієнтом, або сервер було\n"
-"зупинено до завершення транзакції."
+"зупинено до завершення дії."
 
 #: ../src/msw/dde.cpp:1154
 msgid "a transaction failed."
-msgstr "помилкова транзакція."
+msgstr "помилкова дія."
 
 #: ../src/common/accelcmn.cpp:185
 msgid "alt"
@@ -7677,9 +7649,9 @@ msgid ""
 "attempted to perform server transactions."
 msgstr ""
 "програма запущена як APPCLASS_MONITOR\n"
-"спробувала виконати DDE транзакцію,\n"
+"спробувала виконати DDE-дію,\n"
 "або програма запущена як APPCMD_CLIENTONLY \n"
-"спробувала виконати серверні транзакції."
+"спробувала виконати серверні дії."
 
 #: ../src/msw/dde.cpp:1160
 msgid "an internal call to the PostMessage function has failed. "
@@ -7687,7 +7659,7 @@ msgstr "внутрішній виклик до PostMessage не пройшов"
 
 #: ../src/msw/dde.cpp:1169
 msgid "an internal error has occurred in the DDEML."
-msgstr "внутрішня помилка в DDEML."
+msgstr "внутрішня помилка у DDEML."
 
 #: ../src/msw/dde.cpp:1175
 msgid ""
@@ -7695,9 +7667,9 @@ msgid ""
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
-"до функції DDEML передано помилковий ідентифікатор транзакції.\n"
+"до функції DDEML передано помилковий ідентифікатор дії.\n"
 "Тільки-но програма повернулася зі зворотного виклику XTYP_XACT_COMPLETE,\n"
-"ідентифікатор транзакції для цього виклику вже не є дійсним."
+"ідентифікатор дії для цього виклику вже не є дійсним."
 
 #: ../src/common/zipstrm.cpp:1273
 msgid "assuming this is a multi-part zip concatenated"
@@ -7791,7 +7763,7 @@ msgstr ""
 msgid "can't flush file descriptor %d"
 msgstr "Не вдалося злити файл з дескриптором %d"
 
-#: ../src/common/file.cpp:439 ../src/msw/wince/filefnwce.cpp:199
+#: ../src/msw/wince/filefnwce.cpp:199 ../src/common/file.cpp:439
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "неможливо отримати дану позицію файла з дескриптором %d"
@@ -7800,7 +7772,7 @@ msgstr "неможливо отримати дану позицію файла �
 msgid "can't load any font, aborting"
 msgstr "неможливо завантажити жодного шрифту, зупинка"
 
-#: ../src/common/file.cpp:265 ../src/common/ffile.cpp:64
+#: ../src/common/ffile.cpp:64 ../src/common/file.cpp:265
 #, c-format
 msgid "can't open file '%s'"
 msgstr "Не вдалося відкрити файл «%s»"
@@ -7842,7 +7814,7 @@ msgstr "помилка вилучення файла «%s»"
 msgid "can't remove temporary file '%s'"
 msgstr "помилка вилучення тимчасового файла «%s»"
 
-#: ../src/common/file.cpp:425 ../src/msw/wince/filefnwce.cpp:185
+#: ../src/msw/wince/filefnwce.cpp:185 ../src/common/file.cpp:425
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "Не вдалося пересунутись у файлі з дескриптором %d"
@@ -7869,14 +7841,6 @@ msgstr "помилка у контрольній сумі"
 msgid "checksum failure reading tar header block"
 msgstr "помилка під час перевірки контрольної суми у заголовку tar"
 
-#: ../src/richtext/richtextborderspage.cpp:280
-#: ../src/richtext/richtextborderspage.cpp:310
-#: ../src/richtext/richtextborderspage.cpp:340
-#: ../src/richtext/richtextborderspage.cpp:370
-#: ../src/richtext/richtextborderspage.cpp:424
-#: ../src/richtext/richtextborderspage.cpp:454
-#: ../src/richtext/richtextborderspage.cpp:484
-#: ../src/richtext/richtextborderspage.cpp:514
 #: ../src/richtext/richtextmarginspage.cpp:202
 #: ../src/richtext/richtextmarginspage.cpp:227
 #: ../src/richtext/richtextmarginspage.cpp:250
@@ -7885,6 +7849,14 @@ msgstr "помилка під час перевірки контрольної �
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
+#: ../src/richtext/richtextborderspage.cpp:280
+#: ../src/richtext/richtextborderspage.cpp:310
+#: ../src/richtext/richtextborderspage.cpp:340
+#: ../src/richtext/richtextborderspage.cpp:370
+#: ../src/richtext/richtextborderspage.cpp:424
+#: ../src/richtext/richtextborderspage.cpp:454
+#: ../src/richtext/richtextborderspage.cpp:484
+#: ../src/richtext/richtextborderspage.cpp:514
 #: ../src/richtext/richtextsizepage.cpp:336
 #: ../src/richtext/richtextsizepage.cpp:370
 #: ../src/richtext/richtextsizepage.cpp:397
@@ -7918,7 +7890,7 @@ msgstr "дата"
 msgid "decompression error"
 msgstr "помилка розпакування"
 
-#: ../src/richtext/richtextstyles.cpp:772 ../src/common/fmapbase.cpp:821
+#: ../src/common/fmapbase.cpp:821 ../src/richtext/richtextstyles.cpp:781
 msgid "default"
 msgstr "типовий"
 
@@ -7930,15 +7902,15 @@ msgstr "double"
 msgid "dump of the process state (binary)"
 msgstr "дамп стану процесу (бінарний)"
 
-#: ../src/common/datetimefmt.cpp:1925
+#: ../src/common/datetimefmt.cpp:1937
 msgid "eighteenth"
 msgstr "вісімнадцятий"
 
-#: ../src/common/datetimefmt.cpp:1915
+#: ../src/common/datetimefmt.cpp:1927
 msgid "eighth"
 msgstr "восьмий"
 
-#: ../src/common/datetimefmt.cpp:1918
+#: ../src/common/datetimefmt.cpp:1930
 msgid "eleventh"
 msgstr "одинадцятий"
 
@@ -7979,11 +7951,11 @@ msgstr ""
 msgid "failed to flush the file '%s'"
 msgstr "не вдалося скинути буфер файла «%s»."
 
-#: ../src/common/datetimefmt.cpp:1922
+#: ../src/common/datetimefmt.cpp:1934
 msgid "fifteenth"
 msgstr "п'ятнадцятий"
 
-#: ../src/common/datetimefmt.cpp:1912
+#: ../src/common/datetimefmt.cpp:1924
 msgid "fifth"
 msgstr "п'ятий"
 
@@ -8016,7 +7988,7 @@ msgstr "файл «%s»: несподіваний символ %c у рядку 
 msgid "files"
 msgstr "файли"
 
-#: ../src/common/datetimefmt.cpp:1908
+#: ../src/common/datetimefmt.cpp:1920
 msgid "first"
 msgstr "перший"
 
@@ -8024,11 +7996,11 @@ msgstr "перший"
 msgid "font size"
 msgstr "Розмір шрифту:"
 
-#: ../src/common/datetimefmt.cpp:1921
+#: ../src/common/datetimefmt.cpp:1933
 msgid "fourteenth"
 msgstr "чотирнадцятий"
 
-#: ../src/common/datetimefmt.cpp:1911
+#: ../src/common/datetimefmt.cpp:1923
 msgid "fourth"
 msgstr "четвертий"
 
@@ -8036,8 +8008,8 @@ msgstr "четвертий"
 msgid "generate verbose log messages"
 msgstr "генерувати багатослівні повідомлення"
 
-#: ../src/richtext/richtextbuffer.cpp:11838
-#: ../src/richtext/richtextbuffer.cpp:11948
+#: ../src/richtext/richtextbuffer.cpp:11844
+#: ../src/richtext/richtextbuffer.cpp:11954
 msgid "image"
 msgstr "картинка"
 
@@ -8078,15 +8050,15 @@ msgstr "легкий"
 msgid "locale '%s' cannot be set."
 msgstr "локаль «%s» не може бути встановлена."
 
-#: ../src/common/datetimefmt.cpp:2081
+#: ../src/common/datetimefmt.cpp:2093
 msgid "midnight"
 msgstr "північ"
 
-#: ../src/common/datetimefmt.cpp:1926
+#: ../src/common/datetimefmt.cpp:1938
 msgid "nineteenth"
 msgstr "дев'ятнадцятий"
 
-#: ../src/common/datetimefmt.cpp:1916
+#: ../src/common/datetimefmt.cpp:1928
 msgid "ninth"
 msgstr "дев'ятий"
 
@@ -8107,11 +8079,11 @@ msgstr "У %s записів шрифтів не знайдено, викори�
 msgid "noname"
 msgstr "без назви"
 
-#: ../src/common/datetimefmt.cpp:2080
+#: ../src/common/datetimefmt.cpp:2092
 msgid "noon"
 msgstr "південь"
 
-#: ../src/richtext/richtextstyles.cpp:771
+#: ../src/richtext/richtextstyles.cpp:780
 msgid "normal"
 msgstr "звичайний"
 
@@ -8151,33 +8123,8 @@ msgstr "опис контексту процесу"
 #: ../src/richtext/richtextfontpage.cpp:187
 #: ../src/richtext/richtextfontpage.cpp:190
 msgid "pt"
-msgstr ""
+msgstr "пт"
 
-#: ../src/richtext/richtextfontpage.cpp:188
-#: ../src/richtext/richtextborderspage.cpp:279
-#: ../src/richtext/richtextborderspage.cpp:281
-#: ../src/richtext/richtextborderspage.cpp:282
-#: ../src/richtext/richtextborderspage.cpp:309
-#: ../src/richtext/richtextborderspage.cpp:311
-#: ../src/richtext/richtextborderspage.cpp:312
-#: ../src/richtext/richtextborderspage.cpp:339
-#: ../src/richtext/richtextborderspage.cpp:341
-#: ../src/richtext/richtextborderspage.cpp:342
-#: ../src/richtext/richtextborderspage.cpp:369
-#: ../src/richtext/richtextborderspage.cpp:371
-#: ../src/richtext/richtextborderspage.cpp:372
-#: ../src/richtext/richtextborderspage.cpp:423
-#: ../src/richtext/richtextborderspage.cpp:425
-#: ../src/richtext/richtextborderspage.cpp:426
-#: ../src/richtext/richtextborderspage.cpp:453
-#: ../src/richtext/richtextborderspage.cpp:455
-#: ../src/richtext/richtextborderspage.cpp:456
-#: ../src/richtext/richtextborderspage.cpp:483
-#: ../src/richtext/richtextborderspage.cpp:485
-#: ../src/richtext/richtextborderspage.cpp:486
-#: ../src/richtext/richtextborderspage.cpp:513
-#: ../src/richtext/richtextborderspage.cpp:515
-#: ../src/richtext/richtextborderspage.cpp:516
 #: ../src/richtext/richtextmarginspage.cpp:201
 #: ../src/richtext/richtextmarginspage.cpp:203
 #: ../src/richtext/richtextmarginspage.cpp:204
@@ -8202,6 +8149,30 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
+#: ../src/richtext/richtextborderspage.cpp:279
+#: ../src/richtext/richtextborderspage.cpp:281
+#: ../src/richtext/richtextborderspage.cpp:282
+#: ../src/richtext/richtextborderspage.cpp:309
+#: ../src/richtext/richtextborderspage.cpp:311
+#: ../src/richtext/richtextborderspage.cpp:312
+#: ../src/richtext/richtextborderspage.cpp:339
+#: ../src/richtext/richtextborderspage.cpp:341
+#: ../src/richtext/richtextborderspage.cpp:342
+#: ../src/richtext/richtextborderspage.cpp:369
+#: ../src/richtext/richtextborderspage.cpp:371
+#: ../src/richtext/richtextborderspage.cpp:372
+#: ../src/richtext/richtextborderspage.cpp:423
+#: ../src/richtext/richtextborderspage.cpp:425
+#: ../src/richtext/richtextborderspage.cpp:426
+#: ../src/richtext/richtextborderspage.cpp:453
+#: ../src/richtext/richtextborderspage.cpp:455
+#: ../src/richtext/richtextborderspage.cpp:456
+#: ../src/richtext/richtextborderspage.cpp:483
+#: ../src/richtext/richtextborderspage.cpp:485
+#: ../src/richtext/richtextborderspage.cpp:486
+#: ../src/richtext/richtextborderspage.cpp:513
+#: ../src/richtext/richtextborderspage.cpp:515
+#: ../src/richtext/richtextborderspage.cpp:516
 #: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
 #: ../src/richtext/richtextsizepage.cpp:339
@@ -8232,6 +8203,7 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:656
 #: ../src/richtext/richtextsizepage.cpp:659
 #: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextfontpage.cpp:188
 msgid "px"
 msgstr "пк"
 
@@ -8255,9 +8227,9 @@ msgstr "читання потоку zip (елемент %s): помилкова 
 
 #: ../src/msw/dde.cpp:1163
 msgid "reentrancy problem."
-msgstr "помилка перевходу"
+msgstr "проблема з повторним входом."
 
-#: ../src/common/datetimefmt.cpp:1909
+#: ../src/common/datetimefmt.cpp:1921
 msgid "second"
 msgstr "другий"
 
@@ -8265,11 +8237,11 @@ msgstr "другий"
 msgid "seek error"
 msgstr "помилка пошуку"
 
-#: ../src/common/datetimefmt.cpp:1924
+#: ../src/common/datetimefmt.cpp:1936
 msgid "seventeenth"
 msgstr "сімнадцятий"
 
-#: ../src/common/datetimefmt.cpp:1914
+#: ../src/common/datetimefmt.cpp:1926
 msgid "seventh"
 msgstr "сьомий"
 
@@ -8281,11 +8253,11 @@ msgstr "shift"
 msgid "show this help message"
 msgstr "показати цю підказку"
 
-#: ../src/common/datetimefmt.cpp:1923
+#: ../src/common/datetimefmt.cpp:1935
 msgid "sixteenth"
 msgstr "шістнадцятий"
 
-#: ../src/common/datetimefmt.cpp:1913
+#: ../src/common/datetimefmt.cpp:1925
 msgid "sixth"
 msgstr "шостий"
 
@@ -8334,27 +8306,27 @@ msgstr "перекреслення"
 msgid "tar entry not open"
 msgstr "елемент tar не відкрито"
 
-#: ../src/common/datetimefmt.cpp:1917
+#: ../src/common/datetimefmt.cpp:1929
 msgid "tenth"
 msgstr "десятий"
 
 #: ../src/msw/dde.cpp:1127
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
-msgstr "відповідь на транзакцію викликала встановлення біта DDE_FBUSY."
+msgstr "відповідь на дію викликала встановлення біта DDE_FBUSY."
 
-#: ../src/common/datetimefmt.cpp:1910
+#: ../src/common/datetimefmt.cpp:1922
 msgid "third"
 msgstr "третій"
 
-#: ../src/common/datetimefmt.cpp:1920
+#: ../src/common/datetimefmt.cpp:1932
 msgid "thirteenth"
 msgstr "тринадцятий"
 
-#: ../src/common/datetimefmt.cpp:1714
+#: ../src/common/datetimefmt.cpp:1726
 msgid "today"
 msgstr "сьогодні"
 
-#: ../src/common/datetimefmt.cpp:1716
+#: ../src/common/datetimefmt.cpp:1728
 msgid "tomorrow"
 msgstr "завтра"
 
@@ -8367,11 +8339,11 @@ msgstr "у «%s» проігноровано кінцеву похилу рис�
 msgid "translator-credits"
 msgstr "подяки перекладачам"
 
-#: ../src/common/datetimefmt.cpp:1919
+#: ../src/common/datetimefmt.cpp:1931
 msgid "twelfth"
 msgstr "дванадцятий"
 
-#: ../src/common/datetimefmt.cpp:1927
+#: ../src/common/datetimefmt.cpp:1939
 msgid "twentieth"
 msgstr "двадцятий"
 
@@ -8388,8 +8360,8 @@ msgstr "несподіваний \" в позиції %d в «%s»."
 msgid "unexpected end of file"
 msgstr "несподіваний кінець файла"
 
-#: ../src/generic/progdlgg.cpp:400 ../src/common/tarstrm.cpp:372
-#: ../src/common/tarstrm.cpp:395 ../src/common/tarstrm.cpp:426
+#: ../src/common/tarstrm.cpp:372 ../src/common/tarstrm.cpp:395
+#: ../src/common/tarstrm.cpp:426 ../src/generic/progdlgg.cpp:400
 msgid "unknown"
 msgstr "невідомий"
 
@@ -8429,7 +8401,7 @@ msgstr "безіменний%d"
 msgid "unsupported Zip compression method"
 msgstr "непідтримуваний метод стиснення Zip"
 
-#: ../src/common/translation.cpp:1886
+#: ../src/common/translation.cpp:1885
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "використовується каталог «%s» з «%s»."
@@ -8467,7 +8439,7 @@ msgstr "wxWidgets не вдалося відкрити дисплей. Заве�
 msgid "xxxx"
 msgstr "xxxx"
 
-#: ../src/common/datetimefmt.cpp:1715
+#: ../src/common/datetimefmt.cpp:1727
 msgid "yesterday"
 msgstr "вчора"
 
@@ -8476,10 +8448,13 @@ msgstr "вчора"
 msgid "zlib error %d"
 msgstr "помилка zlib %d"
 
-#: ../src/richtext/richtextliststylepage.cpp:497
 #: ../src/richtext/richtextbulletspage.cpp:302
+#: ../src/richtext/richtextliststylepage.cpp:497
 msgid "~"
 msgstr "~"
+
+#~ msgid "'"
+#~ msgstr "'"
 
 #~ msgid "1"
 #~ msgstr "1"
