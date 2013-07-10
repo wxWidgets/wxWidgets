@@ -1478,8 +1478,15 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
 #if wxUSE_MENUS
 
 bool
-wxTopLevelWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU WXUNUSED(hMenu))
+wxTopLevelWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 {
+    // Ignore the special messages generated when the menu is closed (this is
+    // the only case when the flags are set to -1), in particular don't clear
+    // the help string in the status bar when this happens as it had just been
+    // restored by the base class code.
+    if ( !hMenu && flags == 0xffff )
+        return false;
+
     // sign extend to int from unsigned short we get from Windows
     int item = (signed short)nItem;
 
