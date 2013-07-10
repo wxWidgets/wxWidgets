@@ -571,12 +571,14 @@ bool wxLocale::Init(int language, int flags)
 namespace
 {
 
+#ifndef __WXOSX__
 // Small helper function: get the value of the given environment variable and
 // return true only if the variable was found and has non-empty value.
 inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
 {
     return wxGetEnv(name, value) && !value->empty();
 }
+#endif
 
 } // anonymous namespace
 
@@ -591,7 +593,7 @@ inline bool wxGetNonEmptyEnvVar(const wxString& name, wxString* value)
 #if defined(__UNIX__)
     // first get the string identifying the language from the environment
     wxString langFull;
-#ifdef __WXMAC__
+#ifdef __WXOSX__
     wxCFRef<CFLocaleRef> userLocaleRef(CFLocaleCopyCurrent());
 
     // because the locale identifier (kCFLocaleIdentifier) is formatted a little bit differently, eg

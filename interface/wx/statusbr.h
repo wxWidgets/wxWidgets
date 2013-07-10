@@ -39,7 +39,7 @@ public:
     /**
         Constructs the pane with the given @a style and @a width.
     */
-    wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0);
+    wxStatusBarPane(int style = wxSB_NORMAL, int width = 0);
 
     /**
         Returns the pane width; it maybe negative, indicating a variable-width field.

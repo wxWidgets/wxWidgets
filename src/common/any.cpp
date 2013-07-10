@@ -484,7 +484,9 @@ WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxDateTime>)
 
 class wxAnyNullValue
 {
-private:
+protected:
+    // this field is unused, but can't be private to avoid Clang's
+    // "Private field 'm_dummy' is not used" warning
     void*   m_dummy;
 };
 

@@ -204,7 +204,7 @@ private:
             // actual hypertext link or empty string
     bool m_UseLink;
             // true if m_Link is not empty
-    long m_CharHeight, m_CharWidth;
+    int m_CharHeight, m_CharWidth;
             // average height of normal-sized text
     int m_Align;
             // actual alignment

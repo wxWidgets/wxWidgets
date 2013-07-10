@@ -251,7 +251,7 @@ protected:                                                          \
   typedef const value_type* const_iterator;                         \
   typedef value_type& reference;                                    \
   typedef const value_type& const_reference;                        \
-  typedef int difference_type;                                      \
+  typedef ptrdiff_t difference_type;                                \
   typedef size_t size_type;                                         \
                                                                     \
   void assign(const_iterator first, const_iterator last);           \

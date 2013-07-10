@@ -54,7 +54,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusBarNameStr[];
 class WXDLLIMPEXP_CORE wxStatusBarPane
 {
 public:
-    wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0)
+    wxStatusBarPane(int style = wxSB_NORMAL, int width = 0)
         : m_nStyle(style), m_nWidth(width)
         { m_bEllipsized = false; }
 
@@ -120,7 +120,7 @@ public:
     // set the number of fields and call SetStatusWidths(widths) if widths are
     // given
     virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
-    int GetFieldsCount() const { return m_panes.GetCount(); }
+    int GetFieldsCount() const { return (int)m_panes.GetCount(); }
 
     // field text
     // ----------

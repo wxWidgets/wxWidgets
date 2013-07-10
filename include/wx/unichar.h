@@ -36,7 +36,7 @@ public:
     wxUniChar(unsigned char c) { m_value = From8bit((char)c); }
 
 #define wxUNICHAR_DEFINE_CTOR(type) \
-    wxUniChar(type c) { m_value = c; }
+    wxUniChar(type c) { m_value = (value_type)c; }
     wxDO_FOR_INT_TYPES(wxUNICHAR_DEFINE_CTOR)
 #undef wxUNICHAR_DEFINE_CTOR
 
@@ -112,7 +112,7 @@ public:
     wxUniChar& operator=(unsigned char c) { m_value = From8bit((char)c); return *this; }
 
 #define wxUNICHAR_DEFINE_OPERATOR_EQUAL(type) \
-    wxUniChar& operator=(type c) { m_value = c; return *this; }
+    wxUniChar& operator=(type c) { m_value = (value_type)c; return *this; }
     wxDO_FOR_INT_TYPES(wxUNICHAR_DEFINE_OPERATOR_EQUAL)
 #undef wxUNICHAR_DEFINE_OPERATOR_EQUAL
 

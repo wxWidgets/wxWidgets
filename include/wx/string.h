@@ -889,7 +889,7 @@ public:
       public:                                                               \
           WX_DEFINE_ITERATOR_CATEGORY(WX_STR_ITERATOR_TAG)                  \
           typedef wxUniChar value_type;                                     \
-          typedef int difference_type;                                      \
+          typedef ptrdiff_t difference_type;                                \
           typedef reference_type reference;                                 \
           typedef pointer_type pointer;                                     \
                                                                             \

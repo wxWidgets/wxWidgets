@@ -814,7 +814,7 @@ protected:
             "Can't calculate number of cols if number of rows is not specified"
         );
 
-        return (m_children.GetCount() + m_rows - 1) / m_rows;
+        return int(m_children.GetCount() + m_rows - 1) / m_rows;
     }
 
     int CalcRows() const
@@ -825,7 +825,7 @@ protected:
             "Can't calculate number of cols if number of rows is not specified"
         );
 
-        return (m_children.GetCount() + m_cols - 1) / m_cols;
+        return int(m_children.GetCount() + m_cols - 1) / m_cols;
     }
 
 private:

@@ -965,6 +965,7 @@ outlineView:(NSOutlineView*)outlineView
                 delete[] dataFormats;
                 delete itemObject;
                 if (dataStringAvailable)
+                {
                     if (itemStringAvailable)
                     {
                         if (itemCounter > 0)
@@ -973,6 +974,7 @@ outlineView:(NSOutlineView*)outlineView
                     }
                     else
                         dataStringAvailable = false;
+                }
             }
             else
             {
@@ -1701,7 +1703,7 @@ outlineView:(NSOutlineView*)outlineView
         NSArray*          sortDescriptors;
         NSSortDescriptor* sortDescriptor;
 
-        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[NSString stringWithFormat:@"%d",[outlineView columnWithIdentifier:[tableColumn identifier]]]
+        sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[NSString stringWithFormat:@"%ld",(long)[outlineView columnWithIdentifier:[tableColumn identifier]]]
             ascending:YES];
         sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
         [tableColumn setSortDescriptorPrototype:sortDescriptor];

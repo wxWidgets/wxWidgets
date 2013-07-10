@@ -218,7 +218,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
             }                                                                 \
             int IndexOf() const                                               \
             {                                                                 \
-                return *this ? std::distance( m_list->begin(), m_iter )       \
+                return *this ? (int)std::distance( m_list->begin(), m_iter )  \
                              : wxNOT_FOUND;                                   \
             }                                                                 \
         };                                                                    \

@@ -345,9 +345,9 @@ protected:
     wxHtmlContainerCell *m_Parent;
 
     // dimensions of fragment (m_Descent is used to position text & images)
-    long m_Width, m_Height, m_Descent;
+    int m_Width, m_Height, m_Descent;
     // position where the fragment is drawn:
-    long m_PosX, m_PosY;
+    int m_PosX, m_PosY;
 
     // superscript/subscript/normal:
     wxHtmlScriptMode m_ScriptMode;

@@ -43,7 +43,7 @@ public:
 
     wxWindowIDRef(long id)
     {
-        Init(id);
+        Init(wxWindowID(id));
     }
 
     wxWindowIDRef(const wxWindowIDRef& id)
@@ -66,7 +66,7 @@ public:
 
     wxWindowIDRef& operator=(long id)
     {
-        Assign(id);
+        Assign(wxWindowID(id));
         return *this;
     }
 

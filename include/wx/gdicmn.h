@@ -381,27 +381,27 @@ inline wxSize operator/(const wxSize& s, long i)
 
 inline wxSize operator*(const wxSize& s, long i)
 {
-    return wxSize(s.x * i, s.y * i);
+    return wxSize(int(s.x * i), int(s.y * i));
 }
 
 inline wxSize operator*(long i, const wxSize& s)
 {
-    return wxSize(s.x * i, s.y * i);
+    return wxSize(int(s.x * i), int(s.y * i));
 }
 
 inline wxSize operator/(const wxSize& s, unsigned long i)
 {
-    return wxSize(s.x / i, s.y / i);
+    return wxSize(int(s.x / i), int(s.y / i));
 }
 
 inline wxSize operator*(const wxSize& s, unsigned long i)
 {
-    return wxSize(s.x * i, s.y * i);
+    return wxSize(int(s.x * i), int(s.y * i));
 }
 
 inline wxSize operator*(unsigned long i, const wxSize& s)
 {
-    return wxSize(s.x * i, s.y * i);
+    return wxSize(int(s.x * i), int(s.y * i));
 }
 
 inline wxSize operator*(const wxSize& s, double i)
@@ -655,12 +655,12 @@ inline wxPoint operator/(const wxPoint& s, long i)
 
 inline wxPoint operator*(const wxPoint& s, long i)
 {
-    return wxPoint(s.x * i, s.y * i);
+    return wxPoint(int(s.x * i), int(s.y * i));
 }
 
 inline wxPoint operator*(long i, const wxPoint& s)
 {
-    return wxPoint(s.x * i, s.y * i);
+    return wxPoint(int(s.x * i), int(s.y * i));
 }
 
 inline wxPoint operator/(const wxPoint& s, unsigned long i)
@@ -670,12 +670,12 @@ inline wxPoint operator/(const wxPoint& s, unsigned long i)
 
 inline wxPoint operator*(const wxPoint& s, unsigned long i)
 {
-    return wxPoint(s.x * i, s.y * i);
+    return wxPoint(int(s.x * i), int(s.y * i));
 }
 
 inline wxPoint operator*(unsigned long i, const wxPoint& s)
 {
-    return wxPoint(s.x * i, s.y * i);
+    return wxPoint(int(s.x * i), int(s.y * i));
 }
 
 inline wxPoint operator*(const wxPoint& s, double i)

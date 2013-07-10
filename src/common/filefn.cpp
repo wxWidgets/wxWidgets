@@ -1390,7 +1390,7 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
         buf = new wxChar[sz + 1];
     }
 
-    bool ok wxDUMMY_INITIALIZE(false);
+    bool ok = false;
 
     // for the compilers which have Unicode version of _getcwd(), call it
     // directly, for the others call the ANSI version and do the translation
