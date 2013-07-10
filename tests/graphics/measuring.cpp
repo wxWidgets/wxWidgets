@@ -46,6 +46,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( MeasuringTextTestCase );
         CPPUNIT_TEST( DCGetTextExtent );
+        CPPUNIT_TEST( LeadingAndDescent );
         CPPUNIT_TEST( WindowGetTextExtent );
         CPPUNIT_TEST( GetPartialTextExtent );
 #ifdef TEST_GC
@@ -54,6 +55,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void DCGetTextExtent();
+    void LeadingAndDescent();
     void WindowGetTextExtent();
 
     void GetPartialTextExtent();
@@ -125,6 +127,30 @@ void MeasuringTextTestCase::DCGetTextExtent()
     wxEnhMetaFileDC metadc;
     GetTextExtentTester<wxEnhMetaFileDC> testMF(metadc);
 #endif
+}
+
+void MeasuringTextTestCase::LeadingAndDescent()
+{
+    wxClientDC dc(wxTheApp->GetTopWindow());
+
+    // Retrieving just the descent should work.
+    int descent = -17;
+    dc.GetTextExtent("foo", NULL, NULL, &descent);
+    CPPUNIT_ASSERT( descent != -17 );
+
+    // Same for external leading.
+    int leading = -289;
+    dc.GetTextExtent("foo", NULL, NULL, NULL, &leading);
+    CPPUNIT_ASSERT( leading != -289 );
+
+    // And both should also work for the empty string as they retrieve the
+    // values valid for the entire font and not just this string.
+    int descent2,
+        leading2;
+    dc.GetTextExtent("", NULL, NULL, &descent2, &leading2);
+
+    CPPUNIT_ASSERT_EQUAL( descent, descent2 );
+    CPPUNIT_ASSERT_EQUAL( leading, leading2 );
 }
 
 void MeasuringTextTestCase::WindowGetTextExtent()

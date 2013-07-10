@@ -126,7 +126,7 @@ void wxTextMeasure::DoGetTextExtent(const wxString& string,
 
     // Set layout's text
     const wxCharBuffer dataUTF8 = wxGTK_CONV_FONT(string, GetFont());
-    if ( !dataUTF8 )
+    if ( !dataUTF8 && !string.empty() )
     {
         // hardly ideal, but what else can we do if conversion failed?
         wxLogLastError(wxT("GetTextExtent"));
