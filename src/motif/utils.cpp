@@ -30,6 +30,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/evtloop.h"
+#include "wx/private/eventloopsourcesmanager.h"
 #include "wx/motif/private/timer.h"
 
 #include <string.h>
@@ -76,6 +77,94 @@ void wxFlushEvents(WXDisplay* wxdisplay)
         evtLoop.Dispatch();
     }
 }
+
+#if wxUSE_EVENTLOOP_SOURCE
+
+extern "C"
+{
+
+static
+void
+wxMotifInputHandler(XtPointer data,
+                    int* WXUNUSED(fd),
+                    XtInputId* WXUNUSED(inputId))
+{
+    wxEventLoopSourceHandler * const
+        handler = static_cast<wxEventLoopSourceHandler *>(data);
+
+    handler->OnReadWaiting();
+}
+
+}
+
+// This class exists just to call XtRemoveInput() in its dtor, the real work of
+// dispatching events on the file descriptor to the handler is done by
+// wxMotifInputHandler callback above.
+class wxMotifEventLoopSource : public wxEventLoopSource
+{
+public:
+    wxMotifEventLoopSource(XtInputId inputId,
+                           wxEventLoopSourceHandler *handler,
+                           int flags)
+        : wxEventLoopSource(handler, flags),
+          m_inputId(inputId)
+    {
+    }
+
+    virtual ~wxMotifEventLoopSource()
+    {
+        XtRemoveInput(m_inputId);
+    }
+
+private:
+    const XtInputId m_inputId;
+
+    wxDECLARE_NO_COPY_CLASS(wxMotifEventLoopSource);
+};
+
+class wxMotifEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
+{
+public:
+    wxEventLoopSource *
+    AddSourceForFD(int fd, wxEventLoopSourceHandler* handler, int flags)
+    {
+        wxCHECK_MSG( wxTheApp, NULL, "Must create wxTheApp first" );
+
+        // The XtInputXXXMask values cannot be combined (hence "Mask" is a
+        // complete misnomer), and supporting those would make the code more
+        // complicated and we don't need them for now.
+        wxCHECK_MSG( !(flags & (wxEVENT_SOURCE_OUTPUT |
+                                wxEVENT_SOURCE_EXCEPTION)),
+                     NULL,
+                     "Monitoring FDs for output/errors not supported" );
+
+        wxCHECK_MSG( flags & wxEVENT_SOURCE_INPUT,
+                     NULL,
+                     "Should be monitoring for input" );
+
+        XtInputId inputId = XtAppAddInput
+                            (
+                                 (XtAppContext) wxTheApp->GetAppContext(),
+                                 fd,
+                                 (XtPointer) XtInputReadMask,
+                                 wxMotifInputHandler,
+                                 handler
+                            );
+        if ( inputId < 0 )
+            return 0;
+
+        return new wxMotifEventLoopSource(inputId, handler, flags);
+    }
+};
+
+wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
+{
+    static wxMotifEventLoopSourcesManager s_eventLoopSourcesManager;
+
+    return &s_eventLoopSourcesManager;
+}
+
+#endif // wxUSE_EVENTLOOP_SOURCE
 
 // ----------------------------------------------------------------------------
 // misc
