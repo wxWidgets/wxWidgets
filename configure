@@ -23646,12 +23646,14 @@ else
 fi
 
 
-  pkg_config_args=gtk+-3.0
+  pkg_gtk_version=gtk+-3.0
+  pkg_config_args=$pkg_gtk_version
   for module in . $GTK_MODULES
   do
       case "$module" in
          gthread)
-             pkg_config_args="$pkg_config_args gthread-2.0"
+             pkg_gthread_version=gthread-2.0
+             pkg_config_args="$pkg_config_args $pkg_gthread_version"
          ;;
       esac
   done
@@ -23722,8 +23724,7 @@ $as_echo_n "checking for GTK+ - version >= $min_gtk_version... " >&6; }
 	  echo "Will use uninstalled version of GTK+ found in PKG_CONFIG_PATH"
 	  enable_gtktest=no
     fi
-
-    if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args; then
+    if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_gtk_version ; then
 	  :
     else
 	  no_gtk=yes

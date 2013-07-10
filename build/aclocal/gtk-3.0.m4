@@ -12,12 +12,14 @@ dnl
 AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run a test GTK+ program],
 		    , enable_gtktest=yes)
 
-  pkg_config_args=gtk+-3.0
+  pkg_gtk_version=gtk+-3.0
+  pkg_config_args=$pkg_gtk_version
   for module in . $4
   do
       case "$module" in
          gthread)
-             pkg_config_args="$pkg_config_args gthread-2.0"
+             pkg_gthread_version=gthread-2.0
+             pkg_config_args="$pkg_config_args $pkg_gthread_version"
          ;;
       esac
   done
@@ -47,8 +49,7 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
 	  echo "Will use uninstalled version of GTK+ found in PKG_CONFIG_PATH"
 	  enable_gtktest=no
     fi
-
-    if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args; then
+    if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_gtk_version ; then
 	  :
     else
 	  no_gtk=yes
@@ -205,7 +206,7 @@ AC_DEFUN([GTK_CHECK_BACKEND],
 
   AC_PATH_PROG(PKG_CONFIG, [pkg-config], [AC_MSG_ERROR([No pkg-config found])])
 
-  if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_config_args ; then
+  if $PKG_CONFIG --atleast-version $min_gtk_version $pkg_gtk_version ; then
     target_found=yes
   else
     target_found=no
