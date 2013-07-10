@@ -38,7 +38,12 @@
 
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 
-wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
+void wxDirDialog::Init()
+{
+    m_sheetDelegate = nil;
+}
+
+void wxDirDialog::Create(wxWindow *parent, const wxString& message,
         const wxString& defaultPath, long style, const wxPoint& WXUNUSED(pos),
         const wxSize& WXUNUSED(size), const wxString& WXUNUSED(name))
 {

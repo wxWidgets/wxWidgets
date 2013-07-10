@@ -187,16 +187,22 @@ bool HasAppKit_10_6()
 
 IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 
-wxFileDialog::wxFileDialog(
+void wxFileDialog::Init()
+{
+    m_filterIndex = -1;
+    m_delegate = nil;
+    m_sheetDelegate = nil;
+}
+
+void wxFileDialog::Create(
     wxWindow *parent, const wxString& message,
     const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
     long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
-    : wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
-    m_filterIndex = -1;
+    wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name);
+
     m_sheetDelegate = [[ModalDialogDelegate alloc] init];
     [(ModalDialogDelegate*)m_sheetDelegate setImplementation: this];
-    m_delegate = nil;
 }
 
 wxFileDialog::~wxFileDialog()

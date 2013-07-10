@@ -456,12 +456,17 @@ static pascal void NavEventProc(
 }
 
 
-wxFileDialog::wxFileDialog(
+void wxFileDialog::Init()
+{
+}
+
+void wxFileDialog::Create(
     wxWindow *parent, const wxString& message,
     const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
     long style, const wxPoint& pos, const wxSize& sz, const wxString& name)
-    : wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name)
 {
+    wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName, wildCard, style, pos, sz, name);
+
     wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
 }
 

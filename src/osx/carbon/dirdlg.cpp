@@ -55,7 +55,11 @@ static pascal void NavEventProc(
     }
 }
 
-wxDirDialog::wxDirDialog(wxWindow *parent,
+void wxDirDialog::Init()
+{
+}
+
+void wxDirDialog::Create(wxWindow *parent,
                          const wxString& message,
                          const wxString& defaultPath,
                          long style,
