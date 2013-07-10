@@ -6,6 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
+//              (c) 2013 Rob Bresalier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,6 +16,8 @@
 #if defined(__BORLANDC__)
     #pragma hdrstop
 #endif
+
+#include "wx/private/eventloopsourcesmanager.h"
 
 // ============================================================================
 // declarations
@@ -390,3 +393,27 @@ wxString wxGetXEventName(XEvent& event)
 #endif
 }
 
+#if wxUSE_EVENTLOOP_SOURCE
+
+class wxX11EventLoopSourcesManager : public wxEventLoopSourcesManagerBase
+{
+public:
+    wxEventLoopSource *
+    AddSourceForFD(int WXUNUSED(fd),
+                   wxEventLoopSourceHandler* WXUNUSED(handler),
+                   int WXUNUSED(flags))
+    {
+        wxFAIL_MSG("Monitoring FDs in the main loop is not implemented in wxX11");
+
+        return NULL;
+    }
+};
+
+wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
+{
+    static wxX11EventLoopSourcesManager s_eventLoopSourcesManager;
+
+    return &s_eventLoopSourcesManager;
+}
+
+#endif // wxUSE_EVENTLOOP_SOURCE
