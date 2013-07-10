@@ -252,6 +252,10 @@ private:
     // MSWGetSystemMenu(). Owned by this window.
     wxMenu *m_menuSystem;
 
+    // The number of currently opened menus: 0 initially, 1 when a top level
+    // menu is opened, 2 when its submenu is opened and so on.
+    int m_menuDepth;
+
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW);
 };

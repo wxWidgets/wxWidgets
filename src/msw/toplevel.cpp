@@ -159,6 +159,7 @@ void wxTopLevelWindowMSW::Init()
 #endif
 
     m_menuSystem = NULL;
+    m_menuDepth = 0;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -1487,6 +1488,17 @@ wxTopLevelWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     if ( !hMenu && flags == 0xffff )
         return false;
 
+    // Unfortunately we also need to ignore another message which is sent after
+    // closing the currently active submenu of the menu bar by pressing Escape:
+    // in this case we get WM_UNINITMENUPOPUP, from which we generate
+    // wxEVT_MENU_CLOSE, and _then_ we get WM_MENUSELECT for the top level menu
+    // from which we overwrite the help string just restored by OnMenuClose()
+    // handler in wxFrameBase. To prevent this from happening we discard these
+    // messages but only in the case it's really the top level menu as we still
+    // need to clear the help string when a submenu is selected in a menu.
+    if ( flags == (MF_POPUP | MF_HILITE) && !m_menuDepth )
+        return false;
+
     // sign extend to int from unsigned short we get from Windows
     int item = (signed short)nItem;
 
@@ -1515,6 +1527,25 @@ wxTopLevelWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 bool
 wxTopLevelWindowMSW::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup)
 {
+    // Update the menu depth when dealing with the top level menus.
+    if ( !popup )
+    {
+        if ( evtType == wxEVT_MENU_OPEN )
+        {
+            m_menuDepth++;
+        }
+        else if ( evtType == wxEVT_MENU_CLOSE )
+        {
+            wxASSERT_MSG( m_menuDepth > 0, wxS("No open menus?") );
+
+            m_menuDepth--;
+        }
+        else
+        {
+            wxFAIL_MSG( wxS("Unexpected menu event type") );
+        }
+    }
+
     wxMenuEvent event(evtType, popup ? wxID_ANY : 0, menu);
     event.SetEventObject(menu);
 
