@@ -67,8 +67,8 @@ else
 fi
 
 
-# Send notification to cia.vc  
-$REPOS/hooks/ciabot_svn.py "$REPOS" $REV &
+## Send notification to cia.vc  
+#$REPOS/hooks/ciabot_svn.py "$REPOS" $REV &
 
 
 # Check for keywords that Trac can use
