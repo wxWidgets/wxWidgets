@@ -124,16 +124,24 @@
 #endif /* __WXFUNCTION__ already defined */
 
 
-#if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || \
-    (defined(__cplusplus) && __cplusplus >= 201103L)
-    #define wxHAS_VARIADIC_MACROS
-#elif defined(__GNUC__) && __GNUC__ >= 3
-    #define wxHAS_VARIADIC_MACROS
-#elif defined(_MSC_VER) && _MSC_VER >= 1400
-    #define wxHAS_VARIADIC_MACROS
-#endif
+/* Auto-detect variadic macros support unless explicitly disabled. */
+#if !defined(HAVE_VARIADIC_MACROS) && !defined(wxNO_VARIADIC_MACROS)
+    /* Any C99 or C++11 compiler should have them. */
+    #if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || \
+        (defined(__cplusplus) && __cplusplus >= 201103L)
+        #define HAVE_VARIADIC_MACROS
+    #elif defined(__GNUC__) && __GNUC__ >= 3
+        #define HAVE_VARIADIC_MACROS
+    #elif wxCHECK_VISUALC_VERSION(8)
+        #define HAVE_VARIADIC_MACROS
+    #elif wxCHECK_WATCOM_VERSION(1,2)
+        #define HAVE_VARIADIC_MACROS
+    #endif
+#endif /* !HAVE_VARIADIC_MACROS */
 
-#ifdef wxHAS_VARIADIC_MACROS
+
+
+#ifdef HAVE_VARIADIC_MACROS
 /*
    wxCALL_FOR_EACH(what, ...) calls the macro from its first argument, what(pos, x),
    for every remaining argument 'x', with 'pos' being its 1-based index in
@@ -172,7 +180,7 @@
 
 #else
     #define wxCALL_FOR_EACH  Error_wx_CALL_FOR_EACH_requires_variadic_macros_support
-#endif /* wxHAS_VARIADIC_MACROS */
+#endif /* HAVE_VARIADIC_MACROS */
 
 #endif /* _WX_CPP_H_ */
 

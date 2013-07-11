@@ -425,17 +425,6 @@ typedef short int WXTYPE;
     #endif /* va_copy/!va_copy */
 #endif /* wxVaCopy */
 
-#ifndef HAVE_VARIADIC_MACROS
-    #if wxCHECK_WATCOM_VERSION(1,2)
-        #define HAVE_VARIADIC_MACROS
-    #endif
-
-    #if wxCHECK_VISUALC_VERSION(9)
-        #define HAVE_VARIADIC_MACROS
-    #endif
-#endif /* HAVE_VARIADIC_MACROS */
-
-
 #ifndef HAVE_WOSTREAM
     /*
         Mingw <= 3.4 and all versions of Cygwin don't have std::wostream

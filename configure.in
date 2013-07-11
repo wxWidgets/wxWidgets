@@ -1767,6 +1767,8 @@ if test $wx_cv_have_variadic_macros = "yes"; then
     AC_DEFINE(HAVE_VARIADIC_MACROS)
 fi
 
+else
+    AC_DEFINE(wxNO_VARIADIC_MACROS)
 fi dnl wxUSE_VARARG_MACROS == yes
 
 

@@ -20816,6 +20816,9 @@ if test $wx_cv_have_variadic_macros = "yes"; then
 
 fi
 
+else
+    $as_echo "#define wxNO_VARIADIC_MACROS 1" >>confdefs.h
+
 fi
 
 LARGEFILE_CPPFLAGS=

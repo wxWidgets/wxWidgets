@@ -15,7 +15,7 @@
 
 #include "wx/testing.h"
 
-#ifdef wxHAS_VARIADIC_MACROS
+#ifdef HAVE_VARIADIC_MACROS
 
 #include "wx/msgdlg.h"
 #include "wx/filedlg.h"
@@ -122,4 +122,4 @@ void ModalDialogsTestCase::CustomDialog()
     CPPUNIT_ASSERT_EQUAL( 42, dlg.m_value );
 }
 
-#endif // wxHAS_VARIADIC_MACROS
+#endif // HAVE_VARIADIC_MACROS

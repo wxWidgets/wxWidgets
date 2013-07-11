@@ -712,6 +712,12 @@
 #undef HAVE_VARIADIC_MACROS
 
 /*
+ * Define if you don't want variadic macros to be used even if they are
+ * supported by the compiler.
+ */
+#undef wxNO_VARIADIC_MACROS
+
+/*
  * Define if your compiler has std::wstring
  */
 #undef HAVE_STD_WSTRING
