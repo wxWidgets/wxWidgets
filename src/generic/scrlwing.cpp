@@ -1018,6 +1018,9 @@ void wxScrollHelperBase::HandleOnMouseWheel(wxMouseEvent& event)
         newEvent.SetOrientation( event.GetWheelAxis() == 0 ? wxVERTICAL : wxHORIZONTAL);
         newEvent.SetEventObject(m_win);
 
+        if ( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL )
+            lines = -lines;
+
         if (event.IsPageScroll())
         {
             if (lines > 0)
