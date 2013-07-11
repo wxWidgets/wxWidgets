@@ -714,9 +714,9 @@ long wxExecute(const wxString& command,
 // ----------------------------------------------------------------------------
 
 // Id generation
-static long wxCurrentId = 100;
+static wxWindowID wxCurrentId = 100;
 
-long wxNewId()
+wxWindowID wxNewId()
 {
     // skip the part of IDs space that contains hard-coded values:
     if (wxCurrentId == wxID_LOWEST)
@@ -725,11 +725,11 @@ long wxNewId()
     return wxCurrentId++;
 }
 
-long
+wxWindowID
 wxGetCurrentId(void) { return wxCurrentId; }
 
 void
-wxRegisterId (long id)
+wxRegisterId (wxWindowID id)
 {
   if (id >= wxCurrentId)
     wxCurrentId = id + 1;
