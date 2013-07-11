@@ -687,8 +687,11 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
                 
             if ( fabs(deltaX) > fabs(deltaY) )
             {
+                // wx conventions for horizontal are inverted from vertical (originating from native msw behavior)
+                // right and up are positive values, left and down are negative values, while on OSX right and down
+                // are negative and left and up are positive.
                 wxevent.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
-                wxevent.m_wheelRotation = (int)deltaX;
+                wxevent.m_wheelRotation = -(int)deltaX;
             }
             else
             {
