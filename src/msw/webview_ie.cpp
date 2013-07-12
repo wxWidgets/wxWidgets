@@ -670,9 +670,13 @@ long wxWebViewIE::Find(const wxString& text, int flags)
     ClearSelection();
     m_findText = text;
     m_findFlags = flags;
-    //find the text and return count.
+    //find the text and return wxNOT_FOUND if there are no matches.
     FindInternal(text, flags, wxWEBVIEW_FIND_ADD_POINTERS);
-    return m_findPointers.empty() ? wxNOT_FOUND : m_findPointers.size();
+    if(m_findPointers.empty())
+        return wxNOT_FOUND;
+
+    // Or their number if there are.
+    return m_findPointers.size();
 }
 
 void wxWebViewIE::SetEditable(bool enable)
