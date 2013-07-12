@@ -561,6 +561,8 @@ private:
 
         SetShape(path);
 #else // !wxUSE_GRAPHICS_CONTEXT
+        wxUnusedVar(tipKind);
+
         int x = contentSize.x/2,
             yApex = 0,
             dy = 0;
