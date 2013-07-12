@@ -1339,7 +1339,10 @@ void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
 
 wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
 {
-    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y, -1);
+    // The cast is necessary to suppress a MinGW warning due to a missing cast
+    // to WPARAM in the definition of ListView_ApproximateViewRect() in its
+    // own headers (this was the case up to at least MinGW 4.8).
+    const DWORD rc = ListView_ApproximateViewRect(GetHwnd(), x, y, (WPARAM)-1);
 
     wxSize size(LOWORD(rc), HIWORD(rc));
 
