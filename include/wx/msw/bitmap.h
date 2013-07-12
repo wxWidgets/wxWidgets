@@ -13,6 +13,7 @@
 #define _WX_BITMAP_H_
 
 #include "wx/msw/gdiimage.h"
+#include "wx/math.h"
 #include "wx/palette.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
@@ -145,7 +146,7 @@ public:
     virtual bool Create(int width, int height, const wxDC& dc);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     virtual bool CreateScaled(int w, int h, int d, double logicalScale)
-        { return Create(w*logicalScale,h*logicalScale,d); }
+        { return Create(wxRound(w*logicalScale), wxRound(h*logicalScale), d); }
 
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
@@ -175,7 +176,7 @@ public:
     virtual double GetScaledWidth() const { return GetWidth() / GetScaleFactor(); }
     virtual double GetScaledHeight() const { return GetHeight() / GetScaleFactor(); }
     virtual wxSize GetScaledSize() const
-    { return wxSize(GetScaledWidth(), GetScaledHeight()); }
+        { return wxSize(wxRound(GetScaledWidth()), wxRound(GetScaledHeight())); }
 
     // implementation only from now on
     // -------------------------------

@@ -731,7 +731,7 @@ wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     // that's too big. So never use the height calculated
     // from wxSpinButton::DoGetBestSize().
 
-    wxSize tsize(xlen + sizeBtn.x + MARGIN_BETWEEN + 0.3 * y + 10,
+    wxSize tsize(xlen + sizeBtn.x + MARGIN_BETWEEN + 3*y/10 + 10,
                  EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
 
     // Check if the user requested a non-standard height.

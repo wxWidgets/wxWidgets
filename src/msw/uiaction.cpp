@@ -65,8 +65,10 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
     int displayx, displayy;
     wxDisplaySize(&displayx, &displayy);
 
-    int scaledx = ceil((float)x * 65535.0 / (displayx-1));
-    int scaledy = ceil((float)y * 65535.0 / (displayy-1));
+    // Casts are safe because x and y are supposed to be less than the display
+    // size, so there is no danger of overflow.
+    DWORD scaledx = static_cast<DWORD>(ceil(x * 65535.0 / (displayx-1)));
+    DWORD scaledy = static_cast<DWORD>(ceil(y * 65535.0 / (displayy-1)));
     mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, scaledx, scaledy, 0, 0);
 
     return true;

@@ -284,7 +284,7 @@ wxSize wxSpinCtrlGenericBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 
     wxSize tsize(xlen + sizeBtn.x + MARGIN, totalS.y);
 #if defined(__WXMSW__)
-    tsize.IncBy(0.4 * totalS.y + 4, 0);
+    tsize.IncBy(4*totalS.y/10 + 4, 0);
 #elif defined(__WXGTK__)
     tsize.IncBy(totalS.y + 10, 0);
 #endif // MSW GTK
