@@ -1434,7 +1434,6 @@ if test "$wants_win32" = 1 ; then
     USE_UNIX=0
     USE_WIN32=1
     AC_DEFINE(__WIN32__)
-    AC_DEFINE(__WIN95__)
     AC_DEFINE(__WINDOWS__)
     AC_DEFINE(__GNUWIN32__)
     AC_DEFINE(STRICT)
@@ -2834,13 +2833,13 @@ if test "$USE_WIN32" = 1 ; then
     esac
 
     dnl This one is still used by some sample makefiles.
-    RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
+    RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 
     dnl This lot we export to wx-config.  It must add the relevant
     dnl include directories at the point when they can be known.
     dnl (but are these (still) required anyway?)
-    WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
+    WXCONFIG_RESFLAGS="--define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
 
     dnl install Win32-specific files in "make install"
     WIN32INSTALL=win32install

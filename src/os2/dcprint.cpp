@@ -86,10 +86,8 @@ bool wxPrinterDCImpl::StartDoc(const wxString& WXUNUSED(rsMessage))
     else
         docinfo.lpszOutput = (const wxChar *) filename;
 
-#if defined(__WIN95__)
     docinfo.lpszDatatype = NULL;
     docinfo.fwType = 0;
-#endif
 
     if (!m_hDC)
         return false;

@@ -19762,8 +19762,6 @@ if test "$wants_win32" = 1 ; then
     USE_WIN32=1
     $as_echo "#define __WIN32__ 1" >>confdefs.h
 
-    $as_echo "#define __WIN95__ 1" >>confdefs.h
-
     $as_echo "#define __WINDOWS__ 1" >>confdefs.h
 
     $as_echo "#define __GNUWIN32__ 1" >>confdefs.h
@@ -23297,10 +23295,10 @@ fi
                         LIBS="$LIBS -lkernel32 -luser32"
     esac
 
-        RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
+        RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 
-                WXCONFIG_RESFLAGS="--define __WIN32__ --define __WIN95__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
+                WXCONFIG_RESFLAGS="--define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
 
         WIN32INSTALL=win32install
 fi
