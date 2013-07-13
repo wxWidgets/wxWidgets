@@ -178,7 +178,9 @@ __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
 ifeq ($(MONOLITHIC),1)
+ifeq ($(USE_STC),1)
 __LIB_SCINTILLA_IF_MONO_p = -lwxscintilla$(WXDEBUGFLAG)
+endif
 endif
 ifeq ($(USE_GUI),1)
 __LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)

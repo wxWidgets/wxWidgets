@@ -95,7 +95,9 @@ __WXLIB_CORE_p = &
 !endif
 __LIB_SCINTILLA_IF_MONO_p =
 !ifeq MONOLITHIC 1
+!ifeq USE_STC 1
 __LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
+!endif
 !endif
 __LIB_TIFF_p =
 !ifeq USE_GUI 1

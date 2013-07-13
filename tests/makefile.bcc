@@ -321,7 +321,7 @@ __WXLIB_HTML_p = \
 __WXLIB_CORE_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
-!if "$(MONOLITHIC)" == "1"
+!if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
 __LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
 !endif
 !if "$(USE_GUI)" == "1"
