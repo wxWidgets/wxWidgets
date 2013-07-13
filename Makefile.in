@@ -6465,7 +6465,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_treelist.o \
 	monodll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_1) \
-	$(__ADVANCED_UNIV_SRC_OBJECTS)
+	monodll_animateg.o
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_src_cocoa_taskbar.o \
@@ -6687,10 +6687,6 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monodll_unix_sound.o \
 	monodll_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_UNIV_SRC_OBJECTS \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_animateg.o
-@COND_TOOLKIT_MSW@__ADVANCED_UNIV_SRC_OBJECTS = monodll_animateg.o
-@COND_TOOLKIT_WINCE@__ADVANCED_UNIV_SRC_OBJECTS = monodll_animateg.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o 
@@ -8713,7 +8709,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_treelist.o \
 	monolib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_3) \
-	$(__ADVANCED_UNIV_SRC_OBJECTS_1)
+	monolib_animateg.o
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_1 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	monolib_src_cocoa_taskbar.o \
@@ -8935,10 +8931,6 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	monolib_unix_sound.o \
 	monolib_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_UNIV_SRC_OBJECTS_1 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_animateg.o
-@COND_TOOLKIT_MSW@__ADVANCED_UNIV_SRC_OBJECTS_1 = monolib_animateg.o
-@COND_TOOLKIT_WINCE@__ADVANCED_UNIV_SRC_OBJECTS_1 = monolib_animateg.o
 @COND_TOOLKIT_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monolib_src_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
@@ -12882,7 +12874,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_treelist.o \
 	advdll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_5) \
-	$(__ADVANCED_UNIV_SRC_OBJECTS_2)
+	advdll_animateg.o
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_2 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 	advdll_src_cocoa_taskbar.o \
@@ -13104,10 +13096,6 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	advdll_unix_sound.o \
 	advdll_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_5 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_5)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_UNIV_SRC_OBJECTS_2 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= advdll_animateg.o
-@COND_TOOLKIT_MSW@__ADVANCED_UNIV_SRC_OBJECTS_2 = advdll_animateg.o
-@COND_TOOLKIT_WINCE@__ADVANCED_UNIV_SRC_OBJECTS_2 = advdll_animateg.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_2 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advdll_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
@@ -13194,7 +13182,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_treelist.o \
 	advlib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_7) \
-	$(__ADVANCED_UNIV_SRC_OBJECTS_3)
+	advlib_animateg.o
 @COND_WXUNIV_1@__ADVANCED_SRC_OBJECTS_3 = $(COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3)
 COND_TOOLKIT_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 	advlib_src_cocoa_taskbar.o \
@@ -13416,10 +13404,6 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	advlib_unix_sound.o \
 	advlib_taskbarx11.o
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_7 = $(COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_7)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_UNIV_SRC_OBJECTS_3 \
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= advlib_animateg.o
-@COND_TOOLKIT_MSW@__ADVANCED_UNIV_SRC_OBJECTS_3 = advlib_animateg.o
-@COND_TOOLKIT_WINCE@__ADVANCED_UNIV_SRC_OBJECTS_3 = advlib_animateg.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_ADV_SRC_OBJECTS_3 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= advlib_sound_sdl.o
 @COND_SHARED_1@____wxadv_namedll_DEP = $(__advdll___depname)
@@ -22411,6 +22395,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monodll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
@@ -22432,14 +22422,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+@COND_USE_GUI_1_WXUNIV_1@monodll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_carbon_aboutdlg.o: $(srcdir)/src/osx/carbon/aboutdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/aboutdlg.cpp
@@ -28276,6 +28260,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@monolib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
@@ -28297,14 +28287,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+@COND_USE_GUI_1_WXUNIV_1@monolib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_carbon_aboutdlg.o: $(srcdir)/src/osx/carbon/aboutdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/aboutdlg.cpp
@@ -38689,6 +38673,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3@advdll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
+@COND_TOOLKIT_MSW_WXUNIV_0@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
 @COND_TOOLKIT_OSX_CARBON@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
@@ -38710,14 +38700,8 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MSW@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_WINCE@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+@COND_WXUNIV_1@advdll_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVDLL_ODEP)
+@COND_WXUNIV_1@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
 @COND_TOOLKIT_OSX_CARBON@advdll_carbon_aboutdlg.o: $(srcdir)/src/osx/carbon/aboutdlg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/aboutdlg.cpp
@@ -39157,6 +39141,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3@advlib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(ADVLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
+@COND_TOOLKIT_MSW_WXUNIV_0@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
+@COND_TOOLKIT_WINCE_WXUNIV_0@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_WINCE_WXUNIV_0@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+
 @COND_TOOLKIT_OSX_CARBON@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
@@ -39178,14 +39168,8 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_MSW@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
-
-@COND_TOOLKIT_WINCE@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
+@COND_WXUNIV_1@advlib_animateg.o: $(srcdir)/src/generic/animateg.cpp $(ADVLIB_ODEP)
+@COND_WXUNIV_1@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/animateg.cpp
 
 @COND_TOOLKIT_OSX_CARBON@advlib_carbon_aboutdlg.o: $(srcdir)/src/osx/carbon/aboutdlg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/aboutdlg.cpp

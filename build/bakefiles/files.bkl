@@ -3250,20 +3250,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_UNIV_SRC" hints="files">
-<!--
-Don't include src/generic/animateg.cpp many times in ADVANCED_SRC(WXUNIV=='1').
-This file is already included in [OSX_CARBON, OSX_COCOA, OSX_IPHONE, COCOA, PM, MOTIF] TOOLKITs
-and TOOLKIT=='GTK' and TOOLKIT_VERSION==''.
--->
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
-        src/generic/animateg.cpp
-    </if>
-    <if cond="TOOLKIT=='MSW'">
-        src/generic/animateg.cpp
-    </if>
-    <if cond="TOOLKIT=='WINCE'">
-        src/generic/animateg.cpp
-    </if>
+    src/generic/animateg.cpp
 </set>
 <set var="ADVANCED_UNIV_HDR" hints="files">
     wx/generic/animate.h
