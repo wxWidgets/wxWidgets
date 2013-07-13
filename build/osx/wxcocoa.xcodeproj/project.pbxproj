@@ -1619,6 +1619,8 @@
 		F89405757B063F80B111F46A /* datetime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E0EBCDDF248638B58B01D9CC /* datetime.cpp */; };
 		F910C74E48823E0BA7F7885D /* graphicc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BACAA6CE4A0934459F26B27C /* graphicc.cpp */; };
 		F910C74E48823E0BA7F7885E /* graphicc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BACAA6CE4A0934459F26B27C /* graphicc.cpp */; };
+		F9C5EAC42CCF3267B4100BAE /* wakeuppipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B38F3D4DC6D139BA93401F7A /* wakeuppipe.cpp */; };
+		F9C5EAC42CCF3267B4100BAF /* wakeuppipe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B38F3D4DC6D139BA93401F7A /* wakeuppipe.cpp */; };
 		FADD46CB89B135D1AF1D5F8A /* richtextstyledlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23839659AC2A383CB383F0EC /* richtextstyledlg.cpp */; };
 		FADD46CB89B135D1AF1D5F8B /* richtextstyledlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23839659AC2A383CB383F0EC /* richtextstyledlg.cpp */; };
 		FB09720D13673A7B81BCB645 /* xh_datectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C63C964DAFAD311694367C94 /* xh_datectrl.cpp */; };
@@ -2246,6 +2248,7 @@
 		B303230368143F37B2409DE6 /* LexKix.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexKix.cxx; path = ../../src/stc/scintilla/lexers/LexKix.cxx; sourceTree = "<group>"; };
 		B35DA585CFDD32468868E892 /* process.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = process.cpp; path = ../../src/common/process.cpp; sourceTree = "<group>"; };
 		B3645350F572364BABF50238 /* containr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = containr.cpp; path = ../../src/common/containr.cpp; sourceTree = "<group>"; };
+		B38F3D4DC6D139BA93401F7A /* wakeuppipe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wakeuppipe.cpp; path = ../../src/unix/wakeuppipe.cpp; sourceTree = "<group>"; };
 		B3D9C4122372343DBEAF6492 /* LexCOBOL.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCOBOL.cxx; path = ../../src/stc/scintilla/lexers/LexCOBOL.cxx; sourceTree = "<group>"; };
 		B3F1680BBE8331A7B745638C /* xh_sttxt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_sttxt.cpp; path = ../../src/xrc/xh_sttxt.cpp; sourceTree = "<group>"; };
 		B4028ABB08C63AB59F5F240B /* m_list.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = m_list.cpp; path = ../../src/html/m_list.cpp; sourceTree = "<group>"; };
@@ -3383,6 +3386,7 @@
 				0CB2CC8E60833A6993BEA321 /* timerunx.cpp */,
 				AB466912FDA23F8B87A00A3C /* threadpsx.cpp */,
 				DC75C7251C1732B0B07C7BD3 /* utilsunx.cpp */,
+				B38F3D4DC6D139BA93401F7A /* wakeuppipe.cpp */,
 				C019CE87CF9931B0B77C0823 /* fswatcher_kqueue.cpp */,
 			);
 			name = src/unix;
@@ -4137,6 +4141,7 @@
 				2F35A207C3993DE08E4FE0B1 /* timerunx.cpp in Sources */,
 				F5D2146C94E733FAAB6D286B /* threadpsx.cpp in Sources */,
 				B5C7FD8C27F43F3289A77FCA /* utilsunx.cpp in Sources */,
+				F9C5EAC42CCF3267B4100BAF /* wakeuppipe.cpp in Sources */,
 				FF7DB2884F6E3C5DB4BDF61E /* fswatcher_kqueue.cpp in Sources */,
 				55D893FDD00633FEA82ABD82 /* event.cpp in Sources */,
 				131B879180AE3FB481F81CC8 /* fs_mem.cpp in Sources */,
@@ -4971,6 +4976,7 @@
 				2F35A207C3993DE08E4FE0B0 /* timerunx.cpp in Sources */,
 				F5D2146C94E733FAAB6D286A /* threadpsx.cpp in Sources */,
 				B5C7FD8C27F43F3289A77FC9 /* utilsunx.cpp in Sources */,
+				F9C5EAC42CCF3267B4100BAE /* wakeuppipe.cpp in Sources */,
 				FF7DB2884F6E3C5DB4BDF61D /* fswatcher_kqueue.cpp in Sources */,
 				55D893FDD00633FEA82ABD81 /* event.cpp in Sources */,
 				131B879180AE3FB481F81CC7 /* fs_mem.cpp in Sources */,
@@ -5719,7 +5725,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8707324525DB344EA0E7D5CE /* wxdebug.xcconfig */;
 			buildSettings = {
-				ONLY_ACTIVE_ARCH = YES;
 				WXROOT = "$(PROJECT_DIR)/../..";
 			};
 			name = Debug;
