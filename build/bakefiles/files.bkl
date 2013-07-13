@@ -3250,7 +3250,22 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_UNIV_SRC" hints="files">
-    src/generic/animateg.cpp
+<!--
+    Including src/generic/animateg.cpp hre unconditionally results in bakefile
+    errors when not fixing the value of TOOLKIT to MSW in msvc format, see #15327.
+-->
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
+        src/generic/animateg.cpp
+    </if>
+    <if cond="TOOLKIT=='MSW'">
+        src/generic/animateg.cpp
+    </if>
+    <if cond="TOOLKIT=='WINCE'">
+        src/generic/animateg.cpp
+    </if>
+    <if cond="TOOLKIT=='X11'">
+        src/generic/animateg.cpp
+    </if>
 </set>
 <set var="ADVANCED_UNIV_HDR" hints="files">
     wx/generic/animate.h
