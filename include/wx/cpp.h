@@ -13,6 +13,8 @@
 #ifndef _WX_CPP_H_
 #define _WX_CPP_H_
 
+#include "wx/compiler.h"    /* wxCHECK_XXX_VERSION() macros */
+
 /* wxCONCAT works like preprocessor ## operator but also works with macros */
 #define wxCONCAT_HELPER(text, line) text ## line
 
@@ -130,7 +132,7 @@
     #if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || \
         (defined(__cplusplus) && __cplusplus >= 201103L)
         #define HAVE_VARIADIC_MACROS
-    #elif defined(__GNUC__) && __GNUC__ >= 3
+    #elif wxCHECK_GCC_VERSION(3,0)
         #define HAVE_VARIADIC_MACROS
     #elif wxCHECK_VISUALC_VERSION(8)
         #define HAVE_VARIADIC_MACROS

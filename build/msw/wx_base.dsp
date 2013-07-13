@@ -937,6 +937,10 @@ SOURCE=..\..\include\wx\cmdline.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\compiler.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\confbase.h
 # End Source File
 # Begin Source File

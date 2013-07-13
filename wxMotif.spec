@@ -109,6 +109,7 @@ wx/chkconf.h
 wx/clntdata.h
 wx/cmdargs.h
 wx/cmdline.h
+wx/compiler.h
 wx/confbase.h
 wx/config.h
 wx/convauto.h

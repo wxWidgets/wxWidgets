@@ -359,6 +359,7 @@ ALL_BASE_HEADERS =  \
 	wx/clntdata.h \
 	wx/cmdargs.h \
 	wx/cmdline.h \
+	wx/compiler.h \
 	wx/confbase.h \
 	wx/config.h \
 	wx/convauto.h \
@@ -540,6 +541,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/clntdata.h \
 	wx/cmdargs.h \
 	wx/cmdline.h \
+	wx/compiler.h \
 	wx/confbase.h \
 	wx/config.h \
 	wx/convauto.h \

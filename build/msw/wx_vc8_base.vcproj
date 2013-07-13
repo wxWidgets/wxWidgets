@@ -1224,6 +1224,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\compiler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\confbase.h"
 				>
 			</File>
