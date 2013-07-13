@@ -689,7 +689,7 @@ All (GUI):
 wxGTK:
 
 - Allow building wxGTK3 with Broadway and Wayland backends (Kolya Kosenko).
-- Further improvements to wxGTK/MSW port (Kolya Kosenko).
+- Further improvements to wxGTK/Win32 port (Kolya Kosenko).
 - Provide native implementation of wxNotificationMessage using libnotify.
 - Generate clipboard events for wxComboBox and not only wxTextCtrl.
 - Improve drag-and-drop of URLs.

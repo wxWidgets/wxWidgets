@@ -66,7 +66,7 @@
             </option>
         </if>
 
-        <!-- We must make TOOLKIT a constant under MSW -->
+        <!-- We must make TOOLKIT a constant under Windows -->
         <if cond="FORMAT in ['borland','mingw','msvc','watcom', 'msvc6prj', 'msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
             <set var="TOOLKIT">MSW</set>
         </if>

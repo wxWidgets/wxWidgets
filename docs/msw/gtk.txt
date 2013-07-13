@@ -24,7 +24,7 @@ diff build/bakefiles/config.bkl build/bakefiles/config.bkl
 @@ -67,9 +67,9 @@
          </if>
  
-         <!-- We must make TOOLKIT a constant under MSW -->
+         <!-- We must make TOOLKIT a constant under Windows -->
 -        <if cond="FORMAT in ['borland','mingw','msvc','watcom', 'msvc6prj', 'msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
 +        <!--if cond="FORMAT in ['borland','mingw','msvc','watcom', 'msvc6prj', 'msvs2003prj', 'msvs2005prj', 'msvs2008prj']">
              <set var="TOOLKIT">MSW</set>
