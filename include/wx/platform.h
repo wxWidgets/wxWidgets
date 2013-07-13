@@ -445,6 +445,20 @@
 #define wxNEEDS_CHARPP
 #endif
 
+#if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
+    ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) || \
+      wxCHECK_WATCOM_VERSION(1,0) ) && \
+    !defined(__DOS__) && \
+    !defined(__WXPM__) && \
+    !defined(__WXMOTIF__) && \
+    !defined(__WXX11__)
+#    include "wx/msw/gccpriv.h"
+#else
+#    undef wxCHECK_W32API_VERSION
+#    define wxCHECK_W32API_VERSION(maj, min) (0)
+#endif
+
+
 /*
     Handle Darwin gcc universal compilation.  Don't do this in an Apple-
     specific case since no sane compiler should be defining either

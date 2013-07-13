@@ -132,21 +132,14 @@
    This macro can be used to check that the version of mingw32 compiler is
    at least maj.min
  */
-#if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
-    ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) || \
-      wxCHECK_WATCOM_VERSION(1,0) ) && \
-    !defined(__DOS__) && \
-    !defined(__WXPM__) && \
-    !defined(__WXMOTIF__) && \
-    !defined(__WXX11__)
-#    include "wx/msw/gccpriv.h"
+
+/* Check for Mingw runtime version: */
+#if defined(__MINGW32_MAJOR_VERSION) && defined(__MINGW32_MINOR_VERSION)
+    #define wxCHECK_MINGW32_VERSION( major, minor ) \
+ ( ( ( __MINGW32_MAJOR_VERSION > (major) ) \
+      || ( __MINGW32_MAJOR_VERSION == (major) && __MINGW32_MINOR_VERSION >= (minor) ) ) )
 #else
-#    undef wxCHECK_W32API_VERSION
-#    define wxCHECK_W32API_VERSION(maj, min) (0)
-#    undef wxCHECK_MINGW32_VERSION
-#    define wxCHECK_MINGW32_VERSION(maj, min) (0)
+    #define wxCHECK_MINGW32_VERSION( major, minor ) (0)
 #endif
 
-
 #endif // _WX_COMPILER_H_
-
