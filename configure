@@ -634,8 +634,6 @@ POSTLINK_COMMAND
 LIBWXMACRES
 WX_RESOURCES_MACOSX_DATA
 WX_RESOURCES_MACOSX_ASCII
-RESPROGRAMOBJ
-RESFLAGS
 RESCOMP
 WX_VERSION_TAG
 DMALLOC_LIBS
@@ -662,8 +660,6 @@ TOOLCHAIN_FULLNAME
 TOOLCHAIN_NAME
 TOOLKIT_DIR
 TOOLKIT
-WIN32INSTALL
-AFMINSTALL
 USE_GUI
 WX_LIBRARY_BASENAME_GUI
 WX_LIBRARY_BASENAME_NOGUI
@@ -19823,8 +19819,6 @@ if test "x$ac_cv_lib_cExt_drand48" = xyes; then :
   LIBS="$LIBS -lcExt"
 fi
 
-      else
-                    RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
                                     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gcc/libc version" >&5
 $as_echo_n "checking for gcc/libc version... " >&6; }
@@ -23247,9 +23241,6 @@ fi
 
 
 
-AFMINSTALL=
-WIN32INSTALL=
-
 TOOLKIT=
 TOOLKIT_INCLUDE=
 WIDGET_SET=
@@ -23295,12 +23286,7 @@ fi
                         LIBS="$LIBS -lkernel32 -luser32"
     esac
 
-        RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
-    RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
-
-                WXCONFIG_RESFLAGS="--define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
-
-        WIN32INSTALL=win32install
+        WXCONFIG_RESFLAGS="--define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -24644,7 +24630,6 @@ done
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
-        AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
 
@@ -24914,7 +24899,6 @@ $as_echo "MicroWindows' libraries found." >&6; }
 
         wxUSE_UNIVERSAL="yes"
 
-        AFMINSTALL=afminstall
         TOOLKIT=MICROWIN
         GUIDIST=MICROWIN_DIST
 
@@ -25612,7 +25596,6 @@ fi
 
                                 GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//' | sed 's/ -RNONE//'`
         TOOLKIT_INCLUDE=`echo $X_CFLAGS | sed 's/ -INONE//'`
-        AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
     fi
@@ -41343,10 +41326,6 @@ OBJCFLAGS="$OBJCFLAGS $CFLAGS_VISIBILITY"
 OBJCXXFLAGS="$OBJCXXFLAGS $CXXFLAGS_VISIBILITY"
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
-
-
-
-
 
 
 

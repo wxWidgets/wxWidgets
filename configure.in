@@ -1464,9 +1464,6 @@ case "${host}" in
           dnl More complete Unix emulation for unix-like ports
           dnl by linking in POSIX/2's cExt (if available).
           AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
-      else
-          dnl Include resources for the "native" port (wxPM).
-          RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
       dnl Check for the gcc version (and thereby for the C runtime library).
       dnl wx_cv_gccversion = EMX2 -> Standard EMX environment
@@ -2796,9 +2793,6 @@ dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
 
-AFMINSTALL=
-WIN32INSTALL=
-
 TOOLKIT=
 TOOLKIT_INCLUDE=
 WIDGET_SET=
@@ -2832,17 +2826,8 @@ if test "$USE_WIN32" = 1 ; then
             LIBS="$LIBS -lkernel32 -luser32"
     esac
 
-    dnl This one is still used by some sample makefiles.
-    RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
-    RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
-
-    dnl This lot we export to wx-config.  It must add the relevant
-    dnl include directories at the point when they can be known.
-    dnl (but are these (still) required anyway?)
+    dnl Flags to be passed to windres by the applications using wxWidgets.
     WXCONFIG_RESFLAGS="--define __WIN32__ --define __GNUWIN32__ $WINDRES_CPU_DEFINE"
-
-    dnl install Win32-specific files in "make install"
-    WIN32INSTALL=win32install
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -3055,7 +3040,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk $GUI_TK_LIBRARY"
-        AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
 
@@ -3124,7 +3108,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
 
         wxUSE_UNIVERSAL="yes"
 
-        AFMINSTALL=afminstall
         TOOLKIT=MICROWIN
         GUIDIST=MICROWIN_DIST
 
@@ -3147,7 +3130,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         dnl this junk out
         GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//' | sed 's/ -RNONE//'`
         TOOLKIT_INCLUDE=`echo $X_CFLAGS | sed 's/ -INONE//'`
-        AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
     fi
@@ -8344,8 +8326,6 @@ AC_SUBST(WX_LIBRARY_BASENAME_GUI)
 
 dnl toolkit options
 AC_SUBST(USE_GUI)
-AC_SUBST(AFMINSTALL)
-AC_SUBST(WIN32INSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLCHAIN_NAME)
@@ -8398,8 +8378,6 @@ dnl additional resurces settings
 AC_SUBST(RESCOMP)
 AC_SUBST(WINDRES)
 AC_SUBST(REZ)
-AC_SUBST(RESFLAGS)
-AC_SUBST(RESPROGRAMOBJ)
 AC_SUBST(WX_RESOURCES_MACOSX_ASCII)
 AC_SUBST(WX_RESOURCES_MACOSX_DATA)
 
