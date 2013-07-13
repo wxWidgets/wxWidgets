@@ -501,6 +501,9 @@ Changes in behaviour visible to end users
 Build system changes
 --------------------
 
+- Cocoa is now used by default under OS X instead of Carbon. Pass --with-carbon
+  option to configure to use wxCarbon.
+
 - In wxMSW makefile builds, "_x64" is used instead of "_amd64" when compiling
   for this architecture in the architecture-specific paths and library names.
   TARGET_CPU can still be specified as "amd64" for compatibility but "x64"

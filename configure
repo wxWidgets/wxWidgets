@@ -4102,7 +4102,7 @@ case "${host}" in
 
     $as_echo "#define TARGET_CARBON 1" >>confdefs.h
 
-    DEFAULT_DEFAULT_wxUSE_OSX_CARBON=1
+    DEFAULT_DEFAULT_wxUSE_OSX_COCOA=1
   ;;
 
   *-*-beos* )
