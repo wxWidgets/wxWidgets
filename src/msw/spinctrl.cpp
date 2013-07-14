@@ -321,7 +321,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     sizeText.x -= sizeBtn.x + MARGIN_BETWEEN;
     if ( sizeText.x <= 0 )
     {
-        wxLogDebug(wxT("not enough space for wxSpinCtrl!"));
+        wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
+                   wxS("at least %d pixels needed."),
+                   name, size.x, sizeBtn.x + MARGIN_BETWEEN + 1);
     }
 
     wxPoint posBtn(pos);
@@ -745,16 +747,25 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
     int widthBtn = wxSpinButton::DoGetBestSize().x;
     int widthText = width - widthBtn - MARGIN_BETWEEN;
-    if ( widthText <= 0 )
+    if ( widthText < 0 )
     {
-        wxLogDebug(wxT("not enough space for wxSpinCtrl!"));
+        // This can happen during the initial window layout when it's total
+        // size is too small to accommodate all the controls and usually is not
+        // a problem because the window will be relaid out with enough space
+        // later. Of course, if it isn't and this is our final size, then we
+        // have a real problem but as we don't know if this is going to be the
+        // case or not, just hope for the best -- we used to give a debug
+        // warning here and this was annoying as it could result in dozens of
+        // perfectly harmless warnings.
+        widthText = 0;
     }
 
     // 1) The buddy window
     DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
 
     // 2) The button window
-    x += widthText + MARGIN_BETWEEN;
+    if ( widthText > 0 )
+        x += widthText + MARGIN_BETWEEN;
     wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
 }
 
