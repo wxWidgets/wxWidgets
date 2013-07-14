@@ -858,19 +858,25 @@ wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 bool
 wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
 {
-    wxScopeGuard g = wxMakeObjGuard(*doc, &wxDocument::DeleteAllViews);
+    // Normally, if wxDocument::OnCreate() fails, it happens because the view
+    // initialization fails and then the document is destroyed due to the
+    // destruction of its last view. But take into account the (currently
+    // unrealized, AFAICS) possibility of other failures as well and ensure
+    // that the document is always destroyed if it can't be initialized.
+    wxTRY
+    {
+        doc->SetFilename(path);
+        doc->SetDocumentTemplate(this);
+        GetDocumentManager()->AddDocument(doc);
+        doc->SetCommandProcessor(doc->OnCreateCommandProcessor());
 
-    doc->SetFilename(path);
-    doc->SetDocumentTemplate(this);
-    GetDocumentManager()->AddDocument(doc);
-    doc->SetCommandProcessor(doc->OnCreateCommandProcessor());
-
-    if ( !doc->OnCreate(path, flags) )
-        return false;
-
-    g.Dismiss(); // no need to call DeleteAllViews() anymore
-
-    return true;
+        return doc->OnCreate(path, flags);
+    }
+    wxCATCH_ALL(
+        if ( GetDocumentManager()->GetDocuments().Member(doc) )
+            doc->DeleteAllViews();
+        throw;
+    )
 }
 
 wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
