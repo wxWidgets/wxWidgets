@@ -116,7 +116,7 @@ public:
     wxBitmap(const wxSize& sz, int depth = -1) { (void)Create(sz, depth); }
 
     // Convert from wxImage:
-    wxBitmap(const wxImage& image, int depth = -1);
+    wxBitmap(const wxImage& image, int depth = -1, double scale = 1.0);
 
     // Convert from wxIcon
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
