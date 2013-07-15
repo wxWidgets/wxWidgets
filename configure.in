@@ -971,6 +971,7 @@ WX_ARG_FEATURE(notebook,    [  --enable-notebook       use wxNotebook class], wx
 WX_ARG_FEATURE(notifmsg,    [  --enable-notifmsg       use wxNotificationMessage class], wxUSE_NOTIFICATION_MESSAGE)
 WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
 WX_ARG_FEATURE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
+WX_ARG_FEATURE(prefseditor, [  --enable-prefseditor    use wxPreferencesEditor class], wxUSE_PREFERENCES_EDITOR)
 WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
 WX_ARG_FEATURE(richmsgdlg,  [  --enable-richmsgdlg     use wxRichMessageDialog class], wxUSE_RICHMSGDLG)
@@ -7077,6 +7078,11 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
     fi
 fi
 
+if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
+    AC_DEFINE(wxUSE_PREFERENCES_EDITOR)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS prefseditor"
+fi
+
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
     if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
         AC_MSG_WARN([Dialup manager not supported on this platform... disabled])
@@ -7813,7 +7819,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl TODO some samples are never built so far: mfc (requires VC++)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
-                     erase event exec font image minimal preferences render \
+                     erase event exec font image minimal render \
                      shaped svg taborder vscroll widgets wrapsizer"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then

@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PREFERENCES_EDITOR
+
 #include "wx/private/preferences.h"
 
 #ifndef wxHAS_PREF_EDITOR_NATIVE
@@ -255,3 +257,5 @@ wxPreferencesEditorImpl* wxPreferencesEditorImpl::Create(const wxString& title)
 }
 
 #endif // !wxHAS_PREF_EDITOR_NATIVE
+
+#endif // wxUSE_PREFERENCES_EDITOR

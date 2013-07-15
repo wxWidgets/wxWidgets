@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_PREFERENCES_EDITOR
+
 #include "wx/private/preferences.h"
 #include "wx/intl.h"
 
@@ -67,3 +69,5 @@ void wxPreferencesEditor::Dismiss()
 {
     m_impl->Dismiss();
 }
+
+#endif // wxUSE_PREFERENCES_EDITOR

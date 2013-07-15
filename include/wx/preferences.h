@@ -12,6 +12,9 @@
 #define _WX_PREFERENCES_H_
 
 #include "wx/defs.h"
+
+#if wxUSE_PREFERENCES_EDITOR
+
 #include "wx/bitmap.h"
 #include "wx/vector.h"
 
@@ -137,5 +140,7 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxPreferencesEditor);
 };
+
+#endif // wxUSE_PREFERENCES_EDITOR
 
 #endif // _WX_PREFERENCES_H_

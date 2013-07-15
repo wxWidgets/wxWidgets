@@ -414,6 +414,8 @@ typedef pid_t GPid;
 #define wxUSE_POPUPWIN 1
 #endif
 
+#define wxUSE_PREFERENCES_EDITOR 1
+
 #define wxUSE_TIPWINDOW    1
 
 #define wxUSE_STC 1
