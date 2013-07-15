@@ -72,7 +72,7 @@ Upload the files to SourceForge. This can be done via the web interface or just
 scp to sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
 The following files need to be uploaded:
 
-    wxMSW-Setup-2.9.3.exe
+    wxMSW-Setup-x.y.z.exe
     wxWidgets-x.y.z.7z
     wxWidgets-x.y.z.tar.bz2
     wxWidgets-x.y.z.zip
