@@ -2512,15 +2512,19 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     if ( externalLeading )
         *externalLeading = 0;
 
+    // In wxWidgets (MSW-inspired) API it is possible to call GetTextExtent()
+    // with an empty string to get just the descent and the leading of the
+    // font, so support this (mis)use.
+    wxString strToMeasure(str);
     if (str.empty())
-        return;
+        strToMeasure = wxS(" ");
 
 #if wxOSX_USE_CORE_TEXT
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
         CTFontRef font = fref->OSXGetCTFont();
 
-        wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
+        wxCFStringRef text(strToMeasure, wxLocale::GetSystemEncoding() );
         CFStringRef keys[] = { kCTFontAttributeName  };
         CFTypeRef values[] = { font };
         wxCFRef<CFDictionaryRef> attributes( CFDictionaryCreate(kCFAllocatorDefault, (const void**) &keys, (const void**) &values,
@@ -2531,14 +2535,18 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         CGFloat a, d, l, w;
         w = CTLineGetTypographicBounds(line, &a, &d, &l);
 
-        if ( height )
-            *height = a+d+l;
+        if ( !str.empty() )
+        {
+            if ( width )
+                *width = w;
+            if ( height )
+                *height = a+d+l;
+        }
+
         if ( descent )
             *descent = d;
         if ( externalLeading )
             *externalLeading = l;
-        if ( width )
-            *width = w;
         return;
     }
 #endif
@@ -2547,7 +2555,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         OSStatus status = noErr;
 
         ATSUTextLayout atsuLayout;
-        wxMacUniCharBuffer unibuf( str );
+        wxMacUniCharBuffer unibuf( strToMeasure );
         UniCharCount chars = unibuf.GetChars();
 
         ATSUStyle style = (((wxMacCoreGraphicsFontData*)m_font.GetRefData())->GetATSUStyle());
@@ -2565,14 +2573,18 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         status = ::ATSUGetUnjustifiedBounds( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
                                             &textBefore , &textAfter, &textAscent , &textDescent );
 
-        if ( height )
-            *height = FixedToFloat(textAscent + textDescent);
+        if ( !str.empty() )
+        {
+            if ( width )
+                *width = FixedToFloat(textAfter - textBefore);
+            if ( height )
+                *height = FixedToFloat(textAscent + textDescent);
+        }
+
         if ( descent )
             *descent = FixedToFloat(textDescent);
         if ( externalLeading )
             *externalLeading = 0;
-        if ( width )
-            *width = FixedToFloat(textAfter - textBefore);
 
         ::ATSUDisposeTextLayout(atsuLayout);
 
@@ -2582,19 +2594,23 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
 #if wxOSX_USE_IPHONE
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
 
-    wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
+    wxCFStringRef text(strToMeasure, wxLocale::GetSystemEncoding() );
     CGSize sz = MeasureTextInContext( fref->GetUIFont() , text.AsNSString() );
 
-    if ( height )
-        *height = sz.height;
+    if ( !str.empty() )
+    {
+        if ( width )
+            *width = sz.width;
+        if ( height )
+            *height = sz.height;
+    }
+
         /*
     if ( descent )
         *descent = FixedToFloat(textDescent);
     if ( externalLeading )
         *externalLeading = 0;
         */
-    if ( width )
-        *width = sz.width;
 #endif
     
     CheckInvariants();    
