@@ -132,11 +132,20 @@ extern bool IsAutomaticTest();
 class LocaleSetter
 {
 public:
-    LocaleSetter(const char *loc) : m_locOld(setlocale(LC_ALL, loc)) { }
-    ~LocaleSetter() { setlocale(LC_ALL, m_locOld); }
+    LocaleSetter(const char *loc)
+        : m_locOld(wxStrdupA(setlocale(LC_ALL, NULL)))
+    {
+        setlocale(LC_ALL, loc);
+    }
+
+    ~LocaleSetter()
+    {
+        setlocale(LC_ALL, m_locOld);
+        free(m_locOld);
+    }
 
 private:
-    const char * const m_locOld;
+    char * const m_locOld;
 
     wxDECLARE_NO_COPY_CLASS(LocaleSetter);
 };
