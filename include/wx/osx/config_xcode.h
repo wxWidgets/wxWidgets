@@ -74,17 +74,6 @@
 #define HAVE_VSSCANF_DECL 1
 #define HAVE_USLEEP 1
 #define HAVE_WCSLEN 1
-
-/* Many wchar functions are only available since 10.7 so don't use them if we
-   want to build the applications that would run under 10.6 and earlier. */
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
-#define HAVE_WCSDUP 1
-#define HAVE_WCSFTIME 1
-#define HAVE_WCSNLEN 1
-#define HAVE_WCSCASECMP 1
-#define HAVE_WCSNCASECMP 1
-#endif
-
 #define SIZEOF_WCHAR_T 4
 #define SIZEOF_SHORT 2
 #define SIZEOF_INT 4

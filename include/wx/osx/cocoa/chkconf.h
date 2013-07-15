@@ -12,6 +12,17 @@
 #ifndef _WX_OSX_COCOA_CHKCONF_H_
 #define _WX_OSX_COCOA_CHKCONF_H_
 
+/* Many wchar functions (and also strnlen(), for some reason) are only
+   available since 10.7 so don't use them if we want to build the applications
+   that would run under 10.6 and earlier. */
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+#define HAVE_STRNLEN 1
+#define HAVE_WCSDUP 1
+#define HAVE_WCSNLEN 1
+#define HAVE_WCSCASECMP 1
+#define HAVE_WCSNCASECMP 1
+#endif
+
 /*
  * native (1) or emulated (0) toolbar
  */

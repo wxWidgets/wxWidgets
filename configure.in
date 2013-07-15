@@ -4096,15 +4096,17 @@ if test "$WCSLEN_FOUND" = 1; then
     AC_DEFINE(HAVE_WCSLEN)
 fi
 
-AC_CHECK_FUNCS(strnlen)
+dnl Notice that unlike the functions below, this one seems to be present in all
+dnl support OS X versions so it's OK to test for it here.
+AC_CHECK_FUNCS(wcsftime)
 
-dnl OS X provides the wide character functions starting from 10.7 so our tests
-dnl would succeed if we're configuring under 10.7 or later, yet the compiled
-dnl programs would fail if ran under 10.6 or earlier. To avoid this problem we
-dnl define the corresponding HAVE_XXX in wx/osx/config_xcode.h instead of
-dnl testing for them here.
+dnl OS X provides the wide character functions (and also strnlen(), for some
+dnl reason) only starting from 10.7 so our tests would succeed if we're
+dnl configuring under 10.7 or later, yet the compiled programs would fail if
+dnl ran under 10.6 or earlier. To avoid this problem, define the corresponding
+dnl HAVE_XXX in wx/osx/config_xcode.h instead of testing for them here.
 if test "$wxUSE_MAC" != 1; then
-    AC_CHECK_FUNCS([wcsdup wcsftime wcsnlen wcscasecmp wcsncasecmp])
+    AC_CHECK_FUNCS([strnlen wcsdup wcsnlen wcscasecmp wcsncasecmp])
 fi
 
 dnl On HP-UX aCC need this define to find mbstrtowcs() &c

@@ -29906,12 +29906,12 @@ if test "$WCSLEN_FOUND" = 1; then
 
 fi
 
-for ac_func in strnlen
+for ac_func in wcsftime
 do :
-  ac_fn_c_check_func "$LINENO" "strnlen" "ac_cv_func_strnlen"
-if test "x$ac_cv_func_strnlen" = xyes; then :
+  ac_fn_c_check_func "$LINENO" "wcsftime" "ac_cv_func_wcsftime"
+if test "x$ac_cv_func_wcsftime" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_STRNLEN 1
+#define HAVE_WCSFTIME 1
 _ACEOF
 
 fi
@@ -29919,7 +29919,7 @@ done
 
 
 if test "$wxUSE_MAC" != 1; then
-    for ac_func in wcsdup wcsftime wcsnlen wcscasecmp wcsncasecmp
+    for ac_func in strnlen wcsdup wcsnlen wcscasecmp wcsncasecmp
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
