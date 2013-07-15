@@ -48,6 +48,7 @@
 #include "wx/private/selectdispatcher.h"
 #include "wx/private/fdiodispatcher.h"
 #include "wx/unix/execute.h"
+#include "wx/unix/pipe.h"
 #include "wx/unix/private.h"
 
 #include "wx/evtloop.h"
@@ -499,6 +500,8 @@ int BlockUntilChildExit(wxExecuteData& execData)
     wxCHECK_MSG( wxTheApp, -1,
                     wxS("Can't block until child exit without wxTheApp") );
 
+#if wxUSE_SELECT_DISPATCHER
+
     // Even if we don't want to dispatch events, we still need to handle
     // child IO notifications and process termination concurrently, i.e.
     // we can't simply block waiting for the child to terminate as we would
@@ -553,6 +556,11 @@ int BlockUntilChildExit(wxExecuteData& execData)
     }
 
     return execData.exitcode;
+#else // !wxUSE_SELECT_DISPATCHER
+    wxFAIL_MSG( wxS("Can't block until child exit without wxSelectDispatcher") );
+
+    return -1;
+#endif // wxUSE_SELECT_DISPATCHER/!wxUSE_SELECT_DISPATCHER
 }
 
 } // anonymous namespace
@@ -1407,8 +1415,14 @@ bool wxHandleFatalExceptions(bool doit)
 
 int wxAppTraits::WaitForChild(wxExecuteData& execData)
 {
+#if wxUSE_CONSOLE_EVENTLOOP
     wxConsoleEventLoop loop;
     return RunLoopUntilChildExit(execData, loop);
+#else // !wxUSE_CONSOLE_EVENTLOOP
+    wxFAIL_MSG( wxS("Can't wait for child process without wxConsoleEventLoop") );
+
+    return -1;
+#endif // wxUSE_CONSOLE_EVENTLOOP/!wxUSE_CONSOLE_EVENTLOOP
 }
 
 // This function is common code for both console and GUI applications and used
