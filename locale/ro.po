@@ -1,22 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 2.9.1\n"
+"Project-Id-Version: wxWidgets 2.9.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-10 17:19+0200\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Cătălin Răceanu <cata_sr@yahoo.com>, Adrian Hăisan <adrian."
-"haisan@gmail.com>\n"
+"Last-Translator: Cătălin Răceanu <cata_sr@yahoo.com>\n"
 "Language-Team: ro.ro\n"
-"Language: \n"
+"Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Poedit-Language: Romanian\n"
-"X-Poedit-Country: ROMANIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-SearchPath-0: \n"
 
 #: ../src/common/debugrpt.cpp:580
@@ -37,9 +35,9 @@ msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Mulțumim și ne pare rău pentru inconveniență!\n"
 
 #: ../src/common/prntbase.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "Pagina %d din %d"
+msgstr " (copia %d din %d)"
 
 #: ../src/common/log.cpp:428
 #, c-format
@@ -92,9 +90,9 @@ msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 Plic, 3 7/8 x 8 7/8 in"
 
 #: ../src/html/helpwnd.cpp:1044
-#, fuzzy, c-format
+#, c-format
 msgid "%d of %lu"
-msgstr "%i din %i"
+msgstr "%d din %lu"
 
 #: ../src/html/helpwnd.cpp:1681 ../src/html/helpwnd.cpp:1719
 #, c-format
@@ -110,9 +108,9 @@ msgstr[1] "%ld byte-i"
 msgstr[2] "%ld byte-i"
 
 #: ../src/html/helpwnd.cpp:1046
-#, fuzzy, c-format
+#, c-format
 msgid "%lu of %lu"
-msgstr "%i din %i"
+msgstr "%lu din %lu"
 
 #: ../src/common/cmdline.cpp:1043
 #, c-format
@@ -130,9 +128,9 @@ msgid "%s Information"
 msgstr "%s Informație"
 
 #: ../src/generic/preferencesg.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "&Preferințe"
+msgstr "%s, Preferințe"
 
 #: ../src/generic/logg.cpp:235
 #, c-format
@@ -213,14 +211,12 @@ msgstr "&Jos"
 #: ../src/richtext/richtextmarginspage.cpp:374
 #: ../src/richtext/richtextsizepage.cpp:634
 #: ../src/richtext/richtextsizepage.cpp:641
-#, fuzzy
 msgid "&Bottom:"
-msgstr "&Jos"
+msgstr "&Jos:"
 
 #: ../include/wx/richtext/richtextbuffer.h:3524
-#, fuzzy
 msgid "&Box"
-msgstr "În&groșat"
+msgstr "&Casetă"
 
 #: ../src/richtext/richtextliststylepage.cpp:211
 #: ../src/richtext/richtextbulletspage.cpp:160
@@ -242,9 +238,8 @@ msgid "&Cascade"
 msgstr "&Cascadă"
 
 #: ../include/wx/richtext/richtextbuffer.h:5561
-#, fuzzy
 msgid "&Cell"
-msgstr "&Renunță"
+msgstr "&Celulă"
 
 #: ../src/richtext/richtextsymboldlg.cpp:440
 msgid "&Character code:"
@@ -341,7 +336,7 @@ msgstr "&Primul"
 
 #: ../src/richtext/richtextsizepage.cpp:241
 msgid "&Floating mode:"
-msgstr ""
+msgstr "&Mod mișcare:"
 
 #: ../src/common/stockitem.cpp:161
 msgid "&Floppy"
@@ -378,9 +373,8 @@ msgstr "&Harddisk"
 
 #: ../src/richtext/richtextsizepage.cpp:348
 #: ../src/richtext/richtextsizepage.cpp:355
-#, fuzzy
 msgid "&Height:"
-msgstr "&Greutate:"
+msgstr "Î&naltime:"
 
 #: ../src/generic/wizard.cpp:436 ../src/richtext/richtextstyledlg.cpp:304
 #: ../src/richtext/richtextsymboldlg.cpp:480 ../src/osx/menu_osx.cpp:719
@@ -389,9 +383,8 @@ msgid "&Help"
 msgstr "&Ajutor"
 
 #: ../include/wx/richmsgdlg.h:31
-#, fuzzy
 msgid "&Hide details"
-msgstr "&Detalii"
+msgstr "&Ascunde detalii"
 
 #: ../src/common/stockitem.cpp:165
 msgid "&Home"
@@ -462,7 +455,7 @@ msgstr "&Mută"
 
 #: ../src/richtext/richtextsizepage.cpp:669
 msgid "&Move the object to:"
-msgstr ""
+msgstr "&Mută obiectul în:"
 
 #: ../src/common/stockitem.cpp:176
 msgid "&Network"
@@ -482,9 +475,8 @@ msgid "&Next >"
 msgstr "&Următor >"
 
 #: ../src/richtext/richtextsizepage.cpp:678
-#, fuzzy
 msgid "&Next Paragraph"
-msgstr "&După un paragraf:"
+msgstr "&Paragraful următor:"
 
 #: ../src/generic/tipdlg.cpp:277
 msgid "&Next Tip"
@@ -522,7 +514,7 @@ msgstr "Nivel &delimitare:"
 
 #: ../src/richtext/richtextindentspage.cpp:318
 msgid "&Page Break"
-msgstr ""
+msgstr "Întrerupere de &pagină"
 
 #: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:585
 #: ../src/common/stockitem.cpp:181 ../src/msw/textctrl.cpp:2286
@@ -531,7 +523,7 @@ msgstr "Li&pește"
 
 #: ../include/wx/richtext/richtextbuffer.h:4649
 msgid "&Picture"
-msgstr ""
+msgstr "&Imagine"
 
 #: ../src/generic/fontdlgg.cpp:423
 msgid "&Point size:"
@@ -542,9 +534,8 @@ msgid "&Position (tenths of a mm):"
 msgstr "&Poziție (zecimi de mm):"
 
 #: ../src/richtext/richtextsizepage.cpp:511
-#, fuzzy
 msgid "&Position mode:"
-msgstr "Tipărește"
+msgstr "&Mode de poziționare"
 
 #: ../src/common/stockitem.cpp:182
 msgid "&Preferences"
@@ -556,9 +547,8 @@ msgid "&Previous"
 msgstr "&Anterior"
 
 #: ../src/richtext/richtextsizepage.cpp:672
-#, fuzzy
 msgid "&Previous Paragraph"
-msgstr "Pagina anterioară"
+msgstr "&Paragraful anterior"
 
 #: ../src/common/stockitem.cpp:184
 msgid "&Print..."
@@ -620,14 +610,12 @@ msgid "&Save"
 msgstr "&Salvează"
 
 #: ../src/common/stockitem.cpp:192
-#, fuzzy
 msgid "&Save as"
-msgstr "Salvează ca"
+msgstr "&Salvează ca"
 
 #: ../include/wx/richmsgdlg.h:30
-#, fuzzy
 msgid "&See details"
-msgstr "&Detalii"
+msgstr "&Vezi detalii"
 
 #: ../src/generic/tipdlg.cpp:271
 msgid "&Show tips at startup"
@@ -680,9 +668,8 @@ msgid "&Symbol:"
 msgstr "&Simbol:"
 
 #: ../include/wx/richtext/richtextbuffer.h:5643
-#, fuzzy
 msgid "&Table"
-msgstr "Indentări"
+msgstr "&Tabela"
 
 #: ../src/common/stockitem.cpp:201
 msgid "&Top"
@@ -694,9 +681,8 @@ msgstr "&Sus"
 #: ../src/richtext/richtextmarginspage.cpp:349
 #: ../src/richtext/richtextsizepage.cpp:564
 #: ../src/richtext/richtextsizepage.cpp:571
-#, fuzzy
 msgid "&Top:"
-msgstr "&Sus"
+msgstr "&Sus:"
 
 #: ../src/generic/fontdlgg.cpp:445 ../src/common/stockitem.cpp:203
 msgid "&Underline"
@@ -725,9 +711,8 @@ msgid "&Up"
 msgstr "S&us"
 
 #: ../src/richtext/richtextsizepage.cpp:275
-#, fuzzy
 msgid "&Vertical alignment:"
-msgstr "&Aliniere marcatori:"
+msgstr "&Aliniere verticală:"
 
 #: ../src/generic/dbgrptg.cpp:337
 msgid "&View..."
@@ -739,9 +724,8 @@ msgstr "&Greutate:"
 
 #: ../src/richtext/richtextsizepage.cpp:314
 #: ../src/richtext/richtextsizepage.cpp:321
-#, fuzzy
 msgid "&Width:"
-msgstr "&Greutate:"
+msgstr "&Lațime:"
 
 #: ../src/aui/tabmdi.cpp:312 ../src/aui/tabmdi.cpp:328
 #: ../src/aui/tabmdi.cpp:330 ../src/generic/mdig.cpp:295
@@ -874,7 +858,7 @@ msgstr "-"
 
 #: ../src/generic/filepickerg.cpp:67
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: ../src/richtext/richtextindentspage.cpp:301
 #: ../src/richtext/richtextliststylepage.cpp:451
@@ -1150,9 +1134,8 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: ../src/osx/menu_osx.cpp:564 ../src/common/stockitem.cpp:140
-#, fuzzy
 msgid "About"
-msgstr "&Despre"
+msgstr "Despre"
 
 #: ../src/generic/aboutdlgg.cpp:141 ../src/msw/aboutdlg.cpp:65
 #, c-format
@@ -1161,12 +1144,11 @@ msgstr "Despre %s"
 
 #: ../src/richtext/richtextsizepage.cpp:517
 msgid "Absolute"
-msgstr ""
+msgstr "Absolută"
 
 #: ../src/common/stockitem.cpp:208
-#, fuzzy
 msgid "Actual Size"
-msgstr "Dimensiune re&ală"
+msgstr "Dimensiune reală"
 
 #: ../src/common/stockitem.cpp:141
 msgid "Add"
@@ -1174,7 +1156,7 @@ msgstr "Adaugă"
 
 #: ../src/richtext/richtextbuffer.cpp:10477
 msgid "Add column"
-msgstr ""
+msgstr "Adauga coloană"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1182,7 +1164,7 @@ msgstr "Adaugă pagina curentă la însemne"
 
 #: ../src/richtext/richtextbuffer.cpp:10419
 msgid "Add row"
-msgstr ""
+msgstr "Adauga rând"
 
 #: ../src/generic/colrdlgg.cpp:284
 msgid "Add to custom colours"
@@ -1190,11 +1172,11 @@ msgstr "Adaugă la culori personalizate"
 
 #: ../include/wx/xtiprop.h:260
 msgid "AddToPropertyCollection called on a generic accessor"
-msgstr ""
+msgstr "AddToPropertyCollection apelat pentru un accesor generic"
 
 #: ../include/wx/xtiprop.h:198
 msgid "AddToPropertyCollection called w/o valid adder"
-msgstr ""
+msgstr "AddToPropertyCollection apelat cu adder invalid"
 
 #: ../src/html/helpctrl.cpp:160
 #, c-format
@@ -1211,7 +1193,7 @@ msgstr "Adăugarea de utxt a eșuat"
 
 #: ../src/common/preferencescmn.cpp:40
 msgid "Advanced"
-msgstr ""
+msgstr "Avansat"
 
 #: ../src/richtext/richtextliststylepage.cpp:436
 msgid "After a paragraph:"
@@ -1226,9 +1208,8 @@ msgid "Align Right"
 msgstr "Aliniază la dreapta"
 
 #: ../src/richtext/richtextsizepage.cpp:263
-#, fuzzy
 msgid "Alignment"
-msgstr "&Aliniere"
+msgstr "Aliniere"
 
 #: ../src/generic/prntdlgg.cpp:221
 msgid "All"
@@ -1284,14 +1265,12 @@ msgstr ""
 
 #: ../src/osx/menu_osx.cpp:536 ../src/osx/menu_osx.cpp:544
 #: ../src/osx/menu_osx.cpp:583 ../src/osx/menu_osx.cpp:591
-#, fuzzy
 msgid "Application"
-msgstr "Selecție"
+msgstr "Aplicație"
 
 #: ../src/common/stockitem.cpp:142
-#, fuzzy
 msgid "Apply"
-msgstr "&Aplică"
+msgstr "Aplică"
 
 #: ../src/richtext/richtextliststylepage.cpp:483
 #: ../src/richtext/richtextbulletspage.cpp:288
@@ -1303,18 +1282,17 @@ msgid "Arabic (ISO-8859-6)"
 msgstr "Arabă (ISO-8859-6)"
 
 #: ../src/msw/ole/automtn.cpp:662
-#, fuzzy, c-format
+#, c-format
 msgid "Argument %u not found."
-msgstr "Indexul coloanei nu a fost găsit."
+msgstr "Argumentul %u nu a fost găsit."
 
 #: ../src/generic/aboutdlgg.cpp:185
 msgid "Artists"
 msgstr "Artiști"
 
 #: ../src/common/stockitem.cpp:196
-#, fuzzy
 msgid "Ascending"
-msgstr "&Crescător"
+msgstr "Crescător"
 
 #: ../src/generic/filectrlg.cpp:469
 msgid "Attributes"
@@ -1408,20 +1386,17 @@ msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage nu are un obiect wxPalette propriu."
 
 #: ../src/common/stockitem.cpp:143
-#, fuzzy
 msgid "Back"
-msgstr "Î&napoi"
+msgstr "Înapoi"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
 #: ../src/richtext/richtextformatdlg.cpp:375
-#, fuzzy
 msgid "Background"
-msgstr "Culoare de fundal"
+msgstr "Fundal"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:131
-#, fuzzy
 msgid "Background &colour:"
-msgstr "Culoare de fundal"
+msgstr "&Culoare de fundal:"
 
 #: ../src/osx/carbon/fontdlg.cpp:407
 msgid "Background colour"
@@ -1456,33 +1431,28 @@ msgstr "Îngroșat"
 
 #: ../src/richtext/richtextborderspage.cpp:256
 #: ../src/richtext/richtextborderspage.cpp:389
-#, fuzzy
 msgid "Border"
-msgstr "Modern"
+msgstr "Margine"
 
 #: ../src/richtext/richtextformatdlg.cpp:369
-#, fuzzy
 msgid "Borders"
-msgstr "Modern"
+msgstr "Margini"
 
 #: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:145
-#, fuzzy
 msgid "Bottom"
-msgstr "&Jos"
+msgstr "Jos"
 
 #: ../src/generic/prntdlgg.cpp:899
 msgid "Bottom margin (mm):"
 msgstr "Marginea de jos (mm):"
 
 #: ../src/richtext/richtextbuffer.cpp:8858
-#, fuzzy
 msgid "Box Properties"
-msgstr "&Proprietăți"
+msgstr "Proprietăți Casetă"
 
 #: ../src/richtext/richtextstyles.cpp:1049
-#, fuzzy
 msgid "Box styles"
-msgstr "Toate stilurile"
+msgstr "Stiluri casetă"
 
 #: ../src/common/filepickercmn.cpp:44 ../src/common/filepickercmn.cpp:45
 msgid "Browse"
@@ -1542,9 +1512,8 @@ msgid "CAPITAL"
 msgstr "CAPITAL"
 
 #: ../src/common/stockitem.cpp:147
-#, fuzzy
 msgid "CD-Rom"
-msgstr "&CD-Rom"
+msgstr "CD-Rom"
 
 #: ../src/html/chm.cpp:816 ../src/html/chm.cpp:875
 msgid "CHM handler currently supports only local files!"
@@ -1569,6 +1538,8 @@ msgstr "Nu se poate an&ula acțiunea "
 #: ../src/common/image.cpp:2582
 msgid "Can't automatically determine the image format for non-seekable input."
 msgstr ""
+"Formatul imaginii nu poate fi automat determinat pentru input ce nu poate fi "
+"examinat."
 
 #: ../src/msw/registry.cpp:506
 #, c-format
@@ -1643,9 +1614,9 @@ msgid "Can't initialize zlib inflate stream."
 msgstr "Nu poate fi inițializat fluxul de decompresie zlib."
 
 #: ../src/msw/fswatcher.cpp:433
-#, fuzzy, c-format
+#, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
-msgstr "A eșuat deschiderea directorului \"%s\" pentru monitorizare."
+msgstr "Directorul inexistent \"%s\" nu poate fi monitorizat pentru schimbari."
 
 #: ../src/msw/registry.cpp:453
 #, c-format
@@ -1693,9 +1664,8 @@ msgid "Can't set value of '%s'"
 msgstr "Nu se poate seta valoarea '%s'"
 
 #: ../src/unix/utilsunx.cpp:356
-#, fuzzy
 msgid "Can't write to child process's stdin"
-msgstr "A eșuat terminarea forțată a procesului %d"
+msgstr "Nu se poate scrie la stdin-ul procesului copil"
 
 #: ../src/common/zstream.cpp:428
 #, c-format
@@ -1739,9 +1709,9 @@ msgid "Cannot find the location of address book file"
 msgstr "Nu se poate determina locația fișierului agendă"
 
 #: ../src/msw/ole/automtn.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot get an active instance of \"%s\""
-msgstr "Nu se poate determina conexiunea dialup activă: %s"
+msgstr "Nu se poate obține o instanță activă pentru \"%s\""
 
 #: ../src/unix/threadpsx.cpp:1031
 #, c-format
@@ -1810,9 +1780,9 @@ msgid "Cannot open index file: %s"
 msgstr "Nu se poate deschide fișierul index: %s"
 
 #: ../src/xrc/xmlres.cpp:729
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open resources file '%s'."
-msgstr "Nu se pot încărca resursele din fișierul '%s'."
+msgstr "Nu se poatet deschide fișierul resursă '%s'."
 
 #: ../src/html/helpwnd.cpp:1537
 msgid "Cannot print empty page."
@@ -1829,9 +1799,9 @@ msgid "Cannot resume thread %lu"
 msgstr "Nu se poate continua firul de execuție %lu"
 
 #: ../src/msw/thread.cpp:924
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "Nu se poate continua firul de execuție %x"
+msgstr "Nu poate continua firul de execuție %lx"
 
 #: ../src/unix/threadpsx.cpp:1012
 msgid "Cannot retrieve thread scheduling policy."
@@ -1852,9 +1822,9 @@ msgid "Cannot suspend thread %lu"
 msgstr "Nu se poate suspenda firul de execuție %lu"
 
 #: ../src/msw/thread.cpp:908
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
-msgstr "Nu se poate suspenda firul de execuție %x"
+msgstr "Nu se poate suspenda firul de execuție %lx"
 
 #: ../src/msw/thread.cpp:831
 msgid "Cannot wait for thread termination"
@@ -1869,9 +1839,8 @@ msgid "Categorized Mode"
 msgstr "După categorie"
 
 #: ../src/richtext/richtextbuffer.cpp:9270
-#, fuzzy
 msgid "Cell Properties"
-msgstr "&Proprietăți"
+msgstr "Proprietăți pentru celulă"
 
 #: ../src/common/fmapbase.cpp:162
 msgid "Celtic (ISO-8859-14)"
@@ -1903,9 +1872,8 @@ msgid "Centre text."
 msgstr "Centrează textul."
 
 #: ../src/richtext/richtextsizepage.cpp:284
-#, fuzzy
 msgid "Centred"
-msgstr "Cen&trat"
+msgstr "Centrat"
 
 #: ../src/richtext/richtextliststylepage.cpp:281
 #: ../src/richtext/richtextbulletspage.cpp:233
@@ -1917,14 +1885,12 @@ msgid "Change List Style"
 msgstr "Schimbă stilul listei"
 
 #: ../src/richtext/richtextbuffer.cpp:3381
-#, fuzzy
 msgid "Change Object Style"
-msgstr "Schimbă stilul listei"
+msgstr "Schimbă Stilul Obiectului"
 
 #: ../src/richtext/richtextbuffer.cpp:3647
-#, fuzzy
 msgid "Change Properties"
-msgstr "&Proprietăți"
+msgstr "Schimbă Proprietățile"
 
 #: ../src/richtext/richtextbuffer.cpp:3198
 msgid "Change Style"
@@ -1991,9 +1957,8 @@ msgstr "Bifează pentru a afișa textul cu litere mari."
 
 #: ../src/richtext/richtextfontpage.cpp:301
 #: ../src/richtext/richtextfontpage.cpp:303
-#, fuzzy
 msgid "Check to show the text in small capitals."
-msgstr "Bifează pentru a afișa textul cu litere mari."
+msgstr "Bifează pentru a afișa textul cu majuscule de format mic."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
@@ -2036,14 +2001,12 @@ msgid "Cl&ose"
 msgstr "Î&nchide"
 
 #: ../src/msw/ole/automtn.cpp:674
-#, fuzzy
 msgid "Class not registered."
-msgstr "Nu se poate crea firul de execuție"
+msgstr "Clasa nu este inregistrată."
 
 #: ../src/common/stockitem.cpp:148
-#, fuzzy
 msgid "Clear"
-msgstr "&Curăță"
+msgstr "Curăță"
 
 #: ../src/generic/logg.cpp:521
 msgid "Clear the log contents"
@@ -2104,9 +2067,8 @@ msgstr "Clic pentru a confirma selectarea fontului."
 
 #: ../src/richtext/richtextstyledlg.cpp:245
 #: ../src/richtext/richtextstyledlg.cpp:247
-#, fuzzy
 msgid "Click to create a new box style."
-msgstr "Clic pentru a crea un nou stil de listă."
+msgstr "Clic pentru a crea un nou stil de casetă."
 
 #: ../src/richtext/richtextstyledlg.cpp:227
 #: ../src/richtext/richtextstyledlg.cpp:229
@@ -2174,9 +2136,8 @@ msgid "Close this window"
 msgstr "Închide această fereastră"
 
 #: ../src/common/stockitem.cpp:194
-#, fuzzy
 msgid "Color"
-msgstr "&Culoare"
+msgstr "Culoare"
 
 #: ../src/richtext/richtextformatdlg.cpp:724
 msgid "Colour"
@@ -2230,6 +2191,8 @@ msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
 msgstr ""
+"Compunerea nu este suportată de acest sistem, trebuie activată din Managerul "
+"de Ferestre."
 
 #: ../src/html/helpwnd.cpp:1554
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
@@ -2266,9 +2229,8 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "Conversia la setul de caractere '%s' nu funcționează."
 
 #: ../src/common/stockitem.cpp:150
-#, fuzzy
 msgid "Convert"
-msgstr "&Transformă"
+msgstr "Transformă"
 
 #: ../src/html/htmlwin.cpp:1053
 #, c-format
@@ -2357,9 +2319,8 @@ msgid "Could not set column width."
 msgstr "Nu a putut fi setată lățimea coloanei."
 
 #: ../src/common/filefn.cpp:1564
-#, fuzzy
 msgid "Could not set current working directory"
-msgstr "A eșuat obținerea directorului de lucru"
+msgstr "A eșuat setarea directorului de lucru"
 
 #: ../src/osx/carbon/dataview.cpp:2776
 msgid "Could not set header description."
@@ -2413,9 +2374,8 @@ msgid "Couldn't create the overlay window"
 msgstr "Nu a putut fi creată fereastra de acoperire (overlay)"
 
 #: ../src/common/translation.cpp:2015
-#, fuzzy
 msgid "Couldn't enumerate translations"
-msgstr "Nu a putut fi terminat firul de execuție"
+msgstr "Nu au putut fi enumerate traducerile"
 
 #: ../src/common/dynlib.cpp:157
 #, c-format
@@ -2435,9 +2395,8 @@ msgid "Couldn't init the context on the overlay window"
 msgstr "Nu a putut fi inițializat contextul ferestrei de acoperire (overlay)"
 
 #: ../src/common/imaggif.cpp:264
-#, fuzzy
 msgid "Couldn't initialize GIF hash table."
-msgstr "Nu poate fi inițializat fluxul de compresie zlib."
+msgstr "Tabela de dispersie GIF nu a putut fi inițializată."
 
 #: ../src/common/imagpng.cpp:658
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
@@ -2451,9 +2410,8 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "Nu s-a putut încărca sunetul din '%s'."
 
 #: ../src/msw/dirdlg.cpp:442
-#, fuzzy
 msgid "Couldn't obtain folder name"
-msgstr "Nu a putut fi creat un temporizator"
+msgstr "Nu a putut fi obtinut numele directorului"
 
 #: ../src/unix/sound_sdl.cpp:226
 #, c-format
@@ -2486,11 +2444,9 @@ msgid "Couldn't terminate thread"
 msgstr "Nu a putut fi terminat firul de execuție"
 
 #: ../src/common/xtistrm.cpp:171
-#, fuzzy, c-format
+#, c-format
 msgid "Create Parameter %s not found in declared RTTI Parameters"
-msgstr ""
-"Nu este găsit unul dintre parametrii pentru Create între parametrii RTTI "
-"declarați"
+msgstr "Create Parameter %s nu a fost găsit între parametrii RTTI declarați"
 
 #: ../src/generic/dirdlgg.cpp:318
 msgid "Create directory"
@@ -2587,7 +2543,7 @@ msgstr "DOWN"
 
 #: ../src/richtext/richtextborderspage.cpp:545
 msgid "Dashed"
-msgstr ""
+msgstr "Linie întreruptă"
 
 #: ../src/osx/carbon/dataview.cpp:1922
 msgid "Data object has invalid data format"
@@ -2644,18 +2600,16 @@ msgid "Delete Text"
 msgstr "Șterge text"
 
 #: ../src/richtext/richtextbuffer.cpp:10369
-#, fuzzy
 msgid "Delete column"
-msgstr "Șterge selecție"
+msgstr "Șterge coloană"
 
 #: ../src/generic/editlbox.cpp:275
 msgid "Delete item"
 msgstr "Șterge element"
 
 #: ../src/richtext/richtextbuffer.cpp:10301
-#, fuzzy
 msgid "Delete row"
-msgstr "Șterge"
+msgstr "Șterge rând"
 
 #: ../src/common/stockitem.cpp:261
 msgid "Delete selection"
@@ -2677,9 +2631,8 @@ msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
 msgstr "Dependința \"%s\" a modulului \"%s\" nu există."
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Descending"
-msgstr "&Descrescător"
+msgstr "Descrescător"
 
 #: ../src/generic/dirctrlg.cpp:627
 msgid "Desktop"
@@ -2706,7 +2659,7 @@ msgid "Did you know..."
 msgstr "Știați că..."
 
 #: ../src/dfb/wrapdfb.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
 msgstr "A intervenit eroarea %d de DirectFB."
 
@@ -2773,9 +2726,8 @@ msgid "Do you want to save changes to %s?"
 msgstr "Vreți să salvați modificările în %s?"
 
 #: ../src/common/prntbase.cpp:526
-#, fuzzy
 msgid "Document:"
-msgstr "Documentație de"
+msgstr "Documentul:"
 
 #: ../src/generic/aboutdlgg.cpp:74
 msgid "Documentation by "
@@ -2798,14 +2750,12 @@ msgid "Done."
 msgstr "Gata."
 
 #: ../src/richtext/richtextborderspage.cpp:544
-#, fuzzy
 msgid "Dotted"
-msgstr "Gata"
+msgstr "Punctată"
 
 #: ../src/richtext/richtextborderspage.cpp:546
-#, fuzzy
 msgid "Double"
-msgstr "double"
+msgstr "Dublă"
 
 #: ../src/common/paper.cpp:178
 msgid "Double Japanese Postcard Rotated 148 x 200 mm"
@@ -2822,7 +2772,7 @@ msgstr "Jos"
 
 #: ../src/richtext/richtextctrl.cpp:813
 msgid "Drag"
-msgstr ""
+msgstr "Trage"
 
 #: ../src/common/paper.cpp:102
 msgid "E sheet, 34 x 44 in"
@@ -2853,9 +2803,8 @@ msgid "EXECUTE"
 msgstr "EXECUTE"
 
 #: ../src/common/stockitem.cpp:155
-#, fuzzy
 msgid "Edit"
-msgstr "&Editează"
+msgstr "Editează"
 
 #: ../src/generic/editlbox.cpp:273
 msgid "Edit item"
@@ -2866,46 +2815,41 @@ msgstr "Modifică element"
 #: ../src/richtext/richtextsizepage.cpp:462
 #: ../src/richtext/richtextsizepage.cpp:464
 msgid "Enable the height value."
-msgstr ""
+msgstr "Activează valoarea pentru înălțime."
 
 #: ../src/richtext/richtextsizepage.cpp:435
 #: ../src/richtext/richtextsizepage.cpp:437
-#, fuzzy
 msgid "Enable the maximum width value."
-msgstr "Nu a putut fi setată lățimea maximă."
+msgstr "Activează valoarea maximă pentru lățime."
 
 #: ../src/richtext/richtextsizepage.cpp:408
 #: ../src/richtext/richtextsizepage.cpp:410
 msgid "Enable the minimum height value."
-msgstr ""
+msgstr "Activeaza valoarea minimă pentru înălțime."
 
 #: ../src/richtext/richtextsizepage.cpp:381
 #: ../src/richtext/richtextsizepage.cpp:383
-#, fuzzy
 msgid "Enable the minimum width value."
-msgstr "Nu a putut fi setată lățimea minimă."
+msgstr "Activează valoarea minimă pentru lățime."
 
 #: ../src/richtext/richtextsizepage.cpp:316
 #: ../src/richtext/richtextsizepage.cpp:318
 msgid "Enable the width value."
-msgstr ""
+msgstr "Activează valoarea pentru lățime."
 
 #: ../src/richtext/richtextsizepage.cpp:277
 #: ../src/richtext/richtextsizepage.cpp:279
-#, fuzzy
 msgid "Enable vertical alignment."
-msgstr "Nu a putut fi setată alinierea."
+msgstr "Activează alinierea verticală."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:133
 #: ../src/richtext/richtextbackgroundpage.cpp:135
-#, fuzzy
 msgid "Enables a background colour."
-msgstr "Culoare de fundal"
+msgstr "Permite alegerea unei culori de fundal."
 
 #: ../src/richtext/richtextstyledlg.cpp:932
-#, fuzzy
 msgid "Enter a box style name"
-msgstr "Introduceți un nou nume de stil"
+msgstr "Introduceți un nume de stil pentru casetă"
 
 #: ../src/richtext/richtextstyledlg.cpp:604
 msgid "Enter a character style name"
@@ -2999,14 +2943,12 @@ msgid "Event queue overflowed"
 msgstr "Coadă de evenimente supraîncărcată"
 
 #: ../src/generic/dbgrptg.cpp:231
-#, fuzzy
 msgid "Executable files (*.exe)|*.exe|"
-msgstr "Fișiere executabile (*.exe)|*.exe|Toate fișierele (*.*)|*.*||"
+msgstr "Fișiere executabile (*.exe)|*.exe|"
 
 #: ../src/common/stockitem.cpp:156
-#, fuzzy
 msgid "Execute"
-msgstr "&Execută"
+msgstr "Execută"
 
 #: ../src/msw/utilsexc.cpp:931
 #, c-format
@@ -3070,9 +3012,9 @@ msgid "Failed to change video mode"
 msgstr "A eșuat schimbarea modului video"
 
 #: ../src/common/image.cpp:3035
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to check format of image file \"%s\"."
-msgstr "A eșuat salvarea imaginii de tip bitmap în fișierul \"%s\"."
+msgstr "A eșuat detectarea formatului fișierului imagine \"%s\"."
 
 #: ../src/common/debugrpt.cpp:241
 #, c-format
@@ -3151,9 +3093,9 @@ msgid "Failed to create an anonymous pipe"
 msgstr "A eșuat crearea unui canal (pipe) anonim"
 
 #: ../src/msw/ole/automtn.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create an instance of \"%s\""
-msgstr "A eșuat crearea directorului \"%s\""
+msgstr "A eșuat crearea unei instanțe \"%s\""
 
 #: ../src/msw/dde.cpp:443
 #, c-format
@@ -3231,9 +3173,9 @@ msgid "Failed to execute curl, please install it in PATH."
 msgstr "A eșuat executarea curl, trebuie instalat în PATH."
 
 #: ../src/msw/ole/automtn.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find CLSID of \"%s\""
-msgstr "A eșuat încărcarea resursei \"%s\"."
+msgstr "Nu a fost găsit CLSID al \"%s\""
 
 #: ../src/common/regex.cpp:435 ../src/common/regex.cpp:483
 #, c-format
@@ -3246,9 +3188,9 @@ msgid "Failed to get ISP names: %s"
 msgstr "A eșuat obținerea numelor ISP: %s"
 
 #: ../src/msw/ole/automtn.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
-msgstr "A eșuat crearea directorului \"%s\""
+msgstr "Nu a fost gasită interfața de automatizare OLE a \"%s\""
 
 #: ../src/msw/clipbrd.cpp:748
 msgid "Failed to get data from the clipboard"
@@ -3308,14 +3250,14 @@ msgid "Failed to kill process %d"
 msgstr "A eșuat terminarea forțată a procesului %d"
 
 #: ../src/common/image.cpp:2261
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "A eșuat încărcarea imaginii %d din fluxul de date."
+msgstr "A eșuat încărcarea imaginii \"%s\" din resurse."
 
 #: ../src/common/image.cpp:2270
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "A eșuat încărcarea imaginii %d din fluxul de date."
+msgstr "A eșuat încărcarea iconiței \"%s\" din resurse."
 
 #: ../src/common/iconbndl.cpp:183
 #, c-format
@@ -3328,10 +3270,9 @@ msgid "Failed to load image %d from stream."
 msgstr "A eșuat încărcarea imaginii %d din fluxul de date."
 
 #: ../src/common/image.cpp:2346 ../src/common/image.cpp:2365
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load image from file \"%s\"."
-msgstr ""
-"A eșuat încărcarea fișierului de tip meta (metafile) din fișierul \"%s\"."
+msgstr "A eșuat încărcarea imaginii din fișierul \"%s\"."
 
 #: ../src/msw/enhmeta.cpp:98
 #, c-format
@@ -3421,9 +3362,9 @@ msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Nu se pot interpreta formele de plural:'%s'"
 
 #: ../src/unix/mediactrl.cpp:1269
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "A eșuat deschiderea ecranului \"%s\"."
+msgstr "A eșuat pregătirea redării \"%s\"."
 
 #: ../src/msw/clipbrd.cpp:648
 msgid "Failed to put data on the clipboard"
@@ -3548,9 +3489,8 @@ msgid "Failed to set permissions on lock file '%s'"
 msgstr "A eșuat setarea permisiunilor pentru fișierul de blocaj '%s'"
 
 #: ../src/unix/utilsunx.cpp:603
-#, fuzzy
 msgid "Failed to set process priority"
-msgstr "A eșuat setarea priorității %d pentru firul de execuție."
+msgstr "A eșuat setarea priorității procesului"
 
 #: ../src/common/file.cpp:577
 msgid "Failed to set temporary file permissions"
@@ -3561,9 +3501,9 @@ msgid "Failed to set text in the text control."
 msgstr "A eșuat setarea textului în controlul de text."
 
 #: ../src/unix/threadpsx.cpp:1294
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "A eșuat setarea priorității %d pentru firul de execuție."
+msgstr "A eșuat setarea nivelului de concurență la %lu"
 
 #: ../src/unix/threadpsx.cpp:1378 ../src/unix/threadpsx.cpp:1388
 #, c-format
@@ -3573,6 +3513,7 @@ msgstr "A eșuat setarea priorității %d pentru firul de execuție."
 #: ../src/unix/utilsunx.cpp:735
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
+"A eșuat setarea unui canal (pipe) non-blocant, programul poate fi suspendat."
 
 #: ../src/common/fs_mem.cpp:262
 #, c-format
@@ -3673,14 +3614,14 @@ msgstr ""
 "Vreți să fie înlocuit?"
 
 #: ../src/common/filefn.cpp:1202
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be removed"
-msgstr "Fișierul '%s' nu a putut fi deschis."
+msgstr "Fișierul '%s' nu a putut fi șters."
 
 #: ../src/common/filefn.cpp:1183
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be renamed '%s'"
-msgstr "Fișierul '%s' nu a putut fi deschis."
+msgstr "Fișierul '%s' nu a putut fi redenumit '%s'."
 
 #: ../src/richtext/richtextctrl.cpp:2687 ../src/common/textcmn.cpp:920
 msgid "File couldn't be loaded."
@@ -3717,19 +3658,16 @@ msgid "Find"
 msgstr "Caută"
 
 #: ../src/common/stockitem.cpp:160
-#, fuzzy
 msgid "First"
-msgstr "&Primul"
+msgstr "Primul"
 
 #: ../src/common/prntbase.cpp:1519
-#, fuzzy
 msgid "First page"
-msgstr "Pagina următoare"
+msgstr "Prima pagină"
 
 #: ../src/richtext/richtextsizepage.cpp:518
-#, fuzzy
 msgid "Fixed"
-msgstr "Font fix:"
+msgstr "Fixă"
 
 #: ../src/html/helpwnd.cpp:1219
 msgid "Fixed font:"
@@ -3741,12 +3679,11 @@ msgstr "Font cu dimensiune fixă.<br> <b>îngroșat</b> <i>cursiv</i> "
 
 #: ../src/richtext/richtextsizepage.cpp:226
 msgid "Floating"
-msgstr ""
+msgstr "În mișcare"
 
 #: ../src/common/stockitem.cpp:161
-#, fuzzy
 msgid "Floppy"
-msgstr "&Dischetă"
+msgstr "Dischetă"
 
 #: ../src/common/paper.cpp:113
 msgid "Folio, 8 1/2 x 13 in"
@@ -3784,9 +3721,8 @@ msgid "Fork failed"
 msgstr "A eșuat apelul fork"
 
 #: ../src/common/stockitem.cpp:162
-#, fuzzy
 msgid "Forward"
-msgstr "În&ainte"
+msgstr "Înainte"
 
 #: ../src/common/xtixml.cpp:236
 msgid "Forward hrefs are not supported"
@@ -3826,6 +3762,8 @@ msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
 msgstr ""
+"GTK+ instalat pe această mașină este prea vechi pentru a suporta compunerea "
+"ecranului, instalați GTK+ 2.12 sau ulterior."
 
 #: ../src/univ/themes/gtk.cpp:526
 msgid "GTK+ theme"
@@ -3833,7 +3771,7 @@ msgstr "Temă GTK+"
 
 #: ../src/common/preferencescmn.cpp:38
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: ../src/common/prntbase.cpp:244
 msgid "Generic PostScript"
@@ -3849,15 +3787,15 @@ msgstr "German Std Fanfold, 8 1/2 x 12 in"
 
 #: ../include/wx/xtiprop.h:189
 msgid "GetProperty called w/o valid getter"
-msgstr ""
+msgstr "GetProperty apelat cu getter invalid"
 
 #: ../include/wx/xtiprop.h:267
 msgid "GetPropertyCollection called on a generic accessor"
-msgstr ""
+msgstr "GetPropertyCollection apelat pentru un accesor generic"
 
 #: ../include/wx/xtiprop.h:207
 msgid "GetPropertyCollection called w/o valid collection getter"
-msgstr ""
+msgstr "GetPropertyCollection apelat cu un getter de colecție invalid"
 
 #: ../src/html/helpwnd.cpp:673
 msgid "Go back"
@@ -3889,7 +3827,7 @@ msgstr "Greacă (ISO-8859-7)"
 
 #: ../src/richtext/richtextborderspage.cpp:547
 msgid "Groove"
-msgstr ""
+msgstr "Canelură"
 
 #: ../src/common/zstream.cpp:159 ../src/common/zstream.cpp:319
 msgid "Gzip not supported by this version of zlib"
@@ -3917,9 +3855,8 @@ msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "Fișiere HTML (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/common/stockitem.cpp:163
-#, fuzzy
 msgid "Harddisk"
-msgstr "&Harddisk"
+msgstr "Harddisk"
 
 #: ../src/common/fmapbase.cpp:156
 msgid "Hebrew (ISO-8859-8)"
@@ -3966,13 +3903,13 @@ msgid "Help: %s"
 msgstr "Ajutor: %s"
 
 #: ../src/osx/menu_osx.cpp:536 ../src/osx/menu_osx.cpp:583
-#, fuzzy, c-format
+#, c-format
 msgid "Hide %s"
-msgstr "Ajutor: %s"
+msgstr "Ascunde %s"
 
 #: ../src/osx/menu_osx.cpp:538 ../src/osx/menu_osx.cpp:585
 msgid "Hide Others"
-msgstr ""
+msgstr "Ascunde Restul"
 
 #: ../src/generic/infobar.cpp:86
 msgid "Hide this notification message."
@@ -3989,7 +3926,7 @@ msgstr "Director acasă"
 #: ../src/richtext/richtextsizepage.cpp:250
 #: ../src/richtext/richtextsizepage.cpp:252
 msgid "How the object will float relative to the text."
-msgstr ""
+msgstr "Cum se va mișca obiectul relativ la text."
 
 #: ../src/common/imagbmp.cpp:1119
 msgid "ICO: Error in reading mask DIB."
@@ -4087,11 +4024,11 @@ msgstr "Obiect de tip nepermis (Non-wxEvtHandler) ca Sursă a Evenimentului"
 
 #: ../src/common/xti.cpp:514
 msgid "Illegal Parameter Count for ConstructObject Method"
-msgstr ""
+msgstr "Număr incorect de parametri pentru metoda ConstructObject"
 
 #: ../src/common/xti.cpp:502
 msgid "Illegal Parameter Count for Create Method"
-msgstr ""
+msgstr "Număr de parametri incorect pentru metoda Create"
 
 #: ../src/generic/dirctrlg.cpp:671 ../src/generic/filectrlg.cpp:792
 msgid "Illegal directory name."
@@ -4106,14 +4043,14 @@ msgid "Image and mask have different sizes."
 msgstr "Imaginea și masca au dimensiuni diferite."
 
 #: ../src/common/image.cpp:2505
-#, fuzzy, c-format
+#, c-format
 msgid "Image file is not of type %d."
-msgstr "Fișierul imagine nu e de tipul %ld."
+msgstr "Fișierul imagine nu e de tipul %d."
 
 #: ../src/common/image.cpp:2635
-#, fuzzy, c-format
+#, c-format
 msgid "Image is not of type %s."
-msgstr "Fișierul imagine nu e de tipul %s."
+msgstr "Imaginea nu e de tipul %s."
 
 #: ../src/msw/textctrl.cpp:400
 msgid ""
@@ -4149,7 +4086,7 @@ msgstr "Cadru GIF cu dimensiunea (%u, %d) incorectă pentru cadrul #%u"
 
 #: ../src/msw/ole/automtn.cpp:625
 msgid "Incorrect number of arguments."
-msgstr ""
+msgstr "Numar de argumente incorect."
 
 #: ../src/common/stockitem.cpp:166
 msgid "Indent"
@@ -4168,9 +4105,8 @@ msgid "Indian (ISO-8859-12)"
 msgstr "Indian (ISO-8859-12)"
 
 #: ../src/common/stockitem.cpp:168
-#, fuzzy
 msgid "Info"
-msgstr "&Info"
+msgstr "Info"
 
 #: ../src/common/init.cpp:277
 msgid "Initialization failed in post init, aborting."
@@ -4181,9 +4117,8 @@ msgid "Insert"
 msgstr "Inserează"
 
 #: ../src/richtext/richtextbuffer.cpp:7673
-#, fuzzy
 msgid "Insert Field"
-msgstr "Inserează text"
+msgstr "Inserează Câmp"
 
 #: ../src/richtext/richtextbuffer.cpp:7584
 #: ../src/richtext/richtextbuffer.cpp:8490
@@ -4191,9 +4126,8 @@ msgid "Insert Image"
 msgstr "Inserează imagine"
 
 #: ../src/richtext/richtextbuffer.cpp:7631
-#, fuzzy
 msgid "Insert Object"
-msgstr "Inserează text"
+msgstr "Inserează Obiect"
 
 #: ../src/richtext/richtextctrl.cpp:1171 ../src/richtext/richtextctrl.cpp:1361
 #: ../src/richtext/richtextbuffer.cpp:7429
@@ -4204,14 +4138,12 @@ msgstr "Inserează text"
 
 #: ../src/richtext/richtextindentspage.cpp:320
 #: ../src/richtext/richtextindentspage.cpp:322
-#, fuzzy
 msgid "Inserts a page break before the paragraph."
-msgstr "Spațierea înainte de paragraf."
+msgstr "Inserează o intrerupere de pagină înaintea paragrafului."
 
 #: ../src/richtext/richtextborderspage.cpp:549
-#, fuzzy
 msgid "Inset"
-msgstr "Inserează"
+msgstr "Spre interior"
 
 #: ../src/gtk/app.cpp:430
 #, c-format
@@ -4239,7 +4171,7 @@ msgstr "Specificația de geometrie '%s' este invalidă"
 #: ../src/unix/fswatcher_inotify.cpp:299
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "Eveniment inotify invalid pentru \"%s\""
 
 #: ../src/unix/snglinst.cpp:307
 #, c-format
@@ -4267,6 +4199,8 @@ msgstr "Expresie regulată invalidă '%s': %s"
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
+"Valoarea %ld invalidă pentru cheia boolean \"%s\" din fișierul de "
+"configurare."
 
 #: ../src/generic/fontdlgg.cpp:330 ../src/richtext/richtextfontpage.cpp:334
 #: ../src/osx/carbon/fontdlg.cpp:548 ../src/common/stockitem.cpp:169
@@ -4338,9 +4272,8 @@ msgid "Japanese Postcard Rotated 148 x 100 mm"
 msgstr "Japoneză, Carte Postală Rotită 148 x 100 mm"
 
 #: ../src/common/stockitem.cpp:170
-#, fuzzy
 msgid "Jump to"
-msgstr "&Mergi la"
+msgstr "Mergi la"
 
 #: ../src/common/stockitem.cpp:172
 msgid "Justified"
@@ -4470,22 +4403,20 @@ msgid "Landscape"
 msgstr "Orizontal"
 
 #: ../src/common/stockitem.cpp:175
-#, fuzzy
 msgid "Last"
-msgstr "&Ultimul"
+msgstr "Ultimul"
 
 #: ../src/common/prntbase.cpp:1543
-#, fuzzy
 msgid "Last page"
-msgstr "Pagina următoare"
+msgstr "Ultima pagină"
 
 #: ../src/common/log.cpp:312
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ultimul mesaj repetat (\"%s\", %lu data) nu a fost afișat"
+msgstr[1] "Ultimul mesaj repetat (\"%s\", %lu ori) nu a fost afișat"
+msgstr[2] "Ultimul mesaj repetat (\"%s\", %lu de ori) nu a fost afișat"
 
 #: ../src/common/paper.cpp:105
 msgid "Ledger, 17 x 11 in"
@@ -4812,28 +4743,25 @@ msgstr "Selectează:"
 
 #: ../src/richtext/richtextformatdlg.cpp:363
 #: ../src/richtext/richtextmarginspage.cpp:172
-#, fuzzy
 msgid "Margins"
-msgstr "MacGeorgian"
+msgstr "Margini"
 
 #: ../src/generic/fdrepdlg.cpp:148
 msgid "Match case"
 msgstr "Conform majuscule/minuscule"
 
 #: ../src/richtext/richtextsizepage.cpp:460
-#, fuzzy
 msgid "Max height:"
-msgstr "&Greutate:"
+msgstr "Înălțimea maximă:"
 
 #: ../src/richtext/richtextsizepage.cpp:433
-#, fuzzy
 msgid "Max width:"
-msgstr "Înlocuiește cu:"
+msgstr "Lățimea maximă:"
 
 #: ../src/unix/mediactrl.cpp:1007
 #, c-format
 msgid "Media playback error: %s"
-msgstr ""
+msgstr "Eroare de redare media: %s"
 
 #: ../src/common/fs_mem.cpp:176
 #, c-format
@@ -4846,7 +4774,7 @@ msgstr "Meniu"
 
 #: ../src/common/msgout.cpp:125
 msgid "Message"
-msgstr ""
+msgstr "Mesaj"
 
 #: ../src/univ/themes/metal.cpp:169
 msgid "Metal theme"
@@ -4854,24 +4782,23 @@ msgstr "Tema Metal"
 
 #: ../src/msw/ole/automtn.cpp:642
 msgid "Method or property not found."
-msgstr ""
+msgstr "Metoda sau proprietatea nu a fost găsită."
 
 #: ../src/univ/themes/win32.cpp:3753
 msgid "Mi&nimize"
 msgstr "Mi&nimizează"
 
 #: ../src/richtext/richtextsizepage.cpp:406
-#, fuzzy
 msgid "Min height:"
-msgstr "Îngroșare fon&t:"
+msgstr "Înălțimea minimă:"
 
 #: ../src/richtext/richtextsizepage.cpp:379
 msgid "Min width:"
-msgstr ""
+msgstr "Lățime minimă:"
 
 #: ../src/msw/ole/automtn.cpp:658
 msgid "Missing a required parameter."
-msgstr ""
+msgstr "Lipsește un parametru necesar."
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Modern"
@@ -4893,6 +4820,7 @@ msgstr "Monarch Plic, 3 7/8 x 7 1/2 in"
 #: ../src/msw/fswatcher.cpp:144
 msgid "Monitoring individual files for changes is not supported currently."
 msgstr ""
+"Monitorizarea pentru schimbări a fișierelor individuale nu este suportată."
 
 #: ../src/generic/editlbox.cpp:277
 msgid "Move down"
@@ -4904,18 +4832,17 @@ msgstr "Mută în sus"
 
 #: ../src/richtext/richtextsizepage.cpp:679
 #: ../src/richtext/richtextsizepage.cpp:681
-#, fuzzy
 msgid "Moves the object to the next paragraph."
-msgstr "Stilul implicit pentru următorul paragraf."
+msgstr "Mută obiectul în următorul paragraf."
 
 #: ../src/richtext/richtextsizepage.cpp:673
 #: ../src/richtext/richtextsizepage.cpp:675
 msgid "Moves the object to the previous paragraph."
-msgstr ""
+msgstr "Mută obiectul în paragraful anterior."
 
 #: ../src/richtext/richtextbuffer.cpp:9268
 msgid "Multiple Cell Properties"
-msgstr ""
+msgstr "Proprietăți pentru celule multiple"
 
 #: ../src/common/accelcmn.cpp:82
 msgid "NUM_LOCK"
@@ -4926,19 +4853,16 @@ msgid "Name"
 msgstr "Nume"
 
 #: ../src/common/stockitem.cpp:176
-#, fuzzy
 msgid "Network"
-msgstr "&Rețea"
+msgstr "Rețea"
 
 #: ../src/common/stockitem.cpp:177
-#, fuzzy
 msgid "New"
-msgstr "&Nou"
+msgstr "Nou"
 
 #: ../src/richtext/richtextstyledlg.cpp:244
-#, fuzzy
 msgid "New &Box Style..."
-msgstr "Stil nou de &listă..."
+msgstr "Stil nou de &casetă..."
 
 #: ../src/richtext/richtextstyledlg.cpp:226
 msgid "New &Character Style..."
@@ -5096,9 +5020,8 @@ msgstr "Nu au fost găsite asocieri valide în fișierul \"%s\"."
 #: ../src/richtext/richtextborderspage.cpp:542
 #: ../src/richtext/richtextsizepage.cpp:245
 #: ../src/richtext/richtextsizepage.cpp:249
-#, fuzzy
 msgid "None"
-msgstr "(Nimic)"
+msgstr "Niciuna"
 
 #: ../src/common/fmapbase.cpp:158
 msgid "Nordic (ISO-8859-10)"
@@ -5155,16 +5078,15 @@ msgstr "OK"
 #: ../src/msw/ole/automtn.cpp:682
 #, c-format
 msgid "OLE Automation error in %s: %s"
-msgstr ""
+msgstr "Eroare de automatizare OLE în %s: %s"
 
 #: ../include/wx/richtext/richtextimagedlg.h:39
-#, fuzzy
 msgid "Object Properties"
-msgstr "&Proprietăți"
+msgstr "Proprietăți Obiect"
 
 #: ../src/msw/ole/automtn.cpp:650
 msgid "Object implementation does not support named arguments."
-msgstr ""
+msgstr "Implementearea obiectului nu suportă argumente cu denumire."
 
 #: ../src/common/xtixml.cpp:265
 msgid "Objects must have an id attribute"
@@ -5184,9 +5106,8 @@ msgid "Open file \"%s\""
 msgstr "Deschide fișierul \"%s\""
 
 #: ../src/common/stockitem.cpp:180
-#, fuzzy
 msgid "Open..."
-msgstr "&Deschide..."
+msgstr "Deschide..."
 
 #: ../src/osx/carbon/glcanvas.cpp:49
 #, c-format
@@ -5199,9 +5120,9 @@ msgid "Operation not permitted."
 msgstr "Operație nepermisă."
 
 #: ../src/common/cmdline.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Option '%s' can't be negated"
-msgstr "Directorul '%s' nu a putut fi creat"
+msgstr "Opțiunea '%s' nu poate fi negată"
 
 #: ../src/common/cmdline.cpp:892
 #, c-format
@@ -5229,17 +5150,16 @@ msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:400
 #: ../src/richtext/richtextborderspage.cpp:533
-#, fuzzy
 msgid "Outline"
-msgstr "Nivel &delimitare:"
+msgstr "Contur"
 
 #: ../src/richtext/richtextborderspage.cpp:550
 msgid "Outset"
-msgstr ""
+msgstr "Spre exterior"
 
 #: ../src/msw/ole/automtn.cpp:646
 msgid "Overflow while coercing argument values."
-msgstr ""
+msgstr "Overflow în timpul validării valorilor argumentelor."
 
 #: ../src/common/accelcmn.cpp:85
 msgid "PAGEDOWN"
@@ -5408,7 +5328,7 @@ msgstr "PRINT"
 
 #: ../src/richtext/richtextmarginspage.cpp:286
 msgid "Padding"
-msgstr ""
+msgstr "Umplere"
 
 #: ../src/common/prntbase.cpp:2045
 #, c-format
@@ -5470,9 +5390,8 @@ msgid "Permissions"
 msgstr "Permisiuni"
 
 #: ../src/richtext/richtextbuffer.cpp:11568
-#, fuzzy
 msgid "Picture Properties"
-msgstr "&Proprietăți"
+msgstr "Proprietăți Imagine"
 
 #: ../include/wx/unix/pipe.h:47
 msgid "Pipe creation failed"
@@ -5510,9 +5429,8 @@ msgid "Please select the columns to show and define their order:"
 msgstr "Alegeți coloanele ce trebuiesc afișate și stabiliți-le ordinea:"
 
 #: ../src/common/prntbase.cpp:522
-#, fuzzy
 msgid "Please wait while printing..."
-msgstr "Așteptați cât timp se tipărește\n"
+msgstr "Așteptați cât timp se tipărește..."
 
 #: ../src/propgrid/advprops.cpp:632
 msgid "Point Size"
@@ -5541,27 +5459,24 @@ msgid "Portrait"
 msgstr "Vertical"
 
 #: ../src/richtext/richtextsizepage.cpp:493
-#, fuzzy
 msgid "Position"
-msgstr "Tipărește"
+msgstr "Poziție"
 
 #: ../src/generic/prntdlgg.cpp:304
 msgid "PostScript file"
 msgstr "Fișier PostScript"
 
 #: ../src/common/stockitem.cpp:182
-#, fuzzy
 msgid "Preferences"
-msgstr "&Preferințe"
+msgstr "Preferințe"
 
 #: ../src/osx/menu_osx.cpp:577
-#, fuzzy
 msgid "Preferences..."
-msgstr "&Preferințe"
+msgstr "Preferințe..."
 
 #: ../src/common/prntbase.cpp:530
 msgid "Preparing"
-msgstr ""
+msgstr "Pregătește"
 
 #: ../src/generic/fontdlgg.cpp:456 ../src/osx/carbon/fontdlg.cpp:577
 #: ../src/html/helpwnd.cpp:1235
@@ -5601,9 +5516,8 @@ msgid "Print in colour"
 msgstr "Tipărește color"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print previe&w..."
-msgstr "Pre&vizualizează tipărire"
+msgstr "Pre&vizualizează tipărire..."
 
 #: ../src/gtk/gnome/gprint.cpp:945
 msgid "Print preview"
@@ -5614,9 +5528,8 @@ msgid "Print preview creation failed."
 msgstr "Previzualizarea pentru tipărire a eșuat."
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print preview..."
-msgstr "Previzualizează tipărire"
+msgstr "Previzualizează tipărire..."
 
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Print spooling"
@@ -5631,9 +5544,8 @@ msgid "Print to File"
 msgstr "Tipărește în fișier"
 
 #: ../src/common/stockitem.cpp:184
-#, fuzzy
 msgid "Print..."
-msgstr "Ti&părește..."
+msgstr "Tipărește..."
 
 #: ../src/generic/prntdlgg.cpp:499
 msgid "Printer"
@@ -5673,9 +5585,9 @@ msgid "Printing Error"
 msgstr "Eroare de tipărire"
 
 #: ../src/common/prntbase.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d of %d"
-msgstr "Se tipărește pagina %d..."
+msgstr "Se tipărește pagina %d din %d"
 
 #: ../src/generic/printps.cpp:202
 #, c-format
@@ -5705,21 +5617,19 @@ msgstr "Renderul de progres nu poate reda tipul de valoare; tipul de valoare: "
 
 #: ../src/common/prntbase.cpp:529
 msgid "Progress:"
-msgstr ""
+msgstr "Progres:"
 
 #: ../src/common/stockitem.cpp:185
-#, fuzzy
 msgid "Properties"
-msgstr "&Proprietăți"
+msgstr "Proprietăți"
 
 #: ../src/propgrid/manager.cpp:238
 msgid "Property"
 msgstr "Proprietate"
 
 #: ../src/propgrid/propgrid.cpp:3145 ../src/propgrid/propgrid.cpp:3277
-#, fuzzy
 msgid "Property Error"
-msgstr "Proprietate"
+msgstr "Proprietate Eronata"
 
 #: ../src/common/paper.cpp:114
 msgid "Quarto, 215 x 275 mm"
@@ -5730,14 +5640,13 @@ msgid "Question"
 msgstr "Întrebare"
 
 #: ../src/common/stockitem.cpp:157
-#, fuzzy
 msgid "Quit"
-msgstr "&Ieșire"
+msgstr "Ieșire"
 
 #: ../src/osx/menu_osx.cpp:544 ../src/osx/menu_osx.cpp:591
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "&Ieșire"
+msgstr "Ieșire din %s"
 
 #: ../src/common/stockitem.cpp:264
 msgid "Quit this program"
@@ -5752,9 +5661,8 @@ msgid "RIGHT"
 msgstr "RIGHT"
 
 #: ../src/common/accelcmn.cpp:328
-#, fuzzy
 msgid "RawCtrl+"
-msgstr "Ctrl+"
+msgstr "RawCtrl+"
 
 #: ../src/common/ffile.cpp:114 ../src/common/ffile.cpp:135
 #, c-format
@@ -5810,9 +5718,8 @@ msgid "Regular"
 msgstr "Normal"
 
 #: ../src/richtext/richtextsizepage.cpp:516
-#, fuzzy
 msgid "Relative"
-msgstr "Decorativ"
+msgstr "Relativă"
 
 #: ../src/generic/helpext.cpp:463
 msgid "Relevant entries:"
@@ -5823,9 +5730,8 @@ msgid "Remove"
 msgstr "Elimină"
 
 #: ../src/richtext/richtextctrl.cpp:1429
-#, fuzzy
 msgid "Remove Bullet"
-msgstr "Elimină"
+msgstr "Elimină marcator"
 
 #: ../src/html/helpwnd.cpp:440
 msgid "Remove current page from bookmarks"
@@ -5880,9 +5786,8 @@ msgid "Revert to Saved"
 msgstr "Revenire la versiunea salvată"
 
 #: ../src/richtext/richtextborderspage.cpp:548
-#, fuzzy
 msgid "Ridge"
-msgstr "Dreapta"
+msgstr "Crestată"
 
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextbulletspage.cpp:202
@@ -5956,7 +5861,6 @@ msgid "Save As"
 msgstr "Salvează ca"
 
 #: ../src/common/stockitem.cpp:192
-#, fuzzy
 msgid "Save as"
 msgstr "Salvează ca"
 
@@ -6068,13 +5972,12 @@ msgid "Separator expected after the option '%s'."
 msgstr "Lipsește separatorul după opțiunea '%s'."
 
 #: ../src/richtext/richtextbuffer.cpp:10226
-#, fuzzy
 msgid "Set Cell Style"
-msgstr "Șterge stil"
+msgstr "Aplică stilul de celulă"
 
 #: ../include/wx/xtiprop.h:180
 msgid "SetProperty called w/o valid setter"
-msgstr ""
+msgstr "SetProperty apelat cu setter invalid"
 
 #: ../src/common/filename.cpp:2620
 msgid "Setting directory access times is not supported under this OS version"
@@ -6104,9 +6007,8 @@ msgid "Show &hidden files"
 msgstr "Arată &fișiere ascunse"
 
 #: ../src/osx/menu_osx.cpp:539 ../src/osx/menu_osx.cpp:586
-#, fuzzy
 msgid "Show All"
-msgstr "Arată tot"
+msgstr "Arată Tot"
 
 #: ../src/common/stockitem.cpp:258
 msgid "Show about dialog"
@@ -6186,14 +6088,12 @@ msgid "Slant"
 msgstr "Înclinat"
 
 #: ../src/richtext/richtextfontpage.cpp:299
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "&Majuscule"
+msgstr "&Majuscule de format mic"
 
 #: ../src/richtext/richtextborderspage.cpp:543
-#, fuzzy
 msgid "Solid"
-msgstr "Îngroșat"
+msgstr "Îngroșată"
 
 #: ../src/common/docview.cpp:1769
 msgid "Sorry, could not open this file."
@@ -6229,9 +6129,8 @@ msgid "Spacing"
 msgstr "Spațiere"
 
 #: ../src/common/stockitem.cpp:198
-#, fuzzy
 msgid "Spell Check"
-msgstr "&Verificare ortografie"
+msgstr "Verificare ortografiei"
 
 #: ../src/richtext/richtextliststylepage.cpp:491
 #: ../src/richtext/richtextbulletspage.cpp:296
@@ -6244,23 +6143,20 @@ msgstr "Declarație, 5 1/2 x 8 1/2 in"
 
 #: ../src/richtext/richtextsizepage.cpp:515
 #: ../src/richtext/richtextsizepage.cpp:520
-#, fuzzy
 msgid "Static"
-msgstr "Stare:"
+msgstr "Statică"
 
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Status:"
 msgstr "Stare:"
 
 #: ../src/common/stockitem.cpp:199
-#, fuzzy
 msgid "Stop"
-msgstr "&Stop"
+msgstr "Stop"
 
 #: ../src/common/stockitem.cpp:200
-#, fuzzy
 msgid "Strikethrough"
-msgstr "&Tăiat cu o linie"
+msgstr "Tăiat"
 
 #: ../src/common/colourcmn.cpp:46
 #, c-format
@@ -6340,9 +6236,8 @@ msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF: Dimensiunea imaginii este anormal de mare."
 
 #: ../src/richtext/richtextbuffer.cpp:10516
-#, fuzzy
 msgid "Table Properties"
-msgstr "&Proprietăți"
+msgstr "Proprietăți Tabelă"
 
 #: ../src/common/paper.cpp:147
 msgid "Tabloid Extra 11.69 x 18 in"
@@ -6394,29 +6289,25 @@ msgstr "Stilurile disponibile."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:139
 #: ../src/richtext/richtextbackgroundpage.cpp:141
-#, fuzzy
 msgid "The background colour."
-msgstr "Culoare de fundal"
+msgstr "Culoarea de fundal."
 
 #: ../src/richtext/richtextmarginspage.cpp:268
 #: ../src/richtext/richtextmarginspage.cpp:270
-#, fuzzy
 msgid "The bottom margin size."
-msgstr "Dimensiunea în puncte a fontului."
+msgstr "Dimensiunea marginii inferioare."
 
 #: ../src/richtext/richtextmarginspage.cpp:382
 #: ../src/richtext/richtextmarginspage.cpp:384
-#, fuzzy
 msgid "The bottom padding size."
-msgstr "Dimensiunea în puncte a fontului."
+msgstr "Dimensiunea spaCierii inferioare."
 
 #: ../src/richtext/richtextsizepage.cpp:636
 #: ../src/richtext/richtextsizepage.cpp:638
 #: ../src/richtext/richtextsizepage.cpp:650
 #: ../src/richtext/richtextsizepage.cpp:652
-#, fuzzy
 msgid "The bottom position."
-msgstr "Poziția de indentare."
+msgstr "Poziția de jos."
 
 #: ../src/richtext/richtextliststylepage.cpp:255
 #: ../src/richtext/richtextliststylepage.cpp:257
@@ -6478,11 +6369,13 @@ msgstr ""
 "Doriți să fie tipărit oricum?"
 
 #: ../src/common/docview.cpp:1179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
 "It has been removed from the most recently used files list."
-msgstr "A fost șters din lista fișierelor recent folosite."
+msgstr ""
+"Fișierul '%s' nu există și nu a putut fi deschis\n"
+"A fost șters din lista fișierelor recent folosite."
 
 #: ../src/richtext/richtextindentspage.cpp:221
 #: ../src/richtext/richtextindentspage.cpp:223
@@ -6519,9 +6412,8 @@ msgstr "Dimensiunea fontului în puncte."
 
 #: ../src/richtext/richtextfontpage.cpp:191
 #: ../src/richtext/richtextfontpage.cpp:193
-#, fuzzy
 msgid "The font size units, points or pixels."
-msgstr "Dimensiunea fontului în puncte."
+msgstr "Unitățile de măsura pentru mărimea fontului, puncte sau pixeli."
 
 #: ../src/generic/fontdlgg.cpp:387 ../src/generic/fontdlgg.cpp:389
 msgid "The font style."
@@ -6545,23 +6437,20 @@ msgstr "Indent stânga."
 
 #: ../src/richtext/richtextmarginspage.cpp:195
 #: ../src/richtext/richtextmarginspage.cpp:197
-#, fuzzy
 msgid "The left margin size."
-msgstr "Dimensiunea în puncte a fontului."
+msgstr "Dimensiunea marginii stângi."
 
 #: ../src/richtext/richtextmarginspage.cpp:309
 #: ../src/richtext/richtextmarginspage.cpp:311
-#, fuzzy
 msgid "The left padding size."
-msgstr "Dimensiunea în puncte a fontului."
+msgstr "Dimensiunea spațierii din stânga."
 
 #: ../src/richtext/richtextsizepage.cpp:531
 #: ../src/richtext/richtextsizepage.cpp:533
 #: ../src/richtext/richtextsizepage.cpp:545
 #: ../src/richtext/richtextsizepage.cpp:547
-#, fuzzy
 msgid "The left position."
-msgstr "Poziția de indentare."
+msgstr "Poziția din stânga."
 
 #: ../src/richtext/richtextindentspage.cpp:313
 #: ../src/richtext/richtextindentspage.cpp:315
@@ -6577,43 +6466,37 @@ msgstr "Numărul elementului din listă."
 
 #: ../src/msw/ole/automtn.cpp:654
 msgid "The locale ID is unknown."
-msgstr ""
+msgstr "ID-ul pentru localizare este necunoscut."
 
 #: ../src/richtext/richtextsizepage.cpp:363
 #: ../src/richtext/richtextsizepage.cpp:365
-#, fuzzy
 msgid "The object height."
-msgstr "Îngroșarea fontului."
+msgstr "Înălțimea obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:471
 #: ../src/richtext/richtextsizepage.cpp:473
-#, fuzzy
 msgid "The object maximum height."
-msgstr "Îngroșarea fontului."
+msgstr "Înălțimea maximă a obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:444
 #: ../src/richtext/richtextsizepage.cpp:446
-#, fuzzy
 msgid "The object maximum width."
-msgstr "Îngroșarea fontului."
+msgstr "Lățimea maximă a obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:417
 #: ../src/richtext/richtextsizepage.cpp:419
-#, fuzzy
 msgid "The object minimum height."
-msgstr "Îngroșarea fontului."
+msgstr "Înălțimea minimă a obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:390
 #: ../src/richtext/richtextsizepage.cpp:392
-#, fuzzy
 msgid "The object minimum width."
-msgstr "Îngroșarea fontului."
+msgstr "Lățimea minimă a obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:329
 #: ../src/richtext/richtextsizepage.cpp:331
-#, fuzzy
 msgid "The object width."
-msgstr "Îngroșarea fontului."
+msgstr "Lățimea obiectului."
 
 #: ../src/richtext/richtextindentspage.cpp:252
 #: ../src/richtext/richtextindentspage.cpp:254
@@ -6621,15 +6504,14 @@ msgid "The outline level."
 msgstr "Nivelul conturului."
 
 #: ../src/common/log.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
-msgstr[0] "Mesajul anterior e repetat o dată."
+msgstr[0] "Mesajul anterior e repetat %lu dată."
 msgstr[1] "Mesajul anterior e repetat de %lu ori."
-msgstr[2] "Mesajul anterior e repetat de %lu ori."
+msgstr[2] "Mesajul anterior e repetat de %lu de ori."
 
 #: ../src/common/log.cpp:277
-#, fuzzy
 msgid "The previous message repeated once."
 msgstr "Mesajul anterior e repetat o dată."
 
@@ -6666,23 +6548,20 @@ msgstr "Indent dreapta."
 
 #: ../src/richtext/richtextmarginspage.cpp:220
 #: ../src/richtext/richtextmarginspage.cpp:222
-#, fuzzy
 msgid "The right margin size."
-msgstr "Indent dreapta."
+msgstr "Dimensiunea marginii drepte."
 
 #: ../src/richtext/richtextmarginspage.cpp:334
 #: ../src/richtext/richtextmarginspage.cpp:336
-#, fuzzy
 msgid "The right padding size."
-msgstr "Indent dreapta."
+msgstr "Dimensiunea spațierii din dreapta."
 
 #: ../src/richtext/richtextsizepage.cpp:601
 #: ../src/richtext/richtextsizepage.cpp:603
 #: ../src/richtext/richtextsizepage.cpp:615
 #: ../src/richtext/richtextsizepage.cpp:617
-#, fuzzy
 msgid "The right position."
-msgstr "Poziția de indentare."
+msgstr "Poziția din dreapta."
 
 #: ../src/richtext/richtextindentspage.cpp:292
 #: ../src/richtext/richtextliststylepage.cpp:440
@@ -6714,7 +6593,7 @@ msgstr "Previzualizarea stilului."
 
 #: ../src/msw/ole/automtn.cpp:670
 msgid "The system cannot find the file specified."
-msgstr ""
+msgstr "Sistemul nu poate găsi fișierul specificat."
 
 #: ../src/richtext/richtexttabspage.cpp:119
 #: ../src/richtext/richtexttabspage.cpp:121
@@ -6731,23 +6610,20 @@ msgstr "Textul nu a putut fi salvat."
 
 #: ../src/richtext/richtextmarginspage.cpp:243
 #: ../src/richtext/richtextmarginspage.cpp:245
-#, fuzzy
 msgid "The top margin size."
-msgstr "Dimensiunea în puncte a fontului."
+msgstr "Dimensiunea marginii superioare."
 
 #: ../src/richtext/richtextmarginspage.cpp:357
 #: ../src/richtext/richtextmarginspage.cpp:359
-#, fuzzy
 msgid "The top padding size."
-msgstr "Dimensiunea în puncte a fontului."
+msgstr "Dimensiunea spațierii superioare."
 
 #: ../src/richtext/richtextsizepage.cpp:566
 #: ../src/richtext/richtextsizepage.cpp:568
 #: ../src/richtext/richtextsizepage.cpp:580
 #: ../src/richtext/richtextsizepage.cpp:582
-#, fuzzy
 msgid "The top position."
-msgstr "Poziția de indentare."
+msgstr "Poziția de sus."
 
 #: ../src/common/cmdline.cpp:1054
 #, c-format
@@ -6789,19 +6665,21 @@ msgstr ""
 "tipărire."
 
 #: ../src/common/image.cpp:2612
-#, fuzzy, c-format
+#, c-format
 msgid "This is not a %s."
-msgstr "PCX: acesta nu este un fișier PCX."
+msgstr "Acesta nu este un %s."
 
 #: ../src/common/wincmn.cpp:1637
 msgid "This platform does not support background transparency."
-msgstr ""
+msgstr "Această platformă nu suportă transparență pentru fundal."
 
 #: ../src/gtk/window.cpp:4294
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
 msgstr ""
+"Acest program a fost compilat cu o versiune de GTK+ prea veche, recompilați "
+"cu GTK+ 2.12 sau mai recent."
 
 #: ../src/msw/datecontrols.cpp:60
 msgid ""
@@ -6881,9 +6759,8 @@ msgstr "Prea multe culori in PNG, imaginea poate fi ușor neclară."
 
 #: ../src/richtext/richtextsizepage.cpp:283
 #: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:201
-#, fuzzy
 msgid "Top"
-msgstr "&Sus"
+msgstr "Sus"
 
 #: ../src/generic/prntdlgg.cpp:887
 msgid "Top margin (mm):"
@@ -6929,7 +6806,7 @@ msgstr "Tastați o dimensiune în puncte."
 #: ../src/msw/ole/automtn.cpp:666
 #, c-format
 msgid "Type mismatch in argument %u."
-msgstr ""
+msgstr "Tip nepotrivit pentru argumentul %u."
 
 #: ../src/common/xtixml.cpp:357 ../src/common/xtixml.cpp:510
 #: ../src/common/xtistrm.cpp:323
@@ -7067,9 +6944,8 @@ msgid "Undelete"
 msgstr "Restaurează"
 
 #: ../src/common/stockitem.cpp:203
-#, fuzzy
 msgid "Underline"
-msgstr "S&ubliniat"
+msgstr "Subliniat"
 
 #: ../src/richtext/richtextfontpage.cpp:342 ../src/osx/carbon/fontdlg.cpp:557
 #: ../src/propgrid/advprops.cpp:656
@@ -7093,6 +6969,8 @@ msgstr "După opțiunea '%s' apar caractere neașteptate."
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
+"Eveniment neașteptat pentru \"%s\": nu există descriptor de monitorizare "
+"potrivit."
 
 #: ../src/common/cmdline.cpp:1017
 #, c-format
@@ -7146,147 +7024,138 @@ msgid "Unicode 8 bit (UTF-8)"
 msgstr "Unicode 8 bit (UTF-8)"
 
 #: ../src/common/stockitem.cpp:205
-#, fuzzy
 msgid "Unindent"
-msgstr "An&ulează indentare"
+msgstr "Anulează indentare"
 
 #: ../src/richtext/richtextborderspage.cpp:373
 #: ../src/richtext/richtextborderspage.cpp:375
 msgid "Units for the bottom border width."
-msgstr ""
+msgstr "Unități pentru lățimea marginii inferioare."
 
 #: ../src/richtext/richtextmarginspage.cpp:278
 #: ../src/richtext/richtextmarginspage.cpp:280
 msgid "Units for the bottom margin."
-msgstr ""
+msgstr "Unități pentru marginea inferioară."
 
 #: ../src/richtext/richtextborderspage.cpp:517
 #: ../src/richtext/richtextborderspage.cpp:519
 msgid "Units for the bottom outline width."
-msgstr ""
+msgstr "Unități pentru lățimea conturului inferior."
 
 #: ../src/richtext/richtextmarginspage.cpp:392
 #: ../src/richtext/richtextmarginspage.cpp:394
 msgid "Units for the bottom padding."
-msgstr ""
+msgstr "Unități pentru spațierea inferioară."
 
 #: ../src/richtext/richtextsizepage.cpp:661
 #: ../src/richtext/richtextsizepage.cpp:663
-#, fuzzy
 msgid "Units for the bottom position."
-msgstr "Îngroșarea fontului."
+msgstr "Unitățile pentru poziția inferioară."
 
 #: ../src/richtext/richtextborderspage.cpp:283
 #: ../src/richtext/richtextborderspage.cpp:285
 msgid "Units for the left border width."
-msgstr ""
+msgstr "Unități pentru lățimea marginii stângi."
 
 #: ../src/richtext/richtextmarginspage.cpp:205
 #: ../src/richtext/richtextmarginspage.cpp:207
 msgid "Units for the left margin."
-msgstr ""
+msgstr "Unități pentru marginea stângă."
 
 #: ../src/richtext/richtextborderspage.cpp:427
 #: ../src/richtext/richtextborderspage.cpp:429
 msgid "Units for the left outline width."
-msgstr ""
+msgstr "Unități pentru lățimea conturului în stânga."
 
 #: ../src/richtext/richtextmarginspage.cpp:319
 #: ../src/richtext/richtextmarginspage.cpp:321
 msgid "Units for the left padding."
-msgstr ""
+msgstr "Unități pentru spațierea din stânga."
 
 #: ../src/richtext/richtextsizepage.cpp:556
 #: ../src/richtext/richtextsizepage.cpp:558
-#, fuzzy
 msgid "Units for the left position."
-msgstr "Îngroșarea fontului."
+msgstr "Unitățile pentru poziția din stânga."
 
 #: ../src/richtext/richtextsizepage.cpp:482
 #: ../src/richtext/richtextsizepage.cpp:484
-#, fuzzy
 msgid "Units for the maximum object height."
-msgstr "Îngroșarea fontului."
+msgstr "Unități pentru înălțimea maximă a obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:455
 #: ../src/richtext/richtextsizepage.cpp:457
-#, fuzzy
 msgid "Units for the maximum object width."
-msgstr "Îngroșarea fontului."
+msgstr "Unități pentru lățimea maximă a obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:428
 #: ../src/richtext/richtextsizepage.cpp:430
-#, fuzzy
 msgid "Units for the minimum object height."
-msgstr "Îngroșarea fontului."
+msgstr "Unități pentru înălțimea minimă a obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:401
 #: ../src/richtext/richtextsizepage.cpp:403
-#, fuzzy
 msgid "Units for the minimum object width."
-msgstr "Îngroșarea fontului."
+msgstr "Unități pentru lățimea minimă a obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:374
 #: ../src/richtext/richtextsizepage.cpp:376
 msgid "Units for the object height."
-msgstr ""
+msgstr "Unități pentru înălțimea obiectului."
 
 #: ../src/richtext/richtextsizepage.cpp:340
 #: ../src/richtext/richtextsizepage.cpp:342
 msgid "Units for the object width."
-msgstr ""
+msgstr "Unități pentru lățimea obiectului."
 
 #: ../src/richtext/richtextborderspage.cpp:313
 #: ../src/richtext/richtextborderspage.cpp:315
 msgid "Units for the right border width."
-msgstr ""
+msgstr "Unități pentru lățimea marginii drepte."
 
 #: ../src/richtext/richtextmarginspage.cpp:230
 #: ../src/richtext/richtextmarginspage.cpp:232
 msgid "Units for the right margin."
-msgstr ""
+msgstr "Unități pentru marginea dreaptă."
 
 #: ../src/richtext/richtextborderspage.cpp:457
 #: ../src/richtext/richtextborderspage.cpp:459
 msgid "Units for the right outline width."
-msgstr ""
+msgstr "Unități pentru lățimea conturului în dreapta."
 
 #: ../src/richtext/richtextmarginspage.cpp:344
 #: ../src/richtext/richtextmarginspage.cpp:346
 msgid "Units for the right padding."
-msgstr ""
+msgstr "Unități pentru spațierea din dreapta."
 
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:628
-#, fuzzy
 msgid "Units for the right position."
-msgstr "Îngroșarea fontului."
+msgstr "Unități pentru poziție dreapta."
 
 #: ../src/richtext/richtextborderspage.cpp:343
 #: ../src/richtext/richtextborderspage.cpp:345
 msgid "Units for the top border width."
-msgstr ""
+msgstr "Unități pentru lățimea marginii superioare."
 
 #: ../src/richtext/richtextmarginspage.cpp:253
 #: ../src/richtext/richtextmarginspage.cpp:255
 msgid "Units for the top margin."
-msgstr ""
+msgstr "Unități pentru marginea superioară."
 
 #: ../src/richtext/richtextborderspage.cpp:487
 #: ../src/richtext/richtextborderspage.cpp:489
 msgid "Units for the top outline width."
-msgstr ""
+msgstr "Unități pentru lățimea conturului superior."
 
 #: ../src/richtext/richtextmarginspage.cpp:367
 #: ../src/richtext/richtextmarginspage.cpp:369
 msgid "Units for the top padding."
-msgstr ""
+msgstr "Unități pentru spațierea superioară."
 
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:593
-#, fuzzy
 msgid "Units for the top position."
-msgstr "Poziția de indentare."
+msgstr "Unități pentru poziție sus."
 
 #: ../src/generic/progdlgg.cpp:383 ../src/generic/progdlgg.cpp:656
 msgid "Unknown"
@@ -7302,9 +7171,9 @@ msgid "Unknown Object passed to GetObjectClassInfo"
 msgstr "Obiect necunoscut pasat către GetObjectClassInfo"
 
 #: ../src/common/imagpng.cpp:615
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown PNG resolution unit %d"
-msgstr "Unitatea de rezoluție TIFF necunoscută %d ignorată"
+msgstr "Unitatea %d de rezoluție pentru PNG necunoscută"
 
 #: ../src/common/xtixml.cpp:328
 #, c-format
@@ -7330,19 +7199,17 @@ msgid "Unknown encoding (%d)"
 msgstr "Codificare necunoscută (%d)"
 
 #: ../src/msw/ole/automtn.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown error %08x"
-msgstr "Eroare DDE necunoscută %08x"
+msgstr "Eroare necunoscută %08x"
 
 #: ../src/msw/ole/automtn.cpp:637
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Opțiune %s necunoscută"
+msgstr "Exceptie necunoscută"
 
 #: ../src/common/image.cpp:2597
-#, fuzzy
 msgid "Unknown image data format."
-msgstr "Format de date necunoscut"
+msgstr "Format de imagine necunoscut."
 
 #: ../src/common/cmdline.cpp:742
 #, c-format
@@ -7350,9 +7217,8 @@ msgid "Unknown long option '%s'"
 msgstr "Opțiune lungă necunoscută '%s'"
 
 #: ../src/msw/ole/automtn.cpp:621
-#, fuzzy
 msgid "Unknown name or named argument."
-msgstr "Format de date necunoscut"
+msgstr "Nume sau denumire de argument necunoscute."
 
 #: ../src/common/cmdline.cpp:757 ../src/common/cmdline.cpp:779
 #, c-format
@@ -7421,19 +7287,19 @@ msgid "Value"
 msgstr "Valoare"
 
 #: ../src/propgrid/props.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Value must be %s or higher."
-msgstr "Valoarea trebuie să fie %f sau mai mare"
+msgstr "Valoarea trebuie să fie %s sau mai mare."
 
 #: ../src/propgrid/props.cpp:412
-#, fuzzy, c-format
+#, c-format
 msgid "Value must be %s or less."
-msgstr "Valoarea trebuie să fie %f sau mai mică"
+msgstr "Valoarea trebuie să fie %s sau mai mică."
 
 #: ../src/propgrid/props.cpp:389 ../src/propgrid/props.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "Value must be between %s and %s."
-msgstr "Valoarea trebuie să fie %f sau mai mică"
+msgstr "Valoarea trebuie să fie între %s și %s."
 
 #: ../src/generic/aboutdlgg.cpp:129
 msgid "Version "
@@ -7441,9 +7307,8 @@ msgstr "Versiunea "
 
 #: ../src/richtext/richtextsizepage.cpp:288
 #: ../src/richtext/richtextsizepage.cpp:290
-#, fuzzy
 msgid "Vertical alignment."
-msgstr "Nu a putut fi setată alinierea."
+msgstr "Aliniere verticală."
 
 #: ../src/generic/filedlgg.cpp:217
 msgid "View files as a detailed view"
@@ -7511,14 +7376,12 @@ msgid "Win32s on Windows 3.1"
 msgstr "Win32 pe Windows 3.1"
 
 #: ../src/msw/utils.cpp:1271
-#, fuzzy
 msgid "Windows 2000"
-msgstr "Windows 95"
+msgstr "Windows 2000"
 
 #: ../src/msw/utils.cpp:1303
-#, fuzzy
 msgid "Windows 7"
-msgstr "Windows 95"
+msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1235
 msgid "Windows 95"
@@ -7559,14 +7422,12 @@ msgid "Windows Central European (CP 1250)"
 msgstr "Windows Central Europeană (CP 1250)"
 
 #: ../src/common/fmapbase.cpp:169
-#, fuzzy
 msgid "Windows Chinese Simplified (CP 936) or GB-2312"
-msgstr "Windows Chineză Simplificată (CP 936)"
+msgstr "Windows Chineză Simplificată (CP 936) sau GB-2312"
 
 #: ../src/common/fmapbase.cpp:171
-#, fuzzy
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
-msgstr "Windows Chineză Traditională (CP 950)"
+msgstr "Windows Chineză Traditională (CP 950) sau Big-5"
 
 #: ../src/common/fmapbase.cpp:173
 msgid "Windows Cyrillic (CP 1251)"
@@ -7581,14 +7442,12 @@ msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows Ebraică (CP 1255)"
 
 #: ../src/common/fmapbase.cpp:168
-#, fuzzy
 msgid "Windows Japanese (CP 932) or Shift-JIS"
-msgstr "Windows Japoneză (CP 932)"
+msgstr "Windows Japoneză (CP 932) sau Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:181
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows Arabică (CP 1256)"
+msgstr "Windows Johab (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:170
 msgid "Windows Korean (CP 949)"
@@ -7599,24 +7458,21 @@ msgid "Windows ME"
 msgstr "Windows ME"
 
 #: ../src/msw/utils.cpp:1311
-#, fuzzy, c-format
+#, c-format
 msgid "Windows NT %lu.%lu"
-msgstr "Windows NT %lu.%lu (build %lu"
+msgstr "Windows NT %lu.%lu"
 
 #: ../src/msw/utils.cpp:1280
-#, fuzzy
 msgid "Windows Server 2003"
-msgstr "Windows Server 2003 (build %lu"
+msgstr "Windows Server 2003"
 
 #: ../src/msw/utils.cpp:1296
-#, fuzzy
 msgid "Windows Server 2008"
-msgstr "Windows Server 2003 (build %lu"
+msgstr "Windows Server 2003"
 
 #: ../src/msw/utils.cpp:1302
-#, fuzzy
 msgid "Windows Server 2008 R2"
-msgstr "Windows Server 2003 (build %lu"
+msgstr "Windows Server 2008 R2"
 
 #: ../src/common/fmapbase.cpp:167
 msgid "Windows Thai (CP 874)"
@@ -7627,32 +7483,28 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Turcă (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Windows Greacă (CP 1253)"
+msgstr "Windows Vietnameză (CP 1258)"
 
 #: ../src/msw/utils.cpp:1297
-#, fuzzy
 msgid "Windows Vista"
-msgstr "Windows Vista (build %lu"
+msgstr "Windows Vista"
 
 #: ../src/common/fmapbase.cpp:174
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows Vest Europeană (CP 1252)"
 
 #: ../src/msw/utils.cpp:1286
-#, fuzzy
 msgid "Windows XP"
-msgstr "Windows 95"
+msgstr "Windows XP"
 
 #: ../src/common/fmapbase.cpp:182
 msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
 #: ../src/common/fmapbase.cpp:166
-#, fuzzy
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
-msgstr "Windows Chirilică (CP 1251)"
+msgstr "Windows/DOS OEM Chirilică (CP 866)"
 
 #: ../src/common/ffile.cpp:149
 #, c-format
@@ -7712,6 +7564,7 @@ msgstr "Nu se poate adăuga un nou director la această secțiune."
 #: ../src/propgrid/propgrid.cpp:3259
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
+"Ați introdus o valoare incorectă. Apăsati ESC pentru anularea editării."
 
 #: ../src/common/stockitem.cpp:210
 msgid "Zoom &In"
@@ -7722,23 +7575,20 @@ msgid "Zoom &Out"
 msgstr "Mi&cșorează"
 
 #: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1565
-#, fuzzy
 msgid "Zoom In"
-msgstr "Mă&rește"
+msgstr "Mărește"
 
 #: ../src/common/stockitem.cpp:211 ../src/common/prntbase.cpp:1551
-#, fuzzy
 msgid "Zoom Out"
-msgstr "Mi&cșorează"
+msgstr "Micșorează"
 
 #: ../src/common/stockitem.cpp:209
 msgid "Zoom to &Fit"
 msgstr "Redimensione&ază cât să încapă"
 
 #: ../src/common/stockitem.cpp:209
-#, fuzzy
 msgid "Zoom to Fit"
-msgstr "Redimensione&ază cât să încapă"
+msgstr "Redimensionează cât să încapă"
 
 #: ../src/msw/dde.cpp:1145
 msgid "a DDEML application has created a prolonged race condition."
@@ -7870,9 +7720,9 @@ msgid "buffer is too small for Windows directory."
 msgstr "bufferul este prea mic pentru directorul Windows."
 
 #: ../src/msw/utils.cpp:1317
-#, fuzzy, c-format
+#, c-format
 msgid "build %lu"
-msgstr "Windows XP (build %lu"
+msgstr "build %lu"
 
 #: ../src/common/ffile.cpp:80
 #, c-format
@@ -8037,7 +7887,7 @@ msgstr "suma de control eronată în blocul antet pentru tar"
 #: ../src/richtext/richtextsizepage.cpp:622
 #: ../src/richtext/richtextsizepage.cpp:657
 msgid "cm"
-msgstr ""
+msgstr "cm"
 
 #: ../src/html/chm.cpp:348
 msgid "compression error"
@@ -8285,7 +8135,7 @@ msgstr "memorie epuizată"
 #: ../src/richtext/richtextsizepage.cpp:623
 #: ../src/richtext/richtextsizepage.cpp:658
 msgid "percent"
-msgstr ""
+msgstr "la suta"
 
 #: ../src/common/debugrpt.cpp:508
 msgid "process context description"
@@ -8294,7 +8144,7 @@ msgstr "descriere pentru contextul procesului"
 #: ../src/richtext/richtextfontpage.cpp:187
 #: ../src/richtext/richtextfontpage.cpp:190
 msgid "pt"
-msgstr ""
+msgstr "pt"
 
 #: ../src/richtext/richtextfontpage.cpp:188
 #: ../src/richtext/richtextborderspage.cpp:279
@@ -8376,12 +8226,11 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:659
 #: ../src/richtext/richtextsizepage.cpp:660
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../src/common/accelcmn.cpp:189
-#, fuzzy
 msgid "rawctrl"
-msgstr "ctrl"
+msgstr "rawctrl"
 
 #: ../src/html/chm.cpp:334
 msgid "read error"
@@ -8446,9 +8295,8 @@ msgid "standard/circle"
 msgstr "standard/cerc"
 
 #: ../src/richtext/richtextbuffer.cpp:8816
-#, fuzzy
 msgid "standard/circle-outline"
-msgstr "standard/cerc"
+msgstr "standard/contur-cerc"
 
 #: ../src/richtext/richtextbuffer.cpp:8818
 msgid "standard/diamond"
@@ -8471,9 +8319,8 @@ msgid "str"
 msgstr "str"
 
 #: ../src/common/fontcmn.cpp:795 ../src/common/fontcmn.cpp:970
-#, fuzzy
 msgid "strikethrough"
-msgstr "&Tăiat cu o linie"
+msgstr "tăiat"
 
 #: ../src/common/tarstrm.cpp:1004 ../src/common/tarstrm.cpp:1026
 #: ../src/common/tarstrm.cpp:1508 ../src/common/tarstrm.cpp:1530
