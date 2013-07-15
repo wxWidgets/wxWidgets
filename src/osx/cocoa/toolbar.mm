@@ -1462,7 +1462,8 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #endif // wxOSX_USE_NATIVE_TOOLBAR
                 tool->SetControlHandle( controlHandle );
-                tool->UpdateImages();
+                if ( !(style & wxTB_NOICONS) )
+                    tool->UpdateImages();
                 tool->UpdateLabel();
 
                 if ( style & wxTB_NOICONS )
