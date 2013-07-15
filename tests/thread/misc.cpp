@@ -168,6 +168,8 @@ public:
 
     virtual ExitCode Entry()
     {
+        wxUnusedVar(m_i);
+
         //wxPrintf(wxT("%s: Thread #%d (%ld) starting to wait for semaphore...\n"),
         //         wxDateTime::Now().FormatTime().c_str(), m_i, (long)GetId());
 
