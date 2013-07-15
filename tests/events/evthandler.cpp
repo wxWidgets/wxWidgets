@@ -80,7 +80,9 @@ void GlobalOnEvent(wxEvent&)
     g_called.function = true;
 }
 
+#ifdef TEST_INVALID_BIND_GLOBAL
 void GlobalOnAnotherEvent(AnotherEvent&);
+#endif
 
 void GlobalOnIdle(wxIdleEvent&)
 {
