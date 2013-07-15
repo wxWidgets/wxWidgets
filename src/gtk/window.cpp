@@ -2088,12 +2088,14 @@ void wxWindowGTK::GTKHandleUnrealize()
 
 wxWindow *wxWindowBase::DoFindFocus()
 {
+#if wxUSE_MENUS
     // For compatibility with wxMSW, pretend that showing a popup menu doesn't
     // change the focus and that it remains on the window showing it, even
     // though the real focus does change in GTK.
     extern wxMenu *wxCurrentPopupMenu;
     if ( wxCurrentPopupMenu )
         return wxCurrentPopupMenu->GetInvokingWindow();
+#endif // wxUSE_MENUS
 
     wxWindowGTK *focus = gs_pendingFocus ? gs_pendingFocus : gs_currentFocus;
     // the cast is necessary when we compile in wxUniversal mode
