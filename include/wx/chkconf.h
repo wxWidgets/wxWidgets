@@ -2209,13 +2209,21 @@
 #   if !wxUSE_NOTEBOOK
 #       ifdef __WXOSX_COCOA__
 #           if !wxUSE_TOOLBAR || !wxOSX_USE_NATIVE_TOOLBAR
-#               error "wxUSE_PREFERENCES_EDITOR requires native toolbar in wxOSX"
+#               if wxABORT_ON_CONFIG_ERROR
+#                   error "wxUSE_PREFERENCES_EDITOR requires native toolbar in wxOSX"
+#               else
+#                   undef wxUSE_PREFERENCES_EDITOR
+#                   define wxUSE_PREFERENCES_EDITOR 0
+#               endif
 #           endif
 #       else
-#           error "wxUSE_PREFERENCES_EDITOR requires wxNotebook"
+#           if wxABORT_ON_CONFIG_ERROR
+#               error "wxUSE_PREFERENCES_EDITOR requires wxNotebook"
+#           else
+#               undef wxUSE_PREFERENCES_EDITOR
+#               define wxUSE_PREFERENCES_EDITOR 0
+#           endif
 #       endif
-#       undef wxUSE_PREFERENCES_EDITOR
-#       define wxUSE_PREFERENCES_EDITOR 0
 #   endif
 #endif /* wxUSE_PREFERENCES_EDITOR */
 
