@@ -126,6 +126,8 @@ void wxMessageOutputBest::Output(const wxString& str)
 
     ::MessageBox(NULL, str.t_str(), title.t_str(), MB_ICONINFORMATION | MB_OK);
 #else // !__WINDOWS__
+    wxUnusedVar(m_flags);
+
     // TODO: use the native message box for the other ports too
     wxMessageOutputStderr::Output(str);
 #endif // __WINDOWS__/!__WINDOWS__
