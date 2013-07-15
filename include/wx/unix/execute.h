@@ -15,8 +15,10 @@
 #include "wx/hashmap.h"
 #include "wx/process.h"
 
-#include "wx/unix/pipe.h"
-#include "wx/private/streamtempinput.h"
+#if wxUSE_STREAMS
+    #include "wx/unix/pipe.h"
+    #include "wx/private/streamtempinput.h"
+#endif
 
 class wxEventLoopBase;
 
