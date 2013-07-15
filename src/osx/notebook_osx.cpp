@@ -173,6 +173,7 @@ wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 
     wxNotebookPage* page = m_pages[nPage] ;
     m_pages.RemoveAt(nPage);
+    m_images.RemoveAt(nPage);
 
     MacSetupTabs();
 
@@ -190,7 +191,8 @@ wxNotebookPage* wxNotebook::DoRemovePage(size_t nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-    WX_CLEAR_ARRAY(m_pages) ;
+    WX_CLEAR_ARRAY(m_pages);
+    m_images.clear();
     MacSetupTabs();
     m_selection = wxNOT_FOUND ;
     InvalidateBestSize();
