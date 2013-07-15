@@ -2214,7 +2214,6 @@
 #       else
 #           error "wxUSE_PREFERENCES_EDITOR requires wxNotebook"
 #       endif
-#   else
 #       undef wxUSE_PREFERENCES_EDITOR
 #       define wxUSE_PREFERENCES_EDITOR 0
 #   endif
