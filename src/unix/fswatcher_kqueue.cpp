@@ -149,8 +149,7 @@ public:
         // TODO more error conditions according to man
         // XXX closing file descriptor removes the watch. The logic resides in
         // the watch which is not nice, but effective and simple
-        bool ret = watch->Close();
-        if (ret == -1)
+        if ( !watch->Close() )
         {
             wxLogSysError(_("Unable to remove kqueue watch"));
             return false;
