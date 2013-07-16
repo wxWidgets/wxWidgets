@@ -307,7 +307,7 @@ void wxNonOwnedWindow::HandleActivated( double timestampsec, bool didActivate )
     HandleWindowEvent(wxevent);
 }
 
-void wxNonOwnedWindow::HandleResized( double timestampsec )
+void wxNonOwnedWindow::HandleResized( double WXUNUSED(timestampsec) )
 {
     SendSizeEvent();
     // we have to inform some controls that have to reset things
