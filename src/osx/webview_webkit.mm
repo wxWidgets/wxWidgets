@@ -645,10 +645,11 @@ void wxWebViewWebKit::SetScrollPos(int pos)
 
 wxString wxWebViewWebKit::GetSelectedText() const
 {
-    NSString* selection = [[m_webView selectedDOMRange] markupString];
-    if (!selection) return wxEmptyString;
+    DOMRange* dr = [m_webView selectedDOMRange];
+    if ( !dr )
+        return wxString();
 
-    return wxStringWithNSString(selection);
+    return wxStringWithNSString([dr toString]);
 }
 
 void wxWebViewWebKit::RunScript(const wxString& javascript)
