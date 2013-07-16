@@ -100,18 +100,18 @@ void wxMenu::SetNoEventsMode( bool noEvents )
 
 // function appends a new item or submenu to the menu
 // append a new item or submenu to the menu
-bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
+bool wxMenu::DoInsertOrAppend(wxMenuItem *item, size_t pos)
 {
-    wxASSERT_MSG( pItem != NULL, wxT("can't append NULL item to the menu") );
-    GetPeer()->InsertOrAppend( pItem, pos );
+    wxASSERT_MSG( item != NULL, wxT("can't append NULL item to the menu") );
+    GetPeer()->InsertOrAppend( item, pos );
 
-    if ( pItem->IsSeparator() )
+    if ( item->IsSeparator() )
     {
         // nothing to do here
     }
     else
     {
-        wxMenu *pSubMenu = pItem->GetSubMenu() ;
+        wxMenu *pSubMenu = item->GetSubMenu() ;
         if ( pSubMenu != NULL )
         {
             wxASSERT_MSG( pSubMenu->GetHMenu() != NULL , wxT("invalid submenu added"));
@@ -121,8 +121,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         }
         else
         {
-            if ( pItem->GetId() == idMenuTitle )
-                pItem->GetMenu()->Enable( idMenuTitle, false );
+            if ( item->GetId() == idMenuTitle )
+                item->GetMenu()->Enable( idMenuTitle, false );
         }
     }
 
