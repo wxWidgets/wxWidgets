@@ -82,7 +82,13 @@ public:
     void SetKind(wxItemKind kind) { m_kind = kind; }
     bool IsSeparator() const { return m_kind == wxITEM_SEPARATOR; }
 
-    virtual void SetCheckable(bool checkable) { m_kind = checkable ? wxITEM_CHECK : wxITEM_NORMAL; }
+    bool IsCheck() const { return m_kind == wxITEM_CHECK; }
+    bool IsRadio() const { return m_kind == wxITEM_RADIO; }
+
+    virtual void SetCheckable(bool checkable)
+        { m_kind = checkable ? wxITEM_CHECK : wxITEM_NORMAL; }
+
+    // Notice that this doesn't quite match SetCheckable().
     bool IsCheckable() const
         { return m_kind == wxITEM_CHECK || m_kind == wxITEM_RADIO; }
 

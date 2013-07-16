@@ -269,7 +269,20 @@ public:
     //@{
 
     /**
+        Returns @true if the item is a check item.
+
+        Unlike IsCheckable() this doesn't return @true for the radio buttons.
+
+        @since 2.9.5
+     */
+    bool IsCheck() const;
+
+    /**
         Returns @true if the item is checkable.
+
+        Notice that the radio buttons are considered to be checkable as well,
+        so this method returns @true for them too. Use IsCheck() if you want to
+        test for the check items only.
     */
     bool IsCheckable() const;
 
@@ -282,6 +295,13 @@ public:
         Returns @true if the item is enabled.
     */
     virtual bool IsEnabled() const;
+
+    /**
+        Returns @true if the item is a radio button.
+
+        @since 2.9.5
+     */
+    bool IsRadio() const;
 
     /**
         Returns @true if the item is a separator.
