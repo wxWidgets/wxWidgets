@@ -46,6 +46,9 @@ public:
     virtual void SetBitmap(const wxBitmap& bitmap) ;
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
+
+    // Implementation only from now on.
+
     // update the os specific representation
     void UpdateItemBitmap() ;
     void UpdateItemText() ;
@@ -55,6 +58,19 @@ public:
     void SetAsRadioGroupStart();
     void SetRadioGroupStart(int start);
     void SetRadioGroupEnd(int end);
+
+    // return true if this is the starting item of a radio group
+    bool IsRadioGroupStart() const;
+
+    // get the start of the radio group this item belongs to: should not be
+    // called for the starting radio group item itself because it doesn't have
+    // this information
+    int GetRadioGroupStart() const;
+
+    // get the end of the radio group this item belongs to: should be only
+    // called for the starting radio group item, i.e. if IsRadioGroupStart() is
+    // true
+    int GetRadioGroupEnd() const;
 
     wxMenuItemImpl* GetPeer() { return m_peer; }
 private:

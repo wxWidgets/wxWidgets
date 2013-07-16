@@ -57,7 +57,6 @@ static const int idMenuTitle = -3;
 void wxMenu::Init()
 {
     m_doBreak = false;
-    m_startRadioGroup = -1;
     m_allowRearrange = true;
     m_noEventsMode = false;
 
@@ -87,13 +86,6 @@ WXHMENU wxMenu::GetHMenu() const
 void wxMenu::Break()
 {
     // not available on the mac platform
-}
-
-void wxMenu::Attach(wxMenuBarBase *menubar)
-{
-    wxMenuBase::Attach(menubar);
-
-    EndRadioGroup();
 }
 
 void wxMenu::SetAllowRearrange( bool allow )
@@ -141,30 +133,21 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     return true ;
 }
 
-void wxMenu::EndRadioGroup()
-{
-    // we're not inside a radio group any longer
-    m_startRadioGroup = -1;
-}
-
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
     wxCHECK_MSG( item, NULL, wxT("NULL item in wxMenu::DoAppend") );
 
     bool check = false;
 
-    if ( item->GetKind() == wxITEM_RADIO )
+    if ( item->IsRadio() )
     {
         int count = GetMenuItemCount();
 
-        if ( m_startRadioGroup == -1 )
+        if ( !count || !(*GetMenuItems().rbegin())->IsRadio() )
         {
             // start a new radio group
-            m_startRadioGroup = count;
-
-            // for now it has just one element
             item->SetAsRadioGroupStart();
-            item->SetRadioGroupEnd(m_startRadioGroup);
+            item->SetRadioGroupEnd(count);
 
             // ensure that we have a checked item in the radio group
             check = true;
@@ -172,8 +155,13 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
         else // extend the current radio group
         {
             // we need to update its end item
-            item->SetRadioGroupStart(m_startRadioGroup);
-            wxMenuItemList::compatibility_iterator node = GetMenuItems().Item(m_startRadioGroup);
+            wxMenuItem* const last = *GetMenuItems().rbegin();
+            const int groupStart = last->IsRadioGroupStart()
+                                    ? count
+                                    : last->GetRadioGroupStart();
+
+            item->SetRadioGroupStart(groupStart);
+            wxMenuItemList::compatibility_iterator node = GetMenuItems().Item(groupStart);
 
             if ( node )
             {
@@ -184,10 +172,6 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
                 wxFAIL_MSG( wxT("where is the radio group start item?") );
             }
         }
-    }
-    else // not a radio item
-    {
-        EndRadioGroup();
     }
 
     if ( !wxMenuBase::DoAppend(item) || !DoInsertOrAppend(item) )
@@ -210,14 +194,33 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
-    if ( m_startRadioGroup != -1 )
+    if ( item->IsRadio() )
     {
         // Check if we're removing the item starting the radio group
-        if ( GetMenuItems().Item(m_startRadioGroup)->GetData() == item )
+        if ( item->IsRadioGroupStart() )
         {
-            // Yes, we do, so reset its index as the next item added shouldn't
-            // count as part of the same radio group anyhow.
-            m_startRadioGroup = -1;
+            // Yes, we do, update the next radio group item, if any, to be the
+            // start one now.
+            const int endGroup = item->GetRadioGroupEnd();
+
+            wxMenuItemList::compatibility_iterator
+                node = GetMenuItems().Item(endGroup);
+            wxASSERT_MSG( node, wxS("Should have valid radio group end") );
+
+            while ( node->GetData() != item )
+            {
+                const wxMenuItemList::compatibility_iterator
+                    prevNode = node->GetPrevious();
+                wxMenuItem* const prevItem = prevNode->GetData();
+                if ( prevItem == item )
+                {
+                    prevItem->SetAsRadioGroupStart();
+                    prevItem->SetRadioGroupEnd(endGroup);
+                    break;
+                }
+
+                node = prevNode;
+            }
         }
     }
 

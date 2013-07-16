@@ -33,8 +33,6 @@ public:
 
     virtual ~wxMenu();
 
-    virtual void Attach(wxMenuBarBase *menubar) ;
-
     virtual void Break();
 
     virtual void SetTitle(const wxString& title);
@@ -80,9 +78,6 @@ private:
     // common part of Append/Insert (behaves as Append is pos == (size_t)-1)
     bool DoInsertOrAppend(wxMenuItem *item, size_t pos = (size_t)-1);
 
-    // terminate the current radio group, if any
-    void EndRadioGroup();
-
     // Common part of HandleMenu{Opened,Closed}().
     void DoHandleMenuOpenedOrClosed(wxEventType evtType);
 
@@ -95,9 +90,6 @@ private:
 
     // don't trigger native events
     bool m_noEventsMode;
-
-    // the position of the first item in the current radio group or -1
-    int m_startRadioGroup;
 
     wxMenuImpl* m_peer;
 
