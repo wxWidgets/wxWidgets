@@ -872,9 +872,22 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
 
 #endif
     if (x)
-       *x = ww;
+    {
+        // we shouldn't return invalid width
+        if ( ww < 0 )
+            ww = 0;
+        
+        *x = ww;
+    }
+    
     if (y)
-       *y = hh;
+    {
+        // we shouldn't return invalid height
+        if ( hh < 0 )
+            hh = 0;
+        
+        *y = hh;
+    }
 }
 
 bool wxWindowMac::SetCursor(const wxCursor& cursor)
