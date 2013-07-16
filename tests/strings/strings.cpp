@@ -397,17 +397,17 @@ void StringTestCase::Match()
     #define TEST_MATCH( s1 , s2 , result ) \
         CPPUNIT_ASSERT( wxString(s1).Matches(s2) == result )
 
-    TEST_MATCH( wxT("foobar"),    wxT("foo*"),   true  );
-    TEST_MATCH( wxT("foobar"),    wxT("*oo*"),   true  );
-    TEST_MATCH( wxT("foobar"),    wxT("*bar"),   true  );
-    TEST_MATCH( wxT("foobar"),    wxT("??????"), true  );
-    TEST_MATCH( wxT("foobar"),    wxT("f??b*"),  true  );
-    TEST_MATCH( wxT("foobar"),    wxT("f?b*"),   false );
-    TEST_MATCH( wxT("foobar"),    wxT("*goo*"),  false );
-    TEST_MATCH( wxT("foobar"),    wxT("*foo"),   false );
-    TEST_MATCH( wxT("foobarfoo"), wxT("*foo"),   true  );
-    TEST_MATCH( wxT(""),          wxT("*"),      true  );
-    TEST_MATCH( wxT(""),          wxT("?"),      false );
+    TEST_MATCH( "foobar",       "foo*",        true  );
+    TEST_MATCH( "foobar",       "*oo*",        true  );
+    TEST_MATCH( "foobar",       "*bar",        true  );
+    TEST_MATCH( "foobar",       "??????",      true  );
+    TEST_MATCH( "foobar",       "f??b*",       true  );
+    TEST_MATCH( "foobar",       "f?b*",        false );
+    TEST_MATCH( "foobar",       "*goo*",       false );
+    TEST_MATCH( "foobar",       "*foo",        false );
+    TEST_MATCH( "foobarfoo",    "*foo",        true  );
+    TEST_MATCH( "",             "*",           true  );
+    TEST_MATCH( "",             "?",           false );
 
     #undef TEST_MATCH
 }
