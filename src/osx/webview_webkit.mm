@@ -906,13 +906,11 @@ void wxWebViewWebKit::SelectAll()
 
 wxString wxWebViewWebKit::GetSelectedSource() const
 {
-    wxString script = ("var range = window.getSelection().getRangeAt(0);"
-                       "var element = document.createElement('div');"
-                       "element.appendChild(range.cloneContents());"
-                       "return element.innerHTML;");
-    NSString *result = [m_webView stringByEvaluatingJavaScriptFromString:
-                                  wxNSStringWithWxString(script)];
-    return wxStringWithNSString(result);
+    DOMRange* dr = [m_webView selectedDOMRange];
+    if ( !dr )
+        return wxString();
+
+    return wxStringWithNSString([dr markupString]);
 }
 
 wxString wxWebViewWebKit::GetPageText() const

@@ -220,9 +220,18 @@ void WebTestCase::Selection()
 
     CPPUNIT_ASSERT(m_browser->HasSelection());
     CPPUNIT_ASSERT_EQUAL("Some strong text", m_browser->GetSelectedText());
-    //We lower case the result as ie returns tags in uppercase
-    CPPUNIT_ASSERT_EQUAL("some <strong>strong</strong> text",
-                         m_browser->GetSelectedSource().Lower());
+
+    // The web engine doesn't necessarily represent the HTML in the same way as
+    // we used above, e.g. IE uses upper case for all the tags while WebKit
+    // under OS X inserts plenty of its own <span> tags, so don't test for
+    // equality and just check that the source contains things we'd expect it
+    // to.
+    const wxString selSource = m_browser->GetSelectedSource();
+    WX_ASSERT_MESSAGE
+    (
+        ("Unexpected selection source: \"%s\"", selSource),
+        selSource.Lower().Matches("*some*<strong*strong</strong>*text*")
+    );
 
     m_browser->ClearSelection();
     CPPUNIT_ASSERT(!m_browser->HasSelection());
