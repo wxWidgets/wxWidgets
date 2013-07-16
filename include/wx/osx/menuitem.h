@@ -55,7 +55,7 @@ public:
     void UpdateItemStatus() ;
 
     // mark item as belonging to the given radio group
-    void SetAsRadioGroupStart();
+    void SetAsRadioGroupStart(bool start = true);
     void SetRadioGroupStart(int start);
     void SetRadioGroupEnd(int end);
 

@@ -218,9 +218,9 @@ void wxMenuItem::UpdateItemText()
 // radio group stuff
 // -----------------
 
-void wxMenuItem::SetAsRadioGroupStart()
+void wxMenuItem::SetAsRadioGroupStart(bool start)
 {
-    m_isRadioGroupStart = true;
+    m_isRadioGroupStart = start;
 }
 
 void wxMenuItem::SetRadioGroupStart(int start)
