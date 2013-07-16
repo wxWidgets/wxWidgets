@@ -726,6 +726,7 @@ wxOSX/Cocoa:
 - Implement image support in wxNotebook (Malcolm MacLeod).
 - Add support for button mnemonics (joostn).
 - Implemented wxTextCtrl::SetDefaultStyle().
+- Fix insertion and removal of radio items in wxMenu.
 
 
 2.9.4: (released 2012-07-09)
