@@ -1344,7 +1344,7 @@ public:
     /**
         Rotates this matrix clockwise (in radians).
 
-        @param radians
+        @param angle
             Rotation angle in radians, clockwise.
     */
     virtual void Rotate(wxDouble angle);
