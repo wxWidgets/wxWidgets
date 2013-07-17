@@ -17,6 +17,50 @@ Update the release announcement post in docs/publicity/announce.txt.
 Creating release files
 ----------------------
 
+The currently used release scripts need to be used from git-svn checkout and
+rely on Git to avoid problems with using non-clean trees and such. If you don't
+use Git you may use the alternative archive creation scripts in the next
+section.
+
+Follow these steps assuming the current working directory is the root of git
+working copy and you want to prepare distribution for the version x.y.z:
+
+1. Run "./build/tools/svn-find-native-eols.pl > ../eol-native" (if you have
+   an existing svn checkout, pass it to the script to make it run much faster,
+   but take care to have up to date sources in the working tree).
+
+2. Run "./build/tools/git-make-release x.y.z" to create source archives
+   ../wxWidgets-x.y.z.{7z,tar.bz2,zip} and wxWidgets_x.y.z_Headers.zip.
+
+3. Run "./build/tools/make-html-docs x.y.z" to create HTML documentation
+   archives ../wxWidgets-x.y.z.{tar.bz2,zip}
+
+4. This step must be done under Windows as it relies on having hhc.exe, the
+   Html Help compiler, in PATH: run the following commands
+
+    cd docs\doxygen
+    regen.bat chm
+    cd out
+    zip ..\..\..\wxWidgets-x.y.z-docs-chm.zip wx.chm
+
+5. This step also must be done under Windows as it uses Inno Setup to produce
+   the .exe file and it also requires the CHM file built above:
+
+    md x.y.z-sources
+    cd x.y.z-sources
+    7z x ..\wxWidgets-x.y.z.7z
+    md docs\htmlhelp
+    cp ..\docs\doxygen\out\wx.chm docs\htmlhelp
+    set WXW_VER=x.y.z
+    iscc build\tools\wxwidgets.iss
+
+
+
+Instructions for the previous version of release scripts
+--------------------------------------------------------
+
+NB: These scripts haven't been used since 2.8 series and may not work any longer!
+
 Currently our release system uses a Python 2.x script to generate releases.
 The script requires Unix utilities such as tar, zip and unix2dos and thus must
 be run either on Unix or using Cygwin on Windows. To generate a release, simply
@@ -49,20 +93,6 @@ in the tree from which the batch file is run. It depends on doxygen, a number of
 win32 tools and Microsofts htmlhelp compiler. The wxwidgets.iss file should not need 
 editing, but you will want to check that the bld_chm_exe.bat has the correct version number.
 
-
-
-Alternative non official release scripts
-----------------------------------------
-
-If you use git-svn, then you can use alternative script that avoids the
-problems such as using non-clean tree and also has better handling of the ends
-of lines conversions. To use it you need to run
-
-- build/tools/svn-find-native-eols.pl
-- build/tools/git-make-release
-- build/tools/make-html-docs
-
-(the last one can also be used without git).
 
 
 Uploading
