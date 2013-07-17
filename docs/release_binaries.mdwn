@@ -1,18 +1,18 @@
-wxWidgets 2.9.4 Binaries
+wxWidgets 2.9.5 Binaries
 ========================
 
-This directory contains binary files for wxWidgets 2.9.4 release.
+This directory contains binary files for wxWidgets 2.9.5 release.
 
 Currently the binaries are available for Microsoft Visual C++ compiler
-versions 8.0, 9.0 and 10.0 corresponding to marketing product names of
-Microsoft Visual Studio 2005, 2008 and 2010 respectively.
+versions 9.0, 10.0 and 11.0 corresponding to marketing product names of
+Microsoft Visual Studio 2008, 2010 and 2012 respectively.
 
 For Developers
 --------------
 
 For developing applications with wxWidgets you need to download the
-compiler-independent wxMSW-2.9.4_Headers.7z file and one of
-wxMSW-2.9.4-vcXXX_Dev.7z files depending on your compiler version.
+compiler-independent wxMSW-2.9.5_Headers.7z file and one of
+wxMSW-2.9.5-vcXXX_Dev.7z files depending on your compiler version.
 Unpack both files into the same directory so that "include" and "lib"
 directories are at the same level after unpacking. You should be able
 to compile and link applications using wxWidgets in both debug and
@@ -24,14 +24,14 @@ symbols.
 For End Users
 -------------
 
-End users may download wxMSW-2.9.4_vcXXX_ReleaseDLL.7z files to get
+End users may download wxMSW-2.9.5_vcXXX_ReleaseDLL.7z files to get
 just the DLLs required for running the applications using wxWidgets.
 
 
 For Debugging
 -------------
 
-The files wxMSW-2.9.4_vcXXX_ReleasePDB.7z contain the debug symbols
+The files wxMSW-2.9.5_vcXXX_ReleasePDB.7z contain the debug symbols
 for the release build of the DLLs. Download them if you want to debug
 your own applications in release build or if you want to get
 meaningful information from mini-dumps retrieved from your users
@@ -53,26 +53,32 @@ Check Sums
 
 To verify your download you can use the following sha1sums:
 
-    a605a88207ff10edd5daab1055d9c327e7406c3d  wxMSW-2.9.4_vc100_Dev.7z
-    90bd29aef2bed02287a696f4dedfbec379ea7aca  wxMSW-2.9.4_vc100_ReleaseDLL.7z
-    2cce0b0755b8579d297488e1c7ac2b39074048bb  wxMSW-2.9.4_vc100_ReleasePDB.7z
-    943e022bb74c1ff4a41055665b83956dba9da2a8  wxMSW-2.9.4_vc100_x64_Dev.7z
-    c66e865113171f6c6182da10d95be83142262410  wxMSW-2.9.4_vc100_x64_ReleaseDLL.7z
-    2c9a96efc0575ae9afbde9426f115b2b0f086222  wxMSW-2.9.4_vc100_x64_ReleaseDLL.msi
-    88a1036fb856b3cefb5049c412069a95b72346c4  wxMSW-2.9.4_vc100_x64_ReleasePDB.7z
-    4ad92d93fdbb1a19be20adacf36c3a1c07c05046  wxMSW-2.9.4_vc100_x86_ReleaseDLL.msi
-    cb690e198108546f90d65ba9cb0498f2ac38b1b5  wxMSW-2.9.4_vc80_Dev.7z
-    1a850b2dfa19aef33020aa8a6f351c5bb790221c  wxMSW-2.9.4_vc80_ReleaseDLL.7z
-    8d476759a70406884616b939bbc3bbd08a8b73c3  wxMSW-2.9.4_vc80_ReleasePDB.7z
-    f996a073a3b21a0d71d655101ae42c0b96402253  wxMSW-2.9.4_vc80_x86_ReleaseDLL.msi
-    1bfdaf33a45fd8394e412d04f3adb8555ad17d38  wxMSW-2.9.4_vc90_Dev.7z
-    89f470f85a35582a1c621cb9ad350e89c8f58b27  wxMSW-2.9.4_vc90_ReleaseDLL.7z
-    316e9bccd1593fc3797a26eeb6ed85bb6ffb2bec  wxMSW-2.9.4_vc90_ReleasePDB.7z
-    82fb4f49a1dcaab470393832097773041f76a432  wxMSW-2.9.4_vc90_x64_Dev.7z
-    8f88508dc587d29e8e3bce0d2222ccc31c19f2e0  wxMSW-2.9.4_vc90_x64_ReleaseDLL.7z
-    bb57aae511f1a0ce480699f1d51843a845f31462  wxMSW-2.9.4_vc90_x64_ReleaseDLL.msi
-    b353fd681c11582b2385a0b7cfb11cfc025bd9c5  wxMSW-2.9.4_vc90_x64_ReleasePDB.7z
-    2979beb6a7db574dee16be5d604cf836f5b708ba  wxMSW-2.9.4_vc90_x86_ReleaseDLL.msi
+    23c043ccfc76d7f55db972e165d90c102ac444e4  wxMSW-2.9.5_vc100_Dev.7z
+    a29b1701e601421d90d38234fecafa5ea089108e  wxMSW-2.9.5_vc100_ReleaseDLL.7z
+    e320f53d3524200cafe9b93422de49b3387f2c72  wxMSW-2.9.5_vc100_ReleasePDB.7z
+    b9c4a0780f1d0e1a4b05fa77fc169310562d0d66  wxMSW-2.9.5_vc100_x64_Dev.7z
+    bfe474fe29eed0ffb567556995f98051dcdfbb89  wxMSW-2.9.5_vc100_x64_ReleaseDLL.7z
+    1a4aa9a983987cd2ab9e6398cb11dedfd66bea2d  wxMSW-2.9.5_vc100_x64_ReleaseDLL.msi
+    0d89da7e3e72b094a04ae37e49e30197e6e33bcb  wxMSW-2.9.5_vc100_x64_ReleasePDB.7z
+    e4d31dcca207616ab9d0b9702976a2b21ae126a1  wxMSW-2.9.5_vc100_x86_ReleaseDLL.msi
+    05aa6624ff1fab4a9ed2c639327648dcafda0efd  wxMSW-2.9.5_vc110_Dev.7z
+    ebbd9be982aa66abf3793e8700be98d14486fe0c  wxMSW-2.9.5_vc110_ReleaseDLL.7z
+    79c0f8bb3d4197c83a14991b98bf65386be9951c  wxMSW-2.9.5_vc110_ReleasePDB.7z
+    a2a109293b88decc944e43966bbaab90a049d398  wxMSW-2.9.5_vc110_x64_Dev.7z
+    bceedf4c1c131a1b37d5421c48f0f9098009b3bc  wxMSW-2.9.5_vc110_x64_ReleaseDLL.7z
+    bb034c5d0f573054afd2864460e22bf95767cca4  wxMSW-2.9.5_vc110_x64_ReleaseDLL.msi
+    12721bf2607a412f18c620c52db30fa56629c066  wxMSW-2.9.5_vc110_x64_ReleasePDB.7z
+    d4da114c62ea4f246f907981447205bb90007e8b  wxMSW-2.9.5_vc110_x86_ReleaseDLL.msi
+    6f09a33634736cf7caa7c0acddea34d1d119cfae  wxMSW-2.9.5_vc90_Dev.7z
+    640784f90996625fcc2a3b62c99b92936dfae2ce  wxMSW-2.9.5_vc90_ReleaseDLL.7z
+    2a36ad418c856caa040d4efc8807dbb75dd88330  wxMSW-2.9.5_vc90_ReleasePDB.7z
+    f356b8edc7445271ce5a77c41f6b1370154d9799  wxMSW-2.9.5_vc90_x64_Dev.7z
+    282f02c23e7bcb331b1373a2b0b8a2f59f7d7a6e  wxMSW-2.9.5_vc90_x64_ReleaseDLL.7z
+    69096f6ff598285e0a8117caba879b10c4b08528  wxMSW-2.9.5_vc90_x64_ReleaseDLL.msi
+    30c7442d37646b7c9d8a7be3d174b5b7c24cb093  wxMSW-2.9.5_vc90_x64_ReleasePDB.7z
+    d1fa1c531c1bdf1d7c8806038b51a5dab0fce158  wxMSW-2.9.5_vc90_x86_ReleaseDLL.msi
+    c084e9a5af9c082b9d201c0fee2919d7265578bb  wxWidgets-2.9.5_Headers.7z
+
 
 
 Credit
