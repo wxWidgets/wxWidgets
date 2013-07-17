@@ -32,6 +32,12 @@ if [ -z "$version" ]; then
     exit 1
 fi
 
+EOL_FILE=../eol-native
+if [ ! -r "$EOL_FILE" ]; then
+    echo "Use build/tools/svn-find-native-eols.pl to generate $EOL_FILE." >&2
+    exit 1
+fi
+
 set -e
 set -x
 
@@ -61,7 +67,7 @@ tar cjf $prefix.tar.bz2 $prefix
 
 cd $prefix
 set +x
-for f in `cat ../eol-native`; do
+for f in `cat $EOL_FILE`; do
     case $f in
         */setup0.h)
             # we renamed this file above so adjust
