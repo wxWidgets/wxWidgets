@@ -44,14 +44,7 @@ SolidCompression=yes
 
 [Files]
 ; source files
-Source: "{#WXW_DIR}\*"; DestDir: "{app}"; Excludes: ".cvsignore,cocoa,dfb,mac,gtk,gtk1,motif,msdos,os2,wxWindows.xcod*,x11,debian,distrib,docs,misc,tests,wxPython,*.pch,*.pch++,*.pchmm"; Flags: ignoreversion recursesubdirs createallsubdirs
-; docs and helpfile
-Source: "{#WXW_DIR}\docs\htmlhelp\*"; DestDir: "{app}\docs\htmlhelp\";  Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#WXW_DIR}\docs\licence.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#WXW_DIR}\docs\readme.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#WXW_DIR}\docs\changes.txt"; DestDir: "{app}\docs\";  Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#WXW_DIR}\docs\msw\install.txt"; DestDir: "{app}\docs\msw";  Flags: ignoreversion recursesubdirs createallsubdirs
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "{#WXW_DIR}\*"; DestDir: "{app}"; Excludes: ".cvsignore,cocoa,dfb,mac,gtk,gtk1,motif,msdos,os2,wxWindows.xcod*,x11,debian,distrib,misc,tests,wxPython,*.pch,*.pch++,*.pchmm"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [INI]
 Filename: "{app}\wx.url"; Section: "InternetShortcut"; Key: "URL"; String: "http://www.wxwidgets.org"
