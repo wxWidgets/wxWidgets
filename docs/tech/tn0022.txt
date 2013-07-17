@@ -76,10 +76,12 @@ The following files need to be uploaded:
     wxWidgets-x.y.z.7z
     wxWidgets-x.y.z.tar.bz2
     wxWidgets-x.y.z.zip
-    wxWidgets-x.y.z_Headers.zip
     wxWidgets-docs-chm-x.y.z.zip
     wxWidgets-docs-html-x.y.z.tar.bz2
     wxWidgets-docs-html-x.y.z.zip
+
+The file wxWidgets-x.y.z_Headers.7z should be uploaded to binaries
+subdirectory as it's only useful when using pre-built binaries.
 
 You will need to use the web interface to mark the latest uploaded files as
 being "default downloads" for the appropriate platforms (.zip or .exe for MSW,
