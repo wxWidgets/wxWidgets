@@ -336,7 +336,8 @@ public:
 
         @since 3.0
      */
-    virtual wxCursor GetMouseCursorAt(wxHtmlWindowInterface* window) const;
+    virtual wxCursor GetMouseCursorAt(wxHtmlWindowInterface* window,
+                                      const wxPoint& rePos) const;
 
     /**
         Returns pointer to the next cell in list (see htmlcell.h if you're
