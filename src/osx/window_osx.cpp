@@ -416,6 +416,9 @@ bool wxWindowMac::Create(wxWindowMac *parent,
 
     m_windowVariant = parent->GetWindowVariant() ;
 
+    m_hScrollBarAlwaysShown =
+    m_vScrollBarAlwaysShown = HasFlag(wxALWAYS_SHOW_SB);
+
     if ( m_peer != kOSXNoWidgetImpl )
     {
         SetPeer(wxWidgetImpl::CreateUserPane( this, parent, id, pos, size , style, GetExtraStyle() ));
