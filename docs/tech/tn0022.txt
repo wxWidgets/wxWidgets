@@ -144,7 +144,9 @@ Announcement
 
 Post docs/publicity/announce.txt at least to wx-announce@googlegroups.com.
 
-TODO: where else to announce it?
+Submit a link to http://www.reddit.com/r/programming
+
+For major releases, submit the announcement to http://slashdot.org/submission
 
 Update www.wxwidgets.org, usually a news item is enough but something more can
 be called for for major releases.
@@ -152,6 +154,9 @@ be called for for major releases.
 Also update downloads/index.html to mention the new latest release.
 
 Post to wxBlog if necessary.
+
+Announce on Google+/Twitter/whatever the person doing the release prefers (we
+don't have "official" wxWidgets account, should we?).
 
 
 Version updates
