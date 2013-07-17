@@ -74,6 +74,7 @@ mkdir %INNO%\docs\htmlhelp
 copy %WXWIN%\docs\doxygen\out\wx.chm %INNO%\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\tools
 iscc wxwidgets.iss >> c:\temp.log
+copy %INNO%\..\wxMSW-%WXW_VER%-Setup.exe c:\daily
 
 echo docs built for %WXW_VER%
 echo docs built for %WXW_VER% >> c:\temp.log
