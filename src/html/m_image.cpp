@@ -124,88 +124,86 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
             }
             break;
         case POLY:
-            {
-                if (coords.GetCount() >= 6)
-                {
-                    int intersects = 0;
-                    int wherex = x;
-                    int wherey = y;
-                    int totalv = coords.GetCount() / 2;
-                    int totalc = totalv * 2;
-                    int xval = coords[totalc - 2];
-                    int yval = coords[totalc - 1];
-                    int end = totalc;
-                    int pointer = 1;
+             if (coords.GetCount() >= 6)
+             {
+                 int intersects = 0;
+                 int wherex = x;
+                 int wherey = y;
+                 int totalv = coords.GetCount() / 2;
+                 int totalc = totalv * 2;
+                 int xval = coords[totalc - 2];
+                 int yval = coords[totalc - 1];
+                 int end = totalc;
+                 int pointer = 1;
 
-                    if ((yval >= wherey) != (coords[pointer] >= wherey))
-                    {
-                        if ((xval >= wherex) == (coords[0] >= wherex))
-                        {
-                            intersects += (xval >= wherex) ? 1 : 0;
-                        }
-                        else
-                        {
-                            intersects += ((xval - (yval - wherey) *
-                                            (coords[0] - xval) /
-                                            (coords[pointer] - yval)) >= wherex) ? 1 : 0;
-                        }
-                    }
+                 if ((yval >= wherey) != (coords[pointer] >= wherey))
+                 {
+                     if ((xval >= wherex) == (coords[0] >= wherex))
+                     {
+                         intersects += (xval >= wherex) ? 1 : 0;
+                     }
+                     else
+                     {
+                         intersects += ((xval - (yval - wherey) *
+                                         (coords[0] - xval) /
+                                         (coords[pointer] - yval)) >= wherex) ? 1 : 0;
+                     }
+                 }
 
-                    while (pointer < end)
-                    {
-                        yval = coords[pointer];
-                        pointer += 2;
-                        if (yval >= wherey)
-                        {
-                            while ((pointer < end) && (coords[pointer] >= wherey))
-                            {
-                                pointer += 2;
-                            }
-                            if (pointer >= end)
-                            {
-                                break;
-                            }
-                            if ((coords[pointer - 3] >= wherex) ==
-                                    (coords[pointer - 1] >= wherex)) {
-                                intersects += (coords[pointer - 3] >= wherex) ? 1 : 0;
-                            }
-                            else
-                            {
-                                intersects +=
-                                    ((coords[pointer - 3] - (coords[pointer - 2] - wherey) *
-                                      (coords[pointer - 1] - coords[pointer - 3]) /
-                                      (coords[pointer] - coords[pointer - 2])) >= wherex) ? 1 : 0;
-                            }
-                        }
-                        else
-                        {
-                            while ((pointer < end) && (coords[pointer] < wherey))
-                            {
-                                pointer += 2;
-                            }
-                            if (pointer >= end)
-                            {
-                                break;
-                            }
-                            if ((coords[pointer - 3] >= wherex) ==
-                                    (coords[pointer - 1] >= wherex))
-                            {
-                                intersects += (coords[pointer - 3] >= wherex) ? 1 : 0;
-                            }
-                            else
-                            {
-                                intersects +=
-                                    ((coords[pointer - 3] - (coords[pointer - 2] - wherey) *
-                                      (coords[pointer - 1] - coords[pointer - 3]) /
-                                      (coords[pointer] - coords[pointer - 2])) >= wherex) ? 1 : 0;
-                            }
-                        }
-                    }
-                    if ((intersects & 1) != 0)
-                    {
-                        return m_Link;
-                    }
-                }
+                 while (pointer < end)
+                 {
+                     yval = coords[pointer];
+                     pointer += 2;
+                     if (yval >= wherey)
+                     {
+                         while ((pointer < end) && (coords[pointer] >= wherey))
+                         {
+                             pointer += 2;
+                         }
+                         if (pointer >= end)
+                         {
+                             break;
+                         }
+                         if ((coords[pointer - 3] >= wherex) ==
+                                 (coords[pointer - 1] >= wherex)) {
+                             intersects += (coords[pointer - 3] >= wherex) ? 1 : 0;
+                         }
+                         else
+                         {
+                             intersects +=
+                                 ((coords[pointer - 3] - (coords[pointer - 2] - wherey) *
+                                   (coords[pointer - 1] - coords[pointer - 3]) /
+                                   (coords[pointer] - coords[pointer - 2])) >= wherex) ? 1 : 0;
+                         }
+                     }
+                     else
+                     {
+                         while ((pointer < end) && (coords[pointer] < wherey))
+                         {
+                             pointer += 2;
+                         }
+                         if (pointer >= end)
+                         {
+                             break;
+                         }
+                         if ((coords[pointer - 3] >= wherex) ==
+                                 (coords[pointer - 1] >= wherex))
+                         {
+                             intersects += (coords[pointer - 3] >= wherex) ? 1 : 0;
+                         }
+                         else
+                         {
+                             intersects +=
+                                 ((coords[pointer - 3] - (coords[pointer - 2] - wherey) *
+                                   (coords[pointer - 1] - coords[pointer - 3]) /
+                                   (coords[pointer] - coords[pointer - 2])) >= wherex) ? 1 : 0;
+                         }
+                     }
+                 }
+                 if ((intersects & 1) != 0)
+                 {
+                     return m_Link;
+                 }
             }
             break;
     }
