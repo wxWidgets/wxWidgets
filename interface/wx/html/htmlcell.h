@@ -319,8 +319,24 @@ public:
 
         @param window
             interface to the parent HTML window
+
+        @see GetMouseCursorAt()
     */
     virtual wxCursor GetMouseCursor(wxHtmlWindowInterface* window) const;
+
+    /**
+        Returns cursor to show when mouse pointer is over the specified point.
+
+        This function should be overridden instead of GetMouseCursorAt() if
+        the cursor should depend on the exact position of the mouse in the
+        window.
+
+        @param window
+            interface to the parent HTML window
+
+        @since 3.0
+     */
+    virtual wxCursor GetMouseCursorAt(wxHtmlWindowInterface* window) const;
 
     /**
         Returns pointer to the next cell in list (see htmlcell.h if you're

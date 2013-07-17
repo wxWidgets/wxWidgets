@@ -206,7 +206,7 @@ void wxHtmlWindowMouseHelper::HandleIdle(wxHtmlCell *rootCell,
 
         wxCursor cur;
         if (cell)
-            cur = cell->GetMouseCursor(m_interface);
+            cur = cell->GetMouseCursorAt(m_interface, pos);
         else
             cur = m_interface->GetHTMLCursor(
                         wxHtmlWindowInterface::HTMLCursor_Default);
@@ -229,6 +229,11 @@ void wxHtmlWindowMouseHelper::HandleIdle(wxHtmlCell *rootCell,
     {
         if ( cell )
         {
+            // A single cell can have different cursors for different positions,
+            // so update cursor for this case as well.
+            wxCursor cur = cell->GetMouseCursorAt(m_interface, pos);
+            m_interface->GetHTMLWindow()->SetCursor(cur);
+
             OnCellMouseHover(cell, pos.x, pos.y);
         }
     }

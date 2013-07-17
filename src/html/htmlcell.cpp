@@ -196,7 +196,17 @@ wxCursor wxHtmlCell::GetCursor() const
 }
 #endif // WXWIN_COMPATIBILITY_2_6
 
-wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
+wxCursor
+wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface* WXUNUSED(window)) const
+{
+    // This is never called directly, only from GetMouseCursorAt() and we
+    // return an invalid cursor by default to let it delegate to the window.
+    return wxNullCursor;
+}
+
+wxCursor
+wxHtmlCell::GetMouseCursorAt(wxHtmlWindowInterface *window,
+                             const wxPoint& relPos) const
 {
 #if WXWIN_COMPATIBILITY_2_6
     // NB: Older versions of wx used GetCursor() virtual method in place of
@@ -209,7 +219,11 @@ wxCursor wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface *window) const
         return cur;
 #endif // WXWIN_COMPATIBILITY_2_6
 
-    if ( GetLink() )
+    const wxCursor curCell = GetMouseCursor(window);
+    if ( curCell.IsOk() )
+      return curCell;
+
+    if ( GetLink(relPos.x, relPos.y) )
     {
         return window->GetHTMLCursor(wxHtmlWindowInterface::HTMLCursor_Link);
     }

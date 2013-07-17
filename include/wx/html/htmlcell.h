@@ -207,8 +207,16 @@ public:
                                     int WXUNUSED(y) = 0) const
         { return m_Link; }
 
-    // Returns cursor to be used when mouse is over the cell:
+    // Returns cursor to be used when mouse is over the cell, can be
+    // overridden by the derived classes to use a different cursor whenever the
+    // mouse is over this cell.
     virtual wxCursor GetMouseCursor(wxHtmlWindowInterface *window) const;
+
+    // Returns cursor to be used when mouse is over the given point, can be
+    // overridden if the cursor should change depending on where exactly inside
+    // the cell the mouse is.
+    virtual wxCursor GetMouseCursorAt(wxHtmlWindowInterface *window,
+                                      const wxPoint& relPos) const;
 
 #if WXWIN_COMPATIBILITY_2_6
     // this was replaced by GetMouseCursor, don't use in new code!
