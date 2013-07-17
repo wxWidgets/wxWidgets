@@ -95,6 +95,7 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
     switch (type)
     {
         case RECT:
+            if ( coords.GetCount() == 4 )
             {
                 int l, t, r, b;
 
@@ -106,9 +107,10 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
                 {
                     return m_Link;
                 }
-                break;
             }
+            break;
         case CIRCLE:
+            if ( coords.GetCount() == 3 )
             {
                 int l, t, r;
                 double  d;
