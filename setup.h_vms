@@ -1319,12 +1319,6 @@ typedef pid_t GPid;
 /* Define this if you have fputws() */
 #define HAVE_FPUTWS 1
 
-/* Define this if you have strcasecmp() function in <string.h> */
-#define HAVE_STRCASECMP_IN_STRING_H 1
-
-/* Define this if you have strcasecmp() function in <strings.h> */
-#undef HAVE_STRCASECMP_IN_STRINGS_H
-
 /* Define this if you have wprintf() and related functions */
 #define HAVE_WPRINTF 1
 

@@ -1194,12 +1194,6 @@
 /* Define this if you have fputws() */
 #undef HAVE_FPUTWS
 
-/* Define this if you have strcasecmp() function in <string.h> */
-#undef HAVE_STRCASECMP_IN_STRING_H
-
-/* Define this if you have strcasecmp() function in <strings.h> */
-#undef HAVE_STRCASECMP_IN_STRINGS_H
-
 /* Define this if you have wprintf() and related functions */
 #undef HAVE_WPRINTF
 

@@ -1519,50 +1519,6 @@ case "${host}" in
       fi
       dnl (end of OS/2-only piece)
   ;;
-  *)
-      dnl ---------------------------------------------------------------------
-      dnl look for strcasecmp() in string.h and then strings.h if it's not
-      dnl there. Don't do this on OS/2, where "stricmp" is the function to be
-      dnl used.
-      dnl ---------------------------------------------------------------------
-      dnl (non-OS/2-only piece)
-
-      AC_CACHE_CHECK([for strcasecmp() in string.h], ac_cv_string_strcasecmp, [
-          AC_TRY_LINK([
-              #include <string.h>
-              ],
-              [
-                  strcasecmp("foo", "bar");
-              ],
-              ac_cv_string_strcasecmp=yes,
-              ac_cv_string_strcasecmp=no
-          )
-      ])
-
-      if test x"$ac_cv_string_strcasecmp" = "xyes"; then
-          AC_DEFINE(HAVE_STRCASECMP_IN_STRING_H)
-      else
-          AC_CACHE_CHECK([for strcasecmp() in strings.h], ac_cv_strings_strcasecmp, [
-              AC_TRY_LINK([
-                  #include <strings.h>
-                  ],
-                  [
-                      strcasecmp("foo", "bar");
-                  ],
-                  ac_cv_strings_strcasecmp=yes,
-                  ac_cv_strings_strcasecmp=no
-              )
-          ])
-
-          if test x"$ac_cv_strings_strcasecmp" = "xyes"; then
-              AC_DEFINE(HAVE_STRCASECMP_IN_STRINGS_H)
-          else
-              AC_MSG_ERROR([No case-insensitive string comparison function found.])
-          fi
-      fi
-
-      dnl (end of non-OS/2-only piece)
-  ;;
 esac
 
 dnl ------------------------------------------------------------------------
