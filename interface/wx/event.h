@@ -525,7 +525,9 @@ public:
          @param x1 The (optional) first parameter to pass to the method.
          @param x2 The (optional) second parameter to pass to the method.
 
-         Note that currently only up to 2 arguments can be passed.
+         Note that currently only up to 2 arguments can be passed. For more
+         complicated needs, you can use the CallAfter<T>(const T& fn) overload
+         that can call any functor.
 
          @note This method is not available with Visual C++ before version 8
                (Visual Studio 2005) as earlier versions of the compiler don't
@@ -535,6 +537,39 @@ public:
      */
     template<typename T, typename T1, ...>
     void CallAfter(void (T::*method)(T1, ...), T1 x1, ...);
+
+    /**
+         Asynchronously call the given functor.
+
+         Calling this function on an object schedules an asynchronous call to
+         the functor specified as CallAfter() argument at a (slightly) later
+         time. This is useful when processing some events as certain actions
+         typically can't be performed inside their handlers, e.g. you shouldn't
+         show a modal dialog from a mouse click event handler as this would
+         break the mouse capture state -- but you can call a function showing
+         this message dialog after the current event handler completes.
+
+         Notice that it is safe to use CallAfter() from other, non-GUI,
+         threads, but that the method will be always called in the main, GUI,
+         thread context.
+
+         This overload is particularly useful in combination with C++11 lambdas:
+         @code
+         wxGetApp().CallAfter([]{
+             wxBell();
+         });
+         @endcode
+
+         @param functor The functor to call.
+
+         @note This method is not available with Visual C++ before version 8
+               (Visual Studio 2005) as earlier versions of the compiler don't
+               have the required support for C++ templates to implement it.
+
+         @since 2.9.6
+     */
+    template<typename T>
+    void CallAfter(const T& functor);
 
     /**
         Processes an event, searching event tables and calling zero or more suitable

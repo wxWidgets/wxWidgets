@@ -1470,6 +1470,39 @@ private:
     const ParamType2 m_param2;
 };
 
+// This is a version for calling any functors
+template <typename T>
+class wxAsyncMethodCallEventFunctor : public wxAsyncMethodCallEvent
+{
+public:
+    typedef T FunctorType;
+
+    wxAsyncMethodCallEventFunctor(wxObject *object, const FunctorType& fn)
+        : wxAsyncMethodCallEvent(object),
+          m_fn(fn)
+    {
+    }
+
+    wxAsyncMethodCallEventFunctor(const wxAsyncMethodCallEventFunctor& other)
+        : wxAsyncMethodCallEvent(other),
+          m_fn(other.m_fn)
+    {
+    }
+
+    virtual wxEvent *Clone() const
+    {
+        return new wxAsyncMethodCallEventFunctor(*this);
+    }
+
+    virtual void Execute()
+    {
+        m_fn();
+    }
+
+private:
+    FunctorType m_fn;
+};
+
 #endif // wxHAS_CALL_AFTER
 
 
@@ -3393,6 +3426,12 @@ public:
             new wxAsyncMethodCallEvent2<T, T1, T2>(
                 static_cast<T*>(this), method, x1, x2)
         );
+    }
+
+    template <typename T>
+    void CallAfter(const T& fn)
+    {
+        QueueEvent(new wxAsyncMethodCallEventFunctor<T>(this, fn));
     }
 #endif // wxHAS_CALL_AFTER
 
