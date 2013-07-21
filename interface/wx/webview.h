@@ -154,6 +154,9 @@ public:
         @param url Initial URL to load
         @param pos Position of the control
         @param size Size of the control
+        @param style
+            Window style. For generic window styles, please see wxWindow.
+        @param name Window name.
         @return the created wxWebView
     */
     virtual wxWebView* Create(wxWindow* parent,
@@ -335,6 +338,9 @@ public:
         @param backend The backend web rendering engine to use.
                        @c wxWebViewBackendDefault, @c wxWebViewBackendIE and
                        @c wxWebViewBackendWebKit are predefined where appropriate.
+        @param style
+            Window style. For generic window styles, please see wxWindow.
+        @param name Window name.
         @return The created wxWebView, or @c NULL if the requested backend
                 is not available
         @since 2.9.5
