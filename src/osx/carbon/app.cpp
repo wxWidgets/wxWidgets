@@ -401,6 +401,14 @@ void wxApp::MacReopenApp()
     }
 }
 
+void wxApp::OSXOnWillFinishLaunching()
+{
+}
+
+void wxApp::OSXOnDidFinishLaunching()
+{
+}
+
 //----------------------------------------------------------------------
 // Macintosh CommandID support - converting between native and wx IDs
 //----------------------------------------------------------------------
