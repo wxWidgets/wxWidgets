@@ -146,7 +146,11 @@ public:
     virtual void         OSXOnWillFinishLaunching();
     // immediately when the native event loop starts, no events have been served yet
     virtual void         OSXOnDidFinishLaunching();
-
+    // OS asks to terminate app, return no to stay running
+    virtual bool         OSXOnShouldTerminate();
+    // before application terminates
+    virtual void         OSXOnWillTerminate();
+    
     // Hide the application windows the same as the system hide command would do it.
     void MacHideApp();
 

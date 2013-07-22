@@ -407,6 +407,21 @@ void wxApp::OSXOnWillFinishLaunching()
 
 void wxApp::OSXOnDidFinishLaunching()
 {
+    
+}
+
+void wxApp::OSXOnWillTerminate()
+{
+    wxCloseEvent event;
+    event.SetCanVeto(false);
+    wxTheApp->OnEndSession(event);
+}
+
+bool wxApp::OSXOnShouldTerminate()
+{
+    wxCloseEvent event;
+    wxTheApp->OnQueryEndSession(event);
+    return !event.GetVeto();
 }
 
 //----------------------------------------------------------------------

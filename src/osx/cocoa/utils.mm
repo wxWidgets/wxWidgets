@@ -126,9 +126,7 @@ void wxBell()
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
     wxUnusedVar(sender);
-    wxCloseEvent event;
-    wxTheApp->OnQueryEndSession(event);
-    if ( event.GetVeto() )
+    if ( !wxTheApp->OSXOnShouldTerminate() )
         return NSTerminateCancel;
     
     return NSTerminateNow;
@@ -136,9 +134,7 @@ void wxBell()
 
 - (void)applicationWillTerminate:(NSNotification *)application {
     wxUnusedVar(application);
-    wxCloseEvent event;
-    event.SetCanVeto(false);
-    wxTheApp->OnEndSession(event);
+    wxTheApp->OSXOnWillTerminate();
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
