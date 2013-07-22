@@ -47,7 +47,8 @@ void wxBell()
 
 @implementation wxNSAppController
 
-- (void)applicationWillFinishLaunching:(NSNotification *)application {	
+- (void)applicationWillFinishLaunching:(NSNotification *)application
+{
     wxUnusedVar(application);
     
     // we must install our handlers later than setting the app delegate, because otherwise our handlers
@@ -61,6 +62,12 @@ void wxBell()
     [appleEventManager setEventHandler:self andSelector:@selector(handleOpenAppEvent:withReplyEvent:)
                          forEventClass:kCoreEventClass andEventID:kAEOpenApplication];
     
+    wxTheApp->OSXOnWillFinishLaunching();
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
+{
+    wxTheApp->OSXOnDidFinishLaunching();
 }
 
 - (void)application:(NSApplication *)sender openFiles:(NSArray *)fileNames
