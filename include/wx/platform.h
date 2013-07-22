@@ -43,14 +43,20 @@
 #endif
 
 /*
-   first define Windows symbols if they're not defined on the command line: we
-   can autodetect everything we need if _WIN32 is defined
+    We use __WINDOWS__ as our main identification symbol for Microsoft Windows
+    but it's actually not predefined directly by any commonly used compilers
+    (only Watcom defines it itself and it's not supported any longer), so we
+    define it ourselves if any of the following macros is defined:
+
+    - MSVC _WIN32 (notice that this is also defined under Win64)
+    - Borland __WIN32__
+    - Our __WXMSW__ which selects Windows as platform automatically
  */
-#if defined(__CYGWIN__) && defined(__WINDOWS__)
-#    ifndef __WXMSW__
-#        define __WXMSW__
-#    endif
-#endif
+#if defined(_WIN32) || defined(__WIN32__) || defined(__WXMSW__)
+#    ifndef __WINDOWS__
+#        define __WINDOWS__
+#    endif /* !__WINDOWS__ */
+#endif /* Any standard symbol indicating Windows */
 
 #if defined(_WIN64)
 #    ifndef _WIN32
@@ -67,16 +73,18 @@
 #   endif /* !__WIN64__ */
 #endif /* _WIN64 */
 
-#if (defined(_WIN32) || defined(WIN32) || defined(__NT__) || defined(__WXWINCE__)) \
-    && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
-#    ifndef __WXMSW__
-#        define __WXMSW__
-#    endif
-#endif /* Win32 */
+#if defined(__WINDOWS__)
+    /* Select wxMSW under Windows if no other port is specified. */
+#   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
+#       define __WXMSW__
+#   endif
 
-#if defined(_WIN32)
 #   if !defined(__WINDOWS__)
 #       define __WINDOWS__
+#   endif
+
+#   ifndef _WIN32
+#        define _WIN32
 #   endif
 
 #   ifndef WIN32
@@ -86,7 +94,7 @@
 #   ifndef __WIN32__
 #        define __WIN32__
 #   endif
-#endif /* _WIN32 */
+#endif /* __WINDOWS__ */
 
 /* Don't use widget toolkit specific code in non-GUI code */
 #if defined(wxUSE_GUI) && !wxUSE_GUI
@@ -395,12 +403,9 @@
 #    define wxSIZE_T_IS_UINT
 
 /*
-   OS: Otherwise it must be Windows
+   OS: Windows
  */
-#else   /* Windows */
-#    ifndef __WINDOWS__
-#        define __WINDOWS__
-#    endif  /* Windows */
+#elif defined(__WINDOWS__)
 
     /* to be changed for Win64! */
 #    ifndef __WIN32__
@@ -412,6 +417,8 @@
 #    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG) && !defined(__WIN64__)
 #        define wxSIZE_T_IS_UINT
 #    endif
+#else
+#   error "Unknown platform."
 #endif  /* OS */
 
 /*
