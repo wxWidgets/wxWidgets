@@ -724,8 +724,13 @@ public:
     virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
 
 
-        // this is mostly a helper for the various functions using it below
-    bool CanBeFocused() const { return IsShown() && IsEnabled(); }
+        // Can this window be focused right now, in its current state? This
+        // shouldn't be called at all if AcceptsFocus() returns false.
+        //
+        // It is a convenient helper for the various functions using it below
+        // but also a hook allowing to override the default logic for some rare
+        // cases (currently just wxRadioBox in wxMSW) when it's inappropriate.
+    virtual bool CanBeFocused() const { return IsShown() && IsEnabled(); }
 
         // can this window itself have focus?
     bool IsFocusable() const { return AcceptsFocus() && CanBeFocused(); }

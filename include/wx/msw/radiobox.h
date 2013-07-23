@@ -97,6 +97,7 @@ public:
     // override some base class methods
     virtual bool Show(bool show = true);
     virtual bool Enable(bool enable = true);
+    virtual bool CanBeFocused() const;
     virtual void SetFocus();
     virtual bool SetFont(const wxFont& font);
     virtual bool ContainsHWND(WXHWND hWnd) const;

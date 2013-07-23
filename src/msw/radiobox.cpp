@@ -444,6 +444,25 @@ void wxRadioBox::SetFocus()
     }
 }
 
+bool wxRadioBox::CanBeFocused() const
+{
+    // If the control itself is hidden or disabled, no need to check anything
+    // else.
+    if ( !wxStaticBox::CanBeFocused() )
+        return false;
+
+    // Otherwise, check if we have any buttons that can be focused.
+    for ( size_t item = 0; item < m_radioButtons->GetCount(); item++ )
+    {
+        if ( IsItemEnabled(item) && IsItemShown(item) )
+            return true;
+    }
+
+    // We didn't find any items that can accept focus, so neither can we as a
+    // whole accept it.
+    return false;
+}
+
 // Enable a specific button
 bool wxRadioBox::Enable(unsigned int item, bool enable)
 {

@@ -76,11 +76,12 @@ public:
     bool DoSetFocus();
 
     // returns whether we should accept focus ourselves or not
-    bool AcceptsFocus() const { return m_acceptsFocusSelf; }
+    bool AcceptsFocus() const
+        { return m_acceptsFocusSelf && m_winParent->CanBeFocused(); }
 
     // Returns whether we or one of our children accepts focus.
     bool AcceptsFocusRecursively() const
-        { return m_acceptsFocusSelf ||
+        { return AcceptsFocus() ||
             (m_acceptsFocusChildren && HasAnyChildrenAcceptingFocus()); }
 
     // We accept focus from keyboard if we accept it at all.
