@@ -1278,7 +1278,12 @@ unsigned long wxGetProcessId();
 
     @c wxSIGNONE, @c wxSIGKILL and @c wxSIGTERM have the same meaning under
     both Unix and Windows but all the other signals are equivalent to
-    @c wxSIGTERM under Windows.
+    @c wxSIGTERM under Windows. Moreover, under Windows, @c wxSIGTERM is
+    implemented by posting a message to the application window, so it only
+    works if the application does have windows. If it doesn't, as is notably
+    always the case for the console applications, you need to use @c wxSIGKILL
+    to actually kill the process. Of course, this doesn't allow the process to
+    shut down gracefully and so should be avoided if possible.
 
     Returns 0 on success, -1 on failure. If the @a rc parameter is not @NULL,
     it will be filled with a value from the @c wxKillError enum:
