@@ -97,6 +97,9 @@ protected:
     wxWindow *m_winLastFocused;
 
 private:
+    // Update the window status to reflect whether it is getting focus or not.
+    void UpdateParentCanFocus();
+
     // Indicates whether the associated window can ever have focus itself.
     //
     // Usually this is the case, e.g. a wxPanel can be used either as a
