@@ -103,6 +103,9 @@ public:
     // be done here. When OnRun() returns, the programs starts shutting down.
     virtual int OnRun();
 
+    // Called before the first events are handled, called from within MainLoop()
+    virtual void OnLaunched();
+    
     // This is called by wxEventLoopBase::SetActive(): you should put the code
     // which needs an active event loop here.
     // Note that this function is called whenever an event loop is activated;
