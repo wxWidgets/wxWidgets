@@ -256,6 +256,12 @@ bool wxRadioBox::Create(wxWindow *parent,
     const wxSize actualSize = GetSize();
     PositionAllButtons(pos.x, pos.y, actualSize.x, actualSize.y);
 
+    // The base wxStaticBox class never accepts focus, but we do because giving
+    // focus to a wxRadioBox actually gives it to one of its buttons, which are
+    // not visible at wx level and hence are not taken into account by the
+    // logic in wxControlContainer code.
+    m_container.EnableSelfFocus();
+
     return true;
 }
 

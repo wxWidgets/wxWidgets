@@ -62,7 +62,14 @@ public:
 
     // This can be called by the window to indicate that it never wants to have
     // the focus for itself.
-    void DisableSelfFocus() { m_acceptsFocusSelf = false; }
+    void DisableSelfFocus()
+        { m_acceptsFocusSelf = false; UpdateParentCanFocus(); }
+
+    // This can be called to undo the effect of a previous DisableSelfFocus()
+    // (otherwise calling it is not necessary as the window does accept focus
+    // by default).
+    void EnableSelfFocus()
+        { m_acceptsFocusSelf = true; UpdateParentCanFocus(); }
 
     // should be called from SetFocus(), returns false if we did nothing with
     // the focus and the default processing should take place
