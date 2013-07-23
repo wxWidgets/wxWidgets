@@ -1395,113 +1395,72 @@ void wxWindowDCImpl::DoDrawText(const wxString& text,
                                 wxCoord xLogical,
                                 wxCoord yLogical)
 {
-    wxCHECK_RET( IsOk(), wxT("invalid window dc") );
-
-    if (!m_gdkwindow) return;
-
-    if (text.empty()) return;
-
-    wxCoord x = XLOG2DEV(xLogical),
-            y = YLOG2DEV(yLogical);
-
-    wxCHECK_RET( m_context, wxT("no Pango context") );
-    wxCHECK_RET( m_layout, wxT("no Pango layout") );
-
-    wxCharBuffer data = wxGTK_CONV(text);
-    if ( !data )
-        return;
-
-    pango_layout_set_text(m_layout, data, data.length());
-    const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
-
-    int w, h;
-    pango_layout_get_pixel_size(m_layout, &w, &h);
-
-    PangoMatrix matrix = PANGO_MATRIX_INIT;
-    pango_matrix_scale(&matrix, m_scaleX, m_scaleY);
-    pango_context_set_matrix(m_context, &matrix);
-    pango_layout_context_changed(m_layout);
-
-    // Draw layout.
-    int x_rtl = x;
-    if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
-        x_rtl -= w;
-
-    const GdkColor* bg_col = NULL;
-    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
-        bg_col = m_textBackgroundColour.GetColor();
-
-    gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x_rtl, y, m_layout, NULL, bg_col);
-
-    pango_context_set_matrix(m_context, NULL);
-    if (setAttrs)
-    {
-        // undo underline attributes setting:
-        pango_layout_set_attributes(m_layout, NULL);
-    }
-
-    CalcBoundingBox(xLogical + int(w / m_scaleX), yLogical + int(h / m_scaleY));
-    CalcBoundingBox(xLogical, yLogical);
+    DoDrawRotatedText(text, xLogical, yLogical, 0);
 }
 
-// TODO: When GTK2.6 is required, merge DoDrawText and DoDrawRotatedText to
-// avoid code duplication
-void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
+void wxWindowDCImpl::DoDrawRotatedText(const wxString& text, int xLogical, int yLogical, double angle)
 {
     if (!m_gdkwindow || text.empty())
         return;
 
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
-    x = XLOG2DEV(x);
-    y = YLOG2DEV(y);
-
     pango_layout_set_text(m_layout, wxGTK_CONV(text), -1);
     const bool setAttrs = m_font.GTKSetPangoAttrs(m_layout);
-
-    int w, h;
-    pango_layout_get_pixel_size(m_layout, &w, &h);
 
     const GdkColor* bg_col = NULL;
     if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         bg_col = m_textBackgroundColour.GetColor();
 
-    // rotate the text
     PangoMatrix matrix = PANGO_MATRIX_INIT;
     pango_matrix_scale(&matrix, m_scaleX, m_scaleY);
     pango_matrix_rotate (&matrix, angle);
     pango_context_set_matrix (m_context, &matrix);
     pango_layout_context_changed (m_layout);
 
-    // To be compatible with MSW, the rotation axis must be in the old
-    // top-left corner.
-    // Calculate the vertices of the rotated rectangle containing the text,
-    // relative to the old top-left vertex.
-    // the rectangle vertices are counted clockwise with the first one
-    // being at (0, 0)
-    double x2 = w * matrix.xx;
-    double y2 = w * matrix.yx;
-    double x4 = h * matrix.xy;
-    double y4 = h * matrix.yy;
-    double x3 = x4 + x2;
-    double y3 = y4 + y2;
-    // Then we calculate max and min of the rotated rectangle.
-    wxCoord maxX = (wxCoord)(dmax(dmax(0, x2), dmax(x3, x4)) + 0.5),
-            maxY = (wxCoord)(dmax(dmax(0, y2), dmax(y3, y4)) + 0.5),
-            minX = (wxCoord)(dmin(dmin(0, x2), dmin(x3, x4)) - 0.5),
-            minY = (wxCoord)(dmin(dmin(0, y2), dmin(y3, y4)) - 0.5);
+    int w, h;
+    pango_layout_get_pixel_size(m_layout, &w, &h);
 
-    gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x+minX, y+minY,
-                                m_layout, NULL, bg_col);
+    int x = LogicalToDeviceX(xLogical);
+    int y = LogicalToDeviceY(yLogical);
+    if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
+        x -= LogicalToDeviceXRel(w);
 
+    if (wxIsNullDouble(angle))
+    {
+        CalcBoundingBox(xLogical, yLogical);
+        CalcBoundingBox(xLogical + w, yLogical + h);
+    }
+    else
+    {
+        // To be compatible with MSW, the rotation axis must be in the old
+        // top-left corner.
+        // Calculate the vertices of the rotated rectangle containing the text,
+        // relative to the old top-left vertex.
+        // the rectangle vertices are counted clockwise with the first one
+        // being at (0, 0)
+        double x2 = w * matrix.xx;
+        double y2 = w * matrix.yx;
+        double x4 = h * matrix.xy;
+        double y4 = h * matrix.yy;
+        double x3 = x4 + x2;
+        double y3 = y4 + y2;
+        // Then we calculate max and min of the rotated rectangle.
+        wxCoord maxX = (wxCoord)(dmax(dmax(0, x2), dmax(x3, x4)) + 0.5),
+                maxY = (wxCoord)(dmax(dmax(0, y2), dmax(y3, y4)) + 0.5),
+                minX = (wxCoord)(dmin(dmin(0, x2), dmin(x3, x4)) - 0.5),
+                minY = (wxCoord)(dmin(dmin(0, y2), dmin(y3, y4)) - 0.5);
+        x += minX;
+        y += minY;
+        CalcBoundingBox(DeviceToLogicalX(x), DeviceToLogicalY(y));
+        CalcBoundingBox(DeviceToLogicalX(x + maxX - minX), DeviceToLogicalY(y + maxY - minY));
+    }
+
+    gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x, y, m_layout, NULL, bg_col);
+
+    pango_context_set_matrix(m_context, NULL);
     if (setAttrs)
         pango_layout_set_attributes(m_layout, NULL);
-
-    // clean up the transformation matrix
-    pango_context_set_matrix(m_context, NULL);
-
-    CalcBoundingBox(x+minX, y+minY);
-    CalcBoundingBox(x+maxX, y+maxY);
 }
 
 void wxWindowDCImpl::DoGetTextExtent(const wxString &string,
