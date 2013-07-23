@@ -50,13 +50,21 @@
 
 @implementation wxAppDelegate
 
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    wxUnusedVar(application);
+    wxUnusedVar(launchOptions);
+    wxTheApp->OSXOnWillFinishLaunching();
+    return YES;
+}
+
 - (void)applicationDidFinishLaunching:(UIApplication *)application {	
-	wxTheApp->OnInit();
+    wxTheApp->OSXOnDidFinishLaunching();
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application { 
-    wxCloseEvent event;
-    wxTheApp->OnEndSession(event);
+    wxUnusedVar(application);
+    wxTheApp->OSXOnWillTerminate();
 }
 
 - (void)dealloc {
