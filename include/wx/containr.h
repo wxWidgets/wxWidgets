@@ -76,8 +76,7 @@ public:
     bool DoSetFocus();
 
     // returns whether we should accept focus ourselves or not
-    bool AcceptsFocus() const
-        { return m_acceptsFocusSelf && m_winParent->CanBeFocused(); }
+    bool AcceptsFocus() const;
 
     // Returns whether we or one of our children accepts focus.
     bool AcceptsFocusRecursively() const

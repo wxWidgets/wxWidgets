@@ -153,6 +153,11 @@ bool wxControlContainerBase::DoSetFocus()
     return ret;
 }
 
+bool wxControlContainerBase::AcceptsFocus() const
+{
+    return m_acceptsFocusSelf && m_winParent->CanBeFocused();
+}
+
 bool wxControlContainerBase::SetFocusToChild()
 {
     return wxSetFocusToChild(m_winParent, &m_winLastFocused);
