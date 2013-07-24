@@ -401,13 +401,15 @@ void wxApp::MacReopenApp()
     }
 }
 
+#if wxOSX_USE_COCOA_OR_IPHONE
 void wxApp::OSXOnWillFinishLaunching()
 {
+    wxTheApp->OnInit();
 }
 
 void wxApp::OSXOnDidFinishLaunching()
 {
-    
+    wxTheApp->OnLaunched();
 }
 
 void wxApp::OSXOnWillTerminate()
@@ -415,6 +417,8 @@ void wxApp::OSXOnWillTerminate()
     wxCloseEvent event;
     event.SetCanVeto(false);
     wxTheApp->OnEndSession(event);
+    
+    wxTheApp->OnExit();
 }
 
 bool wxApp::OSXOnShouldTerminate()
@@ -423,6 +427,7 @@ bool wxApp::OSXOnShouldTerminate()
     wxTheApp->OnQueryEndSession(event);
     return !event.GetVeto();
 }
+#endif
 
 //----------------------------------------------------------------------
 // Macintosh CommandID support - converting between native and wx IDs
