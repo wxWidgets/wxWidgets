@@ -36,6 +36,7 @@ public:
     wxString GetHeader(const wxString& header) const;
     int GetResponse() const { return m_http_response; }
 
+    void SetMethod(const wxString& method) { m_method = method; }
     void SetHeader(const wxString& header, const wxString& h_data);
     bool SetPostText(const wxString& contentType,
                      const wxString& data,
@@ -51,19 +52,12 @@ public:
     wxDEPRECATED(void SetPostBuffer(const wxString& post_buf));
 
 protected:
-    enum wxHTTP_Req
-    {
-        wxHTTP_GET,
-        wxHTTP_POST,
-        wxHTTP_HEAD
-    };
-
     typedef wxStringToStringHashMap::iterator wxHeaderIterator;
     typedef wxStringToStringHashMap::const_iterator wxHeaderConstIterator;
     typedef wxStringToStringHashMap::iterator wxCookieIterator;
     typedef wxStringToStringHashMap::const_iterator wxCookieConstIterator;
 
-    bool BuildRequest(const wxString& path, wxHTTP_Req req);
+    bool BuildRequest(const wxString& path, const wxString& method);
     void SendHeaders();
     bool ParseHeaders();
 
@@ -81,6 +75,7 @@ protected:
 
     // internal variables:
 
+    wxString m_method;
     wxStringToStringHashMap m_cookies;
 
     wxStringToStringHashMap m_headers;

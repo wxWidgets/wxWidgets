@@ -562,6 +562,7 @@ Major new features in this release
 
 All:
 
+- Allow using custom HTTP methods with wxHTTP (Kolya Kosenko).
 - Fix build with wxUSE_FFILE==0 (jroemmler).
 
 All (GUI):
