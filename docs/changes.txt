@@ -560,6 +560,10 @@ Major new features in this release
 3.0: (released 2013-09-??)
 --------------------------
 
+All:
+
+- Fix build with wxUSE_FFILE==0 (jroemmler).
+
 All (GUI):
 
 - Fix crash in wxHTML on mal-formed <area> elements (LukasK).

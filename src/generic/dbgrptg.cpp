@@ -39,7 +39,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/filename.h"
-#include "wx/ffile.h"
+#ifdef wxUSE_FFILE
+    #include "wx/ffile.h"
+#else
+    #include "wx/file.h"
+#endif
 #include "wx/mimetype.h"
 
 #include "wx/statline.h"
@@ -432,7 +436,12 @@ void wxDebugReportDialog::OnView(wxCommandEvent& )
     wxFileName fn(m_dbgrpt.GetDirectory(), m_files[sel]);
     wxString str;
 
-    wxFFile file(fn.GetFullPath());
+    const wxString& fullPath = fn.GetFullPath();
+#if wxUSE_FFILE
+    wxFFile file(fullPath);
+#elif wxUSE_FILE
+    wxFile file(fullPath);
+#endif
     if ( file.IsOpened() && file.ReadAll(&str) )
     {
         wxDumpPreviewDlg dlg(this, m_files[sel], str);

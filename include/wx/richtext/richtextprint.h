@@ -165,11 +165,15 @@ public:
     virtual ~wxRichTextPrinting();
 
     /// Preview the file or buffer
+#if wxUSE_FFILE && wxUSE_STREAMS
     bool PreviewFile(const wxString& richTextFile);
+#endif
     bool PreviewBuffer(const wxRichTextBuffer& buffer);
 
     /// Print the file or buffer
+#if wxUSE_FFILE && wxUSE_STREAMS
     bool PrintFile(const wxString& richTextFile, bool showPrintDialog = true);
+#endif
     bool PrintBuffer(const wxRichTextBuffer& buffer, bool showPrintDialog = true);
 
     /// Shows page setup dialog

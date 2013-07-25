@@ -33,8 +33,12 @@
 #if wxUSE_DEBUGREPORT && wxUSE_XML
 
 #include "wx/debugrpt.h"
+#if wxUSE_FFILE
+    #include "wx/ffile.h"
+#elif wxUSE_FILE
+    #include "wx/file.h"
+#endif
 
-#include "wx/ffile.h"
 #include "wx/filename.h"
 #include "wx/dir.h"
 #include "wx/dynlib.h"
@@ -288,17 +292,25 @@ wxDebugReport::AddText(const wxString& filename,
                        const wxString& text,
                        const wxString& description)
 {
+#if wxUSE_FFILE || wxUSE_FILE
     wxASSERT_MSG( !wxFileName(filename).IsAbsolute(),
                   wxT("filename should be relative to debug report directory") );
 
-    wxFileName fn(GetDirectory(), filename);
-    wxFFile file(fn.GetFullPath(), wxT("w"));
-    if ( !file.IsOpened() || !file.Write(text) )
+    const wxString fullPath = wxFileName(GetDirectory(), filename).GetFullPath();
+#if wxUSE_FFILE
+    wxFFile file(fullPath, wxT("w"));
+#elif wxUSE_FILE
+    wxFile file(fullPath, wxFile::write);
+#endif
+    if ( !file.IsOpened() || !file.Write(text, wxConvAuto()) )
         return false;
 
     AddFile(filename, description);
 
     return true;
+#else // !wxUSE_FFILE && !wxUSE_FILE
+    return false;
+#endif
 }
 
 void wxDebugReport::RemoveFile(const wxString& name)
@@ -614,6 +626,8 @@ void wxDebugReportCompress::SetCompressedFileBaseName(const wxString& name)
 
 bool wxDebugReportCompress::DoProcess()
 {
+#define HAS_FILE_STREAMS (wxUSE_STREAMS && (wxUSE_FILE || wxUSE_FFILE))
+#if HAS_FILE_STREAMS
     const size_t count = GetFilesCount();
     if ( !count )
         return false;
@@ -630,7 +644,14 @@ bool wxDebugReportCompress::DoProcess()
     fn.SetExt("zip");
 
     // create the streams
-    wxFFileOutputStream os(fn.GetFullPath(), wxT("wb"));
+    const wxString ofullPath = fn.GetFullPath();
+#if wxUSE_FFILE
+    wxFFileOutputStream os(ofullPath, wxT("wb"));
+#elif wxUSE_FILE
+    wxFileOutputStream os(ofullPath);
+#endif
+    if ( !os.IsOk() )
+        return false;
     wxZipOutputStream zos(os, 9);
 
     // add all files to the ZIP one
@@ -645,8 +666,12 @@ bool wxDebugReportCompress::DoProcess()
         if ( !zos.PutNextEntry(ze) )
             return false;
 
-        const wxFileName filename(GetDirectory(), name);
-        wxFFileInputStream is(filename.GetFullPath());
+        const wxString ifullPath = wxFileName(GetDirectory(), name).GetFullPath();
+#if wxUSE_FFILE
+        wxFFileInputStream is(ifullPath);
+#elif wxUSE_FILE
+        wxFileInputStream is(ifullPath);
+#endif
         if ( !is.IsOk() || !zos.Write(is).IsOk() )
             return false;
     }
@@ -654,9 +679,12 @@ bool wxDebugReportCompress::DoProcess()
     if ( !zos.Close() )
         return false;
 
-    m_zipfile = fn.GetFullPath();
+    m_zipfile = ofullPath;
 
     return true;
+#else
+    return false;
+#endif // HAS_FILE_STREAMS
 }
 
 // ----------------------------------------------------------------------------

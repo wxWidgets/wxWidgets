@@ -2665,7 +2665,7 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
 // ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------
-
+#if wxUSE_FFILE && wxUSE_STREAMS
 bool wxRichTextCtrl::DoLoadFile(const wxString& filename, int fileType)
 {
     SetFocusObject(& GetBuffer(), true);
@@ -2707,6 +2707,7 @@ bool wxRichTextCtrl::DoSaveFile(const wxString& filename, int fileType)
 
     return false;
 }
+#endif // wxUSE_FFILE && wxUSE_STREAMS
 
 // ----------------------------------------------------------------------------
 // wxRichTextCtrl specific functionality

@@ -506,6 +506,7 @@ void wxRichTextPrinting::SetRichTextBufferPreview(wxRichTextBuffer* buf)
     m_richTextBufferPreview = buf;
 }
 
+#if wxUSE_FFILE && wxUSE_STREAMS
 bool wxRichTextPrinting::PreviewFile(const wxString& richTextFile)
 {
     SetRichTextBufferPreview(new wxRichTextBuffer);
@@ -525,6 +526,7 @@ bool wxRichTextPrinting::PreviewFile(const wxString& richTextFile)
     p2->SetRichTextBuffer(m_richTextBufferPrinting);
     return DoPreview(p1, p2);
 }
+#endif // wxUSE_FFILE && wxUSE_STREAMS
 
 bool wxRichTextPrinting::PreviewBuffer(const wxRichTextBuffer& buffer)
 {
@@ -540,6 +542,7 @@ bool wxRichTextPrinting::PreviewBuffer(const wxRichTextBuffer& buffer)
     return DoPreview(p1, p2);
 }
 
+#if wxUSE_FFILE && wxUSE_STREAMS
 bool wxRichTextPrinting::PrintFile(const wxString& richTextFile, bool showPrintDialog)
 {
     SetRichTextBufferPrinting(new wxRichTextBuffer);
@@ -557,6 +560,7 @@ bool wxRichTextPrinting::PrintFile(const wxString& richTextFile, bool showPrintD
     delete p;
     return ret;
 }
+#endif // wxUSE_FFILE && wxUSE_STREAMS
 
 bool wxRichTextPrinting::PrintBuffer(const wxRichTextBuffer& buffer, bool showPrintDialog)
 {

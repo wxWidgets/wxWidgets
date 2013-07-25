@@ -573,6 +573,7 @@ public:
                   int type = wxRICHTEXT_TYPE_ANY);
 #endif
 
+#if wxUSE_FFILE && wxUSE_STREAMS
     /**
         Helper function for LoadFile(). Loads content into the control's buffer using the given type.
 
@@ -582,6 +583,7 @@ public:
         This function looks for a suitable wxRichTextFileHandler object.
     */
     virtual bool DoLoadFile(const wxString& file, int fileType);
+#endif // wxUSE_FFILE && wxUSE_STREAMS
 
 #ifdef DOXYGEN
     /**
@@ -596,6 +598,7 @@ public:
                   int type = wxRICHTEXT_TYPE_ANY);
 #endif
 
+#if wxUSE_FFILE && wxUSE_STREAMS
     /**
         Helper function for SaveFile(). Saves the buffer content using the given type.
 
@@ -606,6 +609,7 @@ public:
     */
     virtual bool DoSaveFile(const wxString& file = wxEmptyString,
                             int fileType = wxRICHTEXT_TYPE_ANY);
+#endif // wxUSE_FFILE && wxUSE_STREAMS
 
     /**
         Sets flags that change the behaviour of loading or saving.

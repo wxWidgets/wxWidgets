@@ -4842,23 +4842,41 @@ public:
     */
     virtual void ResetAndClearCommands();
 
+#if wxUSE_FFILE && wxUSE_STREAMS
     //@{
     /**
-        Loads content from a stream or file.
+        Loads content from a file.
         Not all handlers will implement file loading.
     */
     virtual bool LoadFile(const wxString& filename, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
+    //@}
+
+    //@{
+    /**
+        Saves content to a file.
+        Not all handlers will implement file saving.
+    */
+    virtual bool SaveFile(const wxString& filename, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
+    //@}
+#endif // wxUSE_FFILE
+
+#if wxUSE_STREAMS
+    //@{
+    /**
+        Loads content from a stream.
+        Not all handlers will implement loading from a stream.
+    */
     virtual bool LoadFile(wxInputStream& stream, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
     //@}
 
     //@{
     /**
-        Saves content to a stream or file.
-        Not all handlers will implement file saving.
+        Saves content to a stream.
+        Not all handlers will implement saving to a stream.
     */
-    virtual bool SaveFile(const wxString& filename, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
     virtual bool SaveFile(wxOutputStream& stream, wxRichTextFileType type = wxRICHTEXT_TYPE_ANY);
     //@}
+#endif // wxUSE_STREAMS
 
     /**
         Sets the handler flags, controlling loading and saving.

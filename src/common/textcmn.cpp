@@ -915,6 +915,8 @@ bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
             return true;
         }
     }
+#else
+    (void)filename;   // avoid compiler warning about unreferenced parameter
 #endif // wxUSE_FFILE
 
     wxLogError(_("File couldn't be loaded."));
@@ -936,6 +938,8 @@ bool wxTextAreaBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType)
 
         return true;
     }
+#else
+    (void)filename;   // avoid compiler warning about unreferenced parameter
 #endif // wxUSE_FFILE
 
     return false;
