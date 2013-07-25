@@ -1055,7 +1055,7 @@ typedef wxUint32 wxDword;
    architectures to be able to pass wxLongLong_t to the standard functions
    prototyped as taking "long long" such as strtoll().
  */
-#if (defined(__VISUALC__) && defined(__WIN32__))
+#if (defined(__VISUALC__) || defined(__INTELC__)) && defined(__WIN32__)
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec "I64"
