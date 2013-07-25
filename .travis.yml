@@ -1,0 +1,21 @@
+# This is the control file for Travis continuous integration system.
+#
+# It is used automatically for the repositories on Github if it's found in the
+# root directory of the project.
+language: cpp
+
+compiler: gcc
+
+branches:
+    only:
+        - master
+
+notifications:
+    email:
+        recipients:
+            - vadim@wxwidgets.org
+        on_success: change
+        on_failure: change
+
+script:
+    - ./configure && make && make samples && make -C tests && (cd test && ./test -t) && sudo make install
