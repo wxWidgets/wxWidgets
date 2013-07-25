@@ -3376,7 +3376,8 @@ void wxWindowGTK::SetFocus()
 
 void wxWindowGTK::SetCanFocus(bool canFocus)
 {
-    gtk_widget_set_can_focus(m_widget, canFocus);
+    if ( m_widget )
+        gtk_widget_set_can_focus(m_widget, canFocus);
 
     if ( m_wxwindow && (m_widget != m_wxwindow) )
     {
