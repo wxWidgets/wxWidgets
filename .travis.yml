@@ -18,4 +18,8 @@ notifications:
         on_failure: change
 
 script:
-    - ./configure && make && make samples && make -C tests && (cd test && ./test -t) && sudo make install
+    - ./configure --disable-optimise
+    - make
+    - make samples
+    - sudo make install
+    - make -C samples/minimal -f makefile.unx
