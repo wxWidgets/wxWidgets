@@ -34,8 +34,6 @@
 #include "wx/textcompleter.h"
 #include "wx/dynlib.h"
 
-#include <initguid.h>
-
 #include "wx/msw/private.h"
 
 #if wxUSE_UXTHEME
@@ -78,6 +76,11 @@
 #ifndef SHACF_FILESYS_DIRS
     #define SHACF_FILESYS_DIRS 0x00000020
 #endif
+
+// This must be the last header included to only affect the DEFINE_GUID()
+// occurrences below but not any GUIDs declared in the standard files included
+// above.
+#include <initguid.h>
 
 namespace
 {
