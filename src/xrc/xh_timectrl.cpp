@@ -3,7 +3,6 @@
 // Purpose:     XML resource handler for wxTimePickerCtrl
 // Author:      Vadim Zeitlin
 // Created:     2011-09-22
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

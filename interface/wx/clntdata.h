@@ -2,7 +2,6 @@
 // Name:        clntdata.h
 // Purpose:     interface of wxClientData[Container] and wxStringClientData
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

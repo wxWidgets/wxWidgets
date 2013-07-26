@@ -3,7 +3,6 @@
 // Purpose:     wxTextXXXStream unit test
 // Author:      Ryan Norton, Vince Harron
 // Created:     2004-08-14
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Ryan Norton, (c) 2006 Vince Harron
 ///////////////////////////////////////////////////////////////////////////////
 

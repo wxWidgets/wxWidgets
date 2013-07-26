@@ -3,7 +3,6 @@
 // Purpose:     wxWidgets sample demonstrating wxWrapSizer use
 // Author:      Arne Steinarson
 // Created:     21.01.2008
-// RCS-ID:      $Id$
 // Copyright:   (c) Arne Steinarson
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

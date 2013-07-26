@@ -3,7 +3,6 @@
 // Purpose:     IO handler class for the FD used by wxExecute() under Unix
 // Author:      Rob Bresalier, Vadim Zeitlin
 // Created:     2013-01-06
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Rob Bresalier, Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

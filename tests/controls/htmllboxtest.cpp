@@ -3,7 +3,6 @@
 // Purpose:     wxSimpleHtmlListBoxNameStr unit test
 // Author:      Vadim Zeitlin
 // Created:     2010-11-27
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

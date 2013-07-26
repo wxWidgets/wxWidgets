@@ -3,7 +3,6 @@
 // Purpose:     Test for wx vararg look-alike macros
 // Author:      Vaclav Slavik
 // Created:     2007-02-20
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 REA Elektronik GmbH
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        wx/gtk/clipbrd.h
 // Purpose:     wxClipboard for wxGTK
 // Author:      Robert Roebling, Vadim Zeitlin
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 //              (c) 2007 Vadim Zeitlin
 // Licence:     wxWindows licence

@@ -3,7 +3,6 @@
 // Purpose:     Dummy file containing translatable strings from Scintilla
 // Author:      Vadim Zeitlin
 // Created:     2010-06-09
-// RCS-ID:      $Id: $
 // Copyright:   (c) 2010 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

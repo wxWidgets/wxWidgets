@@ -3,7 +3,6 @@
 // Purpose:     wxEventLoop and related classes
 // Author:      Vadim Zeitlin
 // Copyright:   (C) 2008 Vadim Zeitlin
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

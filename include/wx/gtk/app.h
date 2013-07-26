@@ -2,7 +2,6 @@
 // Name:        wx/gtk/app.h
 // Purpose:     wxApp definition for wxGTK
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,6 @@
 // Purpose:     wxGauge unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-15
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 

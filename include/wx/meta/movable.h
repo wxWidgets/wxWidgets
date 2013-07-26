@@ -3,7 +3,6 @@
 // Purpose:     Test if a type is movable using memmove() etc.
 // Author:      Vaclav Slavik
 // Created:     2008-01-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

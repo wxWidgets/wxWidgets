@@ -3,7 +3,6 @@
 // Purpose:     wxTimer for wxBase (unix)
 // Author:      Lukasz Michalski
 // Created:     15/01/2005
-// RCS-ID:      $Id$
 // Copyright:   (c) Lukasz Michalski
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        combobox.h
 // Purpose:     interface of wxComboBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

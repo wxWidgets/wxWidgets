@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
  * Windows CE platform tiffconf.wince.h

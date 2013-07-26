@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- $Id: widgets.bkl 59311 2009-03-04 11:47:32Z FM $ -->
 <makefile>
 
     <include file="../../build/bakefiles/common_samples.bkl"/>

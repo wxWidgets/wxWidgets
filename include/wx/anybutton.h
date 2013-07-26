@@ -3,7 +3,6 @@
 // Purpose:     wxAnyButtonBase class
 // Author:      Vadim Zetlin
 // Created:     2000-08-15 (extracted from button.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zetlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

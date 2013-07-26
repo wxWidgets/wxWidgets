@@ -3,7 +3,6 @@
 // Purpose:     wxGenericFileCtrl Implementation
 // Author:      Diaa M. Sami
 // Created:     2007-07-07
-// RCS-ID:      $Id$
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

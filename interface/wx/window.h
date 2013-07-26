@@ -2,7 +2,6 @@
 // Name:        window.h
 // Purpose:     interface of wxWindow
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

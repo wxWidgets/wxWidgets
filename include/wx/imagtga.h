@@ -2,7 +2,6 @@
 // Name:        wx/imagtga.h
 // Purpose:     wxImage TGA handler
 // Author:      Seth Jackson
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Seth Jackson
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

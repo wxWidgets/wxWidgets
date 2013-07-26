@@ -4,8 +4,6 @@ dnl Macros for configure.in for wxWindows by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.
-dnl
-dnl Version: $Id$
 dnl ---------------------------------------------------------------------------
 
 

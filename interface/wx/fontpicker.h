@@ -2,7 +2,6 @@
 // Name:        fontpicker.h
 // Purpose:     interface of wxFontPickerCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

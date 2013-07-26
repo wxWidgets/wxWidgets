@@ -3,7 +3,6 @@
 // Purpose:
 // Author:      Robert Roebling
 // Modified by: Ryan Norton (Native GTK2.0+ checklist)
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

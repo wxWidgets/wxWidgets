@@ -2,7 +2,6 @@
 // Name:        ribbon/buttonbar.h
 // Purpose:     interface of wxRibbonButtonBar
 // Author:      Peter Cawley
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

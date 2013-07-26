@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxGenericDirCtrl
 // Author:      Wlodzimierz 'ABX' Skiba
 // Created:     4 Oct 2006
-// Id:          $Id$
 // Copyright:   (c) 2006 wxWindows team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

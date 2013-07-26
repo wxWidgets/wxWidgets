@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin, Vaclav Slavik,
 //              Michael N. Filippov <michael@idisys.iae.nsk.su>
 // Created:     2010-04-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              (c) 2010 Vaclav Slavik <vslavik@fastmail.fm>
 // Licence:     wxWindows licence

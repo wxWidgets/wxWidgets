@@ -4,7 +4,6 @@
 // Purpose:     Shows wxSearchCtrl
 // Author:      Robin Dunn
 // Created:     9-Dec-2006
-// Id:          $Id$
 // Copyright:   (c) 2006
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

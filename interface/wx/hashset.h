@@ -2,7 +2,6 @@
 // Name:        hashset.h
 // Purpose:     interface of wxHashSet
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

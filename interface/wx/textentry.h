@@ -3,7 +3,6 @@
 // Purpose:     interface of wxTextEntry
 // Author:      Vadim Zeitlin
 // Created:     2009-03-01 (extracted from wx/textctrl.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

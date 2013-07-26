@@ -3,7 +3,6 @@
 // Purpose:     wxPreferencesEditor implementation common to all platforms.
 // Author:      Vaclav Slavik
 // Created:     2013-02-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Vaclav Slavik <vslavik@fastmail.fm>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

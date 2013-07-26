@@ -2,7 +2,6 @@
 // Name:        webview.cpp
 // Purpose:     wxWebView sample
 // Author:      Marianne Gagnon
-// Id:          $Id$
 // Copyright:   (c) 2010 Marianne Gagnon, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

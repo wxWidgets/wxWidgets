@@ -2,7 +2,6 @@
 // Name:        treectrl.h
 // Purpose:     interface of wxTreeItemData
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     Hildon implementation of wxNotificationMessage
 // Author:      Vadim Zeitlin
 // Created:     2007-11-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

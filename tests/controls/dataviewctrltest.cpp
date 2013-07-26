@@ -3,7 +3,6 @@
 // Purpose:     wxDataViewCtrl unit test
 // Author:      Vaclav Slavik
 // Created:     2011-08-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vaclav Slavik <vslavik@gmail.com>
 ///////////////////////////////////////////////////////////////////////////////
 

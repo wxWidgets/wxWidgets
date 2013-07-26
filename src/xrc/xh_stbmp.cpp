@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxStaticBitmap
 // Author:      Vaclav Slavik
 // Created:     2000/04/22
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

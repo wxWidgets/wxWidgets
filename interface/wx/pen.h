@@ -2,7 +2,6 @@
 // Name:        pen.h
 // Purpose:     interface of wxPen* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

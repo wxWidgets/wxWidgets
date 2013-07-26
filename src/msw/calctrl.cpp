@@ -3,7 +3,6 @@
 // Purpose:     wxCalendarCtrl implementation
 // Author:      Vadim Zeitlin
 // Created:     2008-04-04
-// RCS-ID:      $Id$
 // Copyright:   (C) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

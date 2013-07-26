@@ -3,7 +3,6 @@
 // Purpose:     declares wxFDIOEventLoopSourceHandler class
 // Author:      Rob Bresalier, Vadim Zeitlin
 // Created:     2013-06-13 (extracted from src/unix/evtloopunix.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 //              (c) 2013 Rob Bresalier
 // Licence:     wxWindows licence

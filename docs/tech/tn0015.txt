@@ -118,4 +118,3 @@ client to the end of the list.
 
 === EOF ===
 
-Version: $Id$

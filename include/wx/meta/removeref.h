@@ -3,7 +3,6 @@
 // Purpose:     Allows to remove a reference from a type.
 // Author:      Vadim Zeitlin
 // Created:     2012-10-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2012 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

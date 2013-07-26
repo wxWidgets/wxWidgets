@@ -2,7 +2,6 @@
 // Name:        vlbox.h
 // Purpose:     interface of wxVListBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

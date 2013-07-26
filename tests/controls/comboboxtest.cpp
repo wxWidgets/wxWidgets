@@ -3,7 +3,6 @@
 // Purpose:     wxComboBox unit test
 // Author:      Vadim Zeitlin
 // Created:     2007-09-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

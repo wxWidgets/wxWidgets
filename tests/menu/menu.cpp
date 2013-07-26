@@ -3,7 +3,6 @@
 // Purpose:     wxMenu unit test
 // Author:      wxWidgets team
 // Created:     2010-11-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 

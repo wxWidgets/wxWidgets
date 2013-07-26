@@ -2,7 +2,6 @@
 // Name:        richtext/richtextformatdlg.h
 // Purpose:     interface of wxRichTextFormattingDialog*
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

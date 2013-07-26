@@ -3,7 +3,6 @@
 // Purpose:     Unit tests for numeric validators.
 // Author:      Vadim Zeitlin
 // Created:     2011-01-18
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

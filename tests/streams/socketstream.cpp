@@ -2,7 +2,6 @@
 // Name:        tests/streams/socketstream.cpp
 // Purpose:     Test wxSocketInputStream/wxSocketOutputStream
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

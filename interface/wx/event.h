@@ -3,7 +3,6 @@
 // Purpose:     interface of wxEvtHandler, wxEventBlocker and many
 //              wxEvent-derived classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

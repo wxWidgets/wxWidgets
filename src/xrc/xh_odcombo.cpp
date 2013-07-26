@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxRadioBox
 // Author:      Alex Bligh - Based on src/xrc/xh_combo.cpp
 // Created:     2006/06/19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Alex Bligh
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

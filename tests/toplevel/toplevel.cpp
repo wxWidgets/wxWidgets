@@ -3,7 +3,6 @@
 // Purpose:     Tests for wxTopLevelWindow
 // Author:      Kevin Ollivier
 // Created:     2008-05-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Kevin Ollivier <kevino@theolliviers.com>
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     wxSimplebook unit test
 // Author:      Vadim Zeitlin
 // Created:     2013-06-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

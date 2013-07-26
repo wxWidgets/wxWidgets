@@ -5,7 +5,6 @@
 // Modified by: Vadim Zeitlin to move out various functions to other files
 //              to fix header inter-dependencies
 // Created:     2002/02/17
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

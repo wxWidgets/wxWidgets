@@ -3,7 +3,6 @@
 // Purpose:     wxFileSystemWatcher sample
 // Author:      Bartosz Bekier
 // Created:     2009-06-27
-// RCS-ID:      $Id$
 // Copyright:   (c) Bartosz Bekier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        constants.h
 // Purpose:     Constants page of the Doxygen manual
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

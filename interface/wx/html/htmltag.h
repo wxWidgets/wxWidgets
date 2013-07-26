@@ -2,7 +2,6 @@
 // Name:        html/htmltag.h
 // Purpose:     interface of wxHtmlTag
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

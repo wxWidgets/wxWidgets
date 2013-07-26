@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxEditableListbox
 // Author:      Francesco Montorsi
 // Created:     8/2/2009
-// Id:          $Id$
 // Copyright:   (c) 2009 Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

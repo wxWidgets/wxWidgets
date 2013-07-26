@@ -2,7 +2,6 @@
 // Name:        sizer.h
 // Purpose:     interface of wxStdDialogButtonSizer
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@
 // Name:        fontdata.h
 // Purpose:     interface of wxFontData
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

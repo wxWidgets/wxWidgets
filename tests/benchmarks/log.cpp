@@ -3,7 +3,6 @@
 // Purpose:     Log-related benchmarks
 // Author:      Vadim Zeitlin
 // Created:     2012-01-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

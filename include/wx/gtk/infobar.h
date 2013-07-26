@@ -3,7 +3,6 @@
 // Purpose:     native implementation of wxInfoBar for GTK+ 2.18 and later
 // Author:      Vadim Zeitlin
 // Created:     2009-09-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

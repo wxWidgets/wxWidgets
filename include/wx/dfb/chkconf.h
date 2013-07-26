@@ -3,7 +3,6 @@
  * Author:      Vaclav Slavik
  * Purpose:     Compiler-specific configuration checking
  * Created:     2006-08-10
- * RCS-ID:      $Id$
  * Copyright:   (c) 2006 REA Elektronik GmbH
  * Licence:     wxWindows licence
  */

@@ -1,5 +1,4 @@
 /*
- * $Id$
  *
  * xtiff - view a TIFF file in an X window
  *

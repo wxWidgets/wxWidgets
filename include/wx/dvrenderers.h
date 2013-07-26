@@ -3,7 +3,6 @@
 // Purpose:     Declare all wxDataViewCtrl classes
 // Author:      Robert Roebling, Vadim Zeitlin
 // Created:     2009-11-08 (extracted from wx/dataview.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Robert Roebling
 //              (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

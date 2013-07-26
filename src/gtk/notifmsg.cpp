@@ -3,7 +3,6 @@
 // Purpose:     wxNotificationMessage for wxGTK using libnotify.
 // Author:      Vadim Zeitlin
 // Created:     2012-07-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2012 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

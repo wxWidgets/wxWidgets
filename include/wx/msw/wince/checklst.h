@@ -4,7 +4,6 @@
 // Author:      Wlodzimierz ABX Skiba
 // Modified by:
 // Created:     30.10.2005
-// RCS-ID:      $Id$
 // Copyright:   (c) Wlodzimierz Skiba
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

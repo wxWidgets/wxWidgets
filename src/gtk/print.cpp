@@ -3,7 +3,6 @@
 // Author:      Anthony Bretaudeau
 // Purpose:     GTK printing support
 // Created:     2007-08-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 wxWidgets development team
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////

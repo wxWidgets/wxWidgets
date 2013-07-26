@@ -2,7 +2,6 @@
 // Name:        textfile.h
 // Purpose:     interface of wxTextFile
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

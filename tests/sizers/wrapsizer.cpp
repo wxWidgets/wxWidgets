@@ -3,7 +3,6 @@
 // Purpose:     Unit tests for wxWrapSizer
 // Author:      Catalin Raceanu
 // Created:     2010-10-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets development team
 ///////////////////////////////////////////////////////////////////////////////
 

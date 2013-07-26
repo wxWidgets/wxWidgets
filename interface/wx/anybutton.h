@@ -2,7 +2,6 @@
 // Name:        anybutton.h
 // Purpose:     interface of wxAnyButton
 // Author:      wxWidgets team
-// RCS-ID:      $Id: button.h 69135 2011-09-18 04:38:01Z RD $
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

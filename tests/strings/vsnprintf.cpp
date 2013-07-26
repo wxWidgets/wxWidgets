@@ -5,7 +5,6 @@
 //              (part of this file was taken from CMP.c of TRIO package
 //               written by Bjorn Reese and Daniel Stenberg)
 // Created:     2006-04-01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Francesco Montorsi, Bjorn Reese and Daniel Stenberg
 ///////////////////////////////////////////////////////////////////////////////
 

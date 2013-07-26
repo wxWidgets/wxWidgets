@@ -2,7 +2,6 @@
 // Name:        mediactrl.h
 // Purpose:     interface of wxMediaEvent, wxMediaCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

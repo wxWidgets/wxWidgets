@@ -2,7 +2,6 @@
 // Name:        webviewarchivehandler.h
 // Purpose:     Custom webview handler to allow archive browsing
 // Author:      Steven Lamerton
-// Id:          $Id$
 // Copyright:   (c) 2011 Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

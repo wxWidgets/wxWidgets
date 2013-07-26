@@ -2,7 +2,6 @@
 // Name:        tests/streams/backfile.cpp
 // Purpose:     Test wxBackingFile
 // Author:      Mike Wetherell
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Mike Wetherell
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

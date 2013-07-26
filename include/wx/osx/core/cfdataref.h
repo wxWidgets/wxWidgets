@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2007/05/10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Stefan Csomor
 // Licence:     wxWindows licence
 // Notes:       See http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBinaryData/index.html

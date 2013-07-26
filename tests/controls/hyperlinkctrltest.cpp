@@ -3,7 +3,6 @@
 // Purpose:     wxHyperlinkCtrl unit test
 // Author:      Steven Lamerton
 // Created:     2010-08-05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@
 // Name:        filesys.h
 // Purpose:     interface of wxFileSystem, wxFileSystemHandler, wxFSFile
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

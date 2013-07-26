@@ -3,7 +3,6 @@
 // Purpose:     wxTimer class
 // Author:      Julian Smart
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

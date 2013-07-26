@@ -2,7 +2,6 @@
 // Name:        html/helpctrl.h
 // Purpose:     interface of wxHtmlHelpController
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

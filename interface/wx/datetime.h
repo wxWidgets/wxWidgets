@@ -2,7 +2,6 @@
 // Name:        datetime.h
 // Purpose:     interface of wxDateTime
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

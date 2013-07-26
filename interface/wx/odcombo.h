@@ -2,7 +2,6 @@
 // Name:        odcombo.h
 // Purpose:     interface of wxOwnerDrawnComboBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

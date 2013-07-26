@@ -2,7 +2,6 @@
 // Name:        ribbon/toolbar.h
 // Purpose:     interface of wxRibbonToolBar
 // Author:      Peter Cawley
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@
 // Name:        archive.h
 // Purpose:     interface of wxArchive* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

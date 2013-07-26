@@ -3,7 +3,6 @@
 // Purpose:     wxURL unit test
 // Author:      Francesco Montorsi
 // Created:     2009-5-31
-// RCS-ID:      $Id: uris.cpp 58272 2009-01-21 17:02:11Z VZ $
 // Copyright:   (c) 2009 Francesco Montorsi
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -6,7 +6,6 @@
  * whereby a setup.h is created under the lib directory.
  *
  * Copyright:   (c) Vadim Zeitlin
- * RCS-ID:      $Id$
  * Licence:     wxWindows Licence
  */
 

@@ -2,7 +2,6 @@
 // Name:        tests/testimage.h
 // Purpose:     Unit test helpers for dealing with wxImage.
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

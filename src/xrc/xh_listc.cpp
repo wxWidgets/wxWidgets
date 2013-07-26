@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxListCtrl
 // Author:      Brian Gavin, Kinaou Hervé, Vadim Zeitlin
 // Created:     2000/09/09
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Brian Gavin
 //              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence

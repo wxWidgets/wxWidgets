@@ -2,7 +2,6 @@
 // Name:        autocapture.h
 // Purpose:     Defines the AutoCaptureMechanism class
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

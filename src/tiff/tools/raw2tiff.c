@@ -1,4 +1,3 @@
-/* $Id$
  *
  * Project:  libtiff tools
  * Purpose:  Convert raw byte sequences in TIFF images

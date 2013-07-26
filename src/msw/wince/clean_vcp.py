@@ -5,7 +5,6 @@ you will have wait until 'Visual Tools' will rebuild all dependencies
 and this process might take HUGE amount of time
 
 Author : Viktor Voroshylo
-$Id$
 '''
 __version__='$Revision$'[11:-2]
 

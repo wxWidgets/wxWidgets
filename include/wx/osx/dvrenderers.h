@@ -3,7 +3,6 @@
 // Purpose:     All OS X wxDataViewCtrl renderer classes
 // Author:      Vadim Zeitlin
 // Created:     2009-11-07 (extracted from wx/osx/dataview.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

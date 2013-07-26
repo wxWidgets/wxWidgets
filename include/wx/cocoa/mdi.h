@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes
 // Created:     2003/09/08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence

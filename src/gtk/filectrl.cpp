@@ -3,7 +3,6 @@
 // Purpose:     wxGtkFileCtrl Implementation
 // Author:      Diaa M. Sami
 // Created:     2007-08-10
-// RCS-ID:      $Id$
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

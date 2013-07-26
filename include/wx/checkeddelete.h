@@ -3,7 +3,6 @@
 // Purpose:     wxCHECKED_DELETE() macro
 // Author:      Vadim Zeitlin
 // Created:     2009-02-03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002-2009 wxWidgets dev team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

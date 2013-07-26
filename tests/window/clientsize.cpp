@@ -3,7 +3,6 @@
 // Purpose:     Client vs. window size handling unit test
 // Author:      Vaclav Slavik
 // Created:     2008-02-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vaclav Slavik <vslavik@fastmail.fm>
 ///////////////////////////////////////////////////////////////////////////////
 

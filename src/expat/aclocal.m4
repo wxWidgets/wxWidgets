@@ -34,7 +34,6 @@ dnl  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 dnl  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 dnl  DEALINGS IN THE SOFTWARE.
 dnl
-dnl  $Id$
 dnl
 dnl  Compiler detection macros by David Elliott and Vadim Zeitlin
 dnl

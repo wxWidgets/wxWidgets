@@ -2,7 +2,6 @@
 // Name:        statusbr.h
 // Purpose:     interface of wxStatusBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     Test for wxUniChar class
 // Author:      Vaclav Slavik
 // Created:     2007-03-11
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 REA Elektronik GmbH
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

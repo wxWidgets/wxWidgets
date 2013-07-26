@@ -3,7 +3,6 @@
 // Purpose:     Test keyboard events
 // Author:      Vadim Zeitlin
 // Created:     2010-09-05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@
 // Name:        fdrepdlg.h
 // Purpose:     interface of wxFindDialogEvent, wxFindReplaceDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

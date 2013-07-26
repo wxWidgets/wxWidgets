@@ -3,7 +3,6 @@
  * Purpose:     wxGTK-specific settings consistency checks
  * Author:      Vadim Zeitlin
  * Created:     2007-07-19 (extracted from wx/chkconf.h)
- * RCS-ID:      $Id$
  * Copyright:   (c) 2000-2007 Vadim Zeitlin <vadim@wxwidgets.org>
  * Licence:     wxWindows licence
  */

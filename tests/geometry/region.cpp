@@ -3,7 +3,6 @@
 // Purpose:     wxRegion unit test
 // Author:      Vadim Zeitlin
 // Created:     2011-10-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

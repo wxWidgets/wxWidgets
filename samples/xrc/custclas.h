@@ -2,7 +2,6 @@
 // Name:        custclas.h
 // Purpose:     XML resources sample: A custom class to insert into a XRC file
 // Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert O'Connor and Vaclav Slavik
 // Licence:     wxWindows licence
 //-----------------------------------------------------------------------------

@@ -2,7 +2,6 @@
 // Name:        region.h
 // Purpose:     interface of wxRegionIterator
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

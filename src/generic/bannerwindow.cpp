@@ -3,7 +3,6 @@
 // Purpose:     wxBannerWindow class implementation
 // Author:      Vadim Zeitlin
 // Created:     2011-08-16
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

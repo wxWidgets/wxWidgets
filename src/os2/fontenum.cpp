@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: David Webster to add support for font encodings
 // Created:     01/03/00
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

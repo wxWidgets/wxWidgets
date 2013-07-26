@@ -2,7 +2,6 @@
 // Name:        filename.h
 // Purpose:     interface of wxFileName
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

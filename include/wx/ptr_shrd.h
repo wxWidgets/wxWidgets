@@ -3,7 +3,6 @@
 // Purpose:     compatibility wrapper for wx/sharedptr.h
 // Author:      Vadim Zeitlin
 // Created:     2009-02-03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

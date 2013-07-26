@@ -2,7 +2,6 @@
 // Name:        msw/registry.h
 // Purpose:     interface of wxRegKey
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

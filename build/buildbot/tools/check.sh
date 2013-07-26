@@ -3,7 +3,6 @@
 # Name:        check.sh
 # Purpose:     Offline checker for the buildbot configuration files
 # Author:      Mike Wetherell
-# RCS-ID:      $Id$
 # Copyright:   (c) 2007 Mike Wetherell
 # Licence:     wxWindows licence
 #############################################################################

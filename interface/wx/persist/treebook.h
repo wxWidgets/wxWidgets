@@ -2,7 +2,6 @@
 // Name:        wx/persist/treebook.h
 // Purpose:     interface of wxPersistentTreeBook
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

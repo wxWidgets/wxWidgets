@@ -2,7 +2,6 @@
 // Name:        versioninfo.h
 // Purpose:     interface of wxVersionInfo
 // Author:      Troels K
-// RCS-ID:      $Id: versioninfo.h
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

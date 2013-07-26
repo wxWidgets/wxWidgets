@@ -9,7 +9,6 @@
 //              beware, inelegant code!
 // Author:      Julian Smart
 // Created:     12/12/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

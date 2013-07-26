@@ -3,7 +3,6 @@
 // Purpose:     Sample showing how to use wx DLL from a Win32 application
 // Author:      Vadim Zeitlin
 // Created:     2009-12-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

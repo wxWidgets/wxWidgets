@@ -2,7 +2,6 @@
 // Name:        objref.cpp
 // Purpose:     XML resources sample: Object references and ID ranges dialog
 // Author:      David Hart, Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 //-----------------------------------------------------------------------------

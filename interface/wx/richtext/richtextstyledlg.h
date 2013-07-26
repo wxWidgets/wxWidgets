@@ -2,7 +2,6 @@
 // Name:        richtext/richtextstyledlg.h
 // Purpose:     interface of wxRichTextStyleOrganiserDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

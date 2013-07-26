@@ -4,7 +4,6 @@
 //              wxInputStream and wxOutputStream
 // Author:      Jonathan Liu <net147@gmail.com>
 // Created:     2009-05-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Jonathan Liu
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

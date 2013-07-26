@@ -2,7 +2,6 @@
 // Name:        position.h
 // Purpose:     interface of wxPosition
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

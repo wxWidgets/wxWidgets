@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin on 2008-11-04 to use the base classes
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008-2009 Vadim Zeitlin
 // Licence:     wxWindows licence

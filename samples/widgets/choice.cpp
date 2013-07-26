@@ -3,7 +3,6 @@
 // Name:        choice.cpp
 // Purpose:     Part of the widgets sample showing wxChoice
 // Created:     23.07.07
-// Id:          $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

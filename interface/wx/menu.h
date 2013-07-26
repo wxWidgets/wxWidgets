@@ -2,7 +2,6 @@
 // Name:        menu.h
 // Purpose:     interface of wxMenuBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

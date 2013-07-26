@@ -2,7 +2,6 @@
 // Name:        tests/testdate.h
 // Purpose:     Unit test helpers for dealing with wxDateTime.
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

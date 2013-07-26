@@ -3,7 +3,6 @@
 // Purpose:     wxTaskBarIcon class for GTK2
 // Author:      Paul Cornett
 // Created:     2009-02-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Paul Cornett
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

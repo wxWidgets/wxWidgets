@@ -3,7 +3,6 @@
 // Purpose:     wxRect unit test
 // Author:      Vadim Zeitlin
 // Created:     2004-12-11
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 wxWindows
 ///////////////////////////////////////////////////////////////////////////////
 

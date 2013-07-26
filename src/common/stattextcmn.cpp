@@ -3,7 +3,6 @@
 // Purpose:     common (to all ports) wxStaticText functions
 // Author:      Vadim Zeitlin, Francesco Montorsi
 // Created:     2007-01-07 (extracted from dlgcmn.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999-2006 Vadim Zeitlin
 //              (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence

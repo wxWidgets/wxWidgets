@@ -1,5 +1,4 @@
 /******************************************************************************
- * $Id$
  *
  * Project:  libtiff tools
  * Purpose:  Mainline for setting metadata in existing TIFF files.

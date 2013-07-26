@@ -27,4 +27,3 @@ tn0023.txt   Adding a new app/screenshot to the wxWidgets.org front page
 tn0024.txt   How to add a new XRC handler
 tn0025.txt   How to update a third party library to a newer version
 
-Version: $Id$

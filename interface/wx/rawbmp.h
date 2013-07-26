@@ -2,7 +2,6 @@
 // Name:        rawbmp.h
 // Purpose:     interface of wxPixelData
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

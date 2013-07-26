@@ -26,5 +26,4 @@ wxWidgets src, include, docs directories hierarchy.
 
 
 Author:  Julian Smart
-Version: $Id$
 

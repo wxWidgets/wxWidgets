@@ -3,7 +3,6 @@
 // Purpose:     Sample showing how to use wx from a DLL
 // Author:      Vaclav Slavik
 // Created:     2009-12-03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

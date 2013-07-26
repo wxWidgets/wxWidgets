@@ -2,7 +2,6 @@
 // Name:        richtext/richtextprint.h
 // Purpose:     interface of wxRichTextHeaderFooterData
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     wxTimePickerCtrl for Windows.
 // Author:      Vadim Zeitlin
 // Created:     2011-09-22
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

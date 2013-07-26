@@ -2,7 +2,6 @@
 // Name:        tests/misc/metatest.cpp
 // Purpose:     Test template meta-programming constructs
 // Author:      Jaakko Salli
-// RCS-ID:      $Id$
 // Copyright:   (c) the wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

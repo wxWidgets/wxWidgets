@@ -3,7 +3,6 @@
 // Purpose:     XML resource handler for command link buttons
 // Author:      Kinaou Herve
 // Created:     2010-10-20
-// RCS-ID:      $Id:$
 // Copyright:   (c) 2010 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

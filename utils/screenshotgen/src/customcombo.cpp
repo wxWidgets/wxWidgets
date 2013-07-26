@@ -2,7 +2,6 @@
 // Name:        customcombo.cpp
 // Purpose:     Implement some custom wxComboCtrls
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

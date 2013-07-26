@@ -2,7 +2,6 @@
 // Name:        printing.cpp
 // Purpose:     wxHtml sample: wxHtmlEasyPrinting test
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2009 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

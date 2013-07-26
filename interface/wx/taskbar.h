@@ -2,7 +2,6 @@
 // Name:        taskbar.h
 // Purpose:     interface of wxTaskBarIcon
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

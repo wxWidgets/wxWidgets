@@ -2,7 +2,6 @@
 // Name:        wx/gtk/private/win_gtk.h
 // Purpose:     native GTK+ widget for wxWindow
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */

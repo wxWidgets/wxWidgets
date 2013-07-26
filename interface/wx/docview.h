@@ -2,7 +2,6 @@
 // Name:        docview.h
 // Purpose:     interface of various doc/view framework classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

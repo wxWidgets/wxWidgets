@@ -2,7 +2,6 @@
 // Name:        scroll.cpp
 // Purpose:     wxScrolled sample
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (C) 1998 Robert Roebling, 2002 Ron Lee, 2003 Matt Gregory
 //              (C) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence

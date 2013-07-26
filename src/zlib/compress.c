@@ -3,7 +3,6 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* @(#) $Id$ */
 
 #define ZLIB_INTERNAL
 #include "zlib.h"

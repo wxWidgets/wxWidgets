@@ -3,7 +3,6 @@
 // Purpose:     implementation of OS-2-specific handler event handling
 // Author:      Guilhem Lavaux, Vadim Zeitlin
 // Created:     1999
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999-2008 wxWidgets dev team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

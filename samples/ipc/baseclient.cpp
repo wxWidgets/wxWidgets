@@ -5,7 +5,6 @@
 //              Most of the code was stolen from: samples/ipc/client.cpp
 //              (c) Julian Smart, Jurgen Doornik
 // Created:     2007-11-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Anders Larsen
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

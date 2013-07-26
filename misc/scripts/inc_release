@@ -4,7 +4,6 @@
 # Purpose:    increments the release version number in all files mentioned in
 #             docs/tech/tn0011.txt
 # Created:    2007-01-07
-# RCS-ID:     $Id$
 # Copyright:  (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 # Licence:    wxWindows licence
 ##############################################################################

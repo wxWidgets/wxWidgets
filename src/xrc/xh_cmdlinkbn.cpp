@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for command link buttons
 // Author:      Kinaou Herve
 // Created:     2010/10/20
-// RCS-ID:      $Id:$
 // Copyright:
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

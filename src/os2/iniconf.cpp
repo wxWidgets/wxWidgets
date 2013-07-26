@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     10/09/99
-// RCS-ID:      $Id$
 // Copyright:   David Webster
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

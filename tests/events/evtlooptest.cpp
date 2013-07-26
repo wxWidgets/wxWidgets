@@ -3,7 +3,6 @@
 // Purpose:     Tests for the event loop classes
 // Author:      Rob Bresalier
 // Created:     2013-05-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Rob Bresalier
 ///////////////////////////////////////////////////////////////////////////////
 

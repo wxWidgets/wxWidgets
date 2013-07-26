@@ -4,7 +4,6 @@
 // Author:      Ron Lee, Jaakko Salli
 // Modified by:
 // Created:     Sep-20-2006
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,6 @@
 // Purpose:     wxSocketImpl implementation for OS X
 // Authors:     Brian Victor, Vadim Zeitlin
 // Created:     February 2002
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Brian Victor
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence

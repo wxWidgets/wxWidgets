@@ -3,7 +3,6 @@
 // Purpose:     Unit test for wxMessageQueue
 // Author:      Evgeniy Tarassov
 // Created:     31/10/2007
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Evgeniy Tarassov
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

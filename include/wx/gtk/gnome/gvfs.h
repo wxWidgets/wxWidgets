@@ -3,7 +3,6 @@
 // Author:      Robert Roebling
 // Purpose:     GNOME VFS support
 // Created:     17/03/06
-// RCS-ID:      $Id$
 // Copyright:   Robert Roebling
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////

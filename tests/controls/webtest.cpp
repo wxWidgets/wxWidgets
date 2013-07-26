@@ -3,7 +3,6 @@
 // Purpose:     wxWebView unit test
 // Author:      Steven Lamerton
 // Created:     2011-07-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 

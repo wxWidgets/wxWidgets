@@ -2,7 +2,6 @@
 // Name:        scrolbar.h
 // Purpose:     interface of wxScrollBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

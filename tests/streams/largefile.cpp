@@ -2,7 +2,6 @@
 // Name:        tests/streams/largefile.cpp
 // Purpose:     Tests for large file support
 // Author:      Mike Wetherell
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Mike Wetherell
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

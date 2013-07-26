@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing book controls
 // Author:      Vadim Zeitlin, Wlodzimierz ABX Skiba
 // Created:     06.04.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin, 2006 Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,6 @@
 // Purpose:     interface of wxTextCompleter
 // Author:      Vadim Zeitlin
 // Created:     2011-04-13
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

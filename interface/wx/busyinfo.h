@@ -2,7 +2,6 @@
 // Name:        busyinfo.h
 // Purpose:     interface of wxBusyInfo
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

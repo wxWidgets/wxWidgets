@@ -3,7 +3,6 @@
 // Purpose:     test miscellaneous GUI functions
 // Author:      Vadim Zeitlin
 // Created:     2008-09-22
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin
 ///////////////////////////////////////////////////////////////////////////////
 

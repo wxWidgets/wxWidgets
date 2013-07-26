@@ -2,7 +2,6 @@
 // Name:        print.h
 // Purpose:     interface of wxPreviewControlBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

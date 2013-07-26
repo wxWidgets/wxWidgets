@@ -2,7 +2,6 @@
 // Name:        clrpicker.h
 // Purpose:     interface of wxColourPickerCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

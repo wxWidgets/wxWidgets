@@ -2,7 +2,6 @@
 // Name:        tests/tartest.cpp
 // Purpose:     Test the tar classes
 // Author:      Mike Wetherell
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Mike Wetherell
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

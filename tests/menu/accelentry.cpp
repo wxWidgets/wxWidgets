@@ -3,7 +3,6 @@
 // Purpose:     wxAcceleratorEntry unit test
 // Author:      Vadim Zeitlin
 // Created:     2010-12-03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Vadim Zeitlin
 ///////////////////////////////////////////////////////////////////////////////
 

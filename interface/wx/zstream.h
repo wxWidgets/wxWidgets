@@ -2,7 +2,6 @@
 // Name:        zstream.h
 // Purpose:     interface of wxZlibOutputStream
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

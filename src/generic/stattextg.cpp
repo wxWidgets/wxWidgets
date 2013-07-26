@@ -3,7 +3,6 @@
 // Purpose:     wxGenericStaticText
 // Author:      Marcin Wojdyr
 // Created:     2008-06-26
-// RCS-ID:      $Id$
 // Copyright:   Marcin Wojdyr
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

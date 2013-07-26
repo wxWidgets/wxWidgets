@@ -2,7 +2,6 @@
 // Name:        radiobox.h
 // Purpose:     interface of wxRadioBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

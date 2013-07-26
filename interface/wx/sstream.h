@@ -2,7 +2,6 @@
 // Name:        sstream.h
 // Purpose:     interface of wxStringInputStream
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

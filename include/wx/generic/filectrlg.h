@@ -4,7 +4,6 @@
 // Author:      Diaa M. Sami
 // Modified by:
 // Created:     Jul-07-2007
-// RCS-ID:      $Id$
 // Copyright:   (c) Diaa M. Sami
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,6 @@
     Name:       include/unix.xml
     Purpose:    Declarations for unix slaves
     Author:     Michael Wetherell
-    RCS-ID:     $Id$
     Copyright:  (c) Michael Wetherell
     Licence:    wxWindows licence
 -->

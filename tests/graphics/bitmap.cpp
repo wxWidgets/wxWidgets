@@ -3,7 +3,6 @@
 // Purpose:     wxBitmap unit test
 // Author:      Vadim Zeitlin
 // Created:     2010-03-29
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

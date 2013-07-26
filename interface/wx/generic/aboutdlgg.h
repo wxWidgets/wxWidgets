@@ -3,7 +3,6 @@
 // Purpose:     generic wxAboutBox() implementation
 // Author:      eranon
 // Created:     2012-09-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2012 wxWidgets development team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

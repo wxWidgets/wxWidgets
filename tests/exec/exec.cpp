@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi
 //              (based on console sample TestExecute() function)
 // Created:     2009-01-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Francesco Montorsi
 //              (c) 2013 Rob Bresalier, Vadim Zeitlin
 // Licence:     wxWindows licence

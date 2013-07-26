@@ -3,7 +3,6 @@
 // Purpose:     Tests for SetSize() and related wxWindow methods
 // Author:      Vadim Zeitlin
 // Created:     2008-05-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

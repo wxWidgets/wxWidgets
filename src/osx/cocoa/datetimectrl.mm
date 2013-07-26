@@ -3,7 +3,6 @@
 // Purpose:     Implementation of wxDateTimePickerCtrl for Cocoa.
 // Author:      Vadim Zeitlin
 // Created:     2011-12-18
-// Version:     $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

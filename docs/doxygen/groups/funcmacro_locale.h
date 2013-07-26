@@ -2,7 +2,6 @@
 // Name:        funcmacro_locale.h
 // Purpose:     wxXLocale-enabled functions
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1,4 +1,3 @@
-$! $Id: configure.com,v 1.3 2012-07-29 15:45:29 tgl Exp $
 $!
 $! OpenVMS configure procedure for libtiff
 $! (c) Alexey Chupahin  22-NOV-2007

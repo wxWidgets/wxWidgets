@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing date picker
 // Author:      Dimitri Schoolwerth, Vadim Zeitlin
 // Created:     27 Sep 2003
-// Id:          $Id$
 // Copyright:   (c) 2003 wxWindows team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

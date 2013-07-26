@@ -2,7 +2,6 @@
 // Name:        src/html/m_span.cpp
 // Purpose:     wxHtml module for span handling
 // Author:      Nigel Paton
-// RCS-ID:      $Id$
 // Copyright:   wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        manager.h
 // Purpose:     interface of wxPropertyGridManager
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     Test events propagation
 // Author:      Vadim Zeitlin
 // Created:     2009-01-16
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

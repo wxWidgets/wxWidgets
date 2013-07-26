@@ -3,7 +3,6 @@
 // Purpose:     Server for wxSocket demo
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // Created:     1999/09/19
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Guillermo Rodriguez Garcia
 //              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence

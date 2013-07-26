@@ -3,7 +3,6 @@
 // Purpose:     Test if types are convertible
 // Author:      Arne Steinarson
 // Created:     2008-01-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Arne Steinarson
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

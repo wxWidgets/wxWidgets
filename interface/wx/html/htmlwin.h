@@ -2,7 +2,6 @@
 // Name:        html/htmlwin.h
 // Purpose:     interface of wxHtmlWindow
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     Header to include all headers with wrappers for CRT functions
 // Author:      Robert Roebling
 // Created:     2007-05-30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 wxWidgets dev team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

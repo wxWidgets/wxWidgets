@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor, Francesco Montorsi
 // Modified by:
 // Created:     13/5/2007
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor, Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

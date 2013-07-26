@@ -3,7 +3,6 @@
 // Purpose:     32-bit string (UCS-4)
 // Author:      Robert Roebling
 // Copyright:   (c) Robert Roebling
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

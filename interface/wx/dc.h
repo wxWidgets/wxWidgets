@@ -2,7 +2,6 @@
 // Name:        dc.h
 // Purpose:     interface of wxDC
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

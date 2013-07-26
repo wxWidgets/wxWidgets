@@ -3,7 +3,6 @@
 // Purpose:     Some benchmarks for measuring graphics operations performance
 // Author:      Vadim Zeitlin
 // Created:     2008-04-13
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        wx/persist.h
 // Purpose:     interface of wxPersistenceManager and related classes
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

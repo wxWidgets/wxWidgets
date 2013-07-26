@@ -2,7 +2,6 @@
 // Name:        snglinst.h
 // Purpose:     interface of wxSingleInstanceChecker
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Marcin Wojdyr
 // Created:     07.04.02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

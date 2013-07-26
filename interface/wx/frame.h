@@ -2,7 +2,6 @@
 // Name:        frame.h
 // Purpose:     interface of wxFrame
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

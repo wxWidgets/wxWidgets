@@ -3,7 +3,6 @@
 // Purpose:     implementation of wxEditableListBox XRC handler
 // Author:      Vadim Zeitlin
 // Created:     2009-06-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

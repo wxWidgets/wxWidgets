@@ -2,7 +2,6 @@
 // Name:        samples.h
 // Purpose:     Samples page of the Doxygen manual
 // Author:      wxWidgets team
-// RCS-ID:      $Id: utilities.h 52634 2008-03-20 13:45:17Z VS $
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

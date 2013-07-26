@@ -3,7 +3,6 @@
 // Purpose:     Test wxImage
 // Author:      Francesco Montorsi
 // Created:     2009-05-31
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Francesco Montorsi
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

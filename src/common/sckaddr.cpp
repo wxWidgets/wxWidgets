@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux
 // Created:     26/04/97
 // Modified by: Vadim Zeitlin to use wxSockAddressImpl on 2008-12-28
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence

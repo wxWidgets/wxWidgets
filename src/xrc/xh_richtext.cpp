@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxRichTextCtrl
 // Author:      Julian Smart
 // Created:     2006-11-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

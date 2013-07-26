@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin, Mattia Barbon
 // Modified:    Mike Wetherell
 // Created:     2004-05-16
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin, Mattia Barbon, 2005 M. Wetherell
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@
 // Name:        thread.h
 // Purpose:     interface of all thread-related wxWidgets classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

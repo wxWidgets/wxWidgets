@@ -3,7 +3,6 @@
 // Purpose:     XML resource handler for wxToggleButton
 // Author:      Julian Smart
 // Created:     2004-08-30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

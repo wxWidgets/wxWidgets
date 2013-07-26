@@ -3,7 +3,6 @@
 // Purpose:     implements dispatcher for epoll_wait() call
 // Author:      Lukasz Michalski
 // Created:     April 2007
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Lukasz Michalski
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

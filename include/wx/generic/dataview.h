@@ -3,7 +3,6 @@
 // Purpose:     wxDataViewCtrl generic implementation header
 // Author:      Robert Roebling
 // Modified By: Bo Yang
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

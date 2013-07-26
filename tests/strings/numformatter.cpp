@@ -3,7 +3,6 @@
 // Purpose:     wxNumberFormatter unit test
 // Author:      Vadim Zeitlin
 // Created:     2011-01-15
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

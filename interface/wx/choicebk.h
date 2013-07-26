@@ -2,7 +2,6 @@
 // Name:        choicebk.h
 // Purpose:     interface of wxChoicebook
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

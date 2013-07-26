@@ -5,7 +5,6 @@
 // Modified by: Robin Dunn (moved QT code from mediactrl.cpp)
 //
 // Created:     11/07/04
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,6 @@
 // Purpose:     Miscellaneous tests NOT requiring user input, just user checks
 // Author:      Francesco Montorsi (extracted from console sample)
 // Created:     2010-06-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 

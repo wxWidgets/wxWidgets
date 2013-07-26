@@ -4,7 +4,6 @@
 // Author:      Julian Smart, Guillermo Rodriguez, Vadim Zeitlin
 // Modified by: VZ: extracted all non-wxTimer stuff in stopwatch.cpp (20.06.03)
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 //              (c) 1999 Guillermo Rodriguez <guille@iies.es>
 // Licence:     wxWindows licence

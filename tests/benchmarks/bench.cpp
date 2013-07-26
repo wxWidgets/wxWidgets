@@ -3,7 +3,6 @@
 // Purpose:     Main file of the benchmarking suite
 // Author:      Vadim Zeitlin
 // Created:     2008-07-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

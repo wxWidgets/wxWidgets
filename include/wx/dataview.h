@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by: Bo Yang
 // Created:     08.01.06
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

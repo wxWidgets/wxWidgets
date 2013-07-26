@@ -3,7 +3,6 @@
 // Purpose:     declaration of wxCmdLineArgsArray helper class
 // Author:      Vadim Zeitlin
 // Created:     2007-11-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

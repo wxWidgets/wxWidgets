@@ -2,7 +2,6 @@
 // Name:        regconf.h
 // Purpose:     interface of wxRegConfig
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

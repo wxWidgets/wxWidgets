@@ -3,7 +3,6 @@
 // Purpose:     wxFileName unit test
 // Author:      Vadim Zeitlin
 // Created:     2004-07-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin
 ///////////////////////////////////////////////////////////////////////////////
 

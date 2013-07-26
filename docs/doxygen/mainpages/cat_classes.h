@@ -2,7 +2,6 @@
 // Name:        cat_classes.h
 // Purpose:     Classes-by-category page of the Doxygen manual
 // Author:      wxWidgets team
-// RCS-ID:      $Id: cat_classes.h 52468 2008-03-13 16:30:38Z FM $
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

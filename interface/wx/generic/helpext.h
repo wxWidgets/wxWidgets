@@ -2,7 +2,6 @@
 // Name:        helpext.h
 // Purpose:     interface of wxExtHelpController
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

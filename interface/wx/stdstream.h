@@ -3,7 +3,6 @@
 // Purpose:     interface of wxStdInputStream, wxStdInputStreamBuffer,
 //              wxStdOutputStream, wxStdOutputStreamBuffer
 // Author:      Jonathan Liu <net147@gmail.com>
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Jonathan Liu
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

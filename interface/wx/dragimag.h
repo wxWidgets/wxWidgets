@@ -2,7 +2,6 @@
 // Name:        dragimag.h
 // Purpose:     interface of wxDragImage
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

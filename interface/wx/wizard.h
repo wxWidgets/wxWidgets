@@ -2,7 +2,6 @@
 // Name:        wizard.h
 // Purpose:     interface of wxWizardPage, wxWizardEvent,
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

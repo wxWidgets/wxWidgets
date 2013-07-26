@@ -4,7 +4,6 @@
 # there is a change in the stable branch of wxWidgets which could lead to an
 # ABI breakage and thus result in a binary-incompatible change (see tech docs).
 #
-# $Id$
 
 
 expected_abi_file="expected_abi"

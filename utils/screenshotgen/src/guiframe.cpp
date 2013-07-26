@@ -2,7 +2,6 @@
 // Name:        guiframe.cpp
 // Purpose:     Implement the Application Frame
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

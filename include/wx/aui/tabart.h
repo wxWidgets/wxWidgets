@@ -4,7 +4,6 @@
 // Author:      Benjamin I. Williams
 // Modified by: Jens Lody (extracted from wx/aui/auibook.h)
 // Created:     2012-03-21
-// RCS-ID:      $Id$
 // Copyright:   (C) Copyright 2006, Kirix Corporation, All Rights Reserved.
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////

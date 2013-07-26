@@ -3,7 +3,6 @@
 // Purpose:     Implementation of wxWakeUpPipe class.
 // Author:      Vadim Zeitlin
 // Created:     2013-06-09 (extracted from src/unix/evtloopunix.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

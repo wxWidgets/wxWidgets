@@ -2,7 +2,6 @@
 // Name:        artprov.h
 // Purpose:     interface of wxArtProvider
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

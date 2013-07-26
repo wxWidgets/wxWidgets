@@ -2,7 +2,6 @@
 // Name:        stream.h
 // Purpose:     stream classes overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

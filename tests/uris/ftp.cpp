@@ -3,7 +3,6 @@
 // Purpose:     wxFTP unit test
 // Author:      Francesco Montorsi (extracted from console sample)
 // Created:     2010-05-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 

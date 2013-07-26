@@ -3,7 +3,6 @@
 // Purpose:     wxCommandLinkButton
 // Author:      Rickard Westerlund
 // Created:     2010-06-14
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

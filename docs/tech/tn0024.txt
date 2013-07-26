@@ -51,5 +51,4 @@ samples/xrc/rc/controls.xrc.
 === EOF ===
 
 Author:  VZ
-Version: $Id: tn0021.txt 47865 2007-08-03 20:00:32Z VZ $
 

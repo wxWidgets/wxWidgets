@@ -3,7 +3,6 @@
 // Purpose:     Declaration of wxRichToolTip class.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

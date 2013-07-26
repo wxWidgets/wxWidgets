@@ -3,7 +3,6 @@
 // Purpose:     wxGenericStaticBitmap header
 // Author:      Marcin Wojdyr, Stefan Csomor
 // Created:     2008-06-16
-// RCS-ID:      $Id$
 // Copyright:   wxWidgets developers
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

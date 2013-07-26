@@ -3,7 +3,6 @@
 // Purpose:     MSW wxPipeInputStream and wxPipeOutputStream declarations
 // Author:      Vadim Zeitlin
 // Created:     2013-06-08 (extracted from src/msw/utilsexc.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

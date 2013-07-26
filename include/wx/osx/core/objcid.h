@@ -3,7 +3,6 @@
 // Purpose:     Define wxObjCID working in both C++ and Objective-C.
 // Author:      Vadim Zeitlin
 // Created:     2012-05-20
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
 // Copyright:   (c) 2012 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

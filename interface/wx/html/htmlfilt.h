@@ -2,7 +2,6 @@
 // Name:        html/htmlfilt.h
 // Purpose:     interface of wxHtmlFilter
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

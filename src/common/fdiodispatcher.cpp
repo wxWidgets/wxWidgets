@@ -3,7 +3,6 @@
 // Purpose:     Implementation of common wxFDIODispatcher methods
 // Author:      Vadim Zeitlin
 // Created:     2007-05-13
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

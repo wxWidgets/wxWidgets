@@ -2,7 +2,6 @@
 // Name:        stackwalk.h
 // Purpose:     interface of wxStackWalker
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

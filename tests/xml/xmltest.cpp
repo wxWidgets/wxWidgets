@@ -3,7 +3,6 @@
 // Purpose:     XML classes unit test
 // Author:      Vaclav Slavik
 // Created:     2008-03-29
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
 

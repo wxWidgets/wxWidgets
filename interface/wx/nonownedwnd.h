@@ -3,7 +3,6 @@
 // Purpose:     wxNonOwnedWindow class documentation
 // Author:      Vadim Zeitlin
 // Created:     2011-10-09
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        bmpbuttn.h
 // Purpose:     interface of wxBitmapButton
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

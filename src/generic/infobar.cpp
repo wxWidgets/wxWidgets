@@ -3,7 +3,6 @@
 // Purpose:     generic wxInfoBar implementation
 // Author:      Vadim Zeitlin
 // Created:     2009-07-28
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

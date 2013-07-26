@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxFileCtrl
 // Author:      Diaa M. Sami
 // Created:     28 Jul 2007
-// Id:          $Id$
 // Copyright:   (c) 2007 Diaa M. Sami
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

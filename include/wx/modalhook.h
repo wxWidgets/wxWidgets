@@ -3,7 +3,6 @@
 // Purpose:     Allows to hook into showing modal dialogs.
 // Author:      Vadim Zeitlin
 // Created:     2013-05-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

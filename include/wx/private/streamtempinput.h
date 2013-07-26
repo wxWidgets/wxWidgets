@@ -6,7 +6,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Rob Bresalier
 // Created:     2013-05-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

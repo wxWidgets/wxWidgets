@@ -2,7 +2,6 @@
 // Name:        class_conv.h
 // Purpose:     Conversion classes group docs
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

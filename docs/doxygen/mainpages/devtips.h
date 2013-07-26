@@ -2,7 +2,6 @@
 // Name:        devtips.h
 // Purpose:     Cross-platform development page of the Doxygen manual
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

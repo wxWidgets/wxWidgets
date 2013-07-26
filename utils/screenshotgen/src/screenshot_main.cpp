@@ -2,7 +2,6 @@
 // Name:        screenshot_main.cpp
 // Purpose:     Implements the window containing all controls.
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

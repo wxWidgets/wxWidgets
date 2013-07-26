@@ -2,7 +2,6 @@
 // Name:        wx/msgout.h
 // Purpose:     interface of wxMessageOutput and derived classes
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

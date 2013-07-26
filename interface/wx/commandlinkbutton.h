@@ -2,7 +2,6 @@
 // Name:        wx/commandlinkbutton.h
 // Purpose:     interface of wxCommandLinkButton
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

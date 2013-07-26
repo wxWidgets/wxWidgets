@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing toggle control
 // Author:      Dimitri Schoolwerth, Vadim Zeitlin
 // Created:     27 Sep 2003
-// Id:          $Id$
 // Copyright:   (c) 2006 Wlodzmierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

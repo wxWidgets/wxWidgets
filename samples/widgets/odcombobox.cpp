@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxOwnerDrawnComboBox
 // Author:      Jaakko Salli (based on combobox page by Vadim Zeitlin)
 // Created:     Jul-28-2006
-// Id:          $Id$
 // Copyright:   (c) 2006 Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

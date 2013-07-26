@@ -2,7 +2,6 @@
 // Name:        image.h
 // Purpose:     interface of wxImageHandler and wxImage
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

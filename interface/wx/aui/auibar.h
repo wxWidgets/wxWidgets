@@ -2,7 +2,6 @@
 // Name:        wx/aui/toolbar.h
 // Purpose:     Documentation of wxAuiToolBar and related classes.
 // Created:     2011-01-17
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 wxWidgets development team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

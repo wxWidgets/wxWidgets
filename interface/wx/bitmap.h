@@ -2,7 +2,6 @@
 // Name:        bitmap.h
 // Purpose:     interface of wxBitmap* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     Helper for temporarily changing wxOpenModalDialogsCount global.
 // Author:      Vadim Zeitlin
 // Created:     2013-03-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

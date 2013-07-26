@@ -2,7 +2,6 @@
 // Name:        grid.h
 // Purpose:     interface of wxGrid and related classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

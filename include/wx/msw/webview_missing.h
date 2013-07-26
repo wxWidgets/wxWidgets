@@ -2,7 +2,6 @@
 // Name:        include/wx/msw/webview_missing.h
 // Purpose:     Defintions / classes commonly missing used by wxWebViewIE
 // Author:      Steven Lamerton
-// Id:          $Id$
 // Copyright:   (c) 2012 Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

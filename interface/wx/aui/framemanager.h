@@ -2,7 +2,6 @@
 // Name:        aui/aui.h
 // Purpose:     interface of wxAuiManager
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

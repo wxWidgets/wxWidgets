@@ -2,7 +2,6 @@
 // Name:        dirctrl.h
 // Purpose:     interface of wxGenericDirCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

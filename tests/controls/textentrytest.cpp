@@ -3,7 +3,6 @@
 // Purpose:     TestEntryTestCase implementation
 // Author:      Vadim Zeitlin
 // Created:     2008-09-19 (extracted from textctrltest.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007, 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

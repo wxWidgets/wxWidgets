@@ -3,7 +3,6 @@
 // Purpose:     Unit tests for wxBoxSizer
 // Author:      Vadim Zeitlin
 // Created:     2010-03-06
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

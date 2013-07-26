@@ -4,7 +4,6 @@
 // Author:      Marcin Malich
 // Modified by:
 // Created:     28.06.2008
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Marcin Malich <me@malcom.pl>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

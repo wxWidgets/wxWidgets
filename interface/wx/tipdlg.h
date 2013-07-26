@@ -2,7 +2,6 @@
 // Name:        tipdlg.h
 // Purpose:     interface of wxTipProvider
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

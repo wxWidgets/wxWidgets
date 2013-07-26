@@ -2,7 +2,6 @@
 // Name:        msgdlg.h
 // Purpose:     interface of wxMessageDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

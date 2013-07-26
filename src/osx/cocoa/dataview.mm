@@ -4,7 +4,6 @@
 // Author:
 // Modified by:
 // Created:     2009-01-31
-// RCS-ID:      $Id: dataview.mm$
 // Copyright:
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

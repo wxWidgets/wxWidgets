@@ -3,7 +3,6 @@
 // Purpose:     class allowing to show notification messages to the user
 // Author:      Vadim Zeitlin
 // Created:     2007-11-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

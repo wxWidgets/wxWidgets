@@ -2,7 +2,6 @@
 // Name:        testableframe.h
 // Purpose:     An improved wxFrame for unit-testing
 // Author:      Steven Lamerton
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

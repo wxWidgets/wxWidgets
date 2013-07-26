@@ -2,7 +2,6 @@
 // Name:        panel.h
 // Purpose:     interface of wxPanel
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

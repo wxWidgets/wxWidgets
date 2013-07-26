@@ -1,6 +1,5 @@
 #!/bin/bash
 #
-# $Id$
 #
 # This bash script regenerates the HTML doxygen version of the
 # wxWidgets manual and adjusts the doxygen log to make it more

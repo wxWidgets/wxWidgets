@@ -2,7 +2,6 @@
 // Name:        webviewarchivehandler.h
 // Purpose:     interface of wxWebViewArchiveHandler
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

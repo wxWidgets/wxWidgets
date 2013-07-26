@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence

@@ -2,7 +2,6 @@
 // Name:        src/gtk/dcclient.cpp
 // Purpose:     wxWindowDCImpl implementation
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Chris Breeze
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

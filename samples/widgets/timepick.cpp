@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing time picker
 // Author:      Vadim Zeitlin
 // Created:     2011-12-20
-// Id:          $Id$
 // Copyright:   (c) 2011 wxWindows team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

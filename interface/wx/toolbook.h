@@ -2,7 +2,6 @@
 // Name:        toolbook.h
 // Purpose:     interface of wxToolbook
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

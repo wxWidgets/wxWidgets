@@ -3,7 +3,6 @@
 // Purpose:     Helper class allowing to wake up the main thread.
 // Author:      Vadim Zeitlin
 // Created:     2013-06-09 (extracted from src/unix/evtloopunix.cpp)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

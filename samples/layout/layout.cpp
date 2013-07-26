@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Robin Dunn, Vadim Zeitlin
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //                  2005 Vadim Zeitlin
 // Licence:     wxWindows licence

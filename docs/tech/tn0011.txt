@@ -48,5 +48,4 @@
 
 === EOF ===
 
-Version: $Id$
 

@@ -2,7 +2,6 @@
 // Name:        sound.h
 // Purpose:     interface of wxSound
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

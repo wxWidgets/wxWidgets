@@ -4,7 +4,6 @@
 // Author:      Original from Wolfram Gloger/Guilhem Lavaux/Vadim Zeitlin
 // Modified by: Aj Lavin, Stefan Csomor
 // Created:     04/22/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998),
 //                  Vadim Zeitlin (1999), Stefan Csomor (2000)
 // Licence:     wxWindows licence

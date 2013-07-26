@@ -3,7 +3,6 @@
 // Purpose:     test miscellaneous stuff
 // Author:      Peter Most, Vadim Zeitlin
 // Created:     2008-07-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Peter Most
 //              (c) 2009 Vadim Zeitlin
 ///////////////////////////////////////////////////////////////////////////////

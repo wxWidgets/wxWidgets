@@ -2,7 +2,6 @@
 // Name:        wx/richmsgdlg.h
 // Purpose:     interface of wxRichMessageDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

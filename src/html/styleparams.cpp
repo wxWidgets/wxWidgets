@@ -2,7 +2,6 @@
 // Name:        src/html/styleparams.cpp
 // Purpose:     wxHtml helper code for extracting style parameters
 // Author:      Nigel Paton
-// RCS-ID:      $Id$
 // Copyright:   wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

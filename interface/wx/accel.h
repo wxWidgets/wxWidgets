@@ -2,7 +2,6 @@
 // Name:        accel.h
 // Purpose:     interface of wxAccelerator* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

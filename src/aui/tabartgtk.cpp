@@ -4,7 +4,6 @@
 // Author:      Jens Lody and Teodor Petrov
 // Modified by:
 // Created:     2012-03-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2012 Jens Lody <jens@codeblocks.org>
 //                  and Teodor Petrov
 // Licence:     wxWindows licence

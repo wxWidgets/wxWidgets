@@ -3,7 +3,6 @@
 // Purpose:     OwnerDrawnComboBox unit test
 // Author:      Jaakko Salli
 // Created:     2010-12-17
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Jaakko Salli
 ///////////////////////////////////////////////////////////////////////////////
 

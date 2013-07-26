@@ -3,7 +3,6 @@
 // Purpose:     Test the new event types and wxEvtHandler-methods
 // Author:      Peter Most
 // Created:     2009-01-24
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Peter Most
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     wxLocale unit test
 // Author:      Vaclav Slavik
 // Created:     2007-03-26
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
 

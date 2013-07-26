@@ -3,7 +3,6 @@
 // Purpose:     Compatibility code for older GTK+ versions
 // Author:      Vaclav Slavik
 // Created:     2011-03-25
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vaclav Slavik <vslavik@fastmail.fm>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

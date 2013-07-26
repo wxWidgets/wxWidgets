@@ -4,7 +4,6 @@
     Name:       include/xp_vc.xml
     Purpose:    Declarations for the xp_vc slave
     Author:     Michael Wetherell
-    RCS-ID:     $Id$
     Copyright:  (c) 2008 Michael Wetherell
     Licence:    wxWindows licence
 -->

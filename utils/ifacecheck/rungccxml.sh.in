@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# $Id$
 #
 # Runs gccxml on the wxWidgets include folder, in order to build the XML
 # file to fetch to ifacecheck to check the coherency of the wxWidgets

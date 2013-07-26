@@ -2,7 +2,6 @@
 // Name:        filedlg.h
 // Purpose:     interface of wxFileDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     wxDatePickerCtrl unit test
 // Author:      Vadim Zeitlin
 // Created:     2011-06-18
-// RCS-ID:      $Id$
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

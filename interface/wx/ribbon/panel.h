@@ -2,7 +2,6 @@
 // Name:        ribbon/panel.h
 // Purpose:     interface of wxRibbonPage
 // Author:      Peter Cawley
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

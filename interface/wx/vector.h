@@ -2,7 +2,6 @@
 // Name:        vector.h
 // Purpose:     interface of wxVector<T>
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

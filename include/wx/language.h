@@ -3,7 +3,6 @@
 // Purpose:     wxLanguage enum
 // Author:      Vadim Zeitlin
 // Created:     2010-04-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

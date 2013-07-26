@@ -5,7 +5,6 @@
 //              Vadim Zeitlin (base MDI classes refactoring)
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

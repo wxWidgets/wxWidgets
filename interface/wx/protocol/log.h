@@ -3,7 +3,6 @@
 // Purpose:     interface of wxProtocolLog
 // Author:      Vadim Zeitlin
 // Created:     2009-03-06
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

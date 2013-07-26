@@ -2,7 +2,6 @@
 // Name:        colourdata.h
 // Purpose:     interface of wxColourData
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

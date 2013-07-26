@@ -3,7 +3,6 @@
 // Purpose:     wxLog unit test
 // Author:      Vadim Zeitlin
 // Created:     2009-07-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

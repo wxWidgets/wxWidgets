@@ -3,7 +3,6 @@
 // Purpose:     GTK+ bits for wxFileHistory class
 // Author:      Vaclav Slavik
 // Created:     2010-05-06
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

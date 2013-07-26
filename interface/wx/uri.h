@@ -2,7 +2,6 @@
 // Name:        uri.h
 // Purpose:     interface of wxURI
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

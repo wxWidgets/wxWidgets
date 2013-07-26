@@ -2,7 +2,6 @@
 // Name:        brush.h
 // Purpose:     interface of wxBrush
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

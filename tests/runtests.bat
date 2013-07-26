@@ -11,7 +11,6 @@ REM    http://www.infionline.net/~wtnewton/batch/batguide.html
 REM for general info about DOS batch files.
 
 REM Author: Francesco Montorsi
-REM $Id$
 
 rem set the path for running the tests if they use DLL build of wx
 for /d %%x in ("..\lib\*_dll") do @set PATH=%%x;%PATH%

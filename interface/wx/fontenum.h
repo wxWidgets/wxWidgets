@@ -2,7 +2,6 @@
 // Name:        fontenum.h
 // Purpose:     interface of wxFontEnumerator
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

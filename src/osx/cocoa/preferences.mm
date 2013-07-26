@@ -3,7 +3,6 @@
 // Purpose:     Native OS X implementation of wxPreferencesEditor.
 // Author:      Vaclav Slavik
 // Created:     2013-02-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2013 Vaclav Slavik <vslavik@fastmail.fm>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

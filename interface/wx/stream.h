@@ -2,7 +2,6 @@
 // Name:        stream.h
 // Purpose:     interface of wxStreamBase and its derived classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

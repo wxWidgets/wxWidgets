@@ -2,7 +2,6 @@
 // Name:        geometry.h
 // Purpose:     interface of geometry classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

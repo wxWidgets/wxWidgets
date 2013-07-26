@@ -2,7 +2,6 @@
 // Name:        treebook.h
 // Purpose:     interface of wxTreebook
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

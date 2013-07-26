@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
  * Copyright (c) 2010, Andrey Kiselev <dron@ak4719.spb.edu>

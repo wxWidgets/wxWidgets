@@ -3,7 +3,6 @@
 // Purpose:     Class adding support for custom window backgrounds.
 // Author:      Vadim Zeitlin
 // Created:     2011-10-10
-// RCS-ID:      $Id: wxhead.h,v 1.12 2010-04-22 12:44:51 zeitlin Exp $
 // Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

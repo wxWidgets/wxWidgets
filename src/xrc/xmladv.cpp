@@ -5,7 +5,6 @@
 //              linking wxAdv even if the latter is not used at all.
 // Author:      Vadim Zeitlin (extracted from src/xrc/xmlres.cpp)
 // Created:     2008-08-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

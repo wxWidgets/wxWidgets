@@ -2,7 +2,6 @@
 // Name:        fontutil.h
 // Purpose:     interface of wxNativeFontInfo
 // Author:      wxWidgets team
-// RCS-ID:      $Id: $
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

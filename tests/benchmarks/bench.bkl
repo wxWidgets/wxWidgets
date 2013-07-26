@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- $Id: test.bkl 54614 2008-07-14 02:19:34Z VZ $ -->
 
 <makefile>
     <include file="../../build/bakefiles/common_samples.bkl"/>

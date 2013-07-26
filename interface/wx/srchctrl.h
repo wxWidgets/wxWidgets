@@ -2,7 +2,6 @@
 // Name:        srchctrl.h
 // Purpose:     interface of wxSearchCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

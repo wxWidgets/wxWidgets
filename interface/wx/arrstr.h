@@ -2,7 +2,6 @@
 // Name:        arrstr.h
 // Purpose:     interface of wxArrayString
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

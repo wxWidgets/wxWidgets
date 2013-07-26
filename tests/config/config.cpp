@@ -3,7 +3,6 @@
 // Purpose:     wxConfig unit test
 // Author:      Marcin Wojdyr
 // Created:     2007-07-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Marcin Wojdyr
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     Tests for wxGraphicsRenderer::CreateMeasuringContext
 // Author:      Kevin Ollivier, Vadim Zeitlin (non wxGC parts)
 // Created:     2008-02-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Kevin Ollivier <kevino@theolliviers.com>
 //              (c) 2012 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////

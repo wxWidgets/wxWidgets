@@ -2,7 +2,6 @@
 // Name:        wx/infobar.h
 // Purpose:     interface of wxInfoBar
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        unichar.h
 // Purpose:     interface of wxUniChar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

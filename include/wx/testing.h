@@ -3,7 +3,6 @@
 // Purpose:     helpers for GUI testing
 // Author:      Vaclav Slavik
 // Created:     2012-08-28
-// RCS-ID:      $Id$
 // Copyright:   (c) 2012 Vaclav Slavik
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////

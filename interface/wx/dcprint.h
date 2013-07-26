@@ -2,7 +2,6 @@
 // Name:        dcprint.h
 // Purpose:     interface of wxPrinterDC
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@
 // Name:        dde.h
 // Purpose:     interface of wxDDEConnection
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     classes allowing to wrap a native window handle
 // Author:      Vadim Zeitlin
 // Created:     2008-03-05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

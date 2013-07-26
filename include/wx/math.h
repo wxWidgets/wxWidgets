@@ -4,7 +4,6 @@
 * Author:      John Labenski and others
 * Modified by:
 * Created:     02/02/03
-* RCS-ID:      $Id$
 * Copyright:   (c) John Labenski
 * Licence:     wxWindows licence
 */

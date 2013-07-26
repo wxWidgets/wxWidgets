@@ -2,7 +2,6 @@
 // Name:        wx/listctrl.h
 // Purpose:     interface of wxListCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

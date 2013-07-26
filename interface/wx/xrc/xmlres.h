@@ -2,7 +2,6 @@
 // Name:        xrc/xmlres.h
 // Purpose:     interface of wxXmlResource
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

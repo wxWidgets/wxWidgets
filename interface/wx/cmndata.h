@@ -2,7 +2,6 @@
 // Name:        cmndata.h
 // Purpose:     interface of print wx*Data classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

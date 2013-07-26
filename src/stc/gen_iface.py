@@ -6,7 +6,6 @@
 # Author:       Robin Dunn
 #
 # Created:      5-Sept-2000
-# RCS-ID:       $Id$
 # Copyright:    (c) 2000 by Total Control Software
 # Licence:      wxWindows licence
 #----------------------------------------------------------------------------

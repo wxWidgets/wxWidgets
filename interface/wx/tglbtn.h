@@ -2,7 +2,6 @@
 // Name:        tglbtn.h
 // Purpose:     interface of wxBitmapToggleButton, wxToggleButton
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
  * Purpose:     Pragmas for linking libs conditionally
  * Author:      Michael Wetherell
  * Modified by:
- * RCS-ID:      $Id$
  * Copyright:   (c) 2005 Michael Wetherell
  * Licence:     wxWindows licence
  */

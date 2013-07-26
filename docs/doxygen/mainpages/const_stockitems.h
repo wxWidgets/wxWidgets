@@ -2,7 +2,6 @@
 // Name:        const_stockitems.h
 // Purpose:     stock item values enumerated
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

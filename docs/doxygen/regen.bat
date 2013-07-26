@@ -1,5 +1,4 @@
 @echo off
-REM $Id$
 
 REM This bash script regenerates the HTML doxygen version of the
 REM wxWidgets manual and adjusts the doxygen log to make it more

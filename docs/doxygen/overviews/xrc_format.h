@@ -2,7 +2,6 @@
 // Name:        xrc_format.h
 // Purpose:     XRC format specification
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

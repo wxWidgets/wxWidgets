@@ -3,7 +3,6 @@
 // Purpose:     implements dispatcher for select() call
 // Author:      Lukasz Michalski and Vadim Zeitlin
 // Created:     December 2006
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Lukasz Michalski
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

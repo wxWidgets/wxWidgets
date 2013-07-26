@@ -2,7 +2,6 @@
 // Name:        regex.h
 // Purpose:     interface of wxRegEx
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@
 // Name:        menuitem.h
 // Purpose:     interface of wxMenu, wxMenuItem
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

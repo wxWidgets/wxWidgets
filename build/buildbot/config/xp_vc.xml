@@ -3,7 +3,6 @@
     Name:       xp_vc.xml
     Purpose:    Buildbot xp_vc configuration.
     Author:     Laurent Humbertclaude
-    RCS-ID:     $Id$
     Copyright:  (c) 2008 Laurent Humbertclaude
     Licence:    wxWindows licence
 -->

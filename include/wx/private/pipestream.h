@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Rob Bresalier
 // Created:     2013-04-27
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 //              (c) 2013 Rob Bresalier
 // Licence:     wxWindows licence

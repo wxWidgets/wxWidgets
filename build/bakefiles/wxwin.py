@@ -1,7 +1,6 @@
 #
 # Helper functions for wxWidgets bakefiles
 #
-# $Id$
 #
 
 

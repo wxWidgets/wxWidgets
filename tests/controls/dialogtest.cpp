@@ -3,7 +3,6 @@
 // Purpose:     wxWindow unit test
 // Author:      Vaclav Slavik
 // Created:     2012-08-30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2012 Vaclav Slavik
 ///////////////////////////////////////////////////////////////////////////////
 

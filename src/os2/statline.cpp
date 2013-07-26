@@ -3,7 +3,6 @@
 // Purpose:     OS2 version of wxStaticLine class
 // Author:      David Webster
 // Created:     10/23/99
-// Version:     $Id$
 // Copyright:   (c) 1999 David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

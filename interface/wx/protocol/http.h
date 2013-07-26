@@ -2,7 +2,6 @@
 // Name:        protocol/http.h
 // Purpose:     interface of wxHTTP
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

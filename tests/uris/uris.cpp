@@ -3,7 +3,6 @@
 // Purpose:     wxURI unit test
 // Author:      Ryan Norton
 // Created:     2004-08-14
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Ryan Norton
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,6 @@
 // Name:        src/gtk/font.cpp
 // Purpose:     wxFont for wxGTK
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

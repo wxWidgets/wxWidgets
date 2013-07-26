@@ -2,7 +2,6 @@
 // Name:        dcscreen.h
 // Purpose:     interface of wxScreenDC
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

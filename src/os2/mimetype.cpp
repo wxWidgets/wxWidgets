@@ -4,7 +4,6 @@
 // Author:      David Webster
 // Modified by:
 // Created:     01.21.00
-// RCS-ID:      $Id$
 // Copyright:   Adopted from msw port --(c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,6 @@
 // Purpose:     declaration of wxGUIEventLoop for wxOSX/Cocoa
 // Author:      Vadim Zeitlin
 // Created:     2008-12-28
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

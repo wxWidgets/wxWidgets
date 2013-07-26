@@ -3,7 +3,6 @@
  * Purpose:     wxWINE module mapping main() to WinMain()
  * Author:      Robert Roebling
  * Created:     04/01/98
- * RCS-ID:      $Id$
  * Copyright:   (c) Robert Roebling
  * Licence:     wxWindows licence
  *****************************************************************************/

@@ -3,7 +3,6 @@
 // Purpose:     Implementation of wxDateTimePickerCtrl for MSW.
 // Author:      Vadim Zeitlin
 // Created:     2011-09-22 (extracted from src/msw/datectrl.cpp)
-// RCS-ID:      $Id: wxhead.cpp,v 1.11 2010-04-22 12:44:51 zeitlin Exp $
 // Copyright:   (c) 2005-2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
