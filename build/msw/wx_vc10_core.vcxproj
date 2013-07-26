@@ -13,24 +13,8 @@
       <Configuration>DLL Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="DLL Universal Debug|Win32">
-      <Configuration>DLL Universal Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="DLL Universal Release|Win32">
-      <Configuration>DLL Universal Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Universal Debug|Win32">
-      <Configuration>Universal Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Universal Release|Win32">
-      <Configuration>Universal Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -39,16 +23,6 @@
     <ProjectGuid>{6744DAD8-9C70-574A-BFF2-9F8DDDB24A75}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
@@ -56,16 +30,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -82,22 +46,10 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
@@ -113,10 +65,6 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\vc_lib\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">..\..\lib\vc_lib\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">..\..\lib\vc_lib\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">..\..\lib\vc_dll\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</LinkIncremental>
@@ -125,18 +73,8 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">..\..\lib\vc_dll\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">..\..\lib\vc_dll\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">false</LinkIncremental>
-    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</GenerateManifest>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">wxmsw29ud_core</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">$(ProjectName)d</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">$(ProjectName)d</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">$(ProjectName)d</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">wxmsw29u_core</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -206,80 +144,6 @@
     </ResourceCompile>
     <Lib>
       <OutputFile>..\..\lib\vc_lib\wxmsw29u_core.lib</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Lib>
-    <Bscmake>
-      <OutputFile>..\..\lib\vc_lib\wx_vc9_core.bsc</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Bscmake>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">
-    <Midl>
-      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\lib\vc_lib\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </Midl>
-    <ClCompile>
-      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
-      <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\lib\vc_lib\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>vc_mswunivud\wxprec_corelib.pch</PrecompiledHeaderOutputFile>
-      <ObjectFileName>vc_mswunivud\core\</ObjectFileName>
-      <ProgramDataBaseFileName>..\..\lib\vc_lib\wxmswuniv29ud_core.pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level4</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0409</Culture>
-      <AdditionalIncludeDirectories>..\..\lib\vc_lib\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Lib>
-      <OutputFile>..\..\lib\vc_lib\wxmswuniv29ud_core.lib</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Lib>
-    <Bscmake>
-      <OutputFile>..\..\lib\vc_lib\wx_vc9_core.bsc</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Bscmake>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">
-    <Midl>
-      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\lib\vc_lib\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </Midl>
-    <ClCompile>
-      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
-      <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\..\lib\vc_lib\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>vc_mswunivu\wxprec_corelib.pch</PrecompiledHeaderOutputFile>
-      <ObjectFileName>vc_mswunivu\core\</ObjectFileName>
-      <ProgramDataBaseFileName>..\..\lib\vc_lib\wxmswuniv29u_core.pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level4</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0409</Culture>
-      <AdditionalIncludeDirectories>..\..\lib\vc_lib\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Lib>
-      <OutputFile>..\..\lib\vc_lib\wxmswuniv29u_core.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
@@ -377,96 +241,6 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Bscmake>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">
-    <Midl>
-      <PreprocessorDefinitions>WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </Midl>
-    <ClCompile>
-      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
-      <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_USRDLL;DLL_EXPORTS;_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>vc_mswunivuddll\wxprec_coredll.pch</PrecompiledHeaderOutputFile>
-      <ObjectFileName>vc_mswunivuddll\core\</ObjectFileName>
-      <ProgramDataBaseFileName>..\..\lib\vc_dll\wxmswuniv295ud_core_vc_custom.pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level4</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv295ud_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0409</Culture>
-      <AdditionalIncludeDirectories>..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Link>
-      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;..\..\lib\vc_dll\wxbase29ud.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\lib\vc_dll\wxmswuniv295ud_core_vc_custom.dll</OutputFile>
-      <ImportLibrary>..\..\lib\vc_dll\wxmswuniv29ud_core.lib</ImportLibrary>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>..\..\lib\vc_dll\wxmswuniv295ud_core_vc_custom.pdb</ProgramDatabaseFile>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-    <Bscmake>
-      <OutputFile>..\..\lib\vc_dll\wx_vc9_core.bsc</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Bscmake>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">
-    <Midl>
-      <PreprocessorDefinitions>WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </Midl>
-    <ClCompile>
-      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
-      <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_USRDLL;DLL_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>vc_mswunivudll\wxprec_coredll.pch</PrecompiledHeaderOutputFile>
-      <ObjectFileName>vc_mswunivudll\core\</ObjectFileName>
-      <ProgramDataBaseFileName>..\..\lib\vc_dll\wxmswuniv295u_core_vc_custom.pdb</ProgramDataBaseFileName>
-      <WarningLevel>Level4</WarningLevel>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv295u_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <Culture>0x0409</Culture>
-      <AdditionalIncludeDirectories>..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Link>
-      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;..\..\lib\vc_dll\wxbase29u.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\..\lib\vc_dll\wxmswuniv295u_core_vc_custom.dll</OutputFile>
-      <ImportLibrary>..\..\lib\vc_dll\wxmswuniv29u_core.lib</ImportLibrary>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>..\..\lib\vc_dll\wxmswuniv295u_core_vc_custom.pdb</ProgramDatabaseFile>
-      <TargetMachine>MachineX86</TargetMachine>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-    </Link>
-    <Bscmake>
-      <OutputFile>..\..\lib\vc_dll\wx_vc9_core.bsc</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Bscmake>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\common\accelcmn.cpp" />
     <ClCompile Include="..\..\src\common\accesscmn.cpp" />
@@ -510,12 +284,8 @@
     <ClCompile Include="..\..\src\common\dummy.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\common\effects.cpp" />
     <ClCompile Include="..\..\src\common\event.cpp" />
@@ -613,120 +383,63 @@
     <ClCompile Include="..\..\src\msw\accel.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_accel.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_accel.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_accel.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_accel.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\ole\access.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\ole\access.cpp" />
     <ClCompile Include="..\..\src\msw\ole\activex.cpp" />
-    <ClCompile Include="..\..\src\msw\anybutton.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\anybutton.cpp" />
     <ClCompile Include="..\..\src\msw\app.cpp" />
-    <ClCompile Include="..\..\src\msw\artmsw.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\artmsw.cpp" />
     <ClCompile Include="..\..\src\msw\ole\automtn.cpp" />
     <ClCompile Include="..\..\src\msw\bitmap.cpp" />
     <ClCompile Include="..\..\src\msw\bmpbuttn.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_bmpbuttn.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_bmpbuttn.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_bmpbuttn.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_bmpbuttn.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\brush.cpp" />
     <ClCompile Include="..\..\src\msw\button.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_button.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_button.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_button.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_button.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\caret.cpp" />
     <ClCompile Include="..\..\src\msw\checkbox.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_checkbox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_checkbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_checkbox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_checkbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\checklst.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_checklst.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_checklst.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_checklst.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_checklst.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\choice.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_choice.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_choice.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_choice.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_choice.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\clipbrd.cpp" />
-    <ClCompile Include="..\..\src\msw\colordlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\colordlg.cpp" />
     <ClCompile Include="..\..\src\msw\colour.cpp" />
-    <ClCompile Include="..\..\src\msw\combo.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\combo.cpp" />
     <ClCompile Include="..\..\src\msw\combobox.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_combobox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_combobox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_combobox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_combobox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\control.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_control.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_control.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_control.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_control.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\cursor.cpp" />
     <ClCompile Include="..\..\src\msw\data.cpp" />
@@ -739,28 +452,14 @@
     <ClCompile Include="..\..\src\msw\dialog.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_dialog.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_dialog.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_dialog.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_dialog.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\dialup.cpp" />
     <ClCompile Include="..\..\src\msw\dib.cpp" />
-    <ClCompile Include="..\..\src\msw\dirdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\dirdlg.cpp" />
     <ClCompile Include="..\..\src\msw\display.cpp" />
-    <ClCompile Include="..\..\src\msw\dragimag.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\dragimag.cpp" />
     <ClCompile Include="..\..\src\msw\ole\dropsrc.cpp" />
     <ClCompile Include="..\..\src\msw\ole\droptgt.cpp" />
     <ClCompile Include="..\..\src\msw\enhmeta.cpp" />
@@ -768,334 +467,163 @@
     <ClCompile Include="..\..\src\msw\fdrepdlg.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_fdrepdlg.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_fdrepdlg.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_fdrepdlg.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_fdrepdlg.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\filedlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\filedlg.cpp" />
     <ClCompile Include="..\..\src\msw\font.cpp" />
-    <ClCompile Include="..\..\src\msw\fontdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\fontdlg.cpp" />
     <ClCompile Include="..\..\src\msw\fontenum.cpp" />
     <ClCompile Include="..\..\src\msw\fontutil.cpp" />
-    <ClCompile Include="..\..\src\msw\frame.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\frame.cpp" />
     <ClCompile Include="..\..\src\msw\gauge.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_gauge.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_gauge.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_gauge.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_gauge.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\gdiimage.cpp" />
     <ClCompile Include="..\..\src\msw\gdiobj.cpp" />
     <ClCompile Include="..\..\src\msw\gdiplus.cpp" />
     <ClCompile Include="..\..\src\msw\graphics.cpp" />
-    <ClCompile Include="..\..\src\msw\headerctrl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\headerctrl.cpp" />
     <ClCompile Include="..\..\src\msw\helpchm.cpp" />
     <ClCompile Include="..\..\src\msw\helpwin.cpp" />
     <ClCompile Include="..\..\src\msw\icon.cpp" />
     <ClCompile Include="..\..\src\msw\imaglist.cpp" />
-    <ClCompile Include="..\..\src\msw\iniconf.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\iniconf.cpp" />
     <ClCompile Include="..\..\src\msw\listbox.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_listbox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_listbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_listbox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_listbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\listctrl.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_listctrl.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_listctrl.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_listctrl.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_listctrl.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\main.cpp" />
-    <ClCompile Include="..\..\src\msw\mdi.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\mdi.cpp" />
     <ClCompile Include="..\..\src\msw\menu.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_menu.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_menu.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_menu.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_menu.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\menuitem.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\metafile.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\menuitem.cpp" />
+    <ClCompile Include="..\..\src\msw\metafile.cpp" />
     <ClCompile Include="..\..\src\msw\minifram.cpp" />
-    <ClCompile Include="..\..\src\msw\msgdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\msgdlg.cpp" />
     <ClCompile Include="..\..\src\msw\mslu.cpp" />
-    <ClCompile Include="..\..\src\msw\nativdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\msw\nativewin.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\nativdlg.cpp" />
+    <ClCompile Include="..\..\src\msw\nativewin.cpp" />
     <ClCompile Include="..\..\src\msw\nonownedwnd.cpp" />
     <ClCompile Include="..\..\src\msw\notebook.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_notebook.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_notebook.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_notebook.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_notebook.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\ole\oleutils.cpp" />
     <ClCompile Include="..\..\src\msw\ole\safearray.cpp" />
-    <ClCompile Include="..\..\src\msw\ownerdrw.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\ownerdrw.cpp" />
     <ClCompile Include="..\..\src\msw\palette.cpp" />
-    <ClCompile Include="..\..\src\msw\panel.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\panel.cpp" />
     <ClCompile Include="..\..\src\msw\pen.cpp" />
     <ClCompile Include="..\..\src\msw\popupwin.cpp" />
     <ClCompile Include="..\..\src\msw\printdlg.cpp" />
     <ClCompile Include="..\..\src\msw\printwin.cpp" />
-    <ClCompile Include="..\..\src\msw\progdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\progdlg.cpp" />
     <ClCompile Include="..\..\src\msw\radiobox.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_radiobox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_radiobox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_radiobox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_radiobox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\radiobut.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_radiobut.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_radiobut.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_radiobut.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_radiobut.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\region.cpp" />
     <ClCompile Include="..\..\src\msw\renderer.cpp" />
-    <ClCompile Include="..\..\src\msw\richmsgdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\richmsgdlg.cpp" />
     <ClCompile Include="..\..\src\msw\scrolbar.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_scrolbar.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_scrolbar.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_scrolbar.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_scrolbar.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\settings.cpp" />
     <ClCompile Include="..\..\src\msw\slider.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_slider.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_slider.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_slider.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_slider.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\spinbutt.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_spinbutt.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_spinbutt.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_spinbutt.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_spinbutt.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\spinctrl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\spinctrl.cpp" />
     <ClCompile Include="..\..\src\msw\statbmp.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_statbmp.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_statbmp.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_statbmp.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_statbmp.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\statbox.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_statbox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_statbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_statbox.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_statbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\statline.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_statline.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_statline.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_statline.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_statline.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\stattext.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_stattext.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_stattext.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_stattext.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_stattext.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\statusbar.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\statusbar.cpp" />
     <ClCompile Include="..\..\src\msw\textctrl.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_textctrl.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_textctrl.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_textctrl.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_textctrl.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\textentry.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\textentry.cpp" />
     <ClCompile Include="..\..\src\msw\textmeasure.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_textmeasure.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_textmeasure.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_textmeasure.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_textmeasure.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\tglbtn.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_tglbtn.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_tglbtn.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_tglbtn.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_tglbtn.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\toolbar.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\msw_toolbar.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\msw_toolbar.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\msw_toolbar.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\msw_toolbar.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\tooltip.cpp" />
     <ClCompile Include="..\..\src\msw\toplevel.cpp" />
-    <ClCompile Include="..\..\src\msw\treectrl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\src\msw\treectrl.cpp" />
     <ClCompile Include="..\..\src\msw\uiaction.cpp" />
     <ClCompile Include="..\..\src\msw\utilsgui.cpp" />
     <ClCompile Include="..\..\src\msw\utilswin.cpp" />
@@ -1106,12 +634,8 @@
     <ClCompile Include="..\..\src\generic\accel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\generic_accel.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\generic_accel.obj</ObjectFileName>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\generic_accel.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\generic_accel.obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\busyinfo.cpp" />
     <ClCompile Include="..\..\src\generic\buttonbar.cpp" />
@@ -1138,12 +662,8 @@
     <ClCompile Include="..\..\src\generic\fdrepdlg.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\generic_fdrepdlg.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\generic_fdrepdlg.obj</ObjectFileName>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\generic_fdrepdlg.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\generic_fdrepdlg.obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\filectrlg.cpp" />
     <ClCompile Include="..\..\src\generic\filedlgg.cpp">
@@ -1167,12 +687,8 @@
     <ClCompile Include="..\..\src\generic\listctrl.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\generic_listctrl.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\generic_listctrl.obj</ObjectFileName>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\generic_listctrl.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\generic_listctrl.obj</ObjectFileName>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\logg.cpp" />
     <ClCompile Include="..\..\src\generic\markuptext.cpp" />
@@ -1199,12 +715,8 @@
     <ClCompile Include="..\..\src\generic\statusbr.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">vc_mswuddll\core\generic_statusbr.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">vc_mswudll\core\generic_statusbr.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">true</ExcludedFromBuild>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vc_mswud\core\generic_statusbr.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vc_mswu\core\generic_statusbr.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\textdlgg.cpp" />
     <ClCompile Include="..\..\src\generic\tipwin.cpp" />
@@ -1213,354 +725,12 @@
     <ClCompile Include="..\..\src\generic\treectlg.cpp" />
     <ClCompile Include="..\..\src\generic\vlbox.cpp" />
     <ClCompile Include="..\..\src\generic\vscroll.cpp" />
-    <ClCompile Include="..\..\src\univ\bmpbuttn.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_bmpbuttn.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_bmpbuttn.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_bmpbuttn.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_bmpbuttn.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\button.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_button.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_button.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_button.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_button.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\checkbox.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_checkbox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_checkbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_checkbox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_checkbox.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\checklst.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_checklst.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_checklst.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_checklst.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_checklst.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\choice.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_choice.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_choice.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_choice.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_choice.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\combobox.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_combobox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_combobox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_combobox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_combobox.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\control.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_control.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_control.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_control.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_control.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\ctrlrend.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\dialog.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_dialog.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_dialog.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_dialog.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_dialog.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\framuniv.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\gauge.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_gauge.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_gauge.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_gauge.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_gauge.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\themes\gtk.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\inpcons.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\inphand.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\listbox.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_listbox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_listbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_listbox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_listbox.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\menu.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_menu.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_menu.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_menu.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_menu.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\themes\metal.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\themes\mono.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\notebook.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_notebook.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_notebook.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_notebook.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_notebook.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\radiobox.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_radiobox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_radiobox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_radiobox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_radiobox.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\radiobut.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_radiobut.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_radiobut.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_radiobut.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_radiobut.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\scrarrow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\scrolbar.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_scrolbar.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_scrolbar.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_scrolbar.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_scrolbar.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\scrthumb.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\settingsuniv.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\slider.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_slider.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_slider.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_slider.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_slider.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\spinbutt.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_spinbutt.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_spinbutt.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_spinbutt.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_spinbutt.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\statbmp.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_statbmp.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_statbmp.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_statbmp.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_statbmp.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\statbox.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_statbox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_statbox.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_statbox.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_statbox.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\statline.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_statline.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_statline.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_statline.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_statline.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\stattext.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_stattext.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_stattext.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_stattext.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_stattext.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\statusbr.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_statusbr.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_statusbr.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_statusbr.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_statusbr.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\stdrend.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\textctrl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_textctrl.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_textctrl.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_textctrl.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_textctrl.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\tglbtn.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_tglbtn.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_tglbtn.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_tglbtn.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_tglbtn.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\theme.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\toolbar.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">vc_mswunivuddll\core\univ_toolbar.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">vc_mswunivudll\core\univ_toolbar.obj</ObjectFileName>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">vc_mswunivud\core\univ_toolbar.obj</ObjectFileName>
-      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">vc_mswunivu\core\univ_toolbar.obj</ObjectFileName>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\topluniv.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\themes\win32.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\univ\winuniv.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">true</ExcludedFromBuild>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1577,20 +747,6 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Creating ..\..\lib\vc_lib\mswu\wx\setup.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\lib\vc_lib\mswu\wx\setup.h</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\vc_lib\mswu\wx\setup.h;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\include\wx\univ\setup.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">copy "%(FullPath)" ..\..\lib\vc_dll\mswunivud\wx\setup.h</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">..\..\lib\vc_dll\mswunivud\wx\setup.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">copy "%(FullPath)" ..\..\lib\vc_dll\mswunivu\wx\setup.h</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">..\..\lib\vc_dll\mswunivu\wx\setup.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">copy "%(FullPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">..\..\lib\vc_lib\mswunivud\wx\setup.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">copy "%(FullPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">..\..\lib\vc_lib\mswunivu\wx\setup.h;%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\msw\accel.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\access.h" />
@@ -1652,14 +808,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">cl /EP /nologo "%(FullPath)" &gt; "..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">..\..\lib\vc_dll\mswu\wx\msw;%(AdditionalInputs)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">Creating ..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">cl /EP /nologo "%(FullPath)" &gt; "..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h"</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DLL Universal Debug|Win32'">..\..\lib\vc_dll\mswunivud\wx\msw;%(AdditionalInputs)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">Creating ..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">cl /EP /nologo "%(FullPath)" &gt; "..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DLL Universal Release|Win32'">..\..\lib\vc_dll\mswunivu\wx\msw;%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Creating ..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cl /EP /nologo "%(FullPath)" &gt; "..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h;%(Outputs)</Outputs>
@@ -1668,14 +816,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cl /EP /nologo "%(FullPath)" &gt; "..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\lib\vc_lib\mswu\wx\msw;%(AdditionalInputs)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">Creating ..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">cl /EP /nologo "%(FullPath)" &gt; "..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h"</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Universal Debug|Win32'">..\..\lib\vc_lib\mswunivud\wx\msw;%(AdditionalInputs)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">Creating ..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">cl /EP /nologo "%(FullPath)" &gt; "..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h"</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Universal Release|Win32'">..\..\lib\vc_lib\mswunivu\wx\msw;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\msw\glcanvas.h" />
     <ClInclude Include="..\..\include\wx\msw\headerctrl.h" />
@@ -1804,49 +944,6 @@
     <ClInclude Include="..\..\include\wx\generic\timectrl.h" />
     <ClInclude Include="..\..\include\wx\generic\treectlg.h" />
     <ClInclude Include="..\..\include\wx\generic\wizard.h" />
-    <ClInclude Include="..\..\include\wx\univ\anybutton.h" />
-    <ClInclude Include="..\..\include\wx\univ\app.h" />
-    <ClInclude Include="..\..\include\wx\univ\bmpbuttn.h" />
-    <ClInclude Include="..\..\include\wx\univ\button.h" />
-    <ClInclude Include="..\..\include\wx\univ\checkbox.h" />
-    <ClInclude Include="..\..\include\wx\univ\checklst.h" />
-    <ClInclude Include="..\..\include\wx\univ\chkconf.h" />
-    <ClInclude Include="..\..\include\wx\univ\choice.h" />
-    <ClInclude Include="..\..\include\wx\univ\colschem.h" />
-    <ClInclude Include="..\..\include\wx\univ\combobox.h" />
-    <ClInclude Include="..\..\include\wx\univ\control.h" />
-    <ClInclude Include="..\..\include\wx\univ\custombgwin.h" />
-    <ClInclude Include="..\..\include\wx\univ\dialog.h" />
-    <ClInclude Include="..\..\include\wx\univ\frame.h" />
-    <ClInclude Include="..\..\include\wx\univ\gauge.h" />
-    <ClInclude Include="..\..\include\wx\univ\inpcons.h" />
-    <ClInclude Include="..\..\include\wx\univ\inphand.h" />
-    <ClInclude Include="..\..\include\wx\univ\listbox.h" />
-    <ClInclude Include="..\..\include\wx\univ\menu.h" />
-    <ClInclude Include="..\..\include\wx\univ\menuitem.h" />
-    <ClInclude Include="..\..\include\wx\univ\notebook.h" />
-    <ClInclude Include="..\..\include\wx\univ\panel.h" />
-    <ClInclude Include="..\..\include\wx\univ\radiobox.h" />
-    <ClInclude Include="..\..\include\wx\univ\radiobut.h" />
-    <ClInclude Include="..\..\include\wx\univ\renderer.h" />
-    <ClInclude Include="..\..\include\wx\univ\scrarrow.h" />
-    <ClInclude Include="..\..\include\wx\univ\scrolbar.h" />
-    <ClInclude Include="..\..\include\wx\univ\scrthumb.h" />
-    <ClInclude Include="..\..\include\wx\univ\scrtimer.h" />
-    <ClInclude Include="..\..\include\wx\univ\slider.h" />
-    <ClInclude Include="..\..\include\wx\univ\spinbutt.h" />
-    <ClInclude Include="..\..\include\wx\univ\statbmp.h" />
-    <ClInclude Include="..\..\include\wx\univ\statbox.h" />
-    <ClInclude Include="..\..\include\wx\univ\statline.h" />
-    <ClInclude Include="..\..\include\wx\univ\stattext.h" />
-    <ClInclude Include="..\..\include\wx\univ\statusbr.h" />
-    <ClInclude Include="..\..\include\wx\univ\stdrend.h" />
-    <ClInclude Include="..\..\include\wx\univ\textctrl.h" />
-    <ClInclude Include="..\..\include\wx\univ\tglbtn.h" />
-    <ClInclude Include="..\..\include\wx\univ\theme.h" />
-    <ClInclude Include="..\..\include\wx\univ\toolbar.h" />
-    <ClInclude Include="..\..\include\wx\univ\toplevel.h" />
-    <ClInclude Include="..\..\include\wx\univ\window.h" />
     <ClInclude Include="..\..\include\wx\html\helpctrl.h" />
     <ClInclude Include="..\..\include\wx\html\helpdata.h" />
     <ClInclude Include="..\..\include\wx\html\helpdlg.h" />
