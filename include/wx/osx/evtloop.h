@@ -27,7 +27,11 @@ class WXDLLIMPEXP_CORE wxModalEventLoop : public wxGUIEventLoop
 public:
     wxModalEventLoop(wxWindow *modalWindow);
     wxModalEventLoop(WXWindow modalNativeWindow);
-
+    
+#ifdef __WXOSX_COCOA__
+    // skip wxGUIEventLoop to avoid missing Enter/Exit notifications
+    int Run() { return wxCFEventLoop::Run(); }
+#endif
 protected:
     virtual void OSXDoRun();
     virtual void OSXDoStop();
