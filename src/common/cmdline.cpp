@@ -681,7 +681,15 @@ int wxCmdLineParser::Parse(bool showUsage)
 
             continue;
         }
-
+#ifdef __WXOSX__
+        if ( arg == wxT("-ApplePersistenceIgnoreState") )
+        {
+            maybeOption = false;
+            
+            continue;
+        }
+#endif
+        
         // empty argument or just '-' is not an option but a parameter
         if ( maybeOption && arg.length() > 1 &&
                 // FIXME-UTF8: use wc_str() after removing ANSI build
