@@ -409,6 +409,7 @@ void wxApp::OSXOnWillFinishLaunching()
 void wxApp::OSXOnDidFinishLaunching()
 {
     wxTheApp->OnLaunched();
+    wxEventLoopBase::SetActive(GetMainLoop());
 }
 
 void wxApp::OSXOnWillTerminate()
@@ -417,6 +418,11 @@ void wxApp::OSXOnWillTerminate()
     event.SetCanVeto(false);
     wxTheApp->OnEndSession(event);
     
+    wxGUIEventLoop* mainloop = dynamic_cast<wxGUIEventLoop*>(GetMainLoop());
+    if ( mainloop )
+        mainloop->OSXOnWillTerminate();
+    wxEventLoopBase::SetActive(NULL);
+
     wxTheApp->OnExit();
 }
 
