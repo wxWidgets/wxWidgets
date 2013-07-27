@@ -470,6 +470,10 @@ public:
     virtual wxWindow *GetMainWindowOfCompositeControl()
         { return m_mainCtrlWnd; }
 
+    // also set the embedded wxTextCtrl colours
+    virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool SetBackgroundColour(const wxColour& colour);
+
 protected:
 
     // Returns true if hint text should be drawn in the control
@@ -544,10 +548,6 @@ protected:
     // should override it and set the height and change the width as needed.
     virtual wxSize DoGetBestSize() const;
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const;
-
-    // also set the embedded wxTextCtrl colours
-    virtual bool SetForegroundColour(const wxColour& colour);
-    virtual bool SetBackgroundColour(const wxColour& colour);
 
     // NULL popup can be used to indicate default in a derived class
     virtual void DoSetPopupControl(wxComboPopup* popup);
