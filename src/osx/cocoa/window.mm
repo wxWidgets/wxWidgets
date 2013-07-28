@@ -109,6 +109,22 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 @end // wxNSView
 
+@interface wxNSView(TextInput) <NSTextInputClient>
+
+- (void)insertText:(id)aString replacementRange:(NSRange)replacementRange;
+- (void)doCommandBySelector:(SEL)aSelector;
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange;
+- (void)unmarkText;
+- (NSRange)selectedRange;
+- (NSRange)markedRange;
+- (BOOL)hasMarkedText;
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange;
+- (NSArray*)validAttributesForMarkedText;
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange;
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint;
+
+@end
+
 @interface NSView(PossibleMethods)
 - (void)setTitle:(NSString *)aString;
 - (void)setStringValue:(NSString *)aString;
@@ -835,6 +851,71 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 }
 
 @end // wxNSView
+
+// We need to adopt NSTextInputClient protocol in order to interpretKeyEvents: to work.
+// Currently, only insertText:(replacementRange:) is
+// implemented here, and the rest of the methods are stubs.
+// It is hoped that someday IME-related functionality is implemented in
+// wxWidgets and the methods of this protocol are fully working.
+
+@implementation wxNSView(TextInput)
+
+void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
+
+- (void)insertText:(id)aString replacementRange:(NSRange)replacementRange
+{
+    wxOSX_insertText(self, @selector(insertText:), aString);
+}
+
+- (void)doCommandBySelector:(SEL)aSelector
+{
+    // these are already caught in the keyEvent handler
+}
+
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selectedRange replacementRange:(NSRange)replacementRange
+{
+}
+
+- (void)unmarkText
+{
+}
+
+- (NSRange)selectedRange
+{    
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (NSRange)markedRange
+{
+    return NSMakeRange(NSNotFound, 0);
+}
+
+- (BOOL)hasMarkedText
+{
+    return NO;
+}
+
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+{
+    return nil;
+}
+
+- (NSArray*)validAttributesForMarkedText
+{
+    return nil;
+}
+
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+{
+    return NSMakeRect(0, 0, 0, 0);
+}
+- (NSUInteger)characterIndexForPoint:(NSPoint)aPoint
+{
+    return NSNotFound;
+}
+
+@end // wxNSView(TextInput)
+
 
 //
 // event handlers
@@ -2554,10 +2635,18 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 
 bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
-    wxKeyEvent wxevent(wxEVT_CHAR);
-    SetupKeyEvent( wxevent, event, text );
+    bool result = false;
+    
+    for (NSUInteger i = 0; i < [text length]; ++i)
+    {
+        wxKeyEvent wxevent(wxEVT_CHAR);
+        unichar c = [text characterAtIndex:i];
+        SetupKeyEvent( wxevent, event, [NSString stringWithCharacters:&c length:1]);
 
-    return GetWXPeer()->OSXHandleKeyEvent(wxevent);
+        result = GetWXPeer()->OSXHandleKeyEvent(wxevent) || result;
+    }
+    
+    return result;
 }
 
 bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
