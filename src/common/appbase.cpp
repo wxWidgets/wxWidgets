@@ -324,12 +324,8 @@ int wxAppConsoleBase::MainLoop()
 {
     wxEventLoopBaseTiedPtr mainLoop(&m_mainLoop, CreateMainLoop());
 
-#if defined(__WXOSX__) && wxOSX_USE_COCOA_OR_IPHONE
-    // OnLaunched called from native app controller
-#else
     if (wxTheApp)
         wxTheApp->OnLaunched();
-#endif
     
     return m_mainLoop ? m_mainLoop->Run() : -1;
 }

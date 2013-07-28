@@ -403,13 +403,11 @@ void wxApp::MacReopenApp()
 #if wxOSX_USE_COCOA_OR_IPHONE
 void wxApp::OSXOnWillFinishLaunching()
 {
-    wxTheApp->OnInit();
+    m_onInitResult = OnInit();
 }
 
 void wxApp::OSXOnDidFinishLaunching()
 {
-    wxTheApp->OnLaunched();
-    wxEventLoopBase::SetActive(GetMainLoop());
 }
 
 void wxApp::OSXOnWillTerminate()
@@ -417,13 +415,6 @@ void wxApp::OSXOnWillTerminate()
     wxCloseEvent event;
     event.SetCanVeto(false);
     wxTheApp->OnEndSession(event);
-    
-    wxGUIEventLoop* mainloop = dynamic_cast<wxGUIEventLoop*>(GetMainLoop());
-    if ( mainloop )
-        mainloop->OSXOnWillTerminate();
-    wxEventLoopBase::SetActive(NULL);
-
-    wxTheApp->OnExit();
 }
 
 bool wxApp::OSXOnShouldTerminate()
@@ -896,7 +887,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxOSX_USE_CARBON
 bool wxApp::CallOnInit()
 {
     wxMacAutoreleasePool autoreleasepool;

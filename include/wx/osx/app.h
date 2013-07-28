@@ -150,6 +150,12 @@ public:
     virtual bool         OSXOnShouldTerminate();
     // before application terminates
     virtual void         OSXOnWillTerminate();
+
+private:
+    bool                m_onInitResult;
+    
+public:
+
 #endif
     
     // Hide the application windows the same as the system hide command would do it.
