@@ -242,7 +242,10 @@ void wxBell()
 // here we subclass NSApplication, for the purpose of being able to override sendEvent.
 @interface wxNSApplication : NSApplication
 {
+    BOOL firstPass;
 }
+
+- (id)init;
 
 - (void)sendEvent:(NSEvent *)anEvent;
 
@@ -250,13 +253,28 @@ void wxBell()
 
 @implementation wxNSApplication
 
+- (id)init
+{
+    self = [super init];
+    firstPass = YES;
+    return self;
+}
+
 /* This is needed because otherwise we don't receive any key-up events for command-key
  combinations (an AppKit bug, apparently)			*/
 - (void)sendEvent:(NSEvent *)anEvent
 {
     if ([anEvent type] == NSKeyUp && ([anEvent modifierFlags] & NSCommandKeyMask))
         [[self keyWindow] sendEvent:anEvent];
-    else [super sendEvent:anEvent];
+    else
+        [super sendEvent:anEvent];
+    
+    if ( firstPass )
+    {
+        [NSApp stop:nil];
+        firstPass = NO;
+        return;
+    }
 }
 
 @end
@@ -291,6 +309,14 @@ bool wxApp::DoInitGui()
     gNSLayoutManager = [[NSLayoutManager alloc] init];
     
     return true;
+}
+
+bool wxApp::CallOnInit()
+{
+    wxMacAutoreleasePool autoreleasepool;
+    m_onInitResult = false;
+    [NSApp run];
+    return m_onInitResult; 
 }
 
 void wxApp::DoCleanUp()
