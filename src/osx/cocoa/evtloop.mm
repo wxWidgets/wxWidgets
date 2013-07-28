@@ -242,26 +242,6 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
 
 static int gs_loopNestingLevel = 0;
 
-int wxGUIEventLoop::Run()
-{
-    // because we are using native callbacks for notifying about entering and exiting
-    // the main event loop, we must this leave out here
-    
-    // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsInsideRun(), -1, wxT("can't reenter a message loop") );
-    
-    // We might be called again, after a previous call to ScheduleExit(), so
-    // reset this flag.
-    m_shouldExit = false;
-    
-    // Set this variable to true for the duration of this method.
-    m_isInsideRun = true;
-    wxON_BLOCK_EXIT_SET(m_isInsideRun, false);
-    
-    // Finally really run the loop.
-    return DoRun();
-}
-
 void wxGUIEventLoop::OSXDoRun()
 {
     /*
@@ -369,11 +349,6 @@ void wxGUIEventLoop::OSXDoStop()
     // runloop gets another round. And for the nested loops we need to wake it
     // up to notice that it should exit, so do this unconditionally.
     WakeUp();
-}
-
-void wxGUIEventLoop::OSXOnWillTerminate()
-{
-    OnExit();
 }
 
 void wxGUIEventLoop::WakeUp()

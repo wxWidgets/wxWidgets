@@ -203,9 +203,9 @@ protected:
     bool m_isInsideYield;
     long m_eventsToProcessInsideYield;
 
+private:
     // this flag is set on entry into Run() and reset before leaving it
     bool m_isInsideRun;
-private:
 
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
