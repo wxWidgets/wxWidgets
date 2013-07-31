@@ -230,7 +230,7 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
         if ( DoTextToValue(value, &d) )
         {
             m_value = d;
-            m_textCtrl->SetValue(DoValueToText(m_value));
+            m_textCtrl->ChangeValue(DoValueToText(m_value));
         }
     }
 
