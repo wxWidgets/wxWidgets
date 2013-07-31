@@ -122,7 +122,7 @@ void wxStaticBox::AddChild( wxWindowBase *child )
         gtk_container_add( GTK_CONTAINER (m_widget), m_wxwindow );
     }
 
-    wxWindow::AddChild( child );
+    wxStaticBoxBase::AddChild(child);
 }
 
 void wxStaticBox::SetLabel( const wxString& label )
@@ -153,7 +153,6 @@ wxStaticBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_frame_new(""));
 }
-
 
 void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
 {
