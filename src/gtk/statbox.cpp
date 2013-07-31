@@ -108,6 +108,8 @@ bool wxStaticBox::Create( wxWindow *parent,
     }
 #endif
 
+    m_container.DisableSelfFocus();
+
     return true;
 }
 

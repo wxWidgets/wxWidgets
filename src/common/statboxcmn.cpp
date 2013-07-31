@@ -29,6 +29,13 @@
 
 extern WXDLLEXPORT_DATA(const char) wxStaticBoxNameStr[] = "groupBox";
 
+wxStaticBoxBase::wxStaticBoxBase()
+{
+#ifndef __WXGTK__
+    m_container.DisableSelfFocus();
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // XTI
 // ----------------------------------------------------------------------------
