@@ -146,7 +146,7 @@ void FontPickerWidgetsPage::CreateContent()
     wxStaticBoxSizer *fontbox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&FontPicker style"));
     m_chkFontTextCtrl = CreateCheckBoxAndAddToSizer(fontbox, wxT("With textctrl"));
     m_chkFontDescAsLabel = CreateCheckBoxAndAddToSizer(fontbox, wxT("Font desc as btn label"));
-    m_chkFontUseFontForLabel = CreateCheckBoxAndAddToSizer(fontbox, wxT("Use font for label"), false);
+    m_chkFontUseFontForLabel = CreateCheckBoxAndAddToSizer(fontbox, wxT("Use font for label"));
     boxleft->Add(fontbox, 0, wxALL|wxGROW, 5);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),

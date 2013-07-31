@@ -152,10 +152,10 @@ void DirPickerWidgetsPage::CreateContent()
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBoxSizer *dirbox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&DirPicker style"));
-    m_chkDirTextCtrl = CreateCheckBoxAndAddToSizer(dirbox, wxT("With textctrl"), false);
-    m_chkDirMustExist = CreateCheckBoxAndAddToSizer(dirbox, wxT("Dir must exist"), false);
-    m_chkDirChangeDir = CreateCheckBoxAndAddToSizer(dirbox, wxT("Change working dir"), false);
-    m_chkSmall = CreateCheckBoxAndAddToSizer(dirbox, "&Small version", false);
+    m_chkDirTextCtrl = CreateCheckBoxAndAddToSizer(dirbox, wxT("With textctrl"));
+    m_chkDirMustExist = CreateCheckBoxAndAddToSizer(dirbox, wxT("Dir must exist"));
+    m_chkDirChangeDir = CreateCheckBoxAndAddToSizer(dirbox, wxT("Change working dir"));
+    m_chkSmall = CreateCheckBoxAndAddToSizer(dirbox, "&Small version");
     boxleft->Add(dirbox, 0, wxALL|wxGROW, 5);
 
     boxleft->Add(CreateSizerWithTextAndButton

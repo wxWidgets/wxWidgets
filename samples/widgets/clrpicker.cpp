@@ -143,8 +143,8 @@ void ColourPickerWidgetsPage::CreateContent()
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
     wxStaticBoxSizer *clrbox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&ColourPicker style"));
-    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, wxT("With textctrl"), false);
-    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, wxT("With label"), false);
+    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, wxT("With textctrl"));
+    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, wxT("With label"));
     boxleft->Add(clrbox, 0, wxALL|wxGROW, 5);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),

@@ -175,11 +175,11 @@ void FilePickerWidgetsPage::CreateContent()
     boxleft->Add(m_radioFilePickerMode, 0, wxALL|wxGROW, 5);
 
     wxStaticBoxSizer *filebox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&FilePicker style"));
-    m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(filebox, wxT("With textctrl"), false);
-    m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(filebox, wxT("Overwrite prompt"), false);
-    m_chkFileMustExist = CreateCheckBoxAndAddToSizer(filebox, wxT("File must exist"), false);
-    m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(filebox, wxT("Change working dir"), false);
-    m_chkSmall = CreateCheckBoxAndAddToSizer(filebox, "&Small version", false);
+    m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(filebox, wxT("With textctrl"));
+    m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(filebox, wxT("Overwrite prompt"));
+    m_chkFileMustExist = CreateCheckBoxAndAddToSizer(filebox, wxT("File must exist"));
+    m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(filebox, wxT("Change working dir"));
+    m_chkSmall = CreateCheckBoxAndAddToSizer(filebox, "&Small version");
 
     boxleft->Add(filebox, 0, wxALL|wxGROW, 5);
 
