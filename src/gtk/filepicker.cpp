@@ -104,14 +104,13 @@ wxFileButton::~wxFileButton()
 {
     if ( m_dialog )
     {
-        // We need to delete the C++ dialog object here but we shouldn't delete
-        // its widget which is used by our GtkFileChooserButton and will be
-        // deleted by it when it is itself destroyed in our base class dtor. So
-        // take the widget ownership away from the dialog to avoid GTK+ errors
-        // that would happen if GtkFileChooserButton tried to access the
-        // already destroyed dialog widget.
-        g_object_unref(m_dialog->m_widget);
-        m_dialog->m_widget = NULL;
+        // when m_dialog is deleted, it will destroy the widget it is sharing
+        // with GtkFileChooserButton, which results in a bunch of Gtk-CRITICAL
+        // errors from GtkFileChooserButton. To avoid this, call gtk_widget_destroy()
+        // on GtkFileChooserButton first (our base dtor will do it again, but
+        // that does no harm). m_dialog holds a reference to the shared widget,
+        // so it won't go away until m_dialog base dtor unrefs it.
+        gtk_widget_destroy(m_widget);
         delete m_dialog;
     }
 }
@@ -269,7 +268,12 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
 
 wxDirButton::~wxDirButton()
 {
-    delete m_dialog;
+    if (m_dialog)
+    {
+        // see ~wxFileButton() comment
+        gtk_widget_destroy(m_widget);
+        delete m_dialog;
+    }
 }
 
 void wxDirButton::GTKUpdatePath(const char *gtkpath)
