@@ -79,6 +79,8 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
 
+    friend class wxSpinCtrlEventDisabler;
+
     DECLARE_EVENT_TABLE()
 };
 
