@@ -1625,35 +1625,39 @@ wxImage wxImage::ConvertToGreyscale(void) const
 
 wxImage wxImage::ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const
 {
-    wxImage image(MakeEmptyClone());
+    wxImage image;
+    wxCHECK_MSG(IsOk(), image, "invalid image");
 
-    wxCHECK( image.IsOk(), image );
-
-    const unsigned char *src = M_IMGDATA->m_data;
-    unsigned char *dest = image.GetData();
-
+    const int w = M_IMGDATA->m_width;
+    const int h = M_IMGDATA->m_height;
+    size_t size = size_t(w) * h;
+    image.Create(w, h, false);
+    const unsigned char* alpha = M_IMGDATA->m_alpha;
+    if (alpha)
+    {
+        image.SetAlpha();
+        memcpy(image.GetAlpha(), alpha, size);
+    }
+    const unsigned char mask_r = M_IMGDATA->m_maskRed;
+    const unsigned char mask_g = M_IMGDATA->m_maskGreen;
+    const unsigned char mask_b = M_IMGDATA->m_maskBlue;
     const bool hasMask = M_IMGDATA->m_hasMask;
-    const unsigned char maskRed = M_IMGDATA->m_maskRed;
-    const unsigned char maskGreen = M_IMGDATA->m_maskGreen;
-    const unsigned char maskBlue = M_IMGDATA->m_maskBlue;
+    if (hasMask)
+        image.SetMaskColour(mask_r, mask_g, mask_b);
 
-    const long size = M_IMGDATA->m_width * M_IMGDATA->m_height;
-    for ( long i = 0; i < size; i++, src += 3, dest += 3 )
+    const unsigned char* src = M_IMGDATA->m_data;
+    unsigned char* dst = image.GetData();
+    while (size--)
     {
-        memcpy(dest, src, 3);
-        // only modify non-masked pixels
-        if ( !hasMask || src[0] != maskRed || src[1] != maskGreen || src[2] != maskBlue )
-        {
-            wxColour::MakeGrey(dest + 0, dest + 1, dest + 2, weight_r, weight_g, weight_b);
-        }
+        unsigned char r = *src++;
+        unsigned char g = *src++;
+        unsigned char b = *src++;
+        if (!hasMask || r != mask_r || g != mask_g || b != mask_b)
+            wxColour::MakeGrey(&r, &g, &b, weight_r, weight_g, weight_b);
+        *dst++ = r;
+        *dst++ = g;
+        *dst++ = b;
     }
-
-    // copy the alpha channel, if any
-    if ( image.HasAlpha() )
-    {
-        memcpy( image.GetAlpha(), GetAlpha(), GetWidth() * GetHeight() );
-    }
-
     return image;
 }
 
@@ -1694,30 +1698,38 @@ wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char 
 
 wxImage wxImage::ConvertToDisabled(unsigned char brightness) const
 {
-    wxImage image = *this;
+    wxImage image;
+    wxCHECK_MSG(IsOk(), image, "invalid image");
 
-    unsigned char mr = image.GetMaskRed();
-    unsigned char mg = image.GetMaskGreen();
-    unsigned char mb = image.GetMaskBlue();
-
-    int width = image.GetWidth();
-    int height = image.GetHeight();
-    bool has_mask = image.HasMask();
-
-    for (int y = height-1; y >= 0; --y)
+    const int w = M_IMGDATA->m_width;
+    const int h = M_IMGDATA->m_height;
+    size_t size = size_t(w) * h;
+    image.Create(w, h, false);
+    const unsigned char* alpha = M_IMGDATA->m_alpha;
+    if (alpha)
     {
-        for (int x = width-1; x >= 0; --x)
-        {
-            unsigned char* data = image.GetData() + (y*(width*3))+(x*3);
-            unsigned char* r = data;
-            unsigned char* g = data+1;
-            unsigned char* b = data+2;
+        image.SetAlpha();
+        memcpy(image.GetAlpha(), alpha, size);
+    }
+    const unsigned char mask_r = M_IMGDATA->m_maskRed;
+    const unsigned char mask_g = M_IMGDATA->m_maskGreen;
+    const unsigned char mask_b = M_IMGDATA->m_maskBlue;
+    const bool hasMask = M_IMGDATA->m_hasMask;
+    if (hasMask)
+        image.SetMaskColour(mask_r, mask_g, mask_b);
 
-            if (has_mask && (*r == mr) && (*g == mg) && (*b == mb))
-                continue;
-
-            wxColour::MakeDisabled(r, g, b, brightness);
-        }
+    const unsigned char* src = M_IMGDATA->m_data;
+    unsigned char* dst = image.GetData();
+    while (size--)
+    {
+        unsigned char r = *src++;
+        unsigned char g = *src++;
+        unsigned char b = *src++;
+        if (!hasMask || r != mask_r || g != mask_g || b != mask_b)
+            wxColour::MakeDisabled(&r, &g, &b, brightness);
+        *dst++ = r;
+        *dst++ = g;
+        *dst++ = b;
     }
     return image;
 }
