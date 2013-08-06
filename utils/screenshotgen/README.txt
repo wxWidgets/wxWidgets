@@ -26,7 +26,7 @@ for testing purpose only.
 2) The menu "Capture->Regions<Begin>" and "Capture->Regions<End>" was the semi-auto part,
 and now it's deprecated and will be removed soon.
 
-3) Finnally the full-auto mode: "Capture->Capture All" or Ctrl+Alt+A, follow the instructions
+3) Finally the full-auto mode: "Capture->Capture All" or Ctrl+Alt+A, follow the instructions
  and all the screenshots will be generated correctly under the subdirectory "screenshots".
 
  ==Developer Guide: How To Add More Controls==
