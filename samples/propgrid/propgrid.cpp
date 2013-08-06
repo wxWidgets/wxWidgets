@@ -71,6 +71,8 @@
     #include "../sample.xpm"
 #endif
 
+#include <wx/popupwin.h>
+
 // -----------------------------------------------------------------------
 // wxSampleMultiButtonEditor
 //   A sample editor class that has multiple buttons.
@@ -430,7 +432,9 @@ enum
     ID_ENABLELABELEDITING,
     ID_VETOCOLDRAG,
     ID_SHOWHEADER,
-    ID_ONEXTENDEDKEYNAV
+    ID_ONEXTENDEDKEYNAV,
+    ID_SHOWPOPUP,
+    ID_POPUPGRID
 };
 
 // -----------------------------------------------------------------------
@@ -552,6 +556,7 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_RUNMINIMAL, FormMain::OnRunMinimalClick )
 
     EVT_CONTEXT_MENU( FormMain::OnContextMenu )
+    EVT_BUTTON(ID_SHOWPOPUP, FormMain::OnShowPopup)
 END_EVENT_TABLE()
 
 // -----------------------------------------------------------------------
@@ -1844,6 +1849,9 @@ void FormMain::FinalizePanel( bool wasCreated )
     m_topSizer->Add( new wxButton(m_panel, wxID_ANY,
                      wxS("Should be able to move here with Tab")),
                      0, wxEXPAND );
+    m_topSizer->Add( new wxButton(m_panel, ID_SHOWPOPUP,
+                     wxS("Show Popup")),
+                     0, wxEXPAND );
 
     m_panel->SetSizer( m_topSizer );
     m_topSizer->SetSizeHints( m_panel );
@@ -3111,3 +3119,173 @@ void FormMain::OnIdle( wxIdleEvent& event )
 }
 
 // -----------------------------------------------------------------------
+
+
+wxPGProperty* GetRealRoot(wxPropertyGrid *grid)
+{
+    wxPGProperty *property = grid->GetRoot();
+    return property ? grid->GetFirstChild(property) : NULL;
+}
+
+void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, int width[3])
+{
+    wxPropertyGridPageState *state = grid->GetState();
+
+    width[0] =
+    width[1] =
+    width[2] = 0;
+    int minWidths[3] = { state->GetColumnMinWidth(0),
+                         state->GetColumnMinWidth(1),
+                         state->GetColumnMinWidth(2) };
+
+    for (unsigned ii = 0; ii < root->GetChildCount(); ++ii)
+    {
+        wxPGProperty* p = root->Item(ii);
+
+        width[0] = std::max(width[0], state->GetColumnFullWidth(dc, p, 0));
+        width[1] = std::max(width[1], state->GetColumnFullWidth(dc, p, 1));
+        width[2] = std::max(width[2], state->GetColumnFullWidth(dc, p, 2));
+    }
+    for (unsigned ii = 0; ii < root->GetChildCount(); ++ii)
+    {
+        wxPGProperty* p = root->Item(ii);
+        if (p->IsExpanded())
+        {
+            int w[3];
+            GetColumnWidths(dc, grid, p, w);
+            width[0] = std::max(width[0], w[0]);
+            width[1] = std::max(width[1], w[1]);
+            width[2] = std::max(width[2], w[2]);
+        }
+    }
+
+    width[0] = std::max(width[0], minWidths[0]);
+    width[1] = std::max(width[1], minWidths[1]);
+    width[2] = std::max(width[2], minWidths[2]);
+}
+
+void GetColumnWidths(wxPropertyGrid *grid, wxPGProperty *root, int width[3])
+{
+    wxClientDC dc(grid);
+    dc.SetFont(grid->GetFont());
+    GetColumnWidths(dc, grid, root, width);
+}
+
+void SetMinSize(wxPropertyGrid *grid)
+{
+    wxPGProperty *p = GetRealRoot(grid);
+    wxPGProperty *first = grid->wxPropertyGridInterface::GetFirst(wxPG_ITERATE_ALL);
+    wxPGProperty *last = grid->GetLastItem(wxPG_ITERATE_DEFAULT);
+    wxRect rect = grid->GetPropertyRect(first, last);
+    int height = rect.height + 2 * grid->GetVerticalSpacing();
+
+    // add some height when the root item is collapsed,
+    // this is needed to prevent the vertical scroll from showing
+    if (!grid->IsPropertyExpanded(p))
+        height += 2 * grid->GetVerticalSpacing();
+
+    int width[3];
+    GetColumnWidths(grid, grid->GetRoot(), width);
+    rect.width = width[0]+width[1]+width[2];
+
+    int minWidth = (wxSystemSettings::GetMetric(wxSYS_SCREEN_X, grid->GetParent())*3)/2;
+    int minHeight = (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y, grid->GetParent())*3)/2;
+
+    wxSize size(std::min(minWidth, rect.width + grid->GetMarginWidth()), std::min(minHeight, height));
+    grid->SetMinSize(size);
+
+    int proportions[3];
+    proportions[0] = static_cast<int>(floor((double)width[0]/size.x*100.0+0.5));
+    proportions[1] = static_cast<int>(floor((double)width[1]/size.x*100.0+0.5));
+    proportions[2]= std::max(100 - proportions[0] - proportions[1], 0);
+    grid->SetColumnProportion(0, proportions[0]);
+    grid->SetColumnProportion(1, proportions[1]);
+    grid->SetColumnProportion(2, proportions[2]);
+    grid->ResetColumnSizes(true);
+}
+
+struct PropertyGridPopup : wxPopupWindow
+{
+    wxScrolledWindow *m_panel;
+    wxPropertyGrid *m_grid;
+    wxBoxSizer *m_sizer;
+
+    PropertyGridPopup(wxWindow *parent) : wxPopupWindow(parent, wxBORDER_NONE|wxWANTS_CHARS)
+    {
+        m_panel = new wxScrolledWindow(this, wxID_ANY, wxDefaultPosition, wxSize(200, 200));
+        m_grid = new wxPropertyGrid(m_panel, ID_POPUPGRID, wxDefaultPosition, wxSize(400,400), wxPG_SPLITTER_AUTO_CENTER);
+        m_grid->SetExtraStyle(wxPG_EX_DISABLE_TLP_TRACKING /*| wxPG_EX_HELP_AS_TOOLTIPS*/);
+        m_grid->SetColumnCount(3);
+
+        wxPGProperty *prop=m_grid->Append(new wxStringProperty("test_name", wxPG_LABEL, "test_value"));
+        m_grid->SetPropertyAttribute(prop, wxT("Units"), "type");
+        wxPGProperty *prop1 = m_grid->AppendIn(prop, new wxStringProperty("sub_name1", wxPG_LABEL, "sub_value1"));
+
+        m_grid->AppendIn(prop1, new wxSystemColourProperty(wxT("Cell Colour"),wxPG_LABEL, m_grid->GetGrid()->GetCellBackgroundColour()));
+        wxPGProperty *prop2 = m_grid->AppendIn(prop, new wxStringProperty("sub_name2", wxPG_LABEL, "sub_value2"));
+        m_grid->AppendIn(prop2, new wxStringProperty("sub_name21", wxPG_LABEL, "sub_value21"));
+
+        wxArrayDouble arrdbl;
+        arrdbl.Add(-1.0); arrdbl.Add(-0.5); arrdbl.Add(0.0); arrdbl.Add(0.5); arrdbl.Add(1.0);
+        m_grid->AppendIn(prop, new wxArrayDoubleProperty(wxT("ArrayDoubleProperty"),wxPG_LABEL,arrdbl) );
+        m_grid->AppendIn(prop, new wxFontProperty(wxT("Font"),wxPG_LABEL));
+        m_grid->AppendIn(prop2, new wxStringProperty("sub_name22", wxPG_LABEL, "sub_value22"));
+        m_grid->AppendIn(prop2, new wxStringProperty("sub_name23", wxPG_LABEL, "sub_value23"));
+        prop2->SetExpanded(false);
+
+        ::SetMinSize(m_grid);
+
+        m_sizer = new wxBoxSizer( wxVERTICAL );
+        m_sizer->Add(m_grid, 0, wxALL | wxEXPAND, 0);
+        m_panel->SetAutoLayout(true);
+        m_panel->SetSizer(m_sizer);
+        m_sizer->Fit(m_panel);
+        m_sizer->Fit(this);
+    }
+
+    void OnCollapse(wxPropertyGridEvent& WXUNUSED(event))
+    {
+        wxLogMessage("OnCollapse");
+        Fit();
+    }
+
+    void OnExpand(wxPropertyGridEvent& WXUNUSED(event))
+    {
+        wxLogMessage("OnExpand");
+        Fit();
+    }
+
+    void Fit()
+    {
+        ::SetMinSize(m_grid);
+        m_sizer->Fit(m_panel);
+        wxPoint pos = GetScreenPosition();
+        wxSize size = m_panel->GetScreenRect().GetSize();
+        SetSize(pos.x, pos.y, size.x, size.y);
+    }
+
+    DECLARE_CLASS(PropertyGridPopup)
+    DECLARE_EVENT_TABLE()
+};
+
+IMPLEMENT_CLASS(PropertyGridPopup, wxPopupWindow)
+BEGIN_EVENT_TABLE(PropertyGridPopup, wxPopupWindow)
+    EVT_PG_ITEM_COLLAPSED(ID_POPUPGRID, PropertyGridPopup::OnCollapse)
+    EVT_PG_ITEM_EXPANDED(ID_POPUPGRID, PropertyGridPopup::OnExpand)
+END_EVENT_TABLE()
+
+
+void FormMain::OnShowPopup(wxCommandEvent& WXUNUSED(event))
+{
+    static PropertyGridPopup *popup = NULL;
+    if ( popup )
+    {
+        delete popup;
+        popup = NULL;
+        return;
+    }
+    popup = new PropertyGridPopup(this);
+    wxPoint pt = wxGetMousePosition();
+    popup->Position(pt, wxSize(0, 0));
+    popup->Show();
+}

@@ -253,6 +253,7 @@ public:
     void OnCloseEvent( wxCloseEvent& event );
 
     void OnIdle( wxIdleEvent& event );
+    void OnShowPopup( wxCommandEvent& event );
 
     void AddTestProperties( wxPropertyGridPage* pg );
 

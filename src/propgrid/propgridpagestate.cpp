@@ -802,6 +802,27 @@ int wxPropertyGridPageState::GetColumnFitWidth(wxClientDC& dc,
     return maxW;
 }
 
+int wxPropertyGridPageState::GetColumnFullWidth( wxClientDC &dc, wxPGProperty *p, unsigned int col )
+{
+    if ( p->IsCategory() )
+        return 0;
+
+    const wxPGCell* cell = NULL;
+    wxString text;
+    p->GetDisplayInfo(col, -1, 0, &text, &cell);
+    int w = dc.GetTextExtent(text).x;
+
+    if ( col == 0 )
+        w += (int)p->m_depth * m_pPropGrid->m_subgroup_extramargin;
+
+    // account for the bitmap
+    if ( col == 1 )
+        w += p->GetImageOffset(m_pPropGrid->GetImageRect(p, -1).GetWidth());
+
+    w += (wxPG_XBEFORETEXT*2);
+    return w;
+}
+
 int wxPropertyGridPageState::DoGetSplitterPosition( int splitterColumn ) const
 {
     int n = GetGrid()->m_marginWidth;

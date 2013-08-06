@@ -569,6 +569,7 @@ All (GUI):
 
 - Fix crash in wxHTML on mal-formed <area> elements (LukasK).
 - Set correct cursor when the mouse is over image map links in wxHTML (LukasK).
+- Add wxPropertyGridPageState::GetColumnFullWidth() (Teodor Petrov).
 
 wxMSW:
 
