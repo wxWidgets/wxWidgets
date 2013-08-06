@@ -76,13 +76,15 @@ void SpinCtrlDoubleTestCase::NoEventsInCtor()
     delete m_spin;
     m_spin = new wxSpinCtrlDouble;
 
-    EventCounter updated(m_spin, wxEVT_SPINCTRLDOUBLE);
+    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRLDOUBLE);
+    EventCounter updatedText(m_spin, wxEVT_TEXT);
 
     m_spin->Create(parent, wxID_ANY, "",
                    wxDefaultPosition, wxDefaultSize, 0,
                    0., 100., 17.);
 
-    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
 }
 
 void SpinCtrlDoubleTestCase::Arrows()
@@ -141,7 +143,21 @@ void SpinCtrlDoubleTestCase::Range()
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetMin());
     CPPUNIT_ASSERT_EQUAL(100.0, m_spin->GetMax());
 
-    //Test neagtive ranges
+    // Test that the value is adjusted to be inside the new valid range but
+    // that this doesn't result in any events (as this is not something done by
+    // the user).
+    {
+        EventCounter updatedSpin(m_spin, wxEVT_SPINCTRLDOUBLE);
+        EventCounter updatedText(m_spin, wxEVT_TEXT);
+
+        m_spin->SetRange(1., 10.);
+        CPPUNIT_ASSERT_EQUAL(1., m_spin->GetValue());
+
+        CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+        CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
+    }
+
+    //Test negative ranges
     m_spin->SetRange(-10.0, 10.0);
 
     CPPUNIT_ASSERT_EQUAL(-10.0, m_spin->GetMin());
@@ -156,18 +172,23 @@ void SpinCtrlDoubleTestCase::Range()
 
 void SpinCtrlDoubleTestCase::Value()
 {
+    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRLDOUBLE);
+    EventCounter updatedText(m_spin, wxEVT_TEXT);
+
     m_spin->SetDigits(2);
     m_spin->SetIncrement(0.1);
 
     CPPUNIT_ASSERT_EQUAL(0.0, m_spin->GetValue());
 
     m_spin->SetValue(50.0);
-
     CPPUNIT_ASSERT_EQUAL(50.0, m_spin->GetValue());
 
     m_spin->SetValue(49.1);
-
     CPPUNIT_ASSERT_EQUAL(49.1, m_spin->GetValue());
+
+    // Calling SetValue() shouldn't have generated any events.
+    CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
 }
 
 void SpinCtrlDoubleTestCase::Increment()

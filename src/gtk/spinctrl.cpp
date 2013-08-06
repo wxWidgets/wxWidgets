@@ -471,7 +471,9 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 {
     wxCHECK_RET( m_widget, "invalid spin button" );
 
+    GtkDisableEvents();
     gtk_spin_button_set_digits( GTK_SPIN_BUTTON(m_widget), digits);
+    GtkEnableEvents();
 }
 
 #endif // wxUSE_SPINCTRL

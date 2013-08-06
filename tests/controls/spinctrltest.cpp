@@ -106,13 +106,15 @@ void SpinCtrlTestCase::NoEventsInCtor()
     delete m_spin;
     m_spin = new wxSpinCtrl;
 
-    EventCounter updated(m_spin, wxEVT_SPINCTRL);
+    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
+    EventCounter updatedText(m_spin, wxEVT_TEXT);
 
     m_spin->Create(parent, wxID_ANY, "",
                    wxDefaultPosition, wxDefaultSize, 0,
                    0, 100, 17);
 
-    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
 }
 
 void SpinCtrlTestCase::Arrows()
@@ -176,11 +178,14 @@ void SpinCtrlTestCase::Range()
     // that this doesn't result in any events (as this is not something done by
     // the user).
     {
-        EventCounter updated(m_spin, wxEVT_SPINCTRL);
+        EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
+        EventCounter updatedText(m_spin, wxEVT_TEXT);
 
         m_spin->SetRange(1, 10);
         CPPUNIT_ASSERT_EQUAL(1, m_spin->GetValue());
-        CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
+
+        CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+        CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
     }
 
     //Test negative ranges
@@ -198,19 +203,23 @@ void SpinCtrlTestCase::Range()
 
 void SpinCtrlTestCase::Value()
 {
+    EventCounter updatedSpin(m_spin, wxEVT_SPINCTRL);
+    EventCounter updatedText(m_spin, wxEVT_TEXT);
+
     CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
 
     m_spin->SetValue(50);
-
     CPPUNIT_ASSERT_EQUAL(50, m_spin->GetValue());
 
     m_spin->SetValue(-10);
-
     CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
 
     m_spin->SetValue(110);
-
     CPPUNIT_ASSERT_EQUAL(100, m_spin->GetValue());
+
+    // Calling SetValue() shouldn't have generated any events.
+    CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
+    CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
 }
 
 #endif
