@@ -49,7 +49,7 @@
 #if wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE
-    #include "wx/ffile.h"
+    #include "wx/file.h"
 #endif
 
 #ifdef __WXGTK__
