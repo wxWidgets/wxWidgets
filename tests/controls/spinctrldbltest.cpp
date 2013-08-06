@@ -30,6 +30,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( SpinCtrlDoubleTestCase );
+        CPPUNIT_TEST( NoEventsInCtor );
         WXUISIM_TEST( Arrows );
         WXUISIM_TEST( Wrap );
         CPPUNIT_TEST( Range );
@@ -38,6 +39,7 @@ private:
         CPPUNIT_TEST( Digits );
     CPPUNIT_TEST_SUITE_END();
 
+    void NoEventsInCtor();
     void Arrows();
     void Wrap();
     void Range();
@@ -64,6 +66,23 @@ void SpinCtrlDoubleTestCase::setUp()
 void SpinCtrlDoubleTestCase::tearDown()
 {
     wxDELETE(m_spin);
+}
+
+void SpinCtrlDoubleTestCase::NoEventsInCtor()
+{
+    // Verify that creating the control does not generate any events. This is
+    // unexpected and shouldn't happen.
+    wxWindow* const parent = m_spin->GetParent();
+    delete m_spin;
+    m_spin = new wxSpinCtrlDouble;
+
+    EventCounter updated(m_spin, wxEVT_SPINCTRLDOUBLE);
+
+    m_spin->Create(parent, wxID_ANY, "",
+                   wxDefaultPosition, wxDefaultSize, 0,
+                   0., 100., 17.);
+
+    CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
 }
 
 void SpinCtrlDoubleTestCase::Arrows()
