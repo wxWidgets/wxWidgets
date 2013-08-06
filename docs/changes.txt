@@ -575,6 +575,10 @@ wxMSW:
 
 - It is now possible to tab into radio boxes again.
 
+wxOSX:
+
+- Fix column sorting UI in wxDataViewCtrl (Myrsloik).
+
 
 2.9.5: (released 2013-07-15)
 ----------------------------
