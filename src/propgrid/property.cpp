@@ -2198,7 +2198,7 @@ int wxPGProperty::GetY2( int lh ) const
     for ( parent = GetParent(); parent != NULL; parent = child->GetParent() )
     {
         if ( !parent->IsExpanded() )
-            return -1;
+            return parent->GetY2(lh);
         y += parent->GetChildrenHeight(lh, child->GetIndexInParent());
         y += lh;
         child = parent;
