@@ -516,6 +516,11 @@ public:
 
     /**
         Returns the font of the item label.
+
+        If the font hadn't been explicitly set for the specified @a item with
+        SetItemFont(), returns an invalid ::wxNullFont font. GetFont() can be
+        used to retrieve the global tree control font used for the items
+        without any specific font.
     */
     virtual wxFont GetItemFont(const wxTreeItemId& item) const;
 
