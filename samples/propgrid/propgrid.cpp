@@ -3137,31 +3137,31 @@ void GetColumnWidths(wxClientDC &dc, wxPropertyGrid *grid, wxPGProperty *root, i
     int minWidths[3] = { state->GetColumnMinWidth(0),
                          state->GetColumnMinWidth(1),
                          state->GetColumnMinWidth(2) };
-
-    for (unsigned ii = 0; ii < root->GetChildCount(); ++ii)
+    unsigned ii;
+    for (ii = 0; ii < root->GetChildCount(); ++ii)
     {
         wxPGProperty* p = root->Item(ii);
 
-        width[0] = std::max(width[0], state->GetColumnFullWidth(dc, p, 0));
-        width[1] = std::max(width[1], state->GetColumnFullWidth(dc, p, 1));
-        width[2] = std::max(width[2], state->GetColumnFullWidth(dc, p, 2));
+        width[0] = wxMax(width[0], state->GetColumnFullWidth(dc, p, 0));
+        width[1] = wxMax(width[1], state->GetColumnFullWidth(dc, p, 1));
+        width[2] = wxMax(width[2], state->GetColumnFullWidth(dc, p, 2));
     }
-    for (unsigned ii = 0; ii < root->GetChildCount(); ++ii)
+    for (ii = 0; ii < root->GetChildCount(); ++ii)
     {
         wxPGProperty* p = root->Item(ii);
         if (p->IsExpanded())
         {
             int w[3];
             GetColumnWidths(dc, grid, p, w);
-            width[0] = std::max(width[0], w[0]);
-            width[1] = std::max(width[1], w[1]);
-            width[2] = std::max(width[2], w[2]);
+            width[0] = wxMax(width[0], w[0]);
+            width[1] = wxMax(width[1], w[1]);
+            width[2] = wxMax(width[2], w[2]);
         }
     }
 
-    width[0] = std::max(width[0], minWidths[0]);
-    width[1] = std::max(width[1], minWidths[1]);
-    width[2] = std::max(width[2], minWidths[2]);
+    width[0] = wxMax(width[0], minWidths[0]);
+    width[1] = wxMax(width[1], minWidths[1]);
+    width[2] = wxMax(width[2], minWidths[2]);
 }
 
 void GetColumnWidths(wxPropertyGrid *grid, wxPGProperty *root, int width[3])
@@ -3191,13 +3191,13 @@ void SetMinSize(wxPropertyGrid *grid)
     int minWidth = (wxSystemSettings::GetMetric(wxSYS_SCREEN_X, grid->GetParent())*3)/2;
     int minHeight = (wxSystemSettings::GetMetric(wxSYS_SCREEN_Y, grid->GetParent())*3)/2;
 
-    wxSize size(std::min(minWidth, rect.width + grid->GetMarginWidth()), std::min(minHeight, height));
+    wxSize size(wxMin(minWidth, rect.width + grid->GetMarginWidth()), wxMin(minHeight, height));
     grid->SetMinSize(size);
 
     int proportions[3];
     proportions[0] = static_cast<int>(floor((double)width[0]/size.x*100.0+0.5));
     proportions[1] = static_cast<int>(floor((double)width[1]/size.x*100.0+0.5));
-    proportions[2]= std::max(100 - proportions[0] - proportions[1], 0);
+    proportions[2]= wxMax(100 - proportions[0] - proportions[1], 0);
     grid->SetColumnProportion(0, proportions[0]);
     grid->SetColumnProportion(1, proportions[1]);
     grid->SetColumnProportion(2, proportions[2]);
