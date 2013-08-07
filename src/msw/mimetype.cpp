@@ -291,23 +291,28 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
             if ( keyDDE.Open(wxRegKey::Read) ) {
                 wxString ddeCommand, ddeServer, ddeTopic;
                 keyDDE.QueryValue(wxEmptyString, ddeCommand);
-                ddeCommand.Replace(wxT("%1"), wxT("%s"));
 
-                wxRegKey keyServer(wxRegKey::HKCR, strKey + wxT("\\Application"));
-                keyServer.QueryValue(wxEmptyString, ddeServer);
-                wxRegKey keyTopic(wxRegKey::HKCR, strKey + wxT("\\Topic"));
-                keyTopic.QueryValue(wxEmptyString, ddeTopic);
+                // in some cases "DDEExec" subkey exists but has no value, we
+                // shouldn't use DDE in this case
+                if ( !ddeCommand.empty() ) {
+                    ddeCommand.Replace(wxT("%1"), wxT("%s"));
 
-                if (ddeTopic.empty())
-                    ddeTopic = wxT("System");
+                    wxRegKey keyServer(wxRegKey::HKCR, strKey + wxT("\\Application"));
+                    keyServer.QueryValue(wxEmptyString, ddeServer);
+                    wxRegKey keyTopic(wxRegKey::HKCR, strKey + wxT("\\Topic"));
+                    keyTopic.QueryValue(wxEmptyString, ddeTopic);
 
-                // HACK: we use a special feature of wxExecute which exists
-                //       just because we need it here: it will establish DDE
-                //       conversation with the program it just launched
-                command.Prepend(wxT("WX_DDE#"));
-                command << wxT('#') << ddeServer
-                        << wxT('#') << ddeTopic
-                        << wxT('#') << ddeCommand;
+                    if (ddeTopic.empty())
+                        ddeTopic = wxT("System");
+
+                    // HACK: we use a special feature of wxExecute which exists
+                    //       just because we need it here: it will establish DDE
+                    //       conversation with the program it just launched
+                    command.Prepend(wxT("WX_DDE#"));
+                    command << wxT('#') << ddeServer
+                            << wxT('#') << ddeTopic
+                            << wxT('#') << ddeCommand;
+                }
             }
             else
 #endif // wxUSE_IPC

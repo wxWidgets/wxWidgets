@@ -574,6 +574,7 @@ All (GUI):
 wxMSW:
 
 - It is now possible to tab into radio boxes again.
+- Fix launching some types of files under Windows 7 and later (Steven Houchins).
 
 wxOSX:
 
