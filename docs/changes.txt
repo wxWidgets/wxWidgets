@@ -563,6 +563,7 @@ Major new features in this release
 All:
 
 - Allow using custom HTTP methods with wxHTTP (Kolya Kosenko).
+- Add wxFileName::SetPermissions() (Catalin Raceanu).
 - Fix build with wxUSE_FFILE==0 (jroemmler).
 
 All (GUI):

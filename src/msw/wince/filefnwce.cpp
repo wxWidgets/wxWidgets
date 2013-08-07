@@ -112,6 +112,12 @@ int wxCRT_Access(const wxChar *name, int WXUNUSED(how))
     return 0;
 }
 
+int wxCRT_Chmod(const wxChar *WXUNUSED(name), int WXUNUSED(how))
+{
+    // TODO
+    return -1;
+}
+
 int wxClose(int fd)
 {
     if (CloseHandle((HANDLE)fd))

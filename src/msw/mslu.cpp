@@ -199,6 +199,14 @@ WXDLLIMPEXP_BASE int wxMSLU__waccess(const wchar_t *name, int mode)
         return wxCRT_AccessW(name, mode);
 }
 
+WXDLLIMPEXP_BASE int wxMSLU__wchmod(const wchar_t *name, int mode)
+{
+    if ( wxUsingUnicowsDll() )
+        return wxCRT_ChmodA(wxConvFile.cWX2MB(name), mode);
+    else
+        return wxCRT_ChmodW(name, mode);
+}
+
 WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wchar_t *name)
 {
     if ( wxUsingUnicowsDll() )

@@ -2573,6 +2573,37 @@ wxString wxFileName::StripExtension(const wxString& fullpath)
 }
 
 // ----------------------------------------------------------------------------
+// file permissions functions
+// ----------------------------------------------------------------------------
+
+bool wxFileName::SetPermissions(int permissions)
+{
+    // Don't do anything for a symlink but first make sure it is one.
+    if ( m_dontFollowLinks &&
+            Exists(wxFILE_EXISTS_SYMLINK|wxFILE_EXISTS_NO_FOLLOW) )
+    {
+        // Looks like changing permissions for a symlinc is only supported
+        // on BSD where lchmod is present and correctly implemented.
+        // http://lists.gnu.org/archive/html/bug-coreutils/2009-09/msg00268.html
+        return false;
+    }
+
+#ifdef __WINDOWS__
+    int accMode = 0;
+
+    if ( permissions & (wxS_IRUSR|wxS_IRGRP|wxS_IROTH) )
+        accMode = _S_IREAD;
+
+    if ( permissions & (wxS_IWUSR|wxS_IWGRP|wxS_IWOTH) )
+        accMode |= _S_IWRITE;
+
+    permissions = accMode;
+#endif // __WINDOWS__
+
+    return wxChmod(GetFullPath(), permissions) == 0;
+}
+
+// ----------------------------------------------------------------------------
 // time functions
 // ----------------------------------------------------------------------------
 

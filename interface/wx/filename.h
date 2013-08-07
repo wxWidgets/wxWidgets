@@ -1257,6 +1257,23 @@ public:
     void SetPath(const wxString& path, wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Sets permissions for this file or directory.
+
+        @param permissions
+            The new permissions: this should be a combination of
+            ::wxPosixPermissions enum elements.
+
+        @since 2.9.6
+
+        @note If this is a symbolic link and it should not be followed
+              this call will fail.
+
+        @return @true on success, @false if an error occurred (for example,
+                the file doesn't exist).
+    */
+    bool SetPermissions(int permissions)
+
+    /**
         Sets the file creation and last access/modification times (any of the pointers
         may be @NULL).
 
