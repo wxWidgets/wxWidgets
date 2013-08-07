@@ -91,6 +91,12 @@ public:
         Loads a bitmap from a file or resource, putting the resulting data into
         @a bitmap.
 
+        @note Under MSW, when loading a bitmap from resources (i.e. using @c
+            wxBITMAP_TYPE_BMP_RESOURCE as @a type), the light grey colour is
+            considered to be transparent, for historical reasons. If you want
+            to handle the light grey pixels normally instead, call
+            SetMask(NULL) after loading the bitmap.
+
         @param bitmap
             The bitmap object which is to be affected by this operation.
         @param name
