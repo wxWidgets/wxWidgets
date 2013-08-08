@@ -1050,10 +1050,18 @@ bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalett
     const char* type_name = NULL;
     switch (type)
     {
+        case wxBITMAP_TYPE_ANI:  type_name = "ani";  break;
         case wxBITMAP_TYPE_BMP:  type_name = "bmp";  break;
+        case wxBITMAP_TYPE_GIF:  type_name = "gif";  break;
         case wxBITMAP_TYPE_ICO:  type_name = "ico";  break;
         case wxBITMAP_TYPE_JPEG: type_name = "jpeg"; break;
+        case wxBITMAP_TYPE_PCX:  type_name = "pcx";  break;
         case wxBITMAP_TYPE_PNG:  type_name = "png";  break;
+        case wxBITMAP_TYPE_PNM:  type_name = "pnm";  break;
+        case wxBITMAP_TYPE_TGA:  type_name = "tga";  break;
+        case wxBITMAP_TYPE_TIFF: type_name = "tiff"; break;
+        case wxBITMAP_TYPE_XBM:  type_name = "xbm";  break;
+        case wxBITMAP_TYPE_XPM:  type_name = "xpm";  break;
         default: break;
     }
     if (type_name &&
