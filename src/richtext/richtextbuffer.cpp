@@ -9520,12 +9520,13 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     wxRichTextAttr attr(GetAttributes());
     context.ApplyVirtualAttributes(attr, this);
 
+    bool tableHasPercentWidth = (attr.GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE);
     // If we have no fixed table size, and assuming we're not pushed for
     // space, then we don't have to try to stretch the table to fit the contents.
-    bool stretchToFitTableWidth = false;
-
+    bool stretchToFitTableWidth = tableHasPercentWidth;
+    
     int tableWidth = rect.width;
-    if (attr.GetTextBoxAttr().GetWidth().IsValid())
+    if (attr.GetTextBoxAttr().GetWidth().IsValid() && !tableHasPercentWidth)
     {
         tableWidth = converter.GetPixels(attr.GetTextBoxAttr().GetWidth());
 
