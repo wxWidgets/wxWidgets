@@ -221,124 +221,6 @@ public:
         // TODO Hebrew, Chinese, Maya, ... (just kidding) (or then may be not?)
     };
 
-        // these values only are used to identify the different dates of
-        // adoption of the Gregorian calendar (see IsGregorian())
-        //
-        // All data and comments taken verbatim from "The Calendar FAQ (v 2.0)"
-        // by Claus Tøndering, http://www.pip.dknet.dk/~c-t/calendar.html
-        // except for the comments "we take".
-        //
-        // Symbol "->" should be read as "was followed by" in the comments
-        // which follow.
-    enum GregorianAdoption
-    {
-        Gr_Unknown,    // no data for this country or it's too uncertain to use
-        Gr_Standard,   // on the day 0 of Gregorian calendar: 15 Oct 1582
-
-        Gr_Alaska,             // Oct 1867 when Alaska became part of the USA
-        Gr_Albania,            // Dec 1912
-
-        Gr_Austria = Gr_Unknown,    // Different regions on different dates
-        Gr_Austria_Brixen,          // 5 Oct 1583 -> 16 Oct 1583
-        Gr_Austria_Salzburg = Gr_Austria_Brixen,
-        Gr_Austria_Tyrol = Gr_Austria_Brixen,
-        Gr_Austria_Carinthia,       // 14 Dec 1583 -> 25 Dec 1583
-        Gr_Austria_Styria = Gr_Austria_Carinthia,
-
-        Gr_Belgium,            // Then part of the Netherlands
-
-        Gr_Bulgaria = Gr_Unknown, // Unknown precisely (from 1915 to 1920)
-        Gr_Bulgaria_1,         //      18 Mar 1916 -> 1 Apr 1916
-        Gr_Bulgaria_2,         //      31 Mar 1916 -> 14 Apr 1916
-        Gr_Bulgaria_3,         //      3 Sep 1920 -> 17 Sep 1920
-
-        Gr_Canada = Gr_Unknown,   // Different regions followed the changes in
-                               // Great Britain or France
-
-        Gr_China = Gr_Unknown,    // Different authorities say:
-        Gr_China_1,            //      18 Dec 1911 -> 1 Jan 1912
-        Gr_China_2,            //      18 Dec 1928 -> 1 Jan 1929
-
-        Gr_Czechoslovakia,     // (Bohemia and Moravia) 6 Jan 1584 -> 17 Jan 1584
-        Gr_Denmark,            // (including Norway) 18 Feb 1700 -> 1 Mar 1700
-        Gr_Egypt,              // 1875
-        Gr_Estonia,            // 1918
-        Gr_Finland,            // Then part of Sweden
-
-        Gr_France,             // 9 Dec 1582 -> 20 Dec 1582
-        Gr_France_Alsace,      //      4 Feb 1682 -> 16 Feb 1682
-        Gr_France_Lorraine,    //      16 Feb 1760 -> 28 Feb 1760
-        Gr_France_Strasbourg,  // February 1682
-
-        Gr_Germany = Gr_Unknown,  // Different states on different dates:
-        Gr_Germany_Catholic,   //      1583-1585 (we take 1584)
-        Gr_Germany_Prussia,    //      22 Aug 1610 -> 2 Sep 1610
-        Gr_Germany_Protestant, //      18 Feb 1700 -> 1 Mar 1700
-
-        Gr_GreatBritain,       // 2 Sep 1752 -> 14 Sep 1752 (use 'cal(1)')
-
-        Gr_Greece,             // 9 Mar 1924 -> 23 Mar 1924
-        Gr_Hungary,            // 21 Oct 1587 -> 1 Nov 1587
-        Gr_Ireland = Gr_GreatBritain,
-        Gr_Italy = Gr_Standard,
-
-        Gr_Japan = Gr_Unknown,    // Different authorities say:
-        Gr_Japan_1,            //      19 Dec 1872 -> 1 Jan 1873
-        Gr_Japan_2,            //      19 Dec 1892 -> 1 Jan 1893
-        Gr_Japan_3,            //      18 Dec 1918 -> 1 Jan 1919
-
-        Gr_Latvia,             // 1915-1918 (we take 1915)
-        Gr_Lithuania,          // 1915
-        Gr_Luxemburg,          // 14 Dec 1582 -> 25 Dec 1582
-        Gr_Netherlands = Gr_Belgium, // (including Belgium) 1 Jan 1583
-
-        // this is too weird to take into account: the Gregorian calendar was
-        // introduced twice in Groningen, first time 28 Feb 1583 was followed
-        // by 11 Mar 1583, then it has gone back to Julian in the summer of
-        // 1584 and then 13 Dec 1700 -> 12 Jan 1701 - which is
-        // the date we take here
-        Gr_Netherlands_Groningen,  // 13 Dec 1700 -> 12 Jan 1701
-        Gr_Netherlands_Gelderland, // 30 Jun 1700 -> 12 Jul 1700
-        Gr_Netherlands_Utrecht,    // (and Overijssel) 30 Nov 1700->12 Dec 1700
-        Gr_Netherlands_Friesland,  // (and Drenthe) 31 Dec 1700 -> 12 Jan 1701
-
-        Gr_Norway = Gr_Denmark,       // Then part of Denmark
-        Gr_Poland = Gr_Standard,
-        Gr_Portugal = Gr_Standard,
-        Gr_Romania,                // 31 Mar 1919 -> 14 Apr 1919
-        Gr_Russia,                 // 31 Jan 1918 -> 14 Feb 1918
-        Gr_Scotland = Gr_GreatBritain,
-        Gr_Spain = Gr_Standard,
-
-        // Sweden has a curious history. Sweden decided to make a gradual
-        // change from the Julian to the Gregorian calendar. By dropping every
-        // leap year from 1700 through 1740 the eleven superfluous days would
-        // be omitted and from 1 Mar 1740 they would be in sync with the
-        // Gregorian calendar. (But in the meantime they would be in sync with
-        // nobody!)
-        //
-        // So 1700 (which should have been a leap year in the Julian calendar)
-        // was not a leap year in Sweden. However, by mistake 1704 and 1708
-        // became leap years. This left Sweden out of synchronisation with
-        // both the Julian and the Gregorian world, so they decided to go back
-        // to the Julian calendar. In order to do this, they inserted an extra
-        // day in 1712, making that year a double leap year! So in 1712,
-        // February had 30 days in Sweden.
-        //
-        // Later, in 1753, Sweden changed to the Gregorian calendar by
-        // dropping 11 days like everyone else.
-        Gr_Sweden = Gr_Finland,       // 17 Feb 1753 -> 1 Mar 1753
-
-        Gr_Switzerland = Gr_Unknown,// Different cantons used different dates
-        Gr_Switzerland_Catholic,    //      1583, 1584 or 1597 (we take 1584)
-        Gr_Switzerland_Protestant,  //      31 Dec 1700 -> 12 Jan 1701
-
-        Gr_Turkey,                 // 1 Jan 1927
-        Gr_USA = Gr_GreatBritain,
-        Gr_Wales = Gr_GreatBritain,
-        Gr_Yugoslavia              // 1919
-    };
-
         // the country parameter is used so far for calculating the start and
         // the end of DST period and for deciding whether the date is a work
         // day or not
@@ -907,14 +789,6 @@ public:
         // is this date a work day? This depends on a country, of course,
         // because the holidays are different in different countries
     bool IsWorkDay(Country country = Country_Default) const;
-
-        // is this date later than Gregorian calendar introduction for the
-        // given country (see enum GregorianAdoption)?
-        //
-        // NB: this function shouldn't be considered as absolute authority in
-        //     the matter. Besides, for some countries the exact date of
-        //     adoption of the Gregorian calendar is simply unknown.
-    bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
 
     // dos date and time format
     // ------------------------------------------------------------------------
