@@ -2423,9 +2423,6 @@ wxWindowGTK::~wxWindowGTK()
     // destroy children before destroying this window itself
     DestroyChildren();
 
-    if (m_widget)
-        Show( false );
-
     // delete before the widgets to avoid a crash on solaris
     if ( m_imContext )
     {
