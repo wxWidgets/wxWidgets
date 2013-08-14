@@ -403,7 +403,9 @@ void wxApp::MacReopenApp()
 #if wxOSX_USE_COCOA_OR_IPHONE
 void wxApp::OSXOnWillFinishLaunching()
 {
+#if wxOSX_USE_IPHONE
     m_onInitResult = OnInit();
+#endif
 }
 
 void wxApp::OSXOnDidFinishLaunching()
