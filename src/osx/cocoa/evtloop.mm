@@ -340,8 +340,7 @@ void wxGUIEventLoop::OSXDoStop()
     // We should only stop the top level event loop.
     if ( gs_loopNestingLevel <= 1 )
     {
-        // using terminate support all native notifications
-        [NSApp terminate:0];
+        [NSApp stop:0];
     }
 
     // For the top level loop only calling stop: is not enough when called from
