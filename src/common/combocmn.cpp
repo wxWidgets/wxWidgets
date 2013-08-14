@@ -24,6 +24,10 @@
 
 #include "wx/combo.h"
 
+#ifdef __WXMSW__
+#include "wx/msw/private.h"
+#endif
+
 #if wxUSE_COMBOBOX
 #include "wx/combobox.h"
 extern WXDLLEXPORT_DATA(const char) wxComboBoxNameStr[] = "comboBox";
@@ -1370,15 +1374,31 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
 
     int fhei;
 
-#if wxUSE_COMBOBOX && (defined(__WXMSW__) || defined(__WXGTK__)) \
-        && !defined(__WXUNIVERSAL__)
-    wxComboBox* cb = new wxComboBox;
-    cb->Hide();
-    cb->Create(const_cast<wxComboCtrlBase*>(this), wxID_ANY);
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    fhei = EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight());
+#elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+    // Control creation is not entirely cheap, so cache the heights to
+    // avoid repeatedly creating dummy controls:
+    static wxString s_last_font;
+    static int s_last_fhei = -1;
+    wxString fontdesc;
     if ( m_font.IsOk() )
-        cb->SetFont(m_font);
-    fhei = cb->GetBestSize().y;
-    cb->Destroy();
+        fontdesc = m_font.GetNativeFontInfoDesc();
+    if ( s_last_fhei != -1 && fontdesc == s_last_font )
+    {
+        fhei = s_last_fhei;
+    }
+    else
+    {
+        wxComboBox* cb = new wxComboBox;
+        cb->Hide();
+        cb->Create(const_cast<wxComboCtrlBase*>(this), wxID_ANY);
+        if ( m_font.IsOk() )
+            cb->SetFont(m_font);
+        s_last_font = fontdesc;
+        s_last_fhei = fhei = cb->GetBestSize().y;
+        cb->Destroy();
+    }
 #else
     if ( m_font.IsOk() )
         fhei = (m_font.GetPointSize()*2) + 5;
