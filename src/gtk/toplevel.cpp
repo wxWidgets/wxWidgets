@@ -72,8 +72,9 @@ static wxTopLevelWindowGTK *g_lastActiveFrame = NULL;
 static int g_sendActivateEvent = -1;
 
 // Whether _NET_REQUEST_FRAME_EXTENTS support is working
-//   0 == not tested yet, 1 == working, 2 == broken
-static int gs_requestFrameExtentsStatus;
+static enum {
+    RFE_STATUS_UNKNOWN, RFE_STATUS_WORKING, RFE_STATUS_BROKEN
+} gs_requestFrameExtentsStatus;
 
 //-----------------------------------------------------------------------------
 // RequestUserAttention related functions
@@ -472,7 +473,7 @@ static gboolean property_notify_event(
         if (win->m_netFrameExtentsTimerId)
         {
             // WM support for _NET_REQUEST_FRAME_EXTENTS is working
-            gs_requestFrameExtentsStatus = 1;
+            gs_requestFrameExtentsStatus = RFE_STATUS_WORKING;
             g_source_remove(win->m_netFrameExtentsTimerId);
             win->m_netFrameExtentsTimerId = 0;
         }
@@ -492,7 +493,7 @@ extern "C" {
 static gboolean request_frame_extents_timeout(void* data)
 {
     // WM support for _NET_REQUEST_FRAME_EXTENTS is broken
-    gs_requestFrameExtentsStatus = 2;
+    gs_requestFrameExtentsStatus = RFE_STATUS_BROKEN;
     gdk_threads_enter();
     wxTopLevelWindowGTK* win = static_cast<wxTopLevelWindowGTK*>(data);
     win->m_netFrameExtentsTimerId = 0;
@@ -907,7 +908,8 @@ bool wxTopLevelWindowGTK::Show( bool show )
     bool deferShow = show && !m_isShown && m_deferShow;
     if (deferShow)
     {
-        deferShow = m_deferShowAllowed && gs_requestFrameExtentsStatus != 2 &&
+        deferShow = m_deferShowAllowed &&
+            gs_requestFrameExtentsStatus != RFE_STATUS_BROKEN &&
             !gtk_widget_get_realized(m_widget) &&
             g_signal_handler_find(m_widget,
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
@@ -971,7 +973,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
             SubstructureNotifyMask | SubstructureRedirectMask,
             (XEvent*)&xevent);
 
-        if (gs_requestFrameExtentsStatus == 0)
+        if (gs_requestFrameExtentsStatus == RFE_STATUS_UNKNOWN)
         {
             // if WM does not respond to request within 1 second,
             // we assume support for _NET_REQUEST_FRAME_EXTENTS is not working
