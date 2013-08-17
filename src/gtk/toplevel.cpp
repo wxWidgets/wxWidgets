@@ -327,11 +327,14 @@ void wxTopLevelWindowGTK::GTKConfigureEvent(int x, int y)
         gtk_window_get_position(GTK_WINDOW(m_widget), &point.x, &point.y);
     }
 
-    m_x = point.x;
-    m_y = point.y;
-    wxMoveEvent event(point, GetId());
-    event.SetEventObject(this);
-    HandleWindowEvent(event);
+    if (m_x != point.x || m_y != point.y)
+    {
+        m_x = point.x;
+        m_y = point.y;
+        wxMoveEvent event(point, GetId());
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -1102,6 +1105,9 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     if ( m_x != old_x || m_y != old_y )
     {
         gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
+        wxMoveEvent event(wxPoint(m_x, m_y), GetId());
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
     }
 
     const wxSize oldSize(m_width, m_height);
