@@ -449,21 +449,31 @@ void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
 
     if (IsShown() && m_child)
     {
-        wxPoint pos = ScreenToClient(wxGetMousePosition());
-        wxRect rect(GetSize());
+        // Store the last mouse position to minimize the number of calls to
+        // wxFindWindowAtPoint() which are quite expensive.
+        static wxPoint s_posLast;
+        const wxPoint pos = wxGetMousePosition();
+        if ( pos != s_posLast )
+        {
+            s_posLast = pos;
 
-        if ( rect.Contains(pos) )
-        {
-            if ( m_child->HasCapture() )
+            wxWindow* const winUnderMouse = wxFindWindowAtPoint(pos);
+
+            // We release the mouse capture while the mouse is inside the popup
+            // itself to allow using it normally with the controls inside it.
+            if ( wxGetTopLevelParent(winUnderMouse) == this )
             {
-                m_child->ReleaseMouse();
+                if ( m_child->HasCapture() )
+                {
+                    m_child->ReleaseMouse();
+                }
             }
-        }
-        else
-        {
-            if ( !m_child->HasCapture() )
+            else // And we reacquire it as soon as the mouse goes outside.
             {
-                m_child->CaptureMouse();
+                if ( !m_child->HasCapture() )
+                {
+                    m_child->CaptureMouse();
+                }
             }
         }
     }
