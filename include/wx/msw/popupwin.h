@@ -25,6 +25,7 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
+    virtual void SetFocus();
     virtual bool Show(bool show = true);
 
     // return the style to be used for the popup windows

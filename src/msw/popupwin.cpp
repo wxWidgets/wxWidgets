@@ -89,6 +89,15 @@ WXHWND wxPopupWindow::MSWGetParent() const
 #endif
 }
 
+void wxPopupWindow::SetFocus()
+{
+    // Focusing on a popup window does not work on MSW unless WS_POPUP style is
+    // set (which is never the case currently, see the note in MSWGetParent()).
+    // We do not even want to try to set the focus, as it returns an error from
+    // SetFocus() on recent Windows versions (since Vista) and the resulting
+    // debug message is annoying.
+}
+
 bool wxPopupWindow::Show(bool show)
 {
     if ( !wxWindowMSW::Show(show) )
