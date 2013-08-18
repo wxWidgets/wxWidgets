@@ -664,7 +664,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     PostCreation();
 
 #ifndef __WXGTK3__
-    if ((m_x != -1) || (m_y != -1))
+    if (pos != wxDefaultPosition)
         gtk_widget_set_uposition( m_widget, m_x, m_y );
 #endif
 
