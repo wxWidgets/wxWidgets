@@ -265,8 +265,16 @@ void wxPopupTransientWindow::PopHandlers()
 
 void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 {
+    // If we have a single child, we suppose that it must cover the entire
+    // popup window and hence we give the mouse capture to it instead of
+    // keeping it for ourselves.
+    //
+    // Notice that this works best for combobox-like popups which have a single
+    // control inside them and not so well for popups containing a single
+    // wxPanel with multiple children inside it but OTOH it does no harm in
+    // this case neither and we can't reliably distinguish between them.
     const wxWindowList& children = GetChildren();
-    if ( children.GetCount() )
+    if ( children.GetCount() == 1 )
     {
         m_child = children.GetFirst()->GetData();
     }
