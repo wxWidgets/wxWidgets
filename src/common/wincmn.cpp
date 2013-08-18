@@ -72,6 +72,7 @@
 #endif
 
 #include "wx/platinfo.h"
+#include "wx/recguard.h"
 #include "wx/private/window.h"
 
 #ifdef __WINDOWS__
@@ -3216,8 +3217,8 @@ struct WindowNext
 // the window that currently has mouse capture
 wxWindow *current = NULL;
 
-// indicates if execution is inside CaptureMouse/ReleaseMouse
-bool changing = false;
+// Flag preventing reentrancy in {Capture,Release}Mouse().
+wxRecursionGuardFlag changing;
 
 } // wxMouseCapture
 
@@ -3225,9 +3226,8 @@ void wxWindowBase::CaptureMouse()
 {
     wxLogTrace(wxT("mousecapture"), wxT("CaptureMouse(%p)"), static_cast<void*>(this));
 
-    wxASSERT_MSG( !wxMouseCapture::changing, wxT("recursive CaptureMouse call?") );
-
-    wxMouseCapture::changing = true;
+    wxRecursionGuard guard(wxMouseCapture::changing);
+    wxASSERT_MSG( !guard.IsInside(), wxT("recursive CaptureMouse call?") );
 
     wxWindow *winOld = GetCapture();
     if ( winOld )
@@ -3244,22 +3244,19 @@ void wxWindowBase::CaptureMouse()
 
     DoCaptureMouse();
     wxMouseCapture::current = (wxWindow*)this;
-
-    wxMouseCapture::changing = false;
 }
 
 void wxWindowBase::ReleaseMouse()
 {
     wxLogTrace(wxT("mousecapture"), wxT("ReleaseMouse(%p)"), static_cast<void*>(this));
 
-    wxASSERT_MSG( !wxMouseCapture::changing, wxT("recursive ReleaseMouse call?") );
+    wxRecursionGuard guard(wxMouseCapture::changing);
+    wxASSERT_MSG( !guard.IsInside(), wxT("recursive ReleaseMouse call?") );
 
     wxASSERT_MSG( GetCapture() == this,
                   "attempt to release mouse, but this window hasn't captured it" );
     wxASSERT_MSG( wxMouseCapture::current == this,
                   "attempt to release mouse, but this window hasn't captured it" );
-
-    wxMouseCapture::changing = true;
 
     DoReleaseMouse();
     wxMouseCapture::current = NULL;
@@ -3274,8 +3271,6 @@ void wxWindowBase::ReleaseMouse()
         delete item;
     }
     //else: stack is empty, no previous capture
-
-    wxMouseCapture::changing = false;
 
     wxLogTrace(wxT("mousecapture"),
         (const wxChar *) wxT("After ReleaseMouse() mouse is captured by %p"),
@@ -3301,7 +3296,8 @@ void wxWindowBase::NotifyCaptureLost()
 {
     // don't do anything if capture lost was expected, i.e. resulted from
     // a wx call to ReleaseMouse or CaptureMouse:
-    if ( wxMouseCapture::changing )
+    wxRecursionGuard guard(wxMouseCapture::changing);
+    if ( guard.IsInside() )
         return;
 
     // if the capture was lost unexpectedly, notify every window that has
