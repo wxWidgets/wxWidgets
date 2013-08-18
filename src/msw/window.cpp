@@ -59,6 +59,7 @@
 #include "wx/hashmap.h"
 #include "wx/evtloop.h"
 #include "wx/power.h"
+#include "wx/scopeguard.h"
 #include "wx/sysopt.h"
 
 #if wxUSE_DRAG_AND_DROP
@@ -239,6 +240,9 @@ EraseBgHooks gs_eraseBgHooks;
 // anyhow but could be replaced with a thread-specific value in the future if
 // needed.
 int gs_modalEntryWindowCount = 0;
+
+// Indicates whether we are currently processing WM_CAPTURECHANGED message.
+bool gs_insideCaptureChanged = false;
 
 } // anonymous namespace
 
@@ -804,6 +808,13 @@ void wxWindowMSW::DoReleaseMouse()
 
 /* static */ wxWindow *wxWindowBase::GetCapture()
 {
+    // When we receive WM_CAPTURECHANGED message, ::GetCapture() still returns
+    // the HWND that is losing the mouse capture. But as we must not release
+    // the capture for it (it's going to happen anyhow), pretend that there is
+    // no capture any more.
+    if ( gs_insideCaptureChanged )
+        return NULL;
+
     HWND hwnd = ::GetCapture();
     return hwnd ? wxFindWinFromHandle(hwnd) : NULL;
 }
@@ -4544,6 +4555,12 @@ bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
 
 bool wxWindowMSW::HandleCaptureChanged(WXHWND hWndGainedCapture)
 {
+    // Ensure that wxWindow::GetCapture() returns NULL if called from the event
+    // handlers invoked below. This is necessary to avoid wrongly calling
+    // ReleaseMouse() when we're already losing the mouse capture anyhow.
+    gs_insideCaptureChanged = true;
+    wxON_BLOCK_EXIT_SET(gs_insideCaptureChanged, false);
+
     // notify windows on the capture stack about lost capture
     // (see http://sourceforge.net/tracker/index.php?func=detail&aid=1153662&group_id=9863&atid=109863):
     wxWindowBase::NotifyCaptureLost();
