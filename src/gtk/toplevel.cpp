@@ -353,14 +353,6 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
     gdk_window_set_functions(gtk_widget_get_window(m_widget),
                                (GdkWMFunction)m_gdkFunc);
 
-    // GTK's shrinking/growing policy
-    if ( !(m_gdkFunc & GDK_FUNC_RESIZE) )
-        gtk_window_set_resizable(GTK_WINDOW(m_widget), FALSE);
-#ifndef __WXGTK3__
-    else
-        gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
-#endif
-
     const wxIconBundle& icons = GetIcons();
     if (icons.GetIconCount())
         SetIcons(icons);
@@ -753,6 +745,13 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
            m_gdkDecor |= GDK_DECOR_RESIZEH;
         }
     }
+
+    if ((style & wxRESIZE_BORDER) == 0)
+        gtk_window_set_resizable(GTK_WINDOW(m_widget), false);
+#ifndef __WXGTK3__
+    else
+        gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
+#endif
 
     // GTK sometimes chooses very small size if max size hint is not explicitly set
     DoSetSizeHints(m_minWidth, m_minHeight, m_maxWidth, m_maxHeight, m_incWidth, m_incHeight);
