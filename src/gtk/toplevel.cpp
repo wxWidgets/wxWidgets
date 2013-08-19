@@ -545,16 +545,10 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                                   wxWindowID id,
                                   const wxString& title,
                                   const wxPoint& pos,
-                                  const wxSize& sizeOrig,
+                                  const wxSize& size,
                                   long style,
                                   const wxString &name )
 {
-    // always create a frame of some reasonable, even if arbitrary, size (at
-    // least for MSW compatibility)
-    wxSize size = sizeOrig;
-    size.x = WidthDefault(size.x);
-    size.y = HeightDefault(size.y);
-
     wxTopLevelWindows.Append( this );
 
     if (!PreCreation( parent, pos, size ) ||
