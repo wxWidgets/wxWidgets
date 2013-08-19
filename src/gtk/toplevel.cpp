@@ -749,9 +749,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
 #endif
 
-    // GTK sometimes chooses very small size if max size hint is not explicitly set
-    DoSetSizeHints(m_minWidth, m_minHeight, m_maxWidth, m_maxHeight, m_incWidth, m_incHeight);
-
     m_decorSize = GetCachedDecorSize();
     int w, h;
     GTKDoGetSize(&w, &h);
