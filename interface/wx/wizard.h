@@ -247,7 +247,7 @@ public:
 
         @since 2.9.5
      */
-    wxWizardPageSimple& Chain(wxWizardPageSimple* next)
+    wxWizardPageSimple& Chain(wxWizardPageSimple* next);
 
     /**
         A convenience function to make the pages follow each other.
