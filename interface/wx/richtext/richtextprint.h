@@ -340,13 +340,13 @@ public:
 
     /**
         Prints the given buffer. The function takes its own copy of @a buffer.
-        @showPrintDialog can be @true to show the print dialog, or @false to print quietly.
+        @a showPrintDialog can be @true to show the print dialog, or @false to print quietly.
     */
     bool PrintBuffer(const wxRichTextBuffer& buffer, bool showPrintDialog = true);
 
     /**
         Prints the given file. @a richTextFile can be a text file or XML file,
-        or other file depending on the available file handlers. @showPrintDialog
+        or other file depending on the available file handlers. @a showPrintDialog
         can be @true to show the print dialog, or @false to print quietly.
     */
     bool PrintFile(const wxString& richTextFile, bool showPrintDialog = true);

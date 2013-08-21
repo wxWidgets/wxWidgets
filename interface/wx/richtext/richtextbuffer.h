@@ -2084,7 +2084,7 @@ public:
 
     /**
         Lay the item out at the specified position with the given size constraint.
-        Layout must set the cached size. @rect is the available space for the object,
+        Layout must set the cached size. @a rect is the available space for the object,
         and @a parentRect is the container that is used to determine a relative size
         or position (for example if a text box must be 50% of the parent text box).
     */
@@ -3563,7 +3563,7 @@ public:
 
     /**
         Lay the item out at the specified position with the given size constraint.
-        Layout must set the cached size. @rect is the available space for the object,
+        Layout must set the cached size. @a rect is the available space for the object,
         and @a parentRect is the container that is used to determine a relative size
         or position (for example if a text box must be 50% of the parent text box).
     */
@@ -3664,7 +3664,7 @@ public:
     /**
         Constructor, creating a field type definition with a text label.
 
-        @param parent
+        @param name
             The name of the type definition. This must be unique, and is the type
             name used when adding a field to a control.
         @param label
@@ -3680,10 +3680,10 @@ public:
     /**
         Constructor, creating a field type definition with a bitmap label.
 
-        @param parent
+        @param name
             The name of the type definition. This must be unique, and is the type
             name used when adding a field to a control.
-        @param label
+        @param bitmap
             The bitmap label to be shown on the field.
         @param displayStyle
             The display style: one of wxRICHTEXT_FIELD_STYLE_RECTANGLE,
@@ -3728,7 +3728,7 @@ public:
 
     /**
         Lay the item out at the specified position with the given size constraint.
-        Layout must set the cached size. @rect is the available space for the object,
+        Layout must set the cached size. @a rect is the available space for the object,
         and @a parentRect is the container that is used to determine a relative size
         or position (for example if a text box must be 50% of the parent text box).
     */

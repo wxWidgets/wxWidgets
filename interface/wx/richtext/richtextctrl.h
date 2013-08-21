@@ -494,6 +494,8 @@ public:
 
     /**
         Sets the wxRichTextObject object that currently has the editing focus.
+        @param obj
+            The wxRichTextObject to set focus on.
         @param setCaretPosition
             Optionally set the caret position.
     */
@@ -2290,7 +2292,7 @@ public:
 
         @param commandType
             The type of the event.
-        @param id
+        @param winid
             Window identifier. The value @c wxID_ANY indicates a default value.
     */
     wxRichTextEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
