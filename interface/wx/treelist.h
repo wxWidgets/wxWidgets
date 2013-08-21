@@ -459,6 +459,8 @@ public:
             wxTLI_FIRST or wxTLI_LAST indicating that the item should be either
             inserted before the first child of its parent (if any) or after the
             last one.
+        @param text
+            The item text.
         @param imageClosed
             The normal item image, may be NO_IMAGE to not show any image.
         @param imageOpened

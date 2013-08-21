@@ -256,7 +256,7 @@ public:
 
         Notice that in spite of this the last character of the returned string
         can still be the path separator if this directory is the root one.
-        Because of this, don't append ::wxFILE_SEP_PATH to the returned value
+        Because of this, don't append @c wxFILE_SEP_PATH to the returned value
         if you do need a slash-terminated directory name but use
         GetNameWithSep() instead to avoid having duplicate consecutive slashes.
     */
@@ -265,7 +265,7 @@ public:
     /**
         Returns the name of the directory with the path separator appended.
 
-        The last character of the returned string is always ::wxFILE_SEP_PATH
+        The last character of the returned string is always @c wxFILE_SEP_PATH
         unless the string is empty, indicating that this directory is invalid.
 
         @see GetName()

@@ -883,6 +883,8 @@ public:
 
         @param id
             ID of the tool in question, as passed to AddTool().
+        @param clientData
+            The client data to use.
     */
     virtual void SetToolClientData(int id, wxObject* clientData);
 
@@ -893,6 +895,8 @@ public:
 
         @param id
             ID of the tool in question, as passed to AddTool().
+        @param bitmap
+            Bitmap to use for disabled tools.
 
         @note The native toolbar classes on the main platforms all synthesize
             the disabled bitmap from the normal bitmap, so this function will
@@ -922,6 +926,8 @@ public:
 
         @param id
             ID of the tool in question, as passed to AddTool().
+        @param bitmap
+            Bitmap to use for normals tools.
     */
     virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
 

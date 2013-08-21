@@ -454,7 +454,7 @@ public:
 
         @param name
             The name of the locale. Only used in diagnostic messages.
-        @param short
+        @param shortName
             The standard 2 letter locale abbreviation; it is used as the
             directory prefix when looking for the message catalog files.
         @param locale

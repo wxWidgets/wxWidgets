@@ -1217,9 +1217,9 @@ public:
 
         The following symbolic constants can be used in addition to raw
         values in 0..100 range:
-          - ::wxPRIORITY_MIN: 0
-          - ::wxPRIORITY_DEFAULT: 50
-          - ::wxPRIORITY_MAX: 100
+          - @c wxPRIORITY_MIN: 0
+          - @c wxPRIORITY_DEFAULT: 50
+          - @c wxPRIORITY_MAX: 100
     */
     void SetPriority(unsigned int priority);
 
@@ -1261,7 +1261,7 @@ public:
 
         This function can only be called from another thread context.
 
-        @param waitMode
+        @param flags
             As described in wxThreadWait documentation, wxTHREAD_WAIT_BLOCK
             should be used as the wait mode even although currently
             wxTHREAD_WAIT_YIELD is for compatibility reasons. This parameter is
