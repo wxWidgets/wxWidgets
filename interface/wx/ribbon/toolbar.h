@@ -325,7 +325,7 @@ public:
     /**
         Get any client data associated with the tool.
 
-        @param toolId
+        @param tool_id
             ID of the tool in question, as passed to AddTool().
 
         @return Client data, or @NULL if there is none.
@@ -337,7 +337,7 @@ public:
     /**
         Called to determine whether a tool is enabled (responds to user input).
 
-        @param toolId
+        @param tool_id
             ID of the tool in question, as passed to AddTool().
 
         @return @true if the tool is enabled, @false otherwise.
@@ -351,7 +351,7 @@ public:
     /**
         Returns the help string for the given tool.
 
-        @param toolId
+        @param tool_id
             ID of the tool in question, as passed to AddTool().
 
         @since 2.9.4
@@ -361,7 +361,7 @@ public:
     /**
         Return the kind of the given tool.
 
-        @param toolId
+        @param tool_id
             ID of the tool in question, as passed to AddTool().
 
         @since 2.9.4
@@ -372,7 +372,7 @@ public:
         Returns the tool position in the toolbar, or @c wxNOT_FOUND if the tool
         is not found.
 
-        @param toolId
+        @param tool_id
             ID of the tool in question, as passed to AddTool().
 
         @since 2.9.4
@@ -382,7 +382,7 @@ public:
     /**
         Gets the on/off state of a toggle tool.
 
-        @param toolId
+        @param tool_id
             ID of the tool in question, as passed to AddTool().
 
         @return @true if the tool is toggled on, @false otherwise.
@@ -419,8 +419,10 @@ public:
     /**
         Sets the client data associated with the tool.
 
-        @param id
+        @param tool_id
             ID of the tool in question, as passed to AddTool().
+        @param clientData
+            The client data to use.
 
         @since 2.9.4
     */
@@ -432,6 +434,8 @@ public:
 
         @param tool_id
             ID of the tool in question, as passed to AddTool().
+        @param bitmap
+            Bitmap to use for disabled tools.
 
         @since 2.9.4
     */
@@ -440,7 +444,7 @@ public:
     /**
         Sets the help string shown in tooltip for the given tool.
 
-        @param tool_Id
+        @param tool_id
             ID of the tool in question, as passed to AddTool().
         @param helpString
             A string for the help.
@@ -456,6 +460,8 @@ public:
 
         @param tool_id
             ID of the tool in question, as passed to AddTool().
+        @param bitmap
+            Bitmap to use for normals tools.
 
         @since 2.9.4
     */
