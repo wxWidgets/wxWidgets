@@ -332,6 +332,8 @@ public:
 
         @param window
             interface to the parent HTML window
+        @param rePos
+            Position to show cursor.
 
         @since 3.0
      */
