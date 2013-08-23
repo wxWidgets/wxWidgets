@@ -555,7 +555,7 @@ void AppFrame::CreateMenu ()
 
     // Help menu
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append (wxID_ABOUT, _("&About ..\tShift+F1"));
+    menuHelp->Append (wxID_ABOUT, _("&About ..\tCtrl+D"));
 
     // construct menu
     m_menuBar->Append (menuFile, _("&File"));

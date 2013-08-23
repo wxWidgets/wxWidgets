@@ -474,7 +474,8 @@ void wxHtmlHelpData::SetTempDir(const wxString& path)
         m_tempPath = path;
     else
     {
-        wxFileName fn(path);
+        wxFileName fn;
+        fn.AssignDir(path);
         fn.MakeAbsolute();
 
         m_tempPath = fn.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
