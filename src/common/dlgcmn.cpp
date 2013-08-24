@@ -125,7 +125,7 @@ END_EVENT_TABLE()
 wxDialogLayoutAdapter* wxDialogBase::sm_layoutAdapter = NULL;
 bool wxDialogBase::sm_layoutAdaptation = false;
 
-void wxDialogBase::Init()
+wxDialogBase::wxDialogBase()
 {
     m_returnCode = 0;
     m_affirmativeId = wxID_OK;
