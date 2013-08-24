@@ -4,12 +4,12 @@ msgstr ""
 "Project-Id-Version: wxWidgets\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
-"PO-Revision-Date: 2013-08-23 17:33+0100\n"
+"PO-Revision-Date: 2013-08-23 19:26+0100\n"
 "Last-Translator: Xabier Aramendi (Azpidatziak) <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.7\n"
@@ -136,7 +136,7 @@ msgstr "%s Oharra"
 #: ../src/common/tarstrm.cpp:1319
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
-msgstr ""
+msgstr "%s-k ez du finkatzen tar idazburua '%s' sarrerarentzat"
 
 #: ../src/common/fldlgcmn.cpp:106
 #, c-format
@@ -1022,7 +1022,7 @@ msgstr "Garbiketa jakinarazpena sortu da. Aurkitu daiteke hemen"
 
 #: ../src/common/xtixml.cpp:418
 msgid "A non empty collection must consist of 'element' nodes"
-msgstr ""
+msgstr "Bilduma ez hutsa 'elementu' elkarguneak izan behar da"
 
 #: ../src/richtext/richtextliststylepage.cpp:304
 #: ../src/richtext/richtextliststylepage.cpp:306
@@ -1163,11 +1163,11 @@ msgstr "Gehitu egile margoetara"
 
 #: ../include/wx/xtiprop.h:259
 msgid "AddToPropertyCollection called on a generic accessor"
-msgstr ""
+msgstr "AddToPropertyCollection deituta sarbideratzaile generiko batean"
 
 #: ../include/wx/xtiprop.h:197
 msgid "AddToPropertyCollection called w/o valid adder"
-msgstr ""
+msgstr "AddToPropertyCollection w/o baliozko gehitzailea deituta"
 
 #: ../src/html/helpctrl.cpp:159
 #, c-format
@@ -1180,7 +1180,7 @@ msgstr "flavor TEXT gehitze hutsegitea"
 
 #: ../src/osx/carbon/dataview.cpp:1954
 msgid "Adding flavor utxt failed"
-msgstr ""
+msgstr "flavor TEXT gehitze hutsegitea"
 
 #: ../src/common/preferencescmn.cpp:41
 msgid "Advanced"
@@ -1229,7 +1229,7 @@ msgstr "Alfabeto Moduan"
 
 #: ../src/common/xtistrm.cpp:429
 msgid "Already Registered Object passed to SetObjectClassInfo"
-msgstr ""
+msgstr "Jadanik Erregistraturiko Objetua SetObjectClassInfo-ra pasatuta"
 
 #: ../src/unix/dialup.cpp:354
 msgid "Already dialling ISP."
@@ -1653,7 +1653,7 @@ msgstr "Ezin da '%s'-ren balioa ezarri"
 
 #: ../src/unix/utilsunx.cpp:357
 msgid "Can't write to child process's stdin"
-msgstr ""
+msgstr "Ezin da child prozesuaren stdin idatzi"
 
 #: ../src/common/zstream.cpp:427
 #, c-format
@@ -1715,7 +1715,7 @@ msgstr "Ezin da lortu hostalari-izen ofiziala"
 
 #: ../src/msw/dialup.cpp:949
 msgid "Cannot hang up - no active dialup connection."
-msgstr ""
+msgstr "Ezinezkoa eskegitzea - ez dago dei elkarketarik lanean."
 
 #: ../include/wx/msw/ole/oleutils.h:52
 msgid "Cannot initialize OLE"
@@ -1978,7 +1978,7 @@ msgstr "Hautatu hizkia"
 #: ../src/common/module.cpp:74
 #, c-format
 msgid "Circular dependency involving module \"%s\" detected."
-msgstr ""
+msgstr "\"%s\" moduloa inguratzen duen elkartoki zirkularra atzeman da."
 
 #: ../src/aui/tabmdi.cpp:108 ../src/generic/mdig.cpp:97
 msgid "Cl&ose"
@@ -2340,7 +2340,7 @@ msgstr "Ezinezkoa datuak leihora eskualdatzea"
 
 #: ../src/os2/thread.cpp:160
 msgid "Couldn't acquire a mutex lock"
-msgstr ""
+msgstr "Ezinezkoa mutex blokeoa lortzea"
 
 #: ../src/msw/imaglist.cpp:166 ../src/msw/imaglist.cpp:197
 #: ../src/msw/imaglist.cpp:209 ../src/msw/dragimag.cpp:193
@@ -2350,7 +2350,7 @@ msgstr "Ezinezkoa irudia gehitzea irudi zerrendara."
 
 #: ../src/msw/timer.cpp:134 ../src/os2/timer.cpp:113
 msgid "Couldn't create a timer"
-msgstr "Ezinezkoa denboragailua sortzea"
+msgstr "Ezinezkoa denboragailu bat sortzea"
 
 #: ../src/osx/carbon/overlay.cpp:122
 msgid "Couldn't create the overlay window"
@@ -2632,6 +2632,8 @@ msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
 msgstr ""
+"Dei eginkizunak ez daude eskuragarri hurreneko sarbide zerbitzua (RAS) ez "
+"dagoelako ezarrita makina honetan. Mesedez ezarri ezazu."
 
 #: ../src/generic/tipdlg.cpp:230
 msgid "Did you know..."
@@ -2673,6 +2675,8 @@ msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
 msgstr ""
+"Erakutsi emandako azpikatea duten aurkibideko gai guztiak. Bilaketak hizki "
+"xehe-larriak bereizten ditu."
 
 #: ../src/html/helpwnd.cpp:692
 msgid "Display options dialog"
@@ -3125,6 +3129,7 @@ msgstr ""
 #: ../src/unix/wakeuppipe.cpp:52
 msgid "Failed to create wake up pipe used by event loop."
 msgstr ""
+"Hutsegitea gertaera bigiztak erabilitako iratzarpen hodia sortzearakoan."
 
 #: ../src/html/winpars.cpp:739
 #, c-format
@@ -3295,7 +3300,7 @@ msgstr "Hutsegitea %d azaltzailea %d epoll azaltzailean aldatzerakoan"
 #: ../src/common/filename.cpp:2681
 #, c-format
 msgid "Failed to modify file times for '%s'"
-msgstr "Hutsegitea '%s' agiri denborak aldatzerakoan"
+msgstr "Hutsegitea '%s'-rako agiri denborak aldatzerakoan"
 
 #: ../src/common/selectdispatcher.cpp:252
 msgid "Failed to monitor I/O channels"
@@ -3433,7 +3438,7 @@ msgstr "Hutsegitea gakotik datuak berreskuratzerakoan."
 #: ../src/common/filename.cpp:2777
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
-msgstr "Hutsegitea '%s'-rentzako agiri denborak berreskuratzerakoan"
+msgstr "Hutsegitea '%s'-rako agiri denborak berreskuratzerakoan"
 
 #: ../src/msw/dialup.cpp:487
 msgid "Failed to retrieve text of RAS error message"
@@ -3496,6 +3501,7 @@ msgstr "Hutsegitea %d hari lehentasuna ezartzerakoan."
 #: ../src/unix/utilsunx.cpp:791
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
+"Hutsegitea ez-blokeo hodia ezartzerakoan, programa blokeatu egin daiteke."
 
 #: ../src/common/fs_mem.cpp:261
 #, c-format
@@ -3694,7 +3700,7 @@ msgstr "Hizkia:"
 #: ../src/dfb/fontmgr.cpp:198
 #, c-format
 msgid "Fonts index file %s disappeared while loading fonts."
-msgstr ""
+msgstr "%s hizki agiria ezagertu egin da hizkiak gertatzerakoan."
 
 #: ../src/unix/utilsunx.cpp:651
 msgid "Fork failed"
@@ -3723,7 +3729,7 @@ msgstr "GIF: gif aurkibide baliogabea."
 
 #: ../src/common/imaggif.cpp:150
 msgid "GIF: data stream seems to be truncated."
-msgstr ""
+msgstr "GiF: datu jarioa etenda dagoela dirudi."
 
 #: ../src/common/imaggif.cpp:134
 msgid "GIF: error in GIF image format."
@@ -3767,15 +3773,15 @@ msgstr "German Std Fanfold, 8 1/2 x 12 in"
 
 #: ../include/wx/xtiprop.h:188
 msgid "GetProperty called w/o valid getter"
-msgstr ""
+msgstr "GetProperty w/o baliozko lortzailea deituta"
 
 #: ../include/wx/xtiprop.h:266
 msgid "GetPropertyCollection called on a generic accessor"
-msgstr ""
+msgstr "GetPropertyCollection sarbideratzaile generiko batean deituta"
 
 #: ../include/wx/xtiprop.h:206
 msgid "GetPropertyCollection called w/o valid collection getter"
-msgstr ""
+msgstr "GetPropertyCollection w/o baliozko bilduma lortzailea deituta"
 
 #: ../src/html/helpwnd.cpp:673
 msgid "Go back"
@@ -3907,7 +3913,7 @@ msgstr "Hasierako zuzenbidea"
 #: ../src/richtext/richtextsizepage.cpp:250
 #: ../src/richtext/richtextsizepage.cpp:252
 msgid "How the object will float relative to the text."
-msgstr ""
+msgstr "Objetua idazkiarekiko nola gain ezarriko den."
 
 #: ../src/common/imagbmp.cpp:1118
 msgid "ICO: Error in reading mask DIB."
@@ -3969,12 +3975,16 @@ msgid ""
 "If possible, try changing the layout parameters to make the printout more "
 "narrow."
 msgstr ""
+"Ahal bada, saiatu antolakuntza parametroak aldatzen irarketa estuagoa "
+"egiteko."
 
 #: ../src/generic/dbgrptg.cpp:358
 msgid ""
 "If you have any additional information pertaining to this bug\n"
 "report, please enter it here and it will be joined to it:"
 msgstr ""
+"Akats honi buruzko argibide gehigarriren bat baduzu\n"
+"jakinarazi, mesedez sartu hemen eta berari batuko zaio:"
 
 #: ../src/generic/dbgrptg.cpp:324
 msgid ""
@@ -3983,6 +3993,10 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
+"Akats jakinarazpen hau erabat ezabatzea nahi baduzu, mesedez hautatu "
+"\"Ezeztatu\" botoia,\n"
+"baina kontuan izan programaren hobekuntza zaildu dezakeela, hortaz\n"
+"ahal bezain mesedez jarraitu jakinarazpenaren sortzearekin.\n"
 
 #: ../src/msw/registry.cpp:1395
 #, c-format
@@ -4028,6 +4042,8 @@ msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
 msgstr ""
+"Ezinezkoa aberastu edizio aginte bat sortzea, idazki arrunt agintea "
+"erabiltzen ordez. Mesedez berrezarri riched32.dll"
 
 #: ../src/unix/utilsunx.cpp:307
 msgid "Impossible to get child process input"
@@ -4167,7 +4183,7 @@ msgstr "Adierazpen arrunt baliogabea '%s': %s"
 #: ../src/common/config.cpp:226
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
-msgstr ""
+msgstr "Balio baliogabea %ld boolean giltzarakon \"%s\" itxurapen agirian."
 
 #: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:333
 #: ../src/osx/carbon/fontdlg.cpp:547 ../src/common/stockitem.cpp:168
@@ -5120,11 +5136,11 @@ msgstr "Ingurua"
 
 #: ../src/richtext/richtextborderspage.cpp:550
 msgid "Outset"
-msgstr ""
+msgstr "Hasiera"
 
 #: ../src/msw/ole/automtn.cpp:645
 msgid "Overflow while coercing argument values."
-msgstr ""
+msgstr "Gainezkatzea argumentu balioak behartzean."
 
 #: ../src/common/accelcmn.cpp:84
 msgid "PAGEDOWN"
@@ -5330,7 +5346,7 @@ msgstr "Esaldi estiloak"
 
 #: ../src/common/xtistrm.cpp:469
 msgid "Passing a already registered object to SetObject"
-msgstr ""
+msgstr "Jadanik erregistraturiko objetua SetObject-ra pasatzen"
 
 #: ../src/common/xtistrm.cpp:480
 msgid "Passing an unknown object to GetObject"
@@ -5690,7 +5706,7 @@ msgstr "Sarrera nabarmenak:"
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Remaining time:"
-msgstr "Igarotako denbora:"
+msgstr "Gelditzen den denbora:"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Remove"
@@ -5753,7 +5769,7 @@ msgstr "Itzuli Gordetakora"
 
 #: ../src/richtext/richtextborderspage.cpp:548
 msgid "Ridge"
-msgstr ""
+msgstr "Haria"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
@@ -5942,11 +5958,12 @@ msgstr "Ezarri Gelaxka estiloa"
 
 #: ../include/wx/xtiprop.h:179
 msgid "SetProperty called w/o valid setter"
-msgstr ""
+msgstr "SetProperty w/o baliozko ezartzailea deituta"
 
 #: ../src/common/filename.cpp:2632
 msgid "Setting directory access times is not supported under this OS version"
-msgstr "Zuzenbide sarbide denborak ez daude sostengaturik SE bertsio honetan"
+msgstr ""
+"Zuzenbide sarbide denborak ezartzea ez dago sostengaturik SE bertsio honetan"
 
 #: ../src/generic/prntdlgg.cpp:193
 msgid "Setup..."
@@ -5954,7 +5971,7 @@ msgstr "Ezarpena..."
 
 #: ../src/msw/dialup.cpp:563
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr ""
+msgstr "Dei elkarketa ugari aurkitu dira lanean, zorizko bat hautatzen."
 
 #: ../src/common/accelcmn.cpp:324
 msgid "Shift+"
@@ -6047,7 +6064,7 @@ msgstr "Ahaztu"
 
 #: ../src/generic/fontdlgg.cpp:330
 msgid "Slant"
-msgstr ""
+msgstr "Oker"
 
 #: ../src/richtext/richtextfontpage.cpp:298
 msgid "Small C&apitals"
@@ -6168,9 +6185,8 @@ msgid "Symbol &font:"
 msgstr "Ikur &hizkia:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
-msgstr "Ikurra"
+msgstr "Sinboloak"
 
 #: ../src/common/accelcmn.cpp:63
 msgid "TAB"
@@ -6771,7 +6787,7 @@ msgstr "Idaz bat ez etortzea %u argumentoan."
 #: ../src/common/xtixml.cpp:356 ../src/common/xtixml.cpp:509
 #: ../src/common/xtistrm.cpp:322
 msgid "Type must have enum - long conversion"
-msgstr ""
+msgstr "Motak enum- long bihurketa izan behar du"
 
 #: ../src/propgrid/propgridiface.cpp:382
 #, c-format
@@ -6928,7 +6944,7 @@ msgstr "Ustekabeko hizkiak '%s' aukeraren ondoren."
 #: ../src/unix/fswatcher_inotify.cpp:261
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
-msgstr ""
+msgstr "Ustekabeko gertaera \"%s\": ez dator bat behaketa azaltzailea."
 
 #: ../src/common/cmdline.cpp:1024
 #, c-format
@@ -6983,7 +6999,7 @@ msgstr "Unicode 8 bit (UTF-8)"
 
 #: ../src/common/stockitem.cpp:204
 msgid "Unindent"
-msgstr ""
+msgstr "Hertzgabe"
 
 #: ../src/richtext/richtextborderspage.cpp:373
 #: ../src/richtext/richtextborderspage.cpp:375
@@ -7548,7 +7564,7 @@ msgstr "Zooma Zehazteko"
 
 #: ../src/msw/dde.cpp:1144
 msgid "a DDEML application has created a prolonged race condition."
-msgstr ""
+msgstr "DDEML aplikazio batek lasterketa baldintza luzatu bat sortu du."
 
 #: ../src/msw/dde.cpp:1132
 msgid ""
@@ -7557,6 +7573,9 @@ msgid ""
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
+"DDEML eginkizun bat deitu da lehenik DdeInitialize eginkizuna deitu gabe,\n"
+"edo ekinbide ezagutarazle baliogabe bat\n"
+"pasatu da DDEML eginkizun batera."
 
 #: ../src/msw/dde.cpp:1150
 msgid "a client's attempt to establish a conversation has failed."
@@ -7596,6 +7615,9 @@ msgid ""
 "that was terminated by the client, or the server\n"
 "terminated before completing a transaction."
 msgstr ""
+"zerbitzari-aldeko eskualdaketa elkarrizketa saiakera bat izan da\n"
+"bezeroak amaitu duena, edo zerbitzariak\n"
+"amaitu du eskualdaketa bat osatu aurretik."
 
 #: ../src/msw/dde.cpp:1153
 msgid "a transaction failed."
@@ -7631,6 +7653,9 @@ msgid ""
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
+"eskualdaketa ezagutarazle baliogabe bat pasatu da DDEML eginkizun batera.\n"
+"Behin aplikazioak XTYP_XACT_COMPLETE irizkizunetik erantzundakoan,\n"
+"irizkizun horretarako ezgutarazlea ez da baliogarria gehiago."
 
 #: ../src/common/zipstrm.cpp:1272
 msgid "assuming this is a multi-part zip concatenated"
