@@ -305,7 +305,21 @@ public:
     typedef T ValueType;
 
     /**
-        Validator constructor.
+        Constructor for validator using the default precision.
+
+        @param value
+            A pointer to the variable associated with the validator. If non
+            @NULL, this variable should have a lifetime equal to or longer than
+            the validator lifetime (which is usually determined by the lifetime
+            of the window).
+        @param style
+            A combination of wxNumValidatorStyle enum values.
+    */
+    wxFloatingPointValidator(ValueType *value = NULL,
+                             int style = wxNUM_VAL_DEFAULT);
+
+    /**
+        Constructor for validator specifying the precision.
 
         @param value
             A pointer to the variable associated with the validator. If non
@@ -318,13 +332,9 @@ public:
             The number of decimal digits after the decimal separator to show
             and accept.
     */
-    //@{
-    wxFloatingPointValidator(ValueType *value = NULL,
-                             int style = wxNUM_VAL_DEFAULT);
     wxFloatingPointValidator(int precision,
                              ValueType *value = NULL,
                              int style = wxNUM_VAL_DEFAULT);
-    //@}
 
 
     /**

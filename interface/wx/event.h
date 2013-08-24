@@ -522,11 +522,9 @@ public:
 
          @param method The method to call.
          @param x1 The (optional) first parameter to pass to the method.
-         @param x2 The (optional) second parameter to pass to the method.
-
-         Note that currently only up to 2 arguments can be passed. For more
-         complicated needs, you can use the CallAfter<T>(const T& fn) overload
-         that can call any functor.
+            Currently, 0, 1 or 2 parameters can be passed. If you need to pass
+            more than 2 arguments, you can use the CallAfter<T>(const T& fn)
+            overload that can call any functor.
 
          @note This method is not available with Visual C++ before version 8
                (Visual Studio 2005) as earlier versions of the compiler don't
