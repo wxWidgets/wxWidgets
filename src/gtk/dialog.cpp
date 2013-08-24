@@ -34,9 +34,7 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxGUIEventLoop)
 void wxDialog::Init()
 {
     m_modalLoop = NULL;
-    m_returnCode = 0;
     m_modalShowing = false;
-    m_themeEnabled = true;
 }
 
 wxDialog::wxDialog( wxWindow *parent,
