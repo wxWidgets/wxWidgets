@@ -175,7 +175,7 @@ void wxBitmapComboBox::RecreateControl()
         if ( !objectClientData.empty() )
             SetClientObject(i, objectClientData[i]);
         else if ( !voidClientData.empty() )
-            SetClientData(i, objectClientData[i]);
+            SetClientData(i, voidClientData[i]);
     }
 
     // and make sure it has the same attributes as before
