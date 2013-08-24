@@ -1106,7 +1106,11 @@
 // Default is 1.
 //
 // Recommended setting: 1 (but can be safely disabled if you don't use it)
+#ifdef __WXOSX_IPHONE__
+#define wxUSE_PREFERENCES_EDITOR 0
+#else
 #define wxUSE_PREFERENCES_EDITOR 1
+#endif
 
 // wxRichToolTip is a customizable tooltip class which has more functionality
 // than the stock (but native, unlike this class) wxToolTip.
