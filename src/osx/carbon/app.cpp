@@ -821,21 +821,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     InstallDebugAssertOutputHandler( NewDebugAssertOutputHandlerUPP( wxMacAssertOutputHandler ) );
 #endif
 
-    // Mac OS X passes a process serial number command line argument when
-    // the application is launched from the Finder. This argument must be
-    // removed from the command line arguments before being handled by the
-    // application (otherwise applications would need to handle it)
-    if ( argc > 1 )
-    {
-        static const wxChar *ARG_PSN = wxT("-psn_");
-        if ( wxStrncmp(argv[1], ARG_PSN, wxStrlen(ARG_PSN)) == 0 )
-        {
-            // remove this argument
-            --argc;
-            memmove(argv + 1, argv + 2, argc * sizeof(wxChar*));
-        }
-    }
-
     /*
      Cocoa supports -Key value options which set the user defaults key "Key"
      to the value "value"  Some of them are very handy for debugging like
