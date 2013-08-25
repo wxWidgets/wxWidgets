@@ -4,7 +4,7 @@ WXTOOLKITUPPER = CARBON
 #include "wx.xcconfig"
 
 MACOSX_DEPLOYMENT_TARGET = 10.5
-SDKROOT = macosx10.7
+SDKROOT = macosx10.6
 
 GCC_VERSION[arch=ppc] = 4.0
 
