@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 January 2013                                                     *
+# Date : 27 August 2013                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -135,6 +135,8 @@ gtk : [.include.wx]setup.h
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.minimal]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.notebook]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.propgrid]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
@@ -305,6 +307,8 @@ x11 : [.include.wx]setup.h
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	set default [-.notebook]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.richedit]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.thread]
@@ -357,6 +361,8 @@ motif : [.include.wx]setup.h
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.minimal]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.notebook]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.thread]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)

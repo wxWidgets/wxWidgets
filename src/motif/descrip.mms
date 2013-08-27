@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 2 December 2008                                                     *
+# Date : 21 August 2013                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -186,4 +186,6 @@ toplevel.obj : toplevel.cpp
 timer.obj : timer.cpp
 toolbar.obj : toolbar.cpp
 utils.obj : utils.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/warn=disab=(UNSCOMZER)\
+	$(MMS$TARGET_NAME).cpp
 window.obj : window.cpp
