@@ -25,6 +25,7 @@ public:
                                int noUnitsX, int noUnitsY,
                                int xPos = 0, int yPos = 0,
                                bool noRefresh = false);
+    virtual bool IsScrollbarShown(int orient) const;
     virtual void AdjustScrollbars();
 
 protected:

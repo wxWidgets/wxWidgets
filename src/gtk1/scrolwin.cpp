@@ -178,6 +178,11 @@ void wxScrollHelper::DoScroll( int x_pos, int y_pos )
                 &m_yScrollPosition);
 }
 
+bool wxScrollHelper::IsScrollbarShown(int WXUNUSED(orient)) const
+{
+    return true;
+}
+
 void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility WXUNUSED(horz),
                                       wxScrollbarVisibility WXUNUSED(vert))
 {

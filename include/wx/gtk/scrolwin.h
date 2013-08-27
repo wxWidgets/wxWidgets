@@ -29,6 +29,8 @@ public:
                                bool noRefresh = false);
     virtual void AdjustScrollbars();
 
+    virtual bool IsScrollbarShown(int orient) const;
+
 protected:
     virtual void DoScroll(int x, int y);
     virtual void DoShowScrollbars(wxScrollbarVisibility horz,

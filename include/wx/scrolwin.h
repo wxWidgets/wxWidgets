@@ -100,6 +100,9 @@ public:
         DoShowScrollbars(horz, vert);
     }
 
+    // Test whether the specified scrollbar is shown.
+    virtual bool IsScrollbarShown(int orient) const = 0;
+
     // Enable/disable Windows scrolling in either direction. If true, wxWidgets
     // scrolls the canvas and only a bit of the canvas is invalidated; no
     // Clear() is necessary. If false, the whole canvas is invalidated and a
@@ -315,6 +318,8 @@ protected:
 public:                                                                       \
     virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }                     \
     virtual bool Layout() { return ScrollLayout(); }                          \
+    virtual bool CanScroll(int orient) const                                  \
+        { return IsScrollbarShown(orient); }                                  \
     virtual void DoSetVirtualSize(int x, int y)                               \
         { ScrollDoSetVirtualSize(x, y); }                                     \
     virtual wxSize GetBestVirtualSize() const                                 \

@@ -1201,6 +1201,14 @@ wxScrollHelper::wxScrollHelper(wxWindow *winToScroll)
     m_yVisibility = wxSHOW_SB_DEFAULT;
 }
 
+bool wxScrollHelper::IsScrollbarShown(int orient) const
+{
+    wxScrollbarVisibility visibility = orient == wxHORIZONTAL ? m_xVisibility
+                                                              : m_yVisibility;
+
+    return visibility != wxSHOW_SB_NEVER;
+}
+
 void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility horz,
                                       wxScrollbarVisibility vert)
 {

@@ -21,6 +21,7 @@ public:
 
     // implement base class pure virtuals
     virtual void AdjustScrollbars();
+    virtual bool IsScrollbarShown(int orient) const;
 
 protected:
     virtual void DoScroll(int x, int y);
