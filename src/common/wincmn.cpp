@@ -1840,6 +1840,12 @@ wxWindow *wxWindowBase::FindWindow(long id) const
     for ( node = m_children.GetFirst(); node && !res; node = node->GetNext() )
     {
         wxWindowBase *child = node->GetData();
+
+        // As usual, don't recurse into child dialogs, finding a button in a
+        // child dialog when looking in this window would be unexpected.
+        if ( child->IsTopLevel() )
+            continue;
+
         res = child->FindWindow( id );
     }
 
@@ -1856,6 +1862,11 @@ wxWindow *wxWindowBase::FindWindow(const wxString& name) const
     for ( node = m_children.GetFirst(); node && !res; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
+
+        // As in FindWindow() overload above, never recurse into child dialogs.
+        if ( child->IsTopLevel() )
+            continue;
+
         res = child->FindWindow(name);
     }
 
