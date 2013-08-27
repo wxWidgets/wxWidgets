@@ -577,6 +577,7 @@ wxMSW:
 - It is now possible to tab into radio boxes again.
 - Fix launching some types of files under Windows 7 and later (Steven Houchins).
 - Don't use an icon for items inserted without one into wxListCtrl (Chuddah).
+- Handle custom configurations when using MSVC autolinking (tinman).
 
 wxOSX:
 

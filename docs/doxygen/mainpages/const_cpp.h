@@ -247,6 +247,12 @@ with the corresponding library. The following symbols are honoured:
 Notice that the base library is always included and the core is always included
 for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
 
+If the makefiles have been used to build the libraries from source and the @c CFG
+variable has been set to specify a different output path for that particular
+configuration of build then the @c wxCFG preprocessor symbol should be set in
+the project that uses wxWidgets to the same value as the @c CFG variable in
+order for the correct @c wx/setup.h file to automatically be included for that
+configuration.
 
 @section page_cppconst_miscellaneous Miscellaneous
 

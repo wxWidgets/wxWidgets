@@ -79,10 +79,19 @@
     #define wxARCH_SUFFIX
 #endif
 
+// Ensure the library configuration is defined
+#ifndef wxCFG
+    #define wxCFG
+#endif
+
+// Construct the path for the subdirectory under /lib/ that the included setup.h
+// will be used from
 #ifdef WXUSINGDLL
-    #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _dll)
+    #define wxLIB_SUBDIR \
+        wxCONCAT4(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _dll, wxCFG)
 #else // !DLL
-    #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _lib)
+    #define wxLIB_SUBDIR \
+        wxCONCAT4(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _lib, wxCFG)
 #endif // DLL/!DLL
 
 // The user can predefine a different prefix if not using the default MSW port
