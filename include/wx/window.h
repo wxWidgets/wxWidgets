@@ -1221,11 +1221,7 @@ public:
     // ----------
 
         // can the window have the scrollbar in this orientation?
-    bool CanScroll(int orient) const
-    {
-        return (m_windowStyle &
-                (orient == wxHORIZONTAL ? wxHSCROLL : wxVSCROLL)) != 0;
-    }
+    virtual bool CanScroll(int orient) const;
 
         // does the window have the scrollbar in this orientation?
     bool HasScrollbar(int orient) const;

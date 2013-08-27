@@ -1113,6 +1113,12 @@ void wxWindowBase::SendSizeEventToParent(int flags)
         parent->SendSizeEvent(flags);
 }
 
+bool wxWindowBase::CanScroll(int orient) const
+{
+    return (m_windowStyle &
+            (orient == wxHORIZONTAL ? wxHSCROLL : wxVSCROLL)) != 0;
+}
+
 bool wxWindowBase::HasScrollbar(int orient) const
 {
     // if scrolling in the given direction is disabled, we can't have the
