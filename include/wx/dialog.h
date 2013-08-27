@@ -11,8 +11,8 @@
 #ifndef _WX_DIALOG_H_BASE_
 #define _WX_DIALOG_H_BASE_
 
-#include "wx/defs.h"
 #include "wx/toplevel.h"
+#include "wx/containr.h"
 
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxStdDialogButtonSizer;
@@ -64,7 +64,7 @@ enum wxDialogModality
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
 
-class WXDLLIMPEXP_CORE wxDialogBase : public wxTopLevelWindow
+class WXDLLIMPEXP_CORE wxDialogBase : public wxNavigationEnabled<wxTopLevelWindow>
 {
 public:
     wxDialogBase();

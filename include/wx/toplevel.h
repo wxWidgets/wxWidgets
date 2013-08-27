@@ -19,7 +19,6 @@
 
 #include "wx/nonownedwnd.h"
 #include "wx/iconbndl.h"
-#include "wx/containr.h"
 #include "wx/weakref.h"
 
 // the default names for various classes
@@ -156,8 +155,7 @@ enum
 // wxTopLevelWindow: a top level (as opposed to child) window
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTopLevelWindowBase :
-    public wxNavigationEnabled<wxNonOwnedWindow>
+class WXDLLIMPEXP_CORE wxTopLevelWindowBase : public wxNonOwnedWindow
 {
 public:
     // construction
