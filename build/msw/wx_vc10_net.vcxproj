@@ -74,6 +74,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</GenerateManifest>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">wxbase29ud_net</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">wxbase29u_net</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">wxbase295ud_$(ProjectName)_vc_custom</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">wxbase295u_$(ProjectName)_vc_custom</TargetName>
   </PropertyGroup>

@@ -74,6 +74,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</GenerateManifest>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">wxmsw29ud_propgrid</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">wxmsw29u_propgrid</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">wxmsw295ud_$(ProjectName)_vc_custom</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">wxmsw295u_$(ProjectName)_vc_custom</TargetName>
   </PropertyGroup>
