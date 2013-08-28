@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
-"PO-Revision-Date: 2012-09-14 10:26+0100\n"
+"PO-Revision-Date: 2013-08-28 22:49+0100\n"
 "Last-Translator: Zbyněk Schwarz <zbynek.schwarz@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: cs_CZ\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 1524,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -126,9 +126,9 @@ msgid "%s Information"
 msgstr "%s - informace"
 
 #: ../src/generic/preferencesg.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "Předvolby"
+msgstr "Předvolby %s"
 
 #: ../src/generic/logg.cpp:234
 #, c-format
@@ -1149,7 +1149,7 @@ msgstr "Přidat"
 
 #: ../src/richtext/richtextbuffer.cpp:10648
 msgid "Add column"
-msgstr ""
+msgstr "Přidat sloupec"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1157,7 +1157,7 @@ msgstr "Přidá tuto stránku do záložek"
 
 #: ../src/richtext/richtextbuffer.cpp:10590
 msgid "Add row"
-msgstr ""
+msgstr "Přidat řádek"
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1186,7 +1186,7 @@ msgstr "Přidání flavor utxt selhalo"
 
 #: ../src/common/preferencescmn.cpp:41
 msgid "Advanced"
-msgstr ""
+msgstr "Pokročilé"
 
 #: ../src/richtext/richtextliststylepage.cpp:435
 msgid "After a paragraph:"
@@ -1500,7 +1500,7 @@ msgstr "ZRUŠIT"
 
 #: ../src/common/accelcmn.cpp:70
 msgid "CAPITAL"
-msgstr "VELKÁ PÍSMENA"
+msgstr "KAPITÁLKY"
 
 #: ../src/common/stockitem.cpp:146
 msgid "CD-Rom"
@@ -1520,7 +1520,7 @@ msgstr "PŘÍKAZ"
 
 #: ../src/richtext/richtextfontpage.cpp:291
 msgid "Ca&pitals"
-msgstr "Velká &písmena"
+msgstr "Ka&pitálky"
 
 #: ../src/common/cmdproc.cpp:267
 msgid "Can't &Undo "
@@ -1786,9 +1786,9 @@ msgid "Cannot resume thread %lu"
 msgstr "Nelze obnovit vlákno %lu"
 
 #: ../src/msw/thread.cpp:923
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "Nelze obnovit vlákno %x"
+msgstr "Nelze obnovit vlákno %lx"
 
 #: ../src/unix/threadpsx.cpp:1011
 msgid "Cannot retrieve thread scheduling policy."
@@ -1809,9 +1809,9 @@ msgid "Cannot suspend thread %lu"
 msgstr "Nelze ukončit vlákno %lu"
 
 #: ../src/msw/thread.cpp:907
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
-msgstr "Nelze pozastavit vlákno %x"
+msgstr "Nelze pozastavit vlákno %lx"
 
 #: ../src/msw/thread.cpp:830
 msgid "Cannot wait for thread termination"
@@ -1938,13 +1938,12 @@ msgstr "Zaškrtněte pro přeškrtnuté písmo."
 #: ../src/richtext/richtextfontpage.cpp:293
 #: ../src/richtext/richtextfontpage.cpp:295
 msgid "Check to show the text in capitals."
-msgstr "Zaškrtněte pro zobrazení textu velkými písmeny."
+msgstr "Zaškrtněte pro zobrazení textu kapitálkami."
 
 #: ../src/richtext/richtextfontpage.cpp:300
 #: ../src/richtext/richtextfontpage.cpp:302
-#, fuzzy
 msgid "Check to show the text in small capitals."
-msgstr "Zaškrtněte pro zobrazení textu velkými písmeny."
+msgstr "Zaškrtněte pro zobrazení textu malými kapitálkami."
 
 #: ../src/richtext/richtextfontpage.cpp:314
 #: ../src/richtext/richtextfontpage.cpp:316
@@ -2580,18 +2579,16 @@ msgid "Delete Text"
 msgstr "Smazat text"
 
 #: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
 msgid "Delete column"
-msgstr "Smazat výběr"
+msgstr "Smazat sloupec"
 
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "Odstranit položku."
 
 #: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
 msgid "Delete row"
-msgstr "Smazat"
+msgstr "Smazat řádek"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -3469,9 +3466,8 @@ msgid "Failed to set permissions on lock file '%s'"
 msgstr "Nelze nastavit přístupová práva pro zámkový soubor '%s'"
 
 #: ../src/unix/utilsunx.cpp:674
-#, fuzzy
 msgid "Failed to set process priority"
-msgstr "Nelze nastavit prioritu vlákna %d."
+msgstr "Nelze nastavit prioritu procesu"
 
 #: ../src/common/file.cpp:576
 msgid "Failed to set temporary file permissions"
@@ -3748,7 +3744,7 @@ msgstr "GTK+ téma"
 
 #: ../src/common/preferencescmn.cpp:39
 msgid "General"
-msgstr ""
+msgstr "Obecné"
 
 #: ../src/common/prntbase.cpp:243
 msgid "Generic PostScript"
@@ -4146,7 +4142,7 @@ msgstr "Špatné určení geometrie '%s'."
 #: ../src/unix/fswatcher_inotify.cpp:298
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "Neplatná událost inotify pro \"%s\""
 
 #: ../src/unix/snglinst.cpp:306
 #, c-format
@@ -6054,9 +6050,8 @@ msgid "Slant"
 msgstr "Skloněné"
 
 #: ../src/richtext/richtextfontpage.cpp:298
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "Velká &písmena"
+msgstr "Malé k&apitálky"
 
 #: ../src/richtext/richtextborderspage.cpp:543
 msgid "Solid"
@@ -6173,9 +6168,8 @@ msgid "Symbol &font:"
 msgstr "Symbolové &písmo:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
-msgstr "Symbol"
+msgstr "Symboly"
 
 #: ../src/common/accelcmn.cpp:63
 msgid "TAB"
@@ -6929,6 +6923,7 @@ msgstr "Volbu '%s' následovaly neočekávané znaky."
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
+"Neočekávaná událost pro \"%s\": žádný odpovídající popisovač sledování."
 
 #: ../src/common/cmdline.cpp:1024
 #, c-format
