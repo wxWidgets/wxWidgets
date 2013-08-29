@@ -329,6 +329,10 @@ public:
 protected:
     wxBitmap*   m_pBitmap; // final thumbnail area
     wxImage*    m_pImage; // intermediate thumbnail area
+
+private:
+    // Initialize m_pImage using the current file name.
+    void LoadImageFromFile();
 };
 
 #endif

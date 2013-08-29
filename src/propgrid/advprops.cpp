@@ -1827,6 +1827,8 @@ wxImageFileProperty::wxImageFileProperty( const wxString& label, const wxString&
 
     m_pImage = NULL;
     m_pBitmap = NULL;
+
+    LoadImageFromFile();
 }
 
 wxImageFileProperty::~wxImageFileProperty()
@@ -1845,6 +1847,11 @@ void wxImageFileProperty::OnSetValue()
     wxDELETE(m_pImage);
     wxDELETE(m_pBitmap);
 
+    LoadImageFromFile();
+}
+
+void wxImageFileProperty::LoadImageFromFile()
+{
     wxFileName filename = GetFileName();
 
     // Create the image thumbnail
