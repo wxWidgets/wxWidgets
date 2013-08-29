@@ -35,7 +35,6 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
-#define __STRICT_ANSI__
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
