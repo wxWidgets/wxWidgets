@@ -7446,7 +7446,10 @@ bool wxRichTextParagraphLayoutBox::InsertParagraphsWithUndo(wxRichTextBuffer* bu
 /// Submit command to insert the given text
 bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRichTextCtrl* ctrl, int flags)
 {
-    return ctrl->GetFocusObject()->InsertTextWithUndo(this, pos, text, ctrl, flags);
+    if (ctrl)
+        return ctrl->GetFocusObject()->InsertTextWithUndo(this, pos, text, ctrl, flags);
+    else
+        return wxRichTextParagraphLayoutBox::InsertTextWithUndo(this, pos, text, ctrl, flags);
 }
 
 /// Submit command to insert the given text
