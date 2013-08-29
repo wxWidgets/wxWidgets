@@ -8199,11 +8199,11 @@ dnl when we've configured a Universal binary build.
 dnl The next version of Bakefile will have the correct fix for this
 dnl at which time, this hack can be removed.
 
-if test "$wxUSE_MAC" = 1 ; then
+if test "$DEPS_TRACKING" = 1 -a "$wxUSE_MAC" = 1 ; then
     if test "x$wxUSE_UNIVERSAL_BINARY" != "xno" ; then
         if test "x$disable_macosx_deps" = "xyes"; then
             sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
-                mv temp bk-deps
+            mv temp bk-deps
             chmod +x bk-deps
         fi
     fi

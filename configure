@@ -41275,11 +41275,11 @@ $as_echo "$as_me: WARNING: *** see http://gcc.gnu.org/bugzilla/show_bug.cgi?id=1
 fi
 
 
-if test "$wxUSE_MAC" = 1 ; then
+if test "$DEPS_TRACKING" = 1 -a "$wxUSE_MAC" = 1 ; then
     if test "x$wxUSE_UNIVERSAL_BINARY" != "xno" ; then
         if test "x$disable_macosx_deps" = "xyes"; then
             sed "s/DEPSMODE=gcc/DEPSMODE=none/" < bk-deps > temp
-                mv temp bk-deps
+            mv temp bk-deps
             chmod +x bk-deps
         fi
     fi
