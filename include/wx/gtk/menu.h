@@ -81,7 +81,8 @@ public:
     // Returns the title, with mnemonics translated to wx format
     wxString GetTitle() const;
 
-    // TODO: virtual void SetTitle(const wxString& title);
+    // Sets the title, with mnemonics translated to gtk format
+    virtual void SetTitle(const wxString& title);
 
     // implementation GTK only
     GtkWidget       *m_menu;  // GtkMenu

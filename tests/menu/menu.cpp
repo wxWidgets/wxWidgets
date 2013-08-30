@@ -150,6 +150,10 @@ void MenuTestCase::CreateFrame()
 
     subMenu->AppendSubMenu(subsubMenu, "Subsubmen&u", "Test a subsubmenu");
 
+    // Check GetTitle() returns the correct string _before_ appending to the bar
+    fileMenu->SetTitle("&Foo\tCtrl-F");
+    CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", fileMenu->GetTitle() );
+
     PopulateMenu(fileMenu, "Filemenu item ", itemcount);
 
     fileMenu->Append(MenuTestCase_Foo, "&Foo\tCtrl-F", "Test item to be found");
