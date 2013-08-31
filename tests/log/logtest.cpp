@@ -169,6 +169,7 @@ private:
         CPPUNIT_TEST( CompatLogger2 );
 #endif // WXWIN_COMPATIBILITY_2_8
         CPPUNIT_TEST( SysError );
+        CPPUNIT_TEST( NoWarnings );
     CPPUNIT_TEST_SUITE_END();
 
     void Functions();
@@ -182,6 +183,7 @@ private:
     void CompatLogger2();
 #endif // WXWIN_COMPATIBILITY_2_8
     void SysError();
+    void NoWarnings();
 
     TestLog *m_log;
     wxLog *m_logOld;
@@ -362,3 +364,23 @@ void LogTestCase::SysError()
 #endif // __MINGW32__
 }
 
+void LogTestCase::NoWarnings()
+{
+    // Check that "else" branch is [not] taken as expected and that this code
+    // compiles without warnings (which used to not be the case).
+
+    bool b = wxFalse;
+    if ( b )
+        wxLogError("Not logged");
+    else
+        b = !b;
+
+    CPPUNIT_ASSERT( b );
+
+    if ( b )
+        wxLogError("If");
+    else
+        CPPUNIT_FAIL("Should not be taken");
+
+    CPPUNIT_ASSERT_EQUAL( "If", m_log->GetLog(wxLOG_Error) );
+}
