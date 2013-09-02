@@ -1263,7 +1263,7 @@ public:
             The new permissions: this should be a combination of
             ::wxPosixPermissions enum elements.
 
-        @since 2.9.6
+        @since 3.0
 
         @note If this is a symbolic link and it should not be followed
               this call will fail.

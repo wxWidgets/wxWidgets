@@ -563,7 +563,7 @@ public:
                (Visual Studio 2005) as earlier versions of the compiler don't
                have the required support for C++ templates to implement it.
 
-         @since 2.9.6
+         @since 3.0
      */
     template<typename T>
     void CallAfter(const T& functor);
