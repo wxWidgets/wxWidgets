@@ -829,6 +829,16 @@ Example:
 </object>
 @endcode
 
+
+@subsubsection xrc_wxcomboctrl wxComboCtrl
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{value, @ref overview_xrcformat_type_string,
+     Initial value in the control (default: empty).}
+@endTable
+
+
 @subsubsection xrc_wxdatepickerctrl wxDatePickerCtrl
 
 No additional properties.
@@ -851,6 +861,7 @@ wxDialog may have optional children: either exactly one
 objects. If sizer child is used, it sets
 @ref wxSizer::SetSizeHints() "size hints" too.
 
+
 @subsubsection xrc_wxdirpickerctrl wxDirPickerCtrl
 
 @beginTable
@@ -860,6 +871,34 @@ objects. If sizer child is used, it sets
 @row3col{message, @ref overview_xrcformat_type_text,
     Message shown to the user in wxDirDialog shown by the control (required).}
 @endTable
+
+
+@subsubsection xrc_wxeditablelistbox wxEditableListBox
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+     Label shown above the list (default: empty).}
+@row3col{content, items,
+     Content of the control; this property has any number of @c \<item\> XML
+     elements as its children, with the items text as their text values
+     (default: empty).}
+@endTable
+
+Example:
+@code
+<object class="wxEditableListBox" name="controls_listbox">
+    <size>250,160</size>
+    <label>List of things</label>
+    <content>
+        <item>Milk</item>
+        <item>Pizza</item>
+        <item>Bread</item>
+        <item>Orange juice</item>
+        <item>Paper towels</item>
+    </content>
+</object>
+@endcode
 
 
 @subsubsection xrc_wxfilectrl wxFileCtrl
