@@ -181,8 +181,6 @@ void* wxGTKCairoDCImpl::GetCairoContext() const
     cairo_t* cr = NULL;
     if (m_graphicContext)
         cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
-    if (cr)
-        cairo_reference(cr);
     return cr;
 }
 //-----------------------------------------------------------------------------

@@ -1209,7 +1209,7 @@ bool wxGtkPrinterDCImpl::IsOk() const
 
 void* wxGtkPrinterDCImpl::GetCairoContext() const
 {
-    return (void*) cairo_reference( m_cairo );
+    return m_cairo;
 }
 
 void* wxGtkPrinterDCImpl::GetHandle() const
