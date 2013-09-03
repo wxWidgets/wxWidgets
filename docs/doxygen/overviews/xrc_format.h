@@ -1626,11 +1626,6 @@ child and the second one for right/bottom child window.
     Comma-separated list of @em fields integers. Each value specifies width
     of one field; the values are interpreted using the same convention used
     by wxStatusBar::SetStatusWidths().}
-@row3col{styles, @ref overview_xrcformat_type_string,
-    Comma-separated list of @em fields flags. Each value specifies status bar
-    field style and can be one of @c wxSB_NORMAL, @c wxSB_FLAT,
-    @c wxSB_RAISED or, since wxWidgets 2.9.5, @c wxSB_SUNKEN. See
-    wxStatusBar::SetStatusStyles() for their description.}
 @endTable
 
 
