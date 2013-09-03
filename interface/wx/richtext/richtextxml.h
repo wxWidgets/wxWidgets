@@ -54,33 +54,6 @@ public:
     bool ExportXML(wxOutputStream& stream, wxRichTextObject& obj, int level);
 
     /**
-        Helper function: gets node context.
-    */
-    wxString GetNodeContent(wxXmlNode* node);
-
-    /**
-        Helper function: gets a named parameter from the XML node.
-    */
-    wxXmlNode* GetParamNode(wxXmlNode* node, const wxString& param);
-
-    /**
-        Helper function: gets a named parameter from the XML node.
-    */
-    wxString GetParamValue(wxXmlNode* node, const wxString& param);
-
-    /**
-        Helper function: gets text from the node.
-    */
-    wxString GetText(wxXmlNode* node,
-                     const wxString& param = wxEmptyString,
-                     bool translate = false);
-
-    /**
-        Helper function: returns @true if the node has the given parameter.
-    */
-    bool HasParam(wxXmlNode* node, const wxString& param);
-
-    /**
         Recursively imports an object.
     */
     bool ImportXML(wxRichTextBuffer* buffer, wxRichTextObject* obj, wxXmlNode* node);
