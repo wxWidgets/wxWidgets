@@ -658,10 +658,9 @@ public:
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
 
 #if WXWIN_COMPATIBILITY_2_6
-    // OBSOLETE: don't use, always returns true
-    //
     // returns true if the program is successfully initialized
-    wxDEPRECATED( bool Initialized() );
+    wxDEPRECATED_MSG("always returns true now, don't call")
+    bool Initialized();
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:

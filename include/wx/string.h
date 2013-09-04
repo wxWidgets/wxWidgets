@@ -129,16 +129,16 @@ namespace wxPrivate
 // backwards compatibility only.
 
 // checks whether the passed in pointer is NULL and if the string is empty
-wxDEPRECATED( inline bool IsEmpty(const char *p) );
+wxDEPRECATED_MSG("use wxIsEmpty() instead")
 inline bool IsEmpty(const char *p) { return (!p || !*p); }
 
 // safe version of strlen() (returns 0 if passed NULL pointer)
-wxDEPRECATED( inline size_t Strlen(const char *psz) );
+wxDEPRECATED_MSG("use wxStrlen() instead")
 inline size_t Strlen(const char *psz)
   { return psz ? strlen(psz) : 0; }
 
 // portable strcasecmp/_stricmp
-wxDEPRECATED( inline int Stricmp(const char *psz1, const char *psz2) );
+wxDEPRECATED_MSG("use wxStricmp() instead")
 inline int Stricmp(const char *psz1, const char *psz2)
     { return wxCRT_StricmpA(psz1, psz2); }
 

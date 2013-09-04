@@ -1556,10 +1556,39 @@ template <typename T> wxDELETE(T*& ptr);
 template <typename T> wxDELETEA(T*& array);
 
 /**
+    Generate deprecation warning with the given message when a function is
+    used.
+
+    This macro can be used to generate a warning indicating that a function is
+    deprecated (i.e. scheduled for removal in the future) and explaining why is
+    it so and/or what should it be replaced with. It applies to the declaration
+    following it, for example:
+    @code
+    wxDEPRECATED_MSG("use safer overload returning wxString instead")
+    void wxGetSomething(char* buf, size_t len);
+
+    wxString wxGetSomething();
+    @endcode
+
+    For compilers other than clang, g++ 4.5 or later and MSVC 8 (MSVS 2005) or
+    later, the message is ignored and a generic deprecation warning is given if
+    possible, i.e. if the compiler is g++ (any supported version) or MSVC 7
+    (MSVS 2003) or later.
+
+    @since 3.0
+
+    @header{wx/defs.h}
+ */
+
+/**
     This macro can be used around a function declaration to generate warnings
     indicating that this function is deprecated (i.e. obsolete and planned to
-    be removed in the future) when it is used. Only Visual C++ 7 and higher and
-    g++ compilers currently support this functionality.
+    be removed in the future) when it is used.
+
+    Notice that this macro itself is deprecated in favour of wxDEPRECATED_MSG()!
+
+    Only Visual C++ 7 and higher and g++ compilers currently support this
+    functionality.
 
     Example of use:
 
