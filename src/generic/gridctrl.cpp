@@ -436,30 +436,21 @@ wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
                                               wxDC& dc,
                                               int row, int col)
 {
-    wxCoord x,y, height , width = grid.GetColSize(col) -20;
-    // for width, subtract 20 because ColSize includes a magin of 10 pixels
-    // that we do not want here and because we always start with an increment
-    // by 10 in the loop below.
-    int count = 250; //Limit iterations..
+    const int lineHeight = dc.GetCharHeight();
 
-    wxRect rect(0,0,width,10);
-
-    // M is a nice large character 'y' gives descender!.
-    dc.GetTextExtent(wxT("My"), &x, &y);
-
-    do
-    {
-        width+=10;
-        rect.SetWidth(width);
-        height = y * (wx_truncate_cast(wxCoord, GetTextLines(grid,dc,attr,rect,row,col).GetCount()));
-        count--;
     // Search for a shape no taller than the golden ratio.
-    } while (count && (width  < (height*1.68)) );
+    wxSize size;
+    for ( size.x = 10; ; size.x += 10 )
+    {
+        const size_t
+            numLines = GetTextLines(grid, dc, attr, size, row, col).size();
+        size.y = numLines * lineHeight;
+        if ( size.x >= size.y*1.68 )
+            break;
+    }
 
-
-    return wxSize(width,height);
+    return size;
 }
-
 
 // ----------------------------------------------------------------------------
 // wxGridCellStringRenderer
