@@ -1511,7 +1511,6 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
         return NULL;
 
     docNew->SetDocumentName(temp->GetDocumentName());
-    docNew->SetDocumentTemplate(temp);
 
     wxTRY
     {
