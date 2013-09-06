@@ -346,8 +346,8 @@ public:
 
     // exactly as Wait() except that it may also return if the specified
     // timeout elapses even if the condition hasn't been signalled: in this
-    // case, the return value is false, otherwise (i.e. in case of a normal
-    // return) it is true
+    // case, the return value is wxCOND_TIMEOUT, otherwise (i.e. in case of a
+    // normal return) it is wxCOND_NO_ERROR.
     //
     // the timeout parameter specifies an interval that needs to be waited for
     // in milliseconds
