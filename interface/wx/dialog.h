@@ -607,11 +607,14 @@ public:
         user from interacting with their parent frame only but not with the
         rest of the application. They also don't block the program execution
         but instead return immediately, as Show(), and generate a
-        wxEVT_WINDOW_MODAL_DIALOG_CLOSED event later when the dialog is closed.
+        wxEVT_WINDOW_MODAL_DIALOG_CLOSED event (wxWindowModalDialogEvent)
+        later when the dialog is closed.
 
         Currently this function is only fully implemented in wxOSX ports, under
         the other platforms it behaves like ShowModal() (but also sends the
         above mentioned event).
+
+        @see wxWindowModalDialogEvent
 
         @since 2.9.0
      */
@@ -659,12 +662,23 @@ public:
 };
 
 
+/**
+    Event sent by wxDialog::ShowWindowModal() when the dialog closes.
+
+    @since 2.9.0
+ */
 class wxWindowModalDialogEvent  : public wxCommandEvent
 {
 public:
+    /// Constructor
     wxWindowModalDialogEvent (wxEventType commandType = wxEVT_NULL, int id = 0);
 
+    /// Return the corresponding dialog.
     wxDialog *GetDialog() const;
+
+    /// Return the dialog's return code.
     int GetReturnCode() const;
+
+    /// Clone the event.
     virtual wxEvent *Clone() const;
 };
