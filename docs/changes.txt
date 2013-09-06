@@ -576,6 +576,7 @@ All (GUI):
 
 wxGTK:
 
+- Fix horizontal mouse wheel scrolling (minoki).
 - Fix wxMenu::GetTitle() before the menu is appended to the bar (David Hart).
 
 wxMSW:

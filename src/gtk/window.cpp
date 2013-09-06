@@ -1693,13 +1693,29 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
     if (win->GTKProcessEvent(event))
       return TRUE;
 
-    GtkRange *range = win->m_scrollBar[wxWindow::ScrollDir_Vert];
+    GtkRange *range;
+    switch (gdk_event->direction)
+    {
+        case GDK_SCROLL_UP:
+        case GDK_SCROLL_DOWN:
+            range = win->m_scrollBar[wxWindow::ScrollDir_Vert];
+            break;
+
+        case GDK_SCROLL_LEFT:
+        case GDK_SCROLL_RIGHT:
+            range = win->m_scrollBar[wxWindow::ScrollDir_Horz];
+            break;
+
+        default:
+            return false;
+    }
 
     if (range && gtk_widget_get_visible(GTK_WIDGET(range)))
     {
         GtkAdjustment* adj = gtk_range_get_adjustment(range);
         double delta = gtk_adjustment_get_step_increment(adj) * 3;
-        if (gdk_event->direction == GDK_SCROLL_UP)
+        if (gdk_event->direction == GDK_SCROLL_UP ||
+            gdk_event->direction == GDK_SCROLL_LEFT)
             delta = -delta;
 
         gtk_range_set_value(range, gtk_adjustment_get_value(adj) + delta);
