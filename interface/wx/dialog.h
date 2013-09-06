@@ -596,7 +596,8 @@ public:
 
         @return The value set with SetReturnCode().
 
-        @see ShowWindowModal(), EndModal(), GetReturnCode(), SetReturnCode()
+        @see ShowWindowModal(), ShowWindowModalThenDo(),
+             EndModal(), GetReturnCode(), SetReturnCode()
     */
     virtual int ShowModal();
 
@@ -614,11 +615,51 @@ public:
         the other platforms it behaves like ShowModal() (but also sends the
         above mentioned event).
 
-        @see wxWindowModalDialogEvent
+        @see wxWindowModalDialogEvent, ShowWindowModalThenDo()
 
         @since 2.9.0
      */
     void ShowWindowModal();
+
+    /**
+        Shows a dialog modal to the parent top level window only and call a
+        functor after the dialog is closed.
+
+        Same as the other ShowWindowModal() overload, but calls the functor
+        passed as the argument upon completion, instead of generating the
+        wxEVT_WINDOW_MODAL_DIALOG_CLOSED event.
+
+        This form is particularly useful in combination with C++11 lambdas,
+        when it allows writing window-modal very similarly to how ShowModal()
+        is used (with the notable exception of not being able to create
+        the dialog on stack):
+
+        @code
+        wxWindowPtr<wxDialog> dlg(new wxMessageDialog(this, "Hello!"));
+
+        dlg->ShowWindowModalThenDo([this,dlg](int retcode){
+            if ( retcode == wxID_OK )
+                DoSomething();
+            // dlg is implicitly destroyed here, because the pointer was
+            // explicitly captured by the lambda
+        });
+        @endcode
+
+        @param onEndModal  Function object to call when the dialog is
+                           closed. The functor is called with a single
+                           integer argument, dialog's return code.
+
+        @note The dialog instance must not be destroyed until @a onEndModal
+              is called. The best way to ensure thay is to use wxWindowPtr
+              to hold a pointer and include it in the lambda's capture,
+              by value (not reference!), as shown in the example above.
+
+        @since 3.0
+
+        @see wxWindowPtr<T>
+     */
+    template<typename Functor>
+    void ShowWindowModalThenDo(const Functor& onEndModal);
 };
 
 
