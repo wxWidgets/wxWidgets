@@ -586,7 +586,9 @@ int wxMessageDialog::ShowMessageBox()
     // do show the dialog
     int msAns = MessageBox(hWnd, message.t_str(), m_caption.t_str(), msStyle);
 
-    return MSWTranslateReturnCode(msAns);
+    int ret = MSWTranslateReturnCode(msAns);
+    SetReturnCode(ret);
+    return ret;
 }
 
 int wxMessageDialog::ShowModal()
@@ -621,7 +623,9 @@ int wxMessageDialog::ShowModal()
             msAns = IDOK;
         }
 
-        return MSWTranslateReturnCode( msAns );
+        int ret = MSWTranslateReturnCode(msAns);
+        SetReturnCode(ret);
+        return ret;
     }
 #endif // wxHAS_MSW_TASKDIALOG
 
