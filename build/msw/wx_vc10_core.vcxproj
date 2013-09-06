@@ -1234,6 +1234,7 @@
     <ClInclude Include="..\..\include\wx\persist\window.h" />
     <ClInclude Include="..\..\include\wx\window.h" />
     <ClInclude Include="..\..\include\wx\windowid.h" />
+    <ClInclude Include="..\..\include\wx\windowptr.h" />
     <ClInclude Include="..\..\include\wx\withimages.h" />
     <ClInclude Include="..\..\include\wx\wizard.h" />
     <ClInclude Include="..\..\include\wx\wrapsizer.h" />

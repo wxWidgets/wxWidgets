@@ -2524,6 +2524,9 @@
     <ClInclude Include="..\..\include\wx\xpmhand.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\windowptr.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\include\wx\msw\setup.h">

@@ -3560,6 +3560,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\windowptr.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\withimages.h"
 				>
 			</File>
