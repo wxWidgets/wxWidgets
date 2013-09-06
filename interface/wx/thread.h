@@ -170,6 +170,33 @@ public:
     wxCondError Wait();
 
     /**
+        Waits until the condition is signalled and the associated condition true.
+
+        This is a convenience overload that may be used to ignore spurious
+        awakenings while waiting for a specific condition to become true.
+
+        Equivalent to
+        @code
+        while ( !predicate() )
+        {
+            wxCondError e = Wait();
+            if ( e != wxCOND_NO_ERROR )
+                return e;
+        }
+        return wxCOND_NO_ERROR;
+        @endcode
+
+        The predicate would typically be a C++11 lambda:
+        @code
+        condvar.Wait([]{return value == 1;});
+        @endcode
+
+        @since 3.0
+    */
+    template<typename Functor>
+    wxCondError Wait(const Functor& predicate);
+
+    /**
         Waits until the condition is signalled or the timeout has elapsed.
 
         This method is identical to Wait() except that it returns, with the

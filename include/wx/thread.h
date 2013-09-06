@@ -344,6 +344,19 @@ public:
     // the lock on the associated mutex object, before returning.
     wxCondError Wait();
 
+    // std::condition_variable-like variant that evaluates the associated condition
+    template<typename Functor>
+    wxCondError Wait(const Functor& predicate)
+    {
+        while ( !predicate() )
+        {
+            wxCondError e = Wait();
+            if ( e != wxCOND_NO_ERROR )
+                return e;
+        }
+        return wxCOND_NO_ERROR;
+    }
+
     // exactly as Wait() except that it may also return if the specified
     // timeout elapses even if the condition hasn't been signalled: in this
     // case, the return value is wxCOND_TIMEOUT, otherwise (i.e. in case of a
