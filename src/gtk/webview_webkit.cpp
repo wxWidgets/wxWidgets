@@ -46,7 +46,8 @@ wxgtk_webview_webkit_load_status(GtkWidget* widget,
         //We have to check if we are actually storing history
         //If the item isn't added we add it ourselves, it isn't added otherwise
         //with a custom scheme.
-        if(WEBKIT_IS_WEB_HISTORY_ITEM(item) && webkit_web_history_item_get_uri(item) != url)
+        if(!item || (WEBKIT_IS_WEB_HISTORY_ITEM(item) && 
+                     webkit_web_history_item_get_uri(item) != url))
         {
             WebKitWebHistoryItem*
                 newitem = webkit_web_history_item_new_with_data
