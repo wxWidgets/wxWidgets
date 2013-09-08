@@ -562,6 +562,7 @@ Major new features in this release
 
 All:
 
+- Adjust dates invalid due to DST consistently under all platforms in wxDateTime.
 - Allow using custom HTTP methods with wxHTTP (Kolya Kosenko).
 - Add wxFileName::SetPermissions() (Catalin Raceanu).
 - Fix build with wxUSE_FFILE==0 (jroemmler).

@@ -1335,6 +1335,19 @@ void DateTimeTestCase::TestDSTBug()
     CPPUNIT_ASSERT_EQUAL(0, (int)dt2.GetSecond());
     CPPUNIT_ASSERT_EQUAL(0, (int)dt2.GetMillisecond());
 #endif // CHANGE_SYSTEM_DATE
+
+    // Verify that setting the date to the beginning of the DST period moves it
+    // forward (as this date on its own would be invalid). The problem here is
+    // that our GetBeginDST() is far from being trustworthy, so just try a
+    // couple of dates for the common time zones and check that all of them are
+    // either unchanged or moved forward.
+    wxDateTime dtDST(10, wxDateTime::Mar, 2013, 2, 0, 0);
+    if ( dtDST.GetHour() != 2 )
+        CPPUNIT_ASSERT_EQUAL( 3, dtDST.GetHour() );
+
+    dtDST = wxDateTime(31, wxDateTime::Mar, 2013, 2, 0, 0);
+    if ( dtDST.GetHour() != 2 )
+        CPPUNIT_ASSERT_EQUAL( 3, dtDST.GetHour() );
 }
 
 void DateTimeTestCase::TestDateOnly()
