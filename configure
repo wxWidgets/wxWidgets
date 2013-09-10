@@ -39583,7 +39583,7 @@ EOF
       ;;
 
       powerpc-apple-macos* | \
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-k*bsd*-gnu | \
+      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
       *-*-mirbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
@@ -39625,7 +39625,7 @@ EOF
 
     case "${BAKEFILE_HOST}" in
       *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
-      *-*-k*bsd*-gnu | *-*-mirbsd* )
+      *-*-k*bsd*-gnu | *-*-mirbsd* | *-*-gnu* )
         if test "x$SUNCXX" = "xyes"; then
             SONAME_FLAG="-h "
         else
