@@ -951,8 +951,8 @@ bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_IMAGE;
-    info.m_image = image;
-    info.m_itemId = item == -1 ? I_IMAGENONE : image;
+    info.m_image = image == -1 ? I_IMAGENONE : image;
+    info.m_itemId = item;
     info.m_col = column;
 
     return SetItem(info);
