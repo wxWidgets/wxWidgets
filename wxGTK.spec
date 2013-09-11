@@ -1,6 +1,6 @@
 %define _prefix /usr
-%define ver  2.9.5
-%define ver2 2.9
+%define ver  3.0.0
+%define ver2 3.0
 %define rel  1
 # version for package name according to OpenSuse policy:
 # http://en.opensuse.org/openSUSE:Shared_library_packaging_policy

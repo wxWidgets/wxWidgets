@@ -1,4 +1,4 @@
-               wxWidgets 2.9.5 Release Notes
+               wxWidgets 3.0.0 Release Notes
                =============================
 
 Welcome to the latest release of wxWidgets, a free cross-platform C++
@@ -16,11 +16,11 @@ thread handling, and so on. You can learn more about wxWidgets at
 
 wxWidgets sources are available for download from
 
-        https://sourceforge.net/projects/wxwindows/files/2.9.5/
+        https://sourceforge.net/projects/wxwindows/files/3.0.0/
 
 or
 
-        ftp://ftp.wxwidgets.org/pub/2.9.5/
+        ftp://ftp.wxwidgets.org/pub/3.0.0/
 
 Please see the "Files" section below for the description of various
 files available at these locations.
@@ -29,14 +29,7 @@ files available at these locations.
 A detailed reference manual including in-depth overviews for various
 topics is supplied in various formats and can be accessed online at
 
-        http://docs.wxwidgets.org/2.9.5/
-
-
-Note about naming: while 2.9.5 is called a "development" release,
-this only means that API is not guaranteed to remain unchanged in the
-subsequent 2.9.x releases (although it is still likely that it will),
-unlike in the stable 2.8.x branch. We believe the current version is
-stable and suitable for use in production environment.
+        http://docs.wxwidgets.org/3.0.0/
 
 
 
@@ -47,27 +40,22 @@ This release contains several years worth of improvements compared
 to 2.8 version. Notably, Unicode support has been completely
 overhauled and made much easier to use. Debugging support, including
 when using a release build of the library, was much improved making
-it less likely that you use the library incorrectly. Many new GUI
-and base classes have been added or improved.
+it less likely that you use the library incorrectly. Dynamic event
+handling was made much more comfortable. Many new GUI and base classes
+have been added or improved and all ports, and especially wxOSX/Cocoa
+and wxGTK3, were enhanced.
 
-Compared to the previous 2.9.4 release the most important change at
-the API level is the introduction of new, shorter constants for the
-event types making code using Bind() for dynamic event handling easier
-to both write and read. But the main focus of this release is on
-incremental improvements and fixing defects in preparation for 3.0
-release. In particular, wxOSX/Cocoa port has been significantly
-improved. And there were fixes to the still exprimental wxGTK3 port
-which now also support GTK+ Broadway (HTML5-based) backend.
+Compared to the previous 2.9 development releases the most important
+change is that this release is part of the new 3.0 stable series,
+guarantying backwards API and ABI compatibility with the next 3.0.x
+releases.
 
 Please see the file docs/changes.txt for more details and make sure
 to read the section "Incompatible changes since 2.8" if you upgrade
 from a previous wxWidgets release.
 
 This release introduces many important changes and we are looking
-forward to your feedback about them. In particular please let us
-know about any regressions compared to the previous versions (see
-the section "Bug reporting" below) so that we could fix them before
-3.0 release.
+forward to your feedback about them!
 
 
 Platforms supported
@@ -176,7 +164,7 @@ Documentation
 -------------
 
 wxWidgets documentation is available online at
-http://docs.wxwidgets.org/2.9.5/ and can also be downloaded in HTML
+http://docs.wxwidgets.org/3.0.0/ and can also be downloaded in HTML
 format. To generate documentation in other formats (PDF, CHM, ...)
 please use the scripts in docs/doxygen directory.
 

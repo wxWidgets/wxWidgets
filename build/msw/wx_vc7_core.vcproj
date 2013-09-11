@@ -39,7 +39,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswud\wxprec_corelib.pch"
 				ObjectFile="vc_mswud\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29ud_core.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw30ud_core.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -48,7 +48,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29ud_core.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw30ud_core.lib"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -96,7 +96,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswu\wxprec_corelib.pch"
 				ObjectFile="vc_mswu\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29u_core.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw30u_core.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -105,7 +105,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29u_core.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw30u_core.lib"
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -156,7 +156,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswuddll\wxprec_coredll.pch"
 				ObjectFile="vc_mswuddll\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw295ud_core_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw30ud_core_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -166,14 +166,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase29ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw295ud_core_vc_custom.dll"
+				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib   wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase30ud.lib"
+				OutputFile="..\..\lib\vc_dll\wxmsw30ud_core_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_core.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw30ud_core.lib"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw295ud_core_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw30ud_core_vc_custom.pdb"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -187,7 +187,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw295ud_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw30ud_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"/>
 			<Tool
@@ -221,7 +221,7 @@
 				PrecompiledHeaderThrough="wx/wxprec.h"
 				PrecompiledHeaderFile="vc_mswudll\wxprec_coredll.pch"
 				ObjectFile="vc_mswudll\core\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw295u_core_vc_custom.pdb"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw30u_core_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -231,14 +231,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase29u.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw295u_core_vc_custom.dll"
+				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib   wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxbase30u.lib"
+				OutputFile="..\..\lib\vc_dll\wxmsw30u_core_vc_custom.dll"
 				LinkIncremental="1"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_core.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw30u_core.lib"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw295u_core_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw30u_core_vc_custom.pdb"
 				TargetMachine="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"/>
@@ -254,7 +254,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw295u_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
+				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw30u_core_vc_custom;WXUSINGDLL;WXMAKINGDLL_CORE;wxUSE_BASE=0"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"/>
 			<Tool

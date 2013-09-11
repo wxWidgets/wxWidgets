@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 2.9.5
+PROJECT_NUMBER         = 3.0.0
 PROJECT_BRIEF          =
 PROJECT_LOGO           = logo.png
 OUTPUT_DIRECTORY       = out
@@ -364,7 +364,7 @@ SERVER_BASED_SEARCH    = $(SERVER_BASED_SEARCH)
 #---------------------------------------------------------------------------
 
 GENERATE_DOCSET        = $(GENERATE_DOCSET)
-DOCSET_FEEDNAME        = "wxWidgets 2.9"
+DOCSET_FEEDNAME        = "wxWidgets 3.0"
 DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx29
 DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
 DOCSET_PUBLISHER_NAME  = wxWidgets Team

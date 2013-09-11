@@ -82,7 +82,7 @@ EXTRALIBS_FOR_BASE =
 __renddll___depname =
 !ifeq SHARED 1
 __renddll___depname = &
-	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)$(WXCOMPILER).dll
+	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(WXCOMPILER).dll
 !endif
 __DEBUGINFO =
 !ifeq BUILD debug
@@ -236,8 +236,7 @@ ____CAIRO_LIBDIR_FILENAMES = libpath $(CAIRO_ROOT)\lib
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 29
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)5
+WX_RELEASE_NODOT = 30
 COMPILER_PREFIX = wat
 OBJS = &
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -280,7 +279,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
 	-if exist $(OBJS)\render.exe del $(OBJS)\render.exe
-	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)$(WXCOMPILER).dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)$(WXCOMPILER).dll
+	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(WXCOMPILER).dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(WXCOMPILER).dll
 
 $(OBJS)\render.exe :  $(RENDER_OBJECTS) $(OBJS)\render_sample.res
 	@%create $(OBJS)\render.lbc
@@ -295,7 +294,7 @@ $(OBJS)\render.exe :  $(RENDER_OBJECTS) $(OBJS)\render_sample.res
 	wlink @$(OBJS)\render.lbc
 
 !ifeq SHARED 1
-$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)$(WXCOMPILER).dll :  $(RENDDLL_OBJECTS)
+$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_RELEASE_NODOT)$(WXCOMPILER).dll :  $(RENDDLL_OBJECTS)
 	@%create $(OBJS)\renddll.lbc
 	@%append $(OBJS)\renddll.lbc option quiet
 	@%append $(OBJS)\renddll.lbc name $^@

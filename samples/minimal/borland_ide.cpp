@@ -22,15 +22,15 @@
 #define WinMain WinMain
 
 //wx libs (you may not need all of these
-#pragma link  "wxbase29ud.lib"
-#pragma link  "wxmsw29ud_adv.lib"
-#pragma link  "wxmsw29ud_core.lib"
-#pragma link  "wxmsw29ud_html.lib"
-#pragma link  "wxmsw29ud_media.lib"
-#pragma link  "wxmsw29ud_xrc.lib"
-#pragma link  "wxmsw29ud_aui.lib"
-#pragma link  "wxmsw29ud_stc.lib"
-#pragma link  "wxmsw29ud_richtext.lib"
+#pragma link  "wxbase30ud.lib"
+#pragma link  "wxmsw30ud_adv.lib"
+#pragma link  "wxmsw30ud_core.lib"
+#pragma link  "wxmsw30ud_html.lib"
+#pragma link  "wxmsw30ud_media.lib"
+#pragma link  "wxmsw30ud_xrc.lib"
+#pragma link  "wxmsw30ud_aui.lib"
+#pragma link  "wxmsw30ud_stc.lib"
+#pragma link  "wxmsw30ud_richtext.lib"
 
 //graphics libs
 #pragma link  "wxpngd.lib"

@@ -1,6 +1,6 @@
 %define pref /usr
-%define ver  2.9.5
-%define ver2 2.9
+%define ver  3.0.0
+%define ver2 3.0
 %define rel  1
 
 %define portname   motif

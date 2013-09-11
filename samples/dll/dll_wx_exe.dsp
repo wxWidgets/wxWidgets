@@ -51,8 +51,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29u_core.lib wxbase29u.lib vc_mswu\my_dll.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\wx_exe.exe" /debug /pdb:"vc_mswu\wx_exe.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw29u_core.lib wxbase29u.lib vc_mswu\my_dll.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\wx_exe.exe" /debug /pdb:"vc_mswu\wx_exe.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw30u_core.lib wxbase30u.lib vc_mswu\my_dll.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\wx_exe.exe" /debug /pdb:"vc_mswu\wx_exe.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw30u_core.lib wxbase30u.lib vc_mswu\my_dll.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\wx_exe.exe" /debug /pdb:"vc_mswu\wx_exe.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "wx_exe - Win32 Debug"
 
@@ -76,8 +76,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29ud_core.lib wxbase29ud.lib vc_mswud\my_dll.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\wx_exe.exe" /debug /pdb:"vc_mswud\wx_exe.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw29ud_core.lib wxbase29ud.lib vc_mswud\my_dll.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\wx_exe.exe" /debug /pdb:"vc_mswud\wx_exe.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw30ud_core.lib wxbase30ud.lib vc_mswud\my_dll.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\wx_exe.exe" /debug /pdb:"vc_mswud\wx_exe.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw30ud_core.lib wxbase30ud.lib vc_mswud\my_dll.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\wx_exe.exe" /debug /pdb:"vc_mswud\wx_exe.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ENDIF
 
