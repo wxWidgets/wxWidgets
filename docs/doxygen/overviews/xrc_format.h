@@ -559,19 +559,19 @@ to use it.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{direction, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
-    The side along which the banner will be positioned.}
+    The side along which the banner will be positioned (default: wxLEFT).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Bitmap to use as the banner background.}
+    Bitmap to use as the banner background (default: none).}
 @row3col{title, @ref overview_xrcformat_type_text,
-    Banner title, should be single line.}
+    Banner title, should be single line (default: none).}
 @row3col{message, @ref overview_xrcformat_type_text,
-    Possibly multi-line banner message.}
+    Possibly multi-line banner message (default: none).}
 @row3col{gradient-start, @ref overview_xrcformat_type_colour,
-    Starting colour of the gradient used as banner background. Can't be used if
-    a valid bitmap is specified.}
+    Starting colour of the gradient used as banner background.
+    (Optional. Can't be used if a valid bitmap is specified. If used, both gradient values must be set.)}
 @row3col{gradient-end, @ref overview_xrcformat_type_colour,
-    End colour of the gradient used as banner background. Can't be used if
-    a valid bitmap is specified.}
+    End colour of the gradient used as banner background.
+    (Optional. Can't be used if a valid bitmap is specified. If used, both gradient values must be set.)}
 @endTable
 
 
@@ -655,7 +655,7 @@ Example:
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display in the button (optional).}
 @row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
-    Position of the bitmap in the button, see wxButton::SetBitmapPosition().}
+    Position of the bitmap in the button, see wxButton::SetBitmapPosition() (default: wxLEFT).}
 @row3col{default, @ref overview_xrcformat_type_bool,
     Should this button be the default button in dialog (default: 0)?}
 @endTable
@@ -737,6 +737,7 @@ Example:
 A choicebook can have one or more child objects of the @c choicebookpage
 pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
 @c notebookpage) and one child object of the @ref xrc_wximagelist class.
+
 @c choicebookpage objects have the following properties:
 
 @beginTable
@@ -744,10 +745,10 @@ pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
 @row3col{label, @ref overview_xrcformat_type_text,
      Sheet page's title (required).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-     Bitmap shown alongside the label (default: none).}
+     Bitmap shown alongside the label (default: none, mutually exclusive with @c image).}
 @row3col{image, integer,
     The zero-based index of the image associated with the item
-    into the image list.}
+    into the image list (default: none, mutually exclusive with @c bitmap, parent must have @ref xrc_wximagelist).}
 @row3col{selected, @ref overview_xrcformat_type_bool,
      Is the page selected initially (only one page can be selected; default: 0)?}
 @endTable
@@ -766,9 +767,9 @@ concatenated into a single string using a new line character between them
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
     First line of text on the button, typically the label of an action that
-    will be made when the button is pressed. }
+    will be made when the button is pressed (required). }
 @row3col{note, @ref overview_xrcformat_type_text,
-    Second line of text describing the action performed when the button is pressed.  }
+    Second line of text describing the action performed when the button is pressed (default: none).  }
 @endTable
 
 
@@ -911,7 +912,8 @@ Example:
     Selects a certain file.}
 @row3col{wildcard, @ref overview_xrcformat_type_string,
     Sets the wildcard, which can contain multiple file types, for example:
-    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".}
+    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+    (default: all files).}
 @endTable
 
 
@@ -925,7 +927,8 @@ Example:
     Message shown to the user in wxDirDialog shown by the control (required).}
 @row3col{wildcard, @ref overview_xrcformat_type_string,
     Sets the wildcard, which can contain multiple file types, for example:
-    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".}
+    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+    (default: all files).}
 @endTable
 
 
