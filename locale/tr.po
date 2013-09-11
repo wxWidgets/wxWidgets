@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: wxWidgets - unofficial translations\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
-"PO-Revision-Date: 2013-07-28 23:20+0200\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
+"PO-Revision-Date: 2013-09-11 11:50+0200\n"
+"Last-Translator: Çağrı Doğan <cagrid@hotmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "wxwidgets-1/language/tr_TR/)\n"
 "Language: tr_TR\n"
@@ -2795,7 +2795,7 @@ msgstr "Ögeyi düzenleyin"
 
 #: ../include/wx/generic/progdlgg.h:84
 msgid "Elapsed time:"
-msgstr ""
+msgstr "Geçen süre:"
 
 #: ../src/richtext/richtextsizepage.cpp:350
 #: ../src/richtext/richtextsizepage.cpp:352
@@ -2925,7 +2925,7 @@ msgstr "Esperanto (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
 msgid "Estimated time:"
-msgstr ""
+msgstr "Tahmini süre:"
 
 #: ../src/unix/fswatcher_inotify.cpp:639
 msgid "Event queue overflowed"
@@ -5695,7 +5695,7 @@ msgstr "İlgili kayıtlar:"
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Remaining time:"
-msgstr ""
+msgstr "Kalan süre:"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Remove"
@@ -6172,9 +6172,8 @@ msgid "Symbol &font:"
 msgstr "Sembol &yazı tipi:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
-msgstr "Sembol"
+msgstr "İşaretler"
 
 #: ../src/common/accelcmn.cpp:63
 msgid "TAB"
