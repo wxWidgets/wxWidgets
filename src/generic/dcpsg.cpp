@@ -2339,8 +2339,20 @@ void wxPostScriptDCImpl::DoGetTextExtent(const wxString& string,
 
     long sum=0;
     float height=fontSize; /* by default */
-    unsigned char *p;
-    for(p=(unsigned char *)wxMBSTRINGCAST strbuf; *p; p++)
+    unsigned char *p=(unsigned char *)wxMBSTRINGCAST strbuf;
+    if(!p)
+    {
+        // String couldn't be converted which used to SEGV as reported here:
+        // http://bugs.debian.org/702378
+        // http://trac.wxwidgets.org/ticket/15300
+        // Upstream suggests "just return if the conversion failed".
+        if (x) (*x) = 0;
+        if (y) (*y) = 0;
+        if (descent) (*descent) = 0;
+        if (externalLeading) (*externalLeading) = 0;
+        return;
+    }
+    for(; *p; p++)
     {
         if(lastWidths[*p]== INT_MIN)
         {
