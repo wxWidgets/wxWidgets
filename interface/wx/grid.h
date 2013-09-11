@@ -4303,6 +4303,11 @@ public:
     */
     void SetRowAttr(int row, wxGridCellAttr* attr);
 
+    
+    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg );
+    wxArrayInt CalcColLabelsExposed( const wxRegion& reg );
+    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg );
+
     //@}
 
 
