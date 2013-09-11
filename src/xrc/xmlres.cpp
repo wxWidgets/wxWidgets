@@ -1962,7 +1962,7 @@ wxImageList *wxXmlResourceHandlerImpl::GetImageList(const wxString& param)
                         size = icon.GetSize();
 
                     // We use the mask by default.
-                    bool mask = !HasParam(wxS("mask")) || GetBool(wxS("mask"));
+                    bool mask = GetBool(wxS("mask"), true);
 
                     imagelist = new wxImageList(size.x, size.y, mask);
                 }
