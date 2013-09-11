@@ -1214,6 +1214,8 @@ objects. If sizer child is used, it sets
 @row3col{label, @ref overview_xrcformat_type_text,
      Menu's label (default: empty, but required for menus other
      than popup menus).}
+@row3col{style, @ref overview_xrcformat_type_style,
+    Window style for the menu.}
 @row3col{help, @ref overview_xrcformat_type_text,
      Help shown in statusbar when the menu is selected (only for submenus
      of another wxMenu, default: none).}
@@ -1223,7 +1225,7 @@ objects. If sizer child is used, it sets
 @endTable
 
 Note that unlike most controls, wxMenu does @em not have
-@ref overview_xrcformat_std_props.
+@ref overview_xrcformat_std_props, with the exception of @c style.
 
 A menu object can have one or more child objects of the wxMenuItem or wxMenu
 classes or @c break or @c separator pseudo-classes.
@@ -1284,8 +1286,14 @@ Example:
 
 @subsubsection xrc_wxmenubar wxMenuBar
 
-No properties. Note that unlike most controls, wxMenuBar does @em not have
-@ref overview_xrcformat_std_props.
+@beginTable
+@hdr3col{property, type, description}
+@row3col{style, @ref overview_xrcformat_type_style,
+    Window style for the menu bar.}
+@endTable
+
+Note that unlike most controls, wxMenuBar does @em not have
+@ref overview_xrcformat_std_props, with the exception of @c style.
 
 A menubar can have one or more child objects of the @ref xrc_wxmenu "wxMenu"
 class.
