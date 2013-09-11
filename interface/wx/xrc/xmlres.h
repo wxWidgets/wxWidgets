@@ -578,14 +578,14 @@ protected:
     /**
         Gets a direction.
 
-        If the given @a param is not present or has empty value, @a dir is
+        If the given @a param is not present or has empty value, @a dirDefault is
         returned by default. Otherwise the value of the parameter is parsed and
         a warning is generated if it's not one of @c wxLEFT, @c wxTOP, @c
         wxRIGHT or @c wxBOTTOM.
 
         @since 2.9.3
      */
-    wxDirection GetDirection(const wxString& param, wxDirection dir = wxLEFT);
+    wxDirection GetDirection(const wxString& param, wxDirection dirDefault = wxLEFT);
 
     /**
         Gets a font.
