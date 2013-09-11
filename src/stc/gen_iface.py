@@ -614,7 +614,12 @@ methodOverrideMap = {
      int %s(const wxString& text) {
          const wxWX2MBbuf buf = wx2stc(text);
          return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
-     0),
+     ('Replace the target text with the argument text after \\\d processing.',
+      'Text is counted so it can contain NULs.',
+      'Looks for \\\d where d is between 1 and 9 and replaces these with the strings',
+      'matched in the last search operation which were surrounded by \( and \).',
+      'Returns the length of the replacement text including any change',
+      'caused by processing the \\\d patterns.',)),
 
     'SearchInTarget' :
     (0,
@@ -913,6 +918,10 @@ methodOverrideMap = {
       """void* %s(int operation, void* pointer) {
            return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer); """,
       0),
+      
+    'GetMultiPaste' : 
+    (0, 0, 0, 
+    ('Retrieve the effect of pasting when there are multiple selections.',)),
     
     '' : ('', 0, 0, 0),
 
