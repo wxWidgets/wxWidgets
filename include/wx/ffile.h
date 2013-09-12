@@ -49,7 +49,7 @@ public:
   // assign an existing file descriptor and get it back from wxFFile object
   void Attach(FILE *lfp, const wxString& name = wxEmptyString)
     { Close(); m_fp = lfp; m_name = name; }
-  void Detach() { m_fp = NULL; }
+  FILE* Detach() { FILE* fpOld = m_fp; m_fp = NULL; return fpOld; }
   FILE *fp() const { return m_fp; }
 
   // read/write (unbuffered)

@@ -567,6 +567,7 @@ All:
 - Add wxFileName::SetPermissions() (Catalin Raceanu).
 - Fix build with wxUSE_FFILE==0 (jroemmler).
 - Add wxDEPRECATED_MSG() and use it in a few places.
+- Return the old file descriptor/pointer from wx(F)File::Detach() (troelsk).
 
 All (GUI):
 
