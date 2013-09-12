@@ -914,9 +914,14 @@ wxString wxGetUserHome( const wxString &user )
 // network and user id routines
 // ----------------------------------------------------------------------------
 
-// private utility function which returns output of the given command, removing
-// the trailing newline
-static wxString wxGetCommandOutput(const wxString &cmd)
+// Private utility function which returns output of the given command, removing
+// the trailing newline.
+//
+// Note that by default use Latin-1 just to ensure that we never fail, but if
+// the encoding is known (e.g. UTF-8 for lsb_release), it should be explicitly
+// used instead.
+static wxString
+wxGetCommandOutput(const wxString &cmd, wxMBConv& conv = wxConvISO8859_1)
 {
     // Suppress stderr from the shell to avoid outputting errors if the command
     // doesn't exist.
@@ -937,7 +942,7 @@ static wxString wxGetCommandOutput(const wxString &cmd)
         if ( !fgets(buf, sizeof(buf), f) )
             break;
 
-        s += wxString::FromAscii(buf);
+        s += wxString(buf, conv);
     }
 
     pclose(f);
@@ -1078,23 +1083,38 @@ bool wxIsPlatform64Bit()
 }
 
 #ifdef __LINUX__
+
+static bool
+wxGetValueFromLSBRelease(wxString arg, const wxString& lhs, wxString* rhs)
+{
+    // lsb_release seems to just read a global file which is always in UTF-8
+    // and hence its output is always in UTF-8 as well, regardless of the
+    // locale currently configured by our environment.
+    return wxGetCommandOutput(wxS("lsb_release ") + arg, wxConvUTF8)
+                .StartsWith(lhs, rhs);
+}
+
 wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 {
-    const wxString id = wxGetCommandOutput(wxT("lsb_release --id"));
-    const wxString desc = wxGetCommandOutput(wxT("lsb_release --description"));
-    const wxString rel = wxGetCommandOutput(wxT("lsb_release --release"));
-    const wxString codename = wxGetCommandOutput(wxT("lsb_release --codename"));
-
     wxLinuxDistributionInfo ret;
 
-    id.StartsWith("Distributor ID:\t", &ret.Id);
-    desc.StartsWith("Description:\t", &ret.Description);
-    rel.StartsWith("Release:\t", &ret.Release);
-    codename.StartsWith("Codename:\t", &ret.CodeName);
+    if ( !wxGetValueFromLSBRelease(wxS("--id"), wxS("Distributor ID:\t"),
+                                   &ret.Id) )
+    {
+        // Don't bother to continue, lsb_release is probably not available.
+        return ret;
+    }
+
+    wxGetValueFromLSBRelease(wxS("--description"), wxS("Description:\t"),
+                             &ret.Description);
+    wxGetValueFromLSBRelease(wxS("--release"), wxS("Release:\t"),
+                             &ret.Release);
+    wxGetValueFromLSBRelease(wxS("--codename"), wxS("Codename:\t"),
+                             &ret.CodeName);
 
     return ret;
 }
-#endif
+#endif // __LINUX__
 
 // these functions are in src/osx/utilsexc_base.cpp for wxMac
 #ifndef __DARWIN__
