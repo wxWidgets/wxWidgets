@@ -34,9 +34,9 @@ msgstr ""
 "Unannehmlichkeiten.\n"
 
 #: ../src/common/prntbase.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "Seite %d aus %d"
+msgstr "(Kopie %d von %d)"
 
 #: ../src/common/log.cpp:427
 #, c-format
@@ -126,9 +126,9 @@ msgid "%s Information"
 msgstr "%s Information"
 
 #: ../src/generic/preferencesg.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "Einstellungen"
+msgstr "%s-Einstellungen"
 
 #: ../src/generic/logg.cpp:234
 #, c-format
@@ -189,7 +189,7 @@ msgstr "&Basierend auf:"
 
 #: ../src/richtext/richtextindentspage.cpp:253
 msgid "&Before a paragraph:"
-msgstr "&Vor einem Absatz"
+msgstr "&Vor einem Absatz:"
 
 #: ../src/richtext/richtextfontpage.cpp:271
 msgid "&Bg colour:"
@@ -334,7 +334,7 @@ msgstr "&Erste"
 
 #: ../src/richtext/richtextsizepage.cpp:241
 msgid "&Floating mode:"
-msgstr "& Schwebemodus:"
+msgstr "&Schwebemodus:"
 
 #: ../src/common/stockitem.cpp:160
 msgid "&Floppy"
@@ -532,9 +532,8 @@ msgid "&Position (tenths of a mm):"
 msgstr "&Position (Zehntel-mm):"
 
 #: ../src/richtext/richtextsizepage.cpp:511
-#, fuzzy
 msgid "&Position mode:"
-msgstr "& Schwebemodus:"
+msgstr "&Positionierungs-Modus:"
 
 #: ../src/common/stockitem.cpp:181
 msgid "&Preferences"
@@ -1791,9 +1790,9 @@ msgid "Cannot resume thread %lu"
 msgstr "Kann Thread %lu nicht fortsetzen."
 
 #: ../src/msw/thread.cpp:923
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "Kann Thread %x nicht fortsetzen."
+msgstr "Kann Thread %lx nicht fortsetzen"
 
 #: ../src/unix/threadpsx.cpp:1011
 msgid "Cannot retrieve thread scheduling policy."
@@ -1814,9 +1813,9 @@ msgid "Cannot suspend thread %lu"
 msgstr "Kann Thread %lu nicht anhalten."
 
 #: ../src/msw/thread.cpp:907
-#, fuzzy, c-format
-msgid "Cannot suspend thread %lx"
-msgstr "Kann Thread %x nicht anhalten."
+#, c-format
+msgid "Cannot suspend thread %lx."
+msgstr "Kann Thread %lx nicht anhalten."
 
 #: ../src/msw/thread.cpp:830
 msgid "Cannot wait for thread termination"
@@ -1945,13 +1944,12 @@ msgstr "Klicken um eine Linie durch den Text zu ziehen."
 #: ../src/richtext/richtextfontpage.cpp:293
 #: ../src/richtext/richtextfontpage.cpp:295
 msgid "Check to show the text in capitals."
-msgstr "Klicken um den Text in Kapitalien anzuzeigen."
+msgstr "Markieren um den Text in Großbuchstaben anzuzeigen."
 
 #: ../src/richtext/richtextfontpage.cpp:300
 #: ../src/richtext/richtextfontpage.cpp:302
-#, fuzzy
 msgid "Check to show the text in small capitals."
-msgstr "Klicken um den Text in Kapitalien anzuzeigen."
+msgstr "Markieren um den Text in Kapitälchen darzustellen."
 
 #: ../src/richtext/richtextfontpage.cpp:314
 #: ../src/richtext/richtextfontpage.cpp:316
@@ -2404,9 +2402,8 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "Kann die Klangdaten nicht von '%s' laden."
 
 #: ../src/msw/dirdlg.cpp:441
-#, fuzzy
 msgid "Couldn't obtain folder name"
-msgstr "Kann keinen Timer anlegen."
+msgstr "Verzeichnisname konnte nicht ermittelt werden."
 
 #: ../src/unix/sound_sdl.cpp:229
 #, c-format
@@ -2594,18 +2591,16 @@ msgid "Delete Text"
 msgstr "Text löschen"
 
 #: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
 msgid "Delete column"
-msgstr "Auswahl löschen"
+msgstr "Spalte löschen"
 
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "Element löschen"
 
 #: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
 msgid "Delete row"
-msgstr "Löschen"
+msgstr "Zeile löschen"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -2656,7 +2651,7 @@ msgid "Did you know..."
 msgstr "Wussten Sie schon..."
 
 #: ../src/dfb/wrapdfb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
 msgstr "DirectFB-Fehler %d aufgetreten."
 
@@ -2726,9 +2721,8 @@ msgid "Do you want to save changes to %s?"
 msgstr "Möchten Sie die Änderungen nach %s speichern?"
 
 #: ../src/common/prntbase.cpp:525
-#, fuzzy
 msgid "Document:"
-msgstr "Dokumentation von "
+msgstr "Dokument:"
 
 #: ../src/generic/aboutdlgg.cpp:73
 msgid "Documentation by "
@@ -2812,9 +2806,8 @@ msgid "Edit item"
 msgstr "Element bearbeiten"
 
 #: ../include/wx/generic/progdlgg.h:84
-#, fuzzy
 msgid "Elapsed time:"
-msgstr "bisher benötigte Zeit: "
+msgstr "Benötigte Zeit:"
 
 #: ../src/richtext/richtextsizepage.cpp:350
 #: ../src/richtext/richtextsizepage.cpp:352
@@ -2945,9 +2938,8 @@ msgid "Esperanto (ISO-8859-3)"
 msgstr "Esperanto (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
-#, fuzzy
 msgid "Estimated time:"
-msgstr "Geschätzte Zeit: "
+msgstr "Geschätzte Zeit:"
 
 #: ../src/unix/fswatcher_inotify.cpp:639
 msgid "Event queue overflowed"
@@ -3257,14 +3249,14 @@ msgid "Failed to kill process %d"
 msgstr "Konnte Prozess %d nicht abbrechen"
 
 #: ../src/common/image.cpp:2365
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "Konnte das Bild %d aus demStrom nicht laden."
+msgstr "Konnte das Bitmap \"%s\" aus der Ressource nicht laden."
 
 #: ../src/common/image.cpp:2374
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "Konnte das Bild %d aus demStrom nicht laden."
+msgstr "Konnte das Symbol \"%s\" aus der Ressource nicht laden."
 
 #: ../src/common/iconbndl.cpp:182
 #, c-format
@@ -3274,7 +3266,7 @@ msgstr "Konnte das Bild %%d aus der Datei '%s' nicht laden."
 #: ../src/common/iconbndl.cpp:190
 #, c-format
 msgid "Failed to load image %d from stream."
-msgstr "Konnte das Bild %d aus demStrom nicht laden."
+msgstr "Konnte das Bild %d aus dem Strom nicht laden."
 
 #: ../src/common/image.cpp:2450 ../src/common/image.cpp:2469
 #, c-format
@@ -3368,9 +3360,9 @@ msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Analyse der Pluralformen fehlgeschlagen: '%s'"
 
 #: ../src/unix/mediactrl.cpp:1268
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "Öffnen des Displays \"%s\" fehlgeschlagen."
+msgstr "Fehler bei der Vorbereitung zum Abspielen von \"%s\"."
 
 #: ../src/msw/clipbrd.cpp:647
 msgid "Failed to put data on the clipboard"
@@ -3497,9 +3489,8 @@ msgid "Failed to set permissions on lock file '%s'"
 msgstr "Konnte die Zugriffsrechte für Datei '%s' nicht setzen"
 
 #: ../src/unix/utilsunx.cpp:674
-#, fuzzy
 msgid "Failed to set process priority"
-msgstr "Versuch gescheitert, die Thread-Priorität %d zu setzten."
+msgstr "Versuch gescheitert, die Prozess-Priorität zu setzen"
 
 #: ../src/common/file.cpp:576
 msgid "Failed to set temporary file permissions"
@@ -3510,14 +3501,15 @@ msgid "Failed to set text in the text control."
 msgstr "Setzen von Text in das Text-Steuerelement fehlgeschlagen."
 
 #: ../src/unix/threadpsx.cpp:1293
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "Versuch gescheitert, die Thread-Priorität %d zu setzten."
+msgstr "Versuch gescheitert, die Thread-Nebenläufigkeit auf Stufe %lu zu "
+"setzen"
 
 #: ../src/unix/threadpsx.cpp:1377 ../src/unix/threadpsx.cpp:1387
 #, c-format
 msgid "Failed to set thread priority %d."
-msgstr "Versuch gescheitert, die Thread-Priorität %d zu setzten."
+msgstr "Versuch gescheitert, die Thread-Priorität %d zu setzen."
 
 #: ../src/unix/utilsunx.cpp:791
 msgid "Failed to set up non-blocking pipe, the program might hang."
@@ -3676,9 +3668,8 @@ msgid "First page"
 msgstr "Erste Seite"
 
 #: ../src/richtext/richtextsizepage.cpp:518
-#, fuzzy
 msgid "Fixed"
-msgstr "Schrift fester Breite:"
+msgstr "Festgesetzt"
 
 #: ../src/html/helpwnd.cpp:1219
 msgid "Fixed font:"
@@ -4128,9 +4119,8 @@ msgid "Insert"
 msgstr "Einfügen"
 
 #: ../src/richtext/richtextbuffer.cpp:7672
-#, fuzzy
 msgid "Insert Field"
-msgstr "Text einfügen"
+msgstr "Feld einfügen"
 
 #: ../src/richtext/richtextbuffer.cpp:7583
 #: ../src/richtext/richtextbuffer.cpp:8493
@@ -5383,7 +5373,6 @@ msgid "Passing a already registered object to SetObject"
 msgstr "Ein bereits registriertes Objekt wurde an SetObject übergeben"
 
 #: ../src/common/xtistrm.cpp:480
-#, fuzzy
 msgid "Passing an unknown object to GetObject"
 msgstr "Ein unbekanntes Objekt wurde an GetObject übergeben"
 
@@ -5445,9 +5434,8 @@ msgid "Please select the columns to show and define their order:"
 msgstr "Bitte die Zeilen aufrufen um ihren Ablauf anzuzeigen und zu bestimmen:"
 
 #: ../src/common/prntbase.cpp:521
-#, fuzzy
 msgid "Please wait while printing..."
-msgstr "Bitte warten Sie während des Druckens\n"
+msgstr "Bitte warten Sie während gedruckt wird..."
 
 #: ../src/propgrid/advprops.cpp:631
 msgid "Point Size"
@@ -5532,9 +5520,8 @@ msgid "Print in colour"
 msgstr "Farbig drucken"
 
 #: ../src/common/stockitem.cpp:182
-#, fuzzy
 msgid "Print previe&w..."
-msgstr "Druck&vorschau"
+msgstr "Druck&vorschau..."
 
 #: ../src/gtk/gnome/gprint.cpp:944
 msgid "Print preview"
@@ -5545,9 +5532,8 @@ msgid "Print preview creation failed."
 msgstr "Erzeugung der Druckvorschau fehlgeschlagen"
 
 #: ../src/common/stockitem.cpp:182
-#, fuzzy
 msgid "Print preview..."
-msgstr "Druck&vorschau"
+msgstr "Druckvorschau..."
 
 #: ../src/generic/prntdlgg.cpp:635
 msgid "Print spooling"
@@ -5603,9 +5589,9 @@ msgid "Printing Error"
 msgstr "Fehler beim Drucken"
 
 #: ../src/common/prntbase.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d of %d"
-msgstr "Drucke Seite %d..."
+msgstr "Drucke Seite %d von %d"
 
 #: ../src/generic/printps.cpp:201
 #, c-format
@@ -5737,27 +5723,24 @@ msgid "Regular"
 msgstr "Regulär"
 
 #: ../src/richtext/richtextsizepage.cpp:516
-#, fuzzy
 msgid "Relative"
-msgstr "Dekorativ"
+msgstr "Relativ"
 
 #: ../src/generic/helpext.cpp:462
 msgid "Relevant entries:"
 msgstr "Relevante Einträge:"
 
 #: ../include/wx/generic/progdlgg.h:86
-#, fuzzy
 msgid "Remaining time:"
-msgstr "Verbleibende Zeit: "
+msgstr "Verbleibende Zeit:"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Remove"
 msgstr "Entferne"
 
 #: ../src/richtext/richtextctrl.cpp:1430
-#, fuzzy
 msgid "Remove Bullet"
-msgstr "Entferne"
+msgstr "Gliederungspunkt entfernen"
 
 #: ../src/html/helpwnd.cpp:440
 msgid "Remove current page from bookmarks"
@@ -6113,9 +6096,8 @@ msgid "Slant"
 msgstr "Geneigt"
 
 #: ../src/richtext/richtextfontpage.cpp:298
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "Ka&pitalien"
+msgstr "Ka&pitälchen"
 
 #: ../src/richtext/richtextborderspage.cpp:543
 msgid "Solid"
@@ -6169,9 +6151,8 @@ msgstr "Statement, 5 1/2 x 8 1/2 Zoll"
 
 #: ../src/richtext/richtextsizepage.cpp:515
 #: ../src/richtext/richtextsizepage.cpp:520
-#, fuzzy
 msgid "Static"
-msgstr "Status:"
+msgstr "Statisch"
 
 #: ../src/generic/prntdlgg.cpp:209
 msgid "Status:"
@@ -6336,9 +6317,8 @@ msgstr "Die untere Auffüllung."
 #: ../src/richtext/richtextsizepage.cpp:638
 #: ../src/richtext/richtextsizepage.cpp:650
 #: ../src/richtext/richtextsizepage.cpp:652
-#, fuzzy
 msgid "The bottom position."
-msgstr "Die Tabulatorposition."
+msgstr "Abstand nach unten."
 
 #: ../src/richtext/richtextliststylepage.cpp:254
 #: ../src/richtext/richtextliststylepage.cpp:256
@@ -6444,9 +6424,8 @@ msgstr "Die Schriftgröße in Punkt."
 
 #: ../src/richtext/richtextfontpage.cpp:190
 #: ../src/richtext/richtextfontpage.cpp:192
-#, fuzzy
 msgid "The font size units, points or pixels."
-msgstr "Die Schriftgröße in Punkt."
+msgstr "Einheit der Schriftgröße in Punkt oder Pixel."
 
 #: ../src/generic/fontdlgg.cpp:386 ../src/generic/fontdlgg.cpp:388
 msgid "The font style."
@@ -6482,9 +6461,8 @@ msgstr "Die linke Auffüllung."
 #: ../src/richtext/richtextsizepage.cpp:533
 #: ../src/richtext/richtextsizepage.cpp:545
 #: ../src/richtext/richtextsizepage.cpp:547
-#, fuzzy
 msgid "The left position."
-msgstr "Die Tabulatorposition."
+msgstr "Abstand nach links."
 
 #: ../src/richtext/richtextindentspage.cpp:288
 #: ../src/richtext/richtextindentspage.cpp:290
@@ -6519,7 +6497,6 @@ msgstr "Die maximale Objektbreite."
 
 #: ../src/richtext/richtextsizepage.cpp:417
 #: ../src/richtext/richtextsizepage.cpp:419
-#, fuzzy
 msgid "The object minimum height."
 msgstr "Die minimale Objekthöhe."
 
@@ -6595,9 +6572,8 @@ msgstr "Die rechte Auffüllung."
 #: ../src/richtext/richtextsizepage.cpp:603
 #: ../src/richtext/richtextsizepage.cpp:615
 #: ../src/richtext/richtextsizepage.cpp:617
-#, fuzzy
 msgid "The right position."
-msgstr "Die Tabulatorposition."
+msgstr "Abstand nach rechts."
 
 #: ../src/richtext/richtextindentspage.cpp:267
 #: ../src/richtext/richtextliststylepage.cpp:439
@@ -6658,9 +6634,8 @@ msgstr "Die obere Füllung."
 #: ../src/richtext/richtextsizepage.cpp:568
 #: ../src/richtext/richtextsizepage.cpp:580
 #: ../src/richtext/richtextsizepage.cpp:582
-#, fuzzy
 msgid "The top position."
-msgstr "Die Tabulatorposition."
+msgstr "Abstand nach oben."
 
 #: ../src/common/cmdline.cpp:1061
 #, c-format
@@ -7086,9 +7061,8 @@ msgstr "Einheiten für die untere Auffüllung."
 
 #: ../src/richtext/richtextsizepage.cpp:661
 #: ../src/richtext/richtextsizepage.cpp:663
-#, fuzzy
 msgid "Units for the bottom position."
-msgstr "Einheiten für die untere Auffüllung."
+msgstr "Einheit für den Abstand nach unten."
 
 #: ../src/richtext/richtextborderspage.cpp:283
 #: ../src/richtext/richtextborderspage.cpp:285
@@ -7112,9 +7086,8 @@ msgstr "Einheiten für die linke Auffüllung"
 
 #: ../src/richtext/richtextsizepage.cpp:556
 #: ../src/richtext/richtextsizepage.cpp:558
-#, fuzzy
 msgid "Units for the left position."
-msgstr "Einheiten für die linke Auffüllung"
+msgstr "Einheit für den Abstand nach links."
 
 #: ../src/richtext/richtextsizepage.cpp:482
 #: ../src/richtext/richtextsizepage.cpp:484
@@ -7168,9 +7141,8 @@ msgstr "Einheit für die Auffüllung rechts."
 
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:628
-#, fuzzy
 msgid "Units for the right position."
-msgstr "Einheit für die Auffüllung rechts."
+msgstr "Einheit des Abstands nach rechts."
 
 #: ../src/richtext/richtextborderspage.cpp:343
 #: ../src/richtext/richtextborderspage.cpp:345
@@ -7194,9 +7166,8 @@ msgstr "Einheit für die obere Auffüllung"
 
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:593
-#, fuzzy
 msgid "Units for the top position."
-msgstr "Einheit für die obere Auffüllung"
+msgstr "Einheit des Abstands nach oben."
 
 #: ../src/generic/progdlgg.cpp:382 ../src/generic/progdlgg.cpp:655
 msgid "Unknown"
@@ -7490,9 +7461,8 @@ msgid "Windows Japanese (CP 932) or Shift-JIS"
 msgstr "Windows Japanisch (CP 932) oder Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows Arabisch (CP 1256)"
+msgstr "Windows Johab (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:169
 msgid "Windows Korean (CP 949)"
@@ -7528,9 +7498,8 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Türkisch (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:179
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Windows Griechisch (CP 1253)"
+msgstr "Windows Vietnamesisch (CP 1258)"
 
 #: ../src/msw/utils.cpp:1296
 msgid "Windows Vista"
