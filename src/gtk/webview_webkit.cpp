@@ -86,6 +86,26 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
                                 WebKitWebPolicyDecision *policy_decision,
                                 wxWebViewWebKit *webKitCtrl)
 {
+    const gchar* uri = webkit_network_request_get_uri(request);
+    wxString target = webkit_web_frame_get_name (frame);
+    
+    //If m_creating is true then we are the result of a new window
+    //and so we need to send the event and veto the load
+    if(webKitCtrl->m_creating)
+    {
+        webKitCtrl->m_creating = false;
+        wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
+                             webKitCtrl->GetId(),
+                             wxString(uri, wxConvUTF8),
+                             target);
+
+        if(webKitCtrl && webKitCtrl->GetEventHandler())
+            webKitCtrl->GetEventHandler()->ProcessEvent(event);
+        
+        webkit_web_policy_decision_ignore(policy_decision);
+        return TRUE;
+    }
+
     if(webKitCtrl->m_guard)
     {
         webKitCtrl->m_guard = false;
@@ -98,9 +118,6 @@ wxgtk_webview_webkit_navigation(WebKitWebView *,
 
     webKitCtrl->m_busy = true;
 
-    const gchar* uri = webkit_network_request_get_uri(request);
-
-    wxString target = webkit_web_frame_get_name (frame);
     wxWebViewEvent event(wxEVT_WEBVIEW_NAVIGATING,
                          webKitCtrl->GetId(),
                          wxString( uri, wxConvUTF8 ),
@@ -395,6 +412,17 @@ wxgtk_webview_webkit_context_menu(WebKitWebView *,
 
 #endif
 
+static WebKitWebView*
+wxgtk_webview_webkit_create_webview(WebKitWebView *web_view,
+                                    WebKitWebFrame *frame,
+                                    wxWebViewWebKit *webKitCtrl)
+{
+    //As we do not know the uri being loaded at this point allow the load to
+    //continue and catch it in navigation-policy-decision-requested
+    webKitCtrl->m_creating = true;
+    return web_view;
+}
+
 } // extern "C"
 
 //-----------------------------------------------------------------------------
@@ -418,6 +446,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 {
     m_busy = false;
     m_guard = false;
+    m_creating = false;
     FindClear();
 
     // We currently unconditionally impose scrolling in both directions as it's
@@ -455,6 +484,9 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
      g_signal_connect_after(m_web_view, "context-menu",
                            G_CALLBACK(wxgtk_webview_webkit_context_menu), this);
 #endif
+     
+     g_signal_connect_after(m_web_view, "create-web-view",
+                           G_CALLBACK(wxgtk_webview_webkit_create_webview), this);
 
     m_parent->DoAddChild( this );
 
