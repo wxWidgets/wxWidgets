@@ -1618,14 +1618,14 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
 // _gtk_range_get_wheel_delta()
 static inline int GetWheelScrollActionDelta(GtkRange* range)
 {
-    int d = 3;
+    int delta = 3;
     if (range)
     {
         GtkAdjustment* adj = gtk_range_get_adjustment(range);
         const double page_size = gtk_adjustment_get_page_size(adj);
-        d = wxRound(pow(page_size, 2.0 / 3.0));
+        delta = wxRound(pow(page_size, 2.0 / 3.0));
     }
-    return d;
+    return delta;
 }
 
 static gboolean
@@ -1636,6 +1636,32 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 
     event.m_wheelDelta = 120;
 
+#if GTK_CHECK_VERSION(3,4,0)
+    if (gdk_event->direction == GDK_SCROLL_SMOOTH)
+    {
+        bool processed_x = false;
+        if (gdk_event->delta_x)
+        {
+            event.m_wheelAxis = wxMOUSE_WHEEL_HORIZONTAL;
+            event.m_wheelRotation = int(event.m_wheelDelta * gdk_event->delta_x);
+            GtkRange* range = win->m_scrollBar[wxWindow::ScrollDir_Horz];
+            event.m_linesPerAction = GetWheelScrollActionDelta(range);
+            event.m_columnsPerAction = event.m_linesPerAction;
+            processed_x = win->GTKProcessEvent(event);
+        }
+        bool processed_y = false;
+        if (gdk_event->delta_y)
+        {
+            event.m_wheelAxis = wxMOUSE_WHEEL_VERTICAL;
+            event.m_wheelRotation = int(event.m_wheelDelta * gdk_event->delta_y);
+            GtkRange* range = win->m_scrollBar[wxWindow::ScrollDir_Vert];
+            event.m_linesPerAction = GetWheelScrollActionDelta(range);
+            event.m_columnsPerAction = event.m_linesPerAction;
+            processed_y = win->GTKProcessEvent(event);
+        }
+        return processed_x || processed_y;
+    }
+#endif // GTK_CHECK_VERSION(3,4,0)
     GtkRange *range;
     switch (gdk_event->direction)
     {
@@ -1664,6 +1690,36 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 
     return win->GTKProcessEvent(event);
 }
+
+#if GTK_CHECK_VERSION(3,4,0)
+static gboolean
+hscrollbar_scroll_event(GtkWidget* widget, GdkEventScroll* gdk_event, wxWindow* win)
+{
+    GdkEventScroll event2;
+    if (gdk_event->direction == GDK_SCROLL_SMOOTH && gdk_event->delta_x == 0)
+    {
+        memcpy(&event2, gdk_event, sizeof(event2));
+        event2.delta_x = event2.delta_y;
+        event2.delta_y = 0;
+        gdk_event = &event2;
+    }
+    return window_scroll_event(widget, gdk_event, win);
+}
+
+static gboolean
+vscrollbar_scroll_event(GtkWidget* widget, GdkEventScroll* gdk_event, wxWindow* win)
+{
+    GdkEventScroll event2;
+    if (gdk_event->direction == GDK_SCROLL_SMOOTH && gdk_event->delta_y == 0)
+    {
+        memcpy(&event2, gdk_event, sizeof(event2));
+        event2.delta_y = event2.delta_x;
+        event2.delta_x = 0;
+        gdk_event = &event2;
+    }
+    return window_scroll_event(widget, gdk_event, win);
+}
+#endif // GTK_CHECK_VERSION(3,4,0)
 
 //-----------------------------------------------------------------------------
 // "popup-menu"
@@ -2593,12 +2649,21 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 
     g_signal_connect (widget, "scroll_event",
                       G_CALLBACK (window_scroll_event), this);
-    if (m_scrollBar[ScrollDir_Horz])
-        g_signal_connect (m_scrollBar[ScrollDir_Horz], "scroll_event",
-                      G_CALLBACK (window_scroll_event), this);
-    if (m_scrollBar[ScrollDir_Vert])
-        g_signal_connect (m_scrollBar[ScrollDir_Vert], "scroll_event",
-                      G_CALLBACK (window_scroll_event), this);
+    for (int i = 0; i < 2; i++)
+    {
+        GtkRange* range = m_scrollBar[i];
+        if (range)
+        {
+#if GTK_CHECK_VERSION(3,4,0)
+            GCallback cb = GCallback(i == ScrollDir_Horz
+                ? hscrollbar_scroll_event
+                : vscrollbar_scroll_event);
+#else
+            GCallback cb = GCallback(window_scroll_event);
+#endif
+            g_signal_connect(range, "scroll_event", cb, this);
+        }
+    }
 
     g_signal_connect (widget, "popup_menu",
                      G_CALLBACK (wxgtk_window_popup_menu_callback), this);
