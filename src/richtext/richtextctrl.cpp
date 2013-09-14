@@ -4885,6 +4885,15 @@ void wxRichTextCaret::DoDraw(wxDC *dc)
 
 void wxRichTextCaret::Notify()
 {
+#ifdef __WXMAC__
+    // Workaround for lack of kill focus event in wxOSX
+    if (m_richTextCtrl && !m_richTextCtrl->HasFocus())
+    {
+        Hide();
+        return;
+    }
+#endif
+
     m_flashOn = !m_flashOn;
     Refresh();
 }
