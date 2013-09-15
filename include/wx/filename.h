@@ -583,12 +583,12 @@ public:
 
         // returns the size in a human readable form
     wxString
-    GetHumanReadableSize(const wxString& nullsize = _("Not available"),
+    GetHumanReadableSize(const wxString& nullsize = wxGetTranslation("Not available"),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL) const;
     static wxString
     GetHumanReadableSize(const wxULongLong& sz,
-                         const wxString& nullsize = _("Not available"),
+                         const wxString& nullsize = wxGetTranslation("Not available"),
                          int precision = 1,
                          wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL);
 #endif // wxUSE_LONGLONG
