@@ -137,10 +137,13 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         }
     }
 #if wxUSE_MOUSEWHEEL
+    // Use GTK's own scroll wheel handling in GtkScrolledWindow
+#ifndef __WXGTK20__
     else if ( evType == wxEVT_MOUSEWHEEL )
     {
         m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
     }
+#endif
 #endif // wxUSE_MOUSEWHEEL
     else if ( evType == wxEVT_CHAR &&
                 (m_scrollHelper->GetOrientation() == wxVERTICAL) )
