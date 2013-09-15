@@ -326,6 +326,8 @@ wxAnyScrollHelperBase::wxAnyScrollHelperBase(wxWindow* win)
 
     m_win = win;
     m_targetWindow = NULL;
+
+    m_kbdScrollingEnabled = true;
 }
 
 // ----------------------------------------------------------------------------
@@ -346,8 +348,6 @@ wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
 
     m_xScrollingEnabled =
     m_yScrollingEnabled = true;
-
-    m_kbdScrollingEnabled = true;
 
     m_scaleX =
     m_scaleY = 1.0;
@@ -833,7 +833,7 @@ void wxAnyScrollHelperBase::HandleOnPaint(wxPaintEvent& WXUNUSED(event))
 // compatibility here - if we used OnKeyDown(), the programs which process
 // arrows themselves in their OnChar() would never get the message and like
 // this they always have the priority
-void wxScrollHelperBase::HandleOnChar(wxKeyEvent& event)
+void wxAnyScrollHelperBase::HandleOnChar(wxKeyEvent& event)
 {
     if ( !m_kbdScrollingEnabled )
     {

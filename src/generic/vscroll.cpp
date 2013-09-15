@@ -142,6 +142,16 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
     }
 #endif // wxUSE_MOUSEWHEEL
+    else if ( evType == wxEVT_CHAR &&
+                (m_scrollHelper->GetOrientation() == wxVERTICAL) )
+    {
+        m_scrollHelper->HandleOnChar((wxKeyEvent &)event);
+        if ( !event.GetSkipped() )
+        {
+            processed = true;
+            wasSkipped = false;
+        }
+    }
 
     event.Skip(wasSkipped);
 
