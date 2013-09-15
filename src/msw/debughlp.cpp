@@ -2,7 +2,7 @@
 // Name:        src/msw/debughlp.cpp
 // Purpose:     various Win32 debug helpers
 // Author:      Vadim Zeitlin
-// Modified by: Suzumizaki-kimitaka 2013-04-10
+// Modified by:
 // Created:     2005-01-08 (extracted from crashrpt.cpp)
 // Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
@@ -62,8 +62,7 @@ wxDO_FOR_ALL_SYM_FUNCS(DEFINE_SYM_FUNCTION);
 
 // load all function we need from the DLL
 
-/* static */
-bool wxDbgHelpDLL::BindDbgHelpFunctions(const wxDynamicLibrary& dllDbgHelp)
+static bool BindDbgHelpFunctions(const wxDynamicLibrary& dllDbgHelp)
 {
     #define LOAD_SYM_FUNCTION(func, name)                                     \
         wxDbgHelpDLL::func = (wxDbgHelpDLL::func ## _t)                       \
@@ -74,27 +73,15 @@ bool wxDbgHelpDLL::BindDbgHelpFunctions(const wxDynamicLibrary& dllDbgHelp)
             return false;                                                     \
         }
 
-    wxDO_FOR_ALL_SYM_FUNCS_REQUIRED(LOAD_SYM_FUNCTION);
+    wxDO_FOR_ALL_SYM_FUNCS(LOAD_SYM_FUNCTION);
 
     #undef LOAD_SYM_FUNCTION
-
-    #define LOAD_SYM_FUNCTION_OPTIONAL(func, name)                            \
-        if ( dllDbgHelp.HasSymbol(wxT(#name)) )                               \
-        {                                                                     \
-            wxDbgHelpDLL::func = (wxDbgHelpDLL::func ## _t)                   \
-                dllDbgHelp.GetSymbol(wxT(#name));                             \
-        }
-
-    wxDO_FOR_ALL_SYM_FUNCS_OPTIONAL(LOAD_SYM_FUNCTION_OPTIONAL);
-
-    #undef LOAD_SYM_FUNCTION_CAN_FAIL
 
     return true;
 }
 
 // called by Init() if we hadn't done this before
-/* static */
-bool wxDbgHelpDLL::DoInit()
+static bool DoInit()
 {
     wxDynamicLibrary dllDbgHelp(wxT("dbghelp.dll"), wxDL_VERBATIM);
     if ( dllDbgHelp.IsLoaded() )
@@ -183,13 +170,13 @@ DoGetTypeInfo(DWORD64 base, ULONG ti, IMAGEHLP_SYMBOL_TYPE_INFO type, void *rc)
 
 static inline
 bool
-DoGetTypeInfo(wxPSYMBOL_INFO pSym, IMAGEHLP_SYMBOL_TYPE_INFO type, void *rc)
+DoGetTypeInfo(PSYMBOL_INFO pSym, IMAGEHLP_SYMBOL_TYPE_INFO type, void *rc)
 {
     return DoGetTypeInfo(pSym->ModBase, pSym->TypeIndex, type, rc);
 }
 
 static inline
-wxDbgHelpDLL::BasicType GetBasicType(wxPSYMBOL_INFO pSym)
+wxDbgHelpDLL::BasicType GetBasicType(PSYMBOL_INFO pSym)
 {
     wxDbgHelpDLL::BasicType bt;
     return DoGetTypeInfo(pSym, TI_GET_BASETYPE, &bt)
@@ -198,7 +185,7 @@ wxDbgHelpDLL::BasicType GetBasicType(wxPSYMBOL_INFO pSym)
 }
 
 /* static */
-wxString wxDbgHelpDLL::GetSymbolName(wxPSYMBOL_INFO pSym)
+wxString wxDbgHelpDLL::GetSymbolName(PSYMBOL_INFO pSym)
 {
     wxString s;
 
@@ -302,7 +289,7 @@ wxDbgHelpDLL::DumpBaseType(BasicType bt, DWORD64 length, PVOID pAddress)
 }
 
 wxString
-wxDbgHelpDLL::DumpField(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
+wxDbgHelpDLL::DumpField(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
 {
     wxString s;
 
@@ -349,7 +336,7 @@ wxDbgHelpDLL::DumpField(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
 
 
                 // now pass to the type representing the type of this member
-                wxSYMBOL_INFO sym = *pSym;
+                SYMBOL_INFO sym = *pSym;
                 if ( !DoGetTypeInfo(pSym, TI_GET_TYPEID, &sym.TypeIndex) )
                     break;
 
@@ -400,7 +387,7 @@ wxDbgHelpDLL::DumpField(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
 }
 
 /* static */ wxString
-wxDbgHelpDLL::DumpUDT(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
+wxDbgHelpDLL::DumpUDT(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
 {
     wxString s;
 
@@ -467,7 +454,7 @@ wxDbgHelpDLL::DumpUDT(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
         s << wxT(" {\n");
 
         // Iterate through all children
-        wxSYMBOL_INFO sym;
+        SYMBOL_INFO sym;
         wxZeroMemory(sym);
         sym.ModBase = pSym->ModBase;
         for ( unsigned i = 0; i < dwChildrenCount; i++ )
@@ -499,7 +486,7 @@ wxDbgHelpDLL::DumpUDT(wxPSYMBOL_INFO pSym, void *pVariable, unsigned level)
 
 /* static */
 wxDbgHelpDLL::SymbolTag
-wxDbgHelpDLL::DereferenceSymbol(wxPSYMBOL_INFO pSym, void **ppData)
+wxDbgHelpDLL::DereferenceSymbol(PSYMBOL_INFO pSym, void **ppData)
 {
     SymbolTag tag = SYMBOL_TAG_NULL;
     for ( ;; )
@@ -536,10 +523,10 @@ wxDbgHelpDLL::DereferenceSymbol(wxPSYMBOL_INFO pSym, void **ppData)
 }
 
 /* static */ wxString
-wxDbgHelpDLL::DumpSymbol(wxPSYMBOL_INFO pSym, void *pVariable)
+wxDbgHelpDLL::DumpSymbol(PSYMBOL_INFO pSym, void *pVariable)
 {
     wxString s;
-    wxSYMBOL_INFO symDeref = *pSym;
+    SYMBOL_INFO symDeref = *pSym;
     switch ( DereferenceSymbol(&symDeref, &pVariable) )
     {
         default:
@@ -563,316 +550,6 @@ wxDbgHelpDLL::DumpSymbol(wxPSYMBOL_INFO pSym, void *pVariable)
     }
 
     return s;
-}
-
-// ----------------------------------------------------------------------------
-// do the best functions and structures
-// ----------------------------------------------------------------------------
-
-struct wxMswEnmLddMdlsHelperStruct
-{
-public:
-    wxMswEnmLddMdlsHelperStruct(wxPENUMLOADED_MODULES_CALLBACK64 ptr, PVOID content)
-        : m_pointer_to_callback(ptr), m_user_content(content)
-    { }
-    wxPENUMLOADED_MODULES_CALLBACK64 m_pointer_to_callback;
-    PVOID m_user_content;
-};
-
-#ifdef UNICODE
-
-static BOOL CALLBACK wxMswEnmLddMdlsCallback1(
-    PCSTR ModuleName, DWORD64 ModuleBase, ULONG ModuleSize, PVOID UserContext)
-{
-    wxMswEnmLddMdlsHelperStruct& alternate =
-        *(wxMswEnmLddMdlsHelperStruct*)(UserContext);
-
-    const wxWCharBuffer buf = wxConvLocal.cMB2WC(ModuleName, wxNO_LEN, NULL);
-    return (*alternate.m_pointer_to_callback)
-        (buf.data(), ModuleBase, ModuleSize, alternate.m_user_content);
-}
-
-static BOOL CALLBACK wxMswEnmLddMdlsCallback2(
-    PCSTR ModuleName, DWORD_PTR ModuleBase, ULONG ModuleSize, PVOID UserContext)
-{
-    wxMswEnmLddMdlsHelperStruct& alternate =
-        *(wxMswEnmLddMdlsHelperStruct*)(UserContext);
-
-    const wxWCharBuffer buf = wxConvLocal.cMB2WC(ModuleName, wxNO_LEN, NULL);
-    return (*alternate.m_pointer_to_callback)
-        (buf.data(), ModuleBase, ModuleSize, alternate.m_user_content);
-}
-
-#else
-
-static BOOL CALLBACK wxMswEnmLddMdlsCallback(
-    PCSTR ModuleName, DWORD_PTR ModuleBase, ULONG ModuleSize, PVOID UserContext)
-{
-    wxMswEnmLddMdlsHelperStruct& alternate =
-        *(wxMswEnmLddMdlsHelperStruct*)(UserContext);
-
-    return (*alternate.m_pointer_to_callback)
-        (ModuleName, ModuleBase, ModuleSize, alternate.m_user_content);
-}
-
-#endif // UNICODE
-
-/* static */
-BOOL wxDbgHelpDLL::EnumerateLoadedModulesT(
-    HANDLE handle, wxPENUMLOADED_MODULES_CALLBACK64 callback, PVOID pvoid)
-{
-#ifdef UNICODE
-    if (EnumerateLoadedModulesW64)
-    {
-        const BOOL retVal = (*EnumerateLoadedModulesW64)(handle, callback, pvoid);
-        if (retVal)
-            return retVal;
-    }
-    if (EnumerateLoadedModules64)
-    {
-        wxMswEnmLddMdlsHelperStruct p(callback, pvoid);
-        const BOOL retVal =
-            (*EnumerateLoadedModules64)
-                (handle, &wxMswEnmLddMdlsCallback1, (PVOID)(&p));
-        if (retVal)
-            return retVal;
-    }
-    if (EnumerateLoadedModules)
-    {
-        wxMswEnmLddMdlsHelperStruct p(callback, pvoid);
-        const BOOL retVal =
-            (*EnumerateLoadedModules)
-                (handle, &wxMswEnmLddMdlsCallback2, (PVOID)(&p));
-        if (retVal)
-            return retVal;
-    }
-    return FALSE;
-#else
-    if (EnumerateLoadedModules64)
-    {
-        const BOOL retVal = (*EnumerateLoadedModules64)(handle, callback, pvoid);
-        if (retVal)
-            return retVal;
-    }
-    if (EnumerateLoadedModules)
-    {
-        wxMswEnmLddMdlsHelperStruct p(callback, pvoid);
-        const BOOL retVal =
-            (*EnumerateLoadedModules)
-                (handle, &wxMswEnmLddMdlsCallback, (PVOID)(&p));
-        if (retVal)
-            return retVal;
-    }
-    return FALSE;
-#endif
-}
-
-/* static */
-BOOL wxDbgHelpDLL::SymInitializeT(HANDLE hProcess, LPCTSTR UserSearchPath, BOOL fInvadeProcess)
-{
-#ifdef UNICODE
-    if (SymInitializeW)
-    {
-        const BOOL retVal = (*SymInitializeW)(hProcess, UserSearchPath, fInvadeProcess);
-        if (retVal)
-            return retVal;
-    }
-    if (SymInitialize)
-    {
-        BOOL retVal;
-        if (UserSearchPath)
-        {
-            const wxCharBuffer buf = wxConvLocal.cWC2MB(UserSearchPath, wxNO_LEN, NULL);
-            retVal = (*SymInitialize)(hProcess, buf.data(), fInvadeProcess);
-        }
-        else
-        {
-            retVal = (*SymInitialize)(hProcess, NULL, fInvadeProcess);
-        }
-        return retVal;
-    }
-    return FALSE;
-#else
-    if (SymInitialize)
-    {
-        return (*SymInitialize)(hProcess, UserSearchPath, fInvadeProcess);
-    }
-    return FALSE;
-#endif
-}
-
-/* static */
-BOOL wxDbgHelpDLL::SymFromAddrT(HANDLE hProcess, DWORD64 Address, PDWORD64 Displacement, wxPSYMBOL_INFO Symbol)
-{
-#ifdef UNICODE
-    if (SymFromAddrW)
-    {
-        const BOOL retVal = (*SymFromAddrW)(hProcess, Address, Displacement, Symbol);
-        if (retVal)
-            return retVal;
-    }
-    if (SymFromAddr)
-    {
-        BYTE* symbolBuffer = new BYTE[sizeof(SYMBOL_INFO) + Symbol->MaxNameLen*sizeof(CHAR)];
-        PSYMBOL_INFO data = (SYMBOL_INFO*)(symbolBuffer);
-        wxZeroMemory(*data);
-        data->SizeOfStruct = sizeof(SYMBOL_INFO);
-        data->MaxNameLen = Symbol->MaxNameLen;
-        if (! (*SymFromAddr)(hProcess, Address, Displacement, data))
-        {
-            delete [] symbolBuffer;
-            return FALSE;
-        }
-
-        // We can't refer data->NameLen. It seems to be unmodified.
-        const wxWCharBuffer buf = wxConvLocal.cMB2WC(data->Name, wxNO_LEN, NULL);
-
-        // FIXME: I know too brute but some header names SYMBOL_INFO::Index
-        // and the other one defines it as SYMBOL_INFO::info.
-        const ULONG dstSize = Symbol->SizeOfStruct;
-        CopyMemory(Symbol, data, sizeof(SYMBOL_INFO)-sizeof(CHAR));
-        Symbol->SizeOfStruct = dstSize;
-        Symbol->NameLen = buf.length();
-        wxStrncpy(Symbol->Name, buf.data(), Symbol->MaxNameLen);
-        delete [] symbolBuffer;
-        return TRUE;
-    }
-    return FALSE;
-#else
-    if (SymFromAddr)
-    {
-        return (*SymFromAddr)(hProcess, Address, Displacement, Symbol);
-    }
-    return FALSE;
-#endif
-}
-
-/* static */
-BOOL wxDbgHelpDLL::SymGetLineFromAddrT(HANDLE hProcess, DWORD64 dwAddr, PDWORD pdrDisplacement, wxPIMAGEHLP_LINE Line)
-{
-#ifdef UNICODE
-    if (SymGetLineFromAddrW64)
-    {
-        const BOOL retVal = (*SymGetLineFromAddrW64)(hProcess, dwAddr, pdrDisplacement, Line);
-        if (retVal)
-            return retVal;
-        // TODO: seems always fail with GetLastError() returns 487 with 32bit binary on 64 bit Windows.
-    }
-    static WCHAR staticBuf[MAX_PATH];
-    if (SymGetLineFromAddr64)
-    {
-        IMAGEHLP_LINE64 LineAlternate;
-        LineAlternate.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
-        if ((*SymGetLineFromAddr64)(hProcess, dwAddr, pdrDisplacement, &LineAlternate))
-        {
-            const wxWCharBuffer ConvBuf =
-                wxConvLocal.cMB2WC(LineAlternate.FileName, wxNO_LEN, NULL);
-            wxStrncpy(staticBuf, ConvBuf.data(), MAX_PATH);
-            Line->Key = LineAlternate.Key;
-            Line->LineNumber = LineAlternate.LineNumber;
-            Line->FileName = staticBuf;
-            Line->Address = LineAlternate.Address;
-            return TRUE;
-        }
-    }
-    if (SymGetLineFromAddr)
-    {
-        IMAGEHLP_LINE LineAlternate;
-        LineAlternate.SizeOfStruct = sizeof(IMAGEHLP_LINE);
-        if ((*SymGetLineFromAddr)(hProcess, dwAddr, pdrDisplacement, &LineAlternate))
-        {
-            const wxWCharBuffer ConvBuf =
-                wxConvLocal.cMB2WC(LineAlternate.FileName, wxNO_LEN, NULL);
-            wxStrncpy(staticBuf, ConvBuf.data(), MAX_PATH);
-            Line->Key = LineAlternate.Key;
-            Line->LineNumber = LineAlternate.LineNumber;
-            Line->FileName = staticBuf;
-            Line->Address = LineAlternate.Address;
-            return TRUE;
-        }
-    }
-    return FALSE;
-#else
-    if (SymGetLineFromAddr64)
-    {
-        return (*SymGetLineFromAddr64)(hProcess, dwAddr, pdrDisplacement, Line);
-    }
-    if (SymGetLineFromAddr)
-    {
-        IMAGEHLP_LINE LineAlternate;
-        LineAlternate.SizeOfStruct = sizeof(IMAGEHLP_LINE);
-        if ((*SymGetLineFromAddr)(hProcess, dwAddr, pdrDisplacement, &LineAlternate))
-        {
-            Line->Key = LineAlternate.Key;
-            Line->LineNumber = LineAlternate.LineNumber;
-            Line->FileName = LineAlternate.FileName;
-            Line->Address = LineAlternate.Address;
-            return TRUE;
-        }
-    }
-    return FALSE;
-#endif
-}
-
-struct wxMswSymEnumSymbolsHelperStruct
-{
-public:
-    wxMswSymEnumSymbolsHelperStruct(PSYM_ENUMERATESYMBOLS_CALLBACKW ptr, PVOID content)
-        : m_pointer_to_callback(ptr), m_user_content(content)
-    { }
-    PSYM_ENUMERATESYMBOLS_CALLBACKW m_pointer_to_callback;
-    PVOID m_user_content;
-};
-
-#ifdef UNICODE
-
-static BOOL CALLBACK wxMswSymEnumSymbolsHelperCallback(
-    PSYMBOL_INFO pSymInfo, ULONG SymbolSize, PVOID UserContext)
-{
-    wxMswSymEnumSymbolsHelperStruct& alternate =
-        *(wxMswSymEnumSymbolsHelperStruct*)(UserContext);
-    const wxWCharBuffer buf = wxConvLocal.cMB2WC(pSymInfo->Name, pSymInfo->MaxNameLen, NULL);
-    BYTE* symbolBuffer = new BYTE[sizeof(SYMBOL_INFOW) + buf.length()*sizeof(WCHAR)];
-    SYMBOL_INFOW* data = (SYMBOL_INFOW*)(symbolBuffer);
-
-    // FIXME: I know too brute but some header names SYMBOL_INFO::Index
-    // and the other one defines it as SYMBOL_INFO::info.
-    CopyMemory(data, pSymInfo, sizeof(SYMBOL_INFO)-sizeof(CHAR));
-    data->SizeOfStruct = sizeof(SYMBOL_INFOW);
-    wxStrncpy(data->Name, buf.data(), buf.length());
-    BOOL retVal = (*alternate.m_pointer_to_callback)(data, SymbolSize, alternate.m_user_content);
-    delete [] symbolBuffer;
-    return retVal;
-}
-
-#endif // UNICODE
-
-/* static */
-BOOL wxDbgHelpDLL::SymEnumSymbolsT(HANDLE hProcess, ULONG64 baseOfDll, PCTSTR Mask,
-                    wxPSYM_ENUMERATESYMBOLS_CALLBACK EnumSymbolsCallback, const PVOID UserContext)
-{
-#ifdef UNICODE
-    if (SymEnumSymbolsW)
-    {
-        const BOOL retVal = (*SymEnumSymbolsW)(hProcess, baseOfDll, Mask, EnumSymbolsCallback, UserContext);
-        if (retVal)
-            return retVal;
-    }
-    if (SymEnumSymbols)
-    {
-        wxMswSymEnumSymbolsHelperStruct p(EnumSymbolsCallback, UserContext);
-        const wxCharBuffer buf = wxConvLocal.cWC2MB(Mask ? Mask : L"", wxNO_LEN, NULL);
-        return (*SymEnumSymbols)(hProcess, baseOfDll, buf.data(),
-                                 wxMswSymEnumSymbolsHelperCallback, (PVOID)(&p));
-    }
-    return FALSE;
-#else
-    if (SymEnumSymbols)
-    {
-        return (*SymEnumSymbols)(hProcess, baseOfDll, Mask, EnumSymbolsCallback, UserContext);
-    }
-    return FALSE;
-#endif
 }
 
 // ----------------------------------------------------------------------------
