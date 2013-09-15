@@ -36,6 +36,10 @@ enum wxScrollbarVisibility
 //
 // So we have
 //
+//                          wxAnyScrollHelperBase
+//                                   |
+//                                   |
+//                                  \|/
 //                           wxScrollHelperBase
 //                                   |
 //                                   |
@@ -55,7 +59,25 @@ enum wxScrollbarVisibility
 //
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxScrollHelperBase
+// This class allows reusing some of wxScrollHelperBase functionality in
+// wxVarScrollHelperBase in wx/vscroll.h without duplicating its code.
+class WXDLLIMPEXP_CORE wxAnyScrollHelperBase
+{
+public:
+    wxEXPLICIT wxAnyScrollHelperBase(wxWindow* win);
+
+    // Simple accessor for the window that is really being scrolled.
+    wxWindow *GetTargetWindow() const { return m_targetWindow; }
+
+protected:
+    // the window that receives the scroll events and the window to actually
+    // scroll, respectively
+    wxWindow *m_win,
+             *m_targetWindow;
+};
+
+// This is the class containing the guts of (uniform) scrolling logic.
+class WXDLLIMPEXP_CORE wxScrollHelperBase : public wxAnyScrollHelperBase
 {
 public:
     // ctor must be given the associated window
@@ -173,7 +195,6 @@ public:
     // child of it in order to scroll only a portion the area between the
     // scrollbars (spreadsheet: only cell area will move).
     void SetTargetWindow(wxWindow *target);
-    wxWindow *GetTargetWindow() const;
 
     void SetTargetRect(const wxRect& rect) { m_rectToScroll = rect; }
     wxRect GetTargetRect() const { return m_rectToScroll; }
@@ -277,9 +298,6 @@ protected:
 
     double                m_scaleX;
     double                m_scaleY;
-
-    wxWindow             *m_win,
-                         *m_targetWindow;
 
     wxRect                m_rectToScroll;
 
