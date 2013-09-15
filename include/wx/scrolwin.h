@@ -66,8 +66,18 @@ class WXDLLIMPEXP_CORE wxAnyScrollHelperBase
 public:
     wxEXPLICIT wxAnyScrollHelperBase(wxWindow* win);
 
+    // Override this function to draw the graphic (or just process EVT_PAINT)
+    virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
+
+    // change the DC origin according to the scroll position.
+    virtual void DoPrepareDC(wxDC& dc) = 0;
+
     // Simple accessor for the window that is really being scrolled.
     wxWindow *GetTargetWindow() const { return m_targetWindow; }
+
+
+    // The methods called from the window event handlers.
+    void HandleOnPaint(wxPaintEvent& event);
 
 protected:
     // the window that receives the scroll events and the window to actually
@@ -199,10 +209,6 @@ public:
     void SetTargetRect(const wxRect& rect) { m_rectToScroll = rect; }
     wxRect GetTargetRect() const { return m_rectToScroll; }
 
-    // Override this function to draw the graphic (or just process EVT_PAINT)
-    virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
-
-    // change the DC origin according to the scroll position.
     virtual void DoPrepareDC(wxDC& dc);
 
     // are we generating the autoscroll events?
@@ -222,7 +228,6 @@ public:
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
     void HandleOnSize(wxSizeEvent& event);
-    void HandleOnPaint(wxPaintEvent& event);
     void HandleOnChar(wxKeyEvent& event);
     void HandleOnMouseEnter(wxMouseEvent& event);
     void HandleOnMouseLeave(wxMouseEvent& event);

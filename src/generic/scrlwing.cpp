@@ -186,6 +186,9 @@ void wxAutoScrollTimer::Notify()
 // wxScrollHelperEvtHandler
 // ----------------------------------------------------------------------------
 
+// Notice that this method is currently duplicated in the method with the same
+// name in wxVarScrollHelperEvtHandler class, until this is fixed, the other
+// copy of the method needs to be modified every time this version is.
 bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
     wxEventType evType = event.GetEventType();
@@ -817,7 +820,7 @@ void wxScrollHelperBase::HandleOnSize(wxSizeEvent& WXUNUSED(event))
 
 // This calls OnDraw, having adjusted the origin according to the current
 // scroll position
-void wxScrollHelperBase::HandleOnPaint(wxPaintEvent& WXUNUSED(event))
+void wxAnyScrollHelperBase::HandleOnPaint(wxPaintEvent& WXUNUSED(event))
 {
     // don't use m_targetWindow here, this is always called for ourselves
     wxPaintDC dc(m_win);

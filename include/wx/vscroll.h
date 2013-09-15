@@ -121,9 +121,6 @@ public:
     // scrollbars (spreadsheet: only cell area will move).
     virtual void SetTargetWindow(wxWindow *target);
 
-    // Override this function to draw the graphic (or just process EVT_PAINT)
-    //virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
-
     // change the DC origin according to the scroll position. To properly
     // forward calls to wxWindow::Layout use WX_FORWARD_TO_SCROLL_HELPER()
     // derived class

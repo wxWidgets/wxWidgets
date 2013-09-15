@@ -61,12 +61,20 @@ private:
 // wxVarScrollHelperEvtHandler implementation
 // ============================================================================
 
+// FIXME: This method totally duplicates a method with the same name in
+//        wxScrollHelperEvtHandler, we really should merge them by reusing the
+//        common parts in wxAnyScrollHelperBase.
 bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
     wxEventType evType = event.GetEventType();
 
-    // pass it on to the real handler
-    bool processed = wxEvtHandler::ProcessEvent(event);
+    // Pass it on to the real handler: notice that we must not call
+    // ProcessEvent() on this object itself as it wouldn't pass it to the next
+    // handler (i.e. the real window) if we're called from a previous handler
+    // (as indicated by "process here only" flag being set) and we do want to
+    // execute the handler defined in the window we're associated with right
+    // now, without waiting until TryAfter() is called from wxEvtHandler.
+    bool processed = m_nextHandler->ProcessEvent(event);
 
     // always process the size events ourselves, even if the user code handles
     // them as well, as we need to AdjustScrollbars()
@@ -78,18 +86,28 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     if ( evType == wxEVT_SIZE )
     {
         m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
-
-        return !event.GetSkipped();
+        return true;
     }
 
-    if ( processed )
+    if ( processed && event.IsCommandEvent())
+        return true;
+
+    // For wxEVT_PAINT the user code can either handle this event as usual or
+    // override virtual OnDraw(), so if the event hasn't been handled we need
+    // to call this virtual function ourselves.
+    if (
+#ifndef __WXUNIVERSAL__
+          // in wxUniversal "processed" will always be true, because
+          // all windows use the paint event to draw themselves.
+          // In this case we can't use this flag to determine if a custom
+          // paint event handler already drew our window and we just
+          // call OnDraw() anyway.
+          !processed &&
+#endif // !__WXUNIVERSAL__
+            evType == wxEVT_PAINT )
     {
-        // normally, nothing more to do here - except if we have a command
-        // event
-        if ( event.IsCommandEvent() )
-        {
-            return true;
-        }
+        m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
+        return true;
     }
 
     // reset the skipped flag (which might have been set to true in
@@ -112,7 +130,8 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         {
             // it makes sense to indicate that we processed the message as we
             // did scroll the window (and also notice that wxAutoScrollTimer
-            // relies on our return value for continuous scrolling)
+            // relies on our return value to stop scrolling when we are at top
+            // or bottom already)
             processed = true;
             wasSkipped = false;
         }
@@ -125,6 +144,17 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 #endif // wxUSE_MOUSEWHEEL
 
     event.Skip(wasSkipped);
+
+    // We called ProcessEvent() on the next handler, meaning that we explicitly
+    // worked around the request to process the event in this handler only. As
+    // explained above, this is unfortunately really necessary but the trouble
+    // is that the event will continue to be post-processed by the previous
+    // handler resulting in duplicate calls to event handlers. Call the special
+    // function below to prevent this from happening, base class DoTryChain()
+    // will check for it and behave accordingly.
+    //
+    // And if we're not called from DoTryChain(), this won't do anything anyhow.
+    event.DidntHonourProcessOnlyIn();
 
     return processed;
 }
