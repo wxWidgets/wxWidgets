@@ -2,7 +2,7 @@
 // Name:        src/msw/dlmsw.cpp
 // Purpose:     Win32-specific part of wxDynamicLibrary and related classes
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Suzumizaki-kimitaka 2013-04-09
 // Created:     2005-01-10 (partly extracted from common/dynlib.cpp)
 // Copyright:   (c) 1998-2005 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
@@ -27,6 +27,11 @@
 #include "wx/msw/private.h"
 #include "wx/msw/debughlp.h"
 #include "wx/filename.h"
+
+// defined for TDM's GCC/mingw32
+#ifndef PCTSTR
+#define PCTSTR LPCTSTR
+#endif
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -77,15 +82,8 @@ public:
         wxVersionDLL *verDLL;
     };
 
-    // TODO: fix EnumerateLoadedModules() to use EnumerateLoadedModules64()
-    #ifdef __WIN64__
-        typedef DWORD64 DWORD_32_64;
-    #else
-        typedef DWORD DWORD_32_64;
-    #endif
-
     static BOOL CALLBACK
-    EnumModulesProc(PCSTR name, DWORD_32_64 base, ULONG size, void *data);
+    EnumModulesProc(PCTSTR name, DWORD64 base, ULONG size, PVOID data);
 };
 
 // ============================================================================
@@ -113,7 +111,7 @@ wxVersionDLL::wxVersionDLL()
         #endif // UNICODE/ANSI
 
         #define LOAD_VER_FUNCTION(name)                                       \
-            m_pfn ## name = (name ## _t)m_dll.GetSymbol(wxT(#name SUFFIX));    \
+            m_pfn ## name = (name ## _t)m_dll.GetSymbol(wxT(#name SUFFIX));   \
         if ( !m_pfn ## name )                                                 \
         {                                                                     \
             m_dll.Unload();                                                   \
@@ -172,17 +170,21 @@ wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
 
 /* static */
 BOOL CALLBACK
-wxDynamicLibraryDetailsCreator::EnumModulesProc(PCSTR name,
-                                                DWORD_32_64 base,
+wxDynamicLibraryDetailsCreator::EnumModulesProc(PCTSTR name,
+                                                DWORD64 base,
                                                 ULONG size,
-                                                void *data)
+                                                PVOID data)
 {
     EnumModulesProcParams *params = (EnumModulesProcParams *)data;
 
     wxDynamicLibraryDetails *details = new wxDynamicLibraryDetails;
 
     // fill in simple properties
+#ifdef UNICODE
     details->m_name = name;
+#else
+    details->m_name = wxString(name, wxConvLocal);
+#endif
     details->m_address = wxUIntToPtr(base);
     details->m_length = size;
 
@@ -320,20 +322,14 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
         params.dlls = &dlls;
         params.verDLL = &verDLL;
 
-        // Note that the cast of EnumModulesProc is needed because the type of
-        // PENUMLOADED_MODULES_CALLBACK changed: in old SDK versions its first
-        // argument was non-const PSTR while now it's PCSTR. By explicitly
-        // casting to whatever the currently used headers require we ensure
-        // that the code compilers in any case.
-        if ( !wxDbgHelpDLL::EnumerateLoadedModules
+        if ( !wxDbgHelpDLL::EnumerateLoadedModulesT
                             (
                                 ::GetCurrentProcess(),
-                                (PENUMLOADED_MODULES_CALLBACK)
                                 wxDynamicLibraryDetailsCreator::EnumModulesProc,
                                 &params
                             ) )
         {
-            wxLogLastError(wxT("EnumerateLoadedModules"));
+            wxLogLastError(wxT("EnumerateLoadedModulesT"));
         }
     }
 #endif // wxUSE_DBGHELP

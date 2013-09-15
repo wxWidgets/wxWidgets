@@ -589,6 +589,7 @@ wxMSW:
 - Fix launching some types of files under Windows 7 and later (Steven Houchins).
 - Don't use an icon for items inserted without one into wxListCtrl (Chuddah).
 - Handle custom configurations when using MSVC autolinking (tinman).
+- Fix wxStackWalker to work with Unicode identifiers (suzumizaki).
 
 wxOSX:
 
