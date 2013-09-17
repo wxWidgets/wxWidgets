@@ -556,7 +556,7 @@ void wxWindowCocoaScrollView::Encapsulate()
     // Set the scroll view autoresizingMask to match the current NSView
     [m_cocoaNSScrollView setAutoresizingMask: [m_owner->GetNSView() autoresizingMask]];
     [m_owner->GetNSView() setAutoresizingMask: NSViewNotSizable];
-    // NOTE: replaceSubView will cause m_cocaNSView to be released
+    // NOTE: replaceSubView will cause m_cocoaNSView to be released
     // except when it hasn't been added into an NSView hierarchy in which
     // case it doesn't need to be and this should work out to a no-op
     m_owner->CocoaReplaceView(m_owner->GetNSView(), m_cocoaNSScrollView);
@@ -1451,10 +1451,10 @@ bool wxWindow::Show(bool show)
         // Create a new view to stand in for the real one (via wxWindowCocoaHider) and replace
         // the real one with the stand in.
         m_cocoaHider = new wxWindowCocoaHider(this);
-        // NOTE: replaceSubview:with will cause m_cocaNSView to be
+        // NOTE: replaceSubview:with will cause m_cocoaNSView to be
         // (auto)released which balances out addSubview
         CocoaReplaceView(cocoaView, m_cocoaHider->GetNSView());
-        // m_coocaNSView is now only retained by us
+        // m_cocoaNSView is now only retained by us
         wxASSERT([m_cocoaHider->GetNSView() superview]);
         wxASSERT(![cocoaView superview]);
     }

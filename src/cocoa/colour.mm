@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/cococa/colour.mm
+// Name:        src/cocoa/colour.mm
 // Purpose:     wxColour class
 // Author:      David Elliott
 // Modified by:

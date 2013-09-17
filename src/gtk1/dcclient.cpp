@@ -2101,7 +2101,7 @@ void wxWindowDCImpl::ComputeScaleAndOrigin()
 
     wxGTKDCImpl::ComputeScaleAndOrigin();
 
-    // if scale has changed call SetPen to recalulate the line width
+    // if scale has changed call SetPen to recalculate the line width
     if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.IsOk() )
     {
         // this is a bit artificial, but we need to force wxDC to think the pen

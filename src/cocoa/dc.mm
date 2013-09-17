@@ -649,7 +649,7 @@ void wxCocoaDCImpl::ComputeScaleAndOrigin(void)
   m_scaleX = m_logicalScaleX * m_userScaleX;
   m_scaleY = m_logicalScaleY * m_userScaleY;
 
-  // CMB: if scale has changed call SetPen to recalulate the line width
+  // CMB: if scale has changed call SetPen to recalculate the line width
   if (m_scaleX != origScaleX || m_scaleY != origScaleY)
   {
 #if 0

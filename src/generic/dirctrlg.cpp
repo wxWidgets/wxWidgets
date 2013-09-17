@@ -800,7 +800,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
 #if (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__DOS__) || defined(__OS2__)
     // Check if this is a root directory and if so,
-    // whether the drive is avaiable.
+    // whether the drive is available.
     if (!wxIsDriveAvailable(dirName))
     {
         data->m_isExpanded = false;

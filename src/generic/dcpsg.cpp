@@ -1659,7 +1659,7 @@ void wxPostScriptDCImpl::ComputeScaleAndOrigin()
 
     wxDCImpl::ComputeScaleAndOrigin();
 
-    // If scale has changed call SetPen to recalulate the line width
+    // If scale has changed call SetPen to recalculate the line width
     // and SetFont to recalculate font size
     if ( wxRealPoint(m_scaleX, m_scaleY) != origScale && m_pen.IsOk() )
     {

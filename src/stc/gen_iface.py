@@ -58,7 +58,7 @@ cmdValues = [ 2011,
             ]
 
 
-# Should a funciton be also generated for the CMDs?
+# Should a function be also generated for the CMDs?
 FUNC_FOR_CMD = 1
 
 
