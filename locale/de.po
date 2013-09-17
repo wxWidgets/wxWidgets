@@ -1219,7 +1219,7 @@ msgstr "Alle Dateien (*)|*"
 
 #: ../include/wx/defs.h:2881
 msgid "All files (*.*)|*.*"
-msgstr "Alle Dateien (*.\")|*.\""
+msgstr "Alle Dateien (*.*)|*.*"
 
 #: ../src/richtext/richtextstyles.cpp:1057
 msgid "All styles"
