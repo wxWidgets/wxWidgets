@@ -1137,7 +1137,7 @@ msgstr "Über %s"
 
 #: ../src/richtext/richtextsizepage.cpp:517
 msgid "Absolute"
-msgstr ""
+msgstr "Absolut"
 
 #: ../src/common/stockitem.cpp:207
 msgid "Actual Size"
@@ -1149,7 +1149,7 @@ msgstr "Hinzufügen"
 
 #: ../src/richtext/richtextbuffer.cpp:10648
 msgid "Add column"
-msgstr ""
+msgstr "Spalte hinzufügen"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1157,7 +1157,7 @@ msgstr "Aktuelle HTML-Seite den Lesezeichen hinzufügen"
 
 #: ../src/richtext/richtextbuffer.cpp:10590
 msgid "Add row"
-msgstr ""
+msgstr "Zeile hinzufügen"
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1186,7 +1186,7 @@ msgstr "Das Hinzufügen der Variante utxt schlug fehl"
 
 #: ../src/common/preferencescmn.cpp:41
 msgid "Advanced"
-msgstr ""
+msgstr "Erweitert"
 
 #: ../src/richtext/richtextliststylepage.cpp:435
 msgid "After a paragraph:"
@@ -3774,7 +3774,7 @@ msgstr "GTK+ Thema"
 
 #: ../src/common/preferencescmn.cpp:39
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 #: ../src/common/prntbase.cpp:243
 msgid "Generic PostScript"
@@ -4173,7 +4173,7 @@ msgstr "Ungültige Angabe '%s' der Fenstergröße"
 #: ../src/unix/fswatcher_inotify.cpp:298
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "Ungültiges inotify-Ereignis für \"%s\""
 
 #: ../src/unix/snglinst.cpp:306
 #, c-format
@@ -4765,7 +4765,7 @@ msgstr "Maximale Breite:"
 #: ../src/unix/mediactrl.cpp:1006
 #, c-format
 msgid "Media playback error: %s"
-msgstr ""
+msgstr "Medienwiedergabe-Fehler: %s"
 
 #: ../src/common/fs_mem.cpp:175
 #, c-format
@@ -5480,7 +5480,7 @@ msgstr "Einstellungen..."
 
 #: ../src/common/prntbase.cpp:529
 msgid "Preparing"
-msgstr ""
+msgstr "Vorbereitung"
 
 #: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:576
 #: ../src/html/helpwnd.cpp:1235
@@ -5621,7 +5621,7 @@ msgstr "Prozess Renderer konnte den Wert nicht darstellen; Wert Typ:"
 
 #: ../src/common/prntbase.cpp:528
 msgid "Progress:"
-msgstr ""
+msgstr "Fortschritt:"
 
 #: ../src/common/stockitem.cpp:184
 msgid "Properties"
@@ -6983,6 +6983,7 @@ msgstr "Unerwartete Zeichen folgen der Option '%s'."
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
+"Unerwartetes Ereignis für \"%s\": Kein passender Überwachungs-Deskriptor."
 
 #: ../src/common/cmdline.cpp:1024
 #, c-format
@@ -8167,7 +8168,7 @@ msgstr "Bearbeite Kontextbeschreibung"
 #: ../src/richtext/richtextfontpage.cpp:186
 #: ../src/richtext/richtextfontpage.cpp:189
 msgid "pt"
-msgstr ""
+msgstr "pt"
 
 #: ../src/richtext/richtextfontpage.cpp:187
 #: ../src/richtext/richtextborderspage.cpp:279
