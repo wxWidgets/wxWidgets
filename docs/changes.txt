@@ -577,6 +577,7 @@ All (GUI):
 - wxRTC: extracted XML utilities into a separate class for potential reuse.
 - wxPropertyGrid: improve composite flags handling (Jens Lody).
 - Don't crash laying out wxGridBagSizer with only hidden elements (briceandre).
+- Fix alignment and transparency of bitmaps in wxDataViewCtrl (Eric Jensen).
 
 wxGTK:
 

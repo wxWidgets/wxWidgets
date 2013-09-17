@@ -1021,7 +1021,7 @@ bool wxDataViewBitmapRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
 bool wxDataViewBitmapRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
     if (m_bitmap.IsOk())
-        dc->DrawBitmap( m_bitmap, cell.x, cell.y );
+        dc->DrawBitmap( m_bitmap, cell.x, cell.y, true /* use mask */ );
     else if (m_icon.IsOk())
         dc->DrawIcon( m_icon, cell.x, cell.y );
 
