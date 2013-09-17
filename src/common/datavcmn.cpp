@@ -771,6 +771,20 @@ void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
 }
 
 
+int wxDataViewRendererBase::GetEffectiveAlignment() const
+{
+    int alignment = GetAlignment();
+
+    if ( alignment == wxDVR_DEFAULT_ALIGNMENT )
+    {
+        // if we don't have an explicit alignment ourselves, use that of the
+        // column in horizontal direction and default vertical alignment
+        alignment = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+    }
+
+    return alignment;
+}
+
 // ----------------------------------------------------------------------------
 // wxDataViewCustomRendererBase
 // ----------------------------------------------------------------------------
@@ -807,40 +821,38 @@ wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
 
     // adjust the rectangle ourselves to account for the alignment
     wxRect rectItem = rectCell;
-    const int align = GetAlignment();
-    if ( align != wxDVR_DEFAULT_ALIGNMENT )
+    const int align = GetEffectiveAlignment();
+
+    const wxSize size = GetSize();
+
+    // take alignment into account only if there is enough space, otherwise
+    // show as much contents as possible
+    //
+    // notice that many existing renderers (e.g. wxDataViewSpinRenderer)
+    // return hard-coded size which can be more than they need and if we
+    // trusted their GetSize() we'd draw the text out of cell bounds
+    // entirely
+
+    if ( size.x >= 0 && size.x < rectCell.width )
     {
-        const wxSize size = GetSize();
+        if ( align & wxALIGN_CENTER_HORIZONTAL )
+            rectItem.x += (rectCell.width - size.x)/2;
+        else if ( align & wxALIGN_RIGHT )
+            rectItem.x += rectCell.width - size.x;
+        // else: wxALIGN_LEFT is the default
 
-        // take alignment into account only if there is enough space, otherwise
-        // show as much contents as possible
-        //
-        // notice that many existing renderers (e.g. wxDataViewSpinRenderer)
-        // return hard-coded size which can be more than they need and if we
-        // trusted their GetSize() we'd draw the text out of cell bounds
-        // entirely
+        rectItem.width = size.x;
+    }
 
-        if ( size.x >= 0 && size.x < rectCell.width )
-        {
-            if ( align & wxALIGN_CENTER_HORIZONTAL )
-                rectItem.x += (rectCell.width - size.x)/2;
-            else if ( align & wxALIGN_RIGHT )
-                rectItem.x += rectCell.width - size.x;
-            // else: wxALIGN_LEFT is the default
+    if ( size.y >= 0 && size.y < rectCell.height )
+    {
+        if ( align & wxALIGN_CENTER_VERTICAL )
+            rectItem.y += (rectCell.height - size.y)/2;
+        else if ( align & wxALIGN_BOTTOM )
+            rectItem.y += rectCell.height - size.y;
+        // else: wxALIGN_TOP is the default
 
-            rectItem.width = size.x;
-        }
-
-        if ( size.y >= 0 && size.y < rectCell.height )
-        {
-            if ( align & wxALIGN_CENTER_VERTICAL )
-                rectItem.y += (rectCell.height - size.y)/2;
-            else if ( align & wxALIGN_BOTTOM )
-                rectItem.y += rectCell.height - size.y;
-            // else: wxALIGN_TOP is the default
-
-            rectItem.height = size.y;
-        }
+        rectItem.height = size.y;
     }
 
 
@@ -909,16 +921,8 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     }
 
     // get the alignment to use
-    int align = GetAlignment();
-    if ( align == wxDVR_DEFAULT_ALIGNMENT )
-    {
-        // if we don't have an explicit alignment ourselves, use that of the
-        // column in horizontal direction and default vertical alignment
-        align = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
-    }
-
     dc->DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
-                  rectText, align);
+                  rectText, GetEffectiveAlignment());
 }
 
 //-----------------------------------------------------------------------------
