@@ -9343,7 +9343,48 @@ wxRichTextTable::wxRichTextTable(wxRichTextObject* parent): wxRichTextBox(parent
 // Draws the object.
 bool wxRichTextTable::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style)
 {
-    return wxRichTextBox::Draw(dc, context, range, selection, rect, descent, style);
+    wxRichTextBox::Draw(dc, context, range, selection, rect, descent, style);
+
+    // Now draw the table outline, if any, to ensure there are no breaks caused by
+    // different-coloured cell dividers overwriting the overall table border.
+    int colCount = GetColumnCount();
+    int rowCount = GetRowCount();
+    int col, row;
+    for (col = 0; col < colCount; col++)
+    {
+        for (row = 0; row < rowCount; row++)
+        {
+            if (row == 0 || row == (rowCount-1) || col == 0 || col == (colCount-1))
+            {
+                wxRichTextCell* cell = GetCell(row, col);
+                if (cell && !cell->GetRange().IsOutside(range))
+                {
+                    wxRect childRect(cell->GetPosition(), cell->GetCachedSize());
+                    wxRichTextAttr attr(cell->GetAttributes());
+                    if (row != 0)
+                        attr.GetTextBoxAttr().GetBorder().GetTop().Reset();
+                    if (row != (rowCount-1))
+                        attr.GetTextBoxAttr().GetBorder().GetBottom().Reset();
+                    if (col != 0)
+                        attr.GetTextBoxAttr().GetBorder().GetLeft().Reset();
+                    if (col != (colCount-1))
+                        attr.GetTextBoxAttr().GetBorder().GetRight().Reset();
+
+                    if (attr.GetTextBoxAttr().GetBorder().IsValid())
+                    {
+                        wxRect boxRect(cell->GetPosition(), cell->GetCachedSize());
+                        wxRect marginRect = boxRect;
+                        wxRect contentRect, borderRect, paddingRect, outlineRect;
+
+                        cell->GetBoxRects(dc, GetBuffer(), attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);
+                        cell->DrawBorder(dc, GetBuffer(), attr.GetTextBoxAttr().GetBorder(), borderRect);
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
 }
 
 WX_DECLARE_OBJARRAY(wxRect, wxRichTextRectArray);
