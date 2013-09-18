@@ -1618,19 +1618,18 @@ const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 }
 
 
-const wxString& wxTranslations::GetString(const wxString& origString,
-                                          const wxString& domain) const
+const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
+                                                    const wxString& domain) const
 {
-    return GetString(origString, origString, UINT_MAX, domain);
+    return GetTranslatedString(origString, UINT_MAX, domain);
 }
 
-const wxString& wxTranslations::GetString(const wxString& origString,
-                                          const wxString& origString2,
-                                          unsigned n,
-                                          const wxString& domain) const
+const wxString *wxTranslations::GetTranslatedString(const wxString& origString,
+                                                    unsigned n,
+                                                    const wxString& domain) const
 {
     if ( origString.empty() )
-        return GetUntranslatedString(origString);
+        return NULL;
 
     const wxString *trans = NULL;
     wxMsgCatalog *pMsgCat;
@@ -1665,14 +1664,9 @@ const wxString& wxTranslations::GetString(const wxString& origString,
             (!domain.empty() ? wxString::Format("domain '%s' ", domain) : wxString()),
             m_lang
         );
-
-        if (n == UINT_MAX)
-            return GetUntranslatedString(origString);
-        else
-            return GetUntranslatedString(n == 1 ? origString : origString2);
     }
 
-    return *trans;
+    return trans;
 }
 
 

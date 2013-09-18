@@ -230,38 +230,33 @@ public:
         Retrieves the translation for a string in all loaded domains unless the @a domain
         parameter is specified (and then only this catalog/domain is searched).
 
-        Returns original string if translation is not available (in this case an
-        error message is generated the first time a string is not found; use
-        wxLogNull to suppress it).
+        Returns @NULL if translation is not available.
 
         This function is thread-safe.
 
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
+
+        @since 3.0
     */
-    const wxString& GetString(const wxString& origString,
-                              const wxString& domain = wxEmptyString) const;
+    const wxString *GetTranslatedString(const wxString& origString,
+                                        const wxString& domain = wxEmptyString) const;
 
     /**
         Retrieves the translation for a string in all loaded domains unless the @a domain
         parameter is specified (and then only this catalog/domain is searched).
 
-        Returns original string if translation is not available (in this case an
-        error message is generated the first time a string is not found; use
-        wxLogNull to suppress it).
+        Returns @NULL if translation is not available.
 
         This form is used when retrieving translation of string that has different
         singular and plural form in English or different plural forms in some
         other language.
-        It takes two extra arguments: @a origString parameter must contain the
-        singular form of the string to be converted.
 
-        It is also used as the key for the search in the catalog.
-        The @a origString2 parameter is the plural form (in English).
-
-        The parameter @a n is used to determine the plural form.
-        If no message catalog is found @a origString is returned if 'n == 1',
-        otherwise @a origString2.
+        @param origString  The singular form of the string to be converted.
+        @param n           The number on which the plural form choice depends on.
+                           (In some languages, there are different plural forms
+                           for e.g. n=2 and n=3 etc., in addition to the singlular
+                           form (n=1) being different.)
 
         See GNU gettext manual for additional information on plural forms handling.
         This method is called by the wxGetTranslation() function and _() macro.
@@ -270,11 +265,12 @@ public:
 
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
+
+        @since 3.0
     */
-    const wxString& GetString(const wxString& origString,
-                              const wxString& origString2,
-                              unsigned n,
-                              const wxString& domain = wxEmptyString) const;
+    const wxString *GetTranslatedString(const wxString& origString,
+                                        unsigned n,
+                                        const wxString& domain = wxEmptyString) const;
 
     /**
         Returns the header value for header @a header.
@@ -517,8 +513,6 @@ public:
     provided: the _() macro is defined to do the same thing as
     wxGetTranslation().
 
-    This function calls wxTranslations::GetString().
-
     This function is thread-safe.
 
     @note This function is not suitable for literal strings in Unicode builds
@@ -551,8 +545,6 @@ const wxString& wxGetTranslation(const wxString& string,
     See GNU gettext Manual for additional information on plural forms handling:
     <http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms>
     For a shorter alternative see the wxPLURAL() macro.
-
-    This function calls wxTranslation::GetString().
 
     This function is thread-safe.
 

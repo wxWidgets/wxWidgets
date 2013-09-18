@@ -153,12 +153,11 @@ public:
     bool IsLoaded(const wxString& domain) const;
 
     // access to translations
-    const wxString& GetString(const wxString& origString,
-                              const wxString& domain = wxEmptyString) const;
-    const wxString& GetString(const wxString& origString,
-                              const wxString& origString2,
-                              unsigned n,
-                              const wxString& domain = wxEmptyString) const;
+    const wxString *GetTranslatedString(const wxString& origString,
+                                        const wxString& domain = wxEmptyString) const;
+    const wxString *GetTranslatedString(const wxString& origString,
+                                        unsigned n,
+                                        const wxString& domain = wxEmptyString) const;
 
     wxString GetHeaderValue(const wxString& header,
                             const wxString& domain = wxEmptyString) const;
@@ -242,11 +241,13 @@ protected:
 
 // get the translation of the string in the current locale
 inline const wxString& wxGetTranslation(const wxString& str,
-                                        const wxString& domain = wxEmptyString)
+                                        const wxString& domain = wxString())
 {
     wxTranslations *trans = wxTranslations::Get();
-    if ( trans )
-        return trans->GetString(str, domain);
+    const wxString *transStr = trans ? trans->GetTranslatedString(str, domain)
+                                     : NULL;
+    if ( transStr )
+        return *transStr;
     else
         // NB: this function returns reference to a string, so we have to keep
         //     a copy of it somewhere
@@ -256,11 +257,13 @@ inline const wxString& wxGetTranslation(const wxString& str,
 inline const wxString& wxGetTranslation(const wxString& str1,
                                         const wxString& str2,
                                         unsigned n,
-                                        const wxString& domain = wxEmptyString)
+                                        const wxString& domain = wxString())
 {
     wxTranslations *trans = wxTranslations::Get();
-    if ( trans )
-        return trans->GetString(str1, str2, n, domain);
+    const wxString *transStr = trans ? trans->GetTranslatedString(str1, n, domain)
+                                     : NULL;
+    if ( transStr )
+        return *transStr;
     else
         // NB: this function returns reference to a string, so we have to keep
         //     a copy of it somewhere

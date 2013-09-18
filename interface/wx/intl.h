@@ -354,13 +354,13 @@ public:
     const wxString& GetName() const;
 
     /**
-        Calls wxTranslations::GetString(const wxString&, const wxString&) const.
+        Calls wxGetTranslation(const wxString&, const wxString&).
     */
     virtual const wxString& GetString(const wxString& origString,
                                       const wxString& domain = wxEmptyString) const;
 
     /**
-        Calls wxTranslations::GetString(const wxString&, const wxString&, unsigned, const wxString&) const.
+        Calls wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&).
     */
     virtual const wxString& GetString(const wxString& origString,
                                       const wxString& origString2, unsigned n,
