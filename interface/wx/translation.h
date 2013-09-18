@@ -234,6 +234,8 @@ public:
         error message is generated the first time a string is not found; use
         wxLogNull to suppress it).
 
+        This function is thread-safe.
+
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
     */
@@ -263,6 +265,8 @@ public:
 
         See GNU gettext manual for additional information on plural forms handling.
         This method is called by the wxGetTranslation() function and _() macro.
+
+        This function is thread-safe.
 
         @remarks Domains are searched in the last to first order, i.e. catalogs
                  added later override those added before.
@@ -515,6 +519,8 @@ public:
 
     This function calls wxTranslations::GetString().
 
+    This function is thread-safe.
+
     @note This function is not suitable for literal strings in Unicode builds
           since the literal strings must be enclosed in wxT() macro which makes
           them unrecognised by @c xgettext, and so they are not extracted to
@@ -546,7 +552,9 @@ const wxString& wxGetTranslation(const wxString& string,
     <http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms>
     For a shorter alternative see the wxPLURAL() macro.
 
-    This function calls wxLocale::GetString().
+    This function calls wxTranslation::GetString().
+
+    This function is thread-safe.
 
     @header{wx/intl.h}
 */
@@ -561,6 +569,8 @@ const wxString& wxGetTranslation(const wxString& string,
     message for the extraction by @c xgettext just as wxTRANSLATE() does, but
     also returns the translation of the string for the current locale during
     execution.
+
+    This macro is thread-safe.
 
     @header{wx/intl.h}
 */
