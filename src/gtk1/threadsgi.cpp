@@ -125,7 +125,7 @@ void wxThreadPrivate::SprocStart(void *ptr)
 
   thr->p_internal->thread_id = getpid();
   thr->p_internal->exit_status = 0;
-  status = thr->Entry();
+  status = thr->CallEntry();
   thr->Exit(status);
 }
 

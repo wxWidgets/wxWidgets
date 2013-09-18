@@ -864,7 +864,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 
         wxTRY
         {
-            pthread->m_exitcode = thread->Entry();
+            pthread->m_exitcode = thread->CallEntry();
 
             wxLogTrace(TRACE_THREADS,
                        wxT("Thread %p Entry() returned %lu."),

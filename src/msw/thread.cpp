@@ -571,7 +571,7 @@ THREAD_RETVAL wxThreadInternal::DoThreadStart(wxThread *thread)
             return THREAD_ERROR_EXIT;
         }
 
-        rc = wxPtrToUInt(thread->Entry());
+        rc = wxPtrToUInt(thread->CallEntry());
     }
     wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
 

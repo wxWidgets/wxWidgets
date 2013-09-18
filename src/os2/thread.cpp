@@ -418,7 +418,7 @@ void wxThreadInternal::OS2ThreadStart( void * pParam )
         unsigned long ulHab;
         if (traits)
             traits->InitializeGui(ulHab);
-        dwRet = (DWORD)pThread->Entry();
+        dwRet = (DWORD)pThread->CallEntry();
         if (traits)
             traits->TerminateGui(ulHab);
 

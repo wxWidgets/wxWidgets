@@ -614,6 +614,8 @@ protected:
     // of this thread.
     virtual void *Entry() = 0;
 
+    // use this to call the Entry() virtual method
+    void *CallEntry();
 
     // Callbacks which may be overridden by the derived class to perform some
     // specific actions when the thread is deleted or killed. By default they

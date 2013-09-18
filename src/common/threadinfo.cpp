@@ -28,11 +28,9 @@ namespace
 
 // All thread info objects are stored in a global list so that they are
 // freed when global objects are destroyed and no memory leaks are reported.
-//
-// TODO: This could be made more efficient by freeing g_thisThreadInfo when
-//       wxThread terminates.
 wxCriticalSection g_csAllThreadInfos;
-wxVector< wxSharedPtr<wxThreadSpecificInfo> > g_allThreadInfos;
+typedef wxVector< wxSharedPtr<wxThreadSpecificInfo> > wxAllThreadInfos;
+wxAllThreadInfos g_allThreadInfos;
 
 // Pointer to currenct thread's instance
 wxTLS_TYPE(wxThreadSpecificInfo*) g_thisThreadInfo;
@@ -50,6 +48,26 @@ wxThreadSpecificInfo& wxThreadSpecificInfo::Get()
                 wxSharedPtr<wxThreadSpecificInfo>(wxTLS_VALUE(g_thisThreadInfo)));
     }
     return *wxTLS_VALUE(g_thisThreadInfo);
+}
+
+void wxThreadSpecificInfo::ThreadCleanUp()
+{
+    if ( !wxTLS_VALUE(g_thisThreadInfo) )
+        return; // nothing to do, not used by this thread at all
+
+    // find this thread's instance in g_allThreadInfos and destroy it
+    wxCriticalSectionLocker lock(g_csAllThreadInfos);
+    for ( wxAllThreadInfos::iterator i = g_allThreadInfos.begin();
+          i != g_allThreadInfos.end();
+          ++i )
+    {
+        if ( i->get() == wxTLS_VALUE(g_thisThreadInfo) )
+        {
+            g_allThreadInfos.erase(i);
+            wxTLS_VALUE(g_thisThreadInfo) = NULL;
+            break;
+        }
+    }
 }
 
 #else // !wxUSE_THREADS
