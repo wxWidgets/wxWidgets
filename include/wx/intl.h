@@ -307,12 +307,6 @@ public:
         return wxGetTranslation(origString, origString2, n, domain);
     }
 
-    // this is hack to work around a problem with wxGetTranslation() which
-    // returns const wxString& and not wxString, so when it returns untranslated
-    // string, it needs to have a copy of it somewhere
-    static const wxString& GetUntranslatedString(const wxString& str)
-        { return wxTranslations::GetUntranslatedString(str); }
-
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }
 
