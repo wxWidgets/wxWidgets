@@ -51,9 +51,13 @@
 #endif
 
 
-/* unknown __VISAGECC__, __SYMANTECCC__ */
+#ifdef __cplusplus
 
-#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
+/* Any C++11 compiler should provide isfinite() */
+#if __cplusplus >= 201103
+    #include <cmath>
+    #define wxFinite(x) std::isfinite(x)
+#elif defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
     #include <float.h>
     #define wxFinite(x) _finite(x)
 #elif defined(__MINGW64__) || defined(__clang__)
@@ -89,47 +93,46 @@
     #define wxIsNaN(x) ((x) != (x))
 #endif
 
-#ifdef __cplusplus
+#ifdef __INTELC__
 
-    #ifdef __INTELC__
-
-        inline bool wxIsSameDouble(double x, double y)
-        {
-            // VZ: this warning, given for operators==() and !=() is not wrong, as ==
-            //     shouldn't be used with doubles, but we get too many of them and
-            //     removing these operators is probably not a good idea
-            //
-            //     Maybe we should always compare doubles up to some "epsilon" precision
-            #pragma warning(push)
-
-            // floating-point equality and inequality comparisons are unreliable
-            #pragma warning(disable: 1572)
-
-            return x == y;
-
-            #pragma warning(pop)
-        }
-
-    #else /* !__INTELC__ */
-        wxGCC_WARNING_SUPPRESS(float-equal)
-        inline bool wxIsSameDouble(double x, double y) { return x == y; }
-        wxGCC_WARNING_RESTORE(float-equal)
-
-    #endif /* __INTELC__/!__INTELC__ */
-
-    inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
-
-    inline int wxRound(double x)
+    inline bool wxIsSameDouble(double x, double y)
     {
-        wxASSERT_MSG( x > INT_MIN - 0.5 && x < INT_MAX + 0.5,
-                      wxT("argument out of supported range") );
+        // VZ: this warning, given for operators==() and !=() is not wrong, as ==
+        //     shouldn't be used with doubles, but we get too many of them and
+        //     removing these operators is probably not a good idea
+        //
+        //     Maybe we should always compare doubles up to some "epsilon" precision
+        #pragma warning(push)
 
-        #if defined(HAVE_ROUND)
-            return int(round(x));
-        #else
-            return (int)(x < 0 ? x - 0.5 : x + 0.5);
-        #endif
+        // floating-point equality and inequality comparisons are unreliable
+        #pragma warning(disable: 1572)
+
+        return x == y;
+
+        #pragma warning(pop)
     }
+
+#else /* !__INTELC__ */
+    wxGCC_WARNING_SUPPRESS(float-equal)
+    inline bool wxIsSameDouble(double x, double y) { return x == y; }
+    wxGCC_WARNING_RESTORE(float-equal)
+
+#endif /* __INTELC__/!__INTELC__ */
+
+inline bool wxIsNullDouble(double x) { return wxIsSameDouble(x, 0.); }
+
+inline int wxRound(double x)
+{
+    wxASSERT_MSG( x > INT_MIN - 0.5 && x < INT_MAX + 0.5,
+                  wxT("argument out of supported range") );
+
+    #if defined(HAVE_ROUND)
+        return int(round(x));
+    #else
+        return (int)(x < 0 ? x - 0.5 : x + 0.5);
+    #endif
+}
+
 #endif /* __cplusplus */
 
 
