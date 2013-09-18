@@ -731,6 +731,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\threadinfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\time.cpp"
 				>
 			</File>

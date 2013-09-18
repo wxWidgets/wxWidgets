@@ -366,6 +366,9 @@
     <ClCompile Include="..\..\src\generic\fswatcherg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\threadinfo.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">

@@ -10,9 +10,7 @@
 #ifndef _WX_PRIVATE_THREADINFO_H_
 #define _WX_PRIVATE_THREADINFO_H_
 
-#if wxUSE_THREADS
-
-#include "wx/tls.h"
+#include "wx/defs.h"
 
 class WXDLLIMPEXP_FWD_BASE wxLog;
 
@@ -20,15 +18,15 @@ class WXDLLIMPEXP_FWD_BASE wxLog;
 // wxThreadSpecificInfo: contains all thread-specific information used by wx
 // ----------------------------------------------------------------------------
 
-// currently the only thread-specific information we use is the active wxLog
-// target but more could be added in the future (e.g. current wxLocale would be
-// a likely candidate) and we will group all of them in this struct to avoid
-// consuming more TLS slots than necessary as there is only a limited number of
-// them
-
-// NB: this must be a POD to be stored in TLS
-struct wxThreadSpecificInfo
+// Group all thread-specific information we use (e.g. the active wxLog target)
+// a in this class to avoid consuming more TLS slots than necessary as there is
+// only a limited number of them.
+class wxThreadSpecificInfo
 {
+public:
+    // Return this thread's instance.
+    static wxThreadSpecificInfo& Get();
+
     // the thread-specific logger or NULL if the thread is using the global one
     // (this is not used for the main thread which always uses the global
     // logger)
@@ -41,13 +39,12 @@ struct wxThreadSpecificInfo
     //     because the default, for 0-initialized struct, should be to enable
     //     logging
     bool loggingDisabled;
+
+private:
+    wxThreadSpecificInfo() : logger(NULL), loggingDisabled(false) {}
 };
 
-// currently this is defined in src/common/log.cpp
-extern wxTLS_TYPE(wxThreadSpecificInfo) wxThreadInfoVar;
-#define wxThreadInfo wxTLS_VALUE(wxThreadInfoVar)
-
-#endif // wxUSE_THREADS
+#define wxThreadInfo wxThreadSpecificInfo::Get()
 
 #endif // _WX_PRIVATE_THREADINFO_H_
 

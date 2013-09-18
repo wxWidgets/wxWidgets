@@ -409,6 +409,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_tarstrm.obj \
 	$(OBJS)\monodll_textbuf.obj \
 	$(OBJS)\monodll_textfile.obj \
+	$(OBJS)\monodll_threadinfo.obj \
 	$(OBJS)\monodll_time.obj \
 	$(OBJS)\monodll_timercmn.obj \
 	$(OBJS)\monodll_timerimpl.obj \
@@ -559,6 +560,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_tarstrm.obj \
 	$(OBJS)\monolib_textbuf.obj \
 	$(OBJS)\monolib_textfile.obj \
+	$(OBJS)\monolib_threadinfo.obj \
 	$(OBJS)\monolib_time.obj \
 	$(OBJS)\monolib_timercmn.obj \
 	$(OBJS)\monolib_timerimpl.obj \
@@ -706,6 +708,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_tarstrm.obj \
 	$(OBJS)\basedll_textbuf.obj \
 	$(OBJS)\basedll_textfile.obj \
+	$(OBJS)\basedll_threadinfo.obj \
 	$(OBJS)\basedll_time.obj \
 	$(OBJS)\basedll_timercmn.obj \
 	$(OBJS)\basedll_timerimpl.obj \
@@ -837,6 +840,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_tarstrm.obj \
 	$(OBJS)\baselib_textbuf.obj \
 	$(OBJS)\baselib_textfile.obj \
+	$(OBJS)\baselib_threadinfo.obj \
 	$(OBJS)\baselib_time.obj \
 	$(OBJS)\baselib_timercmn.obj \
 	$(OBJS)\baselib_timerimpl.obj \
@@ -6431,6 +6435,9 @@ $(OBJS)\monodll_textbuf.obj: ..\..\src\common\textbuf.cpp
 $(OBJS)\monodll_textfile.obj: ..\..\src\common\textfile.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\textfile.cpp
 
+$(OBJS)\monodll_threadinfo.obj: ..\..\src\common\threadinfo.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\threadinfo.cpp
+
 $(OBJS)\monodll_time.obj: ..\..\src\common\time.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\time.cpp
 
@@ -8895,6 +8902,9 @@ $(OBJS)\monolib_textbuf.obj: ..\..\src\common\textbuf.cpp
 
 $(OBJS)\monolib_textfile.obj: ..\..\src\common\textfile.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\textfile.cpp
+
+$(OBJS)\monolib_threadinfo.obj: ..\..\src\common\threadinfo.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\threadinfo.cpp
 
 $(OBJS)\monolib_time.obj: ..\..\src\common\time.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\time.cpp
@@ -11361,6 +11371,9 @@ $(OBJS)\basedll_textbuf.obj: ..\..\src\common\textbuf.cpp
 $(OBJS)\basedll_textfile.obj: ..\..\src\common\textfile.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\textfile.cpp
 
+$(OBJS)\basedll_threadinfo.obj: ..\..\src\common\threadinfo.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\threadinfo.cpp
+
 $(OBJS)\basedll_time.obj: ..\..\src\common\time.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\time.cpp
 
@@ -11699,6 +11712,9 @@ $(OBJS)\baselib_textbuf.obj: ..\..\src\common\textbuf.cpp
 
 $(OBJS)\baselib_textfile.obj: ..\..\src\common\textfile.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\textfile.cpp
+
+$(OBJS)\baselib_threadinfo.obj: ..\..\src\common\threadinfo.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\threadinfo.cpp
 
 $(OBJS)\baselib_time.obj: ..\..\src\common\time.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\time.cpp

@@ -87,8 +87,6 @@ const char *wxLOG_COMPONENT = "";
 
 #if wxUSE_THREADS
 
-wxTLS_TYPE(wxThreadSpecificInfo) wxThreadInfoVar;
-
 namespace
 {
 

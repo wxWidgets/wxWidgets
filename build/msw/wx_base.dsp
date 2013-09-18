@@ -427,6 +427,10 @@ SOURCE=..\..\src\common\textfile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\threadinfo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\time.cpp
 # End Source File
 # Begin Source File
