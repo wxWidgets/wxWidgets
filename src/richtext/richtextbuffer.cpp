@@ -769,7 +769,7 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxTe
             wxBrush brush(col);
             dc.SetPen(pen);
             dc.SetBrush(brush);
-            dc.DrawRectangle(rect.x + rect.width - borderRight, rect.y, borderRight, rect.height);
+            dc.DrawRectangle(rect.x + rect.width - borderRight, rect.y, borderRight, rect.height + 1);
         }
     }
 
@@ -826,7 +826,7 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxTe
             wxBrush brush(col);
             dc.SetPen(pen);
             dc.SetBrush(brush);
-            dc.DrawRectangle(rect.x, rect.y + rect.height - borderBottom, rect.width, borderBottom);
+            dc.DrawRectangle(rect.x, rect.y + rect.height - borderBottom + 1, rect.width, borderBottom);
         }
     }
 
