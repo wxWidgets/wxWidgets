@@ -217,29 +217,32 @@ void wxRichTextSizePage::CreateControls()
     m_floatingAlignmentSizer = new wxBoxSizer(wxHORIZONTAL);
     m_parentSizer->Add(m_floatingAlignmentSizer, 0, wxGROW, 5);
 
-    m_floatingSizer = new wxBoxSizer(wxVERTICAL);
-    m_floatingAlignmentSizer->Add(m_floatingSizer, 0, wxALIGN_CENTER_VERTICAL, 5);
+    m_floatingSizer = new wxBoxSizer(wxHORIZONTAL);
+    m_floatingAlignmentSizer->Add(m_floatingSizer, 1, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
-    m_floatingSizer->Add(itemBoxSizer6, 0, wxGROW, 5);
+    wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxVERTICAL);
+    m_floatingSizer->Add(itemBoxSizer6, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxStaticText* itemStaticText7 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("Floating"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText7->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
-    itemBoxSizer6->Add(itemStaticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer6->Add(itemBoxSizer7, 0, wxGROW, 5);
 
-    wxStaticLine* itemStaticLine8 = new wxStaticLine( itemRichTextDialogPage1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-    itemBoxSizer6->Add(itemStaticLine8, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText8 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("Floating"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText8->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
+    itemBoxSizer7->Add(itemStaticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
-    m_floatingSizer->Add(itemBoxSizer9, 0, wxGROW, 5);
+    wxStaticLine* itemStaticLine9 = new wxStaticLine( itemRichTextDialogPage1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    itemBoxSizer7->Add(itemStaticLine9, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    itemBoxSizer9->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer6->Add(itemBoxSizer10, 0, wxGROW, 5);
 
-    wxFlexGridSizer* itemFlexGridSizer11 = new wxFlexGridSizer(0, 2, 0, 0);
-    itemBoxSizer9->Add(itemFlexGridSizer11, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5);
+    itemBoxSizer10->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticText* itemStaticText12 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Floating mode:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer11->Add(itemStaticText12, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxFlexGridSizer* itemFlexGridSizer12 = new wxFlexGridSizer(0, 2, 0, 0);
+    itemBoxSizer10->Add(itemFlexGridSizer12, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5);
+
+    wxStaticText* itemStaticText13 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Floating mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer12->Add(itemStaticText13, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_floatStrings;
     m_floatStrings.Add(_("None"));
@@ -250,34 +253,34 @@ void wxRichTextSizePage::CreateControls()
     m_float->SetHelpText(_("How the object will float relative to the text."));
     if (wxRichTextSizePage::ShowToolTips())
         m_float->SetToolTip(_("How the object will float relative to the text."));
-    itemFlexGridSizer11->Add(m_float, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer12->Add(m_float, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_floatingAlignmentSizer->Add(0, 0, 1, wxALIGN_CENTER_VERTICAL, 5);
+    m_floatingSizer->Add(0, 0, 1, wxALIGN_CENTER_VERTICAL, 5);
 
     m_alignmentSizer = new wxBoxSizer(wxVERTICAL);
     m_floatingAlignmentSizer->Add(m_alignmentSizer, 0, wxALIGN_CENTER_VERTICAL, 5);
 
-    wxBoxSizer* itemBoxSizer16 = new wxBoxSizer(wxHORIZONTAL);
-    m_alignmentSizer->Add(itemBoxSizer16, 0, wxGROW, 5);
+    wxBoxSizer* itemBoxSizer17 = new wxBoxSizer(wxHORIZONTAL);
+    m_alignmentSizer->Add(itemBoxSizer17, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText17 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("Alignment"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText17->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
-    itemBoxSizer16->Add(itemStaticText17, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText18 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("Alignment"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText18->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
+    itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticLine* itemStaticLine18 = new wxStaticLine( itemRichTextDialogPage1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-    itemBoxSizer16->Add(itemStaticLine18, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticLine* itemStaticLine19 = new wxStaticLine( itemRichTextDialogPage1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    itemBoxSizer17->Add(itemStaticLine19, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer19 = new wxBoxSizer(wxHORIZONTAL);
-    m_alignmentSizer->Add(itemBoxSizer19, 0, wxGROW, 5);
+    wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
+    m_alignmentSizer->Add(itemBoxSizer20, 0, wxGROW, 5);
 
-    itemBoxSizer19->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer20->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_verticalAlignmentCheckbox = new wxCheckBox( itemRichTextDialogPage1, ID_RICHTEXT_VERTICAL_ALIGNMENT_CHECKBOX, _("&Vertical alignment:"), wxDefaultPosition, wxDefaultSize, 0 );
     m_verticalAlignmentCheckbox->SetValue(false);
     m_verticalAlignmentCheckbox->SetHelpText(_("Enable vertical alignment."));
     if (wxRichTextSizePage::ShowToolTips())
         m_verticalAlignmentCheckbox->SetToolTip(_("Enable vertical alignment."));
-    itemBoxSizer19->Add(m_verticalAlignmentCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer20->Add(m_verticalAlignmentCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_verticalAlignmentComboBoxStrings;
     m_verticalAlignmentComboBoxStrings.Add(_("Top"));
@@ -288,25 +291,25 @@ void wxRichTextSizePage::CreateControls()
     m_verticalAlignmentComboBox->SetHelpText(_("Vertical alignment."));
     if (wxRichTextSizePage::ShowToolTips())
         m_verticalAlignmentComboBox->SetToolTip(_("Vertical alignment."));
-    itemBoxSizer19->Add(m_verticalAlignmentComboBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer20->Add(m_verticalAlignmentComboBox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer23 = new wxBoxSizer(wxHORIZONTAL);
-    m_parentSizer->Add(itemBoxSizer23, 0, wxGROW, 5);
+    wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
+    m_parentSizer->Add(itemBoxSizer24, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText24 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("Size"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText24->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
-    itemBoxSizer23->Add(itemStaticText24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText25 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("Size"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText25->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
+    itemBoxSizer24->Add(itemStaticText25, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticLine* itemStaticLine25 = new wxStaticLine( itemRichTextDialogPage1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-    itemBoxSizer23->Add(itemStaticLine25, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticLine* itemStaticLine26 = new wxStaticLine( itemRichTextDialogPage1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    itemBoxSizer24->Add(itemStaticLine26, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer26 = new wxBoxSizer(wxHORIZONTAL);
-    m_parentSizer->Add(itemBoxSizer26, 0, wxGROW, 5);
+    wxBoxSizer* itemBoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
+    m_parentSizer->Add(itemBoxSizer27, 0, wxGROW, 5);
 
-    itemBoxSizer26->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer27->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_sizeSizer = new wxFlexGridSizer(0, 4, 0, 0);
-    itemBoxSizer26->Add(m_sizeSizer, 0, wxALIGN_CENTER_VERTICAL, 5);
+    itemBoxSizer27->Add(m_sizeSizer, 0, wxALIGN_CENTER_VERTICAL, 5);
 
     m_widthSizer = new wxBoxSizer(wxHORIZONTAL);
     m_sizeSizer->Add(m_widthSizer, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -322,14 +325,14 @@ void wxRichTextSizePage::CreateControls()
     m_widthLabel->Show(false);
     m_widthSizer->Add(m_widthLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer32 = new wxBoxSizer(wxHORIZONTAL);
-    m_sizeSizer->Add(itemBoxSizer32, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer33 = new wxBoxSizer(wxHORIZONTAL);
+    m_sizeSizer->Add(itemBoxSizer33, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
     m_width = new wxTextCtrl( itemRichTextDialogPage1, ID_RICHTEXT_WIDTH, wxEmptyString, wxDefaultPosition, wxSize(60, -1), 0 );
     m_width->SetHelpText(_("The object width."));
     if (wxRichTextSizePage::ShowToolTips())
         m_width->SetToolTip(_("The object width."));
-    itemBoxSizer32->Add(m_width, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
+    itemBoxSizer33->Add(m_width, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
 
     wxArrayString m_unitsWStrings;
     m_unitsWStrings.Add(_("px"));
@@ -340,7 +343,7 @@ void wxRichTextSizePage::CreateControls()
     m_unitsW->SetHelpText(_("Units for the object width."));
     if (wxRichTextSizePage::ShowToolTips())
         m_unitsW->SetToolTip(_("Units for the object width."));
-    itemBoxSizer32->Add(m_unitsW, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer33->Add(m_unitsW, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_heightSizer = new wxBoxSizer(wxHORIZONTAL);
     m_sizeSizer->Add(m_heightSizer, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -356,14 +359,14 @@ void wxRichTextSizePage::CreateControls()
     m_heightLabel->Show(false);
     m_heightSizer->Add(m_heightLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer38 = new wxBoxSizer(wxHORIZONTAL);
-    m_sizeSizer->Add(itemBoxSizer38, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer39 = new wxBoxSizer(wxHORIZONTAL);
+    m_sizeSizer->Add(itemBoxSizer39, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 
     m_height = new wxTextCtrl( itemRichTextDialogPage1, ID_RICHTEXT_HEIGHT, wxEmptyString, wxDefaultPosition, wxSize(60, -1), 0 );
     m_height->SetHelpText(_("The object height."));
     if (wxRichTextSizePage::ShowToolTips())
         m_height->SetToolTip(_("The object height."));
-    itemBoxSizer38->Add(m_height, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
+    itemBoxSizer39->Add(m_height, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
 
     wxArrayString m_unitsHStrings;
     m_unitsHStrings.Add(_("px"));
@@ -374,7 +377,7 @@ void wxRichTextSizePage::CreateControls()
     m_unitsH->SetHelpText(_("Units for the object height."));
     if (wxRichTextSizePage::ShowToolTips())
         m_unitsH->SetToolTip(_("Units for the object height."));
-    itemBoxSizer38->Add(m_unitsH, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer39->Add(m_unitsH, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_minWidthCheckbox = new wxCheckBox( itemRichTextDialogPage1, ID_RICHTEXT_MIN_WIDTH_CHECKBOX, _("Min width:"), wxDefaultPosition, wxDefaultSize, 0 );
     m_minWidthCheckbox->SetValue(false);
@@ -487,29 +490,29 @@ void wxRichTextSizePage::CreateControls()
     m_positionControls = new wxBoxSizer(wxVERTICAL);
     m_parentSizer->Add(m_positionControls, 0, wxGROW, 5);
 
-    wxBoxSizer* itemBoxSizer58 = new wxBoxSizer(wxHORIZONTAL);
-    m_positionControls->Add(itemBoxSizer58, 0, wxGROW, 5);
+    wxBoxSizer* itemBoxSizer59 = new wxBoxSizer(wxHORIZONTAL);
+    m_positionControls->Add(itemBoxSizer59, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText59 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("Position"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText59->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
-    itemBoxSizer58->Add(itemStaticText59, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText60 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("Position"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText60->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
+    itemBoxSizer59->Add(itemStaticText60, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxStaticLine* itemStaticLine60 = new wxStaticLine( itemRichTextDialogPage1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-    itemBoxSizer58->Add(itemStaticLine60, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticLine* itemStaticLine61 = new wxStaticLine( itemRichTextDialogPage1, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    itemBoxSizer59->Add(itemStaticLine61, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer61 = new wxBoxSizer(wxHORIZONTAL);
-    m_positionControls->Add(itemBoxSizer61, 0, wxGROW, 5);
+    wxBoxSizer* itemBoxSizer62 = new wxBoxSizer(wxHORIZONTAL);
+    m_positionControls->Add(itemBoxSizer62, 0, wxGROW, 5);
 
-    itemBoxSizer61->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer62->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_moveObjectParentSizer = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer61->Add(m_moveObjectParentSizer, 0, wxALIGN_TOP, 5);
+    itemBoxSizer62->Add(m_moveObjectParentSizer, 0, wxALIGN_TOP, 5);
 
     m_positionModeSizer = new wxBoxSizer(wxHORIZONTAL);
     m_moveObjectParentSizer->Add(m_positionModeSizer, 0, wxALIGN_LEFT, 5);
 
-    wxStaticText* itemStaticText65 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Position mode:"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_positionModeSizer->Add(itemStaticText65, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText66 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Position mode:"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_positionModeSizer->Add(itemStaticText66, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_positionModeCtrlStrings;
     m_positionModeCtrlStrings.Add(_("Static"));
@@ -537,15 +540,15 @@ void wxRichTextSizePage::CreateControls()
     m_leftLabel->Show(false);
     m_leftSizer->Add(m_leftLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer71 = new wxBoxSizer(wxHORIZONTAL);
-    m_positionGridSizer->Add(itemBoxSizer71, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer72 = new wxBoxSizer(wxHORIZONTAL);
+    m_positionGridSizer->Add(itemBoxSizer72, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
     m_left = new wxTextCtrl( itemRichTextDialogPage1, ID_RICHTEXT_LEFT, wxEmptyString, wxDefaultPosition, wxSize(65, -1), 0 );
     m_left->SetMaxLength(10);
     m_left->SetHelpText(_("The left position."));
     if (wxRichTextSizePage::ShowToolTips())
         m_left->SetToolTip(_("The left position."));
-    itemBoxSizer71->Add(m_left, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
+    itemBoxSizer72->Add(m_left, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
 
     wxArrayString m_unitsLeftStrings;
     m_unitsLeftStrings.Add(_("px"));
@@ -556,7 +559,7 @@ void wxRichTextSizePage::CreateControls()
     m_unitsLeft->SetHelpText(_("Units for the left position."));
     if (wxRichTextSizePage::ShowToolTips())
         m_unitsLeft->SetToolTip(_("Units for the left position."));
-    itemBoxSizer71->Add(m_unitsLeft, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer72->Add(m_unitsLeft, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_topSizer = new wxBoxSizer(wxHORIZONTAL);
     m_positionGridSizer->Add(m_topSizer, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -572,15 +575,15 @@ void wxRichTextSizePage::CreateControls()
     m_topLabel->Show(false);
     m_topSizer->Add(m_topLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer77 = new wxBoxSizer(wxHORIZONTAL);
-    m_positionGridSizer->Add(itemBoxSizer77, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
+    wxBoxSizer* itemBoxSizer78 = new wxBoxSizer(wxHORIZONTAL);
+    m_positionGridSizer->Add(itemBoxSizer78, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
     m_top = new wxTextCtrl( itemRichTextDialogPage1, ID_RICHTEXT_TOP, wxEmptyString, wxDefaultPosition, wxSize(65, -1), 0 );
     m_top->SetMaxLength(10);
     m_top->SetHelpText(_("The top position."));
     if (wxRichTextSizePage::ShowToolTips())
         m_top->SetToolTip(_("The top position."));
-    itemBoxSizer77->Add(m_top, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
+    itemBoxSizer78->Add(m_top, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
 
     wxArrayString m_unitsTopStrings;
     m_unitsTopStrings.Add(_("px"));
@@ -591,7 +594,7 @@ void wxRichTextSizePage::CreateControls()
     m_unitsTop->SetHelpText(_("Units for the top position."));
     if (wxRichTextSizePage::ShowToolTips())
         m_unitsTop->SetToolTip(_("Units for the top position."));
-    itemBoxSizer77->Add(m_unitsTop, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer78->Add(m_unitsTop, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_rightSizer = new wxBoxSizer(wxHORIZONTAL);
     m_positionGridSizer->Add(m_rightSizer, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -666,20 +669,20 @@ void wxRichTextSizePage::CreateControls()
     m_moveObjectSizer = new wxBoxSizer(wxHORIZONTAL);
     m_moveObjectParentSizer->Add(m_moveObjectSizer, 0, wxGROW, 5);
 
-    wxStaticText* itemStaticText93 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Move the object to:"), wxDefaultPosition, wxDefaultSize, 0 );
-    m_moveObjectSizer->Add(itemStaticText93, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText94 = new wxStaticText( itemRichTextDialogPage1, wxID_STATIC, _("&Move the object to:"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_moveObjectSizer->Add(itemStaticText94, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton94 = new wxButton( itemRichTextDialogPage1, ID_RICHTEXT_PARA_UP, _("&Previous Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton94->SetHelpText(_("Moves the object to the previous paragraph."));
+    wxButton* itemButton95 = new wxButton( itemRichTextDialogPage1, ID_RICHTEXT_PARA_UP, _("&Previous Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton95->SetHelpText(_("Moves the object to the previous paragraph."));
     if (wxRichTextSizePage::ShowToolTips())
-        itemButton94->SetToolTip(_("Moves the object to the previous paragraph."));
-    m_moveObjectSizer->Add(itemButton94, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+        itemButton95->SetToolTip(_("Moves the object to the previous paragraph."));
+    m_moveObjectSizer->Add(itemButton95, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxButton* itemButton95 = new wxButton( itemRichTextDialogPage1, ID_RICHTEXT_PARA_DOWN, _("&Next Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemButton95->SetHelpText(_("Moves the object to the next paragraph."));
+    wxButton* itemButton96 = new wxButton( itemRichTextDialogPage1, ID_RICHTEXT_PARA_DOWN, _("&Next Paragraph"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemButton96->SetHelpText(_("Moves the object to the next paragraph."));
     if (wxRichTextSizePage::ShowToolTips())
-        itemButton95->SetToolTip(_("Moves the object to the next paragraph."));
-    m_moveObjectSizer->Add(itemButton95, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM, 5);
+        itemButton96->SetToolTip(_("Moves the object to the next paragraph."));
+    m_moveObjectSizer->Add(itemButton96, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM, 5);
 
     // Set validators
     m_positionModeCtrl->SetValidator( wxGenericValidator(& m_positionMode) );
