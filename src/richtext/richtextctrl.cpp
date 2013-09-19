@@ -3009,6 +3009,12 @@ wxRichTextBox* wxRichTextCtrl::WriteTextBox(const wxRichTextAttr& textAttr)
     textBox->AddParagraph(wxEmptyString);
     textBox->SetParent(NULL);
 
+    // If the box has an invalid foreground colour, its text will mimic any upstream value (see #15224)
+    if (!textBox->GetAttributes().GetTextColour().IsOk())
+    {
+        textBox->GetAttributes().SetTextColour(GetBasicStyle().GetTextColour());
+    }
+
     // The object returned is the one actually inserted into the buffer,
     // while the original one is deleted.
     wxRichTextObject* obj = GetFocusObject()->InsertObjectWithUndo(& GetBuffer(), m_caretPosition+1, textBox, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
@@ -3034,17 +3040,25 @@ wxRichTextTable* wxRichTextCtrl::WriteTable(int rows, int cols, const wxRichText
     wxRichTextTable* table = new wxRichTextTable;
     table->SetAttributes(tableAttr);
     table->SetParent(& GetBuffer()); // set parent temporarily for AddParagraph to use correct style
+    table->SetBasicStyle(GetBasicStyle());
 
     table->CreateTable(rows, cols);
 
     table->SetParent(NULL);
+
+    // If cells have an invalid foreground colour, their text will mimic any upstream value (see #15224)
+    wxRichTextAttr attr = cellAttr;
+    if (!attr.GetTextColour().IsOk())
+    {
+        attr.SetTextColour(GetBasicStyle().GetTextColour());
+    }
 
     int i, j;
     for (j = 0; j < rows; j++)
     {
         for (i = 0; i < cols; i++)
         {
-            table->GetCell(j, i)->GetAttributes() = cellAttr;
+            table->GetCell(j, i)->GetAttributes() = attr;
         }
     }
 
