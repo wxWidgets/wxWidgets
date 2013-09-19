@@ -10641,6 +10641,10 @@ bool wxRichTextTable::AddRows(int startRow, int noRows, const wxRichTextAttr& at
         action->SetPosition(GetRange().GetStart());
     }
 
+    wxRichTextAttr cellattr = attr;
+    if (!cellattr.GetTextColour().IsOk())
+        cellattr.SetTextColour(buffer->GetBasicStyle().GetTextColour());
+
     int i, j;
     for (i = 0; i < noRows; i++)
     {
@@ -10660,7 +10664,7 @@ bool wxRichTextTable::AddRows(int startRow, int noRows, const wxRichTextAttr& at
         for (j = 0; j < m_colCount; j++)
         {
             wxRichTextCell* cell = new wxRichTextCell;
-            cell->GetAttributes() = attr;
+            cell->GetAttributes() = cellattr;
 
             AppendChild(cell);
             cell->AddParagraph(wxEmptyString);
@@ -10699,6 +10703,10 @@ bool wxRichTextTable::AddColumns(int startCol, int noCols, const wxRichTextAttr&
         action->SetPosition(GetRange().GetStart());
     }
 
+    wxRichTextAttr cellattr = attr;
+    if (!cellattr.GetTextColour().IsOk())
+        cellattr.SetTextColour(buffer->GetBasicStyle().GetTextColour());
+
     int i, j;
     for (i = 0; i < m_rowCount; i++)
     {
@@ -10706,7 +10714,7 @@ bool wxRichTextTable::AddColumns(int startCol, int noCols, const wxRichTextAttr&
         for (j = 0; j < noCols; j++)
         {
             wxRichTextCell* cell = new wxRichTextCell;
-            cell->GetAttributes() = attr;
+            cell->GetAttributes() = cellattr;
 
             AppendChild(cell);
             cell->AddParagraph(wxEmptyString);
