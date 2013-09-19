@@ -1840,7 +1840,7 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, wxRichTextDrawingContext& cont
     context.ApplyVirtualAttributes(attr, this);
 
     int flags = style;
-    if (selection.IsValid() && GetParentContainer() != this && selection.WithinSelection(GetRange().GetStart(), GetParentContainer()))
+    if (selection.IsValid() && GetParentContainer() != this && selection.GetContainer() == this && selection.WithinSelection(GetRange().GetStart(), GetParentContainer()))
         flags |= wxRICHTEXT_DRAW_SELECTED;
 
     // Don't draw guidelines if at top level
