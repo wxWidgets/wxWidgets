@@ -38,6 +38,10 @@ static GtkContainer* ContainerWidget()
     {
         s_widget = GTK_CONTAINER(gtk_fixed_new());
         GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+#ifdef __WXGTK3__
+        // need this to initialize style for window
+        gtk_widget_get_style_context(GTK_WIDGET(window));
+#endif
         gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(s_widget));
     }
     return s_widget;
