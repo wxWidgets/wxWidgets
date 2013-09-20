@@ -5690,9 +5690,19 @@ public:
     int GetRowCount() const { return m_rowCount; }
 
     /**
+        Sets the row count.
+    */
+    void SetRowCount(int count) { m_rowCount = count; }
+
+    /**
         Returns the column count.
     */
     int GetColumnCount() const { return m_colCount; }
+
+    /**
+        Sets the column count.
+    */
+    void SetColumnCount(int count) { m_colCount = count; }
 
     /**
         Returns the cell at the given row/column position.
