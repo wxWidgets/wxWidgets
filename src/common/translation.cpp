@@ -1506,17 +1506,11 @@ bool wxTranslations::AddCatalog(const wxString& domain,
                 wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
                 domain_lang, domain, msgIdLang);
 
-    // It is OK to not load catalog if the msgid language and m_language match,
-    // in which case we can directly display the texts embedded in program's
-    // source code:
-    if ( msgIdLang == domain_lang )
-        return true;
-
-    return LoadCatalog(domain, domain_lang);
+    return LoadCatalog(domain, domain_lang, msgIdLang);
 }
 
 
-bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
+bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang, const wxString& msgIdLang)
 {
     wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
 
@@ -1551,6 +1545,15 @@ bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
         wxString baselang = lang.BeforeFirst('_');
         if ( lang != baselang )
             cat = m_loader->LoadCatalog(domain, baselang);
+    }
+
+    if ( !cat )
+    {
+        // It is OK to not load catalog if the msgid language and m_language match,
+        // in which case we can directly display the texts embedded in program's
+        // source code:
+        if ( msgIdLang == lang )
+            return true;
     }
 
     if ( cat )

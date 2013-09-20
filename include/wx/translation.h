@@ -169,7 +169,7 @@ public:
 
 private:
     // perform loading of the catalog via m_loader
-    bool LoadCatalog(const wxString& domain, const wxString& lang);
+    bool LoadCatalog(const wxString& domain, const wxString& lang, const wxString& msgIdLang);
 
     // find catalog by name in a linked list, return NULL if !found
     wxMsgCatalog *FindCatalog(const wxString& domain) const;
