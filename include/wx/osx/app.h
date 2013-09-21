@@ -152,9 +152,8 @@ public:
     virtual void         OSXOnWillTerminate();
 
 private:
-#if wxOSX_USE_IPHONE
     bool                m_onInitResult;
-#endif
+    
 public:
 
 #endif

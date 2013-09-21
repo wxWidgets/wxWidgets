@@ -314,9 +314,9 @@ bool wxApp::DoInitGui()
 bool wxApp::CallOnInit()
 {
     wxMacAutoreleasePool autoreleasepool;
-    // this will only run one cycle to make sure the OS is ready
+    m_onInitResult = false;
     [NSApp run];
-    return OnInit();
+    return m_onInitResult; 
 }
 
 void wxApp::DoCleanUp()
