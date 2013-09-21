@@ -4,7 +4,7 @@
 # Yuri Chornoivan <yurchor@ukr.net>, 2007, 2010, 2011, 2012, 2013.
 msgid ""
 msgstr ""
-"Project-Id-Version: uk\n"
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
 "PO-Revision-Date: 2013-07-10 20:12+0300\n"

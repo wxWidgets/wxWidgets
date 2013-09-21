@@ -2,6 +2,7 @@
 #
 msgid ""
 msgstr ""
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-29 14:59+0100\n"
 "PO-Revision-Date: 2005-08-12 14:23:42+0100\n"

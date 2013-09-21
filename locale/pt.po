@@ -7,7 +7,7 @@
 # Carlos Gonçalves <mail@cgoncalves.info>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxstd.pt\n"
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
 "PO-Revision-Date: 2007-09-20 21:59+0100\n"

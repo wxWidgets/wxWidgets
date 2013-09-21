@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: ko.po (by trunk 2009-04-16)\n"
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
 "PO-Revision-Date: 2009-04-23 18:29+0900\n"

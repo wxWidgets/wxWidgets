@@ -2,7 +2,7 @@
 # Updated by Thomas Krebs <Thomas.Krebs@mecadtron.de>
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets-2.8.10\n"
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
 "PO-Revision-Date: 2012-04-27 17:01+0100\n"

@@ -1,7 +1,7 @@
 # Copyright (C) Besnik Bleta <besnik@programeshqip.org>, 2004-2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 2.7.0\n"
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
 "PO-Revision-Date: 2006-03-15 18:41+0200\n"
