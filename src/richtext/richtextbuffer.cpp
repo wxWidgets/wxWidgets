@@ -9227,6 +9227,22 @@ bool wxRichTextCell::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxR
     return wxRichTextBox::Draw(dc, context, range, selection, rect, descent, style);
 }
 
+int wxRichTextCell::HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags)
+{
+    int ret = wxRichTextParagraphLayoutBox::HitTest(dc, context, pt, textPosition, obj, contextObj, flags);
+    if (ret != wxRICHTEXT_HITTEST_NONE)
+    {
+        return ret;
+    }
+    else
+    {
+        textPosition = m_ownRange.GetEnd()-1;
+        *obj = this;
+        *contextObj = this;
+        return wxRICHTEXT_HITTEST_AFTER|wxRICHTEXT_HITTEST_OUTSIDE;
+    }
+}
+
 /// Copy
 void wxRichTextCell::Copy(const wxRichTextCell& obj)
 {
@@ -10480,6 +10496,23 @@ wxPosition wxRichTextTable::GetFocusedCell() const
     }
 
     return position;
+}
+
+int wxRichTextTable::HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags)
+{
+    for (int row = 0; row < GetRowCount(); ++row)
+    {
+        for (int col = 0; col < GetColumnCount(); ++col)
+        {
+            wxRichTextCell* cell = GetCell(row, col);
+            if (cell->wxRichTextObject::HitTest(dc, context, pt, textPosition, obj, contextObj, flags) != wxRICHTEXT_HITTEST_NONE)
+            {
+                return cell->HitTest(dc, context, pt, textPosition, obj, contextObj, flags);
+            }
+        }
+    }
+
+    return wxRICHTEXT_HITTEST_NONE;
 }
 
 bool wxRichTextTable::DeleteRows(int startRow, int noRows)
