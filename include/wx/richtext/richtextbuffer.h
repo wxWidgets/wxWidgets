@@ -1556,6 +1556,8 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxRichTextAttr, wxRichTextAttrArray, WXDLLIMPE
 
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxVariant, wxRichTextVariantArray, WXDLLIMPEXP_RICHTEXT);
 
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxRect, wxRichTextRectArray, WXDLLIMPEXP_RICHTEXT);
+
 /**
     @class wxRichTextProperties
     A simple property class using wxVariants. This is used to give each rich text object the
