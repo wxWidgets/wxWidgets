@@ -549,7 +549,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                                   long style,
                                   const wxString &name )
 {
-    const wxSize size(WidthDefault(sizeOrig.x), HeightDefault(sizeOrig.y));
+    wxSize size(sizeOrig);
+    if (!size.IsFullySpecified())
+        size.SetDefaults(GetDefaultSize());
 
     wxTopLevelWindows.Append( this );
 
