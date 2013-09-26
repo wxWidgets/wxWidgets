@@ -9291,18 +9291,20 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
     else
         caption = _("Cell Properties");
 
+    // We don't want position and floating controls for a cell.
+    wxRichTextSizePage::ShowPositionControls(false);
+    wxRichTextSizePage::ShowFloatingControls(false);
+    wxRichTextSizePage::ShowAlignmentControls(true);
+
     wxRichTextObjectPropertiesDialog cellDlg(this, wxGetTopLevelParent(parent), wxID_ANY, caption);
     cellDlg.SetAttributes(attr);
 
-    wxRichTextSizePage* sizePage = wxDynamicCast(cellDlg.FindPage(wxCLASSINFO(wxRichTextSizePage)), wxRichTextSizePage);
-    if (sizePage)
-    {
-        // We don't want position and floating controls for a cell.
-        sizePage->ShowPositionControls(false);
-        sizePage->ShowFloatingControls(false);
-    }
+    bool ok = (cellDlg.ShowModal() == wxID_OK);
 
-    if (cellDlg.ShowModal() == wxID_OK)
+    wxRichTextSizePage::ShowPositionControls(true);
+    wxRichTextSizePage::ShowFloatingControls(true);
+
+    if (ok)
     {
         if (multipleCells)
         {
