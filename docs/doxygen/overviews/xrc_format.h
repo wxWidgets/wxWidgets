@@ -1731,7 +1731,7 @@ No additional properties.
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
      Label to display (required).}
-@row3col{wrap, integer,
+@row3col{wrap, @ref overview_xrcformat_type_dimension,
      Wrap the text so that each line is at most the given number of pixels, see
      wxStaticText::Wrap() (default: no wrap).}
 @endTable
