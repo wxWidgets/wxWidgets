@@ -1666,9 +1666,9 @@ wxWidgets 2.9.5, another one:
 @hdr3col{property, type, description}
 @row3col{orientation, @ref overview_xrcformat_type_string,
     Orientation of the splitter, either "vertical" or "horizontal" (default: horizontal).}
-@row3col{sashpos, integer,
+@row3col{sashpos, @ref overview_xrcformat_type_dimension,
     Initial position of the sash (default: 0).}
-@row3col{minsize, integer,
+@row3col{minsize, @ref overview_xrcformat_type_dimension,
     Minimum child size (default: not set).}
 @row3col{gravity, @ref overview_xrcformat_type_float,
     Sash gravity, see wxSplitterWindow::SetSashGravity() (default: not set).}
