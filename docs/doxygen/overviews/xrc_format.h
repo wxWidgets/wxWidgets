@@ -355,7 +355,8 @@ Examples of stock bitmaps usage:
 <bitmap stock_id="wxART_FILE_OPEN"/>    <!-- standard art -->
 @endcode
 
-Specifying the bitmap directly and using @c stock_id are mutually exclusive.
+If both specifications are provided, then @c stock_id is used if it is
+recognized by wxArtProvider and the provided bitmap file is used as a fallback.
 
 
 @subsection overview_xrcformat_type_style Style
@@ -538,7 +539,9 @@ controls cannot have children.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{animation, @ref overview_xrcformat_type_url,
-    Animation file to load into the control (required).}
+    Animation file to load into the control (default: none).}
+@row3col{inactive-bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap to use when not playing the animation (default: the default).}
 @endTable
 
 
@@ -1012,7 +1015,7 @@ objects. If sizer child is used, it sets
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{defaultfolder, @ref overview_xrcformat_type_text,
+@row3col{defaultfolder, @ref overview_xrcformat_type_string,
     Initial folder (default: empty).}
 @row3col{filter, @ref overview_xrcformat_type_text,
     Filter string, using the same syntax as used by wxFileDialog, e.g.
@@ -1031,9 +1034,9 @@ No additional properties.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{url, @ref overview_xrcformat_type_url,
-    Page to display in the window.}
+    Page to display in the window (default: none).}
 @row3col{htmlcode, @ref overview_xrcformat_type_text,
-    HTML markup to display in the window.}
+    HTML markup to display in the window (default: none).}
 @row3col{borders, @ref overview_xrcformat_type_dimension,
     Border around HTML content (default: 0).}
 @endTable
@@ -1122,21 +1125,22 @@ Each @c listbookpage has exactly one non-toplevel window as its child.
      The small (wxIMAGE_LIST_SMALL) image list (default: none, built implicitly).}
 @endTable
 
-A list control can have one or more child objects of the @ref xrc_wxlistcol
+A list control can have optional child objects of the @ref xrc_wxlistitem
 class.  Report mode list controls (i.e. created with @c wxLC_REPORT style) can
-in addition have one or more @ref xrc_wxlistcol child objects.
+in addition have optional @ref xrc_wxlistcol child objects.
 
 @paragraph xrc_wxlistcol listcol
 
 The @c listcol class can only be used for wxListCtrl children. It can have the
-following properties:
+following properties (all of them optional):
+
 @beginTable
 @hdr3col{property, type, description}
 @row3col{align, wxListColumnFormat,
     The alignment for the item.
     Can be one of @c wxLIST_FORMAT_LEFT, @c wxLIST_FORMAT_RIGHT or
     @c wxLIST_FORMAT_CENTRE.}
-@row3col{text, @ref overview_xrcformat_type_string,
+@row3col{text, @ref overview_xrcformat_type_text,
     The title of the column. }
 @row3col{width, integer,
     The column width. }
@@ -1151,7 +1155,7 @@ objects.
 @paragraph xrc_wxlistitem listitem
 
 The @c listitem is a child object for the class @ref xrc_wxlistctrl.
-It can have the following properties:
+It can have the following properties (all of them optional):
 
 @beginTable
 @hdr3col{property, type, description}
@@ -1185,14 +1189,11 @@ It can have the following properties:
     The client data for the item.}
 @row3col{font, @ref overview_xrcformat_type_font,
     The font for the item.}
-@row3col{image, integer,
-    The zero-based index of the image associated with the item
-    into the image list.}
 @row3col{state, @ref overview_xrcformat_type_style,
     The item state. Can be any combination of the following values:
         - @c wxLIST_STATE_FOCUSED: The item has the focus.
         - @c wxLIST_STATE_SELECTED: The item is selected.}
-@row3col{text, @ref overview_xrcformat_type_string,
+@row3col{text, @ref overview_xrcformat_type_text,
     The text label for the item. }
 @row3col{textcolour, @ref overview_xrcformat_type_colour,
     The text colour for the item. }
@@ -1483,7 +1484,7 @@ Example:
 @endcode
 
 
-@subsubsection xrc_wxribbon wxRibbon
+@subsubsection xrc_wxribbon wxRibbonBar
 
 A wxRibbonBar is a container of ribbon pages which, in turn, contain elements
 that can be wxRibbonControl or wxRibbonGallery.
@@ -1520,7 +1521,7 @@ Example:
 </object>
 @endcode
 
-Notice that wxRibbon support in XRC is available in wxWidgets 2.9.5 and
+Notice that wxRibbonBar support in XRC is available in wxWidgets 2.9.5 and
 later only and you need to explicitly register its handler using
 @code
     #include <wx/xrc/xh_ribbon.h>
@@ -1698,7 +1699,11 @@ child and the second one for right/bottom child window.
 @row3col{widths, @ref overview_xrcformat_type_string,
     Comma-separated list of @em fields integers. Each value specifies width
     of one field; the values are interpreted using the same convention used
-    by wxStatusBar::SetStatusWidths().}
+    by wxStatusBar::SetStatusWidths() (default: not set).}
+@row3col{styles, @ref overview_xrcformat_type_string,
+    Comma-separated list of @em fields style values. Each value specifies style
+    of one field and can be one of @c wxSB_NORMAL, @c wxSB_FLAT, @c wxSB_RAISED or
+    @c wxSB_SUNKEN (default: not set).}
 @endTable
 
 
@@ -1782,7 +1787,7 @@ No additional properties.
 @endTable
 
 A toolbar can have one or more child objects of any wxControl-derived class or
-one of two pseudo-classes: @c separator or @c tool.
+one of three pseudo-classes: @c separator, @c space or @c tool.
 
 The @c separator pseudo-class is used to insert separators into the toolbar and
 has neither properties nor children. Similarly, the @c space pseudo-class is
@@ -1822,7 +1827,7 @@ xrc_wxmenu child object defining the drop-down button associated menu.
 
 Notice that @c radio, @c toggle and @c dropdown are mutually exclusive.
 
-Children that are neither @c tool nor @c separator must be instances of classes
+Children that are not @c tool, @c space or @c separator must be instances of classes
 derived from wxControl and are added to the toolbar using
 wxToolBar::AddControl().
 
@@ -2011,6 +2016,10 @@ wxWizardPageSimple classes. They both support the following properties
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Page-specific bitmap (default: none).}
 @endTable
+
+wxWizardPage and wxWizardPageSimple nodes may have optional children: either
+exactly one @ref overview_xrcformat_sizers "sizer" child or any number of
+non-toplevel window objects.
 
 wxWizardPageSimple pages are automatically chained together; wxWizardPage pages
 transitions must be handled programmatically.
