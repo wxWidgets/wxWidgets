@@ -10536,24 +10536,6 @@ bool wxRichTextTable::DeleteRows(int startRow, int noRows)
     wxRichTextBuffer* buffer = GetBuffer();
     wxRichTextCtrl* rtc = buffer->GetRichTextCtrl();
 
-    wxPosition position = GetFocusedCell();
-    int focusCol = position.GetCol();
-    int focusRow = position.GetRow();
-    if (focusRow >= startRow && focusRow < (startRow+noRows))
-    {
-        // Deleting a focused cell causes a segfault later when laying out, due to GetFocusedObject() returning an invalid object
-        if ((startRow + noRows) < m_rowCount)
-        {
-            // There are more rows after the one(s) to be deleted, so set focus in the first of them
-            rtc->SetFocusObject(GetCell(startRow + noRows, focusCol));
-        }
-        else
-        {
-            // Otherwise set focus in the preceding row
-            rtc->SetFocusObject(GetCell(startRow - 1, focusCol));
-        }
-    }
-
     wxRichTextAction* action = NULL;
     wxRichTextTable* clone = NULL;
     if (!rtc->SuppressingUndo())
@@ -10603,24 +10585,6 @@ bool wxRichTextTable::DeleteColumns(int startCol, int noCols)
 
     wxRichTextBuffer* buffer = GetBuffer();
     wxRichTextCtrl* rtc = buffer->GetRichTextCtrl();
-
-    wxPosition position = GetFocusedCell();
-    int focusCol = position.GetCol();
-    int focusRow = position.GetRow();
-    if (focusCol >= startCol && focusCol < (startCol+noCols))
-    {
-        // Deleting a focused cell causes a segfault later when laying out, due to GetFocusedObject() returning an invalid object
-        if ((startCol + noCols) < m_colCount)
-        {
-            // There are more columns after the one(s) to be deleted, so set focus in the first of them
-            rtc->SetFocusObject(GetCell(focusRow, startCol + noCols));
-        }
-        else
-        {
-            // Otherwise set focus in the preceding column
-            rtc->SetFocusObject(GetCell(focusRow, startCol - 1));
-        }
-    }
 
     wxRichTextAction* action = NULL;
     wxRichTextTable* clone = NULL;
@@ -10674,6 +10638,7 @@ bool wxRichTextTable::AddRows(int startRow, int noRows, const wxRichTextAttr& at
     wxRichTextBuffer* buffer = GetBuffer();
     wxRichTextAction* action = NULL;
     wxRichTextTable* clone = NULL;
+    
     if (!buffer->GetRichTextCtrl()->SuppressingUndo())
     {
         // Create a clone containing the current state of the table. It will be used to Undo the action
@@ -10736,6 +10701,7 @@ bool wxRichTextTable::AddColumns(int startCol, int noCols, const wxRichTextAttr&
     wxRichTextBuffer* buffer = GetBuffer();
     wxRichTextAction* action = NULL;
     wxRichTextTable* clone = NULL;
+
     if (!buffer->GetRichTextCtrl()->SuppressingUndo())
     {
         // Create a clone containing the current state of the table. It will be used to Undo the action
@@ -11178,6 +11144,12 @@ bool wxRichTextAction::Do()
                 }
             }
 
+            // We can't rely on the current focus-object remaining valid, if it's e.g. a table's cell.
+            // And we can't cope with this in the calling code: a user may later click in the cell
+            // before deciding to Undo() or Redo(). So play safe and set focus to the buffer.
+            if (m_ctrl)
+                m_ctrl->SetFocusObject(m_buffer, false);
+            
             // InvalidateHierarchy goes up the hierarchy as well as down, otherwise with a nested object,
             // Layout() would stop prematurely at the top level.
             // Invalidate the whole buffer if there were floating objects
