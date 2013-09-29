@@ -3211,6 +3211,11 @@ public:
     virtual bool SetProperties(const wxRichTextRange& range, const wxRichTextProperties& properties, int flags = wxRICHTEXT_SETPROPERTIES_WITH_UNDO);
 
     /**
+        Sets with undo the properties for the given object.
+    */
+    virtual bool SetObjectPropertiesWithUndo(wxRichTextObject& obj, const wxRichTextProperties& properties);
+
+    /**
         Test if this whole range has character attributes of the specified kind. If any
         of the attributes are different within the range, the test fails. You
         can use this to implement, for example, bold button updating. style must have

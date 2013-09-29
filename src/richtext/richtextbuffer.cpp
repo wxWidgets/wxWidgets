@@ -7723,6 +7723,53 @@ wxRichTextField* wxRichTextParagraphLayoutBox::InsertFieldWithUndo(wxRichTextBuf
     return obj;
 }
 
+bool wxRichTextParagraphLayoutBox::SetObjectPropertiesWithUndo(wxRichTextObject& obj, const wxRichTextProperties& properties)
+{
+    wxRichTextBuffer* buffer = GetBuffer();
+    wxCHECK_MSG(buffer, false, wxT("Invalid buffer"));
+    wxRichTextCtrl* rtc = buffer->GetRichTextCtrl();
+    wxCHECK_MSG(rtc, false, wxT("Invalid rtc"));
+
+    wxRichTextAction* action = NULL;
+    wxRichTextObject* clone = NULL;
+
+#if 1
+    if (rtc->SuppressingUndo())
+        obj.SetProperties(properties);
+    else
+    {
+        clone = obj.Clone();
+        clone->SetProperties(obj.GetProperties());
+        action = new wxRichTextAction(NULL, _("Change Properties"), wxRICHTEXT_CHANGE_OBJECT, buffer, obj.GetParentContainer(), rtc);
+        action->SetOldAndNewObjects(& obj, clone);
+        action->SetPosition(obj.GetRange().GetStart());
+        action->SetRange(obj.GetRange());
+        buffer->SubmitAction(action);
+    }
+#else
+    if (!rtc->SuppressingUndo())
+    {
+        // Create a clone containing the current state of the object. It will be used to Undo the action
+        clone = obj.Clone();
+        clone->SetParent(obj.GetParent());
+        action = new wxRichTextAction(NULL, _("Change Properties"), wxRICHTEXT_CHANGE_OBJECT, buffer, rtc->GetFocusObject(), rtc);
+        action->SetObject(&obj);
+        action->SetPosition(GetRange().GetStart());
+    }
+
+    obj.SetProperties(properties);
+
+    if (!rtc->SuppressingUndo())
+    {
+        buffer->SubmitAction(action);
+        // Finally store the original-state clone; doing so earlier would cause various failures
+        action->StoreObject(clone);
+    }
+#endif
+
+    return true;
+}
+
 /// Get the style that is appropriate for a new paragraph at this position.
 /// If the previous paragraph has a paragraph style name, look up the next-paragraph
 /// style.
