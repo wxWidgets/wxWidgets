@@ -5654,6 +5654,55 @@ protected:
     wxRichTextObjectPtrArrayArray   m_cells;
 };
 
+/** @class wxRichTextTableBlock
+
+    Stores the coordinates for a block of cells.
+ */
+
+class wxRichTextTableBlock
+{
+public:
+    wxRichTextTableBlock() { Init(); }
+    wxRichTextTableBlock(int colStart, int colEnd, int rowStart, int rowEnd)
+    { Init(); m_colStart = colStart; m_colEnd = colEnd; m_rowStart = rowStart; m_rowEnd = rowEnd; }
+    wxRichTextTableBlock(const wxRichTextTableBlock& block) { Copy(block); }
+
+    void Init() { m_colStart = 0; m_colEnd = 0; m_rowStart = 0; m_rowEnd = 0; }
+    
+    void Copy(const wxRichTextTableBlock& block)
+    {
+        m_colStart = block.m_colStart; m_colEnd = block.m_colEnd; m_rowStart = block.m_rowStart; m_rowEnd = block.m_rowEnd;
+    }
+    void operator=(const wxRichTextTableBlock& block) { Copy(block); }
+    bool operator==(const wxRichTextTableBlock& block)
+    { return m_colStart == block.m_colStart && m_colEnd == block.m_colEnd && m_rowStart == block.m_rowStart && m_rowEnd == block.m_rowEnd; }
+
+    /// Computes the block given a table (perhaps about to be edited) and a rich text control
+    /// that may have a selection. If no selection, the whole table is used. If just the whole content
+    /// of one cell is selected, this cell only is used. If the cell contents is not selected and
+    /// requireCellSelection is @false, the focused cell will count as a selected cell.
+    bool ComputeBlockForSelection(wxRichTextTable* table, wxRichTextCtrl* ctrl, bool requireCellSelection = true);
+
+    /// Does this block represent the whole table?
+    bool IsWholeTable(wxRichTextTable* table) const;
+
+    /// Returns the cell focused in the table, if any
+    static wxRichTextCell* GetFocusedCell(wxRichTextCtrl* ctrl);
+
+    int& ColStart() { return m_colStart; }
+    int ColStart() const { return m_colStart; }
+
+    int& ColEnd() { return m_colEnd; }
+    int ColEnd() const { return m_colEnd; }
+
+    int& RowStart() { return m_rowStart; }
+    int RowStart() const { return m_rowStart; }
+
+    int& RowEnd() { return m_rowEnd; }
+    int RowEnd() const { return m_rowEnd; }
+
+    int m_colStart, m_colEnd, m_rowStart, m_rowEnd;
+};
 
 /**
     The command identifiers for Do/Undo.

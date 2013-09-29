@@ -10762,6 +10762,90 @@ bool wxRichTextTable::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
         return false;
 }
 
+bool wxRichTextTableBlock::ComputeBlockForSelection(wxRichTextTable* table, wxRichTextCtrl* ctrl, bool requireCellSelection)
+{
+    if (!ctrl)
+        return false;
+
+    ColStart() = 0;
+    ColEnd() = table->GetColumnCount()-1;
+    RowStart() = 0;
+    RowEnd() = table->GetRowCount()-1;
+
+    wxRichTextSelection selection = ctrl->GetSelection();
+    if (selection.IsValid() && selection.GetContainer() == table)
+    {
+        // Start with an invalid block and increase.
+        wxRichTextTableBlock selBlock(-1, -1, -1, -1);
+        wxRichTextRangeArray ranges = selection.GetRanges();
+        int row, col;
+        for (row = 0; row < table->GetRowCount(); row++)
+        {
+            for (col = 0; col < table->GetColumnCount(); col++)
+            {
+                if (selection.WithinSelection(table->GetCell(row, col)->GetRange().GetStart()))
+                {
+                    if (selBlock.ColStart() == -1)
+                        selBlock.ColStart() = col;
+                    if (selBlock.ColEnd() == -1)
+                        selBlock.ColEnd() = col;
+                    if (col < selBlock.ColStart())
+                        selBlock.ColStart() = col;
+                    if (col > selBlock.ColEnd())
+                        selBlock.ColEnd() = col;
+
+                    if (selBlock.RowStart() == -1)
+                        selBlock.RowStart() = row;
+                    if (selBlock.RowEnd() == -1)
+                        selBlock.RowEnd() = row;
+                    if (row < selBlock.RowStart())
+                        selBlock.RowStart() = row;
+                    if (row > selBlock.RowEnd())
+                        selBlock.RowEnd() = row;
+                }
+            }
+        }
+
+        if (selBlock.RowStart() != -1 && selBlock.RowEnd() != -1 && selBlock.ColStart() != -1 && selBlock.ColEnd() != -1)
+            (*this) = selBlock;
+    }
+    else
+    {
+        // See if a whole cell's contents is selected, in which case we can treat the cell as selected.
+        // wxRTC lacks the ability to select a single cell.
+        wxRichTextCell* cell = wxDynamicCast(ctrl->GetFocusObject(), wxRichTextCell);
+        if (cell && (!requireCellSelection || (ctrl->HasSelection() && ctrl->GetSelectionRange() == cell->GetOwnRange())))
+        {
+            int row, col;
+            if (table->GetCellRowColumnPosition(cell->GetRange().GetStart(), row, col))
+            {
+                RowStart() = row;
+                RowEnd() = row;
+                ColStart() = col;
+                ColEnd() = col;
+            }
+        }
+    }
+
+    return true;
+}
+
+// Does this block represent the whole table?
+bool wxRichTextTableBlock::IsWholeTable(wxRichTextTable* table) const
+{
+    return (ColStart() == 0 && RowStart() == 0 && ColEnd() == (table->GetColumnCount()-1) && RowEnd() == (table->GetRowCount()-1));
+}
+
+// Returns the cell focused in the table, if any
+wxRichTextCell* wxRichTextTableBlock::GetFocusedCell(wxRichTextCtrl* ctrl)
+{
+    if (!ctrl)
+        return NULL;
+
+    wxRichTextCell* cell = wxDynamicCast(ctrl->GetFocusObject(), wxRichTextCell);
+    return cell;
+}
+
 /*
  * Module to initialise and clean up handlers
  */
