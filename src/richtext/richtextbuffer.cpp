@@ -9375,8 +9375,6 @@ bool wxRichTextTable::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
 {
     wxRichTextBox::Draw(dc, context, range, selection, rect, descent, style);
 
-    // Now draw the table outline, if any, to ensure there are no breaks caused by
-    // different-coloured cell dividers overwriting the overall table border.
     int colCount = GetColumnCount();
     int rowCount = GetRowCount();
     int col, row;
@@ -9387,7 +9385,7 @@ bool wxRichTextTable::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
             if (row == 0 || row == (rowCount-1) || col == 0 || col == (colCount-1))
             {
                 wxRichTextCell* cell = GetCell(row, col);
-                if (cell && !cell->GetRange().IsOutside(range))
+                if (cell && cell->IsShown() && !cell->GetRange().IsOutside(range))
                 {
                     wxRect childRect(cell->GetPosition(), cell->GetCachedSize());
                     wxRichTextAttr attr(cell->GetAttributes());
