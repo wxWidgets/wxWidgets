@@ -10644,7 +10644,7 @@ bool wxRichTextTable::AddRows(int startRow, int noRows, const wxRichTextAttr& at
         // Create a clone containing the current state of the table. It will be used to Undo the action
         clone = wxStaticCast(this->Clone(), wxRichTextTable);
         clone->SetParent(GetParent());
-        action = new wxRichTextAction(NULL, _("Add row"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
+        action = new wxRichTextAction(NULL, _("Add Row"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
         action->SetObject(this);
         action->SetPosition(GetRange().GetStart());
     }
@@ -10707,7 +10707,7 @@ bool wxRichTextTable::AddColumns(int startCol, int noCols, const wxRichTextAttr&
         // Create a clone containing the current state of the table. It will be used to Undo the action
         clone = wxStaticCast(this->Clone(), wxRichTextTable);
         clone->SetParent(GetParent());
-        action = new wxRichTextAction(NULL, _("Add column"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
+        action = new wxRichTextAction(NULL, _("Add Column"), wxRICHTEXT_CHANGE_OBJECT, buffer, this, buffer->GetRichTextCtrl());
         action->SetObject(this);
         action->SetPosition(GetRange().GetStart());
     }
