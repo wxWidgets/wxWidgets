@@ -2489,18 +2489,8 @@ bool wxDataViewMainWindow::ItemChanged(const wxDataViewItem & item)
 
 bool wxDataViewMainWindow::ValueChanged( const wxDataViewItem & item, unsigned int model_column )
 {
-    int view_column = -1;
-    unsigned int n_col = m_owner->GetColumnCount();
-    for (unsigned i = 0; i < n_col; i++)
-    {
-        wxDataViewColumn *column = m_owner->GetColumn( i );
-        if (column->GetModelColumn() == model_column)
-        {
-            view_column = (int) i;
-            break;
-        }
-    }
-    if (view_column == -1)
+    int view_column = m_owner->GetModelColumnIndex(model_column);
+    if ( view_column == wxNOT_FOUND )
         return false;
 
     // NOTE: to be valid, we cannot use e.g. INT_MAX - 1
@@ -4730,6 +4720,14 @@ void wxDataViewCtrl::OnColumnsCountChanged()
 
 void wxDataViewCtrl::DoSetExpanderColumn()
 {
+    wxDataViewColumn* column = GetExpanderColumn();
+    if ( column )
+    {
+        int index = GetColumnIndex(column);
+        if ( index != wxNOT_FOUND )
+            InvalidateColBestWidth(index);
+    }
+
     m_clientArea->UpdateDisplay();
 }
 
@@ -4780,6 +4778,18 @@ int wxDataViewCtrl::GetColumnIndex(const wxDataViewColumn *column) const
     return wxNOT_FOUND;
 }
 
+int wxDataViewCtrl::GetModelColumnIndex( unsigned int model_column ) const
+{
+    const int count = GetColumnCount();
+    for ( int index = 0; index < count; index++ )
+    {
+        wxDataViewColumn* column = GetColumn(index);
+        if ( column->GetModelColumn() == model_column )
+            return index;
+    }
+    return wxNOT_FOUND;
+}
+
 unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
 {
     if ( m_colsBestWidths[idx].width != 0 )
@@ -4797,21 +4807,23 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
                            wxDataViewMainWindow *clientArea,
                            wxDataViewRenderer *renderer,
                            const wxDataViewModel *model,
-                           unsigned column,
+                           unsigned int model_column,
                            int expanderSize)
             : m_width(0),
               m_dvc(dvc),
               m_clientArea(clientArea),
               m_renderer(renderer),
               m_model(model),
-              m_column(column),
+              m_model_column(model_column),
               m_expanderSize(expanderSize)
 
         {
+            int index = dvc->GetModelColumnIndex( model_column );
+            wxDataViewColumn* column = index == wxNOT_FOUND ? NULL : dvc->GetColumn(index);
             m_isExpanderCol =
                 !clientArea->IsList() &&
                 (column == 0 ||
-                 GetExpanderColumnOrFirstOne(const_cast<wxDataViewCtrl*>(dvc)) == dvc->GetColumnAt(column));
+                 GetExpanderColumnOrFirstOne(const_cast<wxDataViewCtrl*>(dvc)) == column );
         }
 
         void UpdateWithWidth(int width)
@@ -4835,7 +4847,7 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
                 item = m_clientArea->GetItemByRow(row);
             }
 
-            m_renderer->PrepareForItem(m_model, item, m_column);
+            m_renderer->PrepareForItem(m_model, item, m_model_column);
             m_width = wxMax(m_width, m_renderer->GetSize().x + indent);
         }
 
@@ -4847,7 +4859,7 @@ unsigned int wxDataViewCtrl::GetBestColumnWidth(int idx) const
         wxDataViewMainWindow *m_clientArea;
         wxDataViewRenderer *m_renderer;
         const wxDataViewModel *m_model;
-        unsigned m_column;
+        unsigned m_model_column;
         bool m_isExpanderCol;
         int m_expanderSize;
     };
