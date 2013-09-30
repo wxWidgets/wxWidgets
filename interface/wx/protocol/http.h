@@ -100,7 +100,7 @@ public:
         @param method
             HTTP method name, e.g. "GET".
 
-        @since 3.0.0
+        @since 3.0
 
         @see SetPostBuffer(), SetPostText()
     */
