@@ -731,11 +731,13 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             return false;
         }
 
+#if wxUSE_OWNER_DRAWN
         if ( makeItemOwnerDrawn )
         {
             SetOwnerDrawnMenuItem(GetHmenu(), pos,
                                   reinterpret_cast<ULONG_PTR>(pItem), TRUE);
         }
+#endif
     }
 
 
