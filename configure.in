@@ -2104,7 +2104,7 @@ if test "$wxUSE_STL" = "yes"; then
     fi
 fi
 
-AC_CHECK_HEADERS([type_traits tr1/type_traits])
+AC_CHECK_HEADERS([type_traits tr1/type_traits], break)
 
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
