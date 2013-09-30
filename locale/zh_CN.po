@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-08-23 18:18+0200\n"
-"PO-Revision-Date: 2012-12-31 12:24+0800\n"
-"Last-Translator: William Jiang <williamroot777@qq.com>\n"
+"PO-Revision-Date: 2013-09-27 10:30-0800\n"
+"Last-Translator: Jiawei Huang <hjiawei@gmail.com>\n"
 "Language-Team: wxWidgets tranlators <wx-translators@wxwidgets.org>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -38,9 +38,9 @@ msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              谢谢，我们对您遇到的不便表示抱歉！\n"
 
 #: ../src/common/prntbase.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "页 %d / %d"
+msgstr "(复制 %d / %d)"
 
 #: ../src/common/log.cpp:427
 #, c-format
@@ -129,9 +129,9 @@ msgid "%s Information"
 msgstr "%s 信息"
 
 #: ../src/generic/preferencesg.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "偏好设置"
+msgstr "%s 偏好设置"
 
 #: ../src/generic/logg.cpp:234
 #, c-format
@@ -1155,7 +1155,7 @@ msgstr "加入"
 
 #: ../src/richtext/richtextbuffer.cpp:10648
 msgid "Add column"
-msgstr ""
+msgstr "添加列"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1163,7 +1163,7 @@ msgstr "把当前页加到书签中"
 
 #: ../src/richtext/richtextbuffer.cpp:10590
 msgid "Add row"
-msgstr ""
+msgstr "添加行"
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1184,15 +1184,15 @@ msgstr "正在添加卷 %s"
 
 #: ../src/osx/carbon/dataview.cpp:1933
 msgid "Adding flavor TEXT failed"
-msgstr ""
+msgstr "添加风格 TEXT 失败"
 
 #: ../src/osx/carbon/dataview.cpp:1954
 msgid "Adding flavor utxt failed"
-msgstr ""
+msgstr "添加风格 utxt 失败"
 
 #: ../src/common/preferencescmn.cpp:41
 msgid "Advanced"
-msgstr ""
+msgstr "高级"
 
 #: ../src/richtext/richtextliststylepage.cpp:435
 msgid "After a paragraph:"
@@ -1554,7 +1554,7 @@ msgstr "无法创建注册键 '%s'"
 
 #: ../src/msw/thread.cpp:696 ../src/os2/thread.cpp:494
 msgid "Can't create thread"
-msgstr "无法创建进程"
+msgstr "无法创建线程"
 
 #: ../src/msw/window.cpp:3783
 #, c-format
@@ -1695,16 +1695,16 @@ msgstr "无法枚举目录 '%s' 中的文件"
 #: ../src/msw/dialup.cpp:542
 #, c-format
 msgid "Cannot find active dialup connection: %s"
-msgstr "找不到活动的拨号连接: %s"
+msgstr "无法找到活动的拨号连接: %s"
 
 #: ../src/msw/dialup.cpp:848
 msgid "Cannot find the location of address book file"
-msgstr "找不到地址簿文件的位置"
+msgstr "无法找到地址簿文件的位置"
 
 #: ../src/msw/ole/automtn.cpp:562
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot get an active instance of \"%s\""
-msgstr "找不到活动的拨号连接: %s"
+msgstr "无法获得 \"%s\" 的活动实体"
 
 #: ../src/unix/threadpsx.cpp:1030
 #, c-format
@@ -1790,9 +1790,9 @@ msgid "Cannot resume thread %lu"
 msgstr "无法恢复线程 %lu"
 
 #: ../src/msw/thread.cpp:923
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "无法恢复线程 %x"
+msgstr "无法恢复线程 %lx"
 
 #: ../src/unix/threadpsx.cpp:1011
 msgid "Cannot retrieve thread scheduling policy."
@@ -1813,9 +1813,9 @@ msgid "Cannot suspend thread %lu"
 msgstr "无法挂起线程 %lu"
 
 #: ../src/msw/thread.cpp:907
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
-msgstr "无法挂起线程 %x"
+msgstr "无法挂起线程 %lx"
 
 #: ../src/msw/thread.cpp:830
 msgid "Cannot wait for thread termination"
@@ -2356,9 +2356,8 @@ msgid "Couldn't create a timer"
 msgstr "无法创建计时器"
 
 #: ../src/osx/carbon/overlay.cpp:122
-#, fuzzy
 msgid "Couldn't create the overlay window"
-msgstr "无法创建计时器"
+msgstr "无法创建 overlay 窗口"
 
 #: ../src/common/translation.cpp:2024
 #, fuzzy
@@ -2372,7 +2371,7 @@ msgstr "在动态连接库中找不到符号 '%s'"
 
 #: ../src/gtk/print.cpp:2023
 msgid "Couldn't get hatch style from wxBrush."
-msgstr ""
+msgstr "无法从 wxBrush 获取阴影样式。"
 
 #: ../src/msw/thread.cpp:950
 msgid "Couldn't get the current thread pointer"
@@ -2398,9 +2397,8 @@ msgid "Couldn't load sound data from '%s'."
 msgstr "无法从 '%s' 中的读取声音数据。"
 
 #: ../src/msw/dirdlg.cpp:441
-#, fuzzy
 msgid "Couldn't obtain folder name"
-msgstr "无法创建计时器"
+msgstr "无法获取文件夹名称"
 
 #: ../src/unix/sound_sdl.cpp:229
 #, c-format
@@ -2431,9 +2429,9 @@ msgid "Couldn't terminate thread"
 msgstr "无法终止线程"
 
 #: ../src/common/xtistrm.cpp:170
-#, fuzzy, c-format
+#, c-format
 msgid "Create Parameter %s not found in declared RTTI Parameters"
-msgstr "在声明的RTTI参数里找不到创建参数"
+msgstr "在声明的 RTTI 参数里找不到创建参数 %s"
 
 #: ../src/generic/dirdlgg.cpp:317
 msgid "Create directory"
@@ -2587,18 +2585,16 @@ msgid "Delete Text"
 msgstr "删除文字"
 
 #: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
 msgid "Delete column"
-msgstr "删除选区"
+msgstr "删除列"
 
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "删除项"
 
 #: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
 msgid "Delete row"
-msgstr "删除"
+msgstr "删除行"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -2660,9 +2656,9 @@ msgid "Directory '%s' couldn't be created"
 msgstr "无法创建目录 '%s'"
 
 #: ../src/common/filefn.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' couldn't be deleted"
-msgstr "目录'%s'无法被创建"
+msgstr "目录'%s'无法被删除"
 
 #: ../src/generic/dirdlgg.cpp:233
 msgid "Directory does not exist"
@@ -2706,9 +2702,9 @@ msgstr ""
 "%s %1"
 
 #: ../src/common/docview.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to save changes to %s?"
-msgstr "你想保存对文档%s的修改?"
+msgstr "你想保存对文档 %s 的修改吗?"
 
 #: ../src/common/prntbase.cpp:525
 msgid "Document:"
@@ -2798,7 +2794,6 @@ msgid "Edit item"
 msgstr "编辑项"
 
 #: ../include/wx/generic/progdlgg.h:84
-#, fuzzy
 msgid "Elapsed time:"
 msgstr "用时: "
 
@@ -2811,9 +2806,8 @@ msgstr "启用高度值。"
 
 #: ../src/richtext/richtextsizepage.cpp:435
 #: ../src/richtext/richtextsizepage.cpp:437
-#, fuzzy
 msgid "Enable the maximum width value."
-msgstr "无法设定最大宽度。"
+msgstr "启用最大宽度值。"
 
 #: ../src/richtext/richtextsizepage.cpp:408
 #: ../src/richtext/richtextsizepage.cpp:410
@@ -2822,9 +2816,8 @@ msgstr "启用最小高度值。"
 
 #: ../src/richtext/richtextsizepage.cpp:381
 #: ../src/richtext/richtextsizepage.cpp:383
-#, fuzzy
 msgid "Enable the minimum width value."
-msgstr "无法设定最小宽度。"
+msgstr "启用最小宽度值。"
 
 #: ../src/richtext/richtextsizepage.cpp:316
 #: ../src/richtext/richtextsizepage.cpp:318
@@ -2842,9 +2835,8 @@ msgid "Enables a background colour."
 msgstr "启用背景颜色。"
 
 #: ../src/richtext/richtextstyledlg.cpp:931
-#, fuzzy
 msgid "Enter a box style name"
-msgstr "输入新样式名"
+msgstr "输入文字方块样式名称"
 
 #: ../src/richtext/richtextstyledlg.cpp:603
 msgid "Enter a character style name"
@@ -2895,18 +2887,16 @@ msgid "Error closing epoll descriptor"
 msgstr "关闭 epoll 描述符时发生错误"
 
 #: ../src/unix/fswatcher_kqueue.cpp:114
-#, fuzzy
 msgid "Error closing kqueue instance"
-msgstr "创建目录错误"
+msgstr "关闭 kqueue 实例时发生错误"
 
 #: ../src/generic/dirdlgg.cpp:251
 msgid "Error creating directory"
 msgstr "创建目录错误"
 
 #: ../src/common/imagbmp.cpp:1103
-#, fuzzy
 msgid "Error in reading image DIB."
-msgstr "读图像DIB错误."
+msgstr "读取图像 DIB 错误。"
 
 #: ../src/propgrid/propgrid.cpp:6563
 #, c-format
@@ -2934,9 +2924,8 @@ msgid "Esperanto (ISO-8859-3)"
 msgstr "世界语 (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
-#, fuzzy
 msgid "Estimated time:"
-msgstr "预期时间: "
+msgstr "预期时间:"
 
 #: ../src/unix/fswatcher_inotify.cpp:639
 msgid "Event queue overflowed"
@@ -2984,13 +2973,12 @@ msgid "F"
 msgstr "F"
 
 #: ../src/propgrid/advprops.cpp:640
-#, fuzzy
 msgid "Face Name"
-msgstr "新名称"
+msgstr "字体名称"
 
 #: ../src/unix/snglinst.cpp:269
 msgid "Failed to access lock file."
-msgstr "访问锁文件失败。"
+msgstr "无法访问锁文件。"
 
 #: ../src/unix/epolldispatcher.cpp:116
 #, c-format
@@ -3000,7 +2988,7 @@ msgstr "无法将描述符 %d 加到 epoll 描述符 %d"
 #: ../src/msw/dib.cpp:548
 #, c-format
 msgid "Failed to allocate %luKb of memory for bitmap data."
-msgstr "为位图数据分配 %luKb 内存失败。"
+msgstr "无法为位图数据分配 %luKb 内存。"
 
 #: ../src/common/glcmn.cpp:87
 msgid "Failed to allocate colour for OpenGL"
@@ -3008,7 +2996,7 @@ msgstr "无法为 OpenGL 分配颜色"
 
 #: ../src/unix/displayx11.cpp:288
 msgid "Failed to change video mode"
-msgstr "改变视频模式失败。"
+msgstr "无法改变视频模式。"
 
 #: ../src/common/image.cpp:3139
 #, c-format
@@ -3022,21 +3010,21 @@ msgstr "无法清除调试报告目录 \"%s\""
 
 #: ../src/common/filename.cpp:211
 msgid "Failed to close file handle"
-msgstr "关闭文件句柄失败"
+msgstr "无法关闭文件句柄"
 
 #: ../src/unix/snglinst.cpp:334
 #, c-format
 msgid "Failed to close lock file '%s'"
-msgstr "关闭锁文件 '%s'失败"
+msgstr "无法关闭锁文件 '%s'"
 
 #: ../src/msw/clipbrd.cpp:115
 msgid "Failed to close the clipboard."
-msgstr "关闭剪贴板失败。"
+msgstr "无法关闭剪贴板。"
 
 #: ../src/x11/utils.cpp:204
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to close the display \"%s\""
-msgstr "关闭剪贴板失败."
+msgstr "无法关闭显示 \"%s\""
 
 #: ../src/msw/dialup.cpp:818
 msgid "Failed to connect: missing username/password."
@@ -3058,38 +3046,38 @@ msgstr "无法将对话框内容复制到剪贴板。"
 #: ../src/msw/registry.cpp:691
 #, c-format
 msgid "Failed to copy registry value '%s'"
-msgstr "复制注册键值失败 '%s'"
+msgstr "无法复制注册键值 '%s'"
 
 #: ../src/msw/registry.cpp:700
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
-msgstr "把注册键内容从 '%s' 复制到 '%s' 失败。"
+msgstr "无法把注册键内容从 '%s' 复制到 '%s'。"
 
 #: ../src/common/filefn.cpp:1058
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
-msgstr "复制文件 '%s' 至 '%s' 失败"
+msgstr "无法复制文件 '%s' 至 '%s'"
 
 #: ../src/msw/registry.cpp:678
 #, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
-msgstr "复制注册表子键 '%s' 至 '%s' 失败。"
+msgstr "无法复制注册表子键 '%s' 至 '%s'。"
 
 #: ../src/msw/dde.cpp:1073
 msgid "Failed to create DDE string"
-msgstr "创建 DDE 字符串失败"
+msgstr "无法创建 DDE 字符串"
 
 #: ../src/msw/mdi.cpp:590
 msgid "Failed to create MDI parent frame."
-msgstr "创建 MDI 父框架失败。"
+msgstr "无法创建 MDI 父框架。"
 
 #: ../src/common/filename.cpp:1080
 msgid "Failed to create a temporary file name"
-msgstr "创建临时文件名失败"
+msgstr "无法创建临时文件名"
 
 #: ../src/msw/utilsexc.cpp:235
 msgid "Failed to create an anonymous pipe"
-msgstr "创建匿名管道失败"
+msgstr "无法创建匿名管道"
 
 #: ../src/msw/ole/automtn.cpp:522
 #, c-format
@@ -3099,11 +3087,11 @@ msgstr "无法创建实例 \"%s\""
 #: ../src/msw/dde.cpp:442
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
-msgstr "创建到服务器 '%s' 的关于主题 '%s' 的连接失败"
+msgstr "无法创建到服务器 '%s' 关于主题 '%s' 的连接"
 
 #: ../src/msw/cursor.cpp:212
 msgid "Failed to create cursor."
-msgstr "创建游标失败。"
+msgstr "无法创建游标。"
 
 #: ../src/common/debugrpt.cpp:209
 #, c-format
@@ -3116,7 +3104,7 @@ msgid ""
 "Failed to create directory '%s'\n"
 "(Do you have the required permissions?)"
 msgstr ""
-"创建目录 '%s' 失败\n"
+"无法创建目录 '%s'\n"
 "(您是否有所需的权限?)"
 
 #: ../src/unix/epolldispatcher.cpp:84
@@ -3126,12 +3114,12 @@ msgstr "无法创建 epoll 描述符"
 #: ../src/msw/mimetype.cpp:198
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
-msgstr "为 '%s' 文件创建注册条目失败。"
+msgstr "无法为 '%s' 文件创建注册条目。"
 
 #: ../src/msw/fdrepdlg.cpp:442
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
-msgstr "创建标准\"查找/替换\"对话框失败 (错误号 %d)"
+msgstr "无法创建标准\"查找/替换\"对话框 (错误号 %d)"
 
 #: ../src/unix/wakeuppipe.cpp:52
 #, fuzzy
@@ -3141,29 +3129,29 @@ msgstr "创建状态条失败."
 #: ../src/html/winpars.cpp:739
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
-msgstr "按编码 %s 显示HTML文档失败"
+msgstr "无法按编码 %s 显示 HTML 文档"
 
 #: ../src/msw/clipbrd.cpp:127
 msgid "Failed to empty the clipboard."
-msgstr "清空剪贴板失败"
+msgstr "无法清空剪贴板"
 
 #: ../src/unix/displayx11.cpp:265
 msgid "Failed to enumerate video modes"
-msgstr "枚举视频模式失败"
+msgstr "无法枚举视频模式"
 
 #: ../src/msw/dde.cpp:727
 msgid "Failed to establish an advise loop with DDE server"
-msgstr "在DDE服务器建立advise循环失败"
+msgstr "无法在 DDE 服务器建立 advise 循环"
 
 #: ../src/msw/dialup.cpp:650 ../src/msw/dialup.cpp:884
 #, c-format
 msgid "Failed to establish dialup connection: %s"
-msgstr "建立拨号连接失败: %s"
+msgstr "无法建立拨号连接: %s"
 
 #: ../src/unix/utilsunx.cpp:617
 #, c-format
 msgid "Failed to execute '%s'\n"
-msgstr "执行 '%s' 失败\n"
+msgstr "无法执行 '%s'\n"
 
 #: ../src/common/debugrpt.cpp:725
 msgid "Failed to execute curl, please install it in PATH."
@@ -3182,7 +3170,7 @@ msgstr "无法找到匹配的正则表达式: %s"
 #: ../src/msw/dialup.cpp:716
 #, c-format
 msgid "Failed to get ISP names: %s"
-msgstr "获取 ISP 名失败: %s"
+msgstr "无法获取 ISP 名称: %s"
 
 #: ../src/msw/ole/automtn.cpp:574
 #, fuzzy, c-format
@@ -3191,15 +3179,15 @@ msgstr "无法创建目录 \"%s\""
 
 #: ../src/msw/clipbrd.cpp:747
 msgid "Failed to get data from the clipboard"
-msgstr "从剪贴板获取数据失败"
+msgstr "无法从剪贴板获取数据"
 
 #: ../src/common/time.cpp:249
 msgid "Failed to get the local system time"
-msgstr "获取本地系统时间失败"
+msgstr "无法获取本地系统时间"
 
 #: ../src/common/filefn.cpp:1452
 msgid "Failed to get the working directory"
-msgstr "获取工作目录失败"
+msgstr "无法获取工作目录"
 
 #: ../src/univ/theme.cpp:113
 msgid "Failed to initialize GUI: no built-in themes found."
@@ -3207,7 +3195,7 @@ msgstr "无法初始化 GUI: 找不到内嵌的主题。"
 
 #: ../src/msw/helpchm.cpp:63
 msgid "Failed to initialize MS HTML Help."
-msgstr "初始化MS HTML 帮助失败。"
+msgstr "无法初始化 MS HTML 帮助。"
 
 #: ../src/msw/glcanvas.cpp:892
 msgid "Failed to initialize OpenGL"
@@ -3225,33 +3213,32 @@ msgstr "无法在控件中插入文字。"
 #: ../src/unix/snglinst.cpp:241
 #, c-format
 msgid "Failed to inspect the lock file '%s'"
-msgstr "检查锁文件 '%s' 失败"
+msgstr "无法检查锁文件 '%s'"
 
 #: ../src/unix/appunix.cpp:182
-#, fuzzy
 msgid "Failed to install signal handler"
-msgstr "关闭文件句柄失败."
+msgstr "无法安装信号句柄"
 
 #: ../src/unix/threadpsx.cpp:1162
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
-msgstr "合并线程失败，检测到潜在地内存丢失 - 请重新启动系统"
+msgstr "无法合并线程，检测到潜在地内存丢失 - 请重新启动系统"
 
 #: ../src/msw/utils.cpp:745
 #, c-format
 msgid "Failed to kill process %d"
-msgstr "终止进程 %d 失败"
+msgstr "无法终止进程 %d"
 
 #: ../src/common/image.cpp:2365
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "无法从数据流中载入图像 %d。"
+msgstr "无法从资源中载入图像 \"%s\"。"
 
 #: ../src/common/image.cpp:2374
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "无法从数据流中载入图像 %d。"
+msgstr "无法从资源中载入图标 \"%s\"。"
 
 #: ../src/common/iconbndl.cpp:182
 #, c-format
@@ -3264,23 +3251,23 @@ msgid "Failed to load image %d from stream."
 msgstr "无法从数据流中载入图像 %d。"
 
 #: ../src/common/image.cpp:2450 ../src/common/image.cpp:2469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load image from file \"%s\"."
-msgstr "从文件 \"%s\"读取元文件失败."
+msgstr "无法从文件 \"%s\" 中读取图像。"
 
 #: ../src/msw/enhmeta.cpp:97
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
-msgstr "从文件 \"%s\" 读取元文件失败。"
+msgstr "无法从文件 \"%s\" 读取元文件。"
 
 #: ../src/msw/volume.cpp:327
 msgid "Failed to load mpr.dll."
-msgstr "装载 mpr.dll 失败。"
+msgstr "无法装载 mpr.dll。"
 
 #: ../src/msw/utils.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load resource \"%s\"."
-msgstr "从文件 \"%s\"读取元文件失败."
+msgstr "无法载入资源 \"%s\"。"
 
 #: ../src/common/dynlib.cpp:100
 #, c-format
@@ -3288,14 +3275,14 @@ msgid "Failed to load shared library '%s'"
 msgstr "无法装载共享库 '%s'"
 
 #: ../src/msw/utils.cpp:1127
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lock resource \"%s\"."
-msgstr "锁定锁文件 '%s'失败"
+msgstr "无法锁定资源 \"%s\"。"
 
 #: ../src/unix/snglinst.cpp:198
 #, c-format
 msgid "Failed to lock the lock file '%s'"
-msgstr "锁定锁文件 '%s' 失败"
+msgstr "无法锁定锁文件 '%s'"
 
 #: ../src/unix/epolldispatcher.cpp:136
 #, c-format
@@ -3305,31 +3292,31 @@ msgstr "无法修改描述符 %d (于epoll描述符 %d)"
 #: ../src/common/filename.cpp:2681
 #, c-format
 msgid "Failed to modify file times for '%s'"
-msgstr "为 '%s' 修改文件时间失败"
+msgstr "无法为 '%s' 修改文件时间"
 
 #: ../src/common/selectdispatcher.cpp:252
 msgid "Failed to monitor I/O channels"
 msgstr "无法检测I/O通道"
 
 #: ../src/common/filename.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s' for reading"
-msgstr "打开 '%s'(为 %s) 失败"
+msgstr "无法读取文件 '%s'"
 
 #: ../src/common/filename.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s' for writing"
-msgstr "打开 '%s'(为 %s) 失败"
+msgstr "无法写入文件 '%s'"
 
 #: ../src/html/chm.cpp:141
 #, c-format
 msgid "Failed to open CHM archive '%s'."
-msgstr "打开CHM存档 '%s' 失败。"
+msgstr "无法打开 CHM 存档 '%s'。"
 
 #: ../src/common/utilscmn.cpp:1135
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open URL \"%s\" in default browser."
-msgstr "打开 '%s'(为 %s) 失败"
+msgstr "无法在默认浏览器中打开 URL \"%s\"。"
 
 #: ../include/wx/msw/private/fswatcher.h:92
 #, fuzzy, c-format
@@ -3343,11 +3330,11 @@ msgstr "打开 '%s'(为 %s) 失败"
 
 #: ../src/common/filename.cpp:1115
 msgid "Failed to open temporary file."
-msgstr "打开临时文件失败。"
+msgstr "无法打开临时文件。"
 
 #: ../src/msw/clipbrd.cpp:94
 msgid "Failed to open the clipboard."
-msgstr "打开剪贴板失败。"
+msgstr "无法打开剪贴板。"
 
 #: ../src/common/translation.cpp:1170
 #, c-format
@@ -3361,26 +3348,24 @@ msgstr "打开 '%s'(为 %s) 失败"
 
 #: ../src/msw/clipbrd.cpp:647
 msgid "Failed to put data on the clipboard"
-msgstr "把数据放到剪贴板失败"
+msgstr "无法把数据放到剪贴板"
 
 #: ../src/unix/snglinst.cpp:278
 msgid "Failed to read PID from lock file."
-msgstr "从锁文件读取 PID 失败。"
+msgstr "无法从锁文件读取 PID。"
 
 #: ../src/common/fileconf.cpp:464
-#, fuzzy
 msgid "Failed to read config options."
-msgstr "读配置选项错误."
+msgstr "无法读配置选项。"
 
 #: ../src/common/docview.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read document from the file \"%s\"."
-msgstr "从文件 \"%s\"读取元文件失败."
+msgstr "无法从文件 \"%s\" 中读取文档。"
 
 #: ../src/dfb/evtloop.cpp:98
-#, fuzzy
 msgid "Failed to read event from DirectFB pipe"
-msgstr "从锁文件读取PID失败."
+msgstr "无法从 DirectFB 管道中读取事件"
 
 #: ../src/unix/wakeuppipe.cpp:120
 #, fuzzy
@@ -3389,21 +3374,21 @@ msgstr "从锁文件读取PID失败."
 
 #: ../src/unix/utilsunx.cpp:685
 msgid "Failed to redirect child process input/output"
-msgstr "重定向子过程输入/输出失败"
+msgstr "无法重定向子过程输入/输出"
 
 #: ../src/msw/utilsexc.cpp:697
 msgid "Failed to redirect the child process IO"
-msgstr "重定向子过程IO失败"
+msgstr "无法重定向子过程 IO"
 
 #: ../src/msw/dde.cpp:293
 #, c-format
 msgid "Failed to register DDE server '%s'"
-msgstr "注册DDE服务器 '%s' 失败"
+msgstr "无法注册 DDE 服务器 '%s'"
 
 #: ../src/common/fontmap.cpp:245
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
-msgstr "回忆字符集 '%s' 编码失败。"
+msgstr "无法记忆字符集 '%s' 的编码。"
 
 #: ../src/common/debugrpt.cpp:227
 #, c-format
@@ -3418,12 +3403,12 @@ msgstr "无法删除锁文件 '%s'"
 #: ../src/unix/snglinst.cpp:288
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr "删除过期的锁文件 '%s' 失败。"
+msgstr "无法删除过期的锁文件 '%s'。"
 
 #: ../src/msw/registry.cpp:528
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
-msgstr "将注册值 '%s' 重命名为 '%s' 失败。"
+msgstr "无法将注册值 '%s' 重命名为 '%s'。"
 
 #: ../src/common/filefn.cpp:1168
 #, c-format
@@ -3435,24 +3420,24 @@ msgstr "无法将文件'%s' 重命名为 '%s'，因为目标文件已存在。"
 #: ../src/msw/registry.cpp:633
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
-msgstr "将注册键 '%s' 重命名为 '%s' 失败。"
+msgstr "无法将注册键 '%s' 重命名为 '%s'。"
 
 #: ../src/msw/clipbrd.cpp:497
 msgid "Failed to retrieve data from the clipboard."
-msgstr "从剪贴板检取数据失败。"
+msgstr "无法从剪贴板检取数据。"
 
 #: ../src/common/filename.cpp:2777
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
-msgstr "提取 '%s' 文件时间失败"
+msgstr "无法提取 '%s' 文件时间"
 
 #: ../src/msw/dialup.cpp:487
 msgid "Failed to retrieve text of RAS error message"
-msgstr "提取 RAS 错误消息正文失败"
+msgstr "无法提取 RAS 错误消息正文"
 
 #: ../src/msw/clipbrd.cpp:784
 msgid "Failed to retrieve the supported clipboard formats"
-msgstr "提取支持的剪贴板格式失败"
+msgstr "无法提取支持的剪贴板格式"
 
 #: ../src/common/docview.cpp:649
 #, fuzzy, c-format
@@ -3462,34 +3447,33 @@ msgstr "将位图图像保存至文件 \"%s\"失败."
 #: ../src/msw/dib.cpp:326
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
-msgstr "将位图图像保存至文件 \"%s\" 失败。"
+msgstr "无法将位图图像保存至文件 \"%s\"。"
 
 #: ../src/msw/dde.cpp:768
 msgid "Failed to send DDE advise notification"
-msgstr "发送 DDE advise 通知失败"
+msgstr "无法发送 DDE advise 通知"
 
 #: ../src/common/ftp.cpp:404
 #, c-format
 msgid "Failed to set FTP transfer mode to %s."
-msgstr "设置 FTP 传输模式为 %s 时失败。"
+msgstr "无法设置 FTP 传输模式为 %s。"
 
 #: ../src/msw/clipbrd.cpp:373
 msgid "Failed to set clipboard data."
-msgstr "设置剪贴板数据失败。"
+msgstr "无法设置剪贴板数据。"
 
 #: ../src/unix/snglinst.cpp:181
 #, c-format
 msgid "Failed to set permissions on lock file '%s'"
-msgstr "在锁文件 '%s' 上设置许可权限时失败"
+msgstr "无法在锁文件 '%s' 上设置许可权限"
 
 #: ../src/unix/utilsunx.cpp:674
-#, fuzzy
 msgid "Failed to set process priority"
-msgstr "设置线程优先级 %d 失败。"
+msgstr "无法设置线程优先级"
 
 #: ../src/common/file.cpp:576
 msgid "Failed to set temporary file permissions"
-msgstr "设置临时文件的许可权限时失败"
+msgstr "无法设置临时文件的许可权限"
 
 #: ../src/gtk/textctrl.cpp:1058
 #, fuzzy
@@ -3504,7 +3488,7 @@ msgstr "设置线程优先级 %d 失败。"
 #: ../src/unix/threadpsx.cpp:1377 ../src/unix/threadpsx.cpp:1387
 #, c-format
 msgid "Failed to set thread priority %d."
-msgstr "设置线程优先级 %d 失败。"
+msgstr "无法设置线程优先级 %d。"
 
 #: ../src/unix/utilsunx.cpp:791
 msgid "Failed to set up non-blocking pipe, the program might hang."
@@ -3513,7 +3497,7 @@ msgstr "无法设置非闭塞通道，程序可能挂起。"
 #: ../src/common/fs_mem.cpp:261
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
-msgstr "将图像 '%s' 存到内存 VFS 失败！"
+msgstr "无法将图像 '%s' 存到内存 VFS！"
 
 #: ../src/dfb/evtloop.cpp:170
 msgid "Failed to switch DirectFB pipe to non-blocking mode"
@@ -3525,16 +3509,16 @@ msgstr "无法将唤醒管道切换至非闭塞模式"
 
 #: ../src/unix/threadpsx.cpp:1569
 msgid "Failed to terminate a thread."
-msgstr "终止线程失败。"
+msgstr "无法终止线程。"
 
 #: ../src/msw/dde.cpp:746
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr "终止与 DDE 服务器的 advise 循环失败"
+msgstr "无法终止与 DDE 服务器的 advise 循环"
 
 #: ../src/msw/dialup.cpp:959
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
-msgstr "终止拨号连接失败: %s"
+msgstr "无法终止拨号连接: %s"
 
 #: ../src/common/filename.cpp:2696
 #, c-format
@@ -3544,12 +3528,12 @@ msgstr "对文件 '%s' 进行 touch 操作时失败"
 #: ../src/unix/snglinst.cpp:328
 #, c-format
 msgid "Failed to unlock lock file '%s'"
-msgstr "对已锁文件 '%s' 解锁失败"
+msgstr "无法对已锁文件 '%s' 解锁"
 
 #: ../src/msw/dde.cpp:314
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "撤消 DDE 服务器 '%s' 注册失败"
+msgstr "无法撤消 DDE 服务器 '%s' 的注册"
 
 #: ../src/unix/epolldispatcher.cpp:155
 #, fuzzy, c-format
@@ -3563,12 +3547,12 @@ msgstr "无法更新用户配置文件。"
 #: ../src/common/debugrpt.cpp:738
 #, c-format
 msgid "Failed to upload the debug report (error code %d)."
-msgstr "上传调试报告失败 (错误号 %d)。"
+msgstr "无法上传调试报告 (错误号 %d)。"
 
 #: ../src/unix/snglinst.cpp:168
 #, c-format
 msgid "Failed to write to lock file '%s'"
-msgstr "写锁文件 '%s' 失败"
+msgstr "无法写入锁文件 '%s'"
 
 #: ../src/propgrid/propgrid.cpp:172
 msgid "False"
@@ -3584,14 +3568,14 @@ msgid "File"
 msgstr "文件"
 
 #: ../src/common/docview.cpp:666
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" could not be opened for reading."
-msgstr "打开 '%s'(为 %s) 失败"
+msgstr "文件 \"%s\" 无法开启为读取模式。"
 
 #: ../src/common/docview.cpp:643
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" could not be opened for writing."
-msgstr "打开 '%s'(为 %s) 失败"
+msgstr "文件 \"%s\" 无法开启为写入模式。"
 
 #: ../src/gtk/filedlg.cpp:56
 #, c-format
@@ -3608,14 +3592,14 @@ msgstr ""
 "真的需要替换它?"
 
 #: ../src/common/filefn.cpp:1206
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be removed"
-msgstr "文件不能被装载."
+msgstr "文件 '%s' 无法被移除"
 
 #: ../src/common/filefn.cpp:1187
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' couldn't be renamed '%s'"
-msgstr "文件不能被装载."
+msgstr "文件 '%s' 无法重命名为 '%s'"
 
 #: ../src/richtext/richtextctrl.cpp:2688 ../src/common/textcmn.cpp:921
 msgid "File couldn't be loaded."
@@ -3762,7 +3746,7 @@ msgstr "GTK+ 主题"
 
 #: ../src/common/preferencescmn.cpp:39
 msgid "General"
-msgstr ""
+msgstr "通用"
 
 #: ../src/common/prntbase.cpp:243
 msgid "Generic PostScript"
@@ -3885,9 +3869,9 @@ msgid "Help directory \"%s\" not found."
 msgstr "找不到帮助目录 \"%s\"。"
 
 #: ../src/generic/helpext.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid "Help file \"%s\" not found."
-msgstr "找不到域 '%s'的目录文件."
+msgstr "找不到帮助文件 \"%s\"。"
 
 #: ../src/html/helpctrl.cpp:63
 #, c-format
@@ -4030,14 +4014,14 @@ msgid "Image and mask have different sizes."
 msgstr "图像和掩码的大小不一致。"
 
 #: ../src/common/image.cpp:2609
-#, fuzzy, c-format
+#, c-format
 msgid "Image file is not of type %d."
-msgstr "图像文件的类型不是 %d."
+msgstr "图像文件的类型不是 %d。"
 
 #: ../src/common/image.cpp:2739
-#, fuzzy, c-format
+#, c-format
 msgid "Image is not of type %s."
-msgstr "图像文件的类型不是 %d."
+msgstr "图像的类型不是 %s。"
 
 #: ../src/msw/textctrl.cpp:399
 msgid ""
@@ -4159,7 +4143,7 @@ msgstr "无效的几何规格 '%s'"
 #: ../src/unix/fswatcher_inotify.cpp:298
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "无效的 \"%s\" inotify 事件"
 
 #: ../src/unix/snglinst.cpp:306
 #, c-format
@@ -4167,9 +4151,8 @@ msgid "Invalid lock file '%s'."
 msgstr "无效的锁文件 '%s'。"
 
 #: ../src/common/translation.cpp:1111
-#, fuzzy
 msgid "Invalid message catalog."
-msgstr "'%s' 不是有效的消息目录."
+msgstr "无效的消息目录。"
 
 #: ../src/common/xtistrm.cpp:409 ../src/common/xtistrm.cpp:424
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
@@ -4721,9 +4704,8 @@ msgid "MacVietnamese"
 msgstr "MacVietnamese"
 
 #: ../src/propgrid/advprops.cpp:2024
-#, fuzzy
 msgid "Make a selection:"
-msgstr "选段"
+msgstr "请选择:"
 
 #: ../src/richtext/richtextformatdlg.cpp:362
 #: ../src/richtext/richtextmarginspage.cpp:172
@@ -4952,9 +4934,8 @@ msgstr ""
 "(否则该编码的文本将无法正确显示)?"
 
 #: ../src/generic/animateg.cpp:142
-#, fuzzy
 msgid "No handler found for animation type."
-msgstr "没有找到图像类型处理器."
+msgstr "没有找到动画类型处理器。"
 
 #: ../src/common/image.cpp:2591
 msgid "No handler found for image type."
@@ -5023,9 +5004,9 @@ msgid "Normal font:"
 msgstr "正常字体:"
 
 #: ../src/propgrid/props.cpp:887
-#, fuzzy, c-format
+#, c-format
 msgid "Not %s"
-msgstr "关于(&A)"
+msgstr "非 %s"
 
 #: ../include/wx/filename.h:586 ../include/wx/filename.h:591
 msgid "Not available"
@@ -5599,7 +5580,7 @@ msgstr "程序渲染器无法渲染该值；类型为:"
 
 #: ../src/common/prntbase.cpp:528
 msgid "Progress:"
-msgstr ""
+msgstr "进度:"
 
 #: ../src/common/stockitem.cpp:184
 msgid "Properties"
@@ -5643,9 +5624,8 @@ msgid "RIGHT"
 msgstr "RIGHT"
 
 #: ../src/common/accelcmn.cpp:327
-#, fuzzy
 msgid "RawCtrl+"
-msgstr "Ctrl+"
+msgstr "RawCtrl+"
 
 #: ../src/common/ffile.cpp:113 ../src/common/ffile.cpp:134
 #, c-format
@@ -5709,9 +5689,8 @@ msgid "Relevant entries:"
 msgstr "相关条目:"
 
 #: ../include/wx/generic/progdlgg.h:86
-#, fuzzy
 msgid "Remaining time:"
-msgstr "剩余时间 : "
+msgstr "剩余时间:"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Remove"
@@ -6190,7 +6169,6 @@ msgid "Symbol &font:"
 msgstr "符号样式(&F)"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
 msgstr "符号"
 
@@ -6803,12 +6781,11 @@ msgstr "无法添加 kqueue watch"
 
 #: ../include/wx/msw/private/fswatcher.h:142
 msgid "Unable to associate handle with I/O completion port"
-msgstr ""
+msgstr "无法将句柄与 I/O 完成端口相关联"
 
 #: ../include/wx/msw/private/fswatcher.h:125
-#, fuzzy
 msgid "Unable to close I/O completion port handle"
-msgstr "关闭文件句柄失败."
+msgstr "无法关闭 I/O 完成口的句柄"
 
 #: ../src/unix/fswatcher_inotify.cpp:97
 msgid "Unable to close inotify instance"
@@ -6825,14 +6802,12 @@ msgid "Unable to close the handle for '%s'"
 msgstr "无法关闭 '%s' 的句柄。"
 
 #: ../include/wx/msw/private/fswatcher.h:240
-#, fuzzy
 msgid "Unable to create I/O completion port"
-msgstr "创建游标失败."
+msgstr "无法创建 I/O 完成口"
 
 #: ../src/msw/fswatcher.cpp:84
-#, fuzzy
 msgid "Unable to create IOCP worker thread"
-msgstr "创建 MDI 父框架失败."
+msgstr "无法创建 IOCP 工作线程"
 
 #: ../src/unix/fswatcher_inotify.cpp:74
 msgid "Unable to create inotify instance"
@@ -6844,15 +6819,15 @@ msgstr "无法创建 kqueue 实例"
 
 #: ../include/wx/msw/private/fswatcher.h:229
 msgid "Unable to dequeue completion packet"
-msgstr ""
+msgstr "无法移出完成封包"
 
 #: ../src/unix/fswatcher_kqueue.cpp:185
 msgid "Unable to get events from kqueue"
-msgstr ""
+msgstr "无法从 kqueue 中获取事件"
 
 #: ../src/osx/carbon/dataview.cpp:1903
 msgid "Unable to handle native drag&drop data"
-msgstr ""
+msgstr "无法处理原生的拖放数据"
 
 #: ../src/gtk/app.cpp:439
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
@@ -6878,7 +6853,7 @@ msgstr "无法异步地播放声音。"
 
 #: ../include/wx/msw/private/fswatcher.h:207
 msgid "Unable to post completion status"
-msgstr ""
+msgstr "无法贴上完成状态"
 
 #: ../src/unix/fswatcher_inotify.cpp:530
 msgid "Unable to read from inotify descriptor"
@@ -7143,7 +7118,7 @@ msgstr "未知属性 %s"
 #: ../src/common/imagtiff.cpp:532
 #, c-format
 msgid "Unknown TIFF resolution unit %d ignored"
-msgstr ""
+msgstr "未知 TIFF 解析度单位 %d，忽略之"
 
 #: ../src/osx/carbon/dataview.cpp:1978
 msgid "Unknown data format"
@@ -7220,7 +7195,7 @@ msgstr "大写字母"
 #: ../src/richtext/richtextliststylepage.cpp:485
 #: ../src/richtext/richtextbulletspage.cpp:290
 msgid "Upper case roman numerals"
-msgstr ""
+msgstr "大写罗马数字"
 
 #: ../src/common/cmdline.cpp:1155
 #, c-format
@@ -7232,7 +7207,7 @@ msgstr "用法: %s"
 #: ../src/richtext/richtextliststylepage.cpp:358
 #: ../src/richtext/richtextliststylepage.cpp:360
 msgid "Use the current alignment setting."
-msgstr ""
+msgstr "使用当前的对齐设置。"
 
 #: ../src/osx/carbon/dataview.cpp:2658 ../src/osx/carbon/dataview.cpp:2723
 msgid "Valid pointer to native data view control does not exist"
@@ -7474,7 +7449,7 @@ msgstr "写文件 '%s' 错误"
 #: ../src/xml/xml.cpp:844
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
-msgstr "XML解析错误: '%s' 位于 行 %d"
+msgstr "XML 解析错误: '%s'，位于行 %d"
 
 #: ../src/common/xpmdecod.cpp:796
 msgid "XPM: Malformed pixel data!"
@@ -7496,12 +7471,12 @@ msgstr "XPM: 错误的颜色定义 '%s'，位于行 %d！"
 
 #: ../src/common/xpmdecod.cpp:755
 msgid "XPM: no colors left to use for mask!"
-msgstr ""
+msgstr "XPM: 没有剩下可供选择的掩码颜色！"
 
 #: ../src/common/xpmdecod.cpp:782
 #, c-format
 msgid "XPM: truncated image data at line %d!"
-msgstr ""
+msgstr "XPM: 图像数据被截断，位于行 %d！"
 
 #: ../include/wx/msgdlg.h:271 ../src/common/stockitem.cpp:206
 #: ../src/motif/msgdlg.cpp:196
@@ -7514,7 +7489,7 @@ msgstr "你无法清除未初始化的 overlay。"
 
 #: ../src/osx/carbon/overlay.cpp:107 ../src/dfb/overlay.cpp:61
 msgid "You cannot Init an overlay twice"
-msgstr "你不能初始化overlay两次"
+msgstr "你不能初始化 overlay 两次"
 
 #: ../src/generic/dirdlgg.cpp:316
 msgid "You cannot add a new directory to this section."
@@ -8093,7 +8068,7 @@ msgstr "进程上下文描述"
 #: ../src/richtext/richtextfontpage.cpp:186
 #: ../src/richtext/richtextfontpage.cpp:189
 msgid "pt"
-msgstr ""
+msgstr "点"
 
 #: ../src/richtext/richtextfontpage.cpp:187
 #: ../src/richtext/richtextborderspage.cpp:279
@@ -8178,9 +8153,8 @@ msgid "px"
 msgstr "像素"
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgid "rawctrl"
-msgstr "ctrl"
+msgstr "rawctrl"
 
 #: ../src/html/chm.cpp:333
 msgid "read error"
