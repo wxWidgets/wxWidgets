@@ -147,7 +147,10 @@ compiler used.
 @itemdef{__EVC4__, Embedded Visual C++ 4 (can be only used for building wxWinCE)}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
-@itemdef{__MINGW32__, MinGW}
+@itemdef{__MINGW32__, Either MinGW32 or MinGW-w64 in either 32 or 64 bits}
+@itemdef{__MINGW32_TOOLCHAIN, MinGW32 only (32 bits only right now)}
+@itemdef{__MINGW64__, MinGW-w64 in 64 bit builds}
+@itemdef{__MINGW64_TOOLCHAIN__, MinGW-w64 in either 32 or 64 bit builds}
 @itemdef{__SUNCC__, Sun CC, see also wxCHECK_SUNCC_VERSION}
 @itemdef{__SYMANTECC__, Symantec C++}
 @itemdef{__VISAGECPP__, IBM Visual Age (OS/2)}
