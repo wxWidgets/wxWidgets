@@ -467,12 +467,20 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
 
     dc.DrawRectangle(rect);
 
+    // Make sure that the sign is properly centered by always using an
+    // odd-sized rectangle for it.
+    wxRect signRect(rect);
+    if ( !(signRect.x % 2) )
+        signRect.x--;
+    if ( !(signRect.y % 2) )
+        signRect.y--;
+
     // black lines
-    const wxCoord xMiddle = rect.x + rect.width/2;
-    const wxCoord yMiddle = rect.y + rect.height/2;
+    const wxCoord xMiddle = signRect.x + signRect.width/2;
+    const wxCoord yMiddle = signRect.y + signRect.height/2;
 
     // half of the length of the horz lines in "-" and "+"
-    const wxCoord halfWidth = rect.width/2 - 2;
+    const wxCoord halfWidth = signRect.width/2 - 2;
     dc.SetPen(*wxBLACK_PEN);
     dc.DrawLine(xMiddle - halfWidth, yMiddle,
                 xMiddle + halfWidth + 1, yMiddle);
@@ -480,7 +488,7 @@ wxRendererGeneric::DrawTreeItemButton(wxWindow * WXUNUSED(win),
     if ( !(flags & wxCONTROL_EXPANDED) )
     {
         // turn "-" into "+"
-        const wxCoord halfHeight = rect.height/2 - 2;
+        const wxCoord halfHeight = signRect.height/2 - 2;
         dc.DrawLine(xMiddle, yMiddle - halfHeight,
                     xMiddle, yMiddle + halfHeight + 1);
     }
