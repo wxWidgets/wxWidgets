@@ -165,7 +165,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
 /* Almost all compilers have strdup(), but VC++ and MinGW call it _strdup().
    And it's not available in MinGW strict ANSI mode nor under Windows CE. */
-#if (defined(__VISUALC__) && __VISUALC__ >= 1400)
+#if (defined(__VISUALC__) && __VISUALC__ >= 1400) || (defined(__VISUAC__) && defined (__INTELC__))
     #define wxCRT_StrdupA _strdup
 #elif defined(__MINGW32__)
     #ifndef __WX_STRICT_ANSI_GCC__

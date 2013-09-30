@@ -1191,6 +1191,7 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 bool wxRemoveFile(const wxString& file)
 {
 #if defined(__VISUALC__) \
+ || (defined(__WINDOWS__) && defined(__INTELC__)) \
  || defined(__BORLANDC__) \
  || defined(__WATCOMC__) \
  || defined(__DMC__) \
