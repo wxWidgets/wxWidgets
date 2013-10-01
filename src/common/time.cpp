@@ -190,7 +190,7 @@ int wxGetTimeZone()
     struct timeb tb;
     ftime(&tb);
     return tb.timezone*60;
-#elif defined(__VISUALC__)
+#elif defined(__VISUALC__) || (defined(__WINDOWS__) && defined(__INTELC__))
     // We must initialize the time zone information before using it (this will
     // be done only once internally).
     _tzset();
