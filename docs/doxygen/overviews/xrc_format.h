@@ -1166,12 +1166,12 @@ It can have the following properties (all of them optional):
 @row3col{bg, @ref overview_xrcformat_type_colour,
     The background color for the item.}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Add a bitmap to the (normal) @ref xrc_wximagelist associated with the
+    Add a bitmap to the (normal) @ref overview_xrcformat_type_imagelist associated with the
     @ref xrc_wxlistctrl parent and associate it with this item.
     If the imagelist is not defined it will be created implicitly
     (default: none, mutually exclusive with @c image).}
 @row3col{bitmap-small, @ref overview_xrcformat_type_bitmap,
-    Add a bitmap in the 'small' @ref xrc_wximagelist associated with the
+    Add a bitmap in the 'small' @ref overview_xrcformat_type_imagelist associated with the
     @ref xrc_wxlistctrl parent and associate it with this item.
     If the 'small' imagelist is not defined it will be created implicitly
     (default: none, mutually exclusive with @c image-small).}
