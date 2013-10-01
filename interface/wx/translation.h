@@ -257,6 +257,10 @@ public:
                            (In some languages, there are different plural forms
                            for e.g. n=2 and n=3 etc., in addition to the singlular
                            form (n=1) being different.)
+        @param domain      The only domain (i.e. message catalog) to search if
+                           specified. By default this parameter is empty,
+                           indicating that all loaded catalogs should be
+                           searched.
 
         See GNU gettext manual for additional information on plural forms handling.
         This method is called by the wxGetTranslation() function and _() macro.
