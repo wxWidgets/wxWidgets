@@ -128,8 +128,6 @@
         -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4
     </add-flags>
 
-    <add-formats files="wx.bkl">rpmspec</add-formats>
-
 
     <!-- Use different names for Visual C++ 200x project files: -->
     <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*,../../tests/*/*"
