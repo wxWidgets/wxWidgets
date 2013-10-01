@@ -7723,7 +7723,7 @@ wxRichTextField* wxRichTextParagraphLayoutBox::InsertFieldWithUndo(wxRichTextBuf
     return obj;
 }
 
-bool wxRichTextParagraphLayoutBox::SetObjectPropertiesWithUndo(wxRichTextObject& obj, const wxRichTextProperties& properties)
+bool wxRichTextParagraphLayoutBox::SetObjectPropertiesWithUndo(wxRichTextObject& obj, const wxRichTextProperties& properties, wxRichTextObject* objToSet)
 {
     wxRichTextBuffer* buffer = GetBuffer();
     wxCHECK_MSG(buffer, false, wxT("Invalid buffer"));
@@ -7733,39 +7733,28 @@ bool wxRichTextParagraphLayoutBox::SetObjectPropertiesWithUndo(wxRichTextObject&
     wxRichTextAction* action = NULL;
     wxRichTextObject* clone = NULL;
 
-#if 1
     if (rtc->SuppressingUndo())
         obj.SetProperties(properties);
     else
     {
         clone = obj.Clone();
-        clone->SetProperties(obj.GetProperties());
-        action = new wxRichTextAction(NULL, _("Change Properties"), wxRICHTEXT_CHANGE_OBJECT, buffer, obj.GetParentContainer(), rtc);
+        if (objToSet)
+        {
+            // Necessary e.g. if when setting a wxRichTextCell's properties, when obj will be the parent table
+            objToSet->SetProperties(properties);
+        }
+        else
+        {
+            obj.SetProperties(properties);
+        }
+
+        // The 'true' parameter in the next line says "Ignore first time"; otherwise the objects are prematurely switched
+        action = new wxRichTextAction(NULL, _("Change Properties"), wxRICHTEXT_CHANGE_OBJECT, buffer, obj.GetParentContainer(), rtc, true);
         action->SetOldAndNewObjects(& obj, clone);
         action->SetPosition(obj.GetRange().GetStart());
         action->SetRange(obj.GetRange());
         buffer->SubmitAction(action);
     }
-#else
-    if (!rtc->SuppressingUndo())
-    {
-        // Create a clone containing the current state of the object. It will be used to Undo the action
-        clone = obj.Clone();
-        clone->SetParent(obj.GetParent());
-        action = new wxRichTextAction(NULL, _("Change Properties"), wxRICHTEXT_CHANGE_OBJECT, buffer, rtc->GetFocusObject(), rtc);
-        action->SetObject(&obj);
-        action->SetPosition(GetRange().GetStart());
-    }
-
-    obj.SetProperties(properties);
-
-    if (!rtc->SuppressingUndo())
-    {
-        buffer->SubmitAction(action);
-        // Finally store the original-state clone; doing so earlier would cause various failures
-        action->StoreObject(clone);
-    }
-#endif
 
     return true;
 }
@@ -7926,11 +7915,14 @@ bool wxRichTextBuffer::SubmitAction(wxRichTextAction* action)
 
     if (BatchingUndo() && m_batchedCommand && !SuppressingUndo())
     {
-        wxRichTextCommand* cmd = new wxRichTextCommand(action->GetName());
-        cmd->AddAction(action);
-        cmd->Do();
-        cmd->GetActions().Clear();
-        delete cmd;
+        if (!action->GetIgnoreFirstTime())
+        {
+            wxRichTextCommand* cmd = new wxRichTextCommand(action->GetName());
+            cmd->AddAction(action);
+            cmd->Do();
+            cmd->GetActions().Clear();
+            delete cmd;
+        }
 
         m_batchedCommand->AddAction(action);
     }
@@ -7940,7 +7932,14 @@ bool wxRichTextBuffer::SubmitAction(wxRichTextAction* action)
         cmd->AddAction(action);
 
         // Only store it if we're not suppressing undo.
-        return GetCommandProcessor()->Submit(cmd, !SuppressingUndo());
+        if (!action->GetIgnoreFirstTime())
+        {
+            return GetCommandProcessor()->Submit(cmd, !SuppressingUndo());
+        }
+        else if (!SuppressingUndo())
+        {
+            GetCommandProcessor()->Store(cmd); // Just store it, without Do()ing anything
+        }
     }
 
     return true;
