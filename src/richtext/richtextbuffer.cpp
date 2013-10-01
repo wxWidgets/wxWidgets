@@ -7733,20 +7733,17 @@ bool wxRichTextParagraphLayoutBox::SetObjectPropertiesWithUndo(wxRichTextObject&
     wxRichTextAction* action = NULL;
     wxRichTextObject* clone = NULL;
 
+    // The object on which to set properties will usually be 'obj', but use objToSet if it's valid.
+    // This is necessary e.g. on setting a wxRichTextCell's properties, when obj will be the parent table
+    if (objToSet == NULL)
+        objToSet = &obj;
+
     if (rtc->SuppressingUndo())
-        obj.SetProperties(properties);
+        objToSet->SetProperties(properties);
     else
     {
         clone = obj.Clone();
-        if (objToSet)
-        {
-            // Necessary e.g. if when setting a wxRichTextCell's properties, when obj will be the parent table
-            objToSet->SetProperties(properties);
-        }
-        else
-        {
-            obj.SetProperties(properties);
-        }
+        objToSet->SetProperties(properties);
 
         // The 'true' parameter in the next line says "Ignore first time"; otherwise the objects are prematurely switched
         action = new wxRichTextAction(NULL, _("Change Properties"), wxRICHTEXT_CHANGE_OBJECT, buffer, obj.GetParentContainer(), rtc, true);
