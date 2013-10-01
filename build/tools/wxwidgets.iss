@@ -44,7 +44,7 @@ SolidCompression=yes
 
 [Files]
 ; source files
-Source: "{#WXW_DIR}\*"; DestDir: "{app}"; Excludes: "cocoa,dfb,gtk,gtk1,motif,msdos,os2,osx,wxWindows.xcod*,x11,debian,distrib"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#WXW_DIR}\*"; DestDir: "{app}"; Excludes: "cocoa,dfb,gtk,gtk1,motif,msdos,os2,osx,wxWindows.xcod*,x11,distrib"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [INI]
 Filename: "{app}\wx.url"; Section: "InternetShortcut"; Key: "URL"; String: "http://www.wxwidgets.org"
