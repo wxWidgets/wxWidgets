@@ -588,7 +588,6 @@ WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file forma
 WX_ARG_WITH(libiconv,      [  --with-libiconv         use libiconv (character conversion)], wxUSE_LIBICONV)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
-WX_ARG_WITHOUT(gnomeprint, [  --without-gnomeprint    don't use GNOME printing libraries], wxUSE_LIBGNOMEPRINT)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770/800/810], wxUSE_LIBHILDON)
@@ -5627,31 +5626,6 @@ if test "$WXGTK2" = 1; then
                     ]
                 )
         fi
-
-        if test "$WXGTK3" = 1; then
-            wxUSE_LIBGNOMEPRINT=no
-        fi
-
-        if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
-
-                PKG_CHECK_MODULES(LIBGNOMEPRINTUI,
-                                  [libgnomeprintui-2.2 >= 2.8],
-                    [
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBGNOMEPRINTUI_LIBS"
-                        CFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CFLAGS"
-                        CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
-                        AC_DEFINE(wxUSE_LIBGNOMEPRINT)
-                    ],
-                    [
-                        if test "$wxUSE_GTKPRINT" = yes; then
-                            AC_MSG_RESULT(no)
-                        else
-                            AC_MSG_WARN([libgnomeprintui not found, library will use standard PostScript printing])
-                        fi
-                        wxUSE_LIBGNOMEPRINT="no"
-                    ]
-                )
-        fi
     fi
 
     if test "$wxUSE_MIMETYPE" = "yes" ; then
@@ -8027,9 +8001,6 @@ case "$TOOLKIT" in
             fi
             if test "$wxUSE_GTKPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
-            fi
-            if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
-                TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomeprint";
             fi
             if test "$wxUSE_LIBGNOMEVFS" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomevfs"

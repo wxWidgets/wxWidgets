@@ -1224,8 +1224,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(GTK_SRC)
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
-    <!-- GTK+ specific files: -->
-    src/gtk/gnome/gprint.cpp
 </set>
 <set var="GTK_HDR" hints="files">
     wx/generic/fdrepdlg.h
@@ -1282,7 +1280,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="GTK2_HDR" hints="files">
     $(GTK_HDR)
     wx/generic/fontdlgg.h
-    wx/gtk/gnome/gprint.h
 </set>
 
 

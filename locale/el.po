@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 18:18+0200\n"
+"POT-Creation-Date: 2013-10-01 19:04+0200\n"
 "PO-Revision-Date: 2005-02-16 09:03+0200\n"
 "Last-Translator: InterZone <info@interzone.gr>\n"
 "Language-Team: Tsolakos Stavros <tsolako1@otenet.gr>, Nassos Yiannopoulos "
@@ -32,7 +32,7 @@ msgstr ""
 msgid " (copy %d of %d)"
 msgstr "Σελίδα %d από %d"
 
-#: ../src/common/log.cpp:427
+#: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (σφάλμα %ld: %s)"
@@ -42,7 +42,7 @@ msgstr " (σφάλμα %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "tiff module: %s"
 
-#: ../src/common/docview.cpp:1625
+#: ../src/common/docview.cpp:1624
 msgid " - "
 msgstr " - "
 
@@ -207,12 +207,12 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:634
-#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:637
+#: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:3523
+#: ../include/wx/richtext/richtextbuffer.h:3530
 #, fuzzy
 msgid "&Box"
 msgstr "&Έντονο"
@@ -236,7 +236,7 @@ msgstr "&Ακυρο"
 msgid "&Cascade"
 msgstr "&Επικάλυψη"
 
-#: ../include/wx/richtext/richtextbuffer.h:5578
+#: ../include/wx/richtext/richtextbuffer.h:5587
 #, fuzzy
 msgid "&Cell"
 msgstr "&Ακυρο"
@@ -342,7 +342,7 @@ msgstr "&Τέλος"
 msgid "&First"
 msgstr "πρώτο"
 
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
 msgstr ""
 
@@ -383,8 +383,8 @@ msgstr "Από:"
 msgid "&Harddisk"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:348
-#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:351
+#: ../src/richtext/richtextsizepage.cpp:358
 #, fuzzy
 msgid "&Height:"
 msgstr "&Βάρος:"
@@ -454,8 +454,8 @@ msgstr ""
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:529
-#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:532
+#: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
 msgstr ""
 
@@ -471,7 +471,7 @@ msgstr "&Καταγραφή"
 msgid "&Move"
 msgstr "&Μετακίνηση"
 
-#: ../src/richtext/richtextsizepage.cpp:669
+#: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
 msgstr ""
 
@@ -493,7 +493,7 @@ msgstr "&Επόμενο"
 msgid "&Next >"
 msgstr "&Επόμενο >"
 
-#: ../src/richtext/richtextsizepage.cpp:678
+#: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
 msgstr ""
 
@@ -542,7 +542,7 @@ msgstr ""
 msgid "&Paste"
 msgstr "&Επικόληση"
 
-#: ../include/wx/richtext/richtextbuffer.h:4648
+#: ../include/wx/richtext/richtextbuffer.h:4655
 msgid "&Picture"
 msgstr ""
 
@@ -554,7 +554,7 @@ msgstr "Μέγεθος κουκίδας:"
 msgid "&Position (tenths of a mm):"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:514
 #, fuzzy
 msgid "&Position mode:"
 msgstr "Ερώτημα"
@@ -568,7 +568,7 @@ msgstr "&Προτιμήσεις"
 msgid "&Previous"
 msgstr "&Προηγούμενο"
 
-#: ../src/richtext/richtextsizepage.cpp:672
+#: ../src/richtext/richtextsizepage.cpp:675
 #, fuzzy
 msgid "&Previous Paragraph"
 msgstr "Προηγούμενη σελίδα"
@@ -577,7 +577,7 @@ msgstr "Προηγούμενη σελίδα"
 msgid "&Print..."
 msgstr "&Εκτύπωση..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4922
+#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "&Ιδιότητες"
@@ -624,8 +624,8 @@ msgstr "Απαλό(light)"
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:599
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:602
+#: ../src/richtext/richtextsizepage.cpp:609
 #, fuzzy
 msgid "&Right:"
 msgstr "&Βάρος:"
@@ -698,7 +698,7 @@ msgstr ""
 msgid "&Symbol:"
 msgstr "&Στυλ:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5668
+#: ../include/wx/richtext/richtextbuffer.h:5679
 msgid "&Table"
 msgstr ""
 
@@ -711,8 +711,8 @@ msgstr "&Αντιγραφή"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:564
-#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:574
 #, fuzzy
 msgid "&Top:"
 msgstr "Πρός:"
@@ -744,7 +744,7 @@ msgstr "Α&ποστοίχιση"
 msgid "&Up"
 msgstr "&Επάνω"
 
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/richtext/richtextsizepage.cpp:278
 #, fuzzy
 msgid "&Vertical alignment:"
 msgstr "Στοίχιση Αριστερά"
@@ -758,8 +758,8 @@ msgstr "&Ανοιγμα..."
 msgid "&Weight:"
 msgstr "&Βάρος:"
 
-#: ../src/richtext/richtextsizepage.cpp:314
-#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:324
 #, fuzzy
 msgid "&Width:"
 msgstr "&Βάρος:"
@@ -855,7 +855,7 @@ msgstr "(σελιδοδείκτες)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:829
+#: ../src/richtext/richtextformatdlg.cpp:831
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -1202,7 +1202,7 @@ msgstr "&Περί"
 msgid "About %s"
 msgstr "&Περί..."
 
-#: ../src/richtext/richtextsizepage.cpp:517
+#: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr ""
 
@@ -1215,17 +1215,17 @@ msgstr "&Πραγματικό μέγεθος"
 msgid "Add"
 msgstr "Προσθήκη"
 
-#: ../src/richtext/richtextbuffer.cpp:10648
-msgid "Add column"
+#: ../src/richtext/richtextbuffer.cpp:10751
+msgid "Add Column"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10688
+msgid "Add Row"
 msgstr ""
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "Προσθήκη της τρέχουσας σελίδας στους σελιδοδείκτες"
-
-#: ../src/richtext/richtextbuffer.cpp:10590
-msgid "Add row"
-msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1268,12 +1268,12 @@ msgstr "Στοίχιση Αριστερά"
 msgid "Align Right"
 msgstr "Στοίχιση Δεξιά"
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:266
 #, fuzzy
 msgid "Alignment"
 msgstr "Στοίχιση Αριστερά"
 
-#: ../src/generic/prntdlgg.cpp:220
+#: ../src/generic/prntdlgg.cpp:215
 msgid "All"
 msgstr "Όλα"
 
@@ -1282,11 +1282,11 @@ msgstr "Όλα"
 msgid "All files (%s)|%s"
 msgstr "Όλα τα αρχεία (%s)|%s"
 
-#: ../include/wx/defs.h:2884
+#: ../include/wx/defs.h:2922
 msgid "All files (*)|*"
 msgstr "Όλα τα αρχεία (*)|*"
 
-#: ../include/wx/defs.h:2881
+#: ../include/wx/defs.h:2919
 msgid "All files (*.*)|*.*"
 msgstr "Όλα τα αρχεία (*.*)|*.*"
 
@@ -1302,7 +1302,7 @@ msgstr ""
 msgid "Already Registered Object passed to SetObjectClassInfo"
 msgstr "Ένα ήδη Registered αντικείμενο δόθηκε στην SetObjectClassInfo"
 
-#: ../src/unix/dialup.cpp:354
+#: ../src/unix/dialup.cpp:353
 msgid "Already dialling ISP."
 msgstr "Γίνεται ήδη κλήση προς τον παροχέα Internet(ISP)."
 
@@ -1509,15 +1509,15 @@ msgstr "Μοντέρνο"
 msgid "Borders"
 msgstr "Μοντέρνο"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:144
+#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
 msgid "Bottom"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:898
+#: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "Κάτω περιθώριο (mm)"
 
-#: ../src/richtext/richtextbuffer.cpp:8861
+#: ../src/richtext/richtextbuffer.cpp:8919
 #, fuzzy
 msgid "Box Properties"
 msgstr "&Ιδιότητες"
@@ -1631,7 +1631,7 @@ msgstr "Δεν είναι δυνατή η δημιουργία του κλειδ
 msgid "Can't create thread"
 msgstr "Δεν είναι δυνατή η δημιουργία του νήματος εκτέλεσης (thread)"
 
-#: ../src/msw/window.cpp:3783
+#: ../src/msw/window.cpp:3793
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Δεν είναι δυνατή η δημιουργία παραθύρου τάξεως %s"
@@ -1763,7 +1763,7 @@ msgstr "Δεν είναι δυνατή η δημιουργία του mutex."
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr ""
 
-#: ../src/common/filefn.cpp:1335
+#: ../src/common/filefn.cpp:1336
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "Δεν είναι δυνατή η απαρίθμηση των αρχείων '%s'"
@@ -1792,11 +1792,11 @@ msgstr "Δεν είναι δυνατή η εύρεση της ενεργού τ�
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Δεν είναι δυνατή η ανάγνωση του εύρους προτεραιοτήτων"
 
-#: ../src/unix/utilsunx.cpp:983
+#: ../src/unix/utilsunx.cpp:988
 msgid "Cannot get the hostname"
 msgstr "Δεν είναι δυνατή η ανάγνωση του ονόματος διακομιστή(hostname)"
 
-#: ../src/unix/utilsunx.cpp:1019
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the official hostname"
 msgstr ""
 "Δεν είναι δυνατή η ανάγνωση του επισήμου ονόματος διακομιστή(official "
@@ -1837,7 +1837,7 @@ msgstr "Δεν είναι δυνατή η φόρτωση πόρων(resources) �
 msgid "Cannot open HTML document: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα εγγράφου HTML: %s"
 
-#: ../src/html/helpdata.cpp:664
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Δεν είναι δυνατό το άνοιγμα βιβλίου βοήθειας HTML: %s"
@@ -1919,7 +1919,7 @@ msgstr "Διάκριση κεφαλαίων-πεζών"
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9273
+#: ../src/richtext/richtextbuffer.cpp:9347
 #, fuzzy
 msgid "Cell Properties"
 msgstr "&Ιδιότητες"
@@ -1956,7 +1956,7 @@ msgstr "Στο κέντρο"
 msgid "Centre text."
 msgstr "Δεν είναι δυνατή η δημιουργία του mutex."
 
-#: ../src/richtext/richtextsizepage.cpp:284
+#: ../src/richtext/richtextsizepage.cpp:287
 #, fuzzy
 msgid "Centred"
 msgstr "Στο κέντρο"
@@ -1967,20 +1967,21 @@ msgstr "Στο κέντρο"
 msgid "Ch&oose..."
 msgstr "&Μετάβαση..."
 
-#: ../src/richtext/richtextbuffer.cpp:4029
+#: ../src/richtext/richtextbuffer.cpp:4041
 msgid "Change List Style"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:3380
+#: ../src/richtext/richtextbuffer.cpp:3392
 msgid "Change Object Style"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:3646
+#: ../src/richtext/richtextbuffer.cpp:3658
+#: ../src/richtext/richtextbuffer.cpp:7749
 #, fuzzy
 msgid "Change Properties"
 msgstr "&Ιδιότητες"
 
-#: ../src/richtext/richtextbuffer.cpp:3197
+#: ../src/richtext/richtextbuffer.cpp:3209
 msgid "Change Style"
 msgstr ""
 
@@ -2254,7 +2255,7 @@ msgstr "Κλείσιμο αυτού του παραθύρου."
 msgid "Color"
 msgstr "&Χρώμα:"
 
-#: ../src/richtext/richtextformatdlg.cpp:723
+#: ../src/richtext/richtextformatdlg.cpp:725
 #, fuzzy
 msgid "Colour"
 msgstr "&Χρώμα:"
@@ -2303,7 +2304,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Η εκτέλεση της εντολής '%s' απέτυχε με σφάλμα: %ul"
 
-#: ../src/gtk/window.cpp:4284
+#: ../src/gtk/window.cpp:4306
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2355,7 +2356,7 @@ msgstr "Περιεχόμενα"
 msgid "Copied to clipboard:\"%s\""
 msgstr "Αντιγράφηκε στο πρόχειρο:\"%s\""
 
-#: ../src/generic/prntdlgg.cpp:252
+#: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
 msgstr "Αντίγραφα:"
 
@@ -2449,7 +2450,7 @@ msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωση
 msgid "Could not set column width."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της προεπισκόπησης εγγράφου."
 
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1569
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "Αποτυχία λήψης καταλόγου εργασίας (working directory)"
@@ -2484,11 +2485,11 @@ msgid "Could not start document preview."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της προεπισκόπησης εγγράφου."
 
 #: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1086 ../src/gtk/gnome/gprint.cpp:922
+#: ../src/gtk/print.cpp:1077
 msgid "Could not start printing."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/common/wincmn.cpp:2114
+#: ../src/common/wincmn.cpp:2131
 msgid "Could not transfer data to window"
 msgstr "Δεν ήταν δυνατή η μεταφορά δεδομένων στο παράθυρο."
 
@@ -2511,7 +2512,7 @@ msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακ�
 msgid "Couldn't create the overlay window"
 msgstr "Δεν ήταν δυνατή η δημιουργία χρονοδιακόπτη (timer)"
 
-#: ../src/common/translation.cpp:2024
+#: ../src/common/translation.cpp:2015
 #, fuzzy
 msgid "Couldn't enumerate translations"
 msgstr "Δεν ήταν δυνατός ο τερματισμός του thread"
@@ -2522,7 +2523,7 @@ msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr ""
 "Δεν ήταν δυνατός ο εντοπισμός του συμβόλου '%s' σε μια δυναμική βιβλιοθήκη."
 
-#: ../src/gtk/print.cpp:2023
+#: ../src/gtk/print.cpp:2014
 msgid "Couldn't get hatch style from wxBrush."
 msgstr ""
 
@@ -2615,7 +2616,7 @@ msgstr "Απο&κοπή"
 msgid "Current directory:"
 msgstr "Τρέχον κατάλογος:"
 
-#: ../src/gtk/print.cpp:768
+#: ../src/gtk/print.cpp:759
 #, fuzzy
 msgid "Custom size"
 msgstr "μέγεθος γραμματοσειράς"
@@ -2734,11 +2735,11 @@ msgstr "Προκαθορισμένη κωδικοποίηση"
 msgid "Default font"
 msgstr "Προκαθορισμένος εκτυπωτής"
 
-#: ../src/generic/prntdlgg.cpp:515
+#: ../src/generic/prntdlgg.cpp:510
 msgid "Default printer"
 msgstr "Προκαθορισμένος εκτυπωτής"
 
-#: ../src/richtext/richtextbuffer.cpp:7793 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 #, fuzzy
 msgid "Delete"
@@ -2748,6 +2749,16 @@ msgstr "&Διαγραφή"
 #, fuzzy
 msgid "Delete A&ll"
 msgstr "Επιλογή &Ολων"
+
+#: ../src/richtext/richtextbuffer.cpp:10637
+#, fuzzy
+msgid "Delete Column"
+msgstr "Τμήματα"
+
+#: ../src/richtext/richtextbuffer.cpp:10587
+#, fuzzy
+msgid "Delete Row"
+msgstr "&Διαγραφή"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 #, fuzzy
@@ -2759,19 +2770,9 @@ msgstr "Διαγραφή στοιχείου"
 msgid "Delete Text"
 msgstr "Διαγραφή στοιχείου"
 
-#: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
-msgid "Delete column"
-msgstr "Τμήματα"
-
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "Διαγραφή στοιχείου"
-
-#: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
-msgid "Delete row"
-msgstr "&Διαγραφή"
 
 #: ../src/common/stockitem.cpp:260
 #, fuzzy
@@ -2833,12 +2834,12 @@ msgstr ""
 msgid "Directories"
 msgstr "Διακοσμητικός"
 
-#: ../src/common/filefn.cpp:1250
+#: ../src/common/filefn.cpp:1251
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
 
-#: ../src/common/filefn.cpp:1270
+#: ../src/common/filefn.cpp:1271
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
@@ -2986,37 +2987,37 @@ msgstr "Επεξεργασία στοιχείου"
 msgid "Elapsed time:"
 msgstr "Υπολογισθείς χρόνος : "
 
-#: ../src/richtext/richtextsizepage.cpp:350
-#: ../src/richtext/richtextsizepage.cpp:352
-#: ../src/richtext/richtextsizepage.cpp:462
-#: ../src/richtext/richtextsizepage.cpp:464
+#: ../src/richtext/richtextsizepage.cpp:353
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:465
+#: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:435
-#: ../src/richtext/richtextsizepage.cpp:437
+#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:440
 #, fuzzy
 msgid "Enable the maximum width value."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/richtext/richtextsizepage.cpp:408
-#: ../src/richtext/richtextsizepage.cpp:410
+#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:386
 #, fuzzy
 msgid "Enable the minimum width value."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
 
-#: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:318
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:280
+#: ../src/richtext/richtextsizepage.cpp:282
 #, fuzzy
 msgid "Enable vertical alignment."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
@@ -3111,12 +3112,12 @@ msgstr "Σφάλμα κατά την ανάγνωση των ρυθμίσεων.
 msgid "Error saving user configuration data."
 msgstr "Σφάλμα κατά την εγγραφή των ρυθμίσεων χρήστη."
 
-#: ../src/gtk/print.cpp:680
+#: ../src/gtk/print.cpp:671
 #, fuzzy
 msgid "Error while printing: "
 msgstr "Σφάλμα κατά την αναμονή στη σημαφόρο"
 
-#: ../src/common/log.cpp:225
+#: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "Σφάλμα: "
 
@@ -3401,7 +3402,7 @@ msgstr "Αποτυχία λήψης δεδομένων απο το πρόχει�
 msgid "Failed to get the local system time"
 msgstr "Αποτυχία καθορισμού της ώρας του τοπικού συστήματος"
 
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1453
 msgid "Failed to get the working directory"
 msgstr "Αποτυχία λήψης καταλόγου εργασίας (working directory)"
 
@@ -3826,7 +3827,7 @@ msgstr ""
 "Το αρχείο '%s' υπάρχει ήδη.\n"
 "Θέλετε να αντικατασταθεί;"
 
-#: ../src/common/filefn.cpp:1206
+#: ../src/common/filefn.cpp:1207
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "Δεν ήταν δυνατή η δημιουργία του καταλόγου '%s'"
@@ -3845,7 +3846,7 @@ msgstr "Το αρχείο δεν μπόρεσε να φορτωθεί."
 msgid "File dialog failed with error code %0lx."
 msgstr "Η εκτέλεση της εντολής '%s' απέτυχε με σφάλμα: %ul"
 
-#: ../src/common/docview.cpp:1772
+#: ../src/common/docview.cpp:1771
 msgid "File error"
 msgstr "Σφάλμα αρχείου"
 
@@ -3858,7 +3859,7 @@ msgstr "Το όνομα αρχείου υπάρχει ήδη."
 msgid "Files"
 msgstr "Αρχείο"
 
-#: ../src/common/filefn.cpp:1760
+#: ../src/common/filefn.cpp:1761
 #, c-format
 msgid "Files (%s)"
 msgstr "Αρχεία (%s)"
@@ -3882,7 +3883,7 @@ msgstr "πρώτο"
 msgid "First page"
 msgstr "Επόμενη σελίδα"
 
-#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:521
 #, fuzzy
 msgid "Fixed"
 msgstr "Γραμματοσειρά σταθερού μεγέθους:"
@@ -3895,7 +3896,7 @@ msgstr "Γραμματοσειρά σταθερού μεγέθους:"
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Όψη σταθερού μεγέθους.<br> <b>έντονη</b> <i>πλάγια</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
 msgstr ""
 
@@ -3955,7 +3956,7 @@ msgstr "Οι forward hrefs δεν υποστηρίζονται"
 msgid "Found %i matches"
 msgstr "Βρέθηκαν %i αντιστοιχίες"
 
-#: ../src/generic/prntdlgg.cpp:243
+#: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "Από:"
 
@@ -3979,7 +3980,7 @@ msgstr "GIF: ανεπαρκής μνήμη."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: άγνωστο λάθος!!!"
 
-#: ../src/gtk/window.cpp:4266
+#: ../src/gtk/window.cpp:4288
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -4144,8 +4145,8 @@ msgstr "Αρχική σελίδα"
 msgid "Home directory"
 msgstr "Αρχικός κατάλογος"
 
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:255
 msgid "How the object will float relative to the text."
 msgstr ""
 
@@ -4329,25 +4330,25 @@ msgstr ""
 msgid "Insert"
 msgstr "Στοίχιση"
 
-#: ../src/richtext/richtextbuffer.cpp:7672
+#: ../src/richtext/richtextbuffer.cpp:7687
 #, fuzzy
 msgid "Insert Field"
 msgstr "Στοίχιση"
 
-#: ../src/richtext/richtextbuffer.cpp:7583
-#: ../src/richtext/richtextbuffer.cpp:8493
+#: ../src/richtext/richtextbuffer.cpp:7598
+#: ../src/richtext/richtextbuffer.cpp:8551
 msgid "Insert Image"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7630
+#: ../src/richtext/richtextbuffer.cpp:7645
 #, fuzzy
 msgid "Insert Object"
 msgstr "Στοίχιση"
 
 #: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7428
-#: ../src/richtext/richtextbuffer.cpp:7455
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7440
+#: ../src/richtext/richtextbuffer.cpp:7470
+#: ../src/richtext/richtextbuffer.cpp:7514
 msgid "Insert Text"
 msgstr ""
 
@@ -4374,7 +4375,7 @@ msgstr "Λανθασμένος δείκτης εικόνας TIFF."
 msgid "Invalid data view item"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:245
+#: ../src/common/appcmn.cpp:266
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr ""
@@ -4615,7 +4616,7 @@ msgstr ""
 msgid "LEFT"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
 msgstr "Τοπίο"
 
@@ -4629,7 +4630,7 @@ msgstr "&Επικόληση"
 msgid "Last page"
 msgstr "Επόμενη σελίδα"
 
-#: ../src/common/log.cpp:311
+#: ../src/common/log.cpp:309
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
@@ -4646,7 +4647,7 @@ msgstr "Ledger, 17 x 11 ίντσες"
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:202
 #: ../src/richtext/richtextbulletspage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:246
+#: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr ""
 
@@ -4655,7 +4656,7 @@ msgstr ""
 msgid "Left (&first line):"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
 msgstr "Αριστερό περιθώριο (mm)"
 
@@ -4965,7 +4966,7 @@ msgstr ""
 msgid "MacVietnamese"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2024
+#: ../src/propgrid/advprops.cpp:2031
 #, fuzzy
 msgid "Make a selection:"
 msgstr "Τμήματα"
@@ -4979,12 +4980,12 @@ msgstr ""
 msgid "Match case"
 msgstr "Ταίριασμα πεζών/κεφαλαίων"
 
-#: ../src/richtext/richtextsizepage.cpp:460
+#: ../src/richtext/richtextsizepage.cpp:463
 #, fuzzy
 msgid "Max height:"
 msgstr "&Βάρος:"
 
-#: ../src/richtext/richtextsizepage.cpp:433
+#: ../src/richtext/richtextsizepage.cpp:436
 #, fuzzy
 msgid "Max width:"
 msgstr "Αντικατάσταση με:"
@@ -5020,12 +5021,12 @@ msgstr ""
 msgid "Mi&nimize"
 msgstr "Ελα&χιστοποίηση"
 
-#: ../src/richtext/richtextsizepage.cpp:406
+#: ../src/richtext/richtextsizepage.cpp:409
 #, fuzzy
 msgid "Min height:"
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:379
+#: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
 msgstr ""
 
@@ -5062,17 +5063,17 @@ msgstr "Μετακίνηση κάτω"
 msgid "Move up"
 msgstr "Μετακίνηση επάνω"
 
-#: ../src/richtext/richtextsizepage.cpp:679
-#: ../src/richtext/richtextsizepage.cpp:681
+#: ../src/richtext/richtextsizepage.cpp:682
+#: ../src/richtext/richtextsizepage.cpp:684
 msgid "Moves the object to the next paragraph."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:673
-#: ../src/richtext/richtextsizepage.cpp:675
+#: ../src/richtext/richtextsizepage.cpp:676
+#: ../src/richtext/richtextsizepage.cpp:678
 msgid "Moves the object to the previous paragraph."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9271
+#: ../src/richtext/richtextbuffer.cpp:9345
 msgid "Multiple Cell Properties"
 msgstr ""
 
@@ -5258,8 +5259,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/richtext/richtextsizepage.cpp:248
+#: ../src/richtext/richtextsizepage.cpp:252
 #, fuzzy
 msgid "None"
 msgstr "Έτοιμο"
@@ -5316,7 +5317,7 @@ msgstr ""
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "OK"
@@ -5339,7 +5340,7 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Τα αντικείμενα πρέπει να έχουν ένα χαρακτηριστικό id"
 
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1798
+#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
 msgstr "Ανοιγμα Αρχείου"
 
@@ -5382,11 +5383,11 @@ msgstr "Η επιλογή '%s' απαιτεί μια τιμή."
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Επιλογή '%s': το '%s' δεν μπροει να μετατραπει σε ημερομηνία."
 
-#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "Επιλογές"
 
-#: ../src/generic/prntdlgg.cpp:620 ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
 msgstr "Προσανατολισμός"
 
@@ -5607,22 +5608,21 @@ msgstr "Σελίδα %d"
 msgid "Page %d of %d"
 msgstr "Σελίδα %d από %d"
 
-#: ../src/gtk/print.cpp:783
+#: ../src/gtk/print.cpp:774
 msgid "Page Setup"
 msgstr "Οργάνωση(setup) Σελίδας"
 
-#: ../src/generic/prntdlgg.cpp:833 ../src/common/prntbase.cpp:467
-#: ../src/gtk/gnome/gprint.cpp:710
+#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
 msgid "Page setup"
 msgstr "Ρύθμιση(setup) Σελίδας"
 
-#: ../src/generic/prntdlgg.cpp:221
+#: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "Σελίδες"
 
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:806
-#: ../src/generic/prntdlgg.cpp:847 ../src/generic/prntdlgg.cpp:860
-#: ../src/generic/prntdlgg.cpp:1057 ../src/generic/prntdlgg.cpp:1062
+#: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
+#: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
+#: ../src/generic/prntdlgg.cpp:1052 ../src/generic/prntdlgg.cpp:1057
 msgid "Paper size"
 msgstr "Μέγεθος χαρτιού"
 
@@ -5639,7 +5639,7 @@ msgstr "Δόθηκε ένα ήδη registered αντικείμενο στην Se
 msgid "Passing an unknown object to GetObject"
 msgstr "Δόθηκε ένα άγνωστο αντικείμενο στην GetObject"
 
-#: ../src/richtext/richtextctrl.cpp:3103 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 #, fuzzy
 msgid "Paste"
@@ -5659,7 +5659,7 @@ msgstr ""
 msgid "Permissions"
 msgstr "Δικαιώματα"
 
-#: ../src/richtext/richtextbuffer.cpp:11745
+#: ../src/richtext/richtextbuffer.cpp:11942
 #, fuzzy
 msgid "Picture Properties"
 msgstr "&Ιδιότητες"
@@ -5728,16 +5728,16 @@ msgstr ""
 msgid "Pointer to model not set correctly."
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:617 ../src/generic/prntdlgg.cpp:872
+#: ../src/generic/prntdlgg.cpp:612 ../src/generic/prntdlgg.cpp:867
 msgid "Portrait"
 msgstr "Πορτραίτο"
 
-#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:496
 #, fuzzy
 msgid "Position"
 msgstr "Ερώτημα"
 
-#: ../src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "Αρχείο PostScript"
 
@@ -5764,10 +5764,9 @@ msgstr "Προεπισκόπηση:"
 msgid "Previous page"
 msgstr "Προηγούμενη σελίδα"
 
-#: ../src/generic/prntdlgg.cpp:148 ../src/generic/prntdlgg.cpp:162
+#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
 #: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
 msgid "Print"
 msgstr "Εκτύπωση"
 
@@ -5780,15 +5779,15 @@ msgstr "Προεπισκόπηση Εκτύπωσης"
 msgid "Print Preview Failure"
 msgstr "Αποτυχία Προεπισκόπησης Εκτύπωσης"
 
-#: ../src/generic/prntdlgg.cpp:229
+#: ../src/generic/prntdlgg.cpp:224
 msgid "Print Range"
 msgstr "Εύρος εκτύπωσης"
 
-#: ../src/generic/prntdlgg.cpp:454
+#: ../src/generic/prntdlgg.cpp:449
 msgid "Print Setup"
 msgstr "Οργάνωση(setup) Εκτύπωσης"
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:621
 msgid "Print in colour"
 msgstr "Εγχρωμη εκτύπωση"
 
@@ -5796,10 +5795,6 @@ msgstr "Εγχρωμη εκτύπωση"
 #, fuzzy
 msgid "Print previe&w..."
 msgstr "Π&ροεπισκόπηση εκτύπωσης"
-
-#: ../src/gtk/gnome/gprint.cpp:944
-msgid "Print preview"
-msgstr "Προεπισκόπηση εκτύπωσης"
 
 #: ../src/common/docview.cpp:1244
 #, fuzzy
@@ -5811,7 +5806,7 @@ msgstr "Δημιουργία pipe απέτυχε"
 msgid "Print preview..."
 msgstr "Προεπισκόπηση εκτύπωσης"
 
-#: ../src/generic/prntdlgg.cpp:635
+#: ../src/generic/prntdlgg.cpp:630
 msgid "Print spooling"
 msgstr "Spooling εκτύπωσης"
 
@@ -5819,7 +5814,7 @@ msgstr "Spooling εκτύπωσης"
 msgid "Print this page"
 msgstr "Εκτύπωση αυτής της σελίδας"
 
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
 msgstr "Εκτύπωση σε Αρχείο"
 
@@ -5828,27 +5823,27 @@ msgstr "Εκτύπωση σε Αρχείο"
 msgid "Print..."
 msgstr "&Εκτύπωση..."
 
-#: ../src/generic/prntdlgg.cpp:498
+#: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
 msgstr "Εκτυπωτής"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Printer command:"
 msgstr "Εντολή εκτυπωτή:"
 
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:180
 msgid "Printer options"
 msgstr "Επιλογές εκτυπωτή"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:645
 msgid "Printer options:"
 msgstr "Επιλογές εκτυπωτή:"
 
-#: ../src/generic/prntdlgg.cpp:921
+#: ../src/generic/prntdlgg.cpp:916
 msgid "Printer..."
 msgstr "Εκτυπωτής..."
 
-#: ../src/generic/prntdlgg.cpp:201
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Printer:"
 msgstr "Εκτυπωτής:"
 
@@ -5881,7 +5876,7 @@ msgid "Printing..."
 msgstr "Γίνεται εκτύπωση..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2125
+#: ../src/common/docview.cpp:2124
 #, fuzzy
 msgid "Printout"
 msgstr "Εκτύπωση"
@@ -6005,7 +6000,7 @@ msgstr "Η τιμή μητρώου '%s' υπάρχει ήδη."
 msgid "Regular"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:519
 #, fuzzy
 msgid "Relative"
 msgstr "Διακοσμητικός"
@@ -6043,7 +6038,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Η δημιουργία timer απέτυχε."
 
-#: ../src/richtext/richtextbuffer.cpp:4202
+#: ../src/richtext/richtextbuffer.cpp:4214
 msgid "Renumber List"
 msgstr ""
 
@@ -6051,7 +6046,7 @@ msgstr ""
 msgid "Rep&lace"
 msgstr "&Αντικατάσταση"
 
-#: ../src/richtext/richtextctrl.cpp:3263 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
 #, fuzzy
 msgid "Replace"
 msgstr "&Αντικατάσταση"
@@ -6073,7 +6068,7 @@ msgstr "Αντικατάσταση με:"
 msgid "Required information entry is empty."
 msgstr ""
 
-#: ../src/common/translation.cpp:1975
+#: ../src/common/translation.cpp:1966
 #, fuzzy, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "'%s' δεν είναι ένας σωστός κατάλογος μηνυμάτων."
@@ -6089,12 +6084,12 @@ msgstr "Απαλό(light)"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
-#: ../src/richtext/richtextsizepage.cpp:247
+#: ../src/richtext/richtextsizepage.cpp:250
 #, fuzzy
 msgid "Right"
 msgstr "Απαλό(light)"
 
-#: ../src/generic/prntdlgg.cpp:897
+#: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
 msgstr "Δεξί περιθώριο (mm):"
 
@@ -6235,11 +6230,11 @@ msgstr "Επιλογή &Ολων"
 msgid "Select All"
 msgstr "Επιλογή &Ολων"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1877
 msgid "Select a document template"
 msgstr "Επιλέξτε ένα πρότυπα εγγράφου"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1951
 msgid "Select a document view"
 msgstr "Επιλέξτε μια προβολή εγγράφων"
 
@@ -6273,7 +6268,7 @@ msgstr ""
 msgid "Separator expected after the option '%s'."
 msgstr "Αναμενόταν διαχωριστικό μετά την επιλογή '%s'."
 
-#: ../src/richtext/richtextbuffer.cpp:10397
+#: ../src/richtext/richtextbuffer.cpp:10513
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "Διαγραφή στοιχείου"
@@ -6286,7 +6281,7 @@ msgstr "Η SetProperty κλήθηκε χωρίς έγκυρο θέτη"
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Setup..."
 msgstr "Ρυθμίσεις..."
 
@@ -6376,7 +6371,7 @@ msgid "Single"
 msgstr ""
 
 #: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:296
+#: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "Μέγεθος"
 
@@ -6403,7 +6398,7 @@ msgstr ""
 msgid "Solid"
 msgstr "Έντονο"
 
-#: ../src/common/docview.cpp:1774
+#: ../src/common/docview.cpp:1773
 msgid "Sorry, could not open this file."
 msgstr "Συγγνώμη, δεν μπόρεσε να ανοιχθεί αυτό το αρχείο."
 
@@ -6419,7 +6414,7 @@ msgstr "Συγγνώμη, δεν υπάρχει αρκετή μνήμη για �
 msgid "Sorry, that name is taken. Please choose another."
 msgstr ""
 
-#: ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1796
 msgid "Sorry, the format for this file is unknown."
 msgstr "Συγγνώμη, η μορφή αυτού του αρχείου είναι άγνωστη."
 
@@ -6450,13 +6445,13 @@ msgstr ""
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Δήλωση, 5 1/2 x 8 1/2 ίντσες"
 
-#: ../src/richtext/richtextsizepage.cpp:515
-#: ../src/richtext/richtextsizepage.cpp:520
+#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:523
 #, fuzzy
 msgid "Static"
 msgstr "Κατάσταση: "
 
-#: ../src/generic/prntdlgg.cpp:209
+#: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "Κατάσταση: "
 
@@ -6555,7 +6550,7 @@ msgstr "TIFF: Λάθος κατα την εγγραφή εικόνας."
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10687
+#: ../src/richtext/richtextbuffer.cpp:10794
 #, fuzzy
 msgid "Table Properties"
 msgstr "&Ιδιότητες"
@@ -6577,7 +6572,7 @@ msgstr ""
 msgid "Teletype"
 msgstr "Τηλέτυπο"
 
-#: ../src/common/docview.cpp:1879
+#: ../src/common/docview.cpp:1878
 msgid "Templates"
 msgstr "Πρότυπα"
 
@@ -6629,10 +6624,10 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The bottom padding size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextsizepage.cpp:636
-#: ../src/richtext/richtextsizepage.cpp:638
-#: ../src/richtext/richtextsizepage.cpp:650
-#: ../src/richtext/richtextsizepage.cpp:652
+#: ../src/richtext/richtextsizepage.cpp:639
+#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:653
+#: ../src/richtext/richtextsizepage.cpp:655
 #, fuzzy
 msgid "The bottom position."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6775,10 +6770,10 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The left padding size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
-#: ../src/richtext/richtextsizepage.cpp:545
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:534
+#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:548
+#: ../src/richtext/richtextsizepage.cpp:550
 #, fuzzy
 msgid "The left position."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6799,38 +6794,38 @@ msgstr ""
 msgid "The locale ID is unknown."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 #, fuzzy
 msgid "The object height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:471
-#: ../src/richtext/richtextsizepage.cpp:473
+#: ../src/richtext/richtextsizepage.cpp:474
+#: ../src/richtext/richtextsizepage.cpp:476
 #, fuzzy
 msgid "The object maximum height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 #, fuzzy
 msgid "The object maximum width."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 #, fuzzy
 msgid "The object minimum height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 #, fuzzy
 msgid "The object minimum width."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:331
+#: ../src/richtext/richtextsizepage.cpp:332
+#: ../src/richtext/richtextsizepage.cpp:334
 #, fuzzy
 msgid "The object width."
 msgstr "Το βάρος της γραμματοσειράς."
@@ -6841,18 +6836,18 @@ msgstr "Το βάρος της γραμματοσειράς."
 msgid "The outline level."
 msgstr "Εμφανίζει την προεπισκόπηση της γραμματοσειράς"
 
-#: ../src/common/log.cpp:283
+#: ../src/common/log.cpp:281
 #, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/common/log.cpp:276
+#: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
 msgstr ""
 
-#: ../src/gtk/print.cpp:940 ../src/gtk/print.cpp:1123
+#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
 msgstr ""
 
@@ -6892,10 +6887,10 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The right padding size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextsizepage.cpp:601
-#: ../src/richtext/richtextsizepage.cpp:603
-#: ../src/richtext/richtextsizepage.cpp:615
-#: ../src/richtext/richtextsizepage.cpp:617
+#: ../src/richtext/richtextsizepage.cpp:604
+#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:620
 #, fuzzy
 msgid "The right position."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6961,10 +6956,10 @@ msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 msgid "The top padding size."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
 
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:580
-#: ../src/richtext/richtextsizepage.cpp:582
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:583
+#: ../src/richtext/richtextsizepage.cpp:585
 #, fuzzy
 msgid "The top position."
 msgstr "Το μέγεθος κουκίδας γραμματοσειράς"
@@ -6984,7 +6979,7 @@ msgstr ""
 "(remote access service, RAS) είναι πολύ παλία, παρακαλώ αναβαθμίστε (η "
 "ακόλουθη απαραίτητη συνάρτηση λείπει: %s)."
 
-#: ../src/gtk/print.cpp:968
+#: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr ""
 
@@ -7010,11 +7005,11 @@ msgstr ""
 msgid "This is not a %s."
 msgstr "PCX: αυτό δεν είναι αρχείο PCX."
 
-#: ../src/common/wincmn.cpp:1647
+#: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4295
+#: ../src/gtk/window.cpp:4317
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -7079,7 +7074,7 @@ msgstr "Tip της Ημέρας"
 msgid "Tips not available, sorry!"
 msgstr "Το Tip δεν είναι διαθέσιμο, συγγνώμη!"
 
-#: ../src/generic/prntdlgg.cpp:247
+#: ../src/generic/prntdlgg.cpp:242
 msgid "To:"
 msgstr "Πρός:"
 
@@ -7087,7 +7082,7 @@ msgstr "Πρός:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7925
+#: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Too many EndStyle calls!"
 msgstr ""
 
@@ -7095,13 +7090,13 @@ msgstr ""
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Πάρα πολλά χρώματα στο PNG, η εικόνα μπορεί να είναι λίγο θολή."
 
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 #, fuzzy
 msgid "Top"
 msgstr "Πρός:"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
 msgstr "Πάνω περιθώριο (mm)"
 
@@ -7400,8 +7395,8 @@ msgstr ""
 msgid "Units for the bottom padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:661
-#: ../src/richtext/richtextsizepage.cpp:663
+#: ../src/richtext/richtextsizepage.cpp:664
+#: ../src/richtext/richtextsizepage.cpp:666
 #, fuzzy
 msgid "Units for the bottom position."
 msgstr ""
@@ -7428,45 +7423,45 @@ msgstr ""
 msgid "Units for the left padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:558
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
 #, fuzzy
 msgid "Units for the left position."
 msgstr ""
 "Δεν είναι δυνατή η αναμονή(wait) για τον τερματισμό του νήματος εκτέλεσης"
 "(thread)"
 
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:487
 #, fuzzy
 msgid "Units for the maximum object height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:457
+#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:460
 #, fuzzy
 msgid "Units for the maximum object width."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:430
+#: ../src/richtext/richtextsizepage.cpp:431
+#: ../src/richtext/richtextsizepage.cpp:433
 #, fuzzy
 msgid "Units for the minimum object height."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:403
+#: ../src/richtext/richtextsizepage.cpp:404
+#: ../src/richtext/richtextsizepage.cpp:406
 #, fuzzy
 msgid "Units for the minimum object width."
 msgstr "Το βάρος της γραμματοσειράς."
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:377
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Units for the object height."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:342
+#: ../src/richtext/richtextsizepage.cpp:343
+#: ../src/richtext/richtextsizepage.cpp:345
 msgid "Units for the object width."
 msgstr ""
 
@@ -7490,8 +7485,8 @@ msgstr ""
 msgid "Units for the right padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:628
+#: ../src/richtext/richtextsizepage.cpp:629
+#: ../src/richtext/richtextsizepage.cpp:631
 #, fuzzy
 msgid "Units for the right position."
 msgstr ""
@@ -7521,8 +7516,8 @@ msgstr ""
 msgid "Units for the top padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:596
 #, fuzzy
 msgid "Units for the top position."
 msgstr ""
@@ -7620,7 +7615,7 @@ msgstr "Ευθυγραμμισμένα"
 msgid "Unsupported clipboard format."
 msgstr "Δεν υποστηρίζεται ο τύπος προχείρου(clipboard format)."
 
-#: ../src/common/appcmn.cpp:228
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Το θέμα '%s' δεν υποστηρίζεται."
@@ -7683,8 +7678,8 @@ msgstr "Δώστε έναν αριθμό σελίδας μεταξύ %d και %
 msgid "Version "
 msgstr "Δικαιώματα"
 
-#: ../src/richtext/richtextsizepage.cpp:288
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:291
+#: ../src/richtext/richtextsizepage.cpp:293
 #, fuzzy
 msgid "Vertical alignment."
 msgstr "Δεν ήταν δυνατή η εκκίνηση της εκτύπωσης."
@@ -7697,7 +7692,7 @@ msgstr "Εμφάνιση αρχείων σε προβολή με λεπτομέ�
 msgid "View files as a list view"
 msgstr "Εμφάνιση αρχείων σε προβολή λίστας"
 
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:1952
 msgid "Views"
 msgstr "Προβολές"
 
@@ -7718,7 +7713,7 @@ msgstr ""
 msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr "Η αναμονή για τον τερματισμό υπο-διεργασίας (subprocess) απέτυχε"
 
-#: ../src/common/log.cpp:229
+#: ../src/common/log.cpp:227
 msgid "Warning: "
 msgstr "Προειδοποίηση: "
 
@@ -8290,16 +8285,16 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:370
-#: ../src/richtext/richtextsizepage.cpp:397
-#: ../src/richtext/richtextsizepage.cpp:424
-#: ../src/richtext/richtextsizepage.cpp:451
-#: ../src/richtext/richtextsizepage.cpp:478
-#: ../src/richtext/richtextsizepage.cpp:552
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:622
-#: ../src/richtext/richtextsizepage.cpp:657
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
 msgstr ""
 
@@ -8418,7 +8413,7 @@ msgstr "αρχείο '%s', γραμμή %d: τιμή για αμετάβλητο
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "αρχείο '%s': απροσδόκητος χαρακτήρας %c στη γραμμή %d."
 
-#: ../src/richtext/richtextbuffer.cpp:8300
+#: ../src/richtext/richtextbuffer.cpp:8358
 #, fuzzy
 msgid "files"
 msgstr "Αρχείο"
@@ -8443,8 +8438,8 @@ msgstr "τέταρτο"
 msgid "generate verbose log messages"
 msgstr "δημιουργία αναλυτικών (verbose) μηνυμάτων καταγραφής (log)"
 
-#: ../src/richtext/richtextbuffer.cpp:12015
-#: ../src/richtext/richtextbuffer.cpp:12125
+#: ../src/richtext/richtextbuffer.cpp:12212
+#: ../src/richtext/richtextbuffer.cpp:12322
 #, fuzzy
 msgid "image"
 msgstr "Ώρα"
@@ -8511,7 +8506,7 @@ msgstr "κανένα λάθος"
 msgid "no fonts found in %s, using builtin font"
 msgstr ""
 
-#: ../src/html/helpdata.cpp:654
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "ανώνυμο"
 
@@ -8524,7 +8519,7 @@ msgstr "μεσημέρι"
 msgid "normal"
 msgstr "Κανονικό"
 
-#: ../src/gtk/print.cpp:1227 ../src/gtk/print.cpp:1332
+#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
 msgid "not implemented"
 msgstr ""
 
@@ -8540,16 +8535,16 @@ msgstr "τα αντικείμενα δεν μπορούν να έχουν XML κ
 msgid "out of memory"
 msgstr "ανεπαρκής μνήμη"
 
-#: ../src/richtext/richtextsizepage.cpp:337
-#: ../src/richtext/richtextsizepage.cpp:371
-#: ../src/richtext/richtextsizepage.cpp:398
-#: ../src/richtext/richtextsizepage.cpp:425
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:479
-#: ../src/richtext/richtextsizepage.cpp:553
-#: ../src/richtext/richtextsizepage.cpp:588
-#: ../src/richtext/richtextsizepage.cpp:623
-#: ../src/richtext/richtextsizepage.cpp:658
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
 msgid "percent"
 msgstr ""
 
@@ -8611,36 +8606,36 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:372
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:376
 #: ../src/richtext/richtextsizepage.cpp:399
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:426
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:453
-#: ../src/richtext/richtextsizepage.cpp:454
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:456
+#: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:554
-#: ../src/richtext/richtextsizepage.cpp:555
-#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:557
+#: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:589
-#: ../src/richtext/richtextsizepage.cpp:590
-#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:592
+#: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:624
-#: ../src/richtext/richtextsizepage.cpp:625
-#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:627
+#: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:659
-#: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextsizepage.cpp:662
+#: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
 msgstr ""
 
@@ -8699,32 +8694,32 @@ msgstr "δέκατο έκτο"
 msgid "sixth"
 msgstr "έκτο"
 
-#: ../src/common/appcmn.cpp:206
+#: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr ""
 "διευκρινήστε τον τρόπο απεικόνισης που θα χρησιμοποιηθεί (π.χ. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:192
+#: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
 msgstr "καθορίστε το θέμα που θα χρησιμοποιηθεί"
 
-#: ../src/richtext/richtextbuffer.cpp:8818
+#: ../src/richtext/richtextbuffer.cpp:8876
 msgid "standard/circle"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8819
+#: ../src/richtext/richtextbuffer.cpp:8877
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8821
+#: ../src/richtext/richtextbuffer.cpp:8879
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8820
+#: ../src/richtext/richtextbuffer.cpp:8878
 msgid "standard/square"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8822
+#: ../src/richtext/richtextbuffer.cpp:8880
 msgid "standard/triangle"
 msgstr ""
 
@@ -8832,7 +8827,7 @@ msgstr "άγνωστο-%d"
 msgid "unnamed"
 msgstr "απροσδιόριστο"
 
-#: ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:1606
 #, c-format
 msgid "unnamed%d"
 msgstr "απροσδιόριστο%d"
@@ -8841,7 +8836,7 @@ msgstr "απροσδιόριστο%d"
 msgid "unsupported Zip compression method"
 msgstr "μη υποστηριζόμενη μέθοδος συμπίεσης Zip"
 
-#: ../src/common/translation.cpp:1892
+#: ../src/common/translation.cpp:1883
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "χρήση καταλόγου '%s' από '%s'"
@@ -8854,7 +8849,7 @@ msgstr "σφάλμα εγγραφής"
 msgid "wxGetTimeOfDay failed."
 msgstr "το wxGetTimeOfDay απέτυχε."
 
-#: ../src/gtk/print.cpp:996
+#: ../src/gtk/print.cpp:987
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr ""
 
@@ -8895,6 +8890,9 @@ msgstr "σφάλμα zlib %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr ""
+
+#~ msgid "Print preview"
+#~ msgstr "Προεπισκόπηση εκτύπωσης"
 
 #, fuzzy
 #~ msgid "&Preview..."

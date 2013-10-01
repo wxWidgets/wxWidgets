@@ -964,8 +964,6 @@ LIBNOTIFY_LIBS
 LIBNOTIFY_CFLAGS
 GNOMEVFS_LIBS
 GNOMEVFS_CFLAGS
-LIBGNOMEPRINTUI_LIBS
-LIBGNOMEPRINTUI_CFLAGS
 GTKPRINT_LIBS
 GTKPRINT_CFLAGS
 SDL_LIBS
@@ -1108,7 +1106,6 @@ with_libxpm
 with_libiconv
 with_libmspack
 with_gtkprint
-with_gnomeprint
 with_gnomevfs
 with_libnotify
 with_hildon
@@ -1412,8 +1409,6 @@ MesaGL_CFLAGS
 MesaGL_LIBS
 GTKPRINT_CFLAGS
 GTKPRINT_LIBS
-LIBGNOMEPRINTUI_CFLAGS
-LIBGNOMEPRINTUI_LIBS
 GNOMEVFS_CFLAGS
 GNOMEVFS_LIBS
 LIBNOTIFY_CFLAGS
@@ -2340,7 +2335,6 @@ Optional Packages:
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
   --without-gtkprint      don't use GTK printing support
-  --without-gnomeprint    don't use GNOME printing libraries
   --with-gnomevfs         use GNOME VFS for associating MIME types
   --with-libnotify        use libnotify for notifications
   --with-hildon           use Hildon framework for Nokia 770/800/810
@@ -2411,10 +2405,6 @@ Some influential environment variables:
               C compiler flags for GTKPRINT, overriding pkg-config
   GTKPRINT_LIBS
               linker flags for GTKPRINT, overriding pkg-config
-  LIBGNOMEPRINTUI_CFLAGS
-              C compiler flags for LIBGNOMEPRINTUI, overriding pkg-config
-  LIBGNOMEPRINTUI_LIBS
-              linker flags for LIBGNOMEPRINTUI, overriding pkg-config
   GNOMEVFS_CFLAGS
               C compiler flags for GNOMEVFS, overriding pkg-config
   GNOMEVFS_LIBS
@@ -5173,50 +5163,6 @@ fi
             fi
           else
             result=$wxUSE_GTKPRINT
-          fi
-
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
-$as_echo "$result" >&6; }
-
-
-          withstring=without
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$withstring" = xwithout; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${withstring:-with}-gnomeprint" >&5
-$as_echo_n "checking for --${withstring:-with}-gnomeprint... " >&6; }
-
-# Check whether --with-gnomeprint was given.
-if test "${with_gnomeprint+set}" = set; then :
-  withval=$with_gnomeprint;
-                        if test "$withval" = yes; then
-                          wx_cv_use_gnomeprint='wxUSE_LIBGNOMEPRINT=yes'
-                        else
-                          wx_cv_use_gnomeprint='wxUSE_LIBGNOMEPRINT=no'
-                        fi
-
-else
-
-                        wx_cv_use_gnomeprint='wxUSE_LIBGNOMEPRINT=${'DEFAULT_wxUSE_LIBGNOMEPRINT":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_gnomeprint"
-
-          if test x"$withstring" = xwithout; then
-            if test $wxUSE_LIBGNOMEPRINT = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_LIBGNOMEPRINT
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -34153,109 +34099,6 @@ $as_echo "yes" >&6; }
 
 fi
         fi
-
-        if test "$WXGTK3" = 1; then
-            wxUSE_LIBGNOMEPRINT=no
-        fi
-
-        if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
-
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBGNOMEPRINTUI" >&5
-$as_echo_n "checking for LIBGNOMEPRINTUI... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBGNOMEPRINTUI_CFLAGS"; then
-        pkg_cv_LIBGNOMEPRINTUI_CFLAGS="$LIBGNOMEPRINTUI_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libgnomeprintui-2.2 >= 2.8\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libgnomeprintui-2.2 >= 2.8") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_LIBGNOMEPRINTUI_CFLAGS=`$PKG_CONFIG --cflags "libgnomeprintui-2.2 >= 2.8" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$LIBGNOMEPRINTUI_LIBS"; then
-        pkg_cv_LIBGNOMEPRINTUI_LIBS="$LIBGNOMEPRINTUI_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libgnomeprintui-2.2 >= 2.8\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libgnomeprintui-2.2 >= 2.8") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_LIBGNOMEPRINTUI_LIBS=`$PKG_CONFIG --libs "libgnomeprintui-2.2 >= 2.8" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        LIBGNOMEPRINTUI_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libgnomeprintui-2.2 >= 2.8"`
-        else
-	        LIBGNOMEPRINTUI_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libgnomeprintui-2.2 >= 2.8"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$LIBGNOMEPRINTUI_PKG_ERRORS" >&5
-
-
-                        if test "$wxUSE_GTKPRINT" = yes; then
-                            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                        else
-                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
-$as_echo "$as_me: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&2;}
-                        fi
-                        wxUSE_LIBGNOMEPRINT="no"
-
-
-elif test $pkg_failed = untried; then
-
-                        if test "$wxUSE_GTKPRINT" = yes; then
-                            { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-                        else
-                            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&5
-$as_echo "$as_me: WARNING: libgnomeprintui not found, library will use standard PostScript printing" >&2;}
-                        fi
-                        wxUSE_LIBGNOMEPRINT="no"
-
-
-else
-	LIBGNOMEPRINTUI_CFLAGS=$pkg_cv_LIBGNOMEPRINTUI_CFLAGS
-	LIBGNOMEPRINTUI_LIBS=$pkg_cv_LIBGNOMEPRINTUI_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBGNOMEPRINTUI_LIBS"
-                        CFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CFLAGS"
-                        CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
-                        $as_echo "#define wxUSE_LIBGNOMEPRINT 1" >>confdefs.h
-
-
-fi
-        fi
     fi
 
     if test "$wxUSE_MIMETYPE" = "yes" ; then
@@ -37983,9 +37826,6 @@ case "$TOOLKIT" in
             fi
             if test "$wxUSE_GTKPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
-            fi
-            if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
-                TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomeprint";
             fi
             if test "$wxUSE_LIBGNOMEVFS" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomevfs"

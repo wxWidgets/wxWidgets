@@ -862,17 +862,13 @@ typedef pid_t GPid;
  */
 #define wxUSE_LIBSDL 0
 /*
- * Use GTK print for printing under GTK+ 2.0
+ * Use GTK print for printing under GTK+ 2.10+
  */
 #ifdef VMS_GTK2
 #define wxUSE_GTKPRINT 1
 #else
 #define wxUSE_GTKPRINT 0
 #endif
-/*
- * Use GNOME print for printing under GTK+ 2.0
- */
-#define wxUSE_LIBGNOMEPRINT 0
 /*
  * Use GNOME VFS for MIME types
  */

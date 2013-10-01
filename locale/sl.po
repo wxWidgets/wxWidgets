@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 18:18+0200\n"
+"POT-Creation-Date: 2013-10-01 19:04+0200\n"
 "PO-Revision-Date: 2012-12-30 00:14+0100\n"
 "Last-Translator: filmsi\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
@@ -40,7 +40,7 @@ msgid " (copy %d of %d)"
 msgstr " (kopija %d od %d)"
 
 # common/log.cpp:242
-#: ../src/common/log.cpp:427
+#: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (napaka %ld: %s)"
@@ -51,7 +51,7 @@ msgid " (in module \"%s\")"
 msgstr " (v modulu \"%s\")"
 
 # common/docview.cpp:1206
-#: ../src/common/docview.cpp:1625
+#: ../src/common/docview.cpp:1624
 msgid " - "
 msgstr " - "
 
@@ -238,14 +238,14 @@ msgstr "&Dno"
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:634
-#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:637
+#: ../src/richtext/richtextsizepage.cpp:644
 #, fuzzy
 msgid "&Bottom:"
 msgstr "&Dno:"
 
 # generic/fontdlgg.cpp:217
-#: ../include/wx/richtext/richtextbuffer.h:3523
+#: ../include/wx/richtext/richtextbuffer.h:3530
 #, fuzzy
 msgid "&Box"
 msgstr "&Krepko"
@@ -292,7 +292,7 @@ msgstr "&Kaskadno"
 # generic/proplist.cpp:523
 # generic/wizard.cpp:192
 # html/helpfrm.cpp:910
-#: ../include/wx/richtext/richtextbuffer.h:5578
+#: ../include/wx/richtext/richtextbuffer.h:5587
 msgid "&Cell"
 msgstr "&Celica"
 
@@ -400,7 +400,7 @@ msgstr "&Dokončaj"
 msgid "&First"
 msgstr "&Prvi"
 
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
 msgstr "&Plavajoči način:"
 
@@ -444,8 +444,8 @@ msgid "&Harddisk"
 msgstr "&Trdi disk"
 
 # generic/fontdlgg.cpp:216
-#: ../src/richtext/richtextsizepage.cpp:348
-#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:351
+#: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
 msgstr "&Višina:"
 
@@ -519,8 +519,8 @@ msgstr "&Levo"
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:529
-#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:532
+#: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
 msgstr "&Levo:"
 
@@ -537,7 +537,7 @@ msgstr "&Dnevnik"
 msgid "&Move"
 msgstr "&Premakni"
 
-#: ../src/richtext/richtextsizepage.cpp:669
+#: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
 msgstr "&Premakni predmet v:"
 
@@ -563,7 +563,7 @@ msgstr "&Naslednji"
 msgid "&Next >"
 msgstr "&Naslednji >"
 
-#: ../src/richtext/richtextsizepage.cpp:678
+#: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
 msgstr "&Naslednji odstavek"
 
@@ -627,7 +627,7 @@ msgstr "&Prelom strani"
 msgid "&Paste"
 msgstr "&Prilepi"
 
-#: ../include/wx/richtext/richtextbuffer.h:4648
+#: ../include/wx/richtext/richtextbuffer.h:4655
 msgid "&Picture"
 msgstr "&Slika"
 
@@ -641,7 +641,7 @@ msgid "&Position (tenths of a mm):"
 msgstr "&Položaj (v desetinkah mm):"
 
 # generic/logg.cpp:1023
-#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:514
 msgid "&Position mode:"
 msgstr "&Način položaja:"
 
@@ -656,7 +656,7 @@ msgid "&Previous"
 msgstr "&Prejšnji"
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextsizepage.cpp:672
+#: ../src/richtext/richtextsizepage.cpp:675
 msgid "&Previous Paragraph"
 msgstr "&Prejšnji odstavek"
 
@@ -666,7 +666,7 @@ msgid "&Print..."
 msgstr "&Natisni ..."
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4922
+#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "&Lastnosti"
@@ -720,8 +720,8 @@ msgstr "&Desno"
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:599
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:602
+#: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
 msgstr "&Desno:"
 
@@ -794,7 +794,7 @@ msgstr "&Podmnožica:"
 msgid "&Symbol:"
 msgstr "&Simbol:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5668
+#: ../include/wx/richtext/richtextbuffer.h:5679
 msgid "&Table"
 msgstr "&Tabela"
 
@@ -808,8 +808,8 @@ msgstr "&Vrh"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:564
-#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:574
 #, fuzzy
 msgid "&Top:"
 msgstr "&Vrh:"
@@ -844,7 +844,7 @@ msgstr "&Nezamaknjeno"
 msgid "&Up"
 msgstr "&Gor"
 
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
 msgstr "&Navpična poravnava:"
 
@@ -860,8 +860,8 @@ msgid "&Weight:"
 msgstr "&Debelina:"
 
 # generic/fontdlgg.cpp:216
-#: ../src/richtext/richtextsizepage.cpp:314
-#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
 msgstr "&Širina:"
 
@@ -976,7 +976,7 @@ msgstr "(zaznamki)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:829
+#: ../src/richtext/richtextformatdlg.cpp:831
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -1324,7 +1324,7 @@ msgstr "O programu"
 msgid "About %s"
 msgstr "O programu %s ..."
 
-#: ../src/richtext/richtextsizepage.cpp:517
+#: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr "Absolutno"
 
@@ -1336,18 +1336,18 @@ msgstr "Dejanska velikost"
 msgid "Add"
 msgstr "Dodaj"
 
-#: ../src/richtext/richtextbuffer.cpp:10648
-msgid "Add column"
+#: ../src/richtext/richtextbuffer.cpp:10751
+msgid "Add Column"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10688
+msgid "Add Row"
 msgstr ""
 
 # html/helpfrm.cpp:270
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "Dodaj trenutno stran med zaznamke"
-
-#: ../src/richtext/richtextbuffer.cpp:10590
-msgid "Add row"
-msgstr ""
 
 # generic/colrdlgg.cpp:269
 #: ../src/generic/colrdlgg.cpp:283
@@ -1393,12 +1393,12 @@ msgstr "Poravnaj levo"
 msgid "Align Right"
 msgstr "Poravnaj desno"
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:266
 msgid "Alignment"
 msgstr "Poravnava"
 
 # generic/prntdlgg.cpp:163
-#: ../src/generic/prntdlgg.cpp:220
+#: ../src/generic/prntdlgg.cpp:215
 msgid "All"
 msgstr "Vse"
 
@@ -1409,12 +1409,12 @@ msgid "All files (%s)|%s"
 msgstr "Vse datoteke (%s)|%s"
 
 # generic/filedlgg.cpp:825
-#: ../include/wx/defs.h:2884
+#: ../include/wx/defs.h:2922
 msgid "All files (*)|*"
 msgstr "Vse datoteke (*)|*"
 
 # generic/filedlgg.cpp:825
-#: ../include/wx/defs.h:2881
+#: ../include/wx/defs.h:2919
 msgid "All files (*.*)|*.*"
 msgstr "Vse datoteke (*.*)|*.*"
 
@@ -1430,7 +1430,7 @@ msgstr "Abecedni način"
 msgid "Already Registered Object passed to SetObjectClassInfo"
 msgstr "V SetObjectClassInfo je bil podan že registriran predmet."
 
-#: ../src/unix/dialup.cpp:354
+#: ../src/unix/dialup.cpp:353
 msgid "Already dialling ISP."
 msgstr "Klicanje ponudnika spletnih storitev je v teku."
 
@@ -1647,18 +1647,18 @@ msgstr "Obroba"
 msgid "Borders"
 msgstr "Obrobe"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:144
+#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
 #, fuzzy
 msgid "Bottom"
 msgstr "Dno"
 
 # generic/prntdlgg.cpp:662
-#: ../src/generic/prntdlgg.cpp:898
+#: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "Spodnji rob (mm):"
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:8861
+#: ../src/richtext/richtextbuffer.cpp:8919
 #, fuzzy
 msgid "Box Properties"
 msgstr "Lastnosti polja"
@@ -1796,7 +1796,7 @@ msgstr "Niti ni mogoče ustvariti."
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 # common/file.cpp:200
-#: ../src/msw/window.cpp:3783
+#: ../src/msw/window.cpp:3793
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Okna ali razreda %s ni mogoče ustvariti."
@@ -1994,7 +1994,7 @@ msgstr ""
 
 # common/filefn.cpp:1287
 # msw/dir.cpp:294
-#: ../src/common/filefn.cpp:1335
+#: ../src/common/filefn.cpp:1336
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "Oštevilčenje datotek '%s' ni možno"
@@ -2028,11 +2028,11 @@ msgstr "Aktivne klicne povezave ni mogoče najti: %s"
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Za politiko razporejanja %d ni mogoče pridobiti razpona prioritet."
 
-#: ../src/unix/utilsunx.cpp:983
+#: ../src/unix/utilsunx.cpp:988
 msgid "Cannot get the hostname"
 msgstr "Imena gostitelja ni mogoče dobiti"
 
-#: ../src/unix/utilsunx.cpp:1019
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the official hostname"
 msgstr "Imena uradnega gostitelja ni mogoče dobiti"
 
@@ -2078,7 +2078,7 @@ msgid "Cannot open HTML document: %s"
 msgstr "Dokumenta HTML ni mogoče odpreti: %s"
 
 # html/helpdata.cpp:657
-#: ../src/html/helpdata.cpp:664
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Knjige s HTML pomočjo ni mogoče odpreti: %s"
@@ -2173,7 +2173,7 @@ msgid "Categorized Mode"
 msgstr ""
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:9273
+#: ../src/richtext/richtextbuffer.cpp:9347
 msgid "Cell Properties"
 msgstr "Lastnosti celice"
 
@@ -2215,7 +2215,7 @@ msgid "Centre text."
 msgstr "Sredinsko poravnaj besedilo."
 
 # generic/dirdlgg.cpp:217
-#: ../src/richtext/richtextsizepage.cpp:284
+#: ../src/richtext/richtextsizepage.cpp:287
 msgid "Centred"
 msgstr "Sredinsko"
 
@@ -2224,20 +2224,21 @@ msgstr "Sredinsko"
 msgid "Ch&oose..."
 msgstr "&Izberi ..."
 
-#: ../src/richtext/richtextbuffer.cpp:4029
+#: ../src/richtext/richtextbuffer.cpp:4041
 msgid "Change List Style"
 msgstr "Spremeni slog seznama"
 
-#: ../src/richtext/richtextbuffer.cpp:3380
+#: ../src/richtext/richtextbuffer.cpp:3392
 msgid "Change Object Style"
 msgstr "Spremeni slog predmeta"
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:3646
+#: ../src/richtext/richtextbuffer.cpp:3658
+#: ../src/richtext/richtextbuffer.cpp:7749
 msgid "Change Properties"
 msgstr "Spremeni lastnosti"
 
-#: ../src/richtext/richtextbuffer.cpp:3197
+#: ../src/richtext/richtextbuffer.cpp:3209
 msgid "Change Style"
 msgstr "Spremeni slog"
 
@@ -2504,7 +2505,7 @@ msgstr "Zapri to okno"
 msgid "Color"
 msgstr "Barva"
 
-#: ../src/richtext/richtextformatdlg.cpp:723
+#: ../src/richtext/richtextformatdlg.cpp:725
 msgid "Colour"
 msgstr "Barva"
 
@@ -2552,7 +2553,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Pogovorno okno izbirnika barv ni uspelo, z napako %0lx."
 
-#: ../src/gtk/window.cpp:4284
+#: ../src/gtk/window.cpp:4306
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2613,7 +2614,7 @@ msgid "Copied to clipboard:\"%s\""
 msgstr "Kopirano v odložišče:\"%s\""
 
 # generic/prntdlgg.cpp:196
-#: ../src/generic/prntdlgg.cpp:252
+#: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
 msgstr "Št. kopij"
 
@@ -2728,7 +2729,7 @@ msgid "Could not set column width."
 msgstr "Širine stolpca ni mogoče določiti."
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1569
 msgid "Could not set current working directory"
 msgstr "Delovne mape ni mogoče določiti."
 
@@ -2770,12 +2771,12 @@ msgstr "Predogleda dokumenta ni mogoče začeti."
 # generic/printps.cpp:209
 # msw/printwin.cpp:252
 #: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1086 ../src/gtk/gnome/gprint.cpp:922
+#: ../src/gtk/print.cpp:1077
 msgid "Could not start printing."
 msgstr "Tiskanja ni mogoče pognati."
 
 # common/wincmn.cpp:784
-#: ../src/common/wincmn.cpp:2114
+#: ../src/common/wincmn.cpp:2131
 msgid "Could not transfer data to window"
 msgstr "Podatkov ni mogoče prenesti v okno."
 
@@ -2807,7 +2808,7 @@ msgid "Couldn't create the overlay window"
 msgstr "Prekrivnega okna ni mogoče ustvariti."
 
 # msw/thread.cpp:958
-#: ../src/common/translation.cpp:2024
+#: ../src/common/translation.cpp:2015
 msgid "Couldn't enumerate translations"
 msgstr "Prevodov ni mogoče oštevilčiti."
 
@@ -2817,7 +2818,7 @@ msgstr "Prevodov ni mogoče oštevilčiti."
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Simbola '%s' v dinamični knjižnici ni mogoče najti."
 
-#: ../src/gtk/print.cpp:2023
+#: ../src/gtk/print.cpp:2014
 msgid "Couldn't get hatch style from wxBrush."
 msgstr "Iz wxBrush ni mogoče dobiti sloga šrafiranja."
 
@@ -2923,7 +2924,7 @@ msgid "Current directory:"
 msgstr "Trenutna mapa:"
 
 # html/helpfrm.cpp:899
-#: ../src/gtk/print.cpp:768
+#: ../src/gtk/print.cpp:759
 msgid "Custom size"
 msgstr "Velikost po meri"
 
@@ -3045,11 +3046,11 @@ msgstr "Privzeto kodiranje"
 msgid "Default font"
 msgstr "Privzeta pisava"
 
-#: ../src/generic/prntdlgg.cpp:515
+#: ../src/generic/prntdlgg.cpp:510
 msgid "Default printer"
 msgstr "Privzeti tiskalnik"
 
-#: ../src/richtext/richtextbuffer.cpp:7793 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Izbriši"
@@ -3060,6 +3061,17 @@ msgstr "Izbriši"
 msgid "Delete A&ll"
 msgstr "Izbriši &vse"
 
+# generic/dirdlgg.cpp:191
+#: ../src/richtext/richtextbuffer.cpp:10637
+#, fuzzy
+msgid "Delete Column"
+msgstr "Izbriši izbor"
+
+#: ../src/richtext/richtextbuffer.cpp:10587
+#, fuzzy
+msgid "Delete Row"
+msgstr "Izbriši"
+
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
 msgstr "Izbriši slog"
@@ -3068,20 +3080,9 @@ msgstr "Izbriši slog"
 msgid "Delete Text"
 msgstr "Izbriši besedilo"
 
-# generic/dirdlgg.cpp:191
-#: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
-msgid "Delete column"
-msgstr "Izbriši izbor"
-
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "Izbriši element"
-
-#: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
-msgid "Delete row"
-msgstr "Izbriši"
 
 # generic/dirdlgg.cpp:191
 #: ../src/common/stockitem.cpp:260
@@ -3149,13 +3150,13 @@ msgid "Directories"
 msgstr "Mape"
 
 # common/filefn.cpp:1086
-#: ../src/common/filefn.cpp:1250
+#: ../src/common/filefn.cpp:1251
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Mape '%s' ni mogoče ustvariti."
 
 # common/filefn.cpp:1086
-#: ../src/common/filefn.cpp:1270
+#: ../src/common/filefn.cpp:1271
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "Mape '%s' ni mogoče izbrisati."
@@ -3312,41 +3313,41 @@ msgstr "Uredi element"
 msgid "Elapsed time:"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:350
-#: ../src/richtext/richtextsizepage.cpp:352
-#: ../src/richtext/richtextsizepage.cpp:462
-#: ../src/richtext/richtextsizepage.cpp:464
+#: ../src/richtext/richtextsizepage.cpp:353
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:465
+#: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
 msgstr "Omogoči vrednost višine."
 
 # generic/printps.cpp:209
 # msw/printwin.cpp:252
-#: ../src/richtext/richtextsizepage.cpp:435
-#: ../src/richtext/richtextsizepage.cpp:437
+#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:440
 msgid "Enable the maximum width value."
 msgstr "Omogoči vrednost največje širine."
 
-#: ../src/richtext/richtextsizepage.cpp:408
-#: ../src/richtext/richtextsizepage.cpp:410
+#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
 msgstr "Omogoči vrednost najmanjše višine."
 
 # generic/printps.cpp:209
 # msw/printwin.cpp:252
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:386
 msgid "Enable the minimum width value."
 msgstr "Omogoči vrednost najmanjše širine."
 
-#: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:318
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
 msgstr "Omogoči vrednost širine."
 
 # generic/printps.cpp:209
 # msw/printwin.cpp:252
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:280
+#: ../src/richtext/richtextsizepage.cpp:282
 msgid "Enable vertical alignment."
 msgstr "Omogoči navpično poravnavo."
 
@@ -3455,12 +3456,12 @@ msgstr "Napaka pri branju konfiguracijskih možnosti."
 msgid "Error saving user configuration data."
 msgstr "Napaka pri shranjevanju podatkov nastavitev uporabnika."
 
-#: ../src/gtk/print.cpp:680
+#: ../src/gtk/print.cpp:671
 msgid "Error while printing: "
 msgstr "Napaka pri tiskanju: "
 
 # common/log.cpp:362
-#: ../src/common/log.cpp:225
+#: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "Napaka:"
 
@@ -3804,7 +3805,7 @@ msgid "Failed to get the local system time"
 msgstr "Lokalnega sistemskega časa ni mogoče razbrati."
 
 # generic/dirdlgg.cpp:550
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1453
 msgid "Failed to get the working directory"
 msgstr "Delovne mape ni mogoče pridobiti."
 
@@ -4302,7 +4303,7 @@ msgstr ""
 "Jo želite prepisati?"
 
 # common/filefn.cpp:1086
-#: ../src/common/filefn.cpp:1206
+#: ../src/common/filefn.cpp:1207
 #, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "Datoteke '%s' ni mogoče odstraniti."
@@ -4326,7 +4327,7 @@ msgstr "Pogovorno okno izbirnika datotek je spodletelo, napaka %0lx."
 # common/docview.cpp:296
 # common/docview.cpp:332
 # common/docview.cpp:1388
-#: ../src/common/docview.cpp:1772
+#: ../src/common/docview.cpp:1771
 msgid "File error"
 msgstr "Datotečna napaka"
 
@@ -4342,7 +4343,7 @@ msgid "Files"
 msgstr "Datoteke"
 
 # generic/filedlgg.cpp:825
-#: ../src/common/filefn.cpp:1760
+#: ../src/common/filefn.cpp:1761
 #, c-format
 msgid "Files (%s)"
 msgstr "Datoteke (%s)"
@@ -4367,7 +4368,7 @@ msgid "First page"
 msgstr "Prva stran"
 
 # html/helpfrm.cpp:889
-#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:521
 #, fuzzy
 msgid "Fixed"
 msgstr "Nespremenljivo"
@@ -4381,7 +4382,7 @@ msgstr "Nespremenljiva pisava:"
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Pisava nespremenljive velikosti.<br> <b>krepko</b> <i>ležeče</i>"
 
-#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
 msgstr "Plavajoče"
 
@@ -4443,7 +4444,7 @@ msgid "Found %i matches"
 msgstr "Najdenih %i ujemanj"
 
 # generic/prntdlgg.cpp:187
-#: ../src/generic/prntdlgg.cpp:243
+#: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "Od:"
 
@@ -4471,7 +4472,7 @@ msgstr "GIF: premalo spomina."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: neznana napaka!!!"
 
-#: ../src/gtk/window.cpp:4266
+#: ../src/gtk/window.cpp:4288
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -4660,8 +4661,8 @@ msgstr "Domov"
 msgid "Home directory"
 msgstr "Domača mapa"
 
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:255
 #, fuzzy
 msgid "How the object will float relative to the text."
 msgstr "Kako bo plaval predmet glede na besedilo."
@@ -4863,23 +4864,23 @@ msgstr "Inicializacija ni uspela v po-inicializaciji, sledi prekinitev."
 msgid "Insert"
 msgstr "Vstavi"
 
-#: ../src/richtext/richtextbuffer.cpp:7672
+#: ../src/richtext/richtextbuffer.cpp:7687
 msgid "Insert Field"
 msgstr "Vstavi polje"
 
-#: ../src/richtext/richtextbuffer.cpp:7583
-#: ../src/richtext/richtextbuffer.cpp:8493
+#: ../src/richtext/richtextbuffer.cpp:7598
+#: ../src/richtext/richtextbuffer.cpp:8551
 msgid "Insert Image"
 msgstr "Vstavi sliko"
 
-#: ../src/richtext/richtextbuffer.cpp:7630
+#: ../src/richtext/richtextbuffer.cpp:7645
 msgid "Insert Object"
 msgstr "Vstavi predmet"
 
 #: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7428
-#: ../src/richtext/richtextbuffer.cpp:7455
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7440
+#: ../src/richtext/richtextbuffer.cpp:7470
+#: ../src/richtext/richtextbuffer.cpp:7514
 msgid "Insert Text"
 msgstr "Vstavi besedilo"
 
@@ -4909,7 +4910,7 @@ msgid "Invalid data view item"
 msgstr "Neveljaven element pogleda podatkov"
 
 # generic/filedlgg.cpp:1043
-#: ../src/common/appcmn.cpp:245
+#: ../src/common/appcmn.cpp:266
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Napačna specifikacija načina prikaza '%s'."
@@ -5156,7 +5157,7 @@ msgstr "LEVO"
 # generic/dcpsg.cpp:2262
 # generic/prntdlgg.cpp:441
 # generic/prntdlgg.cpp:637
-#: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
 msgstr "Ležeče"
 
@@ -5170,7 +5171,7 @@ msgstr "Zadnji"
 msgid "Last page"
 msgstr "Zadnja stran"
 
-#: ../src/common/log.cpp:311
+#: ../src/common/log.cpp:309
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
@@ -5189,7 +5190,7 @@ msgstr "Ledger, 17 x 11 in"
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:202
 #: ../src/richtext/richtextbulletspage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:246
+#: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "Levo"
 
@@ -5199,7 +5200,7 @@ msgid "Left (&first line):"
 msgstr "Levo (&prva vrstica):"
 
 # generic/prntdlgg.cpp:649
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
 msgstr "Levi rob (mm):"
 
@@ -5520,7 +5521,7 @@ msgid "MacVietnamese"
 msgstr "Mac, vietnamski"
 
 # generic/dirdlgg.cpp:191
-#: ../src/propgrid/advprops.cpp:2024
+#: ../src/propgrid/advprops.cpp:2031
 msgid "Make a selection:"
 msgstr "Opravite izbor:"
 
@@ -5534,11 +5535,11 @@ msgid "Match case"
 msgstr "Ujemanje velikosti črk"
 
 # generic/fontdlgg.cpp:216
-#: ../src/richtext/richtextsizepage.cpp:460
+#: ../src/richtext/richtextsizepage.cpp:463
 msgid "Max height:"
 msgstr "Najv. višina:"
 
-#: ../src/richtext/richtextsizepage.cpp:433
+#: ../src/richtext/richtextsizepage.cpp:436
 msgid "Max width:"
 msgstr "Najv. širina:"
 
@@ -5573,11 +5574,11 @@ msgstr "Metode ali lastnosti ni mogoče najti."
 msgid "Mi&nimize"
 msgstr "Po&manjšaj"
 
-#: ../src/richtext/richtextsizepage.cpp:406
+#: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
 msgstr "Najm. širina:"
 
-#: ../src/richtext/richtextsizepage.cpp:379
+#: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
 msgstr "Najm. širina:"
 
@@ -5615,17 +5616,17 @@ msgstr "Premakni navzdol"
 msgid "Move up"
 msgstr "Premakni navzgor"
 
-#: ../src/richtext/richtextsizepage.cpp:679
-#: ../src/richtext/richtextsizepage.cpp:681
+#: ../src/richtext/richtextsizepage.cpp:682
+#: ../src/richtext/richtextsizepage.cpp:684
 msgid "Moves the object to the next paragraph."
 msgstr "Premakne predmet v naslednji odstavek."
 
-#: ../src/richtext/richtextsizepage.cpp:673
-#: ../src/richtext/richtextsizepage.cpp:675
+#: ../src/richtext/richtextsizepage.cpp:676
+#: ../src/richtext/richtextsizepage.cpp:678
 msgid "Moves the object to the previous paragraph."
 msgstr "Premakne predmet v prejšnji odstavek."
 
-#: ../src/richtext/richtextbuffer.cpp:9271
+#: ../src/richtext/richtextbuffer.cpp:9345
 msgid "Multiple Cell Properties"
 msgstr "Lastnosti več vrstic"
 
@@ -5829,8 +5830,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr "Ni veljavnih preslikav v datoteki \"%s\"."
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/richtext/richtextsizepage.cpp:248
+#: ../src/richtext/richtextsizepage.cpp:252
 msgid "None"
 msgstr "Brez"
 
@@ -5896,7 +5897,7 @@ msgstr "Oštevilčen oris"
 # html/helpfrm.cpp:909
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "V redu"
@@ -5919,7 +5920,7 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Objekti morajo imeti atribut id"
 
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1798
+#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
 msgstr "Odpri datoteko"
 
@@ -5973,13 +5974,13 @@ msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Možnosti '%s':'%s' ni mogoče pretvoriti v datum."
 
 # generic/prntdlgg.cpp:447
-#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "Možnosti"
 
 # generic/prntdlgg.cpp:443
 # generic/prntdlgg.cpp:638
-#: ../src/generic/prntdlgg.cpp:620 ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
 msgstr "Usmeritev"
 
@@ -6193,27 +6194,26 @@ msgid "Page %d of %d"
 msgstr "Stran %d od %d"
 
 # generic/prntdlgg.cpp:604
-#: ../src/gtk/print.cpp:783
+#: ../src/gtk/print.cpp:774
 msgid "Page Setup"
 msgstr "Nastavitev strani"
 
 # generic/prntdlgg.cpp:604
-#: ../src/generic/prntdlgg.cpp:833 ../src/common/prntbase.cpp:467
-#: ../src/gtk/gnome/gprint.cpp:710
+#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
 msgid "Page setup"
 msgstr "Nastavitev strani"
 
 # generic/prntdlgg.cpp:164
-#: ../src/generic/prntdlgg.cpp:221
+#: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "Strani"
 
 # generic/prntdlgg.cpp:433
 # generic/prntdlgg.cpp:615
 # generic/prntdlgg.cpp:804
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:806
-#: ../src/generic/prntdlgg.cpp:847 ../src/generic/prntdlgg.cpp:860
-#: ../src/generic/prntdlgg.cpp:1057 ../src/generic/prntdlgg.cpp:1062
+#: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
+#: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
+#: ../src/generic/prntdlgg.cpp:1052 ../src/generic/prntdlgg.cpp:1057
 msgid "Paper size"
 msgstr "Velikost papirja"
 
@@ -6230,7 +6230,7 @@ msgid "Passing an unknown object to GetObject"
 msgstr "Podajanje neznanega predmeta k GetObject"
 
 # common/cmdline.cpp:912
-#: ../src/richtext/richtextctrl.cpp:3103 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Prilepi"
@@ -6251,7 +6251,7 @@ msgid "Permissions"
 msgstr "Dovoljenja"
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:11745
+#: ../src/richtext/richtextbuffer.cpp:11942
 msgid "Picture Properties"
 msgstr "Lastnosti slike"
 
@@ -6324,17 +6324,17 @@ msgstr "Kazalec na model ni pravilno nastavljen."
 # generic/dcpsg.cpp:2261
 # generic/prntdlgg.cpp:440
 # generic/prntdlgg.cpp:636
-#: ../src/generic/prntdlgg.cpp:617 ../src/generic/prntdlgg.cpp:872
+#: ../src/generic/prntdlgg.cpp:612 ../src/generic/prntdlgg.cpp:867
 msgid "Portrait"
 msgstr "Portet"
 
 # generic/logg.cpp:1023
-#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:496
 msgid "Position"
 msgstr "Položaj"
 
 # generic/prntdlgg.cpp:272
-#: ../src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "PostScript datoteka"
 
@@ -6363,10 +6363,9 @@ msgstr "Prejšnja stran"
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
-#: ../src/generic/prntdlgg.cpp:148 ../src/generic/prntdlgg.cpp:162
+#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
 #: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
 msgid "Print"
 msgstr "Tiskanje"
 
@@ -6383,18 +6382,18 @@ msgid "Print Preview Failure"
 msgstr "Napaka pri predogledu tiskanja"
 
 # generic/prntdlgg.cpp:172
-#: ../src/generic/prntdlgg.cpp:229
+#: ../src/generic/prntdlgg.cpp:224
 msgid "Print Range"
 msgstr "Obseg tiskanja"
 
 # generic/prntdlgg.cpp:408
 # generic/prntdlgg.cpp:415
-#: ../src/generic/prntdlgg.cpp:454
+#: ../src/generic/prntdlgg.cpp:449
 msgid "Print Setup"
 msgstr "Nastavitev tiskanja"
 
 # generic/prntdlgg.cpp:455
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:621
 msgid "Print in colour"
 msgstr "Bravno tiskanje"
 
@@ -6402,11 +6401,6 @@ msgstr "Bravno tiskanje"
 #: ../src/common/stockitem.cpp:182
 msgid "Print previe&w..."
 msgstr "Predogle&d tiskanja ..."
-
-# common/docview.cpp:897
-#: ../src/gtk/gnome/gprint.cpp:944
-msgid "Print preview"
-msgstr "Predogled tiskanja"
 
 #: ../src/common/docview.cpp:1244
 msgid "Print preview creation failed."
@@ -6418,7 +6412,7 @@ msgid "Print preview..."
 msgstr "Predogled tiskanja ..."
 
 # generic/prntdlgg.cpp:457
-#: ../src/generic/prntdlgg.cpp:635
+#: ../src/generic/prntdlgg.cpp:630
 msgid "Print spooling"
 msgstr "Čakalna vrsta tiskanja"
 
@@ -6429,7 +6423,7 @@ msgstr "Natisni to stran"
 
 # generic/dcpsg.cpp:2265
 # generic/prntdlgg.cpp:150
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
 msgstr "Pošli v datoteko"
 
@@ -6440,32 +6434,32 @@ msgstr "Natisni ..."
 
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
-#: ../src/generic/prntdlgg.cpp:498
+#: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
 msgstr "Tiskalnik"
 
 # generic/prntdlgg.cpp:459
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Printer command:"
 msgstr "Ukaz tiskalniku:"
 
 # generic/prntdlgg.cpp:149
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:180
 msgid "Printer options"
 msgstr "Možnosti tiskalnika"
 
 # generic/prntdlgg.cpp:463
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:645
 msgid "Printer options:"
 msgstr "Možnosti tiskalnika:"
 
 # generic/prntdlgg.cpp:682
-#: ../src/generic/prntdlgg.cpp:921
+#: ../src/generic/prntdlgg.cpp:916
 msgid "Printer..."
 msgstr "Tiskalnik ..."
 
 # generic/prntdlgg.cpp:682
-#: ../src/generic/prntdlgg.cpp:201
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Printer:"
 msgstr "Tiskalnik:"
 
@@ -6507,7 +6501,7 @@ msgstr "Tiskanje ..."
 # generic/prntdlgg.cpp:113
 # generic/prntdlgg.cpp:127
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2125
+#: ../src/common/docview.cpp:2124
 #, fuzzy
 msgid "Printout"
 msgstr "Tiskanje"
@@ -6642,7 +6636,7 @@ msgid "Regular"
 msgstr "Navadno"
 
 # generic/fontdlgg.cpp:207
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:519
 msgid "Relative"
 msgstr "Relativno"
 
@@ -6679,7 +6673,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Upodabljanje ni uspelo."
 
-#: ../src/richtext/richtextbuffer.cpp:4202
+#: ../src/richtext/richtextbuffer.cpp:4214
 msgid "Renumber List"
 msgstr "Ponovno oštevilči seznam"
 
@@ -6692,7 +6686,7 @@ msgstr "Ponovno oštevilči seznam"
 msgid "Rep&lace"
 msgstr "&Zamenjaj"
 
-#: ../src/richtext/richtextctrl.cpp:3263 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "Zamenjaj"
 
@@ -6723,7 +6717,7 @@ msgid "Required information entry is empty."
 msgstr ""
 
 # common/intl.cpp:412
-#: ../src/common/translation.cpp:1975
+#: ../src/common/translation.cpp:1966
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "Vir '%s' ni veljaven katalog sporočil."
@@ -6741,12 +6735,12 @@ msgstr "Desno"
 # generic/fontdlgg.cpp:216
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
-#: ../src/richtext/richtextsizepage.cpp:247
+#: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "Desno"
 
 # generic/prntdlgg.cpp:661
-#: ../src/generic/prntdlgg.cpp:897
+#: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
 msgstr "Desni rob (mm):"
 
@@ -6912,12 +6906,12 @@ msgid "Select All"
 msgstr "Izberi vse"
 
 # common/docview.cpp:1469
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1877
 msgid "Select a document template"
 msgstr "Izberi predlogo dokumenta"
 
 # common/docview.cpp:1494
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1951
 msgid "Select a document view"
 msgstr "Izberi pogled dokumenta"
 
@@ -6952,7 +6946,7 @@ msgstr "Izbere raven seznama za urejanje."
 msgid "Separator expected after the option '%s'."
 msgstr "Po možnosti '%s' je pričakovano ločilo."
 
-#: ../src/richtext/richtextbuffer.cpp:10397
+#: ../src/richtext/richtextbuffer.cpp:10513
 msgid "Set Cell Style"
 msgstr "Določite slog celice"
 
@@ -6965,7 +6959,7 @@ msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
 # generic/prntdlgg.cpp:155
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Setup..."
 msgstr "Nastavitve ..."
 
@@ -7060,7 +7054,7 @@ msgstr "Posamično"
 
 # generic/filedlgg.cpp:534
 #: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:296
+#: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "Velikost"
 
@@ -7093,7 +7087,7 @@ msgstr "Zapolnjeno"
 # common/docview.cpp:342
 # common/docview.cpp:354
 # common/docview.cpp:1390
-#: ../src/common/docview.cpp:1774
+#: ../src/common/docview.cpp:1773
 msgid "Sorry, could not open this file."
 msgstr "Oprostite, te datoteke ni moč odpreti."
 
@@ -7113,7 +7107,7 @@ msgstr "Ime je že zasedeno. Izberite drugo."
 # common/docview.cpp:342
 # common/docview.cpp:354
 # common/docview.cpp:1390
-#: ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1796
 msgid "Sorry, the format for this file is unknown."
 msgstr "Oprostite, ta zapis datoteke je neznan."
 
@@ -7145,14 +7139,14 @@ msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Statement, 5 1/2 x 8 1/2 pal."
 
 # generic/logg.cpp:598
-#: ../src/richtext/richtextsizepage.cpp:515
-#: ../src/richtext/richtextsizepage.cpp:520
+#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:523
 #, fuzzy
 msgid "Static"
 msgstr "Statično"
 
 # generic/logg.cpp:598
-#: ../src/generic/prntdlgg.cpp:209
+#: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "Stanje:"
 
@@ -7258,7 +7252,7 @@ msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF: slika je nenaravno velika."
 
 # html/helpfrm.cpp:512
-#: ../src/richtext/richtextbuffer.cpp:10687
+#: ../src/richtext/richtextbuffer.cpp:10794
 msgid "Table Properties"
 msgstr "Lastnosti tabele"
 
@@ -7280,7 +7274,7 @@ msgid "Teletype"
 msgstr "strojna"
 
 # common/docview.cpp:1469
-#: ../src/common/docview.cpp:1879
+#: ../src/common/docview.cpp:1878
 msgid "Templates"
 msgstr "Šablone"
 
@@ -7331,10 +7325,10 @@ msgid "The bottom padding size."
 msgstr "Velikost pisave."
 
 # html/helpfrm.cpp:899
-#: ../src/richtext/richtextsizepage.cpp:636
-#: ../src/richtext/richtextsizepage.cpp:638
-#: ../src/richtext/richtextsizepage.cpp:650
-#: ../src/richtext/richtextsizepage.cpp:652
+#: ../src/richtext/richtextsizepage.cpp:639
+#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:653
+#: ../src/richtext/richtextsizepage.cpp:655
 msgid "The bottom position."
 msgstr "Spodnji položaj."
 
@@ -7482,10 +7476,10 @@ msgid "The left padding size."
 msgstr "Velikost pisave."
 
 # html/helpfrm.cpp:899
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
-#: ../src/richtext/richtextsizepage.cpp:545
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:534
+#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:548
+#: ../src/richtext/richtextsizepage.cpp:550
 msgid "The left position."
 msgstr "Levi položaj."
 
@@ -7506,33 +7500,33 @@ msgstr "Številka elementa seznama."
 msgid "The locale ID is unknown."
 msgstr "ID krajevnih nastavitev ni znan."
 
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 msgid "The object height."
 msgstr "Višina predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:471
-#: ../src/richtext/richtextsizepage.cpp:473
+#: ../src/richtext/richtextsizepage.cpp:474
+#: ../src/richtext/richtextsizepage.cpp:476
 msgid "The object maximum height."
 msgstr "Največja višina predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 msgid "The object maximum width."
 msgstr "Največja širina predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 msgid "The object minimum height."
 msgstr "Najmanjša višina predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 msgid "The object minimum width."
 msgstr "Najmanjša širina predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:331
+#: ../src/richtext/richtextsizepage.cpp:332
+#: ../src/richtext/richtextsizepage.cpp:334
 msgid "The object width."
 msgstr "Širina predmeta."
 
@@ -7541,7 +7535,7 @@ msgstr "Širina predmeta."
 msgid "The outline level."
 msgstr "Raven orisa."
 
-#: ../src/common/log.cpp:283
+#: ../src/common/log.cpp:281
 #, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
@@ -7550,11 +7544,11 @@ msgstr[1] "Prejšnje sporočilo ponovljeno %lu-krat."
 msgstr[2] "Prejšnje sporočilo ponovljeno %lu-krat."
 msgstr[3] "Prejšnje sporočilo ponovljeno %lu-krat."
 
-#: ../src/common/log.cpp:276
+#: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
 msgstr "Prejšnje sporočilo ponovljeno enkrat."
 
-#: ../src/gtk/print.cpp:940 ../src/gtk/print.cpp:1123
+#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
 msgstr "Pogovorno okno za tiskanje je vrnilo napako."
 
@@ -7598,10 +7592,10 @@ msgid "The right padding size."
 msgstr "Desni odmik."
 
 # html/helpfrm.cpp:899
-#: ../src/richtext/richtextsizepage.cpp:601
-#: ../src/richtext/richtextsizepage.cpp:603
-#: ../src/richtext/richtextsizepage.cpp:615
-#: ../src/richtext/richtextsizepage.cpp:617
+#: ../src/richtext/richtextsizepage.cpp:604
+#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:620
 msgid "The right position."
 msgstr "Desni položaj."
 
@@ -7667,10 +7661,10 @@ msgid "The top padding size."
 msgstr "Velikost pisave."
 
 # html/helpfrm.cpp:899
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:580
-#: ../src/richtext/richtextsizepage.cpp:582
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:583
+#: ../src/richtext/richtextsizepage.cpp:585
 msgid "The top position."
 msgstr "Vrhnji položaj."
 
@@ -7690,7 +7684,7 @@ msgstr ""
 "je zastarela, prosimo, nadgradite jo (manjka naslednja zahtevana funkcija: "
 "%s)."
 
-#: ../src/gtk/print.cpp:968
+#: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "wxGtkPrinterDC ni mogoče uporabiti."
 
@@ -7717,11 +7711,11 @@ msgstr ""
 msgid "This is not a %s."
 msgstr "To ni %s."
 
-#: ../src/common/wincmn.cpp:1647
+#: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
 msgstr "Ta platforma ne podpira prosojnosti ozadja."
 
-#: ../src/gtk/window.cpp:4295
+#: ../src/gtk/window.cpp:4317
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -7794,7 +7788,7 @@ msgid "Tips not available, sorry!"
 msgstr "Oprostite, namigi niso na voljo!"
 
 # generic/prntdlgg.cpp:191
-#: ../src/generic/prntdlgg.cpp:247
+#: ../src/generic/prntdlgg.cpp:242
 msgid "To:"
 msgstr "Za:"
 
@@ -7802,7 +7796,7 @@ msgstr "Za:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "Upodobitelj preklopa ne more upodobiti vrednosti; vrsta vrednosti: "
 
-#: ../src/richtext/richtextbuffer.cpp:7925
+#: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Too many EndStyle calls!"
 msgstr "Preveč klicev EndStyle!"
 
@@ -7811,14 +7805,14 @@ msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "V PNG je preveč barv, slika bo morda malce neostra."
 
 # generic/prntdlgg.cpp:191
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 #, fuzzy
 msgid "Top"
 msgstr "Vrh"
 
 # generic/prntdlgg.cpp:650
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
 msgstr "Zgornji rob (mm):"
 
@@ -8130,8 +8124,8 @@ msgid "Units for the bottom padding."
 msgstr ""
 
 # msw/thread.cpp:871
-#: ../src/richtext/richtextsizepage.cpp:661
-#: ../src/richtext/richtextsizepage.cpp:663
+#: ../src/richtext/richtextsizepage.cpp:664
+#: ../src/richtext/richtextsizepage.cpp:666
 msgid "Units for the bottom position."
 msgstr "Enote za spodnji položaj."
 
@@ -8156,38 +8150,38 @@ msgid "Units for the left padding."
 msgstr ""
 
 # msw/thread.cpp:871
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:558
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
 msgid "Units for the left position."
 msgstr "Enote za levi položaj."
 
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:487
 msgid "Units for the maximum object height."
 msgstr "Enote za največjo višino predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:457
+#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:460
 msgid "Units for the maximum object width."
 msgstr "Enote za največjo širino predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:430
+#: ../src/richtext/richtextsizepage.cpp:431
+#: ../src/richtext/richtextsizepage.cpp:433
 msgid "Units for the minimum object height."
 msgstr "Enote za najmanjšo višino predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:403
+#: ../src/richtext/richtextsizepage.cpp:404
+#: ../src/richtext/richtextsizepage.cpp:406
 msgid "Units for the minimum object width."
 msgstr "Enote za najmanjšo širino predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:377
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Units for the object height."
 msgstr "Enote za višino predmeta."
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:342
+#: ../src/richtext/richtextsizepage.cpp:343
+#: ../src/richtext/richtextsizepage.cpp:345
 msgid "Units for the object width."
 msgstr "Enote za širino predmeta."
 
@@ -8212,8 +8206,8 @@ msgid "Units for the right padding."
 msgstr ""
 
 # msw/thread.cpp:871
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:628
+#: ../src/richtext/richtextsizepage.cpp:629
+#: ../src/richtext/richtextsizepage.cpp:631
 msgid "Units for the right position."
 msgstr "Enote za desni položaj."
 
@@ -8239,8 +8233,8 @@ msgid "Units for the top padding."
 msgstr ""
 
 # msw/thread.cpp:871
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:596
 msgid "Units for the top position."
 msgstr "Enote za gornji položaj."
 
@@ -8344,7 +8338,7 @@ msgstr "Nedoločeno"
 msgid "Unsupported clipboard format."
 msgstr "Nepodprta oblika zapisa za odložišče."
 
-#: ../src/common/appcmn.cpp:228
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Nepodprta tema '%s'."
@@ -8410,8 +8404,8 @@ msgstr "Različica "
 
 # generic/printps.cpp:209
 # msw/printwin.cpp:252
-#: ../src/richtext/richtextsizepage.cpp:288
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:291
+#: ../src/richtext/richtextsizepage.cpp:293
 msgid "Vertical alignment."
 msgstr "Navpična poravnava."
 
@@ -8426,7 +8420,7 @@ msgid "View files as a list view"
 msgstr "Prikaži datoteke kot seznam"
 
 # common/docview.cpp:1494
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:1952
 msgid "Views"
 msgstr "Pogledi"
 
@@ -8448,7 +8442,7 @@ msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr "Čakanje na V/I na deskriptorju epoll %d ni uspelo"
 
 # common/log.cpp:366
-#: ../src/common/log.cpp:229
+#: ../src/common/log.cpp:227
 msgid "Warning: "
 msgstr "Opozorilo:"
 
@@ -9080,16 +9074,16 @@ msgstr "napaka preverjanja preizkusne vsote pri branju bloka glave tar"
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:370
-#: ../src/richtext/richtextsizepage.cpp:397
-#: ../src/richtext/richtextsizepage.cpp:424
-#: ../src/richtext/richtextsizepage.cpp:451
-#: ../src/richtext/richtextsizepage.cpp:478
-#: ../src/richtext/richtextsizepage.cpp:552
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:622
-#: ../src/richtext/richtextsizepage.cpp:657
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
 msgstr "cm"
 
@@ -9222,7 +9216,7 @@ msgid "file '%s': unexpected character %c at line %d."
 msgstr "datoteka '%s': nepričakovan znak %c v vrstici %d"
 
 # generic/filedlgg.cpp:534
-#: ../src/richtext/richtextbuffer.cpp:8300
+#: ../src/richtext/richtextbuffer.cpp:8358
 msgid "files"
 msgstr "datotek"
 
@@ -9247,8 +9241,8 @@ msgstr "četrti"
 msgid "generate verbose log messages"
 msgstr "ustvari obširna dnevniška sporočila"
 
-#: ../src/richtext/richtextbuffer.cpp:12015
-#: ../src/richtext/richtextbuffer.cpp:12125
+#: ../src/richtext/richtextbuffer.cpp:12212
+#: ../src/richtext/richtextbuffer.cpp:12322
 msgid "image"
 msgstr "slika"
 
@@ -9325,7 +9319,7 @@ msgid "no fonts found in %s, using builtin font"
 msgstr "v %s ni najdenih pisav, uporabljena bo vgrajena pisava"
 
 # html/helpdata.cpp:644
-#: ../src/html/helpdata.cpp:654
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "neimanovana"
 
@@ -9341,7 +9335,7 @@ msgstr "opoldne"
 msgid "normal"
 msgstr "Običajno"
 
-#: ../src/gtk/print.cpp:1227 ../src/gtk/print.cpp:1332
+#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
 msgid "not implemented"
 msgstr "ni implementirano"
 
@@ -9358,16 +9352,16 @@ msgstr "objekti ne morejo imeti besedilnih vozlišč XML"
 msgid "out of memory"
 msgstr "premalo spomina"
 
-#: ../src/richtext/richtextsizepage.cpp:337
-#: ../src/richtext/richtextsizepage.cpp:371
-#: ../src/richtext/richtextsizepage.cpp:398
-#: ../src/richtext/richtextsizepage.cpp:425
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:479
-#: ../src/richtext/richtextsizepage.cpp:553
-#: ../src/richtext/richtextsizepage.cpp:588
-#: ../src/richtext/richtextsizepage.cpp:623
-#: ../src/richtext/richtextsizepage.cpp:658
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
 msgid "percent"
 msgstr "odstotek"
 
@@ -9430,36 +9424,36 @@ msgstr "slik. točka"
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:372
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:376
 #: ../src/richtext/richtextsizepage.cpp:399
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:426
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:453
-#: ../src/richtext/richtextsizepage.cpp:454
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:456
+#: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:554
-#: ../src/richtext/richtextsizepage.cpp:555
-#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:557
+#: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:589
-#: ../src/richtext/richtextsizepage.cpp:590
-#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:592
+#: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:624
-#: ../src/richtext/richtextsizepage.cpp:625
-#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:627
+#: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:659
-#: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextsizepage.cpp:662
+#: ../src/richtext/richtextsizepage.cpp:663
 #, fuzzy
 msgid "px"
 msgstr "px"
@@ -9528,35 +9522,35 @@ msgstr "šestnajsti"
 msgid "sixth"
 msgstr "šesti"
 
-#: ../src/common/appcmn.cpp:206
+#: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "določite zaslonski način (npr. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:192
+#: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
 msgstr "določi temo za uporabo"
 
-#: ../src/richtext/richtextbuffer.cpp:8818
+#: ../src/richtext/richtextbuffer.cpp:8876
 #, fuzzy
 msgid "standard/circle"
 msgstr "Navadno/krog"
 
-#: ../src/richtext/richtextbuffer.cpp:8819
+#: ../src/richtext/richtextbuffer.cpp:8877
 #, fuzzy
 msgid "standard/circle-outline"
 msgstr "Navadno/oris-kroga"
 
-#: ../src/richtext/richtextbuffer.cpp:8821
+#: ../src/richtext/richtextbuffer.cpp:8879
 #, fuzzy
 msgid "standard/diamond"
 msgstr "Navadno/karo"
 
-#: ../src/richtext/richtextbuffer.cpp:8820
+#: ../src/richtext/richtextbuffer.cpp:8878
 #, fuzzy
 msgid "standard/square"
 msgstr "Navadno/kvadrat"
 
-#: ../src/richtext/richtextbuffer.cpp:8822
+#: ../src/richtext/richtextbuffer.cpp:8880
 #, fuzzy
 msgid "standard/triangle"
 msgstr "Navadno/trikotnik"
@@ -9680,7 +9674,7 @@ msgid "unnamed"
 msgstr "neimenovana"
 
 # common/docview.cpp:1188
-#: ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:1606
 #, c-format
 msgid "unnamed%d"
 msgstr "neimenovana%d"
@@ -9690,7 +9684,7 @@ msgid "unsupported Zip compression method"
 msgstr "nepodprta metoda stiskanja Zip"
 
 # common/intl.cpp:379
-#: ../src/common/translation.cpp:1892
+#: ../src/common/translation.cpp:1883
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "uporabljam katalog '%s' iz '%s'"
@@ -9707,7 +9701,7 @@ msgstr "napaka pri pisanju"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay ni uspela."
 
-#: ../src/gtk/print.cpp:996
+#: ../src/gtk/print.cpp:987
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr "wxPrintout::GetPageInfo vrne ničelno vrednost maxPage."
 
@@ -9749,6 +9743,10 @@ msgstr "napaka zlib %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr "~"
+
+# common/docview.cpp:897
+#~ msgid "Print preview"
+#~ msgstr "Predogled tiskanja"
 
 #, fuzzy
 #~ msgid "'"

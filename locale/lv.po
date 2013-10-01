@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 18:18+0200\n"
+"POT-Creation-Date: 2013-10-01 19:04+0200\n"
 "PO-Revision-Date: 2013-01-23 13:14+0300\n"
 "Last-Translator: Jānis Eisaks <jancs@dv.lv>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwindows.org>\n"
@@ -39,7 +39,7 @@ msgstr "              Paldies! Atvainojiet par sagādātajām neērtībām!\n"
 msgid " (copy %d of %d)"
 msgstr "Lapa %d no %d"
 
-#: ../src/common/log.cpp:427
+#: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (kļūda %ld: %s)"
@@ -49,7 +49,7 @@ msgstr " (kļūda %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr " (modulī \"%s\")"
 
-#: ../src/common/docview.cpp:1625
+#: ../src/common/docview.cpp:1624
 msgid " - "
 msgstr " - "
 
@@ -209,12 +209,12 @@ msgstr "A&pakšā"
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:634
-#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:637
+#: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr "&Apakša:"
 
-#: ../include/wx/richtext/richtextbuffer.h:3523
+#: ../include/wx/richtext/richtextbuffer.h:3530
 msgid "&Box"
 msgstr "&Rāmis"
 
@@ -237,7 +237,7 @@ msgstr "At&celt"
 msgid "&Cascade"
 msgstr "&Kaskādēt"
 
-#: ../include/wx/richtext/richtextbuffer.h:5578
+#: ../include/wx/richtext/richtextbuffer.h:5587
 msgid "&Cell"
 msgstr "Šū&na"
 
@@ -334,7 +334,7 @@ msgstr "&Pabeigt"
 msgid "&First"
 msgstr "&Pirmais"
 
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
 msgstr "&Peldošais režīms:"
 
@@ -371,8 +371,8 @@ msgstr "&No:"
 msgid "&Harddisk"
 msgstr "&Cietais disks"
 
-#: ../src/richtext/richtextsizepage.cpp:348
-#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:351
+#: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
 msgstr "&Augstums:"
 
@@ -436,8 +436,8 @@ msgstr "&Kreisajā pusē"
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:529
-#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:532
+#: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
 msgstr "&Pa kreisi:"
 
@@ -453,7 +453,7 @@ msgstr "Žurnā&ls"
 msgid "&Move"
 msgstr "&Pārvietot"
 
-#: ../src/richtext/richtextsizepage.cpp:669
+#: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
 msgstr "&Pārvietot objektu uz:"
 
@@ -474,7 +474,7 @@ msgstr "&Nākošais"
 msgid "&Next >"
 msgstr "&Nākošais >"
 
-#: ../src/richtext/richtextsizepage.cpp:678
+#: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
 msgstr "&Nākamā rindkopa"
 
@@ -521,7 +521,7 @@ msgstr "La&pas atdalītājs"
 msgid "&Paste"
 msgstr "Ie&līmēt"
 
-#: ../include/wx/richtext/richtextbuffer.h:4648
+#: ../include/wx/richtext/richtextbuffer.h:4655
 msgid "&Picture"
 msgstr "&Attēls"
 
@@ -533,7 +533,7 @@ msgstr "&Punkta izmērs:"
 msgid "&Position (tenths of a mm):"
 msgstr "No&vietojums (mm desmitdaļās)"
 
-#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:514
 #, fuzzy
 msgid "&Position mode:"
 msgstr "&Peldošais režīms:"
@@ -547,7 +547,7 @@ msgstr "&Preferences"
 msgid "&Previous"
 msgstr "Ie&priekšējais"
 
-#: ../src/richtext/richtextsizepage.cpp:672
+#: ../src/richtext/richtextsizepage.cpp:675
 msgid "&Previous Paragraph"
 msgstr "Ie&priekšējā rindkopa"
 
@@ -555,7 +555,7 @@ msgstr "Ie&priekšējā rindkopa"
 msgid "&Print..."
 msgstr "&Drukāt..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4922
+#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "&Rekvizīti"
@@ -601,8 +601,8 @@ msgstr "&Labajā pusē"
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:599
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:602
+#: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
 msgstr "&Pa labi:"
 
@@ -668,7 +668,7 @@ msgstr "&Apakškopa:"
 msgid "&Symbol:"
 msgstr "&Simbols:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5668
+#: ../include/wx/richtext/richtextbuffer.h:5679
 msgid "&Table"
 msgstr "&Tabula"
 
@@ -680,8 +680,8 @@ msgstr "&Augšā"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:564
-#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
 msgstr "&Augša:"
 
@@ -711,7 +711,7 @@ msgstr "&Samazināt atkāpi"
 msgid "&Up"
 msgstr "A&ugšup"
 
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
 msgstr "&Vertikālā izlīdzināšana:"
 
@@ -723,8 +723,8 @@ msgstr "&Skatīt..."
 msgid "&Weight:"
 msgstr "&Svars:"
 
-#: ../src/richtext/richtextsizepage.cpp:314
-#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
 msgstr "&Platums:"
 
@@ -818,7 +818,7 @@ msgstr "(grāmatzīme)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:829
+#: ../src/richtext/richtextformatdlg.cpp:831
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -1138,7 +1138,7 @@ msgstr "Par"
 msgid "About %s"
 msgstr "Par %s"
 
-#: ../src/richtext/richtextsizepage.cpp:517
+#: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr ""
 
@@ -1150,17 +1150,17 @@ msgstr "Patiesais Izmērs"
 msgid "Add"
 msgstr "Pievienot"
 
-#: ../src/richtext/richtextbuffer.cpp:10648
-msgid "Add column"
+#: ../src/richtext/richtextbuffer.cpp:10751
+msgid "Add Column"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10688
+msgid "Add Row"
 msgstr ""
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "Pievienot grāmatzīmēm pašreizējo lapu"
-
-#: ../src/richtext/richtextbuffer.cpp:10590
-msgid "Add row"
-msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1203,11 +1203,11 @@ msgstr "Izlīdzināt gar kreiso"
 msgid "Align Right"
 msgstr "Izlīdzināt gar labo"
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:266
 msgid "Alignment"
 msgstr "Izlīdzinašana"
 
-#: ../src/generic/prntdlgg.cpp:220
+#: ../src/generic/prntdlgg.cpp:215
 msgid "All"
 msgstr "Visu"
 
@@ -1216,11 +1216,11 @@ msgstr "Visu"
 msgid "All files (%s)|%s"
 msgstr "Visus failus (%s)|%s"
 
-#: ../include/wx/defs.h:2884
+#: ../include/wx/defs.h:2922
 msgid "All files (*)|*"
 msgstr "Visus failus (*)|*"
 
-#: ../include/wx/defs.h:2881
+#: ../include/wx/defs.h:2919
 msgid "All files (*.*)|*.*"
 msgstr "Visus failus (*.*)|*.*"
 
@@ -1236,7 +1236,7 @@ msgstr "Alfabētiskais režīms"
 msgid "Already Registered Object passed to SetObjectClassInfo"
 msgstr ""
 
-#: ../src/unix/dialup.cpp:354
+#: ../src/unix/dialup.cpp:353
 msgid "Already dialling ISP."
 msgstr "ISP jau tiek zvanīts."
 
@@ -1434,15 +1434,15 @@ msgstr "Mala"
 msgid "Borders"
 msgstr "Malas"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:144
+#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
 msgid "Bottom"
 msgstr "Apakša"
 
-#: ../src/generic/prntdlgg.cpp:898
+#: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "Apakšējā mala (mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:8861
+#: ../src/richtext/richtextbuffer.cpp:8919
 msgid "Box Properties"
 msgstr "Rāmja īpašības"
 
@@ -1554,7 +1554,7 @@ msgstr "Nav iespējams izveidot reģistra atslēgu '%s'"
 msgid "Can't create thread"
 msgstr "Nav iespējams izveidot pavedienu"
 
-#: ../src/msw/window.cpp:3783
+#: ../src/msw/window.cpp:3793
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Nav iespējams izveidot %s klases logu"
@@ -1682,7 +1682,7 @@ msgstr ""
 "Nevar izveidot jaunas lejas ID. Iespējams, sasniegts maksimālais sleju "
 "skaits."
 
-#: ../src/common/filefn.cpp:1335
+#: ../src/common/filefn.cpp:1336
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "Nav iespējams uzskaitīt failus '%s'"
@@ -1711,11 +1711,11 @@ msgstr ""
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:983
+#: ../src/unix/utilsunx.cpp:988
 msgid "Cannot get the hostname"
 msgstr "Nevar atrast resursdatora vārdu"
 
-#: ../src/unix/utilsunx.cpp:1019
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the official hostname"
 msgstr "Nevar atrast oficiālo resursdatora vārdu"
 
@@ -1751,7 +1751,7 @@ msgstr "Nav iespējams ielādēt resursus no faila '%s'."
 msgid "Cannot open HTML document: %s"
 msgstr "Nav iespējams atvērt HTML dokumentu: %s"
 
-#: ../src/html/helpdata.cpp:664
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Nav iespējams atvērt HTML palīdzības grāmatu: %s"
@@ -1829,7 +1829,7 @@ msgstr "Reģistrjūtīgs"
 msgid "Categorized Mode"
 msgstr "Šķirotais režīms"
 
-#: ../src/richtext/richtextbuffer.cpp:9273
+#: ../src/richtext/richtextbuffer.cpp:9347
 msgid "Cell Properties"
 msgstr "Tabulas šūnas parametri"
 
@@ -1862,7 +1862,7 @@ msgstr "Centrēt"
 msgid "Centre text."
 msgstr "Centrēt tekstu."
 
-#: ../src/richtext/richtextsizepage.cpp:284
+#: ../src/richtext/richtextsizepage.cpp:287
 msgid "Centred"
 msgstr "Centrēts"
 
@@ -1871,19 +1871,20 @@ msgstr "Centrēts"
 msgid "Ch&oose..."
 msgstr "Iz&vēlieties..."
 
-#: ../src/richtext/richtextbuffer.cpp:4029
+#: ../src/richtext/richtextbuffer.cpp:4041
 msgid "Change List Style"
 msgstr "Mainīt saraksta stilu"
 
-#: ../src/richtext/richtextbuffer.cpp:3380
+#: ../src/richtext/richtextbuffer.cpp:3392
 msgid "Change Object Style"
 msgstr "Mainīt objekta stilu"
 
-#: ../src/richtext/richtextbuffer.cpp:3646
+#: ../src/richtext/richtextbuffer.cpp:3658
+#: ../src/richtext/richtextbuffer.cpp:7749
 msgid "Change Properties"
 msgstr "Mainīt īpašības"
 
-#: ../src/richtext/richtextbuffer.cpp:3197
+#: ../src/richtext/richtextbuffer.cpp:3209
 msgid "Change Style"
 msgstr "Mainīt stilu"
 
@@ -2131,7 +2132,7 @@ msgstr "Aizvērt šo logu"
 msgid "Color"
 msgstr "Krāsa"
 
-#: ../src/richtext/richtextformatdlg.cpp:723
+#: ../src/richtext/richtextformatdlg.cpp:725
 msgid "Colour"
 msgstr "Krāsa"
 
@@ -2178,7 +2179,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4284
+#: ../src/gtk/window.cpp:4306
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2227,7 +2228,7 @@ msgstr "Pārveidot"
 msgid "Copied to clipboard:\"%s\""
 msgstr "Nokopēts starpliktuvē:\"%s\""
 
-#: ../src/generic/prntdlgg.cpp:252
+#: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
 msgstr "Kopijas:"
 
@@ -2308,7 +2309,7 @@ msgstr "Neizdevās iestatīt izlīdiznājumu."
 msgid "Could not set column width."
 msgstr "Neizdevās iestatīt slejas platumu."
 
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1569
 msgid "Could not set current working directory"
 msgstr "Neizdevās iestatīt pašreizējo darba mapi"
 
@@ -2337,11 +2338,11 @@ msgid "Could not start document preview."
 msgstr "Neizdevās parādīt dokumenta priekšskatījumu."
 
 #: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1086 ../src/gtk/gnome/gprint.cpp:922
+#: ../src/gtk/print.cpp:1077
 msgid "Could not start printing."
 msgstr "Neizdevās sākt drukāšanu."
 
-#: ../src/common/wincmn.cpp:2114
+#: ../src/common/wincmn.cpp:2131
 msgid "Could not transfer data to window"
 msgstr "Neizdevās pārvietot datus uz logu"
 
@@ -2363,7 +2364,7 @@ msgstr "Neizdevās izveidot hronometru"
 msgid "Couldn't create the overlay window"
 msgstr ""
 
-#: ../src/common/translation.cpp:2024
+#: ../src/common/translation.cpp:2015
 msgid "Couldn't enumerate translations"
 msgstr "Neizdevās uzskaitīt tulkojumus"
 
@@ -2372,7 +2373,7 @@ msgstr "Neizdevās uzskaitīt tulkojumus"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Simbols '%s' nav atrodams dinamiskajā bibliotēkā"
 
-#: ../src/gtk/print.cpp:2023
+#: ../src/gtk/print.cpp:2014
 msgid "Couldn't get hatch style from wxBrush."
 msgstr ""
 
@@ -2456,7 +2457,7 @@ msgstr "Izgriez&t"
 msgid "Current directory:"
 msgstr "Aktuālā mape:"
 
-#: ../src/gtk/print.cpp:768
+#: ../src/gtk/print.cpp:759
 msgid "Custom size"
 msgstr "Pielāgots izmērs"
 
@@ -2565,11 +2566,11 @@ msgstr "Noklusētais kodējums"
 msgid "Default font"
 msgstr "Noklusētais fonts"
 
-#: ../src/generic/prntdlgg.cpp:515
+#: ../src/generic/prntdlgg.cpp:510
 msgid "Default printer"
 msgstr "Noklusētais printeris"
 
-#: ../src/richtext/richtextbuffer.cpp:7793 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Dzēst"
@@ -2577,6 +2578,16 @@ msgstr "Dzēst"
 #: ../src/richtext/richtexttabspage.cpp:148
 msgid "Delete A&ll"
 msgstr "Dzēst v&isu"
+
+#: ../src/richtext/richtextbuffer.cpp:10637
+#, fuzzy
+msgid "Delete Column"
+msgstr "Dzēst iezīmēto"
+
+#: ../src/richtext/richtextbuffer.cpp:10587
+#, fuzzy
+msgid "Delete Row"
+msgstr "Dzēst"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
@@ -2586,19 +2597,9 @@ msgstr "Dzēst stilu"
 msgid "Delete Text"
 msgstr "Dzēst tekstu"
 
-#: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
-msgid "Delete column"
-msgstr "Dzēst iezīmēto"
-
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "Dzēst objektu"
-
-#: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
-msgid "Delete row"
-msgstr "Dzēst"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -2656,12 +2657,12 @@ msgstr "Radās DirectFB kļūda %d."
 msgid "Directories"
 msgstr "Mapes"
 
-#: ../src/common/filefn.cpp:1250
+#: ../src/common/filefn.cpp:1251
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Mapi '%s' nevarēja izveidot"
 
-#: ../src/common/filefn.cpp:1270
+#: ../src/common/filefn.cpp:1271
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "Mapi '%s' nav iespējams izdzēst"
@@ -2805,35 +2806,35 @@ msgstr "Rediģēt objektu"
 msgid "Elapsed time:"
 msgstr "Pagājušais laiks:"
 
-#: ../src/richtext/richtextsizepage.cpp:350
-#: ../src/richtext/richtextsizepage.cpp:352
-#: ../src/richtext/richtextsizepage.cpp:462
-#: ../src/richtext/richtextsizepage.cpp:464
+#: ../src/richtext/richtextsizepage.cpp:353
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:465
+#: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
 msgstr "Iespējot augstuma vērtību."
 
-#: ../src/richtext/richtextsizepage.cpp:435
-#: ../src/richtext/richtextsizepage.cpp:437
+#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:440
 msgid "Enable the maximum width value."
 msgstr "Iespējot maksimālā platuma vērtību."
 
-#: ../src/richtext/richtextsizepage.cpp:408
-#: ../src/richtext/richtextsizepage.cpp:410
+#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
 msgstr "Iespējot minimālā augstuma vērtību."
 
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:386
 msgid "Enable the minimum width value."
 msgstr "Iespējot minimālā platuma vērtību."
 
-#: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:318
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
 msgstr "Iespējot platuma vērtību"
 
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:280
+#: ../src/richtext/richtextsizepage.cpp:282
 msgid "Enable vertical alignment."
 msgstr "Iespējot vertikālo izlīdzināšanu"
 
@@ -2919,11 +2920,11 @@ msgstr "Kļūda lasot konfigurācijas iestatījumus."
 msgid "Error saving user configuration data."
 msgstr "Kļūda saglabājot lietotāja konfigurācijas datus."
 
-#: ../src/gtk/print.cpp:680
+#: ../src/gtk/print.cpp:671
 msgid "Error while printing: "
 msgstr "Kļūda drukājot:"
 
-#: ../src/common/log.cpp:225
+#: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "Kļūda: "
 
@@ -3194,7 +3195,7 @@ msgstr "Neizdevās iegūt datus no starpliktuves."
 msgid "Failed to get the local system time"
 msgstr "Neizdevās nolasīt lokālās sistēmas laiku"
 
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1453
 msgid "Failed to get the working directory"
 msgstr "Neizdevās noteikt darba mapi"
 
@@ -3602,7 +3603,7 @@ msgstr ""
 "Fails '%s' jau eksistē.\n"
 "Vai vēlaties to aizstāt?"
 
-#: ../src/common/filefn.cpp:1206
+#: ../src/common/filefn.cpp:1207
 #, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "Fails '%s' nav izdzēšams"
@@ -3621,7 +3622,7 @@ msgstr "Failu nevar ielādēt."
 msgid "File dialog failed with error code %0lx."
 msgstr "Faila dialogs pārtrauca dabību ar kļūdu %0lx."
 
-#: ../src/common/docview.cpp:1772
+#: ../src/common/docview.cpp:1771
 msgid "File error"
 msgstr "Faila kļūda"
 
@@ -3633,7 +3634,7 @@ msgstr "Faila nosaukumu jau pastāv."
 msgid "Files"
 msgstr "Faili"
 
-#: ../src/common/filefn.cpp:1760
+#: ../src/common/filefn.cpp:1761
 #, c-format
 msgid "Files (%s)"
 msgstr "Faili (%s)"
@@ -3654,7 +3655,7 @@ msgstr "Pirmais"
 msgid "First page"
 msgstr "Pirmā lapa"
 
-#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:521
 #, fuzzy
 msgid "Fixed"
 msgstr "Fiksēts fonts:"
@@ -3667,7 +3668,7 @@ msgstr "Fiksēts fonts:"
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Fiksēta izmēra.<br> <b>treknraksts</b> <i>kursīvs</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
 msgstr "Peldošs"
 
@@ -3722,7 +3723,7 @@ msgstr ""
 msgid "Found %i matches"
 msgstr "Atrastas %i atbilstības"
 
-#: ../src/generic/prntdlgg.cpp:243
+#: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "Sūtītājs:"
 
@@ -3746,7 +3747,7 @@ msgstr "GIF: nepietiek atmiņas."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: nezināma kļūda!!!"
 
-#: ../src/gtk/window.cpp:4266
+#: ../src/gtk/window.cpp:4288
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3911,8 +3912,8 @@ msgstr "Home"
 msgid "Home directory"
 msgstr "Mājas mape"
 
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:255
 msgid "How the object will float relative to the text."
 msgstr ""
 
@@ -4098,24 +4099,24 @@ msgstr ""
 msgid "Insert"
 msgstr "Insert"
 
-#: ../src/richtext/richtextbuffer.cpp:7672
+#: ../src/richtext/richtextbuffer.cpp:7687
 #, fuzzy
 msgid "Insert Field"
 msgstr "Ievietot tekstu"
 
-#: ../src/richtext/richtextbuffer.cpp:7583
-#: ../src/richtext/richtextbuffer.cpp:8493
+#: ../src/richtext/richtextbuffer.cpp:7598
+#: ../src/richtext/richtextbuffer.cpp:8551
 msgid "Insert Image"
 msgstr "Ievietot attēlu"
 
-#: ../src/richtext/richtextbuffer.cpp:7630
+#: ../src/richtext/richtextbuffer.cpp:7645
 msgid "Insert Object"
 msgstr "Ievietot objektu"
 
 #: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7428
-#: ../src/richtext/richtextbuffer.cpp:7455
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7440
+#: ../src/richtext/richtextbuffer.cpp:7470
+#: ../src/richtext/richtextbuffer.cpp:7514
 msgid "Insert Text"
 msgstr "Ievietot tekstu"
 
@@ -4141,7 +4142,7 @@ msgstr "Nederīgs TIFF attēla indekss."
 msgid "Invalid data view item"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:245
+#: ../src/common/appcmn.cpp:266
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Nederīga ekrāna režīma specifikācija '%s'."
@@ -4379,7 +4380,7 @@ msgstr "Rindu atstarpe:"
 msgid "LEFT"
 msgstr "Pa kreisi"
 
-#: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
 msgstr "Ainava"
 
@@ -4391,7 +4392,7 @@ msgstr "Pēdējā"
 msgid "Last page"
 msgstr "Pēdējā lapa"
 
-#: ../src/common/log.cpp:311
+#: ../src/common/log.cpp:309
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
@@ -4409,7 +4410,7 @@ msgstr "Ledger, 17 x 11 in"
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:202
 #: ../src/richtext/richtextbulletspage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:246
+#: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "Pa kreisi"
 
@@ -4418,7 +4419,7 @@ msgstr "Pa kreisi"
 msgid "Left (&first line):"
 msgstr "Kreisā (&pirmā rinda):"
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
 msgstr "Kreisā apmale (mm):"
 
@@ -4718,7 +4719,7 @@ msgstr "Turku (MacTurkish)"
 msgid "MacVietnamese"
 msgstr "Vjetnamiešu (MacVietnamese)"
 
-#: ../src/propgrid/advprops.cpp:2024
+#: ../src/propgrid/advprops.cpp:2031
 msgid "Make a selection:"
 msgstr "Veidot izvēli:"
 
@@ -4731,11 +4732,11 @@ msgstr "Apmales"
 msgid "Match case"
 msgstr "Reģistrjutīgs"
 
-#: ../src/richtext/richtextsizepage.cpp:460
+#: ../src/richtext/richtextsizepage.cpp:463
 msgid "Max height:"
 msgstr "Maksimālais augstums:"
 
-#: ../src/richtext/richtextsizepage.cpp:433
+#: ../src/richtext/richtextsizepage.cpp:436
 msgid "Max width:"
 msgstr "Maksimālais platums:"
 
@@ -4769,11 +4770,11 @@ msgstr "Metode vai īpašība nav atrasta."
 msgid "Mi&nimize"
 msgstr "Mi&nimizēt"
 
-#: ../src/richtext/richtextsizepage.cpp:406
+#: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
 msgstr "Min. augstums:"
 
-#: ../src/richtext/richtextsizepage.cpp:379
+#: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
 msgstr "Min. platums"
 
@@ -4810,17 +4811,17 @@ msgstr "Uz leju"
 msgid "Move up"
 msgstr "Uz augšu"
 
-#: ../src/richtext/richtextsizepage.cpp:679
-#: ../src/richtext/richtextsizepage.cpp:681
+#: ../src/richtext/richtextsizepage.cpp:682
+#: ../src/richtext/richtextsizepage.cpp:684
 msgid "Moves the object to the next paragraph."
 msgstr "Pārvieto objektu uz nākošo rindkopu."
 
-#: ../src/richtext/richtextsizepage.cpp:673
-#: ../src/richtext/richtextsizepage.cpp:675
+#: ../src/richtext/richtextsizepage.cpp:676
+#: ../src/richtext/richtextsizepage.cpp:678
 msgid "Moves the object to the previous paragraph."
 msgstr "Pārvieto objektu uz iepriekšējo rindkopu."
 
-#: ../src/richtext/richtextbuffer.cpp:9271
+#: ../src/richtext/richtextbuffer.cpp:9345
 msgid "Multiple Cell Properties"
 msgstr "Vairāku šūnu īpašības"
 
@@ -4997,8 +4998,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/richtext/richtextsizepage.cpp:248
+#: ../src/richtext/richtextsizepage.cpp:252
 msgid "None"
 msgstr "Nekas"
 
@@ -5050,7 +5051,7 @@ msgstr "Numurētas aprises"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "Labi"
@@ -5072,7 +5073,7 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Objektiem ir jābūt id atribūtiem"
 
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1798
+#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
 msgstr "Atvērt failu"
 
@@ -5114,11 +5115,11 @@ msgstr "Iestatījumam '%s' ir nepieciešama vērtība."
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Iestatījums '%s': '%s' nav pārvēršams par datumu."
 
-#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "Iestatījumi"
 
-#: ../src/generic/prntdlgg.cpp:620 ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
 msgstr "Orientācija"
 
@@ -5318,22 +5319,21 @@ msgstr "Lapa %d"
 msgid "Page %d of %d"
 msgstr "Lapa %d no %d"
 
-#: ../src/gtk/print.cpp:783
+#: ../src/gtk/print.cpp:774
 msgid "Page Setup"
 msgstr "Lapas iestatījumi"
 
-#: ../src/generic/prntdlgg.cpp:833 ../src/common/prntbase.cpp:467
-#: ../src/gtk/gnome/gprint.cpp:710
+#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
 msgid "Page setup"
 msgstr "Lapas iestatījumi"
 
-#: ../src/generic/prntdlgg.cpp:221
+#: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "Lapas"
 
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:806
-#: ../src/generic/prntdlgg.cpp:847 ../src/generic/prntdlgg.cpp:860
-#: ../src/generic/prntdlgg.cpp:1057 ../src/generic/prntdlgg.cpp:1062
+#: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
+#: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
+#: ../src/generic/prntdlgg.cpp:1052 ../src/generic/prntdlgg.cpp:1057
 msgid "Paper size"
 msgstr "Papīra izmērs"
 
@@ -5350,7 +5350,7 @@ msgstr ""
 msgid "Passing an unknown object to GetObject"
 msgstr "GetObjectClassInfo nodots nezināms objekts"
 
-#: ../src/richtext/richtextctrl.cpp:3103 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Ielīmēt"
@@ -5368,7 +5368,7 @@ msgstr "Peri&ods"
 msgid "Permissions"
 msgstr "Atļaujas"
 
-#: ../src/richtext/richtextbuffer.cpp:11745
+#: ../src/richtext/richtextbuffer.cpp:11942
 msgid "Picture Properties"
 msgstr "Attēla īpašības"
 
@@ -5433,15 +5433,15 @@ msgstr ""
 msgid "Pointer to model not set correctly."
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:617 ../src/generic/prntdlgg.cpp:872
+#: ../src/generic/prntdlgg.cpp:612 ../src/generic/prntdlgg.cpp:867
 msgid "Portrait"
 msgstr "Portrets"
 
-#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:496
 msgid "Position"
 msgstr "Pozīcija"
 
-#: ../src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "PostScript fails"
 
@@ -5466,10 +5466,9 @@ msgstr "Priekšskatījums:"
 msgid "Previous page"
 msgstr "Iepriekšējā lapa"
 
-#: ../src/generic/prntdlgg.cpp:148 ../src/generic/prntdlgg.cpp:162
+#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
 #: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
 msgid "Print"
 msgstr "Drukāt"
 
@@ -5482,15 +5481,15 @@ msgstr "Drukas priekšskatījums"
 msgid "Print Preview Failure"
 msgstr "Drukas priekšskatījuma kļūda"
 
-#: ../src/generic/prntdlgg.cpp:229
+#: ../src/generic/prntdlgg.cpp:224
 msgid "Print Range"
 msgstr "Drukāt diapazonu"
 
-#: ../src/generic/prntdlgg.cpp:454
+#: ../src/generic/prntdlgg.cpp:449
 msgid "Print Setup"
 msgstr "Drukas iestatījumi"
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:621
 msgid "Print in colour"
 msgstr "Drukāt krāsainu"
 
@@ -5498,10 +5497,6 @@ msgstr "Drukāt krāsainu"
 #, fuzzy
 msgid "Print previe&w..."
 msgstr "Drukas priekš&skatījums"
-
-#: ../src/gtk/gnome/gprint.cpp:944
-msgid "Print preview"
-msgstr "Drukas priekšskatījums"
 
 #: ../src/common/docview.cpp:1244
 msgid "Print preview creation failed."
@@ -5512,7 +5507,7 @@ msgstr "Neizdevās izveidot izdrukas priekšskatījumu."
 msgid "Print preview..."
 msgstr "Drukas priekšskatījums"
 
-#: ../src/generic/prntdlgg.cpp:635
+#: ../src/generic/prntdlgg.cpp:630
 msgid "Print spooling"
 msgstr "Drukas spolēšana"
 
@@ -5520,7 +5515,7 @@ msgstr "Drukas spolēšana"
 msgid "Print this page"
 msgstr "Drukāt šo lapu"
 
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
 msgstr "Drukāt failā"
 
@@ -5528,27 +5523,27 @@ msgstr "Drukāt failā"
 msgid "Print..."
 msgstr "Drukāt..."
 
-#: ../src/generic/prntdlgg.cpp:498
+#: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
 msgstr "Printeris"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Printer command:"
 msgstr "Printera komanda:"
 
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:180
 msgid "Printer options"
 msgstr "Printera iestatījumi"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:645
 msgid "Printer options:"
 msgstr "Printera iestatījumi:"
 
-#: ../src/generic/prntdlgg.cpp:921
+#: ../src/generic/prntdlgg.cpp:916
 msgid "Printer..."
 msgstr "Printeris.."
 
-#: ../src/generic/prntdlgg.cpp:201
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Printer:"
 msgstr "Drukas iekārta:"
 
@@ -5580,7 +5575,7 @@ msgid "Printing..."
 msgstr "Drukājas..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2125
+#: ../src/common/docview.cpp:2124
 msgid "Printout"
 msgstr "Izdruka"
 
@@ -5696,7 +5691,7 @@ msgstr "Reģistra vērtība '%s' jau pastāv."
 msgid "Regular"
 msgstr "Regulārs"
 
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:519
 #, fuzzy
 msgid "Relative"
 msgstr "Dekoratīvs"
@@ -5732,7 +5727,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:4202
+#: ../src/richtext/richtextbuffer.cpp:4214
 msgid "Renumber List"
 msgstr "Pārnumurēt sarakstu"
 
@@ -5740,7 +5735,7 @@ msgstr "Pārnumurēt sarakstu"
 msgid "Rep&lace"
 msgstr "Aiz&vietot"
 
-#: ../src/richtext/richtextctrl.cpp:3263 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "Aizvietot"
 
@@ -5760,7 +5755,7 @@ msgstr "Aizstāt ar:"
 msgid "Required information entry is empty."
 msgstr "Nepieciešamais informācijas ieraksts ir tukšs."
 
-#: ../src/common/translation.cpp:1975
+#: ../src/common/translation.cpp:1966
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr ""
@@ -5775,11 +5770,11 @@ msgstr "Kore"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
-#: ../src/richtext/richtextsizepage.cpp:247
+#: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "Pa labi"
 
-#: ../src/generic/prntdlgg.cpp:897
+#: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
 msgstr "Labā apmale (mm):"
 
@@ -5914,11 +5909,11 @@ msgstr "Izvēlēties &visu"
 msgid "Select All"
 msgstr "Iezīmēt visu"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1877
 msgid "Select a document template"
 msgstr "Izvēlieties dokumenta sagatavi"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1951
 msgid "Select a document view"
 msgstr "Izvēlieties dokumenta skatu"
 
@@ -5951,7 +5946,7 @@ msgstr "Izvēlas labojamo saraksta līmeni."
 msgid "Separator expected after the option '%s'."
 msgstr "Aiz iestatījuma '%s' ir jābūt atdalītājam."
 
-#: ../src/richtext/richtextbuffer.cpp:10397
+#: ../src/richtext/richtextbuffer.cpp:10513
 msgid "Set Cell Style"
 msgstr "Iestatīt šūnas stilu"
 
@@ -5963,7 +5958,7 @@ msgstr ""
 msgid "Setting directory access times is not supported under this OS version"
 msgstr "Mapju pieejas laika iestatīšana nav atbalstīta šajā OS versijā"
 
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Setup..."
 msgstr "Iestatīt..."
 
@@ -6047,7 +6042,7 @@ msgid "Single"
 msgstr "Viena"
 
 #: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:296
+#: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "Izmērs"
 
@@ -6073,7 +6068,7 @@ msgstr "Lieli burti"
 msgid "Solid"
 msgstr "Vienlaidus"
 
-#: ../src/common/docview.cpp:1774
+#: ../src/common/docview.cpp:1773
 msgid "Sorry, could not open this file."
 msgstr "Diemžēl, šis fails nav atverams."
 
@@ -6090,7 +6085,7 @@ msgstr ""
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Diemžēl, šis vārds jau ir aizņemts. Izvēlieties citu."
 
-#: ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1796
 msgid "Sorry, the format for this file is unknown."
 msgstr "Atvainojiet, šis faila formāts nav zinams."
 
@@ -6120,13 +6115,13 @@ msgstr "Standarta"
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Statement, 5 1/2 x 8 1/2 in"
 
-#: ../src/richtext/richtextsizepage.cpp:515
-#: ../src/richtext/richtextsizepage.cpp:520
+#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:523
 #, fuzzy
 msgid "Static"
 msgstr "Statuss:"
 
-#: ../src/generic/prntdlgg.cpp:209
+#: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "Statuss:"
 
@@ -6218,7 +6213,7 @@ msgstr "TIFF: kļūda pierakstot attēlu."
 msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF: attēla izmērs ir nedabīgi liels."
 
-#: ../src/richtext/richtextbuffer.cpp:10687
+#: ../src/richtext/richtextbuffer.cpp:10794
 msgid "Table Properties"
 msgstr "Tabulas īpašības"
 
@@ -6238,7 +6233,7 @@ msgstr "Tabuācijas"
 msgid "Teletype"
 msgstr "Teletaips"
 
-#: ../src/common/docview.cpp:1879
+#: ../src/common/docview.cpp:1878
 msgid "Templates"
 msgstr "Sagataves"
 
@@ -6285,10 +6280,10 @@ msgstr "Apakšējās malas izmērs."
 msgid "The bottom padding size."
 msgstr "Apakšējā papildinājuma lielums."
 
-#: ../src/richtext/richtextsizepage.cpp:636
-#: ../src/richtext/richtextsizepage.cpp:638
-#: ../src/richtext/richtextsizepage.cpp:650
-#: ../src/richtext/richtextsizepage.cpp:652
+#: ../src/richtext/richtextsizepage.cpp:639
+#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:653
+#: ../src/richtext/richtextsizepage.cpp:655
 #, fuzzy
 msgid "The bottom position."
 msgstr "Tabulatora pozīcija."
@@ -6430,10 +6425,10 @@ msgstr "Kreisās malas lielums."
 msgid "The left padding size."
 msgstr "Kreisās malas papildinājuma lielums."
 
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
-#: ../src/richtext/richtextsizepage.cpp:545
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:534
+#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:548
+#: ../src/richtext/richtextsizepage.cpp:550
 #, fuzzy
 msgid "The left position."
 msgstr "Tabulatora pozīcija."
@@ -6454,34 +6449,34 @@ msgstr "Saraksta locekļa numurs."
 msgid "The locale ID is unknown."
 msgstr "Lokāles ID nav zināms."
 
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 msgid "The object height."
 msgstr "Objekta augstums."
 
-#: ../src/richtext/richtextsizepage.cpp:471
-#: ../src/richtext/richtextsizepage.cpp:473
+#: ../src/richtext/richtextsizepage.cpp:474
+#: ../src/richtext/richtextsizepage.cpp:476
 msgid "The object maximum height."
 msgstr "Objekta maksimālais augstums."
 
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 msgid "The object maximum width."
 msgstr "Objekta maksimālais platums."
 
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 #, fuzzy
 msgid "The object minimum height."
 msgstr "Objekta minimālais augstums."
 
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 msgid "The object minimum width."
 msgstr "Objekta minimālais platums."
 
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:331
+#: ../src/richtext/richtextsizepage.cpp:332
+#: ../src/richtext/richtextsizepage.cpp:334
 msgid "The object width."
 msgstr "Objekta platums."
 
@@ -6490,7 +6485,7 @@ msgstr "Objekta platums."
 msgid "The outline level."
 msgstr "Aprises līmenis."
 
-#: ../src/common/log.cpp:283
+#: ../src/common/log.cpp:281
 #, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
@@ -6498,11 +6493,11 @@ msgstr[0] "Iepriekšējais paziņojums atkārtojās %lu reizi."
 msgstr[1] "Iepriekšējais paziņojums atkārtojās %lu reizes."
 msgstr[2] "Iepriekšējais paziņojums atkārtojās %lu reizes."
 
-#: ../src/common/log.cpp:276
+#: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
 msgstr "Iepriekšējais paziņojums atkārtojās vienreiz."
 
-#: ../src/gtk/print.cpp:940 ../src/gtk/print.cpp:1123
+#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
 msgstr "Drukāšanas dialogs atbildēja ar kļūdu."
 
@@ -6543,10 +6538,10 @@ msgstr "Labās malas lielums."
 msgid "The right padding size."
 msgstr "Labās malas papildinājuma lielums."
 
-#: ../src/richtext/richtextsizepage.cpp:601
-#: ../src/richtext/richtextsizepage.cpp:603
-#: ../src/richtext/richtextsizepage.cpp:615
-#: ../src/richtext/richtextsizepage.cpp:617
+#: ../src/richtext/richtextsizepage.cpp:604
+#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:620
 #, fuzzy
 msgid "The right position."
 msgstr "Tabulatora pozīcija."
@@ -6606,10 +6601,10 @@ msgstr "Augšējās malas lielums."
 msgid "The top padding size."
 msgstr "Augšējā papildinājuma lielums."
 
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:580
-#: ../src/richtext/richtextsizepage.cpp:582
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:583
+#: ../src/richtext/richtextsizepage.cpp:585
 #, fuzzy
 msgid "The top position."
 msgstr "Tabulatora pozīcija."
@@ -6628,7 +6623,7 @@ msgstr ""
 "Uz šī datora uzstādītās attālinātās pieejas servisa (RAS) versija ir pārāk "
 "veca. Lūdzu, atsvaidziniet to (trūkst sekojoša nepieciešamā funkcija: %s)."
 
-#: ../src/gtk/print.cpp:968
+#: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "xwGtkPrinterDC nav izmantojams."
 
@@ -6654,11 +6649,11 @@ msgstr ""
 msgid "This is not a %s."
 msgstr "Šis nav %s."
 
-#: ../src/common/wincmn.cpp:1647
+#: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
 msgstr "Šī platforma neuztur fona caurspīdīgumu."
 
-#: ../src/gtk/window.cpp:4295
+#: ../src/gtk/window.cpp:4317
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6723,7 +6718,7 @@ msgstr "Dienas padoms"
 msgid "Tips not available, sorry!"
 msgstr "Dienas padomi nav pieejami!"
 
-#: ../src/generic/prntdlgg.cpp:247
+#: ../src/generic/prntdlgg.cpp:242
 msgid "To:"
 msgstr "Saņēmējs:"
 
@@ -6731,7 +6726,7 @@ msgstr "Saņēmējs:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7925
+#: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Too many EndStyle calls!"
 msgstr "Par daudz EndStyle izsaukumu!"
 
@@ -6739,12 +6734,12 @@ msgstr "Par daudz EndStyle izsaukumu!"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "PNG attēlā ir pārāk daudz krāsu, attēls var būt nedaudz izplūdis."
 
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 msgid "Top"
 msgstr "Augša"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
 msgstr "Augšējā mala (mm):"
 
@@ -7026,8 +7021,8 @@ msgstr "Vienības apakšējās aprises platumam."
 msgid "Units for the bottom padding."
 msgstr "Vienības apakšējās malas papildinājumam."
 
-#: ../src/richtext/richtextsizepage.cpp:661
-#: ../src/richtext/richtextsizepage.cpp:663
+#: ../src/richtext/richtextsizepage.cpp:664
+#: ../src/richtext/richtextsizepage.cpp:666
 #, fuzzy
 msgid "Units for the bottom position."
 msgstr "Vienības apakšējās malas papildinājumam."
@@ -7052,39 +7047,39 @@ msgstr "Vienības kreisās malas aprišu platumam."
 msgid "Units for the left padding."
 msgstr "Vienības kreisās malas papildinājumam."
 
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:558
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
 #, fuzzy
 msgid "Units for the left position."
 msgstr "Vienības kreisās malas papildinājumam."
 
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:487
 msgid "Units for the maximum object height."
 msgstr "Vienības objekta maksimālajam augstumam."
 
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:457
+#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:460
 msgid "Units for the maximum object width."
 msgstr "Vienības objekta maksimālajam platumam."
 
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:430
+#: ../src/richtext/richtextsizepage.cpp:431
+#: ../src/richtext/richtextsizepage.cpp:433
 msgid "Units for the minimum object height."
 msgstr "Vienības objekta minimālajam augstumam."
 
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:403
+#: ../src/richtext/richtextsizepage.cpp:404
+#: ../src/richtext/richtextsizepage.cpp:406
 msgid "Units for the minimum object width."
 msgstr "Vienības objekta minimālajam platumam."
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:377
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Units for the object height."
 msgstr "Vienības objekta augstumam."
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:342
+#: ../src/richtext/richtextsizepage.cpp:343
+#: ../src/richtext/richtextsizepage.cpp:345
 msgid "Units for the object width."
 msgstr "Vienības objekta platumam."
 
@@ -7108,8 +7103,8 @@ msgstr "Vienības labās malas aprisēm."
 msgid "Units for the right padding."
 msgstr "Vienības labās malas papildinājumam."
 
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:628
+#: ../src/richtext/richtextsizepage.cpp:629
+#: ../src/richtext/richtextsizepage.cpp:631
 #, fuzzy
 msgid "Units for the right position."
 msgstr "Vienības labās malas papildinājumam."
@@ -7134,8 +7129,8 @@ msgstr "Vienības augšējās aprises platumam."
 msgid "Units for the top padding."
 msgstr "Vienības augšējam papildinājumam."
 
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:596
 #, fuzzy
 msgid "Units for the top position."
 msgstr "Vienības augšējam papildinājumam."
@@ -7226,7 +7221,7 @@ msgstr "Nenorādīts"
 msgid "Unsupported clipboard format."
 msgstr "Neatbalstīts starpliktuves formāts."
 
-#: ../src/common/appcmn.cpp:228
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Neatbalstīta tēma '%s'."
@@ -7288,8 +7283,8 @@ msgstr "Leņķim jābūt starp %s un %s."
 msgid "Version "
 msgstr "Versija"
 
-#: ../src/richtext/richtextsizepage.cpp:288
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:291
+#: ../src/richtext/richtextsizepage.cpp:293
 msgid "Vertical alignment."
 msgstr "Vertikālais izlīdzinājums"
 
@@ -7301,7 +7296,7 @@ msgstr "Aplūkot failus detalizētajā skatā"
 msgid "View files as a list view"
 msgstr "Aplūkot failus saraksta skatā"
 
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:1952
 msgid "Views"
 msgstr "Skati"
 
@@ -7322,7 +7317,7 @@ msgstr "WINDOWS_RIGHT"
 msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr ""
 
-#: ../src/common/log.cpp:229
+#: ../src/common/log.cpp:227
 msgid "Warning: "
 msgstr "Brīdinājums: "
 
@@ -7841,16 +7836,16 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:370
-#: ../src/richtext/richtextsizepage.cpp:397
-#: ../src/richtext/richtextsizepage.cpp:424
-#: ../src/richtext/richtextsizepage.cpp:451
-#: ../src/richtext/richtextsizepage.cpp:478
-#: ../src/richtext/richtextsizepage.cpp:552
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:622
-#: ../src/richtext/richtextsizepage.cpp:657
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
 msgstr "cm"
 
@@ -7967,7 +7962,7 @@ msgstr "fails '%s', rinda %d: nemainīgās atslēgas vērtība '%s' nav ņemta v
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "fails '%s': negaidīts simbols %c %d rindā."
 
-#: ../src/richtext/richtextbuffer.cpp:8300
+#: ../src/richtext/richtextbuffer.cpp:8358
 msgid "files"
 msgstr "failus"
 
@@ -7991,8 +7986,8 @@ msgstr "ceturtais"
 msgid "generate verbose log messages"
 msgstr "veidot izsmeļošus žurnāla ierakstus"
 
-#: ../src/richtext/richtextbuffer.cpp:12015
-#: ../src/richtext/richtextbuffer.cpp:12125
+#: ../src/richtext/richtextbuffer.cpp:12212
+#: ../src/richtext/richtextbuffer.cpp:12322
 msgid "image"
 msgstr "attēls"
 
@@ -8058,7 +8053,7 @@ msgstr "nav kļūdu"
 msgid "no fonts found in %s, using builtin font"
 msgstr "mapē %s nav atrasts neviens fonts, izmanto iebūvēto fontu"
 
-#: ../src/html/helpdata.cpp:654
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "bezvārda"
 
@@ -8070,7 +8065,7 @@ msgstr "dienas vidus"
 msgid "normal"
 msgstr "normāls"
 
-#: ../src/gtk/print.cpp:1227 ../src/gtk/print.cpp:1332
+#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
 msgid "not implemented"
 msgstr "nav realizēts"
 
@@ -8086,16 +8081,16 @@ msgstr ""
 msgid "out of memory"
 msgstr "pietrūkst atmiņas"
 
-#: ../src/richtext/richtextsizepage.cpp:337
-#: ../src/richtext/richtextsizepage.cpp:371
-#: ../src/richtext/richtextsizepage.cpp:398
-#: ../src/richtext/richtextsizepage.cpp:425
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:479
-#: ../src/richtext/richtextsizepage.cpp:553
-#: ../src/richtext/richtextsizepage.cpp:588
-#: ../src/richtext/richtextsizepage.cpp:623
-#: ../src/richtext/richtextsizepage.cpp:658
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
 msgid "percent"
 msgstr "procenti"
 
@@ -8157,36 +8152,36 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:372
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:376
 #: ../src/richtext/richtextsizepage.cpp:399
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:426
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:453
-#: ../src/richtext/richtextsizepage.cpp:454
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:456
+#: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:554
-#: ../src/richtext/richtextsizepage.cpp:555
-#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:557
+#: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:589
-#: ../src/richtext/richtextsizepage.cpp:590
-#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:592
+#: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:624
-#: ../src/richtext/richtextsizepage.cpp:625
-#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:627
+#: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:659
-#: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextsizepage.cpp:662
+#: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
 msgstr " px"
 
@@ -8244,31 +8239,31 @@ msgstr "sešpadsmitais"
 msgid "sixth"
 msgstr "sestais"
 
-#: ../src/common/appcmn.cpp:206
+#: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "norādiet izmantojamo ekrāna režīmu (piem. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:192
+#: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
 msgstr "norādiet izmantojamo tēmu"
 
-#: ../src/richtext/richtextbuffer.cpp:8818
+#: ../src/richtext/richtextbuffer.cpp:8876
 msgid "standard/circle"
 msgstr "standarta/rinķis"
 
-#: ../src/richtext/richtextbuffer.cpp:8819
+#: ../src/richtext/richtextbuffer.cpp:8877
 msgid "standard/circle-outline"
 msgstr "standarta/riņķa aprises"
 
-#: ../src/richtext/richtextbuffer.cpp:8821
+#: ../src/richtext/richtextbuffer.cpp:8879
 msgid "standard/diamond"
 msgstr "standarta/rombs"
 
-#: ../src/richtext/richtextbuffer.cpp:8820
+#: ../src/richtext/richtextbuffer.cpp:8878
 msgid "standard/square"
 msgstr "standarta/kvadrāts"
 
-#: ../src/richtext/richtextbuffer.cpp:8822
+#: ../src/richtext/richtextbuffer.cpp:8880
 msgid "standard/triangle"
 msgstr "standarta/trīsstūris"
 
@@ -8375,7 +8370,7 @@ msgstr "nezināms-%d"
 msgid "unnamed"
 msgstr "nenosaukts"
 
-#: ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:1606
 #, c-format
 msgid "unnamed%d"
 msgstr "nenosaukts%d"
@@ -8384,7 +8379,7 @@ msgstr "nenosaukts%d"
 msgid "unsupported Zip compression method"
 msgstr "neatbalstīta Zip kompresijas metode"
 
-#: ../src/common/translation.cpp:1892
+#: ../src/common/translation.cpp:1883
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "izmanto katalogu '%s' no '%s'."
@@ -8397,7 +8392,7 @@ msgstr "rakstīšanas kļūda"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay beidzās ar kļūdu."
 
-#: ../src/gtk/print.cpp:996
+#: ../src/gtk/print.cpp:987
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr ""
 
@@ -8435,6 +8430,9 @@ msgstr "zlib kļūda  %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr "~"
+
+#~ msgid "Print preview"
+#~ msgstr "Drukas priekšskatījums"
 
 #~ msgid "'"
 #~ msgstr "'"

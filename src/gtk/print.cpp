@@ -51,10 +51,6 @@
 #include "wx/link.h"
 wxFORCE_LINK_THIS_MODULE(gtk_print)
 
-#if wxUSE_LIBGNOMEPRINT
-#include "wx/gtk/gnome/gprint.h"
-#endif
-
 #include "wx/gtk/private/object.h"
 
 // Useful to convert angles from/to Rad to/from Deg.
@@ -64,8 +60,7 @@ static const double DEG2RAD  = M_PI / 180.0;
 //----------------------------------------------------------------------------
 // wxGtkPrintModule
 // Initialized when starting the app : if it successfully load the gtk-print framework,
-// it uses it. If not, it falls back to gnome print (see /gtk/gnome/gprint.cpp) then
-// to postscript if gnomeprint is not available.
+// it uses it. If not, it falls back to Postscript.
 //----------------------------------------------------------------------------
 
 class wxGtkPrintModule: public wxModule
@@ -73,10 +68,6 @@ class wxGtkPrintModule: public wxModule
 public:
     wxGtkPrintModule()
     {
-#if wxUSE_LIBGNOMEPRINT
-        // This module must be initialized AFTER gnomeprint's one
-        AddDependency(wxCLASSINFO(wxGnomePrintModule));
-#endif
     }
     bool OnInit();
     void OnExit() {}

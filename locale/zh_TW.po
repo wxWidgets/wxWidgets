@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 18:18+0200\n"
+"POT-Creation-Date: 2013-10-01 19:04+0200\n"
 "PO-Revision-Date: 2013-02-27 14:58+0800\n"
 "Last-Translator: Wei-Lun Chao <bluebat@member.fsf.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -41,7 +41,7 @@ msgstr "              謝謝，我們對您遇到的不便表示抱歉！\n"
 msgid " (copy %d of %d)"
 msgstr "%d / %d 頁"
 
-#: ../src/common/log.cpp:427
+#: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (錯誤 %ld: %s)"
@@ -51,7 +51,7 @@ msgstr " (錯誤 %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "(在模組中：\"%s\")"
 
-#: ../src/common/docview.cpp:1625
+#: ../src/common/docview.cpp:1624
 msgid " - "
 msgstr " - "
 
@@ -209,12 +209,12 @@ msgstr "底端(&B)"
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:634
-#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:637
+#: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr "底端(&B):"
 
-#: ../include/wx/richtext/richtextbuffer.h:3523
+#: ../include/wx/richtext/richtextbuffer.h:3530
 msgid "&Box"
 msgstr "文字方塊(&B)"
 
@@ -237,7 +237,7 @@ msgstr "取消(&C)"
 msgid "&Cascade"
 msgstr "層疊排列(&C)"
 
-#: ../include/wx/richtext/richtextbuffer.h:5578
+#: ../include/wx/richtext/richtextbuffer.h:5587
 msgid "&Cell"
 msgstr "儲存格(&C)"
 
@@ -334,7 +334,7 @@ msgstr "完成(&F)"
 msgid "&First"
 msgstr "第一(&F)"
 
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
 msgstr "浮動模式(&F):"
 
@@ -371,8 +371,8 @@ msgstr "從(&F)："
 msgid "&Harddisk"
 msgstr "硬碟(&H)"
 
-#: ../src/richtext/richtextsizepage.cpp:348
-#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:351
+#: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
 msgstr "高度(&H):"
 
@@ -436,8 +436,8 @@ msgstr "左側(&L)"
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:529
-#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:532
+#: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
 msgstr "左側(&L)："
 
@@ -453,7 +453,7 @@ msgstr "日誌(&L)"
 msgid "&Move"
 msgstr "移動(&M)"
 
-#: ../src/richtext/richtextsizepage.cpp:669
+#: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
 msgstr "移動物件至(&M):"
 
@@ -474,7 +474,7 @@ msgstr "下一個(&N)"
 msgid "&Next >"
 msgstr "下一個(&N) 》"
 
-#: ../src/richtext/richtextsizepage.cpp:678
+#: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
 msgstr "下個段落(&N)"
 
@@ -521,7 +521,7 @@ msgstr "換頁符號(&P)"
 msgid "&Paste"
 msgstr "貼上(&P)"
 
-#: ../include/wx/richtext/richtextbuffer.h:4648
+#: ../include/wx/richtext/richtextbuffer.h:4655
 msgid "&Picture"
 msgstr "圖片(&P)"
 
@@ -533,7 +533,7 @@ msgstr "字點大小(&P)："
 msgid "&Position (tenths of a mm):"
 msgstr "位置(&P) (十分之一公釐)"
 
-#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:514
 #, fuzzy
 msgid "&Position mode:"
 msgstr "浮動模式(&F):"
@@ -547,7 +547,7 @@ msgstr "偏好設定(&P)"
 msgid "&Previous"
 msgstr "前一個(&P)"
 
-#: ../src/richtext/richtextsizepage.cpp:672
+#: ../src/richtext/richtextsizepage.cpp:675
 msgid "&Previous Paragraph"
 msgstr "上個段落(&P)"
 
@@ -555,7 +555,7 @@ msgstr "上個段落(&P)"
 msgid "&Print..."
 msgstr "列印(&P)…"
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4922
+#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "性質(&P)"
@@ -601,8 +601,8 @@ msgstr "右側(&R)"
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:599
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:602
+#: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
 msgstr "右側(&R)："
 
@@ -668,7 +668,7 @@ msgstr "子集合(&S):"
 msgid "&Symbol:"
 msgstr "樣式(&S)："
 
-#: ../include/wx/richtext/richtextbuffer.h:5668
+#: ../include/wx/richtext/richtextbuffer.h:5679
 msgid "&Table"
 msgstr "表格(&T) "
 
@@ -680,8 +680,8 @@ msgstr "頂端(&T)"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:564
-#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
 msgstr "頂端(&T):"
 
@@ -711,7 +711,7 @@ msgstr "取消縮排(&U)"
 msgid "&Up"
 msgstr "向上(&U)"
 
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
 msgstr "垂直對齊(&V):"
 
@@ -723,8 +723,8 @@ msgstr "檢視(&V)…"
 msgid "&Weight:"
 msgstr "粗細(&W)："
 
-#: ../src/richtext/richtextsizepage.cpp:314
-#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
 msgstr "寬度(&W):"
 
@@ -818,7 +818,7 @@ msgstr "(書籤)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:829
+#: ../src/richtext/richtextformatdlg.cpp:831
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -1138,7 +1138,7 @@ msgstr "關於"
 msgid "About %s"
 msgstr "關於 %s"
 
-#: ../src/richtext/richtextsizepage.cpp:517
+#: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr ""
 
@@ -1150,17 +1150,17 @@ msgstr "實際大小`"
 msgid "Add"
 msgstr "加入"
 
-#: ../src/richtext/richtextbuffer.cpp:10648
-msgid "Add column"
+#: ../src/richtext/richtextbuffer.cpp:10751
+msgid "Add Column"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10688
+msgid "Add Row"
 msgstr ""
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "把目前頁面加到書籤中"
-
-#: ../src/richtext/richtextbuffer.cpp:10590
-msgid "Add row"
-msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1203,11 +1203,11 @@ msgstr "靠左對齊"
 msgid "Align Right"
 msgstr "靠右對齊"
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:266
 msgid "Alignment"
 msgstr "對齊"
 
-#: ../src/generic/prntdlgg.cpp:220
+#: ../src/generic/prntdlgg.cpp:215
 msgid "All"
 msgstr "所有"
 
@@ -1216,11 +1216,11 @@ msgstr "所有"
 msgid "All files (%s)|%s"
 msgstr "所有檔案 (%s)|%s"
 
-#: ../include/wx/defs.h:2884
+#: ../include/wx/defs.h:2922
 msgid "All files (*)|*"
 msgstr "所有檔案 (*)|*"
 
-#: ../include/wx/defs.h:2881
+#: ../include/wx/defs.h:2919
 msgid "All files (*.*)|*.*"
 msgstr "所有檔案 (*.*)|*.*"
 
@@ -1236,7 +1236,7 @@ msgstr "字母順序模式"
 msgid "Already Registered Object passed to SetObjectClassInfo"
 msgstr "傳入已註冊的物件給 SetObjectClassInfo"
 
-#: ../src/unix/dialup.cpp:354
+#: ../src/unix/dialup.cpp:353
 msgid "Already dialling ISP."
 msgstr "已經撥接 ISP。"
 
@@ -1432,15 +1432,15 @@ msgstr "邊框"
 msgid "Borders"
 msgstr "邊框"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:144
+#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
 msgid "Bottom"
 msgstr "底端"
 
-#: ../src/generic/prntdlgg.cpp:898
+#: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "底邊距(公釐)："
 
-#: ../src/richtext/richtextbuffer.cpp:8861
+#: ../src/richtext/richtextbuffer.cpp:8919
 msgid "Box Properties"
 msgstr "文字方塊性質"
 
@@ -1552,7 +1552,7 @@ msgstr "無法建立登錄機碼 '%s'"
 msgid "Can't create thread"
 msgstr "無法建立執行緒"
 
-#: ../src/msw/window.cpp:3783
+#: ../src/msw/window.cpp:3793
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "無法建立類別 '%s' 的視窗"
@@ -1678,7 +1678,7 @@ msgstr "無法建立 mutex。"
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr "無法建立新欄位的 ID 。可能是因為已達到欄位數量的上限。"
 
-#: ../src/common/filefn.cpp:1335
+#: ../src/common/filefn.cpp:1336
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "無法列舉檔案 '%s'"
@@ -1707,11 +1707,11 @@ msgstr "無法提取「%s」的作用中實體"
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "無法取得排程原則 %d 的優先等級範圍。"
 
-#: ../src/unix/utilsunx.cpp:983
+#: ../src/unix/utilsunx.cpp:988
 msgid "Cannot get the hostname"
 msgstr "無法取得主機名稱。"
 
-#: ../src/unix/utilsunx.cpp:1019
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the official hostname"
 msgstr "無法取得正式的主機名稱。"
 
@@ -1747,7 +1747,7 @@ msgstr "無法從檔案 '%s' 中載入資源。"
 msgid "Cannot open HTML document: %s"
 msgstr "無法開啟 HTML 文件：%s"
 
-#: ../src/html/helpdata.cpp:664
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "無法開啟 HTML 說明書：%s"
@@ -1825,7 +1825,7 @@ msgstr "區分大小寫"
 msgid "Categorized Mode"
 msgstr "已分類模式"
 
-#: ../src/richtext/richtextbuffer.cpp:9273
+#: ../src/richtext/richtextbuffer.cpp:9347
 msgid "Cell Properties"
 msgstr "儲存格性質"
 
@@ -1858,7 +1858,7 @@ msgstr "置中對齊"
 msgid "Centre text."
 msgstr "置中對齊文字。"
 
-#: ../src/richtext/richtextsizepage.cpp:284
+#: ../src/richtext/richtextsizepage.cpp:287
 msgid "Centred"
 msgstr "中間"
 
@@ -1867,19 +1867,20 @@ msgstr "中間"
 msgid "Ch&oose..."
 msgstr "選擇(&O)…"
 
-#: ../src/richtext/richtextbuffer.cpp:4029
+#: ../src/richtext/richtextbuffer.cpp:4041
 msgid "Change List Style"
 msgstr "變更清單樣式"
 
-#: ../src/richtext/richtextbuffer.cpp:3380
+#: ../src/richtext/richtextbuffer.cpp:3392
 msgid "Change Object Style"
 msgstr "變更物件樣式"
 
-#: ../src/richtext/richtextbuffer.cpp:3646
+#: ../src/richtext/richtextbuffer.cpp:3658
+#: ../src/richtext/richtextbuffer.cpp:7749
 msgid "Change Properties"
 msgstr "變更性質"
 
-#: ../src/richtext/richtextbuffer.cpp:3197
+#: ../src/richtext/richtextbuffer.cpp:3209
 msgid "Change Style"
 msgstr "變更樣式"
 
@@ -2125,7 +2126,7 @@ msgstr "關閉視窗"
 msgid "Color"
 msgstr "顏色"
 
-#: ../src/richtext/richtextformatdlg.cpp:723
+#: ../src/richtext/richtextformatdlg.cpp:725
 msgid "Colour"
 msgstr "顏色"
 
@@ -2170,7 +2171,7 @@ msgstr "由於命令列參數 %d 無法被轉換為 Unicode 編碼，其將被�
 msgid "Common dialog failed with error code %0lx."
 msgstr "共同對話視窗錯誤，錯誤碼 %0lx。"
 
-#: ../src/gtk/window.cpp:4284
+#: ../src/gtk/window.cpp:4306
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2219,7 +2220,7 @@ msgstr "轉換"
 msgid "Copied to clipboard:\"%s\""
 msgstr "複製到剪貼簿：\"%s\""
 
-#: ../src/generic/prntdlgg.cpp:252
+#: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
 msgstr "份數："
 
@@ -2300,7 +2301,7 @@ msgstr "無法設定對齊。"
 msgid "Could not set column width."
 msgstr "無法設定欄位寬度。"
 
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1569
 msgid "Could not set current working directory"
 msgstr "無法設定目前工作目錄"
 
@@ -2329,11 +2330,11 @@ msgid "Could not start document preview."
 msgstr "無法啟動文件預覽。"
 
 #: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1086 ../src/gtk/gnome/gprint.cpp:922
+#: ../src/gtk/print.cpp:1077
 msgid "Could not start printing."
 msgstr "無法啟動列印。"
 
-#: ../src/common/wincmn.cpp:2114
+#: ../src/common/wincmn.cpp:2131
 msgid "Could not transfer data to window"
 msgstr "無法轉移資料到視窗中。"
 
@@ -2355,7 +2356,7 @@ msgstr "無法建立計時器。"
 msgid "Couldn't create the overlay window"
 msgstr "無法建立 overlay 視窗"
 
-#: ../src/common/translation.cpp:2024
+#: ../src/common/translation.cpp:2015
 msgid "Couldn't enumerate translations"
 msgstr "無法列舉翻譯"
 
@@ -2364,7 +2365,7 @@ msgstr "無法列舉翻譯"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "在動態連結檔中找不到符號 '%s'。"
 
-#: ../src/gtk/print.cpp:2023
+#: ../src/gtk/print.cpp:2014
 msgid "Couldn't get hatch style from wxBrush."
 msgstr "無法從 wxBrush 取得矩形填充樣式。"
 
@@ -2448,7 +2449,7 @@ msgstr "剪下(&T)"
 msgid "Current directory:"
 msgstr "目前目錄："
 
-#: ../src/gtk/print.cpp:768
+#: ../src/gtk/print.cpp:759
 msgid "Custom size"
 msgstr "自訂大小"
 
@@ -2557,11 +2558,11 @@ msgstr "預設的編碼"
 msgid "Default font"
 msgstr "預設字型"
 
-#: ../src/generic/prntdlgg.cpp:515
+#: ../src/generic/prntdlgg.cpp:510
 msgid "Default printer"
 msgstr "預設的印表機"
 
-#: ../src/richtext/richtextbuffer.cpp:7793 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "刪除"
@@ -2569,6 +2570,16 @@ msgstr "刪除"
 #: ../src/richtext/richtexttabspage.cpp:148
 msgid "Delete A&ll"
 msgstr "刪除全部(&L)"
+
+#: ../src/richtext/richtextbuffer.cpp:10637
+#, fuzzy
+msgid "Delete Column"
+msgstr "刪除選取項目"
+
+#: ../src/richtext/richtextbuffer.cpp:10587
+#, fuzzy
+msgid "Delete Row"
+msgstr "刪除"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
@@ -2578,19 +2589,9 @@ msgstr "刪除樣式"
 msgid "Delete Text"
 msgstr "刪除文字"
 
-#: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
-msgid "Delete column"
-msgstr "刪除選取項目"
-
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "刪除項目"
-
-#: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
-msgid "Delete row"
-msgstr "刪除"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -2647,12 +2648,12 @@ msgstr "發生 DirectFB 錯誤，錯誤碼 %d 。"
 msgid "Directories"
 msgstr "目錄"
 
-#: ../src/common/filefn.cpp:1250
+#: ../src/common/filefn.cpp:1251
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "目錄 '%s' 無法建立"
 
-#: ../src/common/filefn.cpp:1270
+#: ../src/common/filefn.cpp:1271
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "目錄 '%s' 無法刪除"
@@ -2793,35 +2794,35 @@ msgstr "編輯項目"
 msgid "Elapsed time:"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:350
-#: ../src/richtext/richtextsizepage.cpp:352
-#: ../src/richtext/richtextsizepage.cpp:462
-#: ../src/richtext/richtextsizepage.cpp:464
+#: ../src/richtext/richtextsizepage.cpp:353
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:465
+#: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
 msgstr "啟用高度值。"
 
-#: ../src/richtext/richtextsizepage.cpp:435
-#: ../src/richtext/richtextsizepage.cpp:437
+#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:440
 msgid "Enable the maximum width value."
 msgstr "啟用最大寬度值。"
 
-#: ../src/richtext/richtextsizepage.cpp:408
-#: ../src/richtext/richtextsizepage.cpp:410
+#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
 msgstr "啟用最小高度值。"
 
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:386
 msgid "Enable the minimum width value."
 msgstr "啟用最小寬度值。"
 
-#: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:318
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
 msgstr "啟用寬度值。"
 
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:280
+#: ../src/richtext/richtextsizepage.cpp:282
 msgid "Enable vertical alignment."
 msgstr "啟用垂直對齊。"
 
@@ -2907,11 +2908,11 @@ msgstr "讀取設定選項時發生錯誤。"
 msgid "Error saving user configuration data."
 msgstr "儲存使用者配置資料錯誤。"
 
-#: ../src/gtk/print.cpp:680
+#: ../src/gtk/print.cpp:671
 msgid "Error while printing: "
 msgstr "列印時發生錯誤: "
 
-#: ../src/common/log.cpp:225
+#: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "錯誤︰"
 
@@ -3180,7 +3181,7 @@ msgstr "無法從剪貼簿取得資料"
 msgid "Failed to get the local system time"
 msgstr "無法取得系統的當地時間"
 
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1453
 msgid "Failed to get the working directory"
 msgstr "無法取得工作目錄"
 
@@ -3585,7 +3586,7 @@ msgstr ""
 "檔案 '%s' 已存在，\n"
 "是否覆寫？"
 
-#: ../src/common/filefn.cpp:1206
+#: ../src/common/filefn.cpp:1207
 #, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "無法移除檔案『%s』"
@@ -3604,7 +3605,7 @@ msgstr "檔案無法載入。"
 msgid "File dialog failed with error code %0lx."
 msgstr "檔案對話視窗錯誤，錯誤碼 %0lx。"
 
-#: ../src/common/docview.cpp:1772
+#: ../src/common/docview.cpp:1771
 msgid "File error"
 msgstr "檔案錯誤"
 
@@ -3616,7 +3617,7 @@ msgstr "檔案名稱已存在。"
 msgid "Files"
 msgstr "檔案"
 
-#: ../src/common/filefn.cpp:1760
+#: ../src/common/filefn.cpp:1761
 #, c-format
 msgid "Files (%s)"
 msgstr "檔案 (%s)"
@@ -3637,7 +3638,7 @@ msgstr "最前"
 msgid "First page"
 msgstr "第一頁"
 
-#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:521
 #, fuzzy
 msgid "Fixed"
 msgstr "定寬字型︰"
@@ -3650,7 +3651,7 @@ msgstr "定寬字型︰"
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "定寬大小字體。<br> <b>粗體</b> <i>斜體</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
 msgstr "浮動"
 
@@ -3705,7 +3706,7 @@ msgstr "不支援往前參照的超連結"
 msgid "Found %i matches"
 msgstr "找到 %i 個符合項目"
 
-#: ../src/generic/prntdlgg.cpp:243
+#: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "從："
 
@@ -3729,7 +3730,7 @@ msgstr "GIF: 記憶體不足。"
 msgid "GIF: unknown error!!!"
 msgstr "GIF: 不明的錯誤！！！"
 
-#: ../src/gtk/window.cpp:4266
+#: ../src/gtk/window.cpp:4288
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3895,8 +3896,8 @@ msgstr "家目錄"
 msgid "Home directory"
 msgstr "家目錄"
 
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:255
 msgid "How the object will float relative to the text."
 msgstr "物件與文字之間的相對位置。"
 
@@ -4083,24 +4084,24 @@ msgstr "安裝後續的啟始失效，忽略中。"
 msgid "Insert"
 msgstr "插入"
 
-#: ../src/richtext/richtextbuffer.cpp:7672
+#: ../src/richtext/richtextbuffer.cpp:7687
 #, fuzzy
 msgid "Insert Field"
 msgstr "插入文字"
 
-#: ../src/richtext/richtextbuffer.cpp:7583
-#: ../src/richtext/richtextbuffer.cpp:8493
+#: ../src/richtext/richtextbuffer.cpp:7598
+#: ../src/richtext/richtextbuffer.cpp:8551
 msgid "Insert Image"
 msgstr "插入圖片"
 
-#: ../src/richtext/richtextbuffer.cpp:7630
+#: ../src/richtext/richtextbuffer.cpp:7645
 msgid "Insert Object"
 msgstr "插入物件"
 
 #: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7428
-#: ../src/richtext/richtextbuffer.cpp:7455
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7440
+#: ../src/richtext/richtextbuffer.cpp:7470
+#: ../src/richtext/richtextbuffer.cpp:7514
 msgid "Insert Text"
 msgstr "插入文字"
 
@@ -4126,7 +4127,7 @@ msgstr "無效的 TIFF 圖像索引。"
 msgid "Invalid data view item"
 msgstr "無效的資料檢視項目"
 
-#: ../src/common/appcmn.cpp:245
+#: ../src/common/appcmn.cpp:266
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "無效的顯示模式規格 '%s'。"
@@ -4364,7 +4365,7 @@ msgstr "列距(&I):"
 msgid "LEFT"
 msgstr "LEFT"
 
-#: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
 msgstr "橫向列印"
 
@@ -4376,7 +4377,7 @@ msgstr "最後"
 msgid "Last page"
 msgstr "最後一頁"
 
-#: ../src/common/log.cpp:311
+#: ../src/common/log.cpp:309
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
@@ -4392,7 +4393,7 @@ msgstr "橫板紙，17 x 11 英吋"
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:202
 #: ../src/richtext/richtextbulletspage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:246
+#: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "左"
 
@@ -4401,7 +4402,7 @@ msgstr "左"
 msgid "Left (&first line):"
 msgstr "左(第一列)(&F):"
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
 msgstr "左邊距(公釐)："
 
@@ -4700,7 +4701,7 @@ msgstr "MacTurkish"
 msgid "MacVietnamese"
 msgstr "MacVietnamese"
 
-#: ../src/propgrid/advprops.cpp:2024
+#: ../src/propgrid/advprops.cpp:2031
 msgid "Make a selection:"
 msgstr "選取項目："
 
@@ -4713,11 +4714,11 @@ msgstr "外邊距"
 msgid "Match case"
 msgstr "區分大小寫"
 
-#: ../src/richtext/richtextsizepage.cpp:460
+#: ../src/richtext/richtextsizepage.cpp:463
 msgid "Max height:"
 msgstr "最大高度："
 
-#: ../src/richtext/richtextsizepage.cpp:433
+#: ../src/richtext/richtextsizepage.cpp:436
 msgid "Max width:"
 msgstr "最大寬度："
 
@@ -4751,11 +4752,11 @@ msgstr "找不到方法或性質。"
 msgid "Mi&nimize"
 msgstr "最小化(&N)"
 
-#: ../src/richtext/richtextsizepage.cpp:406
+#: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
 msgstr "最小高度："
 
-#: ../src/richtext/richtextsizepage.cpp:379
+#: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
 msgstr "最小寬度："
 
@@ -4792,17 +4793,17 @@ msgstr "下移"
 msgid "Move up"
 msgstr "上移"
 
-#: ../src/richtext/richtextsizepage.cpp:679
-#: ../src/richtext/richtextsizepage.cpp:681
+#: ../src/richtext/richtextsizepage.cpp:682
+#: ../src/richtext/richtextsizepage.cpp:684
 msgid "Moves the object to the next paragraph."
 msgstr "將物件移至下個段落。"
 
-#: ../src/richtext/richtextsizepage.cpp:673
-#: ../src/richtext/richtextsizepage.cpp:675
+#: ../src/richtext/richtextsizepage.cpp:676
+#: ../src/richtext/richtextsizepage.cpp:678
 msgid "Moves the object to the previous paragraph."
 msgstr "將物件移至上個段落。"
 
-#: ../src/richtext/richtextbuffer.cpp:9271
+#: ../src/richtext/richtextbuffer.cpp:9345
 msgid "Multiple Cell Properties"
 msgstr "儲存格性質(多個)"
 
@@ -4979,8 +4980,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr "在檔案「%s」中找不到任何有效映射。"
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/richtext/richtextsizepage.cpp:248
+#: ../src/richtext/richtextsizepage.cpp:252
 msgid "None"
 msgstr "無"
 
@@ -5032,7 +5033,7 @@ msgstr "大綱編號"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "確認"
@@ -5054,7 +5055,7 @@ msgstr "物件實作不支援具名參數。"
 msgid "Objects must have an id attribute"
 msgstr "物件必須有 id 屬性"
 
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1798
+#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
 msgstr "開啟檔案"
 
@@ -5096,11 +5097,11 @@ msgstr "選項 '%s' 必須有值。"
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "選項 '%s'：'%s' 無法轉換成日期。"
 
-#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "選項"
 
-#: ../src/generic/prntdlgg.cpp:620 ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
 msgstr "方位"
 
@@ -5300,22 +5301,21 @@ msgstr "第 %d 頁"
 msgid "Page %d of %d"
 msgstr "%d / %d 頁"
 
-#: ../src/gtk/print.cpp:783
+#: ../src/gtk/print.cpp:774
 msgid "Page Setup"
 msgstr "頁面設定"
 
-#: ../src/generic/prntdlgg.cpp:833 ../src/common/prntbase.cpp:467
-#: ../src/gtk/gnome/gprint.cpp:710
+#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
 msgid "Page setup"
 msgstr "頁面設定"
 
-#: ../src/generic/prntdlgg.cpp:221
+#: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "頁"
 
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:806
-#: ../src/generic/prntdlgg.cpp:847 ../src/generic/prntdlgg.cpp:860
-#: ../src/generic/prntdlgg.cpp:1057 ../src/generic/prntdlgg.cpp:1062
+#: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
+#: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
+#: ../src/generic/prntdlgg.cpp:1052 ../src/generic/prntdlgg.cpp:1057
 msgid "Paper size"
 msgstr "紙張大小"
 
@@ -5332,7 +5332,7 @@ msgstr "傳入已註冊的物件給 SetObject"
 msgid "Passing an unknown object to GetObject"
 msgstr "傳入一個不明物件給 GetObject"
 
-#: ../src/richtext/richtextctrl.cpp:3103 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "貼上"
@@ -5350,7 +5350,7 @@ msgstr "週期(&O)"
 msgid "Permissions"
 msgstr "允許"
 
-#: ../src/richtext/richtextbuffer.cpp:11745
+#: ../src/richtext/richtextbuffer.cpp:11942
 msgid "Picture Properties"
 msgstr "圖片性質"
 
@@ -5415,15 +5415,15 @@ msgstr "未正確設定資料檢視控制項的指標。"
 msgid "Pointer to model not set correctly."
 msgstr "未正確設定式樣的指標。"
 
-#: ../src/generic/prntdlgg.cpp:617 ../src/generic/prntdlgg.cpp:872
+#: ../src/generic/prntdlgg.cpp:612 ../src/generic/prntdlgg.cpp:867
 msgid "Portrait"
 msgstr "直向列印"
 
-#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:496
 msgid "Position"
 msgstr "位置"
 
-#: ../src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "PostScript 文件"
 
@@ -5448,10 +5448,9 @@ msgstr "預覽︰"
 msgid "Previous page"
 msgstr "前一頁"
 
-#: ../src/generic/prntdlgg.cpp:148 ../src/generic/prntdlgg.cpp:162
+#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
 #: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
 msgid "Print"
 msgstr "列印"
 
@@ -5464,25 +5463,21 @@ msgstr "預覽列印"
 msgid "Print Preview Failure"
 msgstr "預覽列印失敗"
 
-#: ../src/generic/prntdlgg.cpp:229
+#: ../src/generic/prntdlgg.cpp:224
 msgid "Print Range"
 msgstr "列印範圍"
 
-#: ../src/generic/prntdlgg.cpp:454
+#: ../src/generic/prntdlgg.cpp:449
 msgid "Print Setup"
 msgstr "列印設定"
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:621
 msgid "Print in colour"
 msgstr "彩色列印"
 
 #: ../src/common/stockitem.cpp:182
 #, fuzzy
 msgid "Print previe&w..."
-msgstr "預覽列印"
-
-#: ../src/gtk/gnome/gprint.cpp:944
-msgid "Print preview"
 msgstr "預覽列印"
 
 #: ../src/common/docview.cpp:1244
@@ -5494,7 +5489,7 @@ msgstr "建立預覽列印失敗。"
 msgid "Print preview..."
 msgstr "預覽列印"
 
-#: ../src/generic/prntdlgg.cpp:635
+#: ../src/generic/prntdlgg.cpp:630
 msgid "Print spooling"
 msgstr "列印佇列中"
 
@@ -5502,7 +5497,7 @@ msgstr "列印佇列中"
 msgid "Print this page"
 msgstr "列印本頁"
 
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
 msgstr "列印到檔案"
 
@@ -5510,27 +5505,27 @@ msgstr "列印到檔案"
 msgid "Print..."
 msgstr "列印..."
 
-#: ../src/generic/prntdlgg.cpp:498
+#: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
 msgstr "印表機"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Printer command:"
 msgstr "印表機指令："
 
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:180
 msgid "Printer options"
 msgstr "印表機選項"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:645
 msgid "Printer options:"
 msgstr "印表機選項："
 
-#: ../src/generic/prntdlgg.cpp:921
+#: ../src/generic/prntdlgg.cpp:916
 msgid "Printer..."
 msgstr "印表機…"
 
-#: ../src/generic/prntdlgg.cpp:201
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Printer:"
 msgstr "印表機:"
 
@@ -5562,7 +5557,7 @@ msgid "Printing..."
 msgstr "列印中…"
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2125
+#: ../src/common/docview.cpp:2124
 msgid "Printout"
 msgstr "列印"
 
@@ -5677,7 +5672,7 @@ msgstr "登錄機值 '%s' 已存在。"
 msgid "Regular"
 msgstr "一般"
 
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:519
 #, fuzzy
 msgid "Relative"
 msgstr "修飾"
@@ -5712,7 +5707,7 @@ msgstr "潤算器 \"%s\" %d.%d 版本不完整。而且無法載入。"
 msgid "Rendering failed."
 msgstr "潤算失敗。"
 
-#: ../src/richtext/richtextbuffer.cpp:4202
+#: ../src/richtext/richtextbuffer.cpp:4214
 msgid "Renumber List"
 msgstr "重新編號清單"
 
@@ -5720,7 +5715,7 @@ msgstr "重新編號清單"
 msgid "Rep&lace"
 msgstr "替換(&L)"
 
-#: ../src/richtext/richtextctrl.cpp:3263 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "置換"
 
@@ -5740,7 +5735,7 @@ msgstr "置換："
 msgid "Required information entry is empty."
 msgstr "所需的資訊項目空白。"
 
-#: ../src/common/translation.cpp:1975
+#: ../src/common/translation.cpp:1966
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "資源 '%s' 不是有效的訊息分類。"
@@ -5755,11 +5750,11 @@ msgstr "背脊"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
-#: ../src/richtext/richtextsizepage.cpp:247
+#: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "右側"
 
-#: ../src/generic/prntdlgg.cpp:897
+#: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
 msgstr "右邊距(公釐)："
 
@@ -5894,11 +5889,11 @@ msgstr "選擇全部(&A)"
 msgid "Select All"
 msgstr "選擇全部"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1877
 msgid "Select a document template"
 msgstr "選擇文件範本"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1951
 msgid "Select a document view"
 msgstr "選擇文件檢視"
 
@@ -5931,7 +5926,7 @@ msgstr "選取並編輯該清單層級"
 msgid "Separator expected after the option '%s'."
 msgstr "在選項 '%s' 之後應有分隔字元。"
 
-#: ../src/richtext/richtextbuffer.cpp:10397
+#: ../src/richtext/richtextbuffer.cpp:10513
 msgid "Set Cell Style"
 msgstr "設定儲存格樣式"
 
@@ -5943,7 +5938,7 @@ msgstr "呼叫 SetProperty 時未帶有效的 setter"
 msgid "Setting directory access times is not supported under this OS version"
 msgstr "此作業系統不支援設定目錄存取次數"
 
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Setup..."
 msgstr "設定…"
 
@@ -6027,7 +6022,7 @@ msgid "Single"
 msgstr "單一"
 
 #: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:296
+#: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "大小"
 
@@ -6053,7 +6048,7 @@ msgstr "大寫(&P)"
 msgid "Solid"
 msgstr "單色"
 
-#: ../src/common/docview.cpp:1774
+#: ../src/common/docview.cpp:1773
 msgid "Sorry, could not open this file."
 msgstr "對不起，無法開啟檔案。"
 
@@ -6069,7 +6064,7 @@ msgstr "對不起，記憶體不足無法建立預覽。"
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "抱歉，名字已被使用，請選擇其他名字。"
 
-#: ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1796
 msgid "Sorry, the format for this file is unknown."
 msgstr "對不起，這個檔案格式是不明的。"
 
@@ -6099,13 +6094,13 @@ msgstr "標準"
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "結算單, 5 1/2 x 8 1/2 英吋"
 
-#: ../src/richtext/richtextsizepage.cpp:515
-#: ../src/richtext/richtextsizepage.cpp:520
+#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:523
 #, fuzzy
 msgid "Static"
 msgstr "狀態:"
 
-#: ../src/generic/prntdlgg.cpp:209
+#: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "狀態:"
 
@@ -6198,7 +6193,7 @@ msgstr "TIFF: 寫入圖像錯誤。"
 msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF：影像大小過大。"
 
-#: ../src/richtext/richtextbuffer.cpp:10687
+#: ../src/richtext/richtextbuffer.cpp:10794
 msgid "Table Properties"
 msgstr "表格性質"
 
@@ -6218,7 +6213,7 @@ msgstr "定位點"
 msgid "Teletype"
 msgstr "電傳打字機"
 
-#: ../src/common/docview.cpp:1879
+#: ../src/common/docview.cpp:1878
 msgid "Templates"
 msgstr "範本"
 
@@ -6265,10 +6260,10 @@ msgstr "下外邊距大小。"
 msgid "The bottom padding size."
 msgstr "下內邊距。"
 
-#: ../src/richtext/richtextsizepage.cpp:636
-#: ../src/richtext/richtextsizepage.cpp:638
-#: ../src/richtext/richtextsizepage.cpp:650
-#: ../src/richtext/richtextsizepage.cpp:652
+#: ../src/richtext/richtextsizepage.cpp:639
+#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:653
+#: ../src/richtext/richtextsizepage.cpp:655
 #, fuzzy
 msgid "The bottom position."
 msgstr "跳格位置。"
@@ -6408,10 +6403,10 @@ msgstr "左外邊距大小。"
 msgid "The left padding size."
 msgstr "左內邊距。"
 
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
-#: ../src/richtext/richtextsizepage.cpp:545
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:534
+#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:548
+#: ../src/richtext/richtextsizepage.cpp:550
 #, fuzzy
 msgid "The left position."
 msgstr "跳格位置。"
@@ -6432,34 +6427,34 @@ msgstr "清單項目編號。"
 msgid "The locale ID is unknown."
 msgstr "區域 ID 未知。"
 
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 msgid "The object height."
 msgstr "物件高度。"
 
-#: ../src/richtext/richtextsizepage.cpp:471
-#: ../src/richtext/richtextsizepage.cpp:473
+#: ../src/richtext/richtextsizepage.cpp:474
+#: ../src/richtext/richtextsizepage.cpp:476
 msgid "The object maximum height."
 msgstr "物件最大高度。"
 
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 msgid "The object maximum width."
 msgstr "物件最大寬度。"
 
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 #, fuzzy
 msgid "The object minimum height."
 msgstr "物件最小高度。"
 
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 msgid "The object minimum width."
 msgstr "物件最小寬度。"
 
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:331
+#: ../src/richtext/richtextsizepage.cpp:332
+#: ../src/richtext/richtextsizepage.cpp:334
 msgid "The object width."
 msgstr "物件寬度。"
 
@@ -6468,17 +6463,17 @@ msgstr "物件寬度。"
 msgid "The outline level."
 msgstr "大綱層級。"
 
-#: ../src/common/log.cpp:283
+#: ../src/common/log.cpp:281
 #, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
 msgstr[0] "前一個訊息重複了 %lu 次。"
 
-#: ../src/common/log.cpp:276
+#: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
 msgstr "前一個訊息重複了一次。"
 
-#: ../src/gtk/print.cpp:940 ../src/gtk/print.cpp:1123
+#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
 msgstr "列印對話方塊傳回一個錯誤。"
 
@@ -6518,10 +6513,10 @@ msgstr "右外邊距大小。"
 msgid "The right padding size."
 msgstr "右內邊距。"
 
-#: ../src/richtext/richtextsizepage.cpp:601
-#: ../src/richtext/richtextsizepage.cpp:603
-#: ../src/richtext/richtextsizepage.cpp:615
-#: ../src/richtext/richtextsizepage.cpp:617
+#: ../src/richtext/richtextsizepage.cpp:604
+#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:620
 #, fuzzy
 msgid "The right position."
 msgstr "跳格位置。"
@@ -6581,10 +6576,10 @@ msgstr "上外邊距大小。"
 msgid "The top padding size."
 msgstr "上內邊距。"
 
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:580
-#: ../src/richtext/richtextsizepage.cpp:582
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:583
+#: ../src/richtext/richtextsizepage.cpp:585
 #, fuzzy
 msgid "The top position."
 msgstr "跳格位置。"
@@ -6603,7 +6598,7 @@ msgstr ""
 "於此機器安裝的遠端存取服務 (RAS) 的版本太舊，請更新它 (缺少以下必要的功能："
 "%s)。"
 
-#: ../src/gtk/print.cpp:968
+#: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "無法使用 wxGtkPrinterDC。"
 
@@ -6627,11 +6622,11 @@ msgstr "此文件的水平尺寸不符合頁面，若要列印的話將 會被�
 msgid "This is not a %s."
 msgstr "這不是 %s。"
 
-#: ../src/common/wincmn.cpp:1647
+#: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
 msgstr "這個平臺不支援透明背景。"
 
-#: ../src/gtk/window.cpp:4295
+#: ../src/gtk/window.cpp:4317
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6687,7 +6682,7 @@ msgstr "每日小祕訣"
 msgid "Tips not available, sorry!"
 msgstr "對不起，無法取得小祕訣！"
 
-#: ../src/generic/prntdlgg.cpp:247
+#: ../src/generic/prntdlgg.cpp:242
 msgid "To:"
 msgstr "到："
 
@@ -6695,7 +6690,7 @@ msgstr "到："
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "切換渲染器無法渲染該值，型態為: "
 
-#: ../src/richtext/richtextbuffer.cpp:7925
+#: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Too many EndStyle calls!"
 msgstr "呼叫 EndStyle 太多次！"
 
@@ -6703,12 +6698,12 @@ msgstr "呼叫 EndStyle 太多次！"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "太多顏色在 PNG 中，圖像可能有點模糊。"
 
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 msgid "Top"
 msgstr "頂端"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
 msgstr "頂邊距(公釐)："
 
@@ -6987,8 +6982,8 @@ msgstr "下輪廓單位。"
 msgid "Units for the bottom padding."
 msgstr "下內邊距單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:661
-#: ../src/richtext/richtextsizepage.cpp:663
+#: ../src/richtext/richtextsizepage.cpp:664
+#: ../src/richtext/richtextsizepage.cpp:666
 #, fuzzy
 msgid "Units for the bottom position."
 msgstr "下內邊距單位。"
@@ -7013,39 +7008,39 @@ msgstr "左輪廓單位。"
 msgid "Units for the left padding."
 msgstr "左內邊距單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:558
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
 #, fuzzy
 msgid "Units for the left position."
 msgstr "左內邊距單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:487
 msgid "Units for the maximum object height."
 msgstr "最大物件高度的單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:457
+#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:460
 msgid "Units for the maximum object width."
 msgstr "最大物件寬度的單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:430
+#: ../src/richtext/richtextsizepage.cpp:431
+#: ../src/richtext/richtextsizepage.cpp:433
 msgid "Units for the minimum object height."
 msgstr "最小物件高度的單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:403
+#: ../src/richtext/richtextsizepage.cpp:404
+#: ../src/richtext/richtextsizepage.cpp:406
 msgid "Units for the minimum object width."
 msgstr "最小物件寬度的單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:377
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Units for the object height."
 msgstr "物件高度單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:342
+#: ../src/richtext/richtextsizepage.cpp:343
+#: ../src/richtext/richtextsizepage.cpp:345
 msgid "Units for the object width."
 msgstr "物件寬度單位。"
 
@@ -7069,8 +7064,8 @@ msgstr "右輪廓單位。"
 msgid "Units for the right padding."
 msgstr "右內邊距單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:628
+#: ../src/richtext/richtextsizepage.cpp:629
+#: ../src/richtext/richtextsizepage.cpp:631
 #, fuzzy
 msgid "Units for the right position."
 msgstr "右內邊距單位。"
@@ -7095,8 +7090,8 @@ msgstr "上輪廓單位。"
 msgid "Units for the top padding."
 msgstr "上內邊距單位。"
 
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:596
 #, fuzzy
 msgid "Units for the top position."
 msgstr "上內邊距單位。"
@@ -7187,7 +7182,7 @@ msgstr "未指定"
 msgid "Unsupported clipboard format."
 msgstr "不支援的剪貼簿格式。"
 
-#: ../src/common/appcmn.cpp:228
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "不支援的布景主題 '%s'。"
@@ -7249,8 +7244,8 @@ msgstr "值必須介於 %s 和 %s 之間。"
 msgid "Version "
 msgstr "版本"
 
-#: ../src/richtext/richtextsizepage.cpp:288
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:291
+#: ../src/richtext/richtextsizepage.cpp:293
 msgid "Vertical alignment."
 msgstr "垂直對齊。"
 
@@ -7262,7 +7257,7 @@ msgstr "按詳細資料檢視檔案"
 msgid "View files as a list view"
 msgstr "按清單檢視檔案"
 
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:1952
 msgid "Views"
 msgstr "檢視"
 
@@ -7283,7 +7278,7 @@ msgstr "WINDOWS_RIGHT"
 msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr "等候 epoll 描述子 %d 的輸出入失敗"
 
-#: ../src/common/log.cpp:229
+#: ../src/common/log.cpp:227
 msgid "Warning: "
 msgstr "警告："
 
@@ -7814,16 +7809,16 @@ msgstr "讀取 tar標頭區塊時發生檢查碼錯誤"
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:370
-#: ../src/richtext/richtextsizepage.cpp:397
-#: ../src/richtext/richtextsizepage.cpp:424
-#: ../src/richtext/richtextsizepage.cpp:451
-#: ../src/richtext/richtextsizepage.cpp:478
-#: ../src/richtext/richtextsizepage.cpp:552
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:622
-#: ../src/richtext/richtextsizepage.cpp:657
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
 msgstr "公分"
 
@@ -7940,7 +7935,7 @@ msgstr "檔案 '%s' 第 %d 列：忽略對不可變更機碼 '%s' 的值。"
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "檔案 '%s'： 不應有字元 %c 存在於第 %d 列中。"
 
-#: ../src/richtext/richtextbuffer.cpp:8300
+#: ../src/richtext/richtextbuffer.cpp:8358
 msgid "files"
 msgstr "檔案"
 
@@ -7964,8 +7959,8 @@ msgstr "第四"
 msgid "generate verbose log messages"
 msgstr "產生冗長的記錄訊息"
 
-#: ../src/richtext/richtextbuffer.cpp:12015
-#: ../src/richtext/richtextbuffer.cpp:12125
+#: ../src/richtext/richtextbuffer.cpp:12212
+#: ../src/richtext/richtextbuffer.cpp:12322
 msgid "image"
 msgstr "圖像"
 
@@ -8031,7 +8026,7 @@ msgstr "沒有任何錯誤"
 msgid "no fonts found in %s, using builtin font"
 msgstr "於 %s 找不到字型，將使用內建字型"
 
-#: ../src/html/helpdata.cpp:654
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "未命名"
 
@@ -8043,7 +8038,7 @@ msgstr "中午"
 msgid "normal"
 msgstr "正常"
 
-#: ../src/gtk/print.cpp:1227 ../src/gtk/print.cpp:1332
+#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
 msgid "not implemented"
 msgstr "尚未實作"
 
@@ -8059,16 +8054,16 @@ msgstr "物件不能有 XML 文字子節點"
 msgid "out of memory"
 msgstr "記憶體不足"
 
-#: ../src/richtext/richtextsizepage.cpp:337
-#: ../src/richtext/richtextsizepage.cpp:371
-#: ../src/richtext/richtextsizepage.cpp:398
-#: ../src/richtext/richtextsizepage.cpp:425
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:479
-#: ../src/richtext/richtextsizepage.cpp:553
-#: ../src/richtext/richtextsizepage.cpp:588
-#: ../src/richtext/richtextsizepage.cpp:623
-#: ../src/richtext/richtextsizepage.cpp:658
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
 msgid "percent"
 msgstr "百分比"
 
@@ -8130,36 +8125,36 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:372
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:376
 #: ../src/richtext/richtextsizepage.cpp:399
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:426
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:453
-#: ../src/richtext/richtextsizepage.cpp:454
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:456
+#: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:554
-#: ../src/richtext/richtextsizepage.cpp:555
-#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:557
+#: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:589
-#: ../src/richtext/richtextsizepage.cpp:590
-#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:592
+#: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:624
-#: ../src/richtext/richtextsizepage.cpp:625
-#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:627
+#: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:659
-#: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextsizepage.cpp:662
+#: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
 msgstr "像素"
 
@@ -8217,31 +8212,31 @@ msgstr "第十六"
 msgid "sixth"
 msgstr "第六"
 
-#: ../src/common/appcmn.cpp:206
+#: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "設定顯示模式 (例如 640x480-16)"
 
-#: ../src/common/appcmn.cpp:192
+#: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
 msgstr "設定布景主題"
 
-#: ../src/richtext/richtextbuffer.cpp:8818
+#: ../src/richtext/richtextbuffer.cpp:8876
 msgid "standard/circle"
 msgstr "標準/圓形"
 
-#: ../src/richtext/richtextbuffer.cpp:8819
+#: ../src/richtext/richtextbuffer.cpp:8877
 msgid "standard/circle-outline"
 msgstr "標準/圓框"
 
-#: ../src/richtext/richtextbuffer.cpp:8821
+#: ../src/richtext/richtextbuffer.cpp:8879
 msgid "standard/diamond"
 msgstr "標準/菱形"
 
-#: ../src/richtext/richtextbuffer.cpp:8820
+#: ../src/richtext/richtextbuffer.cpp:8878
 msgid "standard/square"
 msgstr "標準/方形"
 
-#: ../src/richtext/richtextbuffer.cpp:8822
+#: ../src/richtext/richtextbuffer.cpp:8880
 msgid "standard/triangle"
 msgstr "標準/三角形"
 
@@ -8351,7 +8346,7 @@ msgstr "不明-%d"
 msgid "unnamed"
 msgstr "未命名"
 
-#: ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:1606
 #, c-format
 msgid "unnamed%d"
 msgstr "未命名-%d"
@@ -8360,7 +8355,7 @@ msgstr "未命名-%d"
 msgid "unsupported Zip compression method"
 msgstr "不支援的 Zip 壓縮方法"
 
-#: ../src/common/translation.cpp:1892
+#: ../src/common/translation.cpp:1883
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "使用記載檔 '%s' — '%s'。"
@@ -8373,7 +8368,7 @@ msgstr "寫入失敗"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay 失敗。"
 
-#: ../src/gtk/print.cpp:996
+#: ../src/gtk/print.cpp:987
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr "wxPrintout::GetPageInfo 給了一個空的 maxPage。"
 
@@ -8411,6 +8406,9 @@ msgstr "zlib 錯誤碼 %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr "~"
+
+#~ msgid "Print preview"
+#~ msgstr "預覽列印"
 
 #~ msgid "'"
 #~ msgstr "'"

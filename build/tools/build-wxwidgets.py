@@ -281,8 +281,7 @@ def main(scriptName, args):
             wxpy_configure_opts.append("--enable-monolithic")
         else:
             wxpy_configure_opts.append("--with-sdl")
-            wxpy_configure_opts.append("--with-gnomeprint")
-                                        
+
         # Try to use use lowest available SDK back to 10.5. Both Carbon and
         # Cocoa builds require at least the 10.5 SDK now. We only add it to
         # the wxpy options because this is a hard-requirement for wxPython,

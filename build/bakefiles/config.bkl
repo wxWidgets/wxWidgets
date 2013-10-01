@@ -506,7 +506,6 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
         </set>
         <set var="EXTRALIBS_SDL"/>
-        <set var="EXTRALIBS_GNOMEPRINT"/>
 
         <set var="WITH_PLUGIN_SDL">0</set>
 

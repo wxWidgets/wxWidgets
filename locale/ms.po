@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 18:18+0200\n"
+"POT-Creation-Date: 2013-10-01 19:04+0200\n"
 "PO-Revision-Date: 2006-11-06 10:48+0800\n"
 "Last-Translator: Mahrazi Mohd Kamal <mahrazi@gmail.com>\n"
 "Language-Team: ms_MY <ms@li.org>\n"
@@ -40,7 +40,7 @@ msgstr "              Terima kasih dan segala kesulitan amat dikesali!\n"
 msgid " (copy %d of %d)"
 msgstr "Laman %d of %d"
 
-#: ../src/common/log.cpp:427
+#: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (ralat %ld: %s)"
@@ -50,7 +50,7 @@ msgstr " (ralat %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "modul tiff: %s"
 
-#: ../src/common/docview.cpp:1625
+#: ../src/common/docview.cpp:1624
 msgid " - "
 msgstr " - "
 
@@ -212,12 +212,12 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:634
-#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:637
+#: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:3523
+#: ../include/wx/richtext/richtextbuffer.h:3530
 #, fuzzy
 msgid "&Box"
 msgstr "Te&bal"
@@ -241,7 +241,7 @@ msgstr "&Batal"
 msgid "&Cascade"
 msgstr "Bertindih"
 
-#: ../include/wx/richtext/richtextbuffer.h:5578
+#: ../include/wx/richtext/richtextbuffer.h:5587
 #, fuzzy
 msgid "&Cell"
 msgstr "&Batal"
@@ -344,7 +344,7 @@ msgstr "&Tamat"
 msgid "&First"
 msgstr "pertama"
 
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
 msgstr ""
 
@@ -383,8 +383,8 @@ msgstr "Dari: "
 msgid "&Harddisk"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:348
-#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:351
+#: ../src/richtext/richtextsizepage.cpp:358
 #, fuzzy
 msgid "&Height:"
 msgstr "Berat:"
@@ -452,8 +452,8 @@ msgstr "&Kiri"
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:529
-#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:532
+#: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
 msgstr "&Kiri:"
 
@@ -469,7 +469,7 @@ msgstr "&Log"
 msgid "&Move"
 msgstr "&Pindah"
 
-#: ../src/richtext/richtextsizepage.cpp:669
+#: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
 msgstr ""
 
@@ -491,7 +491,7 @@ msgstr "Seterus&nya"
 msgid "&Next >"
 msgstr "Seterus&nya >"
 
-#: ../src/richtext/richtextsizepage.cpp:678
+#: ../src/richtext/richtextsizepage.cpp:681
 #, fuzzy
 msgid "&Next Paragraph"
 msgstr "Selepas satu perenggan:"
@@ -540,7 +540,7 @@ msgstr ""
 msgid "&Paste"
 msgstr "&Tepek"
 
-#: ../include/wx/richtext/richtextbuffer.h:4648
+#: ../include/wx/richtext/richtextbuffer.h:4655
 msgid "&Picture"
 msgstr ""
 
@@ -552,7 +552,7 @@ msgstr "Saiz titik:"
 msgid "&Position (tenths of a mm):"
 msgstr "&Posisi (satu persepuluh mm):"
 
-#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:514
 #, fuzzy
 msgid "&Position mode:"
 msgstr "Soalan"
@@ -566,7 +566,7 @@ msgstr "Keutamaan"
 msgid "&Previous"
 msgstr "&Sebelum"
 
-#: ../src/richtext/richtextsizepage.cpp:672
+#: ../src/richtext/richtextsizepage.cpp:675
 #, fuzzy
 msgid "&Previous Paragraph"
 msgstr "Laman sebelum:"
@@ -575,7 +575,7 @@ msgstr "Laman sebelum:"
 msgid "&Print..."
 msgstr "Ce&tak..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4922
+#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "&Ciri-ciri"
@@ -621,8 +621,8 @@ msgstr "K&anan"
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:599
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:602
+#: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
 msgstr "K&anan:"
 
@@ -691,7 +691,7 @@ msgstr "&Subset:"
 msgid "&Symbol:"
 msgstr "Simbol:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5668
+#: ../include/wx/richtext/richtextbuffer.h:5679
 #, fuzzy
 msgid "&Table"
 msgstr "Tab"
@@ -705,8 +705,8 @@ msgstr "&Salin"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:564
-#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:574
 #, fuzzy
 msgid "&Top:"
 msgstr "Ke:"
@@ -737,7 +737,7 @@ msgstr "Nyahjarak"
 msgid "&Up"
 msgstr "A&tas"
 
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/richtext/richtextsizepage.cpp:278
 #, fuzzy
 msgid "&Vertical alignment:"
 msgstr "J&ajaran Peluru:"
@@ -751,8 +751,8 @@ msgstr "&Buka..."
 msgid "&Weight:"
 msgstr "Berat:"
 
-#: ../src/richtext/richtextsizepage.cpp:314
-#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:324
 #, fuzzy
 msgid "&Width:"
 msgstr "Berat:"
@@ -847,7 +847,7 @@ msgstr "(tanda laman)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:829
+#: ../src/richtext/richtextformatdlg.cpp:831
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -1180,7 +1180,7 @@ msgstr "Perih&al"
 msgid "About %s"
 msgstr "Perihal"
 
-#: ../src/richtext/richtextsizepage.cpp:517
+#: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr ""
 
@@ -1193,17 +1193,17 @@ msgstr "Saiz Seben&ar"
 msgid "Add"
 msgstr "Tambah"
 
-#: ../src/richtext/richtextbuffer.cpp:10648
-msgid "Add column"
+#: ../src/richtext/richtextbuffer.cpp:10751
+msgid "Add Column"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10688
+msgid "Add Row"
 msgstr ""
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "Tambah laman semasa ke tanda laman"
-
-#: ../src/richtext/richtextbuffer.cpp:10590
-msgid "Add row"
-msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1246,12 +1246,12 @@ msgstr "Jajar Kiri"
 msgid "Align Right"
 msgstr "Jajar Kanan"
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:266
 #, fuzzy
 msgid "Alignment"
 msgstr "J&ajaran"
 
-#: ../src/generic/prntdlgg.cpp:220
+#: ../src/generic/prntdlgg.cpp:215
 msgid "All"
 msgstr "Semua"
 
@@ -1260,11 +1260,11 @@ msgstr "Semua"
 msgid "All files (%s)|%s"
 msgstr "Semua fail (%s)|%s"
 
-#: ../include/wx/defs.h:2884
+#: ../include/wx/defs.h:2922
 msgid "All files (*)|*"
 msgstr "Semua fail (*)|*"
 
-#: ../include/wx/defs.h:2881
+#: ../include/wx/defs.h:2919
 msgid "All files (*.*)|*.*"
 msgstr "Semua fail (*.*)|*.*"
 
@@ -1280,7 +1280,7 @@ msgstr ""
 msgid "Already Registered Object passed to SetObjectClassInfo"
 msgstr "Objek Sedia Daftar dilepaskan ke SetObjectClassInfo"
 
-#: ../src/unix/dialup.cpp:354
+#: ../src/unix/dialup.cpp:353
 msgid "Already dialling ISP."
 msgstr "Sudah mendail ISP"
 
@@ -1486,15 +1486,15 @@ msgstr "Moden"
 msgid "Borders"
 msgstr "Moden"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:144
+#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
 msgid "Bottom"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:898
+#: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "Jidar bawah (mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:8861
+#: ../src/richtext/richtextbuffer.cpp:8919
 #, fuzzy
 msgid "Box Properties"
 msgstr "&Ciri-ciri"
@@ -1608,7 +1608,7 @@ msgstr "Gagal mencipta kunci registri '%s'"
 msgid "Can't create thread"
 msgstr "Gagal mencipta benang"
 
-#: ../src/msw/window.cpp:3783
+#: ../src/msw/window.cpp:3793
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Gagal mencipta tetingkap kelas %s"
@@ -1735,7 +1735,7 @@ msgstr "Gagal mencipta mutex."
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr ""
 
-#: ../src/common/filefn.cpp:1335
+#: ../src/common/filefn.cpp:1336
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "Gagal menghitung fail '%s'"
@@ -1764,11 +1764,11 @@ msgstr "Gagal menemui sambungan mendial aktif: %s"
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Gagal mendapatkan keutamaan banjaran untuk penjadualan polisi %d."
 
-#: ../src/unix/utilsunx.cpp:983
+#: ../src/unix/utilsunx.cpp:988
 msgid "Cannot get the hostname"
 msgstr "Gagal mendapatkan namahos"
 
-#: ../src/unix/utilsunx.cpp:1019
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the official hostname"
 msgstr "Gagal mendapatkan namahos rasmi"
 
@@ -1805,7 +1805,7 @@ msgstr "Gagal memuat sumber dari fail '%s'."
 msgid "Cannot open HTML document: %s"
 msgstr "Gagal buka dokumen HTML: %s"
 
-#: ../src/html/helpdata.cpp:664
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Gagal buka buku bantuan HTML: %s"
@@ -1883,7 +1883,7 @@ msgstr "Sensitif kes"
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9273
+#: ../src/richtext/richtextbuffer.cpp:9347
 #, fuzzy
 msgid "Cell Properties"
 msgstr "&Ciri-ciri"
@@ -1917,7 +1917,7 @@ msgstr "Tengah"
 msgid "Centre text."
 msgstr "Teks Tengah."
 
-#: ../src/richtext/richtextsizepage.cpp:284
+#: ../src/richtext/richtextsizepage.cpp:287
 #, fuzzy
 msgid "Centred"
 msgstr "Ke&tengah"
@@ -1927,21 +1927,22 @@ msgstr "Ke&tengah"
 msgid "Ch&oose..."
 msgstr "Pilih..."
 
-#: ../src/richtext/richtextbuffer.cpp:4029
+#: ../src/richtext/richtextbuffer.cpp:4041
 msgid "Change List Style"
 msgstr "Ubah Gaya Senarai"
 
-#: ../src/richtext/richtextbuffer.cpp:3380
+#: ../src/richtext/richtextbuffer.cpp:3392
 #, fuzzy
 msgid "Change Object Style"
 msgstr "Ubah Gaya Senarai"
 
-#: ../src/richtext/richtextbuffer.cpp:3646
+#: ../src/richtext/richtextbuffer.cpp:3658
+#: ../src/richtext/richtextbuffer.cpp:7749
 #, fuzzy
 msgid "Change Properties"
 msgstr "&Ciri-ciri"
 
-#: ../src/richtext/richtextbuffer.cpp:3197
+#: ../src/richtext/richtextbuffer.cpp:3209
 msgid "Change Style"
 msgstr "Ubah Gaya"
 
@@ -2198,7 +2199,7 @@ msgstr "Tutup tetingkap ini"
 msgid "Color"
 msgstr "Warna:"
 
-#: ../src/richtext/richtextformatdlg.cpp:723
+#: ../src/richtext/richtextformatdlg.cpp:725
 #, fuzzy
 msgid "Colour"
 msgstr "Warna:"
@@ -2246,7 +2247,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Perlaksanaan arahan '%s' gagal dengan ralat: %ul"
 
-#: ../src/gtk/window.cpp:4284
+#: ../src/gtk/window.cpp:4306
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2296,7 +2297,7 @@ msgstr "Kandungan"
 msgid "Copied to clipboard:\"%s\""
 msgstr "Salin ke papan klip:\"%s\""
 
-#: ../src/generic/prntdlgg.cpp:252
+#: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
 msgstr "Salinan:"
 
@@ -2389,7 +2390,7 @@ msgstr "Gagal mulakan mencetak."
 msgid "Could not set column width."
 msgstr "Gagal mulakan pralihat dokumen."
 
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1569
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "Gagal mendapatkan direktori kerja"
@@ -2424,11 +2425,11 @@ msgid "Could not start document preview."
 msgstr "Gagal mulakan pralihat dokumen."
 
 #: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1086 ../src/gtk/gnome/gprint.cpp:922
+#: ../src/gtk/print.cpp:1077
 msgid "Could not start printing."
 msgstr "Gagal mulakan mencetak."
 
-#: ../src/common/wincmn.cpp:2114
+#: ../src/common/wincmn.cpp:2131
 msgid "Could not transfer data to window"
 msgstr "Gagal hantar data ke tetingkap"
 
@@ -2450,7 +2451,7 @@ msgstr "Gagal cipta pemasa"
 msgid "Couldn't create the overlay window"
 msgstr "Gagal mencipta tetingkap lapisan"
 
-#: ../src/common/translation.cpp:2024
+#: ../src/common/translation.cpp:2015
 #, fuzzy
 msgid "Couldn't enumerate translations"
 msgstr "Gagal menamatkan benang"
@@ -2460,7 +2461,7 @@ msgstr "Gagal menamatkan benang"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Gagal menemui simbol '%s' dalam pustaka dinamik"
 
-#: ../src/gtk/print.cpp:2023
+#: ../src/gtk/print.cpp:2014
 msgid "Couldn't get hatch style from wxBrush."
 msgstr ""
 
@@ -2546,7 +2547,7 @@ msgstr "&Potong"
 msgid "Current directory:"
 msgstr "Direktori semasa:"
 
-#: ../src/gtk/print.cpp:768
+#: ../src/gtk/print.cpp:759
 #, fuzzy
 msgid "Custom size"
 msgstr "Saiz Fon"
@@ -2659,11 +2660,11 @@ msgstr "Pengenkodan default"
 msgid "Default font"
 msgstr "Pencetak default"
 
-#: ../src/generic/prntdlgg.cpp:515
+#: ../src/generic/prntdlgg.cpp:510
 msgid "Default printer"
 msgstr "Pencetak default"
 
-#: ../src/richtext/richtextbuffer.cpp:7793 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Padam"
@@ -2671,6 +2672,16 @@ msgstr "Padam"
 #: ../src/richtext/richtexttabspage.cpp:148
 msgid "Delete A&ll"
 msgstr "P&adam Semua"
+
+#: ../src/richtext/richtextbuffer.cpp:10637
+#, fuzzy
+msgid "Delete Column"
+msgstr "Padam pilihan"
+
+#: ../src/richtext/richtextbuffer.cpp:10587
+#, fuzzy
+msgid "Delete Row"
+msgstr "Padam"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
@@ -2680,19 +2691,9 @@ msgstr "Padam Gaya"
 msgid "Delete Text"
 msgstr "Padam Teks"
 
-#: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
-msgid "Delete column"
-msgstr "Padam pilihan"
-
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "Padam item"
-
-#: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
-msgid "Delete row"
-msgstr "Padam"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -2752,12 +2753,12 @@ msgstr "Ralat DiretFB %d berlaku."
 msgid "Directories"
 msgstr "Direktori"
 
-#: ../src/common/filefn.cpp:1250
+#: ../src/common/filefn.cpp:1251
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Direktori '%s' gagal dicipta"
 
-#: ../src/common/filefn.cpp:1270
+#: ../src/common/filefn.cpp:1271
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "Direktori '%s' gagal dicipta"
@@ -2907,37 +2908,37 @@ msgstr "Edit item"
 msgid "Elapsed time:"
 msgstr "Masa berlalu : "
 
-#: ../src/richtext/richtextsizepage.cpp:350
-#: ../src/richtext/richtextsizepage.cpp:352
-#: ../src/richtext/richtextsizepage.cpp:462
-#: ../src/richtext/richtextsizepage.cpp:464
+#: ../src/richtext/richtextsizepage.cpp:353
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:465
+#: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:435
-#: ../src/richtext/richtextsizepage.cpp:437
+#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:440
 #, fuzzy
 msgid "Enable the maximum width value."
 msgstr "Gagal mulakan mencetak."
 
-#: ../src/richtext/richtextsizepage.cpp:408
-#: ../src/richtext/richtextsizepage.cpp:410
+#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:386
 #, fuzzy
 msgid "Enable the minimum width value."
 msgstr "Gagal mulakan mencetak."
 
-#: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:318
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:280
+#: ../src/richtext/richtextsizepage.cpp:282
 #, fuzzy
 msgid "Enable vertical alignment."
 msgstr "Gagal mulakan mencetak."
@@ -3031,12 +3032,12 @@ msgstr "Ralat membaca pilihan konfig."
 msgid "Error saving user configuration data."
 msgstr "Ralat menulis fail konfigurasi pengguna."
 
-#: ../src/gtk/print.cpp:680
+#: ../src/gtk/print.cpp:671
 #, fuzzy
 msgid "Error while printing: "
 msgstr "Ralat ketika menunggu semafor"
 
-#: ../src/common/log.cpp:225
+#: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "Ralat: "
 
@@ -3313,7 +3314,7 @@ msgstr "Gagal memdapatkan data dari klipbod."
 msgid "Failed to get the local system time"
 msgstr "Gagal mendapatkan masa sistem lokal"
 
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1453
 msgid "Failed to get the working directory"
 msgstr "Gagal mendapatkan direktori kerja"
 
@@ -3727,7 +3728,7 @@ msgstr ""
 "Fail '%s' sedia wujud.\n"
 "Anda pasti untuk gantinya?"
 
-#: ../src/common/filefn.cpp:1206
+#: ../src/common/filefn.cpp:1207
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "Direktori '%s' gagal dicipta"
@@ -3746,7 +3747,7 @@ msgstr "Fail gagal dimuatkan."
 msgid "File dialog failed with error code %0lx."
 msgstr "Perlaksanaan arahan '%s' gagal dengan ralat: %ul"
 
-#: ../src/common/docview.cpp:1772
+#: ../src/common/docview.cpp:1771
 msgid "File error"
 msgstr "Ralat fail"
 
@@ -3758,7 +3759,7 @@ msgstr "Nama fail sedia wujud."
 msgid "Files"
 msgstr "Fail"
 
-#: ../src/common/filefn.cpp:1760
+#: ../src/common/filefn.cpp:1761
 #, c-format
 msgid "Files (%s)"
 msgstr "Fail (%s)"
@@ -3781,7 +3782,7 @@ msgstr "pertama"
 msgid "First page"
 msgstr "Laman berikut"
 
-#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:521
 #, fuzzy
 msgid "Fixed"
 msgstr "Fon tetap:"
@@ -3794,7 +3795,7 @@ msgstr "Fon tetap:"
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Rupa saiz tetap.<br><b>gelap</b><i>italik</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
 #, fuzzy
 msgid "Floating"
 msgstr "Memformat"
@@ -3852,7 +3853,7 @@ msgstr "href yang dimaju tidak disokong"
 msgid "Found %i matches"
 msgstr "%i padanan ditemui"
 
-#: ../src/generic/prntdlgg.cpp:243
+#: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "Dari:"
 
@@ -3876,7 +3877,7 @@ msgstr "GIF: memori tidak mencukupi."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: ralat tidak diketahui!!!"
 
-#: ../src/gtk/window.cpp:4266
+#: ../src/gtk/window.cpp:4288
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -4041,8 +4042,8 @@ msgstr "Rumah"
 msgid "Home directory"
 msgstr "Direktori rumah"
 
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:255
 msgid "How the object will float relative to the text."
 msgstr ""
 
@@ -4230,25 +4231,25 @@ msgstr "Permulaan gagal pada mula pos, gugurkan."
 msgid "Insert"
 msgstr "Selit"
 
-#: ../src/richtext/richtextbuffer.cpp:7672
+#: ../src/richtext/richtextbuffer.cpp:7687
 #, fuzzy
 msgid "Insert Field"
 msgstr "Selit Teks"
 
-#: ../src/richtext/richtextbuffer.cpp:7583
-#: ../src/richtext/richtextbuffer.cpp:8493
+#: ../src/richtext/richtextbuffer.cpp:7598
+#: ../src/richtext/richtextbuffer.cpp:8551
 msgid "Insert Image"
 msgstr "Selit Imej"
 
-#: ../src/richtext/richtextbuffer.cpp:7630
+#: ../src/richtext/richtextbuffer.cpp:7645
 #, fuzzy
 msgid "Insert Object"
 msgstr "Selit Teks"
 
 #: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7428
-#: ../src/richtext/richtextbuffer.cpp:7455
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7440
+#: ../src/richtext/richtextbuffer.cpp:7470
+#: ../src/richtext/richtextbuffer.cpp:7514
 msgid "Insert Text"
 msgstr "Selit Teks"
 
@@ -4276,7 +4277,7 @@ msgstr "Indeks imej TIFF tidak sah."
 msgid "Invalid data view item"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:245
+#: ../src/common/appcmn.cpp:266
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Spesifikasi mod paparan '%s' tidak sah."
@@ -4516,7 +4517,7 @@ msgstr "Ruang baris:"
 msgid "LEFT"
 msgstr "LEFT"
 
-#: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
 msgstr "Lanskap"
 
@@ -4530,7 +4531,7 @@ msgstr "Tampal"
 msgid "Last page"
 msgstr "Laman berikut"
 
-#: ../src/common/log.cpp:311
+#: ../src/common/log.cpp:309
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
@@ -4547,7 +4548,7 @@ msgstr "Ledger, 17 x 11 in"
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:202
 #: ../src/richtext/richtextbulletspage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:246
+#: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "Kiri"
 
@@ -4556,7 +4557,7 @@ msgstr "Kiri"
 msgid "Left (&first line):"
 msgstr "Kiri (baris pertama):"
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
 msgstr "Left margin (mm):"
 
@@ -4862,7 +4863,7 @@ msgstr ""
 msgid "MacVietnamese"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2024
+#: ../src/propgrid/advprops.cpp:2031
 #, fuzzy
 msgid "Make a selection:"
 msgstr "Tampal pilihan"
@@ -4876,12 +4877,12 @@ msgstr ""
 msgid "Match case"
 msgstr "Padan kes"
 
-#: ../src/richtext/richtextsizepage.cpp:460
+#: ../src/richtext/richtextsizepage.cpp:463
 #, fuzzy
 msgid "Max height:"
 msgstr "Berat:"
 
-#: ../src/richtext/richtextsizepage.cpp:433
+#: ../src/richtext/richtextsizepage.cpp:436
 #, fuzzy
 msgid "Max width:"
 msgstr "Ganti dengan:"
@@ -4917,12 +4918,12 @@ msgstr ""
 msgid "Mi&nimize"
 msgstr "Mi&nimum"
 
-#: ../src/richtext/richtextsizepage.cpp:406
+#: ../src/richtext/richtextsizepage.cpp:409
 #, fuzzy
 msgid "Min height:"
 msgstr "Berat fon:"
 
-#: ../src/richtext/richtextsizepage.cpp:379
+#: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
 msgstr ""
 
@@ -4959,19 +4960,19 @@ msgstr "Pindah bawah"
 msgid "Move up"
 msgstr "Pindah atas"
 
-#: ../src/richtext/richtextsizepage.cpp:679
-#: ../src/richtext/richtextsizepage.cpp:681
+#: ../src/richtext/richtextsizepage.cpp:682
+#: ../src/richtext/richtextsizepage.cpp:684
 #, fuzzy
 msgid "Moves the object to the next paragraph."
 msgstr "Gaya lalai untuk perenggan berikut."
 
-#: ../src/richtext/richtextsizepage.cpp:673
-#: ../src/richtext/richtextsizepage.cpp:675
+#: ../src/richtext/richtextsizepage.cpp:676
+#: ../src/richtext/richtextsizepage.cpp:678
 #, fuzzy
 msgid "Moves the object to the previous paragraph."
 msgstr "Undur ke laman HTML terdahulu"
 
-#: ../src/richtext/richtextbuffer.cpp:9271
+#: ../src/richtext/richtextbuffer.cpp:9345
 msgid "Multiple Cell Properties"
 msgstr ""
 
@@ -5151,8 +5152,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr "Tiada pemetaan sah ditemui dalam fail \"%s\"."
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/richtext/richtextsizepage.cpp:248
+#: ../src/richtext/richtextsizepage.cpp:252
 #, fuzzy
 msgid "None"
 msgstr "(Tiada)"
@@ -5208,7 +5209,7 @@ msgstr "Menomborkan panduan"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "OK"
@@ -5231,7 +5232,7 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "Objek perlu ada atribut id"
 
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1798
+#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
 msgstr "Buka Fail"
 
@@ -5274,11 +5275,11 @@ msgstr "Pilihan '%s' perlukan nilai."
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Pilihan '%s': '%s' gagal ditukar kepada tarikh."
 
-#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "Pilihan"
 
-#: ../src/generic/prntdlgg.cpp:620 ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
 msgstr "Orientasi"
 
@@ -5480,22 +5481,21 @@ msgstr "Laman %d"
 msgid "Page %d of %d"
 msgstr "Laman %d of %d"
 
-#: ../src/gtk/print.cpp:783
+#: ../src/gtk/print.cpp:774
 msgid "Page Setup"
 msgstr "Tetapan Halaman"
 
-#: ../src/generic/prntdlgg.cpp:833 ../src/common/prntbase.cpp:467
-#: ../src/gtk/gnome/gprint.cpp:710
+#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
 msgid "Page setup"
 msgstr "Tetapan halaman"
 
-#: ../src/generic/prntdlgg.cpp:221
+#: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "Laman"
 
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:806
-#: ../src/generic/prntdlgg.cpp:847 ../src/generic/prntdlgg.cpp:860
-#: ../src/generic/prntdlgg.cpp:1057 ../src/generic/prntdlgg.cpp:1062
+#: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
+#: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
+#: ../src/generic/prntdlgg.cpp:1052 ../src/generic/prntdlgg.cpp:1057
 msgid "Paper size"
 msgstr "Saiz &kertas:"
 
@@ -5512,7 +5512,7 @@ msgstr "Passing a already registered object to SetObject"
 msgid "Passing an unknown object to GetObject"
 msgstr "Melepaskan objek tidak diketahui kepada GetObject"
 
-#: ../src/richtext/richtextctrl.cpp:3103 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Tampal"
@@ -5530,7 +5530,7 @@ msgstr "N&oktah"
 msgid "Permissions"
 msgstr "Keizinan"
 
-#: ../src/richtext/richtextbuffer.cpp:11745
+#: ../src/richtext/richtextbuffer.cpp:11942
 #, fuzzy
 msgid "Picture Properties"
 msgstr "&Ciri-ciri"
@@ -5597,16 +5597,16 @@ msgstr ""
 msgid "Pointer to model not set correctly."
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:617 ../src/generic/prntdlgg.cpp:872
+#: ../src/generic/prntdlgg.cpp:612 ../src/generic/prntdlgg.cpp:867
 msgid "Portrait"
 msgstr "Potret"
 
-#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:496
 #, fuzzy
 msgid "Position"
 msgstr "Soalan"
 
-#: ../src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "Fail PostScript"
 
@@ -5633,10 +5633,9 @@ msgstr "Pralihat:"
 msgid "Previous page"
 msgstr "Laman sebelum:"
 
-#: ../src/generic/prntdlgg.cpp:148 ../src/generic/prntdlgg.cpp:162
+#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
 #: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
 msgid "Print"
 msgstr "Cetak"
 
@@ -5649,25 +5648,21 @@ msgstr "Pralihat Cetak"
 msgid "Print Preview Failure"
 msgstr "Gagal Pralihat Cetakan"
 
-#: ../src/generic/prntdlgg.cpp:229
+#: ../src/generic/prntdlgg.cpp:224
 msgid "Print Range"
 msgstr "Julat Cetak"
 
-#: ../src/generic/prntdlgg.cpp:454
+#: ../src/generic/prntdlgg.cpp:449
 msgid "Print Setup"
 msgstr "Tetapan Cetak"
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:621
 msgid "Print in colour"
 msgstr "Cetak warna"
 
 #: ../src/common/stockitem.cpp:182
 #, fuzzy
 msgid "Print previe&w..."
-msgstr "Pralihat cetak"
-
-#: ../src/gtk/gnome/gprint.cpp:944
-msgid "Print preview"
 msgstr "Pralihat cetak"
 
 #: ../src/common/docview.cpp:1244
@@ -5680,7 +5675,7 @@ msgstr "Gagal mencipta paip"
 msgid "Print preview..."
 msgstr "Pralihat cetak"
 
-#: ../src/generic/prntdlgg.cpp:635
+#: ../src/generic/prntdlgg.cpp:630
 msgid "Print spooling"
 msgstr "Gelendong cetak"
 
@@ -5688,7 +5683,7 @@ msgstr "Gelendong cetak"
 msgid "Print this page"
 msgstr "Cetak laman ini"
 
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
 msgstr "Cetak ke Fail"
 
@@ -5697,27 +5692,27 @@ msgstr "Cetak ke Fail"
 msgid "Print..."
 msgstr "Ce&tak..."
 
-#: ../src/generic/prntdlgg.cpp:498
+#: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
 msgstr "Pencetak"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Printer command:"
 msgstr "Arahan pencetak:"
 
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:180
 msgid "Printer options"
 msgstr "Pilihan pencetak"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:645
 msgid "Printer options:"
 msgstr "Pilihan pencetak:"
 
-#: ../src/generic/prntdlgg.cpp:921
+#: ../src/generic/prntdlgg.cpp:916
 msgid "Printer..."
 msgstr "Pencetak..."
 
-#: ../src/generic/prntdlgg.cpp:201
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Printer:"
 msgstr "Pencetak:"
 
@@ -5750,7 +5745,7 @@ msgid "Printing..."
 msgstr "Mencetak..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2125
+#: ../src/common/docview.cpp:2124
 #, fuzzy
 msgid "Printout"
 msgstr "Cetak"
@@ -5873,7 +5868,7 @@ msgstr "Nilai registri '%s' sedia wujud."
 msgid "Regular"
 msgstr "Biasa"
 
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:519
 #, fuzzy
 msgid "Relative"
 msgstr "Dekoratif"
@@ -5912,7 +5907,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Penciptaan pemasa gagal."
 
-#: ../src/richtext/richtextbuffer.cpp:4202
+#: ../src/richtext/richtextbuffer.cpp:4214
 msgid "Renumber List"
 msgstr "Menomborkan Semula Senarai"
 
@@ -5920,7 +5915,7 @@ msgstr "Menomborkan Semula Senarai"
 msgid "Rep&lace"
 msgstr "Ganti"
 
-#: ../src/richtext/richtextctrl.cpp:3263 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "Ganti"
 
@@ -5940,7 +5935,7 @@ msgstr "Ganti dengan:"
 msgid "Required information entry is empty."
 msgstr ""
 
-#: ../src/common/translation.cpp:1975
+#: ../src/common/translation.cpp:1966
 #, fuzzy, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "'%s' bukanlah mesej katalog yang sah."
@@ -5956,11 +5951,11 @@ msgstr "Kanan"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
-#: ../src/richtext/richtextsizepage.cpp:247
+#: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "Kanan"
 
-#: ../src/generic/prntdlgg.cpp:897
+#: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
 msgstr "Jidar kanan (mm):"
 
@@ -6100,11 +6095,11 @@ msgstr "Pilih &Semua"
 msgid "Select All"
 msgstr "Pilih &Semua"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1877
 msgid "Select a document template"
 msgstr "Pilih templat dokumen"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1951
 msgid "Select a document view"
 msgstr "Pilih lihat dokumen"
 
@@ -6137,7 +6132,7 @@ msgstr "Pilih paras senarai untuk edit."
 msgid "Separator expected after the option '%s'."
 msgstr "Pembahagi dijangka selepas pilihan '%s'."
 
-#: ../src/richtext/richtextbuffer.cpp:10397
+#: ../src/richtext/richtextbuffer.cpp:10513
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "Padam Gaya"
@@ -6150,7 +6145,7 @@ msgstr "SetProperty dipanggil tanpa setter sah"
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Setup..."
 msgstr "Tetapan..."
 
@@ -6236,7 +6231,7 @@ msgid "Single"
 msgstr "Tunggal"
 
 #: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:296
+#: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "Saiz"
 
@@ -6262,7 +6257,7 @@ msgstr ""
 msgid "Solid"
 msgstr "Tebal"
 
-#: ../src/common/docview.cpp:1774
+#: ../src/common/docview.cpp:1773
 msgid "Sorry, could not open this file."
 msgstr "Maaf, Gagal membuka fail."
 
@@ -6278,7 +6273,7 @@ msgstr "Maaf, tidak cukup memori untuk mencipta pralihat."
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Maaf, nama sudah diambil. Sila pillih lain."
 
-#: ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1796
 msgid "Sorry, the format for this file is unknown."
 msgstr "Maaf, format fail ini tidak diketahui."
 
@@ -6308,13 +6303,13 @@ msgstr "Piawai"
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Kenyataan, 5 1/2 x 8 1/2 in"
 
-#: ../src/richtext/richtextsizepage.cpp:515
-#: ../src/richtext/richtextsizepage.cpp:520
+#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:523
 #, fuzzy
 msgid "Static"
 msgstr "Status:"
 
-#: ../src/generic/prntdlgg.cpp:209
+#: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "Status:"
 
@@ -6409,7 +6404,7 @@ msgstr "TIFF: Ralat menulis imej."
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10687
+#: ../src/richtext/richtextbuffer.cpp:10794
 #, fuzzy
 msgid "Table Properties"
 msgstr "&Ciri-ciri"
@@ -6430,7 +6425,7 @@ msgstr "Tab"
 msgid "Teletype"
 msgstr "Teletaip"
 
-#: ../src/common/docview.cpp:1879
+#: ../src/common/docview.cpp:1878
 msgid "Templates"
 msgstr "Templat"
 
@@ -6480,10 +6475,10 @@ msgstr "Saiz titik fon."
 msgid "The bottom padding size."
 msgstr "Saiz titik fon."
 
-#: ../src/richtext/richtextsizepage.cpp:636
-#: ../src/richtext/richtextsizepage.cpp:638
-#: ../src/richtext/richtextsizepage.cpp:650
-#: ../src/richtext/richtextsizepage.cpp:652
+#: ../src/richtext/richtextsizepage.cpp:639
+#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:653
+#: ../src/richtext/richtextsizepage.cpp:655
 #, fuzzy
 msgid "The bottom position."
 msgstr "Posisi tab."
@@ -6623,10 +6618,10 @@ msgstr "Saiz titik fon."
 msgid "The left padding size."
 msgstr "Saiz titik fon."
 
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
-#: ../src/richtext/richtextsizepage.cpp:545
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:534
+#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:548
+#: ../src/richtext/richtextsizepage.cpp:550
 #, fuzzy
 msgid "The left position."
 msgstr "Posisi tab."
@@ -6647,38 +6642,38 @@ msgstr "Nombor senarai item."
 msgid "The locale ID is unknown."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 #, fuzzy
 msgid "The object height."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:471
-#: ../src/richtext/richtextsizepage.cpp:473
+#: ../src/richtext/richtextsizepage.cpp:474
+#: ../src/richtext/richtextsizepage.cpp:476
 #, fuzzy
 msgid "The object maximum height."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 #, fuzzy
 msgid "The object maximum width."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 #, fuzzy
 msgid "The object minimum height."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 #, fuzzy
 msgid "The object minimum width."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:331
+#: ../src/richtext/richtextsizepage.cpp:332
+#: ../src/richtext/richtextsizepage.cpp:334
 #, fuzzy
 msgid "The object width."
 msgstr "Berat fon."
@@ -6689,18 +6684,18 @@ msgstr "Berat fon."
 msgid "The outline level."
 msgstr "Pralihat gaya."
 
-#: ../src/common/log.cpp:283
+#: ../src/common/log.cpp:281
 #, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/common/log.cpp:276
+#: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
 msgstr ""
 
-#: ../src/gtk/print.cpp:940 ../src/gtk/print.cpp:1123
+#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
 msgstr ""
 
@@ -6743,10 +6738,10 @@ msgstr "Takuk kanan."
 msgid "The right padding size."
 msgstr "Takuk kanan."
 
-#: ../src/richtext/richtextsizepage.cpp:601
-#: ../src/richtext/richtextsizepage.cpp:603
-#: ../src/richtext/richtextsizepage.cpp:615
-#: ../src/richtext/richtextsizepage.cpp:617
+#: ../src/richtext/richtextsizepage.cpp:604
+#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:620
 #, fuzzy
 msgid "The right position."
 msgstr "Posisi tab."
@@ -6808,10 +6803,10 @@ msgstr "Saiz titik fon."
 msgid "The top padding size."
 msgstr "Saiz titik fon."
 
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:580
-#: ../src/richtext/richtextsizepage.cpp:582
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:583
+#: ../src/richtext/richtextsizepage.cpp:585
 #, fuzzy
 msgid "The top position."
 msgstr "Posisi tab."
@@ -6830,7 +6825,7 @@ msgstr ""
 "Versi servis capaian jauh (RAS) dipasang pada mesin ini terlalu lama, sila "
 "naiktaraf (fungsi diperlukan berikut telah hilang: %s)."
 
-#: ../src/gtk/print.cpp:968
+#: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr ""
 
@@ -6856,11 +6851,11 @@ msgstr ""
 msgid "This is not a %s."
 msgstr "PCX: ini bukahlah fail PCX."
 
-#: ../src/common/wincmn.cpp:1647
+#: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4295
+#: ../src/gtk/window.cpp:4317
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6922,7 +6917,7 @@ msgstr "Petua Hari Ini"
 msgid "Tips not available, sorry!"
 msgstr "Kias tidak wujud, maaf!"
 
-#: ../src/generic/prntdlgg.cpp:247
+#: ../src/generic/prntdlgg.cpp:242
 msgid "To:"
 msgstr "Ke:"
 
@@ -6930,7 +6925,7 @@ msgstr "Ke:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7925
+#: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Too many EndStyle calls!"
 msgstr "Terlalu banyak panggilan EndStyle!"
 
@@ -6938,13 +6933,13 @@ msgstr "Terlalu banyak panggilan EndStyle!"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Terlalu banyak warna dalam PNG, berkemungkinan imej sedikit kabur."
 
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 #, fuzzy
 msgid "Top"
 msgstr "Ke:"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
 msgstr "Jidar bawah (mm):"
 
@@ -7238,8 +7233,8 @@ msgstr ""
 msgid "Units for the bottom padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:661
-#: ../src/richtext/richtextsizepage.cpp:663
+#: ../src/richtext/richtextsizepage.cpp:664
+#: ../src/richtext/richtextsizepage.cpp:666
 #, fuzzy
 msgid "Units for the bottom position."
 msgstr "Gagal menunggu penamatan benang."
@@ -7264,43 +7259,43 @@ msgstr ""
 msgid "Units for the left padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:558
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
 #, fuzzy
 msgid "Units for the left position."
 msgstr "Gagal menunggu penamatan benang."
 
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:487
 #, fuzzy
 msgid "Units for the maximum object height."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:457
+#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:460
 #, fuzzy
 msgid "Units for the maximum object width."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:430
+#: ../src/richtext/richtextsizepage.cpp:431
+#: ../src/richtext/richtextsizepage.cpp:433
 #, fuzzy
 msgid "Units for the minimum object height."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:403
+#: ../src/richtext/richtextsizepage.cpp:404
+#: ../src/richtext/richtextsizepage.cpp:406
 #, fuzzy
 msgid "Units for the minimum object width."
 msgstr "Berat fon."
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:377
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Units for the object height."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:342
+#: ../src/richtext/richtextsizepage.cpp:343
+#: ../src/richtext/richtextsizepage.cpp:345
 msgid "Units for the object width."
 msgstr ""
 
@@ -7324,8 +7319,8 @@ msgstr ""
 msgid "Units for the right padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:628
+#: ../src/richtext/richtextsizepage.cpp:629
+#: ../src/richtext/richtextsizepage.cpp:631
 #, fuzzy
 msgid "Units for the right position."
 msgstr "Gagal menunggu penamatan benang."
@@ -7351,8 +7346,8 @@ msgstr ""
 msgid "Units for the top padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:596
 #, fuzzy
 msgid "Units for the top position."
 msgstr "Gagal menunggu penamatan benang."
@@ -7447,7 +7442,7 @@ msgstr "Ditentu"
 msgid "Unsupported clipboard format."
 msgstr "Format klipbod tidak disokong."
 
-#: ../src/common/appcmn.cpp:228
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Tema tidak disokong '%s'."
@@ -7510,8 +7505,8 @@ msgstr "Masukkan nombor laman antara %d dan %d:"
 msgid "Version "
 msgstr "Versi"
 
-#: ../src/richtext/richtextsizepage.cpp:288
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:291
+#: ../src/richtext/richtextsizepage.cpp:293
 #, fuzzy
 msgid "Vertical alignment."
 msgstr "Gagal mulakan mencetak."
@@ -7524,7 +7519,7 @@ msgstr "Lihat fail sebagai lihat perincian"
 msgid "View files as a list view"
 msgstr "Lihat fail sebagai senarai lihat"
 
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:1952
 msgid "Views"
 msgstr "Pandangan"
 
@@ -7545,7 +7540,7 @@ msgstr "WINDOWS_RIGHT"
 msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr "Gagal menunggu penamatan subproses"
 
-#: ../src/common/log.cpp:229
+#: ../src/common/log.cpp:227
 msgid "Warning: "
 msgstr "Amaran:"
 
@@ -8093,16 +8088,16 @@ msgstr "uji-jumlah gagal membaca blok kepala tar"
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:370
-#: ../src/richtext/richtextsizepage.cpp:397
-#: ../src/richtext/richtextsizepage.cpp:424
-#: ../src/richtext/richtextsizepage.cpp:451
-#: ../src/richtext/richtextsizepage.cpp:478
-#: ../src/richtext/richtextsizepage.cpp:552
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:622
-#: ../src/richtext/richtextsizepage.cpp:657
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
 msgstr ""
 
@@ -8219,7 +8214,7 @@ msgstr "fail '%s', baris %d: nilai untuk nilai tetap '%s' diabaikan."
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "fail '%s': aksara %c tidak dijangka pada baris %d."
 
-#: ../src/richtext/richtextbuffer.cpp:8300
+#: ../src/richtext/richtextbuffer.cpp:8358
 msgid "files"
 msgstr "fail"
 
@@ -8243,8 +8238,8 @@ msgstr "keempat"
 msgid "generate verbose log messages"
 msgstr "menjana mesej log meleret"
 
-#: ../src/richtext/richtextbuffer.cpp:12015
-#: ../src/richtext/richtextbuffer.cpp:12125
+#: ../src/richtext/richtextbuffer.cpp:12212
+#: ../src/richtext/richtextbuffer.cpp:12322
 msgid "image"
 msgstr "imej"
 
@@ -8310,7 +8305,7 @@ msgstr "tiada ralat"
 msgid "no fonts found in %s, using builtin font"
 msgstr ""
 
-#: ../src/html/helpdata.cpp:654
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "tiada nama"
 
@@ -8323,7 +8318,7 @@ msgstr "tengahari"
 msgid "normal"
 msgstr "Normal"
 
-#: ../src/gtk/print.cpp:1227 ../src/gtk/print.cpp:1332
+#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
 msgid "not implemented"
 msgstr ""
 
@@ -8339,16 +8334,16 @@ msgstr "objek tidak boleh mempunyai Nod Teks XML"
 msgid "out of memory"
 msgstr "luar lingkungan memori"
 
-#: ../src/richtext/richtextsizepage.cpp:337
-#: ../src/richtext/richtextsizepage.cpp:371
-#: ../src/richtext/richtextsizepage.cpp:398
-#: ../src/richtext/richtextsizepage.cpp:425
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:479
-#: ../src/richtext/richtextsizepage.cpp:553
-#: ../src/richtext/richtextsizepage.cpp:588
-#: ../src/richtext/richtextsizepage.cpp:623
-#: ../src/richtext/richtextsizepage.cpp:658
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
 msgid "percent"
 msgstr ""
 
@@ -8410,36 +8405,36 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:372
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:376
 #: ../src/richtext/richtextsizepage.cpp:399
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:426
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:453
-#: ../src/richtext/richtextsizepage.cpp:454
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:456
+#: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:554
-#: ../src/richtext/richtextsizepage.cpp:555
-#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:557
+#: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:589
-#: ../src/richtext/richtextsizepage.cpp:590
-#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:592
+#: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:624
-#: ../src/richtext/richtextsizepage.cpp:625
-#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:627
+#: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:659
-#: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextsizepage.cpp:662
+#: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
 msgstr ""
 
@@ -8498,33 +8493,33 @@ msgstr "keenam belas"
 msgid "sixth"
 msgstr "keenam"
 
-#: ../src/common/appcmn.cpp:206
+#: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "tentukan mod paparan untuk diguna (cth. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:192
+#: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
 msgstr "pastikan tema untuk diguna"
 
-#: ../src/richtext/richtextbuffer.cpp:8818
+#: ../src/richtext/richtextbuffer.cpp:8876
 #, fuzzy
 msgid "standard/circle"
 msgstr "Piawai"
 
-#: ../src/richtext/richtextbuffer.cpp:8819
+#: ../src/richtext/richtextbuffer.cpp:8877
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8821
+#: ../src/richtext/richtextbuffer.cpp:8879
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8820
+#: ../src/richtext/richtextbuffer.cpp:8878
 #, fuzzy
 msgid "standard/square"
 msgstr "Piawai"
 
-#: ../src/richtext/richtextbuffer.cpp:8822
+#: ../src/richtext/richtextbuffer.cpp:8880
 msgid "standard/triangle"
 msgstr ""
 
@@ -8631,7 +8626,7 @@ msgstr "tidak diketahui-%d"
 msgid "unnamed"
 msgstr "tanpanama"
 
-#: ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:1606
 #, c-format
 msgid "unnamed%d"
 msgstr "tanpanama%d"
@@ -8640,7 +8635,7 @@ msgstr "tanpanama%d"
 msgid "unsupported Zip compression method"
 msgstr "Mesej mampatan Zip tidak disokong"
 
-#: ../src/common/translation.cpp:1892
+#: ../src/common/translation.cpp:1883
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "guna katalog '%s' dari '%s'."
@@ -8653,7 +8648,7 @@ msgstr "ralat tulis"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay gagal."
 
-#: ../src/gtk/print.cpp:996
+#: ../src/gtk/print.cpp:987
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr ""
 
@@ -8692,6 +8687,9 @@ msgstr "Ralat zlib %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr "~"
+
+#~ msgid "Print preview"
+#~ msgstr "Pralihat cetak"
 
 #, fuzzy
 #~ msgid "&Preview..."

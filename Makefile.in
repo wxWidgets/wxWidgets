@@ -3001,8 +3001,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/textctrl.h \
 	wx/gtk/textentry.h \
 	wx/gtk/tglbtn.h \
-	wx/generic/fontdlgg.h \
-	wx/gtk/gnome/gprint.h
+	wx/generic/fontdlgg.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
 	wx/generic/fdrepdlg.h \
@@ -5642,8 +5641,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_textentry.o \
 	monodll_gtk_tglbtn.o \
 	monodll_treeentry_gtk.o \
-	monodll_fontdlgg.o \
-	monodll_gprint.o
+	monodll_fontdlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -7891,8 +7889,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_textentry.o \
 	monolib_gtk_tglbtn.o \
 	monolib_treeentry_gtk.o \
-	monolib_fontdlgg.o \
-	monolib_gprint.o
+	monolib_fontdlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -10314,8 +10311,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_textentry.o \
 	coredll_gtk_tglbtn.o \
 	coredll_treeentry_gtk.o \
-	coredll_fontdlgg.o \
-	coredll_gprint.o
+	coredll_fontdlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -11992,8 +11988,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_textentry.o \
 	corelib_gtk_tglbtn.o \
 	corelib_treeentry_gtk.o \
-	corelib_fontdlgg.o \
-	corelib_gprint.o
+	corelib_fontdlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -17328,9 +17323,6 @@ monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
 
 monodll_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
-
-monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
 monodll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -23199,9 +23191,6 @@ monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
 
 monolib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
-
-monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
 monolib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -29806,9 +29795,6 @@ coredll_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(COREDLL_ODEP)
 coredll_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
 
-coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
-
 coredll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
 
@@ -34185,9 +34171,6 @@ corelib_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(CORELIB_ODEP)
 
 corelib_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
-corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
 corelib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp

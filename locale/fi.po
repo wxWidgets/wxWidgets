@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 18:18+0200\n"
+"POT-Creation-Date: 2013-10-01 19:04+0200\n"
 "PO-Revision-Date: 2012-08-07 13:31+0200\n"
 "Last-Translator: Jani Kinnunen <jani.kinnunen@wippies.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -44,7 +44,7 @@ msgstr "              Kiitos, ja olemme pahoillamme kaikista hankaluuksista!\n"
 msgid " (copy %d of %d)"
 msgstr "Sivu %d / %d"
 
-#: ../src/common/log.cpp:427
+#: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (virhe %ld: %s)"
@@ -54,7 +54,7 @@ msgstr " (virhe %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "tiff-moduuli: %s"
 
-#: ../src/common/docview.cpp:1625
+#: ../src/common/docview.cpp:1624
 msgid " - "
 msgstr " - "
 
@@ -213,12 +213,12 @@ msgstr "&Alaosa"
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:634
-#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:637
+#: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr "&Alaosa:"
 
-#: ../include/wx/richtext/richtextbuffer.h:3523
+#: ../include/wx/richtext/richtextbuffer.h:3530
 #, fuzzy
 msgid "&Box"
 msgstr "&Lihavoitu"
@@ -242,7 +242,7 @@ msgstr "&Peruuta"
 msgid "&Cascade"
 msgstr "&Limitä"
 
-#: ../include/wx/richtext/richtextbuffer.h:5578
+#: ../include/wx/richtext/richtextbuffer.h:5587
 msgid "&Cell"
 msgstr "&Solu"
 
@@ -339,7 +339,7 @@ msgstr "&Lopeta"
 msgid "&First"
 msgstr "&Ensimmäinen"
 
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
 msgstr "&Liukuva tila:"
 
@@ -377,8 +377,8 @@ msgstr "&Lähettäjä:"
 msgid "&Harddisk"
 msgstr "&Kiintolevy"
 
-#: ../src/richtext/richtextsizepage.cpp:348
-#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:351
+#: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
 msgstr "&Korkeus:"
 
@@ -443,8 +443,8 @@ msgstr "&Vasemmalle"
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:529
-#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:532
+#: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
 msgstr "&Vasemmalle:"
 
@@ -460,7 +460,7 @@ msgstr "&Loki"
 msgid "&Move"
 msgstr "&Siirrä"
 
-#: ../src/richtext/richtextsizepage.cpp:669
+#: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
 msgstr "&Siirrä objekti kohteeseen:"
 
@@ -481,7 +481,7 @@ msgstr "&Seuraava"
 msgid "&Next >"
 msgstr "&Seuraava >"
 
-#: ../src/richtext/richtextsizepage.cpp:678
+#: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
 msgstr "&Seuraava kappale"
 
@@ -528,7 +528,7 @@ msgstr "&Sivunvaihto"
 msgid "&Paste"
 msgstr "L&iitä"
 
-#: ../include/wx/richtext/richtextbuffer.h:4648
+#: ../include/wx/richtext/richtextbuffer.h:4655
 msgid "&Picture"
 msgstr "&Kuva"
 
@@ -540,7 +540,7 @@ msgstr "K&irjasinkoko:"
 msgid "&Position (tenths of a mm):"
 msgstr "&Sijainti (millimetrin kymmenyksiä):"
 
-#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:514
 #, fuzzy
 msgid "&Position mode:"
 msgstr "&Liukuva tila:"
@@ -554,7 +554,7 @@ msgstr "&Asetukset"
 msgid "&Previous"
 msgstr "&Edellinen"
 
-#: ../src/richtext/richtextsizepage.cpp:672
+#: ../src/richtext/richtextsizepage.cpp:675
 msgid "&Previous Paragraph"
 msgstr "&Edellinen kappale"
 
@@ -562,7 +562,7 @@ msgstr "&Edellinen kappale"
 msgid "&Print..."
 msgstr "&Tulosta..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4922
+#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "&Ominaisuudet"
@@ -608,8 +608,8 @@ msgstr "&Oikealle"
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:599
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:602
+#: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
 msgstr "&Oikealle:"
 
@@ -675,7 +675,7 @@ msgstr "&Osajoukko:"
 msgid "&Symbol:"
 msgstr "&Symbolit:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5668
+#: ../include/wx/richtext/richtextbuffer.h:5679
 msgid "&Table"
 msgstr "&Taulukko"
 
@@ -687,8 +687,8 @@ msgstr "&Yläosa"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:564
-#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
 msgstr "&Yläosa:"
 
@@ -718,7 +718,7 @@ msgstr "&Vähennä sisennystä"
 msgid "&Up"
 msgstr "&Ylös"
 
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
 msgstr "&Tasaus pystysuunnassa:"
 
@@ -730,8 +730,8 @@ msgstr "&Näytä..."
 msgid "&Weight:"
 msgstr "&Paino:"
 
-#: ../src/richtext/richtextsizepage.cpp:314
-#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
 msgstr "&Leveys:"
 
@@ -825,7 +825,7 @@ msgstr "(kirjanmerkit)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:829
+#: ../src/richtext/richtextformatdlg.cpp:831
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -1145,7 +1145,7 @@ msgstr "Tietoja"
 msgid "About %s"
 msgstr "Tietoja ohjelmasta %s"
 
-#: ../src/richtext/richtextsizepage.cpp:517
+#: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr ""
 
@@ -1157,17 +1157,17 @@ msgstr "Oikea koko"
 msgid "Add"
 msgstr "Lisää"
 
-#: ../src/richtext/richtextbuffer.cpp:10648
-msgid "Add column"
+#: ../src/richtext/richtextbuffer.cpp:10751
+msgid "Add Column"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10688
+msgid "Add Row"
 msgstr ""
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "Lisää tämä sivu kirjanmerkkeihin"
-
-#: ../src/richtext/richtextbuffer.cpp:10590
-msgid "Add row"
-msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1210,11 +1210,11 @@ msgstr "Tasaa vasemmalle"
 msgid "Align Right"
 msgstr "Tasaa oikealle"
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:266
 msgid "Alignment"
 msgstr "Tasaus"
 
-#: ../src/generic/prntdlgg.cpp:220
+#: ../src/generic/prntdlgg.cpp:215
 msgid "All"
 msgstr "Kaikki"
 
@@ -1223,11 +1223,11 @@ msgstr "Kaikki"
 msgid "All files (%s)|%s"
 msgstr "Kaikki tiedostot (%s)|%s"
 
-#: ../include/wx/defs.h:2884
+#: ../include/wx/defs.h:2922
 msgid "All files (*)|*"
 msgstr "Kaikki tiedostot (*)|*"
 
-#: ../include/wx/defs.h:2881
+#: ../include/wx/defs.h:2919
 msgid "All files (*.*)|*.*"
 msgstr "Kaikki tiedostot (*.*)|*.*"
 
@@ -1243,7 +1243,7 @@ msgstr "Aakkosnumeerinen tila"
 msgid "Already Registered Object passed to SetObjectClassInfo"
 msgstr "Jo rekisteröity objekti välitetty kohteelle SetObjectClassInfo"
 
-#: ../src/unix/dialup.cpp:354
+#: ../src/unix/dialup.cpp:353
 msgid "Already dialling ISP."
 msgstr "Palveluntarjoajalle soitetaan jo."
 
@@ -1444,15 +1444,15 @@ msgstr "Moderni"
 msgid "Borders"
 msgstr "Moderni"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:144
+#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
 msgid "Bottom"
 msgstr "Alaosa"
 
-#: ../src/generic/prntdlgg.cpp:898
+#: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "Alamarginaali (mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:8861
+#: ../src/richtext/richtextbuffer.cpp:8919
 #, fuzzy
 msgid "Box Properties"
 msgstr "&Ominaisuudet"
@@ -1568,7 +1568,7 @@ msgstr "Rekisteriavaimen ”%s” luonti ei onnistu"
 msgid "Can't create thread"
 msgstr "Säiettä ei voi luoda"
 
-#: ../src/msw/window.cpp:3783
+#: ../src/msw/window.cpp:3793
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "Luokan ”%s” ikkunan luonti epäonnistui"
@@ -1698,7 +1698,7 @@ msgstr ""
 "Uutta saraketunnusta ei voi luoda. Mahdollisesti sarakkeiden enimmäismäärä "
 "saavutettu."
 
-#: ../src/common/filefn.cpp:1335
+#: ../src/common/filefn.cpp:1336
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "Tiedostojen ”%s” luettelointi epäonnistui"
@@ -1727,11 +1727,11 @@ msgstr "Aktiivista puhelinyhteyttä ei löydy: %s"
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Järjestyspolitiikan %d priorisointialue ei ole tiedossa."
 
-#: ../src/unix/utilsunx.cpp:983
+#: ../src/unix/utilsunx.cpp:988
 msgid "Cannot get the hostname"
 msgstr "Isäntäkoneen nimeä ei onnistuttu saamaan"
 
-#: ../src/unix/utilsunx.cpp:1019
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the official hostname"
 msgstr "Isäntäkoneen virallista nimeä ei onnistuttu saamaan"
 
@@ -1768,7 +1768,7 @@ msgstr "Ei voi ladata resursseja tiedostosta ”%s”."
 msgid "Cannot open HTML document: %s"
 msgstr "HTML-asiakirjaa ei voi avata: %s"
 
-#: ../src/html/helpdata.cpp:664
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "HTML-ohjekirjaa ei voi avata: %s"
@@ -1846,7 +1846,7 @@ msgstr "Sama merkkikoko"
 msgid "Categorized Mode"
 msgstr "Kategorisoitu tila"
 
-#: ../src/richtext/richtextbuffer.cpp:9273
+#: ../src/richtext/richtextbuffer.cpp:9347
 #, fuzzy
 msgid "Cell Properties"
 msgstr "&Ominaisuudet"
@@ -1880,7 +1880,7 @@ msgstr "Keskitetty"
 msgid "Centre text."
 msgstr "Keskitä teksti."
 
-#: ../src/richtext/richtextsizepage.cpp:284
+#: ../src/richtext/richtextsizepage.cpp:287
 #, fuzzy
 msgid "Centred"
 msgstr "&Keskitetty"
@@ -1890,21 +1890,22 @@ msgstr "&Keskitetty"
 msgid "Ch&oose..."
 msgstr "&Valitse..."
 
-#: ../src/richtext/richtextbuffer.cpp:4029
+#: ../src/richtext/richtextbuffer.cpp:4041
 msgid "Change List Style"
 msgstr "Muuta luettelotyyli"
 
-#: ../src/richtext/richtextbuffer.cpp:3380
+#: ../src/richtext/richtextbuffer.cpp:3392
 #, fuzzy
 msgid "Change Object Style"
 msgstr "Muuta luettelotyyli"
 
-#: ../src/richtext/richtextbuffer.cpp:3646
+#: ../src/richtext/richtextbuffer.cpp:3658
+#: ../src/richtext/richtextbuffer.cpp:7749
 #, fuzzy
 msgid "Change Properties"
 msgstr "&Ominaisuudet"
 
-#: ../src/richtext/richtextbuffer.cpp:3197
+#: ../src/richtext/richtextbuffer.cpp:3209
 msgid "Change Style"
 msgstr "Muuta tyyli"
 
@@ -2161,7 +2162,7 @@ msgstr "Sulje tämä ikkuna"
 msgid "Color"
 msgstr "Väri"
 
-#: ../src/richtext/richtextformatdlg.cpp:723
+#: ../src/richtext/richtextformatdlg.cpp:725
 msgid "Colour"
 msgstr "Väri"
 
@@ -2208,7 +2209,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr "Värin valintaikkuna epäonnistui virheellä %0lx."
 
-#: ../src/gtk/window.cpp:4284
+#: ../src/gtk/window.cpp:4306
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2258,7 +2259,7 @@ msgstr "Sisältä"
 msgid "Copied to clipboard:\"%s\""
 msgstr "Kopioitu leikepöydälle: ”%s”"
 
-#: ../src/generic/prntdlgg.cpp:252
+#: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
 msgstr "Kopiot:"
 
@@ -2340,7 +2341,7 @@ msgstr "Tasausta ei voitu asettaa."
 msgid "Could not set column width."
 msgstr "Sarakkeen leveyttä ei voitu asettaa."
 
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1569
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "Työhakemistoa ei saatu"
@@ -2370,11 +2371,11 @@ msgid "Could not start document preview."
 msgstr "Dokumentin esikatselu epäonnistui."
 
 #: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1086 ../src/gtk/gnome/gprint.cpp:922
+#: ../src/gtk/print.cpp:1077
 msgid "Could not start printing."
 msgstr "Tulostus epäonnistui."
 
-#: ../src/common/wincmn.cpp:2114
+#: ../src/common/wincmn.cpp:2131
 msgid "Could not transfer data to window"
 msgstr "Tiedonsiirto ikkunaan ei onnistu"
 
@@ -2397,7 +2398,7 @@ msgstr "Ajastimen luonti epäonnistui"
 msgid "Couldn't create the overlay window"
 msgstr "Ajastimen luonti epäonnistui"
 
-#: ../src/common/translation.cpp:2024
+#: ../src/common/translation.cpp:2015
 #, fuzzy
 msgid "Couldn't enumerate translations"
 msgstr "Säiettä ei voi päättää"
@@ -2407,7 +2408,7 @@ msgstr "Säiettä ei voi päättää"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Symbolia ”%s” ei löydy dynaamisesta kirjastosta"
 
-#: ../src/gtk/print.cpp:2023
+#: ../src/gtk/print.cpp:2014
 msgid "Couldn't get hatch style from wxBrush."
 msgstr "Varjostustyyliä ei voitu noutaa wxBrush-funktiosta."
 
@@ -2496,7 +2497,7 @@ msgstr "&Leikkaa"
 msgid "Current directory:"
 msgstr "Nykyinen hakemisto:"
 
-#: ../src/gtk/print.cpp:768
+#: ../src/gtk/print.cpp:759
 msgid "Custom size"
 msgstr "Valinnainen koko"
 
@@ -2607,11 +2608,11 @@ msgstr "Oletuskoodaus"
 msgid "Default font"
 msgstr "Oletuskirjasin"
 
-#: ../src/generic/prntdlgg.cpp:515
+#: ../src/generic/prntdlgg.cpp:510
 msgid "Default printer"
 msgstr "Oletustulostin"
 
-#: ../src/richtext/richtextbuffer.cpp:7793 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Poista"
@@ -2619,6 +2620,16 @@ msgstr "Poista"
 #: ../src/richtext/richtexttabspage.cpp:148
 msgid "Delete A&ll"
 msgstr "Poista &kaikki"
+
+#: ../src/richtext/richtextbuffer.cpp:10637
+#, fuzzy
+msgid "Delete Column"
+msgstr "Poista valinta"
+
+#: ../src/richtext/richtextbuffer.cpp:10587
+#, fuzzy
+msgid "Delete Row"
+msgstr "Poista"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
@@ -2628,19 +2639,9 @@ msgstr "Poista tyyli"
 msgid "Delete Text"
 msgstr "Poista teksti"
 
-#: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
-msgid "Delete column"
-msgstr "Poista valinta"
-
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "Poista kohta"
-
-#: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
-msgid "Delete row"
-msgstr "Poista"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -2699,12 +2700,12 @@ msgstr "DirectFB-virhe %d tapahtui."
 msgid "Directories"
 msgstr "Hakemistot"
 
-#: ../src/common/filefn.cpp:1250
+#: ../src/common/filefn.cpp:1251
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Hakemistoa ”%s” ei voitu luoda"
 
-#: ../src/common/filefn.cpp:1270
+#: ../src/common/filefn.cpp:1271
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "Hakemistoa ”%s” ei voitu luoda"
@@ -2853,38 +2854,38 @@ msgstr "Muokkaa"
 msgid "Elapsed time:"
 msgstr "Käytetty aika:"
 
-#: ../src/richtext/richtextsizepage.cpp:350
-#: ../src/richtext/richtextsizepage.cpp:352
-#: ../src/richtext/richtextsizepage.cpp:462
-#: ../src/richtext/richtextsizepage.cpp:464
+#: ../src/richtext/richtextsizepage.cpp:353
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:465
+#: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
 msgstr "Käytä korkeusarvoa."
 
-#: ../src/richtext/richtextsizepage.cpp:435
-#: ../src/richtext/richtextsizepage.cpp:437
+#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:440
 #, fuzzy
 msgid "Enable the maximum width value."
 msgstr "Käytä leveysarvoa."
 
-#: ../src/richtext/richtextsizepage.cpp:408
-#: ../src/richtext/richtextsizepage.cpp:410
+#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:413
 #, fuzzy
 msgid "Enable the minimum height value."
 msgstr "Käytä korkeusarvoa."
 
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:386
 #, fuzzy
 msgid "Enable the minimum width value."
 msgstr "Käytä leveysarvoa."
 
-#: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:318
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
 msgstr "Käytä leveysarvoa."
 
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:280
+#: ../src/richtext/richtextsizepage.cpp:282
 #, fuzzy
 msgid "Enable vertical alignment."
 msgstr "Tasausta ei voitu asettaa."
@@ -2978,11 +2979,11 @@ msgstr "Virhe asetusten lukemisessa."
 msgid "Error saving user configuration data."
 msgstr "Virhe käyttäjän asetusten tallentamisessa."
 
-#: ../src/gtk/print.cpp:680
+#: ../src/gtk/print.cpp:671
 msgid "Error while printing: "
 msgstr "Virhe tulostettaessa: "
 
-#: ../src/common/log.cpp:225
+#: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "Virhe: "
 
@@ -3261,7 +3262,7 @@ msgstr "Dataa ei voida hakea leikepöydältä"
 msgid "Failed to get the local system time"
 msgstr "Paikallista systeemiaikaa ei saatu"
 
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1453
 msgid "Failed to get the working directory"
 msgstr "Työhakemistoa ei saatu"
 
@@ -3676,7 +3677,7 @@ msgstr ""
 "Tiedosto ”%s” on jo olemassa.\n"
 "Korvataanko se?"
 
-#: ../src/common/filefn.cpp:1206
+#: ../src/common/filefn.cpp:1207
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "Hakemistoa ”%s” ei voitu luoda"
@@ -3695,7 +3696,7 @@ msgstr "Tiedostoa ei voitu ladata."
 msgid "File dialog failed with error code %0lx."
 msgstr "Värin valintaikkuna epäonnistui virheellä %0lx."
 
-#: ../src/common/docview.cpp:1772
+#: ../src/common/docview.cpp:1771
 msgid "File error"
 msgstr "Tiedostovirhe"
 
@@ -3707,7 +3708,7 @@ msgstr "Tiedostonimi on jo olemassa."
 msgid "Files"
 msgstr "Tiedostot"
 
-#: ../src/common/filefn.cpp:1760
+#: ../src/common/filefn.cpp:1761
 #, c-format
 msgid "Files (%s)"
 msgstr "Tiedostot (%s)"
@@ -3730,7 +3731,7 @@ msgstr "ensimmäinen"
 msgid "First page"
 msgstr "Seuraava sivu"
 
-#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:521
 #, fuzzy
 msgid "Fixed"
 msgstr "Kiinteälevyinen fontti:"
@@ -3743,7 +3744,7 @@ msgstr "Kiinteälevyinen fontti:"
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Kiinteäkokoinen kirjasin.<br> <b>lihavoitu</b> <i>kursivoitu</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
 msgstr "Liukuva"
 
@@ -3800,7 +3801,7 @@ msgstr "Eteenpäin osoittavia href-viittauksia ei tueta"
 msgid "Found %i matches"
 msgstr "Löytyi %i täsmäävää"
 
-#: ../src/generic/prntdlgg.cpp:243
+#: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "Lähettäjä:"
 
@@ -3824,7 +3825,7 @@ msgstr "GIF: ei riittävästi muistia."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: tuntematon virhe!!!"
 
-#: ../src/gtk/window.cpp:4266
+#: ../src/gtk/window.cpp:4288
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3992,8 +3993,8 @@ msgstr "Koti"
 msgid "Home directory"
 msgstr "Kotihakemisto"
 
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:255
 msgid "How the object will float relative to the text."
 msgstr ""
 
@@ -4175,25 +4176,25 @@ msgstr "Alustus epäonnistui jälkialustuksessa, keskeytetään."
 msgid "Insert"
 msgstr "Lisää"
 
-#: ../src/richtext/richtextbuffer.cpp:7672
+#: ../src/richtext/richtextbuffer.cpp:7687
 #, fuzzy
 msgid "Insert Field"
 msgstr "Lisää teksti"
 
-#: ../src/richtext/richtextbuffer.cpp:7583
-#: ../src/richtext/richtextbuffer.cpp:8493
+#: ../src/richtext/richtextbuffer.cpp:7598
+#: ../src/richtext/richtextbuffer.cpp:8551
 msgid "Insert Image"
 msgstr "Lisää kuva"
 
-#: ../src/richtext/richtextbuffer.cpp:7630
+#: ../src/richtext/richtextbuffer.cpp:7645
 #, fuzzy
 msgid "Insert Object"
 msgstr "Lisää teksti"
 
 #: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7428
-#: ../src/richtext/richtextbuffer.cpp:7455
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7440
+#: ../src/richtext/richtextbuffer.cpp:7470
+#: ../src/richtext/richtextbuffer.cpp:7514
 msgid "Insert Text"
 msgstr "Lisää teksti"
 
@@ -4221,7 +4222,7 @@ msgstr "Virheellinen TIFF-kuvaindeksi."
 msgid "Invalid data view item"
 msgstr "Virheellinen tietonäkymän kohde"
 
-#: ../src/common/appcmn.cpp:245
+#: ../src/common/appcmn.cpp:266
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Virheellinen näyttötilamääritelmä ”%s”."
@@ -4462,7 +4463,7 @@ msgstr "&Riviväli:"
 msgid "LEFT"
 msgstr "VASEN"
 
-#: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
 msgstr "Vaakasuunta"
 
@@ -4476,7 +4477,7 @@ msgstr "Liitä"
 msgid "Last page"
 msgstr "Seuraava sivu"
 
-#: ../src/common/log.cpp:311
+#: ../src/common/log.cpp:309
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
@@ -4494,7 +4495,7 @@ msgstr "Ledger, 17 x 11” "
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:202
 #: ../src/richtext/richtextbulletspage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:246
+#: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "Vasen"
 
@@ -4503,7 +4504,7 @@ msgstr "Vasen"
 msgid "Left (&first line):"
 msgstr "Vasen (&ensimmäinen rivi):"
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
 msgstr "Vasen marginaali (mm):"
 
@@ -4818,7 +4819,7 @@ msgstr "Mac (turkkilainen)"
 msgid "MacVietnamese"
 msgstr "Mac (vietnamilainen)"
 
-#: ../src/propgrid/advprops.cpp:2024
+#: ../src/propgrid/advprops.cpp:2031
 #, fuzzy
 msgid "Make a selection:"
 msgstr "Liitä valinta"
@@ -4832,12 +4833,12 @@ msgstr "Marginaalit"
 msgid "Match case"
 msgstr "Sama kirjainkoko"
 
-#: ../src/richtext/richtextsizepage.cpp:460
+#: ../src/richtext/richtextsizepage.cpp:463
 #, fuzzy
 msgid "Max height:"
 msgstr "&Korkeus:"
 
-#: ../src/richtext/richtextsizepage.cpp:433
+#: ../src/richtext/richtextsizepage.cpp:436
 msgid "Max width:"
 msgstr ""
 
@@ -4872,12 +4873,12 @@ msgstr ""
 msgid "Mi&nimize"
 msgstr "P&ienennä"
 
-#: ../src/richtext/richtextsizepage.cpp:406
+#: ../src/richtext/richtextsizepage.cpp:409
 #, fuzzy
 msgid "Min height:"
 msgstr "Kirjasimen &paino:"
 
-#: ../src/richtext/richtextsizepage.cpp:379
+#: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
 msgstr ""
 
@@ -4915,17 +4916,17 @@ msgstr "Siirrä alas"
 msgid "Move up"
 msgstr "Siirrä ylös"
 
-#: ../src/richtext/richtextsizepage.cpp:679
-#: ../src/richtext/richtextsizepage.cpp:681
+#: ../src/richtext/richtextsizepage.cpp:682
+#: ../src/richtext/richtextsizepage.cpp:684
 msgid "Moves the object to the next paragraph."
 msgstr "Siirtää objektin seuraavaan kappaleeseen."
 
-#: ../src/richtext/richtextsizepage.cpp:673
-#: ../src/richtext/richtextsizepage.cpp:675
+#: ../src/richtext/richtextsizepage.cpp:676
+#: ../src/richtext/richtextsizepage.cpp:678
 msgid "Moves the object to the previous paragraph."
 msgstr "Siirtää objektin edelliseen kappaleeseen."
 
-#: ../src/richtext/richtextbuffer.cpp:9271
+#: ../src/richtext/richtextbuffer.cpp:9345
 msgid "Multiple Cell Properties"
 msgstr "Usean solun ominaisuudet"
 
@@ -5107,8 +5108,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/richtext/richtextsizepage.cpp:248
+#: ../src/richtext/richtextsizepage.cpp:252
 #, fuzzy
 msgid "None"
 msgstr "(Ei mitään)"
@@ -5164,7 +5165,7 @@ msgstr "Numeroitu jäsennys"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "OK"
@@ -5187,7 +5188,7 @@ msgstr "Objektin toteutus ei tue nimettyjä argumentteja."
 msgid "Objects must have an id attribute"
 msgstr "Objekteilla täytyy olla id-määre"
 
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1798
+#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
 msgstr "Valitse Tiedosto"
 
@@ -5230,11 +5231,11 @@ msgstr "Valinta ”%s” vaatii arvon."
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Valinta ”%s”: ”%s” ei voida muuntua päiväykseksi."
 
-#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "Valinnat"
 
-#: ../src/generic/prntdlgg.cpp:620 ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
 msgstr "Suunta"
 
@@ -5434,22 +5435,21 @@ msgstr "Sivu %d"
 msgid "Page %d of %d"
 msgstr "Sivu %d / %d"
 
-#: ../src/gtk/print.cpp:783
+#: ../src/gtk/print.cpp:774
 msgid "Page Setup"
 msgstr "Sivun asetukset"
 
-#: ../src/generic/prntdlgg.cpp:833 ../src/common/prntbase.cpp:467
-#: ../src/gtk/gnome/gprint.cpp:710
+#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
 msgid "Page setup"
 msgstr "Sivun asetukset"
 
-#: ../src/generic/prntdlgg.cpp:221
+#: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "Sivut"
 
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:806
-#: ../src/generic/prntdlgg.cpp:847 ../src/generic/prntdlgg.cpp:860
-#: ../src/generic/prntdlgg.cpp:1057 ../src/generic/prntdlgg.cpp:1062
+#: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
+#: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
+#: ../src/generic/prntdlgg.cpp:1052 ../src/generic/prntdlgg.cpp:1057
 msgid "Paper size"
 msgstr "Paperin koko"
 
@@ -5465,7 +5465,7 @@ msgstr ""
 msgid "Passing an unknown object to GetObject"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:3103 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Liitä"
@@ -5483,7 +5483,7 @@ msgstr "P&iste"
 msgid "Permissions"
 msgstr "Oikeudet"
 
-#: ../src/richtext/richtextbuffer.cpp:11745
+#: ../src/richtext/richtextbuffer.cpp:11942
 #, fuzzy
 msgid "Picture Properties"
 msgstr "&Ominaisuudet"
@@ -5550,16 +5550,16 @@ msgstr ""
 msgid "Pointer to model not set correctly."
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:617 ../src/generic/prntdlgg.cpp:872
+#: ../src/generic/prntdlgg.cpp:612 ../src/generic/prntdlgg.cpp:867
 msgid "Portrait"
 msgstr "Pystysuunta"
 
-#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:496
 #, fuzzy
 msgid "Position"
 msgstr "Kysymys"
 
-#: ../src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "PostScript-tiedosto"
 
@@ -5586,10 +5586,9 @@ msgstr "Esikatselu:"
 msgid "Previous page"
 msgstr "Edellinen sivu"
 
-#: ../src/generic/prntdlgg.cpp:148 ../src/generic/prntdlgg.cpp:162
+#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
 #: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
 msgid "Print"
 msgstr "Tulosta"
 
@@ -5602,15 +5601,15 @@ msgstr "Tulostuksen esikatselu"
 msgid "Print Preview Failure"
 msgstr "Tulostuksen esikatselu epäonnistui"
 
-#: ../src/generic/prntdlgg.cpp:229
+#: ../src/generic/prntdlgg.cpp:224
 msgid "Print Range"
 msgstr "Tulostusalue"
 
-#: ../src/generic/prntdlgg.cpp:454
+#: ../src/generic/prntdlgg.cpp:449
 msgid "Print Setup"
 msgstr "Tulostusasetukset"
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:621
 msgid "Print in colour"
 msgstr "Väritulostus"
 
@@ -5618,10 +5617,6 @@ msgstr "Väritulostus"
 #, fuzzy
 msgid "Print previe&w..."
 msgstr "Tulostuksen &esikatselu"
-
-#: ../src/gtk/gnome/gprint.cpp:944
-msgid "Print preview"
-msgstr "Tulostuksen esikatselu"
 
 #: ../src/common/docview.cpp:1244
 #, fuzzy
@@ -5633,7 +5628,7 @@ msgstr "Putken luonti epäonnistui"
 msgid "Print preview..."
 msgstr "Tulostuksen esikatselu"
 
-#: ../src/generic/prntdlgg.cpp:635
+#: ../src/generic/prntdlgg.cpp:630
 #, fuzzy
 msgid "Print spooling"
 msgstr "Tulostuksen sivuajo"
@@ -5642,7 +5637,7 @@ msgstr "Tulostuksen sivuajo"
 msgid "Print this page"
 msgstr "Tulosta tämä sivu"
 
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
 msgstr "Tulosta tiedostoon"
 
@@ -5651,27 +5646,27 @@ msgstr "Tulosta tiedostoon"
 msgid "Print..."
 msgstr "&Tulosta..."
 
-#: ../src/generic/prntdlgg.cpp:498
+#: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
 msgstr "Tulostin"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Printer command:"
 msgstr "Tulostinkomento:"
 
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:180
 msgid "Printer options"
 msgstr "Tulostimen valinnat"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:645
 msgid "Printer options:"
 msgstr "Tulostimen valinnat:"
 
-#: ../src/generic/prntdlgg.cpp:921
+#: ../src/generic/prntdlgg.cpp:916
 msgid "Printer..."
 msgstr "Tulostin..."
 
-#: ../src/generic/prntdlgg.cpp:201
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Printer:"
 msgstr "Tulostin:"
 
@@ -5704,7 +5699,7 @@ msgid "Printing..."
 msgstr "Tulostetaan..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2125
+#: ../src/common/docview.cpp:2124
 #, fuzzy
 msgid "Printout"
 msgstr "Tulosta"
@@ -5828,7 +5823,7 @@ msgstr "Rekisterin arvo ”%s” on jo olemassa."
 msgid "Regular"
 msgstr "Tavallinen"
 
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:519
 #, fuzzy
 msgid "Relative"
 msgstr "Koristeellinen"
@@ -5863,7 +5858,7 @@ msgstr ""
 msgid "Rendering failed."
 msgstr "Piirtäminen epäonnistui."
 
-#: ../src/richtext/richtextbuffer.cpp:4202
+#: ../src/richtext/richtextbuffer.cpp:4214
 msgid "Renumber List"
 msgstr "Numeroi luettelo uudelleen"
 
@@ -5871,7 +5866,7 @@ msgstr "Numeroi luettelo uudelleen"
 msgid "Rep&lace"
 msgstr "&Korvaa"
 
-#: ../src/richtext/richtextctrl.cpp:3263 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "Korvaa"
 
@@ -5891,7 +5886,7 @@ msgstr "Korvaa kohteella:"
 msgid "Required information entry is empty."
 msgstr ""
 
-#: ../src/common/translation.cpp:1975
+#: ../src/common/translation.cpp:1966
 #, fuzzy, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "”%s” ei ole kelvollinen viestiluettelo."
@@ -5907,11 +5902,11 @@ msgstr "Oikealle"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
-#: ../src/richtext/richtextsizepage.cpp:247
+#: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "Oikealle"
 
-#: ../src/generic/prntdlgg.cpp:897
+#: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
 msgstr "Oikea marginaali (mm):"
 
@@ -6049,11 +6044,11 @@ msgstr "Valitse k&aikki"
 msgid "Select All"
 msgstr "Valitse kaikki"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1877
 msgid "Select a document template"
 msgstr "Valitse asiakirjamalli"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1951
 msgid "Select a document view"
 msgstr "Valitse asiakirjanäkymä"
 
@@ -6086,7 +6081,7 @@ msgstr "Valitse muokattava luettelotaso."
 msgid "Separator expected after the option '%s'."
 msgstr "Erotinmerkki tarvitaan option ”%s” jälkeen."
 
-#: ../src/richtext/richtextbuffer.cpp:10397
+#: ../src/richtext/richtextbuffer.cpp:10513
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "Poista tyyli"
@@ -6099,7 +6094,7 @@ msgstr ""
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Setup..."
 msgstr "Asetukset..."
 
@@ -6186,7 +6181,7 @@ msgid "Single"
 msgstr ""
 
 #: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:296
+#: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "Koko"
 
@@ -6213,7 +6208,7 @@ msgstr "&Suuraakkoset"
 msgid "Solid"
 msgstr "Lihavoitu"
 
-#: ../src/common/docview.cpp:1774
+#: ../src/common/docview.cpp:1773
 msgid "Sorry, could not open this file."
 msgstr "Tätä tiedostoa ei voi avata."
 
@@ -6229,7 +6224,7 @@ msgstr "Liian vähän muistia esikatseluun."
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Nimi on jo käytössä. Valitse toinen."
 
-#: ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1796
 msgid "Sorry, the format for this file is unknown."
 msgstr "Tämän tiedoston muoto on tuntematon."
 
@@ -6261,13 +6256,13 @@ msgstr "Perus"
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Statement, 5 1/2 x 8 1/2” "
 
-#: ../src/richtext/richtextsizepage.cpp:515
-#: ../src/richtext/richtextsizepage.cpp:520
+#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:523
 #, fuzzy
 msgid "Static"
 msgstr "Tila:"
 
-#: ../src/generic/prntdlgg.cpp:209
+#: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "Tila:"
 
@@ -6362,7 +6357,7 @@ msgstr "TIFF: Virhe kuvan kirjoituksessa."
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10687
+#: ../src/richtext/richtextbuffer.cpp:10794
 #, fuzzy
 msgid "Table Properties"
 msgstr "&Ominaisuudet"
@@ -6385,7 +6380,7 @@ msgstr "Välilehdet"
 msgid "Teletype"
 msgstr "Teletype"
 
-#: ../src/common/docview.cpp:1879
+#: ../src/common/docview.cpp:1878
 msgid "Templates"
 msgstr "Asiakirjamallit"
 
@@ -6435,10 +6430,10 @@ msgstr "Kirjasinkoko."
 msgid "The bottom padding size."
 msgstr "Kirjasinkoko."
 
-#: ../src/richtext/richtextsizepage.cpp:636
-#: ../src/richtext/richtextsizepage.cpp:638
-#: ../src/richtext/richtextsizepage.cpp:650
-#: ../src/richtext/richtextsizepage.cpp:652
+#: ../src/richtext/richtextsizepage.cpp:639
+#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:653
+#: ../src/richtext/richtextsizepage.cpp:655
 #, fuzzy
 msgid "The bottom position."
 msgstr "Välilehden sijainti."
@@ -6578,10 +6573,10 @@ msgstr "Kirjasinkoko."
 msgid "The left padding size."
 msgstr "Kirjasinkoko."
 
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
-#: ../src/richtext/richtextsizepage.cpp:545
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:534
+#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:548
+#: ../src/richtext/richtextsizepage.cpp:550
 #, fuzzy
 msgid "The left position."
 msgstr "Välilehden sijainti."
@@ -6602,38 +6597,38 @@ msgstr "Luettelokohdan numero."
 msgid "The locale ID is unknown."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 #, fuzzy
 msgid "The object height."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:471
-#: ../src/richtext/richtextsizepage.cpp:473
+#: ../src/richtext/richtextsizepage.cpp:474
+#: ../src/richtext/richtextsizepage.cpp:476
 #, fuzzy
 msgid "The object maximum height."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 #, fuzzy
 msgid "The object maximum width."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 #, fuzzy
 msgid "The object minimum height."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 #, fuzzy
 msgid "The object minimum width."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:331
+#: ../src/richtext/richtextsizepage.cpp:332
+#: ../src/richtext/richtextsizepage.cpp:334
 #, fuzzy
 msgid "The object width."
 msgstr "Kirjasimen paino."
@@ -6644,18 +6639,18 @@ msgstr "Kirjasimen paino."
 msgid "The outline level."
 msgstr "Näytä kirjasimen esikatselu."
 
-#: ../src/common/log.cpp:283
+#: ../src/common/log.cpp:281
 #, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/common/log.cpp:276
+#: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
 msgstr ""
 
-#: ../src/gtk/print.cpp:940 ../src/gtk/print.cpp:1123
+#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
 msgstr "Tulostusvalintaikkuna palautti virheen."
 
@@ -6695,10 +6690,10 @@ msgstr "Oikea sisennys."
 msgid "The right padding size."
 msgstr "Oikea sisennys."
 
-#: ../src/richtext/richtextsizepage.cpp:601
-#: ../src/richtext/richtextsizepage.cpp:603
-#: ../src/richtext/richtextsizepage.cpp:615
-#: ../src/richtext/richtextsizepage.cpp:617
+#: ../src/richtext/richtextsizepage.cpp:604
+#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:620
 #, fuzzy
 msgid "The right position."
 msgstr "Välilehden sijainti."
@@ -6760,10 +6755,10 @@ msgstr "Kirjasinkoko."
 msgid "The top padding size."
 msgstr "Kirjasinkoko."
 
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:580
-#: ../src/richtext/richtextsizepage.cpp:582
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:583
+#: ../src/richtext/richtextsizepage.cpp:585
 #, fuzzy
 msgid "The top position."
 msgstr "Välilehden sijainti."
@@ -6782,7 +6777,7 @@ msgstr ""
 "Tälle koneelle asennetun RAS (remote access server) komponentin versio on "
 "liian vanha, ole hyvä ja päivitä se (vaadittua funktiota %s ei löytynyt)."
 
-#: ../src/gtk/print.cpp:968
+#: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "Toimintoa wxGtkPrinterDC ei voida käyttää."
 
@@ -6807,11 +6802,11 @@ msgstr ""
 msgid "This is not a %s."
 msgstr "PCX: tämä ei ole PCX tiedosto."
 
-#: ../src/common/wincmn.cpp:1647
+#: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4295
+#: ../src/gtk/window.cpp:4317
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6875,7 +6870,7 @@ msgstr "Päivän vihje"
 msgid "Tips not available, sorry!"
 msgstr "Valitettavasti vihjeitä ei ole!"
 
-#: ../src/generic/prntdlgg.cpp:247
+#: ../src/generic/prntdlgg.cpp:242
 msgid "To:"
 msgstr "Vastaanottaja:"
 
@@ -6883,7 +6878,7 @@ msgstr "Vastaanottaja:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7925
+#: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Too many EndStyle calls!"
 msgstr "Liian monta EndStyle-kutsua!"
 
@@ -6891,13 +6886,13 @@ msgstr "Liian monta EndStyle-kutsua!"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "Liian monta väri PNG:ssä, kuva saattaa olla hieman sumea."
 
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 #, fuzzy
 msgid "Top"
 msgstr "Vastaanottaja:"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
 msgstr "Ylämarginaali (mm):"
 
@@ -7188,8 +7183,8 @@ msgstr ""
 msgid "Units for the bottom padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:661
-#: ../src/richtext/richtextsizepage.cpp:663
+#: ../src/richtext/richtextsizepage.cpp:664
+#: ../src/richtext/richtextsizepage.cpp:666
 #, fuzzy
 msgid "Units for the bottom position."
 msgstr "Ei voi odottaa säikeen keskeytystä"
@@ -7214,43 +7209,43 @@ msgstr ""
 msgid "Units for the left padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:558
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
 #, fuzzy
 msgid "Units for the left position."
 msgstr "Ei voi odottaa säikeen keskeytystä"
 
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:487
 #, fuzzy
 msgid "Units for the maximum object height."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:457
+#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:460
 #, fuzzy
 msgid "Units for the maximum object width."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:430
+#: ../src/richtext/richtextsizepage.cpp:431
+#: ../src/richtext/richtextsizepage.cpp:433
 #, fuzzy
 msgid "Units for the minimum object height."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:403
+#: ../src/richtext/richtextsizepage.cpp:404
+#: ../src/richtext/richtextsizepage.cpp:406
 #, fuzzy
 msgid "Units for the minimum object width."
 msgstr "Kirjasimen paino."
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:377
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Units for the object height."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:342
+#: ../src/richtext/richtextsizepage.cpp:343
+#: ../src/richtext/richtextsizepage.cpp:345
 msgid "Units for the object width."
 msgstr ""
 
@@ -7274,8 +7269,8 @@ msgstr ""
 msgid "Units for the right padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:628
+#: ../src/richtext/richtextsizepage.cpp:629
+#: ../src/richtext/richtextsizepage.cpp:631
 #, fuzzy
 msgid "Units for the right position."
 msgstr "Ei voi odottaa säikeen keskeytystä"
@@ -7301,8 +7296,8 @@ msgstr ""
 msgid "Units for the top padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:596
 #, fuzzy
 msgid "Units for the top position."
 msgstr "Ei voi odottaa säikeen keskeytystä"
@@ -7397,7 +7392,7 @@ msgstr "Tasattu"
 msgid "Unsupported clipboard format."
 msgstr "Leikepöydän muoto ei ole tuettu."
 
-#: ../src/common/appcmn.cpp:228
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Teemaa ”%s” ei tueta."
@@ -7460,8 +7455,8 @@ msgstr "Anna sivunumero väliltä %d ja %d:"
 msgid "Version "
 msgstr "Versio %s"
 
-#: ../src/richtext/richtextsizepage.cpp:288
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:291
+#: ../src/richtext/richtextsizepage.cpp:293
 #, fuzzy
 msgid "Vertical alignment."
 msgstr "Tasausta ei voitu asettaa."
@@ -7474,7 +7469,7 @@ msgstr "Näytä tiedostot lisätiedoilla"
 msgid "View files as a list view"
 msgstr "Näytä tiedostot luettelona"
 
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:1952
 msgid "Views"
 msgstr "Näkymät"
 
@@ -7495,7 +7490,7 @@ msgstr ""
 msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr "Aliprosessin keskeytymisen odotus epäonnistui"
 
-#: ../src/common/log.cpp:229
+#: ../src/common/log.cpp:227
 msgid "Warning: "
 msgstr "Varoitus: "
 
@@ -8032,16 +8027,16 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:370
-#: ../src/richtext/richtextsizepage.cpp:397
-#: ../src/richtext/richtextsizepage.cpp:424
-#: ../src/richtext/richtextsizepage.cpp:451
-#: ../src/richtext/richtextsizepage.cpp:478
-#: ../src/richtext/richtextsizepage.cpp:552
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:622
-#: ../src/richtext/richtextsizepage.cpp:657
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
 msgstr ""
 
@@ -8158,7 +8153,7 @@ msgstr "tiedosto ”%s”, rivi %d: muuttamattoman avaimen ”%s” arvo ohitett
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "tiedosto ”%s”: odottamaton merkki %c rivillä %d."
 
-#: ../src/richtext/richtextbuffer.cpp:8300
+#: ../src/richtext/richtextbuffer.cpp:8358
 msgid "files"
 msgstr "tiedostot"
 
@@ -8182,8 +8177,8 @@ msgstr "neljäs"
 msgid "generate verbose log messages"
 msgstr "luo yksityiskohtaiset lokiviestit"
 
-#: ../src/richtext/richtextbuffer.cpp:12015
-#: ../src/richtext/richtextbuffer.cpp:12125
+#: ../src/richtext/richtextbuffer.cpp:12212
+#: ../src/richtext/richtextbuffer.cpp:12322
 msgid "image"
 msgstr "kuva"
 
@@ -8249,7 +8244,7 @@ msgstr "ei virhettä"
 msgid "no fonts found in %s, using builtin font"
 msgstr "Kirjasimia ei löytynyt kohteesta %s, käytetään sisäänrakennettua"
 
-#: ../src/html/helpdata.cpp:654
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "nimeämätön"
 
@@ -8261,7 +8256,7 @@ msgstr "keskipäivä"
 msgid "normal"
 msgstr "tavallinen"
 
-#: ../src/gtk/print.cpp:1227 ../src/gtk/print.cpp:1332
+#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
 msgid "not implemented"
 msgstr "Ei toteutettu"
 
@@ -8277,16 +8272,16 @@ msgstr "Objekteilla ei voi olla XML-tekstisolmuja"
 msgid "out of memory"
 msgstr "muisti loppu"
 
-#: ../src/richtext/richtextsizepage.cpp:337
-#: ../src/richtext/richtextsizepage.cpp:371
-#: ../src/richtext/richtextsizepage.cpp:398
-#: ../src/richtext/richtextsizepage.cpp:425
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:479
-#: ../src/richtext/richtextsizepage.cpp:553
-#: ../src/richtext/richtextsizepage.cpp:588
-#: ../src/richtext/richtextsizepage.cpp:623
-#: ../src/richtext/richtextsizepage.cpp:658
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
 msgid "percent"
 msgstr "prosentti"
 
@@ -8348,36 +8343,36 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:372
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:376
 #: ../src/richtext/richtextsizepage.cpp:399
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:426
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:453
-#: ../src/richtext/richtextsizepage.cpp:454
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:456
+#: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:554
-#: ../src/richtext/richtextsizepage.cpp:555
-#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:557
+#: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:589
-#: ../src/richtext/richtextsizepage.cpp:590
-#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:592
+#: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:624
-#: ../src/richtext/richtextsizepage.cpp:625
-#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:627
+#: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:659
-#: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextsizepage.cpp:662
+#: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
 msgstr ""
 
@@ -8436,31 +8431,31 @@ msgstr "kuudestoista"
 msgid "sixth"
 msgstr "kuudes"
 
-#: ../src/common/appcmn.cpp:206
+#: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "määritä käytettävä näyttötila (esim. 640x480-16)"
 
-#: ../src/common/appcmn.cpp:192
+#: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
 msgstr "määritä käytettävä teema"
 
-#: ../src/richtext/richtextbuffer.cpp:8818
+#: ../src/richtext/richtextbuffer.cpp:8876
 msgid "standard/circle"
 msgstr "perus/ympyrä"
 
-#: ../src/richtext/richtextbuffer.cpp:8819
+#: ../src/richtext/richtextbuffer.cpp:8877
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8821
+#: ../src/richtext/richtextbuffer.cpp:8879
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8820
+#: ../src/richtext/richtextbuffer.cpp:8878
 msgid "standard/square"
 msgstr "perus/neliö"
 
-#: ../src/richtext/richtextbuffer.cpp:8822
+#: ../src/richtext/richtextbuffer.cpp:8880
 msgid "standard/triangle"
 msgstr ""
 
@@ -8571,7 +8566,7 @@ msgstr "tuntematon-%d"
 msgid "unnamed"
 msgstr "nimetön"
 
-#: ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:1606
 #, c-format
 msgid "unnamed%d"
 msgstr "nimetön%d"
@@ -8580,7 +8575,7 @@ msgstr "nimetön%d"
 msgid "unsupported Zip compression method"
 msgstr "ei-tuettu Zip-pakkaustyyppi"
 
-#: ../src/common/translation.cpp:1892
+#: ../src/common/translation.cpp:1883
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "käytössä luettelo ”%s” ”%s”sta."
@@ -8593,7 +8588,7 @@ msgstr "kirjoitusvirhe"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay epäonnistui."
 
-#: ../src/gtk/print.cpp:996
+#: ../src/gtk/print.cpp:987
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr ""
 
@@ -8631,6 +8626,9 @@ msgstr "zlib-virhe %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr "~"
+
+#~ msgid "Print preview"
+#~ msgstr "Tulostuksen esikatselu"
 
 #~ msgid "'"
 #~ msgstr "'"

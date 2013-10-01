@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 18:18+0200\n"
+"POT-Creation-Date: 2013-10-01 19:04+0200\n"
 "PO-Revision-Date: 2008-07-28 23:09+0530\n"
 "Last-Translator: Priyank Bolia <priyank.bolia@gmail.com>\n"
 "Language-Team: हिन्दी (Hindi) <dysxhi@yahoo.co.in>\n"
@@ -42,7 +42,7 @@ msgstr "              आपका धन्यवाद, कृपया अस
 msgid " (copy %d of %d)"
 msgstr "पृष्ट %d / %d"
 
-#: ../src/common/log.cpp:427
+#: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
 msgstr "(त्रुटि %ld: %s)"
@@ -52,7 +52,7 @@ msgstr "(त्रुटि %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "टिफ़्फ़ माड्यूल: %s"
 
-#: ../src/common/docview.cpp:1625
+#: ../src/common/docview.cpp:1624
 msgid " - "
 msgstr " - "
 
@@ -212,12 +212,12 @@ msgstr ""
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:634
-#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:637
+#: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:3523
+#: ../include/wx/richtext/richtextbuffer.h:3530
 #, fuzzy
 msgid "&Box"
 msgstr "गहरा"
@@ -241,7 +241,7 @@ msgstr "निरस्त करें (&C)"
 msgid "&Cascade"
 msgstr "कास्केड करें (&C)"
 
-#: ../include/wx/richtext/richtextbuffer.h:5578
+#: ../include/wx/richtext/richtextbuffer.h:5587
 #, fuzzy
 msgid "&Cell"
 msgstr "निरस्त करें (&C)"
@@ -342,7 +342,7 @@ msgstr "समाप्त करें (&F)"
 msgid "&First"
 msgstr "प्रथम"
 
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
 msgstr ""
 
@@ -381,8 +381,8 @@ msgstr "से (&F):"
 msgid "&Harddisk"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:348
-#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:351
+#: ../src/richtext/richtextsizepage.cpp:358
 #, fuzzy
 msgid "&Height:"
 msgstr "भार (&W):"
@@ -450,8 +450,8 @@ msgstr "बायें (&L)"
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:529
-#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:532
+#: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
 msgstr "बायें: (&L)"
 
@@ -467,7 +467,7 @@ msgstr "लॉग (&L)"
 msgid "&Move"
 msgstr "इधर-उधर ले जाएँ (&M)"
 
-#: ../src/richtext/richtextsizepage.cpp:669
+#: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
 msgstr ""
 
@@ -489,7 +489,7 @@ msgstr "अगला (&N)"
 msgid "&Next >"
 msgstr "अगला (&N) >"
 
-#: ../src/richtext/richtextsizepage.cpp:678
+#: ../src/richtext/richtextsizepage.cpp:681
 #, fuzzy
 msgid "&Next Paragraph"
 msgstr "अनुच्छेद के बाद में (&A):"
@@ -537,7 +537,7 @@ msgstr ""
 msgid "&Paste"
 msgstr "चिपकाएँ (&P)"
 
-#: ../include/wx/richtext/richtextbuffer.h:4648
+#: ../include/wx/richtext/richtextbuffer.h:4655
 msgid "&Picture"
 msgstr ""
 
@@ -549,7 +549,7 @@ msgstr "फ़ॉन्ट आकार (&P):"
 msgid "&Position (tenths of a mm):"
 msgstr "स्थिति (मिलीमीटर का दसवाँ भाग) (&P):"
 
-#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:514
 #, fuzzy
 msgid "&Position mode:"
 msgstr "प्रश्न"
@@ -563,7 +563,7 @@ msgstr "प्राथमिकता (&P)"
 msgid "&Previous"
 msgstr "पिछला (&P)"
 
-#: ../src/richtext/richtextsizepage.cpp:672
+#: ../src/richtext/richtextsizepage.cpp:675
 #, fuzzy
 msgid "&Previous Paragraph"
 msgstr "पिछला पॄष्ट"
@@ -572,7 +572,7 @@ msgstr "पिछला पॄष्ट"
 msgid "&Print..."
 msgstr "मुद्रण (&P)..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4922
+#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "गुणधर्म (&P)"
@@ -618,8 +618,8 @@ msgstr "दायें (&R)"
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:599
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:602
+#: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
 msgstr "दायें (&R):"
 
@@ -688,7 +688,7 @@ msgstr "उप समुच्चय (&S):"
 msgid "&Symbol:"
 msgstr "चिह्न: (&S)"
 
-#: ../include/wx/richtext/richtextbuffer.h:5668
+#: ../include/wx/richtext/richtextbuffer.h:5679
 #, fuzzy
 msgid "&Table"
 msgstr "टेब्स"
@@ -702,8 +702,8 @@ msgstr "प्रतिलिपि बनाएँ (&C)"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:564
-#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:574
 #, fuzzy
 msgid "&Top:"
 msgstr "प्राप्तकर्ता:"
@@ -734,7 +734,7 @@ msgstr "अन-इंडेंट (&U)"
 msgid "&Up"
 msgstr "ऊपर (&U)"
 
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/richtext/richtextsizepage.cpp:278
 #, fuzzy
 msgid "&Vertical alignment:"
 msgstr "बुल्लेट सरेखण (&A):"
@@ -748,8 +748,8 @@ msgstr "खोलें (&O)..."
 msgid "&Weight:"
 msgstr "भार (&W):"
 
-#: ../src/richtext/richtextsizepage.cpp:314
-#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:324
 #, fuzzy
 msgid "&Width:"
 msgstr "भार (&W):"
@@ -844,7 +844,7 @@ msgstr "(बुकमार्क)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:829
+#: ../src/richtext/richtextformatdlg.cpp:831
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -1186,7 +1186,7 @@ msgstr "के बारे में (&A)"
 msgid "About %s"
 msgstr "के बारे में"
 
-#: ../src/richtext/richtextsizepage.cpp:517
+#: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr ""
 
@@ -1199,17 +1199,17 @@ msgstr "वास्तविक आकार (&A)"
 msgid "Add"
 msgstr "जोड़ें"
 
-#: ../src/richtext/richtextbuffer.cpp:10648
-msgid "Add column"
+#: ../src/richtext/richtextbuffer.cpp:10751
+msgid "Add Column"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10688
+msgid "Add Row"
 msgstr ""
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "वर्तमान पृष्ट को बुकमार्कों में जोड़ें"
-
-#: ../src/richtext/richtextbuffer.cpp:10590
-msgid "Add row"
-msgstr ""
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1252,12 +1252,12 @@ msgstr "बायें पंक्तिबद्ध करें"
 msgid "Align Right"
 msgstr "दायें पंक्तिबद्ध करें"
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:266
 #, fuzzy
 msgid "Alignment"
 msgstr "पंक्तिबद्ध करें (&A)"
 
-#: ../src/generic/prntdlgg.cpp:220
+#: ../src/generic/prntdlgg.cpp:215
 msgid "All"
 msgstr "सभी"
 
@@ -1266,11 +1266,11 @@ msgstr "सभी"
 msgid "All files (%s)|%s"
 msgstr "सभी फ़ाइलें (%s)|%s"
 
-#: ../include/wx/defs.h:2884
+#: ../include/wx/defs.h:2922
 msgid "All files (*)|*"
 msgstr "सभी फ़ाइलें (*)|*"
 
-#: ../include/wx/defs.h:2881
+#: ../include/wx/defs.h:2919
 msgid "All files (*.*)|*.*"
 msgstr "सभी फ़ाइलें (*.*)|*.*"
 
@@ -1286,7 +1286,7 @@ msgstr ""
 msgid "Already Registered Object passed to SetObjectClassInfo"
 msgstr "SetObjectClassInfo को पहिले से पंजीकॄत ऑब्जेक्ट पास कर दिये गये है"
 
-#: ../src/unix/dialup.cpp:354
+#: ../src/unix/dialup.cpp:353
 msgid "Already dialling ISP."
 msgstr "आईएसपी को पहिले से डायल किया जा रहा है।"
 
@@ -1494,15 +1494,15 @@ msgstr "आधुनिक"
 msgid "Borders"
 msgstr "आधुनिक"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:144
+#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
 msgid "Bottom"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:898
+#: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "तल मार्जिन (मिलीमीटर):"
 
-#: ../src/richtext/richtextbuffer.cpp:8861
+#: ../src/richtext/richtextbuffer.cpp:8919
 #, fuzzy
 msgid "Box Properties"
 msgstr "गुणधर्म (&P)"
@@ -1616,7 +1616,7 @@ msgstr "'%s' रजिस्ट्री कुँजी का निर्म�
 msgid "Can't create thread"
 msgstr "थ्रेड का निर्माण नहीं किया जा सकता है"
 
-#: ../src/msw/window.cpp:3783
+#: ../src/msw/window.cpp:3793
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "%s वर्ग की खिड़की का निर्माण नहीं किया जा सकता है"
@@ -1743,7 +1743,7 @@ msgstr "म्यूटेक्स का निर्माण नहीं �
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr ""
 
-#: ../src/common/filefn.cpp:1335
+#: ../src/common/filefn.cpp:1336
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "'%s' फ़ाइलों की परिगणना नहीं की जा सकती है"
@@ -1772,11 +1772,11 @@ msgstr "सक्रिय डायल-अप कनेक्शन को ख�
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "%d नीति की समय-सारणी के लिए वरीयता सीमा को नहीं प्राप्त किया जा सका"
 
-#: ../src/unix/utilsunx.cpp:983
+#: ../src/unix/utilsunx.cpp:988
 msgid "Cannot get the hostname"
 msgstr "होस्टनाम को प्राप्त नहीं किया जा सका"
 
-#: ../src/unix/utilsunx.cpp:1019
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the official hostname"
 msgstr "अधिकारिक होस्टनाम को प्राप्त नहीं किया जा सका"
 
@@ -1813,7 +1813,7 @@ msgstr "'%s' फ़ाइल से स्रोत संसाधनों को
 msgid "Cannot open HTML document: %s"
 msgstr "एचटीएमएल प्रलेख को नहीं खोला जा सका: %s"
 
-#: ../src/html/helpdata.cpp:664
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "एचटीएमएल सहायता प्रलेख को नहीं खोला जा सका: %s"
@@ -1891,7 +1891,7 @@ msgstr "छोटा-बड़ा संवेदी"
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9273
+#: ../src/richtext/richtextbuffer.cpp:9347
 #, fuzzy
 msgid "Cell Properties"
 msgstr "गुणधर्म (&P)"
@@ -1925,7 +1925,7 @@ msgstr "केन्द्रित करें"
 msgid "Centre text."
 msgstr "पाठ को केन्द्रित करें।"
 
-#: ../src/richtext/richtextsizepage.cpp:284
+#: ../src/richtext/richtextsizepage.cpp:287
 #, fuzzy
 msgid "Centred"
 msgstr "केन्द्रित करें (&T)"
@@ -1935,21 +1935,22 @@ msgstr "केन्द्रित करें (&T)"
 msgid "Ch&oose..."
 msgstr "चयन करें (&O)..."
 
-#: ../src/richtext/richtextbuffer.cpp:4029
+#: ../src/richtext/richtextbuffer.cpp:4041
 msgid "Change List Style"
 msgstr "सूची शैली बदले"
 
-#: ../src/richtext/richtextbuffer.cpp:3380
+#: ../src/richtext/richtextbuffer.cpp:3392
 #, fuzzy
 msgid "Change Object Style"
 msgstr "सूची शैली बदले"
 
-#: ../src/richtext/richtextbuffer.cpp:3646
+#: ../src/richtext/richtextbuffer.cpp:3658
+#: ../src/richtext/richtextbuffer.cpp:7749
 #, fuzzy
 msgid "Change Properties"
 msgstr "गुणधर्म (&P)"
 
-#: ../src/richtext/richtextbuffer.cpp:3197
+#: ../src/richtext/richtextbuffer.cpp:3209
 msgid "Change Style"
 msgstr "शैली बदले"
 
@@ -2199,7 +2200,7 @@ msgstr "इस खिड़की को बन्द करें"
 msgid "Color"
 msgstr "रंग"
 
-#: ../src/richtext/richtextformatdlg.cpp:723
+#: ../src/richtext/richtextformatdlg.cpp:725
 msgid "Colour"
 msgstr "रंग"
 
@@ -2246,7 +2247,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4284
+#: ../src/gtk/window.cpp:4306
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2296,7 +2297,7 @@ msgstr "विषय-वस्तु"
 msgid "Copied to clipboard:\"%s\""
 msgstr "क्लिपबोर्ड में प्रतिलिपि बनायी गयी:\"%s\""
 
-#: ../src/generic/prntdlgg.cpp:252
+#: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
 msgstr "प्रतिलिपियां:"
 
@@ -2388,7 +2389,7 @@ msgstr "मुद्रण को आरम्भ नहीं किया ज�
 msgid "Could not set column width."
 msgstr "प्रलेख पूर्वालोकन को आरम्भ नहीं किया जा सका।"
 
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1569
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "कार्यशील निर्देशिका को प्राप्त करने में असफ़ल"
@@ -2423,11 +2424,11 @@ msgid "Could not start document preview."
 msgstr "प्रलेख पूर्वालोकन को आरम्भ नहीं किया जा सका।"
 
 #: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1086 ../src/gtk/gnome/gprint.cpp:922
+#: ../src/gtk/print.cpp:1077
 msgid "Could not start printing."
 msgstr "मुद्रण को आरम्भ नहीं किया जा सका।"
 
-#: ../src/common/wincmn.cpp:2114
+#: ../src/common/wincmn.cpp:2131
 msgid "Could not transfer data to window"
 msgstr "डाटा को खिड़की पर स्थानान्तरित किया जा सका"
 
@@ -2450,7 +2451,7 @@ msgstr "एक समय-सचेतक का निर्माण नही�
 msgid "Couldn't create the overlay window"
 msgstr "एक समय-सचेतक का निर्माण नहीं किया जा सका"
 
-#: ../src/common/translation.cpp:2024
+#: ../src/common/translation.cpp:2015
 #, fuzzy
 msgid "Couldn't enumerate translations"
 msgstr "थ्रेड को समाप्त नहीं किया जा सका"
@@ -2460,7 +2461,7 @@ msgstr "थ्रेड को समाप्त नहीं किया ज�
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "एक गतिक लेखागार में '%s' चिह्न को नहीं खोजा जा सका"
 
-#: ../src/gtk/print.cpp:2023
+#: ../src/gtk/print.cpp:2014
 msgid "Couldn't get hatch style from wxBrush."
 msgstr ""
 
@@ -2549,7 +2550,7 @@ msgstr "काटें (&t)"
 msgid "Current directory:"
 msgstr "वर्तमान निर्देशिका:"
 
-#: ../src/gtk/print.cpp:768
+#: ../src/gtk/print.cpp:759
 #, fuzzy
 msgid "Custom size"
 msgstr "फ़ॉन्ट आकार"
@@ -2661,11 +2662,11 @@ msgstr "डिफ़ाल्ट एन्कोडिंग"
 msgid "Default font"
 msgstr "डिफ़ाल्ट मुद्रक"
 
-#: ../src/generic/prntdlgg.cpp:515
+#: ../src/generic/prntdlgg.cpp:510
 msgid "Default printer"
 msgstr "डिफ़ाल्ट मुद्रक"
 
-#: ../src/richtext/richtextbuffer.cpp:7793 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "मिटाएँं"
@@ -2673,6 +2674,16 @@ msgstr "मिटाएँं"
 #: ../src/richtext/richtexttabspage.cpp:148
 msgid "Delete A&ll"
 msgstr "सभी मिटाएँ (&L)"
+
+#: ../src/richtext/richtextbuffer.cpp:10637
+#, fuzzy
+msgid "Delete Column"
+msgstr "चयन मिटाएँ"
+
+#: ../src/richtext/richtextbuffer.cpp:10587
+#, fuzzy
+msgid "Delete Row"
+msgstr "मिटाएँं"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
@@ -2682,19 +2693,9 @@ msgstr "शैली हटाएँ"
 msgid "Delete Text"
 msgstr "पाठ मिटाएँ"
 
-#: ../src/richtext/richtextbuffer.cpp:10540
-#, fuzzy
-msgid "Delete column"
-msgstr "चयन मिटाएँ"
-
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "आयट्म को हटाएँ"
-
-#: ../src/richtext/richtextbuffer.cpp:10472
-#, fuzzy
-msgid "Delete row"
-msgstr "मिटाएँं"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -2753,12 +2754,12 @@ msgstr ""
 msgid "Directories"
 msgstr "निर्देशिकाओं"
 
-#: ../src/common/filefn.cpp:1250
+#: ../src/common/filefn.cpp:1251
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "'%s' निर्देशिका का निर्माण नहीं किया जा सकता था"
 
-#: ../src/common/filefn.cpp:1270
+#: ../src/common/filefn.cpp:1271
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "'%s' निर्देशिका का निर्माण नहीं किया जा सकता था"
@@ -2906,37 +2907,37 @@ msgstr "आयट्म को संपादित करें"
 msgid "Elapsed time:"
 msgstr "बीता हुआ समय : "
 
-#: ../src/richtext/richtextsizepage.cpp:350
-#: ../src/richtext/richtextsizepage.cpp:352
-#: ../src/richtext/richtextsizepage.cpp:462
-#: ../src/richtext/richtextsizepage.cpp:464
+#: ../src/richtext/richtextsizepage.cpp:353
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:465
+#: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:435
-#: ../src/richtext/richtextsizepage.cpp:437
+#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:440
 #, fuzzy
 msgid "Enable the maximum width value."
 msgstr "मुद्रण को आरम्भ नहीं किया जा सका।"
 
-#: ../src/richtext/richtextsizepage.cpp:408
-#: ../src/richtext/richtextsizepage.cpp:410
+#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:386
 #, fuzzy
 msgid "Enable the minimum width value."
 msgstr "मुद्रण को आरम्भ नहीं किया जा सका।"
 
-#: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:318
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:280
+#: ../src/richtext/richtextsizepage.cpp:282
 msgid "Enable vertical alignment."
 msgstr ""
 
@@ -3026,12 +3027,12 @@ msgstr "संरचना के विकल्पों को पढ़ने�
 msgid "Error saving user configuration data."
 msgstr "प्रयोक्ता की संरचना के विकल्पों को सुरक्षित करने में त्रुटि।"
 
-#: ../src/gtk/print.cpp:680
+#: ../src/gtk/print.cpp:671
 #, fuzzy
 msgid "Error while printing: "
 msgstr "कॄपया प्रतीक्षा करें जबतक कि प्रिंटींग हो रही है\n"
 
-#: ../src/common/log.cpp:225
+#: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "त्रुटि: "
 
@@ -3307,7 +3308,7 @@ msgstr "क्लिपबोर्ड से डाटा प्राप्त
 msgid "Failed to get the local system time"
 msgstr "स्थानीय तंत्र समय प्राप्त करने में असफ़ल"
 
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1453
 msgid "Failed to get the working directory"
 msgstr "कार्यशील निर्देशिका को प्राप्त करने में असफ़ल"
 
@@ -3720,7 +3721,7 @@ msgstr ""
 "'%s' फ़ाइल पहिले से विद्यमान है।\n"
 "क्या आप इसे बदलना चाहते है?"
 
-#: ../src/common/filefn.cpp:1206
+#: ../src/common/filefn.cpp:1207
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "'%s' निर्देशिका का निर्माण नहीं किया जा सकता था"
@@ -3739,7 +3740,7 @@ msgstr "फ़ाइल को लोड नहीं किया जा सका
 msgid "File dialog failed with error code %0lx."
 msgstr ""
 
-#: ../src/common/docview.cpp:1772
+#: ../src/common/docview.cpp:1771
 msgid "File error"
 msgstr "फ़ाइल त्रुटि"
 
@@ -3751,7 +3752,7 @@ msgstr "फ़ाइल नाम पहिले से विद्यमान �
 msgid "Files"
 msgstr "फ़ाइलें"
 
-#: ../src/common/filefn.cpp:1760
+#: ../src/common/filefn.cpp:1761
 #, c-format
 msgid "Files (%s)"
 msgstr "फ़ाइलें (%s)"
@@ -3774,7 +3775,7 @@ msgstr "प्रथम"
 msgid "First page"
 msgstr "अगला पृष्ट"
 
-#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:521
 #, fuzzy
 msgid "Fixed"
 msgstr "नियत फ़ॉन्ट:"
@@ -3787,7 +3788,7 @@ msgstr "नियत फ़ॉन्ट:"
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "नियत आकार फ़ेस<br> <b>गहरा</b> <i>इटैलिक</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
 msgstr ""
 
@@ -3843,7 +3844,7 @@ msgstr "अग्र एचरेफ़्स समर्थित नहीं �
 msgid "Found %i matches"
 msgstr "%i मेल मिलें"
 
-#: ../src/generic/prntdlgg.cpp:243
+#: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "प्रेषणकर्ता:"
 
@@ -3867,7 +3868,7 @@ msgstr "जीआईएफ़: आवश्यकतानुसार स्मॄ
 msgid "GIF: unknown error!!!"
 msgstr "जीआईएफ़: अज्ञात त्रुटि!!!"
 
-#: ../src/gtk/window.cpp:4266
+#: ../src/gtk/window.cpp:4288
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -4032,8 +4033,8 @@ msgstr "गृह"
 msgid "Home directory"
 msgstr "गृह निर्देशिका"
 
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:255
 msgid "How the object will float relative to the text."
 msgstr ""
 
@@ -4219,25 +4220,25 @@ msgstr ""
 msgid "Insert"
 msgstr "डाले"
 
-#: ../src/richtext/richtextbuffer.cpp:7672
+#: ../src/richtext/richtextbuffer.cpp:7687
 #, fuzzy
 msgid "Insert Field"
 msgstr "पाठ डाले"
 
-#: ../src/richtext/richtextbuffer.cpp:7583
-#: ../src/richtext/richtextbuffer.cpp:8493
+#: ../src/richtext/richtextbuffer.cpp:7598
+#: ../src/richtext/richtextbuffer.cpp:8551
 msgid "Insert Image"
 msgstr "आकृति डाले"
 
-#: ../src/richtext/richtextbuffer.cpp:7630
+#: ../src/richtext/richtextbuffer.cpp:7645
 #, fuzzy
 msgid "Insert Object"
 msgstr "पाठ डाले"
 
 #: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7428
-#: ../src/richtext/richtextbuffer.cpp:7455
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7440
+#: ../src/richtext/richtextbuffer.cpp:7470
+#: ../src/richtext/richtextbuffer.cpp:7514
 msgid "Insert Text"
 msgstr "पाठ डाले"
 
@@ -4265,7 +4266,7 @@ msgstr "अवैध टीआईएफ़एफ़ आकॄति इंडेक्
 msgid "Invalid data view item"
 msgstr ""
 
-#: ../src/common/appcmn.cpp:245
+#: ../src/common/appcmn.cpp:266
 #, fuzzy, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "अवैध जयामिति विशिष्टतायें '%s'"
@@ -4504,7 +4505,7 @@ msgstr "पंक्ति अन्तराल (&I):"
 msgid "LEFT"
 msgstr "LEFT"
 
-#: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
 msgstr "लैडस्केप"
 
@@ -4518,7 +4519,7 @@ msgstr "चिपकाएँ"
 msgid "Last page"
 msgstr "अगला पृष्ट"
 
-#: ../src/common/log.cpp:311
+#: ../src/common/log.cpp:309
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
@@ -4535,7 +4536,7 @@ msgstr "लेजर, १७ x ११ इंच"
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:202
 #: ../src/richtext/richtextbulletspage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:246
+#: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "बायें"
 
@@ -4544,7 +4545,7 @@ msgstr "बायें"
 msgid "Left (&first line):"
 msgstr "बायें (पहली पंक्ति) (&F):"
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
 msgstr "बायाँ हाशिया (मिलीमीटर):"
 
@@ -4855,7 +4856,7 @@ msgstr ""
 msgid "MacVietnamese"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2024
+#: ../src/propgrid/advprops.cpp:2031
 #, fuzzy
 msgid "Make a selection:"
 msgstr "चयन चिपकाएँ"
@@ -4869,12 +4870,12 @@ msgstr ""
 msgid "Match case"
 msgstr "बड़ा-छोटा का मिलान करें"
 
-#: ../src/richtext/richtextsizepage.cpp:460
+#: ../src/richtext/richtextsizepage.cpp:463
 #, fuzzy
 msgid "Max height:"
 msgstr "भार (&W):"
 
-#: ../src/richtext/richtextsizepage.cpp:433
+#: ../src/richtext/richtextsizepage.cpp:436
 #, fuzzy
 msgid "Max width:"
 msgstr "से बदलें:"
@@ -4910,12 +4911,12 @@ msgstr ""
 msgid "Mi&nimize"
 msgstr "छोटा करें (&n)"
 
-#: ../src/richtext/richtextsizepage.cpp:406
+#: ../src/richtext/richtextsizepage.cpp:409
 #, fuzzy
 msgid "Min height:"
 msgstr "फ़ॉन्ट भार (&W):"
 
-#: ../src/richtext/richtextsizepage.cpp:379
+#: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
 msgstr ""
 
@@ -4952,18 +4953,18 @@ msgstr "नीचे लाएँ"
 msgid "Move up"
 msgstr "ऊपर लाएँ"
 
-#: ../src/richtext/richtextsizepage.cpp:679
-#: ../src/richtext/richtextsizepage.cpp:681
+#: ../src/richtext/richtextsizepage.cpp:682
+#: ../src/richtext/richtextsizepage.cpp:684
 #, fuzzy
 msgid "Moves the object to the next paragraph."
 msgstr "अगले अनुच्छेद के लिए डिफ़ाल्ट शैली।"
 
-#: ../src/richtext/richtextsizepage.cpp:673
-#: ../src/richtext/richtextsizepage.cpp:675
+#: ../src/richtext/richtextsizepage.cpp:676
+#: ../src/richtext/richtextsizepage.cpp:678
 msgid "Moves the object to the previous paragraph."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9271
+#: ../src/richtext/richtextbuffer.cpp:9345
 msgid "Multiple Cell Properties"
 msgstr ""
 
@@ -5143,8 +5144,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/richtext/richtextsizepage.cpp:248
+#: ../src/richtext/richtextsizepage.cpp:252
 #, fuzzy
 msgid "None"
 msgstr "(कुछ नहीं)"
@@ -5199,7 +5200,7 @@ msgstr "संख्यांकित रूपरेखा"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "ठीक"
@@ -5222,7 +5223,7 @@ msgstr ""
 msgid "Objects must have an id attribute"
 msgstr "ऑबजेक्टों के पास एक पहचान-संख्या विशेषता होनी चाहिए"
 
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1798
+#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
 msgstr "फ़ाइल खोलें"
 
@@ -5265,11 +5266,11 @@ msgstr "'%s' विकल्प को एक वैल्यू की आव�
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "विकल्प '%s': '%s' को एक तिथि में नहीं बदला जा सका।"
 
-#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "विकल्प"
 
-#: ../src/generic/prntdlgg.cpp:620 ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
 msgstr "अभिविन्यास"
 
@@ -5481,22 +5482,21 @@ msgstr "पृष्ट %d"
 msgid "Page %d of %d"
 msgstr "पृष्ट %d / %d"
 
-#: ../src/gtk/print.cpp:783
+#: ../src/gtk/print.cpp:774
 msgid "Page Setup"
 msgstr "पॄष्ट स्थापना"
 
-#: ../src/generic/prntdlgg.cpp:833 ../src/common/prntbase.cpp:467
-#: ../src/gtk/gnome/gprint.cpp:710
+#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
 msgid "Page setup"
 msgstr "पॄष्ट स्थापना"
 
-#: ../src/generic/prntdlgg.cpp:221
+#: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "अनेक पृष्ट"
 
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:806
-#: ../src/generic/prntdlgg.cpp:847 ../src/generic/prntdlgg.cpp:860
-#: ../src/generic/prntdlgg.cpp:1057 ../src/generic/prntdlgg.cpp:1062
+#: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
+#: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
+#: ../src/generic/prntdlgg.cpp:1052 ../src/generic/prntdlgg.cpp:1057
 msgid "Paper size"
 msgstr "पृष्ट आकार"
 
@@ -5513,7 +5513,7 @@ msgstr "SetObject को एक पहिले से पंजीकॄत ऑ
 msgid "Passing an unknown object to GetObject"
 msgstr "GetObject को एक अज्ञात ऑबजेक्ट को दिया जा रहा है"
 
-#: ../src/richtext/richtextctrl.cpp:3103 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "चिपकाएँ"
@@ -5531,7 +5531,7 @@ msgstr "पूर्णविराम (&O)"
 msgid "Permissions"
 msgstr "अनुमतियां"
 
-#: ../src/richtext/richtextbuffer.cpp:11745
+#: ../src/richtext/richtextbuffer.cpp:11942
 #, fuzzy
 msgid "Picture Properties"
 msgstr "गुणधर्म (&P)"
@@ -5598,16 +5598,16 @@ msgstr ""
 msgid "Pointer to model not set correctly."
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:617 ../src/generic/prntdlgg.cpp:872
+#: ../src/generic/prntdlgg.cpp:612 ../src/generic/prntdlgg.cpp:867
 msgid "Portrait"
 msgstr "पोर्ट्रेट"
 
-#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:496
 #, fuzzy
 msgid "Position"
 msgstr "प्रश्न"
 
-#: ../src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "पोस्टस्क्रिप्ट फ़ाइल"
 
@@ -5634,10 +5634,9 @@ msgstr "पूर्वालोकन:"
 msgid "Previous page"
 msgstr "पिछला पॄष्ट"
 
-#: ../src/generic/prntdlgg.cpp:148 ../src/generic/prntdlgg.cpp:162
+#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
 #: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
 msgid "Print"
 msgstr "मुद्रण"
 
@@ -5650,15 +5649,15 @@ msgstr "मुद्रण पूर्वालोकन"
 msgid "Print Preview Failure"
 msgstr "मुद्रण पूर्वालोकन असफ़लता"
 
-#: ../src/generic/prntdlgg.cpp:229
+#: ../src/generic/prntdlgg.cpp:224
 msgid "Print Range"
 msgstr "मुद्रण सीमा"
 
-#: ../src/generic/prntdlgg.cpp:454
+#: ../src/generic/prntdlgg.cpp:449
 msgid "Print Setup"
 msgstr "मुद्रण स्थापना"
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:621
 msgid "Print in colour"
 msgstr "मुद्रण रंगों में"
 
@@ -5666,10 +5665,6 @@ msgstr "मुद्रण रंगों में"
 #, fuzzy
 msgid "Print previe&w..."
 msgstr "मुद्रण पूर्वालोकन (&w)"
-
-#: ../src/gtk/gnome/gprint.cpp:944
-msgid "Print preview"
-msgstr "मुद्रण पूर्वालोकन"
 
 #: ../src/common/docview.cpp:1244
 #, fuzzy
@@ -5681,7 +5676,7 @@ msgstr "पाइप का निर्माण असफ़ल रहा"
 msgid "Print preview..."
 msgstr "मुद्रण पूर्वालोकन"
 
-#: ../src/generic/prntdlgg.cpp:635
+#: ../src/generic/prntdlgg.cpp:630
 msgid "Print spooling"
 msgstr "मुद्रण स्पूलिंग"
 
@@ -5689,7 +5684,7 @@ msgstr "मुद्रण स्पूलिंग"
 msgid "Print this page"
 msgstr "इस पृष्ट को मुद्रित करें"
 
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
 msgstr "फ़ाइल पर मुद्रित करें"
 
@@ -5698,27 +5693,27 @@ msgstr "फ़ाइल पर मुद्रित करें"
 msgid "Print..."
 msgstr "मुद्रण (&P)..."
 
-#: ../src/generic/prntdlgg.cpp:498
+#: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
 msgstr "मुद्रक"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Printer command:"
 msgstr "प्रिंटर निर्देश:"
 
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:180
 msgid "Printer options"
 msgstr "प्रिंटर के विकल्प"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:645
 msgid "Printer options:"
 msgstr "प्रिंटर के विकल्प:"
 
-#: ../src/generic/prntdlgg.cpp:921
+#: ../src/generic/prntdlgg.cpp:916
 msgid "Printer..."
 msgstr "प्रिंटर..."
 
-#: ../src/generic/prntdlgg.cpp:201
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Printer:"
 msgstr "प्रिंटर:"
 
@@ -5751,7 +5746,7 @@ msgid "Printing..."
 msgstr "मुद्रण किया जा रहा है..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2125
+#: ../src/common/docview.cpp:2124
 #, fuzzy
 msgid "Printout"
 msgstr "मुद्रण"
@@ -5875,7 +5870,7 @@ msgstr "'%s' रजिस्ट्री वैल्यू पहिले स�
 msgid "Regular"
 msgstr "नियमित"
 
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:519
 #, fuzzy
 msgid "Relative"
 msgstr "साज-सजावट"
@@ -5912,7 +5907,7 @@ msgstr "\"%s\" रेन्डर्र का %d.%d संस्मरण अ�
 msgid "Rendering failed."
 msgstr "समयसंचेतक का निर्माण असफ़ल रहा।"
 
-#: ../src/richtext/richtextbuffer.cpp:4202
+#: ../src/richtext/richtextbuffer.cpp:4214
 msgid "Renumber List"
 msgstr "सूची पुनः संख्यांकन करें"
 
@@ -5920,7 +5915,7 @@ msgstr "सूची पुनः संख्यांकन करें"
 msgid "Rep&lace"
 msgstr "बदलें (&l)"
 
-#: ../src/richtext/richtextctrl.cpp:3263 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "बदलें"
 
@@ -5940,7 +5935,7 @@ msgstr "से बदलें:"
 msgid "Required information entry is empty."
 msgstr ""
 
-#: ../src/common/translation.cpp:1975
+#: ../src/common/translation.cpp:1966
 #, fuzzy, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "'%s' एक वैध संदेश सूचीपत्र नहीं है।"
@@ -5956,11 +5951,11 @@ msgstr "दायें"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
-#: ../src/richtext/richtextsizepage.cpp:247
+#: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "दायें"
 
-#: ../src/generic/prntdlgg.cpp:897
+#: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
 msgstr "दायाँ हाशिया (मिलीमीटर):"
 
@@ -6100,11 +6095,11 @@ msgstr "सभी का चयन (&A)"
 msgid "Select All"
 msgstr "सभी का चयन (&A)"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1877
 msgid "Select a document template"
 msgstr "एक प्रलेख टेम्पलेट का चयन करें"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1951
 msgid "Select a document view"
 msgstr "एक प्रलेख व्यू का चयन करें"
 
@@ -6137,7 +6132,7 @@ msgstr ""
 msgid "Separator expected after the option '%s'."
 msgstr "'%s' के बाद एक पृथककारी चिह्न की आशा की जाती है।"
 
-#: ../src/richtext/richtextbuffer.cpp:10397
+#: ../src/richtext/richtextbuffer.cpp:10513
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "शैली हटाएँ"
@@ -6150,7 +6145,7 @@ msgstr "SetProperty को बिना किसी वैध सेटर क�
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Setup..."
 msgstr "स्थापना..."
 
@@ -6236,7 +6231,7 @@ msgid "Single"
 msgstr "अकेला"
 
 #: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:296
+#: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "आकार"
 
@@ -6263,7 +6258,7 @@ msgstr "बड़े अक्षर (&P)"
 msgid "Solid"
 msgstr "गहरा"
 
-#: ../src/common/docview.cpp:1774
+#: ../src/common/docview.cpp:1773
 msgid "Sorry, could not open this file."
 msgstr "क्षमा करें, इस फ़ाइल को खोला नहीं जा सका।"
 
@@ -6279,7 +6274,7 @@ msgstr "क्षमा करें, एक पूर्वालोकन क�
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "क्षमा करें, यह नाम चुना जा चुका हें। कृपया कोई दूसरा नाम चुने।"
 
-#: ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1796
 msgid "Sorry, the format for this file is unknown."
 msgstr "क्षमा करें, इस फ़ाइल का प्रारूप अज्ञात है।"
 
@@ -6309,13 +6304,13 @@ msgstr "मानक"
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "स्टेटमेन्ट, ५ १/२ x ८ १/२ इंच"
 
-#: ../src/richtext/richtextsizepage.cpp:515
-#: ../src/richtext/richtextsizepage.cpp:520
+#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:523
 #, fuzzy
 msgid "Static"
 msgstr "अवस्था:"
 
-#: ../src/generic/prntdlgg.cpp:209
+#: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "अवस्था:"
 
@@ -6411,7 +6406,7 @@ msgstr "टीआईएफ़एफ़: आकॄति को लिखने मे�
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10687
+#: ../src/richtext/richtextbuffer.cpp:10794
 #, fuzzy
 msgid "Table Properties"
 msgstr "गुणधर्म (&P)"
@@ -6433,7 +6428,7 @@ msgstr "टेब्स"
 msgid "Teletype"
 msgstr "टेलीटाइप"
 
-#: ../src/common/docview.cpp:1879
+#: ../src/common/docview.cpp:1878
 msgid "Templates"
 msgstr "टेम्पलेट्स"
 
@@ -6483,10 +6478,10 @@ msgstr "फ़ॉन्ट बिन्दु का आकार।"
 msgid "The bottom padding size."
 msgstr "फ़ॉन्ट बिन्दु का आकार।"
 
-#: ../src/richtext/richtextsizepage.cpp:636
-#: ../src/richtext/richtextsizepage.cpp:638
-#: ../src/richtext/richtextsizepage.cpp:650
-#: ../src/richtext/richtextsizepage.cpp:652
+#: ../src/richtext/richtextsizepage.cpp:639
+#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:653
+#: ../src/richtext/richtextsizepage.cpp:655
 #, fuzzy
 msgid "The bottom position."
 msgstr "टैब की स्थिति।"
@@ -6626,10 +6621,10 @@ msgstr "फ़ॉन्ट बिन्दु का आकार।"
 msgid "The left padding size."
 msgstr "फ़ॉन्ट बिन्दु का आकार।"
 
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
-#: ../src/richtext/richtextsizepage.cpp:545
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:534
+#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:548
+#: ../src/richtext/richtextsizepage.cpp:550
 #, fuzzy
 msgid "The left position."
 msgstr "टैब की स्थिति।"
@@ -6650,38 +6645,38 @@ msgstr "सूची की पद संख्या।"
 msgid "The locale ID is unknown."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 #, fuzzy
 msgid "The object height."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:471
-#: ../src/richtext/richtextsizepage.cpp:473
+#: ../src/richtext/richtextsizepage.cpp:474
+#: ../src/richtext/richtextsizepage.cpp:476
 #, fuzzy
 msgid "The object maximum height."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 #, fuzzy
 msgid "The object maximum width."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 #, fuzzy
 msgid "The object minimum height."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 #, fuzzy
 msgid "The object minimum width."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:331
+#: ../src/richtext/richtextsizepage.cpp:332
+#: ../src/richtext/richtextsizepage.cpp:334
 #, fuzzy
 msgid "The object width."
 msgstr "फ़ॉन्ट का भार"
@@ -6691,18 +6686,18 @@ msgstr "फ़ॉन्ट का भार"
 msgid "The outline level."
 msgstr "रूपरेखा का स्तर।"
 
-#: ../src/common/log.cpp:283
+#: ../src/common/log.cpp:281
 #, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/common/log.cpp:276
+#: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
 msgstr ""
 
-#: ../src/gtk/print.cpp:940 ../src/gtk/print.cpp:1123
+#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
 msgstr ""
 
@@ -6745,10 +6740,10 @@ msgstr "दायें इंडेंट।"
 msgid "The right padding size."
 msgstr "दायें इंडेंट।"
 
-#: ../src/richtext/richtextsizepage.cpp:601
-#: ../src/richtext/richtextsizepage.cpp:603
-#: ../src/richtext/richtextsizepage.cpp:615
-#: ../src/richtext/richtextsizepage.cpp:617
+#: ../src/richtext/richtextsizepage.cpp:604
+#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:620
 #, fuzzy
 msgid "The right position."
 msgstr "टैब की स्थिति।"
@@ -6810,10 +6805,10 @@ msgstr "फ़ॉन्ट बिन्दु का आकार।"
 msgid "The top padding size."
 msgstr "फ़ॉन्ट बिन्दु का आकार।"
 
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:580
-#: ../src/richtext/richtextsizepage.cpp:582
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:583
+#: ../src/richtext/richtextsizepage.cpp:585
 #, fuzzy
 msgid "The top position."
 msgstr "टैब की स्थिति।"
@@ -6832,7 +6827,7 @@ msgstr ""
 "इस मशीन पर संसाधित सुदूर पहुँच सेवा (आरऐएस) का यह संस्मरण अति प्राचीन है, कृपया इसे "
 "अपग्रेड करें(निम्न आवश्यक चलन विलुप्त है:  %s)।"
 
-#: ../src/gtk/print.cpp:968
+#: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr ""
 
@@ -6858,11 +6853,11 @@ msgstr ""
 msgid "This is not a %s."
 msgstr "पीसीएक्स: यह एक पीसीएक्स फ़ाइल नहीं है।"
 
-#: ../src/common/wincmn.cpp:1647
+#: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4295
+#: ../src/gtk/window.cpp:4317
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6920,7 +6915,7 @@ msgstr "आज का संकेत"
 msgid "Tips not available, sorry!"
 msgstr "संकेत उपलब्ध नहीं हैं, क्षमा करें!"
 
-#: ../src/generic/prntdlgg.cpp:247
+#: ../src/generic/prntdlgg.cpp:242
 msgid "To:"
 msgstr "प्राप्तकर्ता:"
 
@@ -6928,7 +6923,7 @@ msgstr "प्राप्तकर्ता:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7925
+#: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Too many EndStyle calls!"
 msgstr ""
 
@@ -6936,13 +6931,13 @@ msgstr ""
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "पीएनजी में बहुत सारे रंग, यह आकॄति थोड़ी सी धूमल हो सकती है।"
 
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 #, fuzzy
 msgid "Top"
 msgstr "प्राप्तकर्ता:"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
 msgstr "ऊपरी हाशिया (मिलीमीटर):"
 
@@ -7234,8 +7229,8 @@ msgstr ""
 msgid "Units for the bottom padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:661
-#: ../src/richtext/richtextsizepage.cpp:663
+#: ../src/richtext/richtextsizepage.cpp:664
+#: ../src/richtext/richtextsizepage.cpp:666
 #, fuzzy
 msgid "Units for the bottom position."
 msgstr "थ्रेड समाप्ति की प्रतीक्षा नहीं की जा सकती है।"
@@ -7260,43 +7255,43 @@ msgstr ""
 msgid "Units for the left padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:558
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
 #, fuzzy
 msgid "Units for the left position."
 msgstr "थ्रेड समाप्ति की प्रतीक्षा नहीं की जा सकती है।"
 
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:487
 #, fuzzy
 msgid "Units for the maximum object height."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:457
+#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:460
 #, fuzzy
 msgid "Units for the maximum object width."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:430
+#: ../src/richtext/richtextsizepage.cpp:431
+#: ../src/richtext/richtextsizepage.cpp:433
 #, fuzzy
 msgid "Units for the minimum object height."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:403
+#: ../src/richtext/richtextsizepage.cpp:404
+#: ../src/richtext/richtextsizepage.cpp:406
 #, fuzzy
 msgid "Units for the minimum object width."
 msgstr "फ़ॉन्ट का भार"
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:377
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Units for the object height."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:342
+#: ../src/richtext/richtextsizepage.cpp:343
+#: ../src/richtext/richtextsizepage.cpp:345
 msgid "Units for the object width."
 msgstr ""
 
@@ -7320,8 +7315,8 @@ msgstr ""
 msgid "Units for the right padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:628
+#: ../src/richtext/richtextsizepage.cpp:629
+#: ../src/richtext/richtextsizepage.cpp:631
 #, fuzzy
 msgid "Units for the right position."
 msgstr "थ्रेड समाप्ति की प्रतीक्षा नहीं की जा सकती है।"
@@ -7347,8 +7342,8 @@ msgstr ""
 msgid "Units for the top padding."
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:596
 #, fuzzy
 msgid "Units for the top position."
 msgstr "थ्रेड समाप्ति की प्रतीक्षा नहीं की जा सकती है।"
@@ -7442,7 +7437,7 @@ msgstr ""
 msgid "Unsupported clipboard format."
 msgstr "असमर्थित क्लिपबोर्ड प्रारूप।"
 
-#: ../src/common/appcmn.cpp:228
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "असमर्थित थीम '%s' ।"
@@ -7505,8 +7500,8 @@ msgstr "%d से %d के मध्य में एक पृष्ट सं
 msgid "Version "
 msgstr "संस्मरण"
 
-#: ../src/richtext/richtextsizepage.cpp:288
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:291
+#: ../src/richtext/richtextsizepage.cpp:293
 msgid "Vertical alignment."
 msgstr ""
 
@@ -7518,7 +7513,7 @@ msgstr "फ़ाइलों को एक विस्तॄत अवलोक�
 msgid "View files as a list view"
 msgstr "फ़ाइलों को एक अवलोकन सूची की भांति देखें"
 
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:1952
 msgid "Views"
 msgstr "अवलोकन"
 
@@ -7539,7 +7534,7 @@ msgstr "WINDOWS_RIGHT"
 msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr "उपप्रक्रिया के समाप्त होने की प्रतीक्षा असफ़ल रही"
 
-#: ../src/common/log.cpp:229
+#: ../src/common/log.cpp:227
 msgid "Warning: "
 msgstr "चेतावनी: "
 
@@ -8087,16 +8082,16 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:370
-#: ../src/richtext/richtextsizepage.cpp:397
-#: ../src/richtext/richtextsizepage.cpp:424
-#: ../src/richtext/richtextsizepage.cpp:451
-#: ../src/richtext/richtextsizepage.cpp:478
-#: ../src/richtext/richtextsizepage.cpp:552
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:622
-#: ../src/richtext/richtextsizepage.cpp:657
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
 msgstr ""
 
@@ -8213,7 +8208,7 @@ msgstr "फ़ाइल '%s', पंक्ति %d: निर्विकल्प
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "फ़ाइल '%s': अप्रत्याशित %c शब्द %d पंक्ति पर।"
 
-#: ../src/richtext/richtextbuffer.cpp:8300
+#: ../src/richtext/richtextbuffer.cpp:8358
 msgid "files"
 msgstr "फ़ाइलें"
 
@@ -8237,8 +8232,8 @@ msgstr "चौथा"
 msgid "generate verbose log messages"
 msgstr "वर्णनात्मक लॉग संदेशो का जनन करें"
 
-#: ../src/richtext/richtextbuffer.cpp:12015
-#: ../src/richtext/richtextbuffer.cpp:12125
+#: ../src/richtext/richtextbuffer.cpp:12212
+#: ../src/richtext/richtextbuffer.cpp:12322
 msgid "image"
 msgstr "आकृति"
 
@@ -8304,7 +8299,7 @@ msgstr "कोई त्रुटि नहीं"
 msgid "no fonts found in %s, using builtin font"
 msgstr "कोई फ़ॉन्ट %s में नहीं मिले।"
 
-#: ../src/html/helpdata.cpp:654
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "कोईनामनहीं"
 
@@ -8317,7 +8312,7 @@ msgstr "दोपहर"
 msgid "normal"
 msgstr "सामान्य"
 
-#: ../src/gtk/print.cpp:1227 ../src/gtk/print.cpp:1332
+#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
 msgid "not implemented"
 msgstr ""
 
@@ -8333,16 +8328,16 @@ msgstr "एक्सएमएल पाठ नोडो को ऑबजेक�
 msgid "out of memory"
 msgstr "स्मॄति समाप्त"
 
-#: ../src/richtext/richtextsizepage.cpp:337
-#: ../src/richtext/richtextsizepage.cpp:371
-#: ../src/richtext/richtextsizepage.cpp:398
-#: ../src/richtext/richtextsizepage.cpp:425
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:479
-#: ../src/richtext/richtextsizepage.cpp:553
-#: ../src/richtext/richtextsizepage.cpp:588
-#: ../src/richtext/richtextsizepage.cpp:623
-#: ../src/richtext/richtextsizepage.cpp:658
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
 msgid "percent"
 msgstr ""
 
@@ -8404,36 +8399,36 @@ msgstr ""
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:372
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:376
 #: ../src/richtext/richtextsizepage.cpp:399
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:426
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:453
-#: ../src/richtext/richtextsizepage.cpp:454
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:456
+#: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:554
-#: ../src/richtext/richtextsizepage.cpp:555
-#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:557
+#: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:589
-#: ../src/richtext/richtextsizepage.cpp:590
-#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:592
+#: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:624
-#: ../src/richtext/richtextsizepage.cpp:625
-#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:627
+#: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:659
-#: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextsizepage.cpp:662
+#: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
 msgstr ""
 
@@ -8492,33 +8487,33 @@ msgstr "सोलहवाँ"
 msgid "sixth"
 msgstr "छठवाँ"
 
-#: ../src/common/appcmn.cpp:206
+#: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "उपयोगार्थ अवलोकन विधा को निर्दिष्ट करें (उदाहरण हेतु ६४०x४८०-१६)"
 
-#: ../src/common/appcmn.cpp:192
+#: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
 msgstr "उपयोगार्थ थीम को निर्दिष्ट करें"
 
-#: ../src/richtext/richtextbuffer.cpp:8818
+#: ../src/richtext/richtextbuffer.cpp:8876
 #, fuzzy
 msgid "standard/circle"
 msgstr "मानक"
 
-#: ../src/richtext/richtextbuffer.cpp:8819
+#: ../src/richtext/richtextbuffer.cpp:8877
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8821
+#: ../src/richtext/richtextbuffer.cpp:8879
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8820
+#: ../src/richtext/richtextbuffer.cpp:8878
 #, fuzzy
 msgid "standard/square"
 msgstr "मानक"
 
-#: ../src/richtext/richtextbuffer.cpp:8822
+#: ../src/richtext/richtextbuffer.cpp:8880
 msgid "standard/triangle"
 msgstr ""
 
@@ -8626,7 +8621,7 @@ msgstr "अज्ञात-%d"
 msgid "unnamed"
 msgstr "बिनानामदियाहुआ"
 
-#: ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:1606
 #, c-format
 msgid "unnamed%d"
 msgstr "बिनानामदियाहुआ %d"
@@ -8635,7 +8630,7 @@ msgstr "बिनानामदियाहुआ %d"
 msgid "unsupported Zip compression method"
 msgstr "असमर्थित जीज़िप संकुचन विधि"
 
-#: ../src/common/translation.cpp:1892
+#: ../src/common/translation.cpp:1883
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "'%s' से '%s' तक सूचीपत्र का उपयोग किया जा रहा है।"
@@ -8648,7 +8643,7 @@ msgstr "लेखन त्रुटि"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay असफ़ल रहा।"
 
-#: ../src/gtk/print.cpp:996
+#: ../src/gtk/print.cpp:987
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr ""
 
@@ -8686,6 +8681,9 @@ msgstr "ज़ेडलिब त्रुटि  %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr "~"
+
+#~ msgid "Print preview"
+#~ msgstr "मुद्रण पूर्वालोकन"
 
 #~ msgid "1"
 #~ msgstr "१"
