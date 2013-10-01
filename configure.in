@@ -3789,15 +3789,17 @@ if test "$wxUSE_SHARED" = "yes"; then
             cat <<EOF >change-install-names
 #!/bin/sh
 libnames=\`cd \${2} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
-for i in \${libnames} ; do
-    ${HOST_PREFIX}install_name_tool -id \${3}/\${i} \${1}/\${i}
-    for dep in \${libnames} ; do
-        ${HOST_PREFIX}install_name_tool -change \${2}/\${dep} \${3}/\${dep} \${1}/\${i}
-    done
+changes=''
+for dep in \${libnames} ; do
+    changes="\${changes} -change \${4}/\${dep} \${3}/\${dep}"
 done
+for i in \${libnames} ; do
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${1}/\${i}
+done
+${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}
 EOF
             chmod +x change-install-names
-            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \$(wx_top_builddir)/lib \${libdir}"
+            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \${DESTDIR}\${bindir} \${libdir} \$(wx_top_builddir)/lib"
         fi
 
         dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:
