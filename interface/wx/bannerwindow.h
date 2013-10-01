@@ -44,7 +44,7 @@
 
     @library{wxadv}
     @category{miscwnd}
-    @genericAppearance{bannerwindow.png}
+    @genericAppearance{bannerwindow}
 
     @since 2.9.3
  */

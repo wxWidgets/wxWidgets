@@ -93,7 +93,7 @@ ALIASES += endFlagTable="</div>\n"
 # that look different in different ports. genericAppearance can be used for the
 # controls that always look the same.
 ALIASES += appearance{1}="\htmlonly<div class="appearance"><span class='appearance'>Appearance:</span><table><tr><td>\endhtmlonly\n\image html appear-\1-msw.png \"wxMSW Appearance\"\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\1-gtk.png \"wxGTK Appearance\"\n\htmlonly</td><td>\endhtmlonly\n\image html appear-\1-mac.png \"wxOSX Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
-ALIASES += genericAppearance{1}="\htmlonly<div class="appearance"><span class='appearance'>Appearance:</span><table class='appearance'><tr><td>\endhtmlonly\n\image html generic/\1 \"Generic Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
+ALIASES += genericAppearance{1}="\htmlonly<div class="appearance"><span class='appearance'>Appearance:</span><table class='appearance'><tr><td>\endhtmlonly\n\image html generic/\1.png \"Generic Appearance\"\n\htmlonly</td></tr></table></div>\endhtmlonly"
 
 # aliases for the creation of "named member groups"
 # USAGE: the first argument must not contain spaces and be a unique identifier 
