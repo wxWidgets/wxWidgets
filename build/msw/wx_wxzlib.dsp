@@ -151,7 +151,19 @@ SOURCE=..\..\src\zlib\deflate.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\zlib\gzio.c
+SOURCE=..\..\src\zlib\gzclose.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\zlib\gzlib.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\zlib\gzread.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\zlib\gzwrite.c
 # End Source File
 # Begin Source File
 

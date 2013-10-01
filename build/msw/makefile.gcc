@@ -53,15 +53,18 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_adler32.o \
 	$(OBJS)\wxzlib_compress.o \
 	$(OBJS)\wxzlib_crc32.o \
-	$(OBJS)\wxzlib_gzio.o \
-	$(OBJS)\wxzlib_uncompr.o \
 	$(OBJS)\wxzlib_deflate.o \
-	$(OBJS)\wxzlib_trees.o \
-	$(OBJS)\wxzlib_zutil.o \
-	$(OBJS)\wxzlib_inflate.o \
+	$(OBJS)\wxzlib_gzclose.o \
+	$(OBJS)\wxzlib_gzlib.o \
+	$(OBJS)\wxzlib_gzread.o \
+	$(OBJS)\wxzlib_gzwrite.o \
 	$(OBJS)\wxzlib_infback.o \
+	$(OBJS)\wxzlib_inffast.o \
+	$(OBJS)\wxzlib_inflate.o \
 	$(OBJS)\wxzlib_inftrees.o \
-	$(OBJS)\wxzlib_inffast.o
+	$(OBJS)\wxzlib_trees.o \
+	$(OBJS)\wxzlib_uncompr.o \
+	$(OBJS)\wxzlib_zutil.o
 WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -DNDEBUG -I..\..\src\zlib $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
@@ -5711,31 +5714,40 @@ $(OBJS)\wxzlib_compress.o: ../../src/zlib/compress.c
 $(OBJS)\wxzlib_crc32.o: ../../src/zlib/crc32.c
 	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxzlib_gzio.o: ../../src/zlib/gzio.c
-	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\wxzlib_uncompr.o: ../../src/zlib/uncompr.c
-	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\wxzlib_deflate.o: ../../src/zlib/deflate.c
 	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxzlib_trees.o: ../../src/zlib/trees.c
+$(OBJS)\wxzlib_gzclose.o: ../../src/zlib/gzclose.c
 	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxzlib_zutil.o: ../../src/zlib/zutil.c
+$(OBJS)\wxzlib_gzlib.o: ../../src/zlib/gzlib.c
 	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxzlib_inflate.o: ../../src/zlib/inflate.c
+$(OBJS)\wxzlib_gzread.o: ../../src/zlib/gzread.c
+	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxzlib_gzwrite.o: ../../src/zlib/gzwrite.c
 	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxzlib_infback.o: ../../src/zlib/infback.c
 	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxzlib_inffast.o: ../../src/zlib/inffast.c
+	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxzlib_inflate.o: ../../src/zlib/inflate.c
+	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxzlib_inftrees.o: ../../src/zlib/inftrees.c
 	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\wxzlib_inffast.o: ../../src/zlib/inffast.c
+$(OBJS)\wxzlib_trees.o: ../../src/zlib/trees.c
+	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxzlib_uncompr.o: ../../src/zlib/uncompr.c
+	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxzlib_zutil.o: ../../src/zlib/zutil.c
 	$(CC) -c -o $@ $(WXZLIB_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxpng_png.o: ../../src/png/png.c

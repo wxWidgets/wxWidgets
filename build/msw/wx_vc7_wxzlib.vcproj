@@ -256,7 +256,16 @@
 				RelativePath="..\..\src\zlib\deflate.c">
 			</File>
 			<File
-				RelativePath="..\..\src\zlib\gzio.c">
+				RelativePath="..\..\src\zlib\gzclose.c">
+			</File>
+			<File
+				RelativePath="..\..\src\zlib\gzlib.c">
+			</File>
+			<File
+				RelativePath="..\..\src\zlib\gzread.c">
+			</File>
+			<File
+				RelativePath="..\..\src\zlib\gzwrite.c">
 			</File>
 			<File
 				RelativePath="..\..\src\zlib\infback.c">

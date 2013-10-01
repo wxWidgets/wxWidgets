@@ -58,15 +58,18 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_adler32.obj \
 	$(OBJS)\wxzlib_compress.obj \
 	$(OBJS)\wxzlib_crc32.obj \
-	$(OBJS)\wxzlib_gzio.obj \
-	$(OBJS)\wxzlib_uncompr.obj \
 	$(OBJS)\wxzlib_deflate.obj \
-	$(OBJS)\wxzlib_trees.obj \
-	$(OBJS)\wxzlib_zutil.obj \
-	$(OBJS)\wxzlib_inflate.obj \
+	$(OBJS)\wxzlib_gzclose.obj \
+	$(OBJS)\wxzlib_gzlib.obj \
+	$(OBJS)\wxzlib_gzread.obj \
+	$(OBJS)\wxzlib_gzwrite.obj \
 	$(OBJS)\wxzlib_infback.obj \
+	$(OBJS)\wxzlib_inffast.obj \
+	$(OBJS)\wxzlib_inflate.obj \
 	$(OBJS)\wxzlib_inftrees.obj \
-	$(OBJS)\wxzlib_inffast.obj
+	$(OBJS)\wxzlib_trees.obj \
+	$(OBJS)\wxzlib_uncompr.obj \
+	$(OBJS)\wxzlib_zutil.obj
 WXPNG_CFLAGS = /M$(__RUNTIME_LIBS_40)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxpng$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
@@ -6226,32 +6229,41 @@ $(OBJS)\wxzlib_compress.obj: ..\..\src\zlib\compress.c
 $(OBJS)\wxzlib_crc32.obj: ..\..\src\zlib\crc32.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\crc32.c
 
-$(OBJS)\wxzlib_gzio.obj: ..\..\src\zlib\gzio.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\gzio.c
-
-$(OBJS)\wxzlib_uncompr.obj: ..\..\src\zlib\uncompr.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\uncompr.c
-
 $(OBJS)\wxzlib_deflate.obj: ..\..\src\zlib\deflate.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\deflate.c
 
-$(OBJS)\wxzlib_trees.obj: ..\..\src\zlib\trees.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\trees.c
+$(OBJS)\wxzlib_gzclose.obj: ..\..\src\zlib\gzclose.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\gzclose.c
 
-$(OBJS)\wxzlib_zutil.obj: ..\..\src\zlib\zutil.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\zutil.c
+$(OBJS)\wxzlib_gzlib.obj: ..\..\src\zlib\gzlib.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\gzlib.c
 
-$(OBJS)\wxzlib_inflate.obj: ..\..\src\zlib\inflate.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\inflate.c
+$(OBJS)\wxzlib_gzread.obj: ..\..\src\zlib\gzread.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\gzread.c
+
+$(OBJS)\wxzlib_gzwrite.obj: ..\..\src\zlib\gzwrite.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\gzwrite.c
 
 $(OBJS)\wxzlib_infback.obj: ..\..\src\zlib\infback.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\infback.c
 
+$(OBJS)\wxzlib_inffast.obj: ..\..\src\zlib\inffast.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\inffast.c
+
+$(OBJS)\wxzlib_inflate.obj: ..\..\src\zlib\inflate.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\inflate.c
+
 $(OBJS)\wxzlib_inftrees.obj: ..\..\src\zlib\inftrees.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\inftrees.c
 
-$(OBJS)\wxzlib_inffast.obj: ..\..\src\zlib\inffast.c
-	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\inffast.c
+$(OBJS)\wxzlib_trees.obj: ..\..\src\zlib\trees.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\trees.c
+
+$(OBJS)\wxzlib_uncompr.obj: ..\..\src\zlib\uncompr.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\uncompr.c
+
+$(OBJS)\wxzlib_zutil.obj: ..\..\src\zlib\zutil.c
+	$(CC) /c /nologo /TC /Fo$@ $(WXZLIB_CFLAGS) ..\..\src\zlib\zutil.c
 
 $(OBJS)\wxpng_png.obj: ..\..\src\png\png.c
 	$(CC) /c /nologo /TC /Fo$@ $(WXPNG_CFLAGS) ..\..\src\png\png.c

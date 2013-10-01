@@ -90,15 +90,18 @@ WXZLIB_OBJECTS =  \
 	wxzlib_adler32.o \
 	wxzlib_compress.o \
 	wxzlib_crc32.o \
-	wxzlib_gzio.o \
-	wxzlib_uncompr.o \
 	wxzlib_deflate.o \
-	wxzlib_trees.o \
-	wxzlib_zutil.o \
-	wxzlib_inflate.o \
+	wxzlib_gzclose.o \
+	wxzlib_gzlib.o \
+	wxzlib_gzread.o \
+	wxzlib_gzwrite.o \
 	wxzlib_infback.o \
+	wxzlib_inffast.o \
+	wxzlib_inflate.o \
 	wxzlib_inftrees.o \
-	wxzlib_inffast.o
+	wxzlib_trees.o \
+	wxzlib_uncompr.o \
+	wxzlib_zutil.o
 WXPNG_CFLAGS = -DNDEBUG $(__INC_ZLIB_p) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	wxpng_png.o \
@@ -16168,32 +16171,41 @@ wxzlib_compress.o: $(srcdir)/src/zlib/compress.c
 wxzlib_crc32.o: $(srcdir)/src/zlib/crc32.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/crc32.c
 
-wxzlib_gzio.o: $(srcdir)/src/zlib/gzio.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzio.c
-
-wxzlib_uncompr.o: $(srcdir)/src/zlib/uncompr.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/uncompr.c
-
 wxzlib_deflate.o: $(srcdir)/src/zlib/deflate.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/deflate.c
 
-wxzlib_trees.o: $(srcdir)/src/zlib/trees.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/trees.c
+wxzlib_gzclose.o: $(srcdir)/src/zlib/gzclose.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzclose.c
 
-wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/zutil.c
+wxzlib_gzlib.o: $(srcdir)/src/zlib/gzlib.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzlib.c
 
-wxzlib_inflate.o: $(srcdir)/src/zlib/inflate.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inflate.c
+wxzlib_gzread.o: $(srcdir)/src/zlib/gzread.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzread.c
+
+wxzlib_gzwrite.o: $(srcdir)/src/zlib/gzwrite.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzwrite.c
 
 wxzlib_infback.o: $(srcdir)/src/zlib/infback.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/infback.c
 
+wxzlib_inffast.o: $(srcdir)/src/zlib/inffast.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inffast.c
+
+wxzlib_inflate.o: $(srcdir)/src/zlib/inflate.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inflate.c
+
 wxzlib_inftrees.o: $(srcdir)/src/zlib/inftrees.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inftrees.c
 
-wxzlib_inffast.o: $(srcdir)/src/zlib/inffast.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inffast.c
+wxzlib_trees.o: $(srcdir)/src/zlib/trees.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/trees.c
+
+wxzlib_uncompr.o: $(srcdir)/src/zlib/uncompr.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/uncompr.c
+
+wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/zutil.c
 
 wxpng_png.o: $(srcdir)/src/png/png.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/png.c

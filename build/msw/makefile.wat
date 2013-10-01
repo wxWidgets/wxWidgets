@@ -3682,15 +3682,18 @@ WXZLIB_OBJECTS =  &
 	$(OBJS)\wxzlib_adler32.obj &
 	$(OBJS)\wxzlib_compress.obj &
 	$(OBJS)\wxzlib_crc32.obj &
-	$(OBJS)\wxzlib_gzio.obj &
-	$(OBJS)\wxzlib_uncompr.obj &
 	$(OBJS)\wxzlib_deflate.obj &
-	$(OBJS)\wxzlib_trees.obj &
-	$(OBJS)\wxzlib_zutil.obj &
-	$(OBJS)\wxzlib_inflate.obj &
+	$(OBJS)\wxzlib_gzclose.obj &
+	$(OBJS)\wxzlib_gzlib.obj &
+	$(OBJS)\wxzlib_gzread.obj &
+	$(OBJS)\wxzlib_gzwrite.obj &
 	$(OBJS)\wxzlib_infback.obj &
+	$(OBJS)\wxzlib_inffast.obj &
+	$(OBJS)\wxzlib_inflate.obj &
 	$(OBJS)\wxzlib_inftrees.obj &
-	$(OBJS)\wxzlib_inffast.obj
+	$(OBJS)\wxzlib_trees.obj &
+	$(OBJS)\wxzlib_uncompr.obj &
+	$(OBJS)\wxzlib_zutil.obj
 WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\zlib -wcd=124 $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  &
@@ -5984,31 +5987,40 @@ $(OBJS)\wxzlib_compress.obj :  .AUTODEPEND ..\..\src\zlib\compress.c
 $(OBJS)\wxzlib_crc32.obj :  .AUTODEPEND ..\..\src\zlib\crc32.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_gzio.obj :  .AUTODEPEND ..\..\src\zlib\gzio.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
-
-$(OBJS)\wxzlib_uncompr.obj :  .AUTODEPEND ..\..\src\zlib\uncompr.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
-
 $(OBJS)\wxzlib_deflate.obj :  .AUTODEPEND ..\..\src\zlib\deflate.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_trees.obj :  .AUTODEPEND ..\..\src\zlib\trees.c
+$(OBJS)\wxzlib_gzclose.obj :  .AUTODEPEND ..\..\src\zlib\gzclose.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_zutil.obj :  .AUTODEPEND ..\..\src\zlib\zutil.c
+$(OBJS)\wxzlib_gzlib.obj :  .AUTODEPEND ..\..\src\zlib\gzlib.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_inflate.obj :  .AUTODEPEND ..\..\src\zlib\inflate.c
+$(OBJS)\wxzlib_gzread.obj :  .AUTODEPEND ..\..\src\zlib\gzread.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
+$(OBJS)\wxzlib_gzwrite.obj :  .AUTODEPEND ..\..\src\zlib\gzwrite.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_infback.obj :  .AUTODEPEND ..\..\src\zlib\infback.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
+$(OBJS)\wxzlib_inffast.obj :  .AUTODEPEND ..\..\src\zlib\inffast.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
+$(OBJS)\wxzlib_inflate.obj :  .AUTODEPEND ..\..\src\zlib\inflate.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
 $(OBJS)\wxzlib_inftrees.obj :  .AUTODEPEND ..\..\src\zlib\inftrees.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_inffast.obj :  .AUTODEPEND ..\..\src\zlib\inffast.c
+$(OBJS)\wxzlib_trees.obj :  .AUTODEPEND ..\..\src\zlib\trees.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
+$(OBJS)\wxzlib_uncompr.obj :  .AUTODEPEND ..\..\src\zlib\uncompr.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
+$(OBJS)\wxzlib_zutil.obj :  .AUTODEPEND ..\..\src\zlib\zutil.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxpng_png.obj :  .AUTODEPEND ..\..\src\png\png.c
