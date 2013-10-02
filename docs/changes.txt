@@ -581,6 +581,7 @@ All (GUI):
 - Fix alignment and transparency of bitmaps in wxDataViewCtrl (Eric Jensen).
 - Fix crash when auto-sizing a wxDataViewCtrl column (Spencer T. Parkin).
 - Add wxHtmlTag::GetParamAsString() convenience method.
+- Add wxActivateEvent::GetActivationReason() (Trigve).
 
 wxGTK:
 

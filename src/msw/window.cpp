@@ -4049,7 +4049,10 @@ bool wxWindowMSW::HandleActivate(int state,
 {
     wxActivateEvent event(wxEVT_ACTIVATE,
                           (state == WA_ACTIVE) || (state == WA_CLICKACTIVE),
-                          m_windowId);
+                          m_windowId,
+                          state == WA_CLICKACTIVE
+                            ? wxActivateEvent::Reason_Mouse
+                            : wxActivateEvent::Reason_Unknown);
     event.SetEventObject(this);
 
     return HandleWindowEvent(event);
