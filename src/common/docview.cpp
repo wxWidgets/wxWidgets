@@ -2027,6 +2027,11 @@ bool wxDocChildFrameAnyBase::TryProcessEvent(wxEvent& event)
         return false;
     }
 
+    // Store a (non-owning) pointer to the last processed event here to be able
+    // to recognize this event again if it bubbles up to the parent frame, see
+    // the code in wxDocParentFrameAnyBase::TryProcessEvent().
+    m_lastEvent = &event;
+
     // Forward the event to the document manager which will, in turn, forward
     // it to its active view which must be our m_childView.
     //
@@ -2079,28 +2084,13 @@ bool wxDocParentFrameAnyBase::TryProcessEvent(wxEvent& event)
     // already forwarded the event to wxDocManager, check for this:
     if ( wxView* const view = m_docManager->GetAnyUsableView() )
     {
-        wxWindow* win = view->GetFrame();
-        if ( win && win != m_frame )
-        {
-            // Notice that we intentionally don't use wxGetTopLevelParent()
-            // here because we want to check both for the case of a child
-            // "frame" (e.g. MDI child frame or notebook page) inside this TLW
-            // and a separate child TLW frame (as used in the SDI mode) here.
-            for ( win = win->GetParent(); win; win = win->GetParent() )
-            {
-                if ( win == m_frame )
-                    return false;
-            }
-        }
-        //else: This view is directly associated with the parent frame (which
-        //      can happen in the so called "single" mode in which only one
-        //      document can be opened and so is managed by the parent frame
-        //      itself), there can be no child frame in play so we must forward
-        //      the event to wxDocManager ourselves.
+        wxDocChildFrameAnyBase* const childFrame = view->GetDocChildFrame();
+        if ( childFrame && childFrame->HasAlreadyProcessed(event) )
+            return false;
     }
 
     // But forward the event to wxDocManager ourselves if there are no views at
-    // all or if we are the frame's view ourselves.
+    // all or if this event hadn't been sent to the child frame previously.
     return m_docManager->ProcessEventLocally(event);
 }
 
