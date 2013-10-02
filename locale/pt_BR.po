@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-01 19:04+0200\n"
-"PO-Revision-Date: 2013-09-23 12:10-0300\n"
+"PO-Revision-Date: 2013-10-02 16:24-0300\n"
 "Last-Translator: Felipe <felipefpl@ig.com.br>\n"
 "Language-Team: Felipe <felipefpl@ig.com.br>\n"
 "Language: pt_BR\n"
@@ -1150,14 +1150,12 @@ msgid "Add"
 msgstr "Adicionar"
 
 #: ../src/richtext/richtextbuffer.cpp:10751
-#, fuzzy
 msgid "Add Column"
-msgstr "Adicionar coluna"
+msgstr "Adicionar Coluna"
 
 #: ../src/richtext/richtextbuffer.cpp:10688
-#, fuzzy
 msgid "Add Row"
-msgstr "Adicionar fileira"
+msgstr "Adicionar Fileira"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -2586,14 +2584,12 @@ msgid "Delete A&ll"
 msgstr "Apagar T&udo"
 
 #: ../src/richtext/richtextbuffer.cpp:10637
-#, fuzzy
 msgid "Delete Column"
-msgstr "Apagar a coluna"
+msgstr "Apagar a Coluna"
 
 #: ../src/richtext/richtextbuffer.cpp:10587
-#, fuzzy
 msgid "Delete Row"
-msgstr "Apagar a fileira"
+msgstr "Apagar a Fileira"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
