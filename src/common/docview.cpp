@@ -2031,7 +2031,7 @@ bool wxDocChildFrameAnyBase::TryProcessEvent(wxEvent& event)
     // it to its active view which must be our m_childView.
     //
     // Notice that we do things in this roundabout way to guarantee the correct
-    // event handlers call order: first the document, then the new and then the
+    // event handlers call order: first the document, then the view and then the
     // document manager itself. And if we forwarded the event directly to the
     // view, then the document manager would do it once again when we forwarded
     // it to it.
