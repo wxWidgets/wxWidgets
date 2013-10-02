@@ -599,7 +599,7 @@ public:
         m_win = NULL;
     }
 
-    // full ctor equivalent to using the default one and Create(0
+    // full ctor equivalent to using the default one and Create()
     wxDocChildFrameAnyBase(wxDocument *doc, wxView *view, wxWindow *win)
     {
         Create(doc, view, win);
