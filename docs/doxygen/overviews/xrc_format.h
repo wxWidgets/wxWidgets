@@ -686,7 +686,7 @@ Example:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-    Label to display on the button (may be empty if only bitmap is used).}
+    Label to display on the button (may be omitted if only the bitmap or stock ID is used).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
     Bitmap to display in the button (optional).}
 @row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
@@ -706,7 +706,7 @@ No additional properties.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Label to use for the checkbox (required).}
+     Label to use for the checkbox (default: empty).}
 @row3col{checked, @ref overview_xrcformat_type_bool,
      Should the checkbox be checked initially (default: 0)?}
 @endTable
@@ -1259,7 +1259,7 @@ wxMenuItem objects support the following properties:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Item's label (required).}
+     Item's label (may be omitted if stock ID is used).}
 @row3col{accel, @ref overview_xrcformat_type_text_notrans,
      Item's accelerator (default: none).}
 @row3col{radio, @ref overview_xrcformat_type_bool,
@@ -1438,7 +1438,7 @@ Each @c propertysheetpage has exactly one non-toplevel window as its child.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Label for the whole box (required).}
+     Label for the whole box (default: empty).}
 @row3col{dimension, integer,
      Specifies the maximum number of rows (if style contains
      @c wxRA_SPECIFY_ROWS) or columns (if style contains @c wxRA_SPECIFY_COLS)
@@ -1723,7 +1723,7 @@ child and the second one for right/bottom child window.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Static box's label (required).}
+     Static box's label (default: empty).}
 @endTable
 
 
@@ -1737,7 +1737,7 @@ No additional properties.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Label to display (required).}
+     Label to display (default: empty).}
 @row3col{wrap, @ref overview_xrcformat_type_dimension,
      Wrap the text so that each line is at most the given number of pixels, see
      wxStaticText::Wrap() (default: no wrap).}
@@ -2057,7 +2057,7 @@ they have one property:
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{size, @ref overview_xrcformat_type_size, Size of the empty space (required).}
+@row3col{size, @ref overview_xrcformat_type_size, Size of the empty space (default: @c wxDefaultSize).}
 @endTable
 
 Both @c sizeritem and @c spacer objects can have any of the following
@@ -2155,7 +2155,7 @@ class-specific properties. All classes support the following properties:
 @row3col{orient, @ref overview_xrcformat_type_style,
     Sizer orientation, "wxHORIZONTAL" or "wxVERTICAL" (default: wxHORIZONTAL).}
 @row3col{label, @ref overview_xrcformat_type_text,
-    Label to be used for the static box around the sizer (required).}
+    Label to be used for the static box around the sizer (default: empty).}
 @endTable
 
 @subsection overview_xrcformat_wxgridsizer wxGridSizer
