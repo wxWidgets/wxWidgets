@@ -150,6 +150,8 @@ wxObject* wxRibbonXmlHandler::Handle_button()
     //        with the xml library. Disable it for now but the real solution
     //        would be to virtualize GetChildren() and GetNext() methods via
     //        wxXmlResourceHandler, just as we already do for many others.
+    //
+    // FIXME: If re-enabling, don't forget to update the docs and RELAG NG schema!
 #if 0 // wxUSE_MENUS
     // check whether we have dropdown tag inside
     wxMenu *menu = NULL; // menu for drop down items

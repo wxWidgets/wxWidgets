@@ -1486,10 +1486,17 @@ Example:
 @endcode
 
 
-@subsubsection xrc_wxribbon wxRibbonBar
+@subsubsection xrc_wxribbonbar wxRibbonBar
 
-A wxRibbonBar is a container of ribbon pages which, in turn, contain elements
-that can be wxRibbonControl or wxRibbonGallery.
+@beginTable
+@hdr3col{property, type, description}
+@row3col{art-provider, @ref overview_xrcformat_type_string,
+    One of @c default, @c aui or @c msw (default: @c default).}
+@endTable
+
+A wxRibbonBar may have @ref xrc_wxribbonpage child objects. The @c page
+pseudo-class may be used instead of @c wxRibbonPage when used as wxRibbonBar
+children.
 
 Example:
 @code
@@ -1531,6 +1538,85 @@ later only and you need to explicitly register its handler using
     AddHandler(new wxRibbonXmlHandler);
 @endcode
 to use it.
+
+
+@subsubsection xrc_wxribbonbuttonbar wxRibbonButtonBar
+
+No additional properties.
+
+wxRibbonButtonBar can have child objects of the @c button pseudo-class. @c button
+objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{hybrid, @ref overview_xrcformat_type_bool,
+    If true, the @c wxRIBBON_BUTTON_HYBRID kind is used (default: false).}
+@row3col{disabled, @ref overview_xrcformat_type_bool,
+    Whether the button should be disabled (default: false).}
+@row3col{label, @ref overview_xrcformat_type_text,
+    Item's label (required).}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Item's bitmap (required).}
+@row3col{small-bitmap, @ref overview_xrcformat_type_bitmap,
+    Small bitmap (default: none).}
+@row3col{disabled-bitmap, @ref overview_xrcformat_type_bitmap,
+    Disabled bitmap (default: none).}
+@row3col{small-disabled-bitmap, @ref overview_xrcformat_type_bitmap,
+    Small disabled bitmap (default: none).}
+@row3col{help, @ref overview_xrcformat_type_text,
+    Item's help text (default: none).}
+@endTable
+
+
+@subsubsection xrc_wxribboncontrol wxRibbonControl
+
+No additional properties.
+
+Objects of this type *must* be subclassed with the @c subclass attribute.
+
+
+@subsubsection xrc_wxribbongallery wxRibbonGallery
+
+No additional properties.
+
+wxRibbonGallery can have child objects of the @c item pseudo-class. @c item
+objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Item's bitmap (default: none).}
+@endTable
+
+
+@subsubsection xrc_wxribbonpage wxRibbonPage
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    Label (default: none).}
+@row3col{icon, @ref overview_xrcformat_type_bitmap,
+    Icon (default: none).}
+@endTable
+
+A wxRibbonPage may have children of any type derived from wxRibbonControl.
+Most commontly, wxRibbonPanel is used. As a special case, the @c panel
+pseudo-class may be used instead of @c wxRibbonPanel when used as wxRibbonPage
+children.
+
+
+@subsubsection xrc_wxribbonpanel wxRibbonPanel
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+    Label (default: none).}
+@row3col{icon, @ref overview_xrcformat_type_bitmap,
+    Icon (default: none).}
+@endTable
+
+A wxRibbonPanel may have children of any type derived from wxRibbonControl or
+a single wxSizer child with non-ribbon windows in it.
 
 
 @subsubsection xrc_wxrichtextctrl wxRichTextCtrl
