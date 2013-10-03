@@ -22,6 +22,9 @@
 This document describes the format of XRC resource files, as used by
 wxXmlResource.
 
+Formal description in the form of a RELAX NG schema is located in the
+@c misc/schema subdirectory of the wxWidgets sources.
+
 XRC file is a XML file with all of its elements in the
 @c http://www.wxwidgets.org/wxxrc namespace. For backward compatibility,
 @c http://www.wxwindows.org/wxxrc namespace is accepted as well (and treated
