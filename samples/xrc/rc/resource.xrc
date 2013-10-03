@@ -37,7 +37,7 @@
       <bitmap>update.gif</bitmap>
       <tooltip>Update catalog - synchronize it with sources</tooltip>
     </object>
-    <separator/>
+    <object class="separator"/>
     <object class="tool" name="menu_quotes">
       <bitmap>quotes.gif</bitmap>
       <toggle>1</toggle>
@@ -109,7 +109,6 @@
             </object>
             <label>Page 2</label>
           </object>
-          <usenotebooksizer>1</usenotebooksizer>
         </object>
         <flag>wxEXPAND</flag>
       </object>

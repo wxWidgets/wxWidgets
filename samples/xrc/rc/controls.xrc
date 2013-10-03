@@ -416,7 +416,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxGauge" name="controls_horizontal_gauge">
                                     <style>wxGA_SMOOTH</style>
                                     <size>100,-1</size>
-                                    <max>100</max>
+                                    <range>100</range>
                                     <value>50</value>
                                 </object>
                             </object>
@@ -433,7 +433,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <object class="wxGauge" name="controls_vertical_gauge">
                                     <style>wxGA_VERTICAL</style>
                                     <size>40,60</size>
-                                    <max>100</max>
+                                    <range>100</range>
                                     <value>40</value>
                                 </object>
                             </object>
@@ -472,6 +472,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <border>5</border>
                                 <object class="wxFileCtrl">
                                     <wildcard>Text files (*.txt)</wildcard>
+                                    <message>Choose file</message>
                                 </object>
                             </object>
                         </object>
@@ -1321,6 +1322,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                         <depth>1</depth>
                                         <image>1</image>
                                         <expanded>1</expanded>
+                                        <object class="wxPanel"/>
                                     </object>
                                     <object class="treebookpage">
                                         <label>Page 3</label>
