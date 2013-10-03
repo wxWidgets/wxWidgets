@@ -510,6 +510,8 @@ from properties lists below.
     wxWindow::SetOwnBackgroundColour() (default: none).}
 @row3col{enabled, @ref overview_xrcformat_type_bool,
     If set to 0, the control is disabled (default: 1).}
+@row3col{focused, @ref overview_xrcformat_type_bool,
+    If set to 1, the control has focus initially (default: 0).}
 @row3col{hidden, @ref overview_xrcformat_type_bool,
     If set to 1, the control is created hidden (default: 0).}
 @row3col{tooltip, @ref overview_xrcformat_type_text,
