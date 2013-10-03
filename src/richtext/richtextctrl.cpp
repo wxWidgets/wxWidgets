@@ -240,6 +240,11 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
                              const wxValidator& validator, const wxString& name)
 {
     style |= wxVSCROLL;
+    
+    // If read-only, the programmer probably wants to retain dialog keyboard navigation.
+    // If you don't, then pass wxWANTS_CHARS explicitly.
+    if ((style & wxTE_READONLY) == 0)
+        style |= wxWANTS_CHARS;
 
     if (!wxControl::Create(parent, id, pos, size,
                            style|wxFULL_REPAINT_ON_RESIZE,
