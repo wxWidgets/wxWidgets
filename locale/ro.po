@@ -42,7 +42,7 @@ msgstr " (copia %d din %d)"
 #: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
-msgstr " (eroare %ld: %s)"
+msgstr " (eroarea %ld: %s)"
 
 #: ../src/common/imagtiff.cpp:75
 #, c-format
@@ -374,7 +374,7 @@ msgstr "&Harddisk"
 #: ../src/richtext/richtextsizepage.cpp:351
 #: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
-msgstr "Î&naltime:"
+msgstr "Î&nălțime:"
 
 #: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
 #: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:785
@@ -725,7 +725,7 @@ msgstr "&Greutate:"
 #: ../src/richtext/richtextsizepage.cpp:317
 #: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
-msgstr "&Lațime:"
+msgstr "&Lățime:"
 
 #: ../src/aui/tabmdi.cpp:311 ../src/aui/tabmdi.cpp:327
 #: ../src/aui/tabmdi.cpp:329 ../src/generic/mdig.cpp:294
@@ -844,7 +844,7 @@ msgstr "+"
 
 #: ../src/msw/utils.cpp:1324
 msgid ", 64-bit edition"
-msgstr ", 64-bit"
+msgstr ", ediție 64-bit"
 
 #: ../src/richtext/richtextliststylepage.cpp:493
 #: ../src/richtext/richtextbulletspage.cpp:298
@@ -1150,14 +1150,12 @@ msgid "Add"
 msgstr "Adaugă"
 
 #: ../src/richtext/richtextbuffer.cpp:10751
-#, fuzzy
 msgid "Add Column"
-msgstr "Adauga coloană"
+msgstr "Adaugă coloană"
 
 #: ../src/richtext/richtextbuffer.cpp:10688
-#, fuzzy
 msgid "Add Row"
-msgstr "Adauga rând"
+msgstr "Adaugă rând"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1356,15 +1354,15 @@ msgstr "BACK"
 #: ../src/common/imagbmp.cpp:523 ../src/common/imagbmp.cpp:553
 #: ../src/common/imagbmp.cpp:568
 msgid "BMP: Couldn't allocate memory."
-msgstr "BMP: Nu s-a putut aloca memorie."
+msgstr "BMP: Nu a putut fi alocată memorie."
 
 #: ../src/common/imagbmp.cpp:97
 msgid "BMP: Couldn't save invalid image."
-msgstr "BMP: Nu s-a putut salva imaginea invalidă."
+msgstr "BMP: Nu a putut fi salvată imaginea invalidă."
 
 #: ../src/common/imagbmp.cpp:338
 msgid "BMP: Couldn't write RGB color map."
-msgstr "BMP: Nu s-a putut scrie harta RGB."
+msgstr "BMP: Nu a putut fi scrisă harta RGB."
 
 #: ../src/common/imagbmp.cpp:473
 msgid "BMP: Couldn't write data."
@@ -2590,12 +2588,10 @@ msgid "Delete A&ll"
 msgstr "Șter&ge tot"
 
 #: ../src/richtext/richtextbuffer.cpp:10637
-#, fuzzy
 msgid "Delete Column"
 msgstr "Șterge coloană"
 
 #: ../src/richtext/richtextbuffer.cpp:10587
-#, fuzzy
 msgid "Delete Row"
 msgstr "Șterge rând"
 
@@ -6216,9 +6212,8 @@ msgid "Symbol &font:"
 msgstr "&Font simbol:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
-msgstr "Simbol"
+msgstr "Simboluri"
 
 #: ../src/common/accelcmn.cpp:63
 msgid "TAB"
