@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Kaya Zeren <kayazeren@gmail.com>, 2013
+# Kaya Zeren <translator@zeron.net>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-01 19:04+0200\n"
-"PO-Revision-Date: 2013-09-11 11:50+0200\n"
-"Last-Translator: Çağrı Doğan <cagrid@hotmail.com>\n"
+"PO-Revision-Date: 2013-10-04 19:58+0200\n"
+"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
-"wxwidgets-1/language/tr_TR/)\n"
-"Language: tr_TR\n"
+"wxwidgets_unofficial/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: tr_TR\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.5.7\n"
 
@@ -1151,14 +1151,12 @@ msgid "Add"
 msgstr "Ekleyin"
 
 #: ../src/richtext/richtextbuffer.cpp:10751
-#, fuzzy
 msgid "Add Column"
-msgstr "Sütun ekleyin"
+msgstr "Sütun Ekleyin"
 
 #: ../src/richtext/richtextbuffer.cpp:10688
-#, fuzzy
 msgid "Add Row"
-msgstr "Satır ekleyin"
+msgstr "Satır Ekleyin"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -2577,14 +2575,12 @@ msgid "Delete A&ll"
 msgstr "Tümünü Si&lin"
 
 #: ../src/richtext/richtextbuffer.cpp:10637
-#, fuzzy
 msgid "Delete Column"
-msgstr "Sütunu silin"
+msgstr "Sütunu Silin"
 
 #: ../src/richtext/richtextbuffer.cpp:10587
-#, fuzzy
 msgid "Delete Row"
-msgstr "Satırı silin"
+msgstr "Satırı Silin"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
@@ -2930,7 +2926,7 @@ msgstr "Esperanto (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
 msgid "Estimated time:"
-msgstr "Tahmini süre:"
+msgstr "Öngörülen süre:"
 
 #: ../src/unix/fswatcher_inotify.cpp:639
 msgid "Event queue overflowed"
@@ -3476,7 +3472,7 @@ msgstr "'%s' kilit dosyasının izinleri ayarlanamadı"
 
 #: ../src/unix/utilsunx.cpp:674
 msgid "Failed to set process priority"
-msgstr "İşlem önceliği ayarlanamadı."
+msgstr "İşlem önceliği ayarlanamadı"
 
 #: ../src/common/file.cpp:576
 msgid "Failed to set temporary file permissions"
@@ -4179,7 +4175,7 @@ msgstr "Kurallı ifade geçersiz '%s': %s"
 #: ../src/common/config.cpp:226
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
-msgstr "Ayar dosyasındaki %ld değeri \"%s\" ikili anahtarı için geçersiz ."
+msgstr "Ayar dosyasındaki %ld değeri \"%s\" ikili anahtarı için geçersiz."
 
 #: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:333
 #: ../src/osx/carbon/fontdlg.cpp:547 ../src/common/stockitem.cpp:168
@@ -4472,8 +4468,7 @@ msgstr "Açık"
 #: ../src/generic/helpext.cpp:298
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
-msgstr ""
-"%lu satırında \"%s\" eşleştirme dosyasında sözdizimi hatası var, atlandı."
+msgstr "%lu. satır \"%s\" eşleştirme dosyasında sözdizimi hatası var, atlandı."
 
 #: ../src/richtext/richtextliststylepage.cpp:444
 msgid "Line spacing:"
@@ -6054,7 +6049,7 @@ msgstr "Eğik"
 
 #: ../src/richtext/richtextfontpage.cpp:298
 msgid "Small C&apitals"
-msgstr "&Küçük harfler"
+msgstr "Küçük H&arfler"
 
 #: ../src/richtext/richtextborderspage.cpp:543
 msgid "Solid"
@@ -6172,7 +6167,7 @@ msgstr "Sembol &yazı tipi:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
 msgid "Symbols"
-msgstr "İşaretler"
+msgstr "Simgeler"
 
 #: ../src/common/accelcmn.cpp:63
 msgid "TAB"
@@ -7465,7 +7460,7 @@ msgstr "'%s' dosyasına yazma hatası"
 #: ../src/xml/xml.cpp:844
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
-msgstr "XML işleme hatası: '%s' satır %d"
+msgstr "'%s' XML işleme hatası: Satır %d"
 
 #: ../src/common/xpmdecod.cpp:796
 msgid "XPM: Malformed pixel data!"
@@ -8416,42 +8411,3 @@ msgstr "zlib hatası %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr "~"
-
-#~ msgid "Print preview"
-#~ msgstr "Baskı önizleme"
-
-#~ msgid "'"
-#~ msgstr "'"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "6"
-#~ msgstr "6"
-
-#~ msgid "7"
-#~ msgstr "7"
-
-#~ msgid "8"
-#~ msgstr "8"
-
-#~ msgid "9"
-#~ msgstr "9"
-
-#~ msgid "Can't monitor non-existent path \"%s\" for changes."
-#~ msgstr "\"%s\" yolu bulunamadığından değişiklikleri izlenemiyor."
-
-#~ msgid "File system containing watched object was unmounted"
-#~ msgstr "İzlenen nesnenin içinde bulunduğu dosya sistemi çıkartıldı."
