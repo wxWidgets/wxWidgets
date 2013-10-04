@@ -9686,6 +9686,11 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
     wxArrayInt percentageColWidths;
     percentageColWidths.Add(0, m_colCount);
+
+    // The required width of a column calculated from the content, in case we don't specify any widths
+    wxArrayInt maxUnspecifiedColumnWidths;
+    maxUnspecifiedColumnWidths.Add(0, m_colCount);
+
     // wxArrayInt percentageColWidthsSpanning(m_colCount);
     // These are only relevant when the first column contains spanning information.
     // wxArrayInt columnSpans(m_colCount); // Each contains 1 for non-spanning cell, > 1 for spanning cell.
@@ -9865,6 +9870,8 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                         if (cell->GetMinSize().x > 0 && absoluteCellWidth !=1 && cell->GetMinSize().x > absoluteCellWidth)
                             absoluteCellWidth = cell->GetMinSize().x;
                     }
+                    else
+                        maxUnspecifiedColumnWidths[i] = wxMax(cell->GetMaxSize().x, maxUnspecifiedColumnWidths[i]);
 
                     if (absoluteCellWidth != -1)
                     {
@@ -9972,6 +9979,9 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                             // then we simply stop constraining the columns; instead, we'll just fit the spanning
                             // cells to the columns later.
                             cellWidth = cell->GetMinSize().x;
+
+                            maxUnspecifiedColumnWidths[i] = wxMax(cell->GetMaxSize().x, maxUnspecifiedColumnWidths[i]);
+
                             if (cell->GetMaxSize().x > cellWidth)
                                 cellWidth = cell->GetMaxSize().x;
                         }
@@ -10020,6 +10030,14 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                 }
             }
         }
+    }
+
+    // (3.1) if a column has zero width, make it the maximum unspecified width (i.e. using
+    // the cell's contents to calculate the width)
+    for (i = 0; i < m_colCount; i++)
+    {
+        if (colWidths[i] == 0)
+            colWidths[i] = maxUnspecifiedColumnWidths[i];
     }
 
     // (4) Next, share any remaining space out between columns that have not yet been calculated.
@@ -10085,16 +10103,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
         }
     }
 
-    // TODO: if spanned cells have no specified or max width, make them the
-    // as big as the columns they span. Do this for all spanned cells in all
-    // rows, of course. Size any spanned cells left over at the end - even if they
-    // have width > 0, make sure they're limited to the appropriate column edge.
-
-
 /*
-    Sort out confusion between content width
-    and overall width later. For now, assume we specify overall width.
-
     So, now we've laid out the table to fit into the given space
     and have used specified widths and minimum widths.
 
@@ -10219,18 +10228,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     {
         SetMinSize(GetCachedSize());
     }
-
-    // TODO: currently we use either a fixed table width or the parent's size.
-    // We also want to be able to calculate the table width from its content,
-    // whether using fixed column widths or cell content min/max width.
-    // Probably need a boolean flag to say whether we need to stretch cells
-    // to fit the table width, or to simply use min/max cell widths. The
-    // trouble with this is that if cell widths are not specified, they
-    // will be tiny; we could use arbitrary defaults but this seems unsatisfactory.
-    // Anyway, ignoring that problem, we probably need to factor layout into a function
-    // that can can calculate the maximum unconstrained layout in case table size is
-    // not specified. Then LayoutToBestSize() can choose to use either parent size to
-    // constrain Layout(), or the previously-calculated max size to constraint layout.
 
     return true;
 }
