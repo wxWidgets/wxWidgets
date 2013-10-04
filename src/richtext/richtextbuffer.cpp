@@ -13292,6 +13292,8 @@ int wxTextAttrDimensionConverter::GetPixels(const wxTextAttrDimension& dim, int 
         return ConvertTenthsMMToPixels(dim.GetValue());
     else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
         return dim.GetValue();
+    else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_POINTS)
+        return (int)((double(dim.GetValue()) * (double(m_ppi)/72.0)) + 0.5);
     else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
     {
         wxASSERT(m_parentSize != wxDefaultSize);
