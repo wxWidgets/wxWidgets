@@ -5388,7 +5388,7 @@ protected:
     A cell's appearance can be changed via its associated wxRichTextAttr; for example
     its size altered or its background colour set. It also has the properties of
     column- and row-span. By default these are 1, meaning that the cell only spans
-    itself, but can be increased using the SetColspan() and SetRowspan() methods.
+    itself, but can be increased using the SetColSpan() and SetRowSpan() methods.
     Attempts to set too large a span are silently truncated to the table edge.
  */
 
@@ -5432,9 +5432,9 @@ public:
         
         @since 2.9.5
         
-        @see SetColspan(), GetRowspan()
+        @see SetColSpan(), GetRowSpan()
     */
-    int GetColspan() const;
+    int GetColSpan() const;
 
     /**
         Set the number of columns spanned by the cell.
@@ -5444,9 +5444,9 @@ public:
         
         @since 2.9.5
         
-        @see GetColspan(), SetRowspan()
+        @see GetColSpan(), SetRowSpan()
     */
-    void SetColspan(long span);
+    void SetColSpan(long span);
 
     /**
         Returns the number of rows spanned by the cell.
@@ -5455,9 +5455,9 @@ public:
         
         @since 2.9.5
         
-        @see SetRowspan(), GetColspan()
+        @see SetRowSpan(), GetColSpan()
     */
-    int GetRowspan() const;
+    int GetRowSpan() const;
 
     /**
         Set the number of rows spanned by the cell.
@@ -5467,9 +5467,9 @@ public:
         
         @since 2.9.5
         
-        @see GetRowspan(), SetColspan()
+        @see GetRowSpan(), SetColSpan()
     */
-    void SetRowspan(long span);
+    void SetRowSpan(long span);
 
 // Operations
 

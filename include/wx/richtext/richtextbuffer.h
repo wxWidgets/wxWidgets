@@ -5595,13 +5595,13 @@ public:
 
 // Accessors
 
-    int GetColspan() const;
+    int GetColSpan() const;
 
-    void SetColspan(long span) { GetProperties().SetProperty(wxT("colspan"), span); }
+    void SetColSpan(long span) { GetProperties().SetProperty(wxT("colspan"), span); }
 
-    int GetRowspan() const;
+    int GetRowSpan() const;
 
-    void SetRowspan(long span) { GetProperties().SetProperty(wxT("rowspan"), span); }
+    void SetRowSpan(long span) { GetProperties().SetProperty(wxT("rowspan"), span); }
 
 // Operations
 

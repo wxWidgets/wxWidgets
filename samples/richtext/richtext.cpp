@@ -919,7 +919,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
-    m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL|wxWANTS_CHARS);
+    m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL/*|wxWANTS_CHARS*/);
     wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
 
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
@@ -1236,20 +1236,20 @@ void MyFrame::WriteInitialText()
         
         // Demonstrate colspan and rowspan
         wxRichTextCell* cell = table->GetCell(1, 0);
-        cell->SetColspan(2);
+        cell->SetColSpan(2);
         r.SetFocusObject(cell);
         cell->Clear();
         r.WriteText("This cell spans 2 columns");
         
         cell = table->GetCell(1, 3);
-        cell->SetRowspan(2);
+        cell->SetRowSpan(2);
         r.SetFocusObject(cell);
         cell->Clear();
         r.WriteText("This cell spans 2 rows");
 
         cell = table->GetCell(2, 1);
-        cell->SetColspan(2);
-        cell->SetRowspan(3);
+        cell->SetColSpan(2);
+        cell->SetRowSpan(3);
         r.SetFocusObject(cell);
         cell->Clear();
         r.WriteText("This cell spans 2 columns and 3 rows");
