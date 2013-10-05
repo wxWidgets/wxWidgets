@@ -142,6 +142,7 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     else if ( evType == wxEVT_MOUSEWHEEL )
     {
         m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
+        return true;
     }
 #endif
 #endif // wxUSE_MOUSEWHEEL
