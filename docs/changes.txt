@@ -597,6 +597,7 @@ wxMSW:
 
 wxOSX:
 
+- Improve handling of keyboard entry using IME (minoki).
 - Fix column sorting UI in wxDataViewCtrl (Myrsloik).
 
 
