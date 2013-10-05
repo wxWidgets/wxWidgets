@@ -10003,7 +10003,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     }
 
     // (2) Allocate initial column widths from minimum widths, absolute values and proportions
-    // TODO: simply merge this into (1).
     for (i = 0; i < m_colCount; i++)
     {
         if (absoluteColWidths[i] > 0)
@@ -10013,11 +10012,9 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
         else if (percentageColWidths[i] > 0)
         {
             colWidths[i] = percentageColWidths[i];
-
-            // This is rubbish - we calculated the absolute widths from percentages, so
-            // we can't do it again here.
-            //colWidths[i] = (int) (double(percentageColWidths[i]) * double(tableWidth) / 100.0 + 0.5);
         }
+        else
+            colWidths[i] = maxUnspecifiedColumnWidths[i];
     }
 
     // (3) Process absolute or proportional widths of spanning columns,
@@ -10090,8 +10087,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                             // cells to the columns later.
                             cellWidth = cell->GetMinSize().x;
 
-                            maxUnspecifiedColumnWidths[i] = wxMax(cell->GetMaxSize().x, maxUnspecifiedColumnWidths[i]);
-
                             if (cell->GetMaxSize().x > cellWidth)
                                 cellWidth = cell->GetMaxSize().x;
                         }
@@ -10140,14 +10135,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                 }
             }
         }
-    }
-
-    // (3.1) if a column has zero width, make it the maximum unspecified width (i.e. using
-    // the cell's contents to calculate the width)
-    for (i = 0; i < m_colCount; i++)
-    {
-        if (colWidths[i] == 0)
-            colWidths[i] = maxUnspecifiedColumnWidths[i];
     }
 
     // (4) Next, share any remaining space out between columns that have not yet been calculated.
