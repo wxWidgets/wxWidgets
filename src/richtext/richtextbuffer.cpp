@@ -6788,8 +6788,8 @@ bool wxRichTextPlainText::AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawi
     if (!attr.HasTextColour())
     {
         wxRichTextBuffer* buf = GetBuffer();
-        if (buf && buf->GetDefaultStyle().HasTextColour())
-            attr.SetTextColour(buf->GetDefaultStyle().GetTextColour());
+        if (buf && buf->GetBasicStyle().HasTextColour())
+            attr.SetTextColour(buf->GetBasicStyle().GetTextColour());
         else
             attr.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     }
