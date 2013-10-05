@@ -1195,12 +1195,12 @@ public:
     bool HasClearMode() const { return HasFlag(wxTEXT_BOX_ATTR_CLEAR); }
 
     /**
-        Returns the collapse mode - whether to collapse borders. Currently unimplemented.
+        Returns the collapse mode - whether to collapse borders.
     */
     wxTextBoxAttrCollapseMode GetCollapseBorders() const { return m_collapseMode; }
 
     /**
-        Sets the collapse mode - whether to collapse borders. Currently unimplemented.
+        Sets the collapse mode - whether to collapse borders.
     */
     void SetCollapseBorders(wxTextBoxAttrCollapseMode collapse) { m_collapseMode = collapse; m_flags |= wxTEXT_BOX_ATTR_COLLAPSE_BORDERS; }
 
@@ -2582,6 +2582,11 @@ public:
     virtual bool LayoutToBestSize(wxDC& dc, wxRichTextDrawingContext& context, wxRichTextBuffer* buffer,
                     const wxRichTextAttr& parentAttr, const wxRichTextAttr& attr,
                     const wxRect& availableParentSpace, const wxRect& availableContainerSpace, int style);
+
+    /**
+        Adjusts the attributes for virtual attribute provision, collapsed borders, etc.
+    */
+    virtual bool AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingContext& context);
 
     /**
         Sets the object's attributes.
@@ -5578,6 +5583,8 @@ public:
 
     virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
 
+    virtual bool AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingContext& context);
+
     virtual wxString GetXMLNodeName() const { return wxT("cell"); }
 
     virtual bool CanEditProperties() const { return true; }
@@ -5638,6 +5645,8 @@ public:
     virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
     virtual int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags = 0);
+
+    virtual bool AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingContext& context);
 
     virtual wxString GetXMLNodeName() const { return wxT("table"); }
 
