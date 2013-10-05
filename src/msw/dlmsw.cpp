@@ -250,7 +250,7 @@ void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 {
     return (void *)::GetProcAddress(handle,
 #ifdef __WXWINCE__
-                                            name.c_str()
+                                            name.t_str()
 #else
                                             name.ToAscii()
 #endif // __WXWINCE__
