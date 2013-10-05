@@ -744,17 +744,25 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         }
     }
 
-    if ((style & wxRESIZE_BORDER) == 0)
-        gtk_window_set_resizable(GTK_WINDOW(m_widget), false);
-#ifndef __WXGTK3__
-    else
-        gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
-#endif
-
     m_decorSize = GetCachedDecorSize();
     int w, h;
     GTKDoGetSize(&w, &h);
-    gtk_window_set_default_size(GTK_WINDOW(m_widget), w, h);
+
+    if (style & wxRESIZE_BORDER)
+    {
+        gtk_window_set_default_size(GTK_WINDOW(m_widget), w, h);
+#ifndef __WXGTK3__
+        gtk_window_set_policy(GTK_WINDOW(m_widget), 1, 1, 1);
+#endif
+    }
+    else
+    {
+        gtk_window_set_resizable(GTK_WINDOW(m_widget), false);
+        // gtk_window_set_default_size() does not work for un-resizable windows,
+        // unless you set the size hints, but that causes Ubuntu's WM to make
+        // the window resizable even though GDK_FUNC_RESIZE is not set.
+        gtk_widget_set_size_request(m_widget, w, h);
+    }
 
     return true;
 }
@@ -1120,6 +1128,8 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
         int w, h;
         GTKDoGetSize(&w, &h);
         gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+        if (!gtk_window_get_resizable(GTK_WINDOW(m_widget)))
+            gtk_widget_set_size_request(GTK_WIDGET(m_widget), w, h);
 
         DoGetClientSize(&m_clientWidth, &m_clientHeight);
         wxSizeEvent event(GetSize(), GetId());
@@ -1233,6 +1243,8 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const DecorSize& decorSize)
                 h >= m_minHeight - (decorSize.top + decorSize.bottom))
             {
                 gtk_window_resize(GTK_WINDOW(m_widget), w, h);
+                if (!gtk_window_get_resizable(GTK_WINDOW(m_widget)))
+                    gtk_widget_set_size_request(GTK_WIDGET(m_widget), w, h);
                 resized = true;
             }
         }
