@@ -6780,6 +6780,23 @@ bool wxRichTextPlainText::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     return true;
 }
 
+// Adjusts the attributes for virtual attribute provision, collapsed borders, etc.
+bool wxRichTextPlainText::AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingContext& context)
+{
+    wxRichTextObject::AdjustAttributes(attr, context);
+
+    if (!attr.HasTextColour())
+    {
+        wxRichTextBuffer* buf = GetBuffer();
+        if (buf && buf->GetDefaultStyle().HasTextColour())
+            attr.SetTextColour(buf->GetDefaultStyle().GetTextColour());
+        else
+            attr.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    }
+
+    return true;
+}
+
 /// Copy
 void wxRichTextPlainText::Copy(const wxRichTextPlainText& obj)
 {
