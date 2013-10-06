@@ -80,7 +80,10 @@ void wxBell()
         fileList.Add( wxCFStringRef::AsStringWithNormalizationFormC([fileNames objectAtIndex:i]) );
     }
 
-    wxTheApp->MacOpenFiles(fileList);
+    if ( wxTheApp->OSXInitWasCalled() )
+        wxTheApp->MacOpenFiles(fileList);
+    else
+        wxTheApp->OSXStoreOpenFiles(fileList);
 }
 
 - (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename
@@ -112,7 +115,6 @@ void wxBell()
            withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 {
     wxUnusedVar(replyEvent);
-    wxTheApp->MacNewFile() ;
 }
 
 /*
@@ -315,8 +317,18 @@ bool wxApp::CallOnInit()
 {
     wxMacAutoreleasePool autoreleasepool;
     m_onInitResult = false;
+    m_inited = false;
     [NSApp run];
-    return m_onInitResult; 
+    m_onInitResult = OnInit();
+    m_inited = true;
+    if ( m_onInitResult )
+    {
+        if ( m_openFiles.GetCount() > 0 )
+            MacOpenFiles(m_openFiles);
+        else
+            MacNewFile();
+    }
+    return m_onInitResult;
 }
 
 void wxApp::DoCleanUp()

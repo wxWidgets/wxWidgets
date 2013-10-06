@@ -153,9 +153,12 @@ public:
 
 private:
     bool                m_onInitResult;
+    bool                m_inited;
+    wxArrayString       m_openFiles;
     
 public:
-
+    bool                OSXInitWasCalled() { return m_inited; }
+    void                OSXStoreOpenFiles(const wxArrayString &files ) { m_openFiles = files ; }
 #endif
     
     // Hide the application windows the same as the system hide command would do it.
