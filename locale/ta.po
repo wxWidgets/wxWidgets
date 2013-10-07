@@ -3,16 +3,15 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-01 19:04+0200\n"
-"PO-Revision-Date: 2013-09-12 19:48+0530\n"
+"PO-Revision-Date: 2013-10-07 20:21+0530\n"
 "Last-Translator: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language-Team: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Poedit-Language: Tamil\n"
-"X-Poedit-Country: India\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -1146,12 +1145,10 @@ msgid "Add"
 msgstr "ஏற்றுக"
 
 #: ../src/richtext/richtextbuffer.cpp:10751
-#, fuzzy
 msgid "Add Column"
 msgstr "செங்குத்து வரிசையை சேர்க்கவும்"
 
 #: ../src/richtext/richtextbuffer.cpp:10688
-#, fuzzy
 msgid "Add Row"
 msgstr "கிடை வரிசையை சேர்க்கவும்"
 
@@ -2576,12 +2573,10 @@ msgid "Delete A&ll"
 msgstr "எல்லாவற்றையும் அழி"
 
 #: ../src/richtext/richtextbuffer.cpp:10637
-#, fuzzy
 msgid "Delete Column"
 msgstr "செங்குத்து வரிசையை அழிக்கவும்"
 
 #: ../src/richtext/richtextbuffer.cpp:10587
-#, fuzzy
 msgid "Delete Row"
 msgstr "கிடை வரிசையை அழிக்கவும்"
 
@@ -2792,15 +2787,15 @@ msgstr "செயலாக்குக"
 
 #: ../src/common/stockitem.cpp:154
 msgid "Edit"
-msgstr "தொகு"
+msgstr "தொகுக்கவும்"
 
 #: ../src/generic/editlbox.cpp:272
 msgid "Edit item"
-msgstr "உருப்படியை தொகு"
+msgstr "உருப்படியை தொகுக்கவும்"
 
 #: ../include/wx/generic/progdlgg.h:84
 msgid "Elapsed time:"
-msgstr "காலாவதியான நேரம்"
+msgstr "கடந்துள்ள நேரம்"
 
 #: ../src/richtext/richtextsizepage.cpp:353
 #: ../src/richtext/richtextsizepage.cpp:355
