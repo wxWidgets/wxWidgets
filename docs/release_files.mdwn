@@ -1,24 +1,15 @@
-wxWidgets 2.9.5
-===============
+wxWidgets 3.0.0-RC1
+===================
 
-This directory contains the files for wxWidgets 2.9.5 release.
+This directory contains the files for wxWidgets 3.0.0-rc1 release.
 
 Please notice that since the 2.9 series only a single source distribution is
 provided instead of the multiple distributions containing only the files for
-each port as was done before. So you only need to download wxWidgets-2.9.5.zip
+each port as was done before. So you only need to download wxWidgets-3.0.0.zip
 (or .7z for much smaller archive size) for Microsoft Windows systems or
-wxWidgets-2.9.5.tar.bz2 for Unix ones, including Mac OS X. The only difference
+wxWidgets-3.0.0.tar.bz2 for Unix ones, including Mac OS X. The only difference
 between these files is that the ZIP (and 7z) archives contain files with DOS
 line endings while the tar balls contain files with Unix line endings.
-
-
-Note for Windows users: as an experiment, we also provide, for the first time,
-pre-built binaries of wxMSW port built using several versions of Microsoft
-Visual C++ compiler. They are available from the `binaries` subdirectory.
-Please notice that the files in this directory, including
-wxWidgets-2.9.5-Setup.exe file, contain *only* the sources and do **not**
-include any binaries, so you will need to build the library after downloading
-them. Please see `docs/msw/install.txt` for instructions.
 
 
 Reporting Problems
@@ -33,10 +24,10 @@ Check Sums
 
 To verify your download you can use the following sha1sums:
 
-    ad2eface716d8677b8909e39df395cf4c05943e7  wxWidgets-2.9.5.7z
-    0bab57ecd6d065a3672ec5fbb09d287456727ea4  wxWidgets-2.9.5.tar.bz2
-    a572f210f95b91c1a4790eb941b76375f595730a  wxWidgets-2.9.5.zip
-    970502ab3c01077df82823955d607a416bb3b44e  wxWidgets-2.9.5-docs-chm.zip
-    bfb24630370fda10dd7f0e6e8fb30bc62c74ec90  wxWidgets-2.9.5-docs-html.tar.bz2
-    0b549beb0c503abb70f3a688cc1e63263f2568d1  wxWidgets-2.9.5-docs-html.zip
-    dc4439303e615b960f712fa97378dd11437726bc  wxMSW-2.9.5-Setup.exe
+    0b6f7fbac35c4e923cc7fa73e9c8d8ad3dd8e085  wxWidgets-3.0.0-rc1.7z
+    ae15323ae8c7682f65d9bf58e2ae3fff0af5e816  wxWidgets-3.0.0-rc1.tar.bz2
+    ca272772d9d5c59372ca976375da600e2d7fc2ee  wxWidgets-3.0.0-rc1.zip
+    f344ffa557a5b24b85b612f08f6fae2cf9ca336f  wxWidgets-3.0.0-rc1-docs-chm.zip
+    4f120cbbdffd7b837cb1afdfa5f4a4fbe1c160b4  wxWidgets-3.0.0-rc1-docs-html.tar.bz2
+    8ba6522c78b77bb0d3a8fbea6c4f4d0e11ec8d24  wxWidgets-3.0.0-rc1-docs-html.zip
+    2334dbd62b137957d31a529ab44fab25ce040320  wxWidgets-3.0.0-rc1_headers.7z
