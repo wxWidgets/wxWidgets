@@ -535,9 +535,12 @@ Major new features in this release
 - wxWidgets may now use either wchar_t (UTF-16/32) or UTF-8 internally,
   depending on what is optimal for the target platform.
 
+- New webview library, implementing wxWebView: a wrapper for the native
+  platform web engine with full support for HTML and JavaScript.
+
 - New propgrid library containing wxPropertyGrid and related classes.
 
-- new ribbon library for advanced toolbars.
+- New ribbon library for advanced toolbars.
 
 - Many enhancements to wxDataViewCtrl.
 
