@@ -119,7 +119,10 @@ void wxBell()
     wxUnusedVar(replyEvent);
     NSString* url = [[event descriptorAtIndex:1] stringValue];
     wxCFStringRef cf(wxCFRetain(url));
-    wxTheApp->MacOpenURL(cf.AsString()) ;
+    if ( wxTheApp->OSXInitWasCalled() )
+        wxTheApp->MacOpenURL(cf.AsString()) ;
+    else
+        wxTheApp->OSXStoreOpenURL(cf.AsString());
 }
 
 - (void)handleOpenAppEvent:(NSAppleEventDescriptor *)event
