@@ -1,13 +1,13 @@
-July 15, 2013 -- The wxWidgets team is pleased to announce the
-latest 2.9.5 release of wxWidgets library.
+October 7, 2013 -- The wxWidgets team is pleased to announce the
+first release candidate release of wxWidgets 3.0.
 
-wxWidgets 2.9.5 is available at
+wxWidgets 3.0-RC1 is available at
 
-        https://sourceforge.net/downloads/wxwindows/2.9.5/
+        https://sourceforge.net/downloads/wxwindows/3.0.0-rc1/
 
-and soon will also appear at our FTP mirror at
+and at our FTP mirror at
 
-        ftp://ftp.wxwidgets.org/pub/2.9.5/
+        ftp://ftp.wxwidgets.org/pub/3.0.0-rc1/
 
 Please choose the archive format suitable for your platform, i.e. 7z
 or ZIP for Windows platforms and tar.bz2 for the Unix systems
@@ -17,37 +17,26 @@ readme.txt file for installing it. Notice that if you decide to use
 the Windows installer (.exe file) you still need to build wxWidgets
 as only sources, not binaries, are installed.
 
-However, for the first time ever, we also experimentally provide the
-pre-built versions of wxMSW libraries built with several versions of
-Microsoft Visual C++ compiler. You can download them from
+We also provide the pre-built versions of wxMSW libraries for the
+selected compilers at
 
-        https://sourceforge.net/downloads/wxwindows/2.9.5/binaries/
+        https://sourceforge.net/downloads/wxwindows/3.0.0/binaries/
+
+Notice that 3.0-RC1 does NOT include the binaries, they will be only
+available for the final 3.0 release.
 
 Please see the README file there for the descriptions of the
 individual files.
 
 
-This release mostly focuses on bug fixes in preparation for 3.0
-release, in particular there were a lot of improvements in wxOSX/Cocoa
-port. Some of other noteworthy changes were:
-
-- Introduction of short event names (e.g. wxEVT_BUTTON instead of
-  wxEVT_COMMAND_BUTTON_SELECTED) to make the code using Bind() for
-  dynamic event handling easier to both write and read.
-- Support for hooking any modal dialogs shown by wxWidgets, which is
-  especially used for non-interactive testing.
-- New wxSimplebook class.
-- Many enhancements in wxWebView and related classes.
-- Addition of special files support to wxFileName under Unix.
-
-
-
-The list of of changes since the 2.8 series is much too long to be
-listed here but the most important ones are:
+This release is a culmination of several years of development since
+the last stable 2.8 release. There are too many changes to be listed
+here, but the most important ones are:
 
 - Completely overhauled Unicode support which is much easier to use.
 - New Cocoa-based wxOSX port for Mac OS X for both 32 and 64 bits.
 - New wxGTK3 port, including support for Broadway (HTML5) backend.
+- Access to the native web rendering engine with wxWebView.
 - New property grid and ribbon libraries are now included in wxWidgets.
 - Better interoperability with standard library classes.
 - Totally revised and more readable manual.
@@ -55,27 +44,20 @@ listed here but the most important ones are:
 
 Please see the changes.txt file in the "docs" subdirectory of
 wxWidgets distribution or also available online at
-https://sourceforge.net/projects/wxwindows/files/2.9.5/changes.txt
+https://sourceforge.net/projects/wxwindows/files/3.0.0-rc1/changes.txt
 for more details and please read the "INCOMPATIBLE CHANGES" section
 in its beginning for a brief description of changes if you are
 upgrading from wxWidgets 2.8. For more details, please see
-http://docs.wxwidgets.org/2.9.5/overview_changes_since28.html
+http://docs.wxwidgets.org/3.0.0/overview_changes_since28.html
 
 
-Note about naming: while 2.9.5 is called a "development" release,
-this only means that API is not guaranteed to remain unchanged in
-the subsequent 2.9.x releases (although it is very unlikely to change
-in incompatible ways at this stage), unlike in the stable 2.8.x branch
-where source and binary compatibility is always preserved between the
-different micro releases. We believe the current version is stable and
-suitable for use in production environment and recommend using it for
-any new projects using wxWidgets.
+Please test this release candidate version to help us with making the
+final 3.0 release as problem-free as possible. We are especially
+looking forward to your feedback about the changes in this release
+compared to 2.8 version if you're upgrading. Please let us know about
+any regressions (http://trac.wxwidgets.org/newticket) so that we could
+fix them in the upcoming 3.0.
 
-We are especially looking forward to your feedback about the changes
-in this release compared to 2.8 version if you're upgrading. Please
-let us know about any regressions (http://trac.wxwidgets.org/newticket)
-so that we could fix them in the upcoming 3.0. Thanks in advance!
-
- Enjoy!
+ Thanks in advance!
 
 Vadim Zeitlin, on behalf of wxWidgets development team.

@@ -560,8 +560,8 @@ Major new features in this release
   was added.
 
 
-3.0: (released 2013-09-??)
---------------------------
+3.0-RC1: (released 2013-10-07)
+------------------------------
 
 All:
 

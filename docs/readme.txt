@@ -1,5 +1,5 @@
-               wxWidgets 3.0.0 Release Notes
-               =============================
+               wxWidgets 3.0-RC1 Release Notes
+               ===============================
 
 Welcome to the latest release of wxWidgets, a free cross-platform C++
 framework for writing advanced GUI applications using native controls.
