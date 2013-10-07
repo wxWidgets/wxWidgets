@@ -352,6 +352,26 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
         if (dt2.IsEarlierThan(dt1))
             return -1;
     }
+    else if (value1.GetType() == wxT("bool"))
+    {
+        bool b1 = value1.GetBool();
+        bool b2 = value2.GetBool();
+
+        if (b1 != b2)
+            return b1 ? 1 : -1;
+    }
+    else if (value1.GetType() == wxT("wxDataViewIconText"))
+    {
+        wxDataViewIconText iconText1, iconText2;
+
+        iconText1 << value1;
+        iconText2 << value2;
+
+        int res = iconText1.GetText().Cmp(iconText2.GetText());
+        if (res != 0)
+          return res;
+    }
+
 
     // items must be different
     wxUIntPtr id1 = wxPtrToUInt(item1.GetID()),
