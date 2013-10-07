@@ -330,27 +330,28 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
     {
         long l1 = value1.GetLong();
         long l2 = value2.GetLong();
-        long res = l1-l2;
-        if (res)
-            return res;
+        if (l1 < l2)
+            return -1;
+        else if (l1 > l2)
+            return 1;
     }
     else if (value1.GetType() == wxT("double"))
     {
         double d1 = value1.GetDouble();
         double d2 = value2.GetDouble();
         if (d1 < d2)
-            return 1;
-        if (d1 > d2)
             return -1;
+        else if (d1 > d2)
+            return 1;
     }
     else if (value1.GetType() == wxT("datetime"))
     {
         wxDateTime dt1 = value1.GetDateTime();
         wxDateTime dt2 = value2.GetDateTime();
         if (dt1.IsEarlierThan(dt2))
-            return 1;
-        if (dt2.IsEarlierThan(dt1))
             return -1;
+        if (dt2.IsEarlierThan(dt1))
+            return 1;
     }
     else if (value1.GetType() == wxT("bool"))
     {
