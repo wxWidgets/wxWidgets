@@ -565,6 +565,7 @@ All:
 - Adjust dates invalid due to DST consistently under all platforms in wxDateTime.
 - Allow using custom HTTP methods with wxHTTP (Kolya Kosenko).
 - Add wxFileName::SetPermissions() (Catalin Raceanu).
+- Add specific wxFSW_WARNING_OVERFLOW warning type (Rob Bresalier).
 - Fix build with wxUSE_FFILE==0 (jroemmler).
 - Add wxDEPRECATED_MSG() and use it in a few places.
 - Return the old file descriptor/pointer from wx(F)File::Detach() (troelsk).
