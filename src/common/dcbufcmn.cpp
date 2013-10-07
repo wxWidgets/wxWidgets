@@ -148,7 +148,7 @@ void wxBufferedDC::UnMask()
     int width = m_area.GetWidth(),
         height = m_area.GetHeight();
 
-    if (! m_style & wxBUFFER_VIRTUAL_AREA)
+    if (!(m_style & wxBUFFER_VIRTUAL_AREA))
     {
         int widthDC,
             heightDC;
