@@ -86,12 +86,23 @@ void wxBell()
         wxTheApp->OSXStoreOpenFiles(fileList);
 }
 
-- (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename
+- (NSApplicationPrintReply)application:(NSApplication *)sender printFiles:(NSArray *)fileNames withSettings:(NSDictionary *)printSettings showPrintPanels:(BOOL)showPrintPanels
 {
     wxUnusedVar(sender);
-    wxCFStringRef cf(wxCFRetain(filename));
-    wxTheApp->MacPrintFile(cf.AsString()) ;
-    return YES;
+    wxArrayString fileList;
+    size_t i;
+    const size_t count = [fileNames count];
+    for (i = 0; i < count; i++)
+    {
+        fileList.Add( wxCFStringRef::AsStringWithNormalizationFormC([fileNames objectAtIndex:i]) );
+    }
+    
+    if ( wxTheApp->OSXInitWasCalled() )
+        wxTheApp->MacPrintFiles(fileList);
+    else
+        wxTheApp->OSXStorePrintFiles(fileList);
+    
+    return NSPrintingSuccess;
 }
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
@@ -325,6 +336,10 @@ bool wxApp::CallOnInit()
     {
         if ( m_openFiles.GetCount() > 0 )
             MacOpenFiles(m_openFiles);
+        else if ( m_printFiles.GetCount() > 0 )
+            MacPrintFiles(m_printFiles);
+        else if ( m_getURL.Len() > 0 )
+            MacOpenURL(m_getURL);
         else
             MacNewFile();
     }
