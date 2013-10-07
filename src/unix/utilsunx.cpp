@@ -627,7 +627,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
     //  1. wxPRIORITY_{MIN,DEFAULT,MAX} map to -20, 0 and 19 respectively.
     //  2. The mapping is monotonously increasing.
     //  3. The mapping is onto the target range.
-    int prio = process ? process->GetPriority() : 0;
+    int prio = process ? process->GetPriority() : wxPRIORITY_DEFAULT;
     if ( prio <= 50 )
         prio = (2*prio)/5 - 20;
     else if ( prio < 55 )
