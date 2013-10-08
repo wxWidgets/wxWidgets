@@ -1147,6 +1147,8 @@
 		B198DA8239E9358A9D56B989 /* menu_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 66C21CA37BF63893887FD91B /* menu_osx.cpp */; };
 		B1E30CF6CFA932F5A3DBA94F /* docview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB634FD597793A74B3B3AA7F /* docview.cpp */; };
 		B1E30CF6CFA932F5A3DBA950 /* docview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB634FD597793A74B3B3AA7F /* docview.cpp */; };
+		B20B7313102232A4B3E01ABA /* threadinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE40B073C95D3A7497952D8F /* threadinfo.cpp */; };
+		B20B7313102232A4B3E01ABB /* threadinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE40B073C95D3A7497952D8F /* threadinfo.cpp */; };
 		B30D10F6257631B0A1926F89 /* statbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 926BDF9C386C3A9A8C24D453 /* statbox.mm */; };
 		B30D10F6257631B0A1926F8A /* statbox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 926BDF9C386C3A9A8C24D453 /* statbox.mm */; };
 		B37802B0A90133C68EF93DDA /* LexInno.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 15CBD0AAFEB435429EA96D41 /* LexInno.cxx */; };
@@ -2399,6 +2401,7 @@
 		DDE22D7DDAC93DCABAE5AED0 /* socketiohandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = socketiohandler.cpp; path = ../../src/common/socketiohandler.cpp; sourceTree = "<group>"; };
 		DE16011AD6323AAC8616F973 /* stdstream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdstream.cpp; path = ../../src/common/stdstream.cpp; sourceTree = "<group>"; };
 		DE35DFD2063632AA8FE50C89 /* statline_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = statline_osx.cpp; path = ../../src/osx/statline_osx.cpp; sourceTree = "<group>"; };
+		DE40B073C95D3A7497952D8F /* threadinfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = threadinfo.cpp; path = ../../src/common/threadinfo.cpp; sourceTree = "<group>"; };
 		DE8238DA30FF3FB984511250 /* sckaddr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sckaddr.cpp; path = ../../src/common/sckaddr.cpp; sourceTree = "<group>"; };
 		DE8701E1CF2B352B945C17E5 /* valtext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = valtext.cpp; path = ../../src/common/valtext.cpp; sourceTree = "<group>"; };
 		DE9DBF06A1F43EF2B26445D5 /* dcsvg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dcsvg.cpp; path = ../../src/common/dcsvg.cpp; sourceTree = "<group>"; };
@@ -3530,6 +3533,7 @@
 				C0F7BBD216853E718C9F23D9 /* tarstrm.cpp */,
 				701B84EE7C043B539FF5195A /* textbuf.cpp */,
 				0903EE9B3793303285FF96E3 /* textfile.cpp */,
+				DE40B073C95D3A7497952D8F /* threadinfo.cpp */,
 				5B9586328A1F3C4BA0390AA5 /* time.cpp */,
 				7195E665E0F233839B967FC9 /* timercmn.cpp */,
 				0401B7302088357BB6B7F16F /* timerimpl.cpp */,
@@ -4101,6 +4105,7 @@
 				9FB1E1763EFA334CA0C07C4A /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5423 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2E /* textfile.cpp in Sources */,
+				B20B7313102232A4B3E01ABB /* threadinfo.cpp in Sources */,
 				98AD7D0478BA36249B03C624 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002E /* timercmn.cpp in Sources */,
 				729091CC33C73C989B4E071A /* timerimpl.cpp in Sources */,
@@ -4936,6 +4941,7 @@
 				9FB1E1763EFA334CA0C07C49 /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5422 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2D /* textfile.cpp in Sources */,
+				B20B7313102232A4B3E01ABA /* threadinfo.cpp in Sources */,
 				98AD7D0478BA36249B03C623 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002D /* timercmn.cpp in Sources */,
 				729091CC33C73C989B4E0719 /* timerimpl.cpp in Sources */,
