@@ -2545,10 +2545,12 @@ bool wxWindowMac::OSXHandleClicked( double WXUNUSED(timestampsec) )
     return false;
 }
 
+#if wxOSX_USE_COCOA_OR_IPHONE
 void *wxWindowMac::OSXGetViewOrWindow() const
 {
     return GetHandle();
 }
+#endif
 
 wxInt32 wxWindowMac::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF event )
 {

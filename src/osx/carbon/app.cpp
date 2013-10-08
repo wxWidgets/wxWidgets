@@ -242,7 +242,7 @@ short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF WXUNUSED(reply)
             return err;
         
         fName = wxMacFSRefToPath( &theRef ) ;
-        files += fName;
+        fileNames.Add( fName );
     }
     
     MacPrintFiles(fileNames);
