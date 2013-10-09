@@ -23,10 +23,6 @@ platforms and ports.
 
 @section page_port_wxgtk wxGTK
 
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_gtk.png
-@htmlonly</div>@endhtmlonly
-
 wxGTK is a port of wxWidgets using the GTK+ library. It makes use of GTK+'s
 native widgets wherever possible and uses wxWidgets' generic controls when
 needed. GTK+ itself has been ported to a number of systems, but so far only the
@@ -63,10 +59,6 @@ distribution.
 
 
 @section page_port_wxosx wxOSX
-
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_osxleopard.png
-@htmlonly</div>@endhtmlonly
 
 @subsection page_port_wxosx_carbon wxOSX/Carbon
 
@@ -122,10 +114,6 @@ in the distribution.
 
 @section page_port_wxx11 wxX11
 
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_x11.png
-@htmlonly</div>@endhtmlonly
-
 wxX11 is a port of wxWidgets using X11 (The X Window System) as the underlying
 graphics backend. wxX11 draws its widgets using the wxUniversal widget set
 which is now part of wxWidgets. wxX11 is well-suited for a number of special
@@ -144,10 +132,6 @@ applications on the wxWidgets web site.
 
 @section page_port_wxmotif wxMotif
 
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_motif.png
-@htmlonly</div>@endhtmlonly
-
 wxMotif is a port of wxWidgets for X11 systems using Motif libraries. Motif
 libraries provide a clean and fast user interface at the expense of the beauty
 and candy of newer interfaces like GTK.
@@ -158,10 +142,6 @@ distribution.
 
 
 @section page_port_wxmsw wxMSW
-
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_win.png
-@htmlonly</div>@endhtmlonly
 
 wxMSW is a port of wxWidgets for the Windows platforms including Windows 95,
 98, ME, 2000, NT, XP and Vista in ANSI and Unicode modes (for Windows 9x and ME
