@@ -14,7 +14,7 @@
     <scheduler>trunk_quick</scheduler>
     <steps>
         <checkout/>
-        <configure options="--enable-compat28 --enable-debug --with-libpng=builtin"/>
+        <configure options="--enable-compat28 --enable-debug"/>
         <compile-all/>
         <run-tests/>
     </steps>
