@@ -720,6 +720,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) )
     {
         m_gdkDecor = 0;
+        gtk_window_set_decorated(GTK_WINDOW(m_widget), false);
     }
     else // have border
     {
@@ -727,6 +728,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
         if ( style & wxCAPTION )
             m_gdkDecor |= GDK_DECOR_TITLE;
+#if defined(GDK_WINDOWING_WAYLAND) && GTK_CHECK_VERSION(3,10,0)
+        else if (
+            GDK_IS_WAYLAND_SCREEN(gtk_window_get_screen(GTK_WINDOW(m_widget))) &&
+            gtk_check_version(3,10,0) == NULL)
+        {
+            gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
+        }
+#endif
 
         if ( style & wxSYSTEM_MENU )
             m_gdkDecor |= GDK_DECOR_MENU;
