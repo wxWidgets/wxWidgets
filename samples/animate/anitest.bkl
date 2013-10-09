@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <makefile>
 
-    <include file="../../../build/bakefiles/common_samples.bkl"/>
+    <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="anitest" template="wx_sample" template_append="wx_append">
         <sources>anitest.cpp</sources>
