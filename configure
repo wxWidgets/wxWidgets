@@ -985,12 +985,10 @@ Xxf86vm_LIBS
 Xxf86vm_CFLAGS
 Xinerama_LIBS
 Xinerama_CFLAGS
-PANGOXFT_LIBS
-PANGOXFT_CFLAGS
 PANGOFT2_LIBS
 PANGOFT2_CFLAGS
-PANGOX_LIBS
-PANGOX_CFLAGS
+PANGOXFT_LIBS
+PANGOXFT_CFLAGS
 X_EXTRA_LIBS
 X_LIBS
 X_PRE_LIBS
@@ -1389,12 +1387,10 @@ PKG_CONFIG
 DIRECTFB_CFLAGS
 DIRECTFB_LIBS
 XMKMF
-PANGOX_CFLAGS
-PANGOX_LIBS
-PANGOFT2_CFLAGS
-PANGOFT2_LIBS
 PANGOXFT_CFLAGS
 PANGOXFT_LIBS
+PANGOFT2_CFLAGS
+PANGOFT2_LIBS
 Xinerama_CFLAGS
 Xinerama_LIBS
 Xxf86vm_CFLAGS
@@ -2373,17 +2369,14 @@ Some influential environment variables:
   DIRECTFB_LIBS
               linker flags for DIRECTFB, overriding pkg-config
   XMKMF       Path to xmkmf, Makefile generator for X Window System
-  PANGOX_CFLAGS
-              C compiler flags for PANGOX, overriding pkg-config
-  PANGOX_LIBS linker flags for PANGOX, overriding pkg-config
-  PANGOFT2_CFLAGS
-              C compiler flags for PANGOFT2, overriding pkg-config
-  PANGOFT2_LIBS
-              linker flags for PANGOFT2, overriding pkg-config
   PANGOXFT_CFLAGS
               C compiler flags for PANGOXFT, overriding pkg-config
   PANGOXFT_LIBS
               linker flags for PANGOXFT, overriding pkg-config
+  PANGOFT2_CFLAGS
+              C compiler flags for PANGOFT2, overriding pkg-config
+  PANGOFT2_LIBS
+              linker flags for PANGOFT2, overriding pkg-config
   Xinerama_CFLAGS
               C compiler flags for Xinerama, overriding pkg-config
   Xinerama_LIBS
@@ -25648,20 +25641,20 @@ fi
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PANGOX" >&5
-$as_echo_n "checking for PANGOX... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PANGOXFT" >&5
+$as_echo_n "checking for PANGOXFT... " >&6; }
 
 if test -n "$PKG_CONFIG"; then
-    if test -n "$PANGOX_CFLAGS"; then
-        pkg_cv_PANGOX_CFLAGS="$PANGOX_CFLAGS"
+    if test -n "$PANGOXFT_CFLAGS"; then
+        pkg_cv_PANGOXFT_CFLAGS="$PANGOXFT_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangox\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "pangox") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangoxft\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "pangoxft") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_PANGOX_CFLAGS=`$PKG_CONFIG --cflags "pangox" 2>/dev/null`
+  pkg_cv_PANGOXFT_CFLAGS=`$PKG_CONFIG --cflags "pangoxft" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -25670,16 +25663,16 @@ else
 	pkg_failed=untried
 fi
 if test -n "$PKG_CONFIG"; then
-    if test -n "$PANGOX_LIBS"; then
-        pkg_cv_PANGOX_LIBS="$PANGOX_LIBS"
+    if test -n "$PANGOXFT_LIBS"; then
+        pkg_cv_PANGOXFT_LIBS="$PANGOXFT_LIBS"
     else
         if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangox\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "pangox") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangoxft\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "pangoxft") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_PANGOX_LIBS=`$PKG_CONFIG --libs "pangox" 2>/dev/null`
+  pkg_cv_PANGOXFT_LIBS=`$PKG_CONFIG --libs "pangoxft" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -25698,31 +25691,33 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        PANGOX_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "pangox"`
+	        PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "pangoxft"`
         else
-	        PANGOX_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangox"`
+	        PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangoxft"`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$PANGOX_PKG_ERRORS" >&5
+	echo "$PANGOXFT_PKG_ERRORS" >&5
 
 
-                    as_fn_error $? "pangox library not found, library cannot be compiled in Unicode mode" "$LINENO" 5
+                    as_fn_error $? "pangoxft library not found, library cannot be compiled in Unicode mode" "$LINENO" 5
 
 
 elif test $pkg_failed = untried; then
 
-                    as_fn_error $? "pangox library not found, library cannot be compiled in Unicode mode" "$LINENO" 5
+                    as_fn_error $? "pangoxft library not found, library cannot be compiled in Unicode mode" "$LINENO" 5
 
 
 else
-	PANGOX_CFLAGS=$pkg_cv_PANGOX_CFLAGS
-	PANGOX_LIBS=$pkg_cv_PANGOX_LIBS
+	PANGOXFT_CFLAGS=$pkg_cv_PANGOXFT_CFLAGS
+	PANGOXFT_LIBS=$pkg_cv_PANGOXFT_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                    CFLAGS="$PANGOX_CFLAGS $CFLAGS"
-                    CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
+                    $as_echo "#define HAVE_PANGO_XFT 1" >>confdefs.h
+
+                    CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
+                    CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
 
 fi
 
@@ -25809,90 +25804,6 @@ $as_echo "yes" >&6; }
 
 fi
 
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for PANGOXFT" >&5
-$as_echo_n "checking for PANGOXFT... " >&6; }
-
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PANGOXFT_CFLAGS"; then
-        pkg_cv_PANGOXFT_CFLAGS="$PANGOXFT_CFLAGS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangoxft\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "pangoxft") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_PANGOXFT_CFLAGS=`$PKG_CONFIG --cflags "pangoxft" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-if test -n "$PKG_CONFIG"; then
-    if test -n "$PANGOXFT_LIBS"; then
-        pkg_cv_PANGOXFT_LIBS="$PANGOXFT_LIBS"
-    else
-        if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"pangoxft\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "pangoxft") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_PANGOXFT_LIBS=`$PKG_CONFIG --libs "pangoxft" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
-    fi
-else
-	pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "pangoxft"`
-        else
-	        PANGOXFT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "pangoxft"`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PANGOXFT_PKG_ERRORS" >&5
-
-
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&5
-$as_echo "$as_me: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&2;}
-
-
-elif test $pkg_failed = untried; then
-
-                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&5
-$as_echo "$as_me: WARNING: pangoxft library not found, library will be compiled without anti-aliasing support" >&2;}
-
-
-else
-	PANGOXFT_CFLAGS=$pkg_cv_PANGOXFT_CFLAGS
-	PANGOXFT_LIBS=$pkg_cv_PANGOXFT_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-
-                    $as_echo "#define HAVE_PANGO_XFT 1" >>confdefs.h
-
-                    CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
-                    CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
-
-fi
-            save_LIBS="$LIBS"
-            LIBS="$LIBS $PANGOX_LIBS"
             for ac_func in pango_font_family_is_monospace
 do :
   ac_fn_c_check_func "$LINENO" "pango_font_family_is_monospace" "ac_cv_func_pango_font_family_is_monospace"
@@ -25904,7 +25815,6 @@ _ACEOF
 fi
 done
 
-            LIBS="$save_LIBS"
         fi
 
         wxUSE_UNIVERSAL="yes"

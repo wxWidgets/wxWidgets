@@ -30,10 +30,7 @@
 
 #if wxUSE_UNICODE
 #include "glib.h"
-#include "pango/pangox.h"
-#ifdef HAVE_PANGO_XFT
-    #include "pango/pangoxft.h"
-#endif
+#include "pango/pangoxft.h"
 
 #include "pango_x.cpp"
 #endif
