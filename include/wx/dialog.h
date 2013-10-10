@@ -434,7 +434,7 @@ void wxDialogBase::ShowWindowModalThenDo(const Functor& onEndModal)
     Bind(wxEVT_WINDOW_MODAL_DIALOG_CLOSED,
          wxWindowModalDialogEventFunctor<Functor>(onEndModal));
     ShowWindowModal();
-};
+}
 #endif // wxHAS_EVENT_BIND
 
 #endif
