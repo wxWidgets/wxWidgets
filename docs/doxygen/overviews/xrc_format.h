@@ -2251,8 +2251,8 @@ class-specific properties. All classes support the following properties:
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{rows, integer, Number of rows in the grid (default: 0 - determine automatically).}
-@row3col{cols, integer, Number of columns in the grid (default: 0 - determine automatically).}
+@row3col{rows, unsigned integer, Number of rows in the grid (default: 0 - determine automatically).}
+@row3col{cols, unsigned integer, Number of columns in the grid (default: 0 - determine automatically).}
 @row3col{vgap, @ref overview_xrcformat_type_dimension, Vertical gap between children (default: 0).}
 @row3col{hgap, @ref overview_xrcformat_type_dimension, Horizontal gap between children (default: 0).}
 @endTable
@@ -2261,8 +2261,8 @@ class-specific properties. All classes support the following properties:
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{rows, integer, Number of rows in the grid (default: 0 - determine automatically).}
-@row3col{cols, integer, Number of columns in the grid (default: 0 - determine automatically).}
+@row3col{rows, unsigned integer, Number of rows in the grid (default: 0 - determine automatically).}
+@row3col{cols, unsigned integer, Number of columns in the grid (default: 0 - determine automatically).}
 @row3col{vgap, @ref overview_xrcformat_type_dimension, Vertical gap between children (default: 0).}
 @row3col{hgap, @ref overview_xrcformat_type_dimension, Horizontal gap between children (default: 0).}
 @row3col{flexibledirection, @ref overview_xrcformat_type_style,

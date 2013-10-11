@@ -397,6 +397,7 @@ t_text       = string
 t_string     = string
 t_bool       = "1" | "0"
 t_integer    = xsd:integer
+t_unsigned   = xsd:nonNegativeInteger
 t_float      = xsd:float
 t_direction  = "wxLEFT" | "wxRIGHT" | "wxTOP" | "wxBOTTOM"
 t_style      = xsd:string { pattern = "(wx[A-Z0-9_]+)( *\| *(wx[A-Z0-9_]+))*" }
@@ -1524,8 +1525,8 @@ wxGridSizer =
         attribute class { "wxGridSizer" } &
         stdObjectNodeAttributes &
         [xrc:p="o"] element minsize {_, t_size }* &
-        [xrc:p="o"] element rows    {_, t_integer }* &
-        [xrc:p="o"] element cols    {_, t_integer }* &
+        [xrc:p="o"] element rows    {_, t_unsigned }* &
+        [xrc:p="o"] element cols    {_, t_unsigned }* &
         [xrc:p="o"] element vgap    {_, t_dimension }* &
         [xrc:p="o"] element hgap    {_, t_dimension }* &
         (wxSizer_item | objectRef)*
@@ -1536,8 +1537,8 @@ wxFlexGridSizer =
         attribute class { "wxFlexGridSizer" } &
         stdObjectNodeAttributes &
         [xrc:p="o"] element minsize             {_, t_size }* &
-        [xrc:p="o"] element rows                {_, t_integer }* &
-        [xrc:p="o"] element cols                {_, t_integer }* &
+        [xrc:p="o"] element rows                {_, t_unsigned }* &
+        [xrc:p="o"] element cols                {_, t_unsigned }* &
         [xrc:p="o"] element vgap                {_, t_dimension }* &
         [xrc:p="o"] element hgap                {_, t_dimension }* &
         [xrc:p="o"] element flexibledirection   {_, ("wxVERTICAL" | "wxHORIZONTAL" | "wxBOTH") }* &
