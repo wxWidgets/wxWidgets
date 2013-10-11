@@ -629,11 +629,13 @@ int wxRichTextObject::ConvertTenthsMMToPixels(int ppi, int units, double scale)
     if (scale != 1.0)
         pixels /= scale;
 
-    // If the result is very small, make it at least one pixel in size.
-    if (pixels == 0 && units > 0)
-        pixels = 1;
+    int pixelsInt = int(pixels + 0.5);
 
-    return (int) pixels;
+    // If the result is very small, make it at least one pixel in size.
+    if (pixelsInt == 0 && units > 0)
+        pixelsInt = 1;
+
+    return pixelsInt;
 }
 
 // Convert units in pixels to tenths of a millimetre
