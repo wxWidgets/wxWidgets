@@ -399,7 +399,7 @@ t_bool       = "1" | "0"
 t_integer    = xsd:integer
 t_float      = xsd:float
 t_direction  = "wxLEFT" | "wxRIGHT" | "wxTOP" | "wxBOTTOM"
-t_style      = xsd:string { pattern = "(wx[A-Z_]+)( *\| *(wx[A-Z_]+))*" }
+t_style      = xsd:string { pattern = "(wx[A-Z0-9_]+)( *\| *(wx[A-Z0-9_]+))*" }
 
 t_url        = string
 t_colour     = xsd:string { pattern = "#[0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]" } |
