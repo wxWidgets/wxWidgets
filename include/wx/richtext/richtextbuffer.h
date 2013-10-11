@@ -1700,6 +1700,11 @@ public:
     void SetProperty(const wxString& name, const wxString& value);
 
     /**
+        Sets a property by name and wxChar* value.
+    */
+    void SetProperty(const wxString& name, const wxChar* value) { SetProperty(name, wxString(value)); }
+
+    /**
         Sets  property by name and long integer value.
     */
     void SetProperty(const wxString& name, long value);
