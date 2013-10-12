@@ -9764,7 +9764,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     // If we have no fixed table size, and assuming we're not pushed for
     // space, then we don't have to try to stretch the table to fit the contents.
     bool stretchToFitTableWidth = tableHasPercentWidth;
-    
+
     int tableWidth = rect.width;
     if (attr.GetTextBoxAttr().GetWidth().IsValid() && !tableHasPercentWidth)
     {
@@ -9926,10 +9926,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
     for (j = 0; j < m_rowCount; j++)
     {
-        // First get the overall margins so we can calculate percentage widths based on
-        // the available content space for all cells on the row
-
-        int overallRowContentMargin = 0;
         int visibleCellCount = 0;
 
         for (i = 0; i < m_colCount; i++)
@@ -9937,22 +9933,14 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
             wxRichTextBox* cell = GetCell(j, i);
             if (cell->IsShown())
             {
-                int cellTotalLeftMargin = 0, cellTotalRightMargin = 0, cellTotalTopMargin = 0, cellTotalBottomMargin = 0;
-                wxRichTextAttr cellAttr(cell->GetAttributes());
-                cell->AdjustAttributes(cellAttr, context);
-                GetTotalMargin(dc, buffer, cellAttr, cellTotalLeftMargin, cellTotalRightMargin, cellTotalTopMargin, cellTotalBottomMargin);
-
-                overallRowContentMargin += (cellTotalLeftMargin + cellTotalRightMargin);
                 visibleCellCount ++;
             }
         }
 
-        // Add in inter-cell padding
-        overallRowContentMargin += ((visibleCellCount-1) * paddingX);
-
-        int rowContentWidth = internalTableWidth - overallRowContentMargin;
-        wxSize rowTableSize(rowContentWidth, 0);
-        wxTextAttrDimensionConverter converter(dc, scale, rowTableSize);
+        // Cell width percentages are for the overall cell width, so ignore margins and 
+        // only take into account table margins and inter-cell padding.
+        int availableWidthForPercentageCellWidths = internalTableWidth - ((visibleCellCount-1) * paddingX);
+        wxTextAttrDimensionConverter converter(dc, scale, wxSize(availableWidthForPercentageCellWidths, 0));
 
         for (i = 0; i < m_colCount; i++)
         {
@@ -9970,22 +9958,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                     int absoluteCellWidth = -1;
                     int percentageCellWidth = -1;
 
-                    // I think we need to calculate percentages from the internal table size,
-                    // minus the padding between cells which we'll need to calculate from the
-                    // (number of VISIBLE cells - 1)*paddingX. Then percentages that add up to 100%
-                    // will add up to 100%. In CSS, the width specifies the cell's content rect width,
-                    // so if we want to conform to that we'll need to add in the overall cell margins.
-                    // However, this will make it difficult to specify percentages that add up to
-                    // 100% and still fit within the table width.
-                    // Let's say two cells have 50% width. They have 10 pixels of overall margin each.
-                    // The table content rect is 500 pixels and the inter-cell padding is 20 pixels.
-                    // If we're using internal content size for the width, we would calculate the
-                    // the overall cell width for n cells as:
-                    // (500 - 20*(n-1) - overallCellMargin1 - overallCellMargin2 - ...) * percentage / 100
-                    // + thisOverallCellMargin
-                    // = 500 - 20 - 10 - 10) * 0.5 + 10 = 240 pixels overall cell width.
-                    // Adding this back, we get 240 + 240 + 20 = 500 pixels.
-
                     if (cell->GetAttributes().GetTextBoxAttr().GetWidth().IsValid())
                     {
                         int w = converter.GetPixels(cell->GetAttributes().GetTextBoxAttr().GetWidth());
@@ -9998,7 +9970,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                             absoluteCellWidth = w;
                         }
                         // Override absolute width with minimum width if necessary
-                        if (cell->GetMinSize().x > 0 && absoluteCellWidth !=1 && cell->GetMinSize().x > absoluteCellWidth)
+                        if (cell->GetMinSize().x > 0 && absoluteCellWidth != -1 && cell->GetMinSize().x > absoluteCellWidth)
                             absoluteCellWidth = cell->GetMinSize().x;
                     }
                     else
@@ -10018,6 +9990,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
                     if (colSpan == 1 && cell->GetMinSize().x && cell->GetMinSize().x > minColWidths[i])
                         minColWidths[i] = cell->GetMinSize().x;
+
                     if (colSpan == 1 && cell->GetMaxSize().x && cell->GetMaxSize().x > maxColWidths[i])
                         maxColWidths[i] = cell->GetMaxSize().x;
                 }
@@ -10050,10 +10023,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     // specified explicitly or not. (We could make a note if necessary.)
     for (j = 0; j < m_rowCount; j++)
     {
-        // First get the overall margins so we can calculate percentage widths based on
-        // the available content space for all cells on the row
-
-        int overallRowContentMargin = 0;
         int visibleCellCount = 0;
 
         for (i = 0; i < m_colCount; i++)
@@ -10061,22 +10030,14 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
             wxRichTextBox* cell = GetCell(j, i);
             if (cell->IsShown())
             {
-                int cellTotalLeftMargin = 0, cellTotalRightMargin = 0, cellTotalTopMargin = 0, cellTotalBottomMargin = 0;
-                wxRichTextAttr cellAttr(cell->GetAttributes());
-                cell->AdjustAttributes(cellAttr, context);
-                GetTotalMargin(dc, buffer, cellAttr, cellTotalLeftMargin, cellTotalRightMargin, cellTotalTopMargin, cellTotalBottomMargin);
-
-                overallRowContentMargin += (cellTotalLeftMargin + cellTotalRightMargin);
                 visibleCellCount ++;
             }
         }
 
-        // Add in inter-cell padding
-        overallRowContentMargin += ((visibleCellCount-1) * paddingX);
-
-        int rowContentWidth = internalTableWidth - overallRowContentMargin;
-        wxSize rowTableSize(rowContentWidth, 0);
-        wxTextAttrDimensionConverter converter(dc, scale, rowTableSize);
+        // Cell width percentages are for the overall cell width, so ignore margins and 
+        // only take into account table margins and inter-cell padding.
+        int availableWidthForPercentageCellWidths = internalTableWidth - ((visibleCellCount-1) * paddingX);
+        wxTextAttrDimensionConverter converter(dc, scale, wxSize(availableWidthForPercentageCellWidths, 0));
 
         for (i = 0; i < m_colCount; i++)
         {
@@ -10094,7 +10055,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                         {
                             cellWidth = converter.GetPixels(cell->GetAttributes().GetTextBoxAttr().GetWidth());
                             // Override absolute width with minimum width if necessary
-                            if (cell->GetMinSize().x > 0 && cellWidth !=1 && cell->GetMinSize().x > cellWidth)
+                            if (cell->GetMinSize().x > 0 && cellWidth != -1 && cell->GetMinSize().x > cellWidth)
                                 cellWidth = cell->GetMinSize().x;
                         }
                         else
@@ -10109,7 +10070,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                             // then we simply stop constraining the columns; instead, we'll just fit the spanning
                             // cells to the columns later.
                             cellWidth = cell->GetMinSize().x;
-
+                            
                             if (cell->GetMaxSize().x > cellWidth)
                                 cellWidth = cell->GetMaxSize().x;
                         }
