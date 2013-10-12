@@ -2060,11 +2060,13 @@ void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnInsertImage(wxCommandEvent& WXUNUSED(event))
 {
-    wxFileDialog dialog(this, _("Choose an image"), "", "", "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png");
+    wxFileDialog dialog(this, _("Choose an image"), "", "", "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png|JPEG files (*.jpg;*.jpeg)|*.jpg;*.jpeg");
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString path = dialog.GetPath();
-        m_richTextCtrl->WriteImage(path, wxBITMAP_TYPE_ANY);
+        wxImage image;
+        if (image.LoadFile(path) && image.GetType() != wxBITMAP_TYPE_INVALID)
+            m_richTextCtrl->WriteImage(path, image.GetType());
     }
 }
 
