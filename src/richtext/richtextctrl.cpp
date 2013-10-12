@@ -809,6 +809,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             if (!ProcessBackKey(event, flags))
                 return;
         }
+        else
+            event.Skip();
 
         return;
     }
