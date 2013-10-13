@@ -227,7 +227,7 @@
     </if>
 
     <if cond="not isdefined('WX_VERSION')">
-        <set var="WX_VERSION_DEFAULT" overwrite="0">29</set>
+        <set var="WX_VERSION_DEFAULT" overwrite="0">30</set>
         <option name="WX_VERSION">
             <default-value>$(WX_VERSION_DEFAULT)</default-value>
             <description>
