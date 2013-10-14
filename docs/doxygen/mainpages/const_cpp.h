@@ -36,7 +36,10 @@ using @ifdef_ and not @if_.
 @itemdef{__WXMAC__, old define, same as @c __WXOSX__}
 @itemdef{__WXMOTIF__, Motif}
 @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
-@itemdef{__WXMSW__, GUI using <a href="http://en.wikipedia.org/wiki/Windows_User">Windows Controls</a>}
+@itemdef{__WXMSW__, GUI using <a href="http://en.wikipedia.org/wiki/Windows_User">Windows Controls</a>.
+Notice that for compatibility reasons, this symbol is defined for console
+applications under Windows as well, but it should only be used in the GUI code
+while @c __WINDOWS__ should be used for the platform tests.}
 @itemdef{__WXOSX__, OS X GUI using any Apple widget framework (Carbon, AppKit or UIKit)}
 @itemdef{__WXOSX_IPHONE__, OS X iPhone (UIKit)}
 @itemdef{__WXOSX_CARBON__, Mac OS X using Carbon}
