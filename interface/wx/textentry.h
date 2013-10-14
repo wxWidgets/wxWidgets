@@ -53,7 +53,8 @@ public:
         single-line text control using the given @a choices.
 
         Notice that currently this function is only implemented in wxGTK2,
-        wxMSW and wxOSX/Cocoa ports and does nothing under the other platforms.
+        wxMSW and wxOSX/Cocoa (for wxTextCtrl only, but not for wxComboBox)
+        ports and does nothing under the other platforms.
 
         @since 2.9.0
 
@@ -81,7 +82,8 @@ public:
         Notice that you need to include @c wx/textcompleter.h in order to
         define your class inheriting from wxTextCompleter.
 
-        Currently this method is only implemented in wxMSW and wxOSX/Cocoa.
+        Currently this method is only implemented in wxMSW and wxOSX/Cocoa (for
+        wxTextCtrl only, but not for wxComboBox).
 
         @since 2.9.2
 
