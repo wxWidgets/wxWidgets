@@ -200,6 +200,18 @@ void ItemContainerTestCase::VoidData()
 
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData((unsigned)-1, NULL) );
     WX_ASSERT_FAILS_WITH_ASSERT( container->SetClientData(12345, NULL) );
+
+    // wxMSW used to hace problems retrieving the client data of -1 from a few
+    // standard controls, especially if the last error was set before doing it,
+    // so test for this specially.
+    const wxUIntPtr minus1 = static_cast<wxUIntPtr>(-1);
+    container->Append("item -1", wxUIntToPtr(minus1));
+
+#ifdef __WINDOWS__
+    ::SetLastError(ERROR_INVALID_DATA);
+#endif
+
+    CPPUNIT_ASSERT_EQUAL( minus1, wxPtrToUInt(container->GetClientData(3)) );
 }
 
 void ItemContainerTestCase::Set()
