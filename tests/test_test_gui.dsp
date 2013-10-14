@@ -381,6 +381,10 @@ SOURCE=.\controls\richtextctrltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\safearrayconverttest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\..\samples\sample.rc
 # End Source File
 # Begin Source File

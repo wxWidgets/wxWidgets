@@ -202,6 +202,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_guifuncs.o \
 	$(OBJS)\test_gui_selstoretest.o \
 	$(OBJS)\test_gui_garbage.o \
+	$(OBJS)\test_gui_safearrayconverttest.o \
 	$(OBJS)\test_gui_settings.o \
 	$(OBJS)\test_gui_socket.o \
 	$(OBJS)\test_gui_boxsizer.o \
@@ -959,6 +960,9 @@ $(OBJS)\test_gui_selstoretest.o: ./misc/selstoretest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_garbage.o: ./misc/garbage.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_safearrayconverttest.o: ./misc/safearrayconverttest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_settings.o: ./misc/settings.cpp

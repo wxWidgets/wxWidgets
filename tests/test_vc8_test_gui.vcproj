@@ -706,6 +706,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\misc\safearrayconverttest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\searchctrltest.cpp"
 				>
 			</File>

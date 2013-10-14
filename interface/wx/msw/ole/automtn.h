@@ -42,6 +42,34 @@ enum wxAutomationInstanceFlags
 };
 
 /**
+    Flags used for conversions between wxVariant and OLE VARIANT.
+
+    These flags are used by wxAutomationObject for its wxConvertOleToVariant()
+    calls. They can be obtained by wxAutomationObject::GetConvertVariantFlags()
+    and set by wxAutomationObject::SetConvertVariantFlags().
+
+    @since 3.0
+
+    @header{wx/msw/ole/oleutils.h}
+*/
+enum wxOleConvertVariantFlags
+{
+    /**
+        Default value.
+    */
+    wxOleConvertVariant_Default = 0,
+
+    /**
+        If this flag is used, SAFEARRAYs contained in OLE VARIANTs will be
+        returned as wxVariants with wxVariantDataSafeArray type instead of
+        wxVariants with the list type containing the (flattened) SAFEARRAY's
+        elements.
+    */
+    wxOleConvertVariant_ReturnSafeArrays = 1
+};
+
+
+/**
     @class wxVariantDataCurrency
 
     This class represents a thin wrapper for Microsoft Windows CURRENCY type.
@@ -580,5 +608,28 @@ public:
     */
     void SetLCID(LCID lcid);
 
+    /**
+        Returns the flags used for conversions between wxVariant and OLE
+        VARIANT, see wxConvertVariantToOleFlags.
+
+        The default value is wxOleConvertVariant_Default for compatibility but
+        it can be changed using SetConvertVariantFlags().
+
+        Notice that objects obtained by GetObject() inherit the flags from the
+        one that created them.
+
+        @since 3.0
+    */
+    long GetConvertVariantFlags() const;
+
+    /**
+        Sets the flags used for conversions between wxVariant and OLE VARIANT,
+        see wxConvertVariantToOleFlags.
+
+        The default value is wxOleConvertVariant_Default.
+
+        @since 3.0
+    */
+    void SetConvertVariantFlags(long flags);
 };
 
