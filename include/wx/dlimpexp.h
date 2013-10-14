@@ -23,7 +23,7 @@
        __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
        as VC++.
      */
-#    if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__) || (defined(__WINDOWS__) && defined(__INTELC__))
+#    if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
 #        define WXEXPORT __declspec(dllexport)
 #        define WXIMPORT __declspec(dllimport)
     /*
