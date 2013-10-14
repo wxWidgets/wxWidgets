@@ -568,6 +568,10 @@ All:
 - Add possibility to validate the input files against a schema to wxrc.
 - Fix recently broken compilation with Intel compiler.
 
+All (GUI):
+
+- Fix wxListEvent::GetData() in LLP64 builds.
+
 wxMSW:
 
 - Optional better handling of SAFEARRAYs in wxAutomationObject (PB).
