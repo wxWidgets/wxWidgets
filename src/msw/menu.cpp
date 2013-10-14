@@ -558,7 +558,13 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                                      pItem->GetBackgroundColour().IsOk() ||
                                      pItem->GetFont().IsOk();
 
-            if ( !mustUseOwnerDrawn )
+            // Windows XP or earlier don't display menu bitmaps bigger than
+            // standard size correctly (they're truncated), so we must use
+            // owner-drawn items to show them correctly there. OTOH Win7
+            // doesn't seem to have any problems with even very large bitmaps
+            // so don't use owner-drawn items unnecessarily there (Vista wasn't
+            // actually tested but I assume it works as 7 rather than as XP).
+            if ( !mustUseOwnerDrawn && winver < wxWinVersion_Vista )
             {
                 const wxBitmap& bmpUnchecked = pItem->GetBitmap(false),
                                 bmpChecked   = pItem->GetBitmap(true);
