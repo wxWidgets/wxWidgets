@@ -43,8 +43,11 @@ private:
     CPPUNIT_TEST_SUITE( TextFileTestCase );
         CPPUNIT_TEST( ReadEmpty );
         CPPUNIT_TEST( ReadDOS );
+        CPPUNIT_TEST( ReadDOSLast );
         CPPUNIT_TEST( ReadUnix );
+        CPPUNIT_TEST( ReadUnixLast );
         CPPUNIT_TEST( ReadMac );
+        CPPUNIT_TEST( ReadMacLast );
         CPPUNIT_TEST( ReadMixed );
 #if wxUSE_UNICODE
         CPPUNIT_TEST( ReadUTF8 );
@@ -55,8 +58,11 @@ private:
 
     void ReadEmpty();
     void ReadDOS();
+    void ReadDOSLast();
     void ReadUnix();
+    void ReadUnixLast();
     void ReadMac();
+    void ReadMacLast();
     void ReadMixed();
 #if wxUSE_UNICODE
     void ReadUTF8();
@@ -120,6 +126,18 @@ void TextFileTestCase::ReadDOS()
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
 }
 
+void TextFileTestCase::ReadDOSLast()
+{
+    CreateTestFile("foo\r\n");
+
+    wxTextFile f;
+    CPPUNIT_ASSERT( f.Open(GetTestFileName()) );
+
+    CPPUNIT_ASSERT_EQUAL( 1, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(0) );
+    CPPUNIT_ASSERT_EQUAL( "foo", f.GetFirstLine() );
+}
+
 void TextFileTestCase::ReadUnix()
 {
     CreateTestFile("foo\nbar\nbaz");
@@ -134,6 +152,18 @@ void TextFileTestCase::ReadUnix()
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
 }
 
+void TextFileTestCase::ReadUnixLast()
+{
+    CreateTestFile("foo\n");
+
+    wxTextFile f;
+    CPPUNIT_ASSERT( f.Open(GetTestFileName()) );
+
+    CPPUNIT_ASSERT_EQUAL( 1, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(0) );
+    CPPUNIT_ASSERT_EQUAL( "foo", f.GetFirstLine() );
+}
+
 void TextFileTestCase::ReadMac()
 {
     CreateTestFile("foo\rbar\rbaz");
@@ -146,6 +176,18 @@ void TextFileTestCase::ReadMac()
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
+}
+
+void TextFileTestCase::ReadMacLast()
+{
+    CreateTestFile("foo\r");
+
+    wxTextFile f;
+    CPPUNIT_ASSERT( f.Open(GetTestFileName()) );
+
+    CPPUNIT_ASSERT_EQUAL( 1, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
+    CPPUNIT_ASSERT_EQUAL( "foo", f.GetFirstLine() );
 }
 
 void TextFileTestCase::ReadMixed()

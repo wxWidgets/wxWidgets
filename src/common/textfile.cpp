@@ -275,8 +275,24 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
     // anything in the last line?
     if ( lineStart != end )
     {
-        // add unterminated last line
-        AddLine(wxString(lineStart, end), wxTextFileType_None);
+        // add the last line, notice that it may have been terminated with CR
+        // as we don't end the line immediately when we see a CR, as it could
+        // be followed by a LF.
+        wxString lastLine(lineStart, end);
+        wxTextFileType lastType;
+        if ( chLast == '\r' )
+        {
+            // last line had Mac EOL, exclude it from the string
+            lastLine.RemoveLast();
+            lastType = wxTextFileType_Mac;
+        }
+        else
+        {
+            // last line wasn't terminated at all
+            lastType = wxTextFileType_None;
+        }
+
+        AddLine(lastLine, lastType);
     }
 
     return true;

@@ -567,6 +567,7 @@ All:
 
 - Add possibility to validate the input files against a schema to wxrc.
 - Fix recently broken compilation with Intel compiler.
+- Fix reading of files with Mac EOLs in wxTextFile.
 
 All (GUI):
 
