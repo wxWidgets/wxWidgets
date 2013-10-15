@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-01 19:04+0200\n"
-"PO-Revision-Date: 2013-06-23 19:24+0100\n"
+"PO-Revision-Date: 2013-10-15 08:40+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
 "Language: it\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -1145,12 +1145,10 @@ msgid "Add"
 msgstr "Aggiungi"
 
 #: ../src/richtext/richtextbuffer.cpp:10751
-#, fuzzy
 msgid "Add Column"
 msgstr "Aggiungi colonna"
 
 #: ../src/richtext/richtextbuffer.cpp:10688
-#, fuzzy
 msgid "Add Row"
 msgstr "Aggiungi riga"
 
@@ -2585,12 +2583,10 @@ msgid "Delete A&ll"
 msgstr "&Candella tutti"
 
 #: ../src/richtext/richtextbuffer.cpp:10637
-#, fuzzy
 msgid "Delete Column"
 msgstr "Elimina colonna"
 
 #: ../src/richtext/richtextbuffer.cpp:10587
-#, fuzzy
 msgid "Delete Row"
 msgstr "Elimina riga"
 
