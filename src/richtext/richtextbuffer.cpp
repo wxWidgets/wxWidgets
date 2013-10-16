@@ -970,20 +970,20 @@ wxRect wxRichTextObject::AdjustAvailableSpace(wxDC& dc, wxRichTextBuffer* buffer
     wxTextAttrDimensionConverter converter(dc, scale, availableContainerSpace.GetSize());
 
     if (childAttr.GetTextBoxAttr().GetWidth().IsValid())
-        rect.width = converter.GetPixels(childAttr.GetTextBoxAttr().GetWidth());
+        rect.width = converter.GetPixels(childAttr.GetTextBoxAttr().GetWidth(), wxHORIZONTAL);
 
     if (childAttr.GetTextBoxAttr().GetHeight().IsValid())
-        rect.height = converter.GetPixels(childAttr.GetTextBoxAttr().GetHeight());
+        rect.height = converter.GetPixels(childAttr.GetTextBoxAttr().GetHeight(), wxVERTICAL);
 
     // Can specify either left or right for the position (we're assuming we can't
     // set the left and right edges to effectively set the size. Would we want to do that?)
     if (childAttr.GetTextBoxAttr().GetPosition().GetLeft().IsValid())
     {
-        rect.x = rect.x + converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetLeft());
+        rect.x = rect.x + converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetLeft(), wxHORIZONTAL);
     }
     else if (childAttr.GetTextBoxAttr().GetPosition().GetRight().IsValid())
     {
-        int x = converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetRight());
+        int x = converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetRight(), wxHORIZONTAL);
         if (childAttr.GetTextBoxAttr().GetPosition().GetRight().GetPosition() == wxTEXT_BOX_ATTR_POSITION_RELATIVE)
             rect.x = availableContainerSpace.x + availableContainerSpace.width - rect.width;
         else
@@ -992,11 +992,11 @@ wxRect wxRichTextObject::AdjustAvailableSpace(wxDC& dc, wxRichTextBuffer* buffer
 
     if (childAttr.GetTextBoxAttr().GetPosition().GetTop().IsValid())
     {
-        rect.y = rect.y + converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetTop());
+        rect.y = rect.y + converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetTop(), wxVERTICAL);
     }
     else if (childAttr.GetTextBoxAttr().GetPosition().GetBottom().IsValid())
     {
-        int y = converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetBottom());
+        int y = converter.GetPixels(childAttr.GetTextBoxAttr().GetPosition().GetBottom(), wxVERTICAL);
         if (childAttr.GetTextBoxAttr().GetPosition().GetBottom().GetPosition() == wxTEXT_BOX_ATTR_POSITION_RELATIVE)
             rect.y = availableContainerSpace.y + availableContainerSpace.height - rect.height;
         else
@@ -6282,6 +6282,8 @@ void wxRichTextParagraph::ClearDefaultTabs()
 
 void wxRichTextParagraph::LayoutFloat(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style, wxRichTextFloatCollector* floatCollector)
 {
+    wxTextAttrDimensionConverter converter(dc, GetBuffer() ? GetBuffer()->GetScale() : 1.0, parentRect.GetSize());
+
     wxRichTextObjectList::compatibility_iterator node = GetChildren().GetFirst();
     while (node)
     {
@@ -6308,13 +6310,7 @@ void wxRichTextParagraph::LayoutFloat(wxDC& dc, wxRichTextDrawingContext& contex
 
             int offsetY = 0;
             if (anchored->GetAttributes().GetTextBoxAttr().GetTop().IsValid())
-            {
-                offsetY = anchored->GetAttributes().GetTextBoxAttr().GetTop().GetValue();
-                if (anchored->GetAttributes().GetTextBoxAttr().GetTop().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-                {
-                    offsetY = ConvertTenthsMMToPixels(dc, offsetY);
-                }
-            }
+                offsetY = converter.GetPixels(anchored->GetAttributes().GetTextBoxAttr().GetTop(), wxVERTICAL);
 
             int pos = floatCollector->GetFitPosition(anchored->GetAttributes().GetTextBoxAttr().GetFloatMode(), rect.y + offsetY, size.y);
 
@@ -6322,9 +6318,16 @@ void wxRichTextParagraph::LayoutFloat(wxDC& dc, wxRichTextDrawingContext& contex
             int newOffsetY = pos - rect.y;
             if (newOffsetY != offsetY)
             {
-                if (anchored->GetAttributes().GetTextBoxAttr().GetTop().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-                    newOffsetY = ConvertPixelsToTenthsMM(dc, newOffsetY);
-                anchored->GetAttributes().GetTextBoxAttr().GetTop().SetValue(newOffsetY);
+                if (anchored->GetAttributes().GetTextBoxAttr().GetTop().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
+                {
+                    // We unscaled in GetPixels, so apply scale again.
+                    anchored->GetAttributes().GetTextBoxAttr().GetTop().SetValue(int((double(newOffsetY) * converter.GetScale()) + 0.5));
+                }
+                else
+                {
+                    newOffsetY = converter.ConvertPixelsToTenthsMM(newOffsetY);
+                    anchored->GetAttributes().GetTextBoxAttr().GetTop().SetValue(newOffsetY, wxTEXT_ATTR_UNITS_TENTHS_MM);
+                }
             }
 
             if (anchored->GetAttributes().GetTextBoxAttr().GetFloatMode() == wxTEXT_BOX_ATTR_FLOAT_LEFT)
@@ -9330,7 +9333,7 @@ bool wxRichTextCell::AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingCon
     wxRichTextObject::AdjustAttributes(attr, context);
 
     wxRichTextTable* table = wxDynamicCast(GetParent(), wxRichTextTable);
-    if (table && table->GetAttributes().GetTextBoxAttr().HasCollapseBorders() &&
+    if (IsShown() && table && table->GetAttributes().GetTextBoxAttr().HasCollapseBorders() &&
         table->GetAttributes().GetTextBoxAttr().GetCollapseBorders() == wxTEXT_BOX_ATTR_COLLAPSE_FULL)
     {
         // Collapse borders:
@@ -9360,17 +9363,40 @@ bool wxRichTextCell::AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingCon
                 attr.GetTextBoxAttr().GetBorder().GetTop().Reset();
 
             // Compute right border
+
+            // We need to explicity look at the spans, not just whether
+            // the cell is visible, because that doesn't tell us which
+            // cell to look at for border information.
             wxRichTextCell* adjacentCellRight = NULL;
-            int i;
-            for (i = col+1; i < table->GetColumnCount(); i++)
+
+            int nextCol = col + GetColSpan();
+            if  (nextCol >= table->GetColumnCount())
             {
-                wxRichTextCell* cell = table->GetCell(row, i);
-                if (cell->IsShown())
+                // Do nothing - at edge of table
+            }
+            else
+            {
+                wxRichTextCell* nextRightCell = table->GetCell(row, nextCol);
+                if (nextRightCell->IsShown())
                 {
-                    adjacentCellRight = cell;
-                    break;
+                    adjacentCellRight = nextRightCell;
+                }
+                else
+                {
+                    // Must be hidden by a rowspan above. Go hunting for it.
+                    int r;
+                    for (r = row-1; r >= 0; r--)
+                    {
+                        nextRightCell = table->GetCell(r, nextCol);
+                        if (nextRightCell->IsShown())
+                        {
+                            adjacentCellRight = nextRightCell;
+                            break;
+                        }
+                    }
                 }
             }
+
             // If no adjacent cell (either because they were hidden or at the edge of the table)
             // then we must reset the border, if there's a right table border.
             if (!adjacentCellRight)
@@ -9389,15 +9415,35 @@ bool wxRichTextCell::AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingCon
 
             // Compute bottom border
             wxRichTextCell* adjacentCellBelow = NULL;
-            for (i = row+1; i < table->GetRowCount(); i++)
+
+            int nextRow = row + GetRowSpan();
+            if  (nextRow >= table->GetRowCount())
             {
-                wxRichTextCell* cell = table->GetCell(i, col);
-                if (cell->IsShown())
+                // Do nothing - at edge of table
+            }
+            else
+            {
+                wxRichTextCell* nextBottomCell = table->GetCell(col, nextRow);
+                if (nextBottomCell->IsShown())
                 {
-                    adjacentCellBelow = cell;
-                    break;
+                    adjacentCellBelow = nextBottomCell;
+                }
+                else
+                {
+                    // Must be hidden by a colspan to the left. Go hunting for it.
+                    int c;
+                    for (c = col-1; c >= 0; c--)
+                    {
+                        nextBottomCell = table->GetCell(nextRow, c);
+                        if (nextBottomCell->IsShown())
+                        {
+                            adjacentCellBelow = nextBottomCell;
+                            break;
+                        }
+                    }
                 }
             }
+
             // If no adjacent cell (either because they were hidden or at the edge of the table)
             // then we must reset the border, if there's a bottom table border.
             if (!adjacentCellBelow)
@@ -9768,7 +9814,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     int tableWidth = rect.width;
     if (attr.GetTextBoxAttr().GetWidth().IsValid() && !tableHasPercentWidth)
     {
-        tableWidth = converter.GetPixels(attr.GetTextBoxAttr().GetWidth());
+        tableWidth = converter.GetPixels(attr.GetTextBoxAttr().GetWidth(), wxHORIZONTAL);
 
         // Fixed table width, so we do want to stretch columns out if necessary.
         stretchToFitTableWidth = true;
@@ -9780,9 +9826,9 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     // Get internal padding
     int paddingLeft = 0, paddingTop = 0;
     if (attr.GetTextBoxAttr().GetPadding().GetLeft().IsValid())
-        paddingLeft = converter.GetPixels(attr.GetTextBoxAttr().GetPadding().GetLeft());
+        paddingLeft = converter.GetPixels(attr.GetTextBoxAttr().GetPadding().GetLeft(), wxHORIZONTAL);
     if (attr.GetTextBoxAttr().GetPadding().GetTop().IsValid())
-        paddingTop = converter.GetPixels(attr.GetTextBoxAttr().GetPadding().GetTop());
+        paddingTop = converter.GetPixels(attr.GetTextBoxAttr().GetPadding().GetTop(), wxVERTICAL);
 
     // Assume that left and top padding are also used for inter-cell padding.
     int paddingX = paddingLeft;
@@ -9960,7 +10006,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
                     if (cell->GetAttributes().GetTextBoxAttr().GetWidth().IsValid())
                     {
-                        int w = converter.GetPixels(cell->GetAttributes().GetTextBoxAttr().GetWidth());
+                        int w = converter.GetPixels(cell->GetAttributes().GetTextBoxAttr().GetWidth(), wxHORIZONTAL);
                         if (cell->GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
                         {
                             percentageCellWidth = w;
@@ -10053,7 +10099,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                     {
                         if (cell->GetAttributes().GetTextBoxAttr().GetWidth().IsValid())
                         {
-                            cellWidth = converter.GetPixels(cell->GetAttributes().GetTextBoxAttr().GetWidth());
+                            cellWidth = converter.GetPixels(cell->GetAttributes().GetTextBoxAttr().GetWidth(), wxHORIZONTAL);
                             // Override absolute width with minimum width if necessary
                             if (cell->GetMinSize().x > 0 && cellWidth != -1 && cell->GetMinSize().x > cellWidth)
                                 cellWidth = cell->GetMinSize().x;
@@ -11778,9 +11824,10 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache, const wxSize& pa
             sz = GetParent()->GetParent()->GetCachedSize();
     }
 
+    wxRichTextBuffer* buffer = GetBuffer();
+
     if (sz != wxDefaultSize)
     {
-        wxRichTextBuffer* buffer = GetBuffer();
         if (buffer)
         {
             // Find the actual space available when margin is taken into account
@@ -11803,32 +11850,24 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache, const wxSize& pa
         }
     }
 
+    wxTextAttrDimensionConverter converter(dc, buffer ? buffer->GetScale() : 1.0, wxSize(parentWidth, parentHeight));
+
     if (GetAttributes().GetTextBoxAttr().GetWidth().IsValid() && GetAttributes().GetTextBoxAttr().GetWidth().GetValue() > 0)
     {
-        if (parentWidth > 0 && GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
-            width = (int) ((GetAttributes().GetTextBoxAttr().GetWidth().GetValue() * parentWidth)/100.0);
-        else if (GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-            width = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetWidth().GetValue());
-        else if (GetAttributes().GetTextBoxAttr().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
-            width = GetAttributes().GetTextBoxAttr().GetWidth().GetValue();
+        int widthPixels = converter.GetPixels(GetAttributes().GetTextBoxAttr().GetWidth(), wxHORIZONTAL);
+        if (widthPixels > 0)
+            width = widthPixels;
     }
 
     // Limit to max width
 
     if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().IsValid() && GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetValue() > 0)
     {
-        int mw = -1;
-
-        if (parentWidth > 0 && GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
-            mw = (int) ((GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetValue() * parentWidth)/100.0);
-        else if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-            mw = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetValue());
-        else if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
-            mw = GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth().GetValue();
+        int mw = converter.GetPixels(GetAttributes().GetTextBoxAttr().GetMaxSize().GetWidth(), wxHORIZONTAL);
 
         // If we already have a smaller max width due to the constraints of the control size,
         // don't use the larger max width.
-        if (mw != -1 && ((maxWidth == -1) || (mw < maxWidth)))
+        if (mw > 0 && ((maxWidth == -1) || (mw < maxWidth)))
             maxWidth = mw;
     }
 
@@ -11841,12 +11880,9 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache, const wxSize& pa
 
     if (GetAttributes().GetTextBoxAttr().GetHeight().IsValid() && GetAttributes().GetTextBoxAttr().GetHeight().GetValue() > 0)
     {
-        if (parentHeight > 0 && GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
-            height = (int) ((GetAttributes().GetTextBoxAttr().GetHeight().GetValue() * parentHeight)/100.0);
-        else if (GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-            height = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetHeight().GetValue());
-        else if (GetAttributes().GetTextBoxAttr().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
-            height = GetAttributes().GetTextBoxAttr().GetHeight().GetValue();
+        int heightPixels = converter.GetPixels(GetAttributes().GetTextBoxAttr().GetHeight(), wxVERTICAL);
+        if (heightPixels > 0)
+            height = heightPixels;
 
         // Preserve the aspect ratio
         if (height != m_originalImageSize.GetHeight())
@@ -11857,12 +11893,9 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache, const wxSize& pa
 
     if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().IsValid() && GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetValue() > 0)
     {
-        if (parentHeight > 0 && GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
-            maxHeight = (int) ((GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetValue() * parentHeight)/100.0);
-        else if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-            maxHeight = ConvertTenthsMMToPixels(dc, GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetValue());
-        else if (GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
-            maxHeight = GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight().GetValue();
+        int mh = converter.GetPixels(GetAttributes().GetTextBoxAttr().GetMaxSize().GetHeight(), wxVERTICAL);
+        if (mh > 0)
+            maxHeight = mh;
     }
 
     if (maxHeight > 0 && height > maxHeight)
@@ -13386,23 +13419,41 @@ int wxTextAttrDimensionConverter::ConvertPixelsToTenthsMM(int pixels) const
 int wxTextAttrDimensionConverter::GetPixels(const wxTextAttrDimension& dim, int direction) const
 {
     if (dim.GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
-        return ConvertTenthsMMToPixels(dim.GetValue());
-    else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
-        return dim.GetValue();
-    else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_POINTS)
-        return (int)((double(dim.GetValue()) * (double(m_ppi)/72.0)) + 0.5);
-    else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
-    {
-        wxASSERT(m_parentSize != wxDefaultSize);
-        if (direction == wxHORIZONTAL)
-            return (int) (double(m_parentSize.x) * double(dim.GetValue()) / 100.0);
-        else
-            return (int) (double(m_parentSize.y) * double(dim.GetValue()) / 100.0);
-    }
+        return ConvertTenthsMMToPixels(dim.GetValue()); // Incorporates scaling
     else
     {
-        wxASSERT(false);
-        return 0;
+        double pixelsDouble = 0.0;
+        if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
+            pixelsDouble = (double) dim.GetValue();
+        else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_POINTS)
+            pixelsDouble = (double(dim.GetValue()) * (double(m_ppi)/72.0));
+        else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
+            pixelsDouble = ((double(dim.GetValue())/100.0) * (double(m_ppi)/72.0));
+        else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
+        {
+            wxASSERT(m_parentSize != wxDefaultSize);
+            if (direction == wxHORIZONTAL)
+                pixelsDouble = (double(m_parentSize.x) * double(dim.GetValue()) / 100.0);
+            else
+                pixelsDouble = (double(m_parentSize.y) * double(dim.GetValue()) / 100.0);
+        }
+        else
+        {
+            wxASSERT(false);
+            return 0;
+        }
+
+        // Scaling is used in e.g. printing
+        if (m_scale != 1.0)
+            pixelsDouble /= m_scale;
+
+        int pixelsInt = int(pixelsDouble + 0.5);
+
+        // If the result is very small, make it at least one pixel in size.
+        if (pixelsInt == 0 && dim.GetValue() > 0)
+            pixelsInt = 1;
+
+        return pixelsInt;
     }
 }
 
@@ -13412,6 +13463,10 @@ int wxTextAttrDimensionConverter::GetTenthsMM(const wxTextAttrDimension& dim) co
         return dim.GetValue();
     else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
         return ConvertPixelsToTenthsMM(dim.GetValue());
+    else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_POINTS)
+        return (int) ((double(dim.GetValue())/0.28346456692913384) + 0.5);
+    else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
+        return (int) ((double(dim.GetValue())/28.346456692913384) + 0.5);
     else
     {
         wxASSERT(false);

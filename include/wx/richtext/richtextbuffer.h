@@ -325,8 +325,9 @@ enum wxTextAttrUnits
     wxTEXT_ATTR_UNITS_PIXELS                = 0x0002,
     wxTEXT_ATTR_UNITS_PERCENTAGE            = 0x0004,
     wxTEXT_ATTR_UNITS_POINTS                = 0x0008,
+    wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT      = 0x0100,
 
-    wxTEXT_ATTR_UNITS_MASK                  = 0x000F
+    wxTEXT_ATTR_UNITS_MASK                  = 0x010F
 };
 
 /**
@@ -708,6 +709,33 @@ public:
         Converts pixels to tenths of a mm.
     */
     int ConvertPixelsToTenthsMM(int pixels) const;
+
+    /**
+        Sets the scale factor.
+    */
+    void SetScale(double scale) { m_scale = scale; }
+    /**
+        Returns the scale factor.
+    */
+    double GetScale() const { return m_scale; }
+
+    /**
+        Sets the ppi.
+    */
+    void SetPPI(int ppi) { m_ppi = ppi; }
+    /**
+        Returns the ppi.
+    */
+    int GetPPI() const { return m_ppi; }
+
+    /**
+        Sets the parent size.
+    */
+    void SetParentSize(const wxSize& parentSize) { m_parentSize = parentSize; }
+    /**
+        Returns the parent size.
+    */
+    const wxSize& GetParentSize() const { return m_parentSize; }
 
     int     m_ppi;
     double  m_scale;

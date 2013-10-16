@@ -204,8 +204,9 @@ enum wxTextAttrUnits
     wxTEXT_ATTR_UNITS_PIXELS                = 0x0002,
     wxTEXT_ATTR_UNITS_PERCENTAGE            = 0x0004,
     wxTEXT_ATTR_UNITS_POINTS                = 0x0008,
+    wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT      = 0x0100,
 
-    wxTEXT_ATTR_UNITS_MASK                  = 0x000F
+    wxTEXT_ATTR_UNITS_MASK                  = 0x010F
 };
 
 /**
