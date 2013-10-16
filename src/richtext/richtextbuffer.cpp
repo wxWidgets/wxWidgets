@@ -9423,7 +9423,7 @@ bool wxRichTextCell::AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingCon
             }
             else
             {
-                wxRichTextCell* nextBottomCell = table->GetCell(col, nextRow);
+                wxRichTextCell* nextBottomCell = table->GetCell(nextRow, col);
                 if (nextBottomCell->IsShown())
                 {
                     adjacentCellBelow = nextBottomCell;
