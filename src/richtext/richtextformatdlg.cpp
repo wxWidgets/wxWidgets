@@ -592,7 +592,7 @@ wxRichTextStyleDefinition* wxRichTextFormattingDialog::GetDialogStyleDefinition(
         return NULL;
 }
 
-void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox)
+void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units)
 {
     int unitsIdx = 0;
 
@@ -602,37 +602,52 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
             checkBox->SetValue(false);
         valueCtrl->SetValue(wxT("0"));
         unitsCtrl->SetSelection(0);
-#if 0
-        dim.SetValue(0);
-        dim.SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
-#endif
     }
     else
     {
         if (checkBox)
             checkBox->SetValue(true);
-        if (dim.GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+        
+        if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PIXELS)
         {
-            unitsIdx = 1;
+            unitsIdx = 0;  // By default, the 1st in the list.
+            valueCtrl->SetValue(wxString::Format(wxT("%d"), (int) dim.GetValue()));
+        }
+        else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
+        {
+            unitsIdx = 1; // By default, the 2nd in the list.
             float value = float(dim.GetValue()) / 100.0;
             valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
         }
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
         {
-            unitsIdx = 2;
+            unitsIdx = 2; // By default, the 3rd in the list.
             valueCtrl->SetValue(wxString::Format(wxT("%d"), (int) dim.GetValue()));
         }
-        else
+        else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
         {
-            unitsIdx = 0;
+            unitsIdx = 3; // By default, the 4th in the list.
+            float value = float(dim.GetValue()) / 100.0;
+            valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
+        }
+        else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_POINTS)
+        {
+            unitsIdx = 3; // By default, the 4th in the list (we don't have points and hundredths of points in the same list)
             valueCtrl->SetValue(wxString::Format(wxT("%d"), (int) dim.GetValue()));
+        }
+        
+        if (units)
+        {
+            unitsIdx = units->Index(dim.GetUnits());
+            if (unitsIdx == -1)
+                unitsIdx = 0;
         }
 
         unitsCtrl->SetSelection(unitsIdx);
     }
 }
 
-void wxRichTextFormattingDialog::GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox)
+void wxRichTextFormattingDialog::GetDimensionValue(wxTextAttrDimension& dim, wxTextCtrl* valueCtrl, wxComboBox* unitsCtrl, wxCheckBox* checkBox, wxArrayInt* units)
 {
     if (checkBox && !checkBox->GetValue())
     {
@@ -640,12 +655,22 @@ void wxRichTextFormattingDialog::GetDimensionValue(wxTextAttrDimension& dim, wxT
     }
     else
     {
-        if (unitsCtrl->GetSelection() == 1)
-            dim.SetUnits(wxTEXT_ATTR_UNITS_TENTHS_MM);
-        else if (unitsCtrl->GetSelection() == 2)
-            dim.SetUnits(wxTEXT_ATTR_UNITS_PERCENTAGE);
+        if (units)
+        {
+            int unit = (*units)[unitsCtrl->GetSelection()];
+            dim.SetUnits((wxTextAttrUnits) unit);
+        }
         else
-            dim.SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
+        {
+            if (unitsCtrl->GetSelection() == 0)
+                dim.SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
+            else if (unitsCtrl->GetSelection() == 1)
+                dim.SetUnits(wxTEXT_ATTR_UNITS_TENTHS_MM);
+            else if (unitsCtrl->GetSelection() == 2)
+                dim.SetUnits(wxTEXT_ATTR_UNITS_PERCENTAGE);
+            else if (unitsCtrl->GetSelection() == 3)
+                dim.SetUnits(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
+        }
 
         int value = 0;
         if (ConvertFromString(valueCtrl->GetValue(), value, dim.GetUnits()))
@@ -653,32 +678,42 @@ void wxRichTextFormattingDialog::GetDimensionValue(wxTextAttrDimension& dim, wxT
     }
 }
 
-bool wxRichTextFormattingDialog::ConvertFromString(const wxString& string, int& ret, int scale)
+bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret, int unit)
 {
-    const wxChar* chars = string.GetData();
-    int remain = 2;
-    bool dot = false;
-    ret = 0;
-
-    for (unsigned int i = 0; i < string.Len() && remain; i++)
+    if (unit == wxTEXT_ATTR_UNITS_PIXELS)
     {
-        if (!(chars[i] >= wxT('0') && chars[i] <= wxT('9')) && !(scale == wxTEXT_ATTR_UNITS_TENTHS_MM && chars[i] == wxT('.')))
-            return false;
-
-        if (chars[i] == wxT('.'))
-        {
-            dot = true;
-            continue;
-        }
-
-        if (dot)
-            remain--;
-
-        ret = ret * 10 + chars[i] - wxT('0');
+        ret = wxAtoi(str);
+        return true;
     }
-
-    while (remain-- > 0 && scale == wxTEXT_ATTR_UNITS_TENTHS_MM)
-        ret *= 10;
+    else if (unit == wxTEXT_ATTR_UNITS_TENTHS_MM)
+    {
+        float value = 0.0;
+        wxSscanf(str.c_str(), wxT("%f"), &value);
+        // Convert from cm
+        ret = (int) ((value * 100.0) + 0.5);
+        return true;
+    }
+    else if (unit == wxTEXT_ATTR_UNITS_PERCENTAGE)
+    {
+        ret = wxAtoi(str);
+        return true;
+    }
+    else if (unit == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
+    {
+        float value = 0.0;
+        wxSscanf(str.c_str(), wxT("%f"), &value);
+        ret = (int) ((value * 100.0) + 0.5);
+    }
+    else if (unit == wxTEXT_ATTR_UNITS_POINTS)
+    {
+        ret = wxAtoi(str);
+        return true;
+    }
+    else
+    {
+        ret = 0;
+        return false;
+    }
 
     return true;
 }

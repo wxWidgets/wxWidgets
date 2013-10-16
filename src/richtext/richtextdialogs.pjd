@@ -15161,6 +15161,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -22634,14 +22642,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -23303,7 +23303,7 @@
                               <string name="proxy-Implementation filename">""</string>
                               <string name="proxy-Header filename">""</string>
                               <string name="proxy-Member variable name">"m_leftBorderWidthUnits"</string>
-                              <string name="proxy-Strings">"px|cm"</string>
+                              <string name="proxy-Strings">"px|cm|pt"</string>
                               <string name="proxy-Initial value">"px"</string>
                               <string name="proxy-Help text">"Units for the left border width."</string>
                               <string name="proxy-Tooltip text">""</string>
@@ -23734,7 +23734,7 @@
                               <string name="proxy-Implementation filename">""</string>
                               <string name="proxy-Header filename">""</string>
                               <string name="proxy-Member variable name">"m_rightBorderWidthUnits"</string>
-                              <string name="proxy-Strings">"px|cm"</string>
+                              <string name="proxy-Strings">"px|cm|pt"</string>
                               <string name="proxy-Initial value">"px"</string>
                               <string name="proxy-Help text">"Units for the right border width."</string>
                               <string name="proxy-Tooltip text">""</string>
@@ -24165,7 +24165,7 @@
                               <string name="proxy-Implementation filename">""</string>
                               <string name="proxy-Header filename">""</string>
                               <string name="proxy-Member variable name">"m_topBorderWidthUnits"</string>
-                              <string name="proxy-Strings">"px|cm"</string>
+                              <string name="proxy-Strings">"px|cm|pt"</string>
                               <string name="proxy-Initial value">"px"</string>
                               <string name="proxy-Help text">"Units for the top border width."</string>
                               <string name="proxy-Tooltip text">""</string>
@@ -24596,7 +24596,7 @@
                               <string name="proxy-Implementation filename">""</string>
                               <string name="proxy-Header filename">""</string>
                               <string name="proxy-Member variable name">"m_bottomBorderWidthUnits"</string>
-                              <string name="proxy-Strings">"px|cm"</string>
+                              <string name="proxy-Strings">"px|cm|pt"</string>
                               <string name="proxy-Initial value">"px"</string>
                               <string name="proxy-Help text">"Units for the bottom border width."</string>
                               <string name="proxy-Tooltip text">""</string>
@@ -25392,7 +25392,7 @@
                               <string name="proxy-Implementation filename">""</string>
                               <string name="proxy-Header filename">""</string>
                               <string name="proxy-Member variable name">"m_leftOutlineWidthUnits"</string>
-                              <string name="proxy-Strings">"px|cm"</string>
+                              <string name="proxy-Strings">"px|cm|pt"</string>
                               <string name="proxy-Initial value">"px"</string>
                               <string name="proxy-Help text">"Units for the left outline width."</string>
                               <string name="proxy-Tooltip text">""</string>
@@ -25823,7 +25823,7 @@
                               <string name="proxy-Implementation filename">""</string>
                               <string name="proxy-Header filename">""</string>
                               <string name="proxy-Member variable name">"m_rightOutlineWidthUnits"</string>
-                              <string name="proxy-Strings">"px|cm"</string>
+                              <string name="proxy-Strings">"px|cm|pt"</string>
                               <string name="proxy-Initial value">"px"</string>
                               <string name="proxy-Help text">"Units for the right outline width."</string>
                               <string name="proxy-Tooltip text">""</string>
@@ -26254,7 +26254,7 @@
                               <string name="proxy-Implementation filename">""</string>
                               <string name="proxy-Header filename">""</string>
                               <string name="proxy-Member variable name">"m_topOutlineWidthUnits"</string>
-                              <string name="proxy-Strings">"px|cm"</string>
+                              <string name="proxy-Strings">"px|cm|pt"</string>
                               <string name="proxy-Initial value">"px"</string>
                               <string name="proxy-Help text">"Units for the top outline width."</string>
                               <string name="proxy-Tooltip text">""</string>
@@ -26685,7 +26685,7 @@
                               <string name="proxy-Implementation filename">""</string>
                               <string name="proxy-Header filename">""</string>
                               <string name="proxy-Member variable name">"m_bottomOutlineWidthUnits"</string>
-                              <string name="proxy-Strings">"px|cm"</string>
+                              <string name="proxy-Strings">"px|cm|pt"</string>
                               <string name="proxy-Initial value">"px"</string>
                               <string name="proxy-Help text">"Units for the bottom outline width."</string>
                               <string name="proxy-Tooltip text">""</string>

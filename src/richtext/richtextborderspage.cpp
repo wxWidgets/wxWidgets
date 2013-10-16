@@ -40,85 +40,45 @@ BEGIN_EVENT_TABLE( wxRichTextBordersPage, wxRichTextDialogPage )
 
 ////@begin wxRichTextBordersPage event table entries
     EVT_CHECKBOX( ID_RICHTEXT_BORDER_LEFT_CHECKBOX, wxRichTextBordersPage::OnRichtextBorderCheckboxClick )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_LEFT, wxRichTextBordersPage::OnRichtextBorderLeftUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_LEFT_UNITS, wxRichTextBordersPage::OnRichtextBorderLeftUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_LEFT_STYLE, wxRichTextBordersPage::OnRichtextBorderLeftUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_LEFT_COLOUR, wxRichTextBordersPage::OnRichtextBorderLeftUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXT_BORDER_RIGHT_CHECKBOX, wxRichTextBordersPage::OnRichtextBorderCheckboxClick )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_RIGHT, wxRichTextBordersPage::OnRichtextBorderRightUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_RIGHT_UNITS, wxRichTextBordersPage::OnRichtextBorderRightUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_RIGHT_STYLE, wxRichTextBordersPage::OnRichtextBorderRightUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_RIGHT_COLOUR, wxRichTextBordersPage::OnRichtextBorderRightUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXT_BORDER_TOP_CHECKBOX, wxRichTextBordersPage::OnRichtextBorderCheckboxClick )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_TOP, wxRichTextBordersPage::OnRichtextBorderTopUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_TOP_UNITS, wxRichTextBordersPage::OnRichtextBorderTopUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_TOP_STYLE, wxRichTextBordersPage::OnRichtextBorderTopUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_TOP_COLOUR, wxRichTextBordersPage::OnRichtextBorderTopUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXT_BORDER_BOTTOM_CHECKBOX, wxRichTextBordersPage::OnRichtextBorderCheckboxClick )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_BOTTOM, wxRichTextBordersPage::OnRichtextBorderBottomUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_BOTTOM_UNITS, wxRichTextBordersPage::OnRichtextBorderBottomUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_BOTTOM_STYLE, wxRichTextBordersPage::OnRichtextBorderBottomUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_BORDER_BOTTOM_COLOUR, wxRichTextBordersPage::OnRichtextBorderBottomUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXT_OUTLINE_LEFT_CHECKBOX, wxRichTextBordersPage::OnRichtextBorderCheckboxClick )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_LEFT, wxRichTextBordersPage::OnRichtextOutlineLeftUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_LEFT_UNITS, wxRichTextBordersPage::OnRichtextOutlineLeftUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_LEFT_STYLE, wxRichTextBordersPage::OnRichtextOutlineLeftUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_LEFT_COLOUR, wxRichTextBordersPage::OnRichtextOutlineLeftUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXT_OUTLINE_RIGHT_CHECKBOX, wxRichTextBordersPage::OnRichtextBorderCheckboxClick )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_RIGHT, wxRichTextBordersPage::OnRichtextOutlineRightUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_RIGHT_UNITS, wxRichTextBordersPage::OnRichtextOutlineRightUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_RIGHT_STYLE, wxRichTextBordersPage::OnRichtextOutlineRightUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_RIGHT_COLOUR, wxRichTextBordersPage::OnRichtextOutlineRightUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXT_OUTLINE_TOP_CHECKBOX, wxRichTextBordersPage::OnRichtextBorderCheckboxClick )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_TOP, wxRichTextBordersPage::OnRichtextOutlineTopUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_TOP_UNITS, wxRichTextBordersPage::OnRichtextOutlineTopUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_TOP_STYLE, wxRichTextBordersPage::OnRichtextOutlineTopUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_TOP_COLOUR, wxRichTextBordersPage::OnRichtextOutlineTopUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXT_OUTLINE_BOTTOM_CHECKBOX, wxRichTextBordersPage::OnRichtextBorderCheckboxClick )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_BOTTOM, wxRichTextBordersPage::OnRichtextOutlineBottomUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_BOTTOM_UNITS, wxRichTextBordersPage::OnRichtextOutlineBottomUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_BOTTOM_STYLE, wxRichTextBordersPage::OnRichtextOutlineBottomUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_BOTTOM_COLOUR, wxRichTextBordersPage::OnRichtextOutlineBottomUpdate )
-
 ////@end wxRichTextBordersPage event table entries
 
 END_EVENT_TABLE()
@@ -278,6 +238,7 @@ void wxRichTextBordersPage::CreateControls()
     wxArrayString m_leftBorderWidthUnitsStrings;
     m_leftBorderWidthUnitsStrings.Add(_("px"));
     m_leftBorderWidthUnitsStrings.Add(_("cm"));
+    m_leftBorderWidthUnitsStrings.Add(_("pt"));
     m_leftBorderWidthUnits = new wxComboBox( itemPanel5, ID_RICHTEXT_BORDER_LEFT_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_leftBorderWidthUnitsStrings, wxCB_READONLY );
     m_leftBorderWidthUnits->SetStringSelection(_("px"));
     m_leftBorderWidthUnits->SetHelpText(_("Units for the left border width."));
@@ -308,6 +269,7 @@ void wxRichTextBordersPage::CreateControls()
     wxArrayString m_rightBorderWidthUnitsStrings;
     m_rightBorderWidthUnitsStrings.Add(_("px"));
     m_rightBorderWidthUnitsStrings.Add(_("cm"));
+    m_rightBorderWidthUnitsStrings.Add(_("pt"));
     m_rightBorderWidthUnits = new wxComboBox( itemPanel5, ID_RICHTEXT_BORDER_RIGHT_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_rightBorderWidthUnitsStrings, wxCB_READONLY );
     m_rightBorderWidthUnits->SetStringSelection(_("px"));
     m_rightBorderWidthUnits->SetHelpText(_("Units for the right border width."));
@@ -338,6 +300,7 @@ void wxRichTextBordersPage::CreateControls()
     wxArrayString m_topBorderWidthUnitsStrings;
     m_topBorderWidthUnitsStrings.Add(_("px"));
     m_topBorderWidthUnitsStrings.Add(_("cm"));
+    m_topBorderWidthUnitsStrings.Add(_("pt"));
     m_topBorderWidthUnits = new wxComboBox( itemPanel5, ID_RICHTEXT_BORDER_TOP_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_topBorderWidthUnitsStrings, wxCB_READONLY );
     m_topBorderWidthUnits->SetStringSelection(_("px"));
     m_topBorderWidthUnits->SetHelpText(_("Units for the top border width."));
@@ -368,6 +331,7 @@ void wxRichTextBordersPage::CreateControls()
     wxArrayString m_bottomBorderWidthUnitsStrings;
     m_bottomBorderWidthUnitsStrings.Add(_("px"));
     m_bottomBorderWidthUnitsStrings.Add(_("cm"));
+    m_bottomBorderWidthUnitsStrings.Add(_("pt"));
     m_bottomBorderWidthUnits = new wxComboBox( itemPanel5, ID_RICHTEXT_BORDER_BOTTOM_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_bottomBorderWidthUnitsStrings, wxCB_READONLY );
     m_bottomBorderWidthUnits->SetStringSelection(_("px"));
     m_bottomBorderWidthUnits->SetHelpText(_("Units for the bottom border width."));
@@ -422,6 +386,7 @@ void wxRichTextBordersPage::CreateControls()
     wxArrayString m_leftOutlineWidthUnitsStrings;
     m_leftOutlineWidthUnitsStrings.Add(_("px"));
     m_leftOutlineWidthUnitsStrings.Add(_("cm"));
+    m_leftOutlineWidthUnitsStrings.Add(_("pt"));
     m_leftOutlineWidthUnits = new wxComboBox( itemPanel46, ID_RICHTEXT_OUTLINE_LEFT_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_leftOutlineWidthUnitsStrings, wxCB_READONLY );
     m_leftOutlineWidthUnits->SetStringSelection(_("px"));
     m_leftOutlineWidthUnits->SetHelpText(_("Units for the left outline width."));
@@ -452,6 +417,7 @@ void wxRichTextBordersPage::CreateControls()
     wxArrayString m_rightOutlineWidthUnitsStrings;
     m_rightOutlineWidthUnitsStrings.Add(_("px"));
     m_rightOutlineWidthUnitsStrings.Add(_("cm"));
+    m_rightOutlineWidthUnitsStrings.Add(_("pt"));
     m_rightOutlineWidthUnits = new wxComboBox( itemPanel46, ID_RICHTEXT_OUTLINE_RIGHT_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_rightOutlineWidthUnitsStrings, wxCB_READONLY );
     m_rightOutlineWidthUnits->SetStringSelection(_("px"));
     m_rightOutlineWidthUnits->SetHelpText(_("Units for the right outline width."));
@@ -482,6 +448,7 @@ void wxRichTextBordersPage::CreateControls()
     wxArrayString m_topOutlineWidthUnitsStrings;
     m_topOutlineWidthUnitsStrings.Add(_("px"));
     m_topOutlineWidthUnitsStrings.Add(_("cm"));
+    m_topOutlineWidthUnitsStrings.Add(_("pt"));
     m_topOutlineWidthUnits = new wxComboBox( itemPanel46, ID_RICHTEXT_OUTLINE_TOP_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_topOutlineWidthUnitsStrings, wxCB_READONLY );
     m_topOutlineWidthUnits->SetStringSelection(_("px"));
     m_topOutlineWidthUnits->SetHelpText(_("Units for the top outline width."));
@@ -512,6 +479,7 @@ void wxRichTextBordersPage::CreateControls()
     wxArrayString m_bottomOutlineWidthUnitsStrings;
     m_bottomOutlineWidthUnitsStrings.Add(_("px"));
     m_bottomOutlineWidthUnitsStrings.Add(_("cm"));
+    m_bottomOutlineWidthUnitsStrings.Add(_("pt"));
     m_bottomOutlineWidthUnits = new wxComboBox( itemPanel46, ID_RICHTEXT_OUTLINE_BOTTOM_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_bottomOutlineWidthUnitsStrings, wxCB_READONLY );
     m_bottomOutlineWidthUnits->SetStringSelection(_("px"));
     m_bottomOutlineWidthUnits->SetHelpText(_("Units for the bottom outline width."));
@@ -648,14 +616,20 @@ void wxRichTextBordersPage::SetBorderValue(wxTextAttrBorder& border, /* wxTextAt
     if (!border.IsValid())
     {
         checkBox->Set3StateValue(wxCHK_UNDETERMINED);
-        widthValueCtrl->SetValue(wxT("1"));
+        widthValueCtrl->SetValue(wxT("0"));
         widthUnitsCtrl->SetSelection(0);
         colourCtrl->SetColour(*wxBLACK);
         styleCtrl->SetSelection(0);
     }
     else
     {
-        wxRichTextFormattingDialog::SetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, checkBox);
+        wxArrayInt units;
+        units.Add(wxTEXT_ATTR_UNITS_PIXELS);
+        units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
+        units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
+        
+        wxRichTextFormattingDialog::SetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, checkBox,
+            & units);
 
         int sel = borderStyles.Index(border.GetStyle());
         if (sel == -1)
@@ -674,7 +648,13 @@ void wxRichTextBordersPage::SetBorderValue(wxTextAttrBorder& border, /* wxTextAt
 void wxRichTextBordersPage::GetBorderValue(wxTextAttrBorder& border, /* wxTextAttrBorder& borderToReset, */ wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
         wxComboBox* styleCtrl, wxRichTextColourSwatchCtrl* colourCtrl, const wxArrayInt& borderStyles)
 {
-    wxRichTextFormattingDialog::GetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, checkBox);
+    wxArrayInt units;
+    units.Add(wxTEXT_ATTR_UNITS_PIXELS);
+    units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
+    units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
+        
+    wxRichTextFormattingDialog::GetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, checkBox,
+        & units);
 
     int sel = styleCtrl->GetSelection();
     border.SetColour(colourCtrl->GetColour());
