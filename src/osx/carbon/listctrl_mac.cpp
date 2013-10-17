@@ -2855,16 +2855,13 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     HIThemeTextInfo info;
     bool setup = false;
 #if wxOSX_USE_CORE_TEXT
-    if ( UMAGetSystemVersion() >= 0x1050 )
+    info.version = kHIThemeTextInfoVersionOne;
+    info.fontID = kThemeViewsFont;
+    if (font.IsOk())
     {
-        info.version = kHIThemeTextInfoVersionOne;
-        info.fontID = kThemeViewsFont;
-        if (font.IsOk())
-        {
-            info.fontID = kThemeSpecifiedFont;
-            info.font = (CTFontRef) font.OSXGetCTFont();
-            setup = true;
-        }
+        info.fontID = kThemeSpecifiedFont;
+        info.font = (CTFontRef) font.OSXGetCTFont();
+        setup = true;
     }
 #endif
 #if wxOSX_USE_ATSU_TEXT

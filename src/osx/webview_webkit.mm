@@ -351,10 +351,7 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
 
     m_webView = (WebView*) HIWebViewGetWebView( peer->GetControlRef() );
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-    if ( UMAGetSystemVersion() >= 0x1030 )
-        HIViewChangeFeatures( peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
-#endif
+    HIViewChangeFeatures( peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
     InstallControlEventHandler(peer->GetControlRef(),
                                GetwxWebViewWebKitEventHandlerUPP(),
                                GetEventTypeCount(eventList), eventList, this,
@@ -1074,9 +1071,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
             case NSURLErrorResourceUnavailable:
             case NSURLErrorHTTPTooManyRedirects:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
             case NSURLErrorDataLengthExceedsMaximum:
-#endif
             case NSURLErrorBadURL:
             case NSURLErrorFileIsDirectory:
                 *out = wxWEBVIEW_NAV_ERR_REQUEST;
@@ -1098,20 +1093,16 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                 *out = wxWEBVIEW_NAV_ERR_USER_CANCELLED;
                 break;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
             case NSURLErrorCannotDecodeRawData:
             case NSURLErrorCannotDecodeContentData:
             case NSURLErrorCannotParseResponse:
-#endif
             case NSURLErrorBadServerResponse:
                 *out = wxWEBVIEW_NAV_ERR_REQUEST;
                 break;
 
             case NSURLErrorUserAuthenticationRequired:
             case NSURLErrorSecureConnectionFailed:
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
             case NSURLErrorClientCertificateRequired:
-#endif
                 *out = wxWEBVIEW_NAV_ERR_AUTH;
                 break;
 

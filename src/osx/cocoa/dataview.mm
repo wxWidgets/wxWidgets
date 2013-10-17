@@ -367,10 +367,8 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     }
     [nativeColumn setResizingMask:resizingMask];
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     // setting the visibility:
     [nativeColumn setHidden:static_cast<BOOL>(column->IsHidden())];
-#endif
 
     wxDataViewRendererNativeData * const renderData = renderer->GetNativeData();
 
@@ -1486,7 +1484,6 @@ outlineView:(NSOutlineView*)outlineView
     [super editWithFrame:textFrame inView:controlView editor:textObj delegate:anObject event:theEvent];
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 -(NSUInteger) hitTestForEvent:(NSEvent*)event inRect:(NSRect)cellFrame ofView:(NSView*)controlView
 {
     NSPoint point = [controlView convertPoint:[event locationInWindow] fromView:nil];
@@ -1528,7 +1525,6 @@ outlineView:(NSOutlineView*)outlineView
 
     return [super hitTestForEvent:event inRect:textFrame ofView:controlView];
 }
-#endif
 
 -(NSRect) imageRectForBounds:(NSRect)cellFrame
 {
@@ -2060,7 +2056,6 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
 
 void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
 {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
     const int count = GetCount();
     NSTableColumn *column = GetColumn(pos)->GetNativeData()->GetNativeColumnPtr();
 
@@ -2173,7 +2168,6 @@ void wxCocoaDataViewControl::FitColumnWidthToContent(unsigned int pos)
     }
 
     [column setWidth:calculator.GetMaxWidth()];
-#endif // MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 }
 
 //
@@ -3295,15 +3289,13 @@ void wxDataViewColumn::SetWidth(int width)
     switch ( width )
     {
         case wxCOL_WIDTH_AUTOSIZE:
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
             if ( GetOwner() )
             {
                 wxCocoaDataViewControl *peer = static_cast<wxCocoaDataViewControl*>(GetOwner()->GetPeer());
                 peer->FitColumnWidthToContent(GetOwner()->GetColumnPosition(this));
                 break;
             }
-#endif
-            // fall through if unsupported (OSX < 10.5) or not yet settable
+            // fall through if not yet settable
 
         case wxCOL_WIDTH_DEFAULT:
             width = wxDVC_DEFAULT_WIDTH;

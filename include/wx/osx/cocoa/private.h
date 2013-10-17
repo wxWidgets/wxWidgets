@@ -19,12 +19,6 @@
     #import <Cocoa/Cocoa.h>
 #endif
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
-// available in 10.4 but not in the headers
-enum {
-    kEventMouseScroll             = 11
-};
-#endif
 //
 // shared between Cocoa and Carbon
 //

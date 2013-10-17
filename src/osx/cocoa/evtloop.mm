@@ -66,10 +66,8 @@ static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
             NSMouseEnteredMask |
             NSMouseExitedMask |
             NSScrollWheelMask |
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
             NSTabletPointMask |
             NSTabletProximityMask |
-#endif
             NSOtherMouseDownMask |
             NSOtherMouseUpMask |
             NSOtherMouseDraggedMask |
@@ -77,14 +75,12 @@ static NSUInteger CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
             NSKeyDownMask |
             NSKeyUpMask |
             NSFlagsChangedMask |
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
             NSEventMaskGesture |
             NSEventMaskMagnify |
             NSEventMaskSwipe |
             NSEventMaskRotate |
             NSEventMaskBeginGesture |
             NSEventMaskEndGesture |
-#endif
             0;
     }
     

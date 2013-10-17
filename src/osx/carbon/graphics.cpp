@@ -78,10 +78,6 @@ extern void wxOSXUnlockFocus( WXWidget view) ;
 #endif
 #endif
 
-#if 1 // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-
-// TODO test whether this private API also works under 10.3
-
 // copying values from NSCompositingModes (see also webkit and cairo sources)
 
 typedef enum CGCompositeOperation {
@@ -105,8 +101,6 @@ extern "C"
 {
    CG_EXTERN void CGContextSetCompositeOperation (CGContextRef context, int operation);
 } ;
-
-#endif
 
 //-----------------------------------------------------------------------------
 // constants

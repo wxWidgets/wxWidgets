@@ -458,10 +458,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 
     m_webView = (WebView*) HIWebViewGetWebView( peer->GetControlRef() );
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-    if ( UMAGetSystemVersion() >= 0x1030 )
-        HIViewChangeFeatures( peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
-#endif
+    HIViewChangeFeatures( peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
     InstallControlEventHandler( peer->GetControlRef() , GetwxWebKitCtrlEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,
         (EventHandlerRef *)&m_webKitCtrlEventHandler);
