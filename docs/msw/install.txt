@@ -374,38 +374,35 @@ Note (4): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
 Cygwin/MinGW Compilation
 ----------------------------------------------------------------
 
-wxWidgets supports Cygwin (formerly GnuWin32) betas and
-releases, and MinGW. Cygwin can be downloaded from:
+wxWidgets supports Cygwin, MinGW and MinGW-w64 tool chains under Windows.
+They can be downloaded from:
 
-    http://sources.redhat.com/cygwin/
-
-and MinGW from:
-
+    http://www.cygwin.com/
     http://www.mingw.org/
+    http://mingw-w64.sourceforge.net/
 
-Both Cygwin and MinGW can be used with configure (assuming you have MSYS
-installed in case of MinGW). You will need new enough MinGW version, preferably
-MinGW 3.4.2+ (ships with gcc3).
+respectively. Please retrieve and install the latest version of your preferred
+tool chain by following the instructions provided by these packages. Notice
+that Cygwin includes both native Cygwin compiler, which produces binaries that
+require Cygwin during run-time, and MinGW[-w64] cross-compilers which can still
+be used in Cygwin environment themselves but produce plain Windows binaries
+without any special run-time requirements. You will probably want to use the
+latter for developing your applications.
 
-NOTE: some notes specific to old Cygwin (< 1.1.x) are at the end of this
-      section (see OLD VERSIONS)
+If using MinGW, you can download the add-on MSYS package to provide Unix-like
+tools that you'll need to build wxWidgets using configure.
 
-There are two methods of compiling wxWidgets, by using the
-makefiles provided or by using 'configure'.
-
-Retrieve and install the latest version of Cygwin, or MinGW, as per
-the instructions with either of these packages.
-
-If using MinGW, you can download the add-on MSYS package to
-provide Unix-like tools that you'll need to build wxWidgets using configure.
+All of these tool chains can be used either with Unix-like configure+make build
+process (preferred) or with the provided makefile.gcc makefiles without using
+configure:
 
 Using makefiles Directly
 ----------------------------------------------------------------
 
 NOTE: The makefile.gcc makefiles are for compilation under MinGW using
-      Windows command interpreter (command.com/cmd.exe), they won't work in
-      other environments (such as UNIX or Unix-like, e.g. MSYS where you have
-      to use configure instead, see the section below)
+      Windows command interpreter (command.com/cmd.exe), they won't work
+      if you use Unix shell, as is the case with MSYS. Follow the instructions
+      for using configure below instead in this case.
 
 Use the makefile.gcc files for compiling wxWidgets and samples,
 e.g. to compile a debugging version of wxWidgets:
@@ -437,81 +434,16 @@ make a build directory, and run configure and make in this directory.
 
 For example:
 
-  cd $WXWIN
-  mkdir build-debug
-  cd build-debug
-  ../configure --with-msw --enable-debug --enable-debug_gdb --disable-shared
-  make
-  make install % This step is optional, see note (6) below.
-  cd samples/minimal
-  make
-  ./minimal.exe
-
-Notes:
-
-1. See also the Cygwin/MinGW on the web site or CD-ROM for
-   further information about using wxWidgets with these compilers.
-
-2. libwx.a is 100 MB or more - but much less if compiled with no
-   debug info (-g0) and level 4 optimization (-O4).
-
-3. There's a bug in MinGW headers for some early distributions.
-
-   in include/windows32/defines.h, where it says:
-
-   #define LPSTR_TEXTCALLBACKA (LPSTR)-1L)
-
-   it should say:
-
-   #define LPSTR_TEXTCALLBACKA ((LPSTR)-1L)
-
-   (a missing bracket).
-
-4. OpenGL support should work with MinGW as-is. However,
-   if you wish to generate import libraries appropriate either for
-   the MS OpenGL libraries or the SGI OpenGL libraries, go to
-   include/wx/msw/gl and use:
-
-     dlltool -k -d opengl.def -llibopengl.a
-
-   for the SGI DLLs, or
-
-     dlltool -k -d opengl32.def -llibopengl32.a
-
-   and similarly for glu[32].def.
-
-5. The 'make install' step is optional, and copies files
-   as follows:
-
-   /usr/local/lib - wxmswXYZd.dll.a and wxmswXYZd.dll
-   /usr/local/include/wx - wxWidgets header files
-   /usr/local/bin - wx-config
-
-   You may need to do this if using wx-config with the
-   default root path.
-
-6. With Cygwin, you can invoke gdb --nw myfile.exe to
-   debug an executable. If there are memory leaks, they will be
-   flagged when the program quits. You can use Cygwin gdb
-   to debug MinGW executables.
-
-7. Note that gcc's precompiled headers do not work on current versions of
-   Cygwin. If your version of Cygwin is affected you will need to use the
-   --disable-precomp-headers configure option.
-
-OLD VERSIONS:
-
-- Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
-  to set up appropriate variables, if necessary mounting drives.
-  Run it before compiling.
-
-- For Cygwin, make sure there's a \tmp directory on your
-  Windows drive or bison will crash (actually you don't need
-  bison for ordinary wxWidgets compilation: a pre-generated .c file is
-  supplied).
-
-- If using GnuWin32 b18, you will need to copy windres.exe
-  from e.g. the MinGW distribution, to a directory in your path.
+  $ cd $WXWIN
+  $ mkdir build-debug
+  $ cd build-debug
+  $ # Optionally use --disable-shared for static linking
+  $ ../configure --enable-debug
+  $ make
+  $ make install # This step is optional
+  $ cd samples/minimal
+  $ make
+  $ ./minimal.exe
 
 
 DigitalMars C++ Compilation
