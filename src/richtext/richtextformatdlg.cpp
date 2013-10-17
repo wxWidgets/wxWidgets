@@ -33,6 +33,7 @@
     #include "wx/frame.h"
     #include "wx/checkbox.h"
     #include "wx/button.h"
+    #include "wx/wxcrtvararg.h"
 #endif // WX_PRECOMP
 
 #include "wx/bookctrl.h"
