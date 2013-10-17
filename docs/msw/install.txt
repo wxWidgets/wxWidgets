@@ -393,6 +393,10 @@ latter for developing your applications.
 If using MinGW, you can download the add-on MSYS package to provide Unix-like
 tools that you'll need to build wxWidgets using configure.
 
+C++11 note: If you want to compile wxWidgets in C++11 mode, you currently have
+            to use -std=gnu++11 switch as -std=c++11 disables some extensions
+            that wxWidgets relies on. I.e. please use CXXFLAGS="-std=gnu++11".
+
 All of these tool chains can be used either with Unix-like configure+make build
 process (preferred) or with the provided makefile.gcc makefiles without using
 configure:
