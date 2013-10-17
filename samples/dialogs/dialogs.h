@@ -52,7 +52,7 @@ of MSW, MAC and OS2
     #define USE_WXMAC 0
 #endif
 
-#if defined(__WXMAC_OSX__) && && USE_NATIVE_FONT_DIALOG_FOR_MACOSX
+#if USE_NATIVE_FONT_DIALOG_FOR_MACOSX
     #define USE_WXMACFONTDLG 1
 #else
     #define USE_WXMACFONTDLG 0
