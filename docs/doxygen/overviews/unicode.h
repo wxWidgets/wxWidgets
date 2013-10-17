@@ -58,7 +58,7 @@ Note that typically one character is assigned exactly one code point, but there
 are exceptions; the so-called <em>precomposed characters</em>
 (see http://en.wikipedia.org/wiki/Precomposed_character) or the <em>ligatures</em>.
 In these cases a single "character" may be mapped to more than one code point or
-viceversa more characters may be mapped to a single code point.
+vice versa more than one character may be mapped to a single code point.
 
 The Unicode standard divides the space of all possible code points in <b><em>planes</em></b>;
 a plane is a range of 65,536 (1000016) contiguous Unicode code points.

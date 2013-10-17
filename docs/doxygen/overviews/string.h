@@ -30,22 +30,23 @@ in previous versions.
 
 @section overview_string_internal Internal wxString Encoding
 
-Since wxWidgets 3.0 wxString internally uses <b>UTF-16</b> (with Unicode
-code units stored in @c wchar_t) under Windows and <b>UTF-8</b> (with Unicode
-code units stored in @c char) under Unix, Linux and Mac OS X to store its content.
+Since wxWidgets 3.0 wxString may use any of @c UTF-16 (under Windows, using
+the native 16 bit @c wchar_t), @c UTF-32 (under Unix, using the native 32
+bit @c wchar_t) or @c UTF-8 (under both Windows and Unix) to store its
+content. By default, @c wchar_t is used under all platforms, but wxWidgets can
+be compiled with <tt>wxUSE_UNICODE_UTF8=1</tt> to use UTF-8.
 
-For definitions of <em>code units</em> and <em>code points</em> terms, please
-see the @ref overview_unicode_encodings paragraph.
-
-For simplicity of implementation, wxString when <tt>wxUSE_UNICODE_WCHAR==1</tt>
-(e.g. on Windows) uses <em>per code unit indexing</em> instead of
-<em>per code point indexing</em> and doesn't know anything about surrogate pairs;
-in other words it always considers code points to be composed by 1 code unit,
-while this is really true only for characters in the @e BMP (Basic Multilingual Plane).
-Thus when iterating over a UTF-16 string stored in a wxString under Windows, the user
-code has to take care of <em>surrogate pairs</em> himself.
-(Note however that Windows itself has built-in support for surrogate pairs in UTF-16,
-such as for drawing strings on screen.)
+For simplicity of implementation, wxString uses <em>per code unit indexing</em>
+instead of <em>per code point indexing</em> when using UTF-16, i.e. in the
+default <tt>wxUSE_UNICODE_WCHAR==1</tt> build under Windows and doesn't know
+anything about surrogate pairs. In other words it always considers code points
+to be composed by 1 code unit, while this is really true only for characters in
+the @e BMP (Basic Multilingual Plane), as explained in more details in the @ref
+overview_unicode_encodings section. Thus when iterating over a UTF-16 string
+stored in a wxString under Windows, the user code has to take care of
+<em>surrogate pairs</em> himself. (Note however that Windows itself has
+built-in support for surrogate pairs in UTF-16, such as for drawing strings on
+screen.)
 
 @remarks
 Note that while the behaviour of wxString when <tt>wxUSE_UNICODE_WCHAR==1</tt>
@@ -54,10 +55,10 @@ UCS-2 encoded since you can encode code points outside the @e BMP in a wxString
 as two code units (i.e. as a surrogate pair; as already mentioned however wxString
 will "see" them as two different code points)
 
-When instead <tt>wxUSE_UNICODE_UTF8==1</tt> (e.g. on Linux and Mac OS X)
-wxString handles UTF8 multi-bytes sequences just fine also for characters outside
-the BMP (it implements <em>per code point indexing</em>), so that you can use
-UTF8 in a completely transparent way:
+In <tt>wxUSE_UNICODE_UTF8==1</tt> case, wxString handles UTF-8 multi-bytes
+sequences just fine also for characters outside the BMP (it implements <em>per
+code point indexing</em>), so that you can use UTF-8 in a completely transparent
+way:
 
 Example:
 @code
@@ -361,17 +362,18 @@ difference the change to @c EXTRA_ALLOC makes to your program.
 
 @section overview_string_settings wxString Related Compilation Settings
 
-Much work has been done to make existing code using ANSI string literals
-work as before version 3.0.
+The main option affecting wxString is @c wxUSE_UNICODE which is now always
+defined as @c 1 by default to indicate Unicode support. You may set it to 0 to
+disable Unicode support in wxString and elsewhere in wxWidgets but this is @e
+strongly not recommended.
 
-If you nonetheless need to have a wxString that uses @c wchar_t
-on Unix and Linux, too, you can specify this on the command line with the
-@c configure @c --disable-utf8 switch or you can consider using wxUString
-or @c std::wstring instead.
+Another option affecting wxWidgets is @c wxUSE_UNICODE_WCHAR which is also 1 by
+default. You may want to set it to 0 and set @c wxUSE_UNICODE_UTF8 to 1 instead
+to use UTF-8 internally. wxString still provides the same API in this case, but
+using UTF-8 has performance implications as explained in @ref
+overview_unicode_performance, so it probably shouldn't be enabled for legacy
+code which might contain a lot of index-using loops.
 
-@c wxUSE_UNICODE is now defined as @c 1 by default to indicate Unicode support.
-If UTF-8 is used for the internal storage in wxString, @c wxUSE_UNICODE_UTF8 is
-also defined, otherwise @c wxUSE_UNICODE_WCHAR is.
-See also @ref page_wxusedef_important.
+See also @ref page_wxusedef_important for a few other options affecting wxString.
 
 */
