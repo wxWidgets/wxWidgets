@@ -374,12 +374,13 @@ Note (4): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
 Cygwin/MinGW Compilation
 ----------------------------------------------------------------
 
-wxWidgets supports Cygwin, MinGW and MinGW-w64 tool chains under Windows.
-They can be downloaded from:
+wxWidgets supports Cygwin, MinGW, MinGW-w64 and TDM-GCC tool chains under
+Windows. They can be downloaded from:
 
     http://www.cygwin.com/
     http://www.mingw.org/
     http://mingw-w64.sourceforge.net/
+    http://tdm-gcc.tdragon.net/
 
 respectively. Please retrieve and install the latest version of your preferred
 tool chain by following the instructions provided by these packages. Notice
