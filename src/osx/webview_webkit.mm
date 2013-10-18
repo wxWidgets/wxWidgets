@@ -1102,7 +1102,9 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
             case NSURLErrorUserAuthenticationRequired:
             case NSURLErrorSecureConnectionFailed:
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
             case NSURLErrorClientCertificateRequired:
+#endif
                 *out = wxWEBVIEW_NAV_ERR_AUTH;
                 break;
 
