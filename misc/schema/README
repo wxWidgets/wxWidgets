@@ -1,0 +1,91 @@
+                      Schema for Validation of XRC files
+                      ==================================
+
+0. Overview
+-----------
+
+The files in this directory allow you to check correctness of the XRC files by
+verifying that their contents conforms to wxWidgets XRC schema. Doing this is a
+good way to detect some common errors in manually-written XRC files, even
+though it doesn't currently detect all the possible errors.
+
+
+1. Installation
+---------------
+
+To use them, you need to install Jing, a RELAX NG validator, on your system.
+Jing is available from http://www.thaiopensource.com/relaxng/jing.html and is a
+Java program, so it requires a working Java Runtime Environment installation.
+
+If you are using Windows and already have a working JRE, you can download Jing
+packaged as a Windows executable from
+
+    http://sourceforge.net/projects/wxwindows/files/tools/jing.zip/download
+
+
+2. Usage
+--------
+
+Once you have a working version of Jing, you can use it directly as following:
+
+    jing -c http://www.wxwidgets.org/wxxrc your-file.xrc
+
+Alternatively, you can also use wxrc --validate or --validate-only options:
+
+    wxrc --validate-only your-file.xrc
+
+(notice that this still requires jing to be installed).
+
+
+3. Customization
+----------------
+
+Using xrc_schema.rnc only validates the standard wxWidgets classes and skips
+any custom ones, for which you might have your own XRC handlers defined. If
+you don't use any custom XRC handlers at all, you may prefer to use
+xrc_schema_builtin_only.rnc schema instead of xrc_schema.rnc which won't accept
+any non-standard classes at all -- this is useful for detecting any typos.
+
+If you do use your own custom classes, then you need to define your own
+validations rules for them. Please see comments in xrc_schema.rnc for more
+details about how to do it, but here is a motivating example showing that it is
+not too difficult to validate your own classes:
+
+    #
+    # RELAX NG schema for extended XRC with support for custom handlers.
+    #
+
+    default namespace = "http://www.wxwidgets.org/wxxrc"
+    namespace xrc = "http://www.wxwidgets.org/wxxrc"
+
+    include "http://www.wxwidgets.org/wxxrc" {
+        customClasses = RoundingButtons | InputSequenceEntry
+    }
+
+    # Simplest possible example: no special properties for this handler.
+    RoundingButtons =
+        element object {
+            attribute class { "RoundingButtons" } &
+            stdObjectNodeAttributes &
+            stdWindowProperties
+        }
+
+    # This handler has an optional property called "title" containing text.
+    InputSequenceEntry =
+        element object {
+            attribute class { "InputSequenceEntry" } &
+            stdObjectNodeAttributes &
+            stdWindowProperties &
+            [xrc:p="o"] element title {_, t_text }*
+        }
+
+
+To use a custom schema, you need to pass the full path to the local file
+containing it to Jing or use wxrc --xrc-schema command line option, so you
+could do, for example:
+
+    jing -c $(WXWIN)/misc/schema/xrc_schema_builtin_only.rnc your-file.xrc
+
+or
+
+    wxrc --validate-only --xrc-schema=my_custom.rnc your-file.xrc
