@@ -352,7 +352,7 @@ wxGridBagSizer* wxSizerXmlHandler::Handle_wxGridBagSizer()
 
 wxSizer*  wxSizerXmlHandler::Handle_wxWrapSizer()
 {
-    wxWrapSizer *sizer = new wxWrapSizer(GetStyle("orient"), GetStyle("flag"));
+    wxWrapSizer *sizer = new wxWrapSizer(GetStyle("orient", wxHORIZONTAL), GetStyle("flag"));
     return sizer;
 }
 
