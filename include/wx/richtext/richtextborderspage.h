@@ -85,11 +85,11 @@ public:
     virtual void FillStyleComboBox(wxComboBox* styleComboBox);
 
     /// Set the border controls
-    static void SetBorderValue(wxTextAttrBorder& border, /* wxTextAttrBorder& borderToReset, */ wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
+    static void SetBorderValue(wxTextAttrBorder& border, wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
         wxComboBox* styleCtrl, wxRichTextColourSwatchCtrl* colourCtrl, const wxArrayInt& borderStyles);
 
     /// Get data from the border controls
-    static void GetBorderValue(wxTextAttrBorder& border, /* wxTextAttrBorder& borderToReset, */ wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
+    static void GetBorderValue(wxTextAttrBorder& border, wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
         wxComboBox* styleCtrl, wxRichTextColourSwatchCtrl* colourCtrl, const wxArrayInt& borderStyles);
 
 ////@begin wxRichTextBordersPage event handler declarations

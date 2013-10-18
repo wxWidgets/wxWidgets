@@ -610,7 +610,7 @@ bool wxRichTextBordersPage::TransferDataFromWindow()
 }
 
 // Set the border controls
-void wxRichTextBordersPage::SetBorderValue(wxTextAttrBorder& border, /* wxTextAttrBorder& borderToReset, */ wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
+void wxRichTextBordersPage::SetBorderValue(wxTextAttrBorder& border, wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
         wxComboBox* styleCtrl, wxRichTextColourSwatchCtrl* colourCtrl, const wxArrayInt& borderStyles)
 {
     if (!border.IsValid())
@@ -628,7 +628,7 @@ void wxRichTextBordersPage::SetBorderValue(wxTextAttrBorder& border, /* wxTextAt
         units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
         units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
         
-        wxRichTextFormattingDialog::SetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, checkBox,
+        wxRichTextFormattingDialog::SetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, NULL,
             & units);
 
         int sel = borderStyles.Index(border.GetStyle());
@@ -645,7 +645,7 @@ void wxRichTextBordersPage::SetBorderValue(wxTextAttrBorder& border, /* wxTextAt
 }
 
 // Get data from the border controls
-void wxRichTextBordersPage::GetBorderValue(wxTextAttrBorder& border, /* wxTextAttrBorder& borderToReset, */ wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
+void wxRichTextBordersPage::GetBorderValue(wxTextAttrBorder& border, wxTextCtrl* widthValueCtrl, wxComboBox* widthUnitsCtrl, wxCheckBox* checkBox,
         wxComboBox* styleCtrl, wxRichTextColourSwatchCtrl* colourCtrl, const wxArrayInt& borderStyles)
 {
     wxArrayInt units;
@@ -653,7 +653,7 @@ void wxRichTextBordersPage::GetBorderValue(wxTextAttrBorder& border, /* wxTextAt
     units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
     units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
         
-    wxRichTextFormattingDialog::GetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, checkBox,
+    wxRichTextFormattingDialog::GetDimensionValue(border.GetWidth(), widthValueCtrl, widthUnitsCtrl, NULL,
         & units);
 
     int sel = styleCtrl->GetSelection();
@@ -663,17 +663,14 @@ void wxRichTextBordersPage::GetBorderValue(wxTextAttrBorder& border, /* wxTextAt
     {
         // When we apply the attributes, we won't apply this one, to leave the original unchanged.
         border.Reset();
-        // borderToReset.Reset();
     }
     else if (checkBox->Get3StateValue() == wxCHK_UNCHECKED)
     {
-        // We make a note to reset this attribute.
-        // borderToReset.GetWidth().MakeValid();
         border.SetStyle(wxTEXT_BOX_ATTR_BORDER_NONE);
+        border.GetWidth().SetValue(0);
     }
     else
     {
-        // borderToReset.Reset(); // Don't reset this, in case we were going to previously.
         if (sel != -1)
             border.SetStyle(borderStyles[sel]);
     }
