@@ -1600,8 +1600,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
         case wxTOOL_STYLE_BUTTON:
             {
                 wxASSERT( tool->GetControlHandle() == NULL );
-                ControlButtonContentInfo info;
-                wxMacCreateBitmapButton( &info, tool->GetNormalBitmap() );
 
                 // contrary to the docs this control only works with iconrefs
                 ControlButtonContentInfo info;
