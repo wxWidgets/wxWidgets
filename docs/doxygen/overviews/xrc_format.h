@@ -951,9 +951,9 @@ Example:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{defaultdirectory, @ref overview_xrcformat_type_string,
-    Sets the current directory displayed in the control. }
+    Sets the current directory displayed in the control (default: empty). }
 @row3col{defaultfilename, @ref overview_xrcformat_type_string,
-    Selects a certain file.}
+    Selects a certain file (default: empty).}
 @row3col{wildcard, @ref overview_xrcformat_type_string,
     Sets the wildcard, which can contain multiple file types, for example:
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"

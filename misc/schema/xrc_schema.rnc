@@ -760,9 +760,9 @@ wxFileCtrl =
         attribute class { "wxFileCtrl" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
-        [xrc:p="o"] element value    {_, t_string }* &
-        [xrc:p="r"] element message  {_, t_text }+ &
-        [xrc:p="o"] element wildcard {_, t_string }*
+        [xrc:p="o"] element defaultdirectory {_, t_string }* &
+        [xrc:p="o"] element defaultfilename  {_, t_string }* &
+        [xrc:p="o"] element wildcard         {_, t_string }*
     }
 
 

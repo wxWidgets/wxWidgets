@@ -472,7 +472,6 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <border>5</border>
                                 <object class="wxFileCtrl">
                                     <wildcard>Text files (*.txt)</wildcard>
-                                    <message>Choose file</message>
                                 </object>
                             </object>
                         </object>
