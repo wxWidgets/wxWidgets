@@ -96,6 +96,12 @@ public :
         return v == ms_viewCurrentlyEdited;
     }
 
+    // Returns true if this editor is the one currently being modified.
+    static bool IsCurrentEditor(wxNSTextFieldEditor* e)
+    {
+        return e == [(NSTextField*)ms_viewCurrentlyEdited currentEditor];
+    }
+
 protected :
     BOOL m_formerEditable ;
     BOOL m_formerSelectable;
@@ -286,11 +292,16 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 - (void) insertText:(id) str
 {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
-    if ( impl == NULL || lastKeyDownEvent==nil || !impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+    // We should never generate char events for the text being inserted
+    // programmatically.
+    if ( !wxMacEditHelper::IsCurrentEditor(self) )
     {
-        [super insertText:str];
+        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
+        if ( impl && lastKeyDownEvent && impl->DoHandleCharEvent(lastKeyDownEvent, str) )
+            return;
     }
+
+    [super insertText:str];
 }
 
 @end
