@@ -559,7 +559,7 @@ pseudo-class.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Page label (required).}
+     Page label (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap shown alongside the label (default: none).}
 @row3col{selected, @ref overview_xrcformat_type_bool,
@@ -620,7 +620,7 @@ to use it.
 @row3col{default, @ref overview_xrcformat_type_bool,
      Should this button be the default button in dialog (default: 0)?}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-     Bitmap to show on the button (required).}
+     Bitmap to show on the button (default: none).}
 @row3col{selected, @ref overview_xrcformat_type_bitmap,
      Bitmap to show when the button is selected (default: none, same as @c bitmap).}
 @row3col{focus, @ref overview_xrcformat_type_bitmap,
@@ -652,7 +652,7 @@ pseudo-class. @c ownerdrawnitem objects have the following properties:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{text, @ref overview_xrcformat_type_text,
-     Item's label (required).}
+     Item's label (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Item's bitmap (default: no bitmap).}
 @endTable
@@ -678,7 +678,7 @@ Example:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-     Label to display on the button (required).}
+     Label to display on the button (default: none).}
 @row3col{checked, @ref overview_xrcformat_type_bool,
      Should the button be checked/pressed initially (default: 0)?}
 @endTable
@@ -787,7 +787,7 @@ its @c notebookpage).
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Sheet page's title (required).}
+     Sheet page's title (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap shown alongside the label (default: none, mutually exclusive with @c image).}
 @row3col{image, integer,
@@ -811,7 +811,7 @@ concatenated into a single string using a new line character between them
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
     First line of text on the button, typically the label of an action that
-    will be made when the button is pressed (required). }
+    will be made when the button is pressed (default: empty). }
 @row3col{note, @ref overview_xrcformat_type_text,
     Second line of text describing the action performed when the button is pressed (default: none).  }
 @endTable
@@ -822,7 +822,7 @@ concatenated into a single string using a new line character between them
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Label to use for the collapsible section (required).}
+     Label to use for the collapsible section (default: empty).}
 @row3col{collapsed, @ref overview_xrcformat_type_bool,
      Should the pane be collapsed initially (default: 0)?}
 @endTable
@@ -914,7 +914,7 @@ objects. If sizer child is used, it sets
 @row3col{value, @ref overview_xrcformat_type_string,
     Initial value of the control (default: empty).}
 @row3col{message, @ref overview_xrcformat_type_text,
-    Message shown to the user in wxDirDialog shown by the control (required).}
+    Message shown to the user in wxDirDialog shown by the control (default: empty).}
 @endTable
 
 
@@ -968,7 +968,7 @@ Example:
 @row3col{value, @ref overview_xrcformat_type_string,
     Initial value of the control (default: empty).}
 @row3col{message, @ref overview_xrcformat_type_text,
-    Message shown to the user in wxDirDialog shown by the control (required).}
+    Message shown to the user in wxDirDialog shown by the control (default: empty).}
 @row3col{wildcard, @ref overview_xrcformat_type_string,
     Sets the wildcard, which can contain multiple file types, for example:
     "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
@@ -1056,9 +1056,9 @@ page.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Label to display on the control (required).}
+     Label to display on the control (default: empty).}
 @row3col{url, @ref overview_xrcformat_type_url,
-     URL to open when the link is clicked (required).}
+     URL to open when the link is clicked (default: empty).}
 @endTable
 
 
@@ -1107,7 +1107,7 @@ its @c notebookpage).
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Sheet page's title (required).}
+     Sheet page's title (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap shown alongside the label (default: none, mutually exclusive with @c image).}
 @row3col{image, integer,
@@ -1338,7 +1338,7 @@ pseudo-class.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Page's title (required).}
+     Page's title (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap shown alongside the label
      (default: none, mutually exclusive with @c image).}
@@ -1415,7 +1415,7 @@ pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Sheet page's title (required).}
+     Sheet page's title (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap shown alongside the label (default: none).}
 @row3col{selected, @ref overview_xrcformat_type_bool,
@@ -1430,7 +1430,7 @@ Each @c propertysheetpage has exactly one non-toplevel window as its child.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Label shown on the radio button (required).}
+     Label shown on the radio button (default: empty).}
 @row3col{value, @ref overview_xrcformat_type_bool,
     Initial value of the control (default: 0).}
 @endTable
@@ -1557,9 +1557,9 @@ objects have the following properties:
 @row3col{disabled, @ref overview_xrcformat_type_bool,
     Whether the button should be disabled (default: false).}
 @row3col{label, @ref overview_xrcformat_type_text,
-    Item's label (required).}
+    Item's label (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Item's bitmap (required).}
+    Item's bitmap (default: none).}
 @row3col{small-bitmap, @ref overview_xrcformat_type_bitmap,
     Small bitmap (default: none).}
 @row3col{disabled-bitmap, @ref overview_xrcformat_type_bitmap,
@@ -1853,7 +1853,7 @@ No additional properties.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Label to display on the button (required).}
+     Label to display on the button (default: empty).}
 @row3col{checked, @ref overview_xrcformat_type_bool,
      Should the button be checked/pressed initially (default: 0)?}
 @endTable
@@ -1891,7 +1891,7 @@ properties:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
-    Tool's bitmap (required).}
+    Tool's bitmap (default: empty).}
 @row3col{bitmap2, @ref overview_xrcformat_type_bitmap,
     Bitmap for disabled tool (default: derived from @c bitmap).}
 @row3col{label, @ref overview_xrcformat_type_text,
@@ -1979,7 +1979,7 @@ pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Sheet page's title (required).}
+     Sheet page's title (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap shown alongside the label
      (default: none, mutually exclusive with @c image).}
@@ -2020,9 +2020,9 @@ pseudo-class (similarly to @ref xrc_wxnotebook "wxNotebook" and its
 @beginTable
 @hdr3col{property, type, description}
 @row3col{depth, integer,
-     Page's depth in the labels tree (required; see below).}
+     Page's depth in the labels tree (default: 0; see below).}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Sheet page's title (required).}
+     Sheet page's title (default: empty).}
 @row3col{bitmap, @ref overview_xrcformat_type_bitmap,
      Bitmap shown alongside the label (default: none, mutually exclusive with @c image).}
 @row3col{image, integer,
@@ -2312,7 +2312,7 @@ class-specific properties. All classes support the following properties:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{orient, @ref overview_xrcformat_type_style,
-    Sizer orientation, "wxHORIZONTAL" or "wxVERTICAL" (required).}
+    Sizer orientation, "wxHORIZONTAL" or "wxVERTICAL" (default: wxHORIZONTAL).}
 @row3col{flag, @ref overview_xrcformat_type_style, wxWrapSizer flags (default: 0).}
 @endTable
 
