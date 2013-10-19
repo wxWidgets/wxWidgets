@@ -362,6 +362,11 @@
 #define wxUSE_RICHTOOLTIP 0
 #endif
 
+#if wxUSE_WEBVIEW
+#undef wxUSE_WEBVIEW
+#define wxUSE_WEBVIEW 0
+#endif
+
 #endif
     /* _WX_OSX_IPHONE_CHKCONF_H_ */
 
