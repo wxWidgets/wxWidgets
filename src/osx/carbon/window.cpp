@@ -1178,7 +1178,6 @@ void wxMacControl::SuperChangedPosition()
 void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )
 {
     m_font = font;
-#if wxOSX_USE_CORE_TEXT
     HIViewPartCode part = 0;
     HIThemeTextHorizontalFlush flush = kHIThemeTextHorizontalFlushDefault;
     if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_CENTER_HORIZONTAL )
@@ -1195,7 +1194,6 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
         fontStyle.flags = kControlUseForeColorMask;
         ::SetControlFontStyle( m_controlRef , &fontStyle );
     }
-#endif
 #if wxOSX_USE_ATSU_TEXT
     ControlFontStyleRec fontStyle;
     if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
