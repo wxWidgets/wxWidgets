@@ -35824,8 +35824,14 @@ $as_echo "$as_me: WARNING: wxWidgets IPC classes require sockets... disabled" >&
 fi
 
 if test "$wxUSE_DATAOBJ" = "yes"; then
-    $as_echo "#define wxUSE_DATAOBJ 1" >>confdefs.h
+    if test "$wxUSE_DFB" = 1; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxDataObject not yet supported under $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxDataObject not yet supported under $TOOLKIT... disabled" >&2;}
+        wxUSE_DATAOBJ=no
+    else
+        $as_echo "#define wxUSE_DATAOBJ 1" >>confdefs.h
 
+    fi
 else
     { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Clipboard and drag-and-drop require wxDataObject -- disabled" >&5
 $as_echo "$as_me: WARNING: Clipboard and drag-and-drop require wxDataObject -- disabled" >&2;}

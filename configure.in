@@ -6544,7 +6544,12 @@ if test "$wxUSE_IPC" = "yes"; then
 fi
 
 if test "$wxUSE_DATAOBJ" = "yes"; then
-    AC_DEFINE(wxUSE_DATAOBJ)
+    if test "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([wxDataObject not yet supported under $TOOLKIT... disabled])
+        wxUSE_DATAOBJ=no
+    else
+        AC_DEFINE(wxUSE_DATAOBJ)
+    fi
 else
     AC_MSG_WARN([Clipboard and drag-and-drop require wxDataObject -- disabled])
     wxUSE_CLIPBOARD=no
