@@ -13145,7 +13145,7 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
 
 bool wxTextBoxAttr::IsDefault() const
 {
-    return GetFlags() == 0 && !m_border.IsValid() && !m_outline.IsValid() &&
+    return GetFlags() == 0 && m_border.IsDefault() && m_outline.IsDefault() &&
         !m_size.IsValid() && !m_minSize.IsValid() && !m_maxSize.IsValid() &&
         !m_position.IsValid() && !m_padding.IsValid() && !m_margins.IsValid();
 }

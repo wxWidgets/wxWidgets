@@ -947,6 +947,11 @@ public:
     void MakeValid() { m_borderWidth.SetValid(true); }
 
     /**
+        True if the border has no attributes set.
+    */
+    bool IsDefault() const { return (m_flags == 0); }
+
+    /**
         Returns the border flags.
     */
     int GetFlags() const { return m_flags; }
@@ -1054,9 +1059,14 @@ public:
     void CollectCommonAttributes(const wxTextAttrBorders& attr, wxTextAttrBorders& clashingAttr, wxTextAttrBorders& absentAttr);
 
     /**
-        Returns @true if all borders are valid.
+        Returns @true if at least one border is valid.
     */
     bool IsValid() const { return m_left.IsValid() || m_right.IsValid() || m_top.IsValid() || m_bottom.IsValid(); }
+
+    /**
+        Returns @true if no border attributes were set.
+    */
+    bool IsDefault() const { return m_left.IsDefault() && m_right.IsDefault() && m_top.IsDefault() && m_bottom.IsDefault(); }
 
     /**
         Returns the left border.
