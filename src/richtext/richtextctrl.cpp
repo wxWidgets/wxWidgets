@@ -54,6 +54,7 @@ wxDEFINE_EVENT( wxEVT_RICHTEXT_RIGHT_CLICK, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_RICHTEXT_LEFT_DCLICK, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_RICHTEXT_RETURN, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_RICHTEXT_CHARACTER, wxRichTextEvent );
+wxDEFINE_EVENT( wxEVT_RICHTEXT_CONSUMING_CHARACTER, wxRichTextEvent );
 wxDEFINE_EVENT( wxEVT_RICHTEXT_DELETE, wxRichTextEvent );
 
 wxDEFINE_EVENT( wxEVT_RICHTEXT_STYLESHEET_REPLACING, wxRichTextEvent );
@@ -1318,6 +1319,23 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 #endif
                 {
                     event.Skip();
+                    return;
+                }
+
+                wxRichTextEvent cmdEvent1(
+                    wxEVT_RICHTEXT_CONSUMING_CHARACTER,
+                    GetId());
+                cmdEvent1.SetEventObject(this);
+                cmdEvent1.SetFlags(flags);
+#if wxUSE_UNICODE
+                cmdEvent1.SetCharacter(event.GetUnicodeKey());
+#else
+                cmdEvent1.SetCharacter((wxChar) keycode);
+#endif
+                cmdEvent1.SetPosition(m_caretPosition+1);
+                cmdEvent1.SetContainer(GetFocusObject());
+                if (GetEventHandler()->ProcessEvent(cmdEvent1) && !cmdEvent1.IsAllowed())
+                {
                     return;
                 }
 

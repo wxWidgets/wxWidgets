@@ -2234,6 +2234,11 @@ protected:
     @event{EVT_RICHTEXT_CHARACTER(id, func)}
         Process a @c wxEVT_RICHTEXT_CHARACTER event, generated when the user
         presses a character key. Valid event functions: GetFlags, GetPosition, GetCharacter.
+    @event{EVT_RICHTEXT_CONSUMING_CHARACTER(id, func)}
+        Process a @c wxEVT_RICHTEXT_CONSUMING_CHARACTER event, generated when the user
+        presses a character key but before it is processed and inserted into the control.
+        Call Veto to prevent normal processing. Valid event functions: GetFlags, GetPosition,
+        GetCharacter, Veto.
     @event{EVT_RICHTEXT_DELETE(id, func)}
         Process a @c wxEVT_RICHTEXT_DELETE event, generated when the user
         presses the backspace or delete key. Valid event functions: GetFlags, GetPosition.
@@ -2413,6 +2418,7 @@ wxEventType wxEVT_RICHTEXT_MIDDLE_CLICK;
 wxEventType wxEVT_RICHTEXT_LEFT_DCLICK;
 wxEventType wxEVT_RICHTEXT_RETURN;
 wxEventType wxEVT_RICHTEXT_CHARACTER;
+wxEventType wxEVT_RICHTEXT_CONSUMING_CHARACTER;
 wxEventType wxEVT_RICHTEXT_DELETE;
 
 wxEventType wxEVT_RICHTEXT_STYLESHEET_CHANGING;
