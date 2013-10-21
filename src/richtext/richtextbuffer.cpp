@@ -1861,8 +1861,12 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, wxRichTextDrawingContext& cont
     AdjustAttributes(attr, context);
 
     int flags = style;
-    if (selection.IsValid() && GetParentContainer() != this && selection.GetContainer() == this && selection.WithinSelection(GetRange().GetStart(), GetParentContainer()))
+    if (selection.IsValid() &&
+        ((GetParentContainer() != this && selection.GetContainer() == this && selection.WithinSelection(GetRange().GetStart(), GetParentContainer())) ||
+         (selection.WithinSelection(GetRange().GetStart(), this))))
+    {
         flags |= wxRICHTEXT_DRAW_SELECTED;
+    }
 
     // Don't draw guidelines if at top level
     int theseFlags = flags;
