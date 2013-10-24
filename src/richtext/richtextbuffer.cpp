@@ -2139,9 +2139,15 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
         // breaking layout of a box within a paragraph.
     }
 
-    // TODO: (also in para layout) should set the
-    // object's size to an absolute one if specified,
-    // but if not specified, calculate it from content.
+    if (attr.GetTextBoxAttr().GetSize().GetHeight().IsValid())
+    {
+        wxRect r = AdjustAvailableSpace(dc, GetBuffer(), wxRichTextAttr() /* not used */, attr, parentRect, parentRect);
+        int h = r.GetHeight();
+
+        // Convert external to content rect
+        h = h - topMargin - bottomMargin;
+        maxHeight = wxMax(maxHeight, h);
+    }
 
     // We need to add back the margins etc.
     {
