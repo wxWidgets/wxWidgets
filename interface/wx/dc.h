@@ -258,13 +258,23 @@ public:
     void Clear();
 
     /**
-        Draws an arc of a circle, centred on (@a xc, @a yc), with starting
-        point (@a xStart, @a yStart) and ending at (@a xEnd, @a yEnd). 
-        The current pen is used for the outline and the current brush for 
-        filling the shape.
+        Draws an arc from the given start to the given end point.
 
-        The arc is drawn in a counter-clockwise direction from the start point
-        to the end point.
+        @note DrawEllipticArc() has more clear semantics and it is recommended
+        to use it instead of this function.
+
+        The arc drawn is an arc of the circle centered at (@a xc, @a yc). Its
+        start point is (@a xStart, @a yStart) whereas its end point is the
+        point of intersection of the line passing by (@a xc, @a yc) and (@a
+        xEnd, @a yEnd) with the circle passing by (@a xStart, @a yStart).
+
+        The arc is drawn in a counter-clockwise direction between the start and
+        the end points.
+
+        The current pen is used for the outline and the current brush for
+        filling the shape. Notice that unless the brush is transparent, the
+        lines connecting the centre of the circle to the end points of the arc
+        are drawn as well.
     */
     void DrawArc(wxCoord xStart, wxCoord yStart, wxCoord xEnd, wxCoord yEnd,
                  wxCoord xc, wxCoord yc);
@@ -348,9 +358,13 @@ public:
 
         @a start and @a end specify the start and end of the arc relative to
         the three-o'clock position from the center of the rectangle. Angles are
-        specified in degrees (360 is a complete circle). Positive values mean
+        specified in degrees with 0 degree angle corresponding to the positive
+        horizontal axis (3 o'clock) direction. Positive values mean
         counter-clockwise motion. If @a start is equal to @e end, a complete
         ellipse will be drawn.
+
+        Notice that unlike DrawArc(), this function does not draw the lines to
+        the arc ends, even when using non-transparent brush.
     */
     void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord width, wxCoord height,
                           double start, double end);
