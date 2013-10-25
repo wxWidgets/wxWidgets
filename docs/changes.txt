@@ -675,7 +675,7 @@ All:
 - Add wxVector::assign() (Jonas Rydberg).
 - Add wx[F]File{Input,Output}Stream::GetFile() (troelsk).
 - Add wxSocketBase::GetSocket() (Laurent Poujoulat).
-- Add IEEE 754 single/double precision support to wxDataStream classes (net147).
+- Add IEEE 754 formats support to wxDataStream classes (Jonathan Liu).
 - Add wxVector<>::const_reverse_iterator (troelsk).
 - Fix thread-safety issue in wxSharedPtr<> (plorkyeran).
 - Add wxTimer::StartOnce().
