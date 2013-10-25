@@ -573,6 +573,10 @@ All (GUI):
 
 - Fix wxListEvent::GetData() in LLP64 builds.
 
+wxGTK:
+
+- Fix DrawArc() when printing.
+
 wxMSW:
 
 - Optional better handling of SAFEARRAYs in wxAutomationObject (PB).
