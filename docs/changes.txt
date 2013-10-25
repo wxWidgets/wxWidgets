@@ -572,6 +572,7 @@ All:
 All (GUI):
 
 - Fix wxListEvent::GetData() in LLP64 builds.
+- Fix special characters handling in wxSVGFileDC::DrawText() (Ludovic Aubert).
 
 wxGTK:
 
