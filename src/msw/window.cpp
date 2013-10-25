@@ -2303,12 +2303,14 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 {
     // wxUniversal implements tab traversal itself
 #ifndef __WXUNIVERSAL__
-    // Notice that we check for WS_EX_CONTROLPARENT and not wxTAB_TRAVERSAL
-    // here. While usually they are both set or both unset, doing it like this
-    // also works if there is ever a bug that results in wxTAB_TRAVERSAL being
-    // set but not WS_EX_CONTROLPARENT as we must not call IsDialogMessage() in
-    // this case, it would simply hang (see #15458).
-    if ( m_hWnd != 0 && (wxGetWindowExStyle(this) & WS_EX_CONTROLPARENT) )
+    // Notice that we check for both wxTAB_TRAVERSAL and WS_EX_CONTROLPARENT
+    // being set here. While normally the latter should always be set if the
+    // former is, doing it like this also works if there is ever a bug that
+    // results in wxTAB_TRAVERSAL being set but not WS_EX_CONTROLPARENT as we
+    // must not call IsDialogMessage() then, it would simply hang (see #15458).
+    if ( m_hWnd &&
+            HasFlag(wxTAB_TRAVERSAL) &&
+                (wxGetWindowExStyle(this) & WS_EX_CONTROLPARENT) )
     {
         // intercept dialog navigation keys
         MSG *msg = (MSG *)pMsg;
