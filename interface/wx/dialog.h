@@ -37,7 +37,7 @@ enum wxDialogLayoutAdaptationMode
     resolution screens: please see @ref overview_dialog_autoscrolling for
     further details.
 
-    Dialogs usually contains either a single button allowing to close the
+    Dialogs usually contain either a single button allowing to close the
     dialog or two buttons, one accepting the changes and the other one
     discarding them (such button, if present, is automatically activated if the
     user presses the "Esc" key). By default, buttons with the standard wxID_OK
@@ -650,7 +650,7 @@ public:
                            integer argument, dialog's return code.
 
         @note The dialog instance must not be destroyed until @a onEndModal
-              is called. The best way to ensure thay is to use wxWindowPtr
+              is called. The best way to ensure that is to use wxWindowPtr
               to hold a pointer and include it in the lambda's capture,
               by value (not reference!), as shown in the example above.
 
