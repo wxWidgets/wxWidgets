@@ -59,7 +59,7 @@ public:
     wxGraphicsContext* GetGraphicsContext() const;
 
     /**
-       Set the grpahics context to be used for this wxGCDC.
+       Set the graphics context to be used for this wxGCDC.
     */
     void SetGraphicsContext( wxGraphicsContext* ctx );
 

@@ -196,7 +196,7 @@ enum wxGridCellFloatFormat
     /// Decimal floating point (%f).
     wxGRID_FLOAT_FORMAT_FIXED       = 0x0010,
 
-    /// Scientific notation (mantise/exponent) using e character (%e).
+    /// Scientific notation (mantissa/exponent) using e character (%e).
     wxGRID_FLOAT_FORMAT_SCIENTIFIC  = 0x0020,
 
     /// Use the shorter of %e or %f (%g).

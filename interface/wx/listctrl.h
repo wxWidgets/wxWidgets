@@ -812,7 +812,7 @@ public:
         If @a ptrSubItem is not @NULL and the wxListCtrl is in the report
         mode the subitem (or column) number will also be provided.
         This feature is only available in version 2.7.0 or higher and is currently only
-        implemented under wxMSW and requires at least comctl32.dll of verion 4.70 on
+        implemented under wxMSW and requires at least comctl32.dll of version 4.70 on
         the host system or the value stored in @a ptrSubItem will be always -1.
         To compile this feature into wxWidgets library you need to have access to
         commctrl.h of version 4.70 that is provided by Microsoft.
@@ -1622,7 +1622,7 @@ public:
 
     This class stores information about a wxListCtrl item or column.
 
-    wxListItem is a class which contains informations about:
+    wxListItem is a class which contains information about:
     - Zero based item position; see SetId() and GetId().
     - Zero based column index; see SetColumn() and GetColumn().
     - The label (or header for columns); see SetText() and GetText().

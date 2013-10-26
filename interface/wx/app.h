@@ -444,7 +444,7 @@ public:
 
 
     /**
-        @name Application informations
+        @name Application information
     */
     //@{
 

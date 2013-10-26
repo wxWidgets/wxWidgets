@@ -1562,7 +1562,7 @@ public:
     bool CanDrawBitmap() const;
 
     /**
-       Does the DC supoprt calculating the size required to draw text?
+       Does the DC support calculating the size required to draw text?
     */
     bool CanGetTextExtent() const;
     

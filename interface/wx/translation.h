@@ -255,7 +255,7 @@ public:
         @param origString  The singular form of the string to be converted.
         @param n           The number on which the plural form choice depends on.
                            (In some languages, there are different plural forms
-                           for e.g. n=2 and n=3 etc., in addition to the singlular
+                           for e.g. n=2 and n=3 etc., in addition to the singular
                            form (n=1) being different.)
         @param domain      The only domain (i.e. message catalog) to search if
                            specified. By default this parameter is empty,

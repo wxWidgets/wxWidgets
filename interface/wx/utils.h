@@ -906,7 +906,7 @@ bool wxIsPlatform64Bit();
 bool wxIsPlatformLittleEndian();
 
 /**
-    Returns a structure containing informations about the currently running
+    Returns a structure containing information about the currently running
     Linux distribution.
     
     This function uses the @c lsb_release utility which is part of the 
