@@ -525,6 +525,13 @@ Set the version of your Mingw installation here.
     "2.95" ... for Mingw 1.1 or any of the older versions
             </description>
         </option>
+        <option name="WINDRES">
+            <default-value>windres --use-temp-file</default-value>
+            <description>
+Windows resource compiler to use, possibly including extra options.
+For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
+            </description>
+        </option>
         <set var="GCCFLAGS">
             <if cond="GCC_VERSION=='2.95'">-fvtable-thunks</if>
         </set>

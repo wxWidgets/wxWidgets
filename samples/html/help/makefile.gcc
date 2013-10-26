@@ -239,7 +239,7 @@ data:
 	for %%f in (Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp) do if not exist $(OBJS)\helpfiles\%%f copy .\helpfiles\%%f $(OBJS)\helpfiles
 
 $(OBJS)\htmlhelp_sample_rc.o: ./../../../samples/sample.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
 
 $(OBJS)\htmlhelp_help.o: ./help.cpp
 	$(CXX) -c -o $@ $(HTMLHELP_CXXFLAGS) $(CPPDEPS) $<

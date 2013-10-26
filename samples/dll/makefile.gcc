@@ -261,7 +261,7 @@ $(OBJS)\my_dll_my_dll.o: ./my_dll.cpp
 	$(CXX) -c -o $@ $(MY_DLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wx_exe_sample_rc.o: ./../../samples/sample.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\wx_exe_wx_exe.o: ./wx_exe.cpp
 	$(CXX) -c -o $@ $(WX_EXE_CXXFLAGS) $(CPPDEPS) $<
