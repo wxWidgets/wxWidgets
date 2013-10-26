@@ -493,6 +493,13 @@ Deprecated methods and their replacements
 Changes in behaviour visible to end users
 -----------------------------------------
 
+- wxTextCtrl::SaveFile() now creates UTF-8-encoded files instead of using the
+  default locale encoding. This ensures that the entire text control contents
+  can be saved and is consistent with the use of UTF-8 by default in the other
+  places, notably DoLoadFile(), but is a change since the previous versions.
+  If you need the old behaviour, consider calling wxFFile::Write() explicitly
+  with wxConvCurrent conversion parameter.
+
 - In wxMSW wxSpinCtrl used to prevent the user from entering more digits than
   could fit in its visible area. This was inconsistent with the other ports and
   now the control scrolls if too much text is added.
@@ -565,6 +572,7 @@ Major new features in this release
 
 All:
 
+- wxTextFile::SaveFile() uses UTF-8 now.
 - Add possibility to validate the input files against a schema to wxrc.
 - Fix recently broken compilation with Intel compiler.
 - Fix reading of files with Mac EOLs in wxTextFile.

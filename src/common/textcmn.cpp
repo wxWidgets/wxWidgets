@@ -927,7 +927,7 @@ bool wxTextAreaBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType)
 {
 #if wxUSE_FFILE
     wxFFile file(filename, wxT("w"));
-    if ( file.IsOpened() && file.Write(GetValue(), *wxConvCurrent) )
+    if ( file.IsOpened() && file.Write(GetValue()) )
     {
         // if it worked, save for future calls
         m_filename = filename;
