@@ -24,10 +24,10 @@ Check Sums
 
 To verify your download you can use the following sha1sums:
 
-    143b08577a4da2381d32db86cade9a6419353b9d  wxWidgets-3.0.0-rc2.7z
-    edbcb9a105567d2ab4838183dd232317fce8ccc7  wxWidgets-3.0.0-rc2.tar.bz2
-    20b91a32c9e618c7f6dc767d74cc879227c59fdc  wxWidgets-3.0.0-rc2.zip
-    aa77457c4e13de229d7ff83efaff732f530c760d  wxWidgets-3.0.0-rc2-docs-html.tar.bz2
+    01751f115a8a92a51122245ffef390c273f6e642  wxWidgets-3.0.0-rc2.7z
+    b862990fc3dd97b4194c3955ff73b4f6aa47f823  wxWidgets-3.0.0-rc2.tar.bz2
+    73afa20f3fe911f90fce344098c06e2269e69585  wxWidgets-3.0.0-rc2.zip
     6ec5137bf53bc55ae0d213ec1c00735e8684981f  wxWidgets-3.0.0-rc2-docs-html.zip
-    606a25aa73b9b34d3e5434d708a9026c22de1d25  wxWidgets-3.0.0-rc2_headers.7z
+    aa77457c4e13de229d7ff83efaff732f530c760d  wxWidgets-3.0.0-rc2-docs-html.tar.bz2
+    c6f45af13a376364e4169f91a1ab2191a500ab44  wxWidgets-3.0.0-rc2_headers.7z
 
