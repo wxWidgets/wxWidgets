@@ -1,13 +1,13 @@
-October 7, 2013 -- The wxWidgets team is pleased to announce the
+October 28, 2013 -- The wxWidgets team is pleased to announce the
 first release candidate release of wxWidgets 3.0.
 
-wxWidgets 3.0-RC1 is available at
+wxWidgets 3.0-RC2 is available at
 
-        https://sourceforge.net/downloads/wxwindows/3.0.0-rc1/
+        https://sourceforge.net/downloads/wxwindows/3.0.0-rc2/
 
 and at our FTP mirror at
 
-        ftp://ftp.wxwidgets.org/pub/3.0.0-rc1/
+        ftp://ftp.wxwidgets.org/pub/3.0.0-rc2/
 
 Please choose the archive format suitable for your platform, i.e. 7z
 or ZIP for Windows platforms and tar.bz2 for the Unix systems
@@ -20,10 +20,7 @@ as only sources, not binaries, are installed.
 We also provide the pre-built versions of wxMSW libraries for the
 selected compilers at
 
-        https://sourceforge.net/downloads/wxwindows/3.0.0/binaries/
-
-Notice that 3.0-RC1 does NOT include the binaries, they will be only
-available for the final 3.0 release.
+        https://sourceforge.net/downloads/wxwindows/3.0.0-rc2/binaries/
 
 Please see the README file there for the descriptions of the
 individual files.
@@ -44,7 +41,7 @@ here, but the most important ones are:
 
 Please see the changes.txt file in the "docs" subdirectory of
 wxWidgets distribution or also available online at
-https://sourceforge.net/projects/wxwindows/files/3.0.0-rc1/changes.txt
+https://sourceforge.net/projects/wxwindows/files/3.0.0-rc2/changes.txt
 for more details and please read the "INCOMPATIBLE CHANGES" section
 in its beginning for a brief description of changes if you are
 upgrading from wxWidgets 2.8. For more details, please see

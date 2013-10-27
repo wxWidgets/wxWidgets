@@ -1,4 +1,4 @@
-               wxWidgets 3.0-RC1 Release Notes
+               wxWidgets 3.0-RC2 Release Notes
                ===============================
 
 Welcome to the latest release of wxWidgets, a free cross-platform C++
@@ -16,11 +16,11 @@ thread handling, and so on. You can learn more about wxWidgets at
 
 wxWidgets sources are available for download from
 
-        https://sourceforge.net/projects/wxwindows/files/3.0.0/
+        https://sourceforge.net/projects/wxwindows/files/3.0.0-rc2/
 
 or
 
-        ftp://ftp.wxwidgets.org/pub/3.0.0/
+        ftp://ftp.wxwidgets.org/pub/3.0.0-rc2/
 
 Please see the "Files" section below for the description of various
 files available at these locations.
@@ -203,4 +203,4 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, July 2013
+The wxWidgets Team, October 2013
