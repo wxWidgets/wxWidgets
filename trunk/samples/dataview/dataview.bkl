@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="dataview" template="wx_sample" template_append="wx_append">
+        <sources>dataview.cpp mymodels.cpp</sources>
+        <headers>mymodels.h</headers>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>../sample.rc</win32-res>
+    </exe>
+
+</makefile>

@@ -1,0 +1,170 @@
+                        Making a new wxWidgets release
+                        ==============================
+
+Before making the release
+-------------------------
+
+Update docs/readme.txt. Please review its contents in addition to just
+changing the version number.
+
+Put a date on the release line in docs/changes.txt.
+
+Update the date in the manual (docs/doxygen/mainpages/manual.h).
+
+Update the release announcement post in docs/publicity/announce.txt.
+
+
+Creating release files
+----------------------
+
+The currently used release scripts need to be used from git-svn checkout and
+rely on Git to avoid problems with using non-clean trees and such. If you don't
+use Git you may use the alternative archive creation scripts in the next
+section.
+
+Follow these steps assuming the current working directory is the root of git
+working copy and you want to prepare distribution for the version x.y.z:
+
+1. Run "./build/tools/svn-find-native-eols.pl > ../eol-native" (if you have
+   an existing svn checkout, pass it to the script to make it run much faster,
+   but take care to have up to date sources in the working tree).
+
+2. Run "./build/tools/git-make-release x.y.z" to create source archives
+   ../wxWidgets-x.y.z.{7z,tar.bz2,zip} and wxWidgets_x.y.z_Headers.zip.
+
+3. Run "./build/tools/make-html-docs x.y.z" to create HTML documentation
+   archives ../wxWidgets-x.y.z.{tar.bz2,zip}
+
+4. This step must be done under Windows as it relies on having hhc.exe, the
+   Html Help compiler, in PATH: run the following commands
+
+    cd docs\doxygen
+    regen.bat chm
+    cd out
+    zip ..\..\..\wxWidgets-x.y.z-docs-chm.zip wx.chm
+
+5. This step also must be done under Windows as it uses Inno Setup to produce
+   the .exe file and it also requires the CHM file built above:
+
+    md x.y.z-sources
+    cd x.y.z-sources
+    7z x ..\wxWidgets-x.y.z.7z
+    md docs\htmlhelp
+    cp ..\docs\doxygen\out\wx.chm docs\htmlhelp
+    set WXW_VER=x.y.z
+    iscc build\tools\wxwidgets.iss
+
+
+
+Instructions for the previous version of release scripts
+--------------------------------------------------------
+
+NB: These scripts haven't been used since 2.8 series and may not work any longer!
+
+Currently our release system uses a Python 2.x script to generate releases.
+The script requires Unix utilities such as tar, zip and unix2dos and thus must
+be run either on Unix or using Cygwin on Windows. To generate a release, simply
+run the following command:
+
+build/tools/create-archive.py --compression=all /path/to/output/dir
+
+This will produce zip, gzip and bzip archives of the tree (without
+"compression" argument only .gz is made). Note that this commands produces huge
+amounts of output so redirecting it to a file is recommended.
+
+To add a prefix to the release, such as RC1, the SVN revision, or a date, just
+pass --postfix="postfix" to the script. More info on the options and their
+possible values can be found by calling `create-archive.py --help`.
+
+IMPORTANT NOTE: You *must* run this script from a clean source tree, that is,
+          with no junk files in it or modifications. This is because the
+          release should be a pristine copy of the tree as of the time of
+          release. If you have legitimate modifications in the tree that need
+          to be in the release, commit them first.
+
+To generate the windows installer (.exe) and the documentation files (chm and htb formats)
+run:
+
+build\tools\bld_chm_exe.bat
+
+which depends on the wxwidgets.iss file, and generates output in the %DAILY% directory. It 
+assumes a clean copy of the wxWidgets source tree in %INNO%. Temporary files will be generated 
+in the tree from which the batch file is run. It depends on doxygen, a number of gnu
+win32 tools and Microsofts htmlhelp compiler. The wxwidgets.iss file should not need 
+editing, but you will want to check that the bld_chm_exe.bat has the correct version number.
+
+
+
+Uploading
+---------
+
+Upload the files to SourceForge. This can be done via the web interface or just
+scp to sfusername,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
+The following files need to be uploaded:
+
+    wxMSW-Setup-x.y.z.exe
+    wxWidgets-x.y.z.7z
+    wxWidgets-x.y.z.tar.bz2
+    wxWidgets-x.y.z.zip
+    wxWidgets-docs-chm-x.y.z.zip
+    wxWidgets-docs-html-x.y.z.tar.bz2
+    wxWidgets-docs-html-x.y.z.zip
+
+The file wxWidgets-x.y.z_Headers.7z should be uploaded to binaries
+subdirectory as it's only useful when using pre-built binaries.
+
+You will need to use the web interface to mark the latest uploaded files as
+being "default downloads" for the appropriate platforms (.zip or .exe for MSW,
+.tar.bz2 for everything else) as otherwise SourceForge would continue to suggest
+people to download old files.
+
+Next, update (at least the versions and SHA1 sums, but maybe more) and upload
+docs/release_files.mdwn and docs/release_binaries.mdwn files. They need to be
+renamed to README.md on SF to be shown when the directory is viewed, i.e. do:
+
+    scp docs/release_files.mdwn \
+        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z/README.md
+    scp docs/release_binaries.mdwn \
+        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z/binaries/README.md
+
+And upload the change log too:
+
+    scp docs/changes.txt \
+        sfuser,wxwindows@frs.sf.net:/home/frs/project/w/wx/wxwindows/x.y.z
+
+
+Also upload the files to the FTP mirror at ftp.wxwidgets.org (ask Chris for
+access if you don't have it).
+
+Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
+
+
+Announcement
+------------
+
+Post docs/publicity/announce.txt at least to wx-announce@googlegroups.com.
+
+Submit a link to http://www.reddit.com/r/programming
+
+For major releases, submit the announcement to http://slashdot.org/submission
+
+Update www.wxwidgets.org, usually a news item is enough but something more can
+be called for for major releases.
+
+Also update downloads/index.html to mention the new latest release.
+
+Post to wxBlog if necessary.
+
+Announce on Google+/Twitter/whatever the person doing the release prefers (we
+don't have "official" wxWidgets account, should we?).
+
+
+Version updates
+---------------
+
+Trac: mark the milestone corresponding to the release as completed and add a
+new version for it to allow reporting bugs against it and create the next
+milestone (ask Vadim or Robin to do it or to get admin password).
+
+Run misc/scripts/inc_release to increment micro version, i.e. replace x.y.z
+with x.y.z+1 (minor or major versions updates require manual intervention).

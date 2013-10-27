@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2004-05-12 12:57+0200\n"
+"PO-Revision-Date: 2004-05-12 13:50+0100\n"
+"Last-Translator: Włodzimierz ABX Skiba <abx@abx.art.pl>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n>1 && n<5 ? 1 : 2;\n"
+
+#: ../internat.cpp:200
+msgid "&About"
+msgstr "Inform&acje"
+
+#: ../internat.cpp:202
+msgid "E&xit"
+msgstr "Zakoń&cz"
+
+#: ../internat.cpp:205
+msgid "&Open bogus file"
+msgstr "&Otwórz nieistniejący plik"
+
+#: ../internat.cpp:206
+msgid "&Play a game"
+msgstr "&Pobaw się"
+
+#: ../internat.cpp:208
+msgid "&1 _() (gettext)"
+msgstr "&1 _() (gettext)"
+
+#: ../internat.cpp:209
+msgid "&2 _N() (ngettext)"
+msgstr "&2 _N() (ngettext)"
+
+#: ../internat.cpp:210
+msgid "&3 wxTRANSLATE() (gettext_noop)"
+msgstr "&3 wxTRANSLATE() (gettext_noop)"
+
+#: ../internat.cpp:213
+msgid "&File"
+msgstr "&Plik"
+
+#: ../internat.cpp:214
+msgid "&Test"
+msgstr "&Test"
+
+#: ../internat.cpp:232
+msgid "International wxWindows App"
+msgstr "Wielojęzyczna aplikacja wxWindows"
+
+#: ../internat.cpp:252
+msgid ""
+"Language: %s\n"
+"System locale name:\n"
+"%s\n"
+"Canonical locale name: %s\n"
+msgstr ""
+"Język: %s\n"
+"Językowe ustawienia systemu:\n"
+"%s\n"
+"Wybrany język: %s\n"
+
+#: ../internat.cpp:258
+msgid ""
+"I18n sample\n"
+"(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
+msgstr ""
+"Przykład programu I18n\n"
+"(c) 1998, 1999 Vadim Zeitlin i Julian Smart"
+
+#: ../internat.cpp:261
+msgid "About Internat"
+msgstr "Informacje o programie Internat"
+
+#: ../internat.cpp:270
+msgid "Enter your number:"
+msgstr "Wprowadź liczbę"
+
+#: ../internat.cpp:271
+msgid "Try to guess my number!"
+msgstr "Spróbuj odgadnąć moją liczbę!"
+
+#: ../internat.cpp:285
+msgid "You've probably entered an invalid number."
+msgstr "Najprawdopodobniej wprowadzono błędną liczbę."
+
+#: ../internat.cpp:299
+msgid "Congratulations! you've won. Here is the magic phrase:"
+msgstr "Gratulacje! wygrałeś. Oto magiczna formuła:"
+
+#: ../internat.cpp:300
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr "nie można utworzyć struktury fifo `%s'"
+
+#: ../internat.cpp:311
+msgid "Result"
+msgstr "Wynik"
+
+#: ../internat.cpp:323
+msgid "Testing _() (gettext)"
+msgstr "Test _() (gettext)"
+
+#: ../internat.cpp:324
+msgid "Please enter text to translate"
+msgstr "Wprowadź tekst do przetłumaczenia"
+
+#: ../internat.cpp:338
+msgid "Testing _N() (ngettext)"
+msgstr "Test _N() (ngettext)"
+
+#: ../internat.cpp:340
+msgid "Please enter range for plural forms of \"n files deleted\" phrase"
+msgstr "Wprowadź zakres dla form liczby mnogiej wyrażenia \"sn plików usuniętych\""
+
+#: ../internat.cpp:366
+msgid "Testing wxTRANSLATE() (gettext_noop)"
+msgstr "Test wxTRANSLATE() (gettext_noop)"
+
+#: ../internat.cpp:310
+msgid "Bad luck! try again..."
+msgstr "Pudło! spróbuj jeszcze raz..."
+
+#: ../internat.cpp:327
+msgid "default value"
+msgstr "wartość domyślna"
+
+#: ../internat.cpp:364
+msgid "line 1"
+msgstr "wiersz 1"
+
+#: ../internat.cpp:365
+msgid "line 2"
+msgstr "wiersz 2"
+
+#: ../internat.cpp:366
+msgid "line 3"
+msgstr "wiersz 3"
+
+#: ../internat.cpp:353
+msgid "file deleted"
+msgid_plural "files deleted"
+msgstr[0] "plik usunięty"
+msgstr[1] "pliki usunięte"
+msgstr[2] "plików usuniętych"

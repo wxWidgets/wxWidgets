@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+
+<makefile>
+
+    <include file="presets/wx.bkl"/>
+
+    <exe id="minimal" template="wxgui">
+
+        <!-- this sample builds always in debug mode; if you have
+             compiled wxWidgets in release mode, you'll get link errors! -->
+        <debug-info>on</debug-info>
+        <runtime-libs>dynamic</runtime-libs>
+        
+        <sources>minimal.cpp</sources>
+        
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+</makefile>

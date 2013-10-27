@@ -1,0 +1,70 @@
+#############################################################################
+# Name:        wxreg.test
+# Purpose:     Additional tests for the regex lib and wxRegEx
+# Author:      Mike Wetherell
+# Copyright:   (c) 2004 Mike Wetherell.
+# Licence:     wxWindows licence
+#############################################################################
+
+#
+# The layout of this file is the same as reg.test. See the comments in that
+# file for full details. The encoding used in here is UTF-8.
+
+# wx_1 tests the character classifications over the ascii range pretty
+# thoroughly, since hopefully these will be similar for all platforms and
+# locales where wxWidgets runs.
+
+# wx_2 & wx_3 do some tests involving western european and cyrillic characters.
+# In Unicode mode, all these tests should succeed, which verifies that the
+# classifications aren't limited to a single 8-bit character set.
+
+# In non-unicode mode wx_2 and wx_3 are skipped since they depend on the
+# behaviour of the runtime library's 'is' functions (isalpha, isdigit, etc.),
+# which are not consistent enough between implementations to allow testing.
+#
+
+doing wx_1 "character classification: ascii"
+m   1   &   {[^[:alnum:]]}  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!" "!"
+m   2   &   {[[:alnum:]]}   "\a\b\t\n\v\f\r !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~X" "X"
+m   3   &   {[^[:alpha:]]}  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!" "!"
+m   4   &   {[[:alpha:]]}   "\a\b\t\n\v\f\r !\"#$%&'()*+,-./0123456789:;<=>?@[\\]^_`{|}~X" "X"
+m   5   &   {[^[:cntrl:]]}  "\a\b\t\n\v\f\r!" "!"
+m   6   &   {[[:cntrl:]]}   " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\n" "\n"
+m   7   &   {[^[:digit:]]}  "0123456789!" "!"
+m   8   &   {[[:digit:]]}   "\a\b\t\n\v\f\r !\"#$%&'()*+,-./:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ 0" "0"
+m   9   &   {[^[:graph:]]}  "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\n" "\n"
+m   10  &   {[[:graph:]]}   "\a\b\t\n\v\f\r !" "!"
+m   11  &   {[^[:lower:]]}  "abcdefghijklmnopqrstuvwxyz!" "!"
+m   12  &   {[[:lower:]]}   "\a\b\t\n\v\f\r !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`{|}~x" "x"
+m   13  &   {[^[:print:]]}  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n" "\n"
+m   14  &   {[[:print:]]}   "\a\b\n\v\f\rX" "X"
+m   15  &   {[^[:punct:]]}  "!\"#%&'()*,-./:;?@[\\]_{}X" "X"
+m   16  &   {[[:punct:]]}   "\a\b\t\n\v\f\r 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!" "!"
+m   17  &   {[^[:space:]]}  "\t\n\v\f\r X" "X"
+m   18  &   {[[:space:]]}   "\a\b!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\n" "\n"
+m   19  &   {[^[:upper:]]}  "ABCDEFGHIJKLMNOPQRSTUVWXYZ!" "!"
+m   20  &   {[[:upper:]]}   "\a\b\t\n\v\f\r !\"#$%&'()*+,-./0123456789:;<=>?@[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~X" "X"
+m   21  &   {[^[:xdigit:]]} "0123456789ABCDEFabcdef!" "!"
+m   22  &   {[[:xdigit:]]}  "\a\b\t\n\v\f\r !\"#$%&'()*+,-./:;<=>?@GHIJKLMNOPQRSTUVWXYZ[\\]^_`ghijklmnopqrstuvwxyz{|}~a" "a"
+i   23  &i  "AbCdEfGhIjKlMnOpQrStUvWxYz" "aBcDeFgHiJkLmNoPqRsTuVwXyZ" "0 25"
+
+doing wx_2 "character classification: western european"
+m   1   &*  {[^[:alpha:]]}  "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ!" "!"
+m   2   &*  {[[:alpha:]]}   " ¡¢£¤¥¦§¨©«¬­®¯°±²³´¶·¸¹»¼½¾¿×÷X" "X"
+m   3   &*  {[^[:lower:]]}  "ßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ!" "!"
+m   4   &*  {[[:lower:]]}   " ¡¢£¤¥¦§¨©«¬­®¯°±²³´¶·¸¹»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞ÷x" "x"
+m   5   &*  {[^[:upper:]]}  "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ!" "!"
+m   6   &*  {[[:upper:]]}   " ¡¢£¤¥¦§¨©«¬­®¯°±²³´¶·¸¹»¼½¾¿×ßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿX" "X"
+i   7   &i* "ÀáÂãÄåÆçÈéÊëÌíÎïÐñÒóÔõÖøÙúÛüÝþ" "àÁâÃäÅæÇèÉêËìÍîÏðÑòÓôÕöØùÚûÜýÞ" "0 29"
+
+doing wx_3 "character classification: cyrillic"
+m   1   &*  {[^[:alpha:]]}  "ёЁюабцдефгхийклмнопярстужвьызшэщчъЮАБЦДЕФГХИЙКЛМНОПЯРСТУЖВЬЫЗШЭЩЧЪ!" "!"
+m   2   &*  {[^[:lower:]]}  "ёюабцдефгхийклмнопярстужвьызшэщчъ!" "!"
+m   3   &*  {[[:lower:]]}   "ЁЮАБЦДЕФГХИЙКЛМНОПЯРСТУЖВЬЫЗШЭЩЧЪx" "x"
+m   4   &*  {[^[:upper:]]}  "ЁЮАБЦДЕФГХИЙКЛМНОПЯРСТУЖВЬЫЗШЭЩЧЪ!" "!"
+m   5   &*  {[[:upper:]]}   "ёюабцдефгхийклмнопярстужвьызшэщчъX" "X"
+i   6   &i* "ЁюАбЦдЕфГхИйКлМнОпЯрСтУжВьЫзШэЩчЪ" "ёЮаБцДеФгХиЙкЛмНоПяРсТуЖвЬыЗшЭщЧъ" "0 32"
+
+#doing bugs "known bugs"
+#m  1    -   {(\w+).*?(\d\d:\d\d)} "from 10:30 until 12:00" "from" "10:30"
+

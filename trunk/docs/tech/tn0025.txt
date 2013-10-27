@@ -1,0 +1,127 @@
+            How to update a third party library to a newer version
+            ======================================================
+
+0. Introduction
+---------------
+
+wxWidgets includes several third party libraries, i.e. libraries which are
+used by wxWidgets and distributed with it but which we don't maintain nor even
+modify, inasmuch as possible, ourselves. These libraries are developed by
+their maintainers and from time to time we need to replace the versions used
+by wxWidgets with newer versions.
+
+
+1. Vendor branches
+------------------
+
+Normally all third party libraries should be managed using Subversion vendor
+branches. I.e. we should have the latest version of the library under
+/wx/wxWidgets/vendor directory in the repository. Currently only expat, libpng
+and libtiff are handled like this, while libjpeg and zlib are not. Hopefully
+these exceptions will disappear soon, the rest of this note assumes that we
+are using a vendor branch for the library $(LIB).
+
+We also use $(OLD_VERSION) and $(VERSION) below for the current version of the
+library and the version we are upgrading to. $(OLD_VERSION) can be determined
+by doing
+
+    svn ls https://svn.wxwidgets.org/svn/wx/wxWidgets/vendor/$(LIB)
+
+as normally it's the latest version present in this directory. You can, of
+course, also look at the library sources currently in the trunk to find out
+its version.
+
+
+NB: the instructions here are based on the Subversion documentation, see
+http://svnbook.red-bean.com/en/1.6/svn.advanced.vendorbr.html for more
+information about vendor branches.
+
+
+2. Updating the current branch
+------------------------------
+
+The first thing to do is to checkout a pristine copy of the version currently
+being used, e.g.
+
+    cd /some/temp/directory
+    svn checkout https://svn.wxwidgets.org/svn/wx/wxWidgets/vendor/$(LIB)/current $(LIB)
+
+Now delete all the old files:
+
+    cd $(LIB)
+    find . -type f -not -path '*/.svn/*' -exec rm {} \;
+
+or, if you are using zsh, just
+
+    rm **/*(.)
+
+Next, get the version of the library you are updating to and unpack it into
+the same directory. Examine "svn status" output and add all the files with "?"
+in the first column using "svn add" and delete all the files with "!" in the
+first column using "svn rm".
+
+Finally commit and tag the new version:
+
+    svn commit -m 'Update $(LIB) to $(VERSION).'
+    svn cp https://svn.wxwidgets.org/svn/wx/wxWidgets/vendor/$(LIB)/current \
+        https://svn.wxwidgets.org/svn/wx/wxWidgets/vendor/$(LIB)/$(VERSION) \
+        -m 'Tagging $(LIB) $(VERSION).'
+
+You can now do
+
+    rm -rf /some/temp/directory/$(LIB)
+
+as it won't be needed any longer.
+
+
+3. Merging the current branch
+-----------------------------
+
+Now switch to wxWidgets checkout and run
+
+    svn merge ^/wxWidgets/vendor/$(LIB)/$(OLD_VERSION) ^/wxWidgets/vendor/$(LIB)/current src/$(LIBDIR)
+
+Notice that you may need to escape the circumflexes with backslashes if they
+are special for your shell. Also notice that the directory of the library may
+be different from its name, e.g. we use libpng for the vendor branch but just
+png for the name of the directory.
+
+Unless you are very lucky, the merge will result in conflicts and you will
+need to resolve them by examining the differences -- this is the difficult
+part.
+
+Once everything was resolved, test your changes. As building the third party
+libraries is quite different between Unix and Windows, please do it under both
+platforms. Under Windows it's enough to just build everything as usual as the
+built-in libraries are used by default. Please build both static and dynamic
+wxWidgets libraries as some problems arise only in one of those configurations.
+Under Unix you need to configure with --with-$(LIB)=builtin option to ensure
+that the newly updated built-in version of the library is used and not the
+system version. If upgrading an image format library, please build and run the
+image sample. In any case, run the unit tests to check that everything still
+works.
+
+After testing and correcting the problems, simply commit your changes:
+
+    svn commit -m 'Update $(LIB) to $(VERSION).' src/$(LIBDIR)
+
+
+4. Special instructions for libpng
+----------------------------------
+
+We use a special hack for libpng as we want to prefix all its symbols with
+"wx_" but don't want to use its build system which makes this easily possible
+(perhaps we should, but for now we don't). So, when upgrading libpng, you need
+to perform an extra step after merging the new version (and before committing
+your changes):
+
+Create a temporary build directory and run libpng configure from it using
+--with-libpng-prefix=wx_ option. Then run "make" (actually just "make png.lo"
+is sufficient as we don't really need to build the library) to create
+pnglibconf.h and pngprefix.h files in the build directory. And copy these
+files to src/png subdirectory of the wxWidgets source tree, overwriting the
+versions there.
+
+Notice that config.h generated by libpng configure is not used, we build it
+without -DHAVE_CONFIG_H as it works just fine without it on any ANSI C system
+(i.e. anywhere by now).

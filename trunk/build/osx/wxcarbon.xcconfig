@@ -1,0 +1,15 @@
+WXTOOLKIT = carbon
+WXTOOLKITUPPER = CARBON
+
+#include "wx.xcconfig"
+
+MACOSX_DEPLOYMENT_TARGET = 10.5
+SDKROOT = macosx10.6
+
+GCC_VERSION[arch=ppc] = 4.0
+
+ARCHS = ppc i386
+VALID_ARCHS = ppc i386
+
+OTHER_LDFLAGS = -framework WebKit -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework AGL -framework OpenGL -framework QuickTime
+

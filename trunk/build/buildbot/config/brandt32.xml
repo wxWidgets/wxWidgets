@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       brandt32.xml
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/unix.xml"/>
+
+<build>
+    <name>Linux x86 wxGTK trunk</name>
+    <builddir>brandt32_gtk</builddir>
+    <scheduler>trunk_quick</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--enable-compat28 --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK trunk STL no compat</name>
+    <builddir>brandt32_gtk_stl</builddir>
+    <scheduler>trunk_quick</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-compat28 --enable-stl"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK trunk static</name>
+    <builddir>brandt32_gtk_trunk_static</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-shared --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK stable static</name>
+    <builddir>brandt32_gtk_stable_static</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--disable-shared"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxDFB trunk</name>
+    <builddir>brandt32_dfb_trunk</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--with-directfb --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxDFB stable</name>
+    <builddir>brandt32_dfb_stable</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--with-directfb"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+<!-- These last three are ravnsgaard's job's moved here while it is down -->
+<build>
+    <name>Linux i386 wxGTK stable STL</name>
+    <builddir>brandt32_wxgtk_stable</builddir>
+    <scheduler>stable_quick</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--enable-stl"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux i386 wxGTK trunk no gui</name>
+    <builddir>brandt32_wxgtk_nogui</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-gui --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux i386 wxGTK trunk no features</name>
+    <builddir>brandt32_wxgtk_nofeatures</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-all-features --enable-debug"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+</bot>

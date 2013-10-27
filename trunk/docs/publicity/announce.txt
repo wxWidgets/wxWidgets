@@ -1,0 +1,63 @@
+October 7, 2013 -- The wxWidgets team is pleased to announce the
+first release candidate release of wxWidgets 3.0.
+
+wxWidgets 3.0-RC1 is available at
+
+        https://sourceforge.net/downloads/wxwindows/3.0.0-rc1/
+
+and at our FTP mirror at
+
+        ftp://ftp.wxwidgets.org/pub/3.0.0-rc1/
+
+Please choose the archive format suitable for your platform, i.e. 7z
+or ZIP for Windows platforms and tar.bz2 for the Unix systems
+including OS X (all archives contain sources for all wxWidgets ports
+but they use different line endings) and follow the instructions in
+readme.txt file for installing it. Notice that if you decide to use
+the Windows installer (.exe file) you still need to build wxWidgets
+as only sources, not binaries, are installed.
+
+We also provide the pre-built versions of wxMSW libraries for the
+selected compilers at
+
+        https://sourceforge.net/downloads/wxwindows/3.0.0/binaries/
+
+Notice that 3.0-RC1 does NOT include the binaries, they will be only
+available for the final 3.0 release.
+
+Please see the README file there for the descriptions of the
+individual files.
+
+
+This release is a culmination of several years of development since
+the last stable 2.8 release. There are too many changes to be listed
+here, but the most important ones are:
+
+- Completely overhauled Unicode support which is much easier to use.
+- New Cocoa-based wxOSX port for Mac OS X for both 32 and 64 bits.
+- New wxGTK3 port, including support for Broadway (HTML5) backend.
+- Access to the native web rendering engine with wxWebView.
+- New property grid and ribbon libraries are now included in wxWidgets.
+- Better interoperability with standard library classes.
+- Totally revised and more readable manual.
+- Improved debugging support.
+
+Please see the changes.txt file in the "docs" subdirectory of
+wxWidgets distribution or also available online at
+https://sourceforge.net/projects/wxwindows/files/3.0.0-rc1/changes.txt
+for more details and please read the "INCOMPATIBLE CHANGES" section
+in its beginning for a brief description of changes if you are
+upgrading from wxWidgets 2.8. For more details, please see
+http://docs.wxwidgets.org/3.0.0/overview_changes_since28.html
+
+
+Please test this release candidate version to help us with making the
+final 3.0 release as problem-free as possible. We are especially
+looking forward to your feedback about the changes in this release
+compared to 2.8 version if you're upgrading. Please let us know about
+any regressions (http://trac.wxwidgets.org/newticket) so that we could
+fix them in the upcoming 3.0.
+
+ Thanks in advance!
+
+Vadim Zeitlin, on behalf of wxWidgets development team.

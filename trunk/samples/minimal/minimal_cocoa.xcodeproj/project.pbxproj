@@ -1,0 +1,347 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		405B1AE010EF25D200676938 /* libwx_osx_cocoa_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 405B1A8C10EF202100676938 /* libwx_osx_cocoa_static.a */; };
+		407A75B413B0FE67006BC2D5 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407A75B313B0FE67006BC2D5 /* minimal.cpp */; };
+		407A75B513B0FE67006BC2D5 /* minimal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407A75B313B0FE67006BC2D5 /* minimal.cpp */; };
+		40AC73361325727300982A5C /* libwx_osx_cocoa.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 405B1A8A10EF202100676938 /* libwx_osx_cocoa.dylib */; };
+		40AC73371325728400982A5C /* libwx_osx_cocoa.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 405B1A8A10EF202100676938 /* libwx_osx_cocoa.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		405B1A8910EF202100676938 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC0C705546C1D00DB518D;
+			remoteInfo = dynamic;
+		};
+		405B1A8B10EF202100676938 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 404BEE6110EC83280080E2B8;
+			remoteInfo = static;
+		};
+		405B1A9010EF207D00676938 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 363401F972C53D8EBD3D4BD9;
+			remoteInfo = dynamic;
+		};
+		405B1ADD10EF25B100676938 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BAB02EC06578349A9171CCAC;
+			remoteInfo = static;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		405B1A9410EF209B00676938 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				40AC73371325728400982A5C /* libwx_osx_cocoa.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		405B1A8410EF202100676938 /* wxcocoa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = wxcocoa.xcodeproj; path = ../../build/osx/wxcocoa.xcodeproj; sourceTree = SOURCE_ROOT; };
+		405B1ACB10EF253300676938 /* minimal_cocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimal_cocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		40735927137088070077DE1B /* Info_cocoa.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info_cocoa.plist; sourceTree = "<group>"; };
+		407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxcocoa.xcconfig; path = ../../build/osx/wxcocoa.xcconfig; sourceTree = SOURCE_ROOT; };
+		407A752313B0E1EB006BC2D5 /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
+		407A752413B0E1EB006BC2D5 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
+		407A75B313B0FE67006BC2D5 /* minimal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = minimal.cpp; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* minimal_cocoa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimal_cocoa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		405B1AC410EF253300676938 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				405B1AE010EF25D200676938 /* libwx_osx_cocoa_static.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40AC73361325727300982A5C /* libwx_osx_cocoa.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* minimal_cocoa.app */,
+				405B1ACB10EF253300676938 /* minimal_cocoa.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* minimal_cocoa */ = {
+			isa = PBXGroup;
+			children = (
+				407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */,
+				407A752313B0E1EB006BC2D5 /* wxdebug.xcconfig */,
+				407A752413B0E1EB006BC2D5 /* wxrelease.xcconfig */,
+				40735927137088070077DE1B /* Info_cocoa.plist */,
+				405B1A8410EF202100676938 /* wxcocoa.xcodeproj */,
+				405B1A9710EF227D00676938 /* src */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = minimal_cocoa;
+			sourceTree = "<group>";
+		};
+		405B1A8510EF202100676938 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				405B1A8A10EF202100676938 /* libwx_osx_cocoa.dylib */,
+				405B1A8C10EF202100676938 /* libwx_osx_cocoa_static.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		405B1A9710EF227D00676938 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				407A75B313B0FE67006BC2D5 /* minimal.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		405B1ABF10EF253300676938 /* static */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 405B1AC810EF253300676938 /* Build configuration list for PBXNativeTarget "static" */;
+			buildPhases = (
+				405B1AC210EF253300676938 /* Sources */,
+				405B1AC410EF253300676938 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				405B1ADE10EF25B100676938 /* PBXTargetDependency */,
+			);
+			name = static;
+			productInstallPath = "$(HOME)/Applications";
+			productName = minimal_cocoa;
+			productReference = 405B1ACB10EF253300676938 /* minimal_cocoa.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8D1107260486CEB800E47090 /* dynamic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "dynamic" */;
+			buildPhases = (
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				405B1A9410EF209B00676938 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				405B1A9110EF207D00676938 /* PBXTargetDependency */,
+			);
+			name = dynamic;
+			productInstallPath = "$(HOME)/Applications";
+			productName = minimal_cocoa;
+			productReference = 8D1107320486CEB800E47090 /* minimal_cocoa.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "minimal_cocoa" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* minimal_cocoa */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 405B1A8510EF202100676938 /* Products */;
+					ProjectRef = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* dynamic */,
+				405B1ABF10EF253300676938 /* static */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		405B1A8A10EF202100676938 /* libwx_osx_cocoa.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libwx_osx_cocoa.dylib;
+			remoteRef = 405B1A8910EF202100676938 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		405B1A8C10EF202100676938 /* libwx_osx_cocoa_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libwx_osx_cocoa_static.a;
+			remoteRef = 405B1A8B10EF202100676938 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		405B1AC210EF253300676938 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				407A75B413B0FE67006BC2D5 /* minimal.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				407A75B513B0FE67006BC2D5 /* minimal.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		405B1A9110EF207D00676938 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = dynamic;
+			targetProxy = 405B1A9010EF207D00676938 /* PBXContainerItemProxy */;
+		};
+		405B1ADE10EF25B100676938 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = static;
+			targetProxy = 405B1ADD10EF25B100676938 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		405B1AC910EF253300676938 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-lz",
+				);
+				PRODUCT_NAME = minimal_cocoa;
+			};
+			name = Debug;
+		};
+		405B1ACA10EF253300676938 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-lz",
+				);
+				PRODUCT_NAME = minimal_cocoa;
+			};
+			name = Release;
+		};
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = minimal_cocoa;
+				USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include";
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				PRODUCT_NAME = minimal_cocoa;
+				USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include";
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752313B0E1EB006BC2D5 /* wxdebug.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = Info_cocoa.plist;
+				WXROOT = "$(PROJECT_DIR)/../..";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752413B0E1EB006BC2D5 /* wxrelease.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = Info_cocoa.plist;
+				WXROOT = "$(PROJECT_DIR)/../..";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		405B1AC810EF253300676938 /* Build configuration list for PBXNativeTarget "static" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				405B1AC910EF253300676938 /* Debug */,
+				405B1ACA10EF253300676938 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "dynamic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "minimal_cocoa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

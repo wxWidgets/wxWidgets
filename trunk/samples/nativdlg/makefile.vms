@@ -1,0 +1,38 @@
+#************************************************************************
+# Makefile for HELLO under VMS
+# by Stefan Hammes
+# (incomplete) update history:
+# 11.04.95
+#************************************************************************
+
+#************************************************************************
+# Definition section
+# (cave: definitions and includes must begin with ',')
+#************************************************************************
+
+APPOPTS = 
+APPDEFS = 
+APPINCS = 
+
+#************************************************************************
+# Module section
+#************************************************************************
+
+# Name of main module
+MAIN = hello
+
+# Object modules of the application.
+OBJS = hello.obj
+
+.include [--.src]makevms.env
+
+# main dependency
+$(MAIN).exe : $(MAIN).$(OBJ)
+    $(LINK) $(LINKFLAGS) /exec=$(MAIN).exe $(MAIN).$(OBJ),$(WXLIB)/lib,$(OPTSFILE)/option
+    - purge *.exe
+
+#************************************************************************
+# Header file depedencies following
+#************************************************************************
+hello.obj : hello.cc hello.h
+

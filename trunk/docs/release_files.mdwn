@@ -1,0 +1,33 @@
+wxWidgets 3.0.0-RC1
+===================
+
+This directory contains the files for wxWidgets 3.0.0-rc1 release.
+
+Please notice that since the 2.9 series only a single source distribution is
+provided instead of the multiple distributions containing only the files for
+each port as was done before. So you only need to download wxWidgets-3.0.0.zip
+(or .7z for much smaller archive size) for Microsoft Windows systems or
+wxWidgets-3.0.0.tar.bz2 for Unix ones, including Mac OS X. The only difference
+between these files is that the ZIP (and 7z) archives contain files with DOS
+line endings while the tar balls contain files with Unix line endings.
+
+
+Reporting Problems
+------------------
+
+Please report any bugs in this release using [our Trac](http://trac.wxwidgets.org/report)
+or by posting to [wx-users mailing list](http://groups.google.com/group/wx-users).
+
+
+Check Sums
+----------
+
+To verify your download you can use the following sha1sums:
+
+    0b6f7fbac35c4e923cc7fa73e9c8d8ad3dd8e085  wxWidgets-3.0.0-rc1.7z
+    ae15323ae8c7682f65d9bf58e2ae3fff0af5e816  wxWidgets-3.0.0-rc1.tar.bz2
+    ca272772d9d5c59372ca976375da600e2d7fc2ee  wxWidgets-3.0.0-rc1.zip
+    f344ffa557a5b24b85b612f08f6fae2cf9ca336f  wxWidgets-3.0.0-rc1-docs-chm.zip
+    4f120cbbdffd7b837cb1afdfa5f4a4fbe1c160b4  wxWidgets-3.0.0-rc1-docs-html.tar.bz2
+    8ba6522c78b77bb0d3a8fbea6c4f4d0e11ec8d24  wxWidgets-3.0.0-rc1-docs-html.zip
+    2334dbd62b137957d31a529ab44fab25ce040320  wxWidgets-3.0.0-rc1_headers.7z

@@ -1,0 +1,25 @@
+/* XPM */
+static const char *const green_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"32 15 4 1",
+". c Black",
+"  c None",
+"o c #404040",
+"X c #00FF00",
+/* pixels */
+"                                ",
+"                                ",
+"        ...          ...        ",
+"      ..XXX..      ..ooo..      ",
+"     .XXXXXXX.    .ooooooo.     ",
+"     .XXXXXXX.    .ooooooo.     ",
+"    .XXXXXXXXX.  .ooooooooo.    ",
+"    .XXXXXXXXX.  .ooooooooo.    ",
+"    .XXXXXXXXX.  .ooooooooo.    ",
+"     .XXXXXXX.    .ooooooo.     ",
+"     .XXXXXXX.    .ooooooo.     ",
+"      ..XXX..      ..ooo..      ",
+"        ...          ...        ",
+"                                ",
+"                                "
+};

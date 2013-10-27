@@ -1,0 +1,80 @@
+#!/bin/bash
+
+REPOS="$1"
+REV="$2"
+AUTHOR=`svnlook author $REPOS -r $REV`
+REPONAME=`basename $REPOS`
+##URL="http://svn.wxwidgets.org/viewvc/$REPONAME?view=rev&rev=%s"
+URL="http://trac.wxwidgets.org/changeset/%s"
+TICKET_MAP='\[?#\s*(\d+)\]?=http://trac.wxwidgets.org/ticket/%s'
+
+EMAIL1="wx-commits-diffs@googlegroups.com"
+EMAIL2="wx-commits@googlegroups.com"
+EMAIL3="wxPython-commits@googlegroups.com"
+FROM="noreply@wxsite.net"
+REPLYTO1="wx-dev@googlegroups.com"
+REPLYTO2=$REPLYTO1
+REPLYTO3="wxPython-dev@googlegroups.com"
+
+WXPYTHON=`svnlook dirs-changed $REPOS -r $REV | grep -ce ^wxPython`
+
+if [ $WXPYTHON = 0 ]; then 
+     # Send notification with diffs
+     /usr/bin/svnnotify --repos-path "$REPOS" \
+		    --revision $REV \
+		    --to $EMAIL1 \
+		    --from $FROM \
+		    --reply-to $REPLYTO1 \
+		    --subject-prefix "SVN:($AUTHOR)" \
+		    --revision-url $URL \
+		    --ticket-map $TICKET_MAP \
+		    --wrap-log \
+		    --with-diff \
+		    --diff-switches '--no-diff-added --no-diff-deleted' \
+		    --max-diff-length 10240 \
+		    --handler Alternative \
+		    --alternative HTML::ColorDiff \
+		    &
+		    
+		    
+		   
+    # Send plain text notification without diffs to a different address
+    /usr/bin/svnnotify --repos-path "$REPOS" \
+		   --revision $REV \
+		   --to $EMAIL2 \
+		   --from $FROM \
+		   --reply-to $REPLYTO2 \
+		   --subject-prefix "SVN:($AUTHOR)" \
+		   --revision-url $URL \
+		   &
+		   
+else
+    # Send notification to the wxPython address		   
+     /usr/bin/svnnotify --repos-path "$REPOS" \
+		    --revision $REV \
+		    --to $EMAIL3 \
+		    --from $FROM \
+		    --reply-to $REPLYTO3 \
+		    --subject-prefix "SVN:($AUTHOR)" \
+		    --revision-url $URL \
+		    --ticket-map $TICKET_MAP \
+		    --wrap-log \
+		    --with-diff \
+		    --handler HTML::ColorDiff \
+		    --diff-switches '--no-diff-added --no-diff-deleted' \
+		    --max-diff-length 10240 \
+		    &
+fi
+
+
+## Send notification to cia.vc  
+#$REPOS/hooks/ciabot_svn.py "$REPOS" $REV &
+
+
+# Check for keywords that Trac can use
+export PYTHONPATH=/home/wxsite/domains/trac.wxwidgets.org/htdocs/lib/python
+export PYTHON_EGG_CACHE=/tmp/.python-eggs
+/usr/bin/python2.5 $REPOS/hooks/trac-post-commit-hook \
+       -p /home/wxsite/domains/trac.wxwidgets.org/htdocs/wxtrac -r $REV &
+
+

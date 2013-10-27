@@ -1,0 +1,78 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-08-28 16:46+0000\n"
+"PO-Revision-Date: 2003-04-12 20:10+0400\n"
+"Last-Translator: Aiet Kolkhi <aiet@gmx.net>\n"
+"Language-Team: Georgian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../internat.cpp:120
+msgid "International wxWindows App"
+msgstr "საერთაშორისო wxWindows პროგბრამა"
+
+#: ../internat.cpp:128
+msgid "&About"
+msgstr "შეს&ახებ"
+
+#: ../internat.cpp:130
+msgid "E&xit"
+msgstr "&გამოსვლა"
+
+#: ../internat.cpp:133
+msgid "&Open bogus file"
+msgstr "გ&ახსენი დეფექტიანი ფაილი"
+
+#: ../internat.cpp:134
+msgid "&Play a game"
+msgstr "ითამაშე &თამაში"
+
+#: ../internat.cpp:137
+msgid "&File"
+msgstr "&ფაილი"
+
+#: ../internat.cpp:138
+msgid "&Test"
+msgstr "&ტესტი"
+
+#: ../internat.cpp:161
+msgid "I18n sample\n"
+"© 1998, 1999 Vadim Zeitlin and Julian Smart"
+msgstr "I18n მაგალითი\n"
+"© 1998, 1999 დათვი სიკინჭილაშვილი და ზანზარონე თეთრწვერაშვილი"
+
+#: ../internat.cpp:163
+msgid "About Internat"
+msgstr "Internat-ის შე&სახებ"
+
+#: ../internat.cpp:168
+msgid "Enter your number:"
+msgstr "შეიყვანეთ ნომერი:"
+
+#: ../internat.cpp:169
+msgid "Try to guess my number!"
+msgstr "ცადე ჩემი ნომრის გამოცნობა!"
+
+#: ../internat.cpp:177
+msgid "You've probably entered an invalid number."
+msgstr "ალბათ, არასწორი ნომერი შეიყვანეთ."
+
+#: ../internat.cpp:185
+msgid "Congratulations! you've won. Here is the magic phrase:"
+msgstr "გილოცავთ, თქვენ გაიმარჯვეთ. სულ გამარჯვებით გევლოთ! აი ჯადოსნური ფრაზა:"
+
+#: ../internat.cpp:186
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr "ვერ შევქმენი Fifo `%s'"
+
+#: ../internat.cpp:189
+msgid "Result"
+msgstr "შედეგი"
+

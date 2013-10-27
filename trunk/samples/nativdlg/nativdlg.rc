@@ -1,0 +1,4 @@
+#include "../sample.rc"
+
+#include "dialog1.rc"
+

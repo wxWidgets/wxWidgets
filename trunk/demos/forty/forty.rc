@@ -1,0 +1,6 @@
+aaaaa    ICON   "cards.ico"
+
+#include "wx/msw/wx.rc"
+
+CardsIcon    ICON   "cards.ico"
+

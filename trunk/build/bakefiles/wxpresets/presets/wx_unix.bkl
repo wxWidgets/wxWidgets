@@ -1,0 +1,251 @@
+<?xml version="1.0" ?>
+
+<!--
+Presents for building wxWidgets applications using Autoconf or GNU toosets.
+See wx.bkl for platform-independent notes.
+
+Format-specific notes:
+
+* autoconf:
+        Beware that you have to use WX_CONFIG_OPTIONS and
+        WX_CONFIG_CHECK in your configure.in to get at least the
+        WX_CPPFLAGS, WX_CFLAGS, WX_CXXFLAGS, WX_LIBS option values defined.
+
+        To detect the WX_* option values typically you also want to use
+        the WX_STANDARD_OPTIONS, WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS,
+        WX_CONFIG_CHECK and finally WX_DETECT_STANDARD_OPTION_VALUES macros
+        (see wxwin.m4 for more info).
+
+-->
+
+
+<makefile>
+
+
+
+    <!-- ============================================================== -->
+    <!--                           Autoconf                             -->
+    <!-- ============================================================== -->
+
+    <if cond="FORMAT=='autoconf'">
+        <option name="WX_CFLAGS"/>
+        <option name="WX_CXXFLAGS"/>
+        <option name="WX_CPPFLAGS"/>
+        <option name="WX_LIBS"/>
+        <option name="WX_RESCOMP"/>
+        <option name="WX_VERSION_MAJOR"/>
+        <option name="WX_VERSION_MINOR"/>
+        <option name="WX_PORT"/>
+
+        <!-- wxwin.m4 macros will detect all WX_* options defined above -->
+
+
+        <!-- VERY IMPORTANT: <wx-lib>base</wx-lib> must be the last wx-lib tag
+                            in all your bakefiles !!
+        -->
+        <define-tag name="wx-lib" rules="exe,dll,module">
+            <if cond="value=='base'">
+                <!-- all wx-dependent libraries should have been already listed
+                     thus we can now add WX_LIBS to the linker line -->
+                <ldlibs>$(WX_LIBS)</ldlibs>
+            </if>
+            <if cond="value not in WX_LIB_LIST.split()">
+                <error>Unknown wxWidgets library given in the wx-lib tag</error>
+            </if>
+        </define-tag>
+    </if>
+
+
+    <!-- ============================================================== -->
+    <!--                   GNU makefiles for Unix                       -->
+    <!-- ============================================================== -->
+
+    <if cond="FORMAT=='gnu'">
+
+        <!-- remove those WX_* vars which were created just to avoid the definition
+             of the WX_* options in wx.bkl -->
+        <unset var="WX_SHARED"/>
+        <unset var="WX_UNICODE"/>
+        <unset var="WX_PORT"/>
+        <unset var="WX_VERSION"/>
+
+        <set var="WX_CONFIG_DEFAULT" overwrite="0">wx-config</set>
+        <option name="WX_CONFIG">
+            <default-value>$(WX_CONFIG_DEFAULT)</default-value>
+            <description>Location and arguments of wx-config script</description>
+        </option>
+
+        <set var="WX_PORT_DEFAULT" overwrite="0">
+            $(DOLLAR)(shell $(WX_CONFIG) --query-toolkit)
+        </set>
+        <option name="WX_PORT">
+            <values>gtk1,gtk2,msw,x11,motif,osx_cocoa,osx_carbon,dfb</values>
+            <default-value force="1">$(WX_PORT_DEFAULT)</default-value>
+            <description>
+                Port of the wx library to build against
+            </description>
+        </option>
+
+        <set var="WX_SHARED_DEFAULT" overwrite="0">
+            $(DOLLAR)(shell if test -z `$(WX_CONFIG) --query-linkage`; then echo 1; else echo 0; fi)
+        </set>
+        <option name="WX_SHARED">
+            <values>0,1</values>
+            <values-description>Static,DLL</values-description>
+            <default-value force="1">$(WX_SHARED_DEFAULT)</default-value>
+            <description>
+                Use DLL build of wx library to use?
+            </description>
+        </option>
+
+        <set var="WX_UNICODE_DEFAULT" overwrite="0">
+            $(DOLLAR)(shell $(WX_CONFIG) --query-chartype | sed 's/unicode/1/;s/ansi/0/')
+        </set>
+        <option name="WX_UNICODE">
+            <values>0,1</values>
+            <values-description>ANSI,Unicode</values-description>
+            <default-value force="1">$(WX_UNICODE_DEFAULT)</default-value>
+            <description>
+                Compile Unicode build of wxWidgets?
+            </description>
+        </option>
+
+        <set var="WX_VERSION_DEFAULT" overwrite="0">
+            $(DOLLAR)(shell $(WX_CONFIG) --query-version | sed -e 's/\([0-9]*\)\.\([0-9]*\)/\1\2/')
+        </set>
+        <option name="WX_VERSION">
+            <default-value>$(WX_VERSION_DEFAULT)</default-value>
+            <description>
+                Version of the wx library to build against.
+            </description>
+        </option>
+
+        <!-- Get MAJOR and MINOR version numbers -->
+        <set var="WX_VERSION_MAJOR" make_var="1">
+            $(DOLLAR)(shell echo $(DOLLAR)(WX_VERSION) | cut -c1,1)
+        </set>
+        <set var="WX_VERSION_MINOR" make_var="1">
+            $(DOLLAR)(shell echo $(DOLLAR)(WX_VERSION) | cut -c2,2)
+        </set>
+
+
+        <!--
+            Using the GNU format creates a configurable makefile just like
+            a win32 makefile: i.e. a makefile where you can select the wanted
+            wxWidgets build using the WX_* options.
+
+            The difference with win32 makefiles is that WX_PORT, WX_UNICODE and
+            WX_SHARED options have a smart default value which is created using
+            the installed wx-config or the wx-config given using WX_CONFIG option
+        -->
+        <set var="WX_CONFIG_UNICODE_FLAG">
+            <if cond="WX_UNICODE=='0'">--unicode=no</if>
+            <if cond="WX_UNICODE=='1'">--unicode=yes</if>
+        </set>
+        <set var="WX_CONFIG_SHARED_FLAG">
+            <if cond="WX_SHARED=='0'">--static=yes</if>
+            <if cond="WX_SHARED=='1'">--static=no</if>
+        </set>
+        <set var="WX_CONFIG_PORT_FLAG">
+            --toolkit=$(WX_PORT)
+        </set>
+        <set var="WX_CONFIG_VERSION_FLAG">
+            --version=$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
+        </set>
+
+        <set var="WX_CONFIG_FLAGS" make_var="1">
+            $(WX_CONFIG_UNICODE_FLAG) $(WX_CONFIG_SHARED_FLAG)
+            $(WX_CONFIG_PORT_FLAG) $(WX_CONFIG_VERSION_FLAG)
+        </set>
+
+        <set var="DEFAULT_CXX">`$(DOLLAR)(WX_CONFIG) --cxx`</set>
+        <set var="WX_CFLAGS">`$(DOLLAR)(WX_CONFIG) --cflags $(WX_CONFIG_FLAGS)`</set>
+        <set var="WX_CXXFLAGS">`$(DOLLAR)(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)`</set>
+        <set var="WX_CPPFLAGS">`$(DOLLAR)(WX_CONFIG) --cppflags $(WX_CONFIG_FLAGS)`</set>
+        <set var="WX_RESCOMP">`$(DOLLAR)(WX_CONFIG) --rescomp $(WX_CONFIG_FLAGS)`</set>
+
+        <!--
+         VERY IMPORTANT: before starting to build all targets of the generated makefile,
+                         we need to check if the selected wxWidgets build exists; we do
+                         that simply creating the following target; if it fails the make
+                         program will halt with the wx-config error message...
+        -->
+        <if cond="WX_TEST_FOR_SELECTED_WXBUILD=='1'">
+            <action id="test_for_selected_wxbuild">
+                <dependency-of>all</dependency-of>
+
+                <!-- Use @ to hide to the user that we're running wx-config... -->
+                <command>@$(DOLLAR)(WX_CONFIG) $(WX_CONFIG_FLAGS)</command>
+            </action>
+        </if>
+
+        <!-- we need these vars but the trick used in the default values above
+             prevents bakefile from detecting it: -->
+        <set var="FORMAT_OUTPUT_VARIABLES" append="1">WX_CONFIG WX_VERSION</set>
+
+
+        <!-- VERY IMPORTANT: <wx-lib>base</wx-lib> must be the last wx-lib tag
+                            in all your bakefiles !!
+        -->
+        <define-tag name="wx-lib" rules="exe,dll,module">
+            <if cond="value=='base'">
+                <!-- all wx libraries should have been already specified, thus
+                    $(__liblist) should contain the full list of required wxlibs... -->
+                <set var="__liblist" append="1">base</set>
+                <ldlibs>`$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs $(','.join(__liblist.split()))`</ldlibs>
+            </if>
+            <if cond="value!='base'">
+                <set var="__liblist" append="1">$(value)</set>
+            </if>
+            <if cond="value not in WX_LIB_LIST.split()">
+                <error>Unknown wxWidgets library given in the wx-lib tag</error>
+            </if>
+        </define-tag>
+    </if>
+
+    <!-- ============================================================== -->
+    <!--                          Common code                           -->
+    <!-- ============================================================== -->
+
+    <if cond="FORMAT not in ['gnu','autoconf']">
+        <error>
+            Don't include presets/wx_unix.bkl directly, use presets/wx.bkl.
+        </error>
+    </if>
+
+    <!--
+         We need to re-define the WINDRES resource compiler name to the resource compiler
+         returned by 'wx-config - -rescomp' since this option returns both the name of the
+         resource compiler to use (windres) and the flags required for that compiler.
+
+         This line typically does something *only* when the Makefile.in generated
+         using this bakefile, is used on Windows with MSYS (when using Cygwin, resources
+         are not compiled at all).
+         Without this line, in fact, when compiling with MSYS on Windows, the - -include-dir
+         option which tells windres to look in wxWidgets\include folder would be missing and
+         then windres would fail to find the wxMSW resources.
+
+         NOTE: overwriting the WINDRES variable we add wxWidgets resource flags to
+               all targets which include this bakefile; this could be useless to those
+               targets which are not wx-based eventually present in that bakefile but
+               in any case it shouldn't do any harm.
+    -->
+    <set var="WINDRES">$(WX_RESCOMP)</set>
+
+    <template id="wx-lib">
+        <cxxflags>$(WX_CXXFLAGS)</cxxflags>
+        <cflags>$(WX_CFLAGS)</cflags>
+    </template>
+
+    <template id="wx" template="wx-lib">
+        <!--
+            Don't include the $(WX_LIBS) variable in linker options here since
+            it would make impossible for the user to obtain the right library
+            order when he needs to specify, *before* WX_LIBS, its own libraries
+            that depend on wxWidgets libraries; to avoid this, we include
+            $(WX_LIBS) as soon as we found the <wx-lib>base</wx-lib> tag which
+            the user should always put *after* all other wx-dependent libraries
+        -->
+    </template>
+
+</makefile>

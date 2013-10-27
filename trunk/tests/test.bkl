@@ -1,0 +1,319 @@
+<?xml version="1.0" ?>
+
+<makefile>
+    <!--
+        The use of PCH is disabled for samples by default but we do want to use
+        them for the test as this dramatically speeds up its compilation.
+     -->
+    <set var="WX_ENABLE_PRECOMP_HEADERS">1</set>
+
+    <include file="../build/bakefiles/common_samples.bkl"/>
+
+    <template id="wx_test">
+        <cppflags>$(CPPUNIT_CFLAGS)</cppflags>
+        <ldflags>$(CPPUNIT_LIBS)</ldflags>
+
+        <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
+            <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
+                <sources>dummy.cpp</sources>
+                <precomp-headers-gen>dummy.cpp</precomp-headers-gen>
+            </if>
+            <precomp-headers-header>testprec.h</precomp-headers-header>
+            <precomp-headers>on</precomp-headers>
+            <precomp-headers-file>testprec_$(id)</precomp-headers-file>
+        </if>
+    </template>
+
+    <exe id="test" template="wx_sample_console,wx_test"
+                   template_append="wx_append_base">
+        <sources>
+            test.cpp
+            any/anytest.cpp
+            archive/archivetest.cpp
+            archive/ziptest.cpp
+            archive/tartest.cpp
+            arrays/arrays.cpp
+            base64/base64.cpp
+            cmdline/cmdlinetest.cpp
+            config/fileconf.cpp
+            config/regconf.cpp
+            datetime/datetimetest.cpp
+            events/evthandler.cpp
+            events/evtlooptest.cpp
+            events/evtsource.cpp
+            events/stopwatch.cpp
+            events/timertest.cpp
+            exec/exec.cpp
+            file/dir.cpp
+            file/filefn.cpp
+            file/filetest.cpp
+            filekind/filekind.cpp
+            filename/filenametest.cpp
+            filesys/filesystest.cpp
+            fontmap/fontmaptest.cpp
+            formatconverter/formatconvertertest.cpp
+            fswatcher/fswatchertest.cpp
+            hashes/hashes.cpp
+            interactive/output.cpp
+            interactive/input.cpp
+            intl/intltest.cpp
+            lists/lists.cpp
+            log/logtest.cpp
+            longlong/longlongtest.cpp
+            mbconv/convautotest.cpp
+            mbconv/mbconvtest.cpp
+            misc/dynamiclib.cpp
+            misc/environ.cpp
+            misc/metatest.cpp
+            misc/misctests.cpp
+            misc/module.cpp
+            misc/pathlist.cpp
+            misc/typeinfotest.cpp
+            net/ipc.cpp
+            net/socket.cpp
+            regex/regextest.cpp
+            regex/wxregextest.cpp
+            scopeguard/scopeguardtest.cpp
+            strings/iostream.cpp
+            strings/numformatter.cpp
+            strings/strings.cpp
+            strings/stdstrings.cpp
+            strings/tokenizer.cpp
+            strings/unichar.cpp
+            strings/unicode.cpp
+            strings/vararg.cpp
+            strings/crt.cpp
+            strings/vsnprintf.cpp
+            streams/bstream.cpp
+            streams/datastreamtest.cpp
+            streams/ffilestream.cpp
+            streams/fileback.cpp
+            streams/filestream.cpp
+            streams/iostreams.cpp
+            streams/largefile.cpp
+            streams/memstream.cpp
+            streams/socketstream.cpp
+            streams/sstream.cpp
+            streams/stdstream.cpp
+            streams/tempfile.cpp
+            streams/textstreamtest.cpp
+            streams/zlibstream.cpp
+            textfile/textfiletest.cpp
+            thread/atomic.cpp
+            thread/misc.cpp
+            thread/queue.cpp
+            thread/tls.cpp
+            uris/ftp.cpp
+            uris/uris.cpp
+            uris/url.cpp
+            vectors/vectors.cpp
+            weakref/evtconnection.cpp
+            weakref/weakref.cpp
+            xlocale/xlocale.cpp
+            xml/xmltest.cpp
+        </sources>
+        <wx-lib>net</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+
+    <exe id="test_gui" template="wx_sample,wx_test"
+                       template_append="wx_append"
+         cond="USE_GUI=='1'">
+
+        <!-- link against GUI libraries, but be a console app: -->
+        <app-type>console</app-type>
+
+        <sources>
+            asserthelper.cpp
+            test.cpp
+            testableframe.cpp
+            geometry/rect.cpp
+            geometry/size.cpp
+            geometry/point.cpp
+            geometry/region.cpp
+            graphics/bitmap.cpp
+            graphics/colour.cpp
+            graphics/ellipsization.cpp
+            graphics/measuring.cpp
+            graphics/affinematrix.cpp
+            config/config.cpp
+            controls/bitmapcomboboxtest.cpp
+            controls/bitmaptogglebuttontest.cpp
+            controls/bookctrlbasetest.cpp
+            controls/buttontest.cpp
+            controls/checkboxtest.cpp
+            controls/checklistboxtest.cpp
+            controls/choicebooktest.cpp
+            controls/choicetest.cpp
+            controls/comboboxtest.cpp
+            controls/dataviewctrltest.cpp
+            controls/datepickerctrltest.cpp
+            controls/frametest.cpp
+            controls/gaugetest.cpp
+            controls/gridtest.cpp
+            controls/headerctrltest.cpp
+            controls/htmllboxtest.cpp
+            controls/hyperlinkctrltest.cpp
+            controls/itemcontainertest.cpp
+            controls/label.cpp
+            controls/listbasetest.cpp
+            controls/listbooktest.cpp
+            controls/listboxtest.cpp
+            controls/listctrltest.cpp
+            controls/listviewtest.cpp
+            controls/markuptest.cpp
+            controls/notebooktest.cpp
+            controls/ownerdrawncomboboxtest.cpp
+            controls/pickerbasetest.cpp
+            controls/pickertest.cpp
+            controls/radioboxtest.cpp
+            controls/radiobuttontest.cpp
+            controls/rearrangelisttest.cpp
+            controls/richtextctrltest.cpp
+            controls/searchctrltest.cpp
+            controls/simplebooktest.cpp
+            controls/slidertest.cpp
+            controls/spinctrldbltest.cpp
+            controls/spinctrltest.cpp
+            controls/textctrltest.cpp
+            controls/textentrytest.cpp
+            controls/togglebuttontest.cpp
+            controls/toolbooktest.cpp
+            controls/treebooktest.cpp
+            controls/treectrltest.cpp
+            controls/treelistctrltest.cpp
+            controls/virtlistctrltest.cpp
+            controls/webtest.cpp
+            controls/windowtest.cpp
+            controls/dialogtest.cpp
+            events/clone.cpp
+            <!--
+                Duplicate this file here to test GUI event loops too.
+             -->
+            events/evtlooptest.cpp
+            events/propagation.cpp
+            events/keyboard.cpp
+            <!--
+                And duplicate this one too as wxExecute behaves differently in
+                console and GUI applications.
+             -->
+            exec/exec.cpp
+            font/fonttest.cpp
+            image/image.cpp
+            image/rawbmp.cpp
+            html/htmlparser.cpp
+            html/htmlwindow.cpp
+            menu/accelentry.cpp
+            menu/menu.cpp
+            misc/guifuncs.cpp
+            misc/selstoretest.cpp
+            misc/garbage.cpp
+            misc/safearrayconverttest.cpp
+            misc/settings.cpp
+            <!--
+                This one is intentionally duplicated here (it is also part of
+                non-GUI test) as sockets behave differently in console and GUI
+                applications.
+             -->
+            net/socket.cpp
+            sizers/boxsizer.cpp
+            sizers/wrapsizer.cpp
+            toplevel/toplevel.cpp
+            validators/valnum.cpp
+            window/clientsize.cpp
+            window/setsize.cpp
+            xml/xrctest.cpp
+        </sources>
+        <!--
+            Can't use <wx-lib> here as it doesn't work with conditionally
+            defined variables, so fall back <sys-lib> as we must not link with
+            inexisting webview library to be able to run tests even if
+            wxWebView is not available.
+         -->
+        <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <wx-lib>richtext</wx-lib>
+        <wx-lib>media</wx-lib>
+        <wx-lib>xrc</wx-lib>
+        <wx-lib>xml</wx-lib>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+
+    <wx-data id="data">
+        <files>testdata.fc</files>
+        
+        <!-- test data for image/image.cpp test unit: -->
+        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg  
+               horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
+    </wx-data>
+
+    <wx-data id="data-images">
+        <srcdir>$(SRCDIR)/image</srcdir>
+        <dstdir>image</dstdir>
+        <files>
+            horse_grey.bmp horse_grey_flipped.bmp
+            horse_rle4.bmp horse_rle4_flipped.bmp
+            horse_rle8.bmp horse_rle8_flipped.bmp
+
+            horse_bicubic_50x50.png
+            horse_bicubic_100x100.png
+            horse_bicubic_150x150.png
+            horse_bicubic_300x300.png
+
+            horse_bilinear_50x50.png
+            horse_bilinear_100x100.png
+            horse_bilinear_150x150.png
+            horse_bilinear_300x300.png
+
+            horse_box_average_50x50.png
+            horse_box_average_100x100.png
+            horse_box_average_150x150.png
+            horse_box_average_300x300.png
+        </files>
+    </wx-data>
+
+    <template id="catalog">
+        <dstdir>$(BUILDDIR)/intl/$(id)</dstdir>
+        <srcdir>$(SRCDIR)/intl/$(id)</srcdir>
+        <files>internat.po internat.mo</files>
+    </template>
+
+    <wx-data id="fr" template="catalog"/>
+
+
+    <fragment format="autoconf">
+# notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as
+# currently the value in the makefile would be ignored if we did, but
+# warnings don't matter when we expect compilation to fail anyhow so we can
+# use this variable to enable the compilation of code which is supposed to
+# fail
+failtest: failtest_combobox failtest_evthandler
+
+failtest_combobox:
+	@$(RM) test_gui_comboboxtest.o
+	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_COMBOBOX_ISEMPTY test_gui_comboboxtest.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_INVALID_COMBOBOX_ISEMPTY unexpectedly succeeded.">&amp;2; \
+	    exit 1; \
+	fi; \
+	exit 0
+
+failtest_evthandler:
+	@$(RM) test_evthandler.o
+	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
+	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
+	        echo "*** Compilation with TEST_INVALID_BIND_$$d unexpectedly succeeded.">&amp;2; \
+	        exit 1; \
+	    fi; \
+	done; \
+	exit 0
+
+.PHONY: failtest
+    </fragment>
+
+</makefile>

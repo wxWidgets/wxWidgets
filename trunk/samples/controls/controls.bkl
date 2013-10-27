@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="controls" template="wx_sample" template_append="wx_append">
+        <sources>controls.cpp</sources>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>controls.rc</win32-res>
+    </exe>
+
+    <wx-data id="data">
+        <files>
+            test2.bmp
+        </files>
+    </wx-data>
+
+</makefile>

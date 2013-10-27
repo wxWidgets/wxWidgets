@@ -1,0 +1,85 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wxWindows 2.5 internat sample\n"
+"POT-Creation-Date: 2003-02-03 23:45+0100\n"
+"PO-Revision-Date: 2003-02-03 23:45+0100\n"
+"Last-Translator: James Bishop\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ..\internat.cpp:180
+msgid "&About"
+msgstr "wxウィンドウズについて"
+
+#: ..\internat.cpp:182
+msgid "E&xit"
+msgstr "終了"
+
+#: ..\internat.cpp:189
+msgid "&File"
+msgstr "ファイル"
+
+#: ..\internat.cpp:233
+msgid "About Internat"
+msgstr "インターナットについて"
+
+#: ..\internat.cpp:185
+msgid "&Open bogus file"
+msgstr "ボーガス ファイルを開く"
+
+#: ..\internat.cpp:186
+msgid "&Play a game"
+msgstr "ゲームをする"
+
+#: ..\internat.cpp:190
+msgid "&Test"
+msgstr "テスト"
+
+#: ..\internat.cpp:208
+msgid "International wxWindows App"
+msgstr "国際 wxウィンドウズ アプリケーション"
+
+#: ..\internat.cpp:228
+#, c-format
+msgid "c-フォーマット"
+"Language: %s\n"
+"System locale name: %s\n"
+"Canonical locale name: %s\n"
+msgstr "言語: %s\n"
+       "システム ローカル名: %s\n"
+       "一般的名: %s\n"
+
+#: ..\internat.cpp:231
+msgid "インターナット.cpp:231"
+"I18n sample\n"
+"(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
+msgstr "I18n サンプル\n"
+       "(c) 1998, 1999 Vadim Zeitlin and Julian Smart"
+#: ..\internat.cpp:238
+msgid "Enter your number:"
+msgstr "数字を入力して下さい。"
+
+#: ..\internat.cpp:239
+msgid "Try to guess my number!"
+msgstr "私の数字を当ててみて下さい！"
+
+#: ..\internat.cpp:246
+msgid "You've probably entered an invalid number."
+msgstr "入力した数字は多分無効です。"
+
+#: ..\internat.cpp:255
+msgid "Congratulations! you've won. Here is the magic phrase:"
+msgstr "おめでとうございます！ あなたの勝。 これが魔法の言葉です。："
+
+#: ..\internat.cpp:256
+#, c-format
+msgid "cannot create fifo `%s'"
+msgstr "fifo %s を作ることができませんでした"
+
+#: ..\internat.cpp:259
+msgid "Result"
+msgstr "結果"
+
+msgid "Bad luck! try again..."
+msgstr ""
