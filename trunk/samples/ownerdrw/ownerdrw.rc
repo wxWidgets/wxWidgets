@@ -1,8 +1,0 @@
-#include "../sample.rc"
-
-bell BITMAP "bell.bmp"
-sound BITMAP "sound.bmp"
-nosound BITMAP "nosound.bmp"
-info BITMAP "info.bmp"
-info_mono BITMAP "info_mono.bmp"
-

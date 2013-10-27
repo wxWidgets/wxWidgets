@@ -1,4 +1,0 @@
-
-This is a copy of wxWidgets 2.8's  wxHTML parser. Unlike the 2.9+ version, it
-uses wxString::operator[] during parsing and so is perfect for testing
-real-life performance of the new wxString class' operator[] caching.

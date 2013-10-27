@@ -567,7 +567,7 @@ Major new features in this release
   was added.
 
 
-3.0-RC2: (released 2013-10-xx)
+3.0-RC2: (released 2013-10-28)
 ------------------------------
 
 All:
