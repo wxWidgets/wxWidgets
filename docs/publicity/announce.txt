@@ -1,5 +1,5 @@
 October 28, 2013 -- The wxWidgets team is pleased to announce the
-first release candidate release of wxWidgets 3.0.
+second release candidate release of wxWidgets 3.0.
 
 wxWidgets 3.0-RC2 is available at
 
