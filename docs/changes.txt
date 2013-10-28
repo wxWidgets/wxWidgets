@@ -567,6 +567,14 @@ Major new features in this release
   was added.
 
 
+3.0.0: (released 2013-11-xx)
+----------------------------
+
+All:
+
+- Fix crash if wxCharBuffer fails to allocate the requested amount of memory.
+
+
 3.0-RC2: (released 2013-10-28)
 ------------------------------
 
