@@ -66,6 +66,23 @@ IF "%1" == "all" (
   )
 )
 
+REM Check for Graphviz (its location should be in %PATH%).
+REM
+REM NB: Always do this check because it looks like errorlevel is not set
+REM     when the test is done inside the IF block.
+dot <NUL >NUL 2>&1
+IF %GENERATE_HTML%==YES (
+    IF NOT %errorlevel%==0 (
+        IF %errorlevel%==9009 (
+            echo Error: dot was not found in PATH, please install Graphviz!
+        ) ELSE (
+            echo Error: %errorlevel% error code when running dot, please check Graphviz installation.
+        )
+
+        EXIT /B
+    )
+)
+
 REM
 REM NOW RUN DOXYGEN
 REM
@@ -74,4 +91,15 @@ REM     otherwise when generating the CHM file with Doxygen, those files are
 REM     not included!
 REM
 set PATH=%PATH%;%HHC_PATH%
-doxygen Doxyfile
+rem doxygen Doxyfile
+
+REM Check that class inheritance diagram images are present for html/chm docs.
+REM
+REM NB: Set the file to check outside the IF block,
+REM     otherwise the second check does not always pick its value.
+set filetofind=out\html\classwx_app_console__inherit__graph.png
+IF %GENERATE_HTML%==YES (
+    IF NOT EXIST %~dp0%filetofind% (
+        echo Warning: Class inheritance diagram images are missing, please check Graphviz installation.
+    )
+)
