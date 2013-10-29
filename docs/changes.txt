@@ -574,6 +574,10 @@ All:
 
 - Fix crash if wxCharBuffer fails to allocate the requested amount of memory.
 
+wxGTK:
+
+- Fix wxSpinButton default width under GTK+ 3 (David Hart).
+
 
 3.0-RC2: (released 2013-10-28)
 ------------------------------

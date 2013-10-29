@@ -207,7 +207,13 @@ GdkWindow *wxSpinButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) cons
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    wxSize best(15, 26); // FIXME
+    int width =
+#ifdef __WXGTK3__
+    48;
+#else
+    15;
+#endif
+    wxSize best(width, 26); // FIXME
     CacheBestSize(best);
     return best;
 }
