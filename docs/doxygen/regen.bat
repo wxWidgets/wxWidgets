@@ -91,7 +91,7 @@ REM     otherwise when generating the CHM file with Doxygen, those files are
 REM     not included!
 REM
 set PATH=%PATH%;%HHC_PATH%
-rem doxygen Doxyfile
+doxygen Doxyfile
 
 REM Check that class inheritance diagram images are present for html/chm docs.
 REM
