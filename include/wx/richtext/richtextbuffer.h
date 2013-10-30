@@ -304,7 +304,8 @@ enum wxTextBoxAttrFlags
     wxTEXT_BOX_ATTR_CLEAR                   = 0x00000002,
     wxTEXT_BOX_ATTR_COLLAPSE_BORDERS        = 0x00000004,
     wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT      = 0x00000008,
-    wxTEXT_BOX_ATTR_BOX_STYLE_NAME          = 0x00000010
+    wxTEXT_BOX_ATTR_BOX_STYLE_NAME          = 0x00000010,
+    wxTEXT_BOX_ATTR_WHITESPACE              = 0x00000020
 };
 
 /**
@@ -799,7 +800,7 @@ enum wxTextBoxAttrClearStyle
 };
 
 /**
-    Collapse mode styles. TODO: can they be switched on per side?
+    Collapse mode styles.
  */
 enum wxTextBoxAttrCollapseMode
 {
@@ -816,6 +817,21 @@ enum wxTextBoxAttrVerticalAlignment
     wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_TOP  =       1,
     wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_CENTRE =     2,
     wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_BOTTOM  =    3
+};
+
+/**
+    Whitespace values mirroring the CSS white-space attribute.
+    Only wxTEXT_BOX_ATTR_WHITESPACE_NO_WRAP is currently implemented,
+    in table cells.
+ */
+enum wxTextBoxAttrWhitespaceMode
+{
+    wxTEXT_BOX_ATTR_WHITESPACE_NONE                 = 0,
+    wxTEXT_BOX_ATTR_WHITESPACE_NORMAL               = 1,
+    wxTEXT_BOX_ATTR_WHITESPACE_NO_WRAP              = 2,
+    wxTEXT_BOX_ATTR_WHITESPACE_PREFORMATTED         = 3,
+    wxTEXT_BOX_ATTR_WHITESPACE_PREFORMATTED_LINE    = 4,
+    wxTEXT_BOX_ATTR_WHITESPACE_PREFORMATTED_WRAP    = 5
 };
 
 /**
@@ -1248,6 +1264,21 @@ public:
     bool HasCollapseBorders() const { return HasFlag(wxTEXT_BOX_ATTR_COLLAPSE_BORDERS); }
 
     /**
+        Returns the whitespace mode.
+    */
+    wxTextBoxAttrWhitespaceMode GetWhitespaceMode() const { return m_whitespaceMode; }
+
+    /**
+        Sets the whitespace mode.
+    */
+    void SetWhitespaceMode(wxTextBoxAttrWhitespaceMode whitespace) { m_whitespaceMode = whitespace; m_flags |= wxTEXT_BOX_ATTR_WHITESPACE; }
+
+    /**
+        Returns @true if the whitespace flag is present.
+    */
+    bool HasWhitespaceMode() const { return HasFlag(wxTEXT_BOX_ATTR_WHITESPACE); }
+
+    /**
         Returns the vertical alignment.
     */
     wxTextBoxAttrVerticalAlignment GetVerticalAlignment() const { return m_verticalAlignment; }
@@ -1493,6 +1524,7 @@ public:
     wxTextBoxAttrClearStyle         m_clearMode;
     wxTextBoxAttrCollapseMode       m_collapseMode;
     wxTextBoxAttrVerticalAlignment  m_verticalAlignment;
+    wxTextBoxAttrWhitespaceMode     m_whitespaceMode;
     wxString                        m_boxStyleName;
 };
 

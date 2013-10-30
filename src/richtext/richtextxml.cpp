@@ -1634,6 +1634,8 @@ bool wxRichTextXMLHelper::ImportStyle(wxRichTextAttr& attr, wxXmlNode* node, boo
             }
             else if (name == wxT("collapse-borders"))
                 attr.GetTextBoxAttr().SetCollapseBorders((wxTextBoxAttrCollapseMode) wxAtoi(value));
+            else if (name == wxT("whitespace-mode"))
+                attr.GetTextBoxAttr().SetWhitespaceMode((wxTextBoxAttrWhitespaceMode) wxAtoi(value));
 
             else if (name.Contains(wxT("border-")))
             {
@@ -2228,6 +2230,8 @@ wxString wxRichTextXMLHelper::AddAttributes(const wxRichTextAttr& attr, bool isP
     if (attr.GetTextBoxAttr().HasCollapseBorders())
         AddAttribute(str, wxT("collapse-borders"), (int) attr.GetTextBoxAttr().GetCollapseBorders());
 
+    if (attr.GetTextBoxAttr().HasWhitespaceMode())
+        AddAttribute(str, wxT("whitespace-mode"), (int) attr.GetTextBoxAttr().GetWhitespaceMode());
     return str;
 }
 
@@ -2704,6 +2708,9 @@ bool wxRichTextXMLHelper::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, b
 
     if (attr.GetTextBoxAttr().HasCollapseBorders())
         AddAttribute(node, wxT("collapse-borders"), (int) attr.GetTextBoxAttr().GetCollapseBorders());
+
+    if (attr.GetTextBoxAttr().HasWhitespaceMode())
+        AddAttribute(node, wxT("whitespace-mode"), (int) attr.GetTextBoxAttr().GetWhitespaceMode());
 
     return true;
 }
