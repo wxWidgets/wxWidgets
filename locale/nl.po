@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-01 19:04+0200\n"
-"PO-Revision-Date: 2013-07-31 14:30+0100\n"
+"PO-Revision-Date: 2013-10-30 10:18+0100\n"
 "Last-Translator: Dingoe <translations@gvmelle.com>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: nl_NL\n"
@@ -1145,14 +1145,12 @@ msgid "Add"
 msgstr "Toevoegen"
 
 #: ../src/richtext/richtextbuffer.cpp:10751
-#, fuzzy
 msgid "Add Column"
-msgstr "Voeg kolom toe"
+msgstr "Kolom toevoegen"
 
 #: ../src/richtext/richtextbuffer.cpp:10688
-#, fuzzy
 msgid "Add Row"
-msgstr "voeg rij toe"
+msgstr "Rij toevoegen"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
@@ -1667,7 +1665,7 @@ msgstr "Kan niet schrijven naar deflate stream: %s"
 #: ../src/msw/msgdlg.cpp:489 ../src/msw/progdlg.cpp:673
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
 msgid "Cancel"
-msgstr "Annuleer"
+msgstr "Annuleren"
 
 #: ../src/os2/thread.cpp:116
 msgid "Cannot create mutex."
@@ -2579,12 +2577,10 @@ msgid "Delete A&ll"
 msgstr "A&lles verwijderen"
 
 #: ../src/richtext/richtextbuffer.cpp:10637
-#, fuzzy
 msgid "Delete Column"
 msgstr "Kolom verwijderen"
 
 #: ../src/richtext/richtextbuffer.cpp:10587
-#, fuzzy
 msgid "Delete Row"
 msgstr "Rij verwijderen"
 
@@ -6322,7 +6318,7 @@ msgid ""
 "[Cancel] if it cannot be replaced"
 msgstr ""
 "De tekenset '%s' is onbekend. U kunt een andere\n"
-"tekenset kiezen om te vervangen of kies [Annuleer]\n"
+"tekenset kiezen om te vervangen of kies [Annuleren]\n"
 "als het niet vervangen kan worden"
 
 #: ../src/msw/ole/dataobj.cpp:367
