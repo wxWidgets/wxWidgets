@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtextbackgroundpage.cpp
-// Purpose:     
+// Purpose:     Implements the rich text formatting dialog background
+//              properties page.
 // Author:      Julian Smart
 // Modified by: 
 // Created:     13/11/2010 11:17:25
-// RCS-ID:      
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
@@ -195,7 +195,7 @@ void wxRichTextBackgroundPage::OnColourSwatch(wxCommandEvent& event)
 
 bool wxRichTextBackgroundPage::ShowToolTips()
 {
-    return true;
+    return wxRichTextFormattingDialog::ShowToolTips();
 }
 
 /*!

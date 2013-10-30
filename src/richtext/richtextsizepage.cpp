@@ -1,19 +1,17 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtextsizepage.cpp
-// Purpose:
+// Purpose:     Implements the rich text formatting dialog size page.
 // Author:      Julian Smart
 // Modified by:
 // Created:     20/10/2010 10:23:24
-// RCS-ID:
 // Copyright:   (c) Julian Smart
-// Licence:
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/richtext/richtextsizepage.h"
 
 ////@begin XPM images
 ////@end XPM images
-
 
 /*!
  * wxRichTextSizePage type definition
@@ -756,7 +754,7 @@ wxRichTextAttr* wxRichTextSizePage::GetAttributes()
 
 bool wxRichTextSizePage::ShowToolTips()
 {
-    return true;
+    return wxRichTextFormattingDialog::ShowToolTips();
 }
 
 bool wxRichTextSizePage::TransferDataToWindow()

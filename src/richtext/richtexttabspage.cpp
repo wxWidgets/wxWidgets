@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtexttabspage.cpp
-// Purpose:
+// Purpose:     Implements the rich text formatting dialog tabs page.
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/4/2006 8:03:20 AM

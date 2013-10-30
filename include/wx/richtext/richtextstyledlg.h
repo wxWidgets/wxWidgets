@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextstyledlg.h
-// Purpose:
+// Purpose:     Declares the rich text style editor dialog.
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/5/2006 12:05:31 PM

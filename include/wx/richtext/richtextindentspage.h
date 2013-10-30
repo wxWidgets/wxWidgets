@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextindentspage.h
-// Purpose:
+// Purpose:     Declares the rich text formatting dialog indent page.
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/3/2006 2:28:21 PM

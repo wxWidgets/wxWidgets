@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtextstylepage.cpp
-// Purpose:
+// Purpose:     Implements the rich text formatting dialog style name tab.
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/5/2006 11:34:55 AM
