@@ -578,6 +578,11 @@ wxGTK:
 
 - Fix wxSpinButton default width under GTK+ 3 (David Hart).
 
+wxMSW:
+
+- Compilation fix for WXWIN_COMPATIBILITY_2_6=1 case (Tim Stahlhut).
+
+
 
 3.0-RC2: (released 2013-10-28)
 ------------------------------
