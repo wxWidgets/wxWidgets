@@ -691,7 +691,7 @@ All:
 - Add separate read/written bytes counters and per-direction NOWAIT and WAITALL
   flags to wxSocket (Rob Bresalier).
 - Add wxEventLoop::ScheduleExit() (Rob Bresalier).
-- Add wxProcess::SetPriority() (Marian Meravy).
+- Add wxProcess::SetPriority() (Marian "VooDooMan" Meravy).
 - Add wxDir::Close() method (Silverstorm82).
 - Fix wxDateTime::GetWeekOfYear() for the last week of year (aimo).
 - Fix compilation of wxHash{Map,Set} with g++ 4.7 (Nathan Ridge).
