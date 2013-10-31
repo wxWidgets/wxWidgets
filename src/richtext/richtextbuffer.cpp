@@ -1953,9 +1953,16 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
         availableSpace = GetAvailableContentArea(dc, context, rect);
     }
 
-    // Fix the width if we're at the top level
-    if (!GetParent())
+    // Fix the width if we're at the top level or if we're asked to
+    if (!GetParent() || (style & wxRICHTEXT_FIXED_WIDTH))
         attr.GetTextBoxAttr().GetWidth().SetValue(rect.GetWidth(), wxTEXT_ATTR_UNITS_PIXELS);
+
+    // Fix the height to the passed rect height if we're asked to
+    if (style & wxRICHTEXT_FIXED_HEIGHT)
+        attr.GetTextBoxAttr().GetHeight().SetValue(rect.GetHeight(), wxTEXT_ATTR_UNITS_PIXELS);
+
+    // Don't pass fixed width/height styles to children
+    style &= ~(wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_FIXED_HEIGHT);
 
     int leftMargin, rightMargin, topMargin, bottomMargin;
     wxRichTextObject::GetTotalMargin(dc, GetBuffer(), attr, leftMargin, rightMargin,
@@ -2109,11 +2116,14 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
         node = node->GetNext();
     }
 
+    int maxContentHeight = 0;
+
     node = m_children.GetLast();
     if (node && node->GetData()->IsShown())
     {
         wxRichTextObject* child = node->GetData();
         maxHeight = child->GetPosition().y - (GetPosition().y + topMargin) + child->GetCachedSize().y;
+        maxContentHeight = maxHeight;
     }
     else
         maxHeight = 0; // topMargin + bottomMargin;
@@ -2181,7 +2191,7 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& co
         (attr.GetTextBoxAttr().GetVerticalAlignment() > wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_TOP))
     {
         int yOffset = 0;
-        int leftOverSpace = availableSpace.height - topMargin - bottomMargin - maxHeight;
+        int leftOverSpace = GetCachedSize().y - topMargin - bottomMargin - maxContentHeight;
         if (leftOverSpace > 0)
         {
             if (attr.GetTextBoxAttr().GetVerticalAlignment() == wxTEXT_BOX_ATTR_VERTICAL_ALIGNMENT_CENTRE)
@@ -9748,10 +9758,9 @@ void ExpandCellsWithRowspan(const wxRichTextTable* table, int paddingY, int& bot
                     wxSize newSize = wxSize(cell->GetCachedSize().GetWidth(), availableHeight);
                     wxRect availableCellSpace = wxRect(cell->GetPosition(), newSize);
                     cell->Invalidate(wxRICHTEXT_ALL);
-                    cell->Layout(dc, context, availableCellSpace, availableSpace, style);
+                    cell->Layout(dc, context, availableCellSpace, availableSpace, style|wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_FIXED_HEIGHT);
                     // Ensure there's room in the span to display its contents, else it'll overwrite lower rows
                     int overhang = cell->GetCachedSize().GetHeight() - availableHeight;
-                    cell->SetCachedSize(newSize);
 
                     if (overhang > 0)
                     {
@@ -9801,8 +9810,7 @@ void ExpandCellsWithRowspan(const wxRichTextTable* table, int paddingY, int& bot
 
                 wxRect availableCellSpace = wxRect(position, size);
                 cell->Invalidate(wxRICHTEXT_ALL);
-                cell->Layout(dc, context, availableCellSpace, availableSpace, style);
-                cell->SetCachedSize(size);
+                cell->Layout(dc, context, availableCellSpace, availableSpace, style|wxRICHTEXT_FIXED_WIDTH|wxRICHTEXT_FIXED_HEIGHT);
             }
         }
         
@@ -10425,11 +10433,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                 wxRect availableCellSpace = wxRect(cell->GetPosition(), wxSize(actualWidths[i], maxCellHeight));
                 // Lay out cell with new height
                 cell->Invalidate(wxRICHTEXT_ALL);
-                cell->Layout(dc, context, availableCellSpace, availableSpace, style);
-
-                // Make sure the cell size really is the appropriate size,
-                // not the calculated box size
-                cell->SetCachedSize(wxSize(actualWidths[i], maxCellHeight));
+                cell->Layout(dc, context, availableCellSpace, availableSpace, style||wxRICHTEXT_FIXED_HEIGHT|wxRICHTEXT_FIXED_WIDTH);
 
                 maxRight = wxMax(maxRight, cell->GetPosition().x + cell->GetCachedSize().x);
             }
@@ -13613,7 +13617,7 @@ int wxTextAttrDimensionConverter::GetPixels(const wxTextAttrDimension& dim, int 
         }
 
         // Scaling is used in e.g. printing
-        if (m_scale != 1.0)
+        if (m_scale != 1.0 && dim.GetUnits() != wxTEXT_ATTR_UNITS_PIXELS && dim.GetUnits() != wxTEXT_ATTR_UNITS_PERCENTAGE)
             pixelsDouble /= m_scale;
 
         int pixelsInt = int(pixelsDouble + 0.5);
