@@ -239,6 +239,9 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - wxAny now uses C locale format for the floating point numbers and not the
   current locale one, i.e. decimal point is always used.
 
+- wxGridBagSizer::AddGrowable{Col,Row}() must now be called after the items are
+  added to the sizer, i.e. the columns and rows already exist.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
