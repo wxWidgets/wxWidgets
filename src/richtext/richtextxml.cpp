@@ -1600,6 +1600,10 @@ bool wxRichTextXMLHelper::ImportStyle(wxRichTextAttr& attr, wxXmlNode* node, boo
             {
                 attr.GetTextBoxAttr().GetMaxSize().GetHeight().SetValue(ParseDimension(value));
             }
+            else if (name == wxT("corner-radius"))
+            {
+                attr.GetTextBoxAttr().SetCornerRadius(ParseDimension(value));
+            }
 
             else if (name == wxT("verticalalignment"))
             {
@@ -2186,6 +2190,7 @@ wxString wxRichTextXMLHelper::AddAttributes(const wxRichTextAttr& attr, bool isP
     AddAttribute(str, wxT("minheight"), attr.GetTextBoxAttr().GetMinSize().GetHeight());
     AddAttribute(str, wxT("maxwidth"), attr.GetTextBoxAttr().GetMaxSize().GetWidth());
     AddAttribute(str, wxT("maxheight"), attr.GetTextBoxAttr().GetMaxSize().GetHeight());
+    AddAttribute(str, wxT("corner-radius"), attr.GetTextBoxAttr().GetCornerRadius());
 
     if (attr.GetTextBoxAttr().HasVerticalAlignment())
     {
@@ -2665,6 +2670,7 @@ bool wxRichTextXMLHelper::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, b
     AddAttribute(node, wxT("minheight"), attr.GetTextBoxAttr().GetMinSize().GetHeight());
     AddAttribute(node, wxT("maxwidth"), attr.GetTextBoxAttr().GetMaxSize().GetWidth());
     AddAttribute(node, wxT("maxheight"), attr.GetTextBoxAttr().GetMaxSize().GetHeight());
+    AddAttribute(node, wxT("corner-radius"), attr.GetTextBoxAttr().GetCornerRadius());
 
     if (attr.GetTextBoxAttr().HasVerticalAlignment())
     {

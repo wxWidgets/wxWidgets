@@ -685,11 +685,23 @@ bool wxRichTextObject::DrawBoxAttributes(wxDC& dc, wxRichTextBuffer* buffer, con
             colour = attr.GetBackgroundColour();
 
         wxPen pen(colour);
+        pen.SetJoin(wxJOIN_MITER);
         wxBrush brush(colour);
 
         dc.SetPen(pen);
         dc.SetBrush(brush);
-        dc.DrawRectangle(borderRect);
+
+        if (attr.GetTextBoxAttr().HasCornerRadius() && attr.GetTextBoxAttr().GetCornerRadius().GetValue() > 0)
+        {
+            wxTextAttrDimensionConverter converter(dc, buffer ? buffer->GetScale() : 1.0);
+            int cornerRadius = converter.GetPixels(attr.GetTextBoxAttr().GetCornerRadius());
+            if (cornerRadius > 0)
+            {
+                dc.DrawRoundedRectangle(borderRect, cornerRadius);
+            }
+        }
+        else
+            dc.DrawRectangle(borderRect);
     }
 
     if (flags & wxRICHTEXT_DRAW_GUIDELINES)
@@ -712,46 +724,85 @@ bool wxRichTextObject::DrawBoxAttributes(wxDC& dc, wxRichTextBuffer* buffer, con
             }
         }
 
-        DrawBorder(dc, buffer, editBorderAttr.GetTextBoxAttr().GetBorder(), borderRect, flags);
+        DrawBorder(dc, buffer, attr, editBorderAttr.GetTextBoxAttr().GetBorder(), borderRect, flags);
     }
 
     if (attr.GetTextBoxAttr().GetBorder().IsValid())
-        DrawBorder(dc, buffer, attr.GetTextBoxAttr().GetBorder(), borderRect);
+        DrawBorder(dc, buffer, attr, attr.GetTextBoxAttr().GetBorder(), borderRect);
 
     if (attr.GetTextBoxAttr().GetOutline().IsValid())
-        DrawBorder(dc, buffer, attr.GetTextBoxAttr().GetOutline(), outlineRect);
+        DrawBorder(dc, buffer, attr, attr.GetTextBoxAttr().GetOutline(), outlineRect);
 
     return true;
 }
 
 // Draw a border
-bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxTextAttrBorders& attr, const wxRect& rect, int WXUNUSED(flags))
+bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRichTextAttr& attr, const wxTextAttrBorders& borders, const wxRect& rect, int WXUNUSED(flags))
 {
     int borderLeft = 0, borderRight = 0, borderTop = 0, borderBottom = 0;
     wxTextAttrDimensionConverter converter(dc, buffer ? buffer->GetScale() : 1.0);
 
-    if (attr.GetLeft().IsValid() && attr.GetLeft().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE)
+    // If we have a corner radius, assume all borders are the same, and draw a rounded outline.
+    if (attr.GetTextBoxAttr().HasCornerRadius() && borders.GetLeft().IsValid() && borders.GetLeft().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE)
     {
-        borderLeft = converter.GetPixels(attr.GetLeft().GetWidth());
-        wxColour col(attr.GetLeft().GetColour());
-
-        // If pen width is > 1, resorts to a solid rectangle.
-        if (borderLeft == 1)
+        int cornerRadius = converter.GetPixels(attr.GetTextBoxAttr().GetCornerRadius());
+        if (cornerRadius > 0)
         {
+            borderLeft = converter.GetPixels(borders.GetLeft().GetWidth());
+            wxColour col(borders.GetLeft().GetColour());
             int penStyle = wxSOLID;
-            if (attr.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+            if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
                 penStyle = wxDOT;
-            else if (attr.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+            else if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
                 penStyle = wxLONG_DASH;
-            wxPen pen(col, 1, penStyle);
+            wxPen pen(col, borderLeft, penStyle);
             dc.SetPen(pen);
+            dc.SetBrush(*wxTRANSPARENT_BRUSH);
+            dc.DrawRoundedRectangle(rect, cornerRadius);
+            return true;
+        }
+    }
 
+    // Draw the border in one go if all the borders are the same
+    if (borders.GetLeft().IsValid() && borders.GetTop().IsValid() && borders.GetRight().IsValid() &&borders.GetBottom().IsValid() &&
+        (borders.GetLeft() == borders.GetTop()) && (borders.GetLeft() == borders.GetRight()) && (borders.GetLeft() == borders.GetBottom()))
+    {
+        borderLeft = converter.GetPixels(borders.GetLeft().GetWidth());
+        wxColour col(borders.GetLeft().GetColour());
+        int penStyle = wxSOLID;
+        if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+            penStyle = wxDOT;
+        else if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+            penStyle = wxLONG_DASH;
+        wxPen pen(col, borderLeft, penStyle);
+        pen.SetJoin(wxJOIN_MITER);
+        dc.SetPen(pen);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(rect);
+        return true;
+    }
+
+    if (borders.GetLeft().IsValid() && (borders.GetLeft().GetWidth().GetValue() > 0) && (borders.GetLeft().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE))
+    {
+        borderLeft = converter.GetPixels(borders.GetLeft().GetWidth());
+        wxColour col(borders.GetLeft().GetColour());
+        int penStyle = wxSOLID;
+        if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+            penStyle = wxDOT;
+        else if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+            penStyle = wxLONG_DASH;
+
+        if (borderLeft == 1 || penStyle != wxSOLID)
+        {
+            wxPen pen(col, borderLeft, penStyle);
+            dc.SetPen(pen);
             // Note that the last point is not drawn.
             dc.DrawLine(rect.x, rect.y, rect.x, rect.y + rect.height);
         }
-        else if (borderLeft > 1)
+        else
         {
             wxPen pen(col);
+            pen.SetJoin(wxJOIN_MITER);
             wxBrush brush(col);
             dc.SetPen(pen);
             dc.SetBrush(brush);
@@ -759,28 +810,28 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxTe
         }
     }
 
-    if (attr.GetRight().IsValid() && attr.GetRight().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE)
+    if (borders.GetRight().IsValid() && (borders.GetRight().GetWidth().GetValue() > 0) && (borders.GetRight().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE))
     {
-        borderRight = converter.GetPixels(attr.GetRight().GetWidth());
+        borderRight = converter.GetPixels(borders.GetRight().GetWidth());
 
-        wxColour col(attr.GetRight().GetColour());
+        wxColour col(borders.GetRight().GetColour());
+        int penStyle = wxSOLID;
+        if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+            penStyle = wxDOT;
+        else if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+            penStyle = wxLONG_DASH;
 
-        // If pen width is > 1, resorts to a solid rectangle.
-        if (borderRight == 1)
+        if (borderRight == 1 || penStyle != wxSOLID)
         {
-            int penStyle = wxSOLID;
-            if (attr.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-                penStyle = wxDOT;
-            else if (attr.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-                penStyle = wxLONG_DASH;
-            wxPen pen(col, 1, penStyle);
+            wxPen pen(col, borderRight, penStyle);
             dc.SetPen(pen);
             // Note that the last point is not drawn.
             dc.DrawLine(rect.x + rect.width - 1, rect.y, rect.x + rect.width - 1, rect.y + rect.height);
         }
-        else if (borderRight > 1)
+        else
         {
             wxPen pen(col);
+            pen.SetJoin(wxJOIN_MITER);
             wxBrush brush(col);
             dc.SetPen(pen);
             dc.SetBrush(brush);
@@ -788,28 +839,32 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxTe
         }
     }
 
-    if (attr.GetTop().IsValid() && attr.GetTop().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE)
+    if (borders.GetTop().IsValid() && (borders.GetTop().GetWidth().GetValue() > 0) && (borders.GetTop().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE))
     {
-        borderTop = converter.GetPixels(attr.GetTop().GetWidth());
+        borderTop = converter.GetPixels(borders.GetTop().GetWidth());
 
-        wxColour col(attr.GetTop().GetColour());
+        wxColour col(borders.GetTop().GetColour());
+        int penStyle = wxSOLID;
+        if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+            penStyle = wxDOT;
+        else if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+            penStyle = wxLONG_DASH;
 
-        // If pen width is > 1, resorts to a solid rectangle.
-        if (borderTop == 1)
+        if (borderTop == 1 || penStyle != wxSOLID)
         {
             int penStyle = wxSOLID;
-            if (attr.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+            if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
                 penStyle = wxDOT;
-            else if (attr.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+            else if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
                 penStyle = wxLONG_DASH;
-            wxPen pen(col, 1, penStyle);
+            wxPen pen(col, borderTop, penStyle);
             dc.SetPen(pen);
             dc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y);
-
         }
-        else if (borderTop > 1)
+        else
         {
             wxPen pen(col);
+            pen.SetJoin(wxJOIN_MITER);
             wxBrush brush(col);
             dc.SetPen(pen);
             dc.SetBrush(brush);
@@ -817,26 +872,26 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxTe
         }
     }
 
-    if (attr.GetBottom().IsValid() && attr.GetBottom().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE)
+    if (borders.GetBottom().IsValid() && (borders.GetBottom().GetWidth().GetValue() > 0) && (borders.GetBottom().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE))
     {
-        borderBottom = converter.GetPixels(attr.GetBottom().GetWidth());
-        wxColour col(attr.GetBottom().GetColour());
+        borderBottom = converter.GetPixels(borders.GetBottom().GetWidth());
+        wxColour col(borders.GetBottom().GetColour());
+        int penStyle = wxSOLID;
+        if (borders.GetBottom().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
+            penStyle = wxDOT;
+        else if (borders.GetBottom().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
+            penStyle = wxLONG_DASH;
 
-        // If pen width is > 1, resorts to a solid rectangle.
-        if (borderBottom == 1)
+        if (borderBottom == 1 || penStyle != wxSOLID)
         {
-            int penStyle = wxSOLID;
-            if (attr.GetBottom().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-                penStyle = wxDOT;
-            else if (attr.GetBottom().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-                penStyle = wxLONG_DASH;
-            wxPen pen(col, 1, penStyle);
+            wxPen pen(col, borderBottom, penStyle);
             dc.SetPen(pen);
             dc.DrawLine(rect.x, rect.y + rect.height - 1, rect.x + rect.width, rect.y + rect.height - 1);
         }
-        else if (borderBottom > 1)
+        else
         {
             wxPen pen(col);
+            pen.SetJoin(wxJOIN_MITER);
             wxBrush brush(col);
             dc.SetPen(pen);
             dc.SetBrush(brush);
@@ -9663,7 +9718,7 @@ bool wxRichTextTable::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
                             wxRect contentRect, borderRect, paddingRect, outlineRect;
 
                             cell->GetBoxRects(dc, GetBuffer(), attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);
-                            cell->DrawBorder(dc, GetBuffer(), attr.GetTextBoxAttr().GetBorder(), borderRect);
+                            cell->DrawBorder(dc, GetBuffer(), attr, attr.GetTextBoxAttr().GetBorder(), borderRect);
                         }
                     }
                 }
@@ -12972,6 +13027,7 @@ void wxTextBoxAttr::Reset()
 
     m_border.Reset();
     m_outline.Reset();
+    m_cornerRadius.Reset();
 }
 
 // Equality test
@@ -12984,6 +13040,7 @@ bool wxTextBoxAttr::operator== (const wxTextBoxAttr& attr) const
         m_whitespaceMode == attr.m_whitespaceMode &&
         m_collapseMode == attr.m_collapseMode &&
         m_verticalAlignment == attr.m_verticalAlignment &&
+        m_cornerRadius == attr.m_cornerRadius &&
 
         m_margins == attr.m_margins &&
         m_padding == attr.m_padding &&
@@ -13009,6 +13066,7 @@ bool wxTextBoxAttr::EqPartial(const wxTextBoxAttr& attr, bool weakTest) const
              (!HasCollapseBorders() && attr.HasCollapseBorders()) ||
              (!HasVerticalAlignment() && attr.HasVerticalAlignment()) ||
              (!HasWhitespaceMode() && attr.HasWhitespaceMode()) ||
+             (!HasCornerRadius() && attr.HasCornerRadius()) ||
              (!HasBoxStyleName() && attr.HasBoxStyleName())))
     {
         return false;
@@ -13026,6 +13084,9 @@ bool wxTextBoxAttr::EqPartial(const wxTextBoxAttr& attr, bool weakTest) const
         return false;
 
     if (attr.HasWhitespaceMode() && HasWhitespaceMode() && (GetWhitespaceMode() != attr.GetWhitespaceMode()))
+        return false;
+
+    if (attr.HasCornerRadius() && HasCornerRadius() && !(attr.GetCornerRadius() == GetCornerRadius()))
         return false;
 
     if (attr.HasBoxStyleName() && HasBoxStyleName() && (attr.GetBoxStyleName() != GetBoxStyleName()))
@@ -13103,6 +13164,11 @@ bool wxTextBoxAttr::Apply(const wxTextBoxAttr& attr, const wxTextBoxAttr* compar
             SetWhitespaceMode(attr.GetWhitespaceMode());
     }
 
+    if (attr.HasCornerRadius())
+    {
+        if (!(compareWith && compareWith->HasCornerRadius() && compareWith->GetCornerRadius() == attr.GetCornerRadius()))
+            SetCornerRadius(attr.GetCornerRadius());
+    }
     if (attr.HasBoxStyleName())
     {
         if (!(compareWith && compareWith->HasBoxStyleName() && compareWith->GetBoxStyleName() == attr.GetBoxStyleName()))
@@ -13140,6 +13206,9 @@ bool wxTextBoxAttr::RemoveStyle(const wxTextBoxAttr& attr)
 
     if (attr.HasWhitespaceMode())
         RemoveFlag(wxTEXT_BOX_ATTR_WHITESPACE);
+
+    if (attr.HasCornerRadius())
+        RemoveFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
 
     if (attr.HasBoxStyleName())
     {
@@ -13259,6 +13328,26 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
     }
     else
         absentAttr.AddFlag(wxTEXT_BOX_ATTR_WHITESPACE);
+
+    if (attr.HasCornerRadius())
+    {
+        if (!clashingAttr.HasCornerRadius() && !absentAttr.HasCornerRadius())
+        {
+            if (HasCornerRadius())
+            {
+                if (!(GetCornerRadius() == attr.GetCornerRadius()))
+                {
+                    clashingAttr.AddFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
+                    GetCornerRadius().Reset();
+                    RemoveFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
+                }
+            }
+            else
+                SetCornerRadius(attr.GetCornerRadius());
+        }
+    }
+    else
+        absentAttr.AddFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
 
     if (attr.HasBoxStyleName())
     {

@@ -92,6 +92,8 @@ BEGIN_EVENT_TABLE( wxRichTextBordersPage, wxRichTextDialogPage )
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_BOTTOM_COLOUR, wxRichTextBordersPage::OnRichtextOutlineBottomUpdate )
     EVT_CHECKBOX( ID_RICHTEXT_OUTLINE_SYNCHRONIZE, wxRichTextBordersPage::OnRichtextOutlineSynchronizeClick )
     EVT_UPDATE_UI( ID_RICHTEXT_OUTLINE_SYNCHRONIZE, wxRichTextBordersPage::OnRichtextOutlineSynchronizeUpdate )
+    EVT_UPDATE_UI( ID_RICHTEXTBORDERSPAGE_CORNER_TEXT, wxRichTextBordersPage::OnRichtextborderspageCornerUpdate )
+    EVT_UPDATE_UI( ID_RICHTEXTBORDERSPAGE_CORNER_UNITS, wxRichTextBordersPage::OnRichtextborderspageCornerUpdate )
 ////@end wxRichTextBordersPage event table entries
 
 END_EVENT_TABLE()
@@ -194,6 +196,9 @@ void wxRichTextBordersPage::Init()
     m_bottomOutlineStyle = NULL;
     m_bottomOutlineColour = NULL;
     m_outlineSyncCtrl = NULL;
+    m_cornerRadiusCheckBox = NULL;
+    m_cornerRadiusText = NULL;
+    m_cornerRadiusUnits = NULL;
     m_borderPreviewCtrl = NULL;
 ////@end wxRichTextBordersPage member initialisation
 }
@@ -553,6 +558,51 @@ void wxRichTextBordersPage::CreateControls()
 
     itemNotebook4->AddPage(itemPanel48, _("Outline"));
 
+    wxPanel* itemPanel91 = new wxPanel( itemNotebook4, ID_RICHTEXTBORDERSPAGE_CORNER, wxDefaultPosition, wxDefaultSize, wxNO_BORDER|wxTAB_TRAVERSAL );
+    wxBoxSizer* itemBoxSizer92 = new wxBoxSizer(wxVERTICAL);
+    itemPanel91->SetSizer(itemBoxSizer92);
+
+    wxBoxSizer* itemBoxSizer93 = new wxBoxSizer(wxVERTICAL);
+    itemBoxSizer92->Add(itemBoxSizer93, 1, wxGROW|wxALL, 5);
+    wxBoxSizer* itemBoxSizer94 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer93->Add(itemBoxSizer94, 0, wxGROW, 5);
+    wxStaticText* itemStaticText95 = new wxStaticText( itemPanel91, wxID_STATIC, _("Corner"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStaticText95->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
+    itemBoxSizer94->Add(itemStaticText95, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxStaticLine* itemStaticLine96 = new wxStaticLine( itemPanel91, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+    itemBoxSizer94->Add(itemStaticLine96, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxFlexGridSizer* itemFlexGridSizer97 = new wxFlexGridSizer(0, 2, 0, 0);
+    itemBoxSizer93->Add(itemFlexGridSizer97, 0, wxALIGN_LEFT, 5);
+    m_cornerRadiusCheckBox = new wxCheckBox( itemPanel91, ID_RICHTEXTBORDERSPAGE_CORNER_CHECKBOX, _("Corner &radius:"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+    m_cornerRadiusCheckBox->SetValue(false);
+    m_cornerRadiusCheckBox->SetHelpText(_("An optional corner radius for adding rounded corners."));
+    if (wxRichTextBordersPage::ShowToolTips())
+        m_cornerRadiusCheckBox->SetToolTip(_("An optional corner radius for adding rounded corners."));
+    itemFlexGridSizer97->Add(m_cornerRadiusCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    wxBoxSizer* itemBoxSizer99 = new wxBoxSizer(wxHORIZONTAL);
+    itemFlexGridSizer97->Add(itemBoxSizer99, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+    m_cornerRadiusText = new wxTextCtrl( itemPanel91, ID_RICHTEXTBORDERSPAGE_CORNER_TEXT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
+    m_cornerRadiusText->SetHelpText(_("The value of the corner radius."));
+    if (wxRichTextBordersPage::ShowToolTips())
+        m_cornerRadiusText->SetToolTip(_("The value of the corner radius."));
+    itemBoxSizer99->Add(m_cornerRadiusText, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM, 5);
+
+    wxArrayString m_cornerRadiusUnitsStrings;
+    m_cornerRadiusUnitsStrings.Add(_("px"));
+    m_cornerRadiusUnitsStrings.Add(_("cm"));
+    m_cornerRadiusUnitsStrings.Add(_("pt"));
+    m_cornerRadiusUnits = new wxComboBox( itemPanel91, ID_RICHTEXTBORDERSPAGE_CORNER_UNITS, _("px"), wxDefaultPosition, wxSize(60, -1), m_cornerRadiusUnitsStrings, wxCB_READONLY );
+    m_cornerRadiusUnits->SetStringSelection(_("px"));
+    m_cornerRadiusUnits->SetHelpText(_("Units for the corner radius."));
+    if (wxRichTextBordersPage::ShowToolTips())
+        m_cornerRadiusUnits->SetToolTip(_("Units for the corner radius."));
+    itemBoxSizer99->Add(m_cornerRadiusUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    itemNotebook4->AddPage(itemPanel91, _("Corner"));
+
     itemBoxSizer3->Add(itemNotebook4, 0, wxGROW|wxALL, 5);
 
     m_borderPreviewCtrl = new wxRichTextBorderPreviewCtrl( itemRichTextDialogPage1, ID_RICHTEXT_BORDER_PREVIEW, wxDefaultPosition, wxSize(60, 60), wxBORDER_THEME );
@@ -695,6 +745,29 @@ bool wxRichTextBordersPage::TransferDataToWindow()
     SetBorderValue(GetAttributes()->GetTextBoxAttr().GetOutline().GetTop(), m_topOutlineWidth, m_topOutlineWidthUnits, m_topOutlineCheckbox, m_topOutlineStyle, m_topOutlineColour, m_borderStyles);
     SetBorderValue(GetAttributes()->GetTextBoxAttr().GetOutline().GetBottom(), m_bottomOutlineWidth, m_bottomOutlineWidthUnits, m_bottomOutlineCheckbox, m_bottomOutlineStyle, m_bottomOutlineColour, m_borderStyles);
 
+    // Corner radius
+    if (!GetAttributes()->GetTextBoxAttr().HasCornerRadius())
+    {
+        m_cornerRadiusCheckBox->Set3StateValue(wxCHK_UNDETERMINED);
+        m_cornerRadiusText->SetValue(wxT("0"));
+        m_cornerRadiusUnits->SetSelection(0);
+    }
+    else
+    {
+        wxArrayInt units;
+        units.Add(wxTEXT_ATTR_UNITS_PIXELS);
+        units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
+        units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
+        
+        wxRichTextFormattingDialog::SetDimensionValue(GetAttributes()->GetTextBoxAttr().GetCornerRadius(), m_cornerRadiusText, m_cornerRadiusUnits, NULL,
+            & units);
+
+        if (GetAttributes()->GetTextBoxAttr().GetCornerRadius().GetValue() == 0)
+            m_cornerRadiusCheckBox->Set3StateValue(wxCHK_UNCHECKED);
+        else
+            m_cornerRadiusCheckBox->Set3StateValue(wxCHK_CHECKED);
+    }
+
     m_ignoreUpdates = false;
 
     UpdateSyncControls();
@@ -715,6 +788,33 @@ bool wxRichTextBordersPage::TransferDataFromWindow()
     GetBorderValue(GetAttributes()->GetTextBoxAttr().GetOutline().GetRight(), m_rightOutlineWidth, m_rightOutlineWidthUnits, m_rightOutlineCheckbox, m_rightOutlineStyle, m_rightOutlineColour, m_borderStyles);
     GetBorderValue(GetAttributes()->GetTextBoxAttr().GetOutline().GetTop(), m_topOutlineWidth, m_topOutlineWidthUnits, m_topOutlineCheckbox, m_topOutlineStyle, m_topOutlineColour, m_borderStyles);
     GetBorderValue(GetAttributes()->GetTextBoxAttr().GetOutline().GetBottom(), m_bottomOutlineWidth, m_bottomOutlineWidthUnits, m_bottomOutlineCheckbox, m_bottomOutlineStyle, m_bottomOutlineColour, m_borderStyles);
+
+    // Corner radius
+    {
+        wxArrayInt units;
+        units.Add(wxTEXT_ATTR_UNITS_PIXELS);
+        units.Add(wxTEXT_ATTR_UNITS_TENTHS_MM);
+        units.Add(wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT);
+            
+        wxRichTextFormattingDialog::GetDimensionValue(GetAttributes()->GetTextBoxAttr().GetCornerRadius(), m_cornerRadiusText, m_cornerRadiusUnits, NULL,
+            & units);
+
+        if (m_cornerRadiusCheckBox->Get3StateValue() == wxCHK_UNDETERMINED)
+        {
+            // When we apply the attributes, we won't apply this one, to leave the original unchanged.
+            GetAttributes()->GetTextBoxAttr().GetCornerRadius().Reset();
+            GetAttributes()->GetTextBoxAttr().RemoveFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
+        }
+        else if (m_cornerRadiusCheckBox->Get3StateValue() == wxCHK_UNCHECKED)
+        {
+            GetAttributes()->GetTextBoxAttr().GetCornerRadius().SetValue(0);
+            GetAttributes()->GetTextBoxAttr().AddFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
+        }
+        else
+        {
+            GetAttributes()->GetTextBoxAttr().AddFlag(wxTEXT_BOX_ATTR_CORNER_RADIUS);
+        }
+    }
 
     return true;
 }
@@ -882,6 +982,16 @@ void wxRichTextBordersPage::OnRichtextOutlineTopUpdate( wxUpdateUIEvent& event )
 void wxRichTextBordersPage::OnRichtextOutlineBottomUpdate( wxUpdateUIEvent& event )
 {
     event.Enable(m_bottomOutlineCheckbox->Get3StateValue() == wxCHK_CHECKED && !m_outlineSyncCtrl->GetValue());
+}
+
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_RICHTEXTBORDERSPAGE_CORNER_TEXT
+ */
+
+void wxRichTextBordersPage::OnRichtextborderspageCornerUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable(m_cornerRadiusCheckBox->Get3StateValue() == wxCHK_CHECKED);
 }
 
 /*!
@@ -1238,19 +1348,26 @@ void wxRichTextBorderPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxRect rect = GetClientRect();
         
+        wxRichTextAttr attr;
+        attr.GetTextBoxAttr().GetBorder() = m_attributes->GetTextBoxAttr().GetBorder();
+        attr.GetTextBoxAttr().GetOutline() = m_attributes->GetTextBoxAttr().GetOutline();
+        if (m_attributes->GetTextBoxAttr().HasCornerRadius())
+            attr.GetTextBoxAttr().SetCornerRadius(m_attributes->GetTextBoxAttr().GetCornerRadius());
+        if (m_attributes->HasBackgroundColour())
+            attr.SetBackgroundColour(m_attributes->GetBackgroundColour());
+        
+        wxTextAttrDimension marginDim(10, wxTEXT_ATTR_UNITS_PIXELS);
+        attr.GetTextBoxAttr().GetMargins().GetLeft() = marginDim;
+        attr.GetTextBoxAttr().GetMargins().GetTop() = marginDim;
+        attr.GetTextBoxAttr().GetMargins().GetRight() = marginDim;
+        attr.GetTextBoxAttr().GetMargins().GetBottom() = marginDim;
+
         int margin = 10;
         rect.x += margin;
         rect.y += margin;
         rect.width -= 2*margin;
         rect.height -= 2*margin;
         
-        wxRichTextObject::DrawBorder(dc, NULL, m_attributes->GetTextBoxAttr().GetOutline(), rect);
-
-        rect.x += margin;
-        rect.y += margin;
-        rect.width -= 2*margin;
-        rect.height -= 2*margin;
-        
-        wxRichTextObject::DrawBorder(dc, NULL, m_attributes->GetTextBoxAttr().GetBorder(), rect);
+        wxRichTextObject::DrawBoxAttributes(dc, NULL, attr, rect);
     }
 }
