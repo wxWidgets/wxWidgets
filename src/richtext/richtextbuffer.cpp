@@ -1867,8 +1867,7 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, wxRichTextDrawingContext& cont
 
     int flags = style;
     if (selection.IsValid() &&
-        ((GetParentContainer() != this && selection.GetContainer() == this && selection.WithinSelection(GetRange().GetStart(), GetParentContainer())) ||
-         (selection.WithinSelection(GetRange().GetStart(), this))))
+        ((GetParentContainer() != this && selection.GetContainer() == this && selection.WithinSelection(GetRange().GetStart(), GetParentContainer()))))
     {
         flags |= wxRICHTEXT_DRAW_SELECTED;
     }
@@ -9330,6 +9329,12 @@ wxRichTextCell::wxRichTextCell(wxRichTextObject* parent):
 /// Draw the item
 bool wxRichTextCell::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style)
 {
+    if (selection.IsValid() &&
+       (selection.WithinSelection(GetRange().GetStart(), this)))
+    {
+        style |= wxRICHTEXT_DRAW_SELECTED;
+    }
+
     return wxRichTextBox::Draw(dc, context, range, selection, rect, descent, style);
 }
 
