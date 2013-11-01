@@ -743,7 +743,7 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
     wxTextAttrDimensionConverter converter(dc, buffer ? buffer->GetScale() : 1.0);
 
     // If we have a corner radius, assume all borders are the same, and draw a rounded outline.
-    if (attr.GetTextBoxAttr().HasCornerRadius() && borders.GetLeft().IsValid() && borders.GetLeft().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE)
+    if (attr.GetTextBoxAttr().HasCornerRadius() && borders.GetLeft().IsValid() && (borders.GetLeft().GetWidth().GetValue() > 0) && borders.GetLeft().GetStyle() != wxTEXT_BOX_ATTR_BORDER_NONE)
     {
         int cornerRadius = converter.GetPixels(attr.GetTextBoxAttr().GetCornerRadius());
         if (cornerRadius > 0)
@@ -764,7 +764,7 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
     }
 
     // Draw the border in one go if all the borders are the same
-    if (borders.GetLeft().IsValid() && borders.GetTop().IsValid() && borders.GetRight().IsValid() &&borders.GetBottom().IsValid() &&
+    if (borders.GetLeft().IsValid() && (borders.GetLeft().GetWidth().GetValue() > 0) && borders.GetTop().IsValid() && borders.GetRight().IsValid() &&borders.GetBottom().IsValid() &&
         (borders.GetLeft() == borders.GetTop()) && (borders.GetLeft() == borders.GetRight()) && (borders.GetLeft() == borders.GetBottom()))
     {
         borderLeft = converter.GetPixels(borders.GetLeft().GetWidth());
