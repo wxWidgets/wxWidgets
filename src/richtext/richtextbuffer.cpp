@@ -10492,7 +10492,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                 wxRect availableCellSpace = wxRect(cell->GetPosition(), wxSize(actualWidths[i], maxCellHeight));
                 // Lay out cell with new height
                 cell->Invalidate(wxRICHTEXT_ALL);
-                cell->Layout(dc, context, availableCellSpace, availableSpace, style||wxRICHTEXT_FIXED_HEIGHT|wxRICHTEXT_FIXED_WIDTH);
+                cell->Layout(dc, context, availableCellSpace, availableSpace, style|wxRICHTEXT_FIXED_HEIGHT|wxRICHTEXT_FIXED_WIDTH);
 
                 maxRight = wxMax(maxRight, cell->GetPosition().x + cell->GetCachedSize().x);
             }
