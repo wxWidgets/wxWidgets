@@ -29,45 +29,32 @@ BEGIN_EVENT_TABLE( wxRichTextBulletsPage, wxRichTextDialogPage )
 
 ////@begin wxRichTextBulletsPage event table entries
     EVT_LISTBOX( ID_RICHTEXTBULLETSPAGE_STYLELISTBOX, wxRichTextBulletsPage::OnStylelistboxSelected )
-
     EVT_CHECKBOX( ID_RICHTEXTBULLETSPAGE_PERIODCTRL, wxRichTextBulletsPage::OnPeriodctrlClick )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_PERIODCTRL, wxRichTextBulletsPage::OnPeriodctrlUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL, wxRichTextBulletsPage::OnParenthesesctrlClick )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_PARENTHESESCTRL, wxRichTextBulletsPage::OnParenthesesctrlUpdate )
-
     EVT_CHECKBOX( ID_RICHTEXTBULLETSPAGE_RIGHTPARENTHESISCTRL, wxRichTextBulletsPage::OnRightParenthesisCtrlClick )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_RIGHTPARENTHESISCTRL, wxRichTextBulletsPage::OnRightParenthesisCtrlUpdate )
-
     EVT_COMBOBOX( ID_RICHTEXTBULLETSPAGE_BULLETALIGNMENTCTRL, wxRichTextBulletsPage::OnBulletAlignmentCtrlSelected )
-
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_SYMBOLSTATIC, wxRichTextBulletsPage::OnSymbolstaticUpdate )
-
     EVT_COMBOBOX( ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxRichTextBulletsPage::OnSymbolctrlSelected )
     EVT_TEXT( ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxRichTextBulletsPage::OnSymbolctrlUpdated )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_SYMBOLCTRL, wxRichTextBulletsPage::OnSymbolctrlUpdate )
-
     EVT_BUTTON( ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, wxRichTextBulletsPage::OnChooseSymbolClick )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_CHOOSE_SYMBOL, wxRichTextBulletsPage::OnChooseSymbolUpdate )
-
     EVT_COMBOBOX( ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL, wxRichTextBulletsPage::OnSymbolfontctrlSelected )
     EVT_TEXT( ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL, wxRichTextBulletsPage::OnSymbolfontctrlUpdated )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_SYMBOLFONTCTRL, wxRichTextBulletsPage::OnSymbolfontctrlUIUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_NAMESTATIC, wxRichTextBulletsPage::OnNamestaticUpdate )
-
     EVT_COMBOBOX( ID_RICHTEXTBULLETSPAGE_NAMECTRL, wxRichTextBulletsPage::OnNamectrlSelected )
     EVT_TEXT( ID_RICHTEXTBULLETSPAGE_NAMECTRL, wxRichTextBulletsPage::OnNamectrlUpdated )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_NAMECTRL, wxRichTextBulletsPage::OnNamectrlUIUpdate )
-
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_NUMBERSTATIC, wxRichTextBulletsPage::OnNumberstaticUpdate )
-
     EVT_SPINCTRL( ID_RICHTEXTBULLETSPAGE_NUMBERCTRL, wxRichTextBulletsPage::OnNumberctrlUpdated )
     EVT_SPIN_UP( ID_RICHTEXTBULLETSPAGE_NUMBERCTRL, wxRichTextBulletsPage::OnNumberctrlUp )
     EVT_SPIN_DOWN( ID_RICHTEXTBULLETSPAGE_NUMBERCTRL, wxRichTextBulletsPage::OnNumberctrlDown )
     EVT_TEXT( ID_RICHTEXTBULLETSPAGE_NUMBERCTRL, wxRichTextBulletsPage::OnNumberctrlTextUpdated )
     EVT_UPDATE_UI( ID_RICHTEXTBULLETSPAGE_NUMBERCTRL, wxRichTextBulletsPage::OnNumberctrlUpdate )
-
 ////@end wxRichTextBulletsPage event table entries
 
 END_EVENT_TABLE()
@@ -276,7 +263,7 @@ void wxRichTextBulletsPage::CreateControls()
     m_previewCtrl->SetHelpText(_("Shows a preview of the bullet settings."));
     if (wxRichTextBulletsPage::ShowToolTips())
         m_previewCtrl->SetToolTip(_("Shows a preview of the bullet settings."));
-    itemBoxSizer3->Add(m_previewCtrl, 1, wxGROW|wxALL, 5);
+    itemBoxSizer3->Add(m_previewCtrl, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
 ////@end wxRichTextBulletsPage content construction
 
@@ -536,8 +523,7 @@ bool wxRichTextBulletsPage::TransferDataToWindow()
 /// Updates the bullet preview
 void wxRichTextBulletsPage::UpdatePreview()
 {
-    static const wxChar* s_para1 = wxT("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. \
-Nullam ante sapien, vestibulum nonummy, pulvinar sed, luctus ut, lacus.\n");
+    static const wxChar* s_para1 = wxT("Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\n");
 
     static const wxChar* s_para2 = wxT("Duis pharetra consequat dui. Cum sociis natoque penatibus \
 et magnis dis parturient montes, nascetur ridiculus mus. Nullam vitae justo id mauris lobortis interdum.\n");
