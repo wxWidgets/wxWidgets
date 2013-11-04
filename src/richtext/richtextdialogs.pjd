@@ -474,7 +474,7 @@
                     <long name="locked">0</long>
                     <string name="created">"2/10/2006"</string>
                     <string name="proxy-type">"wbTextCtrlProxy"</string>
-                    <string name="event-handler-0">"wxEVT_COMMAND_TEXT_UPDATED|OnFaceTextCtrlUpdated"</string>
+                    <string name="event-handler-0">"wxEVT_COMMAND_TEXT_UPDATED|OnFaceTextCtrlUpdated|||wxRichTextFontPage"</string>
                     <string name="proxy-Id name">"ID_RICHTEXTFONTPAGE_FACETEXTCTRL"</string>
                     <long name="proxy-Id value">10001</long>
                     <string name="proxy-Name">""</string>
@@ -7306,11 +7306,11 @@
                     <long name="locked">0</long>
                     <string name="created">"25/10/2006"</string>
                     <string name="proxy-type">"wbSpinCtrlProxy"</string>
-                    <string name="event-handler-0">"wxEVT_COMMAND_SPINCTRL_UPDATED|OnNumberctrlUpdated"</string>
-                    <string name="event-handler-1">"wxEVT_SCROLL_LINEUP|OnNumberctrlUp"</string>
-                    <string name="event-handler-2">"wxEVT_SCROLL_LINEDOWN|OnNumberctrlDown"</string>
-                    <string name="event-handler-3">"wxEVT_COMMAND_TEXT_UPDATED|OnNumberctrlTextUpdated"</string>
-                    <string name="event-handler-4">"wxEVT_UPDATE_UI|OnNumberctrlUpdate"</string>
+                    <string name="event-handler-0">"wxEVT_COMMAND_SPINCTRL_UPDATED|OnNumberctrlUpdated|||wxRichTextBulletsPage"</string>
+                    <string name="event-handler-1">"wxEVT_SCROLL_LINEUP|OnNumberctrlUp|||"</string>
+                    <string name="event-handler-2">"wxEVT_SCROLL_LINEDOWN|OnNumberctrlDown|||"</string>
+                    <string name="event-handler-3">"wxEVT_COMMAND_TEXT_UPDATED|OnNumberctrlTextUpdated|||"</string>
+                    <string name="event-handler-4">"wxEVT_UPDATE_UI|OnNumberctrlUpdate|||"</string>
                     <string name="proxy-Id name">"ID_RICHTEXTBULLETSPAGE_NUMBERCTRL"</string>
                     <long name="proxy-Id value">10310</long>
                     <string name="proxy-Name">""</string>
