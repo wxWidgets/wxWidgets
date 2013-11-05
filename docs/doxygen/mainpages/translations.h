@@ -336,9 +336,9 @@ to foil spam robots, remove one <tt>\@</tt> from them.
     <td>Romanian</td>
     <td class="green">100%</td>
     <td>
-        <a href="mailto:manuelrciosici@gmail.com">Manuel Ciosici</a>,
         <a href="mailto:cata_sr@yahoo.com">Cătălin Răceanu</a>,
-        <a href="mailto:adrian.haisan@gmail.com">Adrian Hăisan</a>
+        <a href="mailto:adrian.haisan@gmail.com">Adrian Hăisan</a>,
+        <a href="mailto:manuelrciosici@gmail.com">Manuel Ciosici</a>
     </td>
 </tr>
 
