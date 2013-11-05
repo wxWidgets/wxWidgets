@@ -610,7 +610,7 @@ public:
 
     /**
         Returns the flags used for conversions between wxVariant and OLE
-        VARIANT, see wxConvertVariantToOleFlags.
+        VARIANT, see wxOleConvertVariantFlags.
 
         The default value is wxOleConvertVariant_Default for compatibility but
         it can be changed using SetConvertVariantFlags().
@@ -624,7 +624,7 @@ public:
 
     /**
         Sets the flags used for conversions between wxVariant and OLE VARIANT,
-        see wxConvertVariantToOleFlags.
+        see wxOleConvertVariantFlags.
 
         The default value is wxOleConvertVariant_Default.
 
