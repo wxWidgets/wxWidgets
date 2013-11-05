@@ -1297,8 +1297,10 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
 
 void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event) )
 {
-    RegainColours();
-    Refresh();
+    if ((m_iFlags & wxPG_FL_INITIALIZED)!=0) {
+        RegainColours();
+        Refresh();
+    }
 }
 
 // -----------------------------------------------------------------------
