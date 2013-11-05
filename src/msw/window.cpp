@@ -675,7 +675,7 @@ wxWindowMSW::MSWShowWithEffect(bool show,
                                unsigned timeout)
 {
 #if wxUSE_DYNLIB_CLASS
-    if ( effect == wxSHOW_EFFECT_NONE )
+    if ( effect == wxSHOW_EFFECT_NONE || !IsShownOnScreen() )
         return Show(show);
 
     if ( !wxWindowBase::Show(show) )
