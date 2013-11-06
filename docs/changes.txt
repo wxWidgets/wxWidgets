@@ -584,7 +584,7 @@ wxGTK:
 wxMSW:
 
 - Compilation fix for WXWIN_COMPATIBILITY_2_6=1 case (Tim Stahlhut).
-
+- Fix behaviour of wxComboBox using ID=1000.
 
 
 3.0-RC2: (released 2013-10-28)

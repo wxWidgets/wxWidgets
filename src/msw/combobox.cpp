@@ -674,4 +674,22 @@ wxSize wxComboBox::DoGetSizeFromTextSize(int xlen, int ylen) const
     return tsize;
 }
 
+wxWindow *wxComboBox::MSWFindItem(long id, WXHWND hWnd) const
+{
+    // The base class version considers that any window with the same ID as
+    // this one must be this window itself, but this is not the case for the
+    // comboboxes where the native control seems to always use the ID of 1000
+    // for the popup listbox that it creates -- and this ID may be the same as
+    // our own one. So we must explicitly check the HWND value too here and
+    // avoid eating the events from the listbox as otherwise it is rendered
+    // inoperative, see #15647.
+    if ( id == GetId() && hWnd != GetHWND() )
+    {
+        // Must be the case described above.
+        return NULL;
+    }
+
+    return wxChoice::MSWFindItem(id, hWnd);
+}
+
 #endif // wxUSE_COMBOBOX
