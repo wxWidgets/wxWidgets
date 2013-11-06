@@ -54,6 +54,8 @@ wxRichTextStylePage::wxRichTextStylePage( wxWindow* parent, wxWindowID id, const
 
 void wxRichTextStylePage::Init()
 {
+    m_nameIsEditable = false;
+    
 ////@begin wxRichTextStylePage member initialisation
     m_styleName = NULL;
     m_basedOn = NULL;
@@ -156,6 +158,8 @@ bool wxRichTextStylePage::TransferDataFromWindow()
 
 bool wxRichTextStylePage::TransferDataToWindow()
 {
+    m_styleName->SetEditable(GetNameIsEditable());
+
     wxPanel::TransferDataToWindow();
 
     wxRichTextStyleDefinition* def = wxRichTextFormattingDialog::GetDialogStyleDefinition(this);
