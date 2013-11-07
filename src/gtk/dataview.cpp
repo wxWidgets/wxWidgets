@@ -4260,6 +4260,7 @@ wxdataview_selection_changed_callback( GtkTreeSelection* WXUNUSED(selection), wx
         return;
 
     wxDataViewEvent event( wxEVT_DATAVIEW_SELECTION_CHANGED, dv->GetId() );
+    event.SetEventObject( dv );
     event.SetItem( dv->GetSelection() );
     event.SetModel( dv->GetModel() );
     dv->HandleWindowEvent( event );
