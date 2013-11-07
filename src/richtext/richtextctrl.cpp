@@ -896,7 +896,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         long position2 = 0;
         wxRichTextObject* hitObj2 = NULL, *contextObj2 = NULL;
         int hit2 = GetBuffer().HitTest(dc, context, GetUnscaledPoint(logicalPt), position2, & hitObj2, & contextObj2, 0);
-        if (hit2 != wxRICHTEXT_HITTEST_NONE && !(hit2 & wxRICHTEXT_HITTEST_OUTSIDE) && hitObj2 && hitObj != hitObj2)
+        if (hit2 != wxRICHTEXT_HITTEST_NONE && hitObj2 && hitObj != hitObj2)
         {
             // See if we can find a common ancestor
             if (m_selectionState == wxRichTextCtrlSelectionState_Normal)
