@@ -1680,13 +1680,13 @@ bool wxRichTextXMLHelper::ImportStyle(wxRichTextAttr& attr, wxXmlNode* node, boo
                 else if (name == wxT("border-bottom-style"))
                     attr.GetTextBoxAttr().GetBorder().GetBottom().SetStyle(wxAtoi(value));
 
-                else if (name == wxT("border-left-colour"))
+                else if (name == wxT("border-left-color"))
                     attr.GetTextBoxAttr().GetBorder().GetLeft().SetColour(ColourStringToLong(value));
-                else if (name == wxT("border-right-colour"))
+                else if (name == wxT("border-right-color"))
                     attr.GetTextBoxAttr().GetBorder().GetRight().SetColour(ColourStringToLong(value));
-                else if (name == wxT("border-top-colour"))
+                else if (name == wxT("border-top-color"))
                     attr.GetTextBoxAttr().GetBorder().GetTop().SetColour(ColourStringToLong(value));
-                else if (name == wxT("border-bottom-colour"))
+                else if (name == wxT("border-bottom-color"))
                     attr.GetTextBoxAttr().GetBorder().GetBottom().SetColour(ColourStringToLong(value));
 
                 else if (name == wxT("border-left-width"))
@@ -1709,13 +1709,13 @@ bool wxRichTextXMLHelper::ImportStyle(wxRichTextAttr& attr, wxXmlNode* node, boo
                 else if (name == wxT("outline-bottom-style"))
                     attr.GetTextBoxAttr().GetOutline().GetBottom().SetStyle(wxAtoi(value));
 
-                else if (name == wxT("outline-left-colour"))
+                else if (name == wxT("outline-left-color"))
                     attr.GetTextBoxAttr().GetOutline().GetLeft().SetColour(ColourStringToLong(value));
-                else if (name == wxT("outline-right-colour"))
+                else if (name == wxT("outline-right-color"))
                     attr.GetTextBoxAttr().GetOutline().GetRight().SetColour(ColourStringToLong(value));
-                else if (name == wxT("outline-top-colour"))
+                else if (name == wxT("outline-top-color"))
                     attr.GetTextBoxAttr().GetOutline().GetTop().SetColour(ColourStringToLong(value));
-                else if (name == wxT("outline-bottom-colour"))
+                else if (name == wxT("outline-bottom-color"))
                     attr.GetTextBoxAttr().GetOutline().GetBottom().SetColour(ColourStringToLong(value));
 
                 else if (name == wxT("outline-left-width"))
