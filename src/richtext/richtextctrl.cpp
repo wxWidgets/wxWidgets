@@ -2816,7 +2816,7 @@ bool wxRichTextCtrl::SelectWord(long position)
         }
     }
     if (positionEnd >= para->GetRange().GetEnd())
-        positionEnd = para->GetRange().GetEnd();
+        positionEnd = para->GetRange().GetEnd()-1;
 
     if (positionEnd < positionStart)
         return false;
