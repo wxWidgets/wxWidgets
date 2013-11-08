@@ -4454,7 +4454,7 @@ void wxDataViewMainWindow::OnColumnsCountChanged()
             editableCount++;
     }
 
-    m_useCellFocus = (editableCount > 1);
+    m_useCellFocus = (editableCount > 0);
 
     UpdateDisplay();
 }
