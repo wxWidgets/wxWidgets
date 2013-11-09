@@ -880,6 +880,17 @@ public:
     */
     virtual void MacReopenApp();
 
+    /**
+        Called during startup, if a non-bundled application wants to
+        stay in background, then it has to override this to return false
+        otherwise the app will be brought to the foreground.
+
+        @onlyfor{wxosx}
+        
+        @since 3.0.0
+    */
+    virtual bool OSXIsGUIApplication();
+
     //@}
 
 };
