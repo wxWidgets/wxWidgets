@@ -887,7 +887,7 @@ public:
 
         @onlyfor{wxosx}
         
-        @since 3.0.0
+        @since 3.0.1
     */
     virtual bool OSXIsGUIApplication();
 
