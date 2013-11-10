@@ -9,8 +9,8 @@
 
 @page page_copyright Copyrights and Licenses
 
-Copyright (c) 1992-2012 Julian Smart, Robert Roebling, Vadim Zeitlin and other
-members of the wxWidgets team
+Copyright (c) 1992-2013 Julian Smart, Vadim Zeitlin, Stefan Csomor, Robert
+Roebling, and other members of the wxWidgets team
 
 Portions (c) 1996 Artificial Intelligence Applications Institute
 

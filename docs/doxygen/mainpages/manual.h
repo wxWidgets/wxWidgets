@@ -9,8 +9,8 @@
 
 @mainpage Documentation
 
-@author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn,
-        Stefan Csomor, Francesco Montorsi, Bryan Petty, et al
+@author Julian Smart, Vadim Zeitlin, Robin Dunn, Stefan Csomor,
+        Bryan Petty, Francesco Montorsi, Robert Roebling et al
 
 @date October, 2013
 

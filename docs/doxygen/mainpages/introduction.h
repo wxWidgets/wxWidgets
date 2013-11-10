@@ -24,7 +24,8 @@ wxWidgets was originally developed at the Artificial Intelligence
 Applications Institute, University of Edinburgh, for internal use,
 and was first made publicly available in 1992.
 Version 2 is a vastly improved version written and maintained by
-Julian Smart, Robert Roebling, Vadim Zeitlin, Vaclav Slavik and many others.
+Julian Smart, Vadim Zeitlin, Stefan Csomor, Robert Roebling, Vaclav Slavik and
+many others.
 
 This manual contains a class reference and topic overviews.
 For a selection of wxWidgets tutorials, please see the documentation page
