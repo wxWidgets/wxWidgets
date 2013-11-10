@@ -53,7 +53,7 @@ supports are Windows (Windows 95, NT, 2000, XP, Vista) including its
 mobile variants (Windows CE, PocketPC, Windows Mobile), Linux and
 Unix using the GTK+ 2 toolkit (minimum version is GTK+ 2.4, more
 recent features are used when available) and Mac OS X (minimum
-version 10.4 Tiger, both Intel, PPC and the Universal Binaries for
+version 10.5 Tiger, both Intel, PPC and the Universal Binaries for
 both are supported). wxWidgets includes many code pieces for
 optimising dialog and general layout for small screens such as those
 of the recent netbooks and mobile phones and tablets.</P>
@@ -103,7 +103,7 @@ tries to both make use of new features of the different operating
 systems and support older systems for as long as possible and as long
 as supporting them does not hinder development for up-to-date
 systems. This is especially true for OS X and GTK+ 2 and it was
-therefore decided that OS X versions older than 10.4 Tiger and GTK+ 2
+therefore decided that OS X versions older than 10.5 Leopard and GTK+ 2
 version older than 2.4 are no longer supported. The wxWidgets team
 also realized that it could not do everything and that support for a
 cross-platform database API was beyond the scope and focus of the
@@ -276,23 +276,19 @@ Touch) including both general wrapping or front-end classes for much
 of the GUI code as well as a wrapper for the so called CoreFoundation
 classes of OS X, which are responsible on all OS X variants for
 string manipulation, font support, graphics and other basic
-functionality (CoreImage and CoreVideo have recently been added by
-Apple) and toolkit dependent code for the Carbon, Cocoa and Cocoa
-Touch API. The Carbon variant is the core of what used to be wxMac
-and is the most stable and mature version. The reason behind adding
-optional support for Cocoa and Cocoa Touch is that Carbon is not
-available on iPhones at all and that it has been deprecated for all
-64-bit versions of OS X, which is likely to be the default a few
-years from now. So while present applications using wxOSX are advised
-to use the Carbon backend due its maturity, future developement will
-have to focus on the Cocoa backend.</P>
+functionality and toolkit dependent code for the Carbon, Cocoa, and
+Cocoa Touch API. wxOSX/Carbon is the core of what used to be wxMac
+and is now deprecated in favour of wxOSX/Cocoa. Existing applications
+are encouraged to switch to wxOSX/Cocoa as Carbon is a deprecated OS X
+feature, not available for 64-bit GUI applications, and not available for
+iOS devices at all.</P>
 <P ALIGN=JUSTIFY>As part of the restructuring, all remaining drawing
 code using the old QuickDraw API has been removed (it was only an
 option before) and drawing now always takes place using CoreGraphics.
 Likewise, all code using Carbon functions no longer present in OS X
-10.4 has been removed to clean-up the code greatly. This is turn
+10.4 and 10.5 has been removed to clean-up the code greatly. This is turn
 means, as mentioned above, that applications will require a minimum
-of OS X 10.4 in order to run, better yet OS X 10.5.</P>
+of OS X 10.5 in order to run.</P>
 <P ALIGN=JUSTIFY>Apart from these large changes, these additional
 features can be noted:</P>
 <UL>

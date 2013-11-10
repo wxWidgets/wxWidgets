@@ -91,7 +91,7 @@ primary supported compiler is GNU g++.
 
 @li wxOSX: wxOSX/Cocoa is the primary port for Apple computers, replacing the
 older and now deprecated wxOSX/Carbon port. wxOSX supports either PowerPC or
-Intel Macs running OS X 10.6 or higher and can be compiled in either 32 or 64
+Intel Macs running OS X 10.5 or higher and can be compiled in either 32 or 64
 bits using Apple Developer Tools (both GNU g++ and clang are supported).
 
 Other platforms (iOS, Windows CE, OS/2), compilers (Borland C++ under Windows,
