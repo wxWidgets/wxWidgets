@@ -9,7 +9,7 @@
     @class wxGraphicsPath
 
     A wxGraphicsPath is a native representation of a geometric path. The
-    contents are specific an private to the respective renderer. Instances are
+    contents are specific and private to the respective renderer. Instances are
     reference counted and can therefore be assigned as usual. The only way to
     get a valid instance is by using wxGraphicsContext::CreatePath() or
     wxGraphicsRenderer::CreatePath().

@@ -100,7 +100,7 @@ wxGTK1, wxX11, wxDFB, wxPM...) are also supported but to a lesser extent.
 Please see the @subpage page_port "platform details page" for more information.
 
 There are no CPU speed requirements but the faster (and more) CPU(s) you have,
-faster will the library compile. You do need to have enough RAM, especially
+the faster the library will compile. You do need to have enough RAM, especially
 under Windows platforms, to avoid running out of memory during link phase.
 Depending on the compiler used, you may need at least 4GB to be able to link.
 Under all platforms it's recommended to have large amounts of free hard disk
