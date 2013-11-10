@@ -433,8 +433,8 @@ public:
     @note
     Please note that @e wxID_ABOUT and @e wxID_EXIT are predefined by wxWidgets
     and have a special meaning since entries using these IDs will be taken out
-    of the normal menus under MacOS X and will be inserted into the system menu
-    (following the appropriate MacOS X interface guideline).
+    of the normal menus under OS X and will be inserted into the system menu
+    (following the appropriate OS X interface guideline).
 
     Menu items may be either @e normal items, @e check items or @e radio items.
     Normal items don't have any special properties while the check items have a

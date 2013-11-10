@@ -62,7 +62,7 @@ distribution.
 @subsection page_port_wxosx_carbon wxOSX/Carbon
 
 wxOSX/Carbon is a port of wxWidgets for the Macintosh OS platform. Currently
-MacOS X 10.5 or higher are supported. wxOSX/Carbon can be compiled both using
+OS X 10.5 or higher are supported. wxOSX/Carbon can be compiled both using
 Apple's command line developer tools as well as Apple's Xcode IDE. wxOSX/Carbon
 supports both the Intel and PowerPC architectures and can be used to produce
 "universal binaries" in order create application which can run both
@@ -81,7 +81,7 @@ distribution.
 @subsection page_port_wxosx_cocoa wxOSX/Cocoa
 
 wxOSX/Cocoa is another port of wxWidgets for the Macintosh OS platform.
-Currently MacOS X 10.5 or higher are supported.  In contrast to wxOSX/Carbon,
+Currently OS X 10.5 or higher are supported.  In contrast to wxOSX/Carbon,
 it uses the Cocoa API  in place of Carbon. Much work has gone into this port
 and many  controls are functional, but the port has not reached the maturity of
 the wxOSX/Carbon port yet. It is possible to use wxOSX/Cocoa on 64-bit
