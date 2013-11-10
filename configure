@@ -2310,7 +2310,7 @@ Optional Packages:
   --with-osx_carbon       use Mac OS X (Carbon)
   --with-osx_cocoa        use Mac OS X (Cocoa)
   --with-osx_iphone       use iPhone OS X port
-  --with-osx              use Mac OS X (default port, currently Carbon)
+  --with-osx              use Mac OS X (default port, Cocoa)
   --with-carbon           same as --with-osx_carbon
   --with-cocoa            same as --with-osx_cocoa
   --with-iphone           same as --with-osx_iphone
@@ -4517,7 +4517,7 @@ fi
 
 # Check whether --with-osx was given.
 if test "${with_osx+set}" = set; then :
-  withval=$with_osx; wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1
+  withval=$with_osx; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
 fi
 
 
@@ -4541,7 +4541,7 @@ fi
 
 # Check whether --with-mac was given.
 if test "${with_mac+set}" = set; then :
-  withval=$with_mac; wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1
+  withval=$with_mac; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
 fi
 
 
