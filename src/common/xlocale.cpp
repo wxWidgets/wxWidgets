@@ -76,9 +76,8 @@ wxXLocale& wxXLocale::GetCLocale()
 {
     if ( !gs_cLocale )
     {
-        // NOTE: bcc551 has trouble doing static_cast with incomplete
-        //       type definition. reinterpret_cast used as workaround
-        gs_cLocale = new wxXLocale( reinterpret_cast<wxXLocaleCTag *>(NULL) );
+        wxXLocaleCTag* tag = NULL;
+        gs_cLocale = new wxXLocale(tag);
     }
 
     return *gs_cLocale;
