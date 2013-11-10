@@ -305,10 +305,7 @@ void wxChoice::SetColumns(int n)
 
 int wxChoice::GetColumns() const
 {
-    // gtk_combo_box_get_wrap_width() was added in gtk 2.6
-    gint intval;
-    g_object_get(G_OBJECT(m_widget), "wrap-width", &intval, NULL);
-    return intval;
+    return gtk_combo_box_get_wrap_width(GTK_COMBO_BOX(m_widget));
 }
 
 void wxChoice::GTKDisableEvents()
