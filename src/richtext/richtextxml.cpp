@@ -366,11 +366,7 @@ bool wxRichTextObject::ExportXML(wxOutputStream& stream, int indent, wxRichTextX
     handler->GetHelper().OutputIndentation(stream, indent);
     handler->GetHelper().OutputString(stream, wxT("<") + GetXMLNodeName());
 
-    wxString style = handler->GetHelper().AddAttributes(GetAttributes(), true);
-    if (!IsShown())
-        style << wxT(" show=\"0\"");
-    if (!GetId().IsEmpty())
-        style << wxT(" id=\"") << handler->GetHelper().AttributeToXML(GetId()) << wxT("\"");
+    wxString style = handler->GetHelper().AddAttributes(this, true);
 
     handler->GetHelper().OutputString(stream, style + wxT(">"));
 
@@ -402,12 +398,8 @@ bool wxRichTextObject::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handle
 {
     wxXmlNode* elementNode = new wxXmlNode(wxXML_ELEMENT_NODE, GetXMLNodeName());
     parent->AddChild(elementNode);
-    handler->GetHelper().AddAttributes(elementNode, GetAttributes(), true);
+    handler->GetHelper().AddAttributes(elementNode, this, true);
     handler->GetHelper().WriteProperties(elementNode, GetProperties());
-    if (!IsShown())
-        elementNode->AddAttribute(wxT("show"), wxT("0"));
-    if (!GetId().IsEmpty())
-        elementNode->AddAttribute(wxT("id"), GetId());
 
     wxRichTextCompositeObject* composite = wxDynamicCast(this, wxRichTextCompositeObject);
     if (composite)
@@ -485,7 +477,7 @@ bool wxRichTextPlainText::ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* nod
 // Export this object directly to the given stream.
 bool wxRichTextPlainText::ExportXML(wxOutputStream& stream, int indent, wxRichTextXMLHandler* handler)
 {
-        wxString style = handler->GetHelper().AddAttributes(GetAttributes(), false);
+    wxString style = handler->GetHelper().AddAttributes(this, false);
 
     int i;
     int last = 0;
@@ -742,7 +734,7 @@ bool wxRichTextImage::ImportFromXML(wxRichTextBuffer* buffer, wxXmlNode* node, w
 // Export this object directly to the given stream.
 bool wxRichTextImage::ExportXML(wxOutputStream& stream, int indent, wxRichTextXMLHandler* handler)
 {
-    wxString style = handler->GetHelper().AddAttributes(GetAttributes(), false);
+    wxString style = handler->GetHelper().AddAttributes(this, false);
 
     handler->GetHelper().OutputIndentation(stream, indent);
     handler->GetHelper().OutputString(stream, wxT("<image"));
@@ -787,7 +779,7 @@ bool wxRichTextImage::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler
     if (GetImageBlock().IsOk())
         elementNode->AddAttribute(wxT("imagetype"), wxRichTextXMLHelper::MakeString((int) GetImageBlock().GetImageType()));
 
-    handler->GetHelper().AddAttributes(elementNode, GetAttributes(), false);
+    handler->GetHelper().AddAttributes(elementNode, this, false);
     handler->GetHelper().WriteProperties(elementNode, GetProperties());
 
     wxXmlNode* dataNode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("data"));
@@ -889,7 +881,7 @@ bool wxRichTextParagraphLayoutBox::ExportXML(wxOutputStream& stream, int indent,
     wxString nodeName = GetXMLNodeName();
     handler->GetHelper().OutputString(stream, wxT("<") + nodeName);
 
-    wxString style = handler->GetHelper().AddAttributes(GetAttributes(), true);
+    wxString style = handler->GetHelper().AddAttributes(this, true);
 
     if (GetPartialParagraph())
         style << wxT(" partialparagraph=\"true\"");
@@ -927,7 +919,7 @@ bool wxRichTextParagraphLayoutBox::ExportXML(wxXmlNode* parent, wxRichTextXMLHan
 {
     wxXmlNode* elementNode = new wxXmlNode(wxXML_ELEMENT_NODE, GetXMLNodeName());
     parent->AddChild(elementNode);
-    handler->GetHelper().AddAttributes(elementNode, GetAttributes(), true);
+    handler->GetHelper().AddAttributes(elementNode, this, true);
     handler->GetHelper().WriteProperties(elementNode, GetProperties());
 
     if (GetPartialParagraph())
@@ -1001,7 +993,7 @@ bool wxRichTextTable::ExportXML(wxOutputStream& stream, int indent, wxRichTextXM
     wxString nodeName = GetXMLNodeName();
     handler->GetHelper().OutputString(stream, wxT("<") + nodeName);
 
-    wxString style = handler->GetHelper().AddAttributes(GetAttributes(), true);
+    wxString style = handler->GetHelper().AddAttributes(this, true);
 
     style << wxT(" rows=\"") << m_rowCount << wxT("\"");
     style << wxT(" cols=\"") << m_colCount << wxT("\"");
@@ -1036,7 +1028,7 @@ bool wxRichTextTable::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler
 {
     wxXmlNode* elementNode = new wxXmlNode(wxXML_ELEMENT_NODE, GetXMLNodeName());
     parent->AddChild(elementNode);
-    handler->GetHelper().AddAttributes(elementNode, GetAttributes(), true);
+    handler->GetHelper().AddAttributes(elementNode, this, true);
     handler->GetHelper().WriteProperties(elementNode, GetProperties());
 
     elementNode->AddAttribute(wxT("rows"), wxString::Format(wxT("%d"), m_rowCount));
@@ -2268,6 +2260,17 @@ wxString wxRichTextXMLHelper::AddAttributes(const wxRichTextAttr& attr, bool isP
     return str;
 }
 
+// Create a string containing style attributes, plus further object 'attributes' (shown, id)
+wxString wxRichTextXMLHelper::AddAttributes(wxRichTextObject* obj, bool isPara)
+{
+    wxString style = AddAttributes(obj->GetAttributes(), isPara);
+    if (!obj->IsShown())
+        style << wxT(" show=\"0\"");
+    if (!obj->GetId().IsEmpty())
+        style << wxT(" id=\"") << AttributeToXML(obj->GetId()) << wxT("\"");
+    return style;
+}    
+
 // Write the properties
 bool wxRichTextXMLHelper::WriteProperties(wxOutputStream& stream, const wxRichTextProperties& properties, int level)
 {
@@ -2747,6 +2750,19 @@ bool wxRichTextXMLHelper::AddAttributes(wxXmlNode* node, wxRichTextAttr& attr, b
         AddAttribute(node, wxT("whitespace-mode"), (int) attr.GetTextBoxAttr().GetWhitespaceMode());
 
     return true;
+}
+
+bool wxRichTextXMLHelper::AddAttributes(wxXmlNode* node, wxRichTextObject* obj, bool isPara)
+{
+    if (obj)
+    {
+        if (!obj->IsShown())
+            node->AddAttribute(wxT("show"), wxT("0"));
+        if (!obj->GetId().IsEmpty())
+            node->AddAttribute(wxT("id"), obj->GetId());
+    }
+
+    return AddAttributes(node, obj->GetAttributes(), isPara);
 }
 
 bool wxRichTextXMLHelper::WriteProperties(wxXmlNode* node, const wxRichTextProperties& properties)
