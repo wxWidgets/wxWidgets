@@ -7,11 +7,11 @@
 
 /**
 
-@page page_multiplatform General Cross-Platform Development Tips
+@page page_multiplatform Cross-Platform Development Tips
 
 @tableofcontents
 
-This chapter describes some tips related to cross-platform development.
+This chapter describes some general tips related to cross-platform development.
 
 
 
