@@ -22,7 +22,6 @@ topics related to building applications with wxWidgets.
 @li @subpage overview_roughguide
 @li @subpage overview_helloworld
 @li @subpage overview_python
-@li @subpage overview_changes_since28
 
 @section page_topics_programming Important wxWidgets Topics
 
