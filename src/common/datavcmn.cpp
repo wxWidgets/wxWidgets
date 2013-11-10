@@ -1801,7 +1801,7 @@ void wxDataViewListStore::SetItemData( const wxDataViewItem& item, wxUIntPtr dat
 wxUIntPtr wxDataViewListStore::GetItemData( const wxDataViewItem& item ) const
 {
     wxDataViewListStoreLine* line = m_data[GetRow(item)];
-    if (!line) return static_cast<wxUIntPtr>(NULL);
+    if (!line) return 0;
 
     return line->GetData();
 }
