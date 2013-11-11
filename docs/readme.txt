@@ -1,35 +1,37 @@
-               wxWidgets 3.0-RC2 Release Notes
-               ===============================
+                wxWidgets 3.0.0 Release Notes
+                =============================
 
-Welcome to the latest release of wxWidgets, a free cross-platform C++
-framework for writing advanced GUI applications using native controls.
+Welcome to the latest release of wxWidgets, a free and open source
+cross-platform C++ framework for writing advanced GUI applications
+using native controls.
 
 
-In addition to common and advanced GUI facilities such as frames,
-scrolling windows, toolbars, tree controls, icons, device contexts,
-printing, splitter windows and so on, there are wrappers for common
-file operations, facilities for writing network applications,
-thread handling, and so on. You can learn more about wxWidgets at
+wxWidgets allows you to write native-looking GUI applications for
+all the major desktop platforms and also helps with abstracting
+the differences in the non-GUI aspects between them. It is free
+for the use in both open source and commercial applications, comes
+with the full, easy to read and modify, source and extensive
+documentation and a collection of more than a hundred examples.
+You can learn more about wxWidgets at
 
         http://www.wxwidgets.org/
 
+and read its documentation online at
 
-wxWidgets sources are available for download from
+        http://docs.wxwidgets.org/3.0.0/
 
-        https://sourceforge.net/projects/wxwindows/files/3.0.0-rc2/
+
+wxWidgets sources and binaries for the selected platforms are
+available for download from
+
+        https://sourceforge.net/projects/wxwindows/files/3.0.0/
 
 or
 
-        ftp://ftp.wxwidgets.org/pub/3.0.0-rc2/
+        ftp://ftp.wxwidgets.org/pub/3.0.0/
 
 Please see the "Files" section below for the description of various
 files available at these locations.
-
-
-A detailed reference manual including in-depth overviews for various
-topics is supplied in various formats and can be accessed online at
-
-        http://docs.wxwidgets.org/3.0.0/
 
 
 
@@ -39,7 +41,7 @@ Changes in this release
 This release contains several years worth of improvements compared
 to 2.8 version. Notably, Unicode support has been completely
 overhauled and made much easier to use. Debugging support, including
-when using a release build of the library, was much improved making
+when using a release build of the library, was greatly improved making
 it less likely that you use the library incorrectly. Dynamic event
 handling was made much more comfortable. Many new GUI and base classes
 have been added or improved and all ports, and especially wxOSX/Cocoa
@@ -63,9 +65,9 @@ Platforms supported
 
 wxWidgets currently supports the following primary platforms:
 
-- Windows 95/98/ME, NT, 2000, XP, Vista, 7
+- Windows 95/98/ME, NT, 2000, XP, Vista, 7 (32/64 bits).
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer)
-- Mac OS X (10.5 or newer) using either Carbon or Cocoa
+- Mac OS X (10.5 or newer) using Cocoa (32/64 bits) or Carbon (32 only)
 
 There is some support for the following platforms:
 
@@ -98,8 +100,8 @@ In addition to the sources, documentation in HTML, CHM and HTB
 for Microsoft Windows. Notice that you will still need to compile
 wxWidgets even when using the installer.
 
-Experimentally, we also supply binaries of wxMSW libraries built
-with several versions of Microsoft Visual C++ compiler for this
+We also supply binaries of wxMSW libraries built with several
+versions of Microsoft Visual C++ and GNU g++ compiler for this
 release. They are available in the "binaries" subdirectory, see
 the description of the files in the README file there.
 
@@ -107,10 +109,11 @@ the description of the files in the README file there.
 Installation
 ------------
 
-wxWidgets needs to be compiled before you can test out the samples
-or write your own applications. For installation information, please
-see the install.txt file in the docs subdirectory appropriate for
-the platform you use.
+Unless you have downloaded the binaries for your compiler, you
+will need to build wxWidgets before you can test out the samples
+or write your own applications. For installation information,
+please see the install.txt file in the docs subdirectory
+appropriate for the platform you use.
 
 
 Licence information
@@ -136,13 +139,7 @@ applications using wxWidgets.
 However, if you distribute wxGTK or wxMotif (with Lesstif)
 version of your application, don't forget that it is linked
 against GTK+ (or Lesstif) which is covered by LGPL *without*
-exception notice. Under Linux systems your app is probably linked
-against LGPL glibc as well. Please read carefully LGPL, section
-6. which describes conditions for distribution of closed source
-applications linked against LGPL library. Basically you should
-link dynamically and include source code of LGPL libraries with
-your product (unless it is already present in user's system -
-like glibc usually is).
+exception notice and so is bound by its requirements.
 
 If you use TIFF image handler, please see src/tiff/COPYRIGHT
 for libtiff licence details.
@@ -156,16 +153,17 @@ If you use wxRegEx class on a system without native regular
 expressions support (i.e. MS Windows), see src/regex/COPYRIGHT
 file for Henry Spencer's regular expression library copyright.
 
-If you use wxXML classes or XRC, see src/expat/COPYING for licence details.
+If you use wxXML classes or XRC, see src/expat/COPYING for licence
+details.
 
 
 Documentation
 -------------
 
 wxWidgets documentation is available online at
-http://docs.wxwidgets.org/3.0.0/ and can also be downloaded in HTML
-format. To generate documentation in other formats (PDF, CHM, ...)
-please use the scripts in docs/doxygen directory.
+http://docs.wxwidgets.org/3.0.0/ and can also be downloaded in
+HTML format. To generate documentation in other formats (PDF, CHM,
+...) please use the scripts in docs/doxygen directory.
 
 
 Bug reporting
@@ -188,19 +186,14 @@ addressed sooner.
 Further information
 -------------------
 
-The wxWidgets Web site is located at:
+If you are looking for support, you can get it from
 
-  http://www.wxwidgets.org/
+- wxForum at http://forums.wxwidgets.org/
+- wx-users mailing list (http://www.wxwidgets.org/support/maillst2.htm)
+- #wxwidgets IRC channel
+- http://stackoverflow.com/ if you tag your question with "wxwidgets"
 
-The main wxWidgets ftp site is at:
-
-  ftp://ftp.wxwidgets.org/pub/
-
-A wxWidgets CD-ROM with the latest distribution plus an HTML
-front-end and hundreds of MB of compilers, utilities and other
-material may be ordered from the CD-ROM page: see the wxWidgets
-web site.
 
 Have fun!
 
-The wxWidgets Team, October 2013
+The wxWidgets Team, November 2013
