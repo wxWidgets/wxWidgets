@@ -1,7 +1,7 @@
-wxWidgets 3.0.0-rc2
-===================
+wxWidgets 3.0.0
+===============
 
-This directory contains the files for wxWidgets 3.0.0-rc2 release.
+This directory contains the files for wxWidgets 3.0.0 release.
 
 Please notice that since the 2.9 series only a single source distribution is
 provided instead of the multiple distributions containing only the files for
@@ -24,12 +24,12 @@ Check Sums
 
 To verify your download you can use the following sha1sums:
 
-    01751f115a8a92a51122245ffef390c273f6e642  wxWidgets-3.0.0-rc2.7z
-    b862990fc3dd97b4194c3955ff73b4f6aa47f823  wxWidgets-3.0.0-rc2.tar.bz2
-    73afa20f3fe911f90fce344098c06e2269e69585  wxWidgets-3.0.0-rc2.zip
-    6ec5137bf53bc55ae0d213ec1c00735e8684981f  wxWidgets-3.0.0-rc2-docs-html.zip
-    aa77457c4e13de229d7ff83efaff732f530c760d  wxWidgets-3.0.0-rc2-docs-html.tar.bz2
-    a482ad56606352a73e0f095af7014095c299791a  wxWidgets-3.0.0-rc2-docs-chm.zip
-    c6f45af13a376364e4169f91a1ab2191a500ab44  wxWidgets-3.0.0-rc2_headers.7z
-    c1211acee0b3c24982607f1febb2d81ce0b5c2fd  wxMSW-3.0.0-rc2-Setup.exe
+    01751f115a8a92a51122245ffef390c273f6e642  wxWidgets-3.0.0.7z
+    b862990fc3dd97b4194c3955ff73b4f6aa47f823  wxWidgets-3.0.0.tar.bz2
+    73afa20f3fe911f90fce344098c06e2269e69585  wxWidgets-3.0.0.zip
+    6ec5137bf53bc55ae0d213ec1c00735e8684981f  wxWidgets-3.0.0-docs-html.zip
+    aa77457c4e13de229d7ff83efaff732f530c760d  wxWidgets-3.0.0-docs-html.tar.bz2
+    a482ad56606352a73e0f095af7014095c299791a  wxWidgets-3.0.0-docs-chm.zip
+    c6f45af13a376364e4169f91a1ab2191a500ab44  wxWidgets-3.0.0_headers.7z
+    c1211acee0b3c24982607f1febb2d81ce0b5c2fd  wxMSW-3.0.0-Setup.exe
 
