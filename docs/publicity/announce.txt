@@ -1,13 +1,15 @@
-October 28, 2013 -- The wxWidgets team is pleased to announce the
-second release candidate release of wxWidgets 3.0.
+November 11, 2013 -- The wxWidgets team is pleased to announce a
+major new release of our open source framework for the development
+of native cross-platform applications in C++.
 
-wxWidgets 3.0-RC2 is available at
+wxWidgets 3.0.0 is the first release in the new major stable 3.0
+branch and is available at
 
-        https://sourceforge.net/downloads/wxwindows/3.0.0-rc2/
+        https://sourceforge.net/downloads/wxwindows/3.0.0/
 
 and at our FTP mirror at
 
-        ftp://ftp.wxwidgets.org/pub/3.0.0-rc2/
+        ftp://ftp.wxwidgets.org/pub/3.0.0/
 
 Please choose the archive format suitable for your platform, i.e. 7z
 or ZIP for Windows platforms and tar.bz2 for the Unix systems
@@ -20,7 +22,7 @@ as only sources, not binaries, are installed.
 We also provide the pre-built versions of wxMSW libraries for the
 selected compilers at
 
-        https://sourceforge.net/downloads/wxwindows/3.0.0-rc2/binaries/
+        https://sourceforge.net/downloads/wxwindows/3.0.0/binaries/
 
 Please see the README file there for the descriptions of the
 individual files.
@@ -41,20 +43,20 @@ here, but the most important ones are:
 
 Please see the changes.txt file in the "docs" subdirectory of
 wxWidgets distribution or also available online at
-https://sourceforge.net/projects/wxwindows/files/3.0.0-rc2/changes.txt
+https://sourceforge.net/projects/wxwindows/files/3.0.0/changes.txt
 for more details and please read the "INCOMPATIBLE CHANGES" section
 in its beginning for a brief description of changes if you are
 upgrading from wxWidgets 2.8. For more details, please see
 http://docs.wxwidgets.org/3.0.0/overview_changes_since28.html
 
 
-Please test this release candidate version to help us with making the
-final 3.0 release as problem-free as possible. We are especially
-looking forward to your feedback about the changes in this release
-compared to 2.8 version if you're upgrading. Please let us know about
-any regressions (http://trac.wxwidgets.org/newticket) so that we could
-fix them in the upcoming 3.0.
+We recommend that you use wxWidgets 3.0 for any new programs and
+also update any existing code using the older versions to the new
+one (which should be easier than the jump in the version number
+indicates) as all the future development will only happen in 3.x
+series.
 
- Thanks in advance!
+
+We hope that you will enjoy using the new release!
 
 Vadim Zeitlin, on behalf of wxWidgets development team.

@@ -570,7 +570,7 @@ Major new features in this release
   was added.
 
 
-3.0.0: (released 2013-11-xx)
+3.0.0: (released 2013-11-11)
 ----------------------------
 
 All:
