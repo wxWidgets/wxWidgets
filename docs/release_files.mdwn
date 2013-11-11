@@ -1,7 +1,9 @@
 wxWidgets 3.0.0
 ===============
 
-This directory contains the files for wxWidgets 3.0.0 release.
+This directory contains the files containing the sources and documentation of
+wxWidgets 3.0.0 release. Please see the binaries subdirectory for the binaries
+for the selected platforms/compilers.
 
 Please notice that since the 2.9 series only a single source distribution is
 provided instead of the multiple distributions containing only the files for
@@ -24,12 +26,11 @@ Check Sums
 
 To verify your download you can use the following sha1sums:
 
-    01751f115a8a92a51122245ffef390c273f6e642  wxWidgets-3.0.0.7z
-    b862990fc3dd97b4194c3955ff73b4f6aa47f823  wxWidgets-3.0.0.tar.bz2
-    73afa20f3fe911f90fce344098c06e2269e69585  wxWidgets-3.0.0.zip
-    6ec5137bf53bc55ae0d213ec1c00735e8684981f  wxWidgets-3.0.0-docs-html.zip
-    aa77457c4e13de229d7ff83efaff732f530c760d  wxWidgets-3.0.0-docs-html.tar.bz2
-    a482ad56606352a73e0f095af7014095c299791a  wxWidgets-3.0.0-docs-chm.zip
-    c6f45af13a376364e4169f91a1ab2191a500ab44  wxWidgets-3.0.0_headers.7z
-    c1211acee0b3c24982607f1febb2d81ce0b5c2fd  wxMSW-3.0.0-Setup.exe
-
+    d19985b4ea4277ac7707615b7c00b15e3d58d2c0  wxWidgets-3.0.0.7z
+    756a9c54d1f411e262f03bacb78ccef085a9880a  wxWidgets-3.0.0.tar.bz2
+    becf924bb06441bfd2e7f3f4bf4501e58ff5c7b8  wxWidgets-3.0.0.zip
+    6950f26601f5b71f955803854b19dce22af5e020  wxWidgets-3.0.0-docs-html.tar.bz2
+    b2909e17d19765cedf9d79793a78c3f7eda7d88b  wxWidgets-3.0.0-docs-html.zip
+    bf0d8baa476baba8ac13442a6c9cd74c2f356993  wxWidgets-3.0.0-docs-chm.zip
+    2f4f7013845930e069b4f3c5226d771eadee6986  wxWidgets-3.0.0_headers.7z
+    ff997beecf047ef9c94a1caccd9770300033c136  wxMSW-3.0.0-Setup.exe
