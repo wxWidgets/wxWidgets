@@ -1,27 +1,9 @@
-Installing wxWidgets for Windows
------------------------------------------------------------
+                   Installing wxWidgets for Windows
+                   --------------------------------
 
 This is wxWidgets for Microsoft Windows 9x/ME, Windows NT
-and later (2000, XP, Vista, 7, etc) and Windows CE.
-
-These installation notes can be found in docs/msw/install.txt
-in your wxWidgets distribution.
-
-IMPORTANT NOTE: If you experience problems installing, please
-re-read these instructions and other related files (changes.txt,
-readme.txt, FAQ) carefully before posting to wx-users list.
-
-If you are sure that you found a bug, please report it at
-wxWidgets Trac:
-
-  http://trac.wxwidgets.org/newticket
-
-Please notice that often trying to correct the bug yourself is the
-quickest way to fix it. Even if you fail to do it, you may
-discover valuable information allowing us to fix it while doing
-it. We also give much higher priority to bug reports with patches
-fixing the problems so this ensures that your report will be
-addressed sooner.
+and later (2000, XP, Vista, 7, 8, etc) including both 32 bit and 64
+bit versions.
 
 
 Table of Contents:
@@ -34,27 +16,37 @@ Table of Contents:
 Installation
 ============
 
-Please simply uncompress the .zip file manually into any directory.
-However we advise avoiding using directories with spaces in their
-names (notably "C:\Program Files") as this risks creating problems
+If you are using one of the supported compilers, you can download the
+pre-built in binaries from
+
+    https://sourceforge.net/projects/wxwindows/files/3.0.0/binaries/
+
+or
+
+             ftp://ftp.wxwidgets.org/pub/3.0.0/binaries/
+
+In this case, just uncompress the binaries archive under any directory
+and skip to "Building Applications Using wxWidgets" part.
+
+Otherwise, or if you want to build a configuration of the library
+different from the default one, you need to build the library from
+sources before using it.
+
+The first step, which you may have already performed, unless you are
+reading this file online, is to download the source archive and
+uncompress it in any directory. It is strongly advised to avoid using
+spaces in the name of this directory, i.e. notably do *not* choose a
+location under "C:\Program Files", as this risks creating problems
 with makefiles and other command-line tools.
 
-
-In the majority of cases, you don't need to change the default
-library build configuration. If you wish to change some of the build
-options you need to edit the include/wx/msw/setup.h file enabling or
-disabling the features you would like to compile wxWidgets with[out].
+After choosing the directory location, please define WXWIN environment
+variable containing the full path to this directory. While this is not
+actually required, this makes using the library more convenient and
+this environment variable is used in the examples below.
 
 NB: If you checked your sources from version control repository and
-    didn't obtain them from a release file, the file above doesn't
-    exist and you will need to copy include/wx/msw/setup0.h to
-    include/wx/msw/setup.h.
-
-Notice that this file is later copied into a directory under lib for
-each of the build configurations which allows to have different
-build options for different configurations too.
-
-See "Configuring the Build" section for more information.
+    didn't obtain them from a release file, you also need to copy
+    include/wx/msw/setup0.h to include/wx/msw/setup.h.
 
 
 Building wxWidgets
@@ -64,223 +56,167 @@ The following sections explain how to compile wxWidgets with each supported
 compiler, see the "Building Applications" section about the instructions for
 building your application using wxWidgets.
 
-Search for one of Microsoft/Borland/Watcom/Symantec/Cygwin/Mingw32 keywords
-to quickly locate the instructions for your compiler. Notice that the primary
-compilers for wxWidgets under MSW are Microsoft Visual C++ and GNU g++, other
-compilers are more rarely tested and might not work so please consider using
-one of these two if possible.
-
 All makefiles and project are located in build\msw directory.
-
-Where Compiled Files are Stored
--------------------------------
-
-After successful compilation you'll find the libraries in a subdirectory
-of lib directory named after the compiler and DLL/static settings.
-A couple of examples:
-
-  lib\vc_lib                    VC++ compiled static libraries
-  lib\vc_dll                    VC++ DLLs
-  lib\bcc_lib                   Static libraries for Borland C++
-  lib\wat_dll                   Watcom C++ DLLs
-
-Names of compiled wxWidgets libraries follow this scheme: libraries that don't
-depend on GUI components begin with "wxbase" followed by a version number and,
-optionally, letters indicating Unicode compilation ('u') and a debug build ('d').
-The last component is the name of the wxWidgets component (unless you build the
-library as single monolithic library; look for "Configuring the Build" below).
-This is a typical set of release ANSI build libraries (release versions on
-left, debug on right side):
-
-  wxbase29.lib              wxbase29d.lib
-  wxbase29_net.lib          wxbase29d_net.lib
-  wxbase29_xml.lib          wxbase29d_xml.lib
-  wxmsw29_core.lib          wxmsw29d_core.lib
-  wxmsw29_html.lib          wxmsw29d_html.lib
-  wxmsw29_adv.lib           wxmsw29d_adv.lib
-
-Their Unicode debug counterparts in wxUniversal build would be
-
-  wxbase29ud.lib
-  wxbase29ud_net.lib
-  wxbase29ud_xml.lib        (notice these libs are same for wxUniv and wxMSW)
-  wxmswuniv29ud_core.lib
-  wxmswuniv29ud_html.lib
-  wxmswuniv29ud_adv.lib
-
-These directories also contain a subdirectory with the wx/setup.h header. This
-subdirectory is named after the port, Unicode, wxUniv and debug settings and
-you must add it to the include paths when compiling your application. Some
-examples:
-
-  lib\vc_lib\msw\wx\setup.h          VC++ static, wxMSW
-  lib\vc_lib\mswud\wx\setup.h        VC++ static, wxMSW, Unicode, debug
-  lib\vc_lib\mswunivd\wx\setup.h     VC++ static, wxUniversal, debug
-
-Below are compiler specific notes followed by customizing instructions that
-apply to all compilers (search for "Configuring the Build").
 
 Microsoft Visual C++ Compilation
 ----------------------------------------------------------------
 
-You may wish to visit http://wiki.wxwidgets.org/Microsoft_Visual_C%2B%2B_Guide
-for a more informal and detailed description of the process summarized below.
+* From command line using the provided makefiles:
 
-Please note that currently ready to use projeect files are provided for VC++
-versions 6 through to 9 (also known as 6, 2003, 2005 and 2008). For VC++ 10 and
-11 (2010 and 2012, respectively), you will need to import the existing VC9
-project files.
+0. Open a "Visual Studio Command Prompt" window shortcut to which
+   must have been installed to the "Start" menu or the "Start" screen
+   by MSVS installation.
 
-Using project files (VC++ 6 and later):
+1. Change directory to %WXWIN%\build\msw and type
 
-1. Unarchive wxWidgets-x.y.z-vc.zip, the VC++ 6 project
-   makefiles (already included in wxMSW-x.y.z.zip and the setup version).
-2. Open build\msw\wx.dsw, which has configurations for static
-   compilation or DLL compilation, and each of these available in
-   Unicode/ANSI, Debug/Release and wxUniversal or native variations.
-   Choose the Win32 Debug or Win32 Release configuration (or any other that
-   suits your needs) and use Batch Build to compile _all_ projects. If you
-   know you won't need some of the libraries (e.g. the HTML part), you don't have
-   to compile it.  It will also produce similar variations on jpeg.lib,
-   png.lib, tiff.lib, zlib.lib, and regex.lib.
+        > nmake /f makefile.vc
 
-   If you want to build DLL configurations in wx.dsw project you unfortunately
-   need to build them in the proper order (jpeg, png, tiff, zlib, regex, expat,
-   base, net, core, gl, html, media, qa, adv, xrc, aui, richtext,
-   propgrid) manually because VC6 doesn't always respect the correct build order.
+   to build wxWidgets in the default debug configuration as a static
+   library. You can also do
 
-   Alternatively, use the special wx_dll.dsw project which adds the
-   dependencies to force the correct order (but, because of this, doesn't work
-   for the static libraries) or simply redo the build several times until all
-   DLLs are linked correctly.
-3. Open a sample project file, choose a configuration such as
-   Win32 Debug using Build | Set Active Configuration..., and compile.
-   The project files don't use precompiled headers, to save disk
-   space, but you can switch PCH compiling on for greater speed.
-   NOTE: you may also use samples/samples.dsw to access all
-   sample projects without opening each workspace individually.
-   You can use the Batch Build facility to make several samples
-   at a time.
+        > nmake /f makefile.vc BUILD=release
 
-Using makefiles:
+   to build a release version or
 
-1. Change directory to build\msw. Type:
+        > nmake /f makefile.vc BUILD=release SHARED=1
 
-  'nmake -f makefile.vc'
+   to build a release DLL version. Finally, you can also add
+   "TARGET_CPU=X64" to nmake command line to build Win64 versions
+   (this only works if you are using a 64 bit compiler, of course).
 
-   to make the wxWidgets core library as release DLL.
-   See "Configuring the Build" for instruction how to build debug or static
-   libraries.
+   See "Configuring the Build" for more information about the
+   additional parameters that can be specified on the command line.
 
-2. Change directory to samples and type 'nmake -f makefile.vc'
-   to make all the samples. You can also make them individually.
+2. To verify your build, change the directory to samples\minimal and
+   run the same nmake command (with the same parameters there), this
+   should create a working minimal wxWidgets sample.
 
-Makefile notes:
+3. If you need to rebuild, use "clean" target first or "nmake /a".
 
-  Use the 'clean' target to clean all objects, libraries and
-  executables.
 
-Note (1): if you wish to use templates, please edit
-include\wx\msw\setup.h and set wxUSE_DEBUG_NEW_ALWAYS to 0.
-Without this, the redefinition of 'new' will cause problems in
-the headers. Alternatively, #undef new before including template headers.
-You will also need to set wxUSE_IOSTREAMH to 0 if you will be
-using templates, to avoid the non-template stream files being included
-within wxWidgets.
+* From the IDE using the provided project files:
 
-Note (2): libraries and applications generated with makefiles and
-project files are now (hopefully) compatible where static libraries
-are concerned, but please exercise caution nevertheless and if
-possible, use one method or the other.
+Ready to use project files are provided for VC++ versions 6, 7, 8, 9
+and 10 (also known as MSVS 6, 2003, 2005, 2008 and 2010 respectively).
+For VC++ 11 (2012, respectively), you need to import the existing VC10
+project files into VC11 IDE first.
 
-Note (3): some crash problems can be due to inconsistent compiler
-options. If strange/weird/impossible things start to happen please
-check (dumping IDE project file as makefile and doing text comparison
-if necessary) that the project settings, especially the list of defined
-symbols, struct packing, etc. are exactly the same for all items in
-the project. After this, delete everything (including PCH) and recompile.
+Simply open wx_vcN.sln (for N=7, 8, 9 or 10) or wx.dsw (for VC6) file,
+select the appropriate configuration (Debug or Release, static or DLL)
+and build the solution. Notice that when building a DLL configuration,
+you may need to perform the build several times because the projects
+are not always built in the correct order, and this may result in link
+errors. Simply do the build again, up to 3 times, to fix this.
 
-Note (4): to create your own IDE files, copy .dsp and .dsw
-files from an existing wxWidgets sample and adapt them, or
-visit http://wiki.wxwidgets.org/Microsoft_Visual_C%2B%2B_Guide.
+Notice that x64 configurations are only included in VC10 project
+currently. If you want to build Win64 libraries with the previous
+compiler versions, the simplest solution is to use the makefiles as
+described above.
 
-Microsoft Visual C++ Compilation for 64-bit Windows
+
+Cygwin/MinGW Compilation
 ----------------------------------------------------------------
 
-Visual Studio 2005 includes 64-bit compilers, though they are not installed by
-default; you need to select them during the installation. Both native 64-bit
-compilers and 32-bit hosted cross compilers are included, so you do not need a
-64-bit machine to use them (though you do to run the created executables).
-Visual C++ Express Edition does not include 64-bit compilers.
+wxWidgets supports Cygwin, MinGW, MinGW-w64 and TDM-GCC tool chains under
+Windows. They can be downloaded from:
 
-64-bit compilers are also available in various SDKs, for example
-the .NET Framework SDK:
-    http://msdn.microsoft.com/netframework/programming/64bit/devtools/
+    http://www.cygwin.com/
+    http://www.mingw.org/
+    http://mingw-w64.sourceforge.net/
+    http://tdm-gcc.tdragon.net/
 
-Using project files:
+respectively. Please retrieve and install the latest version of your preferred
+tool chain by following the instructions provided by these packages. Notice
+that Cygwin includes both native Cygwin compiler, which produces binaries that
+require Cygwin during run-time, and MinGW[-w64] cross-compilers which can still
+be used in Cygwin environment themselves but produce plain Windows binaries
+without any special run-time requirements. You will probably want to use the
+latter for developing your applications.
 
-1. Open the solution file for the version you use: build\msw\wx_vc8.sln or
-   wx_vc9.sln.
+If using MinGW, you can download the add-on MSYS package to provide Unix-like
+tools that you'll need to build wxWidgets using configure.
 
-2. To add 64-bit targets, go to the 'Build' menu and choose 'Configuration
-   Manager...'.  In the 'Active solution platform' drop down choose '<new>',
-   then you can choose either 'Itanium' or 'x64'.
+C++11 note: If you want to compile wxWidgets in C++11 mode, you currently have
+            to use -std=gnu++11 switch as -std=c++11 disables some extensions
+            that wxWidgets relies on. I.e. please use CXXFLAGS="-std=gnu++11".
 
-   For more detailed instructions see:
-    http://msdn2.microsoft.com/en-us/library/9yb4317s(en-us,vs.80).aspx
+All of these tool chains can be used either with Unix-like configure+make build
+process (preferred) or with the provided makefile.gcc makefiles without using
+configure:
 
-   Note: 64-bit targets created this way will use the build directory of the
-         corresponding 32-bit target for some files. Therefore after building
-         for one CPU it is necessary to clean the build before building the
-         equivalent target for another CPU. We've reported the problem to MS
-         but they say it is not possible to fix it.
+* Using configure
 
-3. To build, go to the 'Build' menu and choose 'Batch Build...'. Tick all the
-   all the 'x64|Debug' or all the 'Itanium|Debug' projects, and click 'Build'.
+This method works in exactly the same way as under Unix systems,
+including OS X, and requires a Unix-like environment to work, i.e.
+either MSYS or Cygwin.
 
-   This will build a debug version of the static libs. The section above on
-   Visual C++ in general has more information about adjusting the settings to
-   build other configurations.
+0. Open MSYS or Cygwin shell prompt.
 
-4. To compile one of the samples open one of the sample projects, such as
-   samples\minimal\minimal_vc7.vcproj. Visual Studio will convert the project as in
-   step 1, then add a 64-bit target as in step 2, and build.
+1. Create a build directory: it is is strongly recommended to not
+   build the library in the directory containing the sources ($WXWIN)
+   but to create a separate build directory instead. The build
+   directory can be placed anywhere (using the fastest available disk
+   may be a good idea), but in this example we create it as a
+   subdirectory of the source one:
 
-Using makefiles:
+        $ cd $WXWIN
+        $ mkdir build-debug
 
-1. Open a 64-bit build command prompt, for either x64 or Itanium. Change
-   directory to build\msw. Then for x64 type:
+2. Run configure passing it any of the options shown by "configure
+   --help". Notice that configure builds shared libraries by default,
+   use --disable-shared to build static ones. For example:
 
-    nmake -f makefile.vc TARGET_CPU=X64
+        $ ../configure --enable-debug
 
-   or for Itanium:
+3. Build the library:
 
-    nmake -f makefile.vc TARGET_CPU=IA64
+        $ make
 
-   This will build a debug version of wxWidgets DLLs. See "Configuring the
-   build" for instruction how to build other configurations such as a release
-   build or static libraries.
+4. Test the library build by building the minimal sample:
 
-2. Change to the directory of one of the samples such as samples\minimal. Type
-   the same command used to build the main library, for example for x64:
+        $ cd samples/minimal
+        $ make
 
-    nmake -f makefile.vc TARGET_CPU=X64
+5. Optionally install the library in a global location
 
-Notes:
+        $ make install
 
-The versions of the VC++ 8 compiler included with some SDKs requires an
-additional library to be linked or the following error is received.
+   Notice that there is not much benefice to installing under Windows
+   so this step can usually be omitted.
 
-    LNK2001 unresolved external symbol __security_check_cookie
 
-If you receive this error add bufferoverflowu.lib to link, e.g.:
+* Using plain makefiles:
 
-    nmake -f makefile.vc TARGET_CPU=X64 LDFLAGS=bufferoverflowu.lib
+NOTE: The makefile.gcc makefiles are for compilation under MinGW using
+      Windows command interpreter (command.com/cmd.exe), they won't work
+      if you use Unix shell, as is the case with MSYS. Follow the instructions
+      for using configure above instead if you prefer to use Unix shell.
 
-See http://support.microsoft.com/?id=894573 for more information.
+0. Open DOS command line window (cmd.exe, *not* Bash sh.exe).
+
+1. Change directory to %WXWIN%\build\msw and type
+
+        > mingw32-make -f makefile.gcc
+
+   to build wxWidgets in the default debug configuration as a static
+   library. Add "BUILD=release" and/or "SHARED=1" to build the library
+   in release configuration and/or as a shared library instead of the
+   default static one.
+
+2. To verify your build, change the directory to samples\minimal and
+   run the same mingw32-make command (with the same parameters there),
+   this should create a working minimal wxWidgets sample.
+
+3. If you need to rebuild, use "clean" target first.
+
+
+
 
 Borland C++ Compilation
 ----------------------------------------------------------------
+
+WARNING: Borland instructions are out of date, please send us your
+         corrections if you are using it with wxWidgets 3.0.
 
 The minimum version required is 5.5 (last version supported by BC++ 5.0 was
 2.4.2), which can be downloaded for free from:
@@ -344,179 +280,55 @@ the following preprocessor directive:
 (check the samples -- e.g., \wx2\samples\minimal\minimal.cpp -- for
 more details)
 
-Watcom C++ 10.6/11 and OpenWatcom Compilation
-----------------------------------------------------------------
-
-1. Change directory to build\msw. Type 'wmake -f makefile.wat' to
-   make the wxWidgets core library.
-
-2. Change directory to samples\minimal and type 'wmake -f makefile.wat'
-   to make this sample. Repeat for other samples of interest.
-
-Note (1): if variant.cpp is compiled with date/time class options, the linker
-          gives up. So the date/time option is switched off for Watcom C++.
-          Also, wxAutomationObject is not compiled with Watcom C++ 10.
-
-Note (2): RawBitmaps won't work at present because they use unsupported template
-          classes
-
-Note (3): if Watcom can't read the precompiled header when building a sample,
-          try deleting .pch files in build\msw\wat_* and compiling
-          the sample again.
-
-Note (4): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
-          compiler doesn't come with standard C++ library headers by default.
-          If you install STLPort or another STL implementation, you'll need to
-          edit wx/string.h and remove the check for Digital Mars in it (search
-          for __WATCOM__).
-
-
-Cygwin/MinGW Compilation
-----------------------------------------------------------------
-
-wxWidgets supports Cygwin, MinGW, MinGW-w64 and TDM-GCC tool chains under
-Windows. They can be downloaded from:
-
-    http://www.cygwin.com/
-    http://www.mingw.org/
-    http://mingw-w64.sourceforge.net/
-    http://tdm-gcc.tdragon.net/
-
-respectively. Please retrieve and install the latest version of your preferred
-tool chain by following the instructions provided by these packages. Notice
-that Cygwin includes both native Cygwin compiler, which produces binaries that
-require Cygwin during run-time, and MinGW[-w64] cross-compilers which can still
-be used in Cygwin environment themselves but produce plain Windows binaries
-without any special run-time requirements. You will probably want to use the
-latter for developing your applications.
-
-If using MinGW, you can download the add-on MSYS package to provide Unix-like
-tools that you'll need to build wxWidgets using configure.
-
-C++11 note: If you want to compile wxWidgets in C++11 mode, you currently have
-            to use -std=gnu++11 switch as -std=c++11 disables some extensions
-            that wxWidgets relies on. I.e. please use CXXFLAGS="-std=gnu++11".
-
-All of these tool chains can be used either with Unix-like configure+make build
-process (preferred) or with the provided makefile.gcc makefiles without using
-configure:
-
-Using makefiles Directly
-----------------------------------------------------------------
-
-NOTE: The makefile.gcc makefiles are for compilation under MinGW using
-      Windows command interpreter (command.com/cmd.exe), they won't work
-      if you use Unix shell, as is the case with MSYS. Follow the instructions
-      for using configure below instead in this case.
-
-Use the makefile.gcc files for compiling wxWidgets and samples,
-e.g. to compile a debugging version of wxWidgets:
-  > cd c:\wx\build\msw
-  > mingw32-make -f makefile.gcc BUILD=debug
-  > cd c:\wx\samples\minimal
-  > mingw32-make -f makefile.gcc BUILD=debug
-  (See below for more options.)
-
-Notice that Windows command interpreter (cmd.exe) and mingw32-make must be
-used, using Bash (sh.exe) and make.exe from MSYS will only work when using
-configure-based build procedure described below!
-
-You can also use the 'strip' command to reduce executable/dll size (note that
-stripping an executable/dll will remove debug information!).
-
-All targets have 'clean' targets to allow removal of object files
-and other intermediate compiler files.
-
-Using configure
-----------------------------------------------------------------
-
-Instead of using the makefiles, you can use the configure
-system to generate appropriate makefiles, as used on Unix
-and Mac OS X systems.
-
-Change directory to the root of the wxWidgets distribution,
-make a build directory, and run configure and make in this directory.
-
-For example:
-
-  $ cd $WXWIN
-  $ mkdir build-debug
-  $ cd build-debug
-  $ # Optionally use --disable-shared for static linking
-  $ ../configure --enable-debug
-  $ make
-  $ make install # This step is optional
-  $ cd samples/minimal
-  $ make
-  $ ./minimal.exe
-
-
-DigitalMars C++ Compilation
-----------------------------------------------------------------
-
-Digital Mars compiler is no longer updated as the project is discontinued.
-wxWidgets 2.8 was the last version to compile with this compiler.
 
 
 Configuring the Build
 ================================================================
 
-So far the instructions only explain how to build release DLLs of wxWidgets
-and did not cover any configuration. It is possible to change many aspects of
-the build, including debug/release and static/dynamic settings.
+NOTE: If you use configure to build the library with Cygwin/MinGW, the
+      contents of this section does not apply, just pass the arguments
+      to configure directly in this case.
 
-Notice that in the previous versions of wxWidgets it was possible to build the
-library in either ANSI or Unicode mode but in wxWidgets 2.9 and later only a
-single, combined, build mode exists. It is still possible to set UNICODE=0 to
-disable Unicode support entirely but it is strongly not recommended and should
-be never necessary.
-
-
-Changing the Settings
+Library configuration
 ----------------------------------------------------------------
 
-There are two ways to modify the settings: either by passing the values as
-arguments when invoking make or by editing build\msw\config.$(compiler) file
-where $(compiler) is same extension as the makefile you use has (see below).
-The latter is good for setting options that never change in your development
-process (e.g. GCC_VERSION or VENDOR). If you want to build several versions of
-wxWidgets and use them side by side, the former method is better. Settings in
-config.* files are shared by all makefiles (samples, contrib, main library),
-but if you pass the options as arguments, you must use same arguments you used
-for the library when building samples or contrib libraries!
+While it is never necessary to do it, you may want to change some of
+the options in the include/wx/msw/setup.h file before building wxWidgets.
+This file is heavily commented, please read it and enable or disable
+the features you would like to compile wxWidgets with[out].
 
-Examples of invoking make in Unicode debug build (other options described
-below are set analogically):
+Notice that this file is later copied into a directory under lib for
+each of the build configurations which allows to have different
+build options for different configurations too if you edit any
+configuration-specific file.
 
-Visual C++:
-  > nmake -f makefile.vc BUILD=debug
 
-Borland C++:
-  > make -f makefile.bcc -DBUILD=debug
-  (Note that you have to use -D to set the variable, unlike in other make
-  tools!)
-
-Watcom C/C++:
-  > wmake -f makefile.wat BUILD=debug
-
-MinGW using native makefiles:
-  > mingw32-make -f makefile.gcc BUILD=debug
-
-MinGW using configure:
-  > ./configure --enable-debug
-  (see ./configure --help on details; configure is not covered in this
-  section)
-
-Cygwin using configure:
-  > ./configure --disable-precomp-headers --enable-debug
-  (use --disable-precomp-headers if Cygwin doesn't support precompiled
-  headers)
-
-Brief explanation of options and possible values is in every
-build\msw\config.* file; more detailed description follows.
-
-Basic Options
+Makefile parameters
 ----------------------------------------------------------------
+
+When building using makefiles, you can specify many build settings
+(unlike when using the project files where you are limited to choosing
+just the configuration and platform). This can be done either by
+passing the values as arguments when invoking make or by editing
+build\msw\config.$(compiler) file where $(compiler) is same extension
+as the makefile you use has (see below). The latter is good for
+setting options that never change in your development process (e.g.
+GCC_VERSION or VENDOR). If you want to build several versions of
+wxWidgets and use them side by side, the former method is better.
+Settings in config.* files are shared by all makefiles (including the
+samples), but if you pass the options as arguments, you must use same
+arguments you used for the library when building samples!
+
+For example, to build the library in release mode you can either
+change the "BUILD" variable definition in build\msw\config.$(compiler)
+or use
+
+        > nmake -f makefile.vc BUILD=debug
+        > mingw32-make -f makefile.gcc BUILD=debug
+
+depending on the compiler used.
+
+The full list of the build settings follows:
 
 BUILD=release
   Builds release version of the library. It differs from default 'debug' in
@@ -534,15 +346,12 @@ UNICODE=0
   systems and can't use MSLU (which requires MSLU=1) for some reason.
 
   This option affect name of the library ('u' is appended in the default
-  Unicode build) and the directory where the library and setup.h are store
+  Unicode build) and the directory where the library and setup.h are stored
   (ditto).
 
 WXUNIV=1
   Build wxUniversal instead of native wxMSW (see
   http://www.wxwidgets.org/wxuniv.htm for more information).
-
-Advanced Options
-----------------------------------------------------------------
 
 MONOLITHIC=1
   Starting with version 2.5.1, wxWidgets has the ability to be built as
@@ -554,22 +363,13 @@ MONOLITHIC=1
 USE_GUI=0
   Disable building GUI parts of the library, build only wxBase components used
   by console applications. Note that if you leave USE_GUI=1 then both wxBase
-  and GUI libraries are built. If you are building monolithic library, then
-  you should set wxUSE_GUI to 1 in setup.h.
+  and GUI libraries are built.
 
-USE_OPENGL=1
-  Build wxmsw29_gl.lib library with OpenGL integration class wxGLCanvas.
-  You must also modify your setup.h to #define wxUSE_GLCANVAS 1. Note that
-  OpenGL library is always built as additional library, even in monolithic
-  build!
-
-USE_HTML=0
-  Do not build wxHTML library. If MONOLITHIC=1, then you must also
-  #define wxUSE_HTML 1 in setup.h.
-
-USE_XRC=0
-  Do not build XRC resources library. If MONOLITHIC=1, then you must also
-  #define wxUSE_HTML 1 in setup.h.
+USE_$(LIBRARY)=0
+  Do not build the corresponding library (all libraries are built by
+  default). Library which can be disabled in this way are: AUI, HTML,
+  MEDIA, GL (the option name is USE_OPENGL for this one), PROPGRID,
+  QA, RIBBON, RICHTEXT, STC, WEBVIEW, XRC.
 
 RUNTIME_LIBS=static
   Links static version of C and C++ runtime libraries into the executable, so
@@ -606,6 +406,16 @@ DEBUG_INFO=1
   omitted or set to 'default' its value is determined the value of
   the BUILD option.
 
+DEBUG_RUNTIME_LIBS=0
+DEBUG_RUNTIME_LIBS=1
+  (VC++ only.) If set to 1, msvcrtd.dll is used, if to 0, msvcrt.dll
+  is used. By default msvcrtd.dll is used only if the executable
+  contains debug info and msvcrt.dll if it doesn't. It is sometimes
+  desirable to build with debug info and still link against msvcrt.dll
+  (e.g. when you want to ship the app to customers and still have
+  usable .pdb files with debug information) and this setting makes it
+  possible.
+
 TARGET_CPU=X64|IA64
   (VC++ only.) Set this variable to build for x86_64 systems. If unset, x86
   build is performed.
@@ -615,14 +425,18 @@ VENDOR=<your company name>
   distribute wxWidgets DLLs with your application. Default value is 'custom'.
   This string is included as part of DLL name. wxWidgets DLLs contain compiler
   name, version information and vendor name in them. For example
-  wxmsw290_core_bcc_custom.dll is one of DLLs build using Borland C++ with
+  wxmsw300_core_vc_custom.dll is one of DLLs build using Visual C++ with
   default settings. If you set VENDOR=mycorp, the name will change to
-  wxmsw290_core_bcc_mycorp.dll.
+  wxmsw300_core_vc_mycorp.dll.
 
 CFG=<configuration name>
   Sets configuration name so that you can have multiple wxWidgets builds with
-  different setup.h settings coexisting in same tree. See "Object and library
-  directories" below for more information.
+  different setup.h settings coexisting in same tree. The value of
+  this option is appended to the build directories names. This is
+  useful for building the library in some non-default configuration,
+  e.g. you could change wxUSE_STL to 1 in include/wx/msw/setup.h and
+  then build with "CFG=-stl". Alternatively, you could build with e.g.
+  "RUNTIME_LIBS=static CFG=-mt" when using MSVC.
 
 COMPILER_PREFIX=<string>
   If you build with multiple versions of the same compiler, you can put
@@ -631,86 +445,14 @@ COMPILER_PREFIX=<string>
   convenience variable, you can achieve the same effect (but different 
   directory names) with the CFG option.
 
+CFLAGS
+CXXFLAGS
+CPPFLAGS
+LDFLAGS
+  Additional flags to be used with C compiler, C++ compiler, C
+  preprocessor (used for both C and C++ compilation) and linker,
+  respectively.
 
-Compiler-Specific Options
-----------------------------------------------------------------
-
-* MinGW
-
-If you are using gcc-2.95 instead of gcc3, you must set GCC_VERSION to
-2.95. In build\msw\config.gcc, change
-> GCC_VERSION = 3
-to
-> GCC_VERSION = 2.95
-
-* Visual C++
-
-DEBUG_RUNTIME_LIBS=0
-DEBUG_RUNTIME_LIBS=1
-  If set to 1, msvcrtd.dll is used, if to 0, msvcrt.dll is used. By default
-  msvcrtd.dll is used only if the executable contains debug info and
-  msvcrt.dll if it doesn't. It is sometimes desirable to build with debug info
-  and still link against msvcrt.dll (e.g. when you want to ship the app to
-  customers and still have usable .pdb files with debug information) and this
-  setting makes it possible.
-
-Fine-tuning the Compiler
-----------------------------------------------------------------
-
-All makefiles have variables that you can use to specify additional options
-passed to the compiler or linker. You won't need this in most cases, but if you
-do, simply add desired flags to CFLAGS (for C compiler), CXXFLAGS (for C++
-compiler), CPPFLAGS (for both C and C++ compiler) and LDFLAGS (the linker).
-
-Object and Library Directories
-----------------------------------------------------------------
-
-All object files produced during a library build are stored in a directory under
-build\msw. Its name is derived from the build settings and CFG variable and from
-the compiler name. Examples of directory names:
-
-  build\msw\bcc_msw            SHARED=0
-  build\msw\bcc_mswdll         SHARED=1
-  build\msw\bcc_mswunivd       SHARED=0, WXUNIV=1, BUILD=debug
-  build\msw\vc_mswunivd        ditto, with Visual C++
-
-Libraries and DLLs are copied into a subdirectory of the lib directory with a
-name derived from the compiler and a static/DLL setting and setup.h into a
-directory with a name that contains other settings:
-
-  lib\bcc_msw
-  lib\bcc_lib\msw\wx\setup.h
-  lib\bcc_dll
-  lib\bcc_dll\msw\wx\setup.h
-  lib\bcc_lib
-  lib\bcc_lib\mswunivd\wx\setup.h
-  lib\vc_lib
-  lib\vc_lib\mswunivd\wx\setup.h
-
-Each lib\ subdirectory has wx subdirectory with setup.h as seen above.
-This file is copied there from include\wx\msw\setup.h (and if it doesn't exist,
-from include\wx\msw\setup0.h) and this is the copy of setup.h that is used by
-all samples and should be used by your apps as well. If you are doing changes
-to setup.h, you should do them in this file, _not_ in include\wx\msw\setup.h.
-
-If you set CFG to something, the value is appended to directory names. E.g.
-for CFG=MyBuild, you'll have object files in
-
-  build\msw\bcc_mswMyBuild
-  build\msw\bcc_mswdllMyBuild
-  etc.
-
-and libraries in
-
-  lib\bcc_libMyBuild
-  lib\bcc_dllMyBuild
-  etc.
-
-By now it is clear what CFG is for: builds with different CFG settings don't
-share any files and they use different setup.h files. For example, this allows
-you to have two static debug builds, one with wxUSE_SOCKETS=0 and one with sockets
-enabled (without CFG, both of them would be put into same directory and there
-would be conflicts between the files).
 
 
 Building Applications Using wxWidgets
@@ -741,8 +483,8 @@ following to use wxWidgets:
 * Add the list of libraries to link with to the linker input. The exact list
   depends on which libraries you use and whether you built wxWidgets in
   monolithic or default multlib mode and basically should include all the
-  relevant libraries from the directory above, e.g. "wxmsw29ud_core.lib
-  wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
+  relevant libraries from the directory above, e.g. "wxmsw30ud_core.lib
+  wxbase30ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib
   wxexpatd.lib" for a debug build of an application using the core library only
   (all wxWidgets applications use the base library).
 

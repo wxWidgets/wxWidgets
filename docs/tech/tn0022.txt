@@ -4,6 +4,8 @@
 Before making the release
 -------------------------
 
+Change the version in include/wx/version.h.
+
 Update docs/readme.txt. Please review its contents in addition to just
 changing the version number.
 

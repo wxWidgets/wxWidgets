@@ -7,11 +7,11 @@
 
 /**
 
-@page page_multiplatform General Cross-Platform Development Tips
+@page page_multiplatform Cross-Platform Development Tips
 
 @tableofcontents
 
-This chapter describes some tips related to cross-platform development.
+This chapter describes some general tips related to cross-platform development.
 
 
 
@@ -128,7 +128,7 @@ On Windows using a compiler other than MinGW/Cygwin, you would build the
 wxWidgets library from the @c "build/msw" directory which contains the relevant
 makefiles.
 
-On Windows using MinGW/Cygwin, and on Unix, MacOS X and OS/2, you invoke
+On Windows using MinGW/Cygwin, and on Unix, OS X and OS/2, you invoke
 'configure' (found in the top-level of the wxWidgets source hierarchy), from
 within a suitable empty directory for containing makefiles, object files and
 libraries.

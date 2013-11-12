@@ -3496,6 +3496,12 @@ size_t wxListMainWindow::GetItemCount() const
 
 void wxListMainWindow::SetItemCount(long count)
 {
+    // Update the current item if it's not valid any longer (notice that this
+    // invalidates it completely if the control is becoming empty, which is the
+    // right thing to do).
+    if ( HasCurrent() && m_current >= (size_t)count )
+        ChangeCurrent(count - 1);
+
     m_selStore.SetItemCount(count);
     m_countVirt = count;
 

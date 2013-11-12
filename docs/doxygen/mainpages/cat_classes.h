@@ -7,12 +7,13 @@
 
 /**
 
-@page page_class_cat Summarized Class List by Category
+@page page_class_cat Overview of Available Classes
 
 @tableofcontents
 
 This page contains a summarized listing of classes, please see the
-@ref group_class page for a full listing.
+@ref group_class page for a full listing by category or the
+<a href="classes.html">full list of classes</a> in alphabetical order.
 
 
 

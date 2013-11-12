@@ -1271,7 +1271,7 @@ public:
         @return @true on success, @false if an error occurred (for example,
                 the file doesn't exist).
     */
-    bool SetPermissions(int permissions)
+    bool SetPermissions(int permissions);
 
     /**
         Sets the file creation and last access/modification times (any of the pointers

@@ -239,6 +239,9 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - wxAny now uses C locale format for the floating point numbers and not the
   current locale one, i.e. decimal point is always used.
 
+- wxGridBagSizer::AddGrowable{Col,Row}() must now be called after the items are
+  added to the sizer, i.e. the columns and rows already exist.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
@@ -567,7 +570,24 @@ Major new features in this release
   was added.
 
 
-3.0-RC2: (released 2013-10-xx)
+3.0.0: (released 2013-11-11)
+----------------------------
+
+All:
+
+- Fix crash if wxCharBuffer fails to allocate the requested amount of memory.
+
+wxGTK:
+
+- Fix wxSpinButton default width under GTK+ 3 (David Hart).
+
+wxMSW:
+
+- Compilation fix for WXWIN_COMPATIBILITY_2_6=1 case (Tim Stahlhut).
+- Fix behaviour of wxComboBox using ID=1000.
+
+
+3.0-RC2: (released 2013-10-28)
 ------------------------------
 
 All:
@@ -674,7 +694,7 @@ All:
 - Add separate read/written bytes counters and per-direction NOWAIT and WAITALL
   flags to wxSocket (Rob Bresalier).
 - Add wxEventLoop::ScheduleExit() (Rob Bresalier).
-- Add wxProcess::SetPriority() (Marian Meravy).
+- Add wxProcess::SetPriority() (Marián "VooDooMan" Meravý).
 - Add wxDir::Close() method (Silverstorm82).
 - Fix wxDateTime::GetWeekOfYear() for the last week of year (aimo).
 - Fix compilation of wxHash{Map,Set} with g++ 4.7 (Nathan Ridge).

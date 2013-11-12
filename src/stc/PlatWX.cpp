@@ -537,15 +537,12 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, XYPOSITION *
         }
         ui++;
     }
-#else
-
+#else // !wxUSE_UNICODE
     // If not unicode then just use the widths we have
-#if wxUSE_STD_CONTAINERS
-    std::copy(tpos.begin(), tpos.end(), positions);
-#else
-    memcpy(positions, tpos.begin(), len * sizeof(int));
-#endif
-#endif
+    for (int i = 0; i < len; i++) {
+        positions[i] = tpos[i];
+    }
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 
