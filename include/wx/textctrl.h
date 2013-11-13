@@ -205,8 +205,8 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_EFFECTS              = 0x00800000,
     wxTEXT_ATTR_OUTLINE_LEVEL        = 0x01000000,
 
-    wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE = 0x02000000,
-    wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER =  0x04000000,
+    wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE = 0x20000000,
+    wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER =  0x40000000,
 
     /*!
     * Character and paragraph combined styles
