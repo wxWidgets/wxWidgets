@@ -39,6 +39,9 @@
     #include <X11/Xatom.h>  // XA_CARDINAL
     #include "wx/unix/utilsx11.h"
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+    #include <gdk/gdkwayland.h>
+#endif
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/gtk2-compat.h"
@@ -730,7 +733,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
             m_gdkDecor |= GDK_DECOR_TITLE;
 #if defined(GDK_WINDOWING_WAYLAND) && GTK_CHECK_VERSION(3,10,0)
         else if (
-            GDK_IS_WAYLAND_SCREEN(gtk_window_get_screen(GTK_WINDOW(m_widget))) &&
+            GDK_IS_WAYLAND_DISPLAY(gtk_widget_get_display(m_widget)) &&
             gtk_check_version(3,10,0) == NULL)
         {
             gtk_window_set_titlebar(GTK_WINDOW(m_widget), gtk_header_bar_new());
