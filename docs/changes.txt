@@ -570,6 +570,15 @@ Major new features in this release
   was added.
 
 
+
+3.0.1: (released 2014-xx-xx)
+----------------------------
+
+All (GUI):
+
+- Fix crash when setting invalid label ending with "&" (ZaneUJi).
+
+
 3.0.0: (released 2013-11-11)
 ----------------------------
 
