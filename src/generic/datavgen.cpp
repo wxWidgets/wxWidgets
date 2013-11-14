@@ -119,6 +119,34 @@ wxDataViewColumn* GetExpanderColumnOrFirstOne(wxDataViewCtrl* dataview)
     return expander;
 }
 
+wxTextCtrl *CreateEditorTextCtrl(wxWindow *parent, const wxRect& labelRect, const wxString& value)
+{
+    wxTextCtrl* ctrl = new wxTextCtrl(parent, wxID_ANY, value,
+                                      wxPoint(labelRect.x,labelRect.y),
+                                      wxSize(labelRect.width,labelRect.height),
+                                      wxTE_PROCESS_ENTER);
+
+    // Adjust size of wxTextCtrl editor to fit text, even if it means being
+    // wider than the corresponding column (this is how Explorer behaves).
+    const int fitting = ctrl->GetSizeFromTextSize(ctrl->GetTextExtent(ctrl->GetValue())).x;
+    const int current = ctrl->GetSize().x;
+    const int maxwidth = ctrl->GetParent()->GetSize().x - ctrl->GetPosition().x;
+
+    // Adjust size so that it fits all content. Don't change anything if the
+    // allocated space is already larger than needed and don't extend wxDVC's
+    // boundaries.
+    int width = wxMin(wxMax(current, fitting), maxwidth);
+
+    if ( width != current )
+        ctrl->SetSize(wxSize(width, -1));
+
+    // select the text in the control an place the cursor at the end
+    ctrl->SetInsertionPointEnd();
+    ctrl->SelectAll();
+
+    return ctrl;
+}
+
 } // anonymous namespace
 
 //-----------------------------------------------------------------------------
@@ -958,16 +986,7 @@ bool wxDataViewTextRenderer::HasEditorCtrl() const
 wxWindow* wxDataViewTextRenderer::CreateEditorCtrl( wxWindow *parent,
         wxRect labelRect, const wxVariant &value )
 {
-    wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, value,
-                                       wxPoint(labelRect.x,labelRect.y),
-                                       wxSize(labelRect.width,labelRect.height),
-                                       wxTE_PROCESS_ENTER );
-
-    // select the text in the control an place the cursor at the end
-    ctrl->SetInsertionPointEnd();
-    ctrl->SelectAll();
-
-    return ctrl;
+    return CreateEditorTextCtrl(parent, labelRect, value);
 }
 
 bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxWindow *editor, wxVariant &value )
@@ -1239,16 +1258,7 @@ wxWindow* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect 
         labelRect.width -= w;
     }
 
-    wxTextCtrl* ctrl = new wxTextCtrl( parent, wxID_ANY, text,
-                                       wxPoint(labelRect.x,labelRect.y),
-                                       wxSize(labelRect.width,labelRect.height),
-                                       wxTE_PROCESS_ENTER );
-
-    // select the text in the control an place the cursor at the end
-    ctrl->SetInsertionPointEnd();
-    ctrl->SelectAll();
-
-    return ctrl;
+    return CreateEditorTextCtrl(parent, labelRect, text);
 }
 
 bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxWindow *editor, wxVariant& value )
