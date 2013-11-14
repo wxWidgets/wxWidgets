@@ -257,6 +257,8 @@ protected:
     }
 
 private:
+    void FinishEditing();
+
     bool SendEvent(wxEventType type, unsigned int n)
     {
         wxDataViewCtrl * const owner = GetOwner();
@@ -274,6 +276,8 @@ private:
 
     void OnClick(wxHeaderCtrlEvent& event)
     {
+        FinishEditing();
+
         const unsigned idx = event.GetColumn();
 
         if ( SendEvent(wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, idx) )
@@ -318,6 +322,8 @@ private:
 
     void OnResize(wxHeaderCtrlEvent& event)
     {
+        FinishEditing();
+
         wxDataViewCtrl * const owner = GetOwner();
 
         const unsigned col = event.GetColumn();
@@ -327,6 +333,8 @@ private:
 
     void OnEndReorder(wxHeaderCtrlEvent& event)
     {
+        FinishEditing();
+
         wxDataViewCtrl * const owner = GetOwner();
         owner->ColumnMoved(owner->GetColumn(event.GetColumn()),
                         event.GetNewOrder());
@@ -797,6 +805,7 @@ public:
     // Called by wxDataViewCtrl and our own OnRenameTimer() to start edit the
     // specified item in the given column.
     void StartEditing(const wxDataViewItem& item, const wxDataViewColumn* col);
+    void FinishEditing();
 
 private:
     int RecalculateCount() const;
@@ -2202,6 +2211,20 @@ wxDataViewMainWindow::StartEditing(const wxDataViewItem& item,
         m_editorRenderer = renderer;
         m_editorCtrl = renderer->GetEditorCtrl();
     }
+}
+
+void wxDataViewMainWindow::FinishEditing()
+{
+    if ( m_editorCtrl )
+    {
+        m_editorRenderer->FinishEditing();
+    }
+}
+
+void wxDataViewHeaderWindow::FinishEditing()
+{
+    wxDataViewMainWindow *win = static_cast<wxDataViewMainWindow*>(GetOwner()->GetMainWindow());
+    win->FinishEditing();
 }
 
 //-----------------------------------------------------------------------------
