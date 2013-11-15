@@ -582,6 +582,10 @@ wxGTK:
 
 - Fix mouse wheel scrolling in wxListCtrl broken just before 3.0.0.
 
+wxMSW:
+
+- Fix blank wxBitmapComboBox dropdown appearance.
+
 
 3.0.0: (released 2013-11-11)
 ----------------------------
