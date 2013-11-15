@@ -175,3 +175,6 @@ milestone (ask Vadim or Robin to do it or to get admin password).
 
 Run misc/scripts/inc_release to increment micro version, i.e. replace x.y.z
 with x.y.z+1 (minor or major versions updates require manual intervention).
+
+Update the definition of the stable and release branches in
+build/buildbot/config/include/defs.xml after a minor version change.

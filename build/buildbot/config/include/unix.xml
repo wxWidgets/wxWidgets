@@ -37,7 +37,7 @@
     Usage typically just:
         <checkout/>
     for the trunk, or:
-        <checkout branch="branches/WX_2_8_BRANCH"/>
+        <checkout branch="branches/WX_3_0_BRANCH"/>
     to checkout a branch.
 -->
 <xsl:template name="checkout">
