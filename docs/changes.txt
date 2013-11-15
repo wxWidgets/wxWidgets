@@ -578,6 +578,10 @@ All (GUI):
 
 - Fix crash when setting invalid label ending with "&" (ZaneUJi).
 
+wxGTK:
+
+- Fix mouse wheel scrolling in wxListCtrl broken just before 3.0.0.
+
 
 3.0.0: (released 2013-11-11)
 ----------------------------
