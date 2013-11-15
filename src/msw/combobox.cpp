@@ -683,7 +683,7 @@ wxWindow *wxComboBox::MSWFindItem(long id, WXHWND hWnd) const
     // our own one. So we must explicitly check the HWND value too here and
     // avoid eating the events from the listbox as otherwise it is rendered
     // inoperative, see #15647.
-    if ( id == GetId() && hWnd != GetHWND() )
+    if ( id == GetId() && hWnd && hWnd != GetHWND() )
     {
         // Must be the case described above.
         return NULL;
