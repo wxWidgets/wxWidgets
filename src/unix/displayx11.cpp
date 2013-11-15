@@ -252,8 +252,7 @@ wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& mode) const
         {
             XF86VidModeModeInfo& info = *ppXModes[i];
             const wxVideoMode vm = wxCVM(info, display, nScreen);
-            if (mode == wxDefaultVideoMode || //According to display.h All modes valid if dafault mode...
-                mode.Matches(vm)) //...?
+            if (vm.Matches(mode))
             {
                 Modes.Add(vm);
             }
@@ -341,7 +340,7 @@ wxArrayVideoModes wxDisplayImplX11::GetModes(const wxVideoMode& modeMatch) const
             wxVideoMode mode(m_rect.GetWidth(), m_rect.GetHeight(), depths[x]);
             if ( mode.Matches(modeMatch) )
             {
-                modes.Add(modeMatch);
+                modes.Add(mode);
             }
         }
 
