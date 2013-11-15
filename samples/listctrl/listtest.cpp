@@ -1305,7 +1305,7 @@ void MyListCtrl::OnRightClick(wxMouseEvent& event)
 
 void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)
 {
-    wxLogMessage(wxT("Item %d: %s (item text = %s, data = %ld)"),
+    wxLogMessage(wxT("Item %ld: %s (item text = %s, data = %ld)"),
                  event.GetIndex(), eventName,
                  event.GetText(), static_cast<long>(event.GetData()));
 }
