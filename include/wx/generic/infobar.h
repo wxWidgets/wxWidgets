@@ -79,6 +79,11 @@ public:
     // (default font is a larger and bold version of the normal one)
     virtual bool SetFont(const wxFont& font);
 
+#if wxABI_VERSION >= 30001
+    // same thing with the colour: this affects the text colour
+    virtual bool SetForegroundColour(const wxColor& colour);
+#endif // 3.0.1+
+
 protected:
     // info bar shouldn't have any border by default, the colour difference
     // between it and the main window separates it well enough

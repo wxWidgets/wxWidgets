@@ -110,6 +110,17 @@ bool wxInfoBarGeneric::SetFont(const wxFont& font)
     return true;
 }
 
+bool wxInfoBarGeneric::SetForegroundColour(const wxColor& colour)
+{
+    if ( !wxInfoBarBase::SetForegroundColour(colour) )
+        return false;
+
+    if ( m_text )
+        m_text->SetForegroundColour(colour);
+
+    return true;
+}
+
 wxInfoBarGeneric::BarPlacement wxInfoBarGeneric::GetBarPlacement() const
 {
     wxSizer * const sizer = GetContainingSizer();

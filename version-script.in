@@ -24,6 +24,10 @@
 # symbols available since the beginning of this branch are only given
 # generic branch tag (don't remove this!):
 
+@WX_VERSION_TAG@.1 {
+        *wxInfoBarGeneric*SetForegroundColour*;
+};
+
 @WX_VERSION_TAG@ {
         *;
 };
