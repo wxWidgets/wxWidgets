@@ -276,6 +276,24 @@ void wxBell()
     return self;
 }
 
+- (void) transformToForegroundApplication {
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    
+    if ( UMAGetSystemVersion() < 0x1090 )
+    {
+        [self deactivate];
+        [self activateIgnoringOtherApps:YES];
+    }
+    else
+    {
+        [[NSRunningApplication currentApplication] activateWithOptions:
+            (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
+    }
+}
+
+
+
 /* This is needed because otherwise we don't receive any key-up events for command-key
  combinations (an AppKit bug, apparently)			*/
 - (void)sendEvent:(NSEvent *)anEvent
@@ -311,6 +329,20 @@ bool wxApp::DoInitGui()
     if (!sm_isEmbedded)
     {
         [wxNSApplication sharedApplication];
+
+        if ( OSXIsGUIApplication() )
+        {
+            CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle() ) ;
+            CFStringRef path = CFURLCopyFileSystemPath ( url , kCFURLPOSIXPathStyle ) ;
+            CFRelease( url ) ;
+            wxString app = wxCFStringRef(path).AsString(wxLocale::GetSystemEncoding());
+            
+            // workaround is only needed for non-bundled apps
+            if ( !app.EndsWith(".app") )
+            {
+                [(wxNSApplication*) [wxNSApplication sharedApplication] transformToForegroundApplication];
+            }
+        }
 
         appcontroller = OSXCreateAppController();
         [NSApp setDelegate:appcontroller];
