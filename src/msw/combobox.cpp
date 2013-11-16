@@ -228,36 +228,55 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
         case WM_CHAR:
             // for compatibility with wxTextCtrl, generate a special message
             // when Enter is pressed
-            if ( wParam == VK_RETURN )
+            switch ( wParam )
             {
-                if (SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0))
-                    return false;
+                case VK_RETURN:
+                    {
+                        if (SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0))
+                            return false;
 
-                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
+                        wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
 
-                const int sel = GetSelection();
-                event.SetInt(sel);
-                event.SetString(GetValue());
-                InitCommandEventWithItems(event, sel);
+                        const int sel = GetSelection();
+                        event.SetInt(sel);
+                        event.SetString(GetValue());
+                        InitCommandEventWithItems(event, sel);
 
-                if ( ProcessCommand(event) )
-                {
-                    // don't let the event through to the native control
-                    // because it doesn't need it and may generate an annoying
-                    // beep if it gets it
-                    return true;
-                }
+                        if ( ProcessCommand(event) )
+                        {
+                            // don't let the event through to the native control
+                            // because it doesn't need it and may generate an annoying
+                            // beep if it gets it
+                            return true;
+                        }
+                    }
+                    break;
+
+                case VK_TAB:
+                    // If we have wxTE_PROCESS_ENTER style, we get all char
+                    // events, including those for TAB which are usually used
+                    // for keyboard navigation, but we should not process them
+                    // unless we also have wxTE_PROCESS_TAB style.
+                    if ( !HasFlag(wxTE_PROCESS_TAB) )
+                    {
+                        int flags = 0;
+                        if ( !wxIsShiftDown() )
+                            flags |= wxNavigationKeyEvent::IsForward;
+                        if ( wxIsCtrlDown() )
+                            flags |= wxNavigationKeyEvent::WinChange;
+                        if ( Navigate(flags) )
+                            return true;
+                    }
+                    break;
             }
-            // fall through, WM_CHAR is one of the message we should forward.
+    }
 
-        default:
-            if ( ShouldForwardFromEditToCombo(msg) )
-            {
-                // For all the messages forward from the edit control the
-                // result is not used.
-                WXLRESULT result;
-                return MSWHandleMessage(&result, msg, wParam, lParam);
-            }
+    if ( ShouldForwardFromEditToCombo(msg) )
+    {
+        // For all the messages forward from the edit control the
+        // result is not used.
+        WXLRESULT result;
+        return MSWHandleMessage(&result, msg, wParam, lParam);
     }
 
     return false;
