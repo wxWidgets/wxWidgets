@@ -574,6 +574,10 @@ Major new features in this release
 3.0.1: (released 2014-xx-xx)
 ----------------------------
 
+All:
+
+- Fix wxSocket::WaitForAccept() in non-main thread (Hajo Kirchhoff).
+
 All (GUI):
 
 - Fix crash when setting invalid label ending with "&" (ZaneUJi).
