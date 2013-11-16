@@ -589,6 +589,7 @@ wxGTK:
 wxMSW:
 
 - Fix blank wxBitmapComboBox dropdown appearance.
+- Make "%lu" work with size_t arguments under Win64 (laro).
 
 
 3.0.0: (released 2013-11-11)
