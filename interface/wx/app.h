@@ -880,6 +880,27 @@ public:
     */
     virtual void MacReopenApp();
 
+    /**
+        May be overridden to indicate that the application is not a foreground
+        GUI application under OS X.
+
+        This method is called during the application startup and returns @true
+        by default. In this case, wxWidgets ensures that the application is ran
+        as a foreground, GUI application so that the user can interact with it
+        normally, even if it is not bundled. If this is undesired, i.e. if the
+        application doesn't need to be brought to the foreground, this method
+        can be overridden to return @false.
+
+        Notice that overriding it doesn't make any difference for the bundled
+        applications which are always foreground unless @c LSBackgroundOnly key
+        is specified in the @c Info.plist file.
+
+        @onlyfor{wxosx}
+        
+        @since 3.0.1
+    */
+    virtual bool OSXIsGUIApplication();
+
     //@}
 
 };
