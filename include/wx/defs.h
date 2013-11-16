@@ -953,6 +953,10 @@ typedef wxUint16 wxWord;
             #define SIZEOF_LONG 4
         #endif
 
+        #ifndef SIZEOF_LONG_LONG
+            #define SIZEOF_LONG_LONG 8
+        #endif
+
         #ifndef SIZEOF_WCHAR_T
             /* Windows uses UTF-16 */
             #define SIZEOF_WCHAR_T 2
