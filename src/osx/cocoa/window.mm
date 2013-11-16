@@ -1396,7 +1396,9 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
                 wxevent.m_rawFlags = 0;
                 wxevent.SetTimestamp();
                 unichar aunichar = [text characterAtIndex:i];
+#if wxUSE_UNICODE
                 wxevent.m_uniChar = aunichar;
+#endif
                 wxevent.m_keyCode = aunichar < 0x80 ? aunichar : WXK_NONE;
                 wxWindowMac* peer = GetWXPeer();
                 if ( peer )
