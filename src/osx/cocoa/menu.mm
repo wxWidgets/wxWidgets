@@ -194,6 +194,10 @@ public :
     {
         [NSApp setMainMenu:m_osxMenu];
         [NSApp setAppleMenu:[[m_osxMenu itemAtIndex:0] submenu]];
+
+        wxMenuItem *services = GetWXPeer()->FindItem(wxID_OSX_SERVICES);
+        if ( services )
+            [NSApp setServicesMenu:services->GetSubMenu()->GetHMenu()];
     }
 
     virtual void Enable( bool WXUNUSED(enable) )

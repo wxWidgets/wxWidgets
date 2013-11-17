@@ -615,6 +615,9 @@ static wxMenu *CreateAppleMenu()
         appleMenu->AppendSeparator();
     }
 
+    appleMenu->Append(wxID_OSX_SERVICES, _("Services"), new wxMenu());
+    appleMenu->AppendSeparator();
+
     // standard menu items, handled in wxMenu::HandleCommandProcess(), see above:
     wxString hideLabel;
     hideLabel = wxString::Format(_("Hide %s"), wxTheApp ? wxTheApp->GetAppDisplayName() : _("Application"));
