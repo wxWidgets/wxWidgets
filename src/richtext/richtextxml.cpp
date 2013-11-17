@@ -352,7 +352,6 @@ bool wxRichTextObject::ImportFromXML(wxRichTextBuffer* WXUNUSED(buffer), wxXmlNo
     wxString value = node->GetAttribute(wxT("show"), wxEmptyString);
     if (!value.IsEmpty())
         Show(value == wxT("1"));
-    SetId(node->GetAttribute(wxT("id"), wxEmptyString));
 
     *recurse = true;
 
@@ -837,15 +836,6 @@ bool wxRichTextParagraphLayoutBox::ImportFromXML(wxRichTextBuffer* buffer, wxXml
     if (partial == wxT("true"))
         SetPartialParagraph(true);
 
-    wxRichTextCell* cell = wxDynamicCast(this, wxRichTextCell);
-    if (cell)
-    {
-        if (node->HasAttribute(wxT("colspan")))
-            cell->SetColSpan(wxAtoi(node->GetAttribute(wxT("colspan"), wxEmptyString)));
-        if (node->HasAttribute(wxT("rowspan")))
-            cell->SetRowSpan(wxAtoi(node->GetAttribute(wxT("rowspan"), wxEmptyString)));
-    }
-
     wxXmlNode* child = handler->GetHelper().FindNode(node, wxT("stylesheet"));
     if (child && (handler->GetFlags() & wxRICHTEXT_HANDLER_INCLUDE_STYLESHEET))
     {
@@ -886,13 +876,6 @@ bool wxRichTextParagraphLayoutBox::ExportXML(wxOutputStream& stream, int indent,
     if (GetPartialParagraph())
         style << wxT(" partialparagraph=\"true\"");
 
-    wxRichTextCell* cell = wxDynamicCast(this, wxRichTextCell);
-    if (cell)
-    {
-        style << wxT(" colspan=\"") << wxString::Format(wxT("%d"), cell->GetColSpan()) << wxT("\"");
-        style << wxT(" rowspan=\"") << wxString::Format(wxT("%d"), cell->GetRowSpan()) << wxT("\"");
-    }
-
     handler->GetHelper().OutputString(stream, style + wxT(">"));
 
     if (GetProperties().GetCount() > 0)
@@ -924,13 +907,6 @@ bool wxRichTextParagraphLayoutBox::ExportXML(wxXmlNode* parent, wxRichTextXMLHan
 
     if (GetPartialParagraph())
         elementNode->AddAttribute(wxT("partialparagraph"), wxT("true"));
-
-    wxRichTextCell* cell = wxDynamicCast(this, wxRichTextCell);
-    if (cell)
-    {
-        elementNode->AddAttribute(wxT("colspan"), wxString::Format(wxT("%d"), cell->GetColSpan()));
-        elementNode->AddAttribute(wxT("rowspan"), wxString::Format(wxT("%d"), cell->GetRowSpan()));
-    }
 
     size_t i;
     for (i = 0; i < GetChildCount(); i++)
@@ -2266,8 +2242,6 @@ wxString wxRichTextXMLHelper::AddAttributes(wxRichTextObject* obj, bool isPara)
     wxString style = AddAttributes(obj->GetAttributes(), isPara);
     if (!obj->IsShown())
         style << wxT(" show=\"0\"");
-    if (!obj->GetId().IsEmpty())
-        style << wxT(" id=\"") << AttributeToXML(obj->GetId()) << wxT("\"");
     return style;
 }    
 
@@ -2758,8 +2732,6 @@ bool wxRichTextXMLHelper::AddAttributes(wxXmlNode* node, wxRichTextObject* obj, 
     {
         if (!obj->IsShown())
             node->AddAttribute(wxT("show"), wxT("0"));
-        if (!obj->GetId().IsEmpty())
-            node->AddAttribute(wxT("id"), obj->GetId());
     }
 
     return AddAttributes(node, obj->GetAttributes(), isPara);

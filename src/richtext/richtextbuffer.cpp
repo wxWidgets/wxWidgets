@@ -531,7 +531,6 @@ void wxRichTextObject::Copy(const wxRichTextObject& obj)
     m_properties = obj.m_properties;
     m_descent = obj.m_descent;
     m_show = obj.m_show;
-    m_id = obj.m_id;
 }
 
 // Get/set the top-level container of this object.
@@ -7184,9 +7183,6 @@ bool wxRichTextPlainText::CanMerge(wxRichTextObject* object, wxRichTextDrawingCo
         if (!wxTextAttrEq(GetAttributes(), object->GetAttributes()) || !(m_properties == object->GetProperties()))
             return false;
             
-        if (!otherObj->GetId().IsEmpty() && GetId() != otherObj->GetId())
-            return false;
-
         // Check if differing virtual attributes makes it impossible to merge
         // these strings.
         
@@ -9393,8 +9389,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichTextCell, wxRichTextBox)
 wxRichTextCell::wxRichTextCell(wxRichTextObject* parent):
     wxRichTextBox(parent)
 {
-    m_colSpan = 1;
-    m_rowSpan = 1;
 }
 
 /// Draw the item
@@ -9567,23 +9561,6 @@ bool wxRichTextCell::AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingCon
 void wxRichTextCell::Copy(const wxRichTextCell& obj)
 {
     wxRichTextBox::Copy(obj);
-
-    m_colSpan = obj.m_colSpan;
-    m_rowSpan = obj.m_rowSpan;
-}
-
-void wxRichTextCell::SetColSpan(int span)
-{
-    wxASSERT(span >= 1);
-    if (span >= 1)
-        m_colSpan = span;
-}
-
-void wxRichTextCell::SetRowSpan(int span)
-{
-    wxASSERT(span >= 1);
-    if (span >= 1)
-        m_rowSpan = span;
 }
 
 // Edit properties via a GUI
@@ -9664,6 +9641,43 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
     }
     else
         return false;
+}
+
+void wxRichTextCell::SetColSpan(int span)
+{
+    wxASSERT(span >= 1);
+    if (span >= 1)
+        GetProperties().SetProperty(wxT("colspan"), (long) span);
+}
+
+void wxRichTextCell::SetRowSpan(int span)
+{
+    wxASSERT(span >= 1);
+    if (span >= 1)
+        GetProperties().SetProperty(wxT("rowspan"), (long) span);
+}
+
+// The next 2 methods return span values. Note that the default is 1, not 0
+int wxRichTextCell::GetColSpan() const
+{
+    int span = 1;
+    if (GetProperties().HasProperty(wxT("colspan")))
+    {
+        span = GetProperties().GetPropertyLong(wxT("colspan"));
+    }
+
+    return span;
+}
+
+int wxRichTextCell::GetRowSpan() const
+{
+    int span = 1;
+    if (GetProperties().HasProperty(wxT("rowspan")))
+    {
+        span = GetProperties().GetPropertyLong(wxT("rowspan"));
+    }
+
+    return span;
 }
 
 WX_DEFINE_OBJARRAY(wxRichTextObjectPtrArrayArray)

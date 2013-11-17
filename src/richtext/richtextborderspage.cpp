@@ -605,7 +605,7 @@ void wxRichTextBordersPage::CreateControls()
 
     itemBoxSizer3->Add(itemNotebook4, 0, wxGROW|wxALL, 5);
 
-    m_borderPreviewCtrl = new wxRichTextBorderPreviewCtrl( itemRichTextDialogPage1, ID_RICHTEXT_BORDER_PREVIEW, wxDefaultPosition, wxSize(60, 60), wxBORDER_THEME );
+    m_borderPreviewCtrl = new wxRichTextBorderPreviewCtrl( itemRichTextDialogPage1, ID_RICHTEXT_BORDER_PREVIEW, wxDefaultPosition, wxSize(60, 60), wxBORDER_THEME|wxFULL_REPAINT_ON_RESIZE );
     itemBoxSizer3->Add(m_borderPreviewCtrl, 1, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
 ////@end wxRichTextBordersPage content construction
