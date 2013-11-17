@@ -1430,83 +1430,88 @@ bool wxRichTextCompositeObject::Defragment(wxRichTextDrawingContext& context, co
         {
             wxRichTextCompositeObject* composite = wxDynamicCast(child, wxRichTextCompositeObject);
             if (composite)
-                composite->Defragment(context);
-
-            // Optimization: if there are no virtual attributes, we won't need to
-            // to split objects in order to paint individually attributed chunks.
-            // So only merge in this case.
-            if (!context.GetVirtualAttributesEnabled())
             {
-                if (node->GetNext())
+                composite->Defragment(context);
+                node = node->GetNext();
+            }
+            else
+            {
+                // Optimization: if there are no virtual attributes, we won't need to
+                // to split objects in order to paint individually attributed chunks.
+                // So only merge in this case.
+                if (!context.GetVirtualAttributesEnabled())
                 {
-                    wxRichTextObject* nextChild = node->GetNext()->GetData();
-                    if (child->CanMerge(nextChild, context) && child->Merge(nextChild, context))
+                    if (node->GetNext())
                     {
-                        nextChild->Dereference();
-                        m_children.Erase(node->GetNext());
+                        wxRichTextObject* nextChild = node->GetNext()->GetData();
+                        if (child->CanMerge(nextChild, context) && child->Merge(nextChild, context))
+                        {
+                            nextChild->Dereference();
+                            m_children.Erase(node->GetNext());
+                        }
+                        else
+                            node = node->GetNext();
                     }
                     else
                         node = node->GetNext();
                 }
                 else
-                    node = node->GetNext();
-            }
-            else
-            {
-                // If we might have virtual attributes, we first see if we have to split
-                // objects so that they may be painted with potential virtual attributes,
-                // since text objects can only draw or measure with a single attributes object
-                // at a time.
-                wxRichTextObject* childAfterSplit = child;
-                if (child->CanSplit(context))
                 {
-                    childAfterSplit = child->Split(context);
-                    node = m_children.Find(childAfterSplit);                        
-                }
-
-                if (node->GetNext())
-                {
-                    wxRichTextObject* nextChild = node->GetNext()->GetData();
-                    
-                    // First split child and nextChild so we have smaller fragments to merge.
-                    // Then Merge only has to test per-object virtual attributes
-                    // because for an object with all the same sub-object attributes,
-                    // then any general virtual attributes should be merged with sub-objects by
-                    // the implementation.
-                    
-                    wxRichTextObject* nextChildAfterSplit = nextChild;
-
-                    if (nextChildAfterSplit->CanSplit(context))
-                        nextChildAfterSplit = nextChild->Split(context);
-
-                    bool splitNextChild = nextChild != nextChildAfterSplit;
-                        
-                    // See if we can merge this new fragment with (perhaps the first part of) the next object.
-                    // Note that we use nextChild because if we had split nextChild, the first object always
-                    // remains (and further parts are appended). However we must use childAfterSplit since
-                    // it's the last part of a possibly split child.
-                    
-                    if (childAfterSplit->CanMerge(nextChild, context) && childAfterSplit->Merge(nextChild, context))
+                    // If we might have virtual attributes, we first see if we have to split
+                    // objects so that they may be painted with potential virtual attributes,
+                    // since text objects can only draw or measure with a single attributes object
+                    // at a time.
+                    wxRichTextObject* childAfterSplit = child;
+                    if (child->CanSplit(context))
                     {
-                        nextChild->Dereference();
-                        m_children.Erase(node->GetNext());
+                        childAfterSplit = child->Split(context);
+                        node = m_children.Find(childAfterSplit);                        
+                    }
 
-                        // Don't set node -- we'll see if we can merge again with the next
-                        // child. UNLESS we split this or the next child, in which case we know we have to
-                        // move on to the end of the next child.
-                        if (splitNextChild)
-                            node = m_children.Find(nextChildAfterSplit);
+                    if (node->GetNext())
+                    {
+                        wxRichTextObject* nextChild = node->GetNext()->GetData();
+                        
+                        // First split child and nextChild so we have smaller fragments to merge.
+                        // Then Merge only has to test per-object virtual attributes
+                        // because for an object with all the same sub-object attributes,
+                        // then any general virtual attributes should be merged with sub-objects by
+                        // the implementation.
+                        
+                        wxRichTextObject* nextChildAfterSplit = nextChild;
+
+                        if (nextChildAfterSplit->CanSplit(context))
+                            nextChildAfterSplit = nextChild->Split(context);
+
+                        bool splitNextChild = nextChild != nextChildAfterSplit;
+                            
+                        // See if we can merge this new fragment with (perhaps the first part of) the next object.
+                        // Note that we use nextChild because if we had split nextChild, the first object always
+                        // remains (and further parts are appended). However we must use childAfterSplit since
+                        // it's the last part of a possibly split child.
+                        
+                        if (childAfterSplit->CanMerge(nextChild, context) && childAfterSplit->Merge(nextChild, context))
+                        {
+                            nextChild->Dereference();
+                            m_children.Erase(node->GetNext());
+
+                            // Don't set node -- we'll see if we can merge again with the next
+                            // child. UNLESS we split this or the next child, in which case we know we have to
+                            // move on to the end of the next child.
+                            if (splitNextChild)
+                                node = m_children.Find(nextChildAfterSplit);
+                        }
+                        else
+                        {
+                            if (splitNextChild)
+                                node = m_children.Find(nextChildAfterSplit); // start from the last object in the split
+                            else
+                                node = node->GetNext();
+                        }
                     }
                     else
-                    {
-                        if (splitNextChild)
-                            node = m_children.Find(nextChildAfterSplit); // start from the last object in the split
-                        else
-                            node = node->GetNext();
-                    }
+                        node = node->GetNext();
                 }
-                else
-                    node = node->GetNext();
             }
         }
         else
