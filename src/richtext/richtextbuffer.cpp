@@ -11519,21 +11519,29 @@ bool wxRichTextAction::Do()
                 // The plan is to swap the current object with the stored, previous-state, clone
                 // We can't get 'node' from the containing buffer (as it doesn't directly store objects)
                 // so use the parent paragraph
-                wxRichTextParagraph* para = wxDynamicCast(obj->GetParent(), wxRichTextParagraph);
-                wxCHECK_MSG(para, false, "Invalid parent paragraph");
+                wxRichTextCompositeObject* parent = wxDynamicCast(obj->GetParent(), wxRichTextCompositeObject);
+                wxCHECK_MSG(parent, false, wxT("Invalid parent"));
 
-                // The stored object, m_object, may have a stale parent paragraph. This would cause
-                // a crash during layout, so use obj's parent para, which should be the correct one.
+                // Check that at least one is a paragraph, but not both.
+                wxCHECK_MSG((!obj->IsKindOf(CLASSINFO(wxRichTextParagraph)) && parent->IsKindOf(CLASSINFO(wxRichTextParagraph))) ||
+                            (obj->IsKindOf(CLASSINFO(wxRichTextParagraph)) && !parent->IsKindOf(CLASSINFO(wxRichTextParagraph)))
+                            , false, wxT("Either the object or the parent must be a paragraph"));
+
+                // The stored object, m_object, may have a stale parent. This would cause
+                // a crash during layout, so use obj's parent, which should be the correct one.
                 // (An alternative would be to return the parent too from m_objectAddress.GetObject(),
                 // or to set obj's parent there before returning)
-                m_object->SetParent(para);
-
-                wxRichTextObjectList::compatibility_iterator node = para->GetChildren().Find(obj);
-                if (node)
+                m_object->SetParent(parent);
+                if (parent)
                 {
-                    wxRichTextObject* obj = node->GetData();
-                    node->SetData(m_object);
-                    m_object = obj;
+                    wxRichTextObjectList::compatibility_iterator node = parent->GetChildren().Find(obj);
+                    if (node)
+                    {
+                        wxRichTextObject* obj = node->GetData();
+                        node->SetData(m_object);
+                        m_object = obj;
+                        m_object->SetParent(NULL);
+                    }
                 }
             }
 
