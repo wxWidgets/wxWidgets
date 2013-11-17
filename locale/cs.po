@@ -1133,7 +1133,7 @@ msgstr "O"
 #: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
 #, c-format
 msgid "About %s"
-msgstr "O %s"
+msgstr "O aplikaci %s"
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
