@@ -598,11 +598,11 @@ static wxMenu *CreateAppleMenu()
     // recommended, sometimes these items really don't make sense.
     if ( wxApp::s_macAboutMenuItemId != wxID_NONE )
     {
-        wxString aboutLabel(_("About"));
+        wxString aboutLabel;
         if ( wxTheApp )
-            aboutLabel << ' ' << wxTheApp->GetAppDisplayName();
+            aboutLabel.Printf(_("About %s"), wxTheApp->GetAppDisplayName());
         else
-            aboutLabel << "...";
+            aboutLabel = _("About...");
         appleMenu->Append( wxApp::s_macAboutMenuItemId, aboutLabel);
         appleMenu->AppendSeparator();
     }
