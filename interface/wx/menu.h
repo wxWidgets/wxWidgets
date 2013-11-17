@@ -408,6 +408,18 @@ public:
     */
     static wxMenuBar* MacGetCommonMenuBar();
 
+    /**
+        Returns the Apple menu.
+
+        This is the leftmost menu with application's name as its title. You
+        shouldn't remove any items from it, but it is safe to insert extra menu
+        items or submenus into it.
+
+        @onlyfor{wxosx}
+        @since 3.0.1
+     */
+    wxMenu *OSXGetAppleMenu() const;
+
     wxFrame *GetFrame() const;
     bool IsAttached() const;
     virtual void Attach(wxFrame *frame);
