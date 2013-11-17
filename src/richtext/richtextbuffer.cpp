@@ -11540,7 +11540,6 @@ bool wxRichTextAction::Do()
                         wxRichTextObject* obj = node->GetData();
                         node->SetData(m_object);
                         m_object = obj;
-                        m_object->SetParent(NULL);
                     }
                 }
             }
