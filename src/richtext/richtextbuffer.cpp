@@ -9565,19 +9565,23 @@ bool wxRichTextCell::EditProperties(wxWindow* parent, wxRichTextBuffer* buffer)
 
     if (ok)
     {
-        if (multipleCells)
+        wxRichTextAttr newAttr = cellDlg.GetAttributes();
+        if (!(newAttr == attr))
         {
-            const wxRichTextSelection& sel = buffer->GetRichTextCtrl()->GetSelection();
-            // Apply the style; we interpret indeterminate attributes as 'don't touch this attribute'
-            // since it may represent clashing attributes across multiple objects.
-            table->SetCellStyle(sel, attr);
+            if (multipleCells)
+            {
+                const wxRichTextSelection& sel = buffer->GetRichTextCtrl()->GetSelection();
+                // Apply the style; we interpret indeterminate attributes as 'don't touch this attribute'
+                // since it may represent clashing attributes across multiple objects.
+                table->SetCellStyle(sel, attr);
+            }
+            else
+                // For a single object, indeterminate attributes set by the user should be reflected in the
+                // actual object style, so pass the wxRICHTEXT_SETSTYLE_RESET flag to assign
+                // the style directly instead of applying (which ignores indeterminate attributes,
+                // leaving them as they were).
+                cellDlg.ApplyStyle(buffer->GetRichTextCtrl(), wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RESET);
         }
-        else
-            // For a single object, indeterminate attributes set by the user should be reflected in the
-            // actual object style, so pass the wxRICHTEXT_SETSTYLE_RESET flag to assign
-            // the style directly instead of applying (which ignores indeterminate attributes,
-            // leaving them as they were).
-            cellDlg.ApplyStyle(buffer->GetRichTextCtrl(), wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RESET);
         return true;
     }
     else
