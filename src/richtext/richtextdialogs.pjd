@@ -15161,14 +15161,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -16551,7 +16543,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">"m_unitsW"</string>
-                      <string name="proxy-Strings">"px|cm|percent"</string>
+                      <string name="proxy-Strings">"px|cm|%"</string>
                       <string name="proxy-Initial value">"px"</string>
                       <string name="proxy-Help text">"Units for the object width."</string>
                       <string name="proxy-Tooltip text">""</string>
@@ -16888,7 +16880,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">"m_unitsH"</string>
-                      <string name="proxy-Strings">"px|cm|percent"</string>
+                      <string name="proxy-Strings">"px|cm|%"</string>
                       <string name="proxy-Initial value">"px"</string>
                       <string name="proxy-Help text">"Units for the object height."</string>
                       <string name="proxy-Tooltip text">""</string>
@@ -17128,7 +17120,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">"m_unitsMinW"</string>
-                      <string name="proxy-Strings">"px|cm|percent"</string>
+                      <string name="proxy-Strings">"px|cm|%"</string>
                       <string name="proxy-Initial value">"px"</string>
                       <string name="proxy-Help text">"Units for the minimum object width."</string>
                       <string name="proxy-Tooltip text">""</string>
@@ -17368,7 +17360,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">"m_unitsMinH"</string>
-                      <string name="proxy-Strings">"px|cm|percent"</string>
+                      <string name="proxy-Strings">"px|cm|%"</string>
                       <string name="proxy-Initial value">"px"</string>
                       <string name="proxy-Help text">"Units for the minimum object height."</string>
                       <string name="proxy-Tooltip text">""</string>
@@ -17608,7 +17600,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">"m_unitsMaxW"</string>
-                      <string name="proxy-Strings">"px|cm|percent"</string>
+                      <string name="proxy-Strings">"px|cm|%"</string>
                       <string name="proxy-Initial value">"px"</string>
                       <string name="proxy-Help text">"Units for the maximum object width."</string>
                       <string name="proxy-Tooltip text">""</string>
@@ -17848,7 +17840,7 @@
                       <string name="proxy-Implementation filename">""</string>
                       <string name="proxy-Header filename">""</string>
                       <string name="proxy-Member variable name">"m_unitsMaxH"</string>
-                      <string name="proxy-Strings">"px|cm|percent"</string>
+                      <string name="proxy-Strings">"px|cm|%"</string>
                       <string name="proxy-Initial value">"px"</string>
                       <string name="proxy-Help text">"Units for the maximum object height."</string>
                       <string name="proxy-Tooltip text">""</string>
@@ -18628,7 +18620,7 @@
                           <string name="proxy-Implementation filename">""</string>
                           <string name="proxy-Header filename">""</string>
                           <string name="proxy-Member variable name">"m_unitsLeft"</string>
-                          <string name="proxy-Strings">"px|cm|percent"</string>
+                          <string name="proxy-Strings">"px|cm|%"</string>
                           <string name="proxy-Initial value">"px"</string>
                           <string name="proxy-Help text">"Units for the left position."</string>
                           <string name="proxy-Tooltip text">""</string>
@@ -18965,7 +18957,7 @@
                           <string name="proxy-Implementation filename">""</string>
                           <string name="proxy-Header filename">""</string>
                           <string name="proxy-Member variable name">"m_unitsTop"</string>
-                          <string name="proxy-Strings">"px|cm|percent"</string>
+                          <string name="proxy-Strings">"px|cm|%"</string>
                           <string name="proxy-Initial value">"px"</string>
                           <string name="proxy-Help text">"Units for the top position."</string>
                           <string name="proxy-Tooltip text">""</string>
@@ -19302,7 +19294,7 @@
                           <string name="proxy-Implementation filename">""</string>
                           <string name="proxy-Header filename">""</string>
                           <string name="proxy-Member variable name">"m_unitsRight"</string>
-                          <string name="proxy-Strings">"px|cm|percent"</string>
+                          <string name="proxy-Strings">"px|cm|%"</string>
                           <string name="proxy-Initial value">"px"</string>
                           <string name="proxy-Help text">"Units for the right position."</string>
                           <string name="proxy-Tooltip text">""</string>
@@ -19639,7 +19631,7 @@
                           <string name="proxy-Implementation filename">""</string>
                           <string name="proxy-Header filename">""</string>
                           <string name="proxy-Member variable name">"m_unitsBottom"</string>
-                          <string name="proxy-Strings">"px|cm|percent"</string>
+                          <string name="proxy-Strings">"px|cm|%"</string>
                           <string name="proxy-Initial value">"px"</string>
                           <string name="proxy-Help text">"Units for the bottom position."</string>
                           <string name="proxy-Tooltip text">""</string>
@@ -20014,6 +20006,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -22634,6 +22634,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
