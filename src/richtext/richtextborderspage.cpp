@@ -1235,6 +1235,9 @@ void wxRichTextBorderPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
+    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.Clear();
+
     if (m_attributes)
     {
         wxRect rect = GetClientRect();
