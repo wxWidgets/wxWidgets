@@ -577,6 +577,7 @@ Major new features in this release
 All:
 
 - Fix wxSocket::WaitForAccept() in non-main thread (Hajo Kirchhoff).
+- Fix memory overallocation in wxVector::reserve() (Nigel Paton).
 
 All (GUI):
 
