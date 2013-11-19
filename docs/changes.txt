@@ -582,6 +582,8 @@ All:
 All (GUI):
 
 - Fix crash when setting invalid label ending with "&" (ZaneUJi).
+- Fix wxEditableListBox user data corruption when exchanging items
+  in 64 bit builds (Tom Mettam, Rapid2D).
 
 wxGTK:
 
