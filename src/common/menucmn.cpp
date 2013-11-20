@@ -423,21 +423,20 @@ wxMenuItem *wxMenuBase::Remove(wxMenuItem *item)
 {
     wxCHECK_MSG( item, NULL, wxT("invalid item in wxMenu::Remove") );
 
-    return DoRemove(item);
-}
-
-wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)
-{
     wxMenuItemList::compatibility_iterator node = m_items.Find(item);
 
     // if we get here, the item is valid or one of Remove() functions is broken
-    wxCHECK_MSG( node, NULL, wxT("bug in wxMenu::Remove logic") );
+    wxCHECK_MSG( node, NULL, wxT("removing item not in the menu?") );
 
     // we detach the item, but we do delete the list node (i.e. don't call
     // DetachNode() here!)
     m_items.Erase(node);
 
-    // item isn't attached to anything any more
+    return DoRemove(item);
+}
+
+wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)
+{
     item->SetMenu(NULL);
     wxMenu *submenu = item->GetSubMenu();
     if ( submenu )
