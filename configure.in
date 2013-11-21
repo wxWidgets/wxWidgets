@@ -6331,7 +6331,7 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
         wxUSE_JOYSTICK=yes
 
     dnl mac only available on darwin
-    elif test "$TOOLKIT" = "OSX" -o "$TOOLKIT" = "COCOA"; then
+    elif test "$TOOLKIT" = "OSX_COCOA" -o "$TOOLKIT" = "COCOA"; then
         if test "$USE_DARWIN" = 1; then
             dnl check for a bug in the headers, some have bad setEventCallout
             AC_MSG_CHECKING([headers have declarations needed for joystick support])
