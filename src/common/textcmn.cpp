@@ -227,42 +227,43 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
 {
     return  GetFlags() == attr.GetFlags() &&
 
-            GetTextColour() == attr.GetTextColour() &&
-            GetBackgroundColour() == attr.GetBackgroundColour() &&
+            (!HasTextColour() || (GetTextColour() == attr.GetTextColour())) &&
+            (!HasBackgroundColour() || (GetBackgroundColour() == attr.GetBackgroundColour())) &&
 
-            GetAlignment() == attr.GetAlignment() &&
-            GetLeftIndent() == attr.GetLeftIndent() &&
-            GetLeftSubIndent() == attr.GetLeftSubIndent() &&
-            GetRightIndent() == attr.GetRightIndent() &&
-            TabsEq(GetTabs(), attr.GetTabs()) &&
+            (!HasAlignment() || (GetAlignment() == attr.GetAlignment())) &&
+            (!HasLeftIndent() || (GetLeftIndent() == attr.GetLeftIndent() &&
+                                  GetLeftSubIndent() == attr.GetLeftSubIndent())) &&
+            (!HasRightIndent() || (GetRightIndent() == attr.GetRightIndent())) &&
+            (!HasTabs() || (TabsEq(GetTabs(), attr.GetTabs()))) &&
 
-            GetParagraphSpacingAfter() == attr.GetParagraphSpacingAfter() &&
-            GetParagraphSpacingBefore() == attr.GetParagraphSpacingBefore() &&
-            GetLineSpacing() == attr.GetLineSpacing() &&
-            GetCharacterStyleName() == attr.GetCharacterStyleName() &&
-            GetParagraphStyleName() == attr.GetParagraphStyleName() &&
-            GetListStyleName() == attr.GetListStyleName() &&
+            (!HasParagraphSpacingAfter() || (GetParagraphSpacingAfter() == attr.GetParagraphSpacingAfter())) &&
+            (!HasParagraphSpacingBefore() || (GetParagraphSpacingBefore() == attr.GetParagraphSpacingBefore())) &&
+            (!HasLineSpacing() || (GetLineSpacing() == attr.GetLineSpacing())) &&
+            (!HasCharacterStyleName() || (GetCharacterStyleName() == attr.GetCharacterStyleName())) &&
+            (!HasParagraphStyleName() || (GetParagraphStyleName() == attr.GetParagraphStyleName())) &&
+            (!HasListStyleName() || (GetListStyleName() == attr.GetListStyleName())) &&
 
-            GetBulletStyle() == attr.GetBulletStyle() &&
-            GetBulletText() == attr.GetBulletText() &&
-            GetBulletNumber() == attr.GetBulletNumber() &&
-            GetBulletFont() == attr.GetBulletFont() &&
-            GetBulletName() == attr.GetBulletName() &&
+            (!HasBulletStyle() || (GetBulletStyle() == attr.GetBulletStyle())) &&
+            (!HasBulletText() || (GetBulletText() == attr.GetBulletText())) &&
+            (!HasBulletNumber() || (GetBulletNumber() == attr.GetBulletNumber())) &&
+            (GetBulletFont() == attr.GetBulletFont()) &&
+            (!HasBulletName() || (GetBulletName() == attr.GetBulletName())) &&
 
-            GetTextEffects() == attr.GetTextEffects() &&
-            GetTextEffectFlags() == attr.GetTextEffectFlags() &&
+            (!HasTextEffects() || (GetTextEffects() == attr.GetTextEffects() &&
+                                   GetTextEffectFlags() == attr.GetTextEffectFlags())) &&
 
-            GetOutlineLevel() == attr.GetOutlineLevel() &&
+            (!HasOutlineLevel() || (GetOutlineLevel() == attr.GetOutlineLevel())) &&
 
-            GetFontSize() == attr.GetFontSize() &&
-            GetFontStyle() == attr.GetFontStyle() &&
-            GetFontWeight() == attr.GetFontWeight() &&
-            GetFontUnderlined() == attr.GetFontUnderlined() &&
-            GetFontFaceName() == attr.GetFontFaceName() &&
-            GetFontEncoding() == attr.GetFontEncoding() &&
-            GetFontFamily() == attr.GetFontFamily() &&
+            (!HasFontSize() || (GetFontSize() == attr.GetFontSize())) &&
+            (!HasFontItalic() || (GetFontStyle() == attr.GetFontStyle())) &&
+            (!HasFontWeight() || (GetFontWeight() == attr.GetFontWeight())) &&
+            (!HasFontUnderlined() || (GetFontUnderlined() == attr.GetFontUnderlined())) &&
+            (!HasFontStrikethrough() || (GetFontStrikethrough() == attr.GetFontStrikethrough())) &&
+            (!HasFontFaceName() || (GetFontFaceName() == attr.GetFontFaceName())) &&
+            (!HasFontEncoding() || (GetFontEncoding() == attr.GetFontEncoding())) &&
+            (!HasFontFamily() || (GetFontFamily() == attr.GetFontFamily())) &&
 
-            GetURL() == attr.GetURL();
+            (!HasURL() || (GetURL() == attr.GetURL()));
 }
 
 // Partial equality test. Only returns false if an attribute doesn't match.
