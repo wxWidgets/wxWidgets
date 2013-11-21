@@ -6326,25 +6326,9 @@ dnl ---------------------------------------------------------------------------
 if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
     wxUSE_JOYSTICK=no
 
-    dnl under MSW we always have joystick support
-    if test "$TOOLKIT" = "MSW"; then
+    dnl under MSW and OS X we always have joystick support
+    if test "$TOOLKIT" = "MSW" -o "$TOOLKIT" = "OSX_COCOA" -o "$TOOLKIT" = "COCOA"; then
         wxUSE_JOYSTICK=yes
-
-    dnl mac only available on darwin
-    elif test "$TOOLKIT" = "OSX_COCOA" -o "$TOOLKIT" = "COCOA"; then
-        if test "$USE_DARWIN" = 1; then
-            dnl check for a bug in the headers, some have bad setEventCallout
-            AC_MSG_CHECKING([headers have declarations needed for joystick support])
-            AC_LANG_PUSH(C++)
-            AC_TRY_COMPILE( [ #include <IOKit/hid/IOHIDLib.h> ],
-                            [ IOHIDQueueInterface *qi = NULL;
-                              IOHIDCallbackFunction cb = NULL;
-                              qi->setEventCallout(NULL, cb, NULL, NULL); ],
-                            [ wxUSE_JOYSTICK=yes ]
-                          )
-            AC_LANG_POP()
-            AC_MSG_RESULT($wxUSE_JOYSTICK)
-        fi
 
     dnl joystick support is only for Linux 2.1.x or greater
     else
