@@ -1,4 +1,4 @@
-                wxWidgets 3.0.0 Release Notes
+                wxWidgets 3.0.1 Release Notes
                 =============================
 
 Welcome to the latest release of wxWidgets, a free and open source
@@ -18,17 +18,17 @@ You can learn more about wxWidgets at
 
 and read its documentation online at
 
-        http://docs.wxwidgets.org/3.0.0/
+        http://docs.wxwidgets.org/3.0.1/
 
 
 wxWidgets sources and binaries for the selected platforms are
 available for download from
 
-        https://sourceforge.net/projects/wxwindows/files/3.0.0/
+        https://sourceforge.net/projects/wxwindows/files/3.0.1/
 
 or
 
-        ftp://ftp.wxwidgets.org/pub/3.0.0/
+        ftp://ftp.wxwidgets.org/pub/3.0.1/
 
 Please see the "Files" section below for the description of various
 files available at these locations.
@@ -161,7 +161,7 @@ Documentation
 -------------
 
 wxWidgets documentation is available online at
-http://docs.wxwidgets.org/3.0.0/ and can also be downloaded in
+http://docs.wxwidgets.org/3.0.1/ and can also be downloaded in
 HTML format. To generate documentation in other formats (PDF, CHM,
 ...) please use the scripts in docs/doxygen directory.
 
