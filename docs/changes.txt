@@ -595,6 +595,10 @@ wxMSW:
 - Make "%lu" work with size_t arguments under Win64 (laro).
 - Fix wxRegion::Offset() with shared objects (Joost Nieuwenhuijse).
 
+wxOSX:
+
+- Fix incorrect joystick detection in configure (Lauri Nurmi).
+
 
 3.0.0: (released 2013-11-11)
 ----------------------------

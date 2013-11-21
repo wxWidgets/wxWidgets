@@ -35512,7 +35512,7 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
         if test "$TOOLKIT" = "MSW"; then
         wxUSE_JOYSTICK=yes
 
-        elif test "$TOOLKIT" = "OSX" -o "$TOOLKIT" = "COCOA"; then
+        elif test "$TOOLKIT" = "OSX_COCOA" -o "$TOOLKIT" = "COCOA"; then
         if test "$USE_DARWIN" = 1; then
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking headers have declarations needed for joystick support" >&5
 $as_echo_n "checking headers have declarations needed for joystick support... " >&6; }
