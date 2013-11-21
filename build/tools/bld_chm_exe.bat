@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=3.0.0
+SET WXW_VER=3.1.0
 if (%WXW_VER%)==() SET WXW_VER=SVN
 
 echo docs building for %WXW_VER%

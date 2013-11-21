@@ -53,8 +53,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw30u_webview.lib wxmsw30u_stc.lib wxmsw30u_adv.lib wxmsw30u_core.lib wxbase30u.lib wxscintilla.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\webview.exe" /debug /pdb:"vc_mswudll\webview.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw30u_webview.lib wxmsw30u_stc.lib wxmsw30u_adv.lib wxmsw30u_core.lib wxbase30u.lib wxscintilla.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\webview.exe" /debug /pdb:"vc_mswudll\webview.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw31u_webview.lib wxmsw31u_stc.lib wxmsw31u_adv.lib wxmsw31u_core.lib wxbase31u.lib wxscintilla.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\webview.exe" /debug /pdb:"vc_mswudll\webview.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw31u_webview.lib wxmsw31u_stc.lib wxmsw31u_adv.lib wxmsw31u_core.lib wxbase31u.lib wxscintilla.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\webview.exe" /debug /pdb:"vc_mswudll\webview.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "webview - Win32 DLL Debug"
 
@@ -78,8 +78,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw30ud_webview.lib wxmsw30ud_stc.lib wxmsw30ud_adv.lib wxmsw30ud_core.lib wxbase30ud.lib wxscintillad.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\webview.exe" /debug /pdb:"vc_mswuddll\webview.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw30ud_webview.lib wxmsw30ud_stc.lib wxmsw30ud_adv.lib wxmsw30ud_core.lib wxbase30ud.lib wxscintillad.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\webview.exe" /debug /pdb:"vc_mswuddll\webview.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw31ud_webview.lib wxmsw31ud_stc.lib wxmsw31ud_adv.lib wxmsw31ud_core.lib wxbase31ud.lib wxscintillad.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\webview.exe" /debug /pdb:"vc_mswuddll\webview.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw31ud_webview.lib wxmsw31ud_stc.lib wxmsw31ud_adv.lib wxmsw31ud_core.lib wxbase31ud.lib wxscintillad.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\webview.exe" /debug /pdb:"vc_mswuddll\webview.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "webview - Win32 Release"
 
@@ -103,8 +103,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw30u_webview.lib wxmsw30u_stc.lib wxmsw30u_adv.lib wxmsw30u_core.lib wxbase30u.lib wxscintilla.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\webview.exe" /debug /pdb:"vc_mswu\webview.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw30u_webview.lib wxmsw30u_stc.lib wxmsw30u_adv.lib wxmsw30u_core.lib wxbase30u.lib wxscintilla.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\webview.exe" /debug /pdb:"vc_mswu\webview.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw31u_webview.lib wxmsw31u_stc.lib wxmsw31u_adv.lib wxmsw31u_core.lib wxbase31u.lib wxscintilla.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\webview.exe" /debug /pdb:"vc_mswu\webview.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw31u_webview.lib wxmsw31u_stc.lib wxmsw31u_adv.lib wxmsw31u_core.lib wxbase31u.lib wxscintilla.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\webview.exe" /debug /pdb:"vc_mswu\webview.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "webview - Win32 Debug"
 
@@ -128,8 +128,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw30ud_webview.lib wxmsw30ud_stc.lib wxmsw30ud_adv.lib wxmsw30ud_core.lib wxbase30ud.lib wxscintillad.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\webview.exe" /debug /pdb:"vc_mswud\webview.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw30ud_webview.lib wxmsw30ud_stc.lib wxmsw30ud_adv.lib wxmsw30ud_core.lib wxbase30ud.lib wxscintillad.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\webview.exe" /debug /pdb:"vc_mswud\webview.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw31ud_webview.lib wxmsw31ud_stc.lib wxmsw31ud_adv.lib wxmsw31ud_core.lib wxbase31ud.lib wxscintillad.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\webview.exe" /debug /pdb:"vc_mswud\webview.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw31ud_webview.lib wxmsw31ud_stc.lib wxmsw31ud_adv.lib wxmsw31ud_core.lib wxbase31ud.lib wxscintillad.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\webview.exe" /debug /pdb:"vc_mswud\webview.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:windows
 
 !ENDIF
 

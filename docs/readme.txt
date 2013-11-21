@@ -1,9 +1,9 @@
-                wxWidgets 3.0.0 Release Notes
+                wxWidgets 3.1.0 Release Notes
                 =============================
 
-Welcome to the latest release of wxWidgets, a free and open source
-cross-platform C++ framework for writing advanced GUI applications
-using native controls.
+Welcome to the latest development release of wxWidgets, a free and
+open source cross-platform C++ framework for writing advanced GUI
+applications using native controls.
 
 
 wxWidgets allows you to write native-looking GUI applications for
@@ -18,17 +18,17 @@ You can learn more about wxWidgets at
 
 and read its documentation online at
 
-        http://docs.wxwidgets.org/3.0.0/
+        http://docs.wxwidgets.org/3.1.0/
 
 
 wxWidgets sources and binaries for the selected platforms are
 available for download from
 
-        https://sourceforge.net/projects/wxwindows/files/3.0.0/
+        https://sourceforge.net/projects/wxwindows/files/3.1.0/
 
 or
 
-        ftp://ftp.wxwidgets.org/pub/3.0.0/
+        ftp://ftp.wxwidgets.org/pub/3.1.0/
 
 Please see the "Files" section below for the description of various
 files available at these locations.
@@ -38,26 +38,6 @@ files available at these locations.
 Changes in this release
 -----------------------
 
-This release contains several years worth of improvements compared
-to 2.8 version. Notably, Unicode support has been completely
-overhauled and made much easier to use. Debugging support, including
-when using a release build of the library, was greatly improved making
-it less likely that you use the library incorrectly. Dynamic event
-handling was made much more comfortable. Many new GUI and base classes
-have been added or improved and all ports, and especially wxOSX/Cocoa
-and wxGTK3, were enhanced.
-
-Compared to the previous 2.9 development releases the most important
-change is that this release is part of the new 3.0 stable series,
-guarantying backwards API and ABI compatibility with the next 3.0.x
-releases.
-
-Please see the file docs/changes.txt for more details and make sure
-to read the section "Incompatible changes since 2.8" if you upgrade
-from a previous wxWidgets release.
-
-This release introduces many important changes and we are looking
-forward to your feedback about them!
 
 
 Platforms supported
@@ -161,7 +141,7 @@ Documentation
 -------------
 
 wxWidgets documentation is available online at
-http://docs.wxwidgets.org/3.0.0/ and can also be downloaded in
+http://docs.wxwidgets.org/3.1.0/ and can also be downloaded in
 HTML format. To generate documentation in other formats (PDF, CHM,
 ...) please use the scripts in docs/doxygen directory.
 
