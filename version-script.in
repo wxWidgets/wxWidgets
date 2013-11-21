@@ -21,12 +21,15 @@
 # and once released its version cannot be changed.
 
 
-# symbols available since the beginning of this branch are only given
-# generic branch tag (don't remove this!):
-
+# public symbols added in 3.0.1 (please keep in alphabetical order):
 @WX_VERSION_TAG@.1 {
+        *wxDataViewListCtrl*ClearColumns*;
+        *wxDataViewListStore*ClearColumns*;
         *wxInfoBarGeneric*SetForegroundColour*;
 };
+
+# symbols available since the beginning of this branch are only given
+# generic branch tag (don't remove this!):
 
 @WX_VERSION_TAG@ {
         *;
