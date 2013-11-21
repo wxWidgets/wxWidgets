@@ -972,6 +972,9 @@ public:
     void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxUIntPtr data = 0 );
     void DeleteItem( unsigned int pos );
     void DeleteAllItems();
+#if wxABI_VERSION >= 30001
+    void ClearColumns();
+#endif
 
     unsigned int GetItemCount() const;
 
@@ -1040,6 +1043,9 @@ public:
     virtual bool PrependColumn( wxDataViewColumn *col );
     virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
     virtual bool AppendColumn( wxDataViewColumn *col );
+#if wxABI_VERSION >= 30001
+    virtual bool ClearColumns();
+#endif
 
     wxDataViewColumn *AppendTextColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,

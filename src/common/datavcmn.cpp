@@ -1790,6 +1790,11 @@ void wxDataViewListStore::DeleteAllItems()
     Reset( 0 );
 }
 
+void wxDataViewListStore::ClearColumns()
+{
+    m_cols.clear();
+}
+
 void wxDataViewListStore::SetItemData( const wxDataViewItem& item, wxUIntPtr data )
 {
     wxDataViewListStoreLine* line = m_data[GetRow(item)];
@@ -1891,6 +1896,12 @@ bool wxDataViewListCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
 bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *col )
 {
     return AppendColumn( col, "string" );
+}
+
+bool wxDataViewListCtrl::ClearColumns()
+{
+    GetStore()->ClearColumns();
+    return wxDataViewCtrl::ClearColumns();
 }
 
 wxDataViewColumn *wxDataViewListCtrl::AppendTextColumn( const wxString &label,
