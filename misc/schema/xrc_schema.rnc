@@ -154,6 +154,7 @@ builtinWindowClasses =
     ( unknown
     | wxAnimationCtrl
     | wxAuiNotebook
+    | wxAuiToolBar
     | wxBannerWindow
     | wxBitmapButton
     | wxBitmapComboBox
@@ -242,6 +243,7 @@ builtinClassesNames =
 
     | "wxAnimationCtrl"
     | "wxAuiNotebook"
+    | "wxAuiToolBar"
     | "wxBannerWindow"
     | "wxBitmapButton"
     | "wxBitmapComboBox"
@@ -522,6 +524,25 @@ wxAuiNotebook_notebookpage =
         [xrc:p="o"] element bitmap   {_, t_bitmap }* &
         [xrc:p="o"] element selected {_, t_bool }* &
         windowNode
+    }
+
+
+wxAuiToolBar =
+    element object {
+        attribute class { "wxAuiToolBar" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element bitmapsize        {_, t_size }* &
+        [xrc:p="o"] element margins           {_, t_size }* &
+        [xrc:p="o"] element packing           {_, t_integer }* &
+        [xrc:p="o"] element separation        {_, t_integer }* &
+        [xrc:p="o"] element dontattachtoframe {_, t_bool }* &
+        (
+            windowNode |
+            wxToolBar_tool |
+            element object { attribute class { "separator" }, platform } |
+            element object { attribute class { "space" },     platform }
+        )*
     }
 
 

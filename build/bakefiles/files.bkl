@@ -3690,6 +3690,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/aui/tabmdi.cpp
     src/aui/tabart.cpp
     src/xrc/xh_auinotbk.cpp
+    src/xrc/xh_auitoolb.cpp
     $(AUI_GTK_SRC)
 </set>
 <set var="AUI_HDR" hints="files">
@@ -3702,6 +3703,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/aui/aui.h
     wx/aui/tabart.h
     wx/xrc/xh_auinotbk.h
+    wx/xrc/xh_auitoolb.h
     $(AUI_GTK_HDR)
 </set>
 

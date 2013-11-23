@@ -85,6 +85,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("derived_tool_or_menuitem"), MyFrame::OnDerivedDialogToolOrMenuCommand)
     EVT_MENU(XRCID("controls_tool_or_menuitem"), MyFrame::OnControlsToolOrMenuCommand)
     EVT_MENU(XRCID("uncentered_tool_or_menuitem"), MyFrame::OnUncenteredToolOrMenuCommand)
+    EVT_MENU(XRCID("aui_demo_tool_or_menuitem"), MyFrame::OnAuiDemoToolOrMenuCommand)
     EVT_MENU(XRCID("obj_ref_tool_or_menuitem"), MyFrame::OnObjRefToolOrMenuCommand)
     EVT_MENU(XRCID("custom_class_tool_or_menuitem"), MyFrame::OnCustomClassToolOrMenuCommand)
     EVT_MENU(XRCID("platform_property_tool_or_menuitem"), MyFrame::OnPlatformPropertyToolOrMenuCommand)
@@ -270,6 +271,17 @@ void MyFrame::OnUncenteredToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     dlg.ShowModal();
 }
 
+void MyFrame::OnAuiDemoToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
+{
+#if wxUSE_AUI
+    wxDialog dlg;
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxS("aui_dialog"));
+    dlg.SetSize(-1,300);
+    dlg.ShowModal();
+#else
+    wxLogWarning("wxUSE_AUI must be set to 1 in 'setup.h' to view the AUI demo.");
+#endif
+}
 
 void MyFrame::OnObjRefToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {

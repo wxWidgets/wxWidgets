@@ -342,6 +342,10 @@ SOURCE=..\..\include\wx\aui\tabmdi.h
 
 SOURCE=..\..\include\wx\xrc\xh_auinotbk.h
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_auitoolb.h
+# End Source File
 # End Group
 # Begin Group "Source Files"
 
@@ -377,6 +381,10 @@ SOURCE=..\..\src\aui\tabmdi.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_auinotbk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_auitoolb.cpp
 # End Source File
 # End Group
 # End Target

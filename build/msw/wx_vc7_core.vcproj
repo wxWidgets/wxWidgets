@@ -2691,6 +2691,9 @@
 				RelativePath="..\..\include\wx\xrc\xh_auinotbk.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_auitoolb.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_bannerwindow.h">
 			</File>
 			<File

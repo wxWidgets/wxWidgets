@@ -594,6 +594,10 @@
 				RelativePath="..\..\include\wx\xrc\xh_auinotbk.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_auitoolb.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -630,6 +634,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_auinotbk.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_auitoolb.cpp"
 				>
 			</File>
 		</Filter>

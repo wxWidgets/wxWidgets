@@ -26,6 +26,11 @@
         <longhelp>Disable autocentering of a dialog on its parent</longhelp>
     </object>  
     <object class="separator"/>
+     <object class="tool" name="aui_demo_tool_or_menuitem">
+        <bitmap>aui.xpm</bitmap>
+        <tooltip>wxAUI classes and controls</tooltip>
+        <longhelp>XRC construction of Advanced User Interface classes and controls</longhelp>
+    </object>
     <object class="tool" name="obj_ref_tool_or_menuitem">
       <bitmap>objrefdlg.xpm</bitmap>
       <tooltip>Object references and event ranges example</tooltip>
