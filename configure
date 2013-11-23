@@ -947,7 +947,6 @@ wxUSE_ZLIB
 STD_GUI_LIBS
 STD_BASE_LIBS
 BUILT_WX_LIBS
-ALL_WX_LIBS
 GST_LIBS
 GST_CFLAGS
 CAIRO_LIBS
@@ -37314,7 +37313,6 @@ _ACEOF
 STD_BASE_LIBS="base"
 STD_GUI_LIBS=""
 BUILT_WX_LIBS="base"
-ALL_WX_LIBS="xrc stc gl media qa html adv core xml net base"
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
     STD_BASE_LIBS="net $STD_BASE_LIBS"
@@ -37367,7 +37365,6 @@ if test "$wxUSE_GUI" = "yes"; then
         BUILT_WX_LIBS="xrc $BUILT_WX_LIBS"
     fi
 fi
-
 
 
 

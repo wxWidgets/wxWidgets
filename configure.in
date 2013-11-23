@@ -7599,7 +7599,6 @@ dnl ---------------------------------------------------------------------------
 STD_BASE_LIBS="base"
 STD_GUI_LIBS=""
 BUILT_WX_LIBS="base"
-ALL_WX_LIBS="xrc stc gl media qa html adv core xml net base"
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
     STD_BASE_LIBS="net $STD_BASE_LIBS"
@@ -7653,7 +7652,6 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 fi
 
-AC_SUBST(ALL_WX_LIBS)
 AC_SUBST(BUILT_WX_LIBS)
 AC_SUBST(STD_BASE_LIBS)
 AC_SUBST(STD_GUI_LIBS)
