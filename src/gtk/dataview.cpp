@@ -4441,6 +4441,16 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
             &cell_y
         );
 
+        // If the right click is on an item that isn't selected, select it, as is
+        // commonly done. Do not do it if the item under mouse is already selected,
+        // because it could be a part of multi-item selection.
+        GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(dv->GtkGetTreeView()));
+        if ( !gtk_tree_selection_path_is_selected(selection, path) )
+        {
+            gtk_tree_selection_unselect_all(selection);
+            gtk_tree_selection_select_path(selection, path);
+        }
+
         wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, dv->GetId() );
         if (path)
             event.SetItem(dv->GTKPathToItem(path));
