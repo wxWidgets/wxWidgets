@@ -458,7 +458,7 @@ bool wxMenuBase::Delete(wxMenuItem *item)
 
 bool wxMenuBase::DoDelete(wxMenuItem *item)
 {
-    wxMenuItem *item2 = DoRemove(item);
+    wxMenuItem *item2 = Remove(item);
     wxCHECK_MSG( item2, false, wxT("failed to delete menu item") );
 
     // don't delete the submenu
@@ -478,7 +478,7 @@ bool wxMenuBase::Destroy(wxMenuItem *item)
 
 bool wxMenuBase::DoDestroy(wxMenuItem *item)
 {
-    wxMenuItem *item2 = DoRemove(item);
+    wxMenuItem *item2 = Remove(item);
     wxCHECK_MSG( item2, false, wxT("failed to delete menu item") );
 
     delete item2;
