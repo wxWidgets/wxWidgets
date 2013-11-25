@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/xrc/xh_toolb.h
 // Purpose:     XML resource handler for wxAuiToolBar
-// Author:      Kinaou Hervé
+// Author:      Rodolphe Suescun
 // Created:     2013-11-23
-// Copyright:   (c) 2013 Kinaou Hervé
+// Copyright:   (c) 2013 Rodolphe Suescun
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
