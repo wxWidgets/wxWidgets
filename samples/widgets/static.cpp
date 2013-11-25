@@ -215,11 +215,12 @@ StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
     m_radioHAlign =
     m_radioVAlign = (wxRadioBox *)NULL;
 
+    m_statText = NULL;
 #if wxUSE_STATLINE
     m_statLine = (wxStaticLine *)NULL;
 #endif // wxUSE_STATLINE
 #if wxUSE_MARKUP
-    m_statText = m_statMarkup = NULL;
+    m_statMarkup = NULL;
 #endif // wxUSE_MARKUP
 
     m_sizerStatBox = (wxStaticBoxSizer *)NULL;
