@@ -594,6 +594,7 @@ wxMSW:
 - Fix blank wxBitmapComboBox dropdown appearance.
 - Make "%lu" work with size_t arguments under Win64 (laro).
 - Fix wxRegion::Offset() with shared objects (Joost Nieuwenhuijse).
+- Fix wxSocket::Initialize() after Shutdown() (Laurent Poujoulat).
 
 wxOSX:
 
