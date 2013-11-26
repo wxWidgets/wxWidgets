@@ -440,7 +440,7 @@ bool wxModalEventLoop::ProcessIdle()
         // which could have logged new messages)
         wxLog::FlushActive();
 #endif
-        bool needMore = event.MoreRequested();
+        needMore = event.MoreRequested();
         
         wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
         while (node)
