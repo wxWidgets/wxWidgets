@@ -428,11 +428,16 @@ wxMenuItem *wxMenuBase::Remove(wxMenuItem *item)
     // if we get here, the item is valid or one of Remove() functions is broken
     wxCHECK_MSG( node, NULL, wxT("removing item not in the menu?") );
 
+    // call DoRemove() before removing the item from the list of items as the
+    // existing code in port-specific implementation may rely on the item still
+    // being there (this is the case for at least wxMSW)
+    wxMenuItem* const item2 = DoRemove(item);
+
     // we detach the item, but we do delete the list node (i.e. don't call
     // DetachNode() here!)
     m_items.Erase(node);
 
-    return DoRemove(item);
+    return item2;
 }
 
 wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)

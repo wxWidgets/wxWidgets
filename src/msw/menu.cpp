@@ -793,9 +793,6 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         node = node->GetNext();
     }
 
-    // DoRemove() (unlike Remove) can only be called for an existing item!
-    wxCHECK_MSG( node, NULL, wxT("bug in wxMenu::Remove logic") );
-
 #if wxUSE_ACCEL
     // remove the corresponding accel from the accel table
     int n = FindAccel(item->GetId());
