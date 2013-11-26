@@ -1378,6 +1378,9 @@ public:
     virtual void SetSizeHints( const wxSize& minSize,
                                const wxSize& maxSize=wxDefaultSize,
                                const wxSize& incSize=wxDefaultSize);
+    /**
+        @overload
+    */
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
