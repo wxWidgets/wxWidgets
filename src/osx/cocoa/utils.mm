@@ -408,7 +408,21 @@ bool wxApp::CallOnInit()
     wxMacAutoreleasePool autoreleasepool;
     m_onInitResult = false;
     m_inited = false;
+
+    // Feed the upcoming event loop with a dummy event. Without this,
+    // [NSApp run] below wouldn't return, as we expect it to, if the
+    // application was launched without being activated and would block
+    // until the dock icon was clicked - delaying OnInit() call too.
+    NSEvent *event = [NSEvent otherEventWithType:NSApplicationDefined
+                                    location:NSMakePoint(0.0, 0.0)
+                               modifierFlags:0
+                                   timestamp:0
+                                windowNumber:0
+                                     context:nil
+                                     subtype:0 data1:0 data2:0];
+    [NSApp postEvent:event atStart:FALSE];
     [NSApp run];
+
     m_onInitResult = OnInit();
     m_inited = true;
     if ( m_onInitResult )
