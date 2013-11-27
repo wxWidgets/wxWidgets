@@ -135,12 +135,15 @@
 #endif
 
 /*
-   This macro can be used to check that the version of mingw32 compiler is
-   at least maj.min
+   This macro can be used to check that the version of mingw32 CRT is at least
+   maj.min
  */
 
 /* Check for Mingw runtime version: */
-#if defined(__MINGW32_MAJOR_VERSION) && defined(__MINGW32_MINOR_VERSION)
+#ifdef __MINGW32__
+    /* Include the header defining __MINGW32_{MAJ,MIN}OR_VERSION */
+    #include <_mingw.h>
+
     #define wxCHECK_MINGW32_VERSION( major, minor ) \
  ( ( ( __MINGW32_MAJOR_VERSION > (major) ) \
       || ( __MINGW32_MAJOR_VERSION == (major) && __MINGW32_MINOR_VERSION >= (minor) ) ) )
