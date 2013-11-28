@@ -584,6 +584,8 @@ All (GUI):
 - Fix crash when setting invalid label ending with "&" (ZaneUJi).
 - Fix wxEditableListBox user data corruption when exchanging items
   in 64 bit builds (Tom Mettam, Rapid2D).
+- Fix wxCommandProcessor::IsDirty() return value which was wrong after undoing
+  all commands without saving (Neil Chittenden).
 
 wxGTK:
 
