@@ -1657,6 +1657,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
     }
     else
     {
+        TempSetter set(m_changingSelection);
         if ( !TreeView_DeleteItem(GetHwnd(), HITEM(item)) )
         {
             wxLogLastError(wxT("TreeView_DeleteItem"));
