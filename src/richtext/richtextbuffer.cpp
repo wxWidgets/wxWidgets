@@ -8781,7 +8781,10 @@ bool wxRichTextBuffer::SetStyleSheetAndNotify(wxRichTextStyleSheet* sheet)
 
     wxRichTextEvent event(wxEVT_RICHTEXT_STYLESHEET_REPLACING, winid);
     event.SetEventObject(GetRichTextCtrl());
-    event.SetContainer(GetRichTextCtrl()->GetFocusObject());
+    if (GetRichTextCtrl())
+        event.SetContainer(GetRichTextCtrl()->GetFocusObject());
+    else
+        event.SetContainer(this);
     event.SetOldStyleSheet(oldSheet);
     event.SetNewStyleSheet(sheet);
     event.Allow();
