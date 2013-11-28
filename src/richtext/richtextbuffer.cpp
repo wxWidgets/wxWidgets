@@ -1601,6 +1601,8 @@ bool wxRichTextCompositeObject::Defragment(wxRichTextDrawingContext& context, co
 /// Dump to output stream for debugging
 void wxRichTextCompositeObject::Dump(wxTextOutputStream& stream)
 {
+    wxRichTextObject::Dump(stream);
+
     wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
