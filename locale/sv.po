@@ -1447,7 +1447,7 @@ msgstr "Lådstilar"
 
 #: ../src/common/filepickercmn.cpp:43 ../src/common/filepickercmn.cpp:44
 msgid "Browse"
-msgstr ""
+msgstr "Bläddra"
 
 #: ../src/richtext/richtextliststylepage.cpp:245
 #: ../src/richtext/richtextbulletspage.cpp:195
