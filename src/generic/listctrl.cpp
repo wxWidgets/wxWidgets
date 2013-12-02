@@ -5197,6 +5197,9 @@ void wxGenericListCtrl::OnInternalIdle()
 
 bool wxGenericListCtrl::SetBackgroundColour( const wxColour &colour )
 {
+    if ( !wxWindow::SetBackgroundColour( colour ) )
+        return false;
+
     if (m_mainWin)
     {
         m_mainWin->SetBackgroundColour( colour );
