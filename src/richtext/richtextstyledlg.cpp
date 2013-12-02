@@ -349,6 +349,9 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
     }
     else
     {
+        // Avoid the Escape key logic falling back on OK after finding
+        // a hidden wxID_CANCEL contol
+        m_closeButton->SetId(wxID_HIGHEST);
         m_buttonSizer->Show(m_closeButton, false);
     }
 
