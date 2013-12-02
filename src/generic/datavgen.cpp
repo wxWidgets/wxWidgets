@@ -4414,7 +4414,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             // adjust the rectangle ourselves to account for the alignment
             int align = cell->GetAlignment();
             if ( align == wxDVR_DEFAULT_ALIGNMENT )
-                align = wxALIGN_CENTRE;
+                align = cell->GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
 
             wxRect rectItem = cell_rect;
             const wxSize size = cell->GetSize();
