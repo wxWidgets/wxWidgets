@@ -5217,9 +5217,6 @@ bool wxGenericListCtrl::SetForegroundColour( const wxColour &colour )
         m_mainWin->m_dirty = true;
     }
 
-    if (m_headerWin)
-        m_headerWin->SetForegroundColour( colour );
-
     return true;
 }
 
