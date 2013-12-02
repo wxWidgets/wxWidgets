@@ -459,15 +459,19 @@ public:
         Notice that hints are known as <em>cue banners</em> under MSW or
         <em>placeholder strings</em> under OS X.
 
-        @remarks For the platforms without native hints support (and currently
-            only the MSW port does have it and even there it is only used under
-            Windows Vista and later only), the implementation has several known
-            limitations. Notably, the hint display will not be properly updated
-            if you change wxTextEntry contents programmatically when the hint
-            is displayed using methods other than SetValue() or ChangeValue()
-            or others which use them internally (e.g. Clear()). In other words,
-            currently you should avoid calling methods such as WriteText() or
-            Replace() when using hints and the text control is empty.
+        @remarks Currently implemented natively on Windows (Vista and later
+            only), OS X and GTK+ (3.2 and later).
+
+            For the platforms without native hints support, the implementation
+            has several known limitations. Notably, the hint display will not
+            be properly updated if you change wxTextEntry contents
+            programmatically when the hint is displayed using methods other
+            than SetValue() or ChangeValue() or others which use them
+            internally (e.g. Clear()). In other words, currently you should
+            avoid calling methods such as WriteText() or Replace() when using
+            hints and the text control is empty. If you bind to the control's
+            focus and wxEVT_TEXT events, you must call wxEvent::Skip() on them
+            so that the generic implementation works correctly.
 
         @remarks Hints can only be used for single line text controls,
             native multi-line text controls don't support hints under any
