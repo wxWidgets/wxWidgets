@@ -108,7 +108,7 @@ public:
     void Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
     // HitTest the floats
-    int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, int flags);
+    int HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags);
 
     // Get floating object count
     int GetFloatingObjectCount() const { return m_left.GetCount() + m_right.GetCount(); }
@@ -132,7 +132,7 @@ public:
 
     static void DrawFloat(const wxRichTextFloatRectMapArray& array, wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
 
-    static int HitTestFloat(const wxRichTextFloatRectMapArray& array, wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, int flags);
+    static int HitTestFloat(const wxRichTextFloatRectMapArray& array, wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags);
 
 private:
     wxRichTextFloatRectMapArray m_left;
@@ -426,7 +426,7 @@ void wxRichTextFloatCollector::Draw(wxDC& dc, wxRichTextDrawingContext& context,
         DrawFloat(m_right, dc, context, range, selection, rect, descent, style);
 }
 
-int wxRichTextFloatCollector::HitTestFloat(const wxRichTextFloatRectMapArray& array, wxDC& WXUNUSED(dc), wxRichTextDrawingContext& WXUNUSED(context), const wxPoint& pt, long& textPosition, wxRichTextObject** obj, int WXUNUSED(flags))
+int wxRichTextFloatCollector::HitTestFloat(const wxRichTextFloatRectMapArray& array, wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int WXUNUSED(flags))
 {
     int i;
     if (array.GetCount() == 0)
@@ -442,6 +442,15 @@ int wxRichTextFloatCollector::HitTestFloat(const wxRichTextFloatRectMapArray& ar
     if (point.x <= pt.x && point.x + size.x >= pt.x
         && point.y <= pt.y && point.y + size.y >= pt.y)
     {
+        if (array[i]->anchor->IsTopLevel())
+        {
+            int result = array[i]->anchor->HitTest(dc, context, pt, textPosition, obj, contextObj, 0);
+            if (result != wxRICHTEXT_HITTEST_NONE)
+            {
+                return result;
+            }
+        }
+        
         textPosition = array[i]->anchor->GetRange().GetStart();
         * obj = array[i]->anchor;
         if (pt.x > (pt.x + pt.x + size.x) / 2)
@@ -453,12 +462,12 @@ int wxRichTextFloatCollector::HitTestFloat(const wxRichTextFloatRectMapArray& ar
     return wxRICHTEXT_HITTEST_NONE;
 }
 
-int wxRichTextFloatCollector::HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, int flags)
+int wxRichTextFloatCollector::HitTest(wxDC& dc, wxRichTextDrawingContext& context, const wxPoint& pt, long& textPosition, wxRichTextObject** obj, wxRichTextObject** contextObj, int flags)
 {
-    int ret = HitTestFloat(m_left, dc, context, pt, textPosition, obj, flags);
+    int ret = HitTestFloat(m_left, dc, context, pt, textPosition, obj, contextObj, flags);
     if (ret == wxRICHTEXT_HITTEST_NONE)
     {
-        ret = HitTestFloat(m_right, dc, context, pt, textPosition, obj, flags);
+        ret = HitTestFloat(m_right, dc, context, pt, textPosition, obj, contextObj, flags);
     }
     return ret;
 }
@@ -1886,7 +1895,13 @@ int wxRichTextParagraphLayoutBox::HitTest(wxDC& dc, wxRichTextDrawingContext& co
 
     int ret = wxRICHTEXT_HITTEST_NONE;
     if (wxRichTextBuffer::GetFloatingLayoutMode() && m_floatCollector && (flags & wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS) == 0)
-        ret = m_floatCollector->HitTest(dc, context, pt, textPosition, obj, flags);
+    {
+        ret = m_floatCollector->HitTest(dc, context, pt, textPosition, obj, contextObj, flags);
+        if (ret != wxRICHTEXT_HITTEST_NONE)
+        {
+            return ret;
+        }
+    }
 
     if (ret == wxRICHTEXT_HITTEST_NONE)
         return wxRichTextCompositeObject::HitTest(dc, context, pt, textPosition, obj, contextObj, flags);
