@@ -4236,6 +4236,37 @@ if test "$ac_cv_func_vsscanf" = "yes"; then
 
     if test "$wx_cv_func_vsscanf_decl" = "yes"; then
         AC_DEFINE(HAVE_VSSCANF_DECL)
+
+        dnl we know there is a vsscanf() declaration, but it can be broken by
+        dnl declaring vsscanf() as taking a non-const first argument (this
+        dnl happens at least under HP-UX 11.31, see #15638).
+        AC_CACHE_CHECK([if vsscanf() declaration is broken], wx_cv_func_broken_vsscanf_decl,
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #include <stdio.h>
+                        #include <stdarg.h>
+                        #ifdef __MSL__
+                        #if __MSL__ >= 0x6000
+                        namespace std {}
+                        using namespace std;
+                        #endif
+                        #endif
+                    ],
+                    [
+                        const char *buf;
+                        va_list args;
+                        vsscanf(buf, "%s", args);
+                    ],
+                    wx_cv_func_broken_vsscanf_decl=no,
+                    wx_cv_func_broken_vsscanf_decl=yes
+                )
+            ]
+        )
+
+        if test "$wx_cv_func_broken_vsscanf_decl" = "yes"; then
+            AC_DEFINE(HAVE_BROKEN_VSSCANF_DECL)
+        fi
     fi
 fi
 AC_LANG_POP()
