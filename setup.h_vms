@@ -1107,6 +1107,10 @@ typedef pid_t GPid;
  * with 'char*' for the 3rd parameter instead of 'const char*' */
 #undef HAVE_BROKEN_VSNPRINTF_DECL
 
+/* Define if you have a _broken_ vsscanf() declaration in the header,
+ * with 'char*' for the 1st parameter instead of 'const char*' */
+#undef HAVE_BROKEN_VSSCANF_DECL
+
 /* Define if you have vsscanf() */
 #define HAVE_VSSCANF 1
 
