@@ -1195,7 +1195,11 @@ wxDataViewProgressRenderer::Render(wxRect rect, wxDC *dc, int WXUNUSED(state))
 
 wxSize wxDataViewProgressRenderer::GetSize() const
 {
-    return wxSize(40,12);
+    // Return -1 width because a progress bar fits any width; unlike most
+    // renderers, it doesn't have a "good" width for the content. This makes it
+    // grow to the whole column, which is pretty much always the desired
+    // behaviour. Keep the height fixed so that the progress bar isn't too fat.
+    return wxSize(-1, 12);
 }
 
 // ---------------------------------------------------------
