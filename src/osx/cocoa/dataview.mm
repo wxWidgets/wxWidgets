@@ -351,7 +351,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     int resizingMask;
     if (column->IsResizeable())
     {
-        resizingMask = NSTableColumnUserResizingMask;
+        resizingMask = NSTableColumnUserResizingMask | NSTableColumnAutoresizingMask;
         [nativeColumn setMinWidth:column->GetMinWidth()];
         [nativeColumn setMaxWidth:column->GetMaxWidth()];
     }
@@ -1971,7 +1971,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
 void wxCocoaDataViewControl::InitOutlineView(long style)
 {
     [m_OutlineView setImplementation:this];
-    [m_OutlineView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
+    [m_OutlineView setColumnAutoresizingStyle:NSTableViewLastColumnOnlyAutoresizingStyle];
     [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
     NSUInteger maskGridStyle(NSTableViewGridNone);
     if (style & wxDV_HORIZ_RULES)
@@ -3152,6 +3152,7 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title,
     if (renderer && !renderer->IsCustomRenderer() &&
         (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
         renderer->SetAlignment(align);
+    SetResizeable((flags & wxDATAVIEW_COL_RESIZABLE) != 0);
 }
 
 wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap,
@@ -3236,7 +3237,7 @@ void wxDataViewColumn::SetResizeable(bool resizable)
 {
     wxDataViewColumnBase::SetResizeable(resizable);
     if (resizable)
-        [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask];
+        [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask | NSTableColumnAutoresizingMask];
     else
         [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];
 }

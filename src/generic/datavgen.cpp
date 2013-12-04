@@ -802,6 +802,9 @@ public:
 
     void OnColumnsCountChanged();
 
+    // Adjust last column to window size
+    void UpdateColumnSizes();
+
     // Called by wxDataViewCtrl and our own OnRenameTimer() to start edit the
     // specified item in the given column.
     void StartEditing(const wxDataViewItem& item, const wxDataViewColumn* col);
@@ -2591,6 +2594,7 @@ void wxDataViewMainWindow::OnInternalIdle()
 
     if (m_dirty)
     {
+        UpdateColumnSizes();
         RecalculateDisplay();
         m_dirty = false;
     }
@@ -4494,6 +4498,39 @@ void wxDataViewMainWindow::OnColumnsCountChanged()
     UpdateDisplay();
 }
 
+void wxDataViewMainWindow::UpdateColumnSizes()
+{
+    int colsCount = GetOwner()->GetColumnCount();
+    if ( !colsCount )
+        return;
+
+    wxDataViewCtrl *owner = GetOwner();
+
+    int fullWinWidth = GetSize().x;
+
+    wxDataViewColumn *lastCol = owner->GetColumn(colsCount - 1);
+    int colswidth = GetEndOfLastCol();
+    int lastColX = colswidth - lastCol->GetWidth();
+    if ( lastColX < fullWinWidth )
+    {
+        int desiredWidth = wxMax(fullWinWidth - lastColX, lastCol->GetMinWidth());
+        lastCol->SetWidth(desiredWidth);
+
+        // All columns fit on screen, so we don't need horizontal scrolling.
+        // To prevent flickering scrollbar when resizing the window to be
+        // narrower, force-set the virtual width to 0 here. It will eventually
+        // be corrected at idle time.
+        SetVirtualSize(0, m_virtualSize.y);
+
+        RefreshRect(wxRect(lastColX, 0, fullWinWidth - lastColX, GetSize().y));
+    }
+    else
+    {
+        // else: don't bother, the columns won't fit anyway
+        SetVirtualSize(colswidth, m_virtualSize.y);
+    }
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
@@ -4609,6 +4646,9 @@ wxSize wxDataViewCtrl::GetSizeAvailableForScrollTarget(const wxSize& size)
 
 void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
+    if ( m_clientArea && GetColumnCount() )
+        m_clientArea->UpdateColumnSizes();
+
     // We need to override OnSize so that our scrolled
     // window a) does call Layout() to use sizers for
     // positioning the controls but b) does not query
