@@ -324,15 +324,17 @@ void wxBell()
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     
-    if ( UMAGetSystemVersion() < 0x1090 )
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+    if ( UMAGetSystemVersion() >= 0x1090 )
+    {
+        [[NSRunningApplication currentApplication] activateWithOptions:
+         (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
+    }
+    else
+#endif
     {
         [self deactivate];
         [self activateIgnoringOtherApps:YES];
-    }
-    else
-    {
-        [[NSRunningApplication currentApplication] activateWithOptions:
-            (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
     }
 }
 
