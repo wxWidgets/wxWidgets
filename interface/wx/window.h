@@ -3789,6 +3789,8 @@ wxWindow* wxGetActiveWindow();
     Returns the first top level parent of the given window, or in other words,
     the frame or dialog containing it, or @NULL.
 
+    Notice that if @a window is itself already a TLW, it is returned directly.
+
     @header{wx/window.h}
 */
 wxWindow* wxGetTopLevelParent(wxWindow* window);
