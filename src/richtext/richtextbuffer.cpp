@@ -464,6 +464,7 @@ int wxRichTextFloatCollector::HitTestFloat(const wxRichTextFloatRectMapArray& ar
         
         textPosition = array[i]->anchor->GetRange().GetStart();
         * obj = array[i]->anchor;
+        * contextObj = array[i]->anchor->GetParentContainer();
         if (pt.x > (pt.x + pt.x + size.x) / 2)
             return wxRICHTEXT_HITTEST_BEFORE;
         else
@@ -5218,7 +5219,30 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     // Substract -1 because the last position is always the end-paragraph position.
     if (lastCompletedEndPos <= GetRange().GetEnd()-1)
     {
-        currentPosition.x = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
+        int startOffset = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
+        availableRect = wxRect(rect.x + startOffset, rect.y + currentPosition.y,
+                                     rect.width - startOffset - rightIndent, rect.height);
+        
+        // Take into account floating objects for the last line
+        if (wxRichTextBuffer::GetFloatingLayoutMode() && collector)
+        {
+            wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
+
+            // Adjust availableRect to the space that is available when taking floating objects into account.
+
+            if (floatAvailableRect.x + startOffset > availableRect.x)
+            {
+                int newX = floatAvailableRect.x + startOffset;
+                int newW = availableRect.width - (newX - availableRect.x);
+                availableRect.x = newX;
+                availableRect.width = newW;
+            }
+
+            if (floatAvailableRect.width < availableRect.width)
+                availableRect.width = floatAvailableRect.width;
+        }
+
+        currentPosition.x = availableRect.x - rect.x;
 
         wxRichTextLine* line = AllocateLine(lineCount);
 
