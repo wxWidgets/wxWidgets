@@ -12,16 +12,9 @@
 
 <xi:include href="include/csleobuild.xml"/>
 
-<scheduler>
-    <name>branch_2_9_0</name>
-    <branch>branches/WX_2_9_0_BRANCH</branch>
-    <treeStableTimer>900</treeStableTimer>
-    <fileNotImportant>docs/* interface/*</fileNotImportant>
-</scheduler>
-
 <build>
-    <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
-    <builddir>csleo</builddir>
+    <name>OSX 10.5 Intel wxOSX Cocoa trunk</name>
+    <builddir>csleo_cocoa</builddir>
     <scheduler>trunk_quick</scheduler>
 
     <steps>
@@ -31,21 +24,23 @@
         <run-tests/>
     </steps>
 </build>
-  <build>
-    <name>OSX 10.5 Intel wxOSX Cocoa trunk</name>
-    <builddir>csleo_cocoa</builddir>
+
+<build>
+    <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
+    <builddir>csleo_carbon</builddir>
     <scheduler>trunk_quick</scheduler>
 
     <steps>
         <checkout/>
-        <configure options="--with-osx_cocoa"/>
+        <configure options="--with-osx_carbon"/>
         <compile-all/>
         <run-tests/>
     </steps>
-  </build>
+</build>
+
 <build>
-    <name>OSX 10.5 Intel wxMac Stable</name>
-    <builddir>csleo_stable</builddir>
+    <name>OSX 10.5 Intel wxOSX Cocoa Stable</name>
+    <builddir>csleo_stable_cocoa</builddir>
     <scheduler>stable_quick</scheduler>
 
     <steps>
@@ -53,6 +48,19 @@
         <configure/>
         <compile-all/>
         <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>OSX 10.5 Intel wxOSX Carbon Stable</name>
+    <builddir>csleo_stable_carbon</builddir>
+    <scheduler>stable_quick</scheduler>
+
+    <steps>
+    <checkout branch="{$STABLE_BRANCH}"/>
+    <configure options="--with-osx_carbon"/>
+    <compile-all/>
+    <run-tests/>
     </steps>
 </build>
 
