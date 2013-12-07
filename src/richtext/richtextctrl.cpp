@@ -621,23 +621,35 @@ void wxRichTextCtrl::OnLeftClick(wxMouseEvent& event)
     {
         wxRichTextParagraphLayoutBox* oldFocusObject = GetFocusObject();
         wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
+        bool needsCaretSet = false;
         if (container && container != GetFocusObject() && container->AcceptsFocus())
         {
             SetFocusObject(container, false /* don't set caret position yet */);
+            needsCaretSet = true;
         }
 
         m_dragging = true;
         CaptureMouse();
 
-        long oldCaretPos = m_caretPosition;
-
-        SetCaretPositionAfterClick(container, position, hit);
-
-        // For now, don't handle shift-click when we're selecting multiple objects.
-        if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
-            ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
+        // Don't change the caret position if we clicked on a floating objects such as an image,
+        // unless we changed the focus object.
+        if (wxRichTextBuffer::GetFloatingLayoutMode() && hitObj && hitObj->IsFloating() && !hitObj->AcceptsFocus())
+        {
+            if (needsCaretSet)
+                SetInsertionPoint(0);
+        }
         else
-            SelectNone();
+        {
+            long oldCaretPos = m_caretPosition;
+
+            SetCaretPositionAfterClick(container, position, hit);
+
+            // For now, don't handle shift-click when we're selecting multiple objects.
+            if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
+                ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
+            else
+                SelectNone();
+        }
     }
 
     event.Skip();
@@ -678,20 +690,30 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
             int hit = GetBuffer().HitTest(dc, context, GetUnscaledPoint(event.GetLogicalPosition(dc)), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
             wxRichTextParagraphLayoutBox* oldFocusObject = GetFocusObject();
             wxRichTextParagraphLayoutBox* container = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
+            bool needsCaretSet = false;
             if (container && container != GetFocusObject() && container->AcceptsFocus())
             {
                 SetFocusObject(container, false /* don't set caret position yet */);
+                needsCaretSet = true;
             }
 
-            long oldCaretPos = m_caretPosition;
-
-            SetCaretPositionAfterClick(container, position, hit);
-
-            // For now, don't handle shift-click when we're selecting multiple objects.
-            if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
-                ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
+            if (wxRichTextBuffer::GetFloatingLayoutMode() && hitObj && hitObj->IsFloating() && !hitObj->AcceptsFocus())
+            {
+                if (needsCaretSet)
+                    SetInsertionPoint(0);
+            }
             else
-                SelectNone();
+            {
+                long oldCaretPos = m_caretPosition;
+
+                SetCaretPositionAfterClick(container, position, hit);
+
+                // For now, don't handle shift-click when we're selecting multiple objects.
+                if (event.ShiftDown() && GetFocusObject() == oldFocusObject && m_selectionState == wxRichTextCtrlSelectionState_Normal)
+                    ExtendSelection(oldCaretPos, m_caretPosition, wxRICHTEXT_SHIFT_DOWN);
+                else
+                    SelectNone();
+            }
         }
 #endif
 
@@ -1012,7 +1034,7 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
 }
 
 /// Left-double-click
-void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& WXUNUSED(event))
+void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& event)
 {
     wxRichTextEvent cmdEvent(
         wxEVT_RICHTEXT_LEFT_DCLICK,
@@ -1023,7 +1045,45 @@ void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& WXUNUSED(event))
 
     if (!GetEventHandler()->ProcessEvent(cmdEvent))
     {
-        SelectWord(GetCaretPosition()+1);
+        bool okToSelectWord = true;
+        // Don't try to select a word if we clicked on a floating objects such as an image.
+        // Instead, select or deselect the object.
+        if (wxRichTextBuffer::GetFloatingLayoutMode())
+        {
+            wxClientDC dc(this);
+            PrepareDC(dc);
+            dc.SetFont(GetFont());
+
+            long position = 0;
+            wxPoint logicalPt = event.GetLogicalPosition(dc);
+            wxRichTextObject* hitObj = NULL;
+            wxRichTextObject* contextObj = NULL;
+            wxRichTextDrawingContext context(& GetBuffer());
+            int hit = GetFocusObject()->HitTest(dc, context, GetUnscaledPoint(logicalPt), position, & hitObj, & contextObj, wxRICHTEXT_HITTEST_HONOUR_ATOMIC);
+            wxUnusedVar(hit);
+            if (hitObj && hitObj->IsFloating() && !hitObj->AcceptsFocus())
+            {
+                if ((GetFocusObject() == m_selection.GetContainer()) && m_selection.WithinSelection(hitObj->GetRange().GetStart()))
+                {
+                }
+                else
+                {
+                    int from = hitObj->GetRange().GetStart();
+                    int to = hitObj->GetRange().GetStart()+1;
+
+                    wxRichTextSelection oldSelection = m_selection;
+                    m_selectionAnchor = from-1;
+                    m_selectionAnchorObject = NULL;
+                    m_selection.Set(wxRichTextRange(from, to-1), GetFocusObject());
+                    RefreshForSelectionChange(oldSelection, m_selection);
+                }
+                okToSelectWord = false;
+            }
+        }
+        if (okToSelectWord)
+        {
+            SelectWord(GetCaretPosition()+1);
+        }
     }
 }
 
@@ -3580,7 +3640,7 @@ int wxRichTextCtrl::PrepareContextMenu(wxMenu* menu, const wxPoint& pt, bool add
             else
             {
                 if (addPropertyCommands)
-                    m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), NULL);
+                    m_contextMenuPropertiesInfo.AddItems(this, GetFocusObject(), hitObj);
             }
         }
         else
@@ -4539,6 +4599,26 @@ bool wxRichTextCtrl::RefreshForSelectionChange(const wxRichTextSelection& oldSel
         pt1.y = wxMax(0, pt1.y);
         pt2.x = 0;
         pt2.y = wxMin(clientSize.y, pt2.y);
+
+        // Take into account any floating objects within the selection
+        if (wxRichTextBuffer::GetFloatingLayoutMode() && GetFocusObject()->GetFloatingObjectCount() > 0)
+        {
+            wxRichTextObjectList floatingObjects;
+            GetFocusObject()->GetFloatingObjects(floatingObjects);
+            wxRichTextObjectList::compatibility_iterator node = floatingObjects.GetFirst();
+            while (node)
+            {
+                wxRichTextObject* obj = node->GetData();
+                if (obj->GetRange().GetStart() >= firstPos && obj->GetRange().GetStart() <= lastPos)
+                {
+                    wxPoint pt1Obj = GetPhysicalPoint(GetScaledPoint(obj->GetPosition()));
+                    wxPoint pt2Obj = GetPhysicalPoint(GetScaledPoint(obj->GetPosition())) + wxPoint(0, (int) (0.5 + obj->GetCachedSize().y * GetScale()));
+                    pt1.y = wxMin(pt1.y, pt1Obj.y);
+                    pt2.y = wxMax(pt2.y, pt2Obj.y);
+                }
+                node = node->GetNext();
+            }
+        }
 
         wxRect rect(pt1, wxSize(clientSize.x, pt2.y - pt1.y));
         RefreshRect(rect, false);
