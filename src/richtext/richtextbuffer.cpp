@@ -5004,20 +5004,12 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
             if (wxRichTextBuffer::GetFloatingLayoutMode() && collector)
             {
-                wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
-
                 // Adjust availableRect to the space that is available when taking floating objects into account.
-
-                if (floatAvailableRect.x + startOffset > availableRect.x)
-                {
-                    int newX = floatAvailableRect.x + startOffset;
-                    int newW = availableRect.width - (newX - availableRect.x);
-                    availableRect.x = newX;
-                    availableRect.width = newW;
-                }
-
-                if (floatAvailableRect.width < availableRect.width)
-                    availableRect.width = floatAvailableRect.width;
+                wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
+                int x1 = wxMax(availableRect.x, (floatAvailableRect.x + startOffset));
+                int x2 = wxMin(availableRect.GetRight(), (floatAvailableRect.GetRight() - rightIndent));
+                availableRect.x = x1;
+                availableRect.width = x2 - x1 + 1;
             }
 
             currentPosition.x = availableRect.x - rect.x;
@@ -5226,20 +5218,12 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         // Take into account floating objects for the last line
         if (wxRichTextBuffer::GetFloatingLayoutMode() && collector)
         {
-            wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
-
             // Adjust availableRect to the space that is available when taking floating objects into account.
-
-            if (floatAvailableRect.x + startOffset > availableRect.x)
-            {
-                int newX = floatAvailableRect.x + startOffset;
-                int newW = availableRect.width - (newX - availableRect.x);
-                availableRect.x = newX;
-                availableRect.width = newW;
-            }
-
-            if (floatAvailableRect.width < availableRect.width)
-                availableRect.width = floatAvailableRect.width;
+            wxRect floatAvailableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
+            int x1 = wxMax(availableRect.x, (floatAvailableRect.x + startOffset));
+            int x2 = wxMin(availableRect.GetRight(), (floatAvailableRect.GetRight() - rightIndent));
+            availableRect.x = x1;
+            availableRect.width = x2 - x1 + 1;
         }
 
         currentPosition.x = availableRect.x - rect.x;
