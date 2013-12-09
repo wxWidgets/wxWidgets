@@ -397,6 +397,8 @@ wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 
 // END move into a evtloop_osx.cpp
 
+#define OSX_USE_MODAL_SESSION 1
+
 void wxModalEventLoop::OSXDoRun()
 {
     wxMacAutoreleasePool pool;
@@ -412,13 +414,31 @@ void wxModalEventLoop::OSXDoRun()
             [NSApp sendEvent:event];
         }
     }
-    
-    [NSApp runModalForWindow:m_modalNativeWindow];
+#if OSX_USE_MODAL_SESSION
+    if ( m_modalWindow )
+    {
+        BeginModalSession(m_modalWindow);
+        wxCFEventLoop::OSXDoRun();
+    }
+    else
+#endif
+    {
+        [NSApp runModalForWindow:m_modalNativeWindow];
+    }
 }
 
 void wxModalEventLoop::OSXDoStop()
 {
-    [NSApp abortModal];
+#if OSX_USE_MODAL_SESSION
+    if ( m_modalWindow )
+    {
+        EndModalSession();
+    }
+    else
+#endif
+    {
+        [NSApp abortModal];
+    }
 }
 
 // we need our own version of ProcessIdle here in order to
