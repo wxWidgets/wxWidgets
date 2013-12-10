@@ -376,6 +376,10 @@ void wxRichTextCtrl::Init()
     m_caretPositionForDefaultStyle = -2;
     m_focusObject = & m_buffer;
     m_scale = 1.0;
+
+    // Scrollbar hysteresis detection
+    m_setupScrollbarsCount = 0;
+    m_setupScrollbarsCountInOnSize = 0;
 }
 
 void wxRichTextCtrl::DoThaw()
@@ -460,7 +464,7 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
             dc.SetUserScale(1.0, 1.0);
 
-            SetupScrollbars();
+            SetupScrollbars(false, true /* from OnPaint */);
         }
 
         // Paint the background
@@ -2592,6 +2596,10 @@ void wxRichTextCtrl::OnSize(wxSizeEvent& event)
     RecreateBuffer();
 #endif
 
+    // Anti-hysteresis code: a way to determine whether a combination of OnPaint and
+    // OnSize was the source of a scrollbar change.
+    m_setupScrollbarsCountInOnSize = m_setupScrollbarsCount;
+
     event.Skip();
 }
 
@@ -2658,7 +2666,7 @@ void wxRichTextCtrl::OnScroll(wxScrollWinEvent& event)
 }
 
 /// Set up scrollbars, e.g. after a resize
-void wxRichTextCtrl::SetupScrollbars(bool atTop)
+void wxRichTextCtrl::SetupScrollbars(bool atTop, bool fromOnPaint)
 {
     if (IsFrozen())
         return;
@@ -2705,9 +2713,35 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop)
     if (oldPPUY != 0 && (oldVirtualSizeY*oldPPUY < clientSize.y) && (unitsY*pixelsPerUnit < clientSize.y))
         return;
 
+    // Hysteresis detection. If an object width is relative to the window width, then there can be
+    // interaction between image width and total content height, causing the scrollbar to appear
+    // and disappear rapidly. We need to see if we're getting this looping via OnSize/OnPaint,
+    // and if so, keep the scrollbar shown. We use a counter to see whether the SetupScrollbars
+    // call is caused by OnSize, versus any other operation such as editing.
+    // There may still be some flickering when editing at the boundary of scrollbar/no scrollbar
+    // states, but looping will be avoided.
+    bool doSetScrollbars = true;
+    wxSize windowSize = GetSize();
+    if (fromOnPaint)
+    {
+        if ((windowSize == m_lastWindowSize) && (m_setupScrollbarsCountInOnSize == m_setupScrollbarsCount))
+        {
+            // If we will be going from scrollbar to no scrollbar, we're now probably in hysteresis.
+            // So don't set the scrollbars this time.
+            if ((oldPPUY != 0) && (oldVirtualSizeY*oldPPUY > clientSize.y) && (unitsY*pixelsPerUnit <= clientSize.y))
+                doSetScrollbars = false;
+        }
+    }
+    
+    m_lastWindowSize = windowSize;
+    m_setupScrollbarsCount ++;
+    if (m_setupScrollbarsCount > 32000)
+        m_setupScrollbarsCount = 0;
+
     // Move to previous scroll position if
     // possible
-    SetScrollbars(0, pixelsPerUnit, 0, unitsY, newStartX, newStartY);
+    if (doSetScrollbars)
+        SetScrollbars(0, pixelsPerUnit, 0, unitsY, newStartX, newStartY);
 }
 
 /// Paint the background
