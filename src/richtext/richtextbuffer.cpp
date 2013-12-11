@@ -1972,7 +1972,7 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, wxRichTextDrawingContext& cont
     {
         wxRichTextObject* child = node->GetData();
 
-        if (child && !child->GetRange().IsOutside(range))
+        if (child && child->IsShown() && !child->GetRange().IsOutside(range))
         {
             wxRect childRect(child->GetPosition(), child->GetCachedSize());
             wxRichTextRange childRange = range;
