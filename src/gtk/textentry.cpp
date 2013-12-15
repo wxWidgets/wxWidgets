@@ -462,42 +462,29 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 #endif
 
     const GtkBorder* oldBorder = gtk_entry_get_inner_border(entry);
-    GtkBorder* newBorder;
+    GtkBorder newBorder;
 
     if ( oldBorder )
-    {
-        newBorder = gtk_border_copy(oldBorder);
-    }
+        newBorder = *oldBorder;
     else
     {
-    #if GTK_CHECK_VERSION(2,14,0)
-        newBorder = gtk_border_new();
-    #else
-        newBorder = g_slice_new0(GtkBorder);
-    #endif
         // Use some reasonable defaults for initial margins
-        newBorder->left = 2;
-        newBorder->right = 2;
+        newBorder.left = 2;
+        newBorder.right = 2;
 
         // These numbers seem to let the text remain vertically centered
         // in common use scenarios when margins.y == -1.
-        newBorder->top = 3;
-        newBorder->bottom = 3;
+        newBorder.top = 3;
+        newBorder.bottom = 3;
     }
 
     if ( margins.x != -1 )
-        newBorder->left = (gint) margins.x;
+        newBorder.left = margins.x;
 
     if ( margins.y != -1 )
-        newBorder->top = (gint) margins.y;
+        newBorder.top = margins.y;
 
-    gtk_entry_set_inner_border(entry, newBorder);
-
-#if GTK_CHECK_VERSION(2,14,0)
-    gtk_border_free(newBorder);
-#else
-    g_slice_free(GtkBorder, newBorder);
-#endif
+    gtk_entry_set_inner_border(entry, &newBorder);
 
     return true;
 #else
