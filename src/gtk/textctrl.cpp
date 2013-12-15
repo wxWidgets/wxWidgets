@@ -842,26 +842,24 @@ GtkEntry *wxTextCtrl::GetEntry() const
 
 int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
 {
+    if (IsSingleLine())
+        return wxTextEntry::GTKIMFilterKeypress(event);
+
+    int result;
 #if GTK_CHECK_VERSION(2, 22, 0)
-    if ( gtk_check_version(2, 12, 0) == 0 )
+#ifndef __WXGTK3__
+    result = false;
+    if (gtk_check_version(2,22,0) == NULL)
+#endif
     {
-        if ( IsSingleLine() )
-        {
-            return wxTextEntry::GTKIMFilterKeypress(event);
-        }
-        else
-        {
-            return gtk_text_view_im_context_filter_keypress(
-                        GTK_TEXT_VIEW(m_text),
-                        event
-                    );
-        }
+        result = gtk_text_view_im_context_filter_keypress(GTK_TEXT_VIEW(m_text), event);
     }
 #else // GTK+ < 2.22
     wxUnusedVar(event);
+    result = false;
 #endif // GTK+ 2.22+
 
-    return FALSE;
+    return result;
 }
 
 // ----------------------------------------------------------------------------
