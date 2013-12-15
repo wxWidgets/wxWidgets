@@ -417,14 +417,21 @@ void wxTextEntry::SendMaxLenEvent()
 
 int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
 {
+    int result;
 #if GTK_CHECK_VERSION(2, 22, 0)
-    if ( gtk_check_version(2, 12, 0) == 0 )
-        return gtk_entry_im_context_filter_keypress(GetEntry(), event);
+#ifndef __WXGTK3__
+    result = false;
+    if (gtk_check_version(2,22,0) == NULL)
+#endif
+    {
+        result = gtk_entry_im_context_filter_keypress(GetEntry(), event);
+    }
 #else // GTK+ < 2.22
     wxUnusedVar(event);
+    result = false;
 #endif // GTK+ 2.22+
 
-    return FALSE;
+    return result;
 }
 
 void wxTextEntry::GTKConnectInsertTextSignal(GtkEntry* entry)
@@ -449,6 +456,10 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 
     if ( !entry )
         return false;
+#ifndef __WXGTK3__
+    if (gtk_check_version(2,10,0))
+        return false;
+#endif
 
     const GtkBorder* oldBorder = gtk_entry_get_inner_border(entry);
     GtkBorder* newBorder;
@@ -497,21 +508,25 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
 
 wxPoint wxTextEntry::DoGetMargins() const
 {
+    wxPoint point(-1, -1);
 #if GTK_CHECK_VERSION(2,10,0)
     GtkEntry* entry = GetEntry();
-
-    if ( !entry )
-        return wxPoint(-1, -1);
-
-    const GtkBorder* border = gtk_entry_get_inner_border(entry);
-
-    if ( !border )
-        return wxPoint(-1, -1);
-
-    return wxPoint((wxCoord) border->left, (wxCoord) border->top);
-#else
-    return wxPoint(-1, -1);
+    if (entry)
+    {
+#ifndef __WXGTK3__
+        if (gtk_check_version(2,10,0) == NULL)
 #endif
+        {
+            const GtkBorder* border = gtk_entry_get_inner_border(entry);
+            if (border)
+            {
+                point.x = border->left;
+                point.y = border->top;
+            }
+        }
+    }
+#endif
+    return point;
 }
 
 #ifdef __WXGTK3__
@@ -519,25 +534,23 @@ bool wxTextEntry::SetHint(const wxString& hint)
 {
 #if GTK_CHECK_VERSION(3,2,0)
     GtkEntry *entry = GetEntry();
-    if ( entry )
+    if (entry && gtk_check_version(3,2,0) == NULL)
     {
         gtk_entry_set_placeholder_text(entry, wxGTK_CONV(hint));
         return true;
     }
-    else
 #endif
-        return wxTextEntryBase::SetHint(hint);
+    return wxTextEntryBase::SetHint(hint);
 }
 
 wxString wxTextEntry::GetHint() const
 {
 #if GTK_CHECK_VERSION(3,2,0)
     GtkEntry *entry = GetEntry();
-    if ( entry )
+    if (entry && gtk_check_version(3,2,0) == NULL)
         return wxGTK_CONV_BACK(gtk_entry_get_placeholder_text(entry));
-    else
 #endif
-        return wxTextEntryBase::GetHint();
+    return wxTextEntryBase::GetHint();
 }
 #endif // __WXGTK3__
 
