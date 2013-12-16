@@ -117,7 +117,7 @@
 #if wxCHECK_GCC_VERSION(3, 2) || wxCHECK_VISUALC_VERSION(7) \
         || (defined(__SUNCC__) && __SUNCC__ >= 0x5100) \
         || (defined(__xlC__) && __xlC__ >= 0x700) \
-        || defined(__INTELC__)
+        || defined(__INTELC__) || defined( __VMS )
     #define wxHAS_EVENT_BIND
 #endif
 
