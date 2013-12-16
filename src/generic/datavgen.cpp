@@ -702,9 +702,9 @@ public:
     void OnPaint( wxPaintEvent &event );
     void OnCharHook( wxKeyEvent &event );
     void OnChar( wxKeyEvent &event );
-    void OnVerticalNavigation(int delta, const wxKeyEvent& event);
-    void OnLeftKey();
-    void OnRightKey();
+    void OnVerticalNavigation(const wxKeyEvent& event, int delta);
+    void OnLeftKey(wxKeyEvent& event);
+    void OnRightKey(wxKeyEvent& event);
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
@@ -721,7 +721,7 @@ public:
     unsigned GetCurrentRow() const { return m_currentRow; }
     bool HasCurrentRow() { return m_currentRow != (unsigned int)-1; }
     void ChangeCurrentRow( unsigned int row );
-    bool TryAdvanceCurrentColumn(wxDataViewTreeNode *node, bool forward);
+    bool TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxKeyEvent& event, bool forward);
 
     wxDataViewColumn *GetCurrentColumn() const { return m_currentCol; }
     void ClearCurrentColumn() { m_currentCol = NULL; }
@@ -3673,8 +3673,20 @@ void wxDataViewMainWindow::OnCharHook(wxKeyEvent& event)
                 return;
 
             case WXK_RETURN:
+            case WXK_TAB:
                 m_editorRenderer->FinishEditing();
                 return;
+        }
+    }
+    else if ( m_useCellFocus )
+    {
+        if ( event.GetKeyCode() == WXK_TAB )
+        {
+            if ( event.ShiftDown() )
+                OnLeftKey(event);
+            else
+                OnRightKey(event);
+            return;
         }
     }
 
@@ -3801,35 +3813,35 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
 
         case WXK_UP:
-            OnVerticalNavigation( -1, event );
+            OnVerticalNavigation(event, -1);
             break;
 
         case WXK_DOWN:
-            OnVerticalNavigation( +1, event );
+            OnVerticalNavigation(event, +1);
             break;
         // Add the process for tree expanding/collapsing
         case WXK_LEFT:
-            OnLeftKey();
+            OnLeftKey(event);
             break;
 
         case WXK_RIGHT:
-            OnRightKey();
+            OnRightKey(event);
             break;
 
         case WXK_END:
-            OnVerticalNavigation( +(int)GetRowCount(), event );
+            OnVerticalNavigation(event, +(int)GetRowCount());
             break;
 
         case WXK_HOME:
-            OnVerticalNavigation( -(int)GetRowCount(), event );
+            OnVerticalNavigation(event, -(int)GetRowCount());
             break;
 
         case WXK_PAGEUP:
-            OnVerticalNavigation( -(pageSize - 1), event );
+            OnVerticalNavigation(event, -(pageSize - 1));
             break;
 
         case WXK_PAGEDOWN:
-            OnVerticalNavigation( +(pageSize - 1), event );
+            OnVerticalNavigation(event, +(pageSize - 1));
             break;
 
         default:
@@ -3837,7 +3849,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     }
 }
 
-void wxDataViewMainWindow::OnVerticalNavigation(int delta, const wxKeyEvent& event)
+void wxDataViewMainWindow::OnVerticalNavigation(const wxKeyEvent& event, int delta)
 {
     // if there is no selection, we cannot move it anywhere
     if (!HasCurrentRow() || IsEmpty())
@@ -3897,11 +3909,11 @@ void wxDataViewMainWindow::OnVerticalNavigation(int delta, const wxKeyEvent& eve
     GetOwner()->EnsureVisible( m_currentRow, -1 );
 }
 
-void wxDataViewMainWindow::OnLeftKey()
+void wxDataViewMainWindow::OnLeftKey(wxKeyEvent& event)
 {
     if ( IsList() )
     {
-        TryAdvanceCurrentColumn(NULL, /*forward=*/false);
+        TryAdvanceCurrentColumn(NULL, event, /*forward=*/false);
     }
     else
     {
@@ -3909,8 +3921,17 @@ void wxDataViewMainWindow::OnLeftKey()
         if ( !node )
             return;
 
-        if ( TryAdvanceCurrentColumn(node, /*forward=*/false) )
+        if ( TryAdvanceCurrentColumn(node, event, /*forward=*/false) )
             return;
+
+        const bool dontCollapseNodes = event.GetKeyCode() == WXK_TAB;
+        if ( dontCollapseNodes )
+        {
+            m_currentCol = NULL;
+            // allow focus change
+            event.Skip();
+            return;
+        }
 
         // Because TryAdvanceCurrentColumn() return false, we are at the first
         // column or using whole-row selection. In this situation, we can use
@@ -3941,11 +3962,11 @@ void wxDataViewMainWindow::OnLeftKey()
     }
 }
 
-void wxDataViewMainWindow::OnRightKey()
+void wxDataViewMainWindow::OnRightKey(wxKeyEvent& event)
 {
     if ( IsList() )
     {
-        TryAdvanceCurrentColumn(NULL, /*forward=*/true);
+        TryAdvanceCurrentColumn(NULL, event, /*forward=*/true);
     }
     else
     {
@@ -3972,18 +3993,20 @@ void wxDataViewMainWindow::OnRightKey()
         }
         else
         {
-            TryAdvanceCurrentColumn(node, /*forward=*/true);
+            TryAdvanceCurrentColumn(node, event, /*forward=*/true);
         }
     }
 }
 
-bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, bool forward)
+bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, wxKeyEvent& event, bool forward)
 {
     if ( GetOwner()->GetColumnCount() == 0 )
         return false;
 
     if ( !m_useCellFocus )
         return false;
+
+    const bool wrapAround = event.GetKeyCode() == WXK_TAB;
 
     if ( node )
     {
@@ -4002,13 +4025,48 @@ bool wxDataViewMainWindow::TryAdvanceCurrentColumn(wxDataViewTreeNode *node, boo
             return true;
         }
         else
-            return false;
+        {
+            if ( !wrapAround )
+                return false;
+        }
     }
 
     int idx = GetOwner()->GetColumnIndex(m_currentCol) + (forward ? +1 : -1);
 
     if ( idx >= (int)GetOwner()->GetColumnCount() )
-        return false;
+    {
+        if ( !wrapAround )
+            return false;
+
+        if ( GetCurrentRow() < GetRowCount() - 1 )
+        {
+            // go to the first column of the next row:
+            idx = 0;
+            OnVerticalNavigation(wxKeyEvent()/*dummy*/, +1);
+        }
+        else
+        {
+            // allow focus change
+            event.Skip();
+            return false;
+        }
+    }
+
+    if ( idx < 0 && wrapAround )
+    {
+        if ( GetCurrentRow() > 0 )
+        {
+            // go to the last column of the previous row:
+            idx = (int)GetOwner()->GetColumnCount() - 1;
+            OnVerticalNavigation(wxKeyEvent()/*dummy*/, -1);
+        }
+        else
+        {
+            // allow focus change
+            event.Skip();
+            return false;
+        }
+    }
 
     GetOwner()->EnsureVisible(m_currentRow, idx);
 
