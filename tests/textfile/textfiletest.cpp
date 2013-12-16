@@ -49,6 +49,7 @@ private:
         CPPUNIT_TEST( ReadMac );
         CPPUNIT_TEST( ReadMacLast );
         CPPUNIT_TEST( ReadMixed );
+        CPPUNIT_TEST( ReadCRCRLF );
 #if wxUSE_UNICODE
         CPPUNIT_TEST( ReadUTF8 );
         CPPUNIT_TEST( ReadUTF16 );
@@ -64,6 +65,7 @@ private:
     void ReadMac();
     void ReadMacLast();
     void ReadMixed();
+    void ReadCRCRLF();
 #if wxUSE_UNICODE
     void ReadUTF8();
     void ReadUTF16();
@@ -204,6 +206,25 @@ void TextFileTestCase::ReadMixed()
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("foo")), f.GetFirstLine() );
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
+}
+
+void TextFileTestCase::ReadCRCRLF()
+{
+    // Notepad may create files with CRCRLF line endings (see
+    // http://stackoverflow.com/questions/6998506/text-file-with-0d-0d-0a-line-breaks).
+    // Older versions of wx would loose all data when reading such files.
+    // Test that the data are read, but don't worry about empty lines in between or
+    // line endings.
+    CreateTestFile("foo\r\r\nbar\r\r\nbaz\r\r\n");
+
+    wxTextFile f;
+    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+
+    wxString all;
+    for ( wxString str = f.GetFirstLine(); !f.Eof(); str = f.GetNextLine() )
+        all += str;
+
+    CPPUNIT_ASSERT_EQUAL( "foobarbaz", all );
 }
 
 #if wxUSE_UNICODE
