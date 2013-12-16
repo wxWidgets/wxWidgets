@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 November 2012                                                     *
+# Date : 16 December 2013                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -57,7 +57,8 @@ OBJECTS=xh_bmp.obj,xh_bmpbt.obj,xh_bttn.obj,xh_cald.obj,xh_chckb.obj,\
 	xh_animatctrl.obj,xh_htmllbox.obj,xh_collpane.obj,xh_srchctrl.obj,\
 	xh_propdlg.obj,xh_comboctrl.obj,xmladv.obj,xh_editlbox.obj,\
 	xh_filectrl.obj,xh_cmdlinkbn.obj,xh_toolbk.obj,xh_bannerwindow.obj,\
-	xh_timectrl.obj,xmlreshandler.obj,xh_ribbon.obj
+	xh_timectrl.obj,xmlreshandler.obj,xh_ribbon.obj,xh_auitoolb.obj,\
+	xh_auinotbk.obj
 
 SOURCES =xh_bmp.cpp,xh_bmpbt.cpp,xh_bttn.cpp,xh_cald.cpp,xh_chckb.cpp,\
 	xh_chckl.cpp,xh_choic.cpp,xh_combo.cpp,xh_dlg.cpp,xh_frame.cpp,\
@@ -73,7 +74,8 @@ SOURCES =xh_bmp.cpp,xh_bmpbt.cpp,xh_bttn.cpp,xh_cald.cpp,xh_chckb.cpp,\
 	xh_animatctrl.cpp,xh_htmllbox.cpp,xh_collpane.cpp,xh_srchctrl.cpp,\
 	xh_propdlg.cpp,xh_comboctrl.cpp,xmladv.cpp,xh_editlbox.cpp,\
 	xh_filectrl.cpp,xh_cmdlinkbn.cpp,xh_toolbk.cpp,xh_bannerwindow.cpp,\
-	xh_timectrl.cpp,xmlreshandler.cpp,xh_ribbon.cpp
+	xh_timectrl.cpp,xmlreshandler.cpp,xh_ribbon.cpp,xh_auitoolb.cpp,\
+	xh_auinotbk.cpp
   
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -162,3 +164,5 @@ xh_bannerwindow.obj : xh_bannerwindow.cpp
 xh_timectrl.obj : xh_timectrl.cpp
 xmlreshandler.obj : xmlreshandler.cpp
 xh_ribbon.obj : xh_ribbon.cpp
+xh_auitoolb.obj : xh_auitoolb.cpp
+xh_auinotbk.obj : xh_auinotbk.cpp
