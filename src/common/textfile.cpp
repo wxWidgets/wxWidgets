@@ -245,9 +245,23 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
             case '\r':
                 if ( lastWasCR )
                 {
-                    // Mac empty line
-                    AddLine(wxEmptyString, wxTextFileType_Mac);
-                    lineStart = p + 1;
+                    wxString::const_iterator next = p + 1;
+                    // Peek at the next character to detect weirdly formatted
+                    // files ending in CRCRLF. Without this, we would silently
+                    // loose all the lines; this way, we insert empty lines
+                    // (as some editors do), but don't loose any data.
+                    // See here for more information:
+                    // http://stackoverflow.com/questions/6998506/text-file-with-0d-0d-0a-line-breaks
+                    if ( next != end && *next == '\n' )
+                    {
+                        AddLine(wxString(lineStart, p - 1), wxTextFileType_Mac);
+                    }
+                    else
+                    {
+                        // Mac empty line
+                        AddLine(wxEmptyString, wxTextFileType_Mac);
+                    }
+                    lineStart = next;
                 }
                 //else: we don't know what this is yet -- could be a Mac EOL or
                 //      start of DOS EOL so wait for next char
