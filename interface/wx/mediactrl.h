@@ -5,6 +5,22 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+    Describes the current state of the media.
+
+    @see wxMediaCtrl::GetState()
+ */
+enum wxMediaState
+{
+    /** No media is being currently played. */
+    wxMEDIASTATE_STOPPED,
+
+    /** Current media is paused. */
+    wxMEDIASTATE_PAUSED,
+
+    /** There is media currently playing. */
+    wxMEDIASTATE_PLAYING
+};
 
 enum wxMediaCtrlPlayerControls
 {
@@ -306,7 +322,7 @@ public:
     double GetPlaybackRate();
 
     /**
-        Obtains the state the playback of the media is in -
+        Obtains the state the playback of the media is in.
 
         @beginTable
         @row2col{wxMEDIASTATE_STOPPED, The movie has stopped.}
