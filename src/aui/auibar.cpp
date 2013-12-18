@@ -1772,7 +1772,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
     if (m_orientation == wxVERTICAL)
     {
         // take the dropdown size into account
-        if (m_overflowVisible)
+        if (m_overflowVisible && m_overflowSizerItem)
             cli_h -= m_overflowSizerItem->GetSize().y;
 
         if (rect.y+rect.height < cli_h)
@@ -1781,7 +1781,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
     else
     {
         // take the dropdown size into account
-        if (m_overflowVisible)
+        if (m_overflowVisible && m_overflowSizerItem)
             cli_w -= m_overflowSizerItem->GetSize().x;
 
         if (rect.x+rect.width < cli_w)
