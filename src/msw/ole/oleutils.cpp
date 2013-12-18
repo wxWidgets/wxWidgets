@@ -545,11 +545,9 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long fla
                 break;
 
             case VT_NULL:
+            case VT_EMPTY:
                 variant.MakeNull();
                 break;
-
-            case VT_EMPTY:
-                break;    // Ignore Empty Variant, used only during destruction of objects
 
             default:
                 wxLogError(wxT("wxAutomationObject::ConvertOleToVariant: Unknown variant value type %X -> %X"),
