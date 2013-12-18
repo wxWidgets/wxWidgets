@@ -4093,7 +4093,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/accel.h \
 	wx/generic/buttonbar.h \
 	wx/generic/choicdgg.h \
-	wx/generic/colrdlgg.h \
 	wx/generic/combo.h \
 	wx/generic/custombgwin.h \
 	wx/generic/dcpsg.h \

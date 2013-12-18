@@ -833,7 +833,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/accel.h
     wx/generic/buttonbar.h
     wx/generic/choicdgg.h
-    wx/generic/colrdlgg.h
     wx/generic/combo.h
     wx/generic/custombgwin.h
     wx/generic/dcpsg.h

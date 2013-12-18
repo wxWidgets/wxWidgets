@@ -2208,10 +2208,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\colrdlgg.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\generic\combo.h"
 				>
 			</File>
