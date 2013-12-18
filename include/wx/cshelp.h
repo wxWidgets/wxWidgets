@@ -67,11 +67,24 @@ private:
 class WXDLLIMPEXP_CORE wxContextHelpButton : public wxBitmapButton
 {
 public:
+    wxContextHelpButton() {}
+
     wxContextHelpButton(wxWindow* parent,
                         wxWindowID id = wxID_CONTEXT_HELP,
                         const wxPoint& pos = wxDefaultPosition,
                         const wxSize& size = wxDefaultSize,
-                        long style = wxBU_AUTODRAW);
+                        long style = wxBU_AUTODRAW)
+    {
+        Create(parent, id, pos, size, style);
+    }
+
+
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_CONTEXT_HELP,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxBU_AUTODRAW);
+
 
     void OnContextHelp(wxCommandEvent& event);
 
