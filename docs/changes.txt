@@ -12,4 +12,5 @@ Note: This file contains the list of changes since wxWidgets 3.x, please see
 All (GUI):
 
 - XRC handler for wxAuiToolBar added (Kinaou Hervé).
+- Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
