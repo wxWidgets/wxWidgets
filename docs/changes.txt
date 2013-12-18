@@ -588,6 +588,7 @@ All (GUI):
 - Fix wxCommandProcessor::IsDirty() return value which was wrong after undoing
   all commands without saving (Neil Chittenden).
 - Fix crash when Destroy()-ing a TLW with non-TLW parent.
+- Fix crash in wxAuiToolBar::GetToolBarFits().
 
 wxGTK:
 
