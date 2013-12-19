@@ -69,7 +69,7 @@ class Builder:
 
                 for dir in dirs:
                     if os.path.isfile(os.path.join(dir, self.name)):
-                        return True  
+                        return True
 
             else:
                 result = os.system("which %s" % self.name)
@@ -88,12 +88,12 @@ class Builder:
 
         return self.name
 
-    def getProjectFileArg(self, projectFile = None):
+    def getProjectFileArg(self, projectFile=None):
         result = []
         if projectFile:
             result.append(projectFile)
         return result
-    
+
     def clean(self, dir=None, projectFile=None, options=[]):
         """
         dir = the directory containing the project file
@@ -101,10 +101,12 @@ class Builder:
         """
         if self.isAvailable():
             args = [self.getProgramPath()]
-            args.extend(self.getProjectFileArg(projectFile))
+            pfArg = self.getProjectFileArg(projectFile)
+            if pfArg:
+                args.extend(pfArg)
             args.append("clean")
-            args.extend(options)
-        
+            if options:
+                args.extend(options)
             result = runInDir(args, dir)
             return result
 
@@ -117,11 +119,15 @@ class Builder:
     def build(self, dir=None, projectFile=None, targets=None, options=[]):
         if self.isAvailable():
             args = [self.getProgramPath()]
-            args.extend(self.getProjectFileArg(projectFile))
-            args.extend(options)
-
+            pfArg = self.getProjectFileArg(projectFile)
+            if pfArg:
+                args.extend(pfArg)
+            # Important Note: if extending args, check it first!
+            # NoneTypes are not iterable and will crash the clean, build, or install!
+            # Very very irritating when this happens right at the end.
+            if options:
+                args.extend(options)
             result = runInDir(args, dir)
-
             return result
 
         return 1
@@ -129,9 +135,12 @@ class Builder:
     def install(self, dir=None, projectFile=None, options=[]):
         if self.isAvailable():
             args = [self.getProgramPath()]
-            args.extend(self.getProjectFileArg(projectFile))
+            pfArg = self.getProjectFileArg(projectFile)
+            if pfArg:
+                args.extend(pfArg)
             args.append("install")
-            args.extend(options)
+            if options:
+                args.extend(options)
             result = runInDir(args, dir)
             return result
 
@@ -169,7 +178,7 @@ class AutoconfBuilder(GNUMakeBuilder):
                 if configdir == parentdir:
                     break
 
-                configdir = parentdir 
+                configdir = parentdir
             else:
                 configure_cmd = config_cmd
                 break
@@ -201,10 +210,10 @@ class MSVCBuilder(Builder):
         result = []
         if projectFile:
             result.extend(['-f', projectFile])
-            
+
         return result
 
-        
+
 class MSVCProjectBuilder(Builder):
     def __init__(self):
         Builder.__init__(self, commandName="VCExpress.exe", formatName="msvcProject")
