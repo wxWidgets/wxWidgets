@@ -2070,19 +2070,16 @@ void wxComboCtrlBase::OnCharEvent(wxKeyEvent& event)
 
 void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
-    // On Mac, setting focus here leads to infinite recursion and eventually
-    // a crash due to the SetFocus call producing another event.
-    // Handle Mac in OnIdleEvent using m_resetFocus.
+    // On Mac, setting focus here led to infinite recursion so
+    // m_resetFocus is used as a guard
     
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
-        if ( GetTextCtrl() && !GetTextCtrl()->HasFocus() )
+        if ( !m_resetFocus && GetTextCtrl() && !GetTextCtrl()->HasFocus() )
         {
-#ifdef __WXMAC__
             m_resetFocus = true;
-#else
             GetTextCtrl()->SetFocus();
-#endif
+            m_resetFocus = false;
         }
     }
     
@@ -2438,10 +2435,28 @@ void wxComboCtrlBase::ShowPopup()
     }
 }
 
+
+#ifdef __WXMAC__
+bool wxComboCtrlBase::AnimateShow( const wxRect& rect, int WXUNUSED(flags) )
+{
+    // Overridden AnimateShow() will call Raise() and ShowWithEffect() so do
+    // here to avoid duplication. Raise and Show are needed for some contained
+    // control's scrollbars, selection highlights, hit-test accuracy and popup
+    // close via left mousedown when the mouse is not over the parent app.
+    if ( GetPopupWindow() )
+    {
+        GetPopupWindow()->SetSize(rect);
+        GetPopupWindow()->Raise();
+        GetPopupWindow()->Show();
+    }
+    return true;
+}
+#else
 bool wxComboCtrlBase::AnimateShow( const wxRect& WXUNUSED(rect), int WXUNUSED(flags) )
 {
     return true;
 }
+#endif
 
 void wxComboCtrlBase::DoShowPopup( const wxRect& rect, int WXUNUSED(flags) )
 {
