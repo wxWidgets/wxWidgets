@@ -48,6 +48,7 @@ enum wxMediaCtrlPlayerControls
     @beginEventTable{wxMediaEvent}
     @event{EVT_MEDIA_LOADED(id\, func)}
            Sent when a media has loaded enough data that it can start playing.
+           Processes a @c wxEVT_MEDIA_LOADED event type.
     @event{EVT_MEDIA_STOP(id\, func)}
            Sent when a media has switched to the @c wxMEDIASTATE_STOPPED state.
            You may be able to Veto this event to prevent it from stopping,
@@ -55,14 +56,19 @@ enum wxMediaCtrlPlayerControls
            the media (note that this may not have the desired effect - if you
            want to loop the media, for example, catch the @c EVT_MEDIA_FINISHED
            and play there instead).
+           Processes a @c wxEVT_MEDIA_STOP event type.
     @event{EVT_MEDIA_FINISHED(id\, func)}
            Sent when a media has finished playing in a wxMediaCtrl.
+           Processes a @c wxEVT_MEDIA_FINISHED event type.
     @event{EVT_MEDIA_STATECHANGED(id\, func)}
            Sent when a media has switched its state (from any media state).
+           Processes a @c wxEVT_MEDIA_STATECHANGED event type.
     @event{EVT_MEDIA_PLAY(id\, func)}
            Sent when a media has switched to the @c wxMEDIASTATE_PLAYING state.
+           Processes a @c wxEVT_MEDIA_PLAY event type.
     @event{EVT_MEDIA_PAUSE(id\, func)}
            Sent when a media has switched to the @c wxMEDIASTATE_PAUSED state.
+           Processes a @c wxEVT_MEDIA_PAUSE event type.
     @endEventTable
 
     @library{wxmedia}
@@ -442,3 +448,9 @@ public:
     wxFileOffset Tell();
 };
 
+wxEventType wxEVT_MEDIA_LOADED;
+wxEventType wxEVT_MEDIA_STOP;
+wxEventType wxEVT_MEDIA_FINISHED;
+wxEventType wxEVT_MEDIA_STATECHANGED;
+wxEventType wxEVT_MEDIA_PLAY;
+wxEventType wxEVT_MEDIA_PAUSE;
