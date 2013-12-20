@@ -22180,9 +22180,9 @@ $as_echo "yes" >&6; }
 else
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
+    save_LIBS="$LIBS"
     LIBS="$LIBS -lm"
-    # use different functions to avoid configure caching
-    have_sin=0
+        have_sin=0
     have_ceil=0
     for ac_func in sin
 do :
@@ -22214,7 +22214,7 @@ $as_echo "yes" >&6; }
     else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-        # not sure we should warn the user, crash, etc.
+                        LIBS="$save_LIBS"
     fi
 fi
 

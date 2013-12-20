@@ -2316,8 +2316,9 @@ if test "$have_cos" = 1 -a "$have_floor" = 1; then
     AC_MSG_RESULT(yes)
 else
     AC_MSG_RESULT(no)
+    save_LIBS="$LIBS"
     LIBS="$LIBS -lm"
-    # use different functions to avoid configure caching
+    dnl use different functions to avoid configure caching
     have_sin=0
     have_ceil=0
     AC_CHECK_FUNCS(sin, have_sin=1)
@@ -2327,7 +2328,9 @@ else
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
-        # not sure we should warn the user, crash, etc.
+        dnl not sure we should warn the user, crash, etc. but don't link with
+        dnl -lm it might result in failure of the subsequent tests too
+        LIBS="$save_LIBS"
     fi
 fi
 
