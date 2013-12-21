@@ -65,6 +65,8 @@ public:
     wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w );
     virtual ~wxNSTextViewControl();
 
+    virtual void insertText(NSString* text, WXWidget slf, void *_cmd);
+    
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
     virtual void Copy() ;

@@ -586,6 +586,15 @@ bool wxNSTextViewControl::CanFocus() const
     return true;
 }
 
+void wxNSTextViewControl::insertText(NSString* text, WXWidget slf, void *_cmd)
+{
+    if ( m_lastKeyDownEvent ==NULL || !DoHandleCharEvent(m_lastKeyDownEvent, text) )
+    {
+        wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        superimpl(slf, (SEL)_cmd, text);
+    }
+}
+
 wxString wxNSTextViewControl::GetStringValue() const
 {
     if (m_textView)
