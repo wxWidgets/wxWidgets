@@ -929,7 +929,7 @@ public:
     //@{
 
     /**
-        Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
+        Returns the current background mode: @c wxPENSTYLE_SOLID or @c wxPENSTYLE_TRANSPARENT.
 
         @see SetBackgroundMode()
     */
@@ -969,7 +969,7 @@ public:
     const wxColour& GetTextForeground() const;
 
     /**
-        @a mode may be one of @c wxSOLID and @c wxTRANSPARENT. 
+        @a mode may be one of @c wxPENSTYLE_SOLID and @c wxPENSTYLE_TRANSPARENT.
         
         This setting determines whether text will be drawn with a background 
         colour or not.
