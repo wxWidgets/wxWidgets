@@ -101,10 +101,12 @@ class Builder:
         """
         if self.isAvailable():
             args = [self.getProgramPath()]
-            args.extend(self.getProjectFileArg(projectFile))
+            pfArg = self.getProjectFileArg(projectFile)
+            if pfArg:
+                args.extend(pfArg)
             args.append("clean")
-            args.extend(options)
-        
+            if options:
+                args.extend(options)
             result = runInDir(args, dir)
             return result
 
@@ -117,11 +119,15 @@ class Builder:
     def build(self, dir=None, projectFile=None, targets=None, options=[]):
         if self.isAvailable():
             args = [self.getProgramPath()]
-            args.extend(self.getProjectFileArg(projectFile))
-            args.extend(options)
-
+            pfArg = self.getProjectFileArg(projectFile)
+            if pfArg:
+                args.extend(pfArg)
+            # Important Note: if extending args, check it first!
+            # NoneTypes are not iterable and will crash the clean, build, or install!
+            # Very very irritating when this happens right at the end.
+            if options: 
+                args.extend(options)
             result = runInDir(args, dir)
-
             return result
 
         return 1
@@ -129,13 +135,17 @@ class Builder:
     def install(self, dir=None, projectFile=None, options=[]):
         if self.isAvailable():
             args = [self.getProgramPath()]
-            args.extend(self.getProjectFileArg(projectFile))
+            pfArg = self.getProjectFileArg(projectFile)
+            if pfArg:
+                args.extend(pfArg)
             args.append("install")
-            args.extend(options)
+            if options:
+                args.extend(options)
             result = runInDir(args, dir)
             return result
 
         return 1
+
 
 # Concrete subclasses of abstract Builder interface
 
