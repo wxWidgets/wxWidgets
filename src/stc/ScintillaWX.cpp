@@ -32,6 +32,7 @@
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
 #include "wx/dnd.h"
+#include "wx/frame.h"
 
 #if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
     #include "wx/beforestd.h"
@@ -91,7 +92,6 @@ void  wxSTCDropTarget::OnLeave() {
 #include "wx/popupwin.h"
 #define wxSTCCallTipBase wxPopupWindow
 #else
-#include "wx/frame.h"
 #define wxSTCCallTipBase wxFrame
 #endif
 
