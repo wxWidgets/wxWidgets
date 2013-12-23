@@ -103,7 +103,9 @@ public:
 #if wxUSE_POPUPWIN
         wxSTCCallTipBase(parent, wxBORDER_NONE
 #ifdef __WXMAC__
-                                 | wxFRAME_TOOL_WINDOW
+                                 // Workaround to avoid crash on OSX.  Remove when the fix lands in wx.
+                                 // See ticket #15765
+                                 | wxFRAME_TOOL_WINDOW  
 #endif
                                 ),
 #else
