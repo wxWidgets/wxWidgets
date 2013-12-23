@@ -101,7 +101,11 @@ class wxSTCCallTip : public wxSTCCallTipBase {
 public:
     wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
 #if wxUSE_POPUPWIN
-        wxSTCCallTipBase(parent, wxBORDER_NONE),
+        wxSTCCallTipBase(parent, wxBORDER_NONE
+#ifdef __WXMAC__
+                                 | wxFRAME_TOOL_WINDOW
+#endif
+                                ),
 #else
         wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                          wxFRAME_NO_TASKBAR
