@@ -870,10 +870,10 @@ bool wxTextCtrl::ReplaceLine(wxTextCoord line,
         // now change the line
         MData().m_lines[line] = text;
 
-        // OPT: we choose to lay it our immediately instead of delaying it
+        // OPT: we choose to lay it out immediately instead of delaying it
         //      until it is needed because it allows us to avoid invalidating
-        //      lines further down if the number of rows didn't chnage, but
-        //      maybe we can imporve this even further?
+        //      lines further down if the number of rows didn't change, but
+        //      maybe we can improve this even further?
         LayoutLine(line, lineData);
 
         int rowsNew = lineData.GetExtraRowCount();

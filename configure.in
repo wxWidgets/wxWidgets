@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.9.5], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [3.1.0], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -38,9 +38,9 @@ dnl When making releases do:
 dnl
 dnl wx_release_number += 1
 
-wx_major_version_number=2
-wx_minor_version_number=9
-wx_release_number=5
+wx_major_version_number=3
+wx_minor_version_number=1
+wx_release_number=0
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -468,11 +468,11 @@ AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE
 AC_ARG_WITH(osx_carbon,    [  --with-osx_carbon       use Mac OS X (Carbon)], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx_cocoa,     [  --with-osx_cocoa        use Mac OS X (Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(osx_iphone,    [  --with-osx_iphone       use iPhone OS X port], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(osx,           [  --with-osx              use Mac OS X (default port, currently Carbon)], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(osx,           [  --with-osx              use Mac OS X (default port, Cocoa)], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(carbon,        [  --with-carbon           same as --with-osx_carbon], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cocoa,         [  --with-cocoa            same as --with-osx_cocoa], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(iphone,        [  --with-iphone           same as --with-osx_iphone], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(mac,           [  --with-mac              same as --with-osx], [wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(mac,           [  --with-mac              same as --with-osx], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(old_cocoa,     [  --with-old_cocoa        use old, deprecated, Cocoa port], [wxUSE_OLD_COCOA="$withval" CACHE_OLD_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
@@ -588,7 +588,6 @@ WX_ARG_SYS_WITH(libxpm,    [  --with-libxpm           use libxpm (XPM file forma
 WX_ARG_WITH(libiconv,      [  --with-libiconv         use libiconv (character conversion)], wxUSE_LIBICONV)
 WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help files loading)], wxUSE_LIBMSPACK)
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
-WX_ARG_WITHOUT(gnomeprint, [  --without-gnomeprint    don't use GNOME printing libraries], wxUSE_LIBGNOMEPRINT)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
 WX_ARG_WITH(libnotify,     [  --with-libnotify        use libnotify for notifications], wxUSE_LIBNOTIFY)
 WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770/800/810], wxUSE_LIBHILDON)
@@ -2104,7 +2103,7 @@ if test "$wxUSE_STL" = "yes"; then
     fi
 fi
 
-AC_CHECK_HEADERS([type_traits tr1/type_traits])
+AC_CHECK_HEADERS([type_traits tr1/type_traits], break)
 
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
@@ -2317,8 +2316,9 @@ if test "$have_cos" = 1 -a "$have_floor" = 1; then
     AC_MSG_RESULT(yes)
 else
     AC_MSG_RESULT(no)
+    save_LIBS="$LIBS"
     LIBS="$LIBS -lm"
-    # use different functions to avoid configure caching
+    dnl use different functions to avoid configure caching
     have_sin=0
     have_ceil=0
     AC_CHECK_FUNCS(sin, have_sin=1)
@@ -2328,7 +2328,9 @@ else
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
-        # not sure we should warn the user, crash, etc.
+        dnl not sure we should warn the user, crash, etc. but don't link with
+        dnl -lm it might result in failure of the subsequent tests too
+        LIBS="$save_LIBS"
     fi
 fi
 
@@ -3103,14 +3105,15 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         if test "$wxUSE_UNICODE" = "yes"; then
             PKG_PROG_PKG_CONFIG()
 
-            PKG_CHECK_MODULES(PANGOX, pangox,
+            PKG_CHECK_MODULES(PANGOXFT, pangoxft,
                 [
-                    CFLAGS="$PANGOX_CFLAGS $CFLAGS"
-                    CXXFLAGS="$PANGOX_CFLAGS $CXXFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOX_LIBS"
+                    AC_DEFINE(HAVE_PANGO_XFT)
+                    CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
+                    CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
                 ],
                 [
-                    AC_MSG_ERROR([pangox library not found, library cannot be compiled in Unicode mode])
+                    AC_MSG_ERROR([pangoxft library not found, library cannot be compiled in Unicode mode])
                 ]
             )
             PKG_CHECK_MODULES(PANGOFT2, pangoft2,
@@ -3124,21 +3127,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                     wxUSE_PRINTING_ARCHITECTURE="no"
                 ]
             )
-            PKG_CHECK_MODULES(PANGOXFT, pangoxft,
-                [
-                    AC_DEFINE(HAVE_PANGO_XFT)
-                    CFLAGS="$PANGOXFT_CFLAGS $CFLAGS"
-                    CXXFLAGS="$PANGOXFT_CFLAGS $CXXFLAGS"
-                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $PANGOXFT_LIBS"
-                ],
-                [
-                    AC_MSG_WARN([pangoxft library not found, library will be compiled without anti-aliasing support])
-                ]
-            )
-            save_LIBS="$LIBS"
-            LIBS="$LIBS $PANGOX_LIBS"
+
             AC_CHECK_FUNCS([pango_font_family_is_monospace])
-            LIBS="$save_LIBS"
         fi
 
         wxUSE_UNIVERSAL="yes"
@@ -3788,16 +3778,18 @@ if test "$wxUSE_SHARED" = "yes"; then
             DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
             cat <<EOF >change-install-names
 #!/bin/sh
-libnames=\`cd \${2} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
-for i in \${libnames} ; do
-    ${HOST_PREFIX}install_name_tool -id \${3}/\${i} \${1}/\${i}
-    for dep in \${libnames} ; do
-        ${HOST_PREFIX}install_name_tool -change \${2}/\${dep} \${3}/\${dep} \${1}/\${i}
-    done
+libnames=\`cd \${1} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
+changes=''
+for dep in \${libnames} ; do
+    changes="\${changes} -change \${4}/\${dep} \${3}/\${dep}"
 done
+for i in \${libnames} ; do
+    ${HOST_PREFIX}install_name_tool \${changes} -id \${3}/\${i} \${1}/\${i}
+done
+${HOST_PREFIX}install_name_tool \${changes} \${2}/wxrc-${WX_RELEASE}
 EOF
             chmod +x change-install-names
-            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \$(wx_top_builddir)/lib \${libdir}"
+            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${DESTDIR}\${libdir} \${DESTDIR}\${bindir} \${libdir} \$(wx_top_builddir)/lib"
         fi
 
         dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:
@@ -4247,6 +4239,37 @@ if test "$ac_cv_func_vsscanf" = "yes"; then
 
     if test "$wx_cv_func_vsscanf_decl" = "yes"; then
         AC_DEFINE(HAVE_VSSCANF_DECL)
+
+        dnl we know there is a vsscanf() declaration, but it can be broken by
+        dnl declaring vsscanf() as taking a non-const first argument (this
+        dnl happens at least under HP-UX 11.31, see #15638).
+        AC_CACHE_CHECK([if vsscanf() declaration is broken], wx_cv_func_broken_vsscanf_decl,
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #include <stdio.h>
+                        #include <stdarg.h>
+                        #ifdef __MSL__
+                        #if __MSL__ >= 0x6000
+                        namespace std {}
+                        using namespace std;
+                        #endif
+                        #endif
+                    ],
+                    [
+                        const char *buf;
+                        va_list args;
+                        vsscanf(buf, "%s", args);
+                    ],
+                    wx_cv_func_broken_vsscanf_decl=no,
+                    wx_cv_func_broken_vsscanf_decl=yes
+                )
+            ]
+        )
+
+        if test "$wx_cv_func_broken_vsscanf_decl" = "yes"; then
+            AC_DEFINE(HAVE_BROKEN_VSSCANF_DECL)
+        fi
     fi
 fi
 AC_LANG_POP()
@@ -5625,31 +5648,6 @@ if test "$WXGTK2" = 1; then
                     ]
                 )
         fi
-
-        if test "$WXGTK3" = 1; then
-            wxUSE_LIBGNOMEPRINT=no
-        fi
-
-        if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
-
-                PKG_CHECK_MODULES(LIBGNOMEPRINTUI,
-                                  [libgnomeprintui-2.2 >= 2.8],
-                    [
-                        GUI_TK_LIBRARY="$GUI_TK_LIBRARY $LIBGNOMEPRINTUI_LIBS"
-                        CFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CFLAGS"
-                        CXXFLAGS="$LIBGNOMEPRINTUI_CFLAGS $CXXFLAGS"
-                        AC_DEFINE(wxUSE_LIBGNOMEPRINT)
-                    ],
-                    [
-                        if test "$wxUSE_GTKPRINT" = yes; then
-                            AC_MSG_RESULT(no)
-                        else
-                            AC_MSG_WARN([libgnomeprintui not found, library will use standard PostScript printing])
-                        fi
-                        wxUSE_LIBGNOMEPRINT="no"
-                    ]
-                )
-        fi
     fi
 
     if test "$wxUSE_MIMETYPE" = "yes" ; then
@@ -6362,25 +6360,9 @@ dnl ---------------------------------------------------------------------------
 if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
     wxUSE_JOYSTICK=no
 
-    dnl under MSW we always have joystick support
-    if test "$TOOLKIT" = "MSW"; then
+    dnl under MSW and OS X we always have joystick support
+    if test "$TOOLKIT" = "MSW" -o "$TOOLKIT" = "OSX_COCOA" -o "$TOOLKIT" = "COCOA"; then
         wxUSE_JOYSTICK=yes
-
-    dnl mac only available on darwin
-    elif test "$TOOLKIT" = "OSX" -o "$TOOLKIT" = "COCOA"; then
-        if test "$USE_DARWIN" = 1; then
-            dnl check for a bug in the headers, some have bad setEventCallout
-            AC_MSG_CHECKING([headers have declarations needed for joystick support])
-            AC_LANG_PUSH(C++)
-            AC_TRY_COMPILE( [ #include <IOKit/hid/IOHIDLib.h> ],
-                            [ IOHIDQueueInterface *qi = NULL;
-                              IOHIDCallbackFunction cb = NULL;
-                              qi->setEventCallout(NULL, cb, NULL, NULL); ],
-                            [ wxUSE_JOYSTICK=yes ]
-                          )
-            AC_LANG_POP()
-            AC_MSG_RESULT($wxUSE_JOYSTICK)
-        fi
 
     dnl joystick support is only for Linux 2.1.x or greater
     else
@@ -6580,7 +6562,12 @@ if test "$wxUSE_IPC" = "yes"; then
 fi
 
 if test "$wxUSE_DATAOBJ" = "yes"; then
-    AC_DEFINE(wxUSE_DATAOBJ)
+    if test "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([wxDataObject not yet supported under $TOOLKIT... disabled])
+        wxUSE_DATAOBJ=no
+    else
+        AC_DEFINE(wxUSE_DATAOBJ)
+    fi
 else
     AC_MSG_WARN([Clipboard and drag-and-drop require wxDataObject -- disabled])
     wxUSE_CLIPBOARD=no
@@ -7646,7 +7633,6 @@ dnl ---------------------------------------------------------------------------
 STD_BASE_LIBS="base"
 STD_GUI_LIBS=""
 BUILT_WX_LIBS="base"
-ALL_WX_LIBS="xrc stc gl media qa html adv core xml net base"
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
     STD_BASE_LIBS="net $STD_BASE_LIBS"
@@ -7700,7 +7686,6 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
 fi
 
-AC_SUBST(ALL_WX_LIBS)
 AC_SUBST(BUILT_WX_LIBS)
 AC_SUBST(STD_BASE_LIBS)
 AC_SUBST(STD_GUI_LIBS)
@@ -8025,9 +8010,6 @@ case "$TOOLKIT" in
             fi
             if test "$wxUSE_GTKPRINT" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA GTK+ printing";
-            fi
-            if test "$wxUSE_LIBGNOMEPRINT" = "yes" ; then
-                TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomeprint";
             fi
             if test "$wxUSE_LIBGNOMEVFS" = "yes" ; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomevfs"

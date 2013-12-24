@@ -1,5 +1,0 @@
-# --- wxBase headers list begins here ---
-cat <<EOF >wxbase-headers.files
-@('\n'.join(ALL_BASE_HEADERS.split()))
-EOF
-# --- wxBase headers list ends here ---

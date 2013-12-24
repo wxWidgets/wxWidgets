@@ -183,6 +183,16 @@ public:
     */
     virtual bool CanInsertContent(wxRichTextParagraphLayoutBox& container, long pos) const;
 
+    /**
+        Finds a table,  either selected or near the cursor
+    */
+    wxRichTextTable* FindTable() const;
+
+    /**
+        Helper for FindTable()
+    */
+    wxRichTextObject* FindCurrentPosition() const;
+
     long    m_lockId;
     bool    m_locked;
 };
@@ -275,6 +285,13 @@ public:
     void OnDemoteList(wxCommandEvent& event);
     void OnClearList(wxCommandEvent& event);
 
+    void OnTableAddColumn(wxCommandEvent& event);
+    void OnTableAddRow(wxCommandEvent& event);
+    void OnTableDeleteColumn(wxCommandEvent& event);
+    void OnTableDeleteRow(wxCommandEvent& event);
+    void OnTableFocusedUpdateUI(wxUpdateUIEvent& event);
+    void OnTableHasCellsUpdateUI(wxUpdateUIEvent& event);
+
     void OnReload(wxCommandEvent& event);
 
     void OnViewHTML(wxCommandEvent& event);
@@ -358,6 +375,11 @@ enum
     ID_FORMAT_PROMOTE_LIST,
     ID_FORMAT_DEMOTE_LIST,
     ID_FORMAT_CLEAR_LIST,
+
+    ID_TABLE_ADD_COLUMN,
+    ID_TABLE_ADD_ROW,
+    ID_TABLE_DELETE_COLUMN,
+    ID_TABLE_DELETE_ROW,
 
     ID_SET_FONT_SCALE,
     ID_SET_DIMENSION_SCALE,
@@ -445,6 +467,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_FORMAT_PROMOTE_LIST, MyFrame::OnPromoteList)
     EVT_MENU(ID_FORMAT_DEMOTE_LIST, MyFrame::OnDemoteList)
     EVT_MENU(ID_FORMAT_CLEAR_LIST, MyFrame::OnClearList)
+
+    EVT_MENU(ID_TABLE_ADD_COLUMN, MyFrame::OnTableAddColumn)
+    EVT_MENU(ID_TABLE_ADD_ROW, MyFrame::OnTableAddRow)
+    EVT_MENU(ID_TABLE_DELETE_COLUMN, MyFrame::OnTableDeleteColumn)
+    EVT_MENU(ID_TABLE_DELETE_ROW, MyFrame::OnTableDeleteRow)
+    EVT_UPDATE_UI_RANGE(ID_TABLE_ADD_COLUMN, ID_TABLE_ADD_ROW, MyFrame::OnTableFocusedUpdateUI)
+    EVT_UPDATE_UI_RANGE(ID_TABLE_DELETE_COLUMN, ID_TABLE_DELETE_ROW, MyFrame::OnTableHasCellsUpdateUI)
 
     EVT_MENU(ID_VIEW_HTML, MyFrame::OnViewHTML)
     EVT_MENU(ID_SWITCH_STYLE_SHEETS, MyFrame::OnSwitchStyleSheets)
@@ -802,6 +831,12 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     listsMenu->Append(ID_FORMAT_DEMOTE_LIST, _("Demote List Items"));
     listsMenu->Append(ID_FORMAT_CLEAR_LIST, _("Clear List Formatting"));
 
+    wxMenu* tableMenu = new wxMenu;
+    tableMenu->Append(ID_TABLE_ADD_COLUMN, _("&Add Column"));
+    tableMenu->Append(ID_TABLE_ADD_ROW, _("Add &Row"));
+    tableMenu->Append(ID_TABLE_DELETE_COLUMN, _("Delete &Column"));
+    tableMenu->Append(ID_TABLE_DELETE_ROW, _("&Delete Row"));
+
     wxMenu* insertMenu = new wxMenu;
     insertMenu->Append(ID_INSERT_SYMBOL, _("&Symbol...\tCtrl+I"));
     insertMenu->Append(ID_INSERT_URL, _("&URL..."));
@@ -813,6 +848,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     menuBar->Append(editMenu, wxT("&Edit"));
     menuBar->Append(formatMenu, wxT("F&ormat"));
     menuBar->Append(listsMenu, wxT("&Lists"));
+    menuBar->Append(tableMenu, wxT("&Tables"));
     menuBar->Append(insertMenu, wxT("&Insert"));
     menuBar->Append(helpMenu, wxT("&Help"));
 
@@ -883,7 +919,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
     wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
 
-    m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL|wxWANTS_CHARS);
+    m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL/*|wxWANTS_CHARS*/);
     wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
 
     wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
@@ -1163,6 +1199,7 @@ void MyFrame::WriteInitialText()
         r.SetInsertionPointEnd();
     }
 #endif
+
 #if 1
     {
         // Add a table
@@ -1199,24 +1236,24 @@ void MyFrame::WriteInitialText()
         
         // Demonstrate colspan and rowspan
         wxRichTextCell* cell = table->GetCell(1, 0);
-        cell->SetColspan(2);
+        cell->SetColSpan(2);
         r.SetFocusObject(cell);
         cell->Clear();
         r.WriteText("This cell spans 2 columns");
         
         cell = table->GetCell(1, 3);
-        cell->SetRowspan(2);
+        cell->SetRowSpan(2);
         r.SetFocusObject(cell);
         cell->Clear();
         r.WriteText("This cell spans 2 rows");
 
         cell = table->GetCell(2, 1);
-        cell->SetColspan(2);
-        cell->SetRowspan(3);
+        cell->SetColSpan(2);
+        cell->SetRowSpan(3);
         r.SetFocusObject(cell);
         cell->Clear();
         r.WriteText("This cell spans 2 columns and 3 rows");
-                
+
         r.SetFocusObject(NULL); // Set the focus back to the main buffer
         r.SetInsertionPointEnd();
     }
@@ -1929,6 +1966,80 @@ void MyFrame::OnClearList(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnTableAddColumn(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextTable* table = wxDynamicCast(m_richTextCtrl->FindTable(), wxRichTextTable);
+    if (table)
+    {
+        wxRichTextAttr cellAttr = table->GetCell(0, 0)->GetAttributes();
+        table->AddColumns(table->GetColumnCount(), 1, cellAttr);
+    }
+}
+
+void MyFrame::OnTableAddRow(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextTable* table = wxDynamicCast(m_richTextCtrl->FindTable(), wxRichTextTable);
+    if (table)
+    {
+        wxRichTextAttr cellAttr = table->GetCell(0, 0)->GetAttributes();
+        table->AddRows(table->GetRowCount(), 1, cellAttr);
+    }
+}
+
+void MyFrame::OnTableDeleteColumn(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextTable* table = wxDynamicCast(m_richTextCtrl->FindTable(), wxRichTextTable);
+    if (table)
+    {
+        int col = table->GetFocusedCell().GetCol();
+        if (col == -1)
+        {
+            col = table->GetColumnCount() - 1;
+        }
+            
+        table->DeleteColumns(col, 1);
+    }
+}
+
+void MyFrame::OnTableDeleteRow(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextTable* table = wxDynamicCast(m_richTextCtrl->FindTable(), wxRichTextTable);
+    if (table)
+    {
+        int row = table->GetFocusedCell().GetRow();
+        if (row == -1)
+        {
+            row = table->GetRowCount() - 1;
+        }
+            
+        table->DeleteRows(row, 1);
+    }
+}
+
+void MyFrame::OnTableFocusedUpdateUI(wxUpdateUIEvent& event)
+{
+    event.Enable(m_richTextCtrl->FindTable() != NULL);
+}
+
+void MyFrame::OnTableHasCellsUpdateUI(wxUpdateUIEvent& event)
+{
+    bool enable(false);
+    wxRichTextTable* table = wxDynamicCast(m_richTextCtrl->FindTable(), wxRichTextTable);
+    if (table)
+    {
+        if (event.GetId() == ID_TABLE_DELETE_COLUMN)
+        {
+            enable = table->GetColumnCount() > 1;
+        }
+        else
+        {
+            enable = table->GetRowCount() > 1;
+        }
+    }
+
+    event.Enable(enable);
+}
+
 void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
 {
     wxString url = wxGetTextFromUser(_("URL:"), _("Insert URL"));
@@ -1949,11 +2060,13 @@ void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnInsertImage(wxCommandEvent& WXUNUSED(event))
 {
-    wxFileDialog dialog(this, _("Choose an image"), "", "", "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png");
+    wxFileDialog dialog(this, _("Choose an image"), "", "", "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png|JPEG files (*.jpg;*.jpeg)|*.jpg;*.jpeg");
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString path = dialog.GetPath();
-        m_richTextCtrl->WriteImage(path, wxBITMAP_TYPE_ANY);
+        wxImage image;
+        if (image.LoadFile(path) && image.GetType() != wxBITMAP_TYPE_INVALID)
+            m_richTextCtrl->WriteImage(path, image.GetType());
     }
 }
 
@@ -2151,4 +2264,51 @@ bool wxRichTextEnhancedDrawingHandler::GetVirtualAttributes(wxRichTextAttr& attr
 void MyRichTextCtrl::SetEnhancedDrawingHandler()
 {
     wxRichTextBuffer::AddDrawingHandler(new wxRichTextEnhancedDrawingHandler);
+}
+
+wxRichTextObject* MyRichTextCtrl::FindCurrentPosition() const
+{
+    long position = -1;
+
+    if (HasSelection())  // First see if there's a selection
+    {
+        wxRichTextRange range = GetSelectionRange();
+        if (range.ToInternal().GetLength() == 1)
+        {
+            position = range.GetStart();
+        }
+    }
+    if (position == -1)  // Failing that, near cursor
+    {
+        position = GetAdjustedCaretPosition(GetCaretPosition());
+    }
+
+
+    wxRichTextObject* obj = GetFocusObject()->GetLeafObjectAtPosition(position);
+
+    return obj;
+}
+
+wxRichTextTable* MyRichTextCtrl::FindTable() const
+{
+    wxRichTextObject* obj = FindCurrentPosition();
+
+    // It could be a table or a cell (or neither)
+    wxRichTextTable* table = wxDynamicCast(obj, wxRichTextTable);
+    if (table)
+    {
+        return table;
+    }
+
+    while (obj)
+    {
+        obj = obj->GetParent();
+        wxRichTextTable* table = wxDynamicCast(obj, wxRichTextTable);
+        if (table)
+        {
+            return table;
+        }
+    }
+
+    return NULL;
 }

@@ -627,7 +627,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
     //  1. wxPRIORITY_{MIN,DEFAULT,MAX} map to -20, 0 and 19 respectively.
     //  2. The mapping is monotonously increasing.
     //  3. The mapping is onto the target range.
-    int prio = process ? process->GetPriority() : 0;
+    int prio = process ? int(process->GetPriority()) : int(wxPRIORITY_DEFAULT);
     if ( prio <= 50 )
         prio = (2*prio)/5 - 20;
     else if ( prio < 55 )
@@ -697,6 +697,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
         // the descriptors do not need to be closed but for now this is better
         // than never closing them at all as wx code never used FD_CLOEXEC.
 
+#ifdef __DARWIN__
         // TODO: Iterating up to FD_SETSIZE is both inefficient (because it may
         //       be quite big) and incorrect (because in principle we could
         //       have more opened descriptions than this number). Unfortunately
@@ -704,6 +705,14 @@ long wxExecute(char **argv, int flags, wxProcess *process,
         //       above a certain threshold but non-portable solutions exist for
         //       most platforms, see [http://stackoverflow.com/questions/899038/
         //          getting-the-highest-allocated-file-descriptor]
+        //
+        // Unfortunately, we cannot do this safely on OS X, because libdispatch
+        // may crash when we do this:
+        //     Exception Type:  EXC_BAD_INSTRUCTION (SIGILL)
+        //     Exception Codes: 0x0000000000000001, 0x0000000000000000
+        //
+        //     Application Specific Information:
+        //     BUG IN CLIENT OF LIBDISPATCH: Do not close random Unix descriptors
         for ( int fd = 0; fd < (int)FD_SETSIZE; ++fd )
         {
             if ( fd != STDIN_FILENO  &&
@@ -713,6 +722,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
                 close(fd);
             }
         }
+#endif // !__DARWIN__
 
 
         // Process additional options if we have any
@@ -914,9 +924,14 @@ wxString wxGetUserHome( const wxString &user )
 // network and user id routines
 // ----------------------------------------------------------------------------
 
-// private utility function which returns output of the given command, removing
-// the trailing newline
-static wxString wxGetCommandOutput(const wxString &cmd)
+// Private utility function which returns output of the given command, removing
+// the trailing newline.
+//
+// Note that by default use Latin-1 just to ensure that we never fail, but if
+// the encoding is known (e.g. UTF-8 for lsb_release), it should be explicitly
+// used instead.
+static wxString
+wxGetCommandOutput(const wxString &cmd, wxMBConv& conv = wxConvISO8859_1)
 {
     // Suppress stderr from the shell to avoid outputting errors if the command
     // doesn't exist.
@@ -937,7 +952,7 @@ static wxString wxGetCommandOutput(const wxString &cmd)
         if ( !fgets(buf, sizeof(buf), f) )
             break;
 
-        s += wxString::FromAscii(buf);
+        s += wxString(buf, conv);
     }
 
     pclose(f);
@@ -1078,23 +1093,38 @@ bool wxIsPlatform64Bit()
 }
 
 #ifdef __LINUX__
+
+static bool
+wxGetValueFromLSBRelease(wxString arg, const wxString& lhs, wxString* rhs)
+{
+    // lsb_release seems to just read a global file which is always in UTF-8
+    // and hence its output is always in UTF-8 as well, regardless of the
+    // locale currently configured by our environment.
+    return wxGetCommandOutput(wxS("lsb_release ") + arg, wxConvUTF8)
+                .StartsWith(lhs, rhs);
+}
+
 wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
 {
-    const wxString id = wxGetCommandOutput(wxT("lsb_release --id"));
-    const wxString desc = wxGetCommandOutput(wxT("lsb_release --description"));
-    const wxString rel = wxGetCommandOutput(wxT("lsb_release --release"));
-    const wxString codename = wxGetCommandOutput(wxT("lsb_release --codename"));
-
     wxLinuxDistributionInfo ret;
 
-    id.StartsWith("Distributor ID:\t", &ret.Id);
-    desc.StartsWith("Description:\t", &ret.Description);
-    rel.StartsWith("Release:\t", &ret.Release);
-    codename.StartsWith("Codename:\t", &ret.CodeName);
+    if ( !wxGetValueFromLSBRelease(wxS("--id"), wxS("Distributor ID:\t"),
+                                   &ret.Id) )
+    {
+        // Don't bother to continue, lsb_release is probably not available.
+        return ret;
+    }
+
+    wxGetValueFromLSBRelease(wxS("--description"), wxS("Description:\t"),
+                             &ret.Description);
+    wxGetValueFromLSBRelease(wxS("--release"), wxS("Release:\t"),
+                             &ret.Release);
+    wxGetValueFromLSBRelease(wxS("--codename"), wxS("Codename:\t"),
+                             &ret.CodeName);
 
     return ret;
 }
-#endif
+#endif // __LINUX__
 
 // these functions are in src/osx/utilsexc_base.cpp for wxMac
 #ifndef __DARWIN__

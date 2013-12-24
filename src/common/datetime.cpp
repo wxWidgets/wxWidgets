@@ -1129,10 +1129,37 @@ wxDateTime& wxDateTime::Set(const struct tm& tm)
 
         return *this;
     }
-    else
+
+    // mktime() only adjusts tm_wday, tm_yday and tm_isdst fields normally, if
+    // it changed anything else, it must have performed the DST adjustment. But
+    // the trouble with this is that different implementations do it
+    // differently, e.g. GNU libc moves the time forward if the specified time
+    // is invalid in the local time zone, while MSVC CRT moves it backwards
+    // which is especially pernicious as it can change the date if the DST
+    // starts at midnight, as it does in some time zones (see #15419), and this
+    // is completely unexpected for the code working with dates only.
+    //
+    // So standardize on moving the time forwards to have consistent behaviour
+    // under all platforms and to avoid the problem above.
+    if ( tm2.tm_hour != tm.tm_hour )
     {
-        return Set(timet);
+        tm2 = tm;
+        tm2.tm_hour++;
+        if ( tm2.tm_hour == 24 )
+        {
+            // This shouldn't normally happen as the DST never starts at 23:00
+            // but if it does, we have a problem as we need to adjust the day
+            // as well. However we stop here, i.e. we don't adjust the month
+            // (or the year) because mktime() is supposed to take care of this
+            // for us.
+            tm2.tm_hour = 0;
+            tm2.tm_mday++;
+        }
+
+        timet = mktime(&tm2);
     }
+
+    return Set(timet);
 }
 
 wxDateTime& wxDateTime::Set(wxDateTime_t hour,

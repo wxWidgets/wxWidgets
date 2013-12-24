@@ -326,7 +326,13 @@ public:
 
     /**
         Detaches all children from the sizer.
+
         If @a delete_windows is @true then child windows will also be deleted.
+
+        Notice that child sizers are always deleted, as a general consequence
+        of the principle that sizers own their sizer children, but don't own
+        their window children (because they are already owned by their parent
+        windows).
     */
     virtual void Clear(bool delete_windows = false);
 

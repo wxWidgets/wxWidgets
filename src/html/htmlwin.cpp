@@ -283,6 +283,7 @@ wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = NULL;
 wxHtmlProcessorList *wxHtmlWindow::m_GlobalProcessors = NULL;
 wxCursor *wxHtmlWindow::ms_cursorLink = NULL;
 wxCursor *wxHtmlWindow::ms_cursorText = NULL;
+wxCursor *wxHtmlWindow::ms_cursorDefault = NULL;
 
 void wxHtmlWindow::CleanUpStatics()
 {
@@ -293,6 +294,7 @@ void wxHtmlWindow::CleanUpStatics()
     wxDELETE(m_GlobalProcessors);
     wxDELETE(ms_cursorLink);
     wxDELETE(ms_cursorText);
+    wxDELETE(ms_cursorDefault);
 }
 
 void wxHtmlWindow::Init()
@@ -1787,7 +1789,9 @@ wxCursor wxHtmlWindow::GetDefaultHTMLCursor(HTMLCursor type)
 
         case HTMLCursor_Default:
         default:
-            return *wxSTANDARD_CURSOR;
+            if ( !ms_cursorDefault )
+                ms_cursorDefault = new wxCursor(wxCURSOR_ARROW);
+            return *ms_cursorDefault;
     }
 }
 
@@ -1796,6 +1800,27 @@ wxCursor wxHtmlWindow::GetHTMLCursor(HTMLCursor type) const
     return GetDefaultHTMLCursor(type);
 }
 
+/*static*/
+void wxHtmlWindow::SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor)
+{
+    switch (type)
+    {
+        case HTMLCursor_Link:
+            delete ms_cursorLink;
+            ms_cursorLink = new wxCursor(cursor);
+            return;
+
+        case HTMLCursor_Text:
+            delete ms_cursorText;
+            ms_cursorText = new wxCursor(cursor);
+            return;
+
+        case HTMLCursor_Default:
+        default:
+            delete ms_cursorText;
+            ms_cursorDefault = new wxCursor(cursor);
+    }
+}
 
 //-----------------------------------------------------------------------------
 // wxHtmlWinModule

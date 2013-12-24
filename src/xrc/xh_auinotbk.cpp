@@ -22,7 +22,8 @@
 wxIMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookXmlHandler, wxXmlResourceHandler);
 
 wxAuiNotebookXmlHandler::wxAuiNotebookXmlHandler()
-    : wxXmlResourceHandler()
+    : wxXmlResourceHandler(),
+      m_isInside(false)
 {
     XRC_ADD_STYLE(wxAUI_NB_DEFAULT_STYLE);
     XRC_ADD_STYLE(wxAUI_NB_TAB_SPLIT);

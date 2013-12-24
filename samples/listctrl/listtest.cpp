@@ -1307,7 +1307,7 @@ void MyListCtrl::LogEvent(const wxListEvent& event, const wxChar *eventName)
 {
     wxLogMessage(wxT("Item %ld: %s (item text = %s, data = %ld)"),
                  event.GetIndex(), eventName,
-                 event.GetText().c_str(), event.GetData());
+                 event.GetText(), static_cast<long>(event.GetData()));
 }
 
 wxString MyListCtrl::OnGetItemText(long item, long column) const

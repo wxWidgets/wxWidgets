@@ -330,28 +330,49 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
     {
         long l1 = value1.GetLong();
         long l2 = value2.GetLong();
-        long res = l1-l2;
-        if (res)
-            return res;
+        if (l1 < l2)
+            return -1;
+        else if (l1 > l2)
+            return 1;
     }
     else if (value1.GetType() == wxT("double"))
     {
         double d1 = value1.GetDouble();
         double d2 = value2.GetDouble();
         if (d1 < d2)
-            return 1;
-        if (d1 > d2)
             return -1;
+        else if (d1 > d2)
+            return 1;
     }
     else if (value1.GetType() == wxT("datetime"))
     {
         wxDateTime dt1 = value1.GetDateTime();
         wxDateTime dt2 = value2.GetDateTime();
         if (dt1.IsEarlierThan(dt2))
-            return 1;
-        if (dt2.IsEarlierThan(dt1))
             return -1;
+        if (dt2.IsEarlierThan(dt1))
+            return 1;
     }
+    else if (value1.GetType() == wxT("bool"))
+    {
+        bool b1 = value1.GetBool();
+        bool b2 = value2.GetBool();
+
+        if (b1 != b2)
+            return b1 ? 1 : -1;
+    }
+    else if (value1.GetType() == wxT("wxDataViewIconText"))
+    {
+        wxDataViewIconText iconText1, iconText2;
+
+        iconText1 << value1;
+        iconText2 << value2;
+
+        int res = iconText1.GetText().Cmp(iconText2.GetText());
+        if (res != 0)
+          return res;
+    }
+
 
     // items must be different
     wxUIntPtr id1 = wxPtrToUInt(item1.GetID()),
@@ -771,6 +792,20 @@ void wxDataViewRendererBase::PrepareForItem(const wxDataViewModel *model,
 }
 
 
+int wxDataViewRendererBase::GetEffectiveAlignment() const
+{
+    int alignment = GetAlignment();
+
+    if ( alignment == wxDVR_DEFAULT_ALIGNMENT )
+    {
+        // if we don't have an explicit alignment ourselves, use that of the
+        // column in horizontal direction and default vertical alignment
+        alignment = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+    }
+
+    return alignment;
+}
+
 // ----------------------------------------------------------------------------
 // wxDataViewCustomRendererBase
 // ----------------------------------------------------------------------------
@@ -807,40 +842,38 @@ wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
 
     // adjust the rectangle ourselves to account for the alignment
     wxRect rectItem = rectCell;
-    const int align = GetAlignment();
-    if ( align != wxDVR_DEFAULT_ALIGNMENT )
+    const int align = GetEffectiveAlignment();
+
+    const wxSize size = GetSize();
+
+    // take alignment into account only if there is enough space, otherwise
+    // show as much contents as possible
+    //
+    // notice that many existing renderers (e.g. wxDataViewSpinRenderer)
+    // return hard-coded size which can be more than they need and if we
+    // trusted their GetSize() we'd draw the text out of cell bounds
+    // entirely
+
+    if ( size.x >= 0 && size.x < rectCell.width )
     {
-        const wxSize size = GetSize();
+        if ( align & wxALIGN_CENTER_HORIZONTAL )
+            rectItem.x += (rectCell.width - size.x)/2;
+        else if ( align & wxALIGN_RIGHT )
+            rectItem.x += rectCell.width - size.x;
+        // else: wxALIGN_LEFT is the default
 
-        // take alignment into account only if there is enough space, otherwise
-        // show as much contents as possible
-        //
-        // notice that many existing renderers (e.g. wxDataViewSpinRenderer)
-        // return hard-coded size which can be more than they need and if we
-        // trusted their GetSize() we'd draw the text out of cell bounds
-        // entirely
+        rectItem.width = size.x;
+    }
 
-        if ( size.x >= 0 && size.x < rectCell.width )
-        {
-            if ( align & wxALIGN_CENTER_HORIZONTAL )
-                rectItem.x += (rectCell.width - size.x)/2;
-            else if ( align & wxALIGN_RIGHT )
-                rectItem.x += rectCell.width - size.x;
-            // else: wxALIGN_LEFT is the default
+    if ( size.y >= 0 && size.y < rectCell.height )
+    {
+        if ( align & wxALIGN_CENTER_VERTICAL )
+            rectItem.y += (rectCell.height - size.y)/2;
+        else if ( align & wxALIGN_BOTTOM )
+            rectItem.y += rectCell.height - size.y;
+        // else: wxALIGN_TOP is the default
 
-            rectItem.width = size.x;
-        }
-
-        if ( size.y >= 0 && size.y < rectCell.height )
-        {
-            if ( align & wxALIGN_CENTER_VERTICAL )
-                rectItem.y += (rectCell.height - size.y)/2;
-            else if ( align & wxALIGN_BOTTOM )
-                rectItem.y += rectCell.height - size.y;
-            // else: wxALIGN_TOP is the default
-
-            rectItem.height = size.y;
-        }
+        rectItem.height = size.y;
     }
 
 
@@ -909,16 +942,8 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
     }
 
     // get the alignment to use
-    int align = GetAlignment();
-    if ( align == wxDVR_DEFAULT_ALIGNMENT )
-    {
-        // if we don't have an explicit alignment ourselves, use that of the
-        // column in horizontal direction and default vertical alignment
-        align = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
-    }
-
     dc->DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
-                  rectText, align);
+                  rectText, GetEffectiveAlignment());
 }
 
 //-----------------------------------------------------------------------------
@@ -1765,6 +1790,11 @@ void wxDataViewListStore::DeleteAllItems()
     Reset( 0 );
 }
 
+void wxDataViewListStore::ClearColumns()
+{
+    m_cols.clear();
+}
+
 void wxDataViewListStore::SetItemData( const wxDataViewItem& item, wxUIntPtr data )
 {
     wxDataViewListStoreLine* line = m_data[GetRow(item)];
@@ -1776,7 +1806,7 @@ void wxDataViewListStore::SetItemData( const wxDataViewItem& item, wxUIntPtr dat
 wxUIntPtr wxDataViewListStore::GetItemData( const wxDataViewItem& item ) const
 {
     wxDataViewListStoreLine* line = m_data[GetRow(item)];
-    if (!line) return static_cast<wxUIntPtr>(NULL);
+    if (!line) return 0;
 
     return line->GetData();
 }
@@ -1866,6 +1896,12 @@ bool wxDataViewListCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
 bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *col )
 {
     return AppendColumn( col, "string" );
+}
+
+bool wxDataViewListCtrl::ClearColumns()
+{
+    GetStore()->ClearColumns();
+    return wxDataViewCtrl::ClearColumns();
 }
 
 wxDataViewColumn *wxDataViewListCtrl::AppendTextColumn( const wxString &label,

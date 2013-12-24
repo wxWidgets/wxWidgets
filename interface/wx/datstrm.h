@@ -366,7 +366,7 @@ public:
         long integer specifying the length of the string (without the last null
         character) and then reads the string.
 
-        In Unicode build of wxWidgets, the fuction first reads multibyte
+        In Unicode build of wxWidgets, the function first reads multibyte
         (char*) string from the stream and then converts it to Unicode using
         the @e conv object passed to constructor and returns the result as
         wxString. You are responsible for using the same converter as when

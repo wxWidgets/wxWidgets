@@ -189,16 +189,16 @@ void wxTextEntryDialog::SetTextValidator( const wxTextValidator& validator )
 
 IMPLEMENT_CLASS(wxPasswordEntryDialog, wxTextEntryDialog)
 
-wxPasswordEntryDialog::wxPasswordEntryDialog(wxWindow *parent,
-                                     const wxString& message,
-                                     const wxString& caption,
-                                     const wxString& value,
-                                     long style,
-                                     const wxPoint& pos)
-                 : wxTextEntryDialog(parent, message, caption, value,
-                                     style | wxTE_PASSWORD, pos)
+bool wxPasswordEntryDialog::Create(wxWindow *parent,
+                                   const wxString& message,
+                                   const wxString& caption,
+                                   const wxString& value,
+                                   long style,
+                                   const wxPoint& pos)
 {
     // Only change from wxTextEntryDialog is the password style
+    return wxTextEntryDialog::Create(parent, message, caption, value,
+                                     style | wxTE_PASSWORD, pos);
 }
 
 #endif // wxUSE_TEXTDLG

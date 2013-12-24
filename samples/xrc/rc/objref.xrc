@@ -25,7 +25,6 @@
                 <vgap>0</vgap>
                 <hgap>10</hgap>
                 <growablecols>0</growablecols>
-                <growablerows>0</growablerows>
                 <growablerows>1</growablerows>
               </object>
             </object>
@@ -154,7 +153,6 @@
                 <vgap>0</vgap>
                 <hgap>10</hgap>
                 <growablecols>0</growablecols>
-                <growablerows>0</growablerows>
                 <growablerows>2</growablerows>
               </object>
             </object>
@@ -332,7 +330,6 @@
                 <vgap>0</vgap>
                 <hgap>10</hgap>
                 <growablecols>0</growablecols>
-                <growablerows>0</growablerows>
                 <growablerows>2</growablerows>
               </object>
             </object>

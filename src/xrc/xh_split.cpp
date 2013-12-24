@@ -56,8 +56,8 @@ wxObject *wxSplitterWindowXmlHandler::DoCreateResource()
 
     SetupWindow(splitter);
 
-    long sashpos = GetLong(wxT("sashpos"), 0);
-    long minpanesize = GetLong(wxT("minsize"), -1);
+    long sashpos = GetDimension(wxT("sashpos"), 0);
+    long minpanesize = GetDimension(wxT("minsize"), -1);
     float gravity = GetFloat(wxT("gravity"), 0.0);
     if (minpanesize != -1)
         splitter->SetMinimumPaneSize(minpanesize);

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 20 August 2013                                                      *
+# Date : 19 September 2013                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -225,7 +225,7 @@ OBJECTS3=listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		spinbtncmn.obj,scrolbarcmn.obj,colourdata.obj,fontdata.obj,\
 		valnum.obj,numformatter.obj,markupparser.obj,\
 		affinematrix2d.obj,richtooltipcmn.obj,persist.obj,time.obj,\
-		textmeasurecmn.obj,modalhook.obj
+		textmeasurecmn.obj,modalhook.obj,threadinfo.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -718,3 +718,4 @@ persist.obj : persist.cpp
 time.obj : time.cpp
 textmeasurecmn.obj : textmeasurecmn.cpp
 modalhook.obj : modalhook.cpp
+threadinfo.obj : threadinfo.cpp

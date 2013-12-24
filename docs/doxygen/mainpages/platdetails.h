@@ -23,10 +23,6 @@ platforms and ports.
 
 @section page_port_wxgtk wxGTK
 
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_gtk.png
-@htmlonly</div>@endhtmlonly
-
 wxGTK is a port of wxWidgets using the GTK+ library. It makes use of GTK+'s
 native widgets wherever possible and uses wxWidgets' generic controls when
 needed. GTK+ itself has been ported to a number of systems, but so far only the
@@ -54,8 +50,7 @@ GTK+ 1.2 can still be used, albeit discouraged. For that you can pass
 @c --with-gtk=1 to the @c configure script.
 
 Support for GTK+ 3 is available starting with wxWidgets 2.9.4, use @c configure
-option @c --with-gtk=3 to enable it. It is still under development and may have
-significant bugs or missing features, and should be considered experimental.
+option @c --with-gtk=3 to enable it.
 
 For further information, please see the files in @c docs/gtk in the
 distribution.
@@ -64,14 +59,10 @@ distribution.
 
 @section page_port_wxosx wxOSX
 
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_osxleopard.png
-@htmlonly</div>@endhtmlonly
-
 @subsection page_port_wxosx_carbon wxOSX/Carbon
 
 wxOSX/Carbon is a port of wxWidgets for the Macintosh OS platform. Currently
-MacOS X 10.5 or higher are supported. wxOSX/Carbon can be compiled both using
+OS X 10.5 or higher are supported. wxOSX/Carbon can be compiled both using
 Apple's command line developer tools as well as Apple's Xcode IDE. wxOSX/Carbon
 supports both the Intel and PowerPC architectures and can be used to produce
 "universal binaries" in order create application which can run both
@@ -90,7 +81,7 @@ distribution.
 @subsection page_port_wxosx_cocoa wxOSX/Cocoa
 
 wxOSX/Cocoa is another port of wxWidgets for the Macintosh OS platform.
-Currently MacOS X 10.5 or higher are supported.  In contrast to wxOSX/Carbon,
+Currently OS X 10.5 or higher are supported.  In contrast to wxOSX/Carbon,
 it uses the Cocoa API  in place of Carbon. Much work has gone into this port
 and many  controls are functional, but the port has not reached the maturity of
 the wxOSX/Carbon port yet. It is possible to use wxOSX/Cocoa on 64-bit
@@ -122,10 +113,6 @@ in the distribution.
 
 @section page_port_wxx11 wxX11
 
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_x11.png
-@htmlonly</div>@endhtmlonly
-
 wxX11 is a port of wxWidgets using X11 (The X Window System) as the underlying
 graphics backend. wxX11 draws its widgets using the wxUniversal widget set
 which is now part of wxWidgets. wxX11 is well-suited for a number of special
@@ -144,10 +131,6 @@ applications on the wxWidgets web site.
 
 @section page_port_wxmotif wxMotif
 
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_motif.png
-@htmlonly</div>@endhtmlonly
-
 wxMotif is a port of wxWidgets for X11 systems using Motif libraries. Motif
 libraries provide a clean and fast user interface at the expense of the beauty
 and candy of newer interfaces like GTK.
@@ -158,10 +141,6 @@ distribution.
 
 
 @section page_port_wxmsw wxMSW
-
-@htmlonly<div class="logo">@endhtmlonly
-@image html logo_win.png
-@htmlonly</div>@endhtmlonly
 
 wxMSW is a port of wxWidgets for the Windows platforms including Windows 95,
 98, ME, 2000, NT, XP and Vista in ANSI and Unicode modes (for Windows 9x and ME

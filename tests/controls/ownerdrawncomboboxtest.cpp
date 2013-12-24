@@ -140,6 +140,7 @@ void OwnerDrawnComboBoxTestCase::PopDismiss()
 
 void OwnerDrawnComboBoxTestCase::Sort()
 {
+    delete m_combo;
     m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(),
                                        wxID_ANY, "",
                                        wxDefaultPosition, wxDefaultSize,
@@ -171,6 +172,7 @@ void OwnerDrawnComboBoxTestCase::ReadOnly()
     testitems.Add("item 1");
     testitems.Add("item 2");
 
+    delete m_combo;
     m_combo = new wxOwnerDrawnComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
                                        wxDefaultPosition, wxDefaultSize,
                                        testitems,

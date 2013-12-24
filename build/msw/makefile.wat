@@ -225,6 +225,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_tabmdi.obj &
 	$(OBJS)\monodll_tabart.obj &
 	$(OBJS)\monodll_xh_auinotbk.obj &
+	$(OBJS)\monodll_xh_auitoolb.obj &
 	$(OBJS)\monodll_advprops.obj &
 	$(OBJS)\monodll_editors.obj &
 	$(OBJS)\monodll_manager.obj &
@@ -1042,6 +1043,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_tabmdi.obj &
 	$(OBJS)\monolib_tabart.obj &
 	$(OBJS)\monolib_xh_auinotbk.obj &
+	$(OBJS)\monolib_xh_auitoolb.obj &
 	$(OBJS)\monolib_advprops.obj &
 	$(OBJS)\monolib_editors.obj &
 	$(OBJS)\monolib_manager.obj &
@@ -3660,8 +3662,8 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 	WX_FLAVOUR="$(WX_FLAVOUR)" WX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" CFG="$(CFG)" &
 	CPPUNIT_CFLAGS="$(CPPUNIT_CFLAGS)" CPPUNIT_LIBS="$(CPPUNIT_LIBS)" &
 	RUNTIME_LIBS="$(RUNTIME_LIBS)"
-WX_RELEASE_NODOT = 29
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)5
+WX_RELEASE_NODOT = 31
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 COMPILER_PREFIX = wat
 OBJS = &
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -3683,15 +3685,18 @@ WXZLIB_OBJECTS =  &
 	$(OBJS)\wxzlib_adler32.obj &
 	$(OBJS)\wxzlib_compress.obj &
 	$(OBJS)\wxzlib_crc32.obj &
-	$(OBJS)\wxzlib_gzio.obj &
-	$(OBJS)\wxzlib_uncompr.obj &
 	$(OBJS)\wxzlib_deflate.obj &
-	$(OBJS)\wxzlib_trees.obj &
-	$(OBJS)\wxzlib_zutil.obj &
-	$(OBJS)\wxzlib_inflate.obj &
+	$(OBJS)\wxzlib_gzclose.obj &
+	$(OBJS)\wxzlib_gzlib.obj &
+	$(OBJS)\wxzlib_gzread.obj &
+	$(OBJS)\wxzlib_gzwrite.obj &
 	$(OBJS)\wxzlib_infback.obj &
+	$(OBJS)\wxzlib_inffast.obj &
+	$(OBJS)\wxzlib_inflate.obj &
 	$(OBJS)\wxzlib_inftrees.obj &
-	$(OBJS)\wxzlib_inffast.obj
+	$(OBJS)\wxzlib_trees.obj &
+	$(OBJS)\wxzlib_uncompr.obj &
+	$(OBJS)\wxzlib_zutil.obj
 WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\zlib -wcd=124 $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  &
@@ -4025,6 +4030,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_tarstrm.obj &
 	$(OBJS)\monodll_textbuf.obj &
 	$(OBJS)\monodll_textfile.obj &
+	$(OBJS)\monodll_threadinfo.obj &
 	$(OBJS)\monodll_time.obj &
 	$(OBJS)\monodll_timercmn.obj &
 	$(OBJS)\monodll_timerimpl.obj &
@@ -4175,6 +4181,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_tarstrm.obj &
 	$(OBJS)\monolib_textbuf.obj &
 	$(OBJS)\monolib_textfile.obj &
+	$(OBJS)\monolib_threadinfo.obj &
 	$(OBJS)\monolib_time.obj &
 	$(OBJS)\monolib_timercmn.obj &
 	$(OBJS)\monolib_timerimpl.obj &
@@ -4321,6 +4328,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_tarstrm.obj &
 	$(OBJS)\basedll_textbuf.obj &
 	$(OBJS)\basedll_textfile.obj &
+	$(OBJS)\basedll_threadinfo.obj &
 	$(OBJS)\basedll_time.obj &
 	$(OBJS)\basedll_timercmn.obj &
 	$(OBJS)\basedll_timerimpl.obj &
@@ -4452,6 +4460,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_tarstrm.obj &
 	$(OBJS)\baselib_textbuf.obj &
 	$(OBJS)\baselib_textfile.obj &
+	$(OBJS)\baselib_threadinfo.obj &
 	$(OBJS)\baselib_time.obj &
 	$(OBJS)\baselib_timercmn.obj &
 	$(OBJS)\baselib_timerimpl.obj &
@@ -4962,7 +4971,8 @@ AUIDLL_OBJECTS =  &
 	$(OBJS)\auidll_auibar.obj &
 	$(OBJS)\auidll_tabmdi.obj &
 	$(OBJS)\auidll_tabart.obj &
-	$(OBJS)\auidll_xh_auinotbk.obj
+	$(OBJS)\auidll_xh_auinotbk.obj &
+	$(OBJS)\auidll_xh_auitoolb.obj
 AUILIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -4981,7 +4991,8 @@ AUILIB_OBJECTS =  &
 	$(OBJS)\auilib_auibar.obj &
 	$(OBJS)\auilib_tabmdi.obj &
 	$(OBJS)\auilib_tabart.obj &
-	$(OBJS)\auilib_xh_auinotbk.obj
+	$(OBJS)\auilib_xh_auinotbk.obj &
+	$(OBJS)\auilib_xh_auitoolb.obj
 RIBBONDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
@@ -5919,9 +5930,9 @@ $(SETUPHDIR)\wx\msw\rcdefs.h :  $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcde
 	$(CPP) "..\..\include\wx\msw\genrcdefs.h" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
 
 build_cfg_file : .SYMBOLIC $(SETUPHDIR)
-	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
-	@echo WXVER_MINOR=9 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=5 >>$(BUILD_CFG_FILE)
+	@echo WXVER_MAJOR=3 >$(BUILD_CFG_FILE)
+	@echo WXVER_MINOR=1 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=0 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -5981,31 +5992,40 @@ $(OBJS)\wxzlib_compress.obj :  .AUTODEPEND ..\..\src\zlib\compress.c
 $(OBJS)\wxzlib_crc32.obj :  .AUTODEPEND ..\..\src\zlib\crc32.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_gzio.obj :  .AUTODEPEND ..\..\src\zlib\gzio.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
-
-$(OBJS)\wxzlib_uncompr.obj :  .AUTODEPEND ..\..\src\zlib\uncompr.c
-	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
-
 $(OBJS)\wxzlib_deflate.obj :  .AUTODEPEND ..\..\src\zlib\deflate.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_trees.obj :  .AUTODEPEND ..\..\src\zlib\trees.c
+$(OBJS)\wxzlib_gzclose.obj :  .AUTODEPEND ..\..\src\zlib\gzclose.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_zutil.obj :  .AUTODEPEND ..\..\src\zlib\zutil.c
+$(OBJS)\wxzlib_gzlib.obj :  .AUTODEPEND ..\..\src\zlib\gzlib.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_inflate.obj :  .AUTODEPEND ..\..\src\zlib\inflate.c
+$(OBJS)\wxzlib_gzread.obj :  .AUTODEPEND ..\..\src\zlib\gzread.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
+$(OBJS)\wxzlib_gzwrite.obj :  .AUTODEPEND ..\..\src\zlib\gzwrite.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxzlib_infback.obj :  .AUTODEPEND ..\..\src\zlib\infback.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
+$(OBJS)\wxzlib_inffast.obj :  .AUTODEPEND ..\..\src\zlib\inffast.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
+$(OBJS)\wxzlib_inflate.obj :  .AUTODEPEND ..\..\src\zlib\inflate.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
 $(OBJS)\wxzlib_inftrees.obj :  .AUTODEPEND ..\..\src\zlib\inftrees.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
-$(OBJS)\wxzlib_inffast.obj :  .AUTODEPEND ..\..\src\zlib\inffast.c
+$(OBJS)\wxzlib_trees.obj :  .AUTODEPEND ..\..\src\zlib\trees.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
+$(OBJS)\wxzlib_uncompr.obj :  .AUTODEPEND ..\..\src\zlib\uncompr.c
+	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
+
+$(OBJS)\wxzlib_zutil.obj :  .AUTODEPEND ..\..\src\zlib\zutil.c
 	$(CC) -bt=nt -zq -fo=$^@ $(WXZLIB_CFLAGS) $<
 
 $(OBJS)\wxpng_png.obj :  .AUTODEPEND ..\..\src\png\png.c
@@ -6875,6 +6895,9 @@ $(OBJS)\monodll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 $(OBJS)\monodll_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_threadinfo.obj :  .AUTODEPEND ..\..\src\common\threadinfo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_time.obj :  .AUTODEPEND ..\..\src\common\time.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -7704,6 +7727,9 @@ $(OBJS)\monodll_tabart.obj :  .AUTODEPEND ..\..\src\aui\tabart.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_auinotbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_auinotbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_auitoolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_auitoolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_advprops.obj :  .AUTODEPEND ..\..\src\propgrid\advprops.cpp
@@ -9340,6 +9366,9 @@ $(OBJS)\monolib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 $(OBJS)\monolib_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_threadinfo.obj :  .AUTODEPEND ..\..\src\common\threadinfo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_time.obj :  .AUTODEPEND ..\..\src\common\time.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -10169,6 +10198,9 @@ $(OBJS)\monolib_tabart.obj :  .AUTODEPEND ..\..\src\aui\tabart.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_auinotbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_auinotbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_auitoolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_auitoolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_advprops.obj :  .AUTODEPEND ..\..\src\propgrid\advprops.cpp
@@ -11805,6 +11837,9 @@ $(OBJS)\basedll_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 $(OBJS)\basedll_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_threadinfo.obj :  .AUTODEPEND ..\..\src\common\threadinfo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_time.obj :  .AUTODEPEND ..\..\src\common\time.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -12142,6 +12177,9 @@ $(OBJS)\baselib_textbuf.obj :  .AUTODEPEND ..\..\src\common\textbuf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_textfile.obj :  .AUTODEPEND ..\..\src\common\textfile.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_threadinfo.obj :  .AUTODEPEND ..\..\src\common\threadinfo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_time.obj :  .AUTODEPEND ..\..\src\common\time.cpp
@@ -16271,6 +16309,9 @@ $(OBJS)\auidll_tabart.obj :  .AUTODEPEND ..\..\src\aui\tabart.cpp
 $(OBJS)\auidll_xh_auinotbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_auinotbk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(AUIDLL_CXXFLAGS) $<
 
+$(OBJS)\auidll_xh_auitoolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_auitoolb.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(AUIDLL_CXXFLAGS) $<
+
 $(OBJS)\auilib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
@@ -16296,6 +16337,9 @@ $(OBJS)\auilib_tabart.obj :  .AUTODEPEND ..\..\src\aui\tabart.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
 $(OBJS)\auilib_xh_auinotbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_auinotbk.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
+
+$(OBJS)\auilib_xh_auitoolb.obj :  .AUTODEPEND ..\..\src\xrc\xh_auitoolb.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(AUILIB_CXXFLAGS) $<
 
 $(OBJS)\ribbondll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp

@@ -389,11 +389,25 @@ public:
     /**
         Sets the date to be equal to Today() and the time from supplied
         parameters.
+
+        See the full Set() overload for the remarks about DST.
     */
     wxDateTime& Set(wxDateTime_t hour, wxDateTime_t minute = 0,
                     wxDateTime_t second = 0, wxDateTime_t millisec = 0);
     /**
         Sets the date and time from the parameters.
+
+        If the function parameters are invalid, e.g. @a month is February and
+        @a day is 30, the object is left in an invalid state, i.e. IsValid()
+        method will return @false.
+
+        If the specified time moment is invalid due to DST, i.e. it falls into
+        the "missing" hour on the date on which the DST starts, a valid
+        wxDateTime object is still constructed but its hour component is moved
+        forward to ensure that it corresponds to a valid moment in the local
+        time zone. For example, in the CET time zone the DST started on
+        2013-03-31T02:00:00 in 2013 and so setting the object to 2:30 at this
+        date actually sets the hour to 3, and not 2.
     */
     wxDateTime& Set(wxDateTime_t day, Month month,
                     int year = Inv_Year, wxDateTime_t hour = 0,

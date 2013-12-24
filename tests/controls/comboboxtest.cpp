@@ -155,6 +155,7 @@ void ComboBoxTestCase::PopDismiss()
 void ComboBoxTestCase::Sort()
 {
 #if !defined(__WXOSX__)
+    delete m_combo;
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
                              wxDefaultPosition, wxDefaultSize, 0, NULL,
                              wxCB_SORT);
@@ -185,6 +186,7 @@ void ComboBoxTestCase::ReadOnly()
     testitems.Add("item 1");
     testitems.Add("item 2");
 
+    delete m_combo;
     m_combo = new wxComboBox(wxTheApp->GetTopWindow(), wxID_ANY, "",
                              wxDefaultPosition, wxDefaultSize, testitems,
                              wxCB_READONLY);

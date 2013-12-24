@@ -16,7 +16,7 @@
     colours.
 
     It is likely that in the future the only use for palettes within wxWidgets
-    will be for representing colour indeces from images (such as GIF or PNG).
+    will be for representing colour indices from images (such as GIF or PNG).
     The image handlers for these formats have been modified to create a palette
     if there is such information in the original image file (usually 256 or less
     colour images). See wxImage for more information.

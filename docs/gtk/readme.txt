@@ -3,23 +3,21 @@
 
 You have downloaded the GTK+ port of the wxWidgets GUI library.
 
-It is required to use at least GTK+ 2.6 and some features are 
-only available when using GTK+ 2.8 or higher. Note that if you
-compile wxWidgets against GTK+ 2.8 your app will still work
-with older GTK+ version down to version 2.6 as wxWidgets
+It is required to use at least GTK+ 2.6 and some features are
+only available when using GTK+ 2.10 or higher. Note that even if
+you compile wxWidgets against a later GTK+ version, your application
+will still work with older GTK+ version down to version 2.6 as wxWidgets
 tests for the presence of newer features at run-time and it
 will fall back to a generic implementation if these features
 are not present in the GTK+ version used.
 
 wxWidgets 2.9.4 adds support for GTK+ 3, which can be enabled
-with configure option --with-gtk=3. Note that this port is
-still in development and may have significant bugs or missing
-features, and should be considered experimental.
+with configure option --with-gtk=3.
 
-wxWidgets 2.8 still supports GTK+ 1.2, but no developement
+wxWidgets 2.8 still supports GTK+ 1.2, but no development
 is done on that port anymore and support for GTK+ 1.2 will
 probably be dropped entirely. Indeed, one of the major steps
-in the developement cycle leading up to wxWidgets 2.8 was
+in the development cycle leading up to wxWidgets 2.8 was
 that the codebase for GTK+ 1.2 and GTK+ 2.0 were separated
 so that improvements and clean-ups to the GTK+ 2.0 port 
 could be done without caring for GTK+ 1.2.

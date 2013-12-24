@@ -36,6 +36,10 @@ enum wxScrollbarVisibility
 //
 // So we have
 //
+//                          wxAnyScrollHelperBase
+//                                   |
+//                                   |
+//                                  \|/
 //                           wxScrollHelperBase
 //                                   |
 //                                   |
@@ -55,7 +59,51 @@ enum wxScrollbarVisibility
 //
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxScrollHelperBase
+// This class allows reusing some of wxScrollHelperBase functionality in
+// wxVarScrollHelperBase in wx/vscroll.h without duplicating its code.
+class WXDLLIMPEXP_CORE wxAnyScrollHelperBase
+{
+public:
+    wxEXPLICIT wxAnyScrollHelperBase(wxWindow* win);
+    virtual ~wxAnyScrollHelperBase() {}
+
+    // Disable use of keyboard keys for scrolling. By default cursor movement
+    // keys (including Home, End, Page Up and Down) are used to scroll the
+    // window appropriately. If the derived class uses these keys for something
+    // else, e.g. changing the currently selected item, this function can be
+    // used to disable this behaviour as it's not only not necessary then but
+    // can actually be actively harmful if another object forwards a keyboard
+    // event corresponding to one of the above keys to us using
+    // ProcessWindowEvent() because the event will always be processed which
+    // can be undesirable.
+    void DisableKeyboardScrolling() { m_kbdScrollingEnabled = false; }
+
+    // Override this function to draw the graphic (or just process EVT_PAINT)
+    virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
+
+    // change the DC origin according to the scroll position.
+    virtual void DoPrepareDC(wxDC& dc) = 0;
+
+    // Simple accessor for the window that is really being scrolled.
+    wxWindow *GetTargetWindow() const { return m_targetWindow; }
+
+
+    // The methods called from the window event handlers.
+    void HandleOnChar(wxKeyEvent& event);
+    void HandleOnPaint(wxPaintEvent& event);
+
+protected:
+    // the window that receives the scroll events and the window to actually
+    // scroll, respectively
+    wxWindow *m_win,
+             *m_targetWindow;
+
+    // whether cursor keys should scroll the window
+    bool m_kbdScrollingEnabled;
+};
+
+// This is the class containing the guts of (uniform) scrolling logic.
+class WXDLLIMPEXP_CORE wxScrollHelperBase : public wxAnyScrollHelperBase
 {
 public:
     // ctor must be given the associated window
@@ -114,17 +162,6 @@ public:
     // which it is implemented to not use wxWindow::ScrollWindow().
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
 
-    // Disable use of keyboard keys for scrolling. By default cursor movement
-    // keys (including Home, End, Page Up and Down) are used to scroll the
-    // window appropriately. If the derived class uses these keys for something
-    // else, e.g. changing the currently selected item, this function can be
-    // used to disable this behaviour as it's not only not necessary then but
-    // can actually be actively harmful if another object forwards a keyboard
-    // event corresponding to one of the above keys to us using
-    // ProcessWindowEvent() because the event will always be processed which
-    // can be undesirable.
-    void DisableKeyboardScrolling() { m_kbdScrollingEnabled = false; }
-
     // Get the view start
     void GetViewStart(int *x, int *y) const { DoGetViewStart(x, y); }
 
@@ -173,15 +210,10 @@ public:
     // child of it in order to scroll only a portion the area between the
     // scrollbars (spreadsheet: only cell area will move).
     void SetTargetWindow(wxWindow *target);
-    wxWindow *GetTargetWindow() const;
 
     void SetTargetRect(const wxRect& rect) { m_rectToScroll = rect; }
     wxRect GetTargetRect() const { return m_rectToScroll; }
 
-    // Override this function to draw the graphic (or just process EVT_PAINT)
-    virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
-
-    // change the DC origin according to the scroll position.
     virtual void DoPrepareDC(wxDC& dc);
 
     // are we generating the autoscroll events?
@@ -201,8 +233,6 @@ public:
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
     void HandleOnSize(wxSizeEvent& event);
-    void HandleOnPaint(wxPaintEvent& event);
-    void HandleOnChar(wxKeyEvent& event);
     void HandleOnMouseEnter(wxMouseEvent& event);
     void HandleOnMouseLeave(wxMouseEvent& event);
 #if wxUSE_MOUSEWHEEL
@@ -278,9 +308,6 @@ protected:
     double                m_scaleX;
     double                m_scaleY;
 
-    wxWindow             *m_win,
-                         *m_targetWindow;
-
     wxRect                m_rectToScroll;
 
     wxTimer              *m_timerAutoScroll;
@@ -300,8 +327,6 @@ protected:
 
     bool                  m_xScrollingEnabled;
     bool                  m_yScrollingEnabled;
-
-    bool                  m_kbdScrollingEnabled;
 
 #if wxUSE_MOUSEWHEEL
     int m_wheelRotation;

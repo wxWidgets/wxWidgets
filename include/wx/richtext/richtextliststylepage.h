@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextliststylepage.h
-// Purpose:
+// Purpose:     Declares the rich text formatting dialog list style page.
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/18/2006 11:36:37 AM

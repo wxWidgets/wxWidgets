@@ -918,11 +918,13 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
         return false;
     }
 
-    if (tag.HasParam(wxT("HTTP-EQUIV")) &&
-        tag.GetParam(wxT("HTTP-EQUIV")).IsSameAs(wxT("Content-Type"), false) &&
-        tag.HasParam(wxT("CONTENT")))
+    wxString httpEquiv,
+             content;
+    if (tag.GetParamAsString(wxT("HTTP-EQUIV"), &httpEquiv) &&
+        httpEquiv.IsSameAs(wxT("Content-Type"), false) &&
+        tag.GetParamAsString(wxT("CONTENT"), &content))
     {
-        wxString content = tag.GetParam(wxT("CONTENT")).Lower();
+        content.MakeLower();
         if (content.Left(19) == wxT("text/html; charset="))
         {
             *m_retval = content.Mid(19);

@@ -563,7 +563,7 @@ public:
                (Visual Studio 2005) as earlier versions of the compiler don't
                have the required support for C++ templates to implement it.
 
-         @since 2.9.6
+         @since 3.0
      */
     template<typename T>
     void CallAfter(const T& functor);
@@ -595,11 +595,13 @@ public:
         -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
            the function skips to step (7).
         -# Dynamic event table of the handlers bound using Bind<>() is
-           searched. If a handler is found, it is executed and the function
+           searched in the most-recently-bound to the most-early-bound order.
+           If a handler is found, it is executed and the function
            returns @true unless the handler used wxEvent::Skip() to indicate
            that it didn't handle the event in which case the search continues.
         -# Static events table of the handlers bound using event table
-           macros is searched for this event handler. If this fails, the base
+           macros is searched for this event handler in the order of appearance
+           of event table macros in the source code. If this fails, the base
            class event table is tried, and so on until no more tables
            exist or an appropriate function was found. If a handler is found,
            the same logic as in the previous step applies.
@@ -2977,15 +2979,45 @@ class wxActivateEvent : public wxEvent
 {
 public:
     /**
+        Specifies the reason for the generation of this event.
+
+        See GetActivationReason().
+
+        @since 3.0
+    */
+    enum Reason
+    {
+        /// Window activated by mouse click.
+        Reason_Mouse,
+        /// Window was activated with some other method than mouse click.
+        Reason_Unknown
+    };
+
+    /**
         Constructor.
     */
     wxActivateEvent(wxEventType eventType = wxEVT_NULL, bool active = true,
-                    int id = 0);
+                    int id = 0, Reason ActivationReason = Reason_Unknown);
 
     /**
         Returns @true if the application or window is being activated, @false otherwise.
     */
     bool GetActive() const;
+
+    /**
+        Allows to check if the window was activated by clicking it with the
+        mouse or in some other way.
+
+        This method is currently only implemented in wxMSW and returns @c
+        Reason_Mouse there if the window was activated by a mouse click and @c
+        Reason_Unknown if it was activated in any other way (e.g. from
+        keyboard or programmatically).
+
+        Under all the other platforms, @c Reason_Unknown is always returned.
+
+        @since 3.0
+    */
+    Reason GetActivationReason() const;
 };
 
 
@@ -4072,7 +4104,8 @@ public:
         A menu is about to be opened. On Windows, this is only sent once for each
         navigation of the menubar (up until all menus have closed).
     @event{EVT_MENU_CLOSE(func)}
-        A menu has been just closed.
+        A menu has been just closed. Notice that this event is currently being
+        sent before the menu selection (@c wxEVT_MENU) event, if any.
     @event{EVT_MENU_HIGHLIGHT(id, func)}
         The menu item with the specified id has been highlighted: used to show
         help prompts in the status bar by wxFrame

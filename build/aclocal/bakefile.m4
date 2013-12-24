@@ -441,7 +441,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       powerpc-apple-macos* | \
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-k*bsd*-gnu | \
+      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
       *-*-mirbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
@@ -493,7 +493,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
 
     case "${BAKEFILE_HOST}" in
       *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
-      *-*-k*bsd*-gnu | *-*-mirbsd* )
+      *-*-k*bsd*-gnu | *-*-mirbsd* | *-*-gnu* )
         if test "x$SUNCXX" = "xyes"; then
             SONAME_FLAG="-h "
         else

@@ -505,7 +505,11 @@ wxSize wxGridBagSizer::CalcMin()
 
 void wxGridBagSizer::RecalcSizes()
 {
-    if (m_children.GetCount() == 0)
+    // We can't lay out our elements if we don't have at least a single row and
+    // a single column. Notice that this may happen even if we have some
+    // children but all of them are hidden, so checking for m_children being
+    // non-empty is not enough, see #15475.
+    if ( m_rowHeights.empty() || m_colWidths.empty() )
         return;
 
     wxPoint pt( GetPosition() );

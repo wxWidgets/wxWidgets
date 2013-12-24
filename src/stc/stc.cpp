@@ -1796,12 +1796,12 @@ int wxStyledTextCtrl::GetTargetEnd() const
          return SendMsg(2194, wx2stclen(text, buf), (sptr_t)(const char*)buf);
 }
 
-// Replace the target text with the argument text after \d processing.
+// Replace the target text with the argument text after \\d processing.
 // Text is counted so it can contain NULs.
-// Looks for \d where d is between 1 and 9 and replaces these with the strings
+// Looks for \\d where d is between 1 and 9 and replaces these with the strings
 // matched in the last search operation which were surrounded by \( and \).
 // Returns the length of the replacement text including any change
-// caused by processing the \d patterns.
+// caused by processing the \\d patterns.
 
      int wxStyledTextCtrl::ReplaceTargetRE(const wxString& text) {
          const wxWX2MBbuf buf = wx2stc(text);
@@ -2210,7 +2210,7 @@ void wxStyledTextCtrl::SetMultiPaste(int multiPaste)
     SendMsg(2614, multiPaste, 0);
 }
 
-// Retrieve the effect of pasting when there are multiple selections..
+// Retrieve the effect of pasting when there are multiple selections.
 int wxStyledTextCtrl::GetMultiPaste() const
 {
     return SendMsg(2615, 0, 0);

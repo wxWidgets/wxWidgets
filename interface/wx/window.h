@@ -1378,6 +1378,9 @@ public:
     virtual void SetSizeHints( const wxSize& minSize,
                                const wxSize& maxSize=wxDefaultSize,
                                const wxSize& incSize=wxDefaultSize);
+    /**
+        @overload
+    */
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
@@ -3785,6 +3788,8 @@ wxWindow* wxGetActiveWindow();
 /**
     Returns the first top level parent of the given window, or in other words,
     the frame or dialog containing it, or @NULL.
+
+    Notice that if @a window is itself already a TLW, it is returned directly.
 
     @header{wx/window.h}
 */

@@ -569,7 +569,7 @@ void wxSymbolPickerDialog::UpdateSymbolDisplay(bool updateSymbolList, bool showA
     if (!m_symbol.empty())
     {
         m_symbolStaticCtrl->SetFont(font);
-        m_symbolStaticCtrl->SetLabel(m_symbol);
+        m_symbolStaticCtrl->SetLabelText(m_symbol);
 
         int symbol = (int) m_symbol[0];
         m_characterCodeCtrl->SetValue(wxString::Format(wxT("%X hex (%d dec)"), symbol, symbol));

@@ -57,7 +57,7 @@
 
     @section scopedptr_newpointers Declaring new smart pointer types
 
-    To declare the smart pointer class @c CLASSNAME containing pointes to
+    To declare the smart pointer class @c CLASSNAME containing pointer to
     a (possibly incomplete) type @c TYPE you should use
     @code
         wxDECLARE_SCOPED_PTR( TYPE,        // type of the values

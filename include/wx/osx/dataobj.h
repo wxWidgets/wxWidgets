@@ -24,7 +24,7 @@ public:
 #endif
 
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
-    void AddToPasteboard( void * pasteboardRef , int itemID );
+    void AddToPasteboard( void * pasteboardRef , wxIntPtr itemID );
     // returns true if the passed in format is present in the pasteboard
     static bool IsFormatInPasteboard( void * pasteboardRef, const wxDataFormat &dataFormat );
     // returns true if any of the accepted formats of this dataobj is in the pasteboard

@@ -32,6 +32,7 @@
 #include "wx/colordlg.h"
 #include "wx/image.h"
 #include "wx/artprov.h"
+#include "wx/dcbuffer.h"
 #include "wx/dcgraph.h"
 #include "wx/overlay.h"
 #include "wx/graphics.h"
@@ -101,6 +102,7 @@ public:
 #if wxUSE_GRAPHICS_CONTEXT
     void OnGraphicContext(wxCommandEvent& event);
 #endif
+    void OnBuffer(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
     void OnSave(wxCommandEvent& event);
     void OnShow(wxCommandEvent &event);
@@ -148,6 +150,8 @@ public:
 #if wxUSE_GRAPHICS_CONTEXT
     void UseGraphicContext(bool use) { m_useContext = use; Refresh(); }
 #endif
+    void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
+
     void Draw(wxDC& dc);
 
 protected:
@@ -189,6 +193,7 @@ private:
 #if wxUSE_GRAPHICS_CONTEXT
     bool         m_useContext ;
 #endif
+    bool         m_useBuffer;
 
     DECLARE_EVENT_TABLE()
 };
@@ -227,6 +232,7 @@ enum
 #if wxUSE_GRAPHICS_CONTEXT
     File_GraphicContext,
 #endif
+    File_Buffer,
     File_Copy,
     File_Save,
 
@@ -410,6 +416,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
 #if wxUSE_GRAPHICS_CONTEXT
     m_useContext = false;
 #endif
+    m_useBuffer = false;
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -1494,8 +1501,16 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
-    wxPaintDC pdc(this);
-    Draw(pdc);
+    if ( m_useBuffer )
+    {
+        wxBufferedPaintDC bpdc(this);
+        Draw(bpdc);
+    }
+    else
+    {
+        wxPaintDC pdc(this);
+        Draw(pdc);
+    }
 }
 
 void MyCanvas::Draw(wxDC& pdc)
@@ -1729,6 +1744,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_GRAPHICS_CONTEXT
     EVT_MENU      (File_GraphicContext, MyFrame::OnGraphicContext)
 #endif
+    EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
     EVT_MENU      (File_Copy,     MyFrame::OnCopy)
     EVT_MENU      (File_Save,     MyFrame::OnSave)
 
@@ -1769,6 +1785,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_GRAPHICS_CONTEXT
     menuFile->AppendCheckItem(File_GraphicContext, wxT("&Use GraphicContext\tCtrl-Y"), wxT("Use GraphicContext"));
 #endif
+    menuFile->AppendCheckItem(File_Buffer, wxT("&Use wx&BufferedPaintDC\tCtrl-Z"), wxT("Buffer painting"));
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
     menuFile->Append(File_Copy, wxT("Copy to clipboard"));
@@ -1880,6 +1897,11 @@ void MyFrame::OnGraphicContext(wxCommandEvent& event)
     m_canvas->UseGraphicContext(event.IsChecked());
 }
 #endif
+
+void MyFrame::OnBuffer(wxCommandEvent& event)
+{
+    m_canvas->UseBuffer(event.IsChecked());
+}
 
 void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 {

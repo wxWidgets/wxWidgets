@@ -3255,12 +3255,12 @@ public:
     // Returns the length of the replacement text.
     int ReplaceTarget(const wxString& text);
 
-    // Replace the target text with the argument text after \d processing.
+    // Replace the target text with the argument text after \\d processing.
     // Text is counted so it can contain NULs.
-    // Looks for \d where d is between 1 and 9 and replaces these with the strings
+    // Looks for \\d where d is between 1 and 9 and replaces these with the strings
     // matched in the last search operation which were surrounded by \( and \).
     // Returns the length of the replacement text including any change
-    // caused by processing the \d patterns.
+    // caused by processing the \\d patterns.
     int ReplaceTargetRE(const wxString& text);
 
     // Search for a counted string in the target and set the target to the found
@@ -3469,7 +3469,7 @@ public:
     // Change the effect of pasting when there are multiple selections.
     void SetMultiPaste(int multiPaste);
 
-    // Retrieve the effect of pasting when there are multiple selections..
+    // Retrieve the effect of pasting when there are multiple selections.
     int GetMultiPaste() const;
 
     // Retrieve the value of a tag from a regular expression search.

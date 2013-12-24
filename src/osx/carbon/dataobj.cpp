@@ -259,7 +259,7 @@ bool wxDataObject::IsSupportedFormat( const wxDataFormat& rFormat, Direction vDi
     return found;
 }
 
-void wxDataObject::AddToPasteboard( void * pb, int itemID )
+void wxDataObject::AddToPasteboard( void * pb, wxIntPtr itemID )
 {
     PasteboardRef pasteboard = (PasteboardRef) pb;
    // get formats from wxDataObjects
@@ -301,7 +301,7 @@ void wxDataObject::AddToPasteboard( void * pb, int itemID )
             memset( buf, 0, sz );
             if ( GetDataHere( thisFormat, buf ) )
             {
-                int counter = 1 ;
+                wxIntPtr counter = 1 ;
                 if ( thisFormat.GetType() == wxDF_FILENAME )
                 {
                     // the data is D-normalized UTF8 strings of filenames delimited with \n

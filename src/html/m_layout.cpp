@@ -212,9 +212,10 @@ TAG_HANDLER_BEGIN(DIV, "DIV")
 
     TAG_HANDLER_PROC(tag)
     {
-        if(tag.HasParam(wxT("STYLE")))
+        wxString style;
+        if(tag.GetParamAsString(wxT("STYLE"), &style))
         {
-            if(tag.GetParam(wxT("STYLE")).IsSameAs(wxT("PAGE-BREAK-BEFORE:ALWAYS"), false))
+            if(style.IsSameAs(wxT("PAGE-BREAK-BEFORE:ALWAYS"), false))
             {
                 m_WParser->CloseContainer();
                 m_WParser->OpenContainer()->InsertCell(new wxHtmlPageBreakCell);
@@ -330,13 +331,10 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if ( !winIface )
             return false;
 
-        if (tag.HasParam(wxT("BACKGROUND")))
+        wxString bg;
+        if (tag.GetParamAsString(wxT("BACKGROUND"), &bg))
         {
-            wxFSFile *fileBgImage = m_WParser->OpenURL
-                                               (
-                                                wxHTML_URL_IMAGE,
-                                                tag.GetParam(wxT("BACKGROUND"))
-                                               );
+            wxFSFile *fileBgImage = m_WParser->OpenURL(wxHTML_URL_IMAGE, bg);
             if ( fileBgImage )
             {
                 wxInputStream *is = fileBgImage->GetStream();

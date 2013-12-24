@@ -1,12 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/richtext/richtextmarginspage.cpp
-// Purpose:     
+// Purpose:     Implements the rich text formatting dialog margins page.
 // Author:      Julian Smart
 // Modified by: 
 // Created:     20/10/2010 10:27:34
-// RCS-ID:      
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/richtext/richtextmarginspage.h"
@@ -408,7 +407,7 @@ wxRichTextAttr* wxRichTextMarginsPage::GetAttributes()
 
 bool wxRichTextMarginsPage::ShowToolTips()
 {
-    return true;
+    return wxRichTextFormattingDialog::ShowToolTips();
 }
 
 bool wxRichTextMarginsPage::TransferDataToWindow()

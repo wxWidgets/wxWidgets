@@ -399,13 +399,18 @@ public:
         // minimum size, giving priority to the min size components, and
         // returns the results.
     virtual wxSize GetEffectiveMinSize() const;
-    wxDEPRECATED( wxSize GetBestFittingSize() const );  // replaced by GetEffectiveMinSize
-    wxDEPRECATED( wxSize GetAdjustedMinSize() const );  // replaced by GetEffectiveMinSize
+
+    wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
+    wxSize GetBestFittingSize() const;
+    wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
+    wxSize GetAdjustedMinSize() const;
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
     void SetInitialSize(const wxSize& size=wxDefaultSize);
-    wxDEPRECATED( void SetBestFittingSize(const wxSize& size=wxDefaultSize) );  // replaced by SetInitialSize
+
+    wxDEPRECATED_MSG("use SetInitialSize() instead")
+    void SetBestFittingSize(const wxSize& size=wxDefaultSize);
 
 
         // the generic centre function - centers the window on parent by`
@@ -1681,8 +1686,10 @@ protected:
     // recalculated each time the value is needed.
     wxSize m_bestSizeCache;
 
-    wxDEPRECATED( void SetBestSize(const wxSize& size) );  // use SetInitialSize
-    wxDEPRECATED( virtual void SetInitialBestSize(const wxSize& size) );  // use SetInitialSize
+    wxDEPRECATED_MSG("use SetInitialSize() instead.")
+    void SetBestSize(const wxSize& size);
+    wxDEPRECATED_MSG("use SetInitialSize() instead.")
+    virtual void SetInitialBestSize(const wxSize& size);
 
 
 
@@ -1960,8 +1967,7 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 #if WXWIN_COMPATIBILITY_2_6
-    // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
-    wxDEPRECATED( wxWindowID NewControlId() );
+    wxDEPRECATED_MSG("use wxWindow::NewControlId() instead")
     inline wxWindowID NewControlId() { return wxWindowBase::NewControlId(); }
 #endif // WXWIN_COMPATIBILITY_2_6
 

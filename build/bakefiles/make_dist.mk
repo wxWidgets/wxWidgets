@@ -95,7 +95,6 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(WXDIR)/setup.h_vms $(DISTDIR)
 	$(CP_P) $(WXDIR)/descrip.mms $(DISTDIR)
 	$(CP_P) $(WXDIR)/Makefile.in $(DISTDIR)
-	$(CP_P) $(WXDIR)/wxBase.spec $(DISTDIR)
 	$(CP_P) $(DOCDIR)/lgpl.txt $(DISTDIR)/COPYING.LIB
 	$(CP_P) $(DOCDIR)/licence.txt $(DISTDIR)/LICENCE.txt
 	$(CP_P) $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
@@ -335,7 +334,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mv $(DISTDIR) $(BASEDISTDIR)
 
 GTK_DIST: UNIV_DIST
-	$(CP_P) $(WXDIR)/wxGTK.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
 	$(CP_P) $(GTKDIR)/*.h $(DISTDIR)/src/gtk
 	$(CP_P) $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
@@ -371,7 +369,6 @@ GTK_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/include/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
 
 X11_DIST: UNIV_DIST
-	$(CP_P) $(WXDIR)/wxX11.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/x11/*.h $(DISTDIR)/include/wx/x11
 	mkdir $(DISTDIR)/include/wx/x11/private
 	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
@@ -388,7 +385,6 @@ X11_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/include/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
 
 MOTIF_DIST: ALL_GUI_DIST
-	$(CP_P) $(WXDIR)/wxMotif.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
 	$(CP_P) $(MOTIFDIR)/*.cpp $(DISTDIR)/src/motif
 	$(CP_P) $(MOTIFDIR)/*.xbm $(DISTDIR)/src/motif
@@ -875,56 +871,3 @@ win-dist: MSW_ZIP_TEXT_DIST SAMPLES_DIST DEMOS_DIST UTILS_DIST MISC_DIST INTL_DI
 	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.cur
 	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.ico
 	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.bmp
-
-@IF_GNU_MAKE@debian-dist: DEBIAN_SOURCE_DIR = $(WXDIR)/../wxwidgets@WX_RELEASE@@WX_FLAVOUR@-@WX_SUBVERSION@
-@IF_GNU_MAKE@debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
-@IF_GNU_MAKE@	mkdir $(DISTDIR)/debian
-@IF_GNU_MAKE@	-$(CP_P) $(WXDIR)/debian/* $(DISTDIR)/debian
-@IF_GNU_MAKE@	$(CP_P) $(DOCDIR)/licence.txt $(DISTDIR)/docs
-@IF_GNU_MAKE@	$(CP_P) $(DOCDIR)/licendoc.txt $(DISTDIR)/docs
-@IF_GNU_MAKE@	$(CP_P) $(DOCDIR)/preamble.txt $(DISTDIR)/docs
-@IF_GNU_MAKE@	rm -f $(DISTDIR)/*.spec
-@IF_GNU_MAKE@
-@IF_GNU_MAKE@	@# now prune away a lot of the crap included by using cp -R
-@IF_GNU_MAKE@	@# in other dist targets.  Ugly and hardly portable but it
-@IF_GNU_MAKE@	@# will run on any Debian box and that's enough for now.
-@IF_GNU_MAKE@
-@IF_GNU_MAKE@	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp"    \
-@IF_GNU_MAKE@			   -o -name "*.dsw" -o -name "*.hh*" -o -name "*.mms"    \
-@IF_GNU_MAKE@			   -o -name "*.mcp" -o -name "*M*.xml" -o -name "*.r"    \
-@IF_GNU_MAKE@			   -o -name "*.pro"  \
-@IF_GNU_MAKE@			   -o -name "*.vpj"  \
-@IF_GNU_MAKE@			   -o \( -name "makefile.*" -a ! -name "makefile.unx" \) \
-@IF_GNU_MAKE@			\) -print0 | xargs -0 rm -rf
-@IF_GNU_MAKE@
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/SWIG
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/distrib
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/distutils
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/samples
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/contrib/iewin
-@IF_GNU_MAKE@	find $(DISTDIR)/wxPython \( -name "mac" -o -name "msw" \) -print0 | xargs -0 rm -rf
-@IF_GNU_MAKE@
-@IF_GNU_MAKE@	rm -rf $(DEBIAN_SOURCE_DIR)
-@IF_GNU_MAKE@	mv $(DISTDIR) $(DEBIAN_SOURCE_DIR)
-
-
-@IF_GNU_MAKE@debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
-
-@IF_GNU_MAKE@debian-msw-dirs:
-@IF_GNU_MAKE@	mkdir $(DISTDIR)/include/wx/msw
-@IF_GNU_MAKE@	mkdir $(DISTDIR)/src/msw
-
-
-RPMTOP=_dist_dir/_rpm_top
-
-rpm: bzip-dist
-	@echo "*** Building RPMs ***"
-	-mkdir $(RPMTOP)
-	-mkdir $(RPMTOP)/SOURCES
-	-mkdir $(RPMTOP)/SPECS
-	-mkdir $(RPMTOP)/BUILD
-	-mkdir $(RPMTOP)/RPMS
-	-mkdir $(RPMTOP)/SRPMS
-	cp -f $(WXARCHIVE_BZIP) $(RPMTOP)/SOURCES
-	rpmbuild -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
-	mv -f `find $(RPMTOP) -name "wx-*.rpm"` .

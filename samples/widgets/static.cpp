@@ -215,11 +215,12 @@ StaticWidgetsPage::StaticWidgetsPage(WidgetsBookCtrl *book,
     m_radioHAlign =
     m_radioVAlign = (wxRadioBox *)NULL;
 
+    m_statText = NULL;
 #if wxUSE_STATLINE
     m_statLine = (wxStaticLine *)NULL;
 #endif // wxUSE_STATLINE
 #if wxUSE_MARKUP
-    m_statText = m_statMarkup = NULL;
+    m_statMarkup = NULL;
 #endif // wxUSE_MARKUP
 
     m_sizerStatBox = (wxStaticBoxSizer *)NULL;
@@ -477,12 +478,12 @@ void StaticWidgetsPage::CreateStatic()
 
     if ( m_chkGeneric->GetValue() )
     {
-        m_statText = new wxGenericStaticText(this, wxID_ANY,
+        m_statText = new wxGenericStaticText(staticBox, wxID_ANY,
                                              m_textLabel->GetValue(),
                                              wxDefaultPosition, wxDefaultSize,
                                              flagsDummyText);
 #if wxUSE_MARKUP
-        m_statMarkup = new wxGenericStaticText(this, wxID_ANY,
+        m_statMarkup = new wxGenericStaticText(staticBox, wxID_ANY,
                                              wxString(),
                                              wxDefaultPosition, wxDefaultSize,
                                              flagsText);
@@ -490,17 +491,19 @@ void StaticWidgetsPage::CreateStatic()
     }
     else // use native versions
     {
-        m_statText = new wxStaticText(this, wxID_ANY,
+        m_statText = new wxStaticText(staticBox, wxID_ANY,
                                       m_textLabel->GetValue(),
                                       wxDefaultPosition, wxDefaultSize,
                                       flagsDummyText);
 #if wxUSE_MARKUP
-        m_statMarkup = new wxStaticText(this, wxID_ANY,
+        m_statMarkup = new wxStaticText(staticBox, wxID_ANY,
                                         wxString(),
                                         wxDefaultPosition, wxDefaultSize,
                                         flagsText);
 #endif // wxUSE_MARKUP
     }
+
+    m_statText->SetToolTip("Tooltip for a label inside the box");
 
 #if wxUSE_MARKUP
     m_statMarkup->SetLabelMarkup(m_textLabelWithMarkup->GetValue());
@@ -510,20 +513,20 @@ void StaticWidgetsPage::CreateStatic()
 #endif // wxUSE_MARKUP
 
 #if wxUSE_STATLINE
-    m_statLine = new wxStaticLine(this, wxID_ANY,
+    m_statLine = new wxStaticLine(staticBox, wxID_ANY,
                                   wxDefaultPosition, wxDefaultSize,
                                   isVert ? wxLI_VERTICAL : wxLI_HORIZONTAL);
 #endif // wxUSE_STATLINE
 
-    m_sizerStatBox->Add(m_statText, 1, wxGROW | wxALL, 5);
+    m_sizerStatBox->Add(m_statText, 0, wxGROW | wxALL, 5);
 #if wxUSE_STATLINE
     m_sizerStatBox->Add(m_statLine, 0, wxGROW | wxALL, 5);
 #endif // wxUSE_STATLINE
 #if wxUSE_MARKUP
-    m_sizerStatBox->Add(m_statMarkup, 1, wxGROW | wxALL, 5);
+    m_sizerStatBox->Add(m_statMarkup, 0, wxALL, 5);
 #endif // wxUSE_MARKUP
 
-    m_sizerStatic->Add(m_sizerStatBox, 1, wxGROW);
+    m_sizerStatic->Add(m_sizerStatBox, 0, wxGROW);
 
     m_sizerStatic->Layout();
 

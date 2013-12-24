@@ -349,7 +349,14 @@ void TreeCtrlTestCase::CollapseExpandEvents()
 void TreeCtrlTestCase::SelectionChange()
 {
     m_tree->ExpandAll();
-    m_tree->UnselectAll();
+
+    // This is currently needed to work around a problem under wxMSW: clicking
+    // on an item in an unfocused control generates two selection change events
+    // because of the SetFocus() call in TVN_SELCHANGED handler in wxMSW code.
+    // This is, of course, wrong on its own, but fixing it without breaking
+    // anything else is non-obvious, so for now at least work around this
+    // problem in the test.
+    m_tree->SetFocus();
 
     EventCounter changed(m_tree, wxEVT_TREE_SEL_CHANGED);
     EventCounter changing(m_tree, wxEVT_TREE_SEL_CHANGING);
@@ -369,6 +376,9 @@ void TreeCtrlTestCase::SelectionChange()
 
     sim.MouseClick();
     wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, changed.GetCount());
+    CPPUNIT_ASSERT_EQUAL(1, changing.GetCount());
 
     sim.MouseMove(point2);
     wxYield();

@@ -506,7 +506,6 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
         </set>
         <set var="EXTRALIBS_SDL"/>
-        <set var="EXTRALIBS_GNOMEPRINT"/>
 
         <set var="WITH_PLUGIN_SDL">0</set>
 
@@ -524,6 +523,13 @@ it if SHARED=1 unless you know what you are doing.
 Set the version of your Mingw installation here.
     "3" ...... this is for Mingw 2.0 or newer (comes with gcc3)
     "2.95" ... for Mingw 1.1 or any of the older versions
+            </description>
+        </option>
+        <option name="WINDRES">
+            <default-value>windres --use-temp-file</default-value>
+            <description>
+Windows resource compiler to use, possibly including extra options.
+For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
             </description>
         </option>
         <set var="GCCFLAGS">

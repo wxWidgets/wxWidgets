@@ -344,10 +344,23 @@ public:
     // the lock on the associated mutex object, before returning.
     wxCondError Wait();
 
+    // std::condition_variable-like variant that evaluates the associated condition
+    template<typename Functor>
+    wxCondError Wait(const Functor& predicate)
+    {
+        while ( !predicate() )
+        {
+            wxCondError e = Wait();
+            if ( e != wxCOND_NO_ERROR )
+                return e;
+        }
+        return wxCOND_NO_ERROR;
+    }
+
     // exactly as Wait() except that it may also return if the specified
     // timeout elapses even if the condition hasn't been signalled: in this
-    // case, the return value is false, otherwise (i.e. in case of a normal
-    // return) it is true
+    // case, the return value is wxCOND_TIMEOUT, otherwise (i.e. in case of a
+    // normal return) it is wxCOND_NO_ERROR.
     //
     // the timeout parameter specifies an interval that needs to be waited for
     // in milliseconds
@@ -601,6 +614,8 @@ protected:
     // of this thread.
     virtual void *Entry() = 0;
 
+    // use this to call the Entry() virtual method
+    void *CallEntry();
 
     // Callbacks which may be overridden by the derived class to perform some
     // specific actions when the thread is deleted or killed. By default they

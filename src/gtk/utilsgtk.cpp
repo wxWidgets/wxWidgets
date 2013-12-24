@@ -116,7 +116,7 @@ wxConvertToGTK(const wxString& s, wxFontEncoding enc)
     wxWCharBuffer wbuf;
     if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
     {
-        wbuf = wxConvUI->cMB2WC(s);
+        wbuf = wxConvUI->cMB2WC(s.c_str());
     }
     else // another encoding, use generic conversion class
     {
@@ -418,11 +418,11 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
 {
     wxString usage;
 
-    // check whether GLib version is greater than 2.6 but also lower than 2.33
+    // check whether GLib version is lower than 2.39
     // because, as we use the undocumented _GOptionGroup struct, we don't want
-    // to run this code with future versions which might change it (2.32 is the
+    // to run this code with future versions which might change it (2.38 is the
     // latest one at the time of this writing)
-    if (glib_check_version(2,33,0))
+    if (glib_check_version(2,39,0))
     {
         usage << _("The following standard GTK+ options are also supported:\n");
 

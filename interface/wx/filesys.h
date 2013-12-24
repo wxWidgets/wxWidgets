@@ -186,7 +186,7 @@ public:
     @class wxFSFile
 
     This class represents a single file opened by wxFileSystem.
-    It provides more informations than wxWidgets' input streams
+    It provides more information than wxWidgets' input streams
     (stream, filename, mime type, anchor).
 
     @note Any pointer returned by a method of wxFSFile is valid only as long as

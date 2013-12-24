@@ -53,7 +53,8 @@ public:
         single-line text control using the given @a choices.
 
         Notice that currently this function is only implemented in wxGTK2,
-        wxMSW and wxOSX/Cocoa ports and does nothing under the other platforms.
+        wxMSW and wxOSX/Cocoa (for wxTextCtrl only, but not for wxComboBox)
+        ports and does nothing under the other platforms.
 
         @since 2.9.0
 
@@ -81,7 +82,8 @@ public:
         Notice that you need to include @c wx/textcompleter.h in order to
         define your class inheriting from wxTextCompleter.
 
-        Currently this method is only implemented in wxMSW and wxOSX/Cocoa.
+        Currently this method is only implemented in wxMSW and wxOSX/Cocoa (for
+        wxTextCtrl only, but not for wxComboBox).
 
         @since 2.9.2
 
@@ -457,15 +459,19 @@ public:
         Notice that hints are known as <em>cue banners</em> under MSW or
         <em>placeholder strings</em> under OS X.
 
-        @remarks For the platforms without native hints support (and currently
-            only the MSW port does have it and even there it is only used under
-            Windows Vista and later only), the implementation has several known
-            limitations. Notably, the hint display will not be properly updated
-            if you change wxTextEntry contents programmatically when the hint
-            is displayed using methods other than SetValue() or ChangeValue()
-            or others which use them internally (e.g. Clear()). In other words,
-            currently you should avoid calling methods such as WriteText() or
-            Replace() when using hints and the text control is empty.
+        @remarks Currently implemented natively on Windows (Vista and later
+            only), OS X and GTK+ (3.2 and later).
+
+            For the platforms without native hints support, the implementation
+            has several known limitations. Notably, the hint display will not
+            be properly updated if you change wxTextEntry contents
+            programmatically when the hint is displayed using methods other
+            than SetValue() or ChangeValue() or others which use them
+            internally (e.g. Clear()). In other words, currently you should
+            avoid calling methods such as WriteText() or Replace() when using
+            hints and the text control is empty. If you bind to the control's
+            focus and wxEVT_TEXT events, you must call wxEvent::Skip() on them
+            so that the generic implementation works correctly.
 
         @remarks Hints can only be used for single line text controls,
             native multi-line text controls don't support hints under any

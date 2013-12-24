@@ -38,6 +38,10 @@ static GtkContainer* ContainerWidget()
     {
         s_widget = GTK_CONTAINER(gtk_fixed_new());
         GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+#ifdef __WXGTK3__
+        // need this to initialize style for window
+        gtk_widget_get_style_context(GTK_WIDGET(window));
+#endif
         gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(s_widget));
     }
     return s_widget;
@@ -424,8 +428,8 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 wxNativeFontInfo info;
 #ifdef __WXGTK3__
                 GtkStyleContext* sc = gtk_widget_get_style_context(ButtonWidget());
-                info.description = const_cast<PangoFontDescription*>(
-                    gtk_style_context_get_font(sc, GTK_STATE_FLAG_NORMAL));
+                gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
+                    GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
 #else
                 info.description = ButtonStyle()->font_desc;
 #endif
@@ -436,10 +440,14 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 // it's "Sans Serif" but the real font is called "Sans"):
                 if (!wxFontEnumerator::IsValidFacename(gs_fontSystem.GetFaceName()) &&
                     gs_fontSystem.GetFaceName() == "Sans Serif")
+                {
                     gs_fontSystem.SetFaceName("Sans");
+                }
 #endif // wxUSE_FONTENUM
 
+#ifndef __WXGTK3__
                 info.description = NULL;
+#endif
             }
             font = gs_fontSystem;
             break;

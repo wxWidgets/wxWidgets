@@ -408,6 +408,18 @@ public:
     */
     static wxMenuBar* MacGetCommonMenuBar();
 
+    /**
+        Returns the Apple menu.
+
+        This is the leftmost menu with application's name as its title. You
+        shouldn't remove any items from it, but it is safe to insert extra menu
+        items or submenus into it.
+
+        @onlyfor{wxosx}
+        @since 3.0.1
+     */
+    wxMenu *OSXGetAppleMenu() const;
+
     wxFrame *GetFrame() const;
     bool IsAttached() const;
     virtual void Attach(wxFrame *frame);
@@ -433,8 +445,8 @@ public:
     @note
     Please note that @e wxID_ABOUT and @e wxID_EXIT are predefined by wxWidgets
     and have a special meaning since entries using these IDs will be taken out
-    of the normal menus under MacOS X and will be inserted into the system menu
-    (following the appropriate MacOS X interface guideline).
+    of the normal menus under OS X and will be inserted into the system menu
+    (following the appropriate OS X interface guideline).
 
     Menu items may be either @e normal items, @e check items or @e radio items.
     Normal items don't have any special properties while the check items have a

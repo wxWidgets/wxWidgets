@@ -276,7 +276,7 @@ __DLLFLAG_p = -dWXUSINGDLL
 
 ### Variables: ###
 
-WX_RELEASE_NODOT = 29
+WX_RELEASE_NODOT = 31
 COMPILER_PREFIX = wat
 OBJS = &
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -465,6 +465,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_guifuncs.obj &
 	$(OBJS)\test_gui_selstoretest.obj &
 	$(OBJS)\test_gui_garbage.obj &
+	$(OBJS)\test_gui_safearrayconverttest.obj &
 	$(OBJS)\test_gui_settings.obj &
 	$(OBJS)\test_gui_socket.obj &
 	$(OBJS)\test_gui_boxsizer.obj &
@@ -1021,6 +1022,9 @@ $(OBJS)\test_gui_selstoretest.obj :  .AUTODEPEND .\misc\selstoretest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_garbage.obj :  .AUTODEPEND .\misc\garbage.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_safearrayconverttest.obj :  .AUTODEPEND .\misc\safearrayconverttest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_settings.obj :  .AUTODEPEND .\misc\settings.cpp

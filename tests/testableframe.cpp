@@ -18,6 +18,7 @@
 
 wxTestableFrame::wxTestableFrame() : wxFrame(NULL, wxID_ANY, "Test Frame")
 {
+    Move(2000, 200);
 }
 
 void wxTestableFrame::OnEvent(wxEvent& evt)

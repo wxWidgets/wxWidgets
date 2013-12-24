@@ -14,10 +14,6 @@
 
 #include "htmltag.h"
 
-#ifndef WXPRECOMP
-    #include "wx/colour.h"
-#endif
-
 #include "htmlpars.h"
 #include <stdio.h> // for vsscanf
 #include <stdarg.h>
@@ -404,47 +400,6 @@ int wx28HtmlTag::ScanParam(const wxString& par,
 {
     wxString parval = GetParam(par);
     return wxSscanf(parval, format, param);
-}
-
-bool wx28HtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
-{
-    wxCHECK_MSG( clr, false, wxT("invalid colour argument") );
-
-    wxString str = GetParam(par);
-
-    // handle colours defined in HTML 4.0 first:
-    if (str.length() > 1 && str[0] != wxT('#'))
-    {
-        #define HTML_COLOUR(name, r, g, b)              \
-            if (str.IsSameAs(wxT(name), false))         \
-                { clr->Set(r, g, b); return true; }
-        HTML_COLOUR("black",   0x00,0x00,0x00)
-        HTML_COLOUR("silver",  0xC0,0xC0,0xC0)
-        HTML_COLOUR("gray",    0x80,0x80,0x80)
-        HTML_COLOUR("white",   0xFF,0xFF,0xFF)
-        HTML_COLOUR("maroon",  0x80,0x00,0x00)
-        HTML_COLOUR("red",     0xFF,0x00,0x00)
-        HTML_COLOUR("purple",  0x80,0x00,0x80)
-        HTML_COLOUR("fuchsia", 0xFF,0x00,0xFF)
-        HTML_COLOUR("green",   0x00,0x80,0x00)
-        HTML_COLOUR("lime",    0x00,0xFF,0x00)
-        HTML_COLOUR("olive",   0x80,0x80,0x00)
-        HTML_COLOUR("yellow",  0xFF,0xFF,0x00)
-        HTML_COLOUR("navy",    0x00,0x00,0x80)
-        HTML_COLOUR("blue",    0x00,0x00,0xFF)
-        HTML_COLOUR("teal",    0x00,0x80,0x80)
-        HTML_COLOUR("aqua",    0x00,0xFF,0xFF)
-        #undef HTML_COLOUR
-    }
-
-    // then try to parse #rrggbb representations or set from other well
-    // known names (note that this doesn't strictly conform to HTML spec,
-    // but it doesn't do real harm -- but it *must* be done after the standard
-    // colors are handled above):
-    if (clr->Set(str))
-        return true;
-
-    return false;
 }
 
 bool wx28HtmlTag::GetParamAsInt(const wxString& par, int *clr) const

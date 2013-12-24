@@ -1490,7 +1490,7 @@ wxString wxFlagsProperty::ValueToString( wxVariant& value,
     for ( i = 0; i < GetItemCount(); i++ )
     {
         int doAdd;
-        doAdd = ( flags & choices.GetValue(i) );
+        doAdd = ( (flags & choices.GetValue(i)) == choices.GetValue(i) );
 
         if ( doAdd )
         {
@@ -1578,7 +1578,7 @@ void wxFlagsProperty::RefreshChildren()
         if ( subVal != (m_oldValue & flag) )
             p->ChangeFlag( wxPG_PROP_MODIFIED, true );
 
-        p->SetValue( subVal?true:false );
+        p->SetValue( subVal == flag?true:false );
     }
 
     m_oldValue = flags;

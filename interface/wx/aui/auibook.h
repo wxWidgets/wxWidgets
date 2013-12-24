@@ -653,7 +653,7 @@ public:
 
     @see wxAuiTabArt
 
-    @genericAppearance{auidefaulttabart.png}
+    @genericAppearance{auidefaulttabart}
 
     @library{wxaui}
     @category{aui}
@@ -756,7 +756,7 @@ protected:
     completely new tab art class. It can also be used as alternative to
     wxAuiDefaultTabArt.
 
-    @genericAppearance{auisimpletabart.png}
+    @genericAppearance{auisimpletabart}
 
     @library{wxaui}
     @category{aui}

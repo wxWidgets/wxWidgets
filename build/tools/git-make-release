@@ -81,4 +81,4 @@ set -x
 zip -q -r ../$prefix.zip .
 
 7z a ../$prefix.7z . >/dev/null
-7z a ../${prefix}_Headers.7z include >/dev/null
+7z a ../${prefix}_headers.7z include >/dev/null

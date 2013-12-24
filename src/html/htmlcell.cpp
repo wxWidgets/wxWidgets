@@ -1264,9 +1264,9 @@ void wxHtmlContainerCell::InsertCell(wxHtmlCell *f)
 
 void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
 {
-    if (tag.HasParam(wxT("ALIGN")))
+    wxString alg;
+    if (tag.GetParamAsString(wxT("ALIGN"), &alg))
     {
-        wxString alg = tag.GetParam(wxT("ALIGN"));
         alg.MakeUpper();
         if (alg == wxT("CENTER"))
             SetAlignHor(wxHTML_ALIGN_CENTER);
@@ -1284,19 +1284,16 @@ void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
 
 void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag, double pixel_scale)
 {
-    if (tag.HasParam(wxT("WIDTH")))
+    int wdi;
+    bool wpercent;
+    if (tag.GetParamAsIntOrPercent(wxT("WIDTH"), &wdi, wpercent))
     {
-        int wdi;
-        wxString wd = tag.GetParam(wxT("WIDTH"));
-
-        if (wd[wd.length()-1] == wxT('%'))
+        if (wpercent)
         {
-            wxSscanf(wd.c_str(), wxT("%i%%"), &wdi);
             SetWidthFloat(wdi, wxHTML_UNITS_PERCENT);
         }
         else
         {
-            wxSscanf(wd.c_str(), wxT("%i"), &wdi);
             SetWidthFloat((int)(pixel_scale * (double)wdi), wxHTML_UNITS_PIXELS);
         }
         m_LastLayout = -1;

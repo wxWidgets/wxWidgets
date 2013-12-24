@@ -30,19 +30,30 @@
         <if cond="FORMAT=='msevc4prj'">
             <define>NO_ERRNO_H</define>
         </if>
+        <if cond="IS_MSVC">
+            <!--
+                Define this to get rid of many warnings about using open(),
+                read() and other POSIX functions in zlib code. This is much
+                more convenient than having to modify it to avoid them.
+             -->
+            <define>_CRT_NONSTDC_NO_WARNINGS</define>
+        </if>
         <sources>
             src/zlib/adler32.c
             src/zlib/compress.c
             src/zlib/crc32.c
-            src/zlib/gzio.c
-            src/zlib/uncompr.c
             src/zlib/deflate.c
-            src/zlib/trees.c
-            src/zlib/zutil.c
-            src/zlib/inflate.c
+            src/zlib/gzclose.c
+            src/zlib/gzlib.c
+            src/zlib/gzread.c
+            src/zlib/gzwrite.c
             src/zlib/infback.c
-            src/zlib/inftrees.c
             src/zlib/inffast.c
+            src/zlib/inflate.c
+            src/zlib/inftrees.c
+            src/zlib/trees.c
+            src/zlib/uncompr.c
+            src/zlib/zutil.c
         </sources>
     </lib>
 

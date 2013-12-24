@@ -226,8 +226,8 @@ private:
 //                  Purpose of this class is to display HTML page (either local
 //                  file or downloaded via HTTP protocol) in a window. Width of
 //                  window is constant - given in constructor - virtual height
-//                  is changed dynamicly depending on page size.  Once the
-//                  window is created you can set it's content by calling
+//                  is changed dynamically depending on page size.  Once the
+//                  window is created you can set its content by calling
 //                  SetPage(text) or LoadPage(filename).
 // ----------------------------------------------------------------------------
 
@@ -387,6 +387,7 @@ public:
 
     /// Returns standard HTML cursor as used by wxHtmlWindow
     static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
+    static void SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor);
 
 protected:
     void Init();
@@ -552,6 +553,7 @@ private:
     // standard mouse cursors
     static wxCursor *ms_cursorLink;
     static wxCursor *ms_cursorText;
+    static wxCursor *ms_cursorDefault;
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxHtmlWindow);

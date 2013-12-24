@@ -210,6 +210,7 @@
             misc/guifuncs.cpp
             misc/selstoretest.cpp
             misc/garbage.cpp
+            misc/safearrayconverttest.cpp
             misc/settings.cpp
             <!--
                 This one is intentionally duplicated here (it is also part of

@@ -295,8 +295,11 @@ public:
         Get back a file descriptor from wxFile object - the caller is responsible for
         closing the file if this descriptor is opened.
         IsOpened() will return @false after call to Detach().
+
+        @return The file descriptor (this is new since wxWidgets 3.0.0, in the
+        previous versions this method didn't return anything).
     */
-    void Detach();
+    int Detach();
 
     /**
         Returns @true if the end of the file has been reached.

@@ -130,6 +130,9 @@ public:
     //We use this flag to stop recursion when we load a page from the navigation
     //callback, mainly when loading a VFS page
     bool m_guard;
+    //This flag is use to indicate when a navigation event is the result of a
+    //create-web-view signal and so we need to send a new window event
+    bool m_creating;
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl);

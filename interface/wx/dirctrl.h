@@ -50,15 +50,18 @@ enum
     @library{wxcore}
     @category{ctrl}
     @appearance{genericdirctrl}
+    
+    @beginEventEmissionTable
     @event{EVT_DIRCTRL_SELECTIONCHANGED(id, func)}
           Selected directory has changed.
           Processes a @c wxEVT_DIRCTRL_SELECTIONCHANGED event type.
           Notice that this event is generated even for the changes done by the
           program itself and not only those done by the user.
-          @since 2.9.5
+          Available since wxWidgets 2.9.5.
     @event{EVT_DIRCTRL_FILEACTIVATED(id, func)}
           The user activated a file by double-clicking or pressing Enter.
-          @since 2.9.5
+          Available since wxWidgets 2.9.5.
+    @endEventTable
 */
 class wxGenericDirCtrl : public wxControl
 {

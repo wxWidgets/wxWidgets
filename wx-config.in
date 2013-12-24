@@ -156,7 +156,7 @@ wxconfig_flag_options="$wxconfig_yesno_options selected_config no_rpath inplace"
 # Returns NAME if _string is of the form: --NAME[=...]
 option_name()
 {
-    echo "$1" | sed 's/^--//;s/=.*//' | tr '-' '_'
+    echo "$1" | sed -e 's/^--//' -e 's/=.*//' -e s/-/_/g
 }
 
 # option_value _string
@@ -1387,5 +1387,3 @@ fi
 # And so that's it, we're done.  Have a nice build.
 
 exit 0
-
-

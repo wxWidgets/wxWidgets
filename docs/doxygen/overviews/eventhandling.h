@@ -453,14 +453,19 @@ doesn't count as having handled the event and the search continues):
     Bind<>() was called, is consulted. Notice that this is done before
     checking the static event table entries, so if both a dynamic and a static
     event handler match the same event, the static one is never going to be
-    used unless wxEvent::Skip() is called in the dynamic one.
+    used unless wxEvent::Skip() is called in the dynamic one. Also note that
+    the dynamically bound handlers are searched in order of their registration
+    during program run-time, i.e. later bound handlers take priority over the
+    previously bound ones.
     </li>
 
     <li value="4">
     The event table containing all the handlers defined using the event table
-    macros in this class and its base classes is examined. Notice that this
-    means that any event handler defined in a base class will be executed at
-    this step.
+    macros in this class and its base classes is examined. The search in an
+    event table respects the order of the event macros appearance in the source
+    code, i.e. earlier occurring entries take precedence over later occurring
+    ones. Notice that this means that any event handler defined in a base class
+    will be executed at this step.
     </li>
 
     <li value="5">

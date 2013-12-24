@@ -74,10 +74,10 @@ wx_top_builddir = @wx_top_builddir@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 2.9
-WX_RELEASE_NODOT = 29
-WX_VERSION = $(WX_RELEASE).5
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)5
+WX_RELEASE = 3.1
+WX_RELEASE_NODOT = 31
+WX_VERSION = $(WX_RELEASE).0
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
 LIBDIRNAME = $(wx_top_builddir)/lib
 WXREGEX_CFLAGS = -DNDEBUG -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(____SHARED) \
 	$(CPPFLAGS) $(CFLAGS)
@@ -91,15 +91,18 @@ WXZLIB_OBJECTS =  \
 	wxzlib_adler32.o \
 	wxzlib_compress.o \
 	wxzlib_crc32.o \
-	wxzlib_gzio.o \
-	wxzlib_uncompr.o \
 	wxzlib_deflate.o \
-	wxzlib_trees.o \
-	wxzlib_zutil.o \
-	wxzlib_inflate.o \
+	wxzlib_gzclose.o \
+	wxzlib_gzlib.o \
+	wxzlib_gzread.o \
+	wxzlib_gzwrite.o \
 	wxzlib_infback.o \
+	wxzlib_inffast.o \
+	wxzlib_inflate.o \
 	wxzlib_inftrees.o \
-	wxzlib_inffast.o
+	wxzlib_trees.o \
+	wxzlib_uncompr.o \
+	wxzlib_zutil.o
 WXPNG_CFLAGS = -DNDEBUG $(__INC_ZLIB_p) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	wxpng_png.o \
@@ -805,6 +808,7 @@ ALL_BASE_SOURCES =  \
 	src/common/tarstrm.cpp \
 	src/common/textbuf.cpp \
 	src/common/textfile.cpp \
+	src/common/threadinfo.cpp \
 	src/common/time.cpp \
 	src/common/timercmn.cpp \
 	src/common/timerimpl.cpp \
@@ -1001,6 +1005,7 @@ MONODLL_OBJECTS =  \
 	monodll_tarstrm.o \
 	monodll_textbuf.o \
 	monodll_textfile.o \
+	monodll_threadinfo.o \
 	monodll_common_time.o \
 	monodll_timercmn.o \
 	monodll_timerimpl.o \
@@ -1138,6 +1143,7 @@ MONOLIB_OBJECTS =  \
 	monolib_tarstrm.o \
 	monolib_textbuf.o \
 	monolib_textfile.o \
+	monolib_threadinfo.o \
 	monolib_common_time.o \
 	monolib_timercmn.o \
 	monolib_timerimpl.o \
@@ -1267,6 +1273,7 @@ BASEDLL_OBJECTS =  \
 	basedll_tarstrm.o \
 	basedll_textbuf.o \
 	basedll_textfile.o \
+	basedll_threadinfo.o \
 	basedll_common_time.o \
 	basedll_timercmn.o \
 	basedll_timerimpl.o \
@@ -1379,6 +1386,7 @@ BASELIB_OBJECTS =  \
 	baselib_tarstrm.o \
 	baselib_textbuf.o \
 	baselib_textfile.o \
+	baselib_threadinfo.o \
 	baselib_common_time.o \
 	baselib_timercmn.o \
 	baselib_timerimpl.o \
@@ -1876,6 +1884,7 @@ AUIDLL_OBJECTS =  \
 	auidll_tabmdi.o \
 	auidll_tabart.o \
 	auidll_xh_auinotbk.o \
+	auidll_xh_auitoolb.o \
 	$(__AUI_GTK_SRC_OBJECTS_2)
 AUIDLL_ODEP =  $(_____pch_wxprec_auidll_wx_wxprec_h_gch___depname)
 AUILIB_CXXFLAGS = $(__auilib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -1892,6 +1901,7 @@ AUILIB_OBJECTS =  \
 	auilib_tabmdi.o \
 	auilib_tabart.o \
 	auilib_xh_auinotbk.o \
+	auilib_xh_auitoolb.o \
 	$(__AUI_GTK_SRC_OBJECTS_3)
 AUILIB_ODEP =  $(_____pch_wxprec_auilib_wx_wxprec_h_gch___depname)
 RIBBONDLL_CXXFLAGS = $(__ribbondll_PCH_INC) -D__WX$(TOOLKIT)__ \
@@ -2994,8 +3004,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/textctrl.h \
 	wx/gtk/textentry.h \
 	wx/gtk/tglbtn.h \
-	wx/generic/fontdlgg.h \
-	wx/gtk/gnome/gprint.h
+	wx/generic/fontdlgg.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
 	wx/generic/fdrepdlg.h \
@@ -4084,7 +4093,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/accel.h \
 	wx/generic/buttonbar.h \
 	wx/generic/choicdgg.h \
-	wx/generic/colrdlgg.h \
 	wx/generic/combo.h \
 	wx/generic/custombgwin.h \
 	wx/generic/dcpsg.h \
@@ -4159,6 +4167,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/valnum.h \
 	wx/window.h \
 	wx/windowid.h \
+	wx/windowptr.h \
 	wx/withimages.h \
 	wx/wrapsizer.h \
 	wx/wupdlock.h \
@@ -4373,6 +4382,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/aui/aui.h \
 	wx/aui/tabart.h \
 	wx/xrc/xh_auinotbk.h \
+	wx/xrc/xh_auitoolb.h \
 	$(AUI_GTK_HDR) \
 	wx/propgrid/advprops.h \
 	wx/propgrid/editors.h \
@@ -4699,6 +4709,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_tabmdi.o \
 	monodll_tabart.o \
 	monodll_xh_auinotbk.o \
+	monodll_xh_auitoolb.o \
 	$(__AUI_GTK_SRC_OBJECTS) \
 	monodll_advprops.o \
 	monodll_editors.o \
@@ -5634,8 +5645,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_textentry.o \
 	monodll_gtk_tglbtn.o \
 	monodll_treeentry_gtk.o \
-	monodll_fontdlgg.o \
-	monodll_gprint.o
+	monodll_fontdlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -6948,6 +6958,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_tabmdi.o \
 	monolib_tabart.o \
 	monolib_xh_auinotbk.o \
+	monolib_xh_auitoolb.o \
 	$(__AUI_GTK_SRC_OBJECTS_1) \
 	monolib_advprops.o \
 	monolib_editors.o \
@@ -7883,8 +7894,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_textentry.o \
 	monolib_gtk_tglbtn.o \
 	monolib_treeentry_gtk.o \
-	monolib_fontdlgg.o \
-	monolib_gprint.o
+	monolib_fontdlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -10306,8 +10316,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_textentry.o \
 	coredll_gtk_tglbtn.o \
 	coredll_treeentry_gtk.o \
-	coredll_fontdlgg.o \
-	coredll_gprint.o
+	coredll_fontdlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -11984,8 +11993,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_textentry.o \
 	corelib_gtk_tglbtn.o \
 	corelib_treeentry_gtk.o \
-	corelib_fontdlgg.o \
-	corelib_gprint.o
+	corelib_fontdlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -14542,7 +14550,7 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_USE_XRC_1@__clean_wxrc___depname = clean-wxrc
 @COND_USE_XRC_1@__install_wxrc___depname = install-wxrc
 @COND_TOOLKIT_MSW@RCDEFS_H = msw/rcdefs.h
-@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).5.r
+@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).0.r
 @COND_TOOLKIT_COCOA@__cocoa_res_install___depname = cocoa-res-install
 @COND_SHARED_0@____SHARED = 
 @COND_SHARED_1@____SHARED = $(PIC_FLAG)
@@ -15147,17 +15155,17 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1___htmldll_library_link_LIBR_0 \
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_65 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p_65 = --define wxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p_65 = --define wxNO_THREADS
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).5
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .5.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).0
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@dll___targetsuf3 \
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	= \
-@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).5.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.0.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .5.0.0.$(SO_SUFFIX)
-@COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -5.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
+@COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf3 = .$(SO_SUFFIX)
-@COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1@dll___targetsuf3 = .$(SO_SUFFIX).5
+@COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1@dll___targetsuf3 = .$(SO_SUFFIX).0
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_wxUSE_LIBTIFF_builtin@__INC_TIFF_BUILD_p_66 \
@@ -15355,7 +15363,7 @@ clean: $(__clean_wxrc___depname)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 	rm -f $(DLLPREFIX_MODULE)sound_sdl$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 	-(cd samples && $(MAKE) clean)
-	rm -f lib/libwx_$(TOOLCHAIN_NAME).5.rsrc lib/libwx_$(TOOLCHAIN_NAME).5.r
+	rm -f lib/libwx_$(TOOLCHAIN_NAME).0.rsrc lib/libwx_$(TOOLCHAIN_NAME).0.r
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -16098,7 +16106,7 @@ install-wxconfig:
 	$(INSTALL_DIR) $(DESTDIR)$(bindir)
 	$(INSTALL_DIR) $(DESTDIR)$(libdir)/wx/config
 	$(INSTALL_PROGRAM) lib/wx/config/$(TOOLCHAIN_FULLNAME) $(DESTDIR)$(libdir)/wx/config
-	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) ../`basename $(libdir)`/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
+	(cd $(DESTDIR)$(bindir) && rm -f wx-config && $(LN_S) $(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config || cp -p $(DESTDIR)$(libdir)/wx/config/$(TOOLCHAIN_FULLNAME) wx-config)
 
 locale_install: 
 	$(INSTALL_DIR) $(DESTDIR)$(datadir)/locale
@@ -16134,13 +16142,13 @@ locale_msw_uninstall:
 	fi ; \
 	done
 
-@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).5.r: 
-@COND_TOOLKIT_COCOA@	$(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).5.rsrc
-@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).5.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).5.r
+@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).0.r: 
+@COND_TOOLKIT_COCOA@	$(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).0.rsrc
+@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).0.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).0.r
 
 @COND_TOOLKIT_COCOA@cocoa-res-install: $(__cocoa_res___depname)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).5.r $(libdir)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).5.rsrc $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).0.r $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).0.rsrc $(libdir)
 
 wxregex_regcomp.o: $(srcdir)/src/regex/regcomp.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/src/regex/regcomp.c
@@ -16163,32 +16171,41 @@ wxzlib_compress.o: $(srcdir)/src/zlib/compress.c
 wxzlib_crc32.o: $(srcdir)/src/zlib/crc32.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/crc32.c
 
-wxzlib_gzio.o: $(srcdir)/src/zlib/gzio.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzio.c
-
-wxzlib_uncompr.o: $(srcdir)/src/zlib/uncompr.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/uncompr.c
-
 wxzlib_deflate.o: $(srcdir)/src/zlib/deflate.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/deflate.c
 
-wxzlib_trees.o: $(srcdir)/src/zlib/trees.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/trees.c
+wxzlib_gzclose.o: $(srcdir)/src/zlib/gzclose.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzclose.c
 
-wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/zutil.c
+wxzlib_gzlib.o: $(srcdir)/src/zlib/gzlib.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzlib.c
 
-wxzlib_inflate.o: $(srcdir)/src/zlib/inflate.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inflate.c
+wxzlib_gzread.o: $(srcdir)/src/zlib/gzread.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzread.c
+
+wxzlib_gzwrite.o: $(srcdir)/src/zlib/gzwrite.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/gzwrite.c
 
 wxzlib_infback.o: $(srcdir)/src/zlib/infback.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/infback.c
 
+wxzlib_inffast.o: $(srcdir)/src/zlib/inffast.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inffast.c
+
+wxzlib_inflate.o: $(srcdir)/src/zlib/inflate.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inflate.c
+
 wxzlib_inftrees.o: $(srcdir)/src/zlib/inftrees.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inftrees.c
 
-wxzlib_inffast.o: $(srcdir)/src/zlib/inffast.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/inffast.c
+wxzlib_trees.o: $(srcdir)/src/zlib/trees.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/trees.c
+
+wxzlib_uncompr.o: $(srcdir)/src/zlib/uncompr.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/uncompr.c
+
+wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
+	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $(srcdir)/src/zlib/zutil.c
 
 wxpng_png.o: $(srcdir)/src/png/png.c
 	$(CCC) -c -o $@ $(WXPNG_CFLAGS) $(srcdir)/src/png/png.c
@@ -17063,6 +17080,9 @@ monodll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONODLL_ODEP)
 monodll_textfile.o: $(srcdir)/src/common/textfile.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+monodll_threadinfo.o: $(srcdir)/src/common/threadinfo.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/threadinfo.cpp
+
 monodll_common_time.o: $(srcdir)/src/common/time.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/time.cpp
 
@@ -17308,9 +17328,6 @@ monodll_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONODLL_ODEP)
 
 monodll_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
-
-monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
 monodll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -18742,6 +18759,9 @@ monodll_tabart.o: $(srcdir)/src/aui/tabart.cpp $(MONODLL_ODEP)
 
 monodll_xh_auinotbk.o: $(srcdir)/src/xrc/xh_auinotbk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_auinotbk.cpp
+
+monodll_xh_auitoolb.o: $(srcdir)/src/xrc/xh_auitoolb.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_auitoolb.cpp
 
 monodll_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
@@ -22931,6 +22951,9 @@ monolib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONOLIB_ODEP)
 monolib_textfile.o: $(srcdir)/src/common/textfile.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+monolib_threadinfo.o: $(srcdir)/src/common/threadinfo.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/threadinfo.cpp
+
 monolib_common_time.o: $(srcdir)/src/common/time.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/time.cpp
 
@@ -23176,9 +23199,6 @@ monolib_net.o: $(srcdir)/src/msw/wince/net.cpp $(MONOLIB_ODEP)
 
 monolib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
-
-monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
 monolib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -24610,6 +24630,9 @@ monolib_tabart.o: $(srcdir)/src/aui/tabart.cpp $(MONOLIB_ODEP)
 
 monolib_xh_auinotbk.o: $(srcdir)/src/xrc/xh_auinotbk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_auinotbk.cpp
+
+monolib_xh_auitoolb.o: $(srcdir)/src/xrc/xh_auitoolb.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_auitoolb.cpp
 
 monolib_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
@@ -28799,6 +28822,9 @@ basedll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASEDLL_ODEP)
 basedll_textfile.o: $(srcdir)/src/common/textfile.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+basedll_threadinfo.o: $(srcdir)/src/common/threadinfo.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/threadinfo.cpp
+
 basedll_common_time.o: $(srcdir)/src/common/time.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/time.cpp
 
@@ -29312,6 +29338,9 @@ baselib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASELIB_ODEP)
 baselib_textfile.o: $(srcdir)/src/common/textfile.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+baselib_threadinfo.o: $(srcdir)/src/common/threadinfo.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/threadinfo.cpp
+
 baselib_common_time.o: $(srcdir)/src/common/time.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/time.cpp
 
@@ -29776,9 +29805,6 @@ coredll_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(COREDLL_ODEP)
 
 coredll_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
-coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
 coredll_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -34156,9 +34182,6 @@ corelib_uma.o: $(srcdir)/src/osx/carbon/uma.cpp $(CORELIB_ODEP)
 
 corelib_osx_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/utils.mm
-
-corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gprint.cpp
 
 corelib_gtk1_bmpbuttn.o: $(srcdir)/src/gtk1/bmpbuttn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/bmpbuttn.cpp
@@ -40193,6 +40216,9 @@ auidll_tabart.o: $(srcdir)/src/aui/tabart.cpp $(AUIDLL_ODEP)
 auidll_xh_auinotbk.o: $(srcdir)/src/xrc/xh_auinotbk.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_auinotbk.cpp
 
+auidll_xh_auitoolb.o: $(srcdir)/src/xrc/xh_auitoolb.cpp $(AUIDLL_ODEP)
+	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_auitoolb.cpp
+
 auidll_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(AUIDLL_ODEP)
 	$(CXXC) -c -o $@ $(AUIDLL_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
 
@@ -40219,6 +40245,9 @@ auilib_tabart.o: $(srcdir)/src/aui/tabart.cpp $(AUILIB_ODEP)
 
 auilib_xh_auinotbk.o: $(srcdir)/src/xrc/xh_auinotbk.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/xrc/xh_auinotbk.cpp
+
+auilib_xh_auitoolb.o: $(srcdir)/src/xrc/xh_auitoolb.cpp $(AUILIB_ODEP)
+	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/xrc/xh_auitoolb.cpp
 
 auilib_tabartgtk.o: $(srcdir)/src/aui/tabartgtk.cpp $(AUILIB_ODEP)
 	$(CXXC) -c -o $@ $(AUILIB_CXXFLAGS) $(srcdir)/src/aui/tabartgtk.cpp
@@ -40672,7 +40701,6 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(WXDIR)/setup.h_vms $(DISTDIR)
 	$(CP_P) $(WXDIR)/descrip.mms $(DISTDIR)
 	$(CP_P) $(WXDIR)/Makefile.in $(DISTDIR)
-	$(CP_P) $(WXDIR)/wxBase.spec $(DISTDIR)
 	$(CP_P) $(DOCDIR)/lgpl.txt $(DISTDIR)/COPYING.LIB
 	$(CP_P) $(DOCDIR)/licence.txt $(DISTDIR)/LICENCE.txt
 	$(CP_P) $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
@@ -40912,7 +40940,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mv $(DISTDIR) $(BASEDISTDIR)
 
 GTK_DIST: UNIV_DIST
-	$(CP_P) $(WXDIR)/wxGTK.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
 	$(CP_P) $(GTKDIR)/*.h $(DISTDIR)/src/gtk
 	$(CP_P) $(GTKDIR)/*.cpp $(DISTDIR)/src/gtk
@@ -40948,7 +40975,6 @@ GTK_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/include/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
 
 X11_DIST: UNIV_DIST
-	$(CP_P) $(WXDIR)/wxX11.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/x11/*.h $(DISTDIR)/include/wx/x11
 	mkdir $(DISTDIR)/include/wx/x11/private
 	$(CP_P) $(INCDIR)/wx/x11/private/*.h $(DISTDIR)/include/wx/x11/private
@@ -40965,7 +40991,6 @@ X11_DIST: UNIV_DIST
 	$(CP_P) $(WXDIR)/include/wx/osx/core/*.h $(DISTDIR)/include/wx/osx/core
 
 MOTIF_DIST: ALL_GUI_DIST
-	$(CP_P) $(WXDIR)/wxMotif.spec $(DISTDIR)
 	$(CP_P) $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
 	$(CP_P) $(MOTIFDIR)/*.cpp $(DISTDIR)/src/motif
 	$(CP_P) $(MOTIFDIR)/*.xbm $(DISTDIR)/src/motif
@@ -41452,59 +41477,6 @@ win-dist: MSW_ZIP_TEXT_DIST SAMPLES_DIST DEMOS_DIST UTILS_DIST MISC_DIST INTL_DI
 	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.cur
 	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.ico
 	@cd _dist_dir && zip -r ../$(WXARCHIVE_ZIP) wxMSW/include/wx/msw/*.bmp
-
-@IF_GNU_MAKE@debian-dist: DEBIAN_SOURCE_DIR = $(WXDIR)/../wxwidgets@WX_RELEASE@@WX_FLAVOUR@-@WX_SUBVERSION@
-@IF_GNU_MAKE@debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
-@IF_GNU_MAKE@	mkdir $(DISTDIR)/debian
-@IF_GNU_MAKE@	-$(CP_P) $(WXDIR)/debian/* $(DISTDIR)/debian
-@IF_GNU_MAKE@	$(CP_P) $(DOCDIR)/licence.txt $(DISTDIR)/docs
-@IF_GNU_MAKE@	$(CP_P) $(DOCDIR)/licendoc.txt $(DISTDIR)/docs
-@IF_GNU_MAKE@	$(CP_P) $(DOCDIR)/preamble.txt $(DISTDIR)/docs
-@IF_GNU_MAKE@	rm -f $(DISTDIR)/*.spec
-@IF_GNU_MAKE@
-@IF_GNU_MAKE@	@# now prune away a lot of the crap included by using cp -R
-@IF_GNU_MAKE@	@# in other dist targets.  Ugly and hardly portable but it
-@IF_GNU_MAKE@	@# will run on any Debian box and that's enough for now.
-@IF_GNU_MAKE@
-@IF_GNU_MAKE@	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp"    \
-@IF_GNU_MAKE@			   -o -name "*.dsw" -o -name "*.hh*" -o -name "*.mms"    \
-@IF_GNU_MAKE@			   -o -name "*.mcp" -o -name "*M*.xml" -o -name "*.r"    \
-@IF_GNU_MAKE@			   -o -name "*.pro"  \
-@IF_GNU_MAKE@			   -o -name "*.vpj"  \
-@IF_GNU_MAKE@			   -o \( -name "makefile.*" -a ! -name "makefile.unx" \) \
-@IF_GNU_MAKE@			\) -print0 | xargs -0 rm -rf
-@IF_GNU_MAKE@
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/SWIG
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/distrib
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/distutils
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/samples
-@IF_GNU_MAKE@	rm -rf $(DISTDIR)/wxPython/contrib/iewin
-@IF_GNU_MAKE@	find $(DISTDIR)/wxPython \( -name "mac" -o -name "msw" \) -print0 | xargs -0 rm -rf
-@IF_GNU_MAKE@
-@IF_GNU_MAKE@	rm -rf $(DEBIAN_SOURCE_DIR)
-@IF_GNU_MAKE@	mv $(DISTDIR) $(DEBIAN_SOURCE_DIR)
-
-
-@IF_GNU_MAKE@debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
-
-@IF_GNU_MAKE@debian-msw-dirs:
-@IF_GNU_MAKE@	mkdir $(DISTDIR)/include/wx/msw
-@IF_GNU_MAKE@	mkdir $(DISTDIR)/src/msw
-
-
-RPMTOP=_dist_dir/_rpm_top
-
-rpm: bzip-dist
-	@echo "*** Building RPMs ***"
-	-mkdir $(RPMTOP)
-	-mkdir $(RPMTOP)/SOURCES
-	-mkdir $(RPMTOP)/SPECS
-	-mkdir $(RPMTOP)/BUILD
-	-mkdir $(RPMTOP)/RPMS
-	-mkdir $(RPMTOP)/SRPMS
-	cp -f $(WXARCHIVE_BZIP) $(RPMTOP)/SOURCES
-	rpmbuild -ba --define "_topdir `pwd`/$(RPMTOP)" $(WXDIR)/wx$(TOOLKIT).spec
-	mv -f `find $(RPMTOP) -name "wx-*.rpm"` .
 
 
 # Include dependency info, if present:

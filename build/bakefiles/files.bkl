@@ -358,6 +358,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/tarstrm.cpp
     src/common/textbuf.cpp
     src/common/textfile.cpp
+    src/common/threadinfo.cpp
     src/common/time.cpp
     src/common/timercmn.cpp
     src/common/timerimpl.cpp
@@ -832,7 +833,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/accel.h
     wx/generic/buttonbar.h
     wx/generic/choicdgg.h
-    wx/generic/colrdlgg.h
     wx/generic/combo.h
     wx/generic/custombgwin.h
     wx/generic/dcpsg.h
@@ -907,6 +907,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/valnum.h
     wx/window.h
     wx/windowid.h
+    wx/windowptr.h
     wx/withimages.h
     wx/wrapsizer.h
     wx/wupdlock.h
@@ -1222,8 +1223,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     $(GTK_SRC)
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
-    <!-- GTK+ specific files: -->
-    src/gtk/gnome/gprint.cpp
 </set>
 <set var="GTK_HDR" hints="files">
     wx/generic/fdrepdlg.h
@@ -1280,7 +1279,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="GTK2_HDR" hints="files">
     $(GTK_HDR)
     wx/generic/fontdlgg.h
-    wx/gtk/gnome/gprint.h
 </set>
 
 
@@ -3691,6 +3689,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/aui/tabmdi.cpp
     src/aui/tabart.cpp
     src/xrc/xh_auinotbk.cpp
+    src/xrc/xh_auitoolb.cpp
     $(AUI_GTK_SRC)
 </set>
 <set var="AUI_HDR" hints="files">
@@ -3703,6 +3702,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/aui/aui.h
     wx/aui/tabart.h
     wx/xrc/xh_auinotbk.h
+    wx/xrc/xh_auitoolb.h
     $(AUI_GTK_HDR)
 </set>
 

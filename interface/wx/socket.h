@@ -428,7 +428,7 @@ public:
     virtual ~wxSockAddress();
 
     /**
-        Delete all informations about the address.
+        Delete all information about the address.
     */
     virtual void Clear();
 

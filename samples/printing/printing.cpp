@@ -182,6 +182,12 @@ void MyApp::Draw(wxDC&dc)
     dc.DrawPolygon( 5, points, 20, 250, wxODDEVEN_RULE );
     dc.DrawPolygon( 5, points, 50, 250, wxWINDING_RULE );
 
+    dc.DrawArc( 20, 330, 40, 300, 20, 300 );
+    {
+        wxDCBrushChanger changeBrush(dc, *wxTRANSPARENT_BRUSH);
+        dc.DrawArc( 60, 330, 80, 300, 60, 300 );
+    }
+
     dc.DrawEllipticArc( 80, 250, 60, 30, 0.0, 270.0 );
 
     points[0].x = 150;
@@ -193,8 +199,6 @@ void MyApp::Draw(wxDC&dc)
     points[3].x = 200;
     points[3].y = 220;
     dc.DrawSpline( 4, points );
-
-    dc.DrawArc( 20,10, 10,10, 25,40 );
 
     wxString str;
     int i = 0;

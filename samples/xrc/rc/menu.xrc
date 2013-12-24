@@ -49,6 +49,11 @@
     <object class="wxMenu" name="advanced_demos_menu">
         <label>_Advanced</label>
         <help>Advanced techniques with XRC</help>
+         <object class="wxMenuItem" name="aui_demo_tool_or_menuitem">
+            <label>_AUI</label>
+            <bitmap>aui.xpm</bitmap>
+            <help>Advanced User Interface classes and controls</help>
+        </object>
          <object class="wxMenuItem" name="obj_ref_tool_or_menuitem">
             <label>_Object References Example</label>
             <bitmap>objrefdlg.xpm</bitmap>

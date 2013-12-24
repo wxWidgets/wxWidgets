@@ -16,7 +16,7 @@ AC_DEFUN([WX_ATOMIC_BUILTINS],
           __sync_fetch_and_add(&value, 2);
           __sync_sub_and_fetch(&value, 1);
           /* but wxAtomicDec does, so mimic that: */
-          unsigned int r2 = __sync_sub_and_fetch(&value, 1);
+          volatile unsigned int r2 = __sync_sub_and_fetch(&value, 1);
         ],
         wx_cv_cc_gcc_atomic_builtins=yes,
         wx_cv_cc_gcc_atomic_builtins=no)

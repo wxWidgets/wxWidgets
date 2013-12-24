@@ -26,8 +26,8 @@
  */
 
 ////@begin forward declarations
-class wxSpinButton;
 class wxBoxSizer;
+class wxSpinButton;
 class wxRichTextFontListBox;
 class wxRichTextColourSwatchCtrl;
 class wxRichTextFontPreviewCtrl;
@@ -82,15 +82,24 @@ public:
     /// Gets the attributes associated with the main formatting dialog
     wxRichTextAttr* GetAttributes();
 
+    /// Determines which text effect controls should be shown.
+    /// Currently only wxTEXT_ATTR_EFFECT_RTL and wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION may
+    /// be removed from the page. By default, these effects are not shown as they
+    /// have no effect in the editor.
+    static int GetAllowedTextEffects() { return sm_allowedTextEffects; }
+    
+    /// Sets the allowed text effects in the page.
+    static void SetAllowedTextEffects(int allowed) { sm_allowedTextEffects = allowed; }
+
 ////@begin wxRichTextFontPage event handler declarations
 
     /// wxEVT_IDLE event handler for ID_RICHTEXTFONTPAGE
     void OnIdle( wxIdleEvent& event );
 
-    /// wxEVT_TEXT event handler for ID_RICHTEXTFONTPAGE_FACETEXTCTRL
+    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTFONTPAGE_FACETEXTCTRL
     void OnFaceTextCtrlUpdated( wxCommandEvent& event );
 
-    /// wxEVT_TEXT event handler for ID_RICHTEXTFONTPAGE_SIZETEXTCTRL
+    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_RICHTEXTFONTPAGE_SIZETEXTCTRL
     void OnSizeTextCtrlUpdated( wxCommandEvent& event );
 
     /// wxEVT_SCROLL_LINEUP event handler for ID_RICHTEXTFONTPAGE_SPINBUTTONS
@@ -99,31 +108,31 @@ public:
     /// wxEVT_SCROLL_LINEDOWN event handler for ID_RICHTEXTFONTPAGE_SPINBUTTONS
     void OnRichtextfontpageSpinbuttonsDown( wxSpinEvent& event );
 
-    /// wxEVT_CHOICE event handler for ID_RICHTEXTFONTPAGE_SIZE_UNITS
+    /// wxEVT_COMMAND_CHOICE_SELECTED event handler for ID_RICHTEXTFONTPAGE_SIZE_UNITS
     void OnRichtextfontpageSizeUnitsSelected( wxCommandEvent& event );
 
-    /// wxEVT_LISTBOX event handler for ID_RICHTEXTFONTPAGE_SIZELISTBOX
+    /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_SIZELISTBOX
     void OnSizeListBoxSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_STYLECTRL
+    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_STYLECTRL
     void OnStyleCtrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_WEIGHTCTRL
+    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_WEIGHTCTRL
     void OnWeightCtrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_COMBOBOX event handler for ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL
+    /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL
     void OnUnderliningCtrlSelected( wxCommandEvent& event );
 
-    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL
     void OnStrikethroughctrlClick( wxCommandEvent& event );
 
-    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_CAPSCTRL
     void OnCapsctrlClick( wxCommandEvent& event );
 
-    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_SUPERSCRIPT
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_SUPERSCRIPT
     void OnRichtextfontpageSuperscriptClick( wxCommandEvent& event );
 
-    /// wxEVT_CHECKBOX event handler for ID_RICHTEXTFONTPAGE_SUBSCRIPT
+    /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_RICHTEXTFONTPAGE_SUBSCRIPT
     void OnRichtextfontpageSubscriptClick( wxCommandEvent& event );
 
 ////@end wxRichTextFontPage event handler declarations
@@ -141,6 +150,7 @@ public:
     static bool ShowToolTips();
 
 ////@begin wxRichTextFontPage member variables
+    wxBoxSizer* m_innerSizer;
     wxTextCtrl* m_faceTextCtrl;
     wxTextCtrl* m_sizeTextCtrl;
     wxSpinButton* m_fontSizeSpinButtons;
@@ -160,6 +170,9 @@ public:
     wxCheckBox* m_smallCapitalsCtrl;
     wxCheckBox* m_superscriptCtrl;
     wxCheckBox* m_subscriptCtrl;
+    wxBoxSizer* m_rtlParentSizer;
+    wxCheckBox* m_rtlCtrl;
+    wxCheckBox* m_suppressHyphenationCtrl;
     wxRichTextFontPreviewCtrl* m_previewCtrl;
     /// Control identifiers
     enum {
@@ -182,6 +195,8 @@ public:
         ID_RICHTEXTFONTPAGE_SMALLCAPSCTRL = 10016,
         ID_RICHTEXTFONTPAGE_SUPERSCRIPT = 10017,
         ID_RICHTEXTFONTPAGE_SUBSCRIPT = 10018,
+        ID_RICHTEXTFONTPAGE_RIGHT_TO_LEFT = 10020,
+        ID_RICHTEXTFONTPAGE_SUBSCRIPT_SUPPRESS_HYPHENATION = 10021,
         ID_RICHTEXTFONTPAGE_PREVIEWCTRL = 10019
     };
 ////@end wxRichTextFontPage member variables
@@ -189,6 +204,7 @@ public:
     bool m_dontUpdate;
     bool m_colourPresent;
     bool m_bgColourPresent;
+    static int sm_allowedTextEffects;
 };
 
 #endif

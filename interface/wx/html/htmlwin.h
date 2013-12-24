@@ -465,7 +465,32 @@ public:
     */
     virtual void WriteCustomization(wxConfigBase* cfg,
                                     wxString path = wxEmptyString);
-    
+
+    /**
+        Retrieves the default cursor for a given HTMLCursor type.
+
+        @param type
+            HTMLCursor type to retrieve.
+
+        @since 3.1.0
+    */
+    static wxCursor GetDefaultHTMLCursor(HTMLCursor type);
+
+    /**
+        Sets the default cursor for a given HTMLCursor type.
+
+        These cursors are used for all wxHtmlWindow objects by default, but can
+        be overridden on a per-window basis.
+
+        @param type
+            HTMLCursor type to retrieve.
+        @param cursor
+            The default cursor for the specified cursor type.
+
+        @since 3.1.0
+    */
+    static void SetDefaultHTMLCursor(HTMLCursor type, const wxCursor& cursor);
+
 protected:
 
     /**

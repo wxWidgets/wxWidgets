@@ -76,8 +76,11 @@ public:
         closing the file if this descriptor is opened.
 
         IsOpened() will return @false after call to Detach().
+
+        @return The FILE pointer (this is new since wxWidgets 3.0.0, in the
+        previous versions this method didn't return anything).
     */
-    void Detach();
+    FILE* Detach();
 
     /**
         Returns @true if an attempt has been made to read @e past

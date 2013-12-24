@@ -96,12 +96,25 @@ private:
 class WXDLLIMPEXP_CORE wxPasswordEntryDialog : public wxTextEntryDialog
 {
 public:
+    wxPasswordEntryDialog();
     wxPasswordEntryDialog(wxWindow *parent,
                       const wxString& message,
                       const wxString& caption = wxGetPasswordFromUserPromptStr,
                       const wxString& value = wxEmptyString,
                       long style = wxTextEntryDialogStyle,
-                      const wxPoint& pos = wxDefaultPosition);
+                      const wxPoint& pos = wxDefaultPosition)
+    {
+        Create(parent, message, caption, value, style, pos);
+    }
+
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& caption = wxGetPasswordFromUserPromptStr,
+                const wxString& value = wxEmptyString,
+                long style = wxTextEntryDialogStyle,
+                const wxPoint& pos = wxDefaultPosition);
+
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPasswordEntryDialog)
     wxDECLARE_NO_COPY_CLASS(wxPasswordEntryDialog);

@@ -1,18 +1,17 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 2.9.4\n"
+"Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 18:18+0200\n"
-"PO-Revision-Date: 2013-08-09 14:53+0530\n"
+"POT-Creation-Date: 2013-10-01 19:04+0200\n"
+"PO-Revision-Date: 2013-10-07 20:21+0530\n"
 "Last-Translator: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language-Team: DINAKAR T.D. <td.dinkar@gmail.com>\n"
-"Language: \n"
+"Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Poedit-Language: Tamil\n"
-"X-Poedit-Country: India\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.7\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -36,7 +35,7 @@ msgstr "நன்றி. தங்களுக்கு ஏற்பட்டு
 msgid " (copy %d of %d)"
 msgstr "%d-யின் படி; மொத்தம் %d"
 
-#: ../src/common/log.cpp:427
+#: ../src/common/log.cpp:425
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (பிழை %ld: %s)"
@@ -46,7 +45,7 @@ msgstr " (பிழை %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr " (\"%s\" நிரற்கூறில் உள்ளது)"
 
-#: ../src/common/docview.cpp:1625
+#: ../src/common/docview.cpp:1624
 msgid " - "
 msgstr " - "
 
@@ -205,12 +204,12 @@ msgstr "அடித்தளம்"
 #: ../src/richtext/richtextborderspage.cpp:503
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:634
-#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:637
+#: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr "அடித்தளம்"
 
-#: ../include/wx/richtext/richtextbuffer.h:3523
+#: ../include/wx/richtext/richtextbuffer.h:3530
 msgid "&Box"
 msgstr "பெட்டி"
 
@@ -233,7 +232,7 @@ msgstr "விலக்குக"
 msgid "&Cascade"
 msgstr "அடுத்தடுத்த நிலை"
 
-#: ../include/wx/richtext/richtextbuffer.h:5578
+#: ../include/wx/richtext/richtextbuffer.h:5587
 msgid "&Cell"
 msgstr "சிறுகட்டம்"
 
@@ -330,7 +329,7 @@ msgstr "நிறைவு செய்க"
 msgid "&First"
 msgstr "முதல்"
 
-#: ../src/richtext/richtextsizepage.cpp:241
+#: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
 msgstr "மிதக்கும் நிலை:"
 
@@ -367,8 +366,8 @@ msgstr "அனுப்புநர்:"
 msgid "&Harddisk"
 msgstr "வன்தட்டு"
 
-#: ../src/richtext/richtextsizepage.cpp:348
-#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:351
+#: ../src/richtext/richtextsizepage.cpp:358
 msgid "&Height:"
 msgstr "உயரம்:"
 
@@ -432,8 +431,8 @@ msgstr "இடது"
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
-#: ../src/richtext/richtextsizepage.cpp:529
-#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:532
+#: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
 msgstr "இடது:"
 
@@ -449,7 +448,7 @@ msgstr "செயற்குறிப்பேடு"
 msgid "&Move"
 msgstr "நகர்த்து"
 
-#: ../src/richtext/richtextsizepage.cpp:669
+#: ../src/richtext/richtextsizepage.cpp:672
 msgid "&Move the object to:"
 msgstr "பொருளை இங்கே நகர்த்து:"
 
@@ -470,7 +469,7 @@ msgstr "அடுத்து"
 msgid "&Next >"
 msgstr "அடுத்து"
 
-#: ../src/richtext/richtextsizepage.cpp:678
+#: ../src/richtext/richtextsizepage.cpp:681
 msgid "&Next Paragraph"
 msgstr "அடுத்தப் பத்தி"
 
@@ -484,7 +483,7 @@ msgstr "அடுத்தப் பாங்கு"
 
 #: ../src/common/stockitem.cpp:177 ../src/msw/msgdlg.cpp:476
 msgid "&No"
-msgstr "இல்லை"
+msgstr "இ&ல்லை"
 
 #: ../src/generic/dbgrptg.cpp:356
 msgid "&Notes:"
@@ -517,7 +516,7 @@ msgstr "பக்க முறிவு"
 msgid "&Paste"
 msgstr "ஒட்டு"
 
-#: ../include/wx/richtext/richtextbuffer.h:4648
+#: ../include/wx/richtext/richtextbuffer.h:4655
 msgid "&Picture"
 msgstr "படம்"
 
@@ -529,7 +528,7 @@ msgstr "குறியளவு"
 msgid "&Position (tenths of a mm):"
 msgstr "நிலை (மில்லி மீட்டரின் பத்தில் ஒரு பகுதி):"
 
-#: ../src/richtext/richtextsizepage.cpp:511
+#: ../src/richtext/richtextsizepage.cpp:514
 msgid "&Position mode:"
 msgstr "இடத்தின் நிலை:"
 
@@ -542,7 +541,7 @@ msgstr "முன்னுரிமை விருப்பங்கள்"
 msgid "&Previous"
 msgstr "முந்தையது"
 
-#: ../src/richtext/richtextsizepage.cpp:672
+#: ../src/richtext/richtextsizepage.cpp:675
 msgid "&Previous Paragraph"
 msgstr "முந்தைய பத்தி"
 
@@ -550,7 +549,7 @@ msgstr "முந்தைய பத்தி"
 msgid "&Print..."
 msgstr "அச்சிடு..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4922
+#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "பண்புகள்"
@@ -596,18 +595,18 @@ msgstr "வலது"
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
-#: ../src/richtext/richtextsizepage.cpp:599
-#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:602
+#: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
 msgstr "வலது:"
 
 #: ../src/common/stockitem.cpp:190
 msgid "&Save"
-msgstr "சேமி"
+msgstr "சேமிக்கவும்"
 
 #: ../src/common/stockitem.cpp:191
 msgid "&Save as"
-msgstr "என சேமி"
+msgstr "இவ்வாறு சேமிக்கவும்"
 
 #: ../include/wx/richmsgdlg.h:29
 msgid "&See details"
@@ -663,7 +662,7 @@ msgstr "உட்கணம்:"
 msgid "&Symbol:"
 msgstr "குறியெழுத்து:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5668
+#: ../include/wx/richtext/richtextbuffer.h:5679
 msgid "&Table"
 msgstr "அட்டவணை"
 
@@ -675,8 +674,8 @@ msgstr "மேல்"
 #: ../src/richtext/richtextborderspage.cpp:473
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
-#: ../src/richtext/richtextsizepage.cpp:564
-#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:567
+#: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
 msgstr "மேல்:"
 
@@ -706,7 +705,7 @@ msgstr "வரித் துவக்க ஒழுங்கினை நீக
 msgid "&Up"
 msgstr "மேல்"
 
-#: ../src/richtext/richtextsizepage.cpp:275
+#: ../src/richtext/richtextsizepage.cpp:278
 msgid "&Vertical alignment:"
 msgstr "செங்குத்து ஒழுங்கு"
 
@@ -718,8 +717,8 @@ msgstr "தோற்றம்..."
 msgid "&Weight:"
 msgstr "எடை:"
 
-#: ../src/richtext/richtextsizepage.cpp:314
-#: ../src/richtext/richtextsizepage.cpp:321
+#: ../src/richtext/richtextsizepage.cpp:317
+#: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
 msgstr "அகலம்:"
 
@@ -732,7 +731,7 @@ msgstr "சாளரம்"
 
 #: ../src/common/stockitem.cpp:206 ../src/msw/msgdlg.cpp:476
 msgid "&Yes"
-msgstr "ஆம்"
+msgstr "ஆ&ம்"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -813,7 +812,7 @@ msgstr "(ஏட்டுக் குறிகள்)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:829
+#: ../src/richtext/richtextformatdlg.cpp:831
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -1133,7 +1132,7 @@ msgstr "குறித்து..."
 msgid "About %s"
 msgstr "%s குறித்து"
 
-#: ../src/richtext/richtextsizepage.cpp:517
+#: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr "அருதியானது"
 
@@ -1145,17 +1144,17 @@ msgstr "மெய்யளவு"
 msgid "Add"
 msgstr "ஏற்றுக"
 
-#: ../src/richtext/richtextbuffer.cpp:10648
-msgid "Add column"
+#: ../src/richtext/richtextbuffer.cpp:10751
+msgid "Add Column"
 msgstr "செங்குத்து வரிசையை சேர்க்கவும்"
+
+#: ../src/richtext/richtextbuffer.cpp:10688
+msgid "Add Row"
+msgstr "கிடை வரிசையை சேர்க்கவும்"
 
 #: ../src/html/helpwnd.cpp:439
 msgid "Add current page to bookmarks"
 msgstr "தற்போதைய பக்கத்தை ஏட்டுக்குறிகளில் ஏற்றுக"
-
-#: ../src/richtext/richtextbuffer.cpp:10590
-msgid "Add row"
-msgstr "கிடை வரிசையை சேர்க்கவும்"
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1198,11 +1197,11 @@ msgstr "இடது ஒழுங்கு"
 msgid "Align Right"
 msgstr "வலது ஒழுங்கு"
 
-#: ../src/richtext/richtextsizepage.cpp:263
+#: ../src/richtext/richtextsizepage.cpp:266
 msgid "Alignment"
 msgstr "ஒழுங்கமைப்பு"
 
-#: ../src/generic/prntdlgg.cpp:220
+#: ../src/generic/prntdlgg.cpp:215
 msgid "All"
 msgstr "அனைத்தும்"
 
@@ -1211,11 +1210,11 @@ msgstr "அனைத்தும்"
 msgid "All files (%s)|%s"
 msgstr "எல்லாக் கோப்புகளும் (%s)|%s"
 
-#: ../include/wx/defs.h:2884
+#: ../include/wx/defs.h:2922
 msgid "All files (*)|*"
 msgstr "எல்லாக் கோப்புகளும் (*)|*"
 
-#: ../include/wx/defs.h:2881
+#: ../include/wx/defs.h:2919
 msgid "All files (*.*)|*.*"
 msgstr "எல்லாக் கோப்புகளும் (*.*)|*.*"
 
@@ -1231,7 +1230,7 @@ msgstr "அகர நிலை"
 msgid "Already Registered Object passed to SetObjectClassInfo"
 msgstr "ஏற்கனவே பதிவு செய்யப்பட்ட பொருள், SetObjectClassInfo-க்கு அனுப்பப்பட்டது."
 
-#: ../src/unix/dialup.cpp:354
+#: ../src/unix/dialup.cpp:353
 msgid "Already dialling ISP."
 msgstr "ISP ஏற்கனவே சுழற்றப்பட்டுள்ளது."
 
@@ -1429,15 +1428,15 @@ msgstr "எல்லை"
 msgid "Borders"
 msgstr "எல்லைகள்"
 
-#: ../src/richtext/richtextsizepage.cpp:285 ../src/common/stockitem.cpp:144
+#: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
 msgid "Bottom"
 msgstr "அடித்தளம்"
 
-#: ../src/generic/prntdlgg.cpp:898
+#: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "அடித்தளக் கரை (MM)"
 
-#: ../src/richtext/richtextbuffer.cpp:8861
+#: ../src/richtext/richtextbuffer.cpp:8919
 msgid "Box Properties"
 msgstr "பெட்டிப் பண்புகள்"
 
@@ -1549,7 +1548,7 @@ msgstr "'%s' பதிவக விசையினை உருவாக்க �
 msgid "Can't create thread"
 msgstr "இழையினை உருவாக்க இயலவில்லை"
 
-#: ../src/msw/window.cpp:3783
+#: ../src/msw/window.cpp:3793
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "%s பிரிவினைக் கொண்ட சாளரத்தை உருவாக்க இயலவில்லை"
@@ -1677,7 +1676,7 @@ msgstr ""
 "புதிய செங்குத்து வரிசையின் அடையாளத்தை உருவாக்க இயலவில்லை. ஒரு வேளை செங்குத்து வரிசை "
 "எண்ணிக்கையின் உட்ச அளவை எட்டியிருக்கலாம்."
 
-#: ../src/common/filefn.cpp:1335
+#: ../src/common/filefn.cpp:1336
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "'%s' கோப்புகளை கணக்கிட இயலாது"
@@ -1706,11 +1705,11 @@ msgstr "\"%s\"-இன் செயல் நிகழ்வை பெற இய�
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "%d கொள்கையை காலவரையீடுச் செய்ய, முன்னுரிமை வீச்சை பெற இயலவில்லை"
 
-#: ../src/unix/utilsunx.cpp:983
+#: ../src/unix/utilsunx.cpp:988
 msgid "Cannot get the hostname"
 msgstr "வழங்கியின் பெயரை பெற இயலவில்லை"
 
-#: ../src/unix/utilsunx.cpp:1019
+#: ../src/unix/utilsunx.cpp:1024
 msgid "Cannot get the official hostname"
 msgstr "வழங்கியின் அதிகாரப் பூர்வப் பெயரை பெற இயலவில்லை"
 
@@ -1746,7 +1745,7 @@ msgstr "'%s' கோப்பிலிருந்து வளங்களை �
 msgid "Cannot open HTML document: %s"
 msgstr "HTML ஆவணத்தை திறக்க இயலாது: %s"
 
-#: ../src/html/helpdata.cpp:664
+#: ../src/html/helpdata.cpp:665
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "HTML உதவி ஏட்டினை திறக்க இயலாது: %s"
@@ -1824,7 +1823,7 @@ msgstr "எழுத்து வகை உணரி"
 msgid "Categorized Mode"
 msgstr "வகைப்படுத்தப்பட்ட நிலை"
 
-#: ../src/richtext/richtextbuffer.cpp:9273
+#: ../src/richtext/richtextbuffer.cpp:9347
 msgid "Cell Properties"
 msgstr "சிறுகட்ட பண்புகள்"
 
@@ -1857,7 +1856,7 @@ msgstr "நடு"
 msgid "Centre text."
 msgstr "உரையை நடுவாக்கு"
 
-#: ../src/richtext/richtextsizepage.cpp:284
+#: ../src/richtext/richtextsizepage.cpp:287
 msgid "Centred"
 msgstr "நடுவாக்கப்பட்டது"
 
@@ -1866,19 +1865,20 @@ msgstr "நடுவாக்கப்பட்டது"
 msgid "Ch&oose..."
 msgstr "தேர்ந்தெடுக்கவும்..."
 
-#: ../src/richtext/richtextbuffer.cpp:4029
+#: ../src/richtext/richtextbuffer.cpp:4041
 msgid "Change List Style"
 msgstr "வரிசைப் பட்டியலின் பாங்கினை மாற்றுக"
 
-#: ../src/richtext/richtextbuffer.cpp:3380
+#: ../src/richtext/richtextbuffer.cpp:3392
 msgid "Change Object Style"
 msgstr "பொருளின் பாங்கினை மாற்றுக"
 
-#: ../src/richtext/richtextbuffer.cpp:3646
+#: ../src/richtext/richtextbuffer.cpp:3658
+#: ../src/richtext/richtextbuffer.cpp:7749
 msgid "Change Properties"
 msgstr "பண்புகளை மாற்றுக"
 
-#: ../src/richtext/richtextbuffer.cpp:3197
+#: ../src/richtext/richtextbuffer.cpp:3209
 msgid "Change Style"
 msgstr "பாங்கினை மாற்றுக"
 
@@ -2123,7 +2123,7 @@ msgstr "இந்த சாளரத்தை மூடுக"
 msgid "Color"
 msgstr "நிறம்"
 
-#: ../src/richtext/richtextformatdlg.cpp:723
+#: ../src/richtext/richtextformatdlg.cpp:725
 msgid "Colour"
 msgstr "நிறம்"
 
@@ -2168,7 +2168,7 @@ msgstr "%d கட்டளை வரி தர்க்கத்தை ஒர�
 msgid "Common dialog failed with error code %0lx."
 msgstr "பொது உரையாடல் தோல்வியடைந்தது. பிழைக் குறி: %0lx."
 
-#: ../src/gtk/window.cpp:4284
+#: ../src/gtk/window.cpp:4306
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2219,7 +2219,7 @@ msgstr "மாற்று"
 msgid "Copied to clipboard:\"%s\""
 msgstr "பிடிப்புப் பலகைக்கு படியெடுக்கப்பட்டது: \"%s\""
 
-#: ../src/generic/prntdlgg.cpp:252
+#: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
 msgstr "படிகள்:"
 
@@ -2300,7 +2300,7 @@ msgstr "ஒழுங்கமைக்க இயலவில்லை."
 msgid "Could not set column width."
 msgstr "செங்குத்து வரிசையின் அகலத்தை அமைக்க இயலவில்லை."
 
-#: ../src/common/filefn.cpp:1568
+#: ../src/common/filefn.cpp:1569
 msgid "Could not set current working directory"
 msgstr "தற்போதைய செயல் அடைவினை அமைக்க இயலவில்லை."
 
@@ -2329,11 +2329,11 @@ msgid "Could not start document preview."
 msgstr "ஆவணத்தின் முன்தோற்றத்தை துவக்க இயலவில்லை."
 
 #: ../src/generic/printps.cpp:178 ../src/msw/printwin.cpp:210
-#: ../src/gtk/print.cpp:1086 ../src/gtk/gnome/gprint.cpp:922
+#: ../src/gtk/print.cpp:1077
 msgid "Could not start printing."
 msgstr "அச்சிடுதலை துவக்க இயலவில்லை."
 
-#: ../src/common/wincmn.cpp:2114
+#: ../src/common/wincmn.cpp:2131
 msgid "Could not transfer data to window"
 msgstr "சாளரத்திற்கு தரவினை மாற்ற இயலவில்லை."
 
@@ -2355,7 +2355,7 @@ msgstr "நேரங்காட்டியை உருவாக்க இய�
 msgid "Couldn't create the overlay window"
 msgstr "மேலமைவுச் சாளரத்தை உருவாக்க இயலவில்லை."
 
-#: ../src/common/translation.cpp:2024
+#: ../src/common/translation.cpp:2015
 msgid "Couldn't enumerate translations"
 msgstr "மொழிபெயர்ப்புகளை கணக்கிட இயலவில்லை"
 
@@ -2364,7 +2364,7 @@ msgstr "மொழிபெயர்ப்புகளை கணக்கிட �
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "'%s' குறியெழுத்தினை இயங்குநிலை நூலகத்தில் காண இயலவில்லை."
 
-#: ../src/gtk/print.cpp:2023
+#: ../src/gtk/print.cpp:2014
 msgid "Couldn't get hatch style from wxBrush."
 msgstr "WX பிரஷ்ஷிலிருந்து hatch பாங்கினைப் பெற இயலவில்லை."
 
@@ -2450,7 +2450,7 @@ msgstr "வெட்டுக"
 msgid "Current directory:"
 msgstr "தற்போதைய அடைவு"
 
-#: ../src/gtk/print.cpp:768
+#: ../src/gtk/print.cpp:759
 msgid "Custom size"
 msgstr "தனிப் பயனாக்கப்பட்ட அளவு"
 
@@ -2559,11 +2559,11 @@ msgstr "இயல்புக் குறியாக்கம்"
 msgid "Default font"
 msgstr "இயல்பெழுத்துரு"
 
-#: ../src/generic/prntdlgg.cpp:515
+#: ../src/generic/prntdlgg.cpp:510
 msgid "Default printer"
 msgstr "இயல்பு அச்சுப் பொறி"
 
-#: ../src/richtext/richtextbuffer.cpp:7793 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "அழி"
@@ -2571,6 +2571,14 @@ msgstr "அழி"
 #: ../src/richtext/richtexttabspage.cpp:148
 msgid "Delete A&ll"
 msgstr "எல்லாவற்றையும் அழி"
+
+#: ../src/richtext/richtextbuffer.cpp:10637
+msgid "Delete Column"
+msgstr "செங்குத்து வரிசையை அழிக்கவும்"
+
+#: ../src/richtext/richtextbuffer.cpp:10587
+msgid "Delete Row"
+msgstr "கிடை வரிசையை அழிக்கவும்"
 
 #: ../src/richtext/richtextstyledlg.cpp:779
 msgid "Delete Style"
@@ -2580,17 +2588,9 @@ msgstr "பாங்கினை அழி"
 msgid "Delete Text"
 msgstr "உரையை அழி"
 
-#: ../src/richtext/richtextbuffer.cpp:10540
-msgid "Delete column"
-msgstr "செங்குத்து வரிசையை அழிக்கவும்"
-
 #: ../src/generic/editlbox.cpp:274
 msgid "Delete item"
 msgstr "உருப்படியை அழி"
-
-#: ../src/richtext/richtextbuffer.cpp:10472
-msgid "Delete row"
-msgstr "கிடை வரிசையை அழிக்கவும்"
 
 #: ../src/common/stockitem.cpp:260
 msgid "Delete selection"
@@ -2648,12 +2648,12 @@ msgstr "%d நேரடி FB பிழை ஏற்பட்டுள்ளத�
 msgid "Directories"
 msgstr "அடைவுகள்"
 
-#: ../src/common/filefn.cpp:1250
+#: ../src/common/filefn.cpp:1251
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "'%s' அடைவினை உருவாக்க இயலவில்லை"
 
-#: ../src/common/filefn.cpp:1270
+#: ../src/common/filefn.cpp:1271
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "'%s' அடைவினை அழிக்க இயலவில்லை"
@@ -2787,45 +2787,45 @@ msgstr "செயலாக்குக"
 
 #: ../src/common/stockitem.cpp:154
 msgid "Edit"
-msgstr "தொகு"
+msgstr "தொகுக்கவும்"
 
 #: ../src/generic/editlbox.cpp:272
 msgid "Edit item"
-msgstr "உருப்படியை தொகு"
+msgstr "உருப்படியை தொகுக்கவும்"
 
 #: ../include/wx/generic/progdlgg.h:84
 msgid "Elapsed time:"
-msgstr ""
+msgstr "கடந்துள்ள நேரம்"
 
-#: ../src/richtext/richtextsizepage.cpp:350
-#: ../src/richtext/richtextsizepage.cpp:352
-#: ../src/richtext/richtextsizepage.cpp:462
-#: ../src/richtext/richtextsizepage.cpp:464
+#: ../src/richtext/richtextsizepage.cpp:353
+#: ../src/richtext/richtextsizepage.cpp:355
+#: ../src/richtext/richtextsizepage.cpp:465
+#: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
 msgstr "உயரத்தின் மதிப்பை செயல்படச் செய்க"
 
-#: ../src/richtext/richtextsizepage.cpp:435
-#: ../src/richtext/richtextsizepage.cpp:437
+#: ../src/richtext/richtextsizepage.cpp:438
+#: ../src/richtext/richtextsizepage.cpp:440
 msgid "Enable the maximum width value."
 msgstr "உட்சபட்ச அகலத்தின் மதிப்பை இயங்கச் செய்க"
 
-#: ../src/richtext/richtextsizepage.cpp:408
-#: ../src/richtext/richtextsizepage.cpp:410
+#: ../src/richtext/richtextsizepage.cpp:411
+#: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
 msgstr "குறைந்தபட்ச உயரத்தின் மதிப்பை இயங்கச் செய்க"
 
-#: ../src/richtext/richtextsizepage.cpp:381
-#: ../src/richtext/richtextsizepage.cpp:383
+#: ../src/richtext/richtextsizepage.cpp:384
+#: ../src/richtext/richtextsizepage.cpp:386
 msgid "Enable the minimum width value."
 msgstr "குறைந்தபட்ச அகலத்தின் மதிப்பை இயங்கச் செய்க"
 
-#: ../src/richtext/richtextsizepage.cpp:316
-#: ../src/richtext/richtextsizepage.cpp:318
+#: ../src/richtext/richtextsizepage.cpp:319
+#: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
 msgstr "அகலத்தின் மதிப்பை செயற்படச் செய்க"
 
-#: ../src/richtext/richtextsizepage.cpp:277
-#: ../src/richtext/richtextsizepage.cpp:279
+#: ../src/richtext/richtextsizepage.cpp:280
+#: ../src/richtext/richtextsizepage.cpp:282
 msgid "Enable vertical alignment."
 msgstr "செங்குத்து ஒழுங்கமைப்பினை செயற்படச் செய்க"
 
@@ -2912,11 +2912,11 @@ msgstr "அமைவடிவ விருப்பத் தேர்வுக�
 msgid "Error saving user configuration data."
 msgstr "பயனர் அமைவடிவத் தரவினை சேமிப்பதில் பிழை."
 
-#: ../src/gtk/print.cpp:680
+#: ../src/gtk/print.cpp:671
 msgid "Error while printing: "
 msgstr "அச்சிடுகையில் பிழை:"
 
-#: ../src/common/log.cpp:225
+#: ../src/common/log.cpp:223
 msgid "Error: "
 msgstr "பிழை:"
 
@@ -2926,7 +2926,7 @@ msgstr "Esperanto (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
 msgid "Estimated time:"
-msgstr ""
+msgstr "கணக்கிடப்பட்ட நேரம்"
 
 #: ../src/unix/fswatcher_inotify.cpp:639
 msgid "Event queue overflowed"
@@ -3187,13 +3187,13 @@ msgstr "பிடிப்புப் பலகையிலிருந்த�
 msgid "Failed to get the local system time"
 msgstr "கணினி நேரத்தைப் பெறுவதில் தோல்வி"
 
-#: ../src/common/filefn.cpp:1452
+#: ../src/common/filefn.cpp:1453
 msgid "Failed to get the working directory"
 msgstr "செயலிலிருக்கும் அடைவினைப் பெறுவதில் தோல்வி"
 
 #: ../src/univ/theme.cpp:113
 msgid "Failed to initialize GUI: no built-in themes found."
-msgstr "GUI துவக்க நிலையாக்குவதில் தோல்வி: உட்கட்டப்பட்ட வார்ப்புரு ஏதும் காணப்படவில்லை."
+msgstr "GUI துவக்க நிலையாக்குவதில் தோல்வி: உட்கட்டப்பட்ட கருத்தோற்றம் ஏதும் காணப்படவில்லை."
 
 #: ../src/msw/helpchm.cpp:63
 msgid "Failed to initialize MS HTML Help."
@@ -3591,7 +3591,7 @@ msgid ""
 "Do you want to replace it?"
 msgstr "'%s' கோப்பு ஏற்கனவே உள்ளது, அதை மாற்றியமர்த்த வேண்டுமா?"
 
-#: ../src/common/filefn.cpp:1206
+#: ../src/common/filefn.cpp:1207
 #, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "'%s' கோப்பு நீக்கப்பட இயலவில்லை"
@@ -3610,7 +3610,7 @@ msgstr "கோப்பு ஏற்றப்பட இயலவில்லை.
 msgid "File dialog failed with error code %0lx."
 msgstr "கோப்பு உரையாடல் தோல்வியடைந்தது. பிழைக் குறி %0lx."
 
-#: ../src/common/docview.cpp:1772
+#: ../src/common/docview.cpp:1771
 msgid "File error"
 msgstr "கோப்புப் பிழை"
 
@@ -3622,7 +3622,7 @@ msgstr "கோப்புப் பெயர் ஏற்கனவே உள்
 msgid "Files"
 msgstr "கோப்புகள்"
 
-#: ../src/common/filefn.cpp:1760
+#: ../src/common/filefn.cpp:1761
 #, c-format
 msgid "Files (%s)"
 msgstr "கோப்புகள் (%s)"
@@ -3643,7 +3643,7 @@ msgstr "முதல்"
 msgid "First page"
 msgstr "முதல் பக்கம்"
 
-#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:521
 msgid "Fixed"
 msgstr "நிலையானது"
 
@@ -3655,7 +3655,7 @@ msgstr "நிலையான எழுத்துரு:"
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "நிலையான அளவு முகம். <br> <b>அடர்த்தி</b> <i>வலப்பக்க சாய்வு</i> "
 
-#: ../src/richtext/richtextsizepage.cpp:226
+#: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
 msgstr "மிதக்கின்ற"
 
@@ -3710,7 +3710,7 @@ msgstr "hrefs முன்நகர்வுகள் ஆதரிக்கப�
 msgid "Found %i matches"
 msgstr "%i பொருத்தங்கள் காணப்பட்டன"
 
-#: ../src/generic/prntdlgg.cpp:243
+#: ../src/generic/prntdlgg.cpp:238
 msgid "From:"
 msgstr "அனுப்புநர்:"
 
@@ -3734,7 +3734,7 @@ msgstr "GIF: போதுமான நினைவகம் இல்லை."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: தெரியாதப் பிழை."
 
-#: ../src/gtk/window.cpp:4266
+#: ../src/gtk/window.cpp:4288
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3744,7 +3744,7 @@ msgstr ""
 
 #: ../src/univ/themes/gtk.cpp:525
 msgid "GTK+ theme"
-msgstr "GTK+ வார்ப்புரு"
+msgstr "GTK+ கருத்தோற்றம்"
 
 #: ../src/common/preferencescmn.cpp:39
 msgid "General"
@@ -3901,8 +3901,8 @@ msgstr "முகப்பு"
 msgid "Home directory"
 msgstr "முகப்பு அடைவு"
 
-#: ../src/richtext/richtextsizepage.cpp:250
-#: ../src/richtext/richtextsizepage.cpp:252
+#: ../src/richtext/richtextsizepage.cpp:253
+#: ../src/richtext/richtextsizepage.cpp:255
 msgid "How the object will float relative to the text."
 msgstr "உரைக்கு ஏற்றவாறு பொருள் எவ்வாறு மிதக்கும்."
 
@@ -4091,23 +4091,23 @@ msgstr "Post init-ல் துவக்க நிலையாக்கம் �
 msgid "Insert"
 msgstr "செருகு"
 
-#: ../src/richtext/richtextbuffer.cpp:7672
+#: ../src/richtext/richtextbuffer.cpp:7687
 msgid "Insert Field"
 msgstr "களத்தை செருகு"
 
-#: ../src/richtext/richtextbuffer.cpp:7583
-#: ../src/richtext/richtextbuffer.cpp:8493
+#: ../src/richtext/richtextbuffer.cpp:7598
+#: ../src/richtext/richtextbuffer.cpp:8551
 msgid "Insert Image"
 msgstr "படிமத்தை செருகு"
 
-#: ../src/richtext/richtextbuffer.cpp:7630
+#: ../src/richtext/richtextbuffer.cpp:7645
 msgid "Insert Object"
 msgstr "பொருளை செருகு"
 
 #: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7428
-#: ../src/richtext/richtextbuffer.cpp:7455
-#: ../src/richtext/richtextbuffer.cpp:7499
+#: ../src/richtext/richtextbuffer.cpp:7440
+#: ../src/richtext/richtextbuffer.cpp:7470
+#: ../src/richtext/richtextbuffer.cpp:7514
 msgid "Insert Text"
 msgstr "உரையை செருகு"
 
@@ -4134,7 +4134,7 @@ msgstr "ஏற்கமுடியாத TIFF படிம சுட்டெ�
 msgid "Invalid data view item"
 msgstr "ஏற்கமுடியாத தரவுத் தோற்ற உருப்படி"
 
-#: ../src/common/appcmn.cpp:245
+#: ../src/common/appcmn.cpp:266
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "ஏற்கமுடியாத காட்சியமைவு நிலை அளவுக் குறியீடு '%s'."
@@ -4373,7 +4373,7 @@ msgstr "வரி இடைவெளி"
 msgid "LEFT"
 msgstr "இடது"
 
-#: ../src/generic/prntdlgg.cpp:618 ../src/generic/prntdlgg.cpp:873
+#: ../src/generic/prntdlgg.cpp:613 ../src/generic/prntdlgg.cpp:868
 msgid "Landscape"
 msgstr "கிடநீளம்"
 
@@ -4385,7 +4385,7 @@ msgstr "கடைசி"
 msgid "Last page"
 msgstr "கடைசிப் பக்கம்"
 
-#: ../src/common/log.cpp:311
+#: ../src/common/log.cpp:309
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
@@ -4402,7 +4402,7 @@ msgstr "கணக்குப் பதிவேடு, 17 x 11 in"
 #: ../src/richtext/richtextbulletspage.cpp:199
 #: ../src/richtext/richtextbulletspage.cpp:202
 #: ../src/richtext/richtextbulletspage.cpp:203
-#: ../src/richtext/richtextsizepage.cpp:246
+#: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "இடது"
 
@@ -4411,7 +4411,7 @@ msgstr "இடது"
 msgid "Left (&first line):"
 msgstr "இடது (முதல் வரி):"
 
-#: ../src/generic/prntdlgg.cpp:885
+#: ../src/generic/prntdlgg.cpp:880
 msgid "Left margin (mm):"
 msgstr "இடதுக் கரை (mm):"
 
@@ -4711,7 +4711,7 @@ msgstr "MAC துருக்கிய"
 msgid "MacVietnamese"
 msgstr "MAC வியட்னாமிய"
 
-#: ../src/propgrid/advprops.cpp:2024
+#: ../src/propgrid/advprops.cpp:2031
 msgid "Make a selection:"
 msgstr "தெரிவுச் செய்க:"
 
@@ -4724,11 +4724,11 @@ msgstr "கரைகள்"
 msgid "Match case"
 msgstr "முகப்பெழுத்தா, இல்லையா என்று ஒப்புநோக்கு"
 
-#: ../src/richtext/richtextsizepage.cpp:460
+#: ../src/richtext/richtextsizepage.cpp:463
 msgid "Max height:"
 msgstr "உட்சபட்ச உயரம்:"
 
-#: ../src/richtext/richtextsizepage.cpp:433
+#: ../src/richtext/richtextsizepage.cpp:436
 msgid "Max width:"
 msgstr "உட்சபட்ச அகலம்:"
 
@@ -4752,7 +4752,7 @@ msgstr "தகவல்"
 
 #: ../src/univ/themes/metal.cpp:168
 msgid "Metal theme"
-msgstr "உலோக வார்ப்புரு"
+msgstr "உலோகக் கருத்தோற்றம்"
 
 #: ../src/msw/ole/automtn.cpp:641
 msgid "Method or property not found."
@@ -4762,11 +4762,11 @@ msgstr "செயல்முறை அல்லது பண்புகள் 
 msgid "Mi&nimize"
 msgstr "சிறிதாக்கு"
 
-#: ../src/richtext/richtextsizepage.cpp:406
+#: ../src/richtext/richtextsizepage.cpp:409
 msgid "Min height:"
 msgstr "குறைந்தபட்ச உயரம்:"
 
-#: ../src/richtext/richtextsizepage.cpp:379
+#: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
 msgstr "குறைந்தபட்ச அகலம்:"
 
@@ -4803,17 +4803,17 @@ msgstr "கீழே நகர்"
 msgid "Move up"
 msgstr "மேலே நகர்"
 
-#: ../src/richtext/richtextsizepage.cpp:679
-#: ../src/richtext/richtextsizepage.cpp:681
+#: ../src/richtext/richtextsizepage.cpp:682
+#: ../src/richtext/richtextsizepage.cpp:684
 msgid "Moves the object to the next paragraph."
 msgstr "பொருளை அடுத்த பத்திக்கு நகர்த்துகிறது."
 
-#: ../src/richtext/richtextsizepage.cpp:673
-#: ../src/richtext/richtextsizepage.cpp:675
+#: ../src/richtext/richtextsizepage.cpp:676
+#: ../src/richtext/richtextsizepage.cpp:678
 msgid "Moves the object to the previous paragraph."
 msgstr "பொருளை முந்தைய பத்திக்கு நகர்த்துகிறது."
 
-#: ../src/richtext/richtextbuffer.cpp:9271
+#: ../src/richtext/richtextbuffer.cpp:9345
 msgid "Multiple Cell Properties"
 msgstr "பல சிறுகட்டங்களின் பண்புகள்"
 
@@ -4993,8 +4993,8 @@ msgid "No valid mappings found in the file \"%s\"."
 msgstr "\"%s\" கோப்பில் ஏற்கக் கூடிய வரைப்படங்கள் காணப்படவில்லை."
 
 #: ../src/richtext/richtextborderspage.cpp:542
-#: ../src/richtext/richtextsizepage.cpp:245
-#: ../src/richtext/richtextsizepage.cpp:249
+#: ../src/richtext/richtextsizepage.cpp:248
+#: ../src/richtext/richtextsizepage.cpp:252
 msgid "None"
 msgstr "ஏதுமில்லை"
 
@@ -5046,7 +5046,7 @@ msgstr "எண்ணிடப்பட்ட வெளிவரைவு"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "சரி"
@@ -5068,7 +5068,7 @@ msgstr "பெயர் குறிக்கப்பட்ட தர்க்�
 msgid "Objects must have an id attribute"
 msgstr "பொருட்கள், அடையாள பண்புகளைக் கொண்டிருக்க வேண்டும்"
 
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1798
+#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
 msgid "Open File"
 msgstr "கோப்பினைத் திறவுக"
 
@@ -5110,11 +5110,11 @@ msgstr "'%s' விருப்பத் தேர்விற்கு ஒர�
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "'%s' விருப்பத் தேர்வு: '%s'-யினை தேதியாக மாற்ற இயலாது."
 
-#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/dirdlgg.cpp:187 ../src/generic/prntdlgg.cpp:618
 msgid "Options"
 msgstr "விருப்பத் தேர்வுகள்"
 
-#: ../src/generic/prntdlgg.cpp:620 ../src/generic/prntdlgg.cpp:874
+#: ../src/generic/prntdlgg.cpp:615 ../src/generic/prntdlgg.cpp:869
 msgid "Orientation"
 msgstr "திசையமைவு"
 
@@ -5314,22 +5314,21 @@ msgstr "பக்கம் %d"
 msgid "Page %d of %d"
 msgstr "பக்கம் %d, மொத்தம் %d"
 
-#: ../src/gtk/print.cpp:783
+#: ../src/gtk/print.cpp:774
 msgid "Page Setup"
 msgstr "பக்க அமைவு"
 
-#: ../src/generic/prntdlgg.cpp:833 ../src/common/prntbase.cpp:467
-#: ../src/gtk/gnome/gprint.cpp:710
+#: ../src/generic/prntdlgg.cpp:828 ../src/common/prntbase.cpp:467
 msgid "Page setup"
 msgstr "பக்க அமைவு"
 
-#: ../src/generic/prntdlgg.cpp:221
+#: ../src/generic/prntdlgg.cpp:216
 msgid "Pages"
 msgstr "பக்கங்கள்"
 
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:806
-#: ../src/generic/prntdlgg.cpp:847 ../src/generic/prntdlgg.cpp:860
-#: ../src/generic/prntdlgg.cpp:1057 ../src/generic/prntdlgg.cpp:1062
+#: ../src/generic/prntdlgg.cpp:602 ../src/generic/prntdlgg.cpp:801
+#: ../src/generic/prntdlgg.cpp:842 ../src/generic/prntdlgg.cpp:855
+#: ../src/generic/prntdlgg.cpp:1052 ../src/generic/prntdlgg.cpp:1057
 msgid "Paper size"
 msgstr "பக்க அளவு"
 
@@ -5345,7 +5344,7 @@ msgstr "ஏற்கனவே பதிவு செய்யப்பட்ட 
 msgid "Passing an unknown object to GetObject"
 msgstr "தெரியாத பொருளை GetObject-ற்கு அனுப்பி வைத்தல்"
 
-#: ../src/richtext/richtextctrl.cpp:3103 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "ஒட்டுக"
@@ -5363,7 +5362,7 @@ msgstr "காலம்"
 msgid "Permissions"
 msgstr "அனுமதிகள்"
 
-#: ../src/richtext/richtextbuffer.cpp:11745
+#: ../src/richtext/richtextbuffer.cpp:11942
 msgid "Picture Properties"
 msgstr "படப் பண்புகள்"
 
@@ -5429,15 +5428,15 @@ msgstr "தரவுத் தோற்றக் கட்டுப்பாட�
 msgid "Pointer to model not set correctly."
 msgstr "ஒப்புருவிற்கான சுட்டி சரிவர அமைக்கப்படவில்லை."
 
-#: ../src/generic/prntdlgg.cpp:617 ../src/generic/prntdlgg.cpp:872
+#: ../src/generic/prntdlgg.cpp:612 ../src/generic/prntdlgg.cpp:867
 msgid "Portrait"
 msgstr "நெடு தோற்றம்"
 
-#: ../src/richtext/richtextsizepage.cpp:493
+#: ../src/richtext/richtextsizepage.cpp:496
 msgid "Position"
 msgstr "நிலை"
 
-#: ../src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "PostScript கோப்பு"
 
@@ -5462,10 +5461,9 @@ msgstr "முன்தோற்றம்:"
 msgid "Previous page"
 msgstr "முந்தைய பக்கம்"
 
-#: ../src/generic/prntdlgg.cpp:148 ../src/generic/prntdlgg.cpp:162
+#: ../src/generic/prntdlgg.cpp:143 ../src/generic/prntdlgg.cpp:157
 #: ../src/common/prntbase.cpp:409 ../src/common/prntbase.cpp:1511
-#: ../src/gtk/print.cpp:593 ../src/gtk/print.cpp:606
-#: ../src/gtk/gnome/gprint.cpp:537 ../src/gtk/gnome/gprint.cpp:549
+#: ../src/gtk/print.cpp:584 ../src/gtk/print.cpp:597
 msgid "Print"
 msgstr "அச்சிடுக"
 
@@ -5478,25 +5476,21 @@ msgstr "அச்சு முன்தோற்றம்"
 msgid "Print Preview Failure"
 msgstr "அச்சு முன்தோற்றத் தோல்வி"
 
-#: ../src/generic/prntdlgg.cpp:229
+#: ../src/generic/prntdlgg.cpp:224
 msgid "Print Range"
 msgstr "அச்சு வீச்சு"
 
-#: ../src/generic/prntdlgg.cpp:454
+#: ../src/generic/prntdlgg.cpp:449
 msgid "Print Setup"
 msgstr "அச்சு அமைவு"
 
-#: ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:621
 msgid "Print in colour"
 msgstr "நிறங்களைக் கொண்டு அச்சிடு"
 
 #: ../src/common/stockitem.cpp:182
 msgid "Print previe&w..."
 msgstr "அச்சு முன்தோற்றம்..."
-
-#: ../src/gtk/gnome/gprint.cpp:944
-msgid "Print preview"
-msgstr "அச்சு முன்தோற்றம்"
 
 #: ../src/common/docview.cpp:1244
 msgid "Print preview creation failed."
@@ -5506,7 +5500,7 @@ msgstr "அச்சு முன்தோற்ற உருவாக்கம�
 msgid "Print preview..."
 msgstr "அச்சு முன்தோற்றம்..."
 
-#: ../src/generic/prntdlgg.cpp:635
+#: ../src/generic/prntdlgg.cpp:630
 msgid "Print spooling"
 msgstr "அச்சு சுழலி"
 
@@ -5514,7 +5508,7 @@ msgstr "அச்சு சுழலி"
 msgid "Print this page"
 msgstr "இப்பக்கத்தை அச்சிடவும்"
 
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:185
 msgid "Print to File"
 msgstr "கோப்பிற்கு அச்சிடவும்"
 
@@ -5522,27 +5516,27 @@ msgstr "கோப்பிற்கு அச்சிடவும்"
 msgid "Print..."
 msgstr "அச்சிடுக..."
 
-#: ../src/generic/prntdlgg.cpp:498
+#: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
 msgstr "அச்சுப் பொறி"
 
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:633
 msgid "Printer command:"
 msgstr "அச்சுக் கட்டளை:"
 
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:180
 msgid "Printer options"
 msgstr "அச்சுப் பொறி விருப்பத் தேர்வுகள்"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:645
 msgid "Printer options:"
 msgstr "அச்சுப் பொறி விருப்பத் தேர்வுகள்"
 
-#: ../src/generic/prntdlgg.cpp:921
+#: ../src/generic/prntdlgg.cpp:916
 msgid "Printer..."
 msgstr "அச்சுப் பொறி..."
 
-#: ../src/generic/prntdlgg.cpp:201
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Printer:"
 msgstr "அச்சுப் பொறி:"
 
@@ -5574,7 +5568,7 @@ msgid "Printing..."
 msgstr "அச்சிடப்படுகிறது..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2125
+#: ../src/common/docview.cpp:2124
 msgid "Printout"
 msgstr "காகித அச்சு"
 
@@ -5690,7 +5684,7 @@ msgstr "'%s' பதிவக மதிப்பு ஏற்கனவே உள�
 msgid "Regular"
 msgstr "வழக்கமானது"
 
-#: ../src/richtext/richtextsizepage.cpp:516
+#: ../src/richtext/richtextsizepage.cpp:519
 msgid "Relative"
 msgstr "ஒப்பு நோக்கத்தக்க"
 
@@ -5700,7 +5694,7 @@ msgstr "பொருத்தமான உள்ளீடுகள்:"
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Remaining time:"
-msgstr ""
+msgstr "எஞ்சியுள்ள நேரம்"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Remove"
@@ -5723,7 +5717,7 @@ msgstr "\"%s\" வழங்கி ஒவ்வாத %d.%d பதிப்பை
 msgid "Rendering failed."
 msgstr "வழங்குதல் தோல்வியடைந்தது."
 
-#: ../src/richtext/richtextbuffer.cpp:4202
+#: ../src/richtext/richtextbuffer.cpp:4214
 msgid "Renumber List"
 msgstr "பட்டியலை மறுஎண்ணிடுக"
 
@@ -5731,7 +5725,7 @@ msgstr "பட்டியலை மறுஎண்ணிடுக"
 msgid "Rep&lace"
 msgstr "மாற்றமர்வு"
 
-#: ../src/richtext/richtextctrl.cpp:3263 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "மாற்றமர்வு"
 
@@ -5751,7 +5745,7 @@ msgstr "இதைக் கொண்டு மாற்றியமைக்க�
 msgid "Required information entry is empty."
 msgstr "தேவைப்படும் உள்ளீட்டுத் தகவல் வெறுமையாக உள்ளது."
 
-#: ../src/common/translation.cpp:1975
+#: ../src/common/translation.cpp:1966
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
 msgstr "'%s' வளம் ஏற்கக்கூடிய தகவல் பட்டியல் அல்ல."
@@ -5766,11 +5760,11 @@ msgstr "முகடு"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:201
-#: ../src/richtext/richtextsizepage.cpp:247
+#: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "வலது"
 
-#: ../src/generic/prntdlgg.cpp:897
+#: ../src/generic/prntdlgg.cpp:892
 msgid "Right margin (mm):"
 msgstr "வலக் கரை  (mm): "
 
@@ -5820,36 +5814,36 @@ msgstr "கழித்தல்"
 
 #: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2678
 msgid "Save"
-msgstr "சேமி"
+msgstr "சேமிக்கவும்"
 
 #: ../src/common/fldlgcmn.cpp:327
 #, c-format
 msgid "Save %s file"
-msgstr "%s கோப்பினை சேமி"
+msgstr "%s கோப்பினை சேமிக்கவும்"
 
 #: ../src/generic/logg.cpp:518
 msgid "Save &As..."
-msgstr "என சேமி..."
+msgstr "இவ்வாறு சேமிக்கவும்..."
 
 #: ../src/common/docview.cpp:360
 msgid "Save As"
-msgstr "என சேமி"
+msgstr "இவ்வாறு சேமிக்கவும்"
 
 #: ../src/common/stockitem.cpp:191
 msgid "Save as"
-msgstr "என சேமி"
+msgstr "இவ்வாறு சேமிக்கவும்"
 
 #: ../src/common/stockitem.cpp:267
 msgid "Save current document"
-msgstr "தற்போதைய ஆவணத்தை சேமி"
+msgstr "தற்போதைய ஆவணத்தை சேமிக்கவும்"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Save current document with a different filename"
-msgstr "தற்போதைய ஆவணத்தை வேறு பெயர் கொண்டு சேமி"
+msgstr "தற்போதைய ஆவணத்தை வேறு பெயர் கொண்டு சேமிக்கவும்"
 
 #: ../src/generic/logg.cpp:518
 msgid "Save log contents to file"
-msgstr "செயற்குறிப்பேட்டு உள்ளடக்கங்களை கோப்பில் சேமி"
+msgstr "செயற்குறிப்பேட்டு உள்ளடக்கங்களை கோப்பில் சேமிக்கவும்"
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Script"
@@ -5906,11 +5900,11 @@ msgstr "எல்லாவற்றையும் தெரிவு செய�
 msgid "Select All"
 msgstr "எல்லாவற்றையும் தெரிவு செய்க"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1877
 msgid "Select a document template"
 msgstr "ஒரு ஆவண வார்ப்புருவைத் தேர்ந்தெடுக்கவும்"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1951
 msgid "Select a document view"
 msgstr "ஒரு ஆவணத் தோற்றத்தை தெரிவு செய்க"
 
@@ -5943,7 +5937,7 @@ msgstr "தொகுப்பதற்காக பட்டியலின் �
 msgid "Separator expected after the option '%s'."
 msgstr "'%s' விருப்பத் தேர்விற்குப் பிறகு பிரிப்பான் எதிர்பார்க்கப்படுகிறது"
 
-#: ../src/richtext/richtextbuffer.cpp:10397
+#: ../src/richtext/richtextbuffer.cpp:10513
 msgid "Set Cell Style"
 msgstr "சிறுகட்டத்தின் பாங்கினை அமை"
 
@@ -5955,7 +5949,7 @@ msgstr "w/o ஏற்க்கக்கூடிய அமைப்பியை 
 msgid "Setting directory access times is not supported under this OS version"
 msgstr "இந்த இயக்க முறைமை பதிப்பில் அடைவு டைம்ஸ் அணுகியை அமைப்பதற்கு ஆதரவு இல்லை."
 
-#: ../src/generic/prntdlgg.cpp:193
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Setup..."
 msgstr "அமைவு..."
 
@@ -6031,7 +6025,7 @@ msgstr "எழுத்துருவின் முன்தோற்றத�
 
 #: ../src/univ/themes/mono.cpp:516
 msgid "Simple monochrome theme"
-msgstr "எளிய ஒற்றை நிற வார்ப்புரு"
+msgstr "எளிய ஒற்றை நிறக் கருத்தோற்றம்"
 
 #: ../src/richtext/richtextindentspage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:449
@@ -6039,7 +6033,7 @@ msgid "Single"
 msgstr "ஒற்றை"
 
 #: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
-#: ../src/richtext/richtextsizepage.cpp:296
+#: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "அளவு"
 
@@ -6064,7 +6058,7 @@ msgstr "சிறு முகப்பெழுத்துகள்"
 msgid "Solid"
 msgstr "திடம்"
 
-#: ../src/common/docview.cpp:1774
+#: ../src/common/docview.cpp:1773
 msgid "Sorry, could not open this file."
 msgstr "மன்னிக்கவும், இந்தக் கோப்பினைத் திறக்க இயலவில்லை."
 
@@ -6080,7 +6074,7 @@ msgstr "மன்னிக்கவும், முன்தோற்றத்�
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "மன்னிக்கவும், அந்தப் பெயர் எடுக்கப்பட்டுவிட்டது. மற்றொன்றினைத்  தேர்ந்தெடுக்கவும்."
 
-#: ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1796
 msgid "Sorry, the format for this file is unknown."
 msgstr "மன்னிக்கவும், இந்தக் கோப்பிற்கான வடிவூட்டம் தெரியாததாக உள்ளது."
 
@@ -6110,12 +6104,12 @@ msgstr "செந்தரம்"
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "கூற்று, 5 1/2 x 8 1/2 in"
 
-#: ../src/richtext/richtextsizepage.cpp:515
-#: ../src/richtext/richtextsizepage.cpp:520
+#: ../src/richtext/richtextsizepage.cpp:518
+#: ../src/richtext/richtextsizepage.cpp:523
 msgid "Static"
 msgstr "அசைவற்றது"
 
-#: ../src/generic/prntdlgg.cpp:209
+#: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "நிலைமை:"
 
@@ -6175,9 +6169,8 @@ msgid "Symbol &font:"
 msgstr "குறியெழுத்து எழுத்துரு:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
-msgstr "குறியெழுத்து"
+msgstr "குறியெழுத்துகள்"
 
 #: ../src/common/accelcmn.cpp:63
 msgid "TAB"
@@ -6208,7 +6201,7 @@ msgstr "TIF: படிமத்தை எழுதுவதில் பிழ�
 msgid "TIFF: Image size is abnormally big."
 msgstr "TIF: படிமம் இயல்பிற்கு புறம்பாக பெரிய அளவில் உள்ளது."
 
-#: ../src/richtext/richtextbuffer.cpp:10687
+#: ../src/richtext/richtextbuffer.cpp:10794
 msgid "Table Properties"
 msgstr "அட்டவணைப் பண்புகள்"
 
@@ -6228,9 +6221,9 @@ msgstr "தத்தல்கள்"
 msgid "Teletype"
 msgstr "தொலைத் தட்டெழுத்து"
 
-#: ../src/common/docview.cpp:1879
+#: ../src/common/docview.cpp:1878
 msgid "Templates"
-msgstr "வார்ப்புருகள்"
+msgstr "வார்ப்புருக்கள்"
 
 #: ../src/osx/carbon/dataview.cpp:2373
 msgid "Text renderer cannot render value; value type: "
@@ -6275,10 +6268,10 @@ msgstr "கீழ்க் கரையின் அளவு"
 msgid "The bottom padding size."
 msgstr "கீழ் எழுத்து திணிமத்தின் அளவு."
 
-#: ../src/richtext/richtextsizepage.cpp:636
-#: ../src/richtext/richtextsizepage.cpp:638
-#: ../src/richtext/richtextsizepage.cpp:650
-#: ../src/richtext/richtextsizepage.cpp:652
+#: ../src/richtext/richtextsizepage.cpp:639
+#: ../src/richtext/richtextsizepage.cpp:641
+#: ../src/richtext/richtextsizepage.cpp:653
+#: ../src/richtext/richtextsizepage.cpp:655
 msgid "The bottom position."
 msgstr "கீழ் நிலை."
 
@@ -6417,10 +6410,10 @@ msgstr "இடக் கரையின் அளவு."
 msgid "The left padding size."
 msgstr "இடது எழுத்து திணிமத்தின் அளவு."
 
-#: ../src/richtext/richtextsizepage.cpp:531
-#: ../src/richtext/richtextsizepage.cpp:533
-#: ../src/richtext/richtextsizepage.cpp:545
-#: ../src/richtext/richtextsizepage.cpp:547
+#: ../src/richtext/richtextsizepage.cpp:534
+#: ../src/richtext/richtextsizepage.cpp:536
+#: ../src/richtext/richtextsizepage.cpp:548
+#: ../src/richtext/richtextsizepage.cpp:550
 msgid "The left position."
 msgstr "இடது நிலை."
 
@@ -6440,33 +6433,33 @@ msgstr "வரிசைப் பட்டியல் உருப்படி�
 msgid "The locale ID is unknown."
 msgstr "வட்டார அடையாளம் தெரியாததாக உள்ளது."
 
-#: ../src/richtext/richtextsizepage.cpp:363
-#: ../src/richtext/richtextsizepage.cpp:365
+#: ../src/richtext/richtextsizepage.cpp:366
+#: ../src/richtext/richtextsizepage.cpp:368
 msgid "The object height."
 msgstr "பொருள் உயரம்."
 
-#: ../src/richtext/richtextsizepage.cpp:471
-#: ../src/richtext/richtextsizepage.cpp:473
+#: ../src/richtext/richtextsizepage.cpp:474
+#: ../src/richtext/richtextsizepage.cpp:476
 msgid "The object maximum height."
 msgstr "பொருளின் உட்சபட்ச  உயரம்."
 
-#: ../src/richtext/richtextsizepage.cpp:444
-#: ../src/richtext/richtextsizepage.cpp:446
+#: ../src/richtext/richtextsizepage.cpp:447
+#: ../src/richtext/richtextsizepage.cpp:449
 msgid "The object maximum width."
 msgstr "பொருளின் உட்சபட்ச அகலம்."
 
-#: ../src/richtext/richtextsizepage.cpp:417
-#: ../src/richtext/richtextsizepage.cpp:419
+#: ../src/richtext/richtextsizepage.cpp:420
+#: ../src/richtext/richtextsizepage.cpp:422
 msgid "The object minimum height."
 msgstr "பொருளின் குறைந்தபட்ச உயரம்."
 
-#: ../src/richtext/richtextsizepage.cpp:390
-#: ../src/richtext/richtextsizepage.cpp:392
+#: ../src/richtext/richtextsizepage.cpp:393
+#: ../src/richtext/richtextsizepage.cpp:395
 msgid "The object minimum width."
 msgstr "பொருளின் குறைந்தபட்ச அகலம்."
 
-#: ../src/richtext/richtextsizepage.cpp:329
-#: ../src/richtext/richtextsizepage.cpp:331
+#: ../src/richtext/richtextsizepage.cpp:332
+#: ../src/richtext/richtextsizepage.cpp:334
 msgid "The object width."
 msgstr "பொருள் அகலம்."
 
@@ -6475,18 +6468,18 @@ msgstr "பொருள் அகலம்."
 msgid "The outline level."
 msgstr "வெளிவரைவின் நிலை."
 
-#: ../src/common/log.cpp:283
+#: ../src/common/log.cpp:281
 #, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
 msgstr[0] "முந்தைய தகவல் %lu தடவை மீண்டும் தோன்றியது"
 msgstr[1] "முந்தைய தகவல் %lu தடவை மீண்டும் தோன்றின"
 
-#: ../src/common/log.cpp:276
+#: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
 msgstr "முந்தைய தகவல் ஒரு முறை மீண்டும் தோன்றியது."
 
-#: ../src/gtk/print.cpp:940 ../src/gtk/print.cpp:1123
+#: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
 msgstr "அச்சிடு உரையாடல் ஒரு பிழையை  அறிவித்தது."
 
@@ -6527,10 +6520,10 @@ msgstr "வலக் கரையின்  அளவு."
 msgid "The right padding size."
 msgstr "வலது எழுத்து திணிமத்தின் அளவு."
 
-#: ../src/richtext/richtextsizepage.cpp:601
-#: ../src/richtext/richtextsizepage.cpp:603
-#: ../src/richtext/richtextsizepage.cpp:615
-#: ../src/richtext/richtextsizepage.cpp:617
+#: ../src/richtext/richtextsizepage.cpp:604
+#: ../src/richtext/richtextsizepage.cpp:606
+#: ../src/richtext/richtextsizepage.cpp:618
+#: ../src/richtext/richtextsizepage.cpp:620
 msgid "The right position."
 msgstr "வலது நிலை."
 
@@ -6589,10 +6582,10 @@ msgstr "மேற்கரையின் அளவு."
 msgid "The top padding size."
 msgstr "மேல் எழுத்து திணிமத்தின் அளவு."
 
-#: ../src/richtext/richtextsizepage.cpp:566
-#: ../src/richtext/richtextsizepage.cpp:568
-#: ../src/richtext/richtextsizepage.cpp:580
-#: ../src/richtext/richtextsizepage.cpp:582
+#: ../src/richtext/richtextsizepage.cpp:569
+#: ../src/richtext/richtextsizepage.cpp:571
+#: ../src/richtext/richtextsizepage.cpp:583
+#: ../src/richtext/richtextsizepage.cpp:585
 msgid "The top position."
 msgstr "மேல் நிலை."
 
@@ -6610,7 +6603,7 @@ msgstr ""
 "இந்தக் கணினியில் நிறுவப்பட்டுள்ள தொலை அணுகி தொண்டின் (RAS) பதிப்பு மிகப் பழையது, "
 "கருணைக் கூர்ந்து மேம்படுத்தவும்  (பின்வரும் தேவையான செயல் தவறவிடப்பட்டுள்ளது: %s)."
 
-#: ../src/gtk/print.cpp:968
+#: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "wxGtkPrinterDC பயன்படுத்த இயலாது."
 
@@ -6636,11 +6629,11 @@ msgstr ""
 msgid "This is not a %s."
 msgstr "இது %s அல்ல."
 
-#: ../src/common/wincmn.cpp:1647
+#: ../src/common/wincmn.cpp:1653
 msgid "This platform does not support background transparency."
 msgstr "இந்தத் தளம் பின்னணி ஊடுருவி பார்த்தலை ஆதரிப்பதில்லை."
 
-#: ../src/gtk/window.cpp:4295
+#: ../src/gtk/window.cpp:4317
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6707,7 +6700,7 @@ msgstr "இன்றையத் துணுக்குதவி"
 msgid "Tips not available, sorry!"
 msgstr "துணுக்குதவிகள் இல்லை, மன்னிக்கவும்!"
 
-#: ../src/generic/prntdlgg.cpp:247
+#: ../src/generic/prntdlgg.cpp:242
 msgid "To:"
 msgstr "பெறுநர்:"
 
@@ -6715,7 +6708,7 @@ msgstr "பெறுநர்:"
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "நிலை பொருத்தி வழங்கி மதிப்பை வழங்க இயலாது; மதிப்பின் வகை:"
 
-#: ../src/richtext/richtextbuffer.cpp:7925
+#: ../src/richtext/richtextbuffer.cpp:7983
 msgid "Too many EndStyle calls!"
 msgstr "மிகுதியான End Style அழைப்புகள்!"
 
@@ -6723,12 +6716,12 @@ msgstr "மிகுதியான End Style அழைப்புகள்!"
 msgid "Too many colours in PNG, the image may be slightly blurred."
 msgstr "PNG-யில் மிகுதியான நிறங்கள், படிமம் சற்றே தெளிவற்று இருக்கலாம்."
 
-#: ../src/richtext/richtextsizepage.cpp:283
-#: ../src/richtext/richtextsizepage.cpp:287 ../src/common/stockitem.cpp:200
+#: ../src/richtext/richtextsizepage.cpp:286
+#: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
 msgid "Top"
 msgstr "மேல்"
 
-#: ../src/generic/prntdlgg.cpp:886
+#: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
 msgstr "மேற்கரை (mm):"
 
@@ -6878,7 +6871,7 @@ msgstr "வேண்டப்பட்ட HTML ஆவணத்தை திற�
 
 #: ../src/unix/sound.cpp:368
 msgid "Unable to play sound asynchronously."
-msgstr "ஒலியை ஒத்திசையாக ஒலிக்க இயலவில்லை"
+msgstr "ஒலியை ஒத்திசைவில்லாமல் ஒலிக்க இயலவில்லை"
 
 #: ../include/wx/msw/private/fswatcher.h:207
 msgid "Unable to post completion status"
@@ -7011,8 +7004,8 @@ msgstr "கீழ் வெளிவரைவின் அகலத்திற�
 msgid "Units for the bottom padding."
 msgstr "கீழ் எழுத்து திணிமத்தின் தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:661
-#: ../src/richtext/richtextsizepage.cpp:663
+#: ../src/richtext/richtextsizepage.cpp:664
+#: ../src/richtext/richtextsizepage.cpp:666
 msgid "Units for the bottom position."
 msgstr "கீழ் நிலைக்கான தொகுதிகள்."
 
@@ -7036,38 +7029,38 @@ msgstr "இடது வெளிவரைவு அகலத்திற்க�
 msgid "Units for the left padding."
 msgstr "இடது எழுத்து திணிமத்திற்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:558
+#: ../src/richtext/richtextsizepage.cpp:559
+#: ../src/richtext/richtextsizepage.cpp:561
 msgid "Units for the left position."
 msgstr "இடது நிலைக்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:484
+#: ../src/richtext/richtextsizepage.cpp:485
+#: ../src/richtext/richtextsizepage.cpp:487
 msgid "Units for the maximum object height."
 msgstr "பொருளின் உட்சபட்ச  உயரத்திற்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:457
+#: ../src/richtext/richtextsizepage.cpp:458
+#: ../src/richtext/richtextsizepage.cpp:460
 msgid "Units for the maximum object width."
 msgstr "பொருளின் உட்சபட்ச அகலத்திற்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:430
+#: ../src/richtext/richtextsizepage.cpp:431
+#: ../src/richtext/richtextsizepage.cpp:433
 msgid "Units for the minimum object height."
 msgstr "பொருளின் குறைந்தபட்ச உயரத்திற்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:403
+#: ../src/richtext/richtextsizepage.cpp:404
+#: ../src/richtext/richtextsizepage.cpp:406
 msgid "Units for the minimum object width."
 msgstr "பொருளின் குறைந்தபட்ச அகலத்திற்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:376
+#: ../src/richtext/richtextsizepage.cpp:377
+#: ../src/richtext/richtextsizepage.cpp:379
 msgid "Units for the object height."
 msgstr "பொருள் உயரத்திற்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:342
+#: ../src/richtext/richtextsizepage.cpp:343
+#: ../src/richtext/richtextsizepage.cpp:345
 msgid "Units for the object width."
 msgstr "பொருள் அகலத்திற்கான தொகுதிகள்."
 
@@ -7091,8 +7084,8 @@ msgstr "வலது வெளிவரைவு அகலத்திற்க�
 msgid "Units for the right padding."
 msgstr "வலது எழுத்து திணிமத்திற்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:628
+#: ../src/richtext/richtextsizepage.cpp:629
+#: ../src/richtext/richtextsizepage.cpp:631
 msgid "Units for the right position."
 msgstr "வலது நிலைக்கான தொகுதிகள்."
 
@@ -7116,8 +7109,8 @@ msgstr "மேல் வெளிவரைவு அகலத்திற்க�
 msgid "Units for the top padding."
 msgstr "மேல் எழுத்து திணிமத்திற்கான தொகுதிகள்."
 
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:593
+#: ../src/richtext/richtextsizepage.cpp:594
+#: ../src/richtext/richtextsizepage.cpp:596
 msgid "Units for the top position."
 msgstr "மேல் நிலைக்கான தொகுதிகள்."
 
@@ -7207,10 +7200,10 @@ msgstr "குறிப்பிடப்படாதது"
 msgid "Unsupported clipboard format."
 msgstr "ஆதரவளிக்கப்படாத பிடிப்புப் பலகை வடிவூட்டம்."
 
-#: ../src/common/appcmn.cpp:228
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Unsupported theme '%s'."
-msgstr "ஆதரவளிக்கப்படாத வார்ப்புரு '%s'"
+msgstr "ஆதரவளிக்கப்படாத கருத்தோற்றம் '%s'"
 
 #: ../src/generic/fdrepdlg.cpp:152 ../src/common/stockitem.cpp:205
 msgid "Up"
@@ -7269,8 +7262,8 @@ msgstr "மதிப்பு இதற்கிடையே இருக்க 
 msgid "Version "
 msgstr "பதிப்பு"
 
-#: ../src/richtext/richtextsizepage.cpp:288
-#: ../src/richtext/richtextsizepage.cpp:290
+#: ../src/richtext/richtextsizepage.cpp:291
+#: ../src/richtext/richtextsizepage.cpp:293
 msgid "Vertical alignment."
 msgstr "செங்குத்து ஒழுங்கமைப்பு."
 
@@ -7282,7 +7275,7 @@ msgstr "கோப்புகளை விளக்கங்களுடனா�
 msgid "View files as a list view"
 msgstr "கோப்புகளை பட்டியல் வரிசைத் தோற்றத்தில் பார்க்கவும்"
 
-#: ../src/common/docview.cpp:1953
+#: ../src/common/docview.cpp:1952
 msgid "Views"
 msgstr "தோற்றங்கள்"
 
@@ -7303,7 +7296,7 @@ msgstr "சாளரங்கள்-வலது"
 msgid "Waiting for IO on epoll descriptor %d failed"
 msgstr "%d epoll விளக்கியின் மீதான உள்ளிடு/வெளியிடு காத்திருப்பு தோல்வியடைந்தது"
 
-#: ../src/common/log.cpp:229
+#: ../src/common/log.cpp:227
 msgid "Warning: "
 msgstr "எச்சரிக்கை:"
 
@@ -7333,7 +7326,7 @@ msgstr "முழுச் சொற்கள் மட்டும்"
 
 #: ../src/univ/themes/win32.cpp:1102
 msgid "Win32 theme"
-msgstr "Win32 வார்ப்புரு"
+msgstr "Win32 கருத்தோற்றம்"
 
 #: ../src/msw/utils.cpp:1220
 msgid "Win32s on Windows 3.1"
@@ -7532,31 +7525,31 @@ msgstr ""
 
 #: ../src/common/stockitem.cpp:209
 msgid "Zoom &In"
-msgstr "உள்விரிவாக்குக"
+msgstr "உள்நோக்கிப் பெரிதாக்குக"
 
 #: ../src/common/stockitem.cpp:210
 msgid "Zoom &Out"
-msgstr "வெளிவிரிவாக்குக"
+msgstr "வெளிநோக்கிப் பெரிதாக்குக"
 
 #: ../src/common/stockitem.cpp:209 ../src/common/prntbase.cpp:1564
 msgid "Zoom In"
-msgstr "உள்விரிவாக்குக"
+msgstr "உள்நோக்கிப் பெரிதாக்குக"
 
 #: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1550
 msgid "Zoom Out"
-msgstr "வெளிவிரிவாக்குக"
+msgstr "வெளிநோக்கிப் பெரிதாக்குக"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Zoom to &Fit"
-msgstr "பொருந்துமாறு விரிவாக்குக"
+msgstr "பொருந்துமாறு பெரிதாக்குக"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Zoom to Fit"
-msgstr "பொருந்துமாறு விரிவாக்குக"
+msgstr "பொருந்துமாறு பெரிதாக்குக"
 
 #: ../src/msw/dde.cpp:1144
 msgid "a DDEML application has created a prolonged race condition."
-msgstr "ஒரு DDEML செயலி நீட்டிக்கப்பட்ட போட்டியை உருவாக்கியுள்ளது."
+msgstr "ஒரு DDEML செயலி நீட்டிக்கப்பட்ட போட்டி நிலையை உருவாக்கியுள்ளது."
 
 #: ../src/msw/dde.cpp:1132
 msgid ""
@@ -7571,7 +7564,7 @@ msgstr ""
 
 #: ../src/msw/dde.cpp:1150
 msgid "a client's attempt to establish a conversation has failed."
-msgstr "ஒரு வாங்கி உரையாடலை நிலைநாட்டும் முயற்சி தோல்வியடைந்துள்ளது."
+msgstr "ஒரு உரையாடலை நிலைநாட்டும் வாங்கியின் முயற்சி தோல்வியடைந்துள்ளது."
 
 #: ../src/msw/dde.cpp:1147
 msgid "a memory allocation failed."
@@ -7583,23 +7576,23 @@ msgstr "DDEML, ஒரு அளவுக் குறியீட்டை ச�
 
 #: ../src/msw/dde.cpp:1123
 msgid "a request for a synchronous advise transaction has timed out."
-msgstr "ஏககால அறிவுரை பரிவர்த்தனைக்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
+msgstr "ஒத்திசைவு அறிவுரை பரிமாற்றத்திற்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
 
 #: ../src/msw/dde.cpp:1129
 msgid "a request for a synchronous data transaction has timed out."
-msgstr "ஏககால தரவு பரிவர்த்தனைக்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
+msgstr "ஒத்திசைவுத் தரவு பரிமாற்றத்திற்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
 
 #: ../src/msw/dde.cpp:1138
 msgid "a request for a synchronous execute transaction has timed out."
-msgstr "ஏககால செயற்படுத்து பரிவர்த்தனைக்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
+msgstr "ஒத்திசைவு செயற்படுத்து பரிமாற்றத்திற்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
 
 #: ../src/msw/dde.cpp:1156
 msgid "a request for a synchronous poke transaction has timed out."
-msgstr "ஏககால poke பரிவர்த்தனைக்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
+msgstr "ஒத்திசைவு poke பரிமாற்றத்திற்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
 
 #: ../src/msw/dde.cpp:1171
 msgid "a request to end an advise transaction has timed out."
-msgstr "ஒரு அறிவுரை பரிவர்த்தனையை முடிப்பதற்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
+msgstr "ஒரு அறிவுரை பரிமாற்றத்தை முடிப்பதற்கான வேண்டுகோள் காலாவதியாகிவிட்டது"
 
 #: ../src/msw/dde.cpp:1165
 msgid ""
@@ -7607,13 +7600,13 @@ msgid ""
 "that was terminated by the client, or the server\n"
 "terminated before completing a transaction."
 msgstr ""
-"ஒரு உரையாடலின் மீது வழங்கியின் தரப்பிலிருந்து ஒரு பரிவர்த்தனை முயற்சி மேற்கொள்லப்பட்டது.\n"
+"ஒரு உரையாடலின் மீது வழங்கியின் தரப்பிலிருந்து ஒரு பரிமாற்ற முயற்சி மேற்கொள்லப்பட்டது.\n"
 "ஆனால், அதை வழங்கியோ, வாங்கியோ முடிவிற்கு கொண்டு வந்துவிட்டது\n"
-"terminated before completing a transaction."
+"பரிமாற்றம் நிறைவடையும் முன் முடிக்கப்பட்டது."
 
 #: ../src/msw/dde.cpp:1153
 msgid "a transaction failed."
-msgstr "ஒரு பரிவர்த்தனை தோல்வியடைந்தது."
+msgstr "ஒரு பரிமாற்றம் தோல்வியடைந்தது."
 
 #: ../src/common/accelcmn.cpp:184
 msgid "alt"
@@ -7627,9 +7620,9 @@ msgid ""
 "attempted to perform server transactions."
 msgstr ""
 "APPCLASS_MONITOR என்று துவக்க நிலையாக்கப்பட்ட ஒரு செயலி\n"
-"ஒரு DDE பரிவர்த்தனையை மேற்கொள்ள முயற்சித்துள்ளது,\n"
+"ஒரு DDE பரிமாற்றத்தை மேற்கொள்ள முயற்சித்துள்ளது,\n"
 "அல்லது APPCMD_CLIENTONLY என்று துவக்க நிலையாக்கப்பட்ட ஒரு செயலி\n"
-"வழங்கியின் பரிவர்த்தனையைகளை மேற்கொள்ள முயற்சித்துள்ளது."
+"வழங்கியின் பரிமாற்றங்களை மேற்கொள்ள முயற்சித்துள்ளது."
 
 #: ../src/msw/dde.cpp:1159
 msgid "an internal call to the PostMessage function has failed. "
@@ -7645,9 +7638,9 @@ msgid ""
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
-"ஏற்கமுடியாத பரிவர்த்தனை இனங்காட்டி ஒரு DDEML செயற்பாட்டிற்கு அனுப்பி வைக்கப்பட்டுள்ளது.\n"
+"ஏற்கமுடியாத பரிமாற்ற இனங்காட்டி ஒரு DDEML செயற்பாட்டிற்கு அனுப்பி வைக்கப்பட்டுள்ளது.\n"
 "XTYP_XACT_COMPLETE திரும்ப அழைத்தலிலிருந்து செயலி திரும்பிய பின்,\n"
-"அந்த திரும்ப அழைத்தலுக்கான பரிவர்த்தனை இனங்காட்டி, இனிமேல் ஏற்கக்கூடியதாக இருக்காது."
+"அந்த திரும்ப அழைத்தலுக்கான பரிமாற்ற இனங்காட்டி, இனிமேல் ஏற்கக்கூடியதாக இருக்காது."
 
 #: ../src/common/zipstrm.cpp:1272
 msgid "assuming this is a multi-part zip concatenated"
@@ -7834,16 +7827,16 @@ msgstr "tar மேலுரை தொகுதியை படிப்பதி
 #: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:389
-#: ../src/richtext/richtextsizepage.cpp:336
-#: ../src/richtext/richtextsizepage.cpp:370
-#: ../src/richtext/richtextsizepage.cpp:397
-#: ../src/richtext/richtextsizepage.cpp:424
-#: ../src/richtext/richtextsizepage.cpp:451
-#: ../src/richtext/richtextsizepage.cpp:478
-#: ../src/richtext/richtextsizepage.cpp:552
-#: ../src/richtext/richtextsizepage.cpp:587
-#: ../src/richtext/richtextsizepage.cpp:622
-#: ../src/richtext/richtextsizepage.cpp:657
+#: ../src/richtext/richtextsizepage.cpp:339
+#: ../src/richtext/richtextsizepage.cpp:373
+#: ../src/richtext/richtextsizepage.cpp:400
+#: ../src/richtext/richtextsizepage.cpp:427
+#: ../src/richtext/richtextsizepage.cpp:454
+#: ../src/richtext/richtextsizepage.cpp:481
+#: ../src/richtext/richtextsizepage.cpp:555
+#: ../src/richtext/richtextsizepage.cpp:590
+#: ../src/richtext/richtextsizepage.cpp:625
+#: ../src/richtext/richtextsizepage.cpp:660
 msgid "cm"
 msgstr "cm"
 
@@ -7961,7 +7954,7 @@ msgstr ""
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "'%s' கோப்பு: எதிர்பாராத எழுத்து %c, %d வரியில்."
 
-#: ../src/richtext/richtextbuffer.cpp:8300
+#: ../src/richtext/richtextbuffer.cpp:8358
 msgid "files"
 msgstr "கோப்புகள்"
 
@@ -7985,8 +7978,8 @@ msgstr "நான்காம்"
 msgid "generate verbose log messages"
 msgstr "தேவைக்கு மிகுதியானவைகளின் செயற்குறிப்பேட்டுத் தகவல்களை உருவாக்குக"
 
-#: ../src/richtext/richtextbuffer.cpp:12015
-#: ../src/richtext/richtextbuffer.cpp:12125
+#: ../src/richtext/richtextbuffer.cpp:12212
+#: ../src/richtext/richtextbuffer.cpp:12322
 msgid "image"
 msgstr "படிமம்"
 
@@ -8053,7 +8046,7 @@ msgid "no fonts found in %s, using builtin font"
 msgstr ""
 "%s-ல் எழுத்துரு ஏதும் காணப்படவில்லை, உடன் கட்டப்பட்டு வரும் எழுத்துரு பயன்படுத்தப்படுகிறது"
 
-#: ../src/html/helpdata.cpp:654
+#: ../src/html/helpdata.cpp:655
 msgid "noname"
 msgstr "பெயரில்லை"
 
@@ -8065,7 +8058,7 @@ msgstr "நன்பகல்"
 msgid "normal"
 msgstr "இயல்பான"
 
-#: ../src/gtk/print.cpp:1227 ../src/gtk/print.cpp:1332
+#: ../src/gtk/print.cpp:1218 ../src/gtk/print.cpp:1323
 msgid "not implemented"
 msgstr "செயற்படுத்தப்படவில்லை"
 
@@ -8081,16 +8074,16 @@ msgstr "பொருட்கள் xml உரைக் கணுக்களை
 msgid "out of memory"
 msgstr "நினைவகத்திற்கு வெளியே"
 
-#: ../src/richtext/richtextsizepage.cpp:337
-#: ../src/richtext/richtextsizepage.cpp:371
-#: ../src/richtext/richtextsizepage.cpp:398
-#: ../src/richtext/richtextsizepage.cpp:425
-#: ../src/richtext/richtextsizepage.cpp:452
-#: ../src/richtext/richtextsizepage.cpp:479
-#: ../src/richtext/richtextsizepage.cpp:553
-#: ../src/richtext/richtextsizepage.cpp:588
-#: ../src/richtext/richtextsizepage.cpp:623
-#: ../src/richtext/richtextsizepage.cpp:658
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
 msgid "percent"
 msgstr "விழுக்காடு"
 
@@ -8152,36 +8145,36 @@ msgstr "pt"
 #: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextmarginspage.cpp:390
 #: ../src/richtext/richtextmarginspage.cpp:391
-#: ../src/richtext/richtextsizepage.cpp:335
 #: ../src/richtext/richtextsizepage.cpp:338
-#: ../src/richtext/richtextsizepage.cpp:339
-#: ../src/richtext/richtextsizepage.cpp:369
+#: ../src/richtext/richtextsizepage.cpp:341
+#: ../src/richtext/richtextsizepage.cpp:342
 #: ../src/richtext/richtextsizepage.cpp:372
-#: ../src/richtext/richtextsizepage.cpp:373
-#: ../src/richtext/richtextsizepage.cpp:396
+#: ../src/richtext/richtextsizepage.cpp:375
+#: ../src/richtext/richtextsizepage.cpp:376
 #: ../src/richtext/richtextsizepage.cpp:399
-#: ../src/richtext/richtextsizepage.cpp:400
-#: ../src/richtext/richtextsizepage.cpp:423
+#: ../src/richtext/richtextsizepage.cpp:402
+#: ../src/richtext/richtextsizepage.cpp:403
 #: ../src/richtext/richtextsizepage.cpp:426
-#: ../src/richtext/richtextsizepage.cpp:427
-#: ../src/richtext/richtextsizepage.cpp:450
+#: ../src/richtext/richtextsizepage.cpp:429
+#: ../src/richtext/richtextsizepage.cpp:430
 #: ../src/richtext/richtextsizepage.cpp:453
-#: ../src/richtext/richtextsizepage.cpp:454
-#: ../src/richtext/richtextsizepage.cpp:477
+#: ../src/richtext/richtextsizepage.cpp:456
+#: ../src/richtext/richtextsizepage.cpp:457
 #: ../src/richtext/richtextsizepage.cpp:480
-#: ../src/richtext/richtextsizepage.cpp:481
-#: ../src/richtext/richtextsizepage.cpp:551
+#: ../src/richtext/richtextsizepage.cpp:483
+#: ../src/richtext/richtextsizepage.cpp:484
 #: ../src/richtext/richtextsizepage.cpp:554
-#: ../src/richtext/richtextsizepage.cpp:555
-#: ../src/richtext/richtextsizepage.cpp:586
+#: ../src/richtext/richtextsizepage.cpp:557
+#: ../src/richtext/richtextsizepage.cpp:558
 #: ../src/richtext/richtextsizepage.cpp:589
-#: ../src/richtext/richtextsizepage.cpp:590
-#: ../src/richtext/richtextsizepage.cpp:621
+#: ../src/richtext/richtextsizepage.cpp:592
+#: ../src/richtext/richtextsizepage.cpp:593
 #: ../src/richtext/richtextsizepage.cpp:624
-#: ../src/richtext/richtextsizepage.cpp:625
-#: ../src/richtext/richtextsizepage.cpp:656
+#: ../src/richtext/richtextsizepage.cpp:627
+#: ../src/richtext/richtextsizepage.cpp:628
 #: ../src/richtext/richtextsizepage.cpp:659
-#: ../src/richtext/richtextsizepage.cpp:660
+#: ../src/richtext/richtextsizepage.cpp:662
+#: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
 msgstr "px"
 
@@ -8239,32 +8232,32 @@ msgstr "பதினாறாம்"
 msgid "sixth"
 msgstr "ஆறாம்"
 
-#: ../src/common/appcmn.cpp:206
+#: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr ""
 "பயன்படுத்தப்பட வேண்டிய காட்சியளிப்பு நிலையைக் குறிப்பிடு (எடுத்துக்காட்டு: 640x480-16)"
 
-#: ../src/common/appcmn.cpp:192
+#: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
-msgstr "பயன்படுத்தப்பட வேண்டிய வார்ப்புருவைக் குறிப்பிடுக"
+msgstr "பயன்படுத்தப்பட வேண்டிய கருத்தோற்றத்தைக் குறிப்பிடுக"
 
-#: ../src/richtext/richtextbuffer.cpp:8818
+#: ../src/richtext/richtextbuffer.cpp:8876
 msgid "standard/circle"
 msgstr "செந்தர வட்டம்"
 
-#: ../src/richtext/richtextbuffer.cpp:8819
+#: ../src/richtext/richtextbuffer.cpp:8877
 msgid "standard/circle-outline"
 msgstr "செந்தர வட்டம் வெளிவரைவு"
 
-#: ../src/richtext/richtextbuffer.cpp:8821
+#: ../src/richtext/richtextbuffer.cpp:8879
 msgid "standard/diamond"
 msgstr "செந்தர வைரம்"
 
-#: ../src/richtext/richtextbuffer.cpp:8820
+#: ../src/richtext/richtextbuffer.cpp:8878
 msgid "standard/square"
 msgstr "செந்தரச் சதுரம்"
 
-#: ../src/richtext/richtextbuffer.cpp:8822
+#: ../src/richtext/richtextbuffer.cpp:8880
 msgid "standard/triangle"
 msgstr "செந்தர முக்கோணம்"
 
@@ -8291,7 +8284,7 @@ msgstr "பத்தாம்"
 
 #: ../src/msw/dde.cpp:1126
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
-msgstr "பரிவர்த்தனைக்கான மறுமொழி, DDE_FBUSY நுண்மியை  அமைக்கச் செய்தது."
+msgstr "பரிமாற்றத்திற்கான மறுமொழி, DDE_FBUSY நுண்மியை  அமைக்கச் செய்தது."
 
 #: ../src/common/datetimefmt.cpp:1921
 msgid "third"
@@ -8371,7 +8364,7 @@ msgstr "தெரியாத %d"
 msgid "unnamed"
 msgstr "பெயரிடப்படாதது"
 
-#: ../src/common/docview.cpp:1607
+#: ../src/common/docview.cpp:1606
 #, c-format
 msgid "unnamed%d"
 msgstr "பெயரிடப்படாதது %d"
@@ -8380,7 +8373,7 @@ msgstr "பெயரிடப்படாதது %d"
 msgid "unsupported Zip compression method"
 msgstr "ஆதரவளிக்கப்படாத ஜிப் நெறுக்கு வழிமுறை"
 
-#: ../src/common/translation.cpp:1892
+#: ../src/common/translation.cpp:1883
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "'%s' பட்டியல், '%s'-இடமிருந்துப் பயன்படுத்தப்படுகிறது."
@@ -8393,7 +8386,7 @@ msgstr "பிழையை எழுதவும்"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay தோல்வியடைந்தது."
 
-#: ../src/gtk/print.cpp:996
+#: ../src/gtk/print.cpp:987
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr "wxPrintout::GetPageInfo ஒரு  வெற்று maxPage-ஐ தருகிறது."
 
@@ -8431,6 +8424,9 @@ msgstr "zlib பிழை %d"
 #: ../src/richtext/richtextbulletspage.cpp:301
 msgid "~"
 msgstr "~"
+
+#~ msgid "Print preview"
+#~ msgstr "அச்சு முன்தோற்றம்"
 
 #~ msgid "'"
 #~ msgstr "'"
@@ -8472,7 +8468,7 @@ msgstr "~"
 #~ msgstr "முன்தோற்றம்..."
 
 #~ msgid "&Save..."
-#~ msgstr "சேமி..."
+#~ msgstr "சேமிக்கவும்..."
 
 #~ msgid "About "
 #~ msgstr "குறித்து..."

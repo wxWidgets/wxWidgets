@@ -81,7 +81,13 @@ bool wxStaticBox::Create(wxWindow *parent,
 
 #ifndef __WXWINCE__
     if (!wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
+    {
         Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBox::OnPaint));
+
+        // Our OnPaint() completely erases our background, so don't do it in
+        // WM_ERASEBKGND too to avoid flicker.
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+    }
 #endif // !__WXWINCE__
 
     return true;
@@ -278,8 +284,14 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
     HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
     bool foundThis = false;
 
-    // iterate over all child windows (not just wxWindows but all windows)
-    for ( HWND child = ::GetWindow(GetHwndOf(GetParent()), GW_CHILD);
+    // Iterate over all sibling windows as in the old wxWidgets API the
+    // controls appearing inside the static box were created as its siblings
+    // and not children. This is now deprecated but should still work.
+    //
+    // Also notice that we must iterate over all windows, not just all
+    // wxWindows, as there may be composite windows etc.
+    HWND child;
+    for ( child = ::GetWindow(GetHwndOf(GetParent()), GW_CHILD);
           child;
           child = ::GetWindow(child, GW_HWNDNEXT) )
     {
@@ -329,6 +341,23 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
             AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
             ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
         }
+    }
+
+    // Also iterate over all children of the static box, we need to clip them
+    // out as well.
+    for ( child = ::GetWindow(GetHwnd(), GW_CHILD);
+          child;
+          child = ::GetWindow(child, GW_HWNDNEXT) )
+    {
+        if ( !::IsWindowVisible(child) )
+        {
+            // if the window isn't visible then it doesn't need clipped
+            continue;
+        }
+
+        ::GetWindowRect(child, &rc);
+        AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
+        ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
     }
 
     return (WXHRGN)hrgn;

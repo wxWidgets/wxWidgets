@@ -587,7 +587,7 @@ public:
 
     /**
         Returns a list of items in the forward history. The first item in the
-        vector is the next item in the history with respect to the curently
+        vector is the next item in the history with respect to the currently
         loaded page.
     */
     virtual wxVector<wxSharedPtr<wxWebViewHistoryItem> > GetForwardHistory() = 0;
@@ -686,7 +686,7 @@ public:
         @note This function will restart the search if the flags
               @c wxWEBVIEW_FIND_ENTIRE_WORD or @c wxWEBVIEW_FIND_MATCH_CASE
               are changed, since this will require a new search. To reset the
-              search, for example reseting the highlights call the function
+              search, for example resetting the highlights call the function
               with an empty search phrase. This always returns @c wxNOT_FOUND
               on the OSX WebKit backend.
         @since 2.9.5
@@ -787,7 +787,7 @@ public:
 
     /**
         Get the name of the target frame which the url of this event
-        has been or will be loaded into. This may return an emptry string
+        has been or will be loaded into. This may return an empty string
         if the frame is not available.
     */
     const wxString& GetTarget() const;

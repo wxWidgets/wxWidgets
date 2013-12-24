@@ -19,9 +19,9 @@
     Constants
 -->
 <xsl:template name="SVN_URL">http://svn.wxwidgets.org/svn/wx/wxWidgets/</xsl:template>
-<xsl:template name="STABLE_BRANCH">branches/WX_2_8_BRANCH</xsl:template>
+<xsl:template name="STABLE_BRANCH">branches/WX_3_0_BRANCH</xsl:template>
 <xsl:variable name="STABLE_BRANCH"><STABLE_BRANCH/></xsl:variable>
-<xsl:template name="RELEASE_BRANCH">branches/WX_2_9_0_BRANCH</xsl:template>
+<xsl:template name="RELEASE_BRANCH">branches/WX_3_1_0_BRANCH</xsl:template>
 <xsl:variable name="RELEASE_BRANCH"><RELEASE_BRANCH/></xsl:variable>
 <xsl:template name="SNAPSHOT_URL">http://biolpc22.york.ac.uk/pub</xsl:template>
 
@@ -45,7 +45,7 @@
     Typically just:
         <checkout/>
     for the trunk, or:
-        <checkout branch="branches/WX_2_8_BRANCH"/>
+        <checkout branch="branches/WX_3_0_BRANCH"/>
     to checkout a branch.
 -->
 <xsl:template name="checkout">

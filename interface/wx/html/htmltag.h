@@ -78,8 +78,11 @@ public:
     wxString GetName() const;
 
     /**
-        Returns the value of the parameter. You should check whether the
-        parameter exists or not (use wxHtmlTag::HasParam) first.
+        Returns the value of the parameter.
+
+        You should check whether the parameter exists or not (use
+        wxHtmlTag::HasParam) first or use GetParamAsString() if you need to
+        distinguish between non-specified and empty parameter values.
 
         @param par
             The parameter's name.
@@ -120,6 +123,22 @@ public:
         if the tag has no such parameter.
     */
     bool GetParamAsInt(const wxString& par, int* value) const;
+
+    /**
+        Get the value of the parameter.
+
+        If the tag doesn't have such parameter at all, simply returns @false.
+        Otherwise, fills @a value with the parameter value and returns @true.
+
+        @param par
+            The parameter's name.
+        @param value
+            Pointer to the string to be filled with the parameter value, must
+            be non-@NULL.
+
+        @since 3.0
+     */
+    bool GetParamAsString(const wxString& par, wxString* value) const;
 
     /**
         Returns @true if this tag is paired with ending tag, @false otherwise.

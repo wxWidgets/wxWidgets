@@ -27,43 +27,30 @@ BEGIN_EVENT_TABLE( wxRichTextFontPage, wxRichTextDialogPage )
 
 ////@begin wxRichTextFontPage event table entries
     EVT_IDLE( wxRichTextFontPage::OnIdle )
-
     EVT_TEXT( ID_RICHTEXTFONTPAGE_FACETEXTCTRL, wxRichTextFontPage::OnFaceTextCtrlUpdated )
-
     EVT_TEXT( ID_RICHTEXTFONTPAGE_SIZETEXTCTRL, wxRichTextFontPage::OnSizeTextCtrlUpdated )
-
     EVT_SPIN_UP( ID_RICHTEXTFONTPAGE_SPINBUTTONS, wxRichTextFontPage::OnRichtextfontpageSpinbuttonsUp )
     EVT_SPIN_DOWN( ID_RICHTEXTFONTPAGE_SPINBUTTONS, wxRichTextFontPage::OnRichtextfontpageSpinbuttonsDown )
-
     EVT_CHOICE( ID_RICHTEXTFONTPAGE_SIZE_UNITS, wxRichTextFontPage::OnRichtextfontpageSizeUnitsSelected )
-
     EVT_LISTBOX( ID_RICHTEXTFONTPAGE_SIZELISTBOX, wxRichTextFontPage::OnSizeListBoxSelected )
-
     EVT_COMBOBOX( ID_RICHTEXTFONTPAGE_STYLECTRL, wxRichTextFontPage::OnStyleCtrlSelected )
-
     EVT_COMBOBOX( ID_RICHTEXTFONTPAGE_WEIGHTCTRL, wxRichTextFontPage::OnWeightCtrlSelected )
-
     EVT_COMBOBOX( ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, wxRichTextFontPage::OnUnderliningCtrlSelected )
-
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_COLOURCTRL_LABEL, wxRichTextFontPage::OnUnderliningCtrlSelected )
-
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_BGCOLOURCTRL_LABEL, wxRichTextFontPage::OnUnderliningCtrlSelected )
-
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL, wxRichTextFontPage::OnStrikethroughctrlClick )
-
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_CAPSCTRL, wxRichTextFontPage::OnCapsctrlClick )
-
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_SMALLCAPSCTRL, wxRichTextFontPage::OnCapsctrlClick )
-
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_SUPERSCRIPT, wxRichTextFontPage::OnRichtextfontpageSuperscriptClick )
-
     EVT_CHECKBOX( ID_RICHTEXTFONTPAGE_SUBSCRIPT, wxRichTextFontPage::OnRichtextfontpageSubscriptClick )
-
 ////@end wxRichTextFontPage event table entries
 
 END_EVENT_TABLE()
 
 IMPLEMENT_HELP_PROVISION(wxRichTextFontPage)
+
+int wxRichTextFontPage::sm_allowedTextEffects = 0xFFFF & ~(wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION|wxTEXT_ATTR_EFFECT_RTL);
+
 /*!
  * wxRichTextFontPage constructors
  */
@@ -90,6 +77,7 @@ void wxRichTextFontPage::Init()
     m_bgColourPresent = false;
 
 ////@begin wxRichTextFontPage member initialisation
+    m_innerSizer = NULL;
     m_faceTextCtrl = NULL;
     m_sizeTextCtrl = NULL;
     m_fontSizeSpinButtons = NULL;
@@ -109,6 +97,9 @@ void wxRichTextFontPage::Init()
     m_smallCapitalsCtrl = NULL;
     m_superscriptCtrl = NULL;
     m_subscriptCtrl = NULL;
+    m_rtlParentSizer = NULL;
+    m_rtlCtrl = NULL;
+    m_suppressHyphenationCtrl = NULL;
     m_previewCtrl = NULL;
 ////@end wxRichTextFontPage member initialisation
 }
@@ -144,11 +135,11 @@ void wxRichTextFontPage::CreateControls()
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
     itemRichTextDialogPage1->SetSizer(itemBoxSizer2);
 
-    wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer2->Add(itemBoxSizer3, 1, wxGROW|wxALL, 5);
+    m_innerSizer = new wxBoxSizer(wxVERTICAL);
+    itemBoxSizer2->Add(m_innerSizer, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(itemBoxSizer4, 1, wxGROW, 5);
+    m_innerSizer->Add(itemBoxSizer4, 0, wxGROW, 5);
 
     wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer4->Add(itemBoxSizer5, 1, wxGROW, 5);
@@ -193,13 +184,13 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer10->Add(m_sizeUnitsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5);
 
     m_fontListBoxParent = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(m_fontListBoxParent, 0, wxGROW, 5);
+    m_innerSizer->Add(m_fontListBoxParent, 1, wxGROW, 5);
 
     m_faceListBox = new wxRichTextFontListBox( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_FACELISTBOX, wxDefaultPosition, wxSize(200, 100), 0 );
     m_faceListBox->SetHelpText(_("Lists the available fonts."));
     if (wxRichTextFontPage::ShowToolTips())
         m_faceListBox->SetToolTip(_("Lists the available fonts."));
-    m_fontListBoxParent->Add(m_faceListBox, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxFIXED_MINSIZE, 5);
+    m_fontListBoxParent->Add(m_faceListBox, 1, wxGROW|wxALL|wxFIXED_MINSIZE, 5);
 
     wxArrayString m_sizeListBoxStrings;
     m_sizeListBox = new wxListBox( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_SIZELISTBOX, wxDefaultPosition, wxSize(50, -1), m_sizeListBoxStrings, wxLB_SINGLE );
@@ -209,7 +200,7 @@ void wxRichTextFontPage::CreateControls()
     m_fontListBoxParent->Add(m_sizeListBox, 0, wxGROW|wxALL|wxFIXED_MINSIZE, 5);
 
     wxBoxSizer* itemBoxSizer17 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(itemBoxSizer17, 0, wxGROW, 5);
+    m_innerSizer->Add(itemBoxSizer17, 0, wxGROW, 5);
 
     wxBoxSizer* itemBoxSizer18 = new wxBoxSizer(wxVERTICAL);
     itemBoxSizer17->Add(itemBoxSizer18, 0, wxGROW, 5);
@@ -279,7 +270,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer31->Add(m_bgColourCtrl, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer34 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(itemBoxSizer34, 0, wxGROW, 5);
+    m_innerSizer->Add(itemBoxSizer34, 0, wxGROW, 5);
 
     m_strikethroughCtrl = new wxCheckBox( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_STRIKETHROUGHCTRL, _("&Strikethrough"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
     m_strikethroughCtrl->SetValue(false);
@@ -316,15 +307,40 @@ void wxRichTextFontPage::CreateControls()
         m_subscriptCtrl->SetToolTip(_("Check to show the text in subscript."));
     itemBoxSizer34->Add(m_subscriptCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL, 5);
+    m_rtlParentSizer = new wxBoxSizer(wxHORIZONTAL);
+    m_innerSizer->Add(m_rtlParentSizer, 0, wxALIGN_LEFT, 5);
+
+    m_rtlCtrl = new wxCheckBox( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_RIGHT_TO_LEFT, _("Rig&ht-to-left"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+    m_rtlCtrl->SetValue(false);
+    m_rtlCtrl->SetHelpText(_("Check to indicate right-to-left text layout."));
+    if (wxRichTextFontPage::ShowToolTips())
+        m_rtlCtrl->SetToolTip(_("Check to indicate right-to-left text layout."));
+    m_rtlParentSizer->Add(m_rtlCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    m_suppressHyphenationCtrl = new wxCheckBox( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_SUBSCRIPT_SUPPRESS_HYPHENATION, _("Suppress hyphe&nation"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+    m_suppressHyphenationCtrl->SetValue(false);
+    m_suppressHyphenationCtrl->SetHelpText(_("Check to suppress hyphenation."));
+    if (wxRichTextFontPage::ShowToolTips())
+        m_suppressHyphenationCtrl->SetToolTip(_("Check to suppress hyphenation."));
+    m_rtlParentSizer->Add(m_suppressHyphenationCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+
+    m_innerSizer->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL, 5);
 
     m_previewCtrl = new wxRichTextFontPreviewCtrl( itemRichTextDialogPage1, ID_RICHTEXTFONTPAGE_PREVIEWCTRL, wxDefaultPosition, wxSize(100, 60), 0 );
     m_previewCtrl->SetHelpText(_("Shows a preview of the font settings."));
     if (wxRichTextFontPage::ShowToolTips())
         m_previewCtrl->SetToolTip(_("Shows a preview of the font settings."));
-    itemBoxSizer3->Add(m_previewCtrl, 0, wxGROW|wxALL, 5);
+    m_innerSizer->Add(m_previewCtrl, 0, wxGROW|wxALL, 5);
 
 ////@end wxRichTextFontPage content construction
+
+    if ((GetAllowedTextEffects() & wxTEXT_ATTR_EFFECT_RTL) == 0)
+        m_rtlParentSizer->Show(m_rtlCtrl, false);
+    if ((GetAllowedTextEffects() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION) == 0)
+        m_rtlParentSizer->Show(m_suppressHyphenationCtrl, false);
+
+    if ((GetAllowedTextEffects() & (wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION|wxTEXT_ATTR_EFFECT_RTL)) == 0)        
+        m_innerSizer->Show(m_rtlParentSizer, false);
 
     m_faceListBox->UpdateFonts();
 
@@ -499,6 +515,42 @@ bool wxRichTextFontPage::TransferDataFromWindow()
         attr->SetTextEffects(attr->GetTextEffects() & ~(wxTEXT_ATTR_EFFECT_SUBSCRIPT|wxTEXT_ATTR_EFFECT_SUPERSCRIPT) );
     }
 
+    if (GetAllowedTextEffects() & wxTEXT_ATTR_EFFECT_RTL)
+    {
+        if (m_rtlCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
+        {
+            attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_RTL);
+
+            if (m_rtlCtrl->Get3StateValue() == wxCHK_CHECKED)
+                attr->SetTextEffects(attr->GetTextEffects() | wxTEXT_ATTR_EFFECT_RTL);
+            else
+                attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_RTL);
+        }
+        else
+        {
+            attr->SetTextEffectFlags(attr->GetTextEffectFlags() & ~wxTEXT_ATTR_EFFECT_RTL);
+            attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_RTL);
+        }
+    }
+
+    if (GetAllowedTextEffects() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION)
+    {
+        if (m_suppressHyphenationCtrl->Get3StateValue() != wxCHK_UNDETERMINED)
+        {
+            attr->SetTextEffectFlags(attr->GetTextEffectFlags() | wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION);
+
+            if (m_suppressHyphenationCtrl->Get3StateValue() == wxCHK_CHECKED)
+                attr->SetTextEffects(attr->GetTextEffects() | wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION);
+            else
+                attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION);
+        }
+        else
+        {
+            attr->SetTextEffectFlags(attr->GetTextEffectFlags() & ~wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION);
+            attr->SetTextEffects(attr->GetTextEffects() & ~wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION);
+        }
+    }
+
     if (attr->GetTextEffectFlags() == 0)
         attr->SetFlags(attr->GetFlags() & ~wxTEXT_ATTR_EFFECTS);
 
@@ -659,6 +711,32 @@ bool wxRichTextFontPage::TransferDataToWindow()
             m_superscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
             m_subscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         }
+
+        if (GetAllowedTextEffects() & wxTEXT_ATTR_EFFECT_RTL)
+        {
+            if (attr->GetTextEffectFlags() & wxTEXT_ATTR_EFFECT_RTL)
+            {
+                if (attr->GetTextEffects() & wxTEXT_ATTR_EFFECT_RTL)
+                    m_rtlCtrl->Set3StateValue(wxCHK_CHECKED);
+                else
+                    m_rtlCtrl->Set3StateValue(wxCHK_UNCHECKED);
+            }
+            else
+                m_rtlCtrl->Set3StateValue(wxCHK_UNDETERMINED);        
+        }
+
+        if (GetAllowedTextEffects() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION)
+        {
+            if (attr->GetTextEffectFlags() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION)
+            {
+                if (attr->GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION)
+                    m_suppressHyphenationCtrl->Set3StateValue(wxCHK_CHECKED);
+                else
+                    m_suppressHyphenationCtrl->Set3StateValue(wxCHK_UNCHECKED);
+            }
+            else
+                m_suppressHyphenationCtrl->Set3StateValue(wxCHK_UNDETERMINED);        
+        }
     }
     else
     {
@@ -667,6 +745,8 @@ bool wxRichTextFontPage::TransferDataToWindow()
         m_smallCapitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         m_superscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
         m_subscriptCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+        m_rtlCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+        m_suppressHyphenationCtrl->Set3StateValue(wxCHK_UNDETERMINED);
     }
 
     UpdatePreview();
