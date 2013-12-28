@@ -24,10 +24,16 @@
        @li wxImagePixelData: Class to access to wxImage's internal data with
            alpha channel (RGBA).
 
+    wxMSW note: efficient access is only possible to the bits of the so called
+    device independent bitmaps (DIB) under MSW. To ensure that wxBitmap uses a
+    DIB internally and not a device dependent bitmap (DDB), you need to pass an
+    explicit depth to its ctor, i.e. either 24 or 32, as by default wxBitmap
+    creates a DDB of the screen depth.
+
     Example:
 
     @code
-    wxBitmap bmp;
+    wxBitmap bmp(width, size, 24); // explicit depth important under MSW
     wxNativePixelData data(bmp);
     if ( !data )
     {
