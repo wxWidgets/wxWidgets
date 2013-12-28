@@ -242,6 +242,8 @@ void wxBitmapRefData::Free()
         {
             wxLogLastError(wxT("DeleteObject(hbitmap)"));
         }
+
+        m_hBitmap = 0;
     }
 
     wxDELETE(m_bitmapMask);
@@ -1329,7 +1331,8 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
         wxDIB *dib = GetBitmapData()->m_dib;
         GetBitmapData()->m_dib = NULL;
 
-        // TODO: convert
+        GetBitmapData()->Free();
+        GetBitmapData()->CopyFromDIB(*dib);
 
         delete dib;
     }
