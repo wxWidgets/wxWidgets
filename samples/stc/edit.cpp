@@ -112,6 +112,8 @@ BEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
     EVT_STC_KEY( wxID_ANY , Edit::OnKey )
+
+    EVT_KEY_DOWN( Edit::OnKeyDown )
 END_EVENT_TABLE()
 
 Edit::Edit (wxWindow *parent, wxWindowID id,
@@ -208,6 +210,22 @@ void Edit::OnEditClear (wxCommandEvent &WXUNUSED(event)) {
 void Edit::OnKey (wxStyledTextEvent &WXUNUSED(event))
 {
     wxMessageBox("OnKey");
+}
+
+void Edit::OnKeyDown (wxKeyEvent &event)
+{
+    if (CallTipActive())
+        CallTipCancel();
+    if (event.GetKeyCode() == WXK_SPACE && event.ControlDown() && event.ShiftDown())
+    {
+        int pos = GetCurrentPos();
+        CallTipSetBackground(*wxYELLOW);
+        CallTipShow(pos,
+                    "This is a CallTip with multiple lines.\n"
+                    "It is meant to be a context sensitive popup helper for the user.");
+        return;
+    }
+    event.Skip();
 }
 
 void Edit::OnEditCut (wxCommandEvent &WXUNUSED(event)) {
