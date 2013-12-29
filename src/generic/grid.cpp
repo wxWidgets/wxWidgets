@@ -8169,8 +8169,9 @@ void wxGrid::SetRowSize( int row, int height )
         dc.SetFont(GetLabelFont());
         StringToLines(GetRowLabelValue( row ), lines);
         GetTextBoxSize( dc, lines, &w, &h );
-        //check that it is not less than the minimal height
-        height = wxMax(h, GetRowMinimalAcceptableHeight());
+
+        // As with the columns, don't make the row smaller than minimal height.
+        height = wxMax(h, GetRowMinimalHeight(row));
     }
 
     DoSetRowSize(row, height);
@@ -8250,8 +8251,14 @@ void wxGrid::SetColSize( int col, int width )
         else
             GetTextBoxSize( dc, lines, &h, &w );
         width = w + 6;
-        //check that it is not less than the minimal width
-        width = wxMax(width, GetColMinimalAcceptableWidth());
+
+        // Check that it is not less than the minimal width and do use the
+        // possibly greater than minimal-acceptable-width minimal-width itself
+        // here as we shouldn't become too small when auto-sizing, otherwise
+        // the column could be resized to be too small by double clicking its
+        // divider line (which ends up in a call to this function) even though
+        // it couldn't be resized to this size by dragging it.
+        width = wxMax(width, GetColMinimalWidth(col));
     }
 
     DoSetColSize(col, width);
