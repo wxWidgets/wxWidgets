@@ -308,10 +308,20 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
         return;
     }
 
+#if wxUSE_UNICODE
+    // We only filter normal, printable characters.
+    int keyCode = event.GetUnicodeKey();
+#else // !wxUSE_UNICODE
     int keyCode = event.GetKeyCode();
+    if (keyCode > WXK_START)
+    {
+        event.Skip();
+        return;
+    }
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // we don't filter special keys and delete
-    if (keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode >= WXK_START)
+    if (keyCode < WXK_SPACE || keyCode == WXK_DELETE)
     {
         event.Skip();
         return;
