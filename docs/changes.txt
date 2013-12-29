@@ -14,3 +14,7 @@ All (GUI):
 - XRC handler for wxAuiToolBar added (Kinaou Hervé).
 - Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
+
+wxMSW:
+
+- Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
