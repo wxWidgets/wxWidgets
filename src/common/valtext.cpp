@@ -308,6 +308,11 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
     if (!m_validatorWindow)
         return;
 
+    // Don't process the accelerators, i.e. any keys with any modifiers except
+    // for Shift.
+    if ( event.GetModifiers() & ~wxMOD_SHIFT )
+        return;
+
 #if wxUSE_UNICODE
     // We only filter normal, printable characters.
     int keyCode = event.GetUnicodeKey();

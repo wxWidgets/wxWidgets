@@ -15,6 +15,10 @@ All (GUI):
 - Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
 
+wxGTK:
+
+- Don't intercept accelerators in wxTextValidator.
+
 wxMSW:
 
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
