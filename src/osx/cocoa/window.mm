@@ -2689,14 +2689,36 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
     bool result = false;
     wxWindowMac* peer = GetWXPeer();
+    int length = [text length];
     if ( peer )
     {
-        for (NSUInteger i = 0; i < [text length]; ++i)
+        for (NSUInteger i = 0; i < length; ++i)
         {
             wxKeyEvent wxevent(wxEVT_CHAR);
-            wxevent.m_shiftDown = wxevent.m_controlDown = wxevent.m_altDown = wxevent.m_metaDown = false;
-            wxevent.m_rawCode = 0;
-            wxevent.m_rawFlags = 0;
+            
+            // if we have exactly one character resulting from the event, then
+            // set the corresponding modifiers and raw data from the nsevent
+            // otherwise leave these at defaults, as they probably would be incorrect
+            // anyway (IME input)
+            
+            if ( event != nil && length == 1)
+            {
+                UInt32 modifiers = [event modifierFlags] ;
+                wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
+                wxevent.m_rawControlDown = modifiers & NSControlKeyMask;
+                wxevent.m_altDown = modifiers & NSAlternateKeyMask;
+                wxevent.m_controlDown = modifiers & NSCommandKeyMask;
+            
+                wxevent.m_rawCode = [event keyCode];
+                wxevent.m_rawFlags = modifiers;
+            }
+            else
+            {
+                wxevent.m_shiftDown = wxevent.m_controlDown = wxevent.m_altDown = wxevent.m_metaDown = false;
+                wxevent.m_rawCode = 0;
+                wxevent.m_rawFlags = 0;
+            }
+            
             if ( event )
                 wxevent.SetTimestamp( (int)([event timestamp] * 1000) ) ;
             unichar aunichar = [text characterAtIndex:i];
