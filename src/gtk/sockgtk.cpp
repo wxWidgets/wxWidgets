@@ -46,11 +46,14 @@ class GTKFDIOManager : public wxFDIOManager
 public:
     virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d)
     {
-        return g_io_add_watch(
-            g_io_channel_unix_new(fd),
+        GIOChannel* channel = g_io_channel_unix_new(fd);
+        unsigned id = g_io_add_watch(
+            channel,
             d == OUTPUT ? G_IO_OUT : G_IO_IN,
             wxSocket_Input,
             handler);
+        g_io_channel_unref(channel);
+        return id;
     }
 
     virtual void

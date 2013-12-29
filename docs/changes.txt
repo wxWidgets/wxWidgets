@@ -593,6 +593,7 @@ All (GUI):
 wxGTK:
 
 - Fix mouse wheel scrolling in wxListCtrl broken just before 3.0.0.
+- Fix memory leak in wxSocket
 
 wxMSW:
 
