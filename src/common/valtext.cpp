@@ -162,9 +162,9 @@ bool wxTextValidator::Validate(wxWindow *parent)
     if ( HasFlag(wxFILTER_EMPTY) && val.empty() )
         errormsg = _("Required information entry is empty.");
     else if ( HasFlag(wxFILTER_INCLUDE_LIST) && m_includes.Index(val) == wxNOT_FOUND )
-        errormsg = wxString::Format(_("'%s' is invalid"), val);
+        errormsg = wxString::Format(_("'%s' is not one of the valid strings"), val);
     else if ( HasFlag(wxFILTER_EXCLUDE_LIST) && m_excludes.Index(val) != wxNOT_FOUND )
-        errormsg = wxString::Format(_("'%s' is invalid"), val);
+        errormsg = wxString::Format(_("'%s' is one of the invalid strings"), val);
     else if ( !(errormsg = IsValid(val)).empty() )
     {
         // NB: this format string should always contain exactly one '%s'
@@ -251,9 +251,9 @@ wxString wxTextValidator::IsValid(const wxString& val) const
     if ( HasFlag(wxFILTER_NUMERIC) && !wxIsNumeric(val) )
         return _("'%s' should be numeric.");
     if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) && !ContainsOnlyIncludedCharacters(val) )
-        return _("'%s' is invalid");
+        return _("'%s' doesn't consist only of valid characters");
     if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) && ContainsExcludedCharacters(val) )
-        return _("'%s' is invalid");
+        return _("'%s' contains illegal characters");
 
     return wxEmptyString;
 }
