@@ -1544,6 +1544,45 @@ class wxListView : public wxListCtrl
 {
 public:
     /**
+       Default constructor.
+    */
+    wxListView();
+
+    /**
+        Constructor, creating and showing a listview control.
+
+        @param parent
+            Parent window. Must not be @NULL.
+        @param id
+            Window identifier. The value wxID_ANY indicates a default value.
+        @param pos
+            Window position.
+            If ::wxDefaultPosition is specified then a default position is chosen.
+        @param size
+            Window size.
+            If ::wxDefaultSize is specified then the window is sized appropriately.
+        @param style
+            Window style. See wxListCtrl.
+        @param validator
+            Window validator.
+        @param name
+            Window name.
+
+        @see Create(), wxValidator
+    */
+    wxListView(wxWindow* parent, wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxLC_ICON,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxListCtrlNameStr);
+
+    /**
+        Destructor, destroying the listview control.
+    */
+    virtual ~wxListView();
+
+    /**
         Resets the column image -- after calling this function, no image will be shown.
 
         @param col
