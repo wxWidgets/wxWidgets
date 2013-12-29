@@ -2703,14 +2703,7 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
             
             if ( event != nil && length == 1)
             {
-                UInt32 modifiers = [event modifierFlags] ;
-                wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
-                wxevent.m_rawControlDown = modifiers & NSControlKeyMask;
-                wxevent.m_altDown = modifiers & NSAlternateKeyMask;
-                wxevent.m_controlDown = modifiers & NSCommandKeyMask;
-            
-                wxevent.m_rawCode = [event keyCode];
-                wxevent.m_rawFlags = modifiers;
+                SetupKeyEvent(wxevent,event,text);
             }
             else
             {
