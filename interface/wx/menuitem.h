@@ -258,6 +258,17 @@ public:
     */
     wxColour& GetTextColour() const;
     
+    /**
+       Extract the accelerator from the given menu string, return NULL if none
+       found.
+    */
+    static wxAcceleratorEntry *GetAccelFromString(const wxString& label);
+
+    /**
+       Get our accelerator or NULL (caller must delete the pointer)
+    */
+    virtual wxAcceleratorEntry *GetAccel() const;
+
     //@}
     
     
@@ -467,6 +478,12 @@ public:
     */
     void SetTextColour(const wxColour& colour);
     
+    /**
+       Set the accel for this item - this may also be done indirectly with
+       SetText()
+    */
+    virtual void SetAccel(wxAcceleratorEntry *accel);
+
     //@}
 };
 
