@@ -12,21 +12,24 @@
 #define _WX_WEBKIT_H
 
 /**
- @class wxWebKitCtrl
+    @class wxWebKitCtrl
 
- This control is a native wrapper around the Safari web browsing engine. This wrapper
- differs from the one in wxWebView in that this version supports functionality specific to
- WebKit, such as having RunScript return a value, which is a very critical feature in many
- web embedding scenarios.
- **/
+    This control is a native wrapper around the Safari web browsing
+    engine. This wrapper differs from the one in wxWebView in that this
+    version supports functionality specific to WebKit, such as having
+    RunScript return a value, which is a very critical feature in many web
+    embedding scenarios.
+
+    This class is only available on OSX.
+**/
 
 class wxWebKitCtrl : public wxControl
 {
 public:
 
-    wxWebKitCtrl() {}
+    wxWebKitCtrl();
     wxWebKitCtrl(wxWindow *parent,
-                    wxWindowID winID,
+                    wxWindowID winid,
                     const wxString& strURL,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
@@ -34,7 +37,7 @@ public:
                  const wxString& name = wxWebKitCtrlNameStr);
     
     bool Create(wxWindow *parent,
-                wxWindowID winID,
+                wxWindowID winid,
                 const wxString& strURL,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
@@ -89,7 +92,7 @@ enum {
     wxWEBKIT_STATE_REDIRECTING = 4,
     wxWEBKIT_STATE_TRANSFERRING = 8,
     wxWEBKIT_STATE_STOP = 16,
-        wxWEBKIT_STATE_FAILED = 32
+    wxWEBKIT_STATE_FAILED = 32
 };
 
 enum {
@@ -107,12 +110,12 @@ enum {
 class wxWebKitBeforeLoadEvent : public wxCommandEvent
 {
 public:
-    bool IsCancelled() { return m_cancelled; }
-    void Cancel(bool cancel = true) { m_cancelled = cancel; }
-    wxString GetURL() { return m_url; }
-    void SetURL(const wxString& url) { m_url = url; }
-    void SetNavigationType(int navType) { m_navType = navType; }
-    int GetNavigationType() { return m_navType; }
+    bool IsCancelled();
+    void Cancel(bool cancel = true);
+    wxString GetURL();
+    void SetURL(const wxString& url);
+    void SetNavigationType(int navType);
+    int GetNavigationType();
 
     wxWebKitBeforeLoadEvent( wxWindow* win = 0 );
 };
@@ -120,10 +123,10 @@ public:
 class wxWebKitStateChangedEvent : public wxCommandEvent
 {
 public:
-    int GetState() { return m_state; }
-    void SetState(const int state) { m_state = state; }
-    wxString GetURL() { return m_url; }
-    void SetURL(const wxString& url) { m_url = url; }
+    int GetState();
+    void SetState(const int state);
+    wxString GetURL();
+    void SetURL(const wxString& url);
 
     wxWebKitStateChangedEvent( wxWindow* win = 0 );
 };
@@ -132,10 +135,10 @@ public:
 class wxWebKitNewWindowEvent : public wxCommandEvent
 {
 public:
-    wxString GetURL() const { return m_url; }
-    void SetURL(const wxString& url) { m_url = url; }
-    wxString GetTargetName() const { return m_targetName; }
-    void SetTargetName(const wxString& name) { m_targetName = name; }
+    wxString GetURL() const;
+    void SetURL(const wxString& url);
+    wxString GetTargetName() const;
+    void SetTargetName(const wxString& name);
 
     wxWebKitNewWindowEvent( wxWindow* win = 0 );
 };
