@@ -32,6 +32,7 @@
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
 #include "wx/dnd.h"
+#include "wx/frame.h"
 
 #if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
     #include "wx/beforestd.h"
@@ -91,7 +92,6 @@ void  wxSTCDropTarget::OnLeave() {
 #include "wx/popupwin.h"
 #define wxSTCCallTipBase wxPopupWindow
 #else
-#include "wx/frame.h"
 #define wxSTCCallTipBase wxFrame
 #endif
 
@@ -101,7 +101,13 @@ class wxSTCCallTip : public wxSTCCallTipBase {
 public:
     wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
 #if wxUSE_POPUPWIN
-        wxSTCCallTipBase(parent, wxBORDER_NONE),
+        wxSTCCallTipBase(parent, wxBORDER_NONE
+#ifdef __WXMAC__
+                                 // Workaround to avoid crash on OSX.  Remove when the fix lands in wx.
+                                 // See ticket #15765
+                                 | wxFRAME_TOOL_WINDOW  
+#endif
+                                ),
 #else
         wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                          wxFRAME_NO_TASKBAR
