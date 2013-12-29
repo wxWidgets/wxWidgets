@@ -455,6 +455,14 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
                 break ;
         }
     }
+    else
+    {
+        long keycode = wxOSXTranslateCocoaKey( nsEvent, wxEVT_CHAR );
+        if ( (keycode > 0 && keycode < WXK_SPACE) || keycode == WXK_DELETE || keycode >= WXK_START )
+        {
+            keyval = keycode;
+        }
+    }
 
     if ( !keyval )
     {
@@ -1412,15 +1420,9 @@ void wxWidgetCocoaImpl::doCommandBySelector(void* sel, WXWidget slf, void* _cmd)
         {
             // Generate wxEVT_CHAR if wxEVT_KEY_DOWN is not handled.
 
-            long keycode = wxOSXTranslateCocoaKey( m_lastKeyDownEvent, wxEVT_CHAR );
-
             wxKeyEvent wxevent2(wxevent) ;
             wxevent2.SetEventType(wxEVT_CHAR);
             SetupKeyEvent( wxevent2, m_lastKeyDownEvent );
-            if ( (keycode > 0 && keycode < WXK_SPACE) || keycode == WXK_DELETE || keycode >= WXK_START )
-            {
-                wxevent2.m_keyCode = keycode;
-            }
             GetWXPeer()->OSXHandleKeyEvent(wxevent2);
         }
     }
@@ -2710,18 +2712,19 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
                 wxevent.m_shiftDown = wxevent.m_controlDown = wxevent.m_altDown = wxevent.m_metaDown = false;
                 wxevent.m_rawCode = 0;
                 wxevent.m_rawFlags = 0;
-            }
-            
-            if ( event )
-                wxevent.SetTimestamp( (int)([event timestamp] * 1000) ) ;
-            unichar aunichar = [text characterAtIndex:i];
-    #if wxUSE_UNICODE
-            wxevent.m_uniChar = aunichar;
-    #endif
-            wxevent.m_keyCode = aunichar < 0x80 ? aunichar : WXK_NONE;
 
-            wxevent.SetEventObject(peer);
-            wxevent.SetId(peer->GetId());
+                unichar aunichar = [text characterAtIndex:i];
+#if wxUSE_UNICODE
+                wxevent.m_uniChar = aunichar;
+#endif
+                wxevent.m_keyCode = aunichar < 0x80 ? aunichar : WXK_NONE;
+                
+                wxevent.SetEventObject(peer);
+                wxevent.SetId(peer->GetId());
+
+                if ( event )
+                    wxevent.SetTimestamp( (int)([event timestamp] * 1000) ) ;
+            }
             
             result = peer->OSXHandleKeyEvent(wxevent) || result;
         }
