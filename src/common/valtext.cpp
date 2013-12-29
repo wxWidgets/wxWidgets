@@ -302,11 +302,11 @@ void wxTextValidator::SetCharExcludes(const wxString& chars)
 
 void wxTextValidator::OnChar(wxKeyEvent& event)
 {
+    // Let the event propagate by default.
+    event.Skip();
+
     if (!m_validatorWindow)
-    {
-        event.Skip();
         return;
-    }
 
 #if wxUSE_UNICODE
     // We only filter normal, printable characters.
@@ -314,30 +314,22 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 #else // !wxUSE_UNICODE
     int keyCode = event.GetKeyCode();
     if (keyCode > WXK_START)
-    {
-        event.Skip();
         return;
-    }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // we don't filter special keys and delete
     if (keyCode < WXK_SPACE || keyCode == WXK_DELETE)
-    {
-        event.Skip();
         return;
-    }
 
     wxString str((wxUniChar)keyCode, 1);
-    if (!IsValid(str).empty())
-    {
-        if ( !wxValidator::IsSilent() )
-            wxBell();
-
-        // eat message
+    if (IsValid(str).empty())
         return;
-    }
-    else
-        event.Skip();
+
+    if ( !wxValidator::IsSilent() )
+        wxBell();
+
+    // eat message
+    event.Skip(false);
 }
 
 
