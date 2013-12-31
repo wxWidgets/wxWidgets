@@ -129,6 +129,16 @@ public:
      */
     explicit wxScopedArray(T * array = NULL);
 
+    /**
+        Constructor allocating a new array of the specified size.
+
+        @param count
+            The number of elements to allocate.
+
+        @since 3.1.0
+     */
+    explicit wxScopedArray(size_t count);
+
     /// Destructor destroy the array.
     ~wxScopedArray();
 

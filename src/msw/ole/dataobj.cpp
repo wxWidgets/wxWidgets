@@ -894,7 +894,7 @@ STDMETHODIMP wxIDataObject::EnumFormatEtc(DWORD dwDir,
         nFormatCount = wx_truncate_cast(ULONG, ourFormatCount + sysFormatCount);
 
     // fill format array with formats ...
-    wxScopedArray<wxDataFormat> formats(new wxDataFormat[nFormatCount]);
+    wxScopedArray<wxDataFormat> formats(nFormatCount);
 
     // ... from content data (supported formats)
     m_pDataObject->GetAllFormats(formats.get(), dir);

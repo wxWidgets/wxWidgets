@@ -264,7 +264,7 @@ void wxClipboardCallback( Widget xwidget, long* data_id,
 
     wxCharBuffer buffer(size);
     size_t count = dobj->GetFormatCount( wxDataObject::Get );
-    wxDataFormatScopedArray dfarr( new wxDataFormat[count] );
+    wxDataFormatScopedArray dfarr(count);
     dobj->GetAllFormats( dfarr.get(), wxDataObject::Get );
 
     if( !dobj->GetDataHere( dfarr[*priv], buffer.data() ) )
@@ -300,7 +300,7 @@ bool wxClipboard::AddData( wxDataObject *data )
         return false;
 
     size_t count = data->GetFormatCount( wxDataObject::Get );
-    wxDataFormatScopedArray dfarr( new wxDataFormat[count] );
+    wxDataFormatScopedArray dfarr(count);
     data->GetAllFormats( dfarr.get(), wxDataObject::Get );
 
     for( size_t i = 0; i < count; ++i )
@@ -413,7 +413,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     int count;
     unsigned long max_name_length;
     size_t dfcount = data.GetFormatCount( wxDataObject::Set );
-    wxDataFormatScopedArray dfarr( new wxDataFormat[dfcount] );
+    wxDataFormatScopedArray dfarr(dfcount);
     data.GetAllFormats( dfarr.get(), wxDataObject::Set );
 
     if( XmClipboardInquireCount( xdisplay, xwindow, &count, &max_name_length )

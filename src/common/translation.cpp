@@ -138,7 +138,7 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
                                                  NULL,
                                                  &bufferSize) )
         {
-            wxScopedArray<WCHAR> langs(new WCHAR[bufferSize]);
+            wxScopedArray<WCHAR> langs(bufferSize);
             if ( (*s_pfnGetUserPreferredUILanguages)(MUI_LANGUAGE_NAME,
                                                      &numLangs,
                                                      langs.get(),
