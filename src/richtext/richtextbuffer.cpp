@@ -200,7 +200,7 @@ bool wxRichTextFloatCollector::GetFloatingObjects(wxRichTextObjectList& objects)
 
 /*
  * Binary search helper function
- * The argument point is the Y coordinate, and this fuction
+ * The argument point is the Y coordinate, and this function
  * always return the floating rect that contain this coordinate
  * or under this coordinate.
  */
@@ -1435,7 +1435,7 @@ bool wxRichTextCompositeObject::DeleteRange(const wxRichTextRange& range)
         // now match the ranges.
         // However, so long as deletion is not done on the same object twice this is OK.
         // If you may delete content from the same object twice, recalculate
-        // the ranges inbetween DeleteRange calls by calling CalculateRanges, and
+        // the ranges between DeleteRange calls by calling CalculateRanges, and
         // adjust the range you're deleting accordingly.
 
         if (!obj->GetRange().IsOutside(range))
@@ -5208,7 +5208,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
     //wxASSERT(!(lastCompletedEndPos != -1 && lastCompletedEndPos < GetRange().GetEnd()-1));
 
     // Add the last line - it's the current pos -> last para pos
-    // Substract -1 because the last position is always the end-paragraph position.
+    // Subtract -1 because the last position is always the end-paragraph position.
     if (lastCompletedEndPos <= GetRange().GetEnd()-1)
     {
         int startOffset = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
@@ -9497,7 +9497,7 @@ bool wxRichTextCell::AdjustAttributes(wxRichTextAttr& attr, wxRichTextDrawingCon
 
             // Compute right border
 
-            // We need to explicity look at the spans, not just whether
+            // We need to explicitly look at the spans, not just whether
             // the cell is visible, because that doesn't tell us which
             // cell to look at for border information.
             wxRichTextCell* adjacentCellRight = NULL;
