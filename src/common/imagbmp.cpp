@@ -586,8 +586,12 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
             if (hasPalette)
             {
                 if ( !stream.ReadAll(bbuf, 4) )
+                {
+                    delete [] r;
+                    delete [] g;
+                    delete [] b;
                     return false;
-
+                }
                 cmap[j].b = bbuf[0];
                 cmap[j].g = bbuf[1];
                 cmap[j].r = bbuf[2];
