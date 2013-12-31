@@ -33,6 +33,7 @@
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
 #include "wx/scopeguard.h"
+#include "wx/scopedarray.h"
 #include "wx/anidecod.h"
 
 // For memcpy
@@ -578,9 +579,10 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     // Reading the palette, if it exists:
     if ( bpp < 16 && ncolors != 0 )
     {
-        unsigned char* r = new unsigned char[ncolors];
-        unsigned char* g = new unsigned char[ncolors];
-        unsigned char* b = new unsigned char[ncolors];
+        wxScopedArray<unsigned char>
+             r(ncolors),
+             g(ncolors),
+             b(ncolors);
         for (int j = 0; j < ncolors; j++)
         {
             if (hasPalette)
@@ -607,12 +609,8 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
 
 #if wxUSE_PALETTE
         // Set the palette for the wxImage
-        image->SetPalette(wxPalette(ncolors, r, g, b));
+        image->SetPalette(wxPalette(ncolors, r.get(), g.get(), b.get()));
 #endif // wxUSE_PALETTE
-
-        delete[] r;
-        delete[] g;
-        delete[] b;
     }
     else if ( bpp == 16 || bpp == 32 )
     {
