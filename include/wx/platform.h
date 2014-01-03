@@ -176,6 +176,38 @@
 #   include "wx/android/config_android.h"
 #endif
 
+
+/*
+   adjust the Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
+   and is used by wxWidgets, _UNICODE and/or UNICODE may be defined or used by
+   the system headers so bring these settings in sync
+
+   Notice that this must be done before wx/compiler.h inclusion as some
+   compiler-specific headers (_mingw.h) included from there depend on UNICODE
+   being defined correctly.
+ */
+
+/* set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined */
+#if defined(_UNICODE) || defined(UNICODE)
+#   undef wxUSE_UNICODE
+#   define wxUSE_UNICODE 1
+#else /* !UNICODE */
+#   ifndef wxUSE_UNICODE
+#       define wxUSE_UNICODE 0
+#   endif
+#endif /* UNICODE/!UNICODE */
+
+/* and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1 */
+#if wxUSE_UNICODE
+#   ifndef _UNICODE
+#       define _UNICODE
+#   endif
+#   ifndef UNICODE
+#       define UNICODE
+#   endif
+#endif /* wxUSE_UNICODE */
+
+
 #include "wx/compiler.h"
 
 /*
@@ -224,33 +256,6 @@
         #define __ALPHA__
     #endif
 #endif /* alpha */
-
-
-/*
-   adjust the Unicode setting: wxUSE_UNICODE should be defined as 0 or 1
-   and is used by wxWidgets, _UNICODE and/or UNICODE may be defined or used by
-   the system headers so bring these settings in sync
- */
-
-/* set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined */
-#if defined(_UNICODE) || defined(UNICODE)
-#   undef wxUSE_UNICODE
-#   define wxUSE_UNICODE 1
-#else /* !UNICODE */
-#   ifndef wxUSE_UNICODE
-#       define wxUSE_UNICODE 0
-#   endif
-#endif /* UNICODE/!UNICODE */
-
-/* and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1 */
-#if wxUSE_UNICODE
-#   ifndef _UNICODE
-#       define _UNICODE
-#   endif
-#   ifndef UNICODE
-#       define UNICODE
-#   endif
-#endif /* wxUSE_UNICODE */
 
 
 /*
