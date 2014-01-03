@@ -1428,6 +1428,11 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     }
 #else
     GdkPixbuf *pixbuf = GetPixbuf();
+
+    // Pixmap will get out of date when our pixbuf is accessed directly, so
+    // ensure we don't keep the old data in it.
+    PurgeOtherRepresentations(Pixbuf);
+
     const bool hasAlpha = HasAlpha();
 
     // allow access if bpp is valid and matches existence of alpha

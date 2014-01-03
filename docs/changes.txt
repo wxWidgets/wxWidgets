@@ -593,7 +593,8 @@ All (GUI):
 wxGTK:
 
 - Fix mouse wheel scrolling in wxListCtrl broken just before 3.0.0.
-- Fix memory leak in wxSocket
+- Fix memory leak in wxSocket.
+- Fix raw access to wxBitmap pixels after drawing on it using wxMemoryDC.
 
 wxMSW:
 
