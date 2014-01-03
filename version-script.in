@@ -26,6 +26,7 @@
         *wxDataViewListCtrl*ClearColumns*;
         *wxDataViewListStore*ClearColumns*;
         *wxInfoBarGeneric*SetForegroundColour*;
+        *wxTDIChildFrame*DoMoveWindow*;
 };
 
 # symbols available since the beginning of this branch are only given

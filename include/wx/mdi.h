@@ -302,6 +302,11 @@ protected:
         wxWindow::DoSetClientSize(width, height);
     }
 
+    virtual void DoMoveWindow(int x, int y, int width, int height)
+    {
+        wxWindow::DoMoveWindow(x, y, width, height);
+    }
+
     // no size hints
     virtual void DoSetSizeHints(int WXUNUSED(minW), int WXUNUSED(minH),
                                 int WXUNUSED(maxW), int WXUNUSED(maxH),
