@@ -73,7 +73,7 @@ static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
 #else
     dc.SetLogicalFunction(wxINVERT);
 
-    dc.SetPen(wxPen(*wxBLACK,1,wxDOT));
+    dc.SetPen(wxPen(*wxBLACK,1,wxPENSTYLE_DOT));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.DrawRectangle(rect);
