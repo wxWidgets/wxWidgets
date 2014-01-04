@@ -5016,6 +5016,7 @@ bool wxDataViewCtrl::ClearColumns()
 {
     SetExpanderColumn(NULL);
     m_cols.Clear();
+    m_sortingColumnIdx = wxNOT_FOUND;
     m_colsBestWidths.clear();
 
     m_clientArea->ClearCurrentColumn();
