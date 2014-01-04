@@ -702,11 +702,6 @@ bool wxNotebook::InsertPage(size_t nPage,
 
     // hide the page: unless it is selected, it shouldn't be shown (and if it
     // is selected it will be shown later)
-    HWND hwnd = GetWinHwnd(pPage);
-    SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_VISIBLE);
-
-    // this updates internal flag too -- otherwise it would get out of sync
-    // with the real state
     pPage->Show(false);
 
 
