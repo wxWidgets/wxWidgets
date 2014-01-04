@@ -226,13 +226,6 @@ bool wxPathList::EnsureFileAccessible (const wxString& path)
     return Add(wxPathOnly(path));
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-bool wxPathList::Member (const wxString& path) const
-{
-    return Index(path) != wxNOT_FOUND;
-}
-#endif
-
 wxString wxPathList::FindValidPath (const wxString& file) const
 {
     // normalize the given string as it could be a path + a filename
@@ -1501,13 +1494,6 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
 #endif
     // __WXWINCE__
 }
-
-#if WXWIN_COMPATIBILITY_2_6
-wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
-{
-    return wxDoGetCwd(buf,sz);
-}
-#endif // WXWIN_COMPATIBILITY_2_6
 
 wxString wxGetCwd()
 {

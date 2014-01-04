@@ -84,20 +84,6 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
     #define wxTINY_CAPTION_VERT     wxTINY_CAPTION
 #endif
 
-#if WXWIN_COMPATIBILITY_2_6
-
-    // deprecated versions defined for compatibility reasons
-    #define wxRESIZE_BOX            wxMAXIMIZE_BOX
-    #define wxTHICK_FRAME           wxRESIZE_BORDER
-
-    // obsolete styles, unused any more
-    #define wxDIALOG_MODAL          0
-    #define wxDIALOG_MODELESS       0
-    #define wxNO_3D                 0
-    #define wxUSER_COLOURS          0
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // default style
 //
 // under Windows CE (at least when compiling with eVC 4) we should create

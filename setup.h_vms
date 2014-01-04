@@ -187,9 +187,9 @@ typedef pid_t GPid;
     #define wxUSE_GUI            1
 #endif
 
-#define WXWIN_COMPATIBILITY_2_6 1
-
 #define WXWIN_COMPATIBILITY_2_8 1
+
+#define WXWIN_COMPATIBILITY_3_0 1
 
 #define wxEVENTS_COMPATIBILITY_2_8 1
 

@@ -145,12 +145,6 @@ public:
 
     virtual void EnableBellOnNoMatch(bool on = true);
 
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete, don't use
-    wxDEPRECATED( int GetItemSpacing( bool isSmall ) const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
-
     // overridden base class virtuals
     // ------------------------------
 

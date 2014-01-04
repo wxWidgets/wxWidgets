@@ -186,18 +186,6 @@ public:
     // the topmost provider if platform_dependent = false
     static wxSize GetSizeHint(const wxArtClient& client, bool platform_dependent = false);
 
-#if WXWIN_COMPATIBILITY_2_6
-    // use the corresponding methods without redundant "Provider" suffix
-    static wxDEPRECATED( void PushProvider(wxArtProvider *provider) );
-    static wxDEPRECATED( void InsertProvider(wxArtProvider *provider) );
-    static wxDEPRECATED( bool PopProvider() );
-
-    // use Delete() if this is what you really need, or just delete the
-    // provider pointer, do not use Remove() as it does not delete the pointer
-    // unlike RemoveProvider() which does
-    static wxDEPRECATED( bool RemoveProvider(wxArtProvider *provider) );
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     friend class wxArtProviderModule;
 #if wxUSE_ARTPROVIDER_STD

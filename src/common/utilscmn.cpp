@@ -1161,30 +1161,6 @@ bool wxLaunchDefaultBrowser(const wxString& url, int flags)
 // Menu accelerators related functions
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_6
-wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
-{
-#if wxUSE_MENUS
-    wxString s = wxMenuItem::GetLabelText(in);
-#else
-    wxString str(in);
-    wxString s = wxStripMenuCodes(str);
-#endif // wxUSE_MENUS
-    if ( out )
-    {
-        // go smash their buffer if it's not big enough - I love char * params
-        memcpy(out, s.c_str(), s.length() * sizeof(wxChar));
-    }
-    else
-    {
-        out = new wxChar[s.length() + 1];
-        wxStrcpy(out, s.c_str());
-    }
-
-    return out;
-}
-#endif
-
 wxString wxStripMenuCodes(const wxString& in, int flags)
 {
     wxASSERT_MSG( flags, wxT("this is useless to call without any flags") );

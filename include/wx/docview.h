@@ -533,12 +533,6 @@ public:
     );
 #endif
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, use GetHistoryFilesCount() instead
-    wxDEPRECATED( size_t GetNoHistoryFiles() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
-
 protected:
     // Called when a file selected from the MRU list doesn't exist any more.
     // The default behaviour is to remove the file from the MRU and notify the
@@ -576,13 +570,6 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxDocManager)
     wxDECLARE_NO_COPY_CLASS(wxDocManager);
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-inline size_t wxDocManager::GetNoHistoryFiles() const
-{
-    return GetHistoryFilesCount();
-}
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // Base class for child frames -- this is what wxView renders itself into

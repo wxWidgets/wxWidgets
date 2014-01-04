@@ -24,19 +24,6 @@
 #include "wx/dynarray.h"
 #include "wx/itemid.h"
 
-#if WXWIN_COMPATIBILITY_2_6
-
-// flags for deprecated `Expand(int action)', will be removed in next versions
-enum
-{
-    wxTREE_EXPAND_EXPAND,
-    wxTREE_EXPAND_COLLAPSE,
-    wxTREE_EXPAND_COLLAPSE_RESET,
-    wxTREE_EXPAND_TOGGLE
-};
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // ----------------------------------------------------------------------------
 // wxTreeItemId identifies an element of the tree. It's opaque for the
 // application and the only method which can be used by user code is IsOk().
@@ -158,13 +145,6 @@ static const int wxTREE_ITEMSTATE_PREV  = -3;   // cycle to the previous state
 #else
     #define wxTR_DEFAULT_STYLE       (wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
 #endif
-
-#if WXWIN_COMPATIBILITY_2_6
-// deprecated, don't use
-#define wxTR_MAC_BUTTONS             0
-#define wxTR_AQUA_BUTTONS            0
-#endif // WXWIN_COMPATIBILITY_2_6
-
 
 // values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
 // where exactly the specified point is situated:

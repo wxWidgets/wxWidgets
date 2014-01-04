@@ -28,8 +28,8 @@ public:
           ,int             nWidth = 1
           ,wxPenStyle      nStyle = wxPENSTYLE_SOLID
          );
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( wxPen(const wxColour& col, int width, int style) );
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED( wxPen(const wxColour& col, int width, int style) );
 #endif
 
     wxPen( const wxBitmap& rStipple
@@ -68,8 +68,8 @@ public:
     int       GetDashCount() const;
     wxBitmap* GetStipple(void) const;
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( void SetStyle(int style) )
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED( void SetStyle(int style) )
         { SetStyle((wxPenStyle)style); }
 #endif
 

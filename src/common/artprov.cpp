@@ -397,32 +397,6 @@ bool wxArtProvider::HasNativeProvider()
 // deprecated wxArtProvider methods
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_6
-
-/* static */ void wxArtProvider::PushProvider(wxArtProvider *provider)
-{
-    Push(provider);
-}
-
-/* static */ void wxArtProvider::InsertProvider(wxArtProvider *provider)
-{
-    PushBack(provider);
-}
-
-/* static */ bool wxArtProvider::PopProvider()
-{
-    return Pop();
-}
-
-/* static */ bool wxArtProvider::RemoveProvider(wxArtProvider *provider)
-{
-    // RemoveProvider() used to delete the provider being removed so this is
-    // not a typo, we must call Delete() and not Remove() here
-    return Delete(provider);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 #if WXWIN_COMPATIBILITY_2_8
 /* static */ void wxArtProvider::Insert(wxArtProvider *provider)
 {

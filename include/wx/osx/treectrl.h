@@ -59,15 +59,6 @@ enum {
     wxTREE_NEXT_ROOT                   // Retrieves the first child item of the root item of which the specified item is a part.
 };
 
-#if WXWIN_COMPATIBILITY_2_6
-    // Flags for InsertItem
-    enum {
-        wxTREE_INSERT_LAST = -1,
-        wxTREE_INSERT_FIRST = -2,
-        wxTREE_INSERT_SORT = -3
-    };
-#endif
-
 class WXDLLIMPEXP_CORE wxTreeItem: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxTreeItem)
@@ -188,20 +179,6 @@ public:
     // ----------
       // adding/deleting items
     bool DeleteItem(long item);
-
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( long InsertItem(long parent, wxTreeItem& info,
-                  long insertAfter = wxTREE_INSERT_LAST) );
-        // If image > -1 and selImage == -1, the same image is used for
-        // both selected and unselected items.
-    wxDEPRECATED( long InsertItem(long parent, const wxString& label,
-                                  int image = -1, int selImage = -1,
-                                  long insertAfter = wxTREE_INSERT_LAST) );
-
-        // use Expand, Collapse, CollapseAndReset or Toggle
-    wxDEPRECATED( bool ExpandItem(long item, int action) );
-    wxDEPRECATED( void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL) );
-#endif // WXWIN_COMPATIBILITY_2_6
 
       // changing item state
     bool ExpandItem(long item)   { return ExpandItem(item, wxTREE_EXPAND_EXPAND);   }

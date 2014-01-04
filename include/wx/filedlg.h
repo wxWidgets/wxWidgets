@@ -49,18 +49,6 @@ enum
     wxFD_PREVIEW           = 0x0100
 };
 
-#if WXWIN_COMPATIBILITY_2_6
-enum
-{
-    wxOPEN              = wxFD_OPEN,
-    wxSAVE              = wxFD_SAVE,
-    wxOVERWRITE_PROMPT  = wxFD_OVERWRITE_PROMPT,
-    wxFILE_MUST_EXIST   = wxFD_FILE_MUST_EXIST,
-    wxMULTIPLE          = wxFD_MULTIPLE,
-    wxCHANGE_DIR        = wxFD_CHANGE_DIR
-};
-#endif
-
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileDialogNameStr[];
@@ -134,14 +122,6 @@ public:
     wxWindow *GetExtraControl() const { return m_extraControl; }
 
     // Utility functions
-
-#if WXWIN_COMPATIBILITY_2_6
-
-    wxDEPRECATED( long GetStyle() const );
-    wxDEPRECATED( void SetStyle(long style) );
-
-#endif  // WXWIN_COMPATIBILITY_2_6
-
 
     // Append first extension to filePath from a ';' separated extensionList
     // if filePath = "path/foo.bar" just return it as is

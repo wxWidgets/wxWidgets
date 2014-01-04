@@ -66,10 +66,6 @@ public:
 
     // returns interface to the rendering window
     wxHtmlWindowInterface *GetWindowInterface() {return m_windowInterface;}
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, use GetWindowInterface()->GetHTMLWindow() instead
-    wxDEPRECATED( wxHtmlWindow *GetWindow() );
-#endif
 
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = NULL);

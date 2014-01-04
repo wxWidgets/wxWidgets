@@ -564,13 +564,6 @@ public:
     // this method exists for backwards compatibility only, don't use
     bool HasPendingMessages() const { return true; }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // this function doesn't do anything any more, don't call it
-    static wxDEPRECATED_INLINE(
-        wxChar *SetLogBuffer(wxChar *, size_t = 0), return NULL;
-    );
-#endif // WXWIN_COMPATIBILITY_2_6
-
     // don't use integer masks any more, use string trace masks instead
 #if WXWIN_COMPATIBILITY_2_8
     static wxDEPRECATED_INLINE( void SetTraceMask(wxTraceMask ulMask),

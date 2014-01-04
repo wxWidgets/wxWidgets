@@ -432,14 +432,6 @@ typedef void (wxEvtHandler::*wxBookCtrlEventFunction)(wxBookCtrlEvent&);
 #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED    wxEVT_BOOKCTRL_PAGE_CHANGED
 #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING   wxEVT_BOOKCTRL_PAGE_CHANGING
 
-#if WXWIN_COMPATIBILITY_2_6
-    #define wxBC_TOP                               wxBK_TOP
-    #define wxBC_BOTTOM                            wxBK_BOTTOM
-    #define wxBC_LEFT                              wxBK_LEFT
-    #define wxBC_RIGHT                             wxBK_RIGHT
-    #define wxBC_DEFAULT                           wxBK_DEFAULT
-#endif
-
 #endif // wxUSE_BOOKCTRL
 
 #endif // _WX_BOOKCTRL_H_

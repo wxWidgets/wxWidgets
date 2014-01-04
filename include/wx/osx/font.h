@@ -56,7 +56,7 @@ public:
     wxFont(WX_NSFont nsfont);
 #endif
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
     wxFont(int size,
            int family,
            int style,

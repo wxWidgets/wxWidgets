@@ -107,66 +107,11 @@ void wxHtmlCell::SetScriptMode(wxHtmlScriptMode mode, long previousBase)
     m_Descent += m_ScriptBaseline;
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-
-struct wxHtmlCellOnMouseClickCompatHelper;
-
-static wxHtmlCellOnMouseClickCompatHelper *gs_helperOnMouseClick = NULL;
-
-// helper for routing calls to new ProcessMouseClick() method to deprecated
-// OnMouseClick() method
-struct wxHtmlCellOnMouseClickCompatHelper
-{
-    wxHtmlCellOnMouseClickCompatHelper(wxHtmlWindowInterface *window_,
-                                       const wxPoint& pos_,
-                                       const wxMouseEvent& event_)
-        : window(window_), pos(pos_), event(event_), retval(false)
-    {
-    }
-
-    bool CallOnMouseClick(wxHtmlCell *cell)
-    {
-        wxHtmlCellOnMouseClickCompatHelper *oldHelper = gs_helperOnMouseClick;
-        gs_helperOnMouseClick = this;
-        cell->OnMouseClick
-              (
-                window ? window->GetHTMLWindow() : NULL,
-                pos.x, pos.y,
-                event
-              );
-        gs_helperOnMouseClick = oldHelper;
-        return retval;
-    }
-
-    wxHtmlWindowInterface *window;
-    const wxPoint& pos;
-    const wxMouseEvent& event;
-    bool retval;
-};
-#endif // WXWIN_COMPATIBILITY_2_6
-
 bool wxHtmlCell::ProcessMouseClick(wxHtmlWindowInterface *window,
                                    const wxPoint& pos,
                                    const wxMouseEvent& event)
 {
     wxCHECK_MSG( window, false, wxT("window interface must be provided") );
-
-#if WXWIN_COMPATIBILITY_2_6
-    // NB: this hack puts the body of ProcessMouseClick() into OnMouseClick()
-    //     (for which it has to pass the arguments and return value via a
-    //     helper variable because these two methods have different
-    //     signatures), so that old code overriding OnMouseClick will continue
-    //     to work
-    wxHtmlCellOnMouseClickCompatHelper compat(window, pos, event);
-    return compat.CallOnMouseClick(this);
-}
-
-void wxHtmlCell::OnMouseClick(wxWindow *, int, int, const wxMouseEvent& event)
-{
-    wxCHECK_RET( gs_helperOnMouseClick, wxT("unexpected call to OnMouseClick") );
-    wxHtmlWindowInterface *window = gs_helperOnMouseClick->window;
-    const wxPoint& pos = gs_helperOnMouseClick->pos;
-#endif // WXWIN_COMPATIBILITY_2_6
 
     wxHtmlLinkInfo *lnk = GetLink(pos.x, pos.y);
     bool retval = false;
@@ -181,19 +126,8 @@ void wxHtmlCell::OnMouseClick(wxWindow *, int, int, const wxMouseEvent& event)
         retval = true;
     }
 
-#if WXWIN_COMPATIBILITY_2_6
-    gs_helperOnMouseClick->retval = retval;
-#else
     return retval;
-#endif // WXWIN_COMPATIBILITY_2_6
 }
-
-#if WXWIN_COMPATIBILITY_2_6
-wxCursor wxHtmlCell::GetCursor() const
-{
-    return wxNullCursor;
-}
-#endif // WXWIN_COMPATIBILITY_2_6
 
 wxCursor
 wxHtmlCell::GetMouseCursor(wxHtmlWindowInterface* WXUNUSED(window)) const
@@ -207,17 +141,6 @@ wxCursor
 wxHtmlCell::GetMouseCursorAt(wxHtmlWindowInterface *window,
                              const wxPoint& relPos) const
 {
-#if WXWIN_COMPATIBILITY_2_6
-    // NB: Older versions of wx used GetCursor() virtual method in place of
-    //     GetMouseCursor(interface). This code ensures that user code that
-    //     overridden GetCursor() continues to work. The trick is that the base
-    //     wxHtmlCell::GetCursor() method simply returns wxNullCursor, so we
-    //     know that GetCursor() was overridden iff it returns valid cursor.
-    wxCursor cur = GetCursor();
-    if (cur.IsOk())
-        return cur;
-#endif // WXWIN_COMPATIBILITY_2_6
-
     const wxCursor curCell = GetMouseCursor(window);
     if ( curCell.IsOk() )
       return curCell;
@@ -1375,29 +1298,12 @@ bool wxHtmlContainerCell::ProcessMouseClick(wxHtmlWindowInterface *window,
                                             const wxPoint& pos,
                                             const wxMouseEvent& event)
 {
-#if WXWIN_COMPATIBILITY_2_6
-    wxHtmlCellOnMouseClickCompatHelper compat(window, pos, event);
-    return compat.CallOnMouseClick(this);
-}
-
-void wxHtmlContainerCell::OnMouseClick(wxWindow*,
-                                       int, int, const wxMouseEvent& event)
-{
-    wxCHECK_RET( gs_helperOnMouseClick, wxT("unexpected call to OnMouseClick") );
-    wxHtmlWindowInterface *window = gs_helperOnMouseClick->window;
-    const wxPoint& pos = gs_helperOnMouseClick->pos;
-#endif // WXWIN_COMPATIBILITY_2_6
-
     bool retval = false;
     wxHtmlCell *cell = FindCellByPos(pos.x, pos.y);
     if ( cell )
         retval = cell->ProcessMouseClick(window, pos, event);
 
-#if WXWIN_COMPATIBILITY_2_6
-    gs_helperOnMouseClick->retval = retval;
-#else
     return retval;
-#endif // WXWIN_COMPATIBILITY_2_6
 }
 
 

@@ -265,15 +265,6 @@ void wxHtmlWinParser::DoneParser()
     wxHtmlParser::DoneParser();
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-wxHtmlWindow *wxHtmlWinParser::GetWindow()
-{
-    if (!m_windowInterface)
-        return NULL;
-    return wxDynamicCast(m_windowInterface->GetHTMLWindow(), wxHtmlWindow);
-}
-#endif
-
 wxObject* wxHtmlWinParser::GetProduct()
 {
     wxHtmlContainerCell *top;

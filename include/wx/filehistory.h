@@ -60,11 +60,6 @@ public:
     void SetBaseId(wxWindowID baseId) { m_idBase = baseId; }
     wxWindowID GetBaseId() const { return m_idBase; }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, use GetCount() instead
-    wxDEPRECATED( size_t GetNoHistoryFiles() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     // Last n files
     wxArrayString     m_fileHistory;
@@ -85,14 +80,6 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxFileHistoryBase);
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-inline size_t wxFileHistoryBase::GetNoHistoryFiles() const
-{
-    return m_fileHistory.GetCount();
-}
-#endif // WXWIN_COMPATIBILITY_2_6
-
 
 #if defined(__WXGTK20__)
     #include "wx/gtk/filehistory.h"

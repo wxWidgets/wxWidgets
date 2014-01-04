@@ -385,16 +385,6 @@ public:
     //@}
 
     /**
-        @deprecated
-        Compatibility constructor (requires WXWIN_COMPATIBILITY_2_6).
-        When this constructor is used, an emulation of seeking is
-        switched on for compatibility with previous versions. Note however,
-        that it is deprecated.
-    */
-    wxZipInputStream(const wxString& archive,
-                     const wxString& file);
-
-    /**
         Closes the current entry.
         On a non-seekable stream reads to the end of the current entry first.
     */

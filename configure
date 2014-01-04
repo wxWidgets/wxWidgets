@@ -1141,8 +1141,8 @@ enable_no_deps
 enable_vararg_macros
 enable_universal_binary
 enable_macosx_arch
-enable_compat26
 enable_compat28
+enable_compat30
 enable_rpath
 enable_objc_uniquifying
 enable_visibility
@@ -2072,8 +2072,8 @@ Optional Features:
   --disable-vararg_macros don't use vararg macros, even if they are supported
   --enable-universal_binary=archs create universal binary for the specified (or all supported) architectures
   --enable-macosx_arch=ARCH  build for just the specified architecture
-  --enable-compat26       enable wxWidgets 2.6 compatibility
-  --disable-compat28      disable wxWidgets 2.8 compatibility
+  --enable-compat28       enable wxWidgets 2.8 compatibility
+  --disable-compat30      disable wxWidgets 3.0 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
   --enable-objc_uniquifying enable Objective-C class name uniquifying
   --disable-visibility    disable use of ELF symbols visibility even if supported
@@ -6734,50 +6734,6 @@ $as_echo "$wxUSE_MAC_ARCH" >&6; }
               fi
           fi
 
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-compat26" >&5
-$as_echo_n "checking for --${enablestring:-enable}-compat26... " >&6; }
-          # Check whether --enable-compat26 was given.
-if test "${enable_compat26+set}" = set; then :
-  enableval=$enable_compat26;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_compat26='WXWIN_COMPATIBILITY_2_6=yes'
-                          else
-                            wx_cv_use_compat26='WXWIN_COMPATIBILITY_2_6=no'
-                          fi
-
-else
-
-                          wx_cv_use_compat26='WXWIN_COMPATIBILITY_2_6=${'DEFAULT_WXWIN_COMPATIBILITY_2_6":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_compat26"
-
-          if test x"$enablestring" = xdisable; then
-            if test $WXWIN_COMPATIBILITY_2_6 = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$WXWIN_COMPATIBILITY_2_6
-          fi
-
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
-$as_echo "$result" >&6; }
-
-
-          enablestring=disable
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
           { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-compat28" >&5
 $as_echo_n "checking for --${enablestring:-enable}-compat28... " >&6; }
           # Check whether --enable-compat28 was given.
@@ -6806,6 +6762,50 @@ fi
             fi
           else
             result=$WXWIN_COMPATIBILITY_2_8
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
+$as_echo "$result" >&6; }
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-compat30" >&5
+$as_echo_n "checking for --${enablestring:-enable}-compat30... " >&6; }
+          # Check whether --enable-compat30 was given.
+if test "${enable_compat30+set}" = set; then :
+  enableval=$enable_compat30;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_compat30='WXWIN_COMPATIBILITY_3_0=yes'
+                          else
+                            wx_cv_use_compat30='WXWIN_COMPATIBILITY_3_0=no'
+                          fi
+
+else
+
+                          wx_cv_use_compat30='WXWIN_COMPATIBILITY_3_0=${'DEFAULT_WXWIN_COMPATIBILITY_3_0":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_compat30"
+
+          if test x"$enablestring" = xdisable; then
+            if test $WXWIN_COMPATIBILITY_3_0 = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$WXWIN_COMPATIBILITY_3_0
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -33132,15 +33132,15 @@ else
 fi
 
 
-if test "x$WXWIN_COMPATIBILITY_2_6" = "xyes"; then
-    $as_echo "#define WXWIN_COMPATIBILITY_2_6 1" >>confdefs.h
+if test "x$WXWIN_COMPATIBILITY_2_8" = "xyes"; then
+    $as_echo "#define WXWIN_COMPATIBILITY_2_8 1" >>confdefs.h
 
 
-    WXWIN_COMPATIBILITY_2_8="yes"
+    WXWIN_COMPATIBILITY_3_0="yes"
 fi
 
-if test "x$WXWIN_COMPATIBILITY_2_8" != "xno"; then
-    $as_echo "#define WXWIN_COMPATIBILITY_2_8 1" >>confdefs.h
+if test "x$WXWIN_COMPATIBILITY_3_0" != "xno"; then
+    $as_echo "#define WXWIN_COMPATIBILITY_3_0 1" >>confdefs.h
 
 fi
 
@@ -42881,8 +42881,8 @@ else
 fi
 
 echo "  What level of wxWidgets compatibility should be enabled?"
-echo "                                       wxWidgets 2.6      ${WXWIN_COMPATIBILITY_2_6:-no}"
-echo "                                       wxWidgets 2.8      ${WXWIN_COMPATIBILITY_2_8:-yes}"
+echo "                                       wxWidgets 2.8      ${WXWIN_COMPATIBILITY_2_8:-no}"
+echo "                                       wxWidgets 3.0      ${WXWIN_COMPATIBILITY_3_0:-yes}"
 
 echo "  Which libraries should wxWidgets use?"
 echo "                                       STL                ${wxUSE_STL}"

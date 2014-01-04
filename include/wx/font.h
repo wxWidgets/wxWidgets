@@ -285,7 +285,7 @@ public:
     virtual ~wxFontBase();
 
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
     // from the font components
     static wxFont *New(
         int pointSize,              // size of the font in points
@@ -475,19 +475,19 @@ WXDLLIMPEXP_CORE wxString wxToString(const wxFontBase& font);
 WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
 
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
 #define wxDECLARE_FONT_COMPAT_SETTER   \
-    wxDEPRECATED_FUTURE( void SetFamily(int family) ) \
+    wxDEPRECATED( void SetFamily(int family) ) \
         { SetFamily((wxFontFamily)family); } \
-    wxDEPRECATED_FUTURE( void SetStyle(int style) ) \
+    wxDEPRECATED( void SetStyle(int style) ) \
         { SetStyle((wxFontStyle)style); } \
-    wxDEPRECATED_FUTURE( void SetWeight(int weight) ) \
+    wxDEPRECATED( void SetWeight(int weight) ) \
         { SetWeight((wxFontWeight)weight); } \
-    wxDEPRECATED_FUTURE( void SetFamily(wxDeprecatedGUIConstants family) ) \
+    wxDEPRECATED( void SetFamily(wxDeprecatedGUIConstants family) ) \
         { SetFamily((wxFontFamily)family); } \
-    wxDEPRECATED_FUTURE( void SetStyle(wxDeprecatedGUIConstants style) ) \
+    wxDEPRECATED( void SetStyle(wxDeprecatedGUIConstants style) ) \
         { SetStyle((wxFontStyle)style); } \
-    wxDEPRECATED_FUTURE( void SetWeight(wxDeprecatedGUIConstants weight) ) \
+    wxDEPRECATED( void SetWeight(wxDeprecatedGUIConstants weight) ) \
         { SetWeight((wxFontWeight)weight); }
 #else
 #define wxDECLARE_FONT_COMPAT_SETTER  /*empty*/
@@ -546,18 +546,13 @@ public:
                              const wxString& face = wxEmptyString,
                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
      wxFont *FindOrCreateFont(int pointSize, int family, int style, int weight,
                               bool underline = false,
                               const wxString& face = wxEmptyString,
                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
         { return FindOrCreateFont(pointSize, (wxFontFamily)family, (wxFontStyle)style,
                                   (wxFontWeight)weight, underline, face, encoding); }
-#endif
-
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( void AddFont(wxFont*) );
-    wxDEPRECATED( void RemoveFont(wxFont*) );
 #endif
 };
 
@@ -570,7 +565,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxFontList*)    wxTheFontList;
 //
 // to compile without warnings which it would otherwise provoke from some
 // compilers as it compares elements of different enums
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
 
 // Unfortunately some compilers have ambiguity issues when enum comparisons are
 // overloaded so we have to disable the overloads in this case, see
@@ -592,7 +587,7 @@ inline bool operator!=(wxFontWeight s, wxDeprecatedGUIConstants t)
 
 #endif // // wxCOMPILER_NO_OVERLOAD_ON_ENUM
 
-#endif // FUTURE_WXWIN_COMPATIBILITY_3_0
+#endif // WXWIN_COMPATIBILITY_3_0
 
 #endif
     // _WX_FONT_H_BASE_

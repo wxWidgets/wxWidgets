@@ -340,21 +340,6 @@ wxColour wxColourBase::ChangeLightness(int ialpha) const
     return wxColour(r,g,b);
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-
-// static
-wxColour wxColourBase::CreateByName(const wxString& name)
-{
-    return wxColour(name);
-}
-
-void wxColourBase::InitFromName(const wxString& col)
-{
-    Set(col);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // wxColour <-> wxString utilities, used by wxConfig
 wxString wxToString(const wxColourBase& col)
 {

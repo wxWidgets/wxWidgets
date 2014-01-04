@@ -495,11 +495,6 @@ public:
     wxInputStream *GetInputStream() const;
     wxOutputStream *GetOutputStream() const;
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, for compatibility only
-    wxDEPRECATED( wxStreamBase *Stream() );
-#endif // WXWIN_COMPATIBILITY_2_6
-
     // this constructs a dummy wxStreamBuffer, used by (and exists for)
     // wxMemoryStreams only, don't use!
     wxStreamBuffer(BufMode mode);
@@ -578,11 +573,6 @@ public:
     void SetInputStreamBuffer(wxStreamBuffer *buffer);
     wxStreamBuffer *GetInputStreamBuffer() const { return m_i_streambuf; }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, for compatibility only
-    wxDEPRECATED( wxStreamBuffer *InputStreamBuffer() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     virtual size_t OnSysRead(void *buffer, size_t bufsize);
     virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
@@ -630,11 +620,6 @@ public:
     void SetOutputStreamBuffer(wxStreamBuffer *buffer);
     wxStreamBuffer *GetOutputStreamBuffer() const { return m_o_streambuf; }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, for compatibility only
-    wxDEPRECATED( wxStreamBuffer *OutputStreamBuffer() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     virtual size_t OnSysWrite(const void *buffer, size_t bufsize);
     virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
@@ -644,12 +629,6 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxBufferedOutputStream);
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-    inline wxStreamBase *wxStreamBuffer::Stream() { return m_stream; }
-    inline wxStreamBuffer *wxBufferedInputStream::InputStreamBuffer() const { return m_i_streambuf; }
-    inline wxStreamBuffer *wxBufferedOutputStream::OutputStreamBuffer() const { return m_o_streambuf; }
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // ---------------------------------------------------------------------------
 // wxWrapperInputStream: forwards all IO to another stream.

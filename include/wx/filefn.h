@@ -641,15 +641,6 @@ WXDLLIMPEXP_BASE bool wxRemoveFile(const wxString& file);
 WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite = true);
 
 // Get current working directory.
-#if WXWIN_COMPATIBILITY_2_6
-// If buf is NULL, allocates space using new, else
-// copies into buf.
-// IMPORTANT NOTE getcwd is know not to work under some releases
-// of Win32s 1.3, according to MS release notes!
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* wxGetWorkingDirectory(wxChar *buf = NULL, int sz = 1000) );
-// new and preferred version of wxGetWorkingDirectory
-// NB: can't have the same name because of overloading ambiguity
-#endif // WXWIN_COMPATIBILITY_2_6
 WXDLLIMPEXP_BASE wxString wxGetCwd();
 
 // Set working directory
@@ -664,15 +655,6 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 // Return the type of an open file
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(int fd);
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(FILE *fp);
-
-#if WXWIN_COMPATIBILITY_2_6
-// compatibility defines, don't use in new code
-wxDEPRECATED( inline bool wxPathExists(const wxChar *pszPathName) );
-inline bool wxPathExists(const wxChar *pszPathName)
-{
-    return wxDirExists(pszPathName);
-}
-#endif //WXWIN_COMPATIBILITY_2_6
 
 // permissions; these functions work both on files and directories:
 WXDLLIMPEXP_BASE bool wxIsWritable(const wxString &path);
@@ -832,11 +814,6 @@ public:
 
     // Given full path and filename, add path to list
     bool EnsureFileAccessible(const wxString& path);
-
-#if WXWIN_COMPATIBILITY_2_6
-    // Returns true if the path is in the list
-    wxDEPRECATED( bool Member(const wxString& path) const );
-#endif
 };
 
 #endif // _WX_FILEFN_H_

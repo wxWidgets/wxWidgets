@@ -365,12 +365,6 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete stuff, for compatibility only -- don't use
-    wxDEPRECATED( int GetItemSpacing(bool isSmall) const);
-#endif // WXWIN_COMPATIBILITY_2_6
-
     // convert our styles to Windows
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 

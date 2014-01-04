@@ -348,22 +348,4 @@ protected:
     wxEndianness m_endian;
 };
 
-
-#if WXWIN_COMPATIBILITY_2_6
-    #define wxUNKNOWN_PLATFORM      wxOS_UNKNOWN
-    #define wxUnix                  wxOS_UNIX
-    #define wxWin95                 wxOS_WINDOWS_9X
-    #define wxWIN95                 wxOS_WINDOWS_9X
-    #define wxWINDOWS_NT            wxOS_WINDOWS_NT
-    #define wxMSW                   wxOS_WINDOWS
-    #define wxWinCE                 wxOS_WINDOWS_CE
-    #define wxWIN32S                wxOS_WINDOWS_9X
-
-    #define wxOS2                   wxPORT_OS2
-    #define wxCocoa                 wxPORT_MAC
-    #define wxMac                   wxPORT_MAC
-    #define wxMotif                 wxPORT_MOTIF
-    #define wxGTK                   wxPORT_GTK
-#endif // WXWIN_COMPATIBILITY_2_6
-
 #endif // _WX_PLATINFO_H_

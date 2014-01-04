@@ -110,15 +110,6 @@ namespace wxPrivate
 // constants
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_6
-
-// deprecated in favour of wxString::npos, don't use in new code
-//
-// maximum possible length for a string means "take all string" everywhere
-#define wxSTRING_MAXLEN wxString::npos
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // ---------------------------------------------------------------------------
 // global functions complementing standard C string library replacements for
 // strlen() and portable strcasecmp()

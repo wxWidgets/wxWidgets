@@ -41,9 +41,6 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxTE_CENTRE);
     XRC_ADD_STYLE(wxTE_RIGHT);
     XRC_ADD_STYLE(wxTE_DONTWRAP);
-#if WXWIN_COMPATIBILITY_2_6
-    XRC_ADD_STYLE(wxTE_LINEWRAP);
-#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxTE_CHARWRAP);
     XRC_ADD_STYLE(wxTE_WORDWRAP);
 

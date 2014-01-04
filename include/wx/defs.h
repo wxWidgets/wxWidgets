@@ -13,13 +13,6 @@
 #ifndef _WX_DEFS_H_
 #define _WX_DEFS_H_
 
-/*
-    NOTE: this symbol will be replaced with "WXWIN_COMPATIBILITY_3_0" as soon
-          as the development branch for 3.1 is created
- */
-#define FUTURE_WXWIN_COMPATIBILITY_3_0      1
-#define wxDEPRECATED_FUTURE( x )            x
-
 /*  ---------------------------------------------------------------------------- */
 /*  compiler and OS identification */
 /*  ---------------------------------------------------------------------------- */
@@ -1941,12 +1934,6 @@ enum wxBorder
 /*  always show an entire number of rows */
 #define wxLB_INT_HEIGHT     0x0800
 
-#if WXWIN_COMPATIBILITY_2_6
-    /*  deprecated synonyms */
-    #define wxPROCESS_ENTER   0x0400  /*  wxTE_PROCESS_ENTER */
-    #define wxPASSWORD        0x0800  /*  wxTE_PASSWORD */
-#endif
-
 /*
  * wxComboBox style flags
  */
@@ -2429,7 +2416,7 @@ enum wxHatchStyle
              wxPenStyle, wxPenCap, wxPenJoin enum values instead!
 */
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
 
 /* don't use any elements of this enum in the new code */
 enum wxDeprecatedGUIConstants
@@ -2634,11 +2621,6 @@ enum wxKeyCode
     WXK_SCROLL,
     WXK_PAGEUP,
     WXK_PAGEDOWN,
-#if WXWIN_COMPATIBILITY_2_6
-    WXK_PRIOR = WXK_PAGEUP,
-    WXK_NEXT  = WXK_PAGEDOWN,
-#endif
-
     WXK_NUMPAD_SPACE,
     WXK_NUMPAD_TAB,
     WXK_NUMPAD_ENTER,
@@ -2653,10 +2635,6 @@ enum wxKeyCode
     WXK_NUMPAD_DOWN,
     WXK_NUMPAD_PAGEUP,
     WXK_NUMPAD_PAGEDOWN,
-#if WXWIN_COMPATIBILITY_2_6
-    WXK_NUMPAD_PRIOR = WXK_NUMPAD_PAGEUP,
-    WXK_NUMPAD_NEXT  = WXK_NUMPAD_PAGEDOWN,
-#endif
     WXK_NUMPAD_END,
     WXK_NUMPAD_BEGIN,
     WXK_NUMPAD_INSERT,

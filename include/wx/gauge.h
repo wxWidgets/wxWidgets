@@ -27,11 +27,6 @@
 // Win32 only, is default (and only) on some other platforms
 #define wxGA_SMOOTH          0x0020
 
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete style
-    #define wxGA_PROGRESSBAR     0
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // GTK and Mac always have native implementation of the indeterminate mode
 // wxMSW has native implementation only if comctl32.dll >= 6.00
 #if !defined(__WXGTK20__) && !defined(__WXMAC__) && !defined(__WXCOCOA__)

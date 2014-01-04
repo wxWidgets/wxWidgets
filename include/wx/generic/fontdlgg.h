@@ -52,11 +52,6 @@ public:
 
     virtual int ShowModal();
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, for backwards compatibility only
-    wxDEPRECATED( wxGenericFontDialog(wxWindow *parent, const wxFontData *data) );
-#endif // WXWIN_COMPATIBILITY_2_6
-
     // Internal functions
     void OnCloseWindow(wxCloseEvent& event);
 
@@ -99,11 +94,5 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericFontDialog)
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, for backwards compatibility only
-inline wxGenericFontDialog::wxGenericFontDialog(wxWindow *parent, const wxFontData *data)
-                           :wxFontDialogBase(parent) { Init(); InitFontData(data); Create(parent); }
-#endif // WXWIN_COMPATIBILITY_2_6
 
 #endif // _WX_GENERIC_FONTDLGG_H

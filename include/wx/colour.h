@@ -168,14 +168,6 @@ public:
     wxColour ChangeLightness(int ialpha) const;
     wxColour& MakeDisabled(unsigned char brightness = 255);
 
-    // old, deprecated
-    // ---------------
-
-#if WXWIN_COMPATIBILITY_2_6
-    static wxDEPRECATED( wxColour CreateByName(const wxString& name) );
-    wxDEPRECATED( void InitFromName(const wxString& col) );
-#endif
-
 protected:
     // Some ports need Init() and while we don't, provide a stub so that the
     // ports which don't need it are not forced to define it

@@ -1966,11 +1966,6 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 // get the (first) top level parent window
 WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindow *win);
 
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED_MSG("use wxWindow::NewControlId() instead")
-    inline wxWindowID NewControlId() { return wxWindowBase::NewControlId(); }
-#endif // WXWIN_COMPATIBILITY_2_6
-
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------
 // accessible object for windows

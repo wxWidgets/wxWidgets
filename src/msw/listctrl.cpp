@@ -1151,15 +1151,6 @@ wxSize wxListCtrl::GetItemSpacing() const
     return wxSize(LOWORD(spacing), HIWORD(spacing));
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-
-int wxListCtrl::GetItemSpacing(bool isSmall) const
-{
-    return ListView_GetItemSpacing(GetHwnd(), (BOOL) isSmall);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 void wxListCtrl::SetItemTextColour( long item, const wxColour &col )
 {
     wxListItem info;

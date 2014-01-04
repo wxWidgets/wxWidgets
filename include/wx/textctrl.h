@@ -100,11 +100,6 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 #define wxTE_WORDWRAP       0x0001  // wrap only at words boundaries
 #define wxTE_BESTWRAP       0x0000  // this is the default
 
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete synonym
-    #define wxTE_LINEWRAP       wxTE_CHARWRAP
-#endif // WXWIN_COMPATIBILITY_2_6
-
 #if WXWIN_COMPATIBILITY_2_8
     // this style is (or at least should be) on by default now, don't use it
     #define wxTE_AUTO_SCROLL    0

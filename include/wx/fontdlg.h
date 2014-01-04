@@ -40,13 +40,6 @@ public:
     const wxFontData& GetFontData() const { return m_fontData; }
     wxFontData& GetFontData() { return m_fontData; }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated interface, for compatibility only, don't use
-    wxDEPRECATED( wxFontDialogBase(wxWindow *parent, const wxFontData *data) );
-
-    wxDEPRECATED( bool Create(wxWindow *parent, const wxFontData *data) );
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     virtual bool DoCreate(wxWindow *parent) { m_parent = parent; return true; }
 
@@ -57,15 +50,6 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxFontDialogBase);
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated interface, for compatibility only, don't use
-inline wxFontDialogBase::wxFontDialogBase(wxWindow *parent, const wxFontData *data)
-{ m_parent = parent; InitFontData(data); }
-
-inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
-{ InitFontData(data); return Create(parent); }
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
 // platform-specific wxFontDialog implementation

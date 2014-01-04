@@ -40,15 +40,9 @@ class WXDLLIMPEXP_ADV wxSashEdge
 public:
     wxSashEdge()
     { m_show = false;
-#if WXWIN_COMPATIBILITY_2_6
-      m_border = false;
-#endif
       m_margin = 0; }
 
     bool    m_show;     // Is the sash showing?
-#if WXWIN_COMPATIBILITY_2_6
-    bool    m_border;   // Do we draw a border?
-#endif
     int     m_margin;   // The margin size
 };
 
@@ -96,16 +90,6 @@ public:
 
     // Get whether there's a sash in this position
     bool GetSashVisible(wxSashEdgePosition edge) const { return m_sashes[edge].m_show; }
-
-#if WXWIN_COMPATIBILITY_2_6
-    // Set whether there's a border in this position
-    // This value is unused in wxSashWindow.
-    void SetSashBorder(wxSashEdgePosition edge, bool border) { m_sashes[edge].m_border = border; }
-
-    // Get whether there's a border in this position
-    // This value is unused in wxSashWindow.
-    bool HasBorder(wxSashEdgePosition edge) const { return m_sashes[edge].m_border; }
-#endif
 
     // Get border size
     int GetEdgeMargin(wxSashEdgePosition edge) const { return m_sashes[edge].m_margin; }

@@ -351,12 +351,6 @@ public:
     bool IsSizer() const { return m_kind == Item_Sizer; }
     bool IsSpacer() const { return m_kind == Item_Spacer; }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // Deprecated in 2.6, use {G,S}etProportion instead.
-    wxDEPRECATED( void SetOption( int option ) );
-    wxDEPRECATED( int GetOption() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
     void SetProportion( int proportion )
         { m_proportion = proportion; }
     int GetProportion() const
@@ -590,12 +584,6 @@ public:
     // is used in
     void SetContainingWindow(wxWindow *window);
     wxWindow *GetContainingWindow() const { return m_containingWindow; }
-
-#if WXWIN_COMPATIBILITY_2_6
-    // Deprecated in 2.6 since historically it does not delete the window,
-    // use Detach instead.
-    wxDEPRECATED( virtual bool Remove( wxWindow *window ) );
-#endif // WXWIN_COMPATIBILITY_2_6
 
     virtual bool Remove( wxSizer *sizer );
     virtual bool Remove( int index );

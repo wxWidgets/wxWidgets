@@ -106,11 +106,11 @@ void FontTestCase::Construct()
                                wxFONTSTYLE_NORMAL,
                                wxFONTWEIGHT_NORMAL).IsOk() );
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
     // Tests relying on the soon-to-be-deprecated ctor taking ints and not
     // wxFontXXX enum elements.
     CPPUNIT_ASSERT( wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL).IsOk() );
-#endif // FUTURE_WXWIN_COMPATIBILITY_3_0
+#endif // WXWIN_COMPATIBILITY_3_0
 }
 
 void FontTestCase::GetSet()

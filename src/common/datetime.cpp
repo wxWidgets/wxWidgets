@@ -1703,46 +1703,6 @@ wxDateTime::SetToWeekOfYear(int year, wxDateTime_t numWeek, WeekDay wd)
     return dt;
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-// use a separate function to avoid warnings about using deprecated
-// SetToTheWeek in GetWeek below
-static wxDateTime
-SetToTheWeek(int year,
-             wxDateTime::wxDateTime_t numWeek,
-             wxDateTime::WeekDay weekday,
-             wxDateTime::WeekFlags flags)
-{
-    // Jan 4 always lies in the 1st week of the year
-    wxDateTime dt(4, wxDateTime::Jan, year);
-    dt.SetToWeekDayInSameWeek(weekday, flags);
-    dt += wxDateSpan::Weeks(numWeek - 1);
-
-    return dt;
-}
-
-bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek,
-                              WeekDay weekday,
-                              WeekFlags flags)
-{
-    int year = GetYear();
-    *this = ::SetToTheWeek(year, numWeek, weekday, flags);
-    if ( GetYear() != year )
-    {
-        // oops... numWeek was too big
-        return false;
-    }
-
-    return true;
-}
-
-wxDateTime wxDateTime::GetWeek(wxDateTime_t numWeek,
-                               WeekDay weekday,
-                               WeekFlags flags) const
-{
-    return ::SetToTheWeek(GetYear(), numWeek, weekday, flags);
-}
-#endif // WXWIN_COMPATIBILITY_2_6
-
 wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
                                           int year)
 {

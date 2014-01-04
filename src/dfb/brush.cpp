@@ -68,7 +68,7 @@ wxBrush::wxBrush(const wxColour &colour, wxBrushStyle style)
     m_refData = new wxBrushRefData(colour, style);
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData(col, (wxBrushStyle)style);

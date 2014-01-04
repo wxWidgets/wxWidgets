@@ -4305,13 +4305,6 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     EVT_COMMAND_SCROLL_THUMBRELEASE(winid, func) \
     EVT_COMMAND_SCROLL_CHANGED(winid, func)
 
-#if WXWIN_COMPATIBILITY_2_6
-    // compatibility macros for the old name, deprecated in 2.8
-    #define wxEVT_SCROLL_ENDSCROLL wxEVT_SCROLL_CHANGED
-    #define EVT_COMMAND_SCROLL_ENDSCROLL EVT_COMMAND_SCROLL_CHANGED
-    #define EVT_SCROLL_ENDSCROLL EVT_SCROLL_CHANGED
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // Convenience macros for commonly-used commands
 #define EVT_CHECKBOX(winid, func) wx__DECLARE_EVT1(wxEVT_CHECKBOX, winid, wxCommandEventHandler(func))
 #define EVT_CHOICE(winid, func) wx__DECLARE_EVT1(wxEVT_CHOICE, winid, wxCommandEventHandler(func))

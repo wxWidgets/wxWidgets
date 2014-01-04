@@ -33,9 +33,6 @@ wxSplitterWindowXmlHandler::wxSplitterWindowXmlHandler() : wxXmlResourceHandler(
     XRC_ADD_STYLE(wxSP_3D);
     XRC_ADD_STYLE(wxSP_3DSASH);
     XRC_ADD_STYLE(wxSP_3DBORDER);
-#if WXWIN_COMPATIBILITY_2_6
-    XRC_ADD_STYLE(wxSP_FULLSASH);
-#endif // WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxSP_BORDER);
     XRC_ADD_STYLE(wxSP_NOBORDER);
     XRC_ADD_STYLE(wxSP_PERMIT_UNSPLIT);

@@ -111,7 +111,7 @@ wxPen::wxPen(const wxColour& col, int Width, wxPenStyle Style)
     RealizeResource();
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
+#if WXWIN_COMPATIBILITY_3_0
 wxPen::wxPen(const wxColour& col, int Width, int Style)
 {
     m_refData = new wxPenRefData;

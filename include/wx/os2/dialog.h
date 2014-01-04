@@ -71,28 +71,6 @@ public:
                                   ,WXWPARAM wParam
                                   ,WXLPARAM lParam
                                  );
-#if WXWIN_COMPATIBILITY_2_6
-
-    // Constructor with a modal flag, but no window id - the old convention
-    wxDEPRECATED( wxDialog( wxWindow*       pParent
-                           ,const wxString& rsTitle
-                           ,bool            bModal
-                           ,int             nX = -1
-                           ,int             nY = -1
-                           ,int             nWidth = 500
-                           ,int             nHeight = 500
-                           ,long            lStyle = wxDEFAULT_DIALOG_STYLE
-                           ,const wxString& rsName = wxDialogNameStr
-                          ) );
-
-    // just call Show() or ShowModal()
-    wxDEPRECATED( void SetModal(bool bFlag) );
-
-    // use IsModal()
-    wxDEPRECATED( bool IsModalShowing() const );
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     //
     // Common part of all ctors

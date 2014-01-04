@@ -41,11 +41,6 @@
 #define wxSL_VALUE_LABEL     0x4000
 #define wxSL_LABELS          (wxSL_MIN_MAX_LABELS|wxSL_VALUE_LABEL)
 
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete
-    #define wxSL_NOTIFY_DRAG     0x0000
-#endif // WXWIN_COMPATIBILITY_2_6
-
 extern WXDLLIMPEXP_DATA_CORE(const char) wxSliderNameStr[];
 
 // ----------------------------------------------------------------------------

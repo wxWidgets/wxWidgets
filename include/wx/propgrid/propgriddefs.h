@@ -188,7 +188,7 @@
 // (for tree buttons)
 //#undef wxPG_ICON_WIDTH
 
-#if WXWIN_COMPATIBILITY_2_6 || WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     #define wxPG_COMPATIBILITY_1_4      1
 #else
     #define wxPG_COMPATIBILITY_1_4      0

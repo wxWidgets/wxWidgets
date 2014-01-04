@@ -75,10 +75,6 @@ public:
 
     wxTextInputStream& operator>>( __wxTextInputManip func) { return func(*this); }
 
-#if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( wxString ReadString() );  // use ReadLine or ReadWord instead
-#endif // WXWIN_COMPATIBILITY_2_6
-
 protected:
     wxInputStream &m_input;
     wxString m_separators;

@@ -21,12 +21,7 @@
     #include "wx/log.h"
 #endif
 
-#if WXWIN_COMPATIBILITY_2_6 && wxUSE_ZIPSTREAM
-    #include "wx/zipstrm.h"
-#else
-    #include "wx/archive.h"
-#endif
-
+#include "wx/archive.h"
 #include "wx/private/fileback.h"
 
 //---------------------------------------------------------------------------
@@ -402,11 +397,6 @@ wxFSFile* wxArchiveFSHandler::OpenFile(
         delete s;
         return NULL;
     }
-
-#if WXWIN_COMPATIBILITY_2_6 && wxUSE_ZIPSTREAM
-    if (wxDynamicCast(factory, wxZipClassFactory))
-        ((wxZipInputStream*)s)->m_allowSeeking = true;
-#endif // WXWIN_COMPATIBILITY_2_6
 
     return new wxFSFile(s,
                         key + right,

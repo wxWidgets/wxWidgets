@@ -29,20 +29,6 @@ class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase, protected wxCocoaNSPanel
 public:
     wxDialog() { Init(); }
 
-#if WXWIN_COMPATIBILITY_2_6
-    // Constructor with a modal flag, but no window id - the old convention
-    wxDialog(wxWindow *parent,
-            const wxString& title, bool WXUNUSED(modal),
-            int x = wxDefaultCoord, int y= wxDefaultCoord, int width = 500, int height = 500,
-            long style = wxDEFAULT_DIALOG_STYLE,
-            const wxString& name = wxDialogNameStr)
-    {
-        Init();
-        Create(parent, wxID_ANY, title, wxPoint(x, y), wxSize(width, height),
-               style, name);
-    }
-#endif // WXWIN_COMPATIBILITY_2_6
-
     // Constructor with no modal flag - the new convention.
     wxDialog(wxWindow *parent, wxWindowID winid,
              const wxString& title,

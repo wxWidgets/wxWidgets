@@ -191,11 +191,6 @@ public:
 
     wxTreeItemId GetNext(const wxTreeItemId& item) const;
 
-#if WXWIN_COMPATIBILITY_2_6
-    // use EditLabel() instead
-    void Edit( const wxTreeItemId& item ) { EditLabel(item); }
-#endif // WXWIN_COMPATIBILITY_2_6
-
     // implementation only from now on
 
     // overridden base class virtuals

@@ -643,23 +643,6 @@ enum
 WXDLLIMPEXP_CORE wxString
 wxStripMenuCodes(const wxString& str, int flags = wxStrip_All);
 
-#if WXWIN_COMPATIBILITY_2_6
-// obsolete and deprecated version, do not use, use the above overload instead
-wxDEPRECATED(
-    WXDLLIMPEXP_CORE wxChar* wxStripMenuCodes(const wxChar *in, wxChar *out = NULL)
-);
-
-#if wxUSE_ACCEL
-class WXDLLIMPEXP_FWD_CORE wxAcceleratorEntry;
-
-// use wxAcceleratorEntry::Create() or FromString() methods instead
-wxDEPRECATED(
-    WXDLLIMPEXP_CORE wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
-);
-#endif // wxUSE_ACCEL
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // ----------------------------------------------------------------------------
 // Window search
 // ----------------------------------------------------------------------------
