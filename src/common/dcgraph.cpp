@@ -231,9 +231,9 @@ void wxGCDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y,
     if ( bmp.GetDepth() == 1 )
     {
         m_graphicContext->SetPen(*wxTRANSPARENT_PEN);
-        m_graphicContext->SetBrush( wxBrush( m_textBackgroundColour , wxSOLID ) );
+        m_graphicContext->SetBrush(m_textBackgroundColour);
         m_graphicContext->DrawRectangle( x, y, w, h );
-        m_graphicContext->SetBrush( wxBrush( m_textForegroundColour , wxSOLID ) );
+        m_graphicContext->SetBrush(m_textForegroundColour);
         m_graphicContext->DrawBitmap( bmp, x, y, w, h );
         m_graphicContext->SetBrush( m_graphicContext->CreateBrush(m_brush));
         m_graphicContext->SetPen( m_graphicContext->CreatePen(m_pen));
@@ -921,7 +921,7 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     if ( m_backgroundMode == wxTRANSPARENT )
         m_graphicContext->DrawText( str, x ,y , DegToRad(angle ));
     else
-        m_graphicContext->DrawText( str, x ,y , DegToRad(angle ), m_graphicContext->CreateBrush( wxBrush(m_textBackgroundColour,wxSOLID) ) );
+        m_graphicContext->DrawText( str, x ,y , DegToRad(angle ), m_graphicContext->CreateBrush(m_textBackgroundColour) );
 }
 
 void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
@@ -949,7 +949,7 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     if ( m_backgroundMode == wxTRANSPARENT )
         m_graphicContext->DrawText( str, x ,y);
     else
-        m_graphicContext->DrawText( str, x ,y , m_graphicContext->CreateBrush( wxBrush(m_textBackgroundColour,wxSOLID) ) );
+        m_graphicContext->DrawText( str, x ,y , m_graphicContext->CreateBrush(m_textBackgroundColour) );
 }
 
 bool wxGCDCImpl::CanGetTextExtent() const

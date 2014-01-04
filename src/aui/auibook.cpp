@@ -1686,7 +1686,7 @@ void wxAuiNotebook::InitNotebook(long style)
 
     m_normalFont = *wxNORMAL_FONT;
     m_selectedFont = *wxNORMAL_FONT;
-    m_selectedFont.SetWeight(wxBOLD);
+    m_selectedFont.SetWeight(wxFONTWEIGHT_BOLD);
 
     SetArtProvider(new wxAuiDefaultTabArt);
 
@@ -3236,7 +3236,7 @@ bool wxAuiNotebook::SetFont(const wxFont& font)
 
     wxFont normalFont(font);
     wxFont selectedFont(normalFont);
-    selectedFont.SetWeight(wxBOLD);
+    selectedFont.SetWeight(wxFONTWEIGHT_BOLD);
 
     SetNormalFont(normalFont);
     SetSelectedFont(selectedFont);

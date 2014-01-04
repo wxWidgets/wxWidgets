@@ -751,7 +751,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
              st != wxFONTSTYLE_SLANT &&
              st != wxFONTSTYLE_ITALIC )
              st = wxFONTWEIGHT_NORMAL;
-        font.SetStyle( st );
+        font.SetStyle( static_cast<wxFontStyle>(st) );
     }
     else if ( ind == 3 )
     {
@@ -760,7 +760,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
              wt != wxFONTWEIGHT_LIGHT &&
              wt != wxFONTWEIGHT_BOLD )
              wt = wxFONTWEIGHT_NORMAL;
-        font.SetWeight( wt );
+        font.SetWeight( static_cast<wxFontWeight>(wt) );
     }
     else if ( ind == 4 )
     {
@@ -769,10 +769,10 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     else if ( ind == 5 )
     {
         int fam = childValue.GetLong();
-        if ( fam < wxDEFAULT ||
-             fam > wxTELETYPE )
-             fam = wxDEFAULT;
-        font.SetFamily( fam );
+        if ( fam < wxFONTFAMILY_DEFAULT ||
+             fam > wxFONTFAMILY_TELETYPE )
+             fam = wxFONTFAMILY_DEFAULT;
+        font.SetFamily( static_cast<wxFontFamily>(fam) );
     }
 
     wxVariant newVariant;

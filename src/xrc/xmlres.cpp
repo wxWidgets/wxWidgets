@@ -2219,15 +2219,15 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
         isize = GetLong(wxT("size"), -1);
 
     // style
-    int istyle = wxNORMAL;
+    wxFontStyle istyle = wxFONTSTYLE_NORMAL;
     bool hasStyle = HasParam(wxT("style"));
     if (hasStyle)
     {
         wxString style = GetParamValue(wxT("style"));
         if (style == wxT("italic"))
-            istyle = wxITALIC;
+            istyle = wxFONTSTYLE_ITALIC;
         else if (style == wxT("slant"))
-            istyle = wxSLANT;
+            istyle = wxFONTSTYLE_SLANT;
         else if (style != wxT("normal"))
         {
             ReportParamError
@@ -2239,15 +2239,15 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     }
 
     // weight
-    int iweight = wxNORMAL;
+    wxFontWeight iweight = wxFONTWEIGHT_NORMAL;
     bool hasWeight = HasParam(wxT("weight"));
     if (hasWeight)
     {
         wxString weight = GetParamValue(wxT("weight"));
         if (weight == wxT("bold"))
-            iweight = wxBOLD;
+            iweight = wxFONTWEIGHT_BOLD;
         else if (weight == wxT("light"))
-            iweight = wxLIGHT;
+            iweight = wxFONTWEIGHT_LIGHT;
         else if (weight != wxT("normal"))
         {
             ReportParamError
@@ -2263,17 +2263,17 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     bool underlined = hasUnderlined ? GetBool(wxT("underlined"), false) : false;
 
     // family and facename
-    int ifamily = wxDEFAULT;
+    wxFontFamily ifamily = wxFONTFAMILY_DEFAULT;
     bool hasFamily = HasParam(wxT("family"));
     if (hasFamily)
     {
         wxString family = GetParamValue(wxT("family"));
-             if (family == wxT("decorative")) ifamily = wxDECORATIVE;
-        else if (family == wxT("roman")) ifamily = wxROMAN;
-        else if (family == wxT("script")) ifamily = wxSCRIPT;
-        else if (family == wxT("swiss")) ifamily = wxSWISS;
-        else if (family == wxT("modern")) ifamily = wxMODERN;
-        else if (family == wxT("teletype")) ifamily = wxTELETYPE;
+        if (family == wxT("decorative")) ifamily = wxFONTFAMILY_DECORATIVE;
+        else if (family == wxT("roman")) ifamily = wxFONTFAMILY_ROMAN;
+        else if (family == wxT("script")) ifamily = wxFONTFAMILY_SCRIPT;
+        else if (family == wxT("swiss")) ifamily = wxFONTFAMILY_SWISS;
+        else if (family == wxT("modern")) ifamily = wxFONTFAMILY_MODERN;
+        else if (family == wxT("teletype")) ifamily = wxFONTFAMILY_TELETYPE;
         else
         {
             ReportParamError

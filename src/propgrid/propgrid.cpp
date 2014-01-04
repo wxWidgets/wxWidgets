@@ -1275,7 +1275,7 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     if ( !(m_windowStyle & wxPG_HIDE_MARGIN) )
         m_marginWidth = m_gutterWidth*2 + m_iconWidth;
 
-    m_captionFont.SetWeight(wxBOLD);
+    m_captionFont.SetWeight(wxFONTWEIGHT_BOLD);
     GetTextExtent(wxS("jG"), &x, &y, 0, 0, &m_captionFont);
 
     m_lineHeight = m_fontHeight+(2*m_spacingy)+1;
@@ -2112,8 +2112,8 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     wxBrush marginBrush(m_colMargin);
     wxPen marginPen(m_colMargin);
-    wxBrush capbgbrush(m_colCapBack,wxSOLID);
-    wxPen linepen(m_colLine,1,wxSOLID);
+    wxBrush capbgbrush(m_colCapBack,wxBRUSHSTYLE_SOLID);
+    wxPen linepen(m_colLine,1,wxPENSTYLE_SOLID);
 
     wxColour selBackCol;
     if ( isPgEnabled )
@@ -2122,7 +2122,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         selBackCol = m_colMargin;
 
     // pen that has same colour as text
-    wxPen outlinepen(m_colPropFore,1,wxSOLID);
+    wxPen outlinepen(m_colPropFore,1,wxPENSTYLE_SOLID);
 
     //
     // Clear margin with background colour

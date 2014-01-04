@@ -773,11 +773,11 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
         {
             borderLeft = converter.GetPixels(borders.GetLeft().GetWidth());
             wxColour col(borders.GetLeft().GetColour());
-            int penStyle = wxSOLID;
+            wxPenStyle penStyle = wxPENSTYLE_SOLID;
             if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-                penStyle = wxDOT;
+                penStyle = wxPENSTYLE_DOT;
             else if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-                penStyle = wxLONG_DASH;
+                penStyle = wxPENSTYLE_LONG_DASH;
             wxPen pen(col, borderLeft, penStyle);
             dc.SetPen(pen);
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -792,11 +792,11 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
     {
         borderLeft = converter.GetPixels(borders.GetLeft().GetWidth());
         wxColour col(borders.GetLeft().GetColour());
-        int penStyle = wxSOLID;
+        wxPenStyle penStyle = wxPENSTYLE_SOLID;
         if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-            penStyle = wxDOT;
+            penStyle = wxPENSTYLE_DOT;
         else if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-            penStyle = wxLONG_DASH;
+            penStyle = wxPENSTYLE_LONG_DASH;
         wxPen pen(col, borderLeft, penStyle);
         pen.SetJoin(wxJOIN_MITER);
         dc.SetPen(pen);
@@ -809,13 +809,13 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
     {
         borderLeft = converter.GetPixels(borders.GetLeft().GetWidth());
         wxColour col(borders.GetLeft().GetColour());
-        int penStyle = wxSOLID;
+        wxPenStyle penStyle = wxPENSTYLE_SOLID;
         if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-            penStyle = wxDOT;
+            penStyle = wxPENSTYLE_DOT;
         else if (borders.GetLeft().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-            penStyle = wxLONG_DASH;
+            penStyle = wxPENSTYLE_LONG_DASH;
 
-        if (borderLeft == 1 || penStyle != wxSOLID)
+        if (borderLeft == 1 || penStyle != wxPENSTYLE_SOLID)
         {
             wxPen pen(col, borderLeft, penStyle);
             dc.SetPen(pen);
@@ -838,13 +838,13 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
         borderRight = converter.GetPixels(borders.GetRight().GetWidth());
 
         wxColour col(borders.GetRight().GetColour());
-        int penStyle = wxSOLID;
+        wxPenStyle penStyle = wxPENSTYLE_SOLID;
         if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-            penStyle = wxDOT;
+            penStyle = wxPENSTYLE_DOT;
         else if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-            penStyle = wxLONG_DASH;
+            penStyle = wxPENSTYLE_LONG_DASH;
 
-        if (borderRight == 1 || penStyle != wxSOLID)
+        if (borderRight == 1 || penStyle != wxPENSTYLE_SOLID)
         {
             wxPen pen(col, borderRight, penStyle);
             dc.SetPen(pen);
@@ -867,19 +867,19 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
         borderTop = converter.GetPixels(borders.GetTop().GetWidth());
 
         wxColour col(borders.GetTop().GetColour());
-        int penStyle = wxSOLID;
+        wxPenStyle penStyle = wxPENSTYLE_SOLID;
         if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-            penStyle = wxDOT;
+            penStyle = wxPENSTYLE_DOT;
         else if (borders.GetRight().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-            penStyle = wxLONG_DASH;
+            penStyle = wxPENSTYLE_LONG_DASH;
 
-        if (borderTop == 1 || penStyle != wxSOLID)
+        if (borderTop == 1 || penStyle != wxPENSTYLE_SOLID)
         {
-            int penStyle = wxSOLID;
+            wxPenStyle penStyle = wxPENSTYLE_SOLID;
             if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-                penStyle = wxDOT;
+                penStyle = wxPENSTYLE_DOT;
             else if (borders.GetTop().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-                penStyle = wxLONG_DASH;
+                penStyle = wxPENSTYLE_LONG_DASH;
             wxPen pen(col, borderTop, penStyle);
             dc.SetPen(pen);
             dc.DrawLine(rect.x, rect.y, rect.x + rect.width, rect.y);
@@ -899,13 +899,13 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
     {
         borderBottom = converter.GetPixels(borders.GetBottom().GetWidth());
         wxColour col(borders.GetBottom().GetColour());
-        int penStyle = wxSOLID;
+        wxPenStyle penStyle = wxPENSTYLE_SOLID;
         if (borders.GetBottom().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DOTTED)
-            penStyle = wxDOT;
+            penStyle = wxPENSTYLE_DOT;
         else if (borders.GetBottom().GetStyle() == wxTEXT_BOX_ATTR_BORDER_DASHED)
-            penStyle = wxLONG_DASH;
+            penStyle = wxPENSTYLE_LONG_DASH;
 
-        if (borderBottom == 1 || penStyle != wxSOLID)
+        if (borderBottom == 1 || penStyle != wxPENSTYLE_SOLID)
         {
             wxPen pen(col, borderBottom, penStyle);
             dc.SetPen(pen);
@@ -9254,7 +9254,7 @@ bool wxRichTextFieldTypeStandard::Draw(wxRichTextField* obj, wxDC& dc, wxRichTex
     {
         int borderSize = 1;
 
-        wxPen borderPen(m_borderColour, 1, wxSOLID);
+        wxPen borderPen(m_borderColour, 1, wxPENSTYLE_SOLID);
         wxBrush backgroundBrush(m_backgroundColour);
         wxColour textColour(m_textColour);
 
@@ -9263,11 +9263,11 @@ bool wxRichTextFieldTypeStandard::Draw(wxRichTextField* obj, wxDC& dc, wxRichTex
             wxColour highlightColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
             wxColour highlightTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
 
-            borderPen = wxPen(highlightTextColour, 1, wxSOLID);
+            borderPen = wxPen(highlightTextColour, 1, wxPENSTYLE_SOLID);
             backgroundBrush = wxBrush(highlightColour);
 
             wxCheckSetBrush(dc, backgroundBrush);
-            wxCheckSetPen(dc, wxPen(highlightColour, 1, wxSOLID));
+            wxCheckSetPen(dc, wxPen(highlightColour, 1, wxPENSTYLE_SOLID));
             dc.DrawRectangle(rect);
         }
 

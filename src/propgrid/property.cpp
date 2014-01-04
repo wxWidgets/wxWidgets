@@ -62,7 +62,7 @@ static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
     //   Also, it seems that this code may not work in future wx versions.
     dc.SetLogicalFunction(wxINVERT);
 
-    wxPen pen(*wxBLACK,1,wxDOT);
+    wxPen pen(*wxBLACK,1,wxPENSTYLE_DOT);
     pen.SetCap(wxCAP_BUTT);
     dc.SetPen(pen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -244,7 +244,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                                  wxPG_CUSTOM_IMAGE_WIDTH,
                                  rect.height-(wxPG_CUSTOM_IMAGE_SPACINGY*2));
 
-                dc.SetPen( wxPen(propertyGrid->GetCellTextColour(), 1, wxSOLID) );
+                dc.SetPen( wxPen(propertyGrid->GetCellTextColour(), 1, wxPENSTYLE_SOLID) );
 
                 paintdata.m_drawnWidth = imageSize.x;
                 paintdata.m_drawnHeight = imageSize.y;

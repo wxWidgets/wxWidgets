@@ -2449,7 +2449,7 @@ void wxGrid::Init()
     m_attrCache.attr = NULL;
 
     m_labelFont = GetFont();
-    m_labelFont.SetWeight( wxBOLD );
+    m_labelFont.SetWeight( wxFONTWEIGHT_BOLD );
 
     m_rowLabelHorizAlign = wxALIGN_CENTRE;
     m_rowLabelVertAlign  = wxALIGN_CENTRE;
