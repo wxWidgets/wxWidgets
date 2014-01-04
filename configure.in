@@ -6397,6 +6397,8 @@ if test "$wxUSE_FONTMAP" = "yes" ; then
 fi
 
 if test "$wxUSE_UNICODE" = "yes" ; then
+  CPPFLAGS="-DwxUSE_UNICODE=1 $CPPFLAGS"
+
   AC_DEFINE(wxUSE_UNICODE)
 
   if test "$USE_WIN32" != 1; then
