@@ -52,6 +52,7 @@
 #include "wx/filename.h"
 
 #include "wx/propgrid/propgrid.h"
+#include "wx/numformatter.h"
 
 #define wxPG_CUSTOM_IMAGE_WIDTH     20 // for wxColourProperty etc.
 
@@ -667,6 +668,7 @@ wxFloatProperty::wxFloatProperty( const wxString& label,
 
 wxFloatProperty::~wxFloatProperty() { }
 
+#if WXWIN_COMPATIBILITY_3_0
 // This helper method provides standard way for floating point-using
 // properties to convert values to string.
 const wxString& wxPropertyGrid::DoubleToString(wxString& target,
@@ -738,6 +740,7 @@ const wxString& wxPropertyGrid::DoubleToString(wxString& target,
 
     return target;
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
 wxString wxFloatProperty::ValueToString( wxVariant& value,
                                          int argFlags ) const
@@ -745,11 +748,9 @@ wxString wxFloatProperty::ValueToString( wxVariant& value,
     wxString text;
     if ( !value.IsNull() )
     {
-        wxPropertyGrid::DoubleToString(text,
-                                       value,
-                                       m_precision,
-                                       !(argFlags & wxPG_FULL_VALUE),
-                                       NULL);
+        text = wxNumberFormatter::ToString(value.GetDouble(), m_precision,
+                                           argFlags & wxPG_FULL_VALUE ? wxNumberFormatter::Style_None
+                                                                      : wxNumberFormatter::Style_NoTrailingZeroes);
     }
     return text;
 }
