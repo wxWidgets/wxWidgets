@@ -659,11 +659,6 @@ typedef struct
 
 //We need to check if we are using MinGW or mingw-w64 as their
 //definitions are different
-
-#ifdef __MINGW32__
-#include <_mingw.h>
-#endif
-
 #ifdef __MINGW32_TOOLCHAIN__
 typedef enum CommandStateChangeConstants {
     CSC_UPDATECOMMANDS = (int) 0xFFFFFFFF,
