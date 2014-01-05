@@ -5606,9 +5606,15 @@ wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
     // notice that WM_MOUSEWHEEL position is in screen coords (as it's
     // forwarded up to the parent by DefWindowProc()) and not in the client
     // ones as all the other messages, translate them to the client coords for
-    // consistency
-    const wxPoint
-        pt = ScreenToClient(wxPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
+    // consistency -- but do it using Windows function and not our own one
+    // because InitMouseEvent() expects coordinates in Windows client
+    // coordinates and not wx ones (the difference being the height of the
+    // toolbar, if any).
+    POINT pt;
+    pt.x = GET_X_LPARAM(lParam);
+    pt.y = GET_Y_LPARAM(lParam);
+    ::ScreenToClient(GetHwnd(), &pt);
+
     wxMouseEvent event(wxEVT_MOUSEWHEEL);
     InitMouseEvent(event, pt.x, pt.y, LOWORD(wParam));
     event.m_wheelRotation = (short)HIWORD(wParam);

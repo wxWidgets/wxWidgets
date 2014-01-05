@@ -604,6 +604,7 @@ wxMSW:
 - Make "%lu" work with size_t arguments under Win64 (laro).
 - Fix wxRegion::Offset() with shared objects (Joost Nieuwenhuijse).
 - Fix wxSocket::Initialize() after Shutdown() (Laurent Poujoulat).
+- Fix coordinates of EVT_MOUSEWHEEL in frames with toolbars (LtJax).
 
 wxOSX:
 
