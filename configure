@@ -35598,8 +35598,6 @@ if test "$wxUSE_FONTMAP" = "yes" ; then
 fi
 
 if test "$wxUSE_UNICODE" = "yes" ; then
-  CPPFLAGS="-DwxUSE_UNICODE=1 $CPPFLAGS"
-
   $as_echo "#define wxUSE_UNICODE 1" >>confdefs.h
 
 
