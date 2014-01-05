@@ -133,14 +133,14 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</GenerateManifest>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">wxbase30ud_xml</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">wxbase30ud_xml</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">wxbase30u_xml</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">wxbase30u_xml</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">wxbase30ud_$(ProjectName)_vc_custom</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">wxbase30ud_$(ProjectName)_vc_x64_custom</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">wxbase30u_$(ProjectName)_vc_custom</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">wxbase30u_$(ProjectName)_vc_x64_custom</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">wxbase31ud_xml</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">wxbase31ud_xml</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">wxbase31u_xml</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">wxbase31u_xml</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">wxbase310ud_$(ProjectName)_vc_custom</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">wxbase310ud_$(ProjectName)_vc_x64_custom</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">wxbase310u_$(ProjectName)_vc_custom</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">wxbase310u_$(ProjectName)_vc_x64_custom</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -160,7 +160,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>vc_mswud\wxprec_xmllib.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)wxbase30ud_xml.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)wxbase31ud_xml.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -171,7 +171,7 @@
       <AdditionalIncludeDirectories>$(OutDir)mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Lib>
-      <OutputFile>$(OutDir)wxbase30ud_xml.lib</OutputFile>
+      <OutputFile>$(OutDir)wxbase31ud_xml.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
@@ -197,7 +197,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>vc_mswud\wxprec_xmllib.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)wxbase30ud_xml.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)wxbase31ud_xml.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -208,7 +208,7 @@
       <AdditionalIncludeDirectories>$(OutDir)mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Lib>
-      <OutputFile>$(OutDir)wxbase30ud_xml.lib</OutputFile>
+      <OutputFile>$(OutDir)wxbase31ud_xml.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
@@ -232,7 +232,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>vc_mswu\wxprec_xmllib.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)wxbase30u_xml.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)wxbase31u_xml.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -243,7 +243,7 @@
       <AdditionalIncludeDirectories>$(OutDir)mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Lib>
-      <OutputFile>$(OutDir)wxbase30u_xml.lib</OutputFile>
+      <OutputFile>$(OutDir)wxbase31u_xml.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
@@ -267,7 +267,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>vc_mswu\wxprec_xmllib.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)wxbase30u_xml.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)wxbase31u_xml.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -278,7 +278,7 @@
       <AdditionalIncludeDirectories>$(OutDir)mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Lib>
-      <OutputFile>$(OutDir)wxbase30u_xml.lib</OutputFile>
+      <OutputFile>$(OutDir)wxbase31u_xml.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
     </Lib>
     <Bscmake>
@@ -304,25 +304,25 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>vc_mswuddll\wxprec_xmldll.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)wxbase30ud_xml_vc_custom.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)wxbase310ud_xml_vc_custom.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase30ud_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase310ud_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(OutDir)mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;$(OutDir)wxbase30ud.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)wxbase30ud_xml_vc_custom.dll</OutputFile>
-      <ImportLibrary>$(OutDir)wxbase30ud_xml.lib</ImportLibrary>
+      <AdditionalDependencies>wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;$(OutDir)wxbase31ud.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)wxbase310ud_xml_vc_custom.dll</OutputFile>
+      <ImportLibrary>$(OutDir)wxbase31ud_xml.lib</ImportLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)wxbase30ud_xml_vc_custom.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)wxbase310ud_xml_vc_custom.pdb</ProgramDatabaseFile>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Bscmake>
@@ -348,25 +348,25 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>vc_mswuddll\wxprec_xmldll.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)wxbase30ud_xml_vc_x64_custom.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)wxbase310ud_xml_vc_x64_custom.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase30ud_xml_vc_x64_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxbase310ud_xml_vc_x64_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(OutDir)mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;$(OutDir)wxbase30ud.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)wxbase30ud_xml_vc_x64_custom.dll</OutputFile>
-      <ImportLibrary>$(OutDir)wxbase30ud_xml.lib</ImportLibrary>
+      <AdditionalDependencies>wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;$(OutDir)wxbase31ud.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)wxbase310ud_xml_vc_x64_custom.dll</OutputFile>
+      <ImportLibrary>$(OutDir)wxbase31ud_xml.lib</ImportLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)wxbase30ud_xml_vc_x64_custom.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)wxbase310ud_xml_vc_x64_custom.pdb</ProgramDatabaseFile>
     </Link>
     <Bscmake>
       <OutputFile>$(OutDir)wx_vc9_xml.bsc</OutputFile>
@@ -389,25 +389,25 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>vc_mswudll\wxprec_xmldll.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)wxbase30u_xml_vc_custom.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)wxbase310u_xml_vc_custom.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase30u_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase310u_xml_vc_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(OutDir)mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;$(OutDir)wxbase30u.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)wxbase30u_xml_vc_custom.dll</OutputFile>
-      <ImportLibrary>$(OutDir)wxbase30u_xml.lib</ImportLibrary>
+      <AdditionalDependencies>wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;$(OutDir)wxbase31u.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)wxbase310u_xml_vc_custom.dll</OutputFile>
+      <ImportLibrary>$(OutDir)wxbase31u_xml.lib</ImportLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)wxbase30u_xml_vc_custom.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)wxbase310u_xml_vc_custom.pdb</ProgramDatabaseFile>
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -433,25 +433,25 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>wx/wxprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>vc_mswudll\wxprec_xmldll.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)wxbase30u_xml_vc_x64_custom.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(OutDir)wxbase310u_xml_vc_x64_custom.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase30u_xml_vc_x64_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE=1;_CRT_NON_CONFORMING_SWPRINTFS=1;_SCL_SECURE_NO_WARNINGS=1;__WXMSW__;NDEBUG;_UNICODE;WXBUILDING;WXDLLNAME=wxbase310u_xml_vc_x64_custom;wxUSE_GUI=0;WXUSINGDLL;WXMAKINGDLL_XML;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>$(OutDir)mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;$(OutDir)wxbase30u.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)wxbase30u_xml_vc_x64_custom.dll</OutputFile>
-      <ImportLibrary>$(OutDir)wxbase30u_xml.lib</ImportLibrary>
+      <AdditionalDependencies>wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;$(OutDir)wxbase31u.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)wxbase310u_xml_vc_x64_custom.dll</OutputFile>
+      <ImportLibrary>$(OutDir)wxbase31u_xml.lib</ImportLibrary>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)wxbase30u_xml_vc_x64_custom.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)wxbase310u_xml_vc_x64_custom.pdb</ProgramDatabaseFile>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
