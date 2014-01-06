@@ -550,7 +550,7 @@ void wxGCDCImpl::DoDrawArc( wxCoord x1, wxCoord y1,
              -atan2(double(y2 - yc), double(x2 - xc)) * RAD2DEG;
     }
 
-    bool fill = m_brush.GetStyle() != wxTRANSPARENT;
+    bool fill = m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT;
 
     wxGraphicsPath path = m_graphicContext->CreatePath();
     if ( fill && ((x1!=x2)||(y1!=y2)) )
@@ -578,7 +578,7 @@ void wxGCDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 
     // since these angles (ea,sa) are measured counter-clockwise, we invert them to
     // get clockwise angles
-    if ( m_brush.GetStyle() != wxTRANSPARENT )
+    if ( m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
     {
         wxGraphicsPath path = m_graphicContext->CreatePath();
         path.MoveToPoint( 0, 0 );
@@ -691,7 +691,9 @@ void wxGCDCImpl::DoDrawPolygon( int n, const wxPoint points[],
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawPolygon - invalid DC") );
 
-    if ( n <= 0 || (m_brush.GetStyle() == wxTRANSPARENT && m_pen.GetStyle() == wxTRANSPARENT ) )
+    if ( n <= 0 ||
+            (m_brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT &&
+                m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT) )
         return;
     if ( !m_logicalFunctionSupported )
         return;

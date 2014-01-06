@@ -63,14 +63,12 @@ wxBrush::wxBrush( const wxColour &colour, wxBrushStyle style )
     M_BRUSHDATA->m_colour = colour;
 }
 
-#if WXWIN_COMPATIBILITY_3_0
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData;
     M_BRUSHDATA->m_style = (wxBrushStyle)style;
     M_BRUSHDATA->m_colour = col;
 }
-#endif
 
 wxBrush::wxBrush( const wxBitmap &stippleBitmap )
 {

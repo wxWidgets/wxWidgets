@@ -432,12 +432,10 @@ wxPen::wxPen(const wxColour& col, int width, wxPenStyle style)
     m_refData = new wxPenRefData(col, width, style);
 }
 
-#if WXWIN_COMPATIBILITY_3_0
 wxPen::wxPen(const wxColour& colour, int width, int style)
 {
     m_refData = new wxPenRefData(colour, width, (wxPenStyle)style);
 }
-#endif
 
 wxPen::wxPen(const wxBitmap& stipple, int width)
 {

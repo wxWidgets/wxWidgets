@@ -246,7 +246,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
                             wxDEFAULT_CONTROL_BORDER
                             );
 #if defined(__WXMSW__)
-    m_text->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxNORMAL));
+    m_text->SetFont(wxFont(12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
 #endif
 
 //#if defined(__WXPM__)

@@ -196,7 +196,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 #ifdef __WXMAC__
     m_captionFont = *wxSMALL_FONT;
 #else
-    m_captionFont = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
+    m_captionFont = wxFont(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
 #endif
 
     // default metric values

@@ -21,9 +21,6 @@ public:
     wxPen() { }
 
     wxPen( const wxColour &colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID );
-#if WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED( wxPen(const wxColour& col, int width, int style) );
-#endif
 
     virtual ~wxPen();
 
@@ -49,10 +46,12 @@ public:
     wxDash* GetDash() const;
     wxBitmap *GetStipple() const;
 
-#if WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED( void SetStyle(int style) )
-        { SetStyle((wxPenStyle)style); }
-#endif
+
+    wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
+    wxPen(const wxColour& col, int width, int style);
+
+    wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
+    void SetStyle(int style) { SetStyle((wxPenStyle)style); }
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

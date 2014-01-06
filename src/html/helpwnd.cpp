@@ -1329,12 +1329,14 @@ void wxHtmlHelpWindow::OptionsDialog()
     //     are so that we can pass them to the dialog:
     if (m_NormalFace.empty())
     {
-        wxFont fnt(m_FontSize, wxSWISS, wxNORMAL, wxNORMAL, false);
+        wxFont fnt(m_FontSize,
+                   wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
         m_NormalFace = fnt.GetFaceName();
     }
     if (m_FixedFace.empty())
     {
-        wxFont fnt(m_FontSize, wxMODERN, wxNORMAL, wxNORMAL, false);
+        wxFont fnt(m_FontSize,
+                   wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
         m_FixedFace = fnt.GetFaceName();
     }
 

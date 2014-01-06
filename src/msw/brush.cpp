@@ -232,12 +232,10 @@ wxBrush::wxBrush(const wxColour& col, wxBrushStyle style)
     m_refData = new wxBrushRefData(col, style);
 }
 
-#if WXWIN_COMPATIBILITY_3_0
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData(col, (wxBrushStyle)style);
 }
-#endif
 
 wxBrush::wxBrush(const wxBitmap& stipple)
 {

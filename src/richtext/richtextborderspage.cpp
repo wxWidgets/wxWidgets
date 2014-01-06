@@ -230,7 +230,7 @@ void wxRichTextBordersPage::CreateControls()
     wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer7->Add(itemBoxSizer8, 0, wxGROW, 5);
     wxStaticText* itemStaticText9 = new wxStaticText( itemPanel5, wxID_STATIC, _("Border"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText9->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
+    itemStaticText9->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxFONTWEIGHT_BOLD));
     itemBoxSizer8->Add(itemStaticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticLine* itemStaticLine10 = new wxStaticLine( itemPanel5, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -399,7 +399,7 @@ void wxRichTextBordersPage::CreateControls()
     wxBoxSizer* itemBoxSizer51 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer50->Add(itemBoxSizer51, 0, wxGROW, 5);
     wxStaticText* itemStaticText52 = new wxStaticText( itemPanel48, wxID_STATIC, _("Outline"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText52->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
+    itemStaticText52->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxFONTWEIGHT_BOLD));
     itemBoxSizer51->Add(itemStaticText52, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticLine* itemStaticLine53 = new wxStaticLine( itemPanel48, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -567,7 +567,7 @@ void wxRichTextBordersPage::CreateControls()
     wxBoxSizer* itemBoxSizer94 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer93->Add(itemBoxSizer94, 0, wxGROW, 5);
     wxStaticText* itemStaticText95 = new wxStaticText( itemPanel91, wxID_STATIC, _("Corner"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStaticText95->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxBOLD, false, wxT("")));
+    itemStaticText95->SetFont(wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetFamily(), wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetStyle(), wxFONTWEIGHT_BOLD));
     itemBoxSizer94->Add(itemStaticText95, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticLine* itemStaticLine96 = new wxStaticLine( itemPanel91, wxID_STATIC, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );

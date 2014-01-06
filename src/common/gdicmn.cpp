@@ -613,7 +613,8 @@ const wxFont* wxStockGDI::GetFont(Item item)
         switch (item)
         {
         case FONT_ITALIC:
-            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize(), wxROMAN, wxITALIC, wxNORMAL);
+            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize(),
+                              wxFONTFAMILY_ROMAN, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL);
             break;
         case FONT_NORMAL:
             font = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
@@ -631,10 +632,11 @@ const wxFont* wxStockGDI::GetFont(Item item)
 #else
                     - 2,
 #endif
-                    wxSWISS, wxNORMAL, wxNORMAL);
+                    wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
             break;
         case FONT_SWISS:
-            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize(), wxSWISS, wxNORMAL, wxNORMAL);
+            font = new wxFont(GetFont(FONT_NORMAL)->GetPointSize(),
+                              wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
             break;
         default:
             wxFAIL;

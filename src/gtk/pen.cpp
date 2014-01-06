@@ -95,7 +95,6 @@ wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style )
     M_PENDATA->m_colour = colour;
 }
 
-#if WXWIN_COMPATIBILITY_3_0
 wxPen::wxPen(const wxColour& colour, int width, int style)
 {
     m_refData = new wxPenRefData();
@@ -103,7 +102,6 @@ wxPen::wxPen(const wxColour& colour, int width, int style)
     M_PENDATA->m_style = (wxPenStyle)style;
     M_PENDATA->m_colour = colour;
 }
-#endif
 
 wxPen::~wxPen()
 {
