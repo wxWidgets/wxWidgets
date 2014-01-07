@@ -529,8 +529,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // Also handle the case of check menu items that had been checked before
     // being attached to the menu: we don't need to actually call Check() on
     // them, so we don't use checkInitially in this case, but we do need to
-    // make them checked at Windows level too.
-    if ( pItem->IsCheck() && pItem->IsChecked() )
+    // make them checked at Windows level too. Notice that we shouldn't ask
+    // Windows for the checked state here, as wxMenuItem::IsChecked() does, as
+    // the item is not attached yet, so explicitly call the base class version.
+    if ( pItem->IsCheck() && pItem->wxMenuItemBase::IsChecked() )
         flags |= MF_CHECKED;
 
     // adjust position to account for the title of a popup menu, if any
