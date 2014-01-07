@@ -121,7 +121,7 @@ static const int VIEWPORT_EXTENT = 134217727;
 // convert degrees to radians
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
-// call AlphaBlend() to blit contents of hdcSrc to hdcDst using alpha
+// call AlphaBlend() to blit contents of hdcSrc to dcDst using alpha
 //
 // NB: bmpSrc is the bitmap selected in hdcSrc, it is not really needed
 //     to pass it to this function but as we already have it at the point
@@ -129,12 +129,12 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 //
 // return true if we could draw the bitmap in one way or the other, false
 // otherwise
-static bool AlphaBlt(HDC hdcDst,
+static bool AlphaBlt(wxMSWDCImpl* dcSrc,
                      int x, int y, int dstWidth, int dstHeight,
                      int srcX, int srcY,
                      int srcWidth, int srcHeight,
                      HDC hdcSrc,
-                     const wxBitmap& bmp);
+                     const wxBitmap& bmpSrc);
 
 #ifdef wxHAS_RAW_BITMAP
 
@@ -1301,7 +1301,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         MemoryHDC hdcMem;
         SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
 
-        if ( AlphaBlt(GetHdc(), x, y, width, height, 0, 0, width, height, hdcMem, bmp) )
+        if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, bmp) )
             return;
     }
 
@@ -2177,7 +2177,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     if ( bmpSrc.IsOk() && (bmpSrc.HasAlpha() ||
             (m_selectedBitmap.IsOk() && m_selectedBitmap.HasAlpha())) )
     {
-        if ( AlphaBlt(GetHdc(), xdest, ydest, dstWidth, dstHeight,
+        if ( AlphaBlt(this, xdest, ydest, dstWidth, dstHeight,
                       xsrc, ysrc, srcWidth, srcHeight, hdcSrc, bmpSrc) )
             return true;
     }
@@ -2640,15 +2640,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 // alpha channel support
 // ----------------------------------------------------------------------------
 
-static bool AlphaBlt(HDC hdcDst,
+static bool AlphaBlt(wxMSWDCImpl* dcDst,
                      int x, int y, int dstWidth, int dstHeight,
                      int srcX, int srcY,
                      int srcWidth, int srcHeight,
                      HDC hdcSrc,
-                     const wxBitmap& bmp)
+                     const wxBitmap& bmpSrc)
 {
-    wxASSERT_MSG( bmp.IsOk() && bmp.HasAlpha(), wxT("AlphaBlt(): invalid bitmap") );
-    wxASSERT_MSG( hdcDst && hdcSrc, wxT("AlphaBlt(): invalid HDC") );
+    wxASSERT_MSG( bmpSrc.IsOk() && bmpSrc.HasAlpha(),
+                    wxT("AlphaBlt(): invalid bitmap") );
+    wxASSERT_MSG( dcDst && hdcSrc, wxT("AlphaBlt(): invalid HDC") );
 
     // do we have AlphaBlend() and company in the headers?
 #if defined(AC_SRC_OVER) && wxUSE_DYNLIB_CLASS
@@ -2667,10 +2668,59 @@ static bool AlphaBlt(HDC hdcDst,
         bf.SourceConstantAlpha = 0xff;
         bf.AlphaFormat = AC_SRC_ALPHA;
 
-        if ( pfnAlphaBlend(hdcDst, x, y, dstWidth, dstHeight,
+        if ( pfnAlphaBlend(GetHdcOf(*dcDst), x, y, dstWidth, dstHeight,
                            hdcSrc, srcX, srcY, srcWidth, srcHeight,
                            bf) )
         {
+            // There is an extra complication with drawing bitmaps with alpha
+            // on bitmaps without alpha: AlphaBlt() modifies the alpha
+            // component of the destination bitmap even if it hadn't had it
+            // before which is not only unexpected but corrupts the bitmap as
+            // all its pixels outside of the (x, y, dstWidth, dstHeight) area
+            // are now fully transparent: they already had 0 value of alpha
+            // before but it didn't count as long as all other pixels had 0
+            // alpha as well, but now that some of them are not transparent any
+            // more, the rest of pixels with 0 alpha is transparent. So undo
+            // this to avoid "losing" the existing bitmap contents outside of
+            // the area affected by AlphaBlt(), see #14403.
+            const wxBitmap& bmpDst = dcDst->GetSelectedBitmap();
+            if ( bmpDst.IsOk() && !bmpDst.HasAlpha() && bmpDst.GetDepth() == 32 )
+            {
+                // We need to deselect the bitmap from the memory DC it is
+                // currently selected into before modifying it.
+                wxBitmap bmpOld = bmpDst;
+                dcDst->DoSelect(wxNullBitmap);
+
+                // Notice the extra block: we must destroy wxAlphaPixelData
+                // before selecting the bitmap into the DC again.
+                {
+                    wxAlphaPixelData data(bmpOld);
+                    if ( data )
+                    {
+                        wxAlphaPixelData::Iterator p(data);
+                        for ( int y = 0; y < bmpOld.GetHeight(); y++ )
+                        {
+                            wxAlphaPixelData::Iterator rowStart = p;
+
+                            for ( int x = 0; x < bmpOld.GetWidth(); x++ )
+                            {
+                                // We choose to use wxALPHA_TRANSPARENT instead
+                                // of perhaps more logical wxALPHA_OPAQUE here
+                                // to ensure that the bitmap remains the same
+                                // as before, i.e. without any alpha at all.
+                                p.Alpha() = wxALPHA_TRANSPARENT;
+                                ++p;
+                            }
+
+                            p = rowStart;
+                            p.OffsetY(data, 1);
+                        }
+                    }
+                }
+
+                dcDst->DoSelect(bmpOld);
+            }
+
             // skip wxAlphaBlend() call below
             return true;
         }
@@ -2684,13 +2734,14 @@ static bool AlphaBlt(HDC hdcDst,
     // AlphaBlend() unavailable of failed: use our own (probably much slower)
     // implementation
 #ifdef wxHAS_RAW_BITMAP
-    wxAlphaBlend(hdcDst, x, y, dstWidth, dstHeight, srcX, srcY, srcWidth, srcHeight, bmp);
+    wxAlphaBlend(GetHdcOf(*dcDst), x, y, dstWidth, dstHeight,
+                 srcX, srcY, srcWidth, srcHeight, bmpSrc);
 
     return true;
 #else // !wxHAS_RAW_BITMAP
     // no wxAlphaBlend() neither, fall back to using simple BitBlt() (we lose
     // alpha but at least something will be shown like this)
-    wxUnusedVar(bmp);
+    wxUnusedVar(bmpSrc);
     return false;
 #endif // wxHAS_RAW_BITMAP/!wxHAS_RAW_BITMAP
 }
