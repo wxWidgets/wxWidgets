@@ -215,7 +215,8 @@ public:
     // we must be constructed with the size of our images as we need to create
     // the image list
     wxXPButtonImageData(wxAnyButton *btn, const wxBitmap& bitmap)
-        : m_iml(bitmap.GetWidth(), bitmap.GetHeight(), true /* use mask */,
+        : m_iml(bitmap.GetWidth(), bitmap.GetHeight(),
+                !bitmap.HasAlpha() /* use mask only if no alpha */,
                 wxAnyButton::State_Max + 1 /* see "pulse" comment below */),
           m_hwndBtn(GetHwndOf(btn))
     {
