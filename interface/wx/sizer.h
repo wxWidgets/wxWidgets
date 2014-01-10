@@ -1639,7 +1639,17 @@ public:
         Note that this method does not trigger relayout.
     */
     void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
-    
+
+    /**
+       Returns a read-only array containing the heights of the rows in the sizer.
+    */
+    const wxArrayInt& GetRowHeights() const;
+
+    /**
+       Returns a read-only array containing the widths of the columns in the sizer.
+    */
+    const wxArrayInt& GetColWidths() const;
+
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
     
