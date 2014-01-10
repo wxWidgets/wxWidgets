@@ -243,8 +243,13 @@
     #endif
 
     #ifdef __WXGTK__
-        #pragma comment(lib, "gtk-win32-2.0.lib")
-        #pragma comment(lib, "gdk-win32-2.0.lib")
+        #ifdef __WXGTK3__
+            #pragma comment(lib, "libgtk-3.dll.a")
+            #pragma comment(lib, "libgdk-3.dll.a")
+        #else
+            #pragma comment(lib, "gtk-win32-2.0.lib")
+            #pragma comment(lib, "gdk-win32-2.0.lib")
+        #endif
         #pragma comment(lib, "pangocairo-1.0.lib")
         #pragma comment(lib, "gdk_pixbuf-2.0.lib")
         #pragma comment(lib, "cairo.lib")

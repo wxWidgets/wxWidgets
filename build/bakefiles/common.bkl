@@ -608,6 +608,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
 
     <set var="LIB_GTK">
         <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1' and TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">gtk-win32-2.0.lib gdk-win32-2.0.lib pangocairo-1.0.lib gdk_pixbuf-2.0.lib cairo.lib pango-1.0.lib gobject-2.0.lib gthread-2.0.lib glib-2.0.lib</if>
+        <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1' and TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">libgtk-3.dll.a libgdk-3.dll.a pangocairo-1.0.lib gdk_pixbuf-2.0.lib cairo.lib pango-1.0.lib gobject-2.0.lib gthread-2.0.lib glib-2.0.lib</if>
     </set>
 
     <!-- for GUI libs/samples: -->
