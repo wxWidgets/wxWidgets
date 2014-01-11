@@ -48,6 +48,9 @@ enum wxLanguage
           f.write('    %s,\n' % i[0])
           knownLangs.append(i[0])
    f.write("""
+    /// Obsolete synonym.
+    wxLANGUAGE_CAMBODIAN = wxLANGUAGE_KHMER,
+
     /// For custom, user-defined languages.
     wxLANGUAGE_USER_DEFINED
 };
