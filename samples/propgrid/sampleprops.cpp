@@ -113,7 +113,7 @@ void wxFontDataProperty::OnSetValue()
 
         wxFont font = fontData.GetChosenFont();
         if ( !font.IsOk() )
-            font = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
+            font = wxFontInfo(10).Family(wxFONTFAMILY_SWISS);
 
         m_value = WXVARIANT(font);
     }

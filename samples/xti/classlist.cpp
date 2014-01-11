@@ -111,7 +111,7 @@ void ClassListDialog::CreateControls()
     m_pClassCountText = new wxStaticText( this, wxID_STATIC, 
                 wxT("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
                 wxDefaultPosition, wxDefaultSize, 0 );
-    m_pClassCountText->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Tahoma")));
+    m_pClassCountText->SetFont(wxFontInfo(8).Family(wxFONTFAMILY_SWISS).Bold());
     itemBoxSizer2->Add(m_pClassCountText, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
     wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxHORIZONTAL);

@@ -583,9 +583,9 @@ static const wxChar* const gs_fp_es_style_labels[] = {
 };
 
 static const long gs_fp_es_style_values[] = {
-    wxNORMAL,
-    wxSLANT,
-    wxITALIC
+    wxFONTSTYLE_NORMAL,
+    wxFONTSTYLE_SLANT,
+    wxFONTSTYLE_ITALIC
 };
 
 static const wxChar* const gs_fp_es_weight_labels[] = {
@@ -596,9 +596,9 @@ static const wxChar* const gs_fp_es_weight_labels[] = {
 };
 
 static const long gs_fp_es_weight_values[] = {
-    wxNORMAL,
-    wxLIGHT,
-    wxBOLD
+    wxFONTWEIGHT_NORMAL,
+    wxFONTWEIGHT_LIGHT,
+    wxFONTWEIGHT_BOLD
 };
 
 // Class body is in advprops.h
@@ -806,9 +806,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
         dc.DrawRectangle( rect );
 
         wxFont oldFont = dc.GetFont();
-        wxFont drawFont(oldFont.GetPointSize(),
-                        wxDEFAULT,wxNORMAL,wxBOLD,false,drawFace);
-        dc.SetFont(drawFont);
+        dc.SetFont(wxFontInfo(oldFont.GetPointSize().Bold().FaceName(drawFace));
 
         dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT) );
         dc.DrawText( wxT("Aa"), rect.x+2, rect.y+1 );

@@ -698,9 +698,8 @@ void MyPrintout::DrawPageTwo()
                              wxT("testing "), wxT("string. "), wxT("Enjoy "), wxT("it!") };
         wxCoord w, h;
         long x = 200, y= 250;
-        wxFont fnt(15, wxSWISS, wxNORMAL, wxNORMAL);
 
-        dc->SetFont(fnt);
+        dc->SetFont(wxFontInfo(15).Family(wxFONTFAMILY_SWISS));
 
         for (int i = 0; i < 7; i++)
         {
@@ -746,15 +745,6 @@ void MyPrintout::DrawPageTwo()
 // Writes a header on a page. Margin units are in millimetres.
 bool MyPrintout::WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString&text, float mmToLogical)
 {
-#if 0
-    static wxFont *headerFont = (wxFont *) NULL;
-    if (!headerFont)
-    {
-        headerFont = wxTheFontList->FindOrCreateFont(16, wxSWISS, wxNORMAL, wxBOLD);
-    }
-    dc->SetFont(headerFont);
-#endif
-
     int pageWidthMM, pageHeightMM;
 
     printout->GetPageSizeMM(&pageWidthMM, &pageHeightMM);

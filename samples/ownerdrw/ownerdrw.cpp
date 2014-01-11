@@ -110,11 +110,11 @@ void OwnerDrawnFrame::InitMenu()
     wxMenu *sub_menu  = new wxMenu;
 
     // vars used for menu construction
-    wxFont fontLarge(18, wxROMAN, wxNORMAL, wxBOLD, false),
-           fontUlined(12, wxDEFAULT, wxNORMAL, wxNORMAL, true),
-           fontItalic(12, wxMODERN, wxITALIC, wxBOLD, false),
+    wxFont fontLarge(wxFontInfo(18).Family(wxFONTFAMILY_ROMAN).Bold()),
+           fontUlined(wxFontInfo(12).Underlined()),
+           fontItalic(wxFontInfo(12).Italic().Bold()),
            // should be at least of the size of bitmaps
-           fontBmp(14, wxDEFAULT, wxNORMAL, wxNORMAL, false);
+           fontBmp(wxFontInfo(14));
 
     // sorry for my artistic skills...
     wxBitmap bmpBell(wxT("bell")),

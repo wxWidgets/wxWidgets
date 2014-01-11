@@ -648,7 +648,7 @@ AppAbout::AppAbout (wxWindow *parent,
     wxBoxSizer *totalpane = new wxBoxSizer (wxVERTICAL);
     totalpane->Add (0, 20);
     wxStaticText *appname = new wxStaticText(this, wxID_ANY, *g_appname);
-    appname->SetFont (wxFont (24, wxDEFAULT, wxNORMAL, wxBOLD));
+    appname->SetFont (wxFontInfo(24).Bold());
     totalpane->Add (appname, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT, 40);
     totalpane->Add (0, 10);
     totalpane->Add (aboutpane, 0, wxEXPAND | wxALL, 4);

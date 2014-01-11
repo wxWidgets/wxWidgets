@@ -402,8 +402,8 @@ bool wxFontDialog::Create(wxWindow *parent)
             [[NSFontManager sharedFontManager] fontWithFamily:
                                                     wxNSStringWithWxString(thewxfont.GetFaceName())
                                             traits:theMask
-                                            weight:thewxfont.GetWeight() == wxBOLD ? 9 :
-                                                    thewxfont.GetWeight() == wxLIGHT ? 0 : 5
+                                            weight:thewxfont.GetWeight() == wxFONTWEIGHT_BOLD ? 9 :
+                                                    thewxfont.GetWeight() == wxFONTWEIGHT_LIGHT ? 0 : 5
                                             size: (float)(thewxfont.GetPointSize())
             ];
 
@@ -530,8 +530,8 @@ int wxFontDialog::ShowModal()
     m_fontData.m_chosenFont.SetFaceName(wxStringWithNSString([theFont familyName]));
     m_fontData.m_chosenFont.SetPointSize(theFontSize);
     m_fontData.m_chosenFont.SetStyle(theTraits & NSItalicFontMask ? wxFONTSTYLE_ITALIC : 0);
-    m_fontData.m_chosenFont.SetWeight(theFontWeight < 5 ? wxLIGHT :
-                                    theFontWeight >= 9 ? wxBOLD : wxNORMAL);
+    m_fontData.m_chosenFont.SetWeight(theFontWeight < 5 ? wxFONTWEIGHT_LIGHT :
+                                    theFontWeight >= 9 ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL);
 
     //Get the shared color panel along with the chosen color and set the chosen color
     NSColor* theColor = [[theColorPanel color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];

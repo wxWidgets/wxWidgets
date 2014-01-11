@@ -594,8 +594,8 @@ void MyApp::CreateStyles()
 {
     // Paragraph styles
 
-    wxFont romanFont(12, wxROMAN, wxNORMAL, wxNORMAL);
-    wxFont swissFont(12, wxSWISS, wxNORMAL, wxNORMAL);
+    wxFont romanFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
+    wxFont swissFont(wxFontInfo(12).Family(wxFONTFAMILY_SWISS));
 
     wxRichTextParagraphStyleDefinition* normalPara = new wxRichTextParagraphStyleDefinition(wxT("Normal"));
     wxRichTextAttr normalAttr;
@@ -915,14 +915,14 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE);
     sizer->Add(splitter, 1, wxEXPAND);
 
-    wxFont textFont = wxFont(12, wxROMAN, wxNORMAL, wxNORMAL);
-    wxFont boldFont = wxFont(12, wxROMAN, wxNORMAL, wxBOLD);
-    wxFont italicFont = wxFont(12, wxROMAN, wxITALIC, wxNORMAL);
+    wxFont textFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
+    wxFont boldFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
+    wxFont italicFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN).Italic());
 
     m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL/*|wxWANTS_CHARS*/);
     wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
 
-    wxFont font(12, wxROMAN, wxNORMAL, wxNORMAL);
+    wxFont font(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
 
     m_richTextCtrl->SetFont(font);
 

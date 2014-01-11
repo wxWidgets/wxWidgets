@@ -7254,9 +7254,9 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
 // Note: under MSW, the default column label font must be changed because it
 //       does not support vertical printing
 //
-// Example: wxFont font(9, wxSWISS, wxNORMAL, wxBOLD);
-//                      pGrid->SetLabelFont(font);
-//                      pGrid->SetColLabelTextOrientation(wxVERTICAL);
+// Example:
+//      pGrid->SetLabelFont(wxFontInfo(9).Family(wxFONTFAMILY_SWISS));
+//      pGrid->SetColLabelTextOrientation(wxVERTICAL);
 //
 void wxGrid::SetColLabelTextOrientation( int textOrientation )
 {

@@ -1098,23 +1098,23 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
         switch ( (wxChar)wxTheApp->argv[1][0] )
         {
             case '2':
-                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                             false, wxT(""),
-                                             wxFONTENCODING_ISO8859_2));
+                m_horizontal->SetFont(wxFontInfo(18)
+                                        .Family(wxFONTFAMILY_SWISS)
+                                        .Encoding(wxFONTENCODING_ISO8859_2));
                 m_horizontal->AppendText(wxT("\256lu\273ou\350k\375 k\371\362 zb\354sile \350e\271tina \253\273"));
                 break;
 
             case '1':
-                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                             false, wxT(""),
-                                             wxFONTENCODING_CP1251));
+                m_horizontal->SetFont(wxFontInfo(18)
+                                        .Family(wxFONTFAMILY_SWISS)
+                                        .Encoding(wxFONTENCODING_CP1251));
                 m_horizontal->AppendText(wxT("\317\360\350\342\345\362!"));
                 break;
 
             case '8':
-                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
-                                             false, wxT(""),
-                                             wxFONTENCODING_CP1251));
+                m_horizontal->SetFont(wxFontInfo(18)
+                                        .Family(wxFONTFAMILY_SWISS)
+                                        .Encoding(wxFONTENCODING_CP1251));
 #if wxUSE_UNICODE
                 m_horizontal->AppendText(L"\x0412\x0430\x0434\x0438\x043c \x0426");
 #else
@@ -1923,12 +1923,12 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
 
             if (attr.HasFont())
             {
-                if (attr.GetFont().GetWeight() == wxBOLD)
+                if (attr.GetFont().GetWeight() == wxFONTWEIGHT_BOLD)
                     msg += wxT(" BOLD");
-                else if (attr.GetFont().GetWeight() == wxNORMAL)
+                else if (attr.GetFont().GetWeight() == wxFONTWEIGHT_NORMAL)
                     msg += wxT(" NORMAL");
 
-                if (attr.GetFont().GetStyle() == wxITALIC)
+                if (attr.GetFont().GetStyle() == wxFONTSTYLE_ITALIC)
                     msg += wxT(" ITALIC");
 
                 if (attr.GetFont().GetUnderlined())

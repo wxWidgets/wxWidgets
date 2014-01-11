@@ -355,8 +355,8 @@ void wxStyledTextCtrl::StyleSetFont(int styleNum, wxFont& font) {
 #endif
     int            size     = font.GetPointSize();
     wxString       faceName = font.GetFaceName();
-    bool           bold     = font.GetWeight() == wxBOLD;
-    bool           italic   = font.GetStyle() != wxNORMAL;
+    bool           bold     = font.GetWeight() == wxFONTWEIGHT_BOLD;
+    bool           italic   = font.GetStyle() != wxFONTSTYLE_NORMAL;
     bool           under    = font.GetUnderlined();
     wxFontEncoding encoding = font.GetEncoding();
 
