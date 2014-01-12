@@ -339,6 +339,11 @@ wxFileTypeImpl::GetOpenCommand(wxString *openCmd,
 {
     wxString cmd = GetCommand(wxT("open"));
 
+    // Some viewers don't define the "open" verb but do define "show" one, try
+    // to use it as a fallback.
+    if ( cmd.empty() )
+        cmd = GetCommand(wxT("show"));
+
     *openCmd = wxFileType::ExpandCommand(cmd, params);
 
     return !openCmd->empty();
