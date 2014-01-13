@@ -455,13 +455,21 @@ public:
 
     /**
         Find a child of this window, by @a id.
+
         May return @a this if it matches itself.
+
+        Notice that only real children, not top level windows using this window
+        as parent, are searched by this function.
     */
     wxWindow* FindWindow(long id) const;
 
     /**
         Find a child of this window, by name.
+
         May return @a this if it matches itself.
+
+        Notice that only real children, not top level windows using this window
+        as parent, are searched by this function.
     */
     wxWindow* FindWindow(const wxString& name) const;
 

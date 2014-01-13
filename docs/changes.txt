@@ -242,6 +242,9 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - wxGridBagSizer::AddGrowable{Col,Row}() must now be called after the items are
   added to the sizer, i.e. the columns and rows already exist.
 
+- wxWindow::FindWindow() skips over top level children now as finding a child
+  dialog when looking for a child control could have been very unexpected.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
