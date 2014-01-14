@@ -466,6 +466,18 @@ public:
      */
     virtual wxString GetValue() const = 0;
 
+    /**
+       Get the wxControl used by this editor.
+    */
+    wxControl* GetControl() const;
+
+    /**
+       Set the wxControl that will be used by this cell editor for editing the
+       value.
+    */
+    void SetControl(wxControl* control);
+
+
 protected:
 
     /**
