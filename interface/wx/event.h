@@ -4085,6 +4085,11 @@ public:
         You can only veto a shutdown if CanVeto() returns @true.
     */
     void Veto(bool veto = true);
+
+    /**
+       Returns whether the Veto flag was set.
+    */
+    bool GetVeto() const;
 };
 
 
