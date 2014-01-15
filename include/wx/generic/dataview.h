@@ -155,6 +155,7 @@ public:
     virtual int GetColumnPosition( const wxDataViewColumn *column ) const;
 
     virtual wxDataViewColumn *GetSortingColumn() const;
+    virtual wxVector<wxDataViewColumn *> GetSortingColumns() const;
 
     virtual int GetSelectedItemsCount() const;
     virtual int GetSelections( wxDataViewItemArray & sel ) const;
@@ -205,8 +206,14 @@ protected:
     virtual wxDataViewItem GetItemByRow( unsigned int row ) const;
     virtual int GetRowByItem( const wxDataViewItem & item ) const;
 
-    int GetSortingColumnIndex() const { return m_sortingColumnIdx; }
-    void SetSortingColumnIndex(int idx) { m_sortingColumnIdx = idx; }
+    // Get all column indices used for sorting in order they were selected
+    wxVector<int> const &GetSortingColumnIndices() const { return m_sortingColumnIdxs; }
+    // Append column index for sorting
+    void AddSortingColumnIndex(int idx);
+    // Unselect column index from being sorted
+    void UnsetSortingColumnIndex(int idx);
+    // Return true if the given column is sorted
+    bool IsColumnSorted(int Index) const;
 
 public:     // utility functions not part of the API
 
@@ -240,6 +247,7 @@ public:     // utility functions not part of the API
 private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
+    virtual void DoAllowMultipleSort();
 
     void InvalidateColBestWidths();
     void InvalidateColBestWidth(int idx);
@@ -267,8 +275,8 @@ private:
     // user defined color to draw row lines, may be invalid
     wxColour m_alternateRowColour;
 
-    // the index of the column currently used for sorting or -1
-    int m_sortingColumnIdx;
+    // columns indices used for sorting, empty if nothing is sorted
+    wxVector<int> m_sortingColumnIdxs;
 
 private:
     void OnSize( wxSizeEvent &event );

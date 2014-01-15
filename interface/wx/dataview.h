@@ -1395,6 +1395,14 @@ public:
     virtual wxDataViewColumn* GetSortingColumn() const;
 
     /**
+        Returns the vector of wxDataViewColumn currently responsible for sorting
+        or empty one if none has been selected.
+
+        @since 3.1.0
+    */
+    virtual wxVector<wxDataViewColumn *> GetSortingColumns() const;
+
+    /**
         Returns true if any items are currently selected.
 
         This method may be called for both the controls with single and
@@ -1502,6 +1510,29 @@ public:
         @since 2.9.2
     */
     virtual bool SetRowHeight(int rowHeight);
+
+    /**
+        Set to true if multiple columns could be selected for sorting. If false,
+        only 1 column could be selected for sorting.
+
+        If using multiple column sorting, one should use @GetSortingColumns()
+        method for finding the all selected columns and order in which they were
+        selected when processing the sorted event.
+
+        Currently this attribute is only supported in the generic version. In
+        other ports it does nothing.
+
+        @since 3.1.0
+    */
+    void AllowMultipleSort(bool Allow);
+
+    /**
+        Return @true if multiple columns could be selected for sorting.
+        Otherwise @false.
+
+        @since 3.1.0
+    */
+    bool AllowMultipleSort() const;
 };
 
 

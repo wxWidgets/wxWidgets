@@ -645,6 +645,14 @@ public:
         { return m_expander_column; }
 
     virtual wxDataViewColumn *GetSortingColumn() const = 0;
+    virtual wxVector<wxDataViewColumn *> GetSortingColumns() const = 0;
+
+    void AllowMultipleSort(bool Allow)
+    {
+        m_allowMultiColumnSort = Allow;
+        DoAllowMultipleSort();
+    }
+    bool AllowMultipleSort() const { return m_allowMultiColumnSort; }
 
 
     // items management
@@ -730,10 +738,15 @@ private:
     // implementation is trivial and is done in the base class itself).
     virtual wxDataViewItem DoGetCurrentItem() const = 0;
     virtual void DoSetCurrentItem(const wxDataViewItem& item) = 0;
+    // Implementation for processing the multi column sort
+    // activation/deactivation. Default do nothing
+    virtual void DoAllowMultipleSort() {}
 
     wxDataViewModel        *m_model;
     wxDataViewColumn       *m_expander_column;
     int m_indent ;
+    // Allow multiple column sort
+    bool m_allowMultiColumnSort;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)

@@ -48,6 +48,8 @@
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
+#include <algorithm>
+#include <functional>
 
 //-----------------------------------------------------------------------------
 // classes
@@ -165,7 +167,7 @@ void wxDataViewColumn::UnsetAsSortKey()
     m_sort = false;
 
     if ( m_owner )
-        m_owner->SetSortingColumnIndex(wxNOT_FOUND);
+        m_owner->UnsetSortingColumnIndex(m_owner->GetColumnIndex(this));
 
     UpdateDisplay();
 }
@@ -175,18 +177,31 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
     if ( !m_owner )
         return;
 
-    // First unset the old sort column if any.
-    int oldSortKey = m_owner->GetSortingColumnIndex();
-    if ( oldSortKey != wxNOT_FOUND )
+    const int idx = m_owner->GetColumnIndex(this);
+
+    if(m_owner->AllowMultipleSort())
     {
-        m_owner->GetColumn(oldSortKey)->UnsetAsSortKey();
+        if(!m_owner->IsColumnSorted(idx))
+        {
+            m_owner->AddSortingColumnIndex(idx);
+            m_sort = true;
+        }
+    }
+    else
+    {
+        // First unset the old sort column if any.
+        wxVector<int> const &old_sort_keys = m_owner->GetSortingColumnIndices();
+        if (!old_sort_keys.empty())
+        {
+            m_owner->GetColumn(old_sort_keys.front())->UnsetAsSortKey();
+        }
+        wxASSERT(old_sort_keys.empty());
+        // Now set this one as the new sort column.
+        m_owner->AddSortingColumnIndex(idx);
+
+        m_sort = true;
     }
 
-    // Now set this one as the new sort column.
-    const int idx = m_owner->GetColumnIndex(this);
-    m_owner->SetSortingColumnIndex(idx);
-
-    m_sort = true;
     m_sortAscending = ascending;
 
     // Call this directly instead of using UpdateDisplay() as we already have
@@ -286,6 +301,22 @@ private:
         if ( !SendEvent(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
                         event.GetColumn()) )
             event.Skip();
+
+        wxDataViewCtrl * const owner = GetOwner();
+        // With multiple sort column, enable/disable sort
+        if(owner->AllowMultipleSort())
+        {
+            
+            wxDataViewColumn * const col = owner->GetColumn(event.GetColumn());
+            wxVector<int> const &sorted_columns = owner->GetSortingColumnIndices();
+            // Is sorted, remove but only if this column isn't the only one
+            // sorted
+            if(sorted_columns.size() > 1 && owner->IsColumnSorted(event.GetColumn()))
+            {
+                col->UnsetAsSortKey();
+                SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, event.GetColumn());
+            }
+        }
     }
 
     void OnResize(wxHeaderCtrlEvent& event)
@@ -4484,9 +4515,6 @@ void wxDataViewCtrl::Init()
     m_cols.DeleteContents(true);
     m_notifier = NULL;
 
-    // No sorting column at start
-    m_sortingColumnIdx = wxNOT_FOUND;
-
     m_headerArea = NULL;
     m_clientArea = NULL;
 
@@ -5052,8 +5080,15 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
 {
-    return m_sortingColumnIdx == wxNOT_FOUND ? NULL
-                                            : GetColumn(m_sortingColumnIdx);
+    return m_sortingColumnIdxs.empty() ? NULL : GetColumn(m_sortingColumnIdxs.front());
+}
+
+wxVector<wxDataViewColumn *> wxDataViewCtrl::GetSortingColumns() const
+{
+    wxVector<wxDataViewColumn *> out(m_sortingColumnIdxs.size());
+    std::transform(m_sortingColumnIdxs.begin(), m_sortingColumnIdxs.end(), out.begin(), std::bind1st(std::mem_fn(&wxDataViewCtrl::GetColumn), this));
+
+    return out;
 }
 
 wxDataViewItem wxDataViewCtrl::DoGetCurrentItem() const
@@ -5274,6 +5309,43 @@ void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn
     wxCHECK_RET( column, "no column provided" );
 
     m_clientArea->StartEditing(item, column);
+}
+
+void wxDataViewCtrl::DoAllowMultipleSort()
+{
+    // If disabling, must disable any multiple sort that are active
+    if(!AllowMultipleSort())
+    {
+        // Must make copy, because unsorting will remove it from original vector
+        wxVector<int> const copy(m_sortingColumnIdxs);
+        for(wxVector<int>::const_iterator it = copy.begin(), end = copy.end(); it != end; ++it)
+        {
+            GetColumn(*it)->UnsetAsSortKey();
+        }
+        wxASSERT(m_sortingColumnIdxs.empty());
+        // Resort model
+        if(wxDataViewModel *model = GetModel())
+            model->Resort();
+    }
+}
+
+
+bool wxDataViewCtrl::IsColumnSorted( int Index ) const
+{
+    return std::find(m_sortingColumnIdxs.begin(), m_sortingColumnIdxs.end(), Index) != m_sortingColumnIdxs.end();
+}
+
+void wxDataViewCtrl::AddSortingColumnIndex( int idx )
+{
+    m_sortingColumnIdxs.push_back(idx);
+}
+
+void wxDataViewCtrl::UnsetSortingColumnIndex( int idx )
+{
+    wxVector<int>::iterator it = std::find(m_sortingColumnIdxs.begin(), m_sortingColumnIdxs.end(), idx);
+    wxASSERT_MSG(it != m_sortingColumnIdxs.end(), "Sort column index not valid");
+
+    m_sortingColumnIdxs.erase(it);
 }
 
 #endif // !wxUSE_GENERICDATAVIEWCTRL
