@@ -193,6 +193,12 @@ bool hvApp::OnInit()
 
     m_helpController = new wxHtmlHelpController( istyle );
 
+    // By default, the application doesn't continue running if only the help
+    // frame remains. This makes sense for the programs doing something else
+    // and also showing help, but as this one only shows help, we should keep
+    // it running as long as this frame is opened.
+    m_helpController->SetShouldPreventAppExit(true);
+
     if ( !hasWindowName )
     {
         titleFormat = wxT("Help: %s") ;
