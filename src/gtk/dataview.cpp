@@ -1638,10 +1638,10 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
     gtk_tree_path_append_index( path, index );
 #endif
 
+    m_internal->ItemDeleted( parent, item );
+
     gtk_tree_model_row_deleted(
         GTK_TREE_MODEL(wxgtk_model), path );
-
-    m_internal->ItemDeleted( parent, item );
 
     // Did we remove the last child, causing 'parent' to become a leaf?
     if ( !m_wx_model->IsContainer(parent) )
