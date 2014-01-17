@@ -1074,12 +1074,6 @@ public:
     bool IsAnyModified() const { return (m_pState->m_anyModified>0); }
 
     /**
-        Returns true if updating is frozen (ie Freeze() called but not yet
-        Thaw() ).
-     */
-    bool IsFrozen() const { return (m_frozen>0)?true:false; }
-
-    /**
         It is recommended that you call this function any time your code causes
         wxPropertyGrid's top-level parent to change. wxPropertyGrid's OnIdle()
         handler should be able to detect most changes, but it is not perfect.
@@ -1559,8 +1553,6 @@ public:
         { return (m_iFlags & flag) ? true : false; }
     void SetInternalFlag( long flag ) { m_iFlags |= flag; }
     void ClearInternalFlag( long flag ) { m_iFlags &= ~(flag); }
-    void IncFrozen() { m_frozen++; }
-    void DecFrozen() { m_frozen--; }
 
     void OnComboItemPaint( const wxPGComboBox* pCb,
                            int item,
@@ -1778,12 +1770,12 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
     virtual bool SetFont( const wxFont& font );
-    virtual void Freeze();
     virtual void SetExtraStyle( long exStyle );
-    virtual void Thaw();
     virtual bool Reparent( wxWindowBase *newParent );
 
 protected:
+    virtual void DoThaw();
+
     virtual wxSize DoGetBestSize() const;
 
 #ifndef wxPG_ICON_WIDTH
@@ -1933,9 +1925,6 @@ protected:
 
     /** 1 if m_latsCaption is also the bottommost caption. */
     //unsigned char       m_lastCaptionBottomnest;
-
-    /** Set to 1 when graphics frozen. */
-    unsigned char       m_frozen;
 
     unsigned char       m_vspacing;
 

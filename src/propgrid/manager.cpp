@@ -679,17 +679,17 @@ void wxPropertyGridManager::SetExtraStyle( long exStyle )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::Freeze()
+void wxPropertyGridManager::DoFreeze()
 {
     m_pPropGrid->Freeze();
-    wxWindow::Freeze();
+    wxWindow::DoFreeze();
 }
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::Thaw()
+void wxPropertyGridManager::DoThaw()
 {
-    wxWindow::Thaw();
+    wxWindow::DoThaw();
     m_pPropGrid->Thaw();
 }
 
