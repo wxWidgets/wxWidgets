@@ -779,6 +779,8 @@ enum wxThreadError
         MyThread *m_pThread;
         wxCriticalSection m_pThreadCS;    // protects the m_pThread pointer
 
+        friend class MyThread;            // allow it to access our m_pThread
+
         wxDECLARE_EVENT_TABLE();
     };
 
