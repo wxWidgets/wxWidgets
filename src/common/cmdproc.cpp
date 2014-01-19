@@ -333,7 +333,10 @@ bool wxCommandProcessor::IsDirty() const
     {
         // We have never been saved, so we are dirty if and only if we have any
         // commands at all.
-        return m_currentCommand != NULL;
+        //
+        // NB: The ugly "!!" test is needed to avoid warnings both from MSVC in
+        //     non-STL build and g++ in STL build.
+        return !!m_currentCommand;
     }
 
     if ( !m_currentCommand )
