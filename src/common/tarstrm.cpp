@@ -902,7 +902,7 @@ wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
     if ((value = GetExtendedHeader(m_hdr->Name(id))) != wxEmptyString) {
         wxTarNumber n = 0;
         wxString::const_iterator p = value.begin();
-        while (*p == ' ' && p != value.end())
+        while (p != value.end() && *p == ' ')
             p++;
         while (isdigit(*p))
             n = n * 10 + (*p++ - '0');
