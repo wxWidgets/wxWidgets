@@ -71,10 +71,10 @@ public:
     // Creates a new bitmap (DDB or DIB) from the contents of the given DIB.
     void CopyFromDIB(const wxDIB& dib);
 
-#ifndef NEVER_USE_DIB
+#if wxUSE_WXDIB
     // Takes ownership of the given DIB.
     bool AssignDIB(wxDIB& dib);
-#endif // !NEVER_USE_DIB
+#endif // wxUSE_WXDIB
 
 
     // set the mask object to use as the mask, we take ownership of it
@@ -295,7 +295,7 @@ void wxBitmapRefData::CopyFromDIB(const wxDIB& dib)
     InitFromDIB(dib, hbitmap);
 }
 
-#ifndef NEVER_USE_DIB
+#if wxUSE_WXDIB
 
 bool wxBitmapRefData::AssignDIB(wxDIB& dib)
 {
@@ -310,7 +310,7 @@ bool wxBitmapRefData::AssignDIB(wxDIB& dib)
     return true;
 }
 
-#endif // !NEVER_USE_DIB
+#endif // wxUSE_WXDIB
 
 // ----------------------------------------------------------------------------
 // wxBitmap creation
@@ -477,7 +477,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon, wxBitmapTransparency transp)
     return CopyFromIconOrCursor(icon, transp);
 }
 
-#ifndef NEVER_USE_DIB
+#if wxUSE_WXDIB
 
 bool wxBitmap::CopyFromDIB(const wxDIB& dib)
 {
@@ -511,7 +511,7 @@ bool wxBitmap::ConvertToDIB()
     return GetBitmapData()->AssignDIB(dib);
 }
 
-#endif // NEVER_USE_DIB
+#endif // wxUSE_WXDIB
 
 wxBitmap::~wxBitmap()
 {
