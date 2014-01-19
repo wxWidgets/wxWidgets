@@ -172,7 +172,7 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxWindowDC& dc ) :
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc ) :
    wxDCImpl( owner )
 {
-#ifndef NEVER_USE_DIB
+#if defined(__WXMSW__) && wxUSE_WXDIB
     // It seems that GDI+ sets invalid values for alpha channel when used with
     // a compatible bitmap (DDB). So we need to convert the currently selected
     // bitmap to a DIB before using it with any GDI+ functions to ensure that
@@ -225,7 +225,7 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc ) :
         // Undo SelectObject() at the beginning of this block.
         const_cast<wxMemoryDC&>(dc).SelectObjectAsSource(bmp);
     }
-#endif // !NEVER_USE_DIB
+#endif // wxUSE_WXDIB
 
     Init(wxGraphicsContext::Create(dc));
 }
