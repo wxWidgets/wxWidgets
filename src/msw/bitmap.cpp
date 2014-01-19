@@ -68,7 +68,14 @@ public:
 
     virtual void Free();
 
+    // Creates a new bitmap (DDB or DIB) from the contents of the given DIB.
     void CopyFromDIB(const wxDIB& dib);
+
+#ifndef NEVER_USE_DIB
+    // Takes ownership of the given DIB.
+    bool AssignDIB(wxDIB& dib);
+#endif // !NEVER_USE_DIB
+
 
     // set the mask object to use as the mask, we take ownership of it
     void SetMask(wxMask *mask)
@@ -117,6 +124,11 @@ public:
 
 private:
     void Init();
+
+    // Use the given bitmap handle and take the rest of the characteristics
+    // (size, depth, ...) from the given DIB.
+    void InitFromDIB(const wxDIB& dib, HBITMAP hbitmap);
+
 
     // optional mask for transparent drawing
     wxMask       *m_bitmapMask;
@@ -249,6 +261,22 @@ void wxBitmapRefData::Free()
     wxDELETE(m_bitmapMask);
 }
 
+void wxBitmapRefData::InitFromDIB(const wxDIB& dib, HBITMAP hbitmap)
+{
+    m_width = dib.GetWidth();
+    m_height = dib.GetHeight();
+    m_depth = dib.GetDepth();
+
+    m_hBitmap = (WXHBITMAP)hbitmap;
+
+#if wxUSE_PALETTE
+    wxPalette *palette = dib.CreatePalette();
+    if ( palette )
+        m_bitmapPalette = *palette;
+    delete palette;
+#endif // wxUSE_PALETTE
+}
+
 void wxBitmapRefData::CopyFromDIB(const wxDIB& dib)
 {
     wxCHECK_RET( !IsOk(), "bitmap already initialized" );
@@ -264,19 +292,25 @@ void wxBitmapRefData::CopyFromDIB(const wxDIB& dib)
     m_isDIB = true;
 #endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
 
-    m_width = dib.GetWidth();
-    m_height = dib.GetHeight();
-    m_depth = dib.GetDepth();
-
-    m_hBitmap = (WXHBITMAP)hbitmap;
-
-#if wxUSE_PALETTE
-    wxPalette *palette = dib.CreatePalette();
-    if ( palette )
-        m_bitmapPalette = *palette;
-    delete palette;
-#endif // wxUSE_PALETTE
+    InitFromDIB(dib, hbitmap);
 }
+
+#ifndef NEVER_USE_DIB
+
+bool wxBitmapRefData::AssignDIB(wxDIB& dib)
+{
+    if ( !dib.IsOk() )
+        return false;
+
+    Free();
+
+    m_isDIB = true;
+    InitFromDIB(dib, dib.Detach());
+
+    return true;
+}
+
+#endif // !NEVER_USE_DIB
 
 // ----------------------------------------------------------------------------
 // wxBitmap creation
@@ -455,6 +489,26 @@ bool wxBitmap::CopyFromDIB(const wxDIB& dib)
     UnRef();
     m_refData = newData.release();
     return true;
+}
+
+bool wxBitmap::IsDIB() const
+{
+    return GetBitmapData() && GetBitmapData()->m_isDIB;
+}
+
+bool wxBitmap::ConvertToDIB()
+{
+    if ( IsDIB() )
+        return true;
+
+    wxDIB dib(*this);
+    if ( !dib.IsOk() )
+        return false;
+
+    // It is important to reuse the current GetBitmapData() instead of creating
+    // a new one, as our object identity shouldn't change just because our
+    // internal representation did, but IsSameAs() compares data pointers.
+    return GetBitmapData()->AssignDIB(dib);
 }
 
 #endif // NEVER_USE_DIB
