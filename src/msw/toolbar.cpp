@@ -783,6 +783,12 @@ bool wxToolBar::Realize()
 
                 if ( bmp.IsOk() )
                 {
+                    // By default bitmaps don't have alpha in wxMSW, but if we
+                    // use a bitmap tool with alpha, we should use alpha for
+                    // the combined bitmap as well.
+                    if ( bmp.HasAlpha() )
+                        bitmap.UseAlpha();
+
                     int xOffset = wxMax(0, (m_defaultWidth - w)/2);
                     int yOffset = wxMax(0, (m_defaultHeight - h)/2);
 
