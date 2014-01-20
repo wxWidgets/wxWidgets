@@ -533,15 +533,16 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
-    const int heightBest = GetBestSize().y;
+    // The height of the control itself, i.e. of its visible part.
+    int heightVisible = height;
 
     // we need the real height below so get the current one if it's not given
     if ( height == wxDefaultCoord )
     {
         // height not specified, use the same as before
-        DoGetSize(NULL, &height);
+        DoGetSize(NULL, &heightVisible);
     }
-    else if ( height == heightBest )
+    else if ( height == GetBestSize().y )
     {
         // we don't need to manually manage our height, let the system use the
         // default one
@@ -585,7 +586,7 @@ void wxChoice::DoSetSize(int x, int y,
         // The extra item (" + 1") is required to prevent a vertical
         // scrollbar from appearing with comctl32.dll versions earlier
         // than 6.0 (such as found in Win2k).
-        heightWithItems = height + hItem*(nItems + 1);
+        heightWithItems = heightVisible + hItem*(nItems + 1);
     else
         heightWithItems = SetHeightSimpleComboBox(nItems);
 
