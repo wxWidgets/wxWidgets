@@ -184,6 +184,8 @@ public:
 
     virtual bool SetFont(const wxFont & font);
 
+    virtual void AddRemoveMultipleSortColumn(int Column);
+
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource( const wxDataFormat &format );
     virtual bool EnableDropTarget( const wxDataFormat &format );

@@ -5356,6 +5356,11 @@ void wxDataViewCtrl::UnsetSortingColumnIndex( int idx )
     m_sortingColumnIdxs.erase(it);
 }
 
+void wxDataViewCtrl::AddRemoveMultipleSortColumn( int Column )
+{
+    m_headerArea->AddRemoveMultiSort(Column);
+}
+
 #endif // !wxUSE_GENERICDATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

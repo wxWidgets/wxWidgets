@@ -1533,6 +1533,14 @@ public:
         @since 3.1.0
     */
     bool AllowMultipleSort() const;
+
+    /**
+        Add/Remove column to/from actually sorted columns. If the control
+        doesn't allow multiple column sorting, nothing is done.
+        Use this function for customization of how multiple columns are set as
+        sorted.
+    */
+    virtual void AddRemoveMultipleSortColumn(int Column);
 };
 
 

@@ -707,6 +707,10 @@ public:
     // Use EditItem() instead
     wxDEPRECATED( void StartEditor(const wxDataViewItem& item, unsigned int column) );
 
+    virtual void AddRemoveMultipleSortColumn(int WXUNUSED(Column))
+    {
+    }
+
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
         { return false; }
