@@ -219,23 +219,27 @@ public:
         if(owner->AllowMultipleSort())
         {
             wxDataViewColumn * const col = owner->GetColumn(Column);
-            wxVector<int> const &sorted_columns = owner->GetSortingColumnIndices();
-            // Is column sorted
-            if(owner->IsColumnSorted(Column))
+            // Only if sortable
+            if(col->IsSortable())
             {
-                // Unsort it if there are more than 1 column sorted, don't
-                // want to unsort the last one
-                if(sorted_columns.size() > 1)
+                wxVector<int> const &sorted_columns = owner->GetSortingColumnIndices();
+                // Is column sorted
+                if(owner->IsColumnSorted(Column))
                 {
-                    col->UnsetAsSortKey();
+                    // Unsort it if there are more than 1 column sorted, don't
+                    // want to unsort the last one
+                    if(sorted_columns.size() > 1)
+                    {
+                        col->UnsetAsSortKey();
+                        SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, Column);
+                    }
+                }
+                // Otherwise sort it
+                else
+                {
+                    col->SetSortOrder(true);
                     SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, Column);
                 }
-            }
-            // Otherwise sort it
-            else
-            {
-                col->SetSortOrder(true);
-                SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, Column);
             }
         }
     }
