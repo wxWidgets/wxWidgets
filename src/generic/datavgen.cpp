@@ -300,7 +300,7 @@ private:
         else // not using this column for sorting yet
         {
             // Unsort all previous columns
-            wxVector<int> const &old_sort_keys = owner->GetSortingColumnIndices();
+            wxVector<int> const old_sort_keys = owner->GetSortingColumnIndices();
             for(wxVector<int>::const_iterator it = old_sort_keys.begin(), end = old_sort_keys.end(); it != end; ++it)
                 owner->GetColumn(*it)->UnsetAsSortKey();
             // Sort the column
