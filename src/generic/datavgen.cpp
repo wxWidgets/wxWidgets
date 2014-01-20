@@ -179,30 +179,27 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
 
     const int idx = m_owner->GetColumnIndex(this);
 
-    if(m_owner->AllowMultipleSort())
+    // If this column isn't sorted already, mark it as sorted
+    if(!m_sort)
     {
-        if(!m_owner->IsColumnSorted(idx))
+        wxASSERT(!m_owner->IsColumnSorted(idx));
+
+        if(!m_owner->AllowMultipleSort())
         {
-            m_owner->AddSortingColumnIndex(idx);
-            m_sort = true;
+            // First unset the old sort column if any.
+            wxVector<int> const &old_sort_keys = m_owner->GetSortingColumnIndices();
+            if (!old_sort_keys.empty())
+            {
+                m_owner->GetColumn(old_sort_keys.front())->UnsetAsSortKey();
+            }
+            wxASSERT(old_sort_keys.empty());
         }
-    }
-    else
-    {
-        // First unset the old sort column if any.
-        wxVector<int> const &old_sort_keys = m_owner->GetSortingColumnIndices();
-        if (!old_sort_keys.empty())
-        {
-            m_owner->GetColumn(old_sort_keys.front())->UnsetAsSortKey();
-        }
-        wxASSERT(old_sort_keys.empty());
         // Now set this one as the new sort column.
         m_owner->AddSortingColumnIndex(idx);
-
         m_sort = true;
     }
-
-    m_sortAscending = ascending;
+    
+   m_sortAscending = ascending;
 
     // Call this directly instead of using UpdateDisplay() as we already have
     // the column index, no need to look it up again.
