@@ -1149,6 +1149,8 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
             wxLogLastError(wxT("CreateThread(RasStatusThread)"));
 
             CleanUpThreadData();
+
+            ok = false;
         }
     }
 
