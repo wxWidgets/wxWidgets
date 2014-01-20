@@ -151,8 +151,9 @@ bool wxTopLevelWindowBase::IsLastBeforeExit() const
     // second, never terminate the application after closing a child TLW
     // because this would close its parent unexpectedly -- notice that this
     // check is not redundant with the loop below, as the parent might return
-    // false from its ShouldPreventAppExit()
-    if ( GetParent() )
+    // false from its ShouldPreventAppExit() -- except if the child is being
+    // deleted as part of the parent destruction
+    if ( GetParent() && !GetParent()->IsBeingDeleted() )
         return false;
 
     wxWindowList::const_iterator i;
