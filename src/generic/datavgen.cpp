@@ -211,6 +211,34 @@ public:
     wxDataViewCtrl *GetOwner() const
         { return static_cast<wxDataViewCtrl *>(GetParent()); }
 
+    // Add/Remove additional column to sorting columns
+    void AddRemoveMultiSort(int Column)
+    {
+         wxDataViewCtrl * const owner = GetOwner();
+        // With multiple sort column, enable/disable sort
+        if(owner->AllowMultipleSort())
+        {
+            wxDataViewColumn * const col = owner->GetColumn(Column);
+            wxVector<int> const &sorted_columns = owner->GetSortingColumnIndices();
+            // Is column sorted
+            if(owner->IsColumnSorted(Column))
+            {
+                // Unsort it if there are more than 1 column sorted, don't
+                // want to unsort the last one
+                if(sorted_columns.size() > 1)
+                {
+                    col->UnsetAsSortKey();
+                    SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, Column);
+                }
+            }
+            // Otherwise sort it
+            else
+            {
+                col->SetSortOrder(true);
+                SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, Column);
+            }
+        }
+    }
 protected:
     // implement/override wxHeaderCtrl functions by forwarding them to the main
     // control
@@ -290,33 +318,12 @@ private:
 
     void OnRClick(wxHeaderCtrlEvent& event)
     {
+        // Event wasn't processed somewhere, use default behaviour
         if ( !SendEvent(wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK,
                         event.GetColumn()) )
-            event.Skip();
-
-        wxDataViewCtrl * const owner = GetOwner();
-        // With multiple sort column, enable/disable sort
-        if(owner->AllowMultipleSort())
         {
-            wxDataViewColumn * const col = owner->GetColumn(event.GetColumn());
-            wxVector<int> const &sorted_columns = owner->GetSortingColumnIndices();
-            // Is column sorted
-            if(owner->IsColumnSorted(event.GetColumn()))
-            {
-                // Unsort it if there are more than 1 column sorted, don't
-                // want to unsort the last one
-                if(sorted_columns.size() > 1)
-                {
-                    col->UnsetAsSortKey();
-                    SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, event.GetColumn());
-                }
-            }
-            // Otherwise sort it
-            else
-            {
-                col->SetSortOrder(true);
-                SendEvent(wxEVT_DATAVIEW_COLUMN_SORTED, event.GetColumn());
-            }
+            event.Skip();
+            AddRemoveMultiSort(event.GetColumn());
         }
     }
 
