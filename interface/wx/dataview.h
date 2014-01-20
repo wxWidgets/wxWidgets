@@ -821,6 +821,19 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     through wxVariant which can be extended to support more data formats as necessary.
     Accordingly, all type information uses the strings returned from wxVariant::GetType.
 
+    This control support single column sorting and multiple column sorting. In
+    single column sorting, only 1 column could be set as sorted. With multiple
+    column sorting, more than 1 column could be set as sorted. The default
+    behavior of multi column sorting is to click with right mouse button on the
+    column to add that column to the currently sorted columns. Also clicking with
+    right mouse button on the column which is sorted with other multiple columns
+    will unset the column from columns being sorted. Also if one needs
+    to customize how the columns are set sorted with multiple column sort,
+    one could handle the
+    EVT_DATAVIEW_COLUMN_HEADER_CLICK/wxEVT_DATAVIEW_COLUMN_HEADER_CLICK event
+    and from there call the AddRemoveMultipleSortColumn() function to set/unset
+    the column from being sorted.
+
     @beginStyleTable
     @style{wxDV_SINGLE}
            Single selection mode. This is the default.
