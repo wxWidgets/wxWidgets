@@ -667,7 +667,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
                 wxScrolledWindow* scrolledWindow = wxDynamicCast(page, wxScrolledWindow);
                 if (scrolledWindow)
                     windows.Append(scrolledWindow);
-                else if (!scrolledWindow && page->GetSizer())
+                else if (page->GetSizer())
                 {
                     // Create a scrolled window and reparent
                     scrolledWindow = CreateScrolledWindow(page);
