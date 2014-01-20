@@ -114,6 +114,7 @@ private:
     void OnHeaderClick( wxDataViewEvent &event );
     void OnAttrHeaderClick( wxDataViewEvent &event );
     void OnHeaderRightClick( wxDataViewEvent &event );
+	void OnHeaderRightClickList( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
     void OnSortedList( wxDataViewEvent &event );
 
@@ -125,6 +126,7 @@ private:
     void OnShowAttributes( wxCommandEvent &event);
 
     void OnMultipleSort( wxCommandEvent &event);
+	void OnMultipleSortCustom( wxCommandEvent &event);
 
 #if wxUSE_DRAG_AND_DROP
     void OnBeginDrag( wxDataViewEvent &event );
@@ -157,6 +159,7 @@ private:
     wxTextCtrl* m_log;
     wxLog *m_logOld;
 
+	bool m_customMultipleSort;
 private:
     DECLARE_EVENT_TABLE()
 };
@@ -292,6 +295,7 @@ enum
     ID_HIDE_ATTRIBUTES  = 204,
     ID_SHOW_ATTRIBUTES  = 205,
     ID_MULTIPLE_SORT    = 206,
+	ID_MULTIPLE_SORT_CUSTOM = 207,
 
     // Fourth page.
     ID_DELETE_TREE_ITEM = 400,
@@ -327,6 +331,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_HIDE_ATTRIBUTES, MyFrame::OnHideAttributes)
     EVT_BUTTON( ID_SHOW_ATTRIBUTES, MyFrame::OnShowAttributes)
     EVT_CHECKBOX( ID_MULTIPLE_SORT, MyFrame::OnMultipleSort)
+	EVT_CHECKBOX( ID_MULTIPLE_SORT_CUSTOM, MyFrame::OnMultipleSortCustom)
+	
     // Fourth page.
     EVT_BUTTON( ID_DELETE_TREE_ITEM, MyFrame::OnDeleteTreeItem )
     EVT_BUTTON( ID_DELETE_ALL_TREE_ITEMS, MyFrame::OnDeleteAllTreeItems )
@@ -350,6 +356,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
     EVT_DATAVIEW_COLUMN_SORTED(ID_ATTR_CTRL, MyFrame::OnSortedList)
+	EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(ID_ATTR_CTRL, MyFrame::OnHeaderRightClickList)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
 
@@ -373,6 +380,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_ctrl[1] = NULL;
     m_ctrl[2] = NULL;
     m_ctrl[3] = NULL;
+
+	m_customMultipleSort = false;
 
     SetIcon(wxICON(sample));
 
@@ -465,6 +474,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer2->Add( new wxButton( secondPanel, ID_HIDE_ATTRIBUTES,    "Hide attributes"), 0, wxALL, 10 );
     button_sizer2->Add( new wxButton( secondPanel, ID_SHOW_ATTRIBUTES,    "Show attributes"), 0, wxALL, 10 );
     button_sizer2->Add( new wxCheckBox( secondPanel, ID_MULTIPLE_SORT,    "Multiple sort"),   0, wxALL, 10 );
+	button_sizer2->Add( new wxCheckBox( secondPanel, ID_MULTIPLE_SORT_CUSTOM,    "Custom multiple sort"),   0, wxALL, 10 );
 
     wxSizer *secondPanelSz = new wxBoxSizer( wxVERTICAL );
     secondPanelSz->Add(m_ctrl[1], 1, wxGROW|wxALL, 5);
@@ -1112,6 +1122,16 @@ void MyFrame::OnSortedList( wxDataViewEvent &/*event*/)
     }
 }
 
+void MyFrame::OnHeaderRightClickList( wxDataViewEvent &event )
+{
+	if(m_customMultipleSort)
+	{
+		m_ctrl[1]->AddRemoveMultipleSortColumn(event.GetColumn());
+	}
+	else
+		event.Skip();
+}
+
 void MyFrame::OnSorted( wxDataViewEvent &event )
 {
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
@@ -1207,5 +1227,10 @@ void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnMultipleSort( wxCommandEvent &event )
 {
     m_ctrl[1]->AllowMultipleSort(event.IsChecked());
+}
+
+void MyFrame::OnMultipleSortCustom( wxCommandEvent &event )
+{
+	m_customMultipleSort = event.IsChecked();
 }
 
