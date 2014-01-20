@@ -5115,8 +5115,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
             // The descent for the whole line at this point, is the correct max descent
             maxDescent = childDescent;
-            // Maximum ascent
-            maxAscent = actualSize.y-childDescent;
 
             // lineHeight is given by the height for the whole line, since it will
             // take into account ascend/descend.
