@@ -2985,7 +2985,7 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
 }
 
 wxRichTextParagraphLayoutBox*
-wxRichTextCtrl::FindContainerAtPoint(const wxPoint pt, long& position, int& hit, wxRichTextObject* hitObj, int flags/* = 0*/)
+wxRichTextCtrl::FindContainerAtPoint(const wxPoint& pt, long& position, int& hit, wxRichTextObject* hitObj, int flags/* = 0*/)
 {
     wxClientDC dc(this);
     PrepareDC(dc);

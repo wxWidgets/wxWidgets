@@ -903,7 +903,7 @@ public:
     /**
         Finds the container at the given point, which is in screen coordinates.
     */
-    wxRichTextParagraphLayoutBox* FindContainerAtPoint(const wxPoint pt, long& position, int& hit, wxRichTextObject* hitObj, int flags = 0);
+    wxRichTextParagraphLayoutBox* FindContainerAtPoint(const wxPoint& pt, long& position, int& hit, wxRichTextObject* hitObj, int flags = 0);
     //@}
 
 #if wxUSE_DRAG_AND_DROP

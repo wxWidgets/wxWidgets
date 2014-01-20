@@ -91,7 +91,7 @@ public:
       { return DoPoke(item, ws,
                       size == wxNO_LEN ? (wcslen(ws) + 1)*sizeof(wchar_t)
                                        : size, wxIPC_UNICODETEXT); }
-  bool Poke(const wxString& item, const wxString s)
+  bool Poke(const wxString& item, const wxString& s)
   {
       const wxScopedCharBuffer buf = s.utf8_str();
       return DoPoke(item, buf,  strlen(buf) + 1, wxIPC_UTF8TEXT);
@@ -113,7 +113,7 @@ public:
       { return DoAdvise(item, ws,
                         size == wxNO_LEN ? (wcslen(ws) + 1)*sizeof(wchar_t)
                                          : size, wxIPC_UNICODETEXT); }
-  bool Advise(const wxString& item, const wxString s)
+  bool Advise(const wxString& item, const wxString& s)
   {
       const wxScopedCharBuffer buf = s.utf8_str();
       return DoAdvise(item, buf,  strlen(buf) + 1, wxIPC_UTF8TEXT);

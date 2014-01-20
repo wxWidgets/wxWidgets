@@ -1692,7 +1692,7 @@ public:
         @param text
             Initial text value of created wxTextCtrl.
     */
-    void SetupTextCtrlValue( const wxString text ) { m_prevTcValue = text; }
+    void SetupTextCtrlValue( const wxString& text ) { m_prevTcValue = text; }
 
     /**
         Unfocuses or closes editor if one was open, but does not deselect
