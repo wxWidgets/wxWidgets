@@ -128,7 +128,7 @@ public:
 #ifndef __WXUNIVERSAL__
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
     // FIXME: should they really be all virtual?
-    virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID& id);
+    virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID id);
     virtual bool LoadNativeDialog(wxWindow* parent, const wxString& name);
     wxWindow* GetWindowChild1(wxWindowID id);
     wxWindow* GetWindowChild(wxWindowID id);

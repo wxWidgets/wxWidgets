@@ -43,7 +43,7 @@ extern LONG APIENTRY _EXPORT wxDlgProc(HWND hWnd, UINT message,
 // implementation
 // ===========================================================================
 
-bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
+bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID id)
 {
     m_windowId = id;
 
