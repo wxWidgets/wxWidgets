@@ -557,6 +557,18 @@ wxFont::wxFont(const wxString& fontdesc)
         (void)Create(info);
 }
 
+wxFont::wxFont(int size,
+               int family,
+               int style,
+               int weight,
+               bool underlined,
+               const wxString& face,
+               wxFontEncoding encoding)
+{
+    (void)Create(size, (wxFontFamily)family, (wxFontStyle)style,
+                (wxFontWeight)weight, underlined, face, encoding);
+}
+
 bool wxFont::Create(int pointSize,
                     wxFontFamily family,
                     wxFontStyle style,

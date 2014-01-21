@@ -127,10 +127,7 @@ public:
            int weight,
            bool underlined = false,
            const wxString& face = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
-    {
-        (void)Create(size, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
-    }
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
 
     // implementation only from now on
