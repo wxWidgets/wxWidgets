@@ -657,16 +657,6 @@ typedef struct
 #define MUI_LANGUAGE_NAME 0x8
 #endif
 
-//We need to check if we are using MinGW or mingw-w64 as their
-//definitions are different
-#ifdef __MINGW32_TOOLCHAIN__
-typedef enum CommandStateChangeConstants {
-    CSC_UPDATECOMMANDS = (int) 0xFFFFFFFF,
-    CSC_NAVIGATEFORWARD = 0x1,
-    CSC_NAVIGATEBACK = 0x2
-} CommandStateChangeConstants;
-#endif
-
  /*
   * In addition to the declarations for VC++, the following are required for WinCE
   */
