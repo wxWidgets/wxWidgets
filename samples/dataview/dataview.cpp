@@ -1126,7 +1126,7 @@ void MyFrame::OnHeaderRightClickList( wxDataViewEvent &event )
 {
     if(m_customMultipleSort)
     {
-        m_ctrl[1]->AddRemoveMultipleSortColumn(event.GetColumn());
+        m_ctrl[1]->ToggleSortByColumn(event.GetColumn());
     }
     else
         event.Skip();
@@ -1226,7 +1226,7 @@ void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnMultipleSort( wxCommandEvent &event )
 {
-    m_ctrl[1]->AllowMultipleSort(event.IsChecked());
+    m_ctrl[1]->AllowMultiColumnSort(event.IsChecked());
 }
 
 void MyFrame::OnMultipleSortCustom( wxCommandEvent &event )
