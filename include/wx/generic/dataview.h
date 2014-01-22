@@ -249,7 +249,7 @@ public:     // utility functions not part of the API
 private:
     virtual wxDataViewItem DoGetCurrentItem() const;
     virtual void DoSetCurrentItem(const wxDataViewItem& item);
-    virtual void DoAllowMultipleSort();
+    virtual void DoAllowMultiColumnSort();
 
     void InvalidateColBestWidths();
     void InvalidateColBestWidth(int idx);

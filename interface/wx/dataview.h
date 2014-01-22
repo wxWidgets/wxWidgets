@@ -1537,7 +1537,7 @@ public:
 
         @since 3.1.0
     */
-    void AllowMultipleSort(bool Allow);
+    void AllowMultiColumnSort(bool Allow);
 
     /**
         Return @true if multiple columns could be selected for sorting.

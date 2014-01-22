@@ -647,12 +647,12 @@ public:
     virtual wxDataViewColumn *GetSortingColumn() const = 0;
     virtual wxVector<wxDataViewColumn *> GetSortingColumns() const = 0;
 
-    void AllowMultipleSort(bool Allow)
+    void AllowMultiColumnSort(bool Allow)
     {
         m_allowMultiColumnSort = Allow;
-        DoAllowMultipleSort();
+        DoAllowMultiColumnSort();
     }
-    bool AllowMultipleSort() const { return m_allowMultiColumnSort; }
+    bool AllowMultiColumnSort() const { return m_allowMultiColumnSort; }
 
 
     // items management
@@ -744,7 +744,7 @@ private:
     virtual void DoSetCurrentItem(const wxDataViewItem& item) = 0;
     // Implementation for processing the multi column sort
     // activation/deactivation. Default do nothing
-    virtual void DoAllowMultipleSort() {}
+    virtual void DoAllowMultiColumnSort() {}
 
     wxDataViewModel        *m_model;
     wxDataViewColumn       *m_expander_column;

@@ -216,7 +216,7 @@ public:
     {
          wxDataViewCtrl * const owner = GetOwner();
         // With multiple sort column, enable/disable sort
-        if(owner->AllowMultipleSort())
+        if(owner->AllowMultiColumnSort())
         {
             wxDataViewColumn * const col = owner->GetColumn(Column);
             // Only if sortable
@@ -5323,10 +5323,10 @@ void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn
     m_clientArea->StartEditing(item, column);
 }
 
-void wxDataViewCtrl::DoAllowMultipleSort()
+void wxDataViewCtrl::DoAllowMultiColumnSort()
 {
     // If disabling, must disable any multiple sort that are active
-    if(!AllowMultipleSort())
+    if(!AllowMultiColumnSort())
     {
         // Must make copy, because unsorting will remove it from original vector
         wxVector<int> const copy(m_sortingColumnIdxs);
