@@ -48,8 +48,6 @@
 #include "wx/dnd.h"
 #include "wx/stopwatch.h"
 #include "wx/weakref.h"
-#include <algorithm>
-#include <functional>
 
 //-----------------------------------------------------------------------------
 // classes
@@ -5097,8 +5095,10 @@ wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const
 
 wxVector<wxDataViewColumn *> wxDataViewCtrl::GetSortingColumns() const
 {
-    wxVector<wxDataViewColumn *> out(m_sortingColumnIdxs.size());
-    std::transform(m_sortingColumnIdxs.begin(), m_sortingColumnIdxs.end(), out.begin(), std::bind1st(std::mem_fn(&wxDataViewCtrl::GetColumn), this));
+    wxVector<wxDataViewColumn *> out;
+    
+    for(wxVector<int>::const_iterator it = m_sortingColumnIdxs.begin(), end = m_sortingColumnIdxs.end(); it != end; ++it)
+        out.push_back(GetColumn(*it));
 
     return out;
 }
@@ -5344,7 +5344,14 @@ void wxDataViewCtrl::DoAllowMultiColumnSort()
 
 bool wxDataViewCtrl::IsColumnSorted( int index ) const
 {
-    return std::find(m_sortingColumnIdxs.begin(), m_sortingColumnIdxs.end(), Index) != m_sortingColumnIdxs.end();
+    wxVector<int>::const_iterator it = m_sortingColumnIdxs.begin(), end = m_sortingColumnIdxs.end();
+    for(; it != end; ++it)
+    {
+        if(*it == index)
+            break;
+    }
+
+    return it != end;
 }
 
 void wxDataViewCtrl::AddSortingColumnIndex( int idx )
@@ -5354,7 +5361,13 @@ void wxDataViewCtrl::AddSortingColumnIndex( int idx )
 
 void wxDataViewCtrl::UnsetSortingColumnIndex( int idx )
 {
-    wxVector<int>::iterator it = std::find(m_sortingColumnIdxs.begin(), m_sortingColumnIdxs.end(), idx);
+    wxVector<int>::iterator it = m_sortingColumnIdxs.begin(), end = m_sortingColumnIdxs.end();
+    for(; it != end; ++it)
+    {
+        if(*it == idx)
+            break;
+    }
+
     wxASSERT_MSG(it != m_sortingColumnIdxs.end(), "Sort column index not valid");
 
     m_sortingColumnIdxs.erase(it);
