@@ -652,7 +652,7 @@ public:
         m_allowMultiColumnSort = allow;
         DoAllowMultiColumnSort();
     }
-    bool AllowMultiColumnSort() const { return m_allowMultiColumnSort; }
+    bool IsMultiColumnSortAllowed() const { return m_allowMultiColumnSort; }
 
 
     // items management

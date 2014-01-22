@@ -1545,7 +1545,7 @@ public:
 
         @since 3.1.0
     */
-    bool AllowMultipleSort() const;
+    bool IsMultiColumnSortAllowed() const;
 
     /**
         Add/Remove column to/from actually sorted columns. If the control
