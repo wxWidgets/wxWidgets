@@ -645,7 +645,10 @@ public:
         { return m_expander_column; }
 
     virtual wxDataViewColumn *GetSortingColumn() const = 0;
-    virtual wxVector<wxDataViewColumn *> GetSortingColumns() const = 0;
+    virtual wxVector<wxDataViewColumn *> GetSortingColumns() const
+    {
+         return wxVector<wxDataViewColumn *>(GetSortingColumn() != NULL ? 1 : 0, GetSortingColumn());
+    }
 
     void AllowMultiColumnSort(bool allow)
     {
