@@ -114,6 +114,7 @@ private:
     void OnHeaderClick( wxDataViewEvent &event );
     void OnAttrHeaderClick( wxDataViewEvent &event );
     void OnHeaderRightClick( wxDataViewEvent &event );
+    void OnHeaderClickList( wxDataViewEvent &event );
     void OnHeaderRightClickList( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
     void OnSortedList( wxDataViewEvent &event );
@@ -356,6 +357,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(ID_MUSIC_CTRL, MyFrame::OnHeaderRightClick)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
     EVT_DATAVIEW_COLUMN_SORTED(ID_ATTR_CTRL, MyFrame::OnSortedList)
+    EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnHeaderClickList)
     EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(ID_ATTR_CTRL, MyFrame::OnHeaderRightClickList)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
@@ -1122,13 +1124,24 @@ void MyFrame::OnSortedList( wxDataViewEvent &/*event*/)
     }
 }
 
-void MyFrame::OnHeaderRightClickList( wxDataViewEvent &event )
+void MyFrame::OnHeaderClickList( wxDataViewEvent &event )
 {
+    // Left click + control for mutli column sort
     if(m_customMultipleSort)
     {
-        m_ctrl[1]->ToggleSortByColumn(event.GetColumn());
+        if(wxGetKeyState(WXK_CONTROL))
+            m_ctrl[1]->ToggleSortByColumn(event.GetColumn());
+        else
+            event.Skip();
     }
     else
+        event.Skip();
+}
+
+void MyFrame::OnHeaderRightClickList( wxDataViewEvent &event )
+{
+    // Do nothing for default action
+    if(!m_customMultipleSort)
         event.Skip();
 }
 
