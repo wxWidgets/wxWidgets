@@ -178,7 +178,7 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
     const int idx = m_owner->GetColumnIndex(this);
 
     // If this column isn't sorted already, mark it as sorted
-    if(!m_sort)
+    if ( !m_sort )
     {
         wxASSERT(!m_owner->IsColumnSorted(idx));
 
@@ -5330,11 +5330,11 @@ void wxDataViewCtrl::DoAllowMultiColumnSort()
     {
         // Must make copy, because unsorting will remove it from original vector
         wxVector<int> const copy(m_sortingColumnIdxs);
-        for(wxVector<int>::const_iterator it = copy.begin(), end = copy.end(); it != end; ++it)
+        for (wxVector<int>::const_iterator it = copy.begin(), end = copy.end() ; it != end ; ++it)
         {
             GetColumn(*it)->UnsetAsSortKey();
         }
-        wxASSERT(m_sortingColumnIdxs.empty());
+        wxASSERT( m_sortingColumnIdxs.empty() );
         // Resort model
         if(wxDataViewModel *model = GetModel())
             model->Resort();
@@ -5345,9 +5345,9 @@ void wxDataViewCtrl::DoAllowMultiColumnSort()
 bool wxDataViewCtrl::IsColumnSorted( int index ) const
 {
     wxVector<int>::const_iterator it = m_sortingColumnIdxs.begin(), end = m_sortingColumnIdxs.end();
-    for(; it != end; ++it)
+    for (; it != end ; ++it)
     {
-        if(*it == index)
+        if ( *it == index )
             break;
     }
 
@@ -5362,13 +5362,13 @@ void wxDataViewCtrl::AddSortingColumnIndex( int idx )
 void wxDataViewCtrl::UnsetSortingColumnIndex( int idx )
 {
     wxVector<int>::iterator it = m_sortingColumnIdxs.begin(), end = m_sortingColumnIdxs.end();
-    for(; it != end; ++it)
+    for (; it != end ; ++it)
     {
-        if(*it == idx)
+        if ( *it == idx )
             break;
     }
 
-    wxCHECK_RET(it != m_sortingColumnIdxs.end(), "Sort column index not valid");
+    wxCHECK_RET( it != m_sortingColumnIdxs.end() , "Sort column index not valid");
 
     m_sortingColumnIdxs.erase(it);
 }
