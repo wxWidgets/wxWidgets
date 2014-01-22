@@ -215,7 +215,7 @@ protected:
     // Unselect column index from being sorted
     void UnsetSortingColumnIndex(int idx);
     // Return true if the given column is sorted
-    bool IsColumnSorted(int Index) const;
+    bool IsColumnSorted(int index) const;
 
 public:     // utility functions not part of the API
 

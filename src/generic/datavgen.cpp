@@ -5342,7 +5342,7 @@ void wxDataViewCtrl::DoAllowMultiColumnSort()
 }
 
 
-bool wxDataViewCtrl::IsColumnSorted( int Index ) const
+bool wxDataViewCtrl::IsColumnSorted( int index ) const
 {
     return std::find(m_sortingColumnIdxs.begin(), m_sortingColumnIdxs.end(), Index) != m_sortingColumnIdxs.end();
 }
