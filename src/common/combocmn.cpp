@@ -1391,6 +1391,10 @@ wxSize wxComboCtrlBase::DoGetSizeFromTextSize(int xlen, int ylen) const
     else
     {
         wxComboBox* cb = new wxComboBox;
+#ifndef __WXGTK3__
+        // GTK3 returns zero for the preferred size of a hidden widget
+        cb->Hide();
+#endif
         cb->Create(const_cast<wxComboCtrlBase*>(this), wxID_ANY);
         if ( m_font.IsOk() )
             cb->SetFont(m_font);
