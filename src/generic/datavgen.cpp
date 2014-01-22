@@ -5368,7 +5368,7 @@ void wxDataViewCtrl::UnsetSortingColumnIndex( int idx )
             break;
     }
 
-    wxASSERT_MSG(it != m_sortingColumnIdxs.end(), "Sort column index not valid");
+    wxCHECK_RET(it != m_sortingColumnIdxs.end(), "Sort column index not valid");
 
     m_sortingColumnIdxs.erase(it);
 }
