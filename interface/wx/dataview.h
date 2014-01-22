@@ -1537,7 +1537,7 @@ public:
 
         @since 3.1.0
     */
-    void AllowMultiColumnSort(bool Allow);
+    void AllowMultiColumnSort(bool allow);
 
     /**
         Return @true if multiple columns could be selected for sorting.
@@ -1553,7 +1553,7 @@ public:
         Use this function for customization of how multiple columns are set as
         sorted.
     */
-    virtual void AddRemoveMultipleSortColumn(int Column);
+    virtual void AddRemoveMultipleSortColumn(int column);
 };
 
 
