@@ -212,7 +212,7 @@ public:
         { return static_cast<wxDataViewCtrl *>(GetParent()); }
 
     // Add/Remove additional column to sorting columns
-    void AddRemoveMultiSort(int Column)
+    void ToggleSortByColumn(int Column)
     {
          wxDataViewCtrl * const owner = GetOwner();
         // With multiple sort column, enable/disable sort
@@ -327,7 +327,7 @@ private:
                         event.GetColumn()) )
         {
             event.Skip();
-            AddRemoveMultiSort(event.GetColumn());
+            ToggleSortByColumn(event.GetColumn());
         }
     }
 
@@ -5360,9 +5360,9 @@ void wxDataViewCtrl::UnsetSortingColumnIndex( int idx )
     m_sortingColumnIdxs.erase(it);
 }
 
-void wxDataViewCtrl::AddRemoveMultipleSortColumn( int Column )
+void wxDataViewCtrl::ToggleSortByColumn( int Column )
 {
-    m_headerArea->AddRemoveMultiSort(Column);
+    m_headerArea->ToggleSortByColumn(Column);
 }
 
 #endif // !wxUSE_GENERICDATAVIEWCTRL

@@ -707,7 +707,7 @@ public:
     // Use EditItem() instead
     wxDEPRECATED( void StartEditor(const wxDataViewItem& item, unsigned int column) );
 
-    virtual void AddRemoveMultipleSortColumn(int WXUNUSED(Column))
+    virtual void ToggleSortByColumn(int WXUNUSED(column))
     {
     }
 
