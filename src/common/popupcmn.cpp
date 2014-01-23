@@ -375,7 +375,7 @@ bool wxPopupTransientWindow::Show( bool show )
         GdkDeviceManager* manager = gdk_display_get_device_manager(display);
         GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
         gdk_device_grab(device, window,
-            GDK_OWNERSHIP_NONE, false, mask, NULL, unsigned(GDK_CURRENT_TIME));
+            GDK_OWNERSHIP_NONE, true, mask, NULL, unsigned(GDK_CURRENT_TIME));
 #else
         gdk_pointer_grab( window, true,
                           mask,
