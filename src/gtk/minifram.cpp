@@ -304,7 +304,6 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
                gdk_window_set_cursor(gtk_widget_get_window(widget), gdk_cursor_new(GDK_BOTTOM_RIGHT_CORNER));
             else
                gdk_window_set_cursor(gtk_widget_get_window(widget), NULL);
-            win->GTKUpdateCursor(false);
         }
         return TRUE;
     }

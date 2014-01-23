@@ -823,8 +823,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     GTKConnectClipboardSignals(m_text);
 
-    m_cursor = wxCursor( wxCURSOR_IBEAM );
-
     return true;
 }
 
@@ -1329,7 +1327,6 @@ bool wxTextCtrl::Enable( bool enable )
     }
 
     gtk_widget_set_sensitive( m_text, enable );
-    SetCursor(enable ? wxCursor(wxCURSOR_IBEAM) : wxCursor());
 
     return true;
 }
@@ -1989,7 +1986,7 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
     gtk_text_view_get_iter_at_location(GTK_TEXT_VIEW(m_text), &end, x, y);
     if (!gtk_text_iter_has_tag(&end, tag))
     {
-        SetCursor(wxCursor(wxCURSOR_IBEAM));
+        SetCursor(wxCursor());
         return;
     }
 

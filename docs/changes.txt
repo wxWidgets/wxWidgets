@@ -602,6 +602,7 @@ wxGTK:
 - Fix setting font and colours of wxToggleButtons with images.
 - Fix wxPopupTransientWindow mouse events with GTK3,
   also fixes wxOwnerDrawnComboBox, wxDatePickerCtrl.
+- Fix cursor inheritance.
 
 wxMSW:
 
