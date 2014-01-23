@@ -187,6 +187,14 @@ wxPoint wxJoystick::GetPosition() const
     if (m_thread) pos = m_thread->m_lastposition;
     return pos;
 }
+int wxJoystick::GetPosition(unsigned int axis) const
+{
+    wxCHECK_MSG(axis >=0 && axis < GetNumberAxes(), 0, "Invalid joystick axis");
+    if (m_thread)
+        return m_thread->m_axe[axis];
+    return 0;
+
+}
 int wxJoystick::GetZPosition() const
 {
     if (m_thread)
@@ -223,6 +231,14 @@ int wxJoystick::GetButtonState() const
     if (m_thread)
         return m_thread->m_buttons;
     return 0;
+}
+
+bool wxJoystick::GetButtonState(unsigned int id) const
+{
+    if (id > sizeof(int) * 8)
+        return false;
+
+    return (GetButtonState() & (1 << id)) != 0;
 }
 
 //---------------------------------------------------------------------------
