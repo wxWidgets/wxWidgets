@@ -332,7 +332,7 @@ public:
 
     // set the current cursor for all GdkWindows making part of this widget
     // (see GTKGetWindow)
-    void GTKUpdateCursor(bool update_self = true, bool recurse = true);
+    void GTKUpdateCursor();
 
     // extra (wxGTK-specific) flags
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
