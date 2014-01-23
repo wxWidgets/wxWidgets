@@ -1671,6 +1671,12 @@ public:
     void SetPalette(const wxPalette& palette);
 
     /**
+       Set the color of the pixel at the given x and y coordinate.
+    */
+    
+    void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
+
+    /**
         Sets the colour of the pixels within the given rectangle.
 
         This routine performs bounds-checks for the coordinate so it can be considered
