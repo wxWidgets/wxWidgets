@@ -1354,9 +1354,11 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
     else
     {
         // If it has border, have textctrl fill the entire text field.
+        int w = m_tcArea.width - m_widthCustomPaint;
+        if (w < 0) w = 0;
         m_text->SetSize( m_tcArea.x + m_widthCustomPaint,
                          m_tcArea.y,
-                         m_tcArea.width - m_widthCustomPaint,
+                         w,
                          m_tcArea.height );
     }
 }

@@ -271,7 +271,9 @@ void wxCollapsiblePane::OnSize(wxSizeEvent &ev)
 
     // here we need to resize the pane window otherwise, even if the GtkExpander container
     // is expanded or shrunk, the pane window won't be updated!
-    m_pPane->SetSize(ev.GetSize().x, ev.GetSize().y - m_szCollapsed.y);
+    int w = ev.GetSize().y - m_szCollapsed.y;
+    if (w < 0) w = 0;
+    m_pPane->SetSize(ev.GetSize().x, w);
 
     // we need to explicitly call m_pPane->Layout() or else it won't correctly relayout
     // (even if SetAutoLayout(true) has been called on it!)
