@@ -396,7 +396,6 @@ void wxSetCursor( const wxCursor& cursor )
                 // clear all cursors, saving non-default ones for later
                 clearCursors(window);
                 // set global cursor
-                wxASSERT(gdk_window_get_cursor(window) == NULL);
                 gdk_window_set_cursor(window, cursor.GetCursor());
             }
             else
