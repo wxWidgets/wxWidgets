@@ -3064,8 +3064,11 @@ void wxRichTextCtrl::DoWriteText(const wxString& value, int flags)
     wxString valueUnix = wxTextFile::Translate(value, wxTextFileType_Unix);
 
     GetFocusObject()->InsertTextWithUndo(& GetBuffer(), m_caretPosition+1, valueUnix, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
-    wxRichTextDrawingContext context(& GetBuffer());
-    GetBuffer().Defragment(context);
+    if (!IsFrozen())
+    {
+        wxRichTextDrawingContext context(& GetBuffer());
+        GetBuffer().Defragment(context);
+    }
 
     if ( flags & SetValue_SendEvent )
         wxTextCtrl::SendTextUpdatedEvent(this);
