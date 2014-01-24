@@ -638,7 +638,7 @@ wxString wxCFStringRef::AsStringWithNormalizationFormC( CFStringRef ref, wxFontE
 
     CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, ref);
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
-    wxString str = wxCFStringRef::AsString(ref,encoding);
+    wxString str = wxCFStringRef::AsString(cfMutableString,encoding);
     CFRelease(cfMutableString);
     return str;
 }
