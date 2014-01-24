@@ -603,6 +603,7 @@ wxGTK:
 - Fix wxPopupTransientWindow mouse events with GTK3,
   also fixes wxOwnerDrawnComboBox, wxDatePickerCtrl.
 - Fix cursor inheritance.
+- Fix wxStaticBoxSizer size calculation
 
 wxMSW:
 
