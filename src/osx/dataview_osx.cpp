@@ -390,7 +390,10 @@ bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
   // We could have been associated with another model previously, break the
   // association in this case.
   if ( m_ModelNotifier )
+  {
       m_ModelNotifier->GetOwner()->RemoveNotifier(m_ModelNotifier);
+      m_ModelNotifier = NULL;
+  }
 
   if (wxDataViewCtrlBase::AssociateModel(model) && dataViewWidgetPtr->AssociateModel(model))
   {
