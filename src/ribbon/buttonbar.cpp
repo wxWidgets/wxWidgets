@@ -515,6 +515,7 @@ bool wxRibbonButtonBar::DeleteButton(int button_id)
         {
             m_layouts_valid = false;
             m_buttons.RemoveAt(i);
+            delete button;
             Realize();
             Refresh();
             return true;

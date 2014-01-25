@@ -442,7 +442,10 @@ public:
     
     /**
         Delete a single button from the button bar.
-        
+
+        The corresponding button is deleted by this function, so any pointers to
+        it previously obtained by GetItem() or GetItemById() become invalid.
+
         @see ClearButtons()
     */
     virtual bool DeleteButton(int button_id);

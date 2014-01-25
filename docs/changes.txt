@@ -6,6 +6,15 @@ Note: This file contains the list of changes since wxWidgets 3.x, please see
       docs/changes_30.txt for the changes in the previous versions.
 
 
+INCOMPATIBLE CHANGES SINCE 3.0.x:
+=================================
+
+Changes in behaviour not resulting in compilation errors
+--------------------------------------------------------
+
+- wxRibbonButtonBar::DeleteButton() now deletes and not just removes the button.
+
+
 3.1.0: (released 2014-xx-xx)
 ----------------------------
 
