@@ -581,6 +581,7 @@ All:
 
 - Fix wxSocket::WaitForAccept() in non-main thread (Hajo Kirchhoff).
 - Fix memory overallocation in wxVector::reserve() (Nigel Paton).
+- Fix `wx-config --libs` in monolithic build.
 - Fix the build under HP-UX (tested under 11.31).
 - Add Aragonese translation.
 

@@ -1203,12 +1203,14 @@ if is_monolithic; then
 
     # Only add additional info if --libs was specified and not just --optional-libs
     if [ -n "$output_option_libs" ]; then
-        # Core libs are already built into the blob.
-        for i in std @STD_GUI_LIBS@ @STD_BASE_LIBS@; do
-            wx_libs=`remove_field $i $wx_libs`
-        done
+        # The only library we need to add when using monolithic build is the gl
+        # one as all the others are already included into the main one.
+        if match_field gl $wx_libs; then
+            wx_libs=gl
+        else
+            wx_libs=
+        fi
 
-        wx_libs=`order_libs $wx_libs`
         wx_libs="@WXCONFIG_LDFLAGS_GUI@ `lib_flags_for $wx_libs`"
 
         # We still need the core lib deps for a static build though
