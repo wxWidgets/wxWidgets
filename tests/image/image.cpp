@@ -1346,7 +1346,14 @@ void ImageTestCase::BMPFlippingAndRLECompression()
 }
 
 
+// The 0 below can be replaced with 1 to generate, instead of comparing with,
+// the test files.
 #define ASSERT_IMAGE_EQUAL_TO_FILE(image, file) \
+    if ( 0 ) \
+    { \
+        CPPUNIT_ASSERT_MESSAGE( "Failed to save " file, image.SaveFile(file) ); \
+    } \
+    else \
     { \
         wxImage imageFromFile(file); \
         CPPUNIT_ASSERT_MESSAGE( "Failed to load " file, imageFromFile.IsOk() ); \
