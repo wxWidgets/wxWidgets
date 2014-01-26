@@ -515,6 +515,10 @@ bool wxRibbonButtonBar::DeleteButton(int button_id)
         {
             m_layouts_valid = false;
             m_buttons.RemoveAt(i);
+            if (m_hovered_button && m_hovered_button->base == button)
+                m_hovered_button = NULL;
+            if (m_active_button  && m_active_button->base  == button)
+                m_active_button = NULL;
             delete button;
             Realize();
             Refresh();
