@@ -4459,6 +4459,28 @@ public:
 
     //@}
 
+
+    virtual void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
+    
+    virtual void DrawRowLabels( wxDC& dc, const wxArrayInt& rows );
+    virtual void DrawRowLabel( wxDC& dc, int row );
+
+    virtual void DrawColLabels( wxDC& dc, const wxArrayInt& cols );
+    virtual void DrawColLabel( wxDC& dc, int col );
+
+    virtual void DrawCornerLabel(wxDC& dc);
+
+    void DrawTextRectangle( wxDC& dc, const wxString& text, const wxRect& rect,
+                            int horizontalAlignment = wxALIGN_LEFT,
+                            int verticalAlignment = wxALIGN_TOP,
+                            int textOrientation = wxHORIZONTAL ) const;
+
+    void DrawTextRectangle( wxDC& dc, const wxArrayString& lines, const wxRect& rect,
+                            int horizontalAlignment = wxALIGN_LEFT,
+                            int verticalAlignment = wxALIGN_TOP,
+                            int textOrientation = wxHORIZONTAL ) const;
+
+    
 protected:
     /**
         Returns @true if this grid has support for cell attributes.
