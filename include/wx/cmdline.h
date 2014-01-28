@@ -27,7 +27,7 @@ enum wxCmdLineSplitType
 
 #if wxUSE_CMDLINE_PARSER
 
-class WXDLLIMPEXP_FWD_BASE wxCmdLineParser
+class WXDLLIMPEXP_FWD_BASE wxCmdLineParser;
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 
 // ----------------------------------------------------------------------------
