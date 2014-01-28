@@ -20,6 +20,7 @@ Changes in behaviour not resulting in compilation errors
 
 All:
 
+- Allow iterating over wxCmdLineParser arguments in order (Armel Asselin).
 - Add wxScopedArray ctor taking the number of elements to allocate.
 
 All (GUI):
