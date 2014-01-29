@@ -284,19 +284,6 @@ bool wxIsUnicodeAvailable()
 
 #endif // NEED_UNICODE_CHECK
 
-void wxSetProcessDPIAware()
-{
-#if wxUSE_DYNLIB_CLASS
-    typedef BOOL (WINAPI *SetProcessDPIAware_t)(void);
-    wxDynamicLibrary dllUser32(wxT("user32.dll"));
-    SetProcessDPIAware_t pfnSetProcessDPIAware =
-        (SetProcessDPIAware_t)dllUser32.RawGetSymbol(wxT("SetProcessDPIAware"));
-
-    if ( pfnSetProcessDPIAware )
-        pfnSetProcessDPIAware();
-#endif // wxUSE_DYNLIB_CLASS
-}
-
 } //anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -400,13 +387,6 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
                         wxCmdLineArgType WXUNUSED(pCmdLine),
                         int nCmdShow)
 {
-    // wxWidgets library doesn't have problems with non-default DPI settings,
-    // so we can mark the app as "DPI aware" for Vista/Win7 (see
-    // http://msdn.microsoft.com/en-us/library/dd464659%28VS.85%29.aspx).
-    // Note that we intentionally do it here and not in wxApp, so that it
-    // doesn't happen if wx code is hosted in another app (e.g. a plugin).
-    wxSetProcessDPIAware();
-
     if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
         return -1;
 
