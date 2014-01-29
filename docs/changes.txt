@@ -619,6 +619,7 @@ wxMSW:
 - Fix display of bitmaps with alpha in wxStaticBitmap (Artur Wieczorek).
 - Fix wxClientDC::Clear() for scrolled windows (Artur Wieczorek).
 - Make wxPrinterDC::DrawIcon() actually work (Artur Wieczorek).
+- Fix handling of wxSET, wxCLEAR and wxINVERT in wxDC (Artur Wieczorek).
 
 wxOSX:
 
