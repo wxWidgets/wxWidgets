@@ -617,6 +617,7 @@ wxMSW:
 - Fix coordinates of EVT_MOUSEWHEEL in frames with toolbars (LtJax).
 - Support "show" verb as well as "open" in wxFileType (Eric Jensen).
 - Fix display of bitmaps with alpha in wxStaticBitmap (Artur Wieczorek).
+- Fix wxClientDC::Clear() for scrolled windows (Artur Wieczorek).
 - Make wxPrinterDC::DrawIcon() actually work (Artur Wieczorek).
 
 wxOSX:

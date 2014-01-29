@@ -694,10 +694,12 @@ void wxMSWDCImpl::Clear()
         if (!m_selectedBitmap.IsOk())
             return;
 
-        rect.left = -m_deviceOriginX; rect.top = -m_deviceOriginY;
-        rect.right = m_selectedBitmap.GetWidth()-m_deviceOriginX;
-        rect.bottom = m_selectedBitmap.GetHeight()-m_deviceOriginY;
+        rect.left = rect.top = 0;
+        rect.right = m_selectedBitmap.GetWidth();
+        rect.bottom = m_selectedBitmap.GetHeight();
     }
+
+    ::OffsetRect(&rect, -m_deviceOriginX, -m_deviceOriginY);
 
 #ifndef __WXWINCE__
     (void) ::SetMapMode(GetHdc(), MM_TEXT);
