@@ -284,8 +284,11 @@ void wxButton::SetTmpDefault()
     wxWindow *winOldDefault = tlw->GetDefaultItem();
     tlw->SetTmpDefaultItem(this);
 
-    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
+    // Notice that the order of these statements is important, the old button
+    // is not reset if we do it the other way round, probably because of
+    // something done by the default DM_SETDEFID handler.
     SetDefaultStyle(this, true);
+    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
 }
 
 // unset this button as currently default, it may still stay permanent default
@@ -299,8 +302,9 @@ void wxButton::UnsetTmpDefault()
 
     wxWindow *winOldDefault = tlw->GetDefaultItem();
 
-    SetDefaultStyle(this, false);
+    // Just as in SetTmpDefault() above, the order is important here.
     SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), true);
+    SetDefaultStyle(this, false);
 }
 
 /* static */

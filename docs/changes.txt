@@ -620,6 +620,7 @@ wxMSW:
 - Fix wxClientDC::Clear() for scrolled windows (Artur Wieczorek).
 - Make wxPrinterDC::DrawIcon() actually work (Artur Wieczorek).
 - Fix handling of wxSET, wxCLEAR and wxINVERT in wxDC (Artur Wieczorek).
+- Fix bug with multiple default buttons in a dialog (Artur Wieczorek).
 
 wxOSX:
 
