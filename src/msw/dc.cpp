@@ -1271,11 +1271,26 @@ void wxMSWDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 
     wxCHECK_RET( icon.IsOk(), wxT("invalid icon in DrawIcon") );
 
+    // Check if we are printing: notice that it's not enough to just check for
+    // DT_RASPRINTER as this is also the kind of print preview HDC, but its
+    // type is OBJ_ENHMETADC while the type of the "real" printer DC is OBJ_DC.
+    if ( ::GetDeviceCaps(GetHdc(), TECHNOLOGY) == DT_RASPRINTER &&
+            ::GetObjectType(GetHdc()) == OBJ_DC )
+    {
+        // DrawIcon API doesn't work for printer DCs (printer DC is write-only
+        // and DrawIcon requires DC supporting SRCINVERT ROP).
+        // We need to convert icon to bitmap and use alternative API calls.
+        wxBitmap bmp(icon);
+        DoDrawBitmap(bmp, x, y, !bmp.HasAlpha() /* use mask */);
+    }
+    else
+    {
 #ifdef __WIN32__
-    ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, NULL, DI_NORMAL);
+        ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, NULL, DI_NORMAL);
 #else
-    ::DrawIcon(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon));
+        ::DrawIcon(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon));
 #endif
+    }
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + icon.GetWidth(), y + icon.GetHeight());
