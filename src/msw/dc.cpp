@@ -2186,7 +2186,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         return false;
     }
 
-    const HDC hdcSrc = GetHdcOf(*implSrc);
+    HDC hdcSrc = GetHdcOf(*implSrc);
 
     // if either the source or destination has alpha channel, we must use
     // AlphaBlt() as other function don't handle it correctly
@@ -2241,6 +2241,16 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
         default:
            wxFAIL_MSG( wxT("unsupported logical function") );
            return false;
+    }
+
+    // Most of the operations involve the source or the pattern, but a few of
+    // them (and only those few, no other are possible) only use destination
+    // HDC. For them we must not give a valid source HDC to MaskBlt() as it
+    // still uses it, somehow, and the result is garbage.
+    if ( dwRop == BLACKNESS || dwRop == WHITENESS ||
+            dwRop == DSTINVERT || dwRop == DSTCOPY )
+    {
+        hdcSrc = NULL;
     }
 
     bool success = false;
