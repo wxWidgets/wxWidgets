@@ -481,12 +481,17 @@ public:
     // e.g. <object class="wxDialog">.
     bool IsOfClass(wxXmlNode *node, const wxString& classname) const;
 
+    bool IsObjectNode(const wxXmlNode *node) const;
     // Gets node content from wxXML_ENTITY_NODE
     // The problem is, <tag>content<tag> is represented as
     // wxXML_ENTITY_NODE name="tag", content=""
     //    |-- wxXML_TEXT_NODE or
     //        wxXML_CDATA_SECTION_NODE name="" content="content"
     wxString GetNodeContent(const wxXmlNode *node);
+
+    wxXmlNode *GetNodeParent(const wxXmlNode *node) const;
+    wxXmlNode *GetNodeNext(const wxXmlNode *node) const;
+    wxXmlNode *GetNodeChildren(const wxXmlNode *node) const;
 
     // Check to see if a parameter exists.
     bool HasParam(const wxString& param);

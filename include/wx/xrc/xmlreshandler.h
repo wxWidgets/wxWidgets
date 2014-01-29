@@ -52,7 +52,11 @@ public:
     virtual wxObject *CreateResource(wxXmlNode *node, wxObject *parent,
                                      wxObject *instance) = 0;
     virtual bool IsOfClass(wxXmlNode *node, const wxString& classname) const = 0;
+    virtual bool IsObjectNode(const wxXmlNode *node) const = 0;
     virtual wxString GetNodeContent(const wxXmlNode *node) = 0;
+    virtual wxXmlNode *GetNodeParent(const wxXmlNode *node) const = 0;
+    virtual wxXmlNode *GetNodeNext(const wxXmlNode *node) const = 0;
+    virtual wxXmlNode *GetNodeChildren(const wxXmlNode *node) const = 0;
     virtual bool HasParam(const wxString& param) = 0;
     virtual wxXmlNode *GetParamNode(const wxString& param) = 0;
     virtual wxString GetParamValue(const wxString& param) = 0;
@@ -206,10 +210,29 @@ protected:
     {
         return GetImpl()->IsOfClass(node, classname);
     }
+
+    bool IsObjectNode(const wxXmlNode *node) const
+    {
+        return GetImpl()->IsObjectNode(node);
+    }
     wxString GetNodeContent(const wxXmlNode *node)
     {
         return GetImpl()->GetNodeContent(node);
     }
+
+    wxXmlNode *GetNodeParent(const wxXmlNode *node) const
+    {
+        return GetImpl()->GetNodeParent(node);
+    }
+    wxXmlNode *GetNodeNext(const wxXmlNode *node) const
+    {
+        return GetImpl()->GetNodeNext(node);
+    }
+    wxXmlNode *GetNodeChildren(const wxXmlNode *node) const
+    {
+        return GetImpl()->GetNodeChildren(node);
+    }
+
     bool HasParam(const wxString& param)
     {
         return GetImpl()->HasParam(param);

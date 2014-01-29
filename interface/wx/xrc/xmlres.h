@@ -652,9 +652,48 @@ protected:
     wxString GetName();
 
     /**
+        Checks if the given node is an object node.
+
+        Object nodes are those named "object" or "object_ref".
+
+        @since 3.1.0
+    */
+    bool IsObjectNode(const wxXmlNode *node) const;
+    /**
         Gets node content from wxXML_ENTITY_NODE.
     */
     wxString GetNodeContent(wxXmlNode* node);
+
+    /**
+        Gets the parent of the node given.
+
+        This method is safe to call with @NULL argument, it just returns @NULL
+        in this case.
+
+        @since 3.1.0
+    */
+    wxXmlNode *GetNodeParent(const wxXmlNode *node) const;
+
+    /**
+        Gets the next sibling node related to the given node, possibly @NULL.
+
+        This method is safe to call with @NULL argument, it just returns @NULL
+        in this case.
+
+        @since 3.1.0
+    */
+    wxXmlNode *GetNodeNext(const wxXmlNode *node) const;
+
+    /**
+        Gets the first child of the given node or @NULL.
+
+        This method is safe to call with @NULL argument, it just returns @NULL
+        in this case.
+
+        @since 3.1.0
+    */
+    wxXmlNode *GetNodeChildren(const wxXmlNode *node) const;
+
 
     /**
         Finds the node or returns @NULL.
