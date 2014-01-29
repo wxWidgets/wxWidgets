@@ -35,6 +35,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/dib.h"
 
 #include "wx/sysopt.h"
 
@@ -266,6 +267,26 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 
 #ifdef __WIN32__
     HANDLE handle = (HANDLE)m_image->GetHandle();
+
+    AutoHBITMAP hbmpRelease;
+    if ( !m_isIcon )
+    {
+        // wxBitmap normally stores alpha in pre-multiplied format but
+        // apparently STM_SETIMAGE message handler does pre-multiplication
+        // internally so we need to undo the pre-multiplication here for a
+        // while (this is similar to what we do in ImageList::Add()).
+        const wxBitmap& bmp = static_cast<wxBitmap&>(*image);
+        if ( bmp.HasAlpha() )
+        {
+            // For bitmap with alpha channel create temporary DIB with
+            // not-premultiplied alpha values.
+            handle = wxDIB(bmp.ConvertToImage(),
+                           wxDIB::PixelFormat_NotPreMultiplied).Detach();
+
+            // Ensure that this temporary HBITMAP will be destroyed.
+            hbmpRelease.Init((HBITMAP)handle);
+        }
+    }
     LONG style = ::GetWindowLong( (HWND)GetHWND(), GWL_STYLE ) ;
     ::SetWindowLong( (HWND)GetHWND(), GWL_STYLE, ( style & ~( SS_BITMAP|SS_ICON ) ) |
                      ( m_isIcon ? SS_ICON : SS_BITMAP ) );
@@ -278,7 +299,12 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
         // the static control made a copy and we are responsible for deleting it
         DeleteObject((HGDIOBJ) oldHandle);
     }
-    m_currentHandle = (WXHANDLE)handle;
+
+    // Save bitmap handle only if it's not a temporary one, otherwise it's
+    // going to be destroyed right now anyhow.
+    if ( !hbmpRelease )
+        m_currentHandle = (WXHANDLE)handle;
+
 #endif // Win32
 
     if ( ImageIsOk() )

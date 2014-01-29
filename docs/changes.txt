@@ -615,6 +615,7 @@ wxMSW:
 - Fix wxSocket::Initialize() after Shutdown() (Laurent Poujoulat).
 - Fix coordinates of EVT_MOUSEWHEEL in frames with toolbars (LtJax).
 - Support "show" verb as well as "open" in wxFileType (Eric Jensen).
+- Fix display of bitmaps with alpha in wxStaticBitmap (Artur Wieczorek).
 
 wxOSX:
 
