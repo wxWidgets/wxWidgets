@@ -579,6 +579,7 @@ Major new features in this release
 
 All:
 
+- Fix wxMBConvUTF8::ToWChar() for non-NUL-terminated strings (andyr).
 - Fix wxSocket::WaitForAccept() in non-main thread (Hajo Kirchhoff).
 - Fix memory overallocation in wxVector::reserve() (Nigel Paton).
 - Fix `wx-config --libs` in monolithic build.
