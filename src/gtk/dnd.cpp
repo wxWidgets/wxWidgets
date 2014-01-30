@@ -311,6 +311,9 @@ static gboolean target_drag_drop( GtkWidget *widget,
     {
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnDrop returned FALSE") );
 
+        // change drag and drop status if drop operation failed
+        gdk_drag_status( context, (GdkDragAction)0, time );
+
         /* cancel the whole thing */
         gtk_drag_finish( context,
                           FALSE,        /* no success */
@@ -365,6 +368,9 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 
     if (gtk_selection_data_get_length(data) <= 0 || gtk_selection_data_get_format(data) != 8)
     {
+        // change drag and drop status if drop operation failed
+        gdk_drag_status( context, (GdkDragAction)0, time );
+
         /* negative data length and non 8-bit data format
            qualifies for junk */
         gtk_drag_finish (context, FALSE, FALSE, time);
@@ -383,6 +389,9 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
     if ( wxIsDragResultOk( drop_target->OnData( x, y, result ) ) )
     {
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned true") );
+
+        // change drag and drop status if drop operation failed
+        gdk_drag_status( context, (GdkDragAction)0, time );
 
         /* tell GTK that data transfer was successful */
         gtk_drag_finish( context, TRUE, FALSE, time );
@@ -879,6 +888,14 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     while (m_waiting)
         gtk_main_iteration();
+
+    if ( m_retValue != wxDragCancel &&
+         m_retValue != wxDragError )
+    {
+        // if wxDropTarget::OnDrop has been processed and has succeeded
+        // check the return value of wxDropTarget::OnData
+        m_retValue = ConvertFromGTK( context->action );
+    }
 
     g_signal_handlers_disconnect_by_func (m_iconWindow,
                                           (gpointer) gtk_dnd_window_configure_callback, this);

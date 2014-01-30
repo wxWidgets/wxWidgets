@@ -33,6 +33,7 @@ All (GUI):
 wxGTK:
 
 - Support building wxGTK3 under Windows (Kolya Kosenko).
+- Correctly detect cancelled drag-and-drop operations (Kinaou Hervé).
 
 wxMSW:
 
