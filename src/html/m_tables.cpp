@@ -72,7 +72,7 @@ protected:
     /* These are real attributes: */
 
     // number of columns; rows
-    int m_NumCols, m_NumRows;
+    int m_NumCols, m_NumRows, m_NumAllocatedRows;
     // array of column information
     colStruct *m_ColsInfo;
     // 2D array of all cells in the table : m_CellInfo[row][column]
@@ -129,7 +129,7 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
 {
     m_PixelScale = pixel_scale;
     m_ColsInfo = NULL;
-    m_NumCols = m_NumRows = 0;
+    m_NumCols = m_NumRows = m_NumAllocatedRows = 0;
     m_CellInfo = NULL;
     m_ActualCol = m_ActualRow = -1;
 
@@ -210,8 +210,24 @@ void wxHtmlTableCell::ReallocCols(int cols)
 
 void wxHtmlTableCell::ReallocRows(int rows)
 {
-    m_CellInfo = (cellStruct**) realloc(m_CellInfo, sizeof(cellStruct*) * rows);
-    for (int row = m_NumRows; row < rows ; row++)
+    int alloc_rows;
+    for (alloc_rows = m_NumAllocatedRows; alloc_rows < rows;)
+    {
+        if (alloc_rows < 4)
+            alloc_rows = 4;
+        else if (alloc_rows < 4096)
+            alloc_rows <<= 1;
+        else
+            alloc_rows += 2048;
+    }
+
+    if (alloc_rows > m_NumAllocatedRows)
+    {
+        m_CellInfo = (cellStruct**) realloc(m_CellInfo, sizeof(cellStruct*) * alloc_rows);
+        m_NumAllocatedRows = alloc_rows;
+    }
+
+    for (int row = m_NumRows; row < rows ; ++row)
     {
         if (m_NumCols == 0)
             m_CellInfo[row] = NULL;
