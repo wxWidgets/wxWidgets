@@ -481,6 +481,7 @@
     <ClCompile Include="..\..\src\ribbon\page.cpp" />
     <ClCompile Include="..\..\src\ribbon\panel.cpp" />
     <ClCompile Include="..\..\src\ribbon\toolbar.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_ribbon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -560,6 +561,7 @@
     <ClInclude Include="..\..\include\wx\ribbon\page.h" />
     <ClInclude Include="..\..\include\wx\ribbon\panel.h" />
     <ClInclude Include="..\..\include\wx\ribbon\toolbar.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_ribbon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
