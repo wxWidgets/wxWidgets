@@ -159,9 +159,8 @@ wxString wxFileTipProvider::GetTip()
     // Comments start with a # symbol.
     // Loop reading lines until get the first one that isn't a comment.
     // The max number of loop executions is the number of lines in the
-    // textfile so that can't go into an eternal loop in the [oddball]
-    // case of a comment-only tips file, or the developer has vetoed
-    // them all via PreprecessTip().
+    // textfile so that can't go into an infinite loop in the [oddball]
+    // case of a comment-only tips file.
     for ( size_t i=0; i < count; i++ )
     {
         // The current tip may be at the last line of the textfile, (or
@@ -176,10 +175,6 @@ wxString wxFileTipProvider::GetTip()
 
         // Read the tip, and increment the current tip counter.
         tip = m_textfile.GetLine(m_currentTip++);
-
-        // Allow a derived class's overrided virtual to modify the tip
-        // now if so desired.
-        tip = PreprocessTip(tip);
 
         // Break if tip isn't a comment, and isn't an empty string
         // (or only stray space characters).

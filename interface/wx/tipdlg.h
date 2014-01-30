@@ -50,18 +50,6 @@ public:
         This function is pure virtual, it should be implemented in the derived classes.
     */
     virtual wxString GetTip() = 0;
-
-    /**
-        Returns a modified tip.
-
-        This function will be called immediately after read, and before being check
-        whether it is a comment, an empty string or a string to translate.
-        You can optionally override this in your custom user-derived class
-        to optionally to modify the tip as soon as it is read. You can return any
-        modification to the string. If you return wxEmptyString, then this tip is
-        skipped, and the next one is read.
-    */
-    virtual wxString PreprocessTip(const wxString& tip);
 };
 
 
