@@ -40,3 +40,4 @@ wxMSW:
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix handling of selected images in wxBitmapButton (Artur Wieczorek).
+- Support multiline strings in wxDC::DrawRotatedText() (Artur Wieczorek).

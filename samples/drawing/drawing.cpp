@@ -827,6 +827,10 @@ void MyCanvas::DrawText(wxDC& dc)
 
     y += height;
     dc.DrawText("And\nmore\ntext on\nmultiple\nlines", 110, y);
+    y += 5*height;
+
+    dc.SetTextForeground(*wxBLUE);
+    dc.DrawRotatedText("Rotated text\ncan have\nmultiple lines\nas well", 110, y, 15);
 }
 
 static const struct

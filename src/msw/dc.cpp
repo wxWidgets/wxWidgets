@@ -1444,6 +1444,11 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
     WXMICROWIN_CHECK_HDC
 
+    // prepare for drawing the text
+    wxTextColoursChanger textCol(GetHdc(), *this);
+
+    wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
+
     DrawAnyText(text, x, y);
 
     // update the bounding box
@@ -1456,13 +1461,6 @@ void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 
 void wxMSWDCImpl::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
-    WXMICROWIN_CHECK_HDC
-
-    // prepare for drawing the text
-    wxTextColoursChanger textCol(GetHdc(), *this);
-
-    wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
-
     if ( ::ExtTextOut(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), 0, NULL,
                    text.c_str(), text.length(), NULL) == 0 )
     {
@@ -1483,6 +1481,8 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     if ( (angle == 0.0) && m_font.IsOk() )
     {
         DoDrawText(text, x, y);
+
+        // Bounding box already updated by DoDrawText(), no need to do it again.
     }
 #ifndef __WXMICROWIN__
     else
@@ -1501,7 +1501,7 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
         // GDI wants the angle in tenth of degree
         long angle10 = (long)(angle * 10);
         lf.lfEscapement = angle10;
-        lf. lfOrientation = angle10;
+        lf.lfOrientation = angle10;
 
         hfont = ::CreateFontIndirect(&lf);
         if ( !hfont )
@@ -1512,29 +1512,48 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
         {
             HFONT hfontOld = (HFONT)::SelectObject(GetHdc(), hfont);
 
-            DrawAnyText(text, x, y);
+            // Get extent of whole text.
+            wxCoord w, h, heightLine;
+            GetOwner()->GetMultiLineTextExtent(text, &w, &h, &heightLine);
+
+            // Prepare for drawing the text
+            wxTextColoursChanger textCol(GetHdc(), *this);
+            wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
+
+            // Compute the shift for the origin of the next line.
+            const double rad = DegToRad(angle);
+            const double dx = heightLine * sin(rad);
+            const double dy = heightLine * cos(rad);
+
+            // Draw all text line by line
+            const wxArrayString lines = wxSplit(text, '\n', '\0');
+            for ( size_t lineNum = 0; lineNum < lines.size(); lineNum++ )
+            {
+                // Calculate origin for each line to avoid accumulation of
+                // rounding errors.
+                DrawAnyText(lines[lineNum],
+                            x + wxRound(lineNum*dx),
+                            y + wxRound(lineNum*dy));
+            }
 
             (void)::SelectObject(GetHdc(), hfontOld);
             (void)::DeleteObject(hfont);
+
+            // call the bounding box by adding all four vertices of the rectangle
+            // containing the text to it (simpler and probably not slower than
+            // determining which of them is really topmost/leftmost/...)
+
+            // "upper left" and "upper right"
+            CalcBoundingBox(x, y);
+            CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+
+            // "bottom left" and "bottom right"
+            x += (wxCoord)(h*sin(rad));
+            y += (wxCoord)(h*cos(rad));
+            CalcBoundingBox(x, y);
+            CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
         }
 
-        // call the bounding box by adding all four vertices of the rectangle
-        // containing the text to it (simpler and probably not slower than
-        // determining which of them is really topmost/leftmost/...)
-        wxCoord w, h;
-        GetOwner()->GetTextExtent(text, &w, &h);
-
-        double rad = DegToRad(angle);
-
-        // "upper left" and "upper right"
-        CalcBoundingBox(x, y);
-        CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
-
-        // "bottom left" and "bottom right"
-        x += (wxCoord)(h*sin(rad));
-        y += (wxCoord)(h*cos(rad));
-        CalcBoundingBox(x, y);
-        CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
     }
 #endif
 }
