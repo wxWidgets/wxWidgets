@@ -380,6 +380,14 @@ void wxHtmlWindow::SetRelatedFrame(wxFrame* frame, const wxString& format)
 {
     m_RelatedFrame = frame;
     m_TitleFormat = format;
+
+    // Check if the format provided can actually be used: it's more
+    // user-friendly to do it here and now rather than triggering the same
+    // assert much later when it's really used.
+
+    // If you get an assert here, it means that the title doesn't contain
+    // exactly one "%s" format specifier, which is an error in the caller.
+    wxString::Format(m_TitleFormat, wxString());
 }
 
 
