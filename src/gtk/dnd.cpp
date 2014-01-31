@@ -894,7 +894,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     {
         // if wxDropTarget::OnDrop has been processed and has succeeded
         // check the return value of wxDropTarget::OnData
-        m_retValue = ConvertFromGTK( context->action );
+        m_retValue = ConvertFromGTK(gdk_drag_context_get_selected_action(context));
     }
 
     g_signal_handlers_disconnect_by_func (m_iconWindow,
