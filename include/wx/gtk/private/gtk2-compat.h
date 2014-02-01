@@ -298,6 +298,12 @@ static inline void wx_gtk_widget_set_allocation(GtkWidget* widget, const GtkAllo
 }
 #define gtk_widget_set_allocation wx_gtk_widget_set_allocation
 
+static inline gboolean wx_gtk_widget_is_toplevel(GtkWidget* widget)
+{
+    return GTK_WIDGET_TOPLEVEL(widget);
+}
+#define gtk_widget_is_toplevel wx_gtk_widget_is_toplevel
+
 // ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 2.20
 
