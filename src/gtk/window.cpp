@@ -3695,6 +3695,17 @@ void wxWindowGTK::GTKUpdateCursor()
                 gdk_window_set_cursor(window, cursor);
         }
     }
+    if (window && cursor == NULL && m_wxwindow == NULL)
+    {
+        void* data;
+        gdk_window_get_user_data(window, &data);
+        if (data)
+        {
+            // encourage native widget to restore any non-default cursors
+            GtkStateType state = gtk_widget_get_state(GTK_WIDGET(data));
+            g_signal_emit_by_name(data, "state-changed", state);
+        }
+    }
 }
 
 void wxWindowGTK::WarpPointer( int x, int y )
