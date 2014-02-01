@@ -94,6 +94,9 @@ private:
     // remove this tooltip from the tooltip control
     void Remove();
 
+    // adjust tooltip max width based on current tooltip text
+    bool AdjustMaxWidth();
+
     wxString  m_text;           // tooltip text
     wxWindow* m_window;         // main window we're associated with
     wxToolTipOtherWindows *m_others; // other windows associated with it or NULL

@@ -622,6 +622,7 @@ wxMSW:
 - Make wxPrinterDC::DrawIcon() actually work (Artur Wieczorek).
 - Fix handling of wxSET, wxCLEAR and wxINVERT in wxDC (Artur Wieczorek).
 - Fix bug with multiple default buttons in a dialog (Artur Wieczorek).
+- Improve tooltips wrapping after updating their text (Artur Wieczorek).
 
 wxOSX:
 
