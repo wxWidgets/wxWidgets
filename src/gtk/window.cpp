@@ -3671,12 +3671,8 @@ bool wxWindowGTK::SetCursor( const wxCursor &cursor )
 
 void wxWindowGTK::GTKUpdateCursor()
 {
-    if (m_widget == NULL ||
-        !gtk_widget_get_realized(m_widget) ||
-        (m_wxwindow == NULL && !gtk_widget_get_has_window(m_widget)))
-    {
+    if (m_widget == NULL || !gtk_widget_get_realized(m_widget))
         return;
-    }
 
     GdkCursor* cursor = NULL;
     if (m_cursor.IsOk())
