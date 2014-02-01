@@ -2440,8 +2440,6 @@ void wxXmlResourceHandlerImpl::SetupWindow(wxWindow *wnd)
         wnd->Enable(false);
     if (GetBool(wxT("focused"), 0) == 1)
         wnd->SetFocus();
-    if (GetBool(wxT("hidden"), 0) == 1)
-        wnd->Show(false);
 #if wxUSE_TOOLTIPS
     if (HasParam(wxT("tooltip")))
         wnd->SetToolTip(GetText(wxT("tooltip")));

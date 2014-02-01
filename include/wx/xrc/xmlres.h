@@ -620,7 +620,9 @@ public:
    if (m_instance) \
        variable = wxStaticCast(m_instance, classname); \
    if (!variable) \
-       variable = new classname;
+       variable = new classname; \
+   if (GetBool(wxT("hidden"), 0) == 1) \
+       variable->Hide();
 
 
 // FIXME -- remove this $%^#$%#$@# as soon as Ron checks his changes in!!
