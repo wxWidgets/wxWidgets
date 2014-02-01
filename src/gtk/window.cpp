@@ -2067,7 +2067,8 @@ void wxWindowGTK::GTKHandleRealized()
     event.SetEventObject( this );
     GTKProcessEvent( event );
 
-    GTKUpdateCursor();
+    if (m_cursor.IsOk())
+        GTKUpdateCursor();
 
     if (m_wxwindow && IsTopLevel())
     {
