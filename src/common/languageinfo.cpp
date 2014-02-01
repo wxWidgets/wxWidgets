@@ -151,6 +151,9 @@
 #ifndef LANG_JAPANESE
 #define LANG_JAPANESE (0)
 #endif
+#ifndef LANG_KABYLE
+#define LANG_KABYLE (0)
+#endif
 #ifndef LANG_KANNADA
 #define LANG_KANNADA (0)
 #endif
@@ -662,6 +665,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_ITALIAN_SWISS,              "it_CH", LANG_ITALIAN   , SUBLANG_ITALIAN_SWISS             , wxLayout_LeftToRight, "Italian (Swiss)")
    LNG(wxLANGUAGE_JAPANESE,                   "ja_JP", LANG_JAPANESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Japanese")
    LNG(wxLANGUAGE_JAVANESE,                   "jv"   , 0              , 0                                 , wxLayout_LeftToRight, "Javanese")
+   LNG(wxLANGUAGE_KABYLE,                     "kab"  , LANG_KABYLE    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kabyle")
    LNG(wxLANGUAGE_KANNADA,                    "kn"   , LANG_KANNADA   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kannada")
    LNG(wxLANGUAGE_KASHMIRI,                   "ks"   , LANG_KASHMIRI  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kashmiri")
    LNG(wxLANGUAGE_KASHMIRI_INDIA,             "ks_IN", LANG_KASHMIRI  , SUBLANG_KASHMIRI_INDIA            , wxLayout_LeftToRight, "Kashmiri (India)")
