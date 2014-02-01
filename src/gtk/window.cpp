@@ -3663,7 +3663,8 @@ bool wxWindowGTK::SetCursor( const wxCursor &cursor )
     if (!wxWindowBase::SetCursor(cursor))
         return false;
 
-    GTKUpdateCursor();
+    if (m_cursor.IsOk())
+        GTKUpdateCursor();
 
     return true;
 }
