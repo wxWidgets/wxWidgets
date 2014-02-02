@@ -595,6 +595,7 @@ All (GUI):
   all commands without saving (Neil Chittenden).
 - Fix crash when Destroy()-ing a TLW with non-TLW parent.
 - Fix crash in wxAuiToolBar::GetToolBarFits().
+- Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Make wxHTML more efficient when displaying large tables (Kinaou Hervé).
 - Prevent wxGrid rows/columns from becoming too small on double click.
 
