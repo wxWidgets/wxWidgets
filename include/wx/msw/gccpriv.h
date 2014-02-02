@@ -17,8 +17,29 @@
     #define __GNUWIN32__
 #endif
 
-#if defined(__MINGW32__) && ( ( __GNUC__ > 2 ) || ( ( __GNUC__ == 2 ) && ( __GNUC_MINOR__ >= 95 ) ) )
+#if defined(__MINGW32__)
+    /*
+        Include the header defining __MINGW32_{MAJ,MIN}OR_VERSION but check
+        that UNICODE or _UNICODE is already defined, as _mingw.h relies on them
+        being set and we'd get weird compilation errors later if it is included
+        without them being defined, better give a clearer error right now.
+     */
+    #if !defined(UNICODE)
+        #ifndef wxUSE_UNICODE
+            #error "wxUSE_UNICODE must be defined before including this header."
+        #endif
+        #if wxUSE_UNICODE
+            #error "UNICODE must be defined before including this header."
+        #endif
+    #endif
+
     #include <_mingw.h>
+
+    #define wxCHECK_MINGW32_VERSION( major, minor ) \
+ ( ( ( __MINGW32_MAJOR_VERSION > (major) ) \
+      || ( __MINGW32_MAJOR_VERSION == (major) && __MINGW32_MINOR_VERSION >= (minor) ) ) )
+#else
+    #define wxCHECK_MINGW32_VERSION( major, minor ) (0)
 #endif
 
 #if defined( __MINGW32__ ) && !defined(__WINE__) && !defined( HAVE_W32API_H )

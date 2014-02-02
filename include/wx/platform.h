@@ -456,6 +456,10 @@
 #define wxNEEDS_CHARPP
 #endif
 
+/*
+    Note that wx/msw/gccpriv.h must be included after defining UNICODE and
+    _UNICODE macros as it includes _mingw.h which relies on them being set.
+ */
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
     ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) || \
       wxCHECK_WATCOM_VERSION(1,0) ) && \
@@ -467,6 +471,8 @@
 #else
 #    undef wxCHECK_W32API_VERSION
 #    define wxCHECK_W32API_VERSION(maj, min) (0)
+#    undef wxCHECK_MINGW32_VERSION
+#    define wxCHECK_MINGW32_VERSION( major, minor ) (0)
 #endif
 
 

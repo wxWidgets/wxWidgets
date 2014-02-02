@@ -139,15 +139,11 @@
    maj.min
  */
 
-/* Check for Mingw runtime version: */
+/*
+    Define Mingw identification symbols, wxCHECK_MINGW32_VERSION() is defined in
+    wx/msw/gccpriv.h which is included later, see comments there.
+ */
 #ifdef __MINGW32__
-    /* Include the header defining __MINGW32_{MAJ,MIN}OR_VERSION */
-    #include <_mingw.h>
-
-    #define wxCHECK_MINGW32_VERSION( major, minor ) \
- ( ( ( __MINGW32_MAJOR_VERSION > (major) ) \
-      || ( __MINGW32_MAJOR_VERSION == (major) && __MINGW32_MINOR_VERSION >= (minor) ) ) )
-
 /*
     MinGW-w64 project provides compilers for both Win32 and Win64 but only
     defines the same __MINGW32__ symbol for the former as MinGW32 toolchain
@@ -169,8 +165,6 @@
 #           define __MINGW32_TOOLCHAIN__
 #       endif
 #   endif
-#else
-    #define wxCHECK_MINGW32_VERSION( major, minor ) (0)
 #endif
 
 #endif // _WX_COMPILER_H_
