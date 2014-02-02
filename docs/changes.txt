@@ -626,6 +626,7 @@ wxMSW:
 - Fix handling of wxSET, wxCLEAR and wxINVERT in wxDC (Artur Wieczorek).
 - Fix bug with multiple default buttons in a dialog (Artur Wieczorek).
 - Improve tooltips wrapping after updating their text (Artur Wieczorek).
+- Fix checking menu items before appending them to the menu.
 
 wxOSX:
 

@@ -526,6 +526,15 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             checkInitially = true;
     }
 
+    // Also handle the case of check menu items that had been checked before
+    // being attached to the menu: we don't need to actually call Check() on
+    // them, so we don't use checkInitially in this case, but we do need to
+    // make them checked at Windows level too. Notice that we shouldn't ask
+    // Windows for the checked state here, as wxMenuItem::IsChecked() does, as
+    // the item is not attached yet, so explicitly call the base class version.
+    if ( pItem->IsCheck() && pItem->wxMenuItemBase::IsChecked() )
+        flags |= MF_CHECKED;
+
     // adjust position to account for the title of a popup menu, if any
     if ( !GetMenuBar() && !m_title.empty() )
         pos += 2; // for the title itself and its separator
@@ -609,6 +618,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 {
                     mii.fMask |= MIIM_ID;
                     mii.wID = id;
+                }
+
+                if ( flags & MF_CHECKED )
+                {
+                    mii.fMask |= MIIM_STATE;
+                    mii.fState = MFS_CHECKED;
                 }
 
                 mii.dwItemData = reinterpret_cast<ULONG_PTR>(pItem);
