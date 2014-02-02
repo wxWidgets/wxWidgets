@@ -1241,6 +1241,12 @@ void wxBitmap::UseAlpha()
         GetBitmapData()->m_hasAlpha = true;
 }
 
+void wxBitmap::ResetAlpha()
+{
+    if ( GetBitmapData() )
+        GetBitmapData()->m_hasAlpha = false;
+}
+
 bool wxBitmap::HasAlpha() const
 {
     return GetBitmapData() && GetBitmapData()->m_hasAlpha;

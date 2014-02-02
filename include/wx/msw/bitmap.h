@@ -171,6 +171,7 @@ public:
     // disappear in the future
     bool HasAlpha() const;
     void UseAlpha();
+    void ResetAlpha();
 
     // support for scaled bitmaps
     virtual double GetScaleFactor() const { return 1.0; }
