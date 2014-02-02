@@ -751,11 +751,7 @@ public:
     ~wxBusyCursor()
         { wxEndBusyCursor(); }
 
-    // FIXME: These two methods are currently only implemented (and needed?)
-    //        in wxGTK.  BusyCursor handling should probably be moved to
-    //        common code since the wxGTK and wxMSW implementations are very
-    //        similar except for wxMSW using HCURSOR directly instead of
-    //        wxCursor..  -- RL.
+    // Obsolete internal methods, do not use.
     static const wxCursor &GetStoredCursor();
     static const wxCursor GetBusyCursor();
 };

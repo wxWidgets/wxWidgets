@@ -310,6 +310,17 @@ wxCursor::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 
 static int       gs_busyCount = 0;
 
+const wxCursor &wxBusyCursor::GetStoredCursor()
+{
+    static wxCursor s_storedCursor;
+    return s_storedCursor;
+}
+
+const wxCursor wxBusyCursor::GetBusyCursor()
+{
+    return wxCursor(wxCURSOR_WATCH);
+}
+
 void wxBeginBusyCursor(const wxCursor* cursor)
 {
     if (gs_busyCount++ == 0)
