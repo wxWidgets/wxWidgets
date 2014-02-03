@@ -1079,8 +1079,8 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
 
         // first round: search for equal, then for smaller and for larger size
         // with the given weight and style
-        int testweight = weight;
-        int teststyle = style;
+        wxFontWeight testweight = weight;
+        wxFontStyle teststyle = style;
 
         for ( round = 0; round < 3; round++ )
         {
