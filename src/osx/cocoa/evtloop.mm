@@ -202,19 +202,18 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
             {
                 if ( [[NSApplication sharedApplication]
                         nextEventMatchingMask: NSAnyEventMask
-                        untilDate: nil
+                        untilDate: [NSDate dateWithTimeIntervalSinceNow: timeout/1000.0]
                         inMode: NSDefaultRunLoopMode
                         dequeue: NO] != nil )
                     return 1;
                 
                 return -1;
             }
-                
             case NSRunStoppedResponse:
             case NSRunAbortedResponse:
                 return -1;
             default:
-                wxFAIL_MSG("unknown response code");
+                // nested native loops may return other codes here, just ignore them
                 break;
         }
         return -1;
@@ -223,7 +222,7 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
     {        
         NSEvent *event = [NSApp
                     nextEventMatchingMask:NSAnyEventMask
-                    untilDate:[NSDate dateWithTimeIntervalSinceNow: timeout/1000]
+                    untilDate:[NSDate dateWithTimeIntervalSinceNow: timeout/1000.0]
                     inMode:NSDefaultRunLoopMode
                     dequeue: YES];
         
