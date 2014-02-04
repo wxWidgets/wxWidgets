@@ -632,6 +632,8 @@ wxMSW:
 wxOSX:
 
 - Fix incorrect joystick detection in configure (Lauri Nurmi).
+- Add support for wxEVT_COMBOBOX_DROPDOWN and wxEVT_COMBOBOX_CLOSEUP
+  events to wxOSX/Cocoa (Igor Korot).
 
 
 3.0.0: (released 2013-11-11)

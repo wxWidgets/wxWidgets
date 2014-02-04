@@ -60,14 +60,14 @@
     @event{EVT_COMBOBOX_DROPDOWN(id, func)}
            Process a @c wxEVT_COMBOBOX_DROPDOWN event, which is generated
            when the list box part of the combo box is shown (drops down).
-           Notice that this event is currently only supported by wxMSW and
-           wxGTK with GTK+ 2.10 or later.
+           Notice that this event is only supported by wxMSW, wxGTK with GTK+
+           2.10 or later, and wxOSX/Cocoa.
     @event{EVT_COMBOBOX_CLOSEUP(id, func)}
            Process a @c wxEVT_COMBOBOX_CLOSEUP event, which is generated
            when the list box of the combo box disappears (closes up). This
            event is only generated for the same platforms as
-           @c wxEVT_COMBOBOX_DROPDOWN above. Also note that only wxMSW
-           supports adding or deleting items in this event.
+           @c wxEVT_COMBOBOX_DROPDOWN above. Also note that only wxMSW and
+           wxOSX/Cocoa support adding or deleting items in this event.
     @endEventTable
 
     @library{wxcore}
