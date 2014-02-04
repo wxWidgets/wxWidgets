@@ -254,7 +254,10 @@ bool wxHtmlWindowMouseHelper::OnCellClicked(wxHtmlCell *cell,
 
         wxASSERT_MSG( cell, wxT("can't be called with NULL cell") );
 
-        cell->ProcessMouseClick(m_interface, ev.GetPoint(), ev.GetMouseEvent());
+        // If we don't return true, HTML listboxes will always think that they should take
+        // the focus
+        if (cell->ProcessMouseClick(m_interface, ev.GetPoint(), ev.GetMouseEvent()))
+            return true;
     }
 
     // true if a link was clicked, false otherwise
