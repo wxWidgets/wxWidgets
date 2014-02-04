@@ -2332,6 +2332,12 @@
     <ClInclude Include="..\..\include\wx\xrc\xh_animatctrl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\xrc\xh_auinotbk.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\xrc\xh_auitoolb.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_bannerwindow.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -2450,6 +2456,12 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_radbx.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\xrc\xh_ribbon.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\xrc\xh_richtext.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_scrol.h">

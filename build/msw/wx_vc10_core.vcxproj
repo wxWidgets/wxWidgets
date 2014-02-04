@@ -1642,6 +1642,8 @@
     <ClInclude Include="..\..\include\wx\wxhtml.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_all.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_animatctrl.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_auinotbk.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_auitoolb.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_bannerwindow.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_bmp.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_bmpbt.h" />
@@ -1682,6 +1684,8 @@
     <ClInclude Include="..\..\include\wx\xrc\xh_propdlg.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_radbt.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_radbx.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_ribbon.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_richtext.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_scrol.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_scwin.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_sizer.h" />
