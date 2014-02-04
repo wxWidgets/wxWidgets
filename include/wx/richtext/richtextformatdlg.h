@@ -241,6 +241,14 @@ public:
     /// Find a page by class
     wxWindow* FindPage(wxClassInfo* info) const;
 
+    /// Whether to restore the last-selected page
+    static bool  GetRestoreLastPage() { return sm_restoreLastPage; }
+    static void SetRestoreLastPage(bool b) { sm_restoreLastPage = b; }
+
+    /// The page identifier of the last page selected (not the control id)
+    static int GetLastPage() { return sm_lastPage; }
+    static void SetLastPage(int lastPage) { sm_lastPage = lastPage; }
+
 protected:
 
     wxRichTextAttr                              m_attributes;
@@ -252,6 +260,9 @@ protected:
 
     static wxRichTextFormattingDialogFactory*   ms_FormattingDialogFactory;
     static bool                                 sm_showToolTips;
+
+    static bool                                 sm_restoreLastPage;
+    static int                                  sm_lastPage;
 
 DECLARE_EVENT_TABLE()
 };

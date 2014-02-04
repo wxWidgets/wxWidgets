@@ -79,6 +79,8 @@
 #endif
 
 bool wxRichTextFormattingDialog::sm_showToolTips = false;
+bool wxRichTextFormattingDialog::sm_restoreLastPage = true;
+int wxRichTextFormattingDialog::sm_lastPage = -1;
 
 IMPLEMENT_CLASS(wxRichTextDialogPage, wxPanel)
 
@@ -104,6 +106,10 @@ void wxRichTextFormattingDialog::Init()
 
 wxRichTextFormattingDialog::~wxRichTextFormattingDialog()
 {
+    int sel = GetBookCtrl()->GetSelection();
+    if (sel != -1 && sel < (int) m_pageIds.GetCount())
+        sm_lastPage = m_pageIds[sel];
+
     delete m_styleDefinition;
 }
 
@@ -128,6 +134,12 @@ bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxSt
 
     LayoutDialog();
 
+    if (sm_restoreLastPage && sm_lastPage != -1)
+    {
+        int idx = m_pageIds.Index(sm_lastPage);
+        if (idx != -1)
+            GetBookCtrl()->SetSelection(idx);
+    }
     return true;
 }
 
