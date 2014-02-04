@@ -29,6 +29,7 @@ All (GUI):
 - Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
 - Send events when toggling wxPropertyGrid nodes from keyboard (Armel Asselin).
+- Fix wxRearrangeList::Check() which asserted and misbehaved before.
 
 wxGTK:
 
