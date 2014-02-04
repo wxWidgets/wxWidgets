@@ -41,3 +41,8 @@ wxMSW:
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix handling of selected images in wxBitmapButton (Artur Wieczorek).
 - Support multiline strings in wxDC::DrawRotatedText() (Artur Wieczorek).
+
+wxOSX/Cocoa:
+
+- Add support for wxEVT_COMBOBOX_DROPDOWN and wxEVT_COMBOBOX_CLOSEUP
+  events (Igor Korot).

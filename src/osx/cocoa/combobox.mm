@@ -90,6 +90,38 @@
     }
 }
 
+- (void)comboBoxWillPopUp:(NSNotification *)notification
+{
+    wxUnusedVar(notification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if( impl && impl->ShouldSendEvents() )
+    {
+        wxComboBox* wxpeer = static_cast<wxComboBox*>(impl->GetWXPeer());
+        if( wxpeer )
+        {
+            wxCommandEvent event(wxEVT_COMBOBOX_DROPDOWN, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            wxpeer->GetEventHandler()->ProcessEvent( event );
+        }
+    }
+}
+
+- (void)comboBoxWillDismiss:(NSNotification *)notification
+{
+    wxUnusedVar(notification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if( impl && impl->ShouldSendEvents() )
+    {
+        wxComboBox* wxpeer = static_cast<wxComboBox*>(impl->GetWXPeer());
+        if( wxpeer )
+        {
+            wxCommandEvent event(wxEVT_COMBOBOX_CLOSEUP, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            wxpeer->GetEventHandler()->ProcessEvent( event );
+        }
+    }
+}
+
 - (void)comboBoxSelectionDidChange:(NSNotification *)notification
 {
     wxUnusedVar(notification);
