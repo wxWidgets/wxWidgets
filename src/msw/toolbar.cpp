@@ -663,7 +663,10 @@ void wxToolBar::CreateDisabledImageList()
                                         (
                                             sizeBitmap.x,
                                             sizeBitmap.y,
-                                            bmpDisabled.GetMask() != NULL,
+                                            // Don't use mask if we have alpha
+                                            // (wxImageList will fall back to
+                                            // mask if alpha not supported)
+                                            !bmpDisabled.HasAlpha(),
                                             GetToolsCount()
                                         );
                 break;
