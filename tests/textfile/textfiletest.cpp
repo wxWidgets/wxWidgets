@@ -168,15 +168,19 @@ void TextFileTestCase::ReadUnixLast()
 
 void TextFileTestCase::ReadMac()
 {
-    CreateTestFile("foo\rbar\rbaz");
+    CreateTestFile("foo\rbar\r\rbaz");
 
     wxTextFile f;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
 
-    CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
+    CPPUNIT_ASSERT_EQUAL( (size_t)4, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
-    CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
+    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(1) );
+    CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(2) );
+    CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(3) );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("foo")), f.GetLine(0) );
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("")), f.GetLine(2) );
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
 }
 
