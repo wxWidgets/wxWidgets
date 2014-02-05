@@ -821,6 +821,19 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     through wxVariant which can be extended to support more data formats as necessary.
     Accordingly, all type information uses the strings returned from wxVariant::GetType.
 
+    This control support single column sorting and multiple column sorting. In
+    single column sorting, only 1 column could be set as sorted. With multiple
+    column sorting, more than 1 column could be set as sorted. The default
+    behavior of multi column sorting is to click with right mouse button on the
+    column to add that column to the currently sorted columns. Also clicking with
+    right mouse button on the column which is sorted with other multiple columns
+    will unset the column from columns being sorted. Also if one needs
+    to customize how the columns are set sorted with multiple column sort,
+    one could handle the
+    EVT_DATAVIEW_COLUMN_HEADER_CLICK/wxEVT_DATAVIEW_COLUMN_HEADER_CLICK event
+    and from there call the AddRemoveMultipleSortColumn() function to set/unset
+    the column from being sorted.
+
     @beginStyleTable
     @style{wxDV_SINGLE}
            Single selection mode. This is the default.
@@ -1395,6 +1408,14 @@ public:
     virtual wxDataViewColumn* GetSortingColumn() const;
 
     /**
+        Returns the vector of wxDataViewColumn currently responsible for sorting
+        or empty one if none has been selected.
+
+        @since 3.1.0
+    */
+    virtual wxVector<wxDataViewColumn *> GetSortingColumns() const;
+
+    /**
         Returns true if any items are currently selected.
 
         This method may be called for both the controls with single and
@@ -1502,6 +1523,37 @@ public:
         @since 2.9.2
     */
     virtual bool SetRowHeight(int rowHeight);
+
+    /**
+        Set to true if multiple columns could be selected for sorting. If false,
+        only 1 column could be selected for sorting.
+
+        If using multiple column sorting, one should use @GetSortingColumns()
+        method for finding the all selected columns and order in which they were
+        selected when processing the sorted event.
+
+        Currently this attribute is only supported in the generic version. In
+        other ports it does nothing.
+
+        @since 3.1.0
+    */
+    void AllowMultiColumnSort(bool allow);
+
+    /**
+        Return @true if multiple columns could be selected for sorting.
+        Otherwise @false.
+
+        @since 3.1.0
+    */
+    bool IsMultiColumnSortAllowed() const;
+
+    /**
+        Add/Remove column to/from actually sorted columns. If the control
+        doesn't allow multiple column sorting, nothing is done.
+        Use this function for customization of how multiple columns are set as
+        sorted.
+    */
+    virtual void AddRemoveMultipleSortColumn(int column);
 };
 
 

@@ -1035,6 +1035,7 @@ wxDataViewCtrlBase::wxDataViewCtrlBase()
     m_model = NULL;
     m_expander_column = 0;
     m_indent = 8;
+    m_allowMultiColumnSort = false;
 }
 
 wxDataViewCtrlBase::~wxDataViewCtrlBase()

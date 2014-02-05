@@ -645,6 +645,17 @@ public:
         { return m_expander_column; }
 
     virtual wxDataViewColumn *GetSortingColumn() const = 0;
+    virtual wxVector<wxDataViewColumn *> GetSortingColumns() const
+    {
+         return wxVector<wxDataViewColumn *>(GetSortingColumn() != NULL ? 1 : 0, GetSortingColumn());
+    }
+
+    void AllowMultiColumnSort(bool allow)
+    {
+        m_allowMultiColumnSort = allow;
+        DoAllowMultiColumnSort();
+    }
+    bool IsMultiColumnSortAllowed() const { return m_allowMultiColumnSort; }
 
 
     // items management
@@ -699,6 +710,10 @@ public:
     // Use EditItem() instead
     wxDEPRECATED( void StartEditor(const wxDataViewItem& item, unsigned int column) );
 
+    virtual void ToggleSortByColumn(int WXUNUSED(column))
+    {
+    }
+
 #if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
         { return false; }
@@ -730,10 +745,15 @@ private:
     // implementation is trivial and is done in the base class itself).
     virtual wxDataViewItem DoGetCurrentItem() const = 0;
     virtual void DoSetCurrentItem(const wxDataViewItem& item) = 0;
+    // Implementation for processing the multi column sort
+    // activation/deactivation. Default do nothing
+    virtual void DoAllowMultiColumnSort() {}
 
     wxDataViewModel        *m_model;
     wxDataViewColumn       *m_expander_column;
     int m_indent ;
+    // Allow multiple column sort
+    bool m_allowMultiColumnSort;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
