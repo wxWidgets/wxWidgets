@@ -218,8 +218,9 @@ void TextFileTestCase::ReadCRCRLF()
     // http://stackoverflow.com/questions/6998506/text-file-with-0d-0d-0a-line-breaks).
     // Older versions of wx would loose all data when reading such files.
     // Test that the data are read, but don't worry about empty lines in between or
-    // line endings.
-    CreateTestFile("foo\r\r\nbar\r\r\nbaz\r\r\n");
+    // line endings. Also include a longer streak of CRs, because they can
+    // happen as well.
+    CreateTestFile("foo\r\r\nbar\r\r\r\nbaz\r\r\n");
 
     wxTextFile f;
     CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
