@@ -821,6 +821,18 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     through wxVariant which can be extended to support more data formats as necessary.
     Accordingly, all type information uses the strings returned from wxVariant::GetType.
 
+    This control supports single column sorting and on some platforms
+    (currently only those using the generic version, i.e. not wxGTK nor wxOSX)
+    also sorting by multiple columns at once. The latter must be explicitly
+    enabled using AllowMultiColumnSort(), which will also indicate whether this
+    feature is supported, as it changes the default behaviour of right clicking
+    the column header to add or remove it to the set of columns used for
+    sorting. If this behaviour is not appropriate, you may handle
+    @c wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK event yourself to prevent it
+    from happening. In this case you would presumably call ToggleSortByColumn()
+    from some other event handler to still allow the user to configure sort
+    order somehow.
+
     @beginStyleTable
     @style{wxDV_SINGLE}
            Single selection mode. This is the default.
@@ -921,6 +933,24 @@ public:
         Destructor.
     */
     virtual ~wxDataViewCtrl();
+
+    /**
+        Call to allow using multiple columns for sorting.
+
+        When using multiple column for sorting, GetSortingColumns() method
+        should be used to retrieve all the columns which should be used to
+        effectively sort the data when processing the sorted event.
+
+        Currently multiple column sort is only implemented in the generic
+        version, i.e. this functionality is not available when using the native
+        wxDataViewCtrl implementation in wxGTK nor wxOSX.
+
+        @return @true if sorting by multiple columns could be enabled, @false
+            otherwise, typically because this feature is not supported.
+
+        @since 3.1.0
+    */
+    bool AllowMultiColumnSort(bool allow);
 
     /**
         Create the control. Useful for two step creation.
@@ -1395,6 +1425,22 @@ public:
     virtual wxDataViewColumn* GetSortingColumn() const;
 
     /**
+        Returns the columns which should be used for sorting the data in this
+        control.
+
+        This method is only useful when sorting by multiple columns had been
+        enabled using AllowMultiColumnSort() previously, otherwise
+        GetSortingColumn() is more convenient.
+
+        @return A possibly empty vector containing all the columns used
+            selected by the user for sorting. The sort order can be retrieved
+            from each column object separately.
+
+        @since 3.1.0
+    */
+    virtual wxVector<wxDataViewColumn *> GetSortingColumns() const;
+
+    /**
         Returns true if any items are currently selected.
 
         This method may be called for both the controls with single and
@@ -1418,6 +1464,15 @@ public:
         Return @true if the item is expanded.
     */
     virtual bool IsExpanded(const wxDataViewItem& item) const;
+
+    /**
+        Return @true if using more than one column for sorting is allowed.
+
+        See AllowMultiColumnSort() and GetSortingColumns().
+
+        @since 3.1.0
+     */
+    bool IsMultiColumnSortAllowed() const;
 
     /**
         Return @true if the item is selected.
@@ -1502,6 +1557,16 @@ public:
         @since 2.9.2
     */
     virtual bool SetRowHeight(int rowHeight);
+
+    /**
+        Toggle sorting by the given column.
+
+        This method should only be used when sorting by multiple columns is
+        allowed, see AllowMultiColumnSort(), and does nothing otherwise.
+
+        @since 3.1.0
+    */
+    virtual void ToggleSortByColumn(int column);
 };
 
 
