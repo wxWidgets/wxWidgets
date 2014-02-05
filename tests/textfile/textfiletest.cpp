@@ -35,7 +35,10 @@
 class TextFileTestCase : public CppUnit::TestCase
 {
 public:
-    TextFileTestCase() { }
+    TextFileTestCase()
+    {
+        srand((unsigned)time(NULL));
+    }
 
     virtual void tearDown() { unlink(GetTestFileName()); }
 
@@ -49,6 +52,7 @@ private:
         CPPUNIT_TEST( ReadMac );
         CPPUNIT_TEST( ReadMacLast );
         CPPUNIT_TEST( ReadMixed );
+        CPPUNIT_TEST( ReadMixedWithFuzzing );
         CPPUNIT_TEST( ReadCRCRLF );
 #if wxUSE_UNICODE
         CPPUNIT_TEST( ReadUTF8 );
@@ -65,6 +69,7 @@ private:
     void ReadMac();
     void ReadMacLast();
     void ReadMixed();
+    void ReadMixedWithFuzzing();
     void ReadCRCRLF();
 #if wxUSE_UNICODE
     void ReadUTF8();
@@ -210,6 +215,33 @@ void TextFileTestCase::ReadMixed()
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("foo")), f.GetFirstLine() );
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
     CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
+}
+
+void TextFileTestCase::ReadMixedWithFuzzing()
+{
+    // Create a random buffer with lots of newlines. This is intended to catch
+    // bad parsing in unexpected situations such as the one from ReadCRCRLF()
+    // (which is so common it deserves a test of its own).
+    static const char CHOICES[] = {'\r', '\n', 'X'};
+
+    unsigned linesCnt = 0;
+    const size_t BUF_LEN = 20000;
+    char data[BUF_LEN + 1];
+    data[0] = 'X';
+    data[BUF_LEN] = '\0';
+    for ( size_t i = 1; i < BUF_LEN; i++ )
+    {
+        char ch = CHOICES[rand() % WXSIZEOF(CHOICES)];
+        data[i] = ch;
+        if ( ch == '\r' || (ch == '\n' && data[i-1] != '\r') )
+            linesCnt++;
+    }
+
+    CreateTestFile(data);
+
+    wxTextFile f;
+    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+    CPPUNIT_ASSERT_EQUAL( (size_t)linesCnt, f.GetLineCount() );
 }
 
 void TextFileTestCase::ReadCRCRLF()
