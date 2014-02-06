@@ -1529,6 +1529,25 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+
+static void SendSetCursorEvent(wxWindow* win, int x, int y)
+{
+    wxSetCursorEvent event(x, y);
+    wxWindow* w = win;
+    do {
+        if (w->GTKProcessEvent(event))
+        {
+            win->GTKUpdateCursor(false, false, &event.GetCursor());
+            win->m_needCursorReset = true;
+            return;
+        }
+        w = w->GetParent();
+    } while (w);
+    if (win->m_needCursorReset)
+        win->GTKUpdateCursor();
+}
+
+//-----------------------------------------------------------------------------
 // "motion_notify_event"
 //-----------------------------------------------------------------------------
 
@@ -1595,13 +1614,7 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     }
 
     if ( !g_captureWindow )
-    {
-        wxSetCursorEvent cevent( event.m_x, event.m_y );
-        if (win->GTKProcessEvent( cevent ))
-        {
-            win->SetCursor( cevent.GetCursor() );
-        }
-    }
+        SendSetCursorEvent(win, event.m_x, event.m_y);
 
     bool ret = win->GTKProcessEvent(event);
 
@@ -1809,13 +1822,7 @@ gtk_window_enter_callback( GtkWidget*,
     InitMouseEvent(win, event, gdk_event);
 
     if ( !g_captureWindow )
-    {
-        wxSetCursorEvent cevent( event.m_x, event.m_y );
-        if (win->GTKProcessEvent( cevent ))
-        {
-            win->SetCursor( cevent.GetCursor() );
-        }
-    }
+        SendSetCursorEvent(win, event.m_x, event.m_y);
 
     return win->GTKProcessEvent(event);
 }
@@ -1830,6 +1837,9 @@ gtk_window_leave_callback( GtkWidget*,
                            wxWindowGTK *win )
 {
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
+
+    if (win->m_needCursorReset)
+        win->GTKUpdateCursor();
 
     // Event was emitted after an ungrab
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
@@ -2235,7 +2245,7 @@ void wxWindowGTK::Init()
     m_height = 0;
 
     m_showOnIdle = false;
-
+    m_needCursorReset = false;
     m_noExpose = false;
     m_nativeSizeEvent = false;
 #ifdef __WXGTK3__
@@ -3669,8 +3679,10 @@ bool wxWindowGTK::SetCursor( const wxCursor &cursor )
     return true;
 }
 
-void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize)
+void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize, const wxCursor* overrideCursor)
 {
+    m_needCursorReset = false;
+
     if (m_widget == NULL || !gtk_widget_get_realized(m_widget))
         return;
 
@@ -3688,7 +3700,7 @@ void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize)
     }
     GdkCursor* cursor = NULL;
     if (!isBusyOrGlobalCursor)
-        cursor = m_cursor.GetCursor();
+        cursor = (overrideCursor ? *overrideCursor : m_cursor).GetCursor();
 
     GdkWindow* window = NULL;
     if (cursor || isBusyOrGlobalCursor || !isRealize)
