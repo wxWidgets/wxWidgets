@@ -243,8 +243,6 @@ gtk_window_button_release_callback(GtkWidget* widget, GdkEventButton* gdk_event,
     gdk_window_get_origin(gtk_widget_get_window(widget), &org_x, &org_y);
     x += org_x - win->m_diffX;
     y += org_y - win->m_diffY;
-    win->m_x = x;
-    win->m_y = y;
     gtk_window_move( GTK_WINDOW(win->m_widget), x, y );
 
     return TRUE;
@@ -316,8 +314,6 @@ gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event,
     gdk_window_get_origin(gtk_widget_get_window(widget), &org_x, &org_y);
     x += org_x - win->m_diffX;
     y += org_y - win->m_diffY;
-    win->m_x = x;
-    win->m_y = y;
     gtk_window_move( GTK_WINDOW(win->m_widget), x, y );
 
     return TRUE;

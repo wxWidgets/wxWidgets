@@ -609,6 +609,7 @@ wxGTK:
   also fixes wxOwnerDrawnComboBox, wxDatePickerCtrl.
 - Fix cursor inheritance.
 - Fix wxStaticBoxSizer size calculation
+- Fix AUI panel re-docking
 
 wxMSW:
 
