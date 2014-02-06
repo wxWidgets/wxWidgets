@@ -160,14 +160,14 @@ int wxDialog::ShowModal()
     }
 #endif
 
+    // NOTE: this will cause a gtk_grab_add() during Show()
+    gtk_window_set_modal(GTK_WINDOW(m_widget), true);
+
     Show( true );
 
     m_modalShowing = true;
 
     wxOpenModalDialogLocker modalLock;
-
-    // NOTE: gtk_window_set_modal internally calls gtk_grab_add() !
-    gtk_window_set_modal(GTK_WINDOW(m_widget), TRUE);
 
     // Run modal dialog event loop.
     {
