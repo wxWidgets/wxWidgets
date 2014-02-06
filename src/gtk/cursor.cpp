@@ -283,7 +283,10 @@ void wxCursor::InitFromImage( const wxImage & image )
 
 GdkCursor *wxCursor::GetCursor() const
 {
-    return M_CURSORDATA->m_cursor;
+    GdkCursor* cursor = NULL;
+    if (m_refData)
+        cursor = M_CURSORDATA->m_cursor;
+    return cursor;
 }
 
 wxGDIRefData *wxCursor::CreateGDIRefData() const
@@ -308,18 +311,70 @@ wxCursor::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
 // busy cursor routines
 //-----------------------------------------------------------------------------
 
+wxCursor g_globalCursor;
+wxCursor g_busyCursor;
+static wxCursor gs_storedCursor;
 static int       gs_busyCount = 0;
+
+const wxCursor& wxBusyCursor::GetStoredCursor()
+{
+    return gs_storedCursor;
+}
+
+const wxCursor wxBusyCursor::GetBusyCursor()
+{
+    return g_busyCursor;
+}
+
+static void UpdateCursors(wxWindow* win, bool isBusyOrGlobalCursor)
+{
+    win->GTKUpdateCursor(isBusyOrGlobalCursor);
+    const wxWindowList& children = win->GetChildren(); 
+    wxWindowList::const_iterator i = children.begin();
+    for (size_t n = children.size(); n--; ++i)
+        UpdateCursors(*i, isBusyOrGlobalCursor);
+}
+
+static void SetGlobalCursor(const wxCursor& cursor)
+{
+    GdkCursor* gdk_cursor = cursor.GetCursor();
+    GdkDisplay* display = NULL;
+    wxWindowList::const_iterator i = wxTopLevelWindows.begin();
+    for (size_t n = wxTopLevelWindows.size(); n--; ++i)
+    {
+        wxWindow* win = *i;
+        GdkWindow* window;
+        if (win->m_widget && (window = gtk_widget_get_window(win->m_widget)))
+        {
+            gdk_window_set_cursor(window, gdk_cursor);
+            UpdateCursors(win, gdk_cursor != NULL);
+            if (display == NULL)
+                display = gdk_window_get_display(window);
+        }
+    }
+    if (display)
+        gdk_display_flush(display);
+}
 
 void wxBeginBusyCursor(const wxCursor* cursor)
 {
     if (gs_busyCount++ == 0)
-        wxSetCursor(*cursor);
+    {
+        g_busyCursor = *cursor;
+        gs_storedCursor = g_globalCursor;
+        SetGlobalCursor(*cursor);
+    }
 }
 
 void wxEndBusyCursor()
 {
     if (gs_busyCount && --gs_busyCount == 0)
-        wxSetCursor(wxCursor());
+    {
+        g_globalCursor = gs_storedCursor;
+        gs_storedCursor =
+        g_busyCursor = wxCursor();
+        SetGlobalCursor(g_globalCursor);
+    }
 }
 
 bool wxIsBusy()
@@ -327,93 +382,8 @@ bool wxIsBusy()
     return gs_busyCount > 0;
 }
 
-// Table holding non-default cursors to be restored when global cursor is unset
-WX_DECLARE_HASH_MAP(GdkWindow*, GdkCursor*, wxPointerHash, wxPointerEqual, wxGdkWindowGdkCursorMapBase);
-class wxGdkWindowGdkCursorMap: public wxGdkWindowGdkCursorMapBase
-{
-public:
-    ~wxGdkWindowGdkCursorMap();
-};
-static wxGdkWindowGdkCursorMap* gs_windowCursorMap;
-
-wxGdkWindowGdkCursorMap::~wxGdkWindowGdkCursorMap()
-{
-    const_iterator i = begin();
-    for (size_t n = size(); n--; ++i)
-    {
-#ifdef __WXGTK3__
-        g_object_unref(i->second);
-#else
-        gdk_cursor_unref(i->second);
-#endif
-    }
-}
-
-// Set cursor to default for window and all its children,
-// recording non-default cursors in gs_windowCursorMap
-static void clearCursors(GdkWindow* window)
-{
-    GdkCursor* cursor = gdk_window_get_cursor(window);
-    if (cursor)
-    {
-#ifdef __WXGTK3__
-        g_object_ref(cursor);
-#else
-        gdk_cursor_ref(cursor);
-#endif
-        (*gs_windowCursorMap)[window] = cursor;
-        gdk_window_set_cursor(window, NULL);
-    }
-    for (const GList* p = gdk_window_peek_children(window); p; p = p->next)
-        clearCursors(static_cast<GdkWindow*>(p->data));
-}
-
-// Restore non-default cursors
-static void restoreCursors(GdkWindow* window)
-{
-    wxGdkWindowGdkCursorMap::const_iterator i = gs_windowCursorMap->find(window);
-    if (i != gs_windowCursorMap->end())
-        gdk_window_set_cursor(window, i->second);
-    for (const GList* p = gdk_window_peek_children(window); p; p = p->next)
-        restoreCursors(static_cast<GdkWindow*>(p->data));
-}
-
 void wxSetCursor( const wxCursor& cursor )
 {
-    GdkDisplay* display = NULL;
-    wxWindowList::const_iterator i = wxTopLevelWindows.begin();
-    for (size_t n = wxTopLevelWindows.size(); n--; ++i)
-    {
-        GtkWidget* widget = (*i)->m_widget;
-        GdkWindow* window;
-        if (widget && (window = gtk_widget_get_window(widget)))
-        {
-            // if setting global cursor
-            if (cursor.IsOk())
-            {
-                delete gs_windowCursorMap;
-                gs_windowCursorMap = new wxGdkWindowGdkCursorMap;
-                // clear all cursors, saving non-default ones for later
-                clearCursors(window);
-                // set global cursor
-                gdk_window_set_cursor(window, cursor.GetCursor());
-            }
-            else
-            {
-                // remove global cursor
-                gdk_window_set_cursor(window, NULL);
-                if (gs_windowCursorMap)
-                {
-                    // restore non-default cursors
-                    restoreCursors(window);
-                    delete gs_windowCursorMap;
-                    gs_windowCursorMap = NULL;
-                }
-            }
-            if (display == NULL)
-                display = gdk_window_get_display(window);
-        }
-    }
-    if (display)
-        gdk_display_flush(display);
+    g_globalCursor = cursor;
+    SetGlobalCursor(cursor);
 }

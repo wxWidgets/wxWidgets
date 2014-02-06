@@ -74,6 +74,9 @@ static wxTopLevelWindowGTK *g_lastActiveFrame = NULL;
 // send any activate events at all
 static int g_sendActivateEvent = -1;
 
+extern wxCursor g_globalCursor;
+extern wxCursor g_busyCursor;
+
 #ifdef GDK_WINDOWING_X11
 // Whether _NET_REQUEST_FRAME_EXTENTS support is working
 static enum {
@@ -351,14 +354,21 @@ void wxTopLevelWindowGTK::GTKHandleRealized()
 {
     wxNonOwnedWindow::GTKHandleRealized();
 
-    gdk_window_set_decorations(gtk_widget_get_window(m_widget),
-                               (GdkWMDecoration)m_gdkDecor);
-    gdk_window_set_functions(gtk_widget_get_window(m_widget),
-                               (GdkWMFunction)m_gdkFunc);
+    GdkWindow* window = gtk_widget_get_window(m_widget);
+
+    gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
+    gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
 
     const wxIconBundle& icons = GetIcons();
     if (icons.GetIconCount())
         SetIcons(icons);
+
+    GdkCursor* cursor = g_globalCursor.GetCursor();
+    if (wxIsBusy() && !gtk_window_get_modal(GTK_WINDOW(m_widget)))
+        cursor = g_busyCursor.GetCursor();
+
+    if (cursor)
+        gdk_window_set_cursor(window, cursor);
 
 #ifdef __WXGTK3__
     if (gtk_window_get_has_resize_grip(GTK_WINDOW(m_widget)))
