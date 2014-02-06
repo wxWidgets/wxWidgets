@@ -219,29 +219,34 @@ void TextFileTestCase::ReadMixed()
 
 void TextFileTestCase::ReadMixedWithFuzzing()
 {
-    // Create a random buffer with lots of newlines. This is intended to catch
-    // bad parsing in unexpected situations such as the one from ReadCRCRLF()
-    // (which is so common it deserves a test of its own).
-    static const char CHOICES[] = {'\r', '\n', 'X'};
-
-    unsigned linesCnt = 0;
-    const size_t BUF_LEN = 20000;
-    char data[BUF_LEN + 1];
-    data[0] = 'X';
-    data[BUF_LEN] = '\0';
-    for ( size_t i = 1; i < BUF_LEN; i++ )
+    for ( int iteration = 0; iteration < 100; iteration++)
     {
-        char ch = CHOICES[rand() % WXSIZEOF(CHOICES)];
-        data[i] = ch;
-        if ( ch == '\r' || (ch == '\n' && data[i-1] != '\r') )
-            linesCnt++;
+        // Create a random buffer with lots of newlines. This is intended to catch
+        // bad parsing in unexpected situations such as the one from ReadCRCRLF()
+        // (which is so common it deserves a test of its own).
+        static const char CHOICES[] = {'\r', '\n', 'X'};
+
+        const size_t BUF_LEN = 100;
+        char data[BUF_LEN + 1];
+        data[0] = 'X';
+        data[BUF_LEN] = '\0';
+        unsigned linesCnt = 0;
+        for ( size_t i = 1; i < BUF_LEN; i++ )
+        {
+            char ch = CHOICES[rand() % WXSIZEOF(CHOICES)];
+            data[i] = ch;
+            if ( ch == '\r' || (ch == '\n' && data[i-1] != '\r') )
+                linesCnt++;
+        }
+        if (data[BUF_LEN-1] != '\r' && data[BUF_LEN-1] != '\n')
+            linesCnt++; // last line was unterminated
+
+        CreateTestFile(data);
+
+        wxTextFile f;
+        CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
+        CPPUNIT_ASSERT_EQUAL( (size_t)linesCnt, f.GetLineCount() );
     }
-
-    CreateTestFile(data);
-
-    wxTextFile f;
-    CPPUNIT_ASSERT( f.Open(wxString::FromAscii(GetTestFileName())) );
-    CPPUNIT_ASSERT_EQUAL( (size_t)linesCnt, f.GetLineCount() );
 }
 
 void TextFileTestCase::ReadCRCRLF()
