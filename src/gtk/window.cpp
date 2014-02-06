@@ -1529,6 +1529,31 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+
+WX_DECLARE_VOIDPTR_HASH_MAP(bool, wxVoidPtrBoolMap);
+static wxVoidPtrBoolMap gs_needCursorResetMap;
+
+static const wxCursor* gs_overrideCursor;
+
+static void SendSetCursorEvent(wxWindow* win, int x, int y)
+{
+    wxSetCursorEvent event(x, y);
+    wxWindow* w = win;
+    do {
+        if (w->GTKProcessEvent(event))
+        {
+            gs_overrideCursor = &event.GetCursor();
+            win->GTKUpdateCursor();
+            gs_needCursorResetMap[win] = true;
+            return;
+        }
+        w = w->GetParent();
+    } while (w);
+    if (gs_needCursorResetMap[win])
+        win->GTKUpdateCursor();
+}
+
+//-----------------------------------------------------------------------------
 // "motion_notify_event"
 //-----------------------------------------------------------------------------
 
@@ -1595,13 +1620,7 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
     }
 
     if ( !g_captureWindow )
-    {
-        wxSetCursorEvent cevent( event.m_x, event.m_y );
-        if (win->GTKProcessEvent( cevent ))
-        {
-            win->SetCursor( cevent.GetCursor() );
-        }
-    }
+        SendSetCursorEvent(win, event.m_x, event.m_y);
 
     bool ret = win->GTKProcessEvent(event);
 
@@ -1809,13 +1828,7 @@ gtk_window_enter_callback( GtkWidget*,
     InitMouseEvent(win, event, gdk_event);
 
     if ( !g_captureWindow )
-    {
-        wxSetCursorEvent cevent( event.m_x, event.m_y );
-        if (win->GTKProcessEvent( cevent ))
-        {
-            win->SetCursor( cevent.GetCursor() );
-        }
-    }
+        SendSetCursorEvent(win, event.m_x, event.m_y);
 
     return win->GTKProcessEvent(event);
 }
@@ -1830,6 +1843,9 @@ gtk_window_leave_callback( GtkWidget*,
                            wxWindowGTK *win )
 {
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
+
+    if (gs_needCursorResetMap[win])
+        win->GTKUpdateCursor();
 
     // Event was emitted after an ungrab
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
@@ -2464,6 +2480,8 @@ wxWindowGTK::~wxWindowGTK()
     if (m_styleProvider)
         g_object_unref(m_styleProvider);
 #endif
+
+    gs_needCursorResetMap.erase(this);
 
     if (m_widget)
     {
@@ -3671,6 +3689,8 @@ bool wxWindowGTK::SetCursor( const wxCursor &cursor )
 
 void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize)
 {
+    gs_needCursorResetMap[this] = false;
+
     if (m_widget == NULL || !gtk_widget_get_realized(m_widget))
         return;
 
@@ -3688,7 +3708,11 @@ void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize)
     }
     GdkCursor* cursor = NULL;
     if (!isBusyOrGlobalCursor)
-        cursor = m_cursor.GetCursor();
+    {
+        const wxCursor* overrideCursor = gs_overrideCursor;
+        gs_overrideCursor = NULL;
+        cursor = (overrideCursor ? *overrideCursor : m_cursor).GetCursor();
+    }
 
     GdkWindow* window = NULL;
     if (cursor || isBusyOrGlobalCursor || !isRealize)
