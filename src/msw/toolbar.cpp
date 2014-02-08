@@ -974,6 +974,16 @@ bool wxToolBar::Realize()
         switch ( tool->GetStyle() )
         {
             case wxTOOL_STYLE_CONTROL:
+                if ( wxStaticText *staticText = tool->GetStaticText() )
+                {
+                    // Display control and its label only if buttons have icons
+                    // and texts as otherwise there is not enough room on the
+                    // toolbar to fit the label.
+                    staticText->
+                        Show(HasFlag(wxTB_TEXT) && !HasFlag(wxTB_NOICONS));
+                }
+                // Fall through
+
             case wxTOOL_STYLE_SEPARATOR:
                 if ( tool->IsStretchableSpace() )
                 {
@@ -1127,7 +1137,7 @@ bool wxToolBar::Realize()
 
         wxSize size = control->GetSize();
         wxSize staticTextSize;
-        if ( staticText )
+        if ( staticText && staticText->IsShown() )
         {
             staticTextSize = staticText->GetSize();
             staticTextSize.y += 3; // margin between control and its label
@@ -1464,6 +1474,12 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
+    // Leave the effective size as (0, 0) if we are not showing bitmaps at all.
+    wxSize effectiveSize;
+
+    if ( !HasFlag(wxTB_NOICONS) )
+        effectiveSize = size;
+
     wxToolBarBase::SetToolBitmapSize(size);
 
     ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));

@@ -437,6 +437,12 @@ void wxToolBarBase::ClearTools()
 
 void wxToolBarBase::AdjustToolBitmapSize()
 {
+    if ( HasFlag(wxTB_NOICONS) )
+    {
+        SetToolBitmapSize(wxSize(0, 0));
+        return;
+    }
+
     const wxSize sizeOrig(m_defaultWidth, m_defaultHeight);
 
     wxSize sizeActual(sizeOrig);
