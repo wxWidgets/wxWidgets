@@ -12281,7 +12281,7 @@ bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
         size.x = 0; size.y = 0;
         if (partialExtents)
             partialExtents->Add(0);
-        return false;
+        return true;
     }
 
     wxRichTextAttr attr(GetAttributes());
