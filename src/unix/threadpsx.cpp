@@ -870,6 +870,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
                        wxT("Thread %p Entry() returned %lu."),
                        THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
         }
+#ifndef wxNO_EXCEPTIONS
 #ifdef HAVE_ABI_FORCEDUNWIND
         // When using common C++ ABI under Linux we must always rethrow this
         // special exception used to unwind the stack when the thread was
@@ -882,7 +883,11 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
             throw;
         }
 #endif // HAVE_ABI_FORCEDUNWIND
-        wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
+        catch ( ... )
+        {
+            wxTheApp->OnUnhandledException();
+        }
+#endif // !wxNO_EXCEPTIONS
 
         {
             wxCriticalSectionLocker lock(thread->m_critsect);
