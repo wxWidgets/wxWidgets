@@ -3725,14 +3725,17 @@ void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize, con
         gdk_window_get_user_data(window, &data);
         if (data)
         {
-            // encourage native widget to restore any non-default cursors
 #ifdef __WXGTK3__
+            const char sig_name[] = "state-flags-changed";
             GtkStateFlags state = gtk_widget_get_state_flags(GTK_WIDGET(data));
-            g_signal_emit_by_name(data, "state-flags-changed", state);
 #else
+            const char sig_name[] = "state-changed";
             GtkStateType state = gtk_widget_get_state(GTK_WIDGET(data));
-            g_signal_emit_by_name(data, "state-changed", state);
 #endif
+            static unsigned sig_id = g_signal_lookup(sig_name, GTK_TYPE_WIDGET);
+
+            // encourage native widget to restore any non-default cursors
+            g_signal_emit(data, sig_id, 0, state);
         }
     }
 }
