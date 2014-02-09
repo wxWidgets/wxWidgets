@@ -583,6 +583,19 @@ static void mark_set(GtkTextBuffer*, GtkTextIter*, GtkTextMark* mark, GSList** m
 }
 }
 
+#ifdef __WXGTK3__
+//-----------------------------------------------------------------------------
+//  "state_flags_changed"
+//-----------------------------------------------------------------------------
+extern "C" {
+static void state_flags_changed(GtkWidget*, GtkStateFlags, wxTextCtrl* win)
+{
+    // restore non-default cursor, if any
+    win->GTKUpdateCursor(false, true);
+}
+}
+#endif // __WXGTK3__
+
 //-----------------------------------------------------------------------------
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
@@ -820,8 +833,11 @@ bool wxTextCtrl::Create( wxWindow *parent,
         GTKConnectInsertTextSignal(GTK_ENTRY(m_text));
     }
 
-
     GTKConnectClipboardSignals(m_text);
+
+#ifdef __WXGTK3__
+    g_signal_connect(m_text, "state_flags_changed", G_CALLBACK(state_flags_changed), this);
+#endif
 
     return true;
 }
@@ -1634,7 +1650,15 @@ GdkWindow *wxTextCtrl::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     else
     {
 #ifdef __WXGTK3__
-        // no access to internal GdkWindows
+        GdkWindow* window = gtk_widget_get_window(m_text);
+        for (const GList* p = gdk_window_peek_children(window); p; p = p->next)
+        {
+            window = GDK_WINDOW(p->data);
+            void* data;
+            gdk_window_get_user_data(window, &data);
+            if (data == m_text)
+                return window;
+        }
         return NULL;
 #else
         return gtk_entry_get_text_window(GTK_ENTRY(m_text));
