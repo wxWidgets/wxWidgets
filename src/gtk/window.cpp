@@ -3726,8 +3726,13 @@ void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize, con
         if (data)
         {
             // encourage native widget to restore any non-default cursors
+#ifdef __WXGTK3__
+            GtkStateFlags state = gtk_widget_get_state_flags(GTK_WIDGET(data));
+            g_signal_emit_by_name(data, "state-flags-changed", state);
+#else
             GtkStateType state = gtk_widget_get_state(GTK_WIDGET(data));
             g_signal_emit_by_name(data, "state-changed", state);
+#endif
         }
     }
 }
