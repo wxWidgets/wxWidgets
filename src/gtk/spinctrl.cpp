@@ -342,8 +342,7 @@ void wxSpinCtrlGTKBase::OnChar( wxKeyEvent &event )
 GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
 #ifdef __WXGTK3__
-    // no access to internal GdkWindows
-    wxUnusedVar(windows);
+    GTKFindWindow(m_widget, windows);
 #else
     GtkSpinButton* spinbutton = GTK_SPIN_BUTTON(m_widget);
 

@@ -278,8 +278,7 @@ GtkWidget* wxComboBox::GetConnectWidget()
 GdkWindow* wxComboBox::GTKGetWindow(wxArrayGdkWindows& /* windows */) const
 {
 #ifdef __WXGTK3__
-    // no access to internal GdkWindows
-    return NULL;
+    return GTKFindWindow(GTK_WIDGET(GetEntry()));
 #else
     return gtk_entry_get_text_window(GetEntry());
 #endif

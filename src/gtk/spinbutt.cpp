@@ -174,10 +174,10 @@ void wxSpinButton::GtkEnableEvents() const
         (gpointer)gtk_value_changed, (void*) this);
 }
 
-GdkWindow *wxSpinButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
+GdkWindow *wxSpinButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED_IN_GTK2(windows)) const
 {
 #ifdef __WXGTK3__
-    // no access to internal GdkWindows
+    GTKFindWindow(m_widget, windows);
     return NULL;
 #else
     return GTK_SPIN_BUTTON(m_widget)->panel;

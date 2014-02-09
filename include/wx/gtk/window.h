@@ -14,8 +14,10 @@
 #ifdef __WXGTK3__
     typedef struct _cairo cairo_t;
     typedef struct _GtkStyleProvider GtkStyleProvider;
+    #define WXUNUSED_IN_GTK2(x) x
     #define WXUNUSED_IN_GTK3(x)
 #else
+    #define WXUNUSED_IN_GTK2(x)
     #define WXUNUSED_IN_GTK3(x) x
 #endif
 
@@ -426,6 +428,11 @@ protected:
     unsigned long GTKConnectWidget(const char *signal, wxGTKCallback callback);
 
     void ConstrainSize();
+
+#ifdef __WXGTK3__
+    static GdkWindow* GTKFindWindow(GtkWidget* widget);
+    static void GTKFindWindow(GtkWidget* widget, wxArrayGdkWindows& windows);
+#endif
 
 private:
     void Init();
