@@ -4370,6 +4370,35 @@ bool wxWindowGTK::IsTransparentBackgroundSupported(wxString* reason) const
 #endif // wxGTK_HAS_COMPOSITING_SUPPORT/!wxGTK_HAS_COMPOSITING_SUPPORT
 }
 
+#ifdef __WXGTK3__
+GdkWindow* wxGTKFindWindow(GtkWidget* widget)
+{
+    GdkWindow* window = gtk_widget_get_window(widget);
+    for (const GList* p = gdk_window_peek_children(window); p; p = p->next)
+    {
+        window = GDK_WINDOW(p->data);
+        void* data;
+        gdk_window_get_user_data(window, &data);
+        if (data == widget)
+            return window;
+    }
+    return NULL;
+}
+
+void wxGTKFindWindow(GtkWidget* widget, wxArrayGdkWindows& windows)
+{
+    GdkWindow* window = gtk_widget_get_window(widget);
+    for (const GList* p = gdk_window_peek_children(window); p; p = p->next)
+    {
+        window = GDK_WINDOW(p->data);
+        void* data;
+        gdk_window_get_user_data(window, &data);
+        if (data == widget)
+            windows.push_back(window);
+    }
+}
+#endif // __WXGTK3__
+
 // ----------------------------------------------------------------------------
 // Pop-up menu stuff
 // ----------------------------------------------------------------------------

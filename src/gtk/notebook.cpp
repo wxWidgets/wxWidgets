@@ -594,7 +594,10 @@ GdkWindow *wxNotebook::GTKGetWindow(wxArrayGdkWindows& windows) const
 {
     windows.push_back(gtk_widget_get_window(m_widget));
 #ifdef __WXGTK3__
-    // no access to internal GdkWindows
+    GdkWindow* wxGTKFindWindow(GtkWidget* widget);
+    GdkWindow* window = wxGTKFindWindow(m_widget);
+    if (window)
+        windows.push_back(window);
 #else
     windows.push_back(GTK_NOTEBOOK(m_widget)->event_window);
 #endif

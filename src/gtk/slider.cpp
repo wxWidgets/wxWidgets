@@ -508,8 +508,8 @@ int wxSlider::GetLineSize() const
 GdkWindow *wxSlider::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
 #ifdef __WXGTK3__
-    // no access to internal GdkWindows
-    return NULL;
+    GdkWindow* wxGTKFindWindow(GtkWidget* widget);
+    return wxGTKFindWindow(m_scale);
 #else
     return GTK_RANGE(m_scale)->event_window;
 #endif
