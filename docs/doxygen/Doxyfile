@@ -230,7 +230,7 @@ ALIASES += buildwith{2}="<b>Build Note:</b> You may need to build the wxWidgets 
 #---------------------------------------------------------------------------
 
 EXTRACT_ALL            = YES # Default: NO
-EXTRACT_PRIVATE        = NO
+EXTRACT_PRIVATE        = YES # Default: NO
 EXTRACT_PACKAGE        = NO
 EXTRACT_STATIC         = YES # Default: NO
 EXTRACT_LOCAL_CLASSES  = YES
