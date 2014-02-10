@@ -176,12 +176,12 @@ void wxPopupWindow::DoSetSize( int x, int y, int width, int height, int sizeFlag
 
     ConstrainSize();
 
-    if ((m_x != -1) || (m_y != -1))
+    if (m_x != old_x || m_y != old_y)
     {
-        if ((m_x != old_x) || (m_y != old_y))
-        {
-            gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
-        }
+        gtk_window_move(GTK_WINDOW(m_widget), m_x, m_y);
+        wxMoveEvent event(wxPoint(m_x, m_y), GetId());
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
     }
 
     if ((m_width != old_width) || (m_height != old_height))
