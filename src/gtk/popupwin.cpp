@@ -113,18 +113,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     {
         GtkWidget *toplevel = gtk_widget_get_toplevel( parent->m_widget );
         if (GTK_IS_WINDOW (toplevel))
-        {
-#if GTK_CHECK_VERSION(2,10,0)
-#ifndef __WXGTK3__
-            if (!gtk_check_version(2,10,0))
-#endif
-            {
-                gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)), GTK_WINDOW (m_widget));
-            }
-#endif
             gtk_window_set_transient_for (GTK_WINDOW (m_widget), GTK_WINDOW (toplevel));
-        }
-        gtk_window_set_screen (GTK_WINDOW (m_widget), gtk_widget_get_screen (GTK_WIDGET (parent->m_widget)));
     }
 
     gtk_window_set_resizable (GTK_WINDOW (m_widget), FALSE);
