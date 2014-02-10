@@ -1126,14 +1126,6 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
         m_y = y;
     }
 
-    if ( m_x != old_x || m_y != old_y )
-    {
-        gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
-        wxMoveEvent event(wxPoint(m_x, m_y), GetId());
-        event.SetEventObject(this);
-        HandleWindowEvent(event);
-    }
-
     const wxSize oldSize(m_width, m_height);
     if (width >= 0)
         m_width = width;
@@ -1142,6 +1134,15 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     ConstrainSize();
     if (m_width < 1) m_width = 1;
     if (m_height < 1) m_height = 1;
+
+    if ( m_x != old_x || m_y != old_y )
+    {
+        gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
+        wxMoveEvent event(wxPoint(m_x, m_y), GetId());
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
+    }
+
     if (m_width != oldSize.x || m_height != oldSize.y)
     {
         m_deferShowAllowed = true;
