@@ -13498,8 +13498,12 @@ void wxTextBoxAttr::CollectCommonAttributes(const wxTextBoxAttr& attr, wxTextBox
 bool wxTextBoxAttr::IsDefault() const
 {
     return GetFlags() == 0 && m_border.IsDefault() && m_outline.IsDefault() &&
-        !m_size.IsValid() && !m_minSize.IsValid() && !m_maxSize.IsValid() &&
-        !m_position.IsValid() && !m_padding.IsValid() && !m_margins.IsValid();
+        !m_size.GetWidth().IsValid() && !m_size.GetHeight().IsValid() &&
+        !m_minSize.GetWidth().IsValid() && !m_minSize.GetHeight().IsValid() &&
+        !m_maxSize.GetWidth().IsValid() && !m_maxSize.GetHeight().IsValid() &&
+        !m_position.GetLeft().IsValid() && !m_position.GetRight().IsValid() && !m_position.GetTop().IsValid() && !m_position.GetBottom().IsValid() &&
+        !m_padding.GetLeft().IsValid() && !m_padding.GetRight().IsValid() && !m_padding.GetTop().IsValid() && !m_padding.GetBottom().IsValid() &&
+        !m_margins.GetLeft().IsValid() && !m_margins.GetRight().IsValid() && !m_margins.GetTop().IsValid() && !m_margins.GetBottom().IsValid();
 }
 
 // wxRichTextAttr
