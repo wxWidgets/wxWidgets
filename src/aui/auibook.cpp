@@ -1552,19 +1552,22 @@ public:
                 // results in assert failures/GTK+ warnings
                 height = 0;
             }
+            int width = m_rect.width - 2 * border_space;
+            if (width < 0)
+                width = 0;
 
             if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
             {
                 page.window->SetSize(m_rect.x + border_space,
                                      m_rect.y + border_space,
-                                     m_rect.width - 2 * border_space,
+                                     width,
                                      height);
             }
             else //TODO: if (GetFlags() & wxAUI_NB_TOP)
             {
                 page.window->SetSize(m_rect.x + border_space,
                                      m_rect.y + m_tabCtrlHeight,
-                                     m_rect.width - 2 * border_space,
+                                     width,
                                      height);
             }
             // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
