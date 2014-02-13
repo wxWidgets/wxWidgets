@@ -3836,7 +3836,7 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
 
 void wxWindowGTK::Update()
 {
-    if (m_widget && gtk_widget_get_mapped(m_widget))
+    if (m_widget && gtk_widget_get_mapped(m_widget) && m_width > 0 && m_height > 0)
     {
         GdkDisplay* display = gtk_widget_get_display(m_widget);
         // Flush everything out to the server, and wait for it to finish.
