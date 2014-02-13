@@ -1747,11 +1747,14 @@ void wxRichTextCompositeObject::Invalidate(const wxRichTextRange& invalidRange)
         }
         else if (child->IsTopLevel())
         {
+            // Not sure why we did this, but it stops updated layout happening for floating objects.
+#if 0
             if (wxRichTextBuffer::GetFloatingLayoutMode() && child->IsFloating() && GetBuffer()->GetFloatCollector() && GetBuffer()->GetFloatCollector()->HasFloat(child))
             {
                 // Don't invalidate subhierarchy if we've already been laid out
             }
             else
+#endif
             {
                 if (invalidRange == wxRICHTEXT_NONE)
                     child->Invalidate(wxRICHTEXT_NONE);
