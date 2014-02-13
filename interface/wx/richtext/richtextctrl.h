@@ -2033,6 +2033,18 @@ public:
     long GetFirstVisiblePosition() const;
 
     /**
+        Enable or disable images
+    */
+
+    void EnableImages(bool b);
+
+    /**
+        Returns @true if images are enabled.
+    */
+
+    bool GetImagesEnabled() const;
+
+    /**
         Returns the caret position since the default formatting was changed. As
         soon as this position changes, we no longer reflect the default style
         in the UI. A value of -2 means that we should only reflect the style of the

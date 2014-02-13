@@ -165,6 +165,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/generic/private
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
+	mkdir $(DISTDIR)/include/wx/richtext/bitmaps
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/ribbon
 	mkdir $(DISTDIR)/include/wx/persist
@@ -182,6 +183,7 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/generic/private/*.h $(DISTDIR)/include/wx/generic/private
 	$(CP_P) $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
+	$(CP_P) $(INCDIR)/wx/richtext/bitmaps/*.xpm $(DISTDIR)/include/wx/richtext/bitmaps
 	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
 	$(CP_P) $(INCDIR)/wx/ribbon/*.h $(DISTDIR)/include/wx/ribbon
 	$(CP_P) $(INCDIR)/wx/persist/*.h $(DISTDIR)/include/wx/persist
@@ -292,6 +294,7 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
+	mkdir $(DISTDIR)/include/wx/richtext/bitmaps
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/ribbon
 	mkdir $(DISTDIR)/include/wx/persist

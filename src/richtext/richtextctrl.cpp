@@ -380,6 +380,8 @@ void wxRichTextCtrl::Init()
     // Scrollbar hysteresis detection
     m_setupScrollbarsCount = 0;
     m_setupScrollbarsCountInOnSize = 0;
+
+    m_enableImages = true;
 }
 
 void wxRichTextCtrl::DoThaw()

@@ -2211,7 +2211,7 @@ public:
     */
     wxRichTextDrawingContext(wxRichTextBuffer* buffer);
 
-    void Init() { m_buffer = NULL; m_enableVirtualAttributes = true; }
+    void Init() { m_buffer = NULL; m_enableVirtualAttributes = true; m_enableImages = true; }
 
     /**
         Does this object have virtual attributes?
@@ -2269,8 +2269,21 @@ public:
 
     bool GetVirtualAttributesEnabled() const { return m_enableVirtualAttributes; }
 
+    /**
+        Enable or disable images
+    */
+
+    void EnableImages(bool b) { m_enableImages = b; }
+
+    /**
+        Returns @true if images are enabled.
+    */
+
+    bool GetImagesEnabled() const { return m_enableImages; }
+
     wxRichTextBuffer*   m_buffer;
     bool                m_enableVirtualAttributes;
+    bool                m_enableImages;
 };
 
 /**
@@ -4810,7 +4823,7 @@ public:
     /**
         Creates a cached image at the required size.
     */
-    virtual bool LoadImageCache(wxDC& dc, bool resetCache = false, const wxSize& parentSize = wxDefaultSize);
+    virtual bool LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context, bool resetCache = false, const wxSize& parentSize = wxDefaultSize);
 
     /**
         Gets the original image size.

@@ -2122,6 +2122,18 @@ public:
     */
     wxPoint GetFirstVisiblePoint() const;
 
+    /**
+        Enable or disable images
+    */
+
+    void EnableImages(bool b) { m_enableImages = b; }
+
+    /**
+        Returns @true if images are enabled.
+    */
+
+    bool GetImagesEnabled() const { return m_enableImages; }
+
 #ifdef DOXYGEN
     /**
         Returns the content of the entire control as a string.
@@ -2321,6 +2333,9 @@ protected:
     wxSize                  m_lastWindowSize;
     int                     m_setupScrollbarsCount;
     int                     m_setupScrollbarsCountInOnSize;
+
+    /// Whether images are enabled for this control
+    bool                    m_enableImages;
 };
 
 #if wxUSE_DRAG_AND_DROP

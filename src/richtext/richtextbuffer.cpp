@@ -42,6 +42,7 @@
 #include "wx/richtext/richtextimagedlg.h"
 #include "wx/richtext/richtextsizepage.h"
 #include "wx/richtext/richtextxml.h"
+#include "wx/richtext/bitmaps/image_placeholder24x24.xpm"
 
 #include "wx/listimpl.cpp"
 #include "wx/arrimpl.cpp"
@@ -12100,10 +12101,20 @@ void wxRichTextImage::Init()
 }
 
 /// Create a cached image at the required size
-bool wxRichTextImage::LoadImageCache(wxDC& dc, bool resetCache, const wxSize& parentSize)
+bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context, bool resetCache, const wxSize& parentSize)
 {
     if (!m_imageBlock.IsOk())
         return false;
+
+    if (!context.GetImagesEnabled())
+    {
+        if (resetCache || !m_imageCache.IsOk())
+        {
+            wxBitmap bitmap(image_placeholder24x24_xpm);
+            m_imageCache = bitmap;
+        }
+        return true;
+    }
 
     // If we have an original image size, use that to compute the cached bitmap size
     // instead of loading the image each time. This way we can avoid loading
@@ -12266,9 +12277,7 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
     if (!IsShown())
         return true;
 
-    // Don't need cached size AFAIK
-    // wxSize size = GetCachedSize();
-    if (!LoadImageCache(dc))
+    if (!LoadImageCache(dc, context))
         return false;
 
     wxRichTextAttr attr(GetAttributes());
@@ -12298,7 +12307,7 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
 /// Lay the item out
 bool wxRichTextImage::Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& WXUNUSED(parentRect), int WXUNUSED(style))
 {
-    if (!LoadImageCache(dc))
+    if (!LoadImageCache(dc, context))
         return false;
 
     wxSize imageSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
@@ -12327,7 +12336,7 @@ bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
     if (!range.IsWithin(GetRange()))
         return false;
 
-    if (!((wxRichTextImage*)this)->LoadImageCache(dc, false, parentSize))
+    if (!((wxRichTextImage*)this)->LoadImageCache(dc, context, false, parentSize))
     {
         size.x = 0; size.y = 0;
         if (partialExtents)
@@ -14869,7 +14878,10 @@ wxRichTextDrawingContext::wxRichTextDrawingContext(wxRichTextBuffer* buffer)
     Init();
     m_buffer = buffer;
     if (m_buffer && m_buffer->GetRichTextCtrl())
+    {
         EnableVirtualAttributes(m_buffer->GetRichTextCtrl()->GetVirtualAttributesEnabled());
+        m_enableImages = m_buffer->GetRichTextCtrl()->GetImagesEnabled();
+    }
 }
 
 bool wxRichTextDrawingContext::HasVirtualAttributes(wxRichTextObject* obj) const
