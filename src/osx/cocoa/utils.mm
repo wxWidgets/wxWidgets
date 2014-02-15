@@ -109,7 +109,16 @@ void wxBell()
 {
     wxUnusedVar(flag);
     wxUnusedVar(sender);
-    wxTheApp->MacReopenApp() ;
+    if ( wxTheApp->OSXInitWasCalled() )
+        wxTheApp->MacReopenApp();
+    // else: It's possible that this function was called as the first thing.
+    //       This can happen when OS X restores running apps when starting a new
+    //       user session. Apps that were hidden (dock only) when the previous
+    //       session terminated are only restored in a limited, resources-saving
+    //       way. When the user clicks the icon, applicationShouldHandleReopen:
+    //       is called, but we didn't call OnInit() yet. In this case, we
+    //       shouldn't call MacReopenApp(), but should proceed with normal
+    //       initialization.
     return NO;
 }
 
