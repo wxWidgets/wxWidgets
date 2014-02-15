@@ -31,6 +31,7 @@ All (GUI):
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
 - Send events when toggling wxPropertyGrid nodes from keyboard (Armel Asselin).
 - Fix wxRearrangeList::Check() which asserted and misbehaved before.
+- Optimized wxRTC insertion and deletion when floating objects are present.
 
 wxGTK:
 

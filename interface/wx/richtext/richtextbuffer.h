@@ -4124,6 +4124,8 @@ public:
     virtual ~wxRichTextParagraph();
     wxRichTextParagraph(const wxRichTextParagraph& obj): wxRichTextCompositeObject() { Copy(obj); }
 
+    void Init();
+
 // Overridables
 
     virtual bool Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style);
@@ -4257,11 +4259,24 @@ public:
     */
     void LayoutFloat(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style, wxRichTextFloatCollector* floatCollector);
 
+    /**
+        Whether the paragraph is impacted by floating objects from above.
+    */
+    int GetImpactedByFloatingObjects() const { return m_impactedByFloatingObjects; }
+
+    /**
+        Sets whether the paragraph is impacted by floating objects from above.
+    */
+    void SetImpactedByFloatingObjects(int i) { m_impactedByFloatingObjects = i; }
+
 protected:
 
     // The lines that make up the wrapped paragraph
-    wxRichTextLineList m_cachedLines;
+    wxRichTextLineList  m_cachedLines;
 
+    // Whether the paragraph is impacted by floating objects from above
+    int                 m_impactedByFloatingObjects;
+    
     // Default tabstops
     static wxArrayInt  sm_defaultTabs;
 
@@ -5971,7 +5986,9 @@ public:
         Updates the control appearance, optimizing if possible given information from the call to Layout.
     */
     void UpdateAppearance(long caretPosition, bool sendUpdateEvent = false,
-                            wxArrayInt* optimizationLineCharPositions = NULL, wxArrayInt* optimizationLineYPositions = NULL, bool isDoCmd = true);
+                          const wxRect& oldFloatRect = wxRect(),
+                          wxArrayInt* optimizationLineCharPositions = NULL, wxArrayInt* optimizationLineYPositions = NULL,
+                          bool isDoCmd = true);
 
     /**
         Replaces the buffer paragraphs with the given fragment.
@@ -6026,7 +6043,8 @@ public:
     /**
         Calculate arrays for refresh optimization.
     */
-    void CalculateRefreshOptimizations(wxArrayInt& optimizationLineCharPositions, wxArrayInt& optimizationLineYPositions);
+    void CalculateRefreshOptimizations(wxArrayInt& optimizationLineCharPositions, wxArrayInt& optimizationLineYPositions,
+                                       wxRect& oldFloatRect);
 
     /**
         Sets the position used for e.g. insertion.
