@@ -1547,6 +1547,9 @@ static void SendSetCursorEvent(wxWindow* win, int x, int y)
             gs_needCursorResetMap[win] = true;
             return;
         }
+        // this is how wxMSW works...
+        if (w->GetCursor().IsOk())
+            break;
         w = w->GetParent();
     } while (w);
     if (gs_needCursorResetMap[win])
