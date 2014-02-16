@@ -103,6 +103,9 @@ public:
     /// Enable the checkboxes for position and size
     static void EnablePositionAndSizeCheckboxes(bool enable) { sm_enablePositionAndSizeCheckboxes = enable; }
 
+    /// Enable the move object controls
+    static void ShowMoveObjectControls(bool enable) { sm_showMoveObjectControls = enable; }
+
 ////@begin wxRichTextSizePage event handler declarations
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXT_VERTICAL_ALIGNMENT_COMBOBOX
@@ -294,6 +297,7 @@ public:
     static bool sm_showFloatingAndAlignmentControls;
     static bool sm_enablePositionAndSizeUnits;
     static bool sm_enablePositionAndSizeCheckboxes;
+    static bool sm_showMoveObjectControls;
 };
 
 #endif

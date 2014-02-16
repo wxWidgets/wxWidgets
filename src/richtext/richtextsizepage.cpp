@@ -65,6 +65,7 @@ bool wxRichTextSizePage::sm_showAlignmentControls = true;
 bool wxRichTextSizePage::sm_showFloatingAndAlignmentControls = true;
 bool wxRichTextSizePage::sm_enablePositionAndSizeUnits = true;
 bool wxRichTextSizePage::sm_enablePositionAndSizeCheckboxes = true;
+bool wxRichTextSizePage::sm_showMoveObjectControls = true;
 
 /*!
  * wxRichTextSizePage constructors
@@ -117,6 +118,7 @@ wxRichTextSizePage::~wxRichTextSizePage()
     sm_showMinMaxSizeControls = true;
     sm_showMinMaxSizeControls = true;
     sm_enablePositionAndSizeCheckboxes = true;
+    sm_showMoveObjectControls = true;
     
 ////@begin wxRichTextSizePage destruction
 ////@end wxRichTextSizePage destruction
@@ -741,6 +743,9 @@ void wxRichTextSizePage::CreateControls()
 
     if (!sm_showPositionModeControls)
         m_moveObjectParentSizer->Show(m_positionModeSizer, false);
+
+    if (!sm_showMoveObjectControls)
+        m_moveObjectParentSizer->Show(m_moveObjectSizer, false);
 }
 
 wxRichTextAttr* wxRichTextSizePage::GetAttributes()

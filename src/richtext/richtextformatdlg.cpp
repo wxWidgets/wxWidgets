@@ -102,6 +102,7 @@ void wxRichTextFormattingDialog::Init()
     m_styleSheet = NULL;
     m_object = NULL;
     m_options = 0;
+    m_ignoreUpdates = false;
 }
 
 wxRichTextFormattingDialog::~wxRichTextFormattingDialog()
@@ -138,7 +139,11 @@ bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxSt
     {
         int idx = m_pageIds.Index(sm_lastPage);
         if (idx != -1)
+        {
+            m_ignoreUpdates = true;
             GetBookCtrl()->SetSelection(idx);
+            m_ignoreUpdates = false;
+        }
     }
     return true;
 }
@@ -224,6 +229,9 @@ bool wxRichTextFormattingDialog::UpdateDisplay()
 /// up to date
 void wxRichTextFormattingDialog::OnTabChanged(wxBookCtrlEvent& event)
 {
+    if (m_ignoreUpdates)
+        return;
+
     if (GetBookCtrl() != event.GetEventObject())
     {
         event.Skip();
@@ -703,7 +711,7 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
         float value = 0.0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
         // Convert from cm
-        ret = (int) ((value * 100.0) + 0.5);
+        ret = (int) ((value * 100.0) /* + 0.5 */);
         return true;
     }
     else if (unit == wxTEXT_ATTR_UNITS_PERCENTAGE)
@@ -715,7 +723,7 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
     {
         float value = 0.0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
-        ret = (int) ((value * 100.0) + 0.5);
+        ret = (int) ((value * 100.0) /* + 0.5 */);
     }
     else if (unit == wxTEXT_ATTR_UNITS_POINTS)
     {

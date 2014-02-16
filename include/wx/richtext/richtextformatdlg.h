@@ -257,6 +257,7 @@ protected:
     wxRichTextObject*                           m_object;
     wxArrayInt                                  m_pageIds; // mapping of book control indexes to page ids
     int                                         m_options; // UI options
+    bool                                        m_ignoreUpdates;
 
     static wxRichTextFormattingDialogFactory*   ms_FormattingDialogFactory;
     static bool                                 sm_showToolTips;
