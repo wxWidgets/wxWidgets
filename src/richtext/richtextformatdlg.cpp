@@ -691,7 +691,7 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
         float value = 0.0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
         // Convert from cm
-        ret = (int) ((value * 100.0) + 0.5);
+        ret = (int) ((value * 100.0) /* + 0.5 */);
         return true;
     }
     else if (unit == wxTEXT_ATTR_UNITS_PERCENTAGE)
@@ -703,7 +703,7 @@ bool wxRichTextFormattingDialog::ConvertFromString(const wxString& str, int& ret
     {
         float value = 0.0;
         wxSscanf(str.c_str(), wxT("%f"), &value);
-        ret = (int) ((value * 100.0) + 0.5);
+        ret = (int) ((value * 100.0) /* + 0.5 */);
     }
     else if (unit == wxTEXT_ATTR_UNITS_POINTS)
     {
