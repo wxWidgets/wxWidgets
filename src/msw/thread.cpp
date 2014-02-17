@@ -794,6 +794,8 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
         gs_waitingForThread = true;
     }
 
+    wxAppTraits& traits = wxApp::GetValidTraits();
+
     // we can't just wait for the thread to terminate because it might be
     // calling some GUI functions and so it will never terminate before we
     // process the Windows messages that result from these functions
@@ -812,16 +814,9 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
             }
         }
 
-        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-        if ( traits )
-        {
-            result = traits->WaitForThread(m_hThread, waitMode);
-        }
-        else // can't wait for the thread
-        {
-            // so kill it below
-            result = 0xFFFFFFFF;
-        }
+        // Wait for the thread while still processing events in the GUI apps or
+        // just simply wait for it in the console ones.
+        result = traits.WaitForThread(m_hThread, waitMode);
 
         switch ( result )
         {
@@ -846,7 +841,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
                 //     the system might dead lock then
                 if ( wxThread::IsMain() )
                 {
-                    if ( traits && !traits->DoMessageFromThreadWait() )
+                    if ( !traits.DoMessageFromThreadWait() )
                     {
                         // WM_QUIT received: kill the thread
                         Kill();
