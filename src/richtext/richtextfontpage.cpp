@@ -686,7 +686,7 @@ bool wxRichTextFontPage::TransferDataToWindow()
                 m_smallCapitalsCtrl->Set3StateValue(wxCHK_UNCHECKED);
         }
         else
-            m_capitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
+            m_smallCapitalsCtrl->Set3StateValue(wxCHK_UNDETERMINED);
 
         if ( attr->GetTextEffectFlags() & (wxTEXT_ATTR_EFFECT_SUPERSCRIPT | wxTEXT_ATTR_EFFECT_SUBSCRIPT) )
         {
