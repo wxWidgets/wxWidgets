@@ -3214,8 +3214,8 @@ wxImageHistogram::FindFirstUnusedColour(unsigned char *r,
                                         unsigned char *g,
                                         unsigned char *b,
                                         unsigned char r2,
-                                        unsigned char b2,
-                                        unsigned char g2) const
+                                        unsigned char g2,
+                                        unsigned char b2) const
 {
     unsigned long key = MakeKey(r2, g2, b2);
 
@@ -3257,8 +3257,8 @@ wxImage::FindFirstUnusedColour(unsigned char *r,
                                unsigned char *g,
                                unsigned char *b,
                                unsigned char r2,
-                               unsigned char b2,
-                               unsigned char g2) const
+                               unsigned char g2,
+                               unsigned char b2) const
 {
     wxImageHistogram histogram;
 
