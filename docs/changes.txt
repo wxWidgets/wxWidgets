@@ -629,6 +629,7 @@ wxMSW:
 - Fix bug with multiple default buttons in a dialog (Artur Wieczorek).
 - Improve tooltips wrapping after updating their text (Artur Wieczorek).
 - Fix checking menu items before appending them to the menu.
+- Fix crash when adding/removing the same path to/from wxFileSystemWatcher.
 
 wxOSX:
 
