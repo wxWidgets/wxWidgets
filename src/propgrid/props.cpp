@@ -531,7 +531,7 @@ wxString wxUIntProperty::ValueToString( wxVariant& value,
 {
     size_t index = m_base + m_prefix;
     if ( index >= wxPG_UINT_TEMPLATE_MAX )
-        index = wxPG_BASE_DEC;
+        index = wxPG_UINT_DEC;
 
     if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
     {
