@@ -1319,7 +1319,11 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
 
         if ( AlphaBlt(GetHdc(), x, y, width, height, 0, 0, width, height, hdcMem, bmp) )
+        {
+            CalcBoundingBox(x, y);
+            CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
             return;
+        }
     }
 
     SET_STRETCH_BLT_MODE(GetHdc());
@@ -1426,6 +1430,9 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
         ::SelectObject( memdc, hOldBitmap );
         ::DeleteDC( memdc );
     }
+
+    CalcBoundingBox(x, y);
+    CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
 }
 
 void wxMSWDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
@@ -2196,7 +2203,11 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     {
         if ( AlphaBlt(GetHdc(), xdest, ydest, dstWidth, dstHeight,
                       xsrc, ysrc, srcWidth, srcHeight, hdcSrc, bmpSrc) )
+        {
+            CalcBoundingBox(xdest, ydest);
+            CalcBoundingBox(xdest + dstWidth, ydest + dstHeight);
             return true;
+        }
     }
 
     wxMask *mask = NULL;
@@ -2471,6 +2482,12 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 success = true;
             }
         }
+    }
+
+    if ( success )
+    {
+        CalcBoundingBox(xdest, ydest);
+        CalcBoundingBox(xdest + dstWidth, ydest + dstHeight);
     }
 
     return success;
@@ -2842,6 +2859,8 @@ void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
              ) )
         {
             // skip call of the base class version below
+            CalcBoundingBox(rect.GetLeft(), rect.GetBottom());
+            CalcBoundingBox(rect.GetRight(), rect.GetTop());
             return;
         }
 
