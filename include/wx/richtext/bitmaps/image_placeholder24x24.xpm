@@ -1,5 +1,5 @@
 /* XPM */
-static char *image_placeholder24x24_xpm[] = {
+static const char *image_placeholder24x24_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "24 24 2 1",
 "  c #7E97A9",
