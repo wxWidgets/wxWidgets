@@ -2497,13 +2497,11 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
         }
     }
 
-    if (m_overflowSizerItem)
+    if (m_overflowSizerItem && m_overflowVisible && m_art)
     {
         wxRect overflow_rect = GetOverflowRect();
 
-        if (m_art &&
-            m_overflowVisible &&
-            overflow_rect.Contains(evt.m_x, evt.m_y))
+        if (overflow_rect.Contains(evt.m_x, evt.m_y))
         {
             wxAuiToolBarEvent e(wxEVT_AUITOOLBAR_OVERFLOW_CLICK, -1);
             e.SetEventObject(this);
