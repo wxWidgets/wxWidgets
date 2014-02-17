@@ -470,8 +470,18 @@ wxValidator* wxIntProperty::DoGetValidator() const
 // wxUIntProperty
 // -----------------------------------------------------------------------
 
-
-#define wxPG_UINT_TEMPLATE_MAX 8
+enum
+{
+    wxPG_UINT_HEX_LOWER,
+    wxPG_UINT_HEX_LOWER_PREFIX,
+    wxPG_UINT_HEX_LOWER_DOLLAR,
+    wxPG_UINT_HEX_UPPER,
+    wxPG_UINT_HEX_UPPER_PREFIX,
+    wxPG_UINT_HEX_UPPER_DOLLAR,
+    wxPG_UINT_DEC,
+    wxPG_UINT_OCT,
+    wxPG_UINT_TEMPLATE_MAX
+};
 
 static const wxChar* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
     wxT("%lx"),wxT("0x%lx"),wxT("$%lx"),
@@ -495,7 +505,7 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxPGProperty,
 
 void wxUIntProperty::Init()
 {
-    m_base = 6; // This is magic number for dec base (must be same as in setattribute)
+    m_base = wxPG_UINT_DEC;
     m_realBase = 10;
     m_prefix = wxPG_PREFIX_NONE;
 }
@@ -633,13 +643,13 @@ bool wxUIntProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
         //
         // Translate logical base to a template array index
-        m_base = 7; // oct
+        m_base = wxPG_UINT_OCT;
         if ( val == wxPG_BASE_HEX )
-            m_base = 3;
+            m_base = wxPG_UINT_HEX_UPPER;
         else if ( val == wxPG_BASE_DEC )
-            m_base = 6;
+            m_base = wxPG_UINT_DEC;
         else if ( val == wxPG_BASE_HEXL )
-            m_base = 0;
+            m_base = wxPG_UINT_HEX_LOWER_DOLLAR;
         return true;
     }
     else if ( name == wxPG_UINT_PREFIX )
