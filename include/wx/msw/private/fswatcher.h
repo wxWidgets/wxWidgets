@@ -173,7 +173,7 @@ public:
         // worse, reused to point to another object) pointer in ReadEvents() so
         // just remember that this one should be removed when CompleteRemoval()
         // is called later.
-        m_removedWatches.insert(wxFSWatchEntries::value_type(path, watch));
+        m_removedWatches.push_back(watch);
         m_watches.erase(it);
 
         return true;
@@ -185,15 +185,20 @@ public:
     // this case we'll just return false and do nothing.
     bool CompleteRemoval(wxFSWatchEntryMSW* watch)
     {
-        wxFSWatchEntries::iterator it = m_removedWatches.find(watch->GetPath());
-        if ( it == m_removedWatches.end() )
-            return false;
+        for ( Watches::iterator it = m_removedWatches.begin();
+              it != m_removedWatches.end();
+              ++it )
+        {
+            if ( (*it).get() == watch )
+            {
+                // Removing the object from here will result in deleting the
+                // watch itself as it's not referenced from anywhere else now.
+                m_removedWatches.erase(it);
+                return true;
+            }
+        }
 
-        // Removing the object from the map will result in deleting the watch
-        // itself as it's not referenced from anywhere else now.
-        m_removedWatches.erase(it);
-
-        return true;
+        return false;
     }
 
     // post completion packet
@@ -249,7 +254,8 @@ protected:
     wxFSWatchEntries m_watches;
 
     // Contains the watches which had been removed but are still pending.
-    wxFSWatchEntries m_removedWatches;
+    typedef wxVector< wxSharedPtr<wxFSWatchEntryMSW> > Watches;
+    Watches m_removedWatches;
 };
 
 
