@@ -48,6 +48,10 @@
     #define DT_HIDEPREFIX 0x00100000
 #endif
 
+#ifndef DSS_HIDEPREFIX
+    #define DSS_HIDEPREFIX  0x0200
+#endif
+
 // Needed by toplevel.cpp
 #ifndef UIS_SET
     #define UIS_SET         1
