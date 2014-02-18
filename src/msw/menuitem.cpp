@@ -149,10 +149,6 @@ private:
 #define SPI_GETKEYBOARDCUES 0x100A
 #endif
 
-#ifndef DSS_HIDEPREFIX
-#define DSS_HIDEPREFIX  0x0200
-#endif
-
 #if wxUSE_UXTHEME
 
 enum MENUPARTS

@@ -103,10 +103,6 @@ using namespace wxMSWImpl;
     #define ODS_NOFOCUSRECT     0x0200
 #endif
 
-#ifndef DT_HIDEPREFIX
-    #define DT_HIDEPREFIX       0x00100000
-#endif
-
 #if wxUSE_UXTHEME
 extern wxWindowMSW *wxWindowBeingErased; // From src/msw/window.cpp
 #endif // wxUSE_UXTHEME
