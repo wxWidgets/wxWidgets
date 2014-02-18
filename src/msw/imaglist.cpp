@@ -142,6 +142,7 @@ bool wxImageList::GetSize(int WXUNUSED(index), int &width, int &height) const
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 {
     HBITMAP hbmp;
+    bool useMask;
 
 #if wxUSE_WXDIB && wxUSE_IMAGE
     // wxBitmap normally stores alpha in pre-multiplied format but
@@ -150,7 +151,6 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
     // course, very inefficient but it's better than wrong appearance so we do
     // this for now until a better way can be found.
     AutoHBITMAP hbmpRelease;
-    bool useMask;
     if ( bitmap.HasAlpha() )
     {
         wxImage img = bitmap.ConvertToImage();
