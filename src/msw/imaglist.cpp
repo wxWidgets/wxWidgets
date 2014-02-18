@@ -24,6 +24,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/window.h"
     #include "wx/icon.h"
@@ -87,7 +88,8 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
     flags |= ILC_COLOR32;
 #endif
 
-    if ( mask )
+    // For comctl32.dll < 6 always use masks as it doesn't support alpha.
+    if ( mask || wxApp::GetComCtl32Version() < 600 )
         flags |= ILC_MASK;
 
     // Grow by 1, I guess this is reasonable behaviour most of the time
@@ -140,6 +142,7 @@ bool wxImageList::GetSize(int WXUNUSED(index), int &width, int &height) const
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
 {
     HBITMAP hbmp;
+    bool useMask;
 
 #if wxUSE_WXDIB && wxUSE_IMAGE
     // wxBitmap normally stores alpha in pre-multiplied format but
@@ -150,15 +153,35 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
     AutoHBITMAP hbmpRelease;
     if ( bitmap.HasAlpha() )
     {
-        hbmp = wxDIB(bitmap.ConvertToImage(),
-                     wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        wxImage img = bitmap.ConvertToImage();
+
+        // For comctl32.dll < 6 remove alpha channel from image
+        // to prevent possible interferences with the mask.
+        if ( wxApp::GetComCtl32Version() < 600 )
+        {
+            img.ClearAlpha();
+            useMask = true;
+        }
+        else
+        {
+            useMask = false;
+        }
+
+        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
         hbmpRelease.Init(hbmp);
     }
     else
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
+    {
         hbmp = GetHbitmapOf(bitmap);
+        useMask = true;
+    }
 
-    AutoHBITMAP hbmpMask(GetMaskForImage(bitmap, mask));
+    // Use mask only if we don't have alpha, the bitmap isn't drawn correctly
+    // if we use both.
+    AutoHBITMAP hbmpMask;
+    if ( useMask )
+        hbmpMask.Init(GetMaskForImage(bitmap, mask));
 
     int index = ImageList_Add(GetHImageList(), hbmp, hbmpMask);
     if ( index == -1 )
@@ -181,8 +204,14 @@ int wxImageList::Add(const wxBitmap& bitmap, const wxColour& maskColour)
     AutoHBITMAP hbmpRelease;
     if ( bitmap.HasAlpha() )
     {
-        hbmp = wxDIB(bitmap.ConvertToImage(),
-                     wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        wxImage img = bitmap.ConvertToImage();
+
+        if ( wxApp::GetComCtl32Version() < 600 )
+        {
+            img.ClearAlpha();
+        }
+
+        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
         hbmpRelease.Init(hbmp);
     }
     else
@@ -220,21 +249,38 @@ bool wxImageList::Replace(int index,
                           const wxBitmap& mask)
 {
     HBITMAP hbmp;
+    bool useMask;
 
 #if wxUSE_WXDIB && wxUSE_IMAGE
     // See the comment in Add() above.
     AutoHBITMAP hbmpRelease;
     if ( bitmap.HasAlpha() )
     {
-        hbmp = wxDIB(bitmap.ConvertToImage(),
-                     wxDIB::PixelFormat_NotPreMultiplied).Detach();
+        wxImage img = bitmap.ConvertToImage();
+
+        if ( wxApp::GetComCtl32Version() < 600 )
+        {
+            img.ClearAlpha();
+            useMask = true;
+        }
+        else
+        {
+            useMask = false;
+        }
+
+        hbmp = wxDIB(img, wxDIB::PixelFormat_NotPreMultiplied).Detach();
         hbmpRelease.Init(hbmp);
     }
     else
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
+    {
         hbmp = GetHbitmapOf(bitmap);
+        useMask = true;
+    }
 
-    AutoHBITMAP hbmpMask(GetMaskForImage(bitmap, mask));
+    AutoHBITMAP hbmpMask;
+    if ( useMask )
+        hbmpMask.Init(GetMaskForImage(bitmap, mask));
 
     if ( !ImageList_Replace(GetHImageList(), index, hbmp, hbmpMask) )
     {
