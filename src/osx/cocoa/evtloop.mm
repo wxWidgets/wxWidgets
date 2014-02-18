@@ -32,8 +32,23 @@
 
 #include "wx/log.h"
 #include "wx/scopeguard.h"
+#include "wx/vector.h"
+#include "wx/hashmap.h"
 
 #include "wx/osx/private.h"
+
+struct wxModalSessionStackElement
+{
+    WXWindow        dummyWindow;
+    void*           modalSession;
+};
+
+typedef wxVector<wxModalSessionStackElement> wxModalSessionStack;
+
+WX_DECLARE_HASH_MAP(wxGUIEventLoop*, wxModalSessionStack*, wxPointerHash, wxPointerEqual,
+                    wxModalSessionStackMap);
+
+static wxModalSessionStackMap gs_modalSessionStackMap;
 
 // ============================================================================
 // wxEventLoop implementation
@@ -110,6 +125,7 @@ wxGUIEventLoop::wxGUIEventLoop()
 
 wxGUIEventLoop::~wxGUIEventLoop()
 {
+    wxASSERT( gs_modalSessionStackMap.find( this ) == gs_modalSessionStackMap.end() );
     wxASSERT( m_modalSession == nil );
     wxASSERT( m_dummyWindow == nil );
     wxASSERT( m_modalNestedLevel == 0 );
@@ -475,15 +491,34 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
 {
     WXWindow nsnow = nil;
 
-    if ( m_modalNestedLevel > 0 )
+    m_modalNestedLevel++;
+    if ( m_modalNestedLevel > 1 )
     {
-        wxASSERT_MSG( m_modalWindow == modalWindow, "Nested Modal Sessions must be based on same window");
-        m_modalNestedLevel++;
-        return;
+        wxModalSessionStack* stack = NULL;
+        
+        if ( m_modalNestedLevel == 2 )
+        {
+            stack = new wxModalSessionStack;
+            gs_modalSessionStackMap[this] = stack;
+        }
+        else
+        {
+            stack = gs_modalSessionStackMap[this];
+        }
+        
+        wxModalSessionStackElement element;
+        element.dummyWindow = m_dummyWindow;
+        element.modalSession = m_modalSession;
+        
+        stack->push_back(element);
+        
+        // shortcut if nothing changed in this level
+        
+        if ( m_modalWindow == modalWindow )
+            return;
     }
     
     m_modalWindow = modalWindow;
-    m_modalNestedLevel = 1;
     
     if ( modalWindow )
     {
@@ -505,9 +540,9 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
                                  backing:NSBackingStoreBuffered
                                    defer:YES
          ];
-        [nsnow orderOut:nil];
         m_dummyWindow = nsnow;
     }
+    [nsnow orderOut:nil];
     m_modalSession = [NSApp beginModalSessionForWindow:nsnow];
     wxASSERT_MSG(m_modalSession != NULL, "modal session couldn't be started");
 }
@@ -518,7 +553,8 @@ void wxGUIEventLoop::EndModalSession()
     
     wxASSERT_MSG(m_modalNestedLevel > 0, "incorrect modal nesting level");
     
-    if ( --m_modalNestedLevel == 0 )
+    --m_modalNestedLevel;
+    if ( m_modalNestedLevel == 0 )
     {
         [NSApp endModalSession:(NSModalSession)m_modalSession];
         m_modalSession = nil;
@@ -526,6 +562,32 @@ void wxGUIEventLoop::EndModalSession()
         {
             [m_dummyWindow release];
             m_dummyWindow = nil;
+        }
+    }
+    else
+    {
+        wxModalSessionStack* stack = gs_modalSessionStackMap[this];
+        wxModalSessionStackElement element = stack->back();
+        stack->pop_back();
+        
+        if( m_modalNestedLevel == 1 )
+        {
+            gs_modalSessionStackMap.erase(this);
+            delete stack;
+        }
+        
+        if ( m_modalSession != element.modalSession )
+        {
+            [NSApp endModalSession:(NSModalSession)m_modalSession];
+            m_modalSession = element.modalSession;
+        }
+        
+        if ( m_dummyWindow != element.dummyWindow )
+        {
+            if ( element.dummyWindow )
+                [element.dummyWindow release];
+
+            m_dummyWindow = element.dummyWindow;
         }
     }
 }
