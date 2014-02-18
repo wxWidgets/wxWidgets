@@ -614,6 +614,7 @@ wxGTK:
 wxMSW:
 
 - Disable the use of compiler TLS to avoid mysterious crashes in plugins.
+- Added solution files for MSVS 2012 and 2013 (Artur Wieczorek).
 - Fix blank wxBitmapComboBox dropdown appearance.
 - Fix clicking on checkboxes in wxDataViewCtrl.
 - Many improvements to alpha transparency handling (Artur Wieczorek).
