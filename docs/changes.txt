@@ -25,7 +25,7 @@ All:
 
 All (GUI):
 
-- XRC handler for wxAuiToolBar added (Kinaou Hervé).
+- XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
 - Add support for sorting wxDataViewCtrl by multiple columns (Trigve).
 - Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).

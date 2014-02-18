@@ -4,15 +4,23 @@
     <title>AUI XRC demo</title>
     <centered>1</centered>
     <style>wxCAPTION|wxRESIZE_BORDER</style>
-    <size>-1,300</size>
+    <size>500,300</size>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
+        <flag>wxEXPAND</flag>
         <object class="wxAuiToolBar" name="aui_toolbar">
           <style>wxAUI_TB_TEXT|wxAUI_TB_GRIPPER</style>
+          <object class="label" name="label1">
+            <label>Tools:</label>
+            <width>-1</width>
+          </object>
           <object class="tool" name="tool1">
             <bitmap stock_id="wxART_NEW"/>
             <label>Tool 1</label>
+          </object>
+          <object class="space">
+            <width>25</width>
           </object>
           <object class="tool" name="tool2">
             <bitmap stock_id="wxART_FILE_OPEN"/>
@@ -34,7 +42,9 @@
             </dropdown>
           </object>
           <object class="separator"/>
-          <object class="space"/>
+          <object class="space">
+            <proportion>3</proportion>
+          </object>
           <object class="wxComboBox">
             <content>
               <item>Just a</item>
@@ -43,7 +53,7 @@
             </content>
           </object>
           <object class="space"/>
-        </object>
+      </object>
       </object>
       <object class="sizeritem">
         <option>1</option>
