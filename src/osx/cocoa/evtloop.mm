@@ -418,6 +418,7 @@ void wxModalEventLoop::OSXDoRun()
     {
         BeginModalSession(m_modalWindow);
         wxCFEventLoop::OSXDoRun();
+        EndModalSession();
     }
     else
 #endif
@@ -428,17 +429,8 @@ void wxModalEventLoop::OSXDoRun()
 
 void wxModalEventLoop::OSXDoStop()
 {
-#if OSX_USE_MODAL_SESSION
-    if ( m_modalWindow )
-    {
-        EndModalSession();
-    }
-    else
-#endif
-    {
         [NSApp abortModal];
     }
-}
 
 // we need our own version of ProcessIdle here in order to
 // avoid deletion of pending objects, because ProcessIdle is running
