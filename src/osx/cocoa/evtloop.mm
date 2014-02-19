@@ -541,8 +541,8 @@ void wxGUIEventLoop::BeginModalSession( wxWindow* modalWindow )
                                    defer:YES
          ];
         m_dummyWindow = nsnow;
+        [nsnow orderOut:nil];
     }
-    [nsnow orderOut:nil];
     m_modalSession = [NSApp beginModalSessionForWindow:nsnow];
     wxASSERT_MSG(m_modalSession != NULL, "modal session couldn't be started");
 }
