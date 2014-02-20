@@ -1012,9 +1012,28 @@ void wxMDIChildFrame::Maximize(bool maximize)
     wxMDIParentFrame * const parent = GetMDIParent();
     if ( parent && parent->GetClientWindow() )
     {
+        if ( !IsShown() )
+        {
+            // Turn off redrawing in the MDI client window because otherwise
+            // maximizing it would also show it and we don't want this for
+            // hidden windows.
+            ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_SETREDRAW,
+                          FALSE, 0L);
+        }
+
         ::SendMessage(GetWinHwnd(parent->GetClientWindow()),
                       maximize ? WM_MDIMAXIMIZE : WM_MDIRESTORE,
                       (WPARAM)GetHwnd(), 0);
+
+        if ( !IsShown() )
+        {
+            // Hide back the child window shown by maximizing it.
+            ::ShowWindow(GetHwnd(), SW_HIDE);
+
+            // Turn redrawing in the MDI client back on.
+            ::SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_SETREDRAW,
+                          TRUE, 0L);
+        }
     }
 }
 
