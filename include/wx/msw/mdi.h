@@ -225,7 +225,6 @@ protected:
     void Init();
 
 private:
-    bool m_needsInitialShow; // Show must be called in idle time after Creation
     bool m_needsResize; // flag which tells us to artificially resize the frame
 
     DECLARE_EVENT_TABLE()
