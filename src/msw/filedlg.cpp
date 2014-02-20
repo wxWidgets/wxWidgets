@@ -172,22 +172,26 @@ wxFileDialogHookFunction(HWND      hDlg,
 
         case WM_NOTIFY:
             {
-                OFNOTIFY* const
-                    pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
-                wxFileDialog* const
-                    dialog = reinterpret_cast<wxFileDialog *>(
-                                    pNotifyCode->lpOFN->lCustData
-                                );
-
-                switch ( pNotifyCode->hdr.code )
+                NMHDR* const pNM = reinterpret_cast<NMHDR*>(lParam);
+                if ( pNM->code >= CDN_FIRST && pNM->code < CDN_LAST )
                 {
-                    case CDN_INITDONE:
-                        dialog->MSWOnInitDone((WXHWND)hDlg);
-                        break;
+                    OFNOTIFY* const
+                        pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
+                    wxFileDialog* const
+                        dialog = reinterpret_cast<wxFileDialog *>(
+                                        pNotifyCode->lpOFN->lCustData
+                                    );
 
-                    case CDN_SELCHANGE:
-                        dialog->MSWOnSelChange((WXHWND)hDlg);
-                        break;
+                    switch ( pNotifyCode->hdr.code )
+                    {
+                        case CDN_INITDONE:
+                            dialog->MSWOnInitDone((WXHWND)hDlg);
+                            break;
+
+                        case CDN_SELCHANGE:
+                            dialog->MSWOnSelChange((WXHWND)hDlg);
+                            break;
+                    }
                 }
             }
             break;
