@@ -709,7 +709,9 @@ void wxCmdLineParser::AddUsageText(const wxString& text)
 
 bool wxCmdLineParser::Found(const wxString& name) const
 {
-    return FoundSwitch(name) != wxCMD_SWITCH_NOT_FOUND;
+    const wxCmdLineOption* const opt = m_data->FindOptionByAnyName(name);
+
+    return opt && opt->HasValue();
 }
 
 wxCmdLineSwitchState wxCmdLineParser::FoundSwitch(const wxString& name) const

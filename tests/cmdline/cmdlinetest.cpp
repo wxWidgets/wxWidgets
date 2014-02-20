@@ -40,12 +40,14 @@ private:
         CPPUNIT_TEST( ParseSwitches );
         CPPUNIT_TEST( ArgumentsCollection );
         CPPUNIT_TEST( Usage );
+        CPPUNIT_TEST( Found );
     CPPUNIT_TEST_SUITE_END();
 
     void ConvertStringTestCase();
     void ParseSwitches();
     void ArgumentsCollection();
     void Usage();
+    void Found();
 
     DECLARE_NO_COPY_CLASS(CmdLineTestCase)
 };
@@ -325,4 +327,63 @@ void CmdLineTestCase::Usage()
     CPPUNIT_ASSERT_EQUAL("", usageLines[Line_Text_Dummy1]);
     CPPUNIT_ASSERT_EQUAL("Even more usage text", usageLines[Line_Text_Dummy2]);
     CPPUNIT_ASSERT_EQUAL("", usageLines[Line_Last]);
+}
+
+void CmdLineTestCase::Found()
+{
+    static const wxCmdLineEntryDesc desc[] =
+    {
+        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
+        { wxCMD_LINE_OPTION, "o", "output",  "output file" },
+        { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
+        { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE },
+        { wxCMD_LINE_OPTION, "f", "double",  "output double", wxCMD_LINE_VAL_DOUBLE },
+        { wxCMD_LINE_PARAM,  NULL, NULL, "input file", },
+        { wxCMD_LINE_NONE }
+    };
+
+    wxCmdLineParser p(desc);
+    p.SetCmdLine ("-v --output hello -s 2 --date=2014-02-17 -f 0.2 input-file.txt");
+
+    CPPUNIT_ASSERT(p.Parse() == 0);
+
+    wxString dummys;
+    wxDateTime dummydate;
+    long dummyl;
+    double dummyd;
+    // now verify that any option/switch badly queried actually generates an exception
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("v", &dummyd));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("v", &dummydate));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("v", &dummyl));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("v", &dummys));
+    CPPUNIT_ASSERT(p.FoundSwitch("v") != wxCMD_SWITCH_NOT_FOUND);
+    CPPUNIT_ASSERT(p.Found("v"));
+
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("o", &dummyd));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("o", &dummydate));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("o", &dummyl));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.FoundSwitch("o"));
+    CPPUNIT_ASSERT(p.Found("o", &dummys));
+    CPPUNIT_ASSERT(p.Found("o"));
+
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("s", &dummyd));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("s", &dummydate));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("s", &dummys));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.FoundSwitch("s"));
+    CPPUNIT_ASSERT(p.Found("s", &dummyl));
+    CPPUNIT_ASSERT(p.Found("s"));
+
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("d", &dummyd));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("d", &dummyl));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("d", &dummys));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.FoundSwitch("d"));
+    CPPUNIT_ASSERT(p.Found("d", &dummydate));
+    CPPUNIT_ASSERT(p.Found("d"));
+
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("f", &dummydate));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("f", &dummyl));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.Found("f", &dummys));
+    WX_ASSERT_FAILS_WITH_ASSERT(p.FoundSwitch("f"));
+    CPPUNIT_ASSERT(p.Found("f", &dummyd));
+    CPPUNIT_ASSERT(p.Found("f"));
 }
