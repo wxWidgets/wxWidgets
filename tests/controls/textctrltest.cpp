@@ -85,6 +85,7 @@ private:
         CPPUNIT_TEST( FontStyle );
         CPPUNIT_TEST( Lines );
         CPPUNIT_TEST( LogTextCtrl );
+        CPPUNIT_TEST( LongText );
         CPPUNIT_TEST( PositionToCoords );
         CPPUNIT_TEST( PositionToCoordsRich );
         CPPUNIT_TEST( PositionToCoordsRich2 );
@@ -106,6 +107,7 @@ private:
     void FontStyle();
     void Lines();
     void LogTextCtrl();
+    void LongText();
     void PositionToCoords();
     void PositionToCoordsRich();
     void PositionToCoordsRich2();
@@ -519,6 +521,36 @@ void TextCtrlTestCase::LogTextCtrl()
     delete wxLog::SetActiveTarget(old);
 
     CPPUNIT_ASSERT(!m_text->IsEmpty());
+}
+
+void TextCtrlTestCase::LongText()
+{
+    delete m_text;
+    CreateText(wxTE_MULTILINE|wxTE_DONTWRAP);
+
+    // Pattern for the line.
+    wxChar linePattern[100+1];
+    for (int i = 0; i < WXSIZEOF(linePattern) - 1; i++)
+    {
+        linePattern[i] = wxChar('0' + i % 10);
+    }
+    linePattern[WXSIZEOF(linePattern) - 1] = wxChar('\0');
+
+    // Fill the control.
+    const int numLines = 1000;
+    m_text->SetMaxLength(15000);
+    for (int i = 0; i < numLines; i++)
+    {
+        m_text->AppendText(wxString::Format(wxT("[%3d] %s\n"), i, linePattern));
+    }
+
+    // Check the content.
+    for (int i = 0; i < numLines; i++)
+    {
+        wxString pattern = wxString::Format(wxT("[%3d] %s"), i, linePattern);
+        wxString line = m_text->GetLineText(i);
+        CPPUNIT_ASSERT_EQUAL( line, pattern );
+    }
 }
 
 void TextCtrlTestCase::PositionToCoords()
