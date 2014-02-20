@@ -1885,17 +1885,17 @@ bool wxDataViewListCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *colum
 
 bool wxDataViewListCtrl::PrependColumn( wxDataViewColumn *col )
 {
-    return PrependColumn( col, "string" );
+    return PrependColumn( col, col->GetRenderer()->GetVariantType() );
 }
 
 bool wxDataViewListCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
 {
-    return InsertColumn( pos, col, "string" );
+    return InsertColumn( pos, col, col->GetRenderer()->GetVariantType() );
 }
 
 bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *col )
 {
-    return AppendColumn( col, "string" );
+    return AppendColumn( col, col->GetRenderer()->GetVariantType() );
 }
 
 bool wxDataViewListCtrl::ClearColumns()
