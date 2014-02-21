@@ -8,15 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-01 19:04+0200\n"
+"POT-Creation-Date: 2014-02-21 17:22+0100\n"
 "PO-Revision-Date: 2013-10-04 19:58+0200\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "wxwidgets_unofficial/language/tr_TR/)\n"
+"Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: tr_TR\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.5.7\n"
 
@@ -52,7 +52,7 @@ msgstr " (hata %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr " (\"%s\" modülünde)"
 
-#: ../src/common/docview.cpp:1624
+#: ../src/common/docview.cpp:1631
 msgid " - "
 msgstr " - "
 
@@ -92,12 +92,25 @@ msgstr "#14 Zarf, 5 x 11 1/2 inç"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 Zarf, 3 7/8 x 8 7/8 inç"
 
-#: ../src/html/helpwnd.cpp:1044
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
+msgid "%"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1045
 #, c-format
 msgid "%d of %lu"
 msgstr "%d / %lu"
 
-#: ../src/html/helpwnd.cpp:1681 ../src/html/helpwnd.cpp:1719
+#: ../src/html/helpwnd.cpp:1692 ../src/html/helpwnd.cpp:1730
 #, c-format
 msgid "%i of %i"
 msgstr "%i / %i"
@@ -108,12 +121,12 @@ msgid "%ld byte"
 msgid_plural "%ld bytes"
 msgstr[0] "%ld bayt"
 
-#: ../src/html/helpwnd.cpp:1046
+#: ../src/html/helpwnd.cpp:1047
 #, c-format
 msgid "%lu of %lu"
 msgstr "%lu / %lu"
 
-#: ../src/common/cmdline.cpp:1050
+#: ../src/common/cmdline.cpp:1215
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (ya da %s)"
@@ -143,7 +156,7 @@ msgstr "%s Uyarı"
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s '%s' kaydının tar başlığına sığmadı"
 
-#: ../src/common/fldlgcmn.cpp:106
+#: ../src/common/fldlgcmn.cpp:124
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "%s dosya (%s)|%s"
@@ -186,7 +199,7 @@ msgstr "&Artan"
 msgid "&Back"
 msgstr "&Geri"
 
-#: ../src/richtext/richtextstylepage.cpp:113
+#: ../src/richtext/richtextstylepage.cpp:115
 msgid "&Based on:"
 msgstr "&Kaynak:"
 
@@ -194,7 +207,7 @@ msgstr "&Kaynak:"
 msgid "&Before a paragraph:"
 msgstr "&Paragraftan önce:"
 
-#: ../src/richtext/richtextfontpage.cpp:271
+#: ../src/richtext/richtextfontpage.cpp:262
 msgid "&Bg colour:"
 msgstr "&Artalan rengi:"
 
@@ -206,21 +219,21 @@ msgstr "&Koyu"
 msgid "&Bottom"
 msgstr "Al&t"
 
-#: ../src/richtext/richtextborderspage.cpp:359
-#: ../src/richtext/richtextborderspage.cpp:503
-#: ../src/richtext/richtextmarginspage.cpp:260
-#: ../src/richtext/richtextmarginspage.cpp:374
+#: ../src/richtext/richtextborderspage.cpp:347
+#: ../src/richtext/richtextborderspage.cpp:516
+#: ../src/richtext/richtextmarginspage.cpp:259
+#: ../src/richtext/richtextmarginspage.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:637
 #: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr "Al&t:"
 
-#: ../include/wx/richtext/richtextbuffer.h:3530
+#: ../include/wx/richtext/richtextbuffer.h:3641
 msgid "&Box"
 msgstr "&Kutu"
 
 #: ../src/richtext/richtextliststylepage.cpp:210
-#: ../src/richtext/richtextbulletspage.cpp:159
+#: ../src/richtext/richtextbulletspage.cpp:146
 msgid "&Bullet style:"
 msgstr "&Madde imi stili:"
 
@@ -229,7 +242,7 @@ msgid "&CD-Rom"
 msgstr "&CD-Rom"
 
 #: ../src/generic/wizard.cpp:432 ../src/generic/fontdlgg.cpp:470
-#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:588
+#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:572
 #: ../src/common/stockitem.cpp:145
 msgid "&Cancel"
 msgstr "İ&ptal"
@@ -238,7 +251,7 @@ msgstr "İ&ptal"
 msgid "&Cascade"
 msgstr "Ardarda &dizin"
 
-#: ../include/wx/richtext/richtextbuffer.h:5587
+#: ../include/wx/richtext/richtextbuffer.h:5717
 msgid "&Cell"
 msgstr "&Hücre"
 
@@ -260,7 +273,7 @@ msgstr "&Kapatın"
 msgid "&Color"
 msgstr "&Renk"
 
-#: ../src/richtext/richtextfontpage.cpp:258
+#: ../src/richtext/richtextfontpage.cpp:249
 msgid "&Colour:"
 msgstr "&Renk:"
 
@@ -268,8 +281,8 @@ msgstr "&Renk:"
 msgid "&Convert"
 msgstr "&Dönüştürün"
 
-#: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2284
+#: ../src/richtext/richtextctrl.cpp:332 ../src/osx/textctrl_osx.cpp:583
+#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2335
 msgid "&Copy"
 msgstr "K&opyalayın"
 
@@ -285,9 +298,9 @@ msgstr "Ö&zelleştirin..."
 msgid "&Debug report preview:"
 msgstr "&Hata ayıklama raporu ön izlemesi:"
 
-#: ../src/richtext/richtexttabspage.cpp:142
-#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2286
+#: ../src/richtext/richtexttabspage.cpp:138
+#: ../src/richtext/richtextctrl.cpp:334 ../src/osx/textctrl_osx.cpp:585
+#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2337
 msgid "&Delete"
 msgstr "&Silin"
 
@@ -355,7 +368,7 @@ msgstr "&Yazı tipi ailesi:"
 msgid "&Font for Level..."
 msgstr "&Düzeyin yazıtipi..."
 
-#: ../src/richtext/richtextfontpage.cpp:156
+#: ../src/richtext/richtextfontpage.cpp:147
 #: ../src/richtext/richtextsymboldlg.cpp:400
 msgid "&Font:"
 msgstr "&Yazı tipi:"
@@ -378,7 +391,7 @@ msgid "&Height:"
 msgstr "&Yükseklik:"
 
 #: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
-#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:785
+#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:776
 #: ../src/common/stockitem.cpp:163 ../src/html/helpfrm.cpp:147
 msgid "&Help"
 msgstr "&Yardım"
@@ -432,11 +445,11 @@ msgid "&Left"
 msgstr "So&l"
 
 #: ../src/richtext/richtextindentspage.cpp:195
-#: ../src/richtext/richtextborderspage.cpp:269
-#: ../src/richtext/richtextborderspage.cpp:413
+#: ../src/richtext/richtextborderspage.cpp:245
+#: ../src/richtext/richtextborderspage.cpp:414
 #: ../src/richtext/richtextliststylepage.cpp:381
-#: ../src/richtext/richtextmarginspage.cpp:187
-#: ../src/richtext/richtextmarginspage.cpp:301
+#: ../src/richtext/richtextmarginspage.cpp:186
+#: ../src/richtext/richtextmarginspage.cpp:300
 #: ../src/richtext/richtextsizepage.cpp:532
 #: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
@@ -462,7 +475,7 @@ msgstr "&Nesneyi şuraya taşıyın:"
 msgid "&Network"
 msgstr "&Ağ"
 
-#: ../src/richtext/richtexttabspage.cpp:136 ../src/common/stockitem.cpp:176
+#: ../src/richtext/richtexttabspage.cpp:132 ../src/common/stockitem.cpp:176
 msgid "&New"
 msgstr "Ye&ni"
 
@@ -479,11 +492,11 @@ msgstr "So&nraki >"
 msgid "&Next Paragraph"
 msgstr "So&nraki Paragraf"
 
-#: ../src/generic/tipdlg.cpp:276
+#: ../src/generic/tipdlg.cpp:271
 msgid "&Next Tip"
 msgstr "So&nraki İpucu"
 
-#: ../src/richtext/richtextstylepage.cpp:123
+#: ../src/richtext/richtextstylepage.cpp:125
 msgid "&Next style:"
 msgstr "So&nraki stil:"
 
@@ -495,12 +508,12 @@ msgstr "&Hayır"
 msgid "&Notes:"
 msgstr "&Notlar:"
 
-#: ../src/richtext/richtextbulletspage.cpp:264
+#: ../src/richtext/richtextbulletspage.cpp:251
 msgid "&Number:"
 msgstr "&Sayı:"
 
 #: ../src/generic/fontdlgg.cpp:475 ../src/generic/fontdlgg.cpp:482
-#: ../src/osx/carbon/fontdlg.cpp:594 ../src/common/stockitem.cpp:178
+#: ../src/osx/carbon/fontdlg.cpp:578 ../src/common/stockitem.cpp:178
 msgid "&OK"
 msgstr "&Tamam"
 
@@ -517,12 +530,12 @@ msgstr "Başlık &düzeyi:"
 msgid "&Page Break"
 msgstr "&Sayfa Sonu"
 
-#: ../src/richtext/richtextctrl.cpp:327 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2285
+#: ../src/richtext/richtextctrl.cpp:333 ../src/osx/textctrl_osx.cpp:584
+#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2336
 msgid "&Paste"
 msgstr "Ya&pıştırın"
 
-#: ../include/wx/richtext/richtextbuffer.h:4655
+#: ../include/wx/richtext/richtextbuffer.h:4783
 msgid "&Picture"
 msgstr "&Resim"
 
@@ -530,7 +543,7 @@ msgstr "&Resim"
 msgid "&Point size:"
 msgstr "Yazı &boyutu:"
 
-#: ../src/richtext/richtexttabspage.cpp:114
+#: ../src/richtext/richtexttabspage.cpp:110
 msgid "&Position (tenths of a mm):"
 msgstr "&Konum (1/10mm):"
 
@@ -555,7 +568,7 @@ msgstr "Önceki &Paragraf"
 msgid "&Print..."
 msgstr "&Yazdırın..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
+#: ../src/richtext/richtextctrl.cpp:338 ../src/richtext/richtextctrl.cpp:5090
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "Ö&zellikler"
@@ -564,9 +577,9 @@ msgstr "Ö&zellikler"
 msgid "&Quit"
 msgstr "Çı&kış"
 
-#: ../src/richtext/richtextctrl.cpp:323 ../src/osx/textctrl_osx.cpp:580
+#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:580
 #: ../src/common/stockitem.cpp:185 ../src/common/cmdproc.cpp:293
-#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2281
+#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2332
 msgid "&Redo"
 msgstr "&Yineleyin"
 
@@ -596,11 +609,11 @@ msgid "&Right"
 msgstr "&Sağ"
 
 #: ../src/richtext/richtextindentspage.cpp:213
-#: ../src/richtext/richtextborderspage.cpp:299
-#: ../src/richtext/richtextborderspage.cpp:443
+#: ../src/richtext/richtextborderspage.cpp:279
+#: ../src/richtext/richtextborderspage.cpp:448
 #: ../src/richtext/richtextliststylepage.cpp:399
-#: ../src/richtext/richtextmarginspage.cpp:212
-#: ../src/richtext/richtextmarginspage.cpp:326
+#: ../src/richtext/richtextmarginspage.cpp:211
+#: ../src/richtext/richtextmarginspage.cpp:325
 #: ../src/richtext/richtextsizepage.cpp:602
 #: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
@@ -618,7 +631,7 @@ msgstr "&Farklı kaydedin"
 msgid "&See details"
 msgstr "&Ayrıntılar"
 
-#: ../src/generic/tipdlg.cpp:270
+#: ../src/generic/tipdlg.cpp:265
 msgid "&Show tips at startup"
 msgstr "İpuçları &başlangıçta görüntülensin"
 
@@ -626,7 +639,7 @@ msgstr "İpuçları &başlangıçta görüntülensin"
 msgid "&Size"
 msgstr "&Boyut"
 
-#: ../src/richtext/richtextfontpage.cpp:168
+#: ../src/richtext/richtextfontpage.cpp:159
 msgid "&Size:"
 msgstr "&Boyut:"
 
@@ -647,11 +660,11 @@ msgstr "&Yazım Denetimi"
 msgid "&Stop"
 msgstr "&Durdurun"
 
-#: ../src/richtext/richtextfontpage.cpp:284 ../src/common/stockitem.cpp:199
+#: ../src/richtext/richtextfontpage.cpp:275 ../src/common/stockitem.cpp:199
 msgid "&Strikethrough"
 msgstr "Ü&stü çizili"
 
-#: ../src/generic/fontdlgg.cpp:382 ../src/richtext/richtextstylepage.cpp:104
+#: ../src/generic/fontdlgg.cpp:382 ../src/richtext/richtextstylepage.cpp:106
 msgid "&Style:"
 msgstr "&Stil:"
 
@@ -664,11 +677,16 @@ msgid "&Subset:"
 msgstr "A&lt küme:"
 
 #: ../src/richtext/richtextliststylepage.cpp:268
-#: ../src/richtext/richtextbulletspage.cpp:222
+#: ../src/richtext/richtextbulletspage.cpp:209
 msgid "&Symbol:"
 msgstr "&Simge:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5679
+#: ../src/richtext/richtextborderspage.cpp:383
+#: ../src/richtext/richtextborderspage.cpp:552
+msgid "&Synchronize values"
+msgstr ""
+
+#: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
 msgstr "&Tablo"
 
@@ -676,10 +694,10 @@ msgstr "&Tablo"
 msgid "&Top"
 msgstr "Üs&t"
 
-#: ../src/richtext/richtextborderspage.cpp:329
-#: ../src/richtext/richtextborderspage.cpp:473
-#: ../src/richtext/richtextmarginspage.cpp:235
-#: ../src/richtext/richtextmarginspage.cpp:349
+#: ../src/richtext/richtextborderspage.cpp:313
+#: ../src/richtext/richtextborderspage.cpp:482
+#: ../src/richtext/richtextmarginspage.cpp:234
+#: ../src/richtext/richtextmarginspage.cpp:348
 #: ../src/richtext/richtextsizepage.cpp:567
 #: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
@@ -689,13 +707,13 @@ msgstr "Üs&t:"
 msgid "&Underline"
 msgstr "&Altı çizili"
 
-#: ../src/richtext/richtextfontpage.cpp:243
+#: ../src/richtext/richtextfontpage.cpp:234
 msgid "&Underlining:"
 msgstr "&Altını çizme:"
 
-#: ../src/richtext/richtextctrl.cpp:322 ../src/osx/textctrl_osx.cpp:579
+#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:579
 #: ../src/common/stockitem.cpp:203 ../src/common/cmdproc.cpp:271
-#: ../src/msw/textctrl.cpp:2280
+#: ../src/msw/textctrl.cpp:2331
 msgid "&Undo"
 msgstr "&Geri Alın"
 
@@ -739,68 +757,82 @@ msgstr "&Pencere"
 msgid "&Yes"
 msgstr "&Evet"
 
+#: ../src/common/valtext.cpp:256
+#, fuzzy, c-format
+msgid "'%s' contains illegal characters"
+msgstr "'%s' yalnız alfabetik karakterler içermeli."
+
+#: ../src/common/valtext.cpp:254
+#, fuzzy, c-format
+msgid "'%s' doesn't consist only of valid characters"
+msgstr "'%s' yalnız alfabetik karakterler içermeli."
+
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' içindeki fazladan '..' yoksayıldı."
 
-#: ../src/common/valtext.cpp:249 ../src/common/valtext.cpp:251
-#: ../src/common/valtext.cpp:253 ../src/common/valtext.cpp:255
-#, c-format
-msgid "'%s' is invalid"
-msgstr "'%s' geçersiz"
-
-#: ../src/common/cmdline.cpp:948 ../src/common/cmdline.cpp:966
+#: ../src/common/cmdline.cpp:1107 ../src/common/cmdline.cpp:1125
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' '%s' seçeneği için doğru bir sayısal değer değil."
 
-#: ../src/common/translation.cpp:1086
+#: ../src/common/translation.cpp:1087
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' geçerli bir ileti kataloğu değil."
+
+#: ../src/common/valtext.cpp:165
+#, fuzzy, c-format
+msgid "'%s' is not one of the valid strings"
+msgstr "'%s' geçerli bir ileti kataloğu değil."
+
+#: ../src/common/valtext.cpp:167
+#, fuzzy, c-format
+msgid "'%s' is one of the invalid strings"
+msgstr "'%s' geçersiz"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' muhtemelen ikili ara bellek."
 
-#: ../src/common/valtext.cpp:247
+#: ../src/common/valtext.cpp:252
 #, c-format
 msgid "'%s' should be numeric."
 msgstr "'%s' sayısal olmalı."
 
-#: ../src/common/valtext.cpp:239
+#: ../src/common/valtext.cpp:244
 #, c-format
 msgid "'%s' should only contain ASCII characters."
 msgstr "'%s' yalnız ASCII karakterler içermeli."
 
-#: ../src/common/valtext.cpp:241
+#: ../src/common/valtext.cpp:246
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
 msgstr "'%s' yalnız alfabetik karakterler içermeli."
 
-#: ../src/common/valtext.cpp:243
+#: ../src/common/valtext.cpp:248
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' yalnız alfabetik ya da sayısal karakterler içermeli."
 
-#: ../src/common/valtext.cpp:245
+#: ../src/common/valtext.cpp:250
 #, c-format
 msgid "'%s' should only contain digits."
 msgstr "'%s' yalnız rakamlar içermeli."
 
 #: ../src/richtext/richtextliststylepage.cpp:229
-#: ../src/richtext/richtextbulletspage.cpp:179
+#: ../src/richtext/richtextbulletspage.cpp:166
 msgid "(*)"
 msgstr "(*)"
 
-#: ../src/html/helpwnd.cpp:976
+#: ../src/html/helpwnd.cpp:977
 msgid "(Help)"
 msgstr "(Yardım)"
 
 #: ../src/richtext/richtextliststylepage.cpp:481
-#: ../src/richtext/richtextbulletspage.cpp:286
+#: ../src/richtext/richtextbulletspage.cpp:273
 msgid "(None)"
 msgstr "(Hiçbiri)"
 
@@ -808,8 +840,8 @@ msgstr "(Hiçbiri)"
 msgid "(Normal text)"
 msgstr "(Normal metin)"
 
-#: ../src/html/helpwnd.cpp:426 ../src/html/helpwnd.cpp:1119
-#: ../src/html/helpwnd.cpp:1745
+#: ../src/html/helpwnd.cpp:427 ../src/html/helpwnd.cpp:1120
+#: ../src/html/helpwnd.cpp:1756
 msgid "(bookmarks)"
 msgstr "(yer imleri)"
 
@@ -818,10 +850,10 @@ msgstr "(yer imleri)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:831
-#: ../src/richtext/richtextfontpage.cpp:331
-#: ../src/richtext/richtextfontpage.cpp:335
-#: ../src/richtext/richtextfontpage.cpp:339
+#: ../src/richtext/richtextformatdlg.cpp:887
+#: ../src/richtext/richtextfontpage.cpp:347
+#: ../src/richtext/richtextfontpage.cpp:351
+#: ../src/richtext/richtextfontpage.cpp:355
 #: ../src/richtext/richtextliststylepage.cpp:448
 #: ../src/richtext/richtextliststylepage.cpp:460
 #: ../src/richtext/richtextliststylepage.cpp:461
@@ -829,26 +861,26 @@ msgid "(none)"
 msgstr "(hiçbiri)"
 
 #: ../src/richtext/richtextliststylepage.cpp:492
-#: ../src/richtext/richtextbulletspage.cpp:297
+#: ../src/richtext/richtextbulletspage.cpp:284
 msgid "*"
 msgstr "*"
 
 #: ../src/richtext/richtextliststylepage.cpp:236
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextbulletspage.cpp:173
 msgid "*)"
 msgstr "*)"
 
 #: ../src/richtext/richtextliststylepage.cpp:495
-#: ../src/richtext/richtextbulletspage.cpp:300
+#: ../src/richtext/richtextbulletspage.cpp:287
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1324
+#: ../src/msw/utils.cpp:1336
 msgid ", 64-bit edition"
 msgstr ", 64-bit sürümü"
 
 #: ../src/richtext/richtextliststylepage.cpp:493
-#: ../src/richtext/richtextbulletspage.cpp:298
+#: ../src/richtext/richtextbulletspage.cpp:285
 msgid "-"
 msgstr "-"
 
@@ -950,37 +982,37 @@ msgstr ": bilinmeyen kodlama"
 msgid "< &Back"
 msgstr "< &Geri"
 
-#: ../src/osx/carbon/fontdlg.cpp:608 ../src/osx/carbon/fontdlg.cpp:815
-#: ../src/osx/carbon/fontdlg.cpp:835
+#: ../src/osx/carbon/fontdlg.cpp:592 ../src/osx/carbon/fontdlg.cpp:798
+#: ../src/osx/carbon/fontdlg.cpp:818
 msgid "<Any Decorative>"
 msgstr "<Süslü>"
 
-#: ../src/osx/carbon/fontdlg.cpp:609 ../src/osx/carbon/fontdlg.cpp:817
-#: ../src/osx/carbon/fontdlg.cpp:837
+#: ../src/osx/carbon/fontdlg.cpp:593 ../src/osx/carbon/fontdlg.cpp:800
+#: ../src/osx/carbon/fontdlg.cpp:820
 msgid "<Any Modern>"
 msgstr "<Modern>"
 
-#: ../src/osx/carbon/fontdlg.cpp:607 ../src/osx/carbon/fontdlg.cpp:813
-#: ../src/osx/carbon/fontdlg.cpp:833
+#: ../src/osx/carbon/fontdlg.cpp:591 ../src/osx/carbon/fontdlg.cpp:796
+#: ../src/osx/carbon/fontdlg.cpp:816
 msgid "<Any Roman>"
 msgstr "<Roman>"
 
-#: ../src/osx/carbon/fontdlg.cpp:610 ../src/osx/carbon/fontdlg.cpp:819
-#: ../src/osx/carbon/fontdlg.cpp:839
+#: ../src/osx/carbon/fontdlg.cpp:594 ../src/osx/carbon/fontdlg.cpp:802
+#: ../src/osx/carbon/fontdlg.cpp:822
 msgid "<Any Script>"
 msgstr "<Betik>"
 
-#: ../src/osx/carbon/fontdlg.cpp:611 ../src/osx/carbon/fontdlg.cpp:824
-#: ../src/osx/carbon/fontdlg.cpp:843
+#: ../src/osx/carbon/fontdlg.cpp:595 ../src/osx/carbon/fontdlg.cpp:807
+#: ../src/osx/carbon/fontdlg.cpp:826
 msgid "<Any Swiss>"
 msgstr "<İsveç>"
 
-#: ../src/osx/carbon/fontdlg.cpp:612 ../src/osx/carbon/fontdlg.cpp:821
-#: ../src/osx/carbon/fontdlg.cpp:841
+#: ../src/osx/carbon/fontdlg.cpp:596 ../src/osx/carbon/fontdlg.cpp:804
+#: ../src/osx/carbon/fontdlg.cpp:824
 msgid "<Any Teletype>"
 msgstr "<Teletype>"
 
-#: ../src/osx/carbon/fontdlg.cpp:606
+#: ../src/osx/carbon/fontdlg.cpp:590
 msgid "<Any>"
 msgstr "<Herhangi>"
 
@@ -996,24 +1028,24 @@ msgstr "<DRIVE>"
 msgid "<LINK>"
 msgstr "<LINK>"
 
-#: ../src/html/helpwnd.cpp:1279
+#: ../src/html/helpwnd.cpp:1280
 msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr "<b><i>Koyu yatık şekil.</i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1283
+#: ../src/html/helpwnd.cpp:1284
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
 msgstr "<b><i>koyu yatık <u>altçizgili</u></i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1278
+#: ../src/html/helpwnd.cpp:1279
 msgid "<b>Bold face.</b> "
 msgstr "<b>Koyu şekil.</b> "
 
-#: ../src/html/helpwnd.cpp:1277
+#: ../src/html/helpwnd.cpp:1278
 msgid "<i>Italic face.</i> "
 msgstr "<i>Yatık şekil.</i> "
 
 #: ../src/richtext/richtextliststylepage.cpp:494
-#: ../src/richtext/richtextbulletspage.cpp:299
+#: ../src/richtext/richtextbulletspage.cpp:286
 msgid ">"
 msgstr ">"
 
@@ -1031,8 +1063,8 @@ msgstr "Boş olmayan bir yığın 'element' düğümlerinden oluşmalıdır"
 
 #: ../src/richtext/richtextliststylepage.cpp:304
 #: ../src/richtext/richtextliststylepage.cpp:306
-#: ../src/richtext/richtextbulletspage.cpp:257
-#: ../src/richtext/richtextbulletspage.cpp:259
+#: ../src/richtext/richtextbulletspage.cpp:244
+#: ../src/richtext/richtextbulletspage.cpp:246
 msgid "A standard bullet name."
 msgstr "Standart bir madde imi adı."
 
@@ -1116,8 +1148,8 @@ msgstr "A6 105 x 148 mm"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 Çevrilmiş 148 x 105 mm"
 
-#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:526
-#: ../src/osx/carbon/fontdlg.cpp:339
+#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:547
+#: ../src/osx/carbon/fontdlg.cpp:323
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
@@ -1129,14 +1161,20 @@ msgstr "ADD"
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:630 ../src/common/stockitem.cpp:139
+#: ../src/common/stockitem.cpp:139
 msgid "About"
 msgstr "Hakkında"
 
-#: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
+#: ../src/generic/aboutdlgg.cpp:140 ../src/osx/menu_osx.cpp:603
+#: ../src/msw/aboutdlg.cpp:64
 #, c-format
 msgid "About %s"
 msgstr "%s Hakkında "
+
+#: ../src/osx/menu_osx.cpp:605
+#, fuzzy
+msgid "About..."
+msgstr "Hakkında"
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1150,15 +1188,15 @@ msgstr "Geçerli Boyut"
 msgid "Add"
 msgstr "Ekleyin"
 
-#: ../src/richtext/richtextbuffer.cpp:10751
+#: ../src/richtext/richtextbuffer.cpp:11219
 msgid "Add Column"
 msgstr "Sütun Ekleyin"
 
-#: ../src/richtext/richtextbuffer.cpp:10688
+#: ../src/richtext/richtextbuffer.cpp:11156
 msgid "Add Row"
 msgstr "Satır Ekleyin"
 
-#: ../src/html/helpwnd.cpp:439
+#: ../src/html/helpwnd.cpp:440
 msgid "Add current page to bookmarks"
 msgstr "Geçerli sayfayı yer imlerine ekleyin"
 
@@ -1179,11 +1217,11 @@ msgstr "AddToPropertyCollection işlevi, geçerli bir ekleyici olmadançağrıld
 msgid "Adding book %s"
 msgstr "%s kitabı ekleniyor"
 
-#: ../src/osx/carbon/dataview.cpp:1933
+#: ../src/osx/carbon/dataview.cpp:1931
 msgid "Adding flavor TEXT failed"
 msgstr "TEXT niteliği eklenemedi"
 
-#: ../src/osx/carbon/dataview.cpp:1954
+#: ../src/osx/carbon/dataview.cpp:1952
 msgid "Adding flavor utxt failed"
 msgstr "utxt niteliği eklenemedi"
 
@@ -1211,16 +1249,16 @@ msgstr "Hizalama"
 msgid "All"
 msgstr "Tümü"
 
-#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:89
+#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:107
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "Tüm dosyalar (%s)|%s"
 
-#: ../include/wx/defs.h:2922
+#: ../include/wx/defs.h:2908
 msgid "All files (*)|*"
 msgstr "Tüm dosyalar (*)|*"
 
-#: ../include/wx/defs.h:2919
+#: ../include/wx/defs.h:2905
 msgid "All files (*.*)|*.*"
 msgstr "Tüm dosyalar (*.*)|*.*"
 
@@ -1244,6 +1282,11 @@ msgstr "ISP zaten aranıyor."
 msgid "Alt+"
 msgstr "Alt+"
 
+#: ../src/richtext/richtextborderspage.cpp:580
+#: ../src/richtext/richtextborderspage.cpp:582
+msgid "An optional corner radius for adding rounded corners."
+msgstr ""
+
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
 msgstr "Ve aşağıdaki dosyaları içeriyor:\n"
@@ -1258,8 +1301,7 @@ msgstr "Canlandırma dosyası %ld tipinde değil."
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "'%s' günlük dosyasına eklensin ([Hayır] seçilirse üstüne yazılacak)."
 
-#: ../src/osx/menu_osx.cpp:602 ../src/osx/menu_osx.cpp:610
-#: ../src/osx/menu_osx.cpp:649 ../src/osx/menu_osx.cpp:657
+#: ../src/osx/menu_osx.cpp:623 ../src/osx/menu_osx.cpp:631
 msgid "Application"
 msgstr "Uygulama"
 
@@ -1268,7 +1310,7 @@ msgid "Apply"
 msgstr "Uygulayın"
 
 #: ../src/richtext/richtextliststylepage.cpp:482
-#: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextbulletspage.cpp:274
 msgid "Arabic"
 msgstr "Arapça"
 
@@ -1276,7 +1318,7 @@ msgstr "Arapça"
 msgid "Arabic (ISO-8859-6)"
 msgstr "Arapça (ISO-8859-6)"
 
-#: ../src/msw/ole/automtn.cpp:661
+#: ../src/msw/ole/automtn.cpp:675
 #, c-format
 msgid "Argument %u not found."
 msgstr "%u argümanı bulunamadı."
@@ -1294,8 +1336,8 @@ msgid "Attributes"
 msgstr "Öznitelikler"
 
 #: ../src/richtext/richtextliststylepage.cpp:294
-#: ../src/richtext/richtextbulletspage.cpp:245
-#: ../src/richtext/richtextbulletspage.cpp:247
+#: ../src/richtext/richtextbulletspage.cpp:232
+#: ../src/richtext/richtextbulletspage.cpp:234
 msgid "Available fonts."
 msgstr "Kullanılabilecek yazı tipleri."
 
@@ -1351,32 +1393,32 @@ msgstr "B6 Zarf, 176 x 125 mm"
 msgid "BACK"
 msgstr "BACK"
 
-#: ../src/common/imagbmp.cpp:523 ../src/common/imagbmp.cpp:553
-#: ../src/common/imagbmp.cpp:568
+#: ../src/common/imagbmp.cpp:524 ../src/common/imagbmp.cpp:554
+#: ../src/common/imagbmp.cpp:569
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: bellek ayrılamadı."
 
-#: ../src/common/imagbmp.cpp:97
+#: ../src/common/imagbmp.cpp:98
 msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: Geçersiz görüntü kaydedilemedi."
 
-#: ../src/common/imagbmp.cpp:338
+#: ../src/common/imagbmp.cpp:339
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: RGB renk haritası yazılamadı."
 
-#: ../src/common/imagbmp.cpp:473
+#: ../src/common/imagbmp.cpp:474
 msgid "BMP: Couldn't write data."
 msgstr "BMP: Veri yazılamadı."
 
-#: ../src/common/imagbmp.cpp:239
+#: ../src/common/imagbmp.cpp:240
 msgid "BMP: Couldn't write the file (Bitmap) header."
 msgstr "BMP: Dosya (Bitmap) başlık bilgisi yazılamadı."
 
-#: ../src/common/imagbmp.cpp:262
+#: ../src/common/imagbmp.cpp:263
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Dosya (BitmapInfo) başlık bilgisi yazılamadı."
 
-#: ../src/common/imagbmp.cpp:133
+#: ../src/common/imagbmp.cpp:134
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage için wxPalette yok."
 
@@ -1385,7 +1427,7 @@ msgid "Back"
 msgstr "Geri"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
-#: ../src/richtext/richtextformatdlg.cpp:374
+#: ../src/richtext/richtextformatdlg.cpp:395
 msgid "Background"
 msgstr "Artalan"
 
@@ -1393,7 +1435,7 @@ msgstr "Artalan"
 msgid "Background &colour:"
 msgstr "Artalan &rengi:"
 
-#: ../src/osx/carbon/fontdlg.cpp:406
+#: ../src/osx/carbon/fontdlg.cpp:390
 msgid "Background colour"
 msgstr "Artalan rengi"
 
@@ -1410,25 +1452,25 @@ msgid "Before a paragraph:"
 msgstr "Paragraftan önce:"
 
 #: ../src/richtext/richtextliststylepage.cpp:489
-#: ../src/richtext/richtextbulletspage.cpp:294
+#: ../src/richtext/richtextbulletspage.cpp:281
 msgid "Bitmap"
 msgstr "Bitmap"
 
-#: ../src/osx/carbon/dataview.cpp:2396
+#: ../src/osx/carbon/dataview.cpp:2394
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr "Bitmap görüntüleyici değeri işleyemiyor; değer tipi:"
 
-#: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:337
-#: ../src/osx/carbon/fontdlg.cpp:540 ../src/common/stockitem.cpp:143
+#: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:353
+#: ../src/osx/carbon/fontdlg.cpp:524 ../src/common/stockitem.cpp:143
 msgid "Bold"
 msgstr "Kalın"
 
-#: ../src/richtext/richtextborderspage.cpp:256
-#: ../src/richtext/richtextborderspage.cpp:389
+#: ../src/richtext/richtextborderspage.cpp:232
+#: ../src/richtext/richtextborderspage.cpp:390
 msgid "Border"
 msgstr "Kenarlık"
 
-#: ../src/richtext/richtextformatdlg.cpp:368
+#: ../src/richtext/richtextformatdlg.cpp:389
 msgid "Borders"
 msgstr "Kenarlıklar"
 
@@ -1440,7 +1482,7 @@ msgstr "Alt"
 msgid "Bottom margin (mm):"
 msgstr "Alt kenar boşluğu (mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:8919
+#: ../src/richtext/richtextbuffer.cpp:9176
 msgid "Box Properties"
 msgstr "Kutu Özellikleri"
 
@@ -1453,7 +1495,7 @@ msgid "Browse"
 msgstr "Gözatın"
 
 #: ../src/richtext/richtextliststylepage.cpp:245
-#: ../src/richtext/richtextbulletspage.cpp:195
+#: ../src/richtext/richtextbulletspage.cpp:182
 msgid "Bullet &Alignment:"
 msgstr "Madde İmi &Hizalaması:"
 
@@ -1461,7 +1503,7 @@ msgstr "Madde İmi &Hizalaması:"
 msgid "Bullet style"
 msgstr "Madde imi stili"
 
-#: ../src/richtext/richtextformatdlg.cpp:342
+#: ../src/richtext/richtextformatdlg.cpp:363
 msgid "Bullets"
 msgstr "Madde imleri"
 
@@ -1521,7 +1563,7 @@ msgstr "CLEAR"
 msgid "COMMAND"
 msgstr "COMMAND"
 
-#: ../src/richtext/richtextfontpage.cpp:291
+#: ../src/richtext/richtextfontpage.cpp:282
 msgid "Ca&pitals"
 msgstr "&Büyük harfler"
 
@@ -1552,7 +1594,7 @@ msgstr "'%s' kayıt anahtarı oluşturulamadı"
 msgid "Can't create thread"
 msgstr "İş parçacığı oluşturulamadı"
 
-#: ../src/msw/window.cpp:3793
+#: ../src/msw/window.cpp:3787
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "%s sınıfının penceresi oluşturulamadı"
@@ -1605,7 +1647,7 @@ msgstr "Zlib sıkıştırma akışı başlatılamadı."
 msgid "Can't initialize zlib inflate stream."
 msgstr "Zlib ayıklama akışı başlatılamadı."
 
-#: ../src/msw/fswatcher.cpp:432
+#: ../src/msw/fswatcher.cpp:456
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr "\"%s\" klasörü bulunamadığından değişiklikleri izlenemiyor."
@@ -1674,12 +1716,12 @@ msgstr "İptal"
 msgid "Cannot create mutex."
 msgstr "Muteks oluşturulamadı."
 
-#: ../src/osx/carbon/dataview.cpp:895
+#: ../src/osx/carbon/dataview.cpp:893
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr ""
 "Yeni sütunun kodu oluşturulamadı. En fazla sütun sayısına ulaşılmış olabilir."
 
-#: ../src/common/filefn.cpp:1336
+#: ../src/common/filefn.cpp:1328
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "'%s' dosyaları sayılamadı"
@@ -1698,21 +1740,21 @@ msgstr "Etkin çevirmeli bağlantı bulunamadı: %s"
 msgid "Cannot find the location of address book file"
 msgstr "Adres defteri dosyasının yeri bulunamadı"
 
-#: ../src/msw/ole/automtn.cpp:562
+#: ../src/msw/ole/automtn.cpp:565
 #, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "Çalışan bir \"%s\" kopyası bulunamadı"
 
-#: ../src/unix/threadpsx.cpp:1030
+#: ../src/unix/threadpsx.cpp:1035
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Zamanlama ilkesi %d için öncelik aralığı alınamadı."
 
-#: ../src/unix/utilsunx.cpp:988
+#: ../src/unix/utilsunx.cpp:998
 msgid "Cannot get the hostname"
 msgstr "Sunucu adı alınamadı"
 
-#: ../src/unix/utilsunx.cpp:1024
+#: ../src/unix/utilsunx.cpp:1034
 msgid "Cannot get the official hostname"
 msgstr "Resmi sunucu adı alınamadı"
 
@@ -1724,7 +1766,7 @@ msgstr "Kapatılamadı - etkin çevirmeli bağlantı yok."
 msgid "Cannot initialize OLE"
 msgstr "OLE başlatılamadı"
 
-#: ../src/common/socket.cpp:847
+#: ../src/common/socket.cpp:852
 msgid "Cannot initialize sockets"
 msgstr "Soketler başlatılamadı"
 
@@ -1772,7 +1814,7 @@ msgstr "%s dizin dosyası açılamadı."
 msgid "Cannot open resources file '%s'."
 msgstr "'%s' kaynak dosyası açılamadı."
 
-#: ../src/html/helpwnd.cpp:1537
+#: ../src/html/helpwnd.cpp:1548
 msgid "Cannot print empty page."
 msgstr "Boş sayfa basılamaz."
 
@@ -1786,12 +1828,12 @@ msgstr "'%s' içinden tip adı okunamadı."
 msgid "Cannot resume thread %lu"
 msgstr "%lu iş parçacığı sürdürülemiyor"
 
-#: ../src/msw/thread.cpp:923
+#: ../src/msw/thread.cpp:918
 #, c-format
 msgid "Cannot resume thread %lx"
 msgstr "%lx iş parçacığı sürdürülemiyor"
 
-#: ../src/unix/threadpsx.cpp:1011
+#: ../src/unix/threadpsx.cpp:1016
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "İş parçacığı zamanlama ilkesi alınamadı."
 
@@ -1809,16 +1851,16 @@ msgstr "İş parçacığı başlatılamadı: TLS yazma hatası."
 msgid "Cannot suspend thread %lu"
 msgstr "%lu iş parçacığı beklemeye alınamadı"
 
-#: ../src/msw/thread.cpp:907
+#: ../src/msw/thread.cpp:902
 #, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "%lx iş parçacığı beklemeye alınamadı"
 
-#: ../src/msw/thread.cpp:830
+#: ../src/msw/thread.cpp:825
 msgid "Cannot wait for thread termination"
 msgstr "İş parçacığının sonlanması beklenemiyor"
 
-#: ../src/html/helpwnd.cpp:546
+#: ../src/html/helpwnd.cpp:547
 msgid "Case sensitive"
 msgstr "Büyük küçük harfe duyarlı"
 
@@ -1826,7 +1868,7 @@ msgstr "Büyük küçük harfe duyarlı"
 msgid "Categorized Mode"
 msgstr "Kategorize Kip"
 
-#: ../src/richtext/richtextbuffer.cpp:9347
+#: ../src/richtext/richtextbuffer.cpp:9748
 msgid "Cell Properties"
 msgstr "Hücre Özellikleri"
 
@@ -1848,7 +1890,7 @@ msgid "Central European (ISO-8859-2)"
 msgstr "Orta Avrupa (ISO-8859-2)"
 
 #: ../src/richtext/richtextliststylepage.cpp:250
-#: ../src/richtext/richtextbulletspage.cpp:200
+#: ../src/richtext/richtextbulletspage.cpp:187
 msgid "Centre"
 msgstr "Orta"
 
@@ -1864,24 +1906,24 @@ msgid "Centred"
 msgstr "Ortalanmış"
 
 #: ../src/richtext/richtextliststylepage.cpp:280
-#: ../src/richtext/richtextbulletspage.cpp:232
+#: ../src/richtext/richtextbulletspage.cpp:219
 msgid "Ch&oose..."
 msgstr "S&eçin..."
 
-#: ../src/richtext/richtextbuffer.cpp:4041
+#: ../src/richtext/richtextbuffer.cpp:4242
 msgid "Change List Style"
 msgstr "Liste Stilini Değiştirin"
 
-#: ../src/richtext/richtextbuffer.cpp:3392
+#: ../src/richtext/richtextbuffer.cpp:3604
 msgid "Change Object Style"
 msgstr "Nesne Stilini Değiştirin"
 
-#: ../src/richtext/richtextbuffer.cpp:3658
-#: ../src/richtext/richtextbuffer.cpp:7749
+#: ../src/richtext/richtextbuffer.cpp:3870
+#: ../src/richtext/richtextbuffer.cpp:8003
 msgid "Change Properties"
 msgstr "Özellikleri Değiştirin"
 
-#: ../src/richtext/richtextbuffer.cpp:3209
+#: ../src/richtext/richtextbuffer.cpp:3421
 msgid "Change Style"
 msgstr "Stili Değiştirin"
 
@@ -1898,34 +1940,47 @@ msgstr "Karakter stilleri"
 
 #: ../src/richtext/richtextliststylepage.cpp:224
 #: ../src/richtext/richtextliststylepage.cpp:226
-#: ../src/richtext/richtextbulletspage.cpp:174
-#: ../src/richtext/richtextbulletspage.cpp:176
+#: ../src/richtext/richtextbulletspage.cpp:161
+#: ../src/richtext/richtextbulletspage.cpp:163
 msgid "Check to add a period after the bullet."
 msgstr "Madde iminin ardına nokta eklenmesi için işaretleyin."
 
 #: ../src/richtext/richtextliststylepage.cpp:238
 #: ../src/richtext/richtextliststylepage.cpp:240
-#: ../src/richtext/richtextbulletspage.cpp:188
-#: ../src/richtext/richtextbulletspage.cpp:190
+#: ../src/richtext/richtextbulletspage.cpp:175
+#: ../src/richtext/richtextbulletspage.cpp:177
 msgid "Check to add a right parenthesis."
 msgstr "Sağa bir parantez eklemek için işaretleyin."
 
+#: ../src/richtext/richtextborderspage.cpp:385
+#: ../src/richtext/richtextborderspage.cpp:387
+#: ../src/richtext/richtextborderspage.cpp:554
+#: ../src/richtext/richtextborderspage.cpp:556
+msgid "Check to edit all borders simultaneously."
+msgstr ""
+
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
-#: ../src/richtext/richtextbulletspage.cpp:181
-#: ../src/richtext/richtextbulletspage.cpp:183
+#: ../src/richtext/richtextbulletspage.cpp:168
+#: ../src/richtext/richtextbulletspage.cpp:170
 msgid "Check to enclose the bullet in parentheses."
 msgstr "Madde imini parantez içine almak için işaretleyin."
 
-#: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
+#: ../src/richtext/richtextfontpage.cpp:315
+#: ../src/richtext/richtextfontpage.cpp:317
+#, fuzzy
+msgid "Check to indicate right-to-left text layout."
+msgstr "Metin rengini değiştirmek için tıklayın."
+
+#: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
 msgstr "Koyu yazı tipi için işaretleyin."
 
-#: ../src/osx/carbon/fontdlg.cpp:549 ../src/osx/carbon/fontdlg.cpp:551
+#: ../src/osx/carbon/fontdlg.cpp:533 ../src/osx/carbon/fontdlg.cpp:535
 msgid "Check to make the font italic."
 msgstr "Yatık yazı tipi için işaretleyin."
 
-#: ../src/osx/carbon/fontdlg.cpp:558 ../src/osx/carbon/fontdlg.cpp:560
+#: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
 msgid "Check to make the font underlined."
 msgstr "Altı çizili yazı tipi için işaretleyin."
 
@@ -1934,40 +1989,45 @@ msgstr "Altı çizili yazı tipi için işaretleyin."
 msgid "Check to restart numbering."
 msgstr "Yeniden numaralandırmak için işaretleyin."
 
-#: ../src/richtext/richtextfontpage.cpp:286
-#: ../src/richtext/richtextfontpage.cpp:288
+#: ../src/richtext/richtextfontpage.cpp:277
+#: ../src/richtext/richtextfontpage.cpp:279
 msgid "Check to show a line through the text."
 msgstr "Metnin üzerini çizmek için işaretleyin."
 
-#: ../src/richtext/richtextfontpage.cpp:293
-#: ../src/richtext/richtextfontpage.cpp:295
+#: ../src/richtext/richtextfontpage.cpp:284
+#: ../src/richtext/richtextfontpage.cpp:286
 msgid "Check to show the text in capitals."
 msgstr "Metni büyük harfe dönüştürmek için işaretleyin."
 
-#: ../src/richtext/richtextfontpage.cpp:300
-#: ../src/richtext/richtextfontpage.cpp:302
+#: ../src/richtext/richtextfontpage.cpp:291
+#: ../src/richtext/richtextfontpage.cpp:293
 msgid "Check to show the text in small capitals."
 msgstr "Metni küçük harfe dönüştürmek için işaretleyin."
 
-#: ../src/richtext/richtextfontpage.cpp:314
-#: ../src/richtext/richtextfontpage.cpp:316
+#: ../src/richtext/richtextfontpage.cpp:305
+#: ../src/richtext/richtextfontpage.cpp:307
 msgid "Check to show the text in subscript."
 msgstr "Metni altyazıya dönüştürmek için işaretleyin."
 
-#: ../src/richtext/richtextfontpage.cpp:307
-#: ../src/richtext/richtextfontpage.cpp:309
+#: ../src/richtext/richtextfontpage.cpp:298
+#: ../src/richtext/richtextfontpage.cpp:300
 msgid "Check to show the text in superscript."
 msgstr "Metni üst yazıya dönüştürmek için işaretleyin."
+
+#: ../src/richtext/richtextfontpage.cpp:322
+#: ../src/richtext/richtextfontpage.cpp:324
+msgid "Check to suppress hyphenation."
+msgstr ""
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
 msgstr "Aranacak servis sağlayıcıyı seçin"
 
-#: ../src/propgrid/props.cpp:1643
+#: ../src/propgrid/props.cpp:1654
 msgid "Choose a directory:"
 msgstr "Bir klasör seçin:"
 
-#: ../src/propgrid/props.cpp:1702
+#: ../src/propgrid/props.cpp:1713
 msgid "Choose a file"
 msgstr "Bir dosya seçin"
 
@@ -1989,7 +2049,7 @@ msgstr "\"%s\" modülü ile döngüsel bağlılık algılandı."
 msgid "Cl&ose"
 msgstr "Kapa&tın"
 
-#: ../src/msw/ole/automtn.cpp:673
+#: ../src/msw/ole/automtn.cpp:687
 msgid "Class not registered."
 msgstr "Sınıf kaydedilmemiş."
 
@@ -2008,12 +2068,12 @@ msgstr "Seçili stili uygulamak için tıklayın."
 
 #: ../src/richtext/richtextliststylepage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:283
-#: ../src/richtext/richtextbulletspage.cpp:233
-#: ../src/richtext/richtextbulletspage.cpp:235
+#: ../src/richtext/richtextbulletspage.cpp:220
+#: ../src/richtext/richtextbulletspage.cpp:222
 msgid "Click to browse for a symbol."
 msgstr "Bir simge seçmek için tıklayın."
 
-#: ../src/osx/carbon/fontdlg.cpp:589 ../src/osx/carbon/fontdlg.cpp:591
+#: ../src/osx/carbon/fontdlg.cpp:573 ../src/osx/carbon/fontdlg.cpp:575
 msgid "Click to cancel changes to the font."
 msgstr "Yazı tipi değişikliklerinden vazgeçmek için tıklayın."
 
@@ -2021,17 +2081,17 @@ msgstr "Yazı tipi değişikliklerinden vazgeçmek için tıklayın."
 msgid "Click to cancel the font selection."
 msgstr "Yazı tipi seçiminden vazgeçmek için tıklayın."
 
-#: ../src/osx/carbon/fontdlg.cpp:570 ../src/osx/carbon/fontdlg.cpp:572
+#: ../src/osx/carbon/fontdlg.cpp:554 ../src/osx/carbon/fontdlg.cpp:556
 msgid "Click to change the font colour."
 msgstr "Metin rengini değiştirmek için tıklayın."
 
-#: ../src/richtext/richtextfontpage.cpp:276
-#: ../src/richtext/richtextfontpage.cpp:278
+#: ../src/richtext/richtextfontpage.cpp:267
+#: ../src/richtext/richtextfontpage.cpp:269
 msgid "Click to change the text background colour."
 msgstr "Metin artalan rengini değiştirmek için tıklayın."
 
-#: ../src/richtext/richtextfontpage.cpp:263
-#: ../src/richtext/richtextfontpage.cpp:265
+#: ../src/richtext/richtextfontpage.cpp:254
+#: ../src/richtext/richtextfontpage.cpp:256
 msgid "Click to change the text colour."
 msgstr "Metin rengini değiştirmek için tıklayın."
 
@@ -2045,7 +2105,7 @@ msgstr "Bu düzeyin yazı tipini seçmek için tıklayın."
 msgid "Click to close this window."
 msgstr "Pencereyi kapatmak için tıklayın."
 
-#: ../src/osx/carbon/fontdlg.cpp:596 ../src/osx/carbon/fontdlg.cpp:598
+#: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
 msgid "Click to confirm changes to the font."
 msgstr "Yazı tipindeki değişiklikleri onaylamak için tıklayın."
 
@@ -2074,13 +2134,13 @@ msgstr "Yeni bir liste stili oluşturmak için tıklayın."
 msgid "Click to create a new paragraph style."
 msgstr "Yeni bir paragraf stili oluşturmak için tıklayın."
 
-#: ../src/richtext/richtexttabspage.cpp:137
-#: ../src/richtext/richtexttabspage.cpp:139
+#: ../src/richtext/richtexttabspage.cpp:133
+#: ../src/richtext/richtexttabspage.cpp:135
 msgid "Click to create a new tab position."
 msgstr "Yeni bir sekme konumu oluşturmak için tıklayın."
 
-#: ../src/richtext/richtexttabspage.cpp:149
-#: ../src/richtext/richtexttabspage.cpp:151
+#: ../src/richtext/richtexttabspage.cpp:145
+#: ../src/richtext/richtexttabspage.cpp:147
 msgid "Click to delete all tab positions."
 msgstr "Tüm sekme konumlarını silmek için tıklayın."
 
@@ -2089,8 +2149,8 @@ msgstr "Tüm sekme konumlarını silmek için tıklayın."
 msgid "Click to delete the selected style."
 msgstr "Seçili stili silmek için tıklayın."
 
-#: ../src/richtext/richtexttabspage.cpp:143
-#: ../src/richtext/richtexttabspage.cpp:145
+#: ../src/richtext/richtexttabspage.cpp:139
+#: ../src/richtext/richtexttabspage.cpp:141
 msgid "Click to delete the selected tab position."
 msgstr "Seçili sekme konumunu silmek için tıklayın."
 
@@ -2128,7 +2188,7 @@ msgstr "Bu pencereyi kapatın"
 msgid "Color"
 msgstr "Renk"
 
-#: ../src/richtext/richtextformatdlg.cpp:725
+#: ../src/richtext/richtextformatdlg.cpp:781
 msgid "Colour"
 msgstr "Renk"
 
@@ -2137,27 +2197,27 @@ msgstr "Renk"
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Renk seçimi diyaloğu %0lx hatasıyla sonlandı."
 
-#: ../src/osx/carbon/fontdlg.cpp:566
+#: ../src/osx/carbon/fontdlg.cpp:550
 msgid "Colour:"
 msgstr "Renk:"
 
-#: ../src/osx/carbon/dataview.cpp:900
+#: ../src/osx/carbon/dataview.cpp:898
 msgid "Column could not be added."
 msgstr "Sütun eklenemedi."
 
-#: ../src/osx/carbon/dataview.cpp:899
+#: ../src/osx/carbon/dataview.cpp:897
 msgid "Column description could not be initialized."
 msgstr "Sütun tanımı yüklenemedi."
 
-#: ../src/osx/carbon/dataview.cpp:1538 ../src/osx/carbon/dataview.cpp:1559
+#: ../src/osx/carbon/dataview.cpp:1536 ../src/osx/carbon/dataview.cpp:1557
 msgid "Column index not found."
 msgstr "Sütun dizini bulunamadı."
 
-#: ../src/osx/carbon/dataview.cpp:1614
+#: ../src/osx/carbon/dataview.cpp:1612
 msgid "Column width could not be determined"
 msgstr "Sütun genişliği belirlenemedi."
 
-#: ../src/osx/carbon/dataview.cpp:901
+#: ../src/osx/carbon/dataview.cpp:899
 msgid "Column width could not be set."
 msgstr "Sütun genişliği ayarlanamadı."
 
@@ -2173,7 +2233,7 @@ msgstr "%d komut satırı değişkeni Unikoda çevrilemediğinden yoksayılacak.
 msgid "Common dialog failed with error code %0lx."
 msgstr "Ortak diyalog %0lx hata koduyla sonlandı."
 
-#: ../src/gtk/window.cpp:4306
+#: ../src/gtk/window.cpp:4345
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2181,7 +2241,7 @@ msgstr ""
 "Sistmein birleştirme (compositing) desteği etkin değil. Lütfen Pencere "
 "Yöneticinizden etkinleştirin."
 
-#: ../src/html/helpwnd.cpp:1554
+#: ../src/html/helpwnd.cpp:1565
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "Sıkıştırılmış HTML Yardım dosyası (*.chm)|*.chm|"
 
@@ -2198,19 +2258,19 @@ msgstr "Ayar kaydının adı '%c' ile başlayamaz."
 msgid "Confirm"
 msgstr "Onaylayın"
 
-#: ../src/msw/mimetype.cpp:739
+#: ../src/msw/mimetype.cpp:715
 msgid "Confirm registry update"
 msgstr "Kayıt değişikligini onaylayın"
 
-#: ../src/html/htmlwin.cpp:544
+#: ../src/html/htmlwin.cpp:557
 msgid "Connecting..."
 msgstr "Bağlanılıyor..."
 
-#: ../src/html/helpwnd.cpp:482
+#: ../src/html/helpwnd.cpp:483
 msgid "Contents"
 msgstr "İçerik"
 
-#: ../src/common/strconv.cpp:2261
+#: ../src/common/strconv.cpp:2271
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "'%s' karakter kümesine dönüşüm çalışmıyor."
@@ -2219,7 +2279,7 @@ msgstr "'%s' karakter kümesine dönüşüm çalışmıyor."
 msgid "Convert"
 msgstr "Dönüştürün"
 
-#: ../src/html/htmlwin.cpp:1057
+#: ../src/html/htmlwin.cpp:1070
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "\"%s\" panoya kopyalandı."
@@ -2236,24 +2296,33 @@ msgstr "Kopyalayın"
 msgid "Copy selection"
 msgstr "Seçimi kopyalayın"
 
+#: ../src/richtext/richtextborderspage.cpp:569
+#: ../src/richtext/richtextborderspage.cpp:604
+msgid "Corner"
+msgstr ""
+
+#: ../src/richtext/richtextborderspage.cpp:578
+msgid "Corner &radius:"
+msgstr ""
+
 #: ../src/html/chm.cpp:718
 #, c-format
 msgid "Could not create temporary file '%s'"
 msgstr "'%s' geçici dosyası oluşturulamadı."
 
-#: ../src/osx/carbon/dataview.cpp:1285 ../src/osx/carbon/dataview.cpp:1672
+#: ../src/osx/carbon/dataview.cpp:1283 ../src/osx/carbon/dataview.cpp:1670
 msgid "Could not determine column index."
 msgstr "Sütun dizini belirlenemedi."
 
-#: ../src/osx/carbon/dataview.cpp:876
+#: ../src/osx/carbon/dataview.cpp:874
 msgid "Could not determine column's position"
 msgstr "Sütunun konumu belirlenemedi."
 
-#: ../src/osx/carbon/dataview.cpp:843
+#: ../src/osx/carbon/dataview.cpp:841
 msgid "Could not determine number of columns."
 msgstr "Sütun sayısı belirlenemedi."
 
-#: ../src/osx/carbon/dataview.cpp:975
+#: ../src/osx/carbon/dataview.cpp:973
 msgid "Could not determine number of items"
 msgstr "Öge sayısı belirlenemedi."
 
@@ -2266,21 +2335,21 @@ msgstr "%s %s içine ayıklanamadı: %s"
 msgid "Could not find tab for id"
 msgstr "Kodun sekmesi bulunamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2556 ../src/osx/carbon/dataview.cpp:2591
-#: ../src/osx/carbon/dataview.cpp:2615 ../src/osx/carbon/dataview.cpp:2636
-#: ../src/osx/carbon/dataview.cpp:2773
+#: ../src/osx/carbon/dataview.cpp:2554 ../src/osx/carbon/dataview.cpp:2589
+#: ../src/osx/carbon/dataview.cpp:2613 ../src/osx/carbon/dataview.cpp:2634
+#: ../src/osx/carbon/dataview.cpp:2771
 msgid "Could not get header description."
 msgstr "Başlık bilgisi tanımı alınamadı."
 
-#: ../src/osx/carbon/dataview.cpp:1169 ../src/osx/carbon/dataview.cpp:1195
+#: ../src/osx/carbon/dataview.cpp:1167 ../src/osx/carbon/dataview.cpp:1193
 msgid "Could not get items."
 msgstr "Ögeler alınamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2659 ../src/osx/carbon/dataview.cpp:2724
+#: ../src/osx/carbon/dataview.cpp:2657 ../src/osx/carbon/dataview.cpp:2722
 msgid "Could not get property flags."
 msgstr "Özellik işaretleri alınamadı."
 
-#: ../src/osx/carbon/dataview.cpp:726
+#: ../src/osx/carbon/dataview.cpp:724
 msgid "Could not get selected items."
 msgstr "Seçili ögeler alınamadı."
 
@@ -2289,43 +2358,43 @@ msgstr "Seçili ögeler alınamadı."
 msgid "Could not locate file '%s'."
 msgstr "'%s' dosyası bulunamadı."
 
-#: ../src/osx/carbon/dataview.cpp:845
+#: ../src/osx/carbon/dataview.cpp:843
 msgid "Could not remove column."
 msgstr "Sütun kaldırılamadı."
 
-#: ../src/osx/carbon/dataview.cpp:642
+#: ../src/osx/carbon/dataview.cpp:640
 msgid "Could not retrieve number of items"
 msgstr "Öge sayısı alınamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2572
+#: ../src/osx/carbon/dataview.cpp:2570
 msgid "Could not set alignment."
 msgstr "Hizalama ayarlanamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2803
+#: ../src/osx/carbon/dataview.cpp:2801
 msgid "Could not set column width."
 msgstr "Sütun genişliği ayarlanamadı."
 
-#: ../src/common/filefn.cpp:1569
+#: ../src/common/filefn.cpp:1554
 msgid "Could not set current working directory"
 msgstr "Geçerli çalışma klasörü ayarlanamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2775
+#: ../src/osx/carbon/dataview.cpp:2773
 msgid "Could not set header description."
 msgstr "Başlık bilgisi açıklaması ayarlanamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2596
+#: ../src/osx/carbon/dataview.cpp:2594
 msgid "Could not set icon."
 msgstr "Simge ayarlanamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2617
+#: ../src/osx/carbon/dataview.cpp:2615
 msgid "Could not set maximum width."
 msgstr "En fazla genişlik ayarlanamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2638
+#: ../src/osx/carbon/dataview.cpp:2636
 msgid "Could not set minimum width."
 msgstr "En az genişlik ayarlanamadı."
 
-#: ../src/osx/carbon/dataview.cpp:2664 ../src/osx/carbon/dataview.cpp:2729
+#: ../src/osx/carbon/dataview.cpp:2662 ../src/osx/carbon/dataview.cpp:2727
 msgid "Could not set property flags."
 msgstr "Özellik işaretleri ayarlanamadı."
 
@@ -2346,8 +2415,8 @@ msgstr "Veri pencereye aktarılamadı."
 msgid "Couldn't acquire a mutex lock"
 msgstr "Mutex kilidi alınamadı."
 
-#: ../src/msw/imaglist.cpp:166 ../src/msw/imaglist.cpp:197
-#: ../src/msw/imaglist.cpp:209 ../src/msw/dragimag.cpp:193
+#: ../src/msw/imaglist.cpp:189 ../src/msw/imaglist.cpp:226
+#: ../src/msw/imaglist.cpp:238 ../src/msw/dragimag.cpp:193
 #: ../src/msw/dragimag.cpp:232
 msgid "Couldn't add an image to the image list."
 msgstr "Görsel listesine bir görsel eklenemedi."
@@ -2369,11 +2438,11 @@ msgstr "Çeviriler sayılamadı."
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "'%s' simgesi devingen kitaplıkta bulunamadı."
 
-#: ../src/gtk/print.cpp:2014
+#: ../src/gtk/print.cpp:2010
 msgid "Couldn't get hatch style from wxBrush."
 msgstr "wxBrush tarama stili alınamadı."
 
-#: ../src/msw/thread.cpp:950
+#: ../src/msw/thread.cpp:945
 msgid "Couldn't get the current thread pointer"
 msgstr "Geçerli iş parçacığı imleci alınamadı."
 
@@ -2403,7 +2472,7 @@ msgstr "Klasör adı alınamadı."
 msgid "Couldn't open audio: %s"
 msgstr "Ses açılamadı: %s"
 
-#: ../src/msw/ole/dataobj.cpp:350
+#: ../src/msw/ole/dataobj.cpp:377
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr "'%s' pano biçimi kaydedilemedi."
@@ -2443,8 +2512,8 @@ msgstr "Yeni klasör oluşturun"
 msgid "Ctrl+"
 msgstr "Ctrl+"
 
-#: ../src/richtext/richtextctrl.cpp:325 ../src/osx/textctrl_osx.cpp:582
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2283
+#: ../src/richtext/richtextctrl.cpp:331 ../src/osx/textctrl_osx.cpp:582
+#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2334
 msgid "Cu&t"
 msgstr "&Kesin"
 
@@ -2492,23 +2561,23 @@ msgstr "DEL"
 msgid "DELETE"
 msgstr "DELETE"
 
-#: ../src/common/imagbmp.cpp:1092
+#: ../src/common/imagbmp.cpp:1090
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB Başlık Bilgisi: Kodlama, bit derinliğine uymuyor."
 
-#: ../src/common/imagbmp.cpp:1040
+#: ../src/common/imagbmp.cpp:1038
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "DIB Başlık Bilgisi: Dosya için görsel yüksekliği > 32767 piksel."
 
-#: ../src/common/imagbmp.cpp:1032
+#: ../src/common/imagbmp.cpp:1030
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "DIB Başlık Bilgisi: Dosya için görsel genişliği > 32767 piksel."
 
-#: ../src/common/imagbmp.cpp:1060
+#: ../src/common/imagbmp.cpp:1058
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB Başlık Bilgisi: Dosyada bilinmeyen bit derinliği."
 
-#: ../src/common/imagbmp.cpp:1074
+#: ../src/common/imagbmp.cpp:1072
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB Başlık Bilgisi: Dosyada bilinmeyen kodlama."
 
@@ -2524,15 +2593,15 @@ msgstr "DL Zarf, 110 x 220 mm"
 msgid "DOWN"
 msgstr "DOWN"
 
-#: ../src/richtext/richtextborderspage.cpp:545
+#: ../src/richtext/richtextborderspage.cpp:616
 msgid "Dashed"
 msgstr "Çizgili"
 
-#: ../src/osx/carbon/dataview.cpp:1921
+#: ../src/osx/carbon/dataview.cpp:1919
 msgid "Data object has invalid data format"
 msgstr "Veri nesnesinin veri biçimi geçersiz."
 
-#: ../src/osx/carbon/dataview.cpp:2491
+#: ../src/osx/carbon/dataview.cpp:2489
 msgid "Date renderer cannot render value; value type: "
 msgstr "Tarih görüntüleyici değeri işleyemiyor; değer tipi:"
 
@@ -2565,28 +2634,28 @@ msgstr "Varsayılan yazı tipi"
 msgid "Default printer"
 msgstr "Varsayılan yazıcı"
 
-#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:8095 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "Silin"
 
-#: ../src/richtext/richtexttabspage.cpp:148
+#: ../src/richtext/richtexttabspage.cpp:144
 msgid "Delete A&ll"
 msgstr "Tümünü Si&lin"
 
-#: ../src/richtext/richtextbuffer.cpp:10637
+#: ../src/richtext/richtextbuffer.cpp:11105
 msgid "Delete Column"
 msgstr "Sütunu Silin"
 
-#: ../src/richtext/richtextbuffer.cpp:10587
+#: ../src/richtext/richtextbuffer.cpp:11055
 msgid "Delete Row"
 msgstr "Satırı Silin"
 
-#: ../src/richtext/richtextstyledlg.cpp:779
+#: ../src/richtext/richtextstyledlg.cpp:782
 msgid "Delete Style"
 msgstr "Stili Silin"
 
-#: ../src/richtext/richtextctrl.cpp:1231 ../src/richtext/richtextctrl.cpp:1452
+#: ../src/richtext/richtextctrl.cpp:1306 ../src/richtext/richtextctrl.cpp:1544
 msgid "Delete Text"
 msgstr "Metni Silin"
 
@@ -2598,12 +2667,12 @@ msgstr "Ögeyi Silin"
 msgid "Delete selection"
 msgstr "Seçimi silin"
 
-#: ../src/richtext/richtextstyledlg.cpp:779
+#: ../src/richtext/richtextstyledlg.cpp:782
 #, c-format
 msgid "Delete style %s?"
 msgstr "%s stili silinsin mi?"
 
-#: ../src/unix/snglinst.cpp:295
+#: ../src/unix/snglinst.cpp:301
 #, c-format
 msgid "Deleted stale lock file '%s'."
 msgstr "Eski kilit dosyası '%s' silindi."
@@ -2637,7 +2706,7 @@ msgstr ""
 "Uzaktan erişim hizmeti (RAS) kurulu olmadığı için arama işlevleri "
 "kullanılamıyor. Lütfen kurun."
 
-#: ../src/generic/tipdlg.cpp:230
+#: ../src/generic/tipdlg.cpp:225
 msgid "Did you know..."
 msgstr "Biliyor musunuz..."
 
@@ -2650,12 +2719,12 @@ msgstr "%d DirectFB hatası oluştu."
 msgid "Directories"
 msgstr "Klasörler"
 
-#: ../src/common/filefn.cpp:1251
+#: ../src/common/filefn.cpp:1243
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "'%s' klasörü oluşturulamadı"
 
-#: ../src/common/filefn.cpp:1271
+#: ../src/common/filefn.cpp:1263
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "'%s' klasörü silinemedi"
@@ -2672,7 +2741,7 @@ msgstr "Klasör bulunamadı."
 msgid "Discard changes and reload the last saved version?"
 msgstr "Değişiklikler iptal edilip son kaydedilmiş sürüme dönülsün mü?"
 
-#: ../src/html/helpwnd.cpp:512
+#: ../src/html/helpwnd.cpp:513
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
@@ -2680,15 +2749,15 @@ msgstr ""
 "Verilen altdizgeyi içeren tüm dizin elemanları görüntülensin. Arama küçük-"
 "büyük harfe duyarlıdır."
 
-#: ../src/html/helpwnd.cpp:692
+#: ../src/html/helpwnd.cpp:693
 msgid "Display options dialog"
 msgstr "Ayarlar penceresi görüntülensin"
 
-#: ../src/html/helpwnd.cpp:326
+#: ../src/html/helpwnd.cpp:327
 msgid "Displays help as you browse the books on the left."
 msgstr "Soldaki kitapları gezilirken yardım görüntülenir."
 
-#: ../src/msw/mimetype.cpp:732
+#: ../src/msw/mimetype.cpp:708
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
 "\" ?\n"
@@ -2721,11 +2790,11 @@ msgstr "Belgeleyen"
 msgid "Documentation writers"
 msgstr "Belge yazarları "
 
-#: ../src/common/sizer.cpp:2680
+#: ../src/common/sizer.cpp:2684
 msgid "Don't Save"
 msgstr "Kaydedilmesin"
 
-#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:611
+#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:624
 msgid "Done"
 msgstr "Tamamlandı"
 
@@ -2733,11 +2802,11 @@ msgstr "Tamamlandı"
 msgid "Done."
 msgstr "Tamamlandı."
 
-#: ../src/richtext/richtextborderspage.cpp:544
+#: ../src/richtext/richtextborderspage.cpp:615
 msgid "Dotted"
 msgstr "Noktalı"
 
-#: ../src/richtext/richtextborderspage.cpp:546
+#: ../src/richtext/richtextborderspage.cpp:617
 msgid "Double"
 msgstr "Çift"
 
@@ -2754,7 +2823,7 @@ msgstr "Kod iki kez kullanılmış: %d"
 msgid "Down"
 msgstr "Aşağı"
 
-#: ../src/richtext/richtextctrl.cpp:814
+#: ../src/richtext/richtextctrl.cpp:848
 msgid "Drag"
 msgstr "Sürükleyin"
 
@@ -2770,7 +2839,7 @@ msgstr "SON"
 msgid "ENTER"
 msgstr "ENTER"
 
-#: ../src/unix/fswatcher_inotify.cpp:535
+#: ../src/unix/fswatcher_inotify.cpp:548
 msgid "EOF while reading from inotify descriptor"
 msgstr "inotify belirteci okunurken dosya sonuna ulaşıldı "
 
@@ -2835,23 +2904,23 @@ msgstr "Dikey hizalama kullanılsın."
 msgid "Enables a background colour."
 msgstr "Bir artalan rengini etkinleştirir."
 
-#: ../src/richtext/richtextstyledlg.cpp:931
+#: ../src/richtext/richtextstyledlg.cpp:934
 msgid "Enter a box style name"
 msgstr "Bir kutu stili adı yazın"
 
-#: ../src/richtext/richtextstyledlg.cpp:603
+#: ../src/richtext/richtextstyledlg.cpp:606
 msgid "Enter a character style name"
 msgstr "Bir karakter stili adı yazın"
 
-#: ../src/richtext/richtextstyledlg.cpp:817
+#: ../src/richtext/richtextstyledlg.cpp:820
 msgid "Enter a list style name"
 msgstr "Bir liste stili adı yazın"
 
-#: ../src/richtext/richtextstyledlg.cpp:890
+#: ../src/richtext/richtextstyledlg.cpp:893
 msgid "Enter a new style name"
 msgstr "Yeni bir stil adı yazın"
 
-#: ../src/richtext/richtextstyledlg.cpp:651
+#: ../src/richtext/richtextstyledlg.cpp:654
 msgid "Enter a paragraph style name"
 msgstr "Bir paragraf stili adı yazın"
 
@@ -2895,11 +2964,11 @@ msgstr "kqueue kopyası kapatılırken hata"
 msgid "Error creating directory"
 msgstr "Klasör oluşturma hatası"
 
-#: ../src/common/imagbmp.cpp:1103
+#: ../src/common/imagbmp.cpp:1101
 msgid "Error in reading image DIB."
 msgstr "DIB görüntüsü okuma hatası"
 
-#: ../src/propgrid/propgrid.cpp:6563
+#: ../src/propgrid/propgrid.cpp:6550
 #, c-format
 msgid "Error in resource: %s"
 msgstr "%s kaynağında hata"
@@ -2928,10 +2997,6 @@ msgstr "Esperanto (ISO-8859-3)"
 msgid "Estimated time:"
 msgstr "Öngörülen süre:"
 
-#: ../src/unix/fswatcher_inotify.cpp:639
-msgid "Event queue overflowed"
-msgstr "Olay kuyruğu taştı"
-
 #: ../src/generic/dbgrptg.cpp:234
 msgid "Executable files (*.exe)|*.exe|"
 msgstr "Yürütülebilir dosyalar (*.exe)|*.exe|"
@@ -2940,7 +3005,7 @@ msgstr "Yürütülebilir dosyalar (*.exe)|*.exe|"
 msgid "Execute"
 msgstr "Yürütün"
 
-#: ../src/msw/utilsexc.cpp:888
+#: ../src/msw/utilsexc.cpp:887
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "'%s' komutu yürütülemedi"
@@ -2973,7 +3038,7 @@ msgstr "'%s'', '%s' içine açılamadı."
 msgid "F"
 msgstr "F"
 
-#: ../src/propgrid/advprops.cpp:640
+#: ../src/propgrid/advprops.cpp:641
 msgid "Face Name"
 msgstr "Yazı Tipi Adı"
 
@@ -2995,7 +3060,7 @@ msgstr "Bit eşlem verisi için %luKb bellek ayrılamadı."
 msgid "Failed to allocate colour for OpenGL"
 msgstr "OpenGL için renk ayarlanamadı"
 
-#: ../src/unix/displayx11.cpp:288
+#: ../src/unix/displayx11.cpp:292
 msgid "Failed to change video mode"
 msgstr "Görüntü kipi değiştirilemedi"
 
@@ -3013,7 +3078,7 @@ msgstr "\"%s\" hata ayıklama rapor klasörü temizlenemedi"
 msgid "Failed to close file handle"
 msgstr "Dosya işleyici kapatılamadı"
 
-#: ../src/unix/snglinst.cpp:334
+#: ../src/unix/snglinst.cpp:340
 #, c-format
 msgid "Failed to close lock file '%s'"
 msgstr "'%s' kilit dosyası kapatılamadı"
@@ -3054,7 +3119,7 @@ msgstr "'%s' kayıt değeri kopyalanamadı"
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "'%s' kayıt anahtarının içeriği '%s' içine kopyalanamadı."
 
-#: ../src/common/filefn.cpp:1058
+#: ../src/common/filefn.cpp:1051
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "'%s' dosyası '%s' içine kopyalanamadı"
@@ -3068,19 +3133,19 @@ msgstr "'%s' kayıt alt anahtarı '%s' içine kopyalanamadı."
 msgid "Failed to create DDE string"
 msgstr "DDE dizgesi oluşturulamadı"
 
-#: ../src/msw/mdi.cpp:590
+#: ../src/msw/mdi.cpp:594
 msgid "Failed to create MDI parent frame."
 msgstr "MDI üst çerçevesi oluşturulamadı."
 
-#: ../src/common/filename.cpp:1080
+#: ../src/common/filename.cpp:1086
 msgid "Failed to create a temporary file name"
 msgstr "Geçici dosya adı oluşturulamadı"
 
-#: ../src/msw/utilsexc.cpp:235
+#: ../src/msw/utilsexc.cpp:234
 msgid "Failed to create an anonymous pipe"
 msgstr "Anonim bir boru oluşturulamadı"
 
-#: ../src/msw/ole/automtn.cpp:522
+#: ../src/msw/ole/automtn.cpp:525
 #, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr "\"%s\" kopyası oluşturulamadı"
@@ -3112,7 +3177,7 @@ msgstr ""
 msgid "Failed to create epoll descriptor"
 msgstr "epoll tanımlayıcısı oluşturulamadı"
 
-#: ../src/msw/mimetype.cpp:198
+#: ../src/msw/mimetype.cpp:200
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
 msgstr "'%s' dosyaları için kayıt anahtarı oluşturulamadı."
@@ -3126,7 +3191,7 @@ msgstr "Standart bul/değiştir penceresi oluşturulamadı (hata kodu %d)"
 msgid "Failed to create wake up pipe used by event loop."
 msgstr "Olay döngüsünde kullanılan uyandırma borusu oluşturulamadı."
 
-#: ../src/html/winpars.cpp:739
+#: ../src/html/winpars.cpp:730
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "HTML belgesi %s kodlamasıyla görüntülenemedi"
@@ -3135,7 +3200,7 @@ msgstr "HTML belgesi %s kodlamasıyla görüntülenemedi"
 msgid "Failed to empty the clipboard."
 msgstr "Pano temizlenemedi."
 
-#: ../src/unix/displayx11.cpp:265
+#: ../src/unix/displayx11.cpp:266
 msgid "Failed to enumerate video modes"
 msgstr "Görüntü kipleri sıralanamadı"
 
@@ -3157,7 +3222,7 @@ msgstr "'%s' çalıştırılamadı\n"
 msgid "Failed to execute curl, please install it in PATH."
 msgstr "curl çalıştırılamadı, lütfen YOL içine yükleyin."
 
-#: ../src/msw/ole/automtn.cpp:505
+#: ../src/msw/ole/automtn.cpp:508
 #, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr "\"%s\" için CLSID bulunamadı"
@@ -3172,7 +3237,7 @@ msgstr "Kurallı ifadeye uygun veri bulunamadı: %s"
 msgid "Failed to get ISP names: %s"
 msgstr "ISS adları alınamadı: %s"
 
-#: ../src/msw/ole/automtn.cpp:574
+#: ../src/msw/ole/automtn.cpp:577
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr "\"%s\" için OLE otomasyonu arayüzü getirilemedi"
@@ -3185,7 +3250,7 @@ msgstr "Panodan veri alınamadı"
 msgid "Failed to get the local system time"
 msgstr "Yerel sistem zamanı alınamadı"
 
-#: ../src/common/filefn.cpp:1453
+#: ../src/common/filefn.cpp:1445
 msgid "Failed to get the working directory"
 msgstr "Çalışma klasörü alınamadı"
 
@@ -3206,7 +3271,7 @@ msgstr "OpenGL başlatılamadı"
 msgid "Failed to initiate dialup connection: %s"
 msgstr "Çevirmeli bağlantı başlatılamadı: %s"
 
-#: ../src/gtk/textctrl.cpp:1117
+#: ../src/gtk/textctrl.cpp:1129
 msgid "Failed to insert text in the control."
 msgstr "Metin denetime eklenemedi."
 
@@ -3219,7 +3284,7 @@ msgstr "'%s' kilit dosyası incelenemedi"
 msgid "Failed to install signal handler"
 msgstr "İşaret işleyici kurulamadı"
 
-#: ../src/unix/threadpsx.cpp:1162
+#: ../src/unix/threadpsx.cpp:1167
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -3291,7 +3356,7 @@ msgstr "'%s' kilit dosyası kilitlenemedi"
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr "%d tanımlayıcısı değiştirilemedi (epoll %d tanımlayıcısındaki)"
 
-#: ../src/common/filename.cpp:2681
+#: ../src/common/filename.cpp:2687
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "'%s' için dosya zamanları değiştirilemedi"
@@ -3315,7 +3380,7 @@ msgstr "'%s' yazılmak üzere açılamadı"
 msgid "Failed to open CHM archive '%s'."
 msgstr "'%s' CHM arşivi açılamadı."
 
-#: ../src/common/utilscmn.cpp:1135
+#: ../src/common/utilscmn.cpp:1142
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "'%s' İnternet adresi varsayılan tarayıcıyla açılamadı."
@@ -3330,7 +3395,7 @@ msgstr "\"%s\"klasörü izlenmek üzere açılamadı."
 msgid "Failed to open display \"%s\"."
 msgstr "\"%s\" görüntüsü açılamadı."
 
-#: ../src/common/filename.cpp:1115
+#: ../src/common/filename.cpp:1121
 msgid "Failed to open temporary file."
 msgstr "Geçici dosya açılamadı."
 
@@ -3338,7 +3403,7 @@ msgstr "Geçici dosya açılamadı."
 msgid "Failed to open the clipboard."
 msgstr "Pano açılamadı."
 
-#: ../src/common/translation.cpp:1170
+#: ../src/common/translation.cpp:1171
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "Çoğul-formlar ayrıştırılamadı: '%s'"
@@ -3377,7 +3442,7 @@ msgstr "Uyandırma borusu okunamadı"
 msgid "Failed to redirect child process input/output"
 msgstr "Alt iş giriş/çıkışı yönlendirilemedi"
 
-#: ../src/msw/utilsexc.cpp:697
+#: ../src/msw/utilsexc.cpp:696
 msgid "Failed to redirect the child process IO"
 msgstr "Alt iş giriş/çıkışı yönlendirilemedi"
 
@@ -3396,7 +3461,7 @@ msgstr "'%s' karakter kümesi için kodlama anımsanamadı."
 msgid "Failed to remove debug report file \"%s\""
 msgstr "\"%s\" hata ayıklama rapor dosyası silinemedi"
 
-#: ../src/unix/snglinst.cpp:322
+#: ../src/unix/snglinst.cpp:328
 #, c-format
 msgid "Failed to remove lock file '%s'"
 msgstr "'%s' kilit dosyası silinemedi"
@@ -3411,7 +3476,7 @@ msgstr "'%s' eski kilit dosyası silinemedi."
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "'%s' kayıt değeri '%s' olarak yeniden adlandırılamadı."
 
-#: ../src/common/filefn.cpp:1168
+#: ../src/common/filefn.cpp:1161
 #, c-format
 msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
@@ -3429,7 +3494,7 @@ msgstr "'%s' kayıt anahtarı '%s' olarak yeniden adlandırılamadı."
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Panodan veri alınamadı."
 
-#: ../src/common/filename.cpp:2777
+#: ../src/common/filename.cpp:2783
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "'%s' için dosya zamanları alınamadı"
@@ -3478,21 +3543,21 @@ msgstr "İşlem önceliği ayarlanamadı"
 msgid "Failed to set temporary file permissions"
 msgstr "Geçici dosya izinleri ayarlanamadı"
 
-#: ../src/gtk/textctrl.cpp:1058
+#: ../src/gtk/textctrl.cpp:1070
 msgid "Failed to set text in the text control."
 msgstr "Metin denetime yerleştirilemedi."
 
-#: ../src/unix/threadpsx.cpp:1293
+#: ../src/unix/threadpsx.cpp:1298
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "%lu iş parçacığı öncelik düzeyi ayarlanamadı."
 
-#: ../src/unix/threadpsx.cpp:1377 ../src/unix/threadpsx.cpp:1387
+#: ../src/unix/threadpsx.cpp:1382 ../src/unix/threadpsx.cpp:1392
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "%d iş parçacığı önceliği ayarlanamadı."
 
-#: ../src/unix/utilsunx.cpp:791
+#: ../src/unix/utilsunx.cpp:801
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr "Engellemesiz boru kurulamadı, program takılabilir."
 
@@ -3509,7 +3574,7 @@ msgstr "DirectFB borusu engellemesiz kipe döndürülemedi"
 msgid "Failed to switch wake up pipe to non-blocking mode"
 msgstr "Uyandırma borusu engellemesiz kipe döndürülemedi"
 
-#: ../src/unix/threadpsx.cpp:1569
+#: ../src/unix/threadpsx.cpp:1574
 msgid "Failed to terminate a thread."
 msgstr "Bir iş parçacığı sonlandırılamadı."
 
@@ -3522,12 +3587,12 @@ msgstr "DDE sunucusuyla danışma döngüsü sonlandırılamadı"
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Çevirmeli bağlantı sonlandırılamadı: %s"
 
-#: ../src/common/filename.cpp:2696
+#: ../src/common/filename.cpp:2702
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "'%s' dosyasına dokunulamadı"
 
-#: ../src/unix/snglinst.cpp:328
+#: ../src/unix/snglinst.cpp:334
 #, c-format
 msgid "Failed to unlock lock file '%s'"
 msgstr "'%s' kilit dosyasının kilidi kaldırılamadı"
@@ -3560,7 +3625,7 @@ msgstr "'%s' kilit dosyasına yazılamadı"
 msgid "False"
 msgstr "Yanlış"
 
-#: ../src/propgrid/advprops.cpp:658
+#: ../src/propgrid/advprops.cpp:659
 msgid "Family"
 msgstr "Aile"
 
@@ -3592,26 +3657,26 @@ msgstr ""
 "'%s' dosyası zaten var.\n"
 "Üstüne yazılsın mı?"
 
-#: ../src/common/filefn.cpp:1207
+#: ../src/common/filefn.cpp:1199
 #, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "'%s' dosyası silinemedi"
 
-#: ../src/common/filefn.cpp:1187
+#: ../src/common/filefn.cpp:1180
 #, c-format
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "'%s' dosyası '%s' olarak yeniden adlandırılamadı"
 
-#: ../src/richtext/richtextctrl.cpp:2688 ../src/common/textcmn.cpp:921
+#: ../src/richtext/richtextctrl.cpp:2810 ../src/common/textcmn.cpp:935
 msgid "File couldn't be loaded."
 msgstr "Dosya yüklenemedi."
 
-#: ../src/msw/filedlg.cpp:458
+#: ../src/msw/filedlg.cpp:462
 #, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr "Dosya diyaloğu %0lx hata koduyla sonlandı."
 
-#: ../src/common/docview.cpp:1771
+#: ../src/common/docview.cpp:1778
 msgid "File error"
 msgstr "Dosya hatası"
 
@@ -3623,7 +3688,7 @@ msgstr "Aynı adlı bir dosya zaten var."
 msgid "Files"
 msgstr "Dosyalar"
 
-#: ../src/common/filefn.cpp:1761
+#: ../src/common/filefn.cpp:1746
 #, c-format
 msgid "Files (%s)"
 msgstr "Dosyalar (%s)"
@@ -3632,7 +3697,7 @@ msgstr "Dosyalar (%s)"
 msgid "Filter"
 msgstr "Süzgeç"
 
-#: ../src/common/stockitem.cpp:158 ../src/html/helpwnd.cpp:500
+#: ../src/common/stockitem.cpp:158 ../src/html/helpwnd.cpp:501
 msgid "Find"
 msgstr "Bulun"
 
@@ -3648,11 +3713,11 @@ msgstr "İlk sayfa"
 msgid "Fixed"
 msgstr "Sabit"
 
-#: ../src/html/helpwnd.cpp:1219
+#: ../src/html/helpwnd.cpp:1220
 msgid "Fixed font:"
 msgstr "Sabit yazı tipi:"
 
-#: ../src/html/helpwnd.cpp:1282
+#: ../src/html/helpwnd.cpp:1283
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "Sabit boyutlu tip.<br> <b>koyu</b> <i>eğik</i> "
 
@@ -3668,24 +3733,24 @@ msgstr "Esnek"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Kitap yaprağı, 8 1/2 x 13 inç"
 
-#: ../src/richtext/richtextformatdlg.cpp:324 ../src/osx/carbon/fontdlg.cpp:473
+#: ../src/richtext/richtextformatdlg.cpp:345 ../src/osx/carbon/fontdlg.cpp:457
 #: ../src/common/stockitem.cpp:194
 msgid "Font"
 msgstr "Yazı tipi"
 
-#: ../src/richtext/richtextfontpage.cpp:230
+#: ../src/richtext/richtextfontpage.cpp:221
 msgid "Font &weight:"
 msgstr "Yazı &koyuluğu:"
 
-#: ../src/html/helpwnd.cpp:1220
+#: ../src/html/helpwnd.cpp:1221
 msgid "Font size:"
 msgstr "Yazı boyutu"
 
-#: ../src/richtext/richtextfontpage.cpp:217
+#: ../src/richtext/richtextfontpage.cpp:208
 msgid "Font st&yle:"
 msgstr "Yazı &stili:"
 
-#: ../src/osx/carbon/fontdlg.cpp:515
+#: ../src/osx/carbon/fontdlg.cpp:499
 msgid "Font:"
 msgstr "Yazı tipi:"
 
@@ -3706,7 +3771,7 @@ msgstr "İleri"
 msgid "Forward hrefs are not supported"
 msgstr "Yönlendirme href biçimi desteklenmiyor"
 
-#: ../src/html/helpwnd.cpp:888
+#: ../src/html/helpwnd.cpp:889
 #, c-format
 msgid "Found %i matches"
 msgstr "%i sonuç bulundu"
@@ -3735,7 +3800,7 @@ msgstr "GIF: yetersiz bellek."
 msgid "GIF: unknown error!!!"
 msgstr "GIF: bilinmeyen hata!!!"
 
-#: ../src/gtk/window.cpp:4288
+#: ../src/gtk/window.cpp:4327
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3777,15 +3842,15 @@ msgstr ""
 "'GetPropertyCollection' işlevi geçerli bir koleksiyon alıcısı olmaksızın "
 "çağrıldı"
 
-#: ../src/html/helpwnd.cpp:673
+#: ../src/html/helpwnd.cpp:674
 msgid "Go back"
 msgstr "Geri gidin"
 
-#: ../src/html/helpwnd.cpp:674
+#: ../src/html/helpwnd.cpp:675
 msgid "Go forward"
 msgstr "İleri gidin"
 
-#: ../src/html/helpwnd.cpp:676
+#: ../src/html/helpwnd.cpp:677
 msgid "Go one level up in document hierarchy"
 msgstr "Belge hiyerarşisinde bir düzey yukarı gidin"
 
@@ -3805,7 +3870,7 @@ msgstr "Grafikleri hazırlayan"
 msgid "Greek (ISO-8859-7)"
 msgstr "Yunanca (ISO-8859-7)"
 
-#: ../src/richtext/richtextborderspage.cpp:547
+#: ../src/richtext/richtextborderspage.cpp:618
 msgid "Groove"
 msgstr "Groove"
 
@@ -3821,16 +3886,16 @@ msgstr "HELP"
 msgid "HOME"
 msgstr "HOME"
 
-#: ../src/html/helpwnd.cpp:1552
+#: ../src/html/helpwnd.cpp:1563
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "HTML Yardım Projesi (*.hhp)|*.hhp|"
 
-#: ../src/html/htmlwin.cpp:659
+#: ../src/html/htmlwin.cpp:672
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "%s HTML çapası bulunamadı."
 
-#: ../src/html/helpwnd.cpp:1550
+#: ../src/html/helpwnd.cpp:1561
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "HTML dosyaları (*.html;*.htm)|*.html;*.htm|"
 
@@ -3848,7 +3913,7 @@ msgstr "İbranice (ISO-8859-8)"
 msgid "Help"
 msgstr "Yardım"
 
-#: ../src/html/helpwnd.cpp:1213
+#: ../src/html/helpwnd.cpp:1214
 msgid "Help Browser Options"
 msgstr "Yardım Tarayıcısı Ayarları"
 
@@ -3856,15 +3921,15 @@ msgstr "Yardım Tarayıcısı Ayarları"
 msgid "Help Index"
 msgstr "Yardım Dizini"
 
-#: ../src/html/helpwnd.cpp:1534
+#: ../src/html/helpwnd.cpp:1545
 msgid "Help Printing"
 msgstr "Yardım Yazdırma"
 
-#: ../src/html/helpwnd.cpp:814
+#: ../src/html/helpwnd.cpp:815
 msgid "Help Topics"
 msgstr "Yardım Konuları"
 
-#: ../src/html/helpwnd.cpp:1551
+#: ../src/html/helpwnd.cpp:1562
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "Yardım kitapları (*.htb)|*.htb|Yardım kitapları (*.zip)|*.zip|"
 
@@ -3883,16 +3948,16 @@ msgstr "\"%s\" yardım dosyası bulunamadı."
 msgid "Help: %s"
 msgstr "Yardım: %s"
 
-#: ../src/osx/menu_osx.cpp:602 ../src/osx/menu_osx.cpp:649
+#: ../src/osx/menu_osx.cpp:623
 #, c-format
 msgid "Hide %s"
 msgstr "%s gizleyin"
 
-#: ../src/osx/menu_osx.cpp:604 ../src/osx/menu_osx.cpp:651
+#: ../src/osx/menu_osx.cpp:625
 msgid "Hide Others"
 msgstr "Diğerlerini Gizleyin"
 
-#: ../src/generic/infobar.cpp:85
+#: ../src/generic/infobar.cpp:84
 msgid "Hide this notification message."
 msgstr "Bu uyarı iletisini gizleyin."
 
@@ -3909,26 +3974,26 @@ msgstr "Açılış klasörü"
 msgid "How the object will float relative to the text."
 msgstr "Nesnenin metne göre nasıl yüzeceği."
 
-#: ../src/common/imagbmp.cpp:1118
+#: ../src/common/imagbmp.cpp:1116
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: DIB maskesi okuma hatası."
 
-#: ../src/common/imagbmp.cpp:1233 ../src/common/imagbmp.cpp:1294
-#: ../src/common/imagbmp.cpp:1305 ../src/common/imagbmp.cpp:1318
-#: ../src/common/imagbmp.cpp:1363 ../src/common/imagbmp.cpp:1375
-#: ../src/common/imagbmp.cpp:1386
+#: ../src/common/imagbmp.cpp:1231 ../src/common/imagbmp.cpp:1292
+#: ../src/common/imagbmp.cpp:1303 ../src/common/imagbmp.cpp:1316
+#: ../src/common/imagbmp.cpp:1361 ../src/common/imagbmp.cpp:1373
+#: ../src/common/imagbmp.cpp:1384
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: Görsel dosyası yazma hatası!"
 
-#: ../src/common/imagbmp.cpp:1198
+#: ../src/common/imagbmp.cpp:1196
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: Görsel simge için çok uzun."
 
-#: ../src/common/imagbmp.cpp:1206
+#: ../src/common/imagbmp.cpp:1204
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: Görsel simge için çok geniş."
 
-#: ../src/common/imagbmp.cpp:1466
+#: ../src/common/imagbmp.cpp:1464
 msgid "ICO: Invalid icon index."
 msgstr "ICO: Geçersiz simge dizini."
 
@@ -3960,7 +4025,7 @@ msgstr "INSERT"
 msgid "ISO-2022-JP"
 msgstr "ISO-2022-JP"
 
-#: ../src/osx/carbon/dataview.cpp:2420
+#: ../src/osx/carbon/dataview.cpp:2418
 msgid "Icon & text renderer cannot render value; value type: "
 msgstr "Simge ve metin görüntüleyici değeri işleyemiyor; değer tipi:"
 
@@ -4029,7 +4094,7 @@ msgstr "Görsel dosyası %d tipinde değil."
 msgid "Image is not of type %s."
 msgstr "Görsel dosyası %s tipinde değil."
 
-#: ../src/msw/textctrl.cpp:399
+#: ../src/msw/textctrl.cpp:413
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -4041,27 +4106,27 @@ msgstr ""
 msgid "Impossible to get child process input"
 msgstr "Alt iş girdisi alınamıyor"
 
-#: ../src/common/filefn.cpp:1074
+#: ../src/common/filefn.cpp:1067
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "'%s' dosyasının izinleri okunamıyor"
 
-#: ../src/common/filefn.cpp:1088
+#: ../src/common/filefn.cpp:1081
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "'%s' dosyasının üzerine yazılamıyor"
 
-#: ../src/common/filefn.cpp:1142
+#: ../src/common/filefn.cpp:1135
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "'%s' dosyasının izinleri değiştirilemiyor"
 
-#: ../src/common/gifdecod.cpp:818
+#: ../src/common/gifdecod.cpp:792
 #, c-format
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr "GIF kare sayısı yanlış (%u, %d) #%u karesi"
 
-#: ../src/msw/ole/automtn.cpp:624
+#: ../src/msw/ole/automtn.cpp:638
 msgid "Incorrect number of arguments."
 msgstr "Argüman sayısı hatalı."
 
@@ -4069,11 +4134,11 @@ msgstr "Argüman sayısı hatalı."
 msgid "Indent"
 msgstr "Girinti"
 
-#: ../src/richtext/richtextformatdlg.cpp:330
+#: ../src/richtext/richtextformatdlg.cpp:351
 msgid "Indents && Spacing"
 msgstr "Girinti ve Boşluklar"
 
-#: ../src/common/stockitem.cpp:166 ../src/html/helpwnd.cpp:525
+#: ../src/common/stockitem.cpp:166 ../src/html/helpwnd.cpp:526
 msgid "Index"
 msgstr "Dizin"
 
@@ -4093,23 +4158,23 @@ msgstr "Hazırlığın ardından başlatılamadı, vazgeçiliyor."
 msgid "Insert"
 msgstr "Ekleyin"
 
-#: ../src/richtext/richtextbuffer.cpp:7687
+#: ../src/richtext/richtextbuffer.cpp:7941
 msgid "Insert Field"
 msgstr "Alan Ekleyin"
 
-#: ../src/richtext/richtextbuffer.cpp:7598
-#: ../src/richtext/richtextbuffer.cpp:8551
+#: ../src/richtext/richtextbuffer.cpp:7852
+#: ../src/richtext/richtextbuffer.cpp:8805
 msgid "Insert Image"
 msgstr "Görsel Ekleyin"
 
-#: ../src/richtext/richtextbuffer.cpp:7645
+#: ../src/richtext/richtextbuffer.cpp:7899
 msgid "Insert Object"
 msgstr "Nesne Ekleyin"
 
-#: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7440
-#: ../src/richtext/richtextbuffer.cpp:7470
-#: ../src/richtext/richtextbuffer.cpp:7514
+#: ../src/richtext/richtextctrl.cpp:1247 ../src/richtext/richtextctrl.cpp:1454
+#: ../src/richtext/richtextbuffer.cpp:7694
+#: ../src/richtext/richtextbuffer.cpp:7724
+#: ../src/richtext/richtextbuffer.cpp:7768
 msgid "Insert Text"
 msgstr "Metin Ekleyin"
 
@@ -4118,7 +4183,7 @@ msgstr "Metin Ekleyin"
 msgid "Inserts a page break before the paragraph."
 msgstr "Paragraftan önce bir sayfa sonu ekler."
 
-#: ../src/richtext/richtextborderspage.cpp:549
+#: ../src/richtext/richtextborderspage.cpp:620
 msgid "Inset"
 msgstr "Gömme"
 
@@ -4131,7 +4196,7 @@ msgstr "Geçersiz GTK+ komut satırı seçeneği, \"%s --help\" yazarak yardım 
 msgid "Invalid TIFF image index."
 msgstr "TIFF görsel dizini geçersiz."
 
-#: ../src/osx/carbon/dataview.cpp:1782 ../src/osx/carbon/dataview.cpp:1877
+#: ../src/osx/carbon/dataview.cpp:1780 ../src/osx/carbon/dataview.cpp:1875
 msgid "Invalid data view item"
 msgstr "Veri görünümü ögesi geçersiz"
 
@@ -4145,17 +4210,17 @@ msgstr "'%s' görünüm kipi özelliği geçersiz."
 msgid "Invalid geometry specification '%s'"
 msgstr "'%s' geometri özelliği geçersiz."
 
-#: ../src/unix/fswatcher_inotify.cpp:298
+#: ../src/unix/fswatcher_inotify.cpp:311
 #, c-format
 msgid "Invalid inotify event for \"%s\""
 msgstr "\"%s\" için inotify etkinliği geçersiz"
 
-#: ../src/unix/snglinst.cpp:306
+#: ../src/unix/snglinst.cpp:312
 #, c-format
 msgid "Invalid lock file '%s'."
 msgstr "'%s' kilit dosyası geçersiz."
 
-#: ../src/common/translation.cpp:1111
+#: ../src/common/translation.cpp:1112
 msgid "Invalid message catalog."
 msgstr "İleti kataloğu geçersiz."
 
@@ -4177,8 +4242,8 @@ msgstr "Kurallı ifade geçersiz '%s': %s"
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr "Ayar dosyasındaki %ld değeri \"%s\" ikili anahtarı için geçersiz."
 
-#: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:333
-#: ../src/osx/carbon/fontdlg.cpp:547 ../src/common/stockitem.cpp:168
+#: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:349
+#: ../src/osx/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:168
 msgid "Italic"
 msgstr "Yatık"
 
@@ -4398,9 +4463,9 @@ msgstr "Ledger, 17 x 11 inç"
 #: ../src/richtext/richtextliststylepage.cpp:249
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextbulletspage.cpp:199
-#: ../src/richtext/richtextbulletspage.cpp:202
-#: ../src/richtext/richtextbulletspage.cpp:203
+#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "Sol"
@@ -4478,7 +4543,7 @@ msgstr "Satır aralığı:"
 msgid "Link contained '//', converted to absolute link."
 msgstr "Bağlantı '//' içeriyor, mutlak bağlantıya dönüştürüldü."
 
-#: ../src/richtext/richtextformatdlg.cpp:349
+#: ../src/richtext/richtextformatdlg.cpp:370
 msgid "List Style"
 msgstr "Liste Stili"
 
@@ -4486,22 +4551,22 @@ msgstr "Liste Stili"
 msgid "List styles"
 msgstr "Liste stilleri"
 
-#: ../src/richtext/richtextfontpage.cpp:206
-#: ../src/richtext/richtextfontpage.cpp:208
+#: ../src/richtext/richtextfontpage.cpp:197
+#: ../src/richtext/richtextfontpage.cpp:199
 msgid "Lists font sizes in points."
 msgstr "Yazı tipi boyutları punto olarak listelenir."
 
-#: ../src/richtext/richtextfontpage.cpp:199
-#: ../src/richtext/richtextfontpage.cpp:201
+#: ../src/richtext/richtextfontpage.cpp:190
+#: ../src/richtext/richtextfontpage.cpp:192
 msgid "Lists the available fonts."
 msgstr "Kullanılabilir yazı tipleri listelenir."
 
-#: ../src/common/fldlgcmn.cpp:325
+#: ../src/common/fldlgcmn.cpp:330
 #, c-format
 msgid "Load %s file"
 msgstr "%s dosyasını yükleyin"
 
-#: ../src/html/htmlwin.cpp:575
+#: ../src/html/htmlwin.cpp:588
 msgid "Loading : "
 msgstr "Yükleniyor :"
 
@@ -4521,12 +4586,12 @@ msgid "Log saved to the file '%s'."
 msgstr "Günlük '%s' dosyasına kaydedildi."
 
 #: ../src/richtext/richtextliststylepage.cpp:484
-#: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextbulletspage.cpp:276
 msgid "Lower case letters"
 msgstr "Küçük harfler"
 
 #: ../src/richtext/richtextliststylepage.cpp:486
-#: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextbulletspage.cpp:278
 msgid "Lower case roman numerals"
 msgstr "Küçük harf Romen rakamları"
 
@@ -4710,12 +4775,12 @@ msgstr "MacTürkçe"
 msgid "MacVietnamese"
 msgstr "MacVietnamca"
 
-#: ../src/propgrid/advprops.cpp:2031
+#: ../src/propgrid/advprops.cpp:2012
 msgid "Make a selection:"
 msgstr "Bir seçim yapın:"
 
-#: ../src/richtext/richtextformatdlg.cpp:362
-#: ../src/richtext/richtextmarginspage.cpp:172
+#: ../src/richtext/richtextformatdlg.cpp:383
+#: ../src/richtext/richtextmarginspage.cpp:171
 msgid "Margins"
 msgstr "Kenar Boşlukları"
 
@@ -4753,7 +4818,7 @@ msgstr "İleti"
 msgid "Metal theme"
 msgstr "Metal tema"
 
-#: ../src/msw/ole/automtn.cpp:641
+#: ../src/msw/ole/automtn.cpp:655
 msgid "Method or property not found."
 msgstr "Yordam ya da özellik bulunamadı"
 
@@ -4769,7 +4834,7 @@ msgstr "En az yükseklik:"
 msgid "Min width:"
 msgstr "En az genişlik:"
 
-#: ../src/msw/ole/automtn.cpp:657
+#: ../src/msw/ole/automtn.cpp:671
 msgid "Missing a required parameter."
 msgstr "Gereken bir parametre eksik."
 
@@ -4812,7 +4877,7 @@ msgstr "Nesne sonraki paragrafa taşınır."
 msgid "Moves the object to the previous paragraph."
 msgstr "Nesne önceki paragrafa taşınır."
 
-#: ../src/richtext/richtextbuffer.cpp:9345
+#: ../src/richtext/richtextbuffer.cpp:9746
 msgid "Multiple Cell Properties"
 msgstr "Çoklu Hücre Özellikleri"
 
@@ -4848,16 +4913,16 @@ msgstr "Yeni &Liste Stili..."
 msgid "New &Paragraph Style..."
 msgstr "Yeni &Paragraf Stili..."
 
-#: ../src/richtext/richtextstyledlg.cpp:603
-#: ../src/richtext/richtextstyledlg.cpp:608
-#: ../src/richtext/richtextstyledlg.cpp:651
-#: ../src/richtext/richtextstyledlg.cpp:656
-#: ../src/richtext/richtextstyledlg.cpp:817
-#: ../src/richtext/richtextstyledlg.cpp:822
-#: ../src/richtext/richtextstyledlg.cpp:890
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:931
-#: ../src/richtext/richtextstyledlg.cpp:936
+#: ../src/richtext/richtextstyledlg.cpp:606
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:654
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:820
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:893
+#: ../src/richtext/richtextstyledlg.cpp:901
+#: ../src/richtext/richtextstyledlg.cpp:934
+#: ../src/richtext/richtextstyledlg.cpp:939
 msgid "New Style"
 msgstr "Yeni Stil"
 
@@ -4874,11 +4939,11 @@ msgstr "Yeni öge"
 msgid "NewName"
 msgstr "YeniAd"
 
-#: ../src/generic/tipdlg.cpp:305
+#: ../src/generic/tipdlg.cpp:300
 msgid "Next"
 msgstr "Sonraki"
 
-#: ../src/common/prntbase.cpp:1537 ../src/html/helpwnd.cpp:678
+#: ../src/common/prntbase.cpp:1537 ../src/html/helpwnd.cpp:679
 msgid "Next page"
 msgstr "Sonraki sayfa"
 
@@ -4897,19 +4962,19 @@ msgstr "%ld tipi için canlandırma işleyicisi tanımlanmamış."
 msgid "No bitmap handler for type %d defined."
 msgstr "%d tipi için bit eşlemi işleyicisi tanımlanmamış."
 
-#: ../src/osx/carbon/dataview.cpp:1784
+#: ../src/osx/carbon/dataview.cpp:1782
 msgid "No column existing."
 msgstr "Hiç bir sütun bulunamadı."
 
-#: ../src/osx/carbon/dataview.cpp:1674
+#: ../src/osx/carbon/dataview.cpp:1672
 msgid "No column for the specified column existing."
 msgstr "Belirtilen sütun için varolan bir sütun yok."
 
-#: ../src/osx/carbon/dataview.cpp:1423
+#: ../src/osx/carbon/dataview.cpp:1421
 msgid "No column for the specified column position existing."
 msgstr "Belirtilen konumda sütun bulunamadı."
 
-#: ../src/common/utilscmn.cpp:1049
+#: ../src/common/utilscmn.cpp:1056
 msgid "No default application configured for HTML files."
 msgstr "HTML dosyaları için varsayılan uygulama ayarlanmamış."
 
@@ -4960,15 +5025,15 @@ msgstr "%d tipinin görüntü işleyicisi tanımlanmamış."
 msgid "No image handler for type %s defined."
 msgstr "%s tipinin görüntü işleyicisi tanımlanmamış."
 
-#: ../src/html/helpwnd.cpp:871
+#: ../src/html/helpwnd.cpp:872
 msgid "No matching page found yet"
 msgstr "Henüz uyan bir sayfa bulunamadı"
 
-#: ../src/osx/carbon/dataview.cpp:1676 ../src/osx/carbon/dataview.cpp:1786
+#: ../src/osx/carbon/dataview.cpp:1674 ../src/osx/carbon/dataview.cpp:1784
 msgid "No renderer or invalid renderer type specified for custom data column."
 msgstr "Özel veri sütunu için görüntüleyici belirtilmemiş ya da geçersiz."
 
-#: ../src/osx/carbon/dataview.cpp:1424
+#: ../src/osx/carbon/dataview.cpp:1422
 msgid "No renderer specified for column."
 msgstr "Sütun görüntüleyici belirtilmemiş."
 
@@ -4989,7 +5054,7 @@ msgstr "Görselde kullanılmamış renk yok"
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "\"%s\" dosyasında geçerli eşleme bulunamadı."
 
-#: ../src/richtext/richtextborderspage.cpp:542
+#: ../src/richtext/richtextborderspage.cpp:613
 #: ../src/richtext/richtextsizepage.cpp:248
 #: ../src/richtext/richtextsizepage.cpp:252
 msgid "None"
@@ -5003,15 +5068,15 @@ msgstr "Norveçce (ISO-8859-10)"
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/html/helpwnd.cpp:1276
+#: ../src/html/helpwnd.cpp:1277
 msgid "Normal face<br>and <u>underlined</u>. "
 msgstr "Normal yazı tipi <br>ve <u>altı çizili</u>. "
 
-#: ../src/html/helpwnd.cpp:1218
+#: ../src/html/helpwnd.cpp:1219
 msgid "Normal font:"
 msgstr "Normal yazı tipi:"
 
-#: ../src/propgrid/props.cpp:887
+#: ../src/propgrid/props.cpp:898
 #, c-format
 msgid "Not %s"
 msgstr "%s değil"
@@ -5020,7 +5085,7 @@ msgstr "%s değil"
 msgid "Not available"
 msgstr "Kullanılamıyor"
 
-#: ../src/richtext/richtextfontpage.cpp:340
+#: ../src/richtext/richtextfontpage.cpp:356
 msgid "Not underlined"
 msgstr "Altı çizili değil"
 
@@ -5032,32 +5097,32 @@ msgstr "Not, 8 1/2 x 11 inç"
 msgid "Notice"
 msgstr "Bildirim"
 
-#: ../src/osx/carbon/dataview.cpp:902
+#: ../src/osx/carbon/dataview.cpp:900
 msgid "Number of columns could not be determined."
 msgstr "Sütun sayısı belirlenemedi."
 
 #: ../src/richtext/richtextliststylepage.cpp:487
-#: ../src/richtext/richtextbulletspage.cpp:292
+#: ../src/richtext/richtextbulletspage.cpp:279
 msgid "Numbered outline"
 msgstr "Numaralı taslak"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "Tamam"
 
-#: ../src/msw/ole/automtn.cpp:681
+#: ../src/msw/ole/automtn.cpp:695
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr "%s içinde OLE otomasyon hatası: %s"
 
-#: ../include/wx/richtext/richtextimagedlg.h:39
+#: ../include/wx/richtext/richtextimagedlg.h:37
 msgid "Object Properties"
 msgstr "Nesne Özellikleri"
 
-#: ../src/msw/ole/automtn.cpp:649
+#: ../src/msw/ole/automtn.cpp:663
 msgid "Object implementation does not support named arguments."
 msgstr "Nesne uygulaması adlandırılmış argümanları desteklemiyor."
 
@@ -5065,11 +5130,11 @@ msgstr "Nesne uygulaması adlandırılmış argümanları desteklemiyor."
 msgid "Objects must have an id attribute"
 msgstr "Nesnelerin bir kod özniteliği olmalıdır"
 
-#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
 msgid "Open File"
 msgstr "Dosya Açın"
 
-#: ../src/html/helpwnd.cpp:684 ../src/html/helpwnd.cpp:1557
+#: ../src/html/helpwnd.cpp:685 ../src/html/helpwnd.cpp:1568
 msgid "Open HTML document"
 msgstr "HTML belgesi açın"
 
@@ -5092,17 +5157,17 @@ msgstr "\"%s\" OpenGL işlevi çalıştırılamadı: %s (hata %d)"
 msgid "Operation not permitted."
 msgstr "İşleme izin verilmiyor."
 
-#: ../src/common/cmdline.cpp:735
+#: ../src/common/cmdline.cpp:894
 #, c-format
 msgid "Option '%s' can't be negated"
 msgstr "'%s' seçeneği yok sayılamaz"
 
-#: ../src/common/cmdline.cpp:899
+#: ../src/common/cmdline.cpp:1058
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "'%s' seçeneğinin bir değeri olması gerekiyor."
 
-#: ../src/common/cmdline.cpp:982
+#: ../src/common/cmdline.cpp:1141
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "'%s' seçeneği: '%s' tarihe dönüştürülemiyor."
@@ -5119,16 +5184,16 @@ msgstr "Yön"
 msgid "Out of window IDs.  Recommend shutting down application."
 msgstr "Pencere kodları tükendi. Uygulamayı kapatmanız önerilir."
 
-#: ../src/richtext/richtextborderspage.cpp:400
-#: ../src/richtext/richtextborderspage.cpp:533
+#: ../src/richtext/richtextborderspage.cpp:401
+#: ../src/richtext/richtextborderspage.cpp:559
 msgid "Outline"
 msgstr "Taslak"
 
-#: ../src/richtext/richtextborderspage.cpp:550
+#: ../src/richtext/richtextborderspage.cpp:621
 msgid "Outset"
 msgstr "Kabartma"
 
-#: ../src/msw/ole/automtn.cpp:645
+#: ../src/msw/ole/automtn.cpp:659
 msgid "Overflow while coercing argument values."
 msgstr "Arguman değerleri zorlanırken taşma."
 
@@ -5297,7 +5362,7 @@ msgstr "PRC Zarf #9 Çevrilmiş 324 x 229 mm"
 msgid "PRINT"
 msgstr "PRINT"
 
-#: ../src/richtext/richtextmarginspage.cpp:286
+#: ../src/richtext/richtextmarginspage.cpp:285
 msgid "Padding"
 msgstr "Yastıklama"
 
@@ -5341,7 +5406,7 @@ msgstr "SetObject işlevine zaten kayıtlı olan bir nesne gönderildi"
 msgid "Passing an unknown object to GetObject"
 msgstr "GetObject işlevine bilinmeyen bir nesne gönderildi"
 
-#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3242 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "Yapıştırın"
@@ -5351,7 +5416,7 @@ msgid "Paste selection"
 msgstr "Seçimi yapıştırın"
 
 #: ../src/richtext/richtextliststylepage.cpp:222
-#: ../src/richtext/richtextbulletspage.cpp:172
+#: ../src/richtext/richtextbulletspage.cpp:159
 msgid "Peri&od"
 msgstr "N&okta"
 
@@ -5359,7 +5424,7 @@ msgstr "N&okta"
 msgid "Permissions"
 msgstr "İzinler"
 
-#: ../src/richtext/richtextbuffer.cpp:11942
+#: ../src/richtext/richtextbuffer.cpp:12512
 msgid "Picture Properties"
 msgstr "Görsel Özellikleri"
 
@@ -5375,7 +5440,7 @@ msgstr "Lütfen geçerli bir yazı tipi seçin."
 msgid "Please choose an existing file."
 msgstr "Lütfen varolan bir dosya seçin."
 
-#: ../src/html/helpwnd.cpp:813
+#: ../src/html/helpwnd.cpp:814
 msgid "Please choose the page to display:"
 msgstr "Lütfen görüntülenecek sayfayı seçin:"
 
@@ -5402,24 +5467,24 @@ msgstr "Lütfen görüntülenecek sütunları seçin ve sıralarını belirleyin
 msgid "Please wait while printing..."
 msgstr "Yazdırılıyor, lütfen bekleyin..."
 
-#: ../src/propgrid/advprops.cpp:631
+#: ../src/propgrid/advprops.cpp:632
 msgid "Point Size"
 msgstr "Punto Boyutu"
 
-#: ../src/osx/carbon/dataview.cpp:1278 ../src/osx/carbon/dataview.cpp:1329
-#: ../src/osx/carbon/dataview.cpp:1420 ../src/osx/carbon/dataview.cpp:1443
-#: ../src/osx/carbon/dataview.cpp:1460 ../src/osx/carbon/dataview.cpp:1477
-#: ../src/osx/carbon/dataview.cpp:1670 ../src/osx/carbon/dataview.cpp:1779
-#: ../src/osx/carbon/dataview.cpp:1821 ../src/osx/carbon/dataview.cpp:1874
-#: ../src/osx/carbon/dataview.cpp:1997
+#: ../src/osx/carbon/dataview.cpp:1276 ../src/osx/carbon/dataview.cpp:1327
+#: ../src/osx/carbon/dataview.cpp:1418 ../src/osx/carbon/dataview.cpp:1441
+#: ../src/osx/carbon/dataview.cpp:1458 ../src/osx/carbon/dataview.cpp:1475
+#: ../src/osx/carbon/dataview.cpp:1668 ../src/osx/carbon/dataview.cpp:1777
+#: ../src/osx/carbon/dataview.cpp:1819 ../src/osx/carbon/dataview.cpp:1872
+#: ../src/osx/carbon/dataview.cpp:1995
 msgid "Pointer to data view control not set correctly."
 msgstr "Veri görünümü denetimi imleci doğru olarak ayarlanmamış."
 
-#: ../src/osx/carbon/dataview.cpp:1279 ../src/osx/carbon/dataview.cpp:1338
-#: ../src/osx/carbon/dataview.cpp:1421 ../src/osx/carbon/dataview.cpp:1478
-#: ../src/osx/carbon/dataview.cpp:1671 ../src/osx/carbon/dataview.cpp:1780
-#: ../src/osx/carbon/dataview.cpp:1822 ../src/osx/carbon/dataview.cpp:1875
-#: ../src/osx/carbon/dataview.cpp:1998
+#: ../src/osx/carbon/dataview.cpp:1277 ../src/osx/carbon/dataview.cpp:1336
+#: ../src/osx/carbon/dataview.cpp:1419 ../src/osx/carbon/dataview.cpp:1476
+#: ../src/osx/carbon/dataview.cpp:1669 ../src/osx/carbon/dataview.cpp:1778
+#: ../src/osx/carbon/dataview.cpp:1820 ../src/osx/carbon/dataview.cpp:1873
+#: ../src/osx/carbon/dataview.cpp:1996
 msgid "Pointer to model not set correctly."
 msgstr "Model imleci doğru olarak ayarlanmamış."
 
@@ -5439,7 +5504,7 @@ msgstr "PostScript dosyası"
 msgid "Preferences"
 msgstr "Ayarlar"
 
-#: ../src/osx/menu_osx.cpp:643
+#: ../src/osx/menu_osx.cpp:614
 msgid "Preferences..."
 msgstr "Ayarlar..."
 
@@ -5447,12 +5512,12 @@ msgstr "Ayarlar..."
 msgid "Preparing"
 msgstr "Hazırlanıyor"
 
-#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:576
-#: ../src/html/helpwnd.cpp:1235
+#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:560
+#: ../src/html/helpwnd.cpp:1236
 msgid "Preview:"
 msgstr "Önizleme:"
 
-#: ../src/common/prntbase.cpp:1523 ../src/html/helpwnd.cpp:677
+#: ../src/common/prntbase.cpp:1523 ../src/html/helpwnd.cpp:678
 msgid "Previous page"
 msgstr "Önceki sayfa"
 
@@ -5462,7 +5527,7 @@ msgstr "Önceki sayfa"
 msgid "Print"
 msgstr "Yazdırın"
 
-#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1250
+#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1257
 msgid "Print Preview"
 msgstr "Baskı Önizlemesi"
 
@@ -5487,7 +5552,7 @@ msgstr "Renkli yazdırın"
 msgid "Print previe&w..."
 msgstr "Baskı ö&nizleme..."
 
-#: ../src/common/docview.cpp:1244
+#: ../src/common/docview.cpp:1251
 msgid "Print preview creation failed."
 msgstr "Baskı önizleme oluşturulamadı."
 
@@ -5499,7 +5564,7 @@ msgstr "Baskı önizleme..."
 msgid "Print spooling"
 msgstr "Yazdırma kuyruğu"
 
-#: ../src/html/helpwnd.cpp:688
+#: ../src/html/helpwnd.cpp:689
 msgid "Print this page"
 msgstr "Bu sayfayı yazdırın"
 
@@ -5563,7 +5628,7 @@ msgid "Printing..."
 msgstr "Yazdırılıyor..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2124
+#: ../src/common/docview.cpp:2121
 msgid "Printout"
 msgstr "Çıktı"
 
@@ -5574,7 +5639,7 @@ msgid ""
 msgstr ""
 "Hata ayıklama raporu oluşturulamadı, dosyalar \"%s\" klasöründe bırakıldı."
 
-#: ../src/osx/carbon/dataview.cpp:2472
+#: ../src/osx/carbon/dataview.cpp:2470
 msgid "Progress renderer cannot render value type; value type: "
 msgstr "İşlem görüntüleyici değeri işleyemiyor; değer tipi:"
 
@@ -5590,7 +5655,7 @@ msgstr "Özellikler"
 msgid "Property"
 msgstr "Özellik"
 
-#: ../src/propgrid/propgrid.cpp:3144 ../src/propgrid/propgrid.cpp:3276
+#: ../src/propgrid/propgrid.cpp:3131 ../src/propgrid/propgrid.cpp:3263
 msgid "Property Error"
 msgstr "Özellik Hatası"
 
@@ -5606,7 +5671,7 @@ msgstr "Soru"
 msgid "Quit"
 msgstr "Çıkış"
 
-#: ../src/osx/menu_osx.cpp:610 ../src/osx/menu_osx.cpp:657
+#: ../src/osx/menu_osx.cpp:631
 #, c-format
 msgid "Quit %s"
 msgstr "%s uygulamasından çıkın"
@@ -5674,8 +5739,8 @@ msgstr ""
 msgid "Registry value '%s' already exists."
 msgstr "'%s' kayıt değeri zaten var."
 
-#: ../src/richtext/richtextfontpage.cpp:332
-#: ../src/richtext/richtextfontpage.cpp:336
+#: ../src/richtext/richtextfontpage.cpp:348
+#: ../src/richtext/richtextfontpage.cpp:352
 msgid "Regular"
 msgstr "Normal"
 
@@ -5695,11 +5760,11 @@ msgstr "Kalan süre:"
 msgid "Remove"
 msgstr "Silin"
 
-#: ../src/richtext/richtextctrl.cpp:1430
+#: ../src/richtext/richtextctrl.cpp:1522
 msgid "Remove Bullet"
 msgstr "Madde İmini Kaldırın"
 
-#: ../src/html/helpwnd.cpp:440
+#: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
 msgstr "Geçerli sayfayı yer imlerinden silin"
 
@@ -5708,11 +5773,11 @@ msgstr "Geçerli sayfayı yer imlerinden silin"
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
 msgstr "\"%s\" görüntüleyicisinin %d.%d sürümü uyumsuz olduğundan yüklenemedi."
 
-#: ../src/osx/carbon/dataview.cpp:1430
+#: ../src/osx/carbon/dataview.cpp:1428
 msgid "Rendering failed."
 msgstr "Görüntülenemiyor."
 
-#: ../src/richtext/richtextbuffer.cpp:4214
+#: ../src/richtext/richtextbuffer.cpp:4415
 msgid "Renumber List"
 msgstr "Listeyi Yeniden Numaralayın"
 
@@ -5720,7 +5785,7 @@ msgstr "Listeyi Yeniden Numaralayın"
 msgid "Rep&lace"
 msgstr "&Değiştirin"
 
-#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3402 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "Değiştirin"
 
@@ -5736,7 +5801,7 @@ msgstr "Seçimi değiştirin"
 msgid "Replace with:"
 msgstr "Şununla değiştirin:"
 
-#: ../src/common/valtext.cpp:161
+#: ../src/common/valtext.cpp:163
 msgid "Required information entry is empty."
 msgstr "Gereken bilgi kayıdı boş."
 
@@ -5749,12 +5814,16 @@ msgstr "'%s' kaynağı geçerli bir ileti kataloğu değil."
 msgid "Revert to Saved"
 msgstr "Kaydedilmiş Olana Geri Dönün"
 
-#: ../src/richtext/richtextborderspage.cpp:548
+#: ../src/richtext/richtextborderspage.cpp:619
 msgid "Ridge"
 msgstr "Sırt"
 
+#: ../src/richtext/richtextfontpage.cpp:313
+msgid "Rig&ht-to-left"
+msgstr ""
+
 #: ../src/richtext/richtextliststylepage.cpp:251
-#: ../src/richtext/richtextbulletspage.cpp:201
+#: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "Sağ"
@@ -5775,7 +5844,7 @@ msgid "Roman"
 msgstr "Roman"
 
 #: ../src/richtext/richtextliststylepage.cpp:299
-#: ../src/richtext/richtextbulletspage.cpp:252
+#: ../src/richtext/richtextbulletspage.cpp:239
 msgid "S&tandard bullet name:"
 msgstr "S&tandart madde imi adı:"
 
@@ -5807,11 +5876,11 @@ msgstr "SPECIAL"
 msgid "SUBTRACT"
 msgstr "SUBTRACT"
 
-#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2678
+#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2682
 msgid "Save"
 msgstr "Kaydedin"
 
-#: ../src/common/fldlgcmn.cpp:327
+#: ../src/common/fldlgcmn.cpp:332
 #, c-format
 msgid "Save %s file"
 msgstr "%s dosyasını kaydedin"
@@ -5844,12 +5913,12 @@ msgstr "Günlük içeriğini dosyaya kaydedin"
 msgid "Script"
 msgstr "Betik"
 
-#: ../src/generic/srchctlg.cpp:67 ../src/html/helpwnd.cpp:548
-#: ../src/html/helpwnd.cpp:563
+#: ../src/generic/srchctlg.cpp:67 ../src/html/helpwnd.cpp:549
+#: ../src/html/helpwnd.cpp:564
 msgid "Search"
 msgstr "Arayın"
 
-#: ../src/html/helpwnd.cpp:550
+#: ../src/html/helpwnd.cpp:551
 msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
 "above"
@@ -5863,11 +5932,11 @@ msgstr "Arama yönü"
 msgid "Search for:"
 msgstr "Aranan:"
 
-#: ../src/html/helpwnd.cpp:1065
+#: ../src/html/helpwnd.cpp:1066
 msgid "Search in all books"
 msgstr "Tüm kitaplarda arayın"
 
-#: ../src/html/helpwnd.cpp:870
+#: ../src/html/helpwnd.cpp:871
 msgid "Searching..."
 msgstr "Aranıyor..."
 
@@ -5887,8 +5956,8 @@ msgstr ""
 "'%s' dosyasında arama hatası (büyük dosyalar 'stdio' tarafından "
 "desteklenmiyor)"
 
-#: ../src/richtext/richtextctrl.cpp:330 ../src/osx/textctrl_osx.cpp:587
-#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2288
+#: ../src/richtext/richtextctrl.cpp:336 ../src/osx/textctrl_osx.cpp:587
+#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2339
 msgid "Select &All"
 msgstr "&Tümünü Seçin"
 
@@ -5896,26 +5965,26 @@ msgstr "&Tümünü Seçin"
 msgid "Select All"
 msgstr "Tümünü Seçin"
 
-#: ../src/common/docview.cpp:1877
+#: ../src/common/docview.cpp:1884
 msgid "Select a document template"
 msgstr "Bir belge şablonu seçin"
 
-#: ../src/common/docview.cpp:1951
+#: ../src/common/docview.cpp:1958
 msgid "Select a document view"
 msgstr "Bir belge görünümü seçin"
 
-#: ../src/richtext/richtextfontpage.cpp:235
-#: ../src/richtext/richtextfontpage.cpp:237
+#: ../src/richtext/richtextfontpage.cpp:226
+#: ../src/richtext/richtextfontpage.cpp:228
 msgid "Select regular or bold."
 msgstr "Normal ya da koyu seçin."
 
-#: ../src/richtext/richtextfontpage.cpp:222
-#: ../src/richtext/richtextfontpage.cpp:224
+#: ../src/richtext/richtextfontpage.cpp:213
+#: ../src/richtext/richtextfontpage.cpp:215
 msgid "Select regular or italic style."
 msgstr "Normal ya da yatık stil seçin."
 
-#: ../src/richtext/richtextfontpage.cpp:248
-#: ../src/richtext/richtextfontpage.cpp:250
+#: ../src/richtext/richtextfontpage.cpp:239
+#: ../src/richtext/richtextfontpage.cpp:241
 msgid "Select underlining or no underlining."
 msgstr "Altıçizili ya da normal  seçin."
 
@@ -5928,12 +5997,16 @@ msgstr "Seçim"
 msgid "Selects the list level to edit."
 msgstr "Düzenlenecek liste düzeyini seçer."
 
-#: ../src/common/cmdline.cpp:918
+#: ../src/common/cmdline.cpp:1077
 #, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "'%s' seçeneğinden sonra ayraç bekleniyor."
 
-#: ../src/richtext/richtextbuffer.cpp:10513
+#: ../src/osx/menu_osx.cpp:618
+msgid "Services"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
 msgstr "Hücre Stilini Ayarlayın"
 
@@ -5941,7 +6014,7 @@ msgstr "Hücre Stilini Ayarlayın"
 msgid "SetProperty called w/o valid setter"
 msgstr "'SetProperty' işlevi geçerli bir yerleştirici olmaksızın çağrıldı"
 
-#: ../src/common/filename.cpp:2632
+#: ../src/common/filename.cpp:2638
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 "Klasör erişim zamanları ayarı bu işletim sistemi sürümünde desteklenmiyor"
@@ -5966,7 +6039,7 @@ msgstr "Gizli &klasörler görüntülensin"
 msgid "Show &hidden files"
 msgstr "Gizli &dosyalar görüntülensin"
 
-#: ../src/osx/menu_osx.cpp:605 ../src/osx/menu_osx.cpp:652
+#: ../src/osx/menu_osx.cpp:626
 msgid "Show All"
 msgstr "Tümü Görüntülensin"
 
@@ -5974,11 +6047,11 @@ msgstr "Tümü Görüntülensin"
 msgid "Show about dialog"
 msgstr "Hakkında penceresi görüntülensin"
 
-#: ../src/html/helpwnd.cpp:502
+#: ../src/html/helpwnd.cpp:503
 msgid "Show all"
 msgstr "Tümü görüntülensin"
 
-#: ../src/html/helpwnd.cpp:513
+#: ../src/html/helpwnd.cpp:514
 msgid "Show all items in index"
 msgstr "Dizindeki tüm ögeler görüntülensin"
 
@@ -5986,7 +6059,7 @@ msgstr "Dizindeki tüm ögeler görüntülensin"
 msgid "Show hidden directories"
 msgstr "Gizli klasörler görüntülensin"
 
-#: ../src/html/helpwnd.cpp:671
+#: ../src/html/helpwnd.cpp:672
 msgid "Show/hide navigation panel"
 msgstr "Gezinti panelini görüntüleyin/gizleyin"
 
@@ -5997,17 +6070,17 @@ msgstr "Bir Unikod alt kümesi görüntülenir."
 
 #: ../src/richtext/richtextliststylepage.cpp:472
 #: ../src/richtext/richtextliststylepage.cpp:474
-#: ../src/richtext/richtextbulletspage.cpp:276
-#: ../src/richtext/richtextbulletspage.cpp:278
+#: ../src/richtext/richtextbulletspage.cpp:263
+#: ../src/richtext/richtextbulletspage.cpp:265
 msgid "Shows a preview of the bullet settings."
 msgstr "Madde imi ayarlarının önizlemesi görüntülenir."
 
-#: ../src/richtext/richtextfontpage.cpp:322
-#: ../src/richtext/richtextfontpage.cpp:324
+#: ../src/richtext/richtextfontpage.cpp:330
+#: ../src/richtext/richtextfontpage.cpp:332
 msgid "Shows a preview of the font settings."
 msgstr "Yazı tipi ayarlarının bir önizlemesi görüntülenir."
 
-#: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
+#: ../src/osx/carbon/fontdlg.cpp:564 ../src/osx/carbon/fontdlg.cpp:566
 msgid "Shows a preview of the font."
 msgstr "Yazı tipinin önizlemesi görüntülenir."
 
@@ -6029,12 +6102,12 @@ msgstr "Basit tek renkli tema"
 msgid "Single"
 msgstr "Tek"
 
-#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
+#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:377
 #: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "Boyut"
 
-#: ../src/osx/carbon/fontdlg.cpp:525
+#: ../src/osx/carbon/fontdlg.cpp:509
 msgid "Size:"
 msgstr "Boyut:"
 
@@ -6047,15 +6120,15 @@ msgstr "Atlayın"
 msgid "Slant"
 msgstr "Eğik"
 
-#: ../src/richtext/richtextfontpage.cpp:298
+#: ../src/richtext/richtextfontpage.cpp:289
 msgid "Small C&apitals"
 msgstr "Küçük H&arfler"
 
-#: ../src/richtext/richtextborderspage.cpp:543
+#: ../src/richtext/richtextborderspage.cpp:614
 msgid "Solid"
 msgstr "Katı"
 
-#: ../src/common/docview.cpp:1773
+#: ../src/common/docview.cpp:1780
 msgid "Sorry, could not open this file."
 msgstr "Malesef bu dosya açılamıyor."
 
@@ -6063,15 +6136,15 @@ msgstr "Malesef bu dosya açılamıyor."
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Malesef önizleme oluşturmak için yeterli bellek yok."
 
-#: ../src/richtext/richtextstyledlg.cpp:608
-#: ../src/richtext/richtextstyledlg.cpp:656
-#: ../src/richtext/richtextstyledlg.cpp:822
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:936
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:901
+#: ../src/richtext/richtextstyledlg.cpp:939
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "Malesef bu ad kullanılmış. Lütfen başka bir ad seçin."
 
-#: ../src/common/docview.cpp:1796
+#: ../src/common/docview.cpp:1803
 msgid "Sorry, the format for this file is unknown."
 msgstr "Malesef bu dosyanın biçimi bilinmiyor."
 
@@ -6093,7 +6166,7 @@ msgid "Spell Check"
 msgstr "Yazım Denetimi"
 
 #: ../src/richtext/richtextliststylepage.cpp:490
-#: ../src/richtext/richtextbulletspage.cpp:295
+#: ../src/richtext/richtextbulletspage.cpp:282
 msgid "Standard"
 msgstr "Standart"
 
@@ -6123,23 +6196,23 @@ msgstr "Üstü çizili"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Dizgeden Renge: Hatalı renk tanımı: %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:318 ../src/propgrid/advprops.cpp:647
+#: ../src/richtext/richtextformatdlg.cpp:339 ../src/propgrid/advprops.cpp:648
 msgid "Style"
 msgstr "Stil"
 
-#: ../include/wx/richtext/richtextstyledlg.h:47
+#: ../include/wx/richtext/richtextstyledlg.h:46
 msgid "Style Organiser"
 msgstr "Stil Düzenleyici"
 
-#: ../src/osx/carbon/fontdlg.cpp:534
+#: ../src/osx/carbon/fontdlg.cpp:518
 msgid "Style:"
 msgstr "Stil:"
 
-#: ../src/richtext/richtextfontpage.cpp:312
+#: ../src/richtext/richtextfontpage.cpp:303
 msgid "Subscrip&t"
 msgstr "Al&tyazı"
 
-#: ../src/richtext/richtextfontpage.cpp:305
+#: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
 msgstr "Ü&styazı"
 
@@ -6151,17 +6224,21 @@ msgstr "SuperA/SuperA/A4 227 x 356 mm"
 msgid "SuperB/SuperB/A3 305 x 487 mm"
 msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
+#: ../src/richtext/richtextfontpage.cpp:320
+msgid "Suppress hyphe&nation"
+msgstr ""
+
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
 msgstr "İsveç"
 
 #: ../src/richtext/richtextliststylepage.cpp:488
-#: ../src/richtext/richtextbulletspage.cpp:293
+#: ../src/richtext/richtextbulletspage.cpp:280
 msgid "Symbol"
 msgstr "Sembol"
 
 #: ../src/richtext/richtextliststylepage.cpp:288
-#: ../src/richtext/richtextbulletspage.cpp:240
+#: ../src/richtext/richtextbulletspage.cpp:227
 msgid "Symbol &font:"
 msgstr "Sembol &yazı tipi:"
 
@@ -6198,7 +6275,7 @@ msgstr "TIFF: Görsel yazma hatası."
 msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF: Görsel boyutu anormal büyük."
 
-#: ../src/richtext/richtextbuffer.cpp:10794
+#: ../src/richtext/richtextbuffer.cpp:11262
 msgid "Table Properties"
 msgstr "Tablo Özellikleri"
 
@@ -6210,7 +6287,7 @@ msgstr "Tabloid Ek 11.69 x 18 inç"
 msgid "Tabloid, 11 x 17 in"
 msgstr "Tabloid, 11 x 17 inç"
 
-#: ../src/richtext/richtextformatdlg.cpp:336
+#: ../src/richtext/richtextformatdlg.cpp:357
 msgid "Tabs"
 msgstr "Sekmeler"
 
@@ -6218,11 +6295,11 @@ msgstr "Sekmeler"
 msgid "Teletype"
 msgstr "Teletype"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1885
 msgid "Templates"
 msgstr "Şablonlar"
 
-#: ../src/osx/carbon/dataview.cpp:2373
+#: ../src/osx/carbon/dataview.cpp:2371
 msgid "Text renderer cannot render value; value type: "
 msgstr "Metin görüntüleyici değeri işleyemiyor; değer tipi:"
 
@@ -6240,8 +6317,8 @@ msgstr "FTP sunucusu PORT komutunu desteklemiyor."
 
 #: ../src/richtext/richtextliststylepage.cpp:215
 #: ../src/richtext/richtextliststylepage.cpp:217
-#: ../src/richtext/richtextbulletspage.cpp:164
-#: ../src/richtext/richtextbulletspage.cpp:166
+#: ../src/richtext/richtextbulletspage.cpp:151
+#: ../src/richtext/richtextbulletspage.cpp:153
 msgid "The available bullet styles."
 msgstr "Kullanılabilecek madde imi stilleri."
 
@@ -6255,13 +6332,33 @@ msgstr "Kullanılabilecek stiller."
 msgid "The background colour."
 msgstr "Artalan rengi."
 
-#: ../src/richtext/richtextmarginspage.cpp:268
-#: ../src/richtext/richtextmarginspage.cpp:270
+#: ../src/richtext/richtextborderspage.cpp:269
+#: ../src/richtext/richtextborderspage.cpp:271
+#: ../src/richtext/richtextborderspage.cpp:303
+#: ../src/richtext/richtextborderspage.cpp:305
+#: ../src/richtext/richtextborderspage.cpp:337
+#: ../src/richtext/richtextborderspage.cpp:339
+#: ../src/richtext/richtextborderspage.cpp:371
+#: ../src/richtext/richtextborderspage.cpp:373
+#: ../src/richtext/richtextborderspage.cpp:438
+#: ../src/richtext/richtextborderspage.cpp:440
+#: ../src/richtext/richtextborderspage.cpp:472
+#: ../src/richtext/richtextborderspage.cpp:474
+#: ../src/richtext/richtextborderspage.cpp:506
+#: ../src/richtext/richtextborderspage.cpp:508
+#: ../src/richtext/richtextborderspage.cpp:540
+#: ../src/richtext/richtextborderspage.cpp:542
+#, fuzzy
+msgid "The border line style."
+msgstr "Yazı tipi stili."
+
+#: ../src/richtext/richtextmarginspage.cpp:267
+#: ../src/richtext/richtextmarginspage.cpp:269
 msgid "The bottom margin size."
 msgstr "Alt kenar boşluğunun boyutu."
 
-#: ../src/richtext/richtextmarginspage.cpp:382
-#: ../src/richtext/richtextmarginspage.cpp:384
+#: ../src/richtext/richtextmarginspage.cpp:381
+#: ../src/richtext/richtextmarginspage.cpp:383
 msgid "The bottom padding size."
 msgstr "Alt yastıklama boyutu."
 
@@ -6276,10 +6373,10 @@ msgstr "Alt konum."
 #: ../src/richtext/richtextliststylepage.cpp:256
 #: ../src/richtext/richtextliststylepage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:277
-#: ../src/richtext/richtextbulletspage.cpp:204
-#: ../src/richtext/richtextbulletspage.cpp:206
-#: ../src/richtext/richtextbulletspage.cpp:227
-#: ../src/richtext/richtextbulletspage.cpp:229
+#: ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/richtext/richtextbulletspage.cpp:193
+#: ../src/richtext/richtextbulletspage.cpp:214
+#: ../src/richtext/richtextbulletspage.cpp:216
 msgid "The bullet character."
 msgstr "Madde imi karakteri."
 
@@ -6299,13 +6396,13 @@ msgstr ""
 "başka bir tane seçebilir ya da \n"
 "seçemiyorsanız [İptal] düğmesine tıklayabilirsiniz"
 
-#: ../src/msw/ole/dataobj.cpp:367
+#: ../src/msw/ole/dataobj.cpp:394
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "'%d' pano biçimi bulunamıyor."
 
-#: ../src/richtext/richtextstylepage.cpp:128
 #: ../src/richtext/richtextstylepage.cpp:130
+#: ../src/richtext/richtextstylepage.cpp:132
 msgid "The default style for the next paragraph."
 msgstr "Sonraki paragraf için varsayılan stil."
 
@@ -6330,7 +6427,7 @@ msgstr ""
 "\n"
 "Buna rağmen yazdırmak istiyor musunuz?"
 
-#: ../src/common/docview.cpp:1184
+#: ../src/common/docview.cpp:1191
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -6368,12 +6465,12 @@ msgstr "Simgenin alınacağı yazı tipi."
 msgid "The font point size."
 msgstr "Yazı tipi punto boyutu."
 
-#: ../src/osx/carbon/fontdlg.cpp:529 ../src/osx/carbon/fontdlg.cpp:531
+#: ../src/osx/carbon/fontdlg.cpp:513 ../src/osx/carbon/fontdlg.cpp:515
 msgid "The font size in points."
 msgstr "Punto olarak yazı tipi boyutu."
 
-#: ../src/richtext/richtextfontpage.cpp:190
-#: ../src/richtext/richtextfontpage.cpp:192
+#: ../src/richtext/richtextfontpage.cpp:181
+#: ../src/richtext/richtextfontpage.cpp:183
 msgid "The font size units, points or pixels."
 msgstr "Yazı tipi boyutu birimi, punto ya da piksel."
 
@@ -6385,7 +6482,7 @@ msgstr "Yazı tipi stili."
 msgid "The font weight."
 msgstr "Yazı tipi yoğunluğu."
 
-#: ../src/common/docview.cpp:1465
+#: ../src/common/docview.cpp:1472
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "'%s' dosyasının biçimi belirlenemedi."
@@ -6397,13 +6494,13 @@ msgstr "'%s' dosyasının biçimi belirlenemedi."
 msgid "The left indent."
 msgstr "Sol girinti."
 
-#: ../src/richtext/richtextmarginspage.cpp:195
-#: ../src/richtext/richtextmarginspage.cpp:197
+#: ../src/richtext/richtextmarginspage.cpp:194
+#: ../src/richtext/richtextmarginspage.cpp:196
 msgid "The left margin size."
 msgstr "Sol kenar boşluğu boyutu."
 
-#: ../src/richtext/richtextmarginspage.cpp:309
-#: ../src/richtext/richtextmarginspage.cpp:311
+#: ../src/richtext/richtextmarginspage.cpp:308
+#: ../src/richtext/richtextmarginspage.cpp:310
 msgid "The left padding size."
 msgstr "Sol yastıklama boyutu."
 
@@ -6421,12 +6518,12 @@ msgstr "Sol konum."
 msgid "The line spacing."
 msgstr "Satır aralığı."
 
-#: ../src/richtext/richtextbulletspage.cpp:268
-#: ../src/richtext/richtextbulletspage.cpp:270
+#: ../src/richtext/richtextbulletspage.cpp:255
+#: ../src/richtext/richtextbulletspage.cpp:257
 msgid "The list item number."
 msgstr "Liste ögesi numarası."
 
-#: ../src/msw/ole/automtn.cpp:653
+#: ../src/msw/ole/automtn.cpp:667
 msgid "The locale ID is unknown."
 msgstr "Yerel kodu bilinmiyor."
 
@@ -6494,7 +6591,7 @@ msgstr ""
 "bilgileriniz varsa,\n"
 "rapordan çıkarmak istediğiniz dosyaların işaretini kaldırın.\n"
 
-#: ../src/common/cmdline.cpp:1083
+#: ../src/common/cmdline.cpp:1248
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Gerekli '%s' parametresi belirtilmemiş."
@@ -6506,13 +6603,13 @@ msgstr "Gerekli '%s' parametresi belirtilmemiş."
 msgid "The right indent."
 msgstr "Sağ girinti."
 
-#: ../src/richtext/richtextmarginspage.cpp:220
-#: ../src/richtext/richtextmarginspage.cpp:222
+#: ../src/richtext/richtextmarginspage.cpp:219
+#: ../src/richtext/richtextmarginspage.cpp:221
 msgid "The right margin size."
 msgstr "Sağ kenar boşluğu boyutu."
 
-#: ../src/richtext/richtextmarginspage.cpp:334
-#: ../src/richtext/richtextmarginspage.cpp:336
+#: ../src/richtext/richtextmarginspage.cpp:333
+#: ../src/richtext/richtextmarginspage.cpp:335
 msgid "The right padding size."
 msgstr "Sağ yastıklama boyutu."
 
@@ -6536,13 +6633,13 @@ msgstr "Paragraftan sonraki boşluk."
 msgid "The spacing before the paragraph."
 msgstr "Paragraftan önceki boşluk."
 
-#: ../src/richtext/richtextstylepage.cpp:108
 #: ../src/richtext/richtextstylepage.cpp:110
+#: ../src/richtext/richtextstylepage.cpp:112
 msgid "The style name."
 msgstr "Stil adı."
 
-#: ../src/richtext/richtextstylepage.cpp:118
 #: ../src/richtext/richtextstylepage.cpp:120
+#: ../src/richtext/richtextstylepage.cpp:122
 msgid "The style on which this style is based."
 msgstr "Bu stilin temel alındığı stil."
 
@@ -6551,30 +6648,30 @@ msgstr "Bu stilin temel alındığı stil."
 msgid "The style preview."
 msgstr "Stil önizlemesi."
 
-#: ../src/msw/ole/automtn.cpp:669
+#: ../src/msw/ole/automtn.cpp:683
 msgid "The system cannot find the file specified."
 msgstr "Sistem belirtilen dosyayı bulamadı."
 
-#: ../src/richtext/richtexttabspage.cpp:118
-#: ../src/richtext/richtexttabspage.cpp:120
+#: ../src/richtext/richtexttabspage.cpp:114
+#: ../src/richtext/richtexttabspage.cpp:116
 msgid "The tab position."
 msgstr "Sekme konumu."
 
-#: ../src/richtext/richtexttabspage.cpp:124
+#: ../src/richtext/richtexttabspage.cpp:120
 msgid "The tab positions."
 msgstr "Sekme konumları."
 
-#: ../src/richtext/richtextctrl.cpp:2705
+#: ../src/richtext/richtextctrl.cpp:2827
 msgid "The text couldn't be saved."
 msgstr "Metin kaydedilemedi."
 
-#: ../src/richtext/richtextmarginspage.cpp:243
-#: ../src/richtext/richtextmarginspage.cpp:245
+#: ../src/richtext/richtextmarginspage.cpp:242
+#: ../src/richtext/richtextmarginspage.cpp:244
 msgid "The top margin size."
 msgstr "Üst kenar boşluğu boyutu."
 
-#: ../src/richtext/richtextmarginspage.cpp:357
-#: ../src/richtext/richtextmarginspage.cpp:359
+#: ../src/richtext/richtextmarginspage.cpp:356
+#: ../src/richtext/richtextmarginspage.cpp:358
 msgid "The top padding size."
 msgstr "Üst yastıklama boyutu."
 
@@ -6585,10 +6682,15 @@ msgstr "Üst yastıklama boyutu."
 msgid "The top position."
 msgstr "Üst konum."
 
-#: ../src/common/cmdline.cpp:1061
+#: ../src/common/cmdline.cpp:1226
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "'%s' seçeneği için değer belirtilmelidir."
+
+#: ../src/richtext/richtextborderspage.cpp:588
+#: ../src/richtext/richtextborderspage.cpp:590
+msgid "The value of the corner radius."
+msgstr ""
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -6603,7 +6705,7 @@ msgstr ""
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "wxGtkPrinterDC kullanılamıyor."
 
-#: ../src/osx/carbon/dataview.cpp:1340
+#: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr "Belirtilen sütun dizin için sütun ya da görüntüleyici bulunamadı."
 
@@ -6629,7 +6731,7 @@ msgstr "Bu bir %s değil."
 msgid "This platform does not support background transparency."
 msgstr "Bu platformda artalan saydamlığı desteklenmiyor."
 
-#: ../src/gtk/window.cpp:4317
+#: ../src/gtk/window.cpp:4356
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6645,24 +6747,24 @@ msgstr ""
 "Bu sistem tarih ögelerini desteklemiyor, lütfen comctl32.dll sürümünü "
 "yükseltin"
 
-#: ../src/msw/thread.cpp:1300
+#: ../src/msw/thread.cpp:1295
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr "İş parçacığı modülü başlatılamadı: yerel depoya değer koyulamıyor"
 
-#: ../src/unix/threadpsx.cpp:1758
+#: ../src/unix/threadpsx.cpp:1763
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 "İş parçacığı modülü başlatılamadı: iş parçacığı anahtarı oluşturulamadı"
 
-#: ../src/msw/thread.cpp:1288
+#: ../src/msw/thread.cpp:1283
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr "İş parçacığı modülü başlatılamadı: yerel depoda dizin oluşturulamıyor"
 
-#: ../src/unix/threadpsx.cpp:1038
+#: ../src/unix/threadpsx.cpp:1043
 msgid "Thread priority setting is ignored."
 msgstr "İş parçacığı öncelik ayarları yok sayıldı."
 
@@ -6682,7 +6784,7 @@ msgstr "FTP sunucusuna bağlanırken zamanaşımı oldu, pasif kipi deneyin."
 msgid "Timer creation failed."
 msgstr "Zamanlayıcı oluşturulamadı"
 
-#: ../src/generic/tipdlg.cpp:220
+#: ../src/generic/tipdlg.cpp:215
 msgid "Tip of the Day"
 msgstr "Günün İpucu"
 
@@ -6694,11 +6796,11 @@ msgstr "Malesef ipucu yok!"
 msgid "To:"
 msgstr "Kime:"
 
-#: ../src/osx/carbon/dataview.cpp:2451
+#: ../src/osx/carbon/dataview.cpp:2449
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "İki durumlu düğme görüntüleyici değeri işleyemiyor; değer tipi:"
 
-#: ../src/richtext/richtextbuffer.cpp:7983
+#: ../src/richtext/richtextbuffer.cpp:8237
 msgid "Too many EndStyle calls!"
 msgstr "Çok fazla EndStyle çağrısı!"
 
@@ -6741,17 +6843,17 @@ msgstr "Türkçe (ISO-8859-9)"
 msgid "Type"
 msgstr "Tip"
 
-#: ../src/richtext/richtextfontpage.cpp:160
-#: ../src/richtext/richtextfontpage.cpp:162
+#: ../src/richtext/richtextfontpage.cpp:151
+#: ../src/richtext/richtextfontpage.cpp:153
 msgid "Type a font name."
 msgstr "Bir yazı tipi adı yazın."
 
-#: ../src/richtext/richtextfontpage.cpp:175
-#: ../src/richtext/richtextfontpage.cpp:177
+#: ../src/richtext/richtextfontpage.cpp:166
+#: ../src/richtext/richtextfontpage.cpp:168
 msgid "Type a size in points."
 msgstr "Punto olarak bir boyut yazın."
 
-#: ../src/msw/ole/automtn.cpp:665
+#: ../src/msw/ole/automtn.cpp:679
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr "%u argümanında tip uyuşmazlığı."
@@ -6812,7 +6914,7 @@ msgstr "'%s' yolu kapatılamadı"
 msgid "Unable to close the handle for '%s'"
 msgstr "'%s' işleyicisi kapatılamadı"
 
-#: ../include/wx/msw/private/fswatcher.h:240
+#: ../include/wx/msw/private/fswatcher.h:245
 msgid "Unable to create I/O completion port"
 msgstr "G/Ç tamamlanma kapısı oluşturulamadı"
 
@@ -6828,7 +6930,7 @@ msgstr "inotify kopyası oluşturulamadı"
 msgid "Unable to create kqueue instance"
 msgstr "kqueue kopyası oluşturulamadı"
 
-#: ../include/wx/msw/private/fswatcher.h:229
+#: ../include/wx/msw/private/fswatcher.h:234
 msgid "Unable to dequeue completion packet"
 msgstr "Tamamlanma paketi kuyruktan çıkarılamadı"
 
@@ -6836,7 +6938,7 @@ msgstr "Tamamlanma paketi kuyruktan çıkarılamadı"
 msgid "Unable to get events from kqueue"
 msgstr "Olaylar kqueue üzerinden alınamadı"
 
-#: ../src/osx/carbon/dataview.cpp:1903
+#: ../src/osx/carbon/dataview.cpp:1901
 msgid "Unable to handle native drag&drop data"
 msgstr "Doğal sürükle bırak verisi işlenemedi"
 
@@ -6853,7 +6955,7 @@ msgstr "Hildon programı başlatılamadı"
 msgid "Unable to open path '%s'"
 msgstr "'%s' yolu açılamadı"
 
-#: ../src/html/htmlwin.cpp:561
+#: ../src/html/htmlwin.cpp:574
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "İstenen HTML belgesi açılamıyor: %s"
@@ -6862,11 +6964,11 @@ msgstr "İstenen HTML belgesi açılamıyor: %s"
 msgid "Unable to play sound asynchronously."
 msgstr "Ses zaman eşlemesiz olarak çalınamıyor."
 
-#: ../include/wx/msw/private/fswatcher.h:207
+#: ../include/wx/msw/private/fswatcher.h:212
 msgid "Unable to post completion status"
 msgstr "Tamamlanma durumu gönderilemedi"
 
-#: ../src/unix/fswatcher_inotify.cpp:530
+#: ../src/unix/fswatcher_inotify.cpp:543
 msgid "Unable to read from inotify descriptor"
 msgstr "inotify tanımlayıcısı okunamadı"
 
@@ -6895,8 +6997,8 @@ msgstr "Silmeyi geri alın"
 msgid "Underline"
 msgstr "Altıçizili"
 
-#: ../src/richtext/richtextfontpage.cpp:341 ../src/osx/carbon/fontdlg.cpp:556
-#: ../src/propgrid/advprops.cpp:655
+#: ../src/richtext/richtextfontpage.cpp:357 ../src/osx/carbon/fontdlg.cpp:540
+#: ../src/propgrid/advprops.cpp:656
 msgid "Underlined"
 msgstr "Altıçizili"
 
@@ -6908,17 +7010,17 @@ msgstr "Geri Alın"
 msgid "Undo last action"
 msgstr "Son eylemi geri alın"
 
-#: ../src/common/cmdline.cpp:864
+#: ../src/common/cmdline.cpp:1023
 #, c-format
 msgid "Unexpected characters following option '%s'."
 msgstr "'%s' seçeneğinden sonra beklenmeyen karakterler."
 
-#: ../src/unix/fswatcher_inotify.cpp:261
+#: ../src/unix/fswatcher_inotify.cpp:262
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr "\"%s\" için beklenmeyen etkinlik: uyan izleme belirteci yok."
 
-#: ../src/common/cmdline.cpp:1024
+#: ../src/common/cmdline.cpp:1189
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Beklenmeyen parametre '%s'"
@@ -6973,23 +7075,23 @@ msgstr "8 bit Unikod (UTF-8)"
 msgid "Unindent"
 msgstr "Girintiyi geri alın"
 
-#: ../src/richtext/richtextborderspage.cpp:373
-#: ../src/richtext/richtextborderspage.cpp:375
+#: ../src/richtext/richtextborderspage.cpp:362
+#: ../src/richtext/richtextborderspage.cpp:364
 msgid "Units for the bottom border width."
 msgstr "Alt kenarlık genişliğinin birimleri."
 
-#: ../src/richtext/richtextmarginspage.cpp:278
-#: ../src/richtext/richtextmarginspage.cpp:280
+#: ../src/richtext/richtextmarginspage.cpp:277
+#: ../src/richtext/richtextmarginspage.cpp:279
 msgid "Units for the bottom margin."
 msgstr "Alt kenar boşluğunun birimleri."
 
-#: ../src/richtext/richtextborderspage.cpp:517
-#: ../src/richtext/richtextborderspage.cpp:519
+#: ../src/richtext/richtextborderspage.cpp:531
+#: ../src/richtext/richtextborderspage.cpp:533
 msgid "Units for the bottom outline width."
 msgstr "Alt taslak genişliğinin birimleri."
 
-#: ../src/richtext/richtextmarginspage.cpp:392
-#: ../src/richtext/richtextmarginspage.cpp:394
+#: ../src/richtext/richtextmarginspage.cpp:391
+#: ../src/richtext/richtextmarginspage.cpp:393
 msgid "Units for the bottom padding."
 msgstr "Alt yastıklamanın birimleri."
 
@@ -6998,23 +7100,29 @@ msgstr "Alt yastıklamanın birimleri."
 msgid "Units for the bottom position."
 msgstr "Alt konumun birimleri."
 
-#: ../src/richtext/richtextborderspage.cpp:283
-#: ../src/richtext/richtextborderspage.cpp:285
+#: ../src/richtext/richtextborderspage.cpp:599
+#: ../src/richtext/richtextborderspage.cpp:601
+#, fuzzy
+msgid "Units for the corner radius."
+msgstr "Üst yastıklamanın birimleri."
+
+#: ../src/richtext/richtextborderspage.cpp:260
+#: ../src/richtext/richtextborderspage.cpp:262
 msgid "Units for the left border width."
 msgstr "Sol sınır genişliğinin birimleri."
 
-#: ../src/richtext/richtextmarginspage.cpp:205
-#: ../src/richtext/richtextmarginspage.cpp:207
+#: ../src/richtext/richtextmarginspage.cpp:204
+#: ../src/richtext/richtextmarginspage.cpp:206
 msgid "Units for the left margin."
 msgstr "Sol kenar boşluğunun birimleri."
 
-#: ../src/richtext/richtextborderspage.cpp:427
 #: ../src/richtext/richtextborderspage.cpp:429
+#: ../src/richtext/richtextborderspage.cpp:431
 msgid "Units for the left outline width."
 msgstr "Sol taslak genişliğinin birimleri."
 
-#: ../src/richtext/richtextmarginspage.cpp:319
-#: ../src/richtext/richtextmarginspage.cpp:321
+#: ../src/richtext/richtextmarginspage.cpp:318
+#: ../src/richtext/richtextmarginspage.cpp:320
 msgid "Units for the left padding."
 msgstr "Sol yastıklamanın birimleri."
 
@@ -7053,23 +7161,23 @@ msgstr "Nesne yüksekliğinin birimleri."
 msgid "Units for the object width."
 msgstr "Nesne genişliğinin birimleri."
 
-#: ../src/richtext/richtextborderspage.cpp:313
-#: ../src/richtext/richtextborderspage.cpp:315
+#: ../src/richtext/richtextborderspage.cpp:294
+#: ../src/richtext/richtextborderspage.cpp:296
 msgid "Units for the right border width."
 msgstr "Sağ sınır genişliğinin birimleri."
 
-#: ../src/richtext/richtextmarginspage.cpp:230
-#: ../src/richtext/richtextmarginspage.cpp:232
+#: ../src/richtext/richtextmarginspage.cpp:229
+#: ../src/richtext/richtextmarginspage.cpp:231
 msgid "Units for the right margin."
 msgstr "Sağ kenar boşluğunun birimleri."
 
-#: ../src/richtext/richtextborderspage.cpp:457
-#: ../src/richtext/richtextborderspage.cpp:459
+#: ../src/richtext/richtextborderspage.cpp:463
+#: ../src/richtext/richtextborderspage.cpp:465
 msgid "Units for the right outline width."
 msgstr "Sağ taslak genişliğinin birimleri."
 
-#: ../src/richtext/richtextmarginspage.cpp:344
-#: ../src/richtext/richtextmarginspage.cpp:346
+#: ../src/richtext/richtextmarginspage.cpp:343
+#: ../src/richtext/richtextmarginspage.cpp:345
 msgid "Units for the right padding."
 msgstr "Sağ yastıklamanın birimleri."
 
@@ -7078,23 +7186,23 @@ msgstr "Sağ yastıklamanın birimleri."
 msgid "Units for the right position."
 msgstr "Sağ konumun birimleri."
 
-#: ../src/richtext/richtextborderspage.cpp:343
-#: ../src/richtext/richtextborderspage.cpp:345
+#: ../src/richtext/richtextborderspage.cpp:328
+#: ../src/richtext/richtextborderspage.cpp:330
 msgid "Units for the top border width."
 msgstr "Üst kenarlık genişliğinin birimleri."
 
-#: ../src/richtext/richtextmarginspage.cpp:253
-#: ../src/richtext/richtextmarginspage.cpp:255
+#: ../src/richtext/richtextmarginspage.cpp:252
+#: ../src/richtext/richtextmarginspage.cpp:254
 msgid "Units for the top margin."
 msgstr "Üst kenar boşluğunun birimleri."
 
-#: ../src/richtext/richtextborderspage.cpp:487
-#: ../src/richtext/richtextborderspage.cpp:489
+#: ../src/richtext/richtextborderspage.cpp:497
+#: ../src/richtext/richtextborderspage.cpp:499
 msgid "Units for the top outline width."
 msgstr "Üst taslak genişliğinin birimleri."
 
-#: ../src/richtext/richtextmarginspage.cpp:367
-#: ../src/richtext/richtextmarginspage.cpp:369
+#: ../src/richtext/richtextmarginspage.cpp:366
+#: ../src/richtext/richtextmarginspage.cpp:368
 msgid "Units for the top padding."
 msgstr "Üst yastıklamanın birimleri."
 
@@ -7131,11 +7239,11 @@ msgstr "Bilinmeyen Özellik %s"
 msgid "Unknown TIFF resolution unit %d ignored"
 msgstr "Bilinmeyen TIFF %d çözünürlük birimi yok sayıldı"
 
-#: ../src/osx/carbon/dataview.cpp:1978
+#: ../src/osx/carbon/dataview.cpp:1976
 msgid "Unknown data format"
 msgstr "Bilinmeyen veri biçimi"
 
-#: ../src/unix/dlunix.cpp:325
+#: ../src/unix/dlunix.cpp:160
 msgid "Unknown dynamic library error"
 msgstr "Blinmeyen devingen kitaplık hatası"
 
@@ -7144,12 +7252,12 @@ msgstr "Blinmeyen devingen kitaplık hatası"
 msgid "Unknown encoding (%d)"
 msgstr "Bilinmeyen kodlama (%d)"
 
-#: ../src/msw/ole/automtn.cpp:677
+#: ../src/msw/ole/automtn.cpp:691
 #, c-format
 msgid "Unknown error %08x"
 msgstr "Bilinmeyen hata %08x"
 
-#: ../src/msw/ole/automtn.cpp:636
+#: ../src/msw/ole/automtn.cpp:650
 msgid "Unknown exception"
 msgstr "Bilinmeyen istisna"
 
@@ -7157,16 +7265,16 @@ msgstr "Bilinmeyen istisna"
 msgid "Unknown image data format."
 msgstr "Bilinmeyen görsel veri biçimi."
 
-#: ../src/common/cmdline.cpp:749
+#: ../src/common/cmdline.cpp:908
 #, c-format
 msgid "Unknown long option '%s'"
 msgstr "Blinmeyen long seçeneği '%s'"
 
-#: ../src/msw/ole/automtn.cpp:620
+#: ../src/msw/ole/automtn.cpp:634
 msgid "Unknown name or named argument."
 msgstr "Bilinmeyen ad ya da adlandırılmış argüman."
 
-#: ../src/common/cmdline.cpp:764 ../src/common/cmdline.cpp:786
+#: ../src/common/cmdline.cpp:923 ../src/common/cmdline.cpp:945
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Bilinmeyen seçenek '%s'"
@@ -7181,7 +7289,7 @@ msgstr "%s MIME tipi kaydına uymayan '{'."
 msgid "Unnamed command"
 msgstr "Adsız komut"
 
-#: ../src/propgrid/propgrid.cpp:398
+#: ../src/propgrid/propgrid.cpp:397
 msgid "Unspecified"
 msgstr "Belirtilmemiş"
 
@@ -7199,16 +7307,16 @@ msgid "Up"
 msgstr "Yukarı"
 
 #: ../src/richtext/richtextliststylepage.cpp:483
-#: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextbulletspage.cpp:275
 msgid "Upper case letters"
 msgstr "Büyük harfler"
 
 #: ../src/richtext/richtextliststylepage.cpp:485
-#: ../src/richtext/richtextbulletspage.cpp:290
+#: ../src/richtext/richtextbulletspage.cpp:277
 msgid "Upper case roman numerals"
 msgstr "Büyük harf romen rakamları"
 
-#: ../src/common/cmdline.cpp:1155
+#: ../src/common/cmdline.cpp:1320
 #, c-format
 msgid "Usage: %s"
 msgstr "Kullanım: %s"
@@ -7220,11 +7328,11 @@ msgstr "Kullanım: %s"
 msgid "Use the current alignment setting."
 msgstr "Geçerli hizalama ayarları kullanılsın."
 
-#: ../src/osx/carbon/dataview.cpp:2658 ../src/osx/carbon/dataview.cpp:2723
+#: ../src/osx/carbon/dataview.cpp:2656 ../src/osx/carbon/dataview.cpp:2721
 msgid "Valid pointer to native data view control does not exist"
 msgstr "Doğal veri görünüm denetimine ait bir imleç yok"
 
-#: ../src/common/valtext.cpp:174
+#: ../src/common/valtext.cpp:179
 msgid "Validation conflict"
 msgstr "Doğrulama çelişkisi"
 
@@ -7232,17 +7340,17 @@ msgstr "Doğrulama çelişkisi"
 msgid "Value"
 msgstr "Değer"
 
-#: ../src/propgrid/props.cpp:384
+#: ../src/propgrid/props.cpp:385
 #, c-format
 msgid "Value must be %s or higher."
 msgstr "Değer %s ya da daha büyük olmalı."
 
-#: ../src/propgrid/props.cpp:411
+#: ../src/propgrid/props.cpp:412
 #, c-format
 msgid "Value must be %s or less."
 msgstr "Değer %s ya da daha küçük olmalı."
 
-#: ../src/propgrid/props.cpp:388 ../src/propgrid/props.cpp:415
+#: ../src/propgrid/props.cpp:389 ../src/propgrid/props.cpp:416
 #, c-format
 msgid "Value must be between %s and %s."
 msgstr "Değer %s ile %s arasında olmalı."
@@ -7264,7 +7372,7 @@ msgstr "Dosyalar ayrıntılı görünümde görüntülensin"
 msgid "View files as a list view"
 msgstr "Dosyalar liste görünümünde görüntülensin"
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1959
 msgid "Views"
 msgstr "Görünümler"
 
@@ -7289,7 +7397,7 @@ msgstr "%d epoll tanımlayıcısı üstündeki GÇ beklemesi başarısız"
 msgid "Warning: "
 msgstr "Uyarı:"
 
-#: ../src/propgrid/advprops.cpp:651
+#: ../src/propgrid/advprops.cpp:652
 msgid "Weight"
 msgstr "Yoğunluk"
 
@@ -7309,7 +7417,7 @@ msgstr "Yazı tipinin altıçizili olup olmadığı."
 msgid "Whole word"
 msgstr "Tam kelime"
 
-#: ../src/html/helpwnd.cpp:547
+#: ../src/html/helpwnd.cpp:548
 msgid "Whole words only"
 msgstr "Yalnız tam kelimeler"
 
@@ -7328,6 +7436,16 @@ msgstr "Windows 2000"
 #: ../src/msw/utils.cpp:1302
 msgid "Windows 7"
 msgstr "Windows 7"
+
+#: ../src/msw/utils.cpp:1308
+#, fuzzy
+msgid "Windows 8"
+msgstr "Windows 98"
+
+#: ../src/msw/utils.cpp:1314
+#, fuzzy
+msgid "Windows 8.1"
+msgstr "Windows 98"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7403,7 +7521,7 @@ msgstr "Windows Korece (CP 949)"
 msgid "Windows ME"
 msgstr "Windows ME"
 
-#: ../src/msw/utils.cpp:1310
+#: ../src/msw/utils.cpp:1322
 #, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "Windows NT %lu.%lu"
@@ -7418,6 +7536,16 @@ msgstr "Windows Server 2008"
 
 #: ../src/msw/utils.cpp:1301
 msgid "Windows Server 2008 R2"
+msgstr "Windows Server 2008 R2"
+
+#: ../src/msw/utils.cpp:1307
+#, fuzzy
+msgid "Windows Server 2012"
+msgstr "Windows Server 2003"
+
+#: ../src/msw/utils.cpp:1313
+#, fuzzy
+msgid "Windows Server 2012 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/common/fmapbase.cpp:166
@@ -7506,7 +7634,7 @@ msgstr "Bir örtüşmeyi iki kez hazırlayamazsınız"
 msgid "You cannot add a new directory to this section."
 msgstr "Bu bölüme yeni bir klasör ekleyemezsiniz."
 
-#: ../src/propgrid/propgrid.cpp:3258
+#: ../src/propgrid/propgrid.cpp:3245
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 "Geçersiz bir değer yazdınız, düzenlemeyi iptal etmek için ESC tuşuna basın."
@@ -7647,7 +7775,7 @@ msgstr "kitaplık işlevi için hatalı değişkenler"
 msgid "bad signature"
 msgstr "kötü imza"
 
-#: ../src/common/zipstrm.cpp:1715
+#: ../src/common/zipstrm.cpp:1678
 msgid "bad zipfile offset to entry"
 msgstr "kayıt için hatalı zip dosyası konumu"
 
@@ -7663,7 +7791,7 @@ msgstr "koyu"
 msgid "buffer is too small for Windows directory."
 msgstr "arabellek Windows klasörü için çok küçük."
 
-#: ../src/msw/utils.cpp:1316
+#: ../src/msw/utils.cpp:1328
 #, c-format
 msgid "build %lu"
 msgstr "yapım %lu"
@@ -7705,7 +7833,7 @@ msgstr ""
 msgid "can't execute '%s'"
 msgstr "'%s' çalıştırılamadı"
 
-#: ../src/common/zipstrm.cpp:1490
+#: ../src/common/zipstrm.cpp:1453
 msgid "can't find central directory in zip"
 msgstr "zip içinde merkez klasör bulunamıyor"
 
@@ -7779,7 +7907,7 @@ msgstr "'%s' geçici dosyası silinemedi"
 msgid "can't seek on file descriptor %d"
 msgstr "%d dosya tanımlayıcısı üzerinde arama yapılamıyor"
 
-#: ../src/common/textfile.cpp:299
+#: ../src/common/textfile.cpp:270
 #, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "'%s' arabelleği diske yazılamadı."
@@ -7801,22 +7929,23 @@ msgstr "sağlama toplamı hatası"
 msgid "checksum failure reading tar header block"
 msgstr "tar başlık bloğu okunurken sağlama toplamı hatası"
 
-#: ../src/richtext/richtextborderspage.cpp:280
-#: ../src/richtext/richtextborderspage.cpp:310
-#: ../src/richtext/richtextborderspage.cpp:340
-#: ../src/richtext/richtextborderspage.cpp:370
-#: ../src/richtext/richtextborderspage.cpp:424
-#: ../src/richtext/richtextborderspage.cpp:454
-#: ../src/richtext/richtextborderspage.cpp:484
-#: ../src/richtext/richtextborderspage.cpp:514
-#: ../src/richtext/richtextmarginspage.cpp:202
-#: ../src/richtext/richtextmarginspage.cpp:227
-#: ../src/richtext/richtextmarginspage.cpp:250
-#: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:316
-#: ../src/richtext/richtextmarginspage.cpp:341
-#: ../src/richtext/richtextmarginspage.cpp:364
-#: ../src/richtext/richtextmarginspage.cpp:389
+#: ../src/richtext/richtextborderspage.cpp:256
+#: ../src/richtext/richtextborderspage.cpp:290
+#: ../src/richtext/richtextborderspage.cpp:324
+#: ../src/richtext/richtextborderspage.cpp:358
+#: ../src/richtext/richtextborderspage.cpp:425
+#: ../src/richtext/richtextborderspage.cpp:459
+#: ../src/richtext/richtextborderspage.cpp:493
+#: ../src/richtext/richtextborderspage.cpp:527
+#: ../src/richtext/richtextborderspage.cpp:595
+#: ../src/richtext/richtextmarginspage.cpp:201
+#: ../src/richtext/richtextmarginspage.cpp:226
+#: ../src/richtext/richtextmarginspage.cpp:249
+#: ../src/richtext/richtextmarginspage.cpp:274
+#: ../src/richtext/richtextmarginspage.cpp:315
+#: ../src/richtext/richtextmarginspage.cpp:340
+#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextsizepage.cpp:339
 #: ../src/richtext/richtextsizepage.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:400
@@ -7842,7 +7971,7 @@ msgstr "8-bit kodlama dönüşümü yapılamadı"
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:1323
+#: ../src/common/cmdline.cpp:1488
 msgid "date"
 msgstr "tarih"
 
@@ -7854,7 +7983,7 @@ msgstr "ayıklama hatası"
 msgid "default"
 msgstr "varsayılan"
 
-#: ../src/common/cmdline.cpp:1319
+#: ../src/common/cmdline.cpp:1484
 msgid "double"
 msgstr "çift"
 
@@ -7892,15 +8021,15 @@ msgstr "'%s' açma hatası"
 msgid "error opening file"
 msgstr "dosya açma hatası"
 
-#: ../src/common/zipstrm.cpp:1576
+#: ../src/common/zipstrm.cpp:1539
 msgid "error reading zip central directory"
 msgstr "zip merkez klasörünü okuma hatası"
 
-#: ../src/common/zipstrm.cpp:1667
+#: ../src/common/zipstrm.cpp:1630
 msgid "error reading zip local header"
 msgstr "zip yerel başlığını okuma hatası"
 
-#: ../src/common/zipstrm.cpp:2396
+#: ../src/common/zipstrm.cpp:2291
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
 msgstr "'%s' zip kaydı yazma hatası: hatalı CRC ya da uzunluk"
@@ -7943,7 +8072,7 @@ msgstr "dosya '%s', satır %d: '%s' değişmez anahtarı için değer yok sayıl
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "dosya '%s': beklenmedik karakter %c,  satır: %d."
 
-#: ../src/richtext/richtextbuffer.cpp:8358
+#: ../src/richtext/richtextbuffer.cpp:8612
 msgid "files"
 msgstr "dosyalar"
 
@@ -7951,7 +8080,7 @@ msgstr "dosyalar"
 msgid "first"
 msgstr "birinci"
 
-#: ../src/html/helpwnd.cpp:1265
+#: ../src/html/helpwnd.cpp:1266
 msgid "font size"
 msgstr "yazı tipi boyutu"
 
@@ -7963,12 +8092,12 @@ msgstr "ondördüncü"
 msgid "fourth"
 msgstr "dördüncü"
 
-#: ../src/common/appbase.cpp:695
+#: ../src/common/appbase.cpp:699
 msgid "generate verbose log messages"
 msgstr "ayrıntılı günlük iletileri oluşturulsun"
 
-#: ../src/richtext/richtextbuffer.cpp:12212
-#: ../src/richtext/richtextbuffer.cpp:12322
+#: ../src/richtext/richtextbuffer.cpp:12782
+#: ../src/richtext/richtextbuffer.cpp:12892
 msgid "image"
 msgstr "görsel"
 
@@ -7992,7 +8121,7 @@ msgstr "ek tar başlığında hatalı veri"
 msgid "invalid message box return value"
 msgstr "geçersiz ileti penceresi sonuç değeri"
 
-#: ../src/common/zipstrm.cpp:1445
+#: ../src/common/zipstrm.cpp:1408
 msgid "invalid zip file"
 msgstr "geçersiz zip dosyası"
 
@@ -8050,7 +8179,7 @@ msgstr "normal"
 msgid "not implemented"
 msgstr "eklenmedi"
 
-#: ../src/common/cmdline.cpp:1315
+#: ../src/common/cmdline.cpp:1480
 msgid "num"
 msgstr "tamsayı"
 
@@ -8062,77 +8191,76 @@ msgstr "nesnelerin XML Metin Düğümleri olamaz"
 msgid "out of memory"
 msgstr "bellek yetersiz"
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:661
-msgid "percent"
-msgstr "yüzde"
-
 #: ../src/common/debugrpt.cpp:519
 msgid "process context description"
 msgstr "işlem bağlamı tanımı"
 
-#: ../src/richtext/richtextfontpage.cpp:186
-#: ../src/richtext/richtextfontpage.cpp:189
+#: ../src/richtext/richtextfontpage.cpp:177
+#: ../src/richtext/richtextfontpage.cpp:180
+#: ../src/richtext/richtextborderspage.cpp:257
+#: ../src/richtext/richtextborderspage.cpp:291
+#: ../src/richtext/richtextborderspage.cpp:325
+#: ../src/richtext/richtextborderspage.cpp:359
+#: ../src/richtext/richtextborderspage.cpp:426
+#: ../src/richtext/richtextborderspage.cpp:460
+#: ../src/richtext/richtextborderspage.cpp:494
+#: ../src/richtext/richtextborderspage.cpp:528
+#: ../src/richtext/richtextborderspage.cpp:596
 msgid "pt"
 msgstr "punto"
 
-#: ../src/richtext/richtextfontpage.cpp:187
-#: ../src/richtext/richtextborderspage.cpp:279
-#: ../src/richtext/richtextborderspage.cpp:281
-#: ../src/richtext/richtextborderspage.cpp:282
-#: ../src/richtext/richtextborderspage.cpp:309
-#: ../src/richtext/richtextborderspage.cpp:311
-#: ../src/richtext/richtextborderspage.cpp:312
-#: ../src/richtext/richtextborderspage.cpp:339
-#: ../src/richtext/richtextborderspage.cpp:341
-#: ../src/richtext/richtextborderspage.cpp:342
-#: ../src/richtext/richtextborderspage.cpp:369
-#: ../src/richtext/richtextborderspage.cpp:371
-#: ../src/richtext/richtextborderspage.cpp:372
-#: ../src/richtext/richtextborderspage.cpp:423
-#: ../src/richtext/richtextborderspage.cpp:425
-#: ../src/richtext/richtextborderspage.cpp:426
-#: ../src/richtext/richtextborderspage.cpp:453
-#: ../src/richtext/richtextborderspage.cpp:455
-#: ../src/richtext/richtextborderspage.cpp:456
-#: ../src/richtext/richtextborderspage.cpp:483
-#: ../src/richtext/richtextborderspage.cpp:485
-#: ../src/richtext/richtextborderspage.cpp:486
-#: ../src/richtext/richtextborderspage.cpp:513
-#: ../src/richtext/richtextborderspage.cpp:515
-#: ../src/richtext/richtextborderspage.cpp:516
-#: ../src/richtext/richtextmarginspage.cpp:201
+#: ../src/richtext/richtextfontpage.cpp:178
+#: ../src/richtext/richtextborderspage.cpp:255
+#: ../src/richtext/richtextborderspage.cpp:258
+#: ../src/richtext/richtextborderspage.cpp:259
+#: ../src/richtext/richtextborderspage.cpp:289
+#: ../src/richtext/richtextborderspage.cpp:292
+#: ../src/richtext/richtextborderspage.cpp:293
+#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:326
+#: ../src/richtext/richtextborderspage.cpp:327
+#: ../src/richtext/richtextborderspage.cpp:357
+#: ../src/richtext/richtextborderspage.cpp:360
+#: ../src/richtext/richtextborderspage.cpp:361
+#: ../src/richtext/richtextborderspage.cpp:424
+#: ../src/richtext/richtextborderspage.cpp:427
+#: ../src/richtext/richtextborderspage.cpp:428
+#: ../src/richtext/richtextborderspage.cpp:458
+#: ../src/richtext/richtextborderspage.cpp:461
+#: ../src/richtext/richtextborderspage.cpp:462
+#: ../src/richtext/richtextborderspage.cpp:492
+#: ../src/richtext/richtextborderspage.cpp:495
+#: ../src/richtext/richtextborderspage.cpp:496
+#: ../src/richtext/richtextborderspage.cpp:526
+#: ../src/richtext/richtextborderspage.cpp:529
+#: ../src/richtext/richtextborderspage.cpp:530
+#: ../src/richtext/richtextborderspage.cpp:594
+#: ../src/richtext/richtextborderspage.cpp:597
+#: ../src/richtext/richtextborderspage.cpp:598
+#: ../src/richtext/richtextmarginspage.cpp:200
+#: ../src/richtext/richtextmarginspage.cpp:202
 #: ../src/richtext/richtextmarginspage.cpp:203
-#: ../src/richtext/richtextmarginspage.cpp:204
-#: ../src/richtext/richtextmarginspage.cpp:226
+#: ../src/richtext/richtextmarginspage.cpp:225
+#: ../src/richtext/richtextmarginspage.cpp:227
 #: ../src/richtext/richtextmarginspage.cpp:228
-#: ../src/richtext/richtextmarginspage.cpp:229
-#: ../src/richtext/richtextmarginspage.cpp:249
+#: ../src/richtext/richtextmarginspage.cpp:248
+#: ../src/richtext/richtextmarginspage.cpp:250
 #: ../src/richtext/richtextmarginspage.cpp:251
-#: ../src/richtext/richtextmarginspage.cpp:252
-#: ../src/richtext/richtextmarginspage.cpp:274
+#: ../src/richtext/richtextmarginspage.cpp:273
+#: ../src/richtext/richtextmarginspage.cpp:275
 #: ../src/richtext/richtextmarginspage.cpp:276
-#: ../src/richtext/richtextmarginspage.cpp:277
-#: ../src/richtext/richtextmarginspage.cpp:315
+#: ../src/richtext/richtextmarginspage.cpp:314
+#: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:317
-#: ../src/richtext/richtextmarginspage.cpp:318
-#: ../src/richtext/richtextmarginspage.cpp:340
+#: ../src/richtext/richtextmarginspage.cpp:339
+#: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:342
-#: ../src/richtext/richtextmarginspage.cpp:343
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:362
+#: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:365
-#: ../src/richtext/richtextmarginspage.cpp:366
-#: ../src/richtext/richtextmarginspage.cpp:388
+#: ../src/richtext/richtextmarginspage.cpp:387
+#: ../src/richtext/richtextmarginspage.cpp:389
 #: ../src/richtext/richtextmarginspage.cpp:390
-#: ../src/richtext/richtextmarginspage.cpp:391
 #: ../src/richtext/richtextsizepage.cpp:338
 #: ../src/richtext/richtextsizepage.cpp:341
 #: ../src/richtext/richtextsizepage.cpp:342
@@ -8174,12 +8302,12 @@ msgstr "hamctrl"
 msgid "read error"
 msgstr "okuma hatası"
 
-#: ../src/common/zipstrm.cpp:1882
+#: ../src/common/zipstrm.cpp:1845
 #, c-format
 msgid "reading zip stream (entry %s): bad crc"
 msgstr "zip akışı okuma (kayıt %s): CRC hatalı"
 
-#: ../src/common/zipstrm.cpp:1877
+#: ../src/common/zipstrm.cpp:1840
 #, c-format
 msgid "reading zip stream (entry %s): bad length"
 msgstr "zip akışı okuma (kayıt %s): uzunluk hatalı"
@@ -8208,7 +8336,7 @@ msgstr "yedinci"
 msgid "shift"
 msgstr "shift"
 
-#: ../src/common/appbase.cpp:685
+#: ../src/common/appbase.cpp:689
 msgid "show this help message"
 msgstr "bu yardım iletisi görüntülensin"
 
@@ -8228,31 +8356,31 @@ msgstr "kullanılacak görüntü kipini belirleyin (ör. 640x480-16)"
 msgid "specify the theme to use"
 msgstr "kullanılacak temayı belirleyin"
 
-#: ../src/richtext/richtextbuffer.cpp:8876
+#: ../src/richtext/richtextbuffer.cpp:9133
 msgid "standard/circle"
 msgstr "standart/daire"
 
-#: ../src/richtext/richtextbuffer.cpp:8877
+#: ../src/richtext/richtextbuffer.cpp:9134
 msgid "standard/circle-outline"
 msgstr "standart/daire-çerçeve"
 
-#: ../src/richtext/richtextbuffer.cpp:8879
+#: ../src/richtext/richtextbuffer.cpp:9136
 msgid "standard/diamond"
 msgstr "standart/elmas"
 
-#: ../src/richtext/richtextbuffer.cpp:8878
+#: ../src/richtext/richtextbuffer.cpp:9135
 msgid "standard/square"
 msgstr "standart/kare"
 
-#: ../src/richtext/richtextbuffer.cpp:8880
+#: ../src/richtext/richtextbuffer.cpp:9137
 msgid "standard/triangle"
 msgstr "standart/üçgen"
 
-#: ../src/common/zipstrm.cpp:1782
+#: ../src/common/zipstrm.cpp:1745
 msgid "stored file length not in Zip header"
 msgstr "kayıtlı dosya uzunluğu Zip başlığında yok"
 
-#: ../src/common/cmdline.cpp:1311
+#: ../src/common/cmdline.cpp:1476
 msgid "str"
 msgstr "str"
 
@@ -8351,12 +8479,12 @@ msgstr "bilinmeyen-%d"
 msgid "unnamed"
 msgstr "adsız"
 
-#: ../src/common/docview.cpp:1606
+#: ../src/common/docview.cpp:1613
 #, c-format
 msgid "unnamed%d"
 msgstr "adsız%d"
 
-#: ../src/common/zipstrm.cpp:1796 ../src/common/zipstrm.cpp:2184
+#: ../src/common/zipstrm.cpp:1759 ../src/common/zipstrm.cpp:2079
 msgid "unsupported Zip compression method"
 msgstr "desteklemeyen Zip sıkıştırma yöntemi"
 
@@ -8377,11 +8505,11 @@ msgstr "wxGetTimeOfDay başarısız."
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr "wxPrintout::GetPageInfo boş bir maxPage değeri veriyor."
 
-#: ../src/osx/carbon/dataview.cpp:1303
+#: ../src/osx/carbon/dataview.cpp:1301
 msgid "wxWidget control pointer is not a data view pointer"
 msgstr "wxWidget denetim imleci bir veri görünüm imleci değil"
 
-#: ../src/osx/carbon/dataview.cpp:907
+#: ../src/osx/carbon/dataview.cpp:905
 msgid "wxWidget's control not initialized."
 msgstr "wxWidget denetimi başlatılamadı."
 
@@ -8408,6 +8536,12 @@ msgid "zlib error %d"
 msgstr "zlib hatası %d"
 
 #: ../src/richtext/richtextliststylepage.cpp:496
-#: ../src/richtext/richtextbulletspage.cpp:301
+#: ../src/richtext/richtextbulletspage.cpp:288
 msgid "~"
 msgstr "~"
+
+#~ msgid "Event queue overflowed"
+#~ msgstr "Olay kuyruğu taştı"
+
+#~ msgid "percent"
+#~ msgstr "yüzde"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-01 19:04+0200\n"
+"POT-Creation-Date: 2014-02-21 17:22+0100\n"
 "PO-Revision-Date: 2012-11-13 10:25+0545\n"
 "Last-Translator: हिम प्रसाद गौतम \n"
 "Language-Team: Him Prasad Gautam <himjee@yahoo.com>\n"
@@ -53,7 +53,7 @@ msgstr " (गल्ती %ld: %s)"
 msgid " (in module \"%s\")"
 msgstr "(Module \"%s\"मा)"
 
-#: ../src/common/docview.cpp:1624
+#: ../src/common/docview.cpp:1631
 msgid " - "
 msgstr " - "
 
@@ -93,12 +93,25 @@ msgstr "#14 खाम, 5 x 11 1/2 इन्च"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 खाम, 3 7/8 x 8 7/8 इन्च"
 
-#: ../src/html/helpwnd.cpp:1044
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
+msgid "%"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1045
 #, c-format
 msgid "%d of %lu"
 msgstr "%d को %lu"
 
-#: ../src/html/helpwnd.cpp:1681 ../src/html/helpwnd.cpp:1719
+#: ../src/html/helpwnd.cpp:1692 ../src/html/helpwnd.cpp:1730
 #, c-format
 msgid "%i of %i"
 msgstr "%2$i मध्ये %1$i"
@@ -110,12 +123,12 @@ msgid_plural "%ld bytes"
 msgstr[0] "%ld बाइट"
 msgstr[1] "%ld बाइटहरू"
 
-#: ../src/html/helpwnd.cpp:1046
+#: ../src/html/helpwnd.cpp:1047
 #, c-format
 msgid "%lu of %lu"
 msgstr "%lu को %lu"
 
-#: ../src/common/cmdline.cpp:1050
+#: ../src/common/cmdline.cpp:1215
 #, c-format
 msgid "%s (or %s)"
 msgstr "%s (अथवा %s)"
@@ -145,7 +158,7 @@ msgstr "%s चेतावनी"
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s tar header '%s' प्रविष्टिको लागि मिलेन ।"
 
-#: ../src/common/fldlgcmn.cpp:106
+#: ../src/common/fldlgcmn.cpp:124
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "%s फाइल (%s)|%s"
@@ -188,7 +201,7 @@ msgstr "&बढ्दो वर्णानुक्रमिक"
 msgid "&Back"
 msgstr "&पछाडि"
 
-#: ../src/richtext/richtextstylepage.cpp:113
+#: ../src/richtext/richtextstylepage.cpp:115
 msgid "&Based on:"
 msgstr "&आधारित"
 
@@ -196,7 +209,7 @@ msgstr "&आधारित"
 msgid "&Before a paragraph:"
 msgstr "&अनुच्छेद अगाडि:"
 
-#: ../src/richtext/richtextfontpage.cpp:271
+#: ../src/richtext/richtextfontpage.cpp:262
 msgid "&Bg colour:"
 msgstr "&पृष्ठभूमि रङ्ग:"
 
@@ -208,21 +221,21 @@ msgstr "&मोटो"
 msgid "&Bottom"
 msgstr "&पुछार"
 
-#: ../src/richtext/richtextborderspage.cpp:359
-#: ../src/richtext/richtextborderspage.cpp:503
-#: ../src/richtext/richtextmarginspage.cpp:260
-#: ../src/richtext/richtextmarginspage.cpp:374
+#: ../src/richtext/richtextborderspage.cpp:347
+#: ../src/richtext/richtextborderspage.cpp:516
+#: ../src/richtext/richtextmarginspage.cpp:259
+#: ../src/richtext/richtextmarginspage.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:637
 #: ../src/richtext/richtextsizepage.cpp:644
 msgid "&Bottom:"
 msgstr "&पुछार:"
 
-#: ../include/wx/richtext/richtextbuffer.h:3530
+#: ../include/wx/richtext/richtextbuffer.h:3641
 msgid "&Box"
 msgstr "&बाकस"
 
 #: ../src/richtext/richtextliststylepage.cpp:210
-#: ../src/richtext/richtextbulletspage.cpp:159
+#: ../src/richtext/richtextbulletspage.cpp:146
 msgid "&Bullet style:"
 msgstr "&गोलिछिन्हको शैली:"
 
@@ -231,7 +244,7 @@ msgid "&CD-Rom"
 msgstr "&CD-Rom"
 
 #: ../src/generic/wizard.cpp:432 ../src/generic/fontdlgg.cpp:470
-#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:588
+#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:572
 #: ../src/common/stockitem.cpp:145
 msgid "&Cancel"
 msgstr "&रद्द"
@@ -240,7 +253,7 @@ msgstr "&रद्द"
 msgid "&Cascade"
 msgstr "&खप्टिएको"
 
-#: ../include/wx/richtext/richtextbuffer.h:5587
+#: ../include/wx/richtext/richtextbuffer.h:5717
 msgid "&Cell"
 msgstr "&कोशिका"
 
@@ -262,7 +275,7 @@ msgstr "&बन्द गर"
 msgid "&Color"
 msgstr "&रङ्ग"
 
-#: ../src/richtext/richtextfontpage.cpp:258
+#: ../src/richtext/richtextfontpage.cpp:249
 msgid "&Colour:"
 msgstr "&रङ्ग:"
 
@@ -270,8 +283,8 @@ msgstr "&रङ्ग:"
 msgid "&Convert"
 msgstr "&रूपान्तरण गर"
 
-#: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2284
+#: ../src/richtext/richtextctrl.cpp:332 ../src/osx/textctrl_osx.cpp:583
+#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2335
 msgid "&Copy"
 msgstr "&नक्कल उतार"
 
@@ -287,9 +300,9 @@ msgstr "&आफू अनुकूल बनाउ.."
 msgid "&Debug report preview:"
 msgstr "प्रतिवेदन चेहराको &खानतलासी :"
 
-#: ../src/richtext/richtexttabspage.cpp:142
-#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2286
+#: ../src/richtext/richtexttabspage.cpp:138
+#: ../src/richtext/richtextctrl.cpp:334 ../src/osx/textctrl_osx.cpp:585
+#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2337
 msgid "&Delete"
 msgstr "&मेटाइ देउ"
 
@@ -357,7 +370,7 @@ msgstr "&वरणाकृति परिवार:"
 msgid "&Font for Level..."
 msgstr "&वरणाकृति for तह.."
 
-#: ../src/richtext/richtextfontpage.cpp:156
+#: ../src/richtext/richtextfontpage.cpp:147
 #: ../src/richtext/richtextsymboldlg.cpp:400
 msgid "&Font:"
 msgstr "&वरणाकृति:"
@@ -380,7 +393,7 @@ msgid "&Height:"
 msgstr "&उचाइ:"
 
 #: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
-#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:785
+#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:776
 #: ../src/common/stockitem.cpp:163 ../src/html/helpfrm.cpp:147
 msgid "&Help"
 msgstr "&सहयोग"
@@ -434,11 +447,11 @@ msgid "&Left"
 msgstr "&देब्रे"
 
 #: ../src/richtext/richtextindentspage.cpp:195
-#: ../src/richtext/richtextborderspage.cpp:269
-#: ../src/richtext/richtextborderspage.cpp:413
+#: ../src/richtext/richtextborderspage.cpp:245
+#: ../src/richtext/richtextborderspage.cpp:414
 #: ../src/richtext/richtextliststylepage.cpp:381
-#: ../src/richtext/richtextmarginspage.cpp:187
-#: ../src/richtext/richtextmarginspage.cpp:301
+#: ../src/richtext/richtextmarginspage.cpp:186
+#: ../src/richtext/richtextmarginspage.cpp:300
 #: ../src/richtext/richtextsizepage.cpp:532
 #: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
@@ -464,7 +477,7 @@ msgstr "&वस्तुमा जाउ"
 msgid "&Network"
 msgstr "&सञ्जाल "
 
-#: ../src/richtext/richtexttabspage.cpp:136 ../src/common/stockitem.cpp:176
+#: ../src/richtext/richtexttabspage.cpp:132 ../src/common/stockitem.cpp:176
 msgid "&New"
 msgstr "&नया"
 
@@ -481,11 +494,11 @@ msgstr "&अघिल्लो >"
 msgid "&Next Paragraph"
 msgstr "&अघिल्लो अनुच्छेद"
 
-#: ../src/generic/tipdlg.cpp:276
+#: ../src/generic/tipdlg.cpp:271
 msgid "&Next Tip"
 msgstr "&अघिल्लो टिपोट"
 
-#: ../src/richtext/richtextstylepage.cpp:123
+#: ../src/richtext/richtextstylepage.cpp:125
 msgid "&Next style:"
 msgstr "&अघिल्लो शैली:"
 
@@ -497,12 +510,12 @@ msgstr "&होइन"
 msgid "&Notes:"
 msgstr "&टिप्पणीहरू:"
 
-#: ../src/richtext/richtextbulletspage.cpp:264
+#: ../src/richtext/richtextbulletspage.cpp:251
 msgid "&Number:"
 msgstr "&सङ्ख्या:"
 
 #: ../src/generic/fontdlgg.cpp:475 ../src/generic/fontdlgg.cpp:482
-#: ../src/osx/carbon/fontdlg.cpp:594 ../src/common/stockitem.cpp:178
+#: ../src/osx/carbon/fontdlg.cpp:578 ../src/common/stockitem.cpp:178
 msgid "&OK"
 msgstr "&ठीक"
 
@@ -519,12 +532,12 @@ msgstr "&बाह्य रेखा तह:"
 msgid "&Page Break"
 msgstr "&पृष्ट विच्छेद"
 
-#: ../src/richtext/richtextctrl.cpp:327 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2285
+#: ../src/richtext/richtextctrl.cpp:333 ../src/osx/textctrl_osx.cpp:584
+#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2336
 msgid "&Paste"
 msgstr "&टाँसि देउ"
 
-#: ../include/wx/richtext/richtextbuffer.h:4655
+#: ../include/wx/richtext/richtextbuffer.h:4783
 msgid "&Picture"
 msgstr "&चीत्र"
 
@@ -532,7 +545,7 @@ msgstr "&चीत्र"
 msgid "&Point size:"
 msgstr "&थोप्लोको आकार:"
 
-#: ../src/richtext/richtexttabspage.cpp:114
+#: ../src/richtext/richtexttabspage.cpp:110
 msgid "&Position (tenths of a mm):"
 msgstr "&स्थान (मिलि मिटरको दसौँ भाग):"
 
@@ -557,7 +570,7 @@ msgstr "&पछिल्लो अनुच्छेद"
 msgid "&Print..."
 msgstr "&छापी देउ.."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
+#: ../src/richtext/richtextctrl.cpp:338 ../src/richtext/richtextctrl.cpp:5090
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "&गुणहरू"
@@ -566,9 +579,9 @@ msgstr "&गुणहरू"
 msgid "&Quit"
 msgstr "&त्यागि देउ"
 
-#: ../src/richtext/richtextctrl.cpp:323 ../src/osx/textctrl_osx.cpp:580
+#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:580
 #: ../src/common/stockitem.cpp:185 ../src/common/cmdproc.cpp:293
-#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2281
+#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2332
 msgid "&Redo"
 msgstr "&फेरि गर"
 
@@ -598,11 +611,11 @@ msgid "&Right"
 msgstr "&दाहिने"
 
 #: ../src/richtext/richtextindentspage.cpp:213
-#: ../src/richtext/richtextborderspage.cpp:299
-#: ../src/richtext/richtextborderspage.cpp:443
+#: ../src/richtext/richtextborderspage.cpp:279
+#: ../src/richtext/richtextborderspage.cpp:448
 #: ../src/richtext/richtextliststylepage.cpp:399
-#: ../src/richtext/richtextmarginspage.cpp:212
-#: ../src/richtext/richtextmarginspage.cpp:326
+#: ../src/richtext/richtextmarginspage.cpp:211
+#: ../src/richtext/richtextmarginspage.cpp:325
 #: ../src/richtext/richtextsizepage.cpp:602
 #: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
@@ -620,7 +633,7 @@ msgstr "&यसरी बचत गर"
 msgid "&See details"
 msgstr "&विस्तृत अवलोकन"
 
-#: ../src/generic/tipdlg.cpp:270
+#: ../src/generic/tipdlg.cpp:265
 msgid "&Show tips at startup"
 msgstr "&सुरु हुँदा टिपोट देखाउ"
 
@@ -628,7 +641,7 @@ msgstr "&सुरु हुँदा टिपोट देखाउ"
 msgid "&Size"
 msgstr "&आकार"
 
-#: ../src/richtext/richtextfontpage.cpp:168
+#: ../src/richtext/richtextfontpage.cpp:159
 msgid "&Size:"
 msgstr "&आकार:"
 
@@ -649,11 +662,11 @@ msgstr "&हिज्जे जाँच"
 msgid "&Stop"
 msgstr "&रोकि देउ"
 
-#: ../src/richtext/richtextfontpage.cpp:284 ../src/common/stockitem.cpp:199
+#: ../src/richtext/richtextfontpage.cpp:275 ../src/common/stockitem.cpp:199
 msgid "&Strikethrough"
 msgstr "&Strikethrough"
 
-#: ../src/generic/fontdlgg.cpp:382 ../src/richtext/richtextstylepage.cpp:104
+#: ../src/generic/fontdlgg.cpp:382 ../src/richtext/richtextstylepage.cpp:106
 msgid "&Style:"
 msgstr "&शैली:"
 
@@ -666,11 +679,16 @@ msgid "&Subset:"
 msgstr "&उप समूह"
 
 #: ../src/richtext/richtextliststylepage.cpp:268
-#: ../src/richtext/richtextbulletspage.cpp:222
+#: ../src/richtext/richtextbulletspage.cpp:209
 msgid "&Symbol:"
 msgstr "&चिन्ह:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5679
+#: ../src/richtext/richtextborderspage.cpp:383
+#: ../src/richtext/richtextborderspage.cpp:552
+msgid "&Synchronize values"
+msgstr ""
+
+#: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
 msgstr "&तालिका"
 
@@ -678,10 +696,10 @@ msgstr "&तालिका"
 msgid "&Top"
 msgstr "&सिरान"
 
-#: ../src/richtext/richtextborderspage.cpp:329
-#: ../src/richtext/richtextborderspage.cpp:473
-#: ../src/richtext/richtextmarginspage.cpp:235
-#: ../src/richtext/richtextmarginspage.cpp:349
+#: ../src/richtext/richtextborderspage.cpp:313
+#: ../src/richtext/richtextborderspage.cpp:482
+#: ../src/richtext/richtextmarginspage.cpp:234
+#: ../src/richtext/richtextmarginspage.cpp:348
 #: ../src/richtext/richtextsizepage.cpp:567
 #: ../src/richtext/richtextsizepage.cpp:574
 msgid "&Top:"
@@ -691,13 +709,13 @@ msgstr "&सिरान:"
 msgid "&Underline"
 msgstr "&अधोरेखाङ्कन"
 
-#: ../src/richtext/richtextfontpage.cpp:243
+#: ../src/richtext/richtextfontpage.cpp:234
 msgid "&Underlining:"
 msgstr "&अदोरेखाङ्करण:"
 
-#: ../src/richtext/richtextctrl.cpp:322 ../src/osx/textctrl_osx.cpp:579
+#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:579
 #: ../src/common/stockitem.cpp:203 ../src/common/cmdproc.cpp:271
-#: ../src/msw/textctrl.cpp:2280
+#: ../src/msw/textctrl.cpp:2331
 msgid "&Undo"
 msgstr "&उल्टाउ"
 
@@ -741,68 +759,82 @@ msgstr "&विन्डो"
 msgid "&Yes"
 msgstr "&हो"
 
+#: ../src/common/valtext.cpp:256
+#, fuzzy, c-format
+msgid "'%s' contains illegal characters"
+msgstr "'%s' मा वर्णहरू मात्रै हुन सक्छ ।"
+
+#: ../src/common/valtext.cpp:254
+#, fuzzy, c-format
+msgid "'%s' doesn't consist only of valid characters"
+msgstr "'%s' मा वर्णहरू मात्रै हुन सक्छ ।"
+
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' मा अतिरिक्त '..' रहेछ, बेवास्ता गर्नु होस् ।"
 
-#: ../src/common/valtext.cpp:249 ../src/common/valtext.cpp:251
-#: ../src/common/valtext.cpp:253 ../src/common/valtext.cpp:255
-#, c-format
-msgid "'%s' is invalid"
-msgstr "'%s' गल्ती छ"
-
-#: ../src/common/cmdline.cpp:948 ../src/common/cmdline.cpp:966
+#: ../src/common/cmdline.cpp:1107 ../src/common/cmdline.cpp:1125
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' सहि सङ्ख्यात्मक मान विकल्प '%s' को लागि हदैन"
 
-#: ../src/common/translation.cpp:1086
+#: ../src/common/translation.cpp:1087
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' सहि सन्देश सूची होइन"
+
+#: ../src/common/valtext.cpp:165
+#, fuzzy, c-format
+msgid "'%s' is not one of the valid strings"
+msgstr "'%s' सहि सन्देश सूची होइन"
+
+#: ../src/common/valtext.cpp:167
+#, fuzzy, c-format
+msgid "'%s' is one of the invalid strings"
+msgstr "'%s' गल्ती छ"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' सम्भवतः binary buffer हो ।"
 
-#: ../src/common/valtext.cpp:247
+#: ../src/common/valtext.cpp:252
 #, c-format
 msgid "'%s' should be numeric."
 msgstr "'%s' सङ्ख्यात्मक हुनै पर्छ ।"
 
-#: ../src/common/valtext.cpp:239
+#: ../src/common/valtext.cpp:244
 #, c-format
 msgid "'%s' should only contain ASCII characters."
 msgstr "'%s' मा ASCII वर्णहरू मात्रै हुन सक्छ ।"
 
-#: ../src/common/valtext.cpp:241
+#: ../src/common/valtext.cpp:246
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
 msgstr "'%s' मा वर्णहरू मात्रै हुन सक्छ ।"
 
-#: ../src/common/valtext.cpp:243
+#: ../src/common/valtext.cpp:248
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' मा पाठिय अथवा सङ्ख्यात्मक वर्णहरू मात्रै हुन सक्छ ।"
 
-#: ../src/common/valtext.cpp:245
+#: ../src/common/valtext.cpp:250
 #, c-format
 msgid "'%s' should only contain digits."
 msgstr "'%s' मा सङ्ख्या मात्रै हुन सक्छ ।"
 
 #: ../src/richtext/richtextliststylepage.cpp:229
-#: ../src/richtext/richtextbulletspage.cpp:179
+#: ../src/richtext/richtextbulletspage.cpp:166
 msgid "(*)"
 msgstr "(*)"
 
-#: ../src/html/helpwnd.cpp:976
+#: ../src/html/helpwnd.cpp:977
 msgid "(Help)"
 msgstr "(सहयोग)"
 
 #: ../src/richtext/richtextliststylepage.cpp:481
-#: ../src/richtext/richtextbulletspage.cpp:286
+#: ../src/richtext/richtextbulletspage.cpp:273
 msgid "(None)"
 msgstr "(कुनै पनि होइन)"
 
@@ -810,8 +842,8 @@ msgstr "(कुनै पनि होइन)"
 msgid "(Normal text)"
 msgstr "(सामान्य पाठ)"
 
-#: ../src/html/helpwnd.cpp:426 ../src/html/helpwnd.cpp:1119
-#: ../src/html/helpwnd.cpp:1745
+#: ../src/html/helpwnd.cpp:427 ../src/html/helpwnd.cpp:1120
+#: ../src/html/helpwnd.cpp:1756
 msgid "(bookmarks)"
 msgstr "(बुकमार्क)"
 
@@ -820,10 +852,10 @@ msgstr "(बुकमार्क)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:831
-#: ../src/richtext/richtextfontpage.cpp:331
-#: ../src/richtext/richtextfontpage.cpp:335
-#: ../src/richtext/richtextfontpage.cpp:339
+#: ../src/richtext/richtextformatdlg.cpp:887
+#: ../src/richtext/richtextfontpage.cpp:347
+#: ../src/richtext/richtextfontpage.cpp:351
+#: ../src/richtext/richtextfontpage.cpp:355
 #: ../src/richtext/richtextliststylepage.cpp:448
 #: ../src/richtext/richtextliststylepage.cpp:460
 #: ../src/richtext/richtextliststylepage.cpp:461
@@ -831,26 +863,26 @@ msgid "(none)"
 msgstr "(कुनै पनि होइन)"
 
 #: ../src/richtext/richtextliststylepage.cpp:492
-#: ../src/richtext/richtextbulletspage.cpp:297
+#: ../src/richtext/richtextbulletspage.cpp:284
 msgid "*"
 msgstr "*"
 
 #: ../src/richtext/richtextliststylepage.cpp:236
-#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextbulletspage.cpp:173
 msgid "*)"
 msgstr "*)"
 
 #: ../src/richtext/richtextliststylepage.cpp:495
-#: ../src/richtext/richtextbulletspage.cpp:300
+#: ../src/richtext/richtextbulletspage.cpp:287
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1324
+#: ../src/msw/utils.cpp:1336
 msgid ", 64-bit edition"
 msgstr ", 64-bit संस्करण"
 
 #: ../src/richtext/richtextliststylepage.cpp:493
-#: ../src/richtext/richtextbulletspage.cpp:298
+#: ../src/richtext/richtextbulletspage.cpp:285
 msgid "-"
 msgstr "-"
 
@@ -952,37 +984,37 @@ msgstr ": अज्ञात अनुसंहिता"
 msgid "< &Back"
 msgstr "< &पछाडि"
 
-#: ../src/osx/carbon/fontdlg.cpp:608 ../src/osx/carbon/fontdlg.cpp:815
-#: ../src/osx/carbon/fontdlg.cpp:835
+#: ../src/osx/carbon/fontdlg.cpp:592 ../src/osx/carbon/fontdlg.cpp:798
+#: ../src/osx/carbon/fontdlg.cpp:818
 msgid "<Any Decorative>"
 msgstr "<कुनै सजावट>"
 
-#: ../src/osx/carbon/fontdlg.cpp:609 ../src/osx/carbon/fontdlg.cpp:817
-#: ../src/osx/carbon/fontdlg.cpp:837
+#: ../src/osx/carbon/fontdlg.cpp:593 ../src/osx/carbon/fontdlg.cpp:800
+#: ../src/osx/carbon/fontdlg.cpp:820
 msgid "<Any Modern>"
 msgstr "<कुनै मोडेम >"
 
-#: ../src/osx/carbon/fontdlg.cpp:607 ../src/osx/carbon/fontdlg.cpp:813
-#: ../src/osx/carbon/fontdlg.cpp:833
+#: ../src/osx/carbon/fontdlg.cpp:591 ../src/osx/carbon/fontdlg.cpp:796
+#: ../src/osx/carbon/fontdlg.cpp:816
 msgid "<Any Roman>"
 msgstr "<कुनै रोमन>"
 
-#: ../src/osx/carbon/fontdlg.cpp:610 ../src/osx/carbon/fontdlg.cpp:819
-#: ../src/osx/carbon/fontdlg.cpp:839
+#: ../src/osx/carbon/fontdlg.cpp:594 ../src/osx/carbon/fontdlg.cpp:802
+#: ../src/osx/carbon/fontdlg.cpp:822
 msgid "<Any Script>"
 msgstr "<कुनै Script>"
 
-#: ../src/osx/carbon/fontdlg.cpp:611 ../src/osx/carbon/fontdlg.cpp:824
-#: ../src/osx/carbon/fontdlg.cpp:843
+#: ../src/osx/carbon/fontdlg.cpp:595 ../src/osx/carbon/fontdlg.cpp:807
+#: ../src/osx/carbon/fontdlg.cpp:826
 msgid "<Any Swiss>"
 msgstr "<कुनै Swiss>"
 
-#: ../src/osx/carbon/fontdlg.cpp:612 ../src/osx/carbon/fontdlg.cpp:821
-#: ../src/osx/carbon/fontdlg.cpp:841
+#: ../src/osx/carbon/fontdlg.cpp:596 ../src/osx/carbon/fontdlg.cpp:804
+#: ../src/osx/carbon/fontdlg.cpp:824
 msgid "<Any Teletype>"
 msgstr "<कुनै Teletype>"
 
-#: ../src/osx/carbon/fontdlg.cpp:606
+#: ../src/osx/carbon/fontdlg.cpp:590
 msgid "<Any>"
 msgstr "<कुनै>"
 
@@ -998,24 +1030,24 @@ msgstr "<DRIVE>"
 msgid "<LINK>"
 msgstr "<LINK>"
 
-#: ../src/html/helpwnd.cpp:1279
+#: ../src/html/helpwnd.cpp:1280
 msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr "<b><i>मोटो कोल्टे </i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1283
+#: ../src/html/helpwnd.cpp:1284
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
 msgstr "<b><i> मोटो कोल्टे <u> अधोरेखाङ्कित </u></i></b><br>"
 
-#: ../src/html/helpwnd.cpp:1278
+#: ../src/html/helpwnd.cpp:1279
 msgid "<b>Bold face.</b> "
 msgstr "<b>मोटो .</b> "
 
-#: ../src/html/helpwnd.cpp:1277
+#: ../src/html/helpwnd.cpp:1278
 msgid "<i>Italic face.</i> "
 msgstr "<i>कोल्टे .</i> "
 
 #: ../src/richtext/richtextliststylepage.cpp:494
-#: ../src/richtext/richtextbulletspage.cpp:299
+#: ../src/richtext/richtextbulletspage.cpp:286
 msgid ">"
 msgstr ">"
 
@@ -1033,8 +1065,8 @@ msgstr "खालि नभएको सङ्ग्रहमा 'Element' ट�
 
 #: ../src/richtext/richtextliststylepage.cpp:304
 #: ../src/richtext/richtextliststylepage.cpp:306
-#: ../src/richtext/richtextbulletspage.cpp:257
-#: ../src/richtext/richtextbulletspage.cpp:259
+#: ../src/richtext/richtextbulletspage.cpp:244
+#: ../src/richtext/richtextbulletspage.cpp:246
 msgid "A standard bullet name."
 msgstr "स्तरीय थोप्लोको नाम"
 
@@ -1118,8 +1150,8 @@ msgstr "A6 105 x 148 मिमी"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 Rotated 148 x 105 मिमी"
 
-#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:526
-#: ../src/osx/carbon/fontdlg.cpp:339
+#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:547
+#: ../src/osx/carbon/fontdlg.cpp:323
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
@@ -1131,14 +1163,20 @@ msgstr "थप"
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/osx/menu_osx.cpp:630 ../src/common/stockitem.cpp:139
+#: ../src/common/stockitem.cpp:139
 msgid "About"
 msgstr "बारेमा"
 
-#: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
+#: ../src/generic/aboutdlgg.cpp:140 ../src/osx/menu_osx.cpp:603
+#: ../src/msw/aboutdlg.cpp:64
 #, c-format
 msgid "About %s"
 msgstr "%s को बारेमा"
+
+#: ../src/osx/menu_osx.cpp:605
+#, fuzzy
+msgid "About..."
+msgstr "बारेमा"
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1152,15 +1190,15 @@ msgstr "वास्तविक आकार"
 msgid "Add"
 msgstr "थप"
 
-#: ../src/richtext/richtextbuffer.cpp:10751
+#: ../src/richtext/richtextbuffer.cpp:11219
 msgid "Add Column"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10688
+#: ../src/richtext/richtextbuffer.cpp:11156
 msgid "Add Row"
 msgstr ""
 
-#: ../src/html/helpwnd.cpp:439
+#: ../src/html/helpwnd.cpp:440
 msgid "Add current page to bookmarks"
 msgstr "चालू पृष्टलाई बुकमार्कमा थप गर"
 
@@ -1181,11 +1219,11 @@ msgstr "w/o valid adder भनिने गुणहरूको सङ्ग्
 msgid "Adding book %s"
 msgstr "किताब %s थिदै"
 
-#: ../src/osx/carbon/dataview.cpp:1933
+#: ../src/osx/carbon/dataview.cpp:1931
 msgid "Adding flavor TEXT failed"
 msgstr "flavor TEXT थप्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:1954
+#: ../src/osx/carbon/dataview.cpp:1952
 msgid "Adding flavor utxt failed"
 msgstr "flavor utxt थप्न सकिएन"
 
@@ -1213,16 +1251,16 @@ msgstr "पङ्‌क्तिबद्धता"
 msgid "All"
 msgstr "सबै"
 
-#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:89
+#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:107
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "सबै फाइलहरू (%s)|%s"
 
-#: ../include/wx/defs.h:2922
+#: ../include/wx/defs.h:2908
 msgid "All files (*)|*"
 msgstr "सबै फाइलहरू(*)|*"
 
-#: ../include/wx/defs.h:2919
+#: ../include/wx/defs.h:2905
 msgid "All files (*.*)|*.*"
 msgstr "सबै फाइलहरू(*.*)|*.*"
 
@@ -1246,6 +1284,11 @@ msgstr "पहिले देखी नै ISP डायल गर्दै छ
 msgid "Alt+"
 msgstr "Alt+"
 
+#: ../src/richtext/richtextborderspage.cpp:580
+#: ../src/richtext/richtextborderspage.cpp:582
+msgid "An optional corner radius for adding rounded corners."
+msgstr ""
+
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
 msgstr "एवम् निमन लिखित फाइलहरू समावेश गर्छ:\n"
@@ -1260,8 +1303,7 @@ msgstr "चलायमान फाइल %ld प्रकृतिको ह�
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "फाइल '%s' मा लग पुस्तिका थपेर लेख ।([NO] छानेमा यसै माथि लेख्ने छ ।"
 
-#: ../src/osx/menu_osx.cpp:602 ../src/osx/menu_osx.cpp:610
-#: ../src/osx/menu_osx.cpp:649 ../src/osx/menu_osx.cpp:657
+#: ../src/osx/menu_osx.cpp:623 ../src/osx/menu_osx.cpp:631
 msgid "Application"
 msgstr "अनुप्रयोग"
 
@@ -1270,7 +1312,7 @@ msgid "Apply"
 msgstr "लागू गर"
 
 #: ../src/richtext/richtextliststylepage.cpp:482
-#: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextbulletspage.cpp:274
 msgid "Arabic"
 msgstr "अरबी"
 
@@ -1278,7 +1320,7 @@ msgstr "अरबी"
 msgid "Arabic (ISO-8859-6)"
 msgstr "अरबी (ISO-8859-6)"
 
-#: ../src/msw/ole/automtn.cpp:661
+#: ../src/msw/ole/automtn.cpp:675
 #, c-format
 msgid "Argument %u not found."
 msgstr "तर्क %u भेटिएन ।"
@@ -1296,8 +1338,8 @@ msgid "Attributes"
 msgstr "Attributes"
 
 #: ../src/richtext/richtextliststylepage.cpp:294
-#: ../src/richtext/richtextbulletspage.cpp:245
-#: ../src/richtext/richtextbulletspage.cpp:247
+#: ../src/richtext/richtextbulletspage.cpp:232
+#: ../src/richtext/richtextbulletspage.cpp:234
 msgid "Available fonts."
 msgstr "उपलब्ध वरणाकृतिहरू"
 
@@ -1353,32 +1395,32 @@ msgstr "B6 खाम, 176 x 125 मिमी"
 msgid "BACK"
 msgstr "पछाडि"
 
-#: ../src/common/imagbmp.cpp:523 ../src/common/imagbmp.cpp:553
-#: ../src/common/imagbmp.cpp:568
+#: ../src/common/imagbmp.cpp:524 ../src/common/imagbmp.cpp:554
+#: ../src/common/imagbmp.cpp:569
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: भण्डार उपलब्ध गराउन सकेन ।"
 
-#: ../src/common/imagbmp.cpp:97
+#: ../src/common/imagbmp.cpp:98
 msgid "BMP: Couldn't save invalid image."
 msgstr "BMP: चित्र गल्ती भएकोले बचत भएन ।"
 
-#: ../src/common/imagbmp.cpp:338
+#: ../src/common/imagbmp.cpp:339
 msgid "BMP: Couldn't write RGB color map."
 msgstr "BMP: RGB रङ्गिन नक्सा लेख्न सकेन"
 
-#: ../src/common/imagbmp.cpp:473
+#: ../src/common/imagbmp.cpp:474
 msgid "BMP: Couldn't write data."
 msgstr "BMP: तथ्याङ्क लेख्न सकिएन ।"
 
-#: ../src/common/imagbmp.cpp:239
+#: ../src/common/imagbmp.cpp:240
 msgid "BMP: Couldn't write the file (Bitmap) header."
 msgstr "BMP: फाइल (Bitmap) को शीर्षक लेख्न सकिएन ।"
 
-#: ../src/common/imagbmp.cpp:262
+#: ../src/common/imagbmp.cpp:263
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: फाइल (Bitmap जानकारी) शीर्षक लेख्न सकिएन ।"
 
-#: ../src/common/imagbmp.cpp:133
+#: ../src/common/imagbmp.cpp:134
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage को आफ्नै wxPalette छैन ।"
 
@@ -1387,7 +1429,7 @@ msgid "Back"
 msgstr "पछाडी"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
-#: ../src/richtext/richtextformatdlg.cpp:374
+#: ../src/richtext/richtextformatdlg.cpp:395
 msgid "Background"
 msgstr "पृष्ठभूमि"
 
@@ -1395,7 +1437,7 @@ msgstr "पृष्ठभूमि"
 msgid "Background &colour:"
 msgstr "पृष्ठभूमि &रङ्ग:"
 
-#: ../src/osx/carbon/fontdlg.cpp:406
+#: ../src/osx/carbon/fontdlg.cpp:390
 msgid "Background colour"
 msgstr "पृष्ठभूमिको रङ्ग"
 
@@ -1412,25 +1454,25 @@ msgid "Before a paragraph:"
 msgstr " अनुच्छेद अगाडि:"
 
 #: ../src/richtext/richtextliststylepage.cpp:489
-#: ../src/richtext/richtextbulletspage.cpp:294
+#: ../src/richtext/richtextbulletspage.cpp:281
 msgid "Bitmap"
 msgstr "Bitmap"
 
-#: ../src/osx/carbon/dataview.cpp:2396
+#: ../src/osx/carbon/dataview.cpp:2394
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr "Bitmap renderer ले मान खोज्न सक्दैन; मानको किसिम: "
 
-#: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:337
-#: ../src/osx/carbon/fontdlg.cpp:540 ../src/common/stockitem.cpp:143
+#: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:353
+#: ../src/osx/carbon/fontdlg.cpp:524 ../src/common/stockitem.cpp:143
 msgid "Bold"
 msgstr "मोटो"
 
-#: ../src/richtext/richtextborderspage.cpp:256
-#: ../src/richtext/richtextborderspage.cpp:389
+#: ../src/richtext/richtextborderspage.cpp:232
+#: ../src/richtext/richtextborderspage.cpp:390
 msgid "Border"
 msgstr "सिमाना"
 
-#: ../src/richtext/richtextformatdlg.cpp:368
+#: ../src/richtext/richtextformatdlg.cpp:389
 msgid "Borders"
 msgstr "सिमानाहरू"
 
@@ -1442,7 +1484,7 @@ msgstr "पुछार"
 msgid "Bottom margin (mm):"
 msgstr "तलको सिमान्त (मिमि):"
 
-#: ../src/richtext/richtextbuffer.cpp:8919
+#: ../src/richtext/richtextbuffer.cpp:9176
 msgid "Box Properties"
 msgstr "बाकसका गुणहरू"
 
@@ -1455,7 +1497,7 @@ msgid "Browse"
 msgstr "खोतल्ने"
 
 #: ../src/richtext/richtextliststylepage.cpp:245
-#: ../src/richtext/richtextbulletspage.cpp:195
+#: ../src/richtext/richtextbulletspage.cpp:182
 msgid "Bullet &Alignment:"
 msgstr "थोप्लो &पङ्क्तिsवद्धता:"
 
@@ -1463,7 +1505,7 @@ msgstr "थोप्लो &पङ्क्तिsवद्धता:"
 msgid "Bullet style"
 msgstr "थोप्ले शैली"
 
-#: ../src/richtext/richtextformatdlg.cpp:342
+#: ../src/richtext/richtextformatdlg.cpp:363
 msgid "Bullets"
 msgstr "थोप्लोहरू"
 
@@ -1523,7 +1565,7 @@ msgstr "मेटाउ"
 msgid "COMMAND"
 msgstr "आदेश"
 
-#: ../src/richtext/richtextfontpage.cpp:291
+#: ../src/richtext/richtextfontpage.cpp:282
 msgid "Ca&pitals"
 msgstr "Ca&pitals"
 
@@ -1554,7 +1596,7 @@ msgstr "registry कुञ्जी '%s' सिर्जना गर्न स�
 msgid "Can't create thread"
 msgstr "धागो सिर्जना गर्न सकिँदैन ।"
 
-#: ../src/msw/window.cpp:3793
+#: ../src/msw/window.cpp:3787
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "विन्डो class %s सिर्जना गर्न सकिँदैन ।"
@@ -1607,7 +1649,7 @@ msgstr "zlib deflate stream लाइ सुरु गर् सकिँदै�
 msgid "Can't initialize zlib inflate stream."
 msgstr "zlib inflate stream लाइ सुर गर्न सकिँदैन ।"
 
-#: ../src/msw/fswatcher.cpp:432
+#: ../src/msw/fswatcher.cpp:456
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr "परिवर्तनको लागी भनेर हुँदै नभएको घर्रा \"%s\" लाइ अनुगमन गर्न सकिँदैन ।"
@@ -1676,11 +1718,11 @@ msgstr "रद्द गर"
 msgid "Cannot create mutex."
 msgstr "नया पाठ सिर्जना गर्न सकिँदैन ।"
 
-#: ../src/osx/carbon/dataview.cpp:895
+#: ../src/osx/carbon/dataview.cpp:893
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr " नया महलको ID सिर्जना गर्न सकिँदैन । सम्भवतः अधिकतम महलको सङ्ख्या पुगेर होला ।"
 
-#: ../src/common/filefn.cpp:1336
+#: ../src/common/filefn.cpp:1328
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "गल्ती '%s' गणना गर्न सकिँदैन ।"
@@ -1699,21 +1741,21 @@ msgstr "सक्रिय डायलअप जडान फेला पा�
 msgid "Cannot find the location of address book file"
 msgstr "ठेगाना किताब फाइलको स्थान फेला पार्न सकिँदैन ।"
 
-#: ../src/msw/ole/automtn.cpp:562
+#: ../src/msw/ole/automtn.cpp:565
 #, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "सक्रिय instance \"%s\" लाइ फेला पार्न सकिँदैन ।"
 
-#: ../src/unix/threadpsx.cpp:1030
+#: ../src/unix/threadpsx.cpp:1035
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "प्राथमिकता तह for कार्यसूची नीति %d पाउन सकिँदैन ।"
 
-#: ../src/unix/utilsunx.cpp:988
+#: ../src/unix/utilsunx.cpp:998
 msgid "Cannot get the hostname"
 msgstr "सत्कार कर्ताको नाम पाउन सकिँदैन ।"
 
-#: ../src/unix/utilsunx.cpp:1024
+#: ../src/unix/utilsunx.cpp:1034
 msgid "Cannot get the official hostname"
 msgstr "अतिरिक्त सत्कार कर्ताको नाम पाउन सकिँदैन ।"
 
@@ -1725,7 +1767,7 @@ msgstr "सक्रिय डायल जडान पाउन सकिँ�
 msgid "Cannot initialize OLE"
 msgstr "OLE लाइ सुरु गर्न सकिँदैन ।"
 
-#: ../src/common/socket.cpp:847
+#: ../src/common/socket.cpp:852
 msgid "Cannot initialize sockets"
 msgstr "sockets लाइ सुरु गर्न सकिँदैन ।"
 
@@ -1773,7 +1815,7 @@ msgstr "अनुक्रमणिका फाइल: %s खोल्न स�
 msgid "Cannot open resources file '%s'."
 msgstr "श्रोत फाइल '%s' खोल्न सकिँदैन ।"
 
-#: ../src/html/helpwnd.cpp:1537
+#: ../src/html/helpwnd.cpp:1548
 msgid "Cannot print empty page."
 msgstr "खाली पृष्ट छाप्न सकिँदैन ।"
 
@@ -1787,12 +1829,12 @@ msgstr "'%s' बाट typename पढ्न सकिँदैन ।"
 msgid "Cannot resume thread %lu"
 msgstr "धागो %lu फेरि सुरु गर्न सकिँदैन ।"
 
-#: ../src/msw/thread.cpp:923
+#: ../src/msw/thread.cpp:918
 #, fuzzy, c-format
 msgid "Cannot resume thread %lx"
 msgstr "धागो %x फेरि सुरु गर्न सकिँदैन ।"
 
-#: ../src/unix/threadpsx.cpp:1011
+#: ../src/unix/threadpsx.cpp:1016
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "धागो कार्य सुची नीति प्राप्त गर्न सकिँदैन ।"
 
@@ -1810,16 +1852,16 @@ msgstr "धागो सुरु गर्न सकिँदैन: TLS ले
 msgid "Cannot suspend thread %lu"
 msgstr "धागो %lu लाइ निलम्बन गर्न सकिँदैन ।"
 
-#: ../src/msw/thread.cpp:907
+#: ../src/msw/thread.cpp:902
 #, fuzzy, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "धागो %x लाइ निलम्बन गर्न सकिँदैन ।"
 
-#: ../src/msw/thread.cpp:830
+#: ../src/msw/thread.cpp:825
 msgid "Cannot wait for thread termination"
 msgstr "धागो को समाप्ति पर्खन सकिँदैन ।"
 
-#: ../src/html/helpwnd.cpp:546
+#: ../src/html/helpwnd.cpp:547
 msgid "Case sensitive"
 msgstr "Case सम्बेदनसिल "
 
@@ -1827,7 +1869,7 @@ msgstr "Case सम्बेदनसिल "
 msgid "Categorized Mode"
 msgstr "निर्दिष्ट मुद्रा"
 
-#: ../src/richtext/richtextbuffer.cpp:9347
+#: ../src/richtext/richtextbuffer.cpp:9748
 msgid "Cell Properties"
 msgstr "कोशिका गुणहरू"
 
@@ -1849,7 +1891,7 @@ msgid "Central European (ISO-8859-2)"
 msgstr "केन्द्रीय युरोपेली (ISO-8859-2)"
 
 #: ../src/richtext/richtextliststylepage.cpp:250
-#: ../src/richtext/richtextbulletspage.cpp:200
+#: ../src/richtext/richtextbulletspage.cpp:187
 msgid "Centre"
 msgstr "केन्द्र"
 
@@ -1865,24 +1907,24 @@ msgid "Centred"
 msgstr "केन्द्रित"
 
 #: ../src/richtext/richtextliststylepage.cpp:280
-#: ../src/richtext/richtextbulletspage.cpp:232
+#: ../src/richtext/richtextbulletspage.cpp:219
 msgid "Ch&oose..."
 msgstr "&रोजाई.."
 
-#: ../src/richtext/richtextbuffer.cpp:4041
+#: ../src/richtext/richtextbuffer.cpp:4242
 msgid "Change List Style"
 msgstr "सूचिको शैली परिवर्तन "
 
-#: ../src/richtext/richtextbuffer.cpp:3392
+#: ../src/richtext/richtextbuffer.cpp:3604
 msgid "Change Object Style"
 msgstr "वस्तुको शैली परिवर्तन"
 
-#: ../src/richtext/richtextbuffer.cpp:3658
-#: ../src/richtext/richtextbuffer.cpp:7749
+#: ../src/richtext/richtextbuffer.cpp:3870
+#: ../src/richtext/richtextbuffer.cpp:8003
 msgid "Change Properties"
 msgstr "गुणहरूको परिवर्तन "
 
-#: ../src/richtext/richtextbuffer.cpp:3209
+#: ../src/richtext/richtextbuffer.cpp:3421
 msgid "Change Style"
 msgstr "शैलीको परिवर्तन"
 
@@ -1898,34 +1940,47 @@ msgstr "वर्ण शैलीहरू"
 
 #: ../src/richtext/richtextliststylepage.cpp:224
 #: ../src/richtext/richtextliststylepage.cpp:226
-#: ../src/richtext/richtextbulletspage.cpp:174
-#: ../src/richtext/richtextbulletspage.cpp:176
+#: ../src/richtext/richtextbulletspage.cpp:161
+#: ../src/richtext/richtextbulletspage.cpp:163
 msgid "Check to add a period after the bullet."
 msgstr "गोलि पछि थोप्लो थप्ने हो भने टिक लगाउ "
 
 #: ../src/richtext/richtextliststylepage.cpp:238
 #: ../src/richtext/richtextliststylepage.cpp:240
-#: ../src/richtext/richtextbulletspage.cpp:188
-#: ../src/richtext/richtextbulletspage.cpp:190
+#: ../src/richtext/richtextbulletspage.cpp:175
+#: ../src/richtext/richtextbulletspage.cpp:177
 msgid "Check to add a right parenthesis."
 msgstr "दाहिने कोष्ठ थप्ने हो भने टिक लगाउ"
 
+#: ../src/richtext/richtextborderspage.cpp:385
+#: ../src/richtext/richtextborderspage.cpp:387
+#: ../src/richtext/richtextborderspage.cpp:554
+#: ../src/richtext/richtextborderspage.cpp:556
+msgid "Check to edit all borders simultaneously."
+msgstr ""
+
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
-#: ../src/richtext/richtextbulletspage.cpp:181
-#: ../src/richtext/richtextbulletspage.cpp:183
+#: ../src/richtext/richtextbulletspage.cpp:168
+#: ../src/richtext/richtextbulletspage.cpp:170
 msgid "Check to enclose the bullet in parentheses."
 msgstr "गोलीलाई कोष्ठ भित्र राख्ने हो भने टिक लगाउ"
 
-#: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
+#: ../src/richtext/richtextfontpage.cpp:315
+#: ../src/richtext/richtextfontpage.cpp:317
+#, fuzzy
+msgid "Check to indicate right-to-left text layout."
+msgstr "पाठको रङ्ग फेर्न किटिक्क पार्नु होस्"
+
+#: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
 msgstr "वरणाकृति मोटो बनाउने हो भने टिक लगाउ"
 
-#: ../src/osx/carbon/fontdlg.cpp:549 ../src/osx/carbon/fontdlg.cpp:551
+#: ../src/osx/carbon/fontdlg.cpp:533 ../src/osx/carbon/fontdlg.cpp:535
 msgid "Check to make the font italic."
 msgstr "वरणाकृति कोल्टे बनाउने हो भने टिक लगाउ"
 
-#: ../src/osx/carbon/fontdlg.cpp:558 ../src/osx/carbon/fontdlg.cpp:560
+#: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
 msgid "Check to make the font underlined."
 msgstr "वरणाकृति अधोरेखाङ्कित बनाउने हो भने टिक लगाउ"
 
@@ -1934,41 +1989,46 @@ msgstr "वरणाकृति अधोरेखाङ्कित बना�
 msgid "Check to restart numbering."
 msgstr "फेरि सङ्ख्या सुरु गर्ने हो भने टिक लगाउ"
 
-#: ../src/richtext/richtextfontpage.cpp:286
-#: ../src/richtext/richtextfontpage.cpp:288
+#: ../src/richtext/richtextfontpage.cpp:277
+#: ../src/richtext/richtextfontpage.cpp:279
 msgid "Check to show a line through the text."
 msgstr "पाठको आधारमा हरफ देखाउने हो भने टिक लगाउ"
 
-#: ../src/richtext/richtextfontpage.cpp:293
-#: ../src/richtext/richtextfontpage.cpp:295
+#: ../src/richtext/richtextfontpage.cpp:284
+#: ../src/richtext/richtextfontpage.cpp:286
 msgid "Check to show the text in capitals."
 msgstr "पाठलाई capitals मा देखाउने हो भने टिक लगाउ"
 
-#: ../src/richtext/richtextfontpage.cpp:300
-#: ../src/richtext/richtextfontpage.cpp:302
+#: ../src/richtext/richtextfontpage.cpp:291
+#: ../src/richtext/richtextfontpage.cpp:293
 #, fuzzy
 msgid "Check to show the text in small capitals."
 msgstr "पाठलाई capitals मा देखाउने हो भने टिक लगाउ"
 
-#: ../src/richtext/richtextfontpage.cpp:314
-#: ../src/richtext/richtextfontpage.cpp:316
+#: ../src/richtext/richtextfontpage.cpp:305
+#: ../src/richtext/richtextfontpage.cpp:307
 msgid "Check to show the text in subscript."
 msgstr "पैतालोमा पाठ देखाउने हो भने टिक लगाउ"
 
-#: ../src/richtext/richtextfontpage.cpp:307
-#: ../src/richtext/richtextfontpage.cpp:309
+#: ../src/richtext/richtextfontpage.cpp:298
+#: ../src/richtext/richtextfontpage.cpp:300
 msgid "Check to show the text in superscript."
 msgstr "टाउकोमा पाठ देखाउने हो भने टिक लगाउ"
+
+#: ../src/richtext/richtextfontpage.cpp:322
+#: ../src/richtext/richtextfontpage.cpp:324
+msgid "Check to suppress hyphenation."
+msgstr ""
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
 msgstr "डायल गर्न ISP छान्नु होस्"
 
-#: ../src/propgrid/props.cpp:1643
+#: ../src/propgrid/props.cpp:1654
 msgid "Choose a directory:"
 msgstr "एउटा घर्रा छान्नु होस्:"
 
-#: ../src/propgrid/props.cpp:1702
+#: ../src/propgrid/props.cpp:1713
 msgid "Choose a file"
 msgstr "एउटा फाइल छान्नु होस्"
 
@@ -1990,7 +2050,7 @@ msgstr "चक्री य module \"%s\" पाइयो"
 msgid "Cl&ose"
 msgstr "&बन्द गर"
 
-#: ../src/msw/ole/automtn.cpp:673
+#: ../src/msw/ole/automtn.cpp:687
 msgid "Class not registered."
 msgstr "Class दर्ता छैन"
 
@@ -2009,12 +2069,12 @@ msgstr "चयन गरिएको शैली लागू गर्न क�
 
 #: ../src/richtext/richtextliststylepage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:283
-#: ../src/richtext/richtextbulletspage.cpp:233
-#: ../src/richtext/richtextbulletspage.cpp:235
+#: ../src/richtext/richtextbulletspage.cpp:220
+#: ../src/richtext/richtextbulletspage.cpp:222
 msgid "Click to browse for a symbol."
 msgstr "चिन्ह खोतल्न किटिक्क पार्नु होस"
 
-#: ../src/osx/carbon/fontdlg.cpp:589 ../src/osx/carbon/fontdlg.cpp:591
+#: ../src/osx/carbon/fontdlg.cpp:573 ../src/osx/carbon/fontdlg.cpp:575
 msgid "Click to cancel changes to the font."
 msgstr "वरणाकृति परिवर्तन रद्द गर्न किटिक्क पार्नु होस्"
 
@@ -2022,17 +2082,17 @@ msgstr "वरणाकृति परिवर्तन रद्द गर्
 msgid "Click to cancel the font selection."
 msgstr "वरणाकृतिको चयन रद्द गर्न किटिक्क पार्नु होस्"
 
-#: ../src/osx/carbon/fontdlg.cpp:570 ../src/osx/carbon/fontdlg.cpp:572
+#: ../src/osx/carbon/fontdlg.cpp:554 ../src/osx/carbon/fontdlg.cpp:556
 msgid "Click to change the font colour."
 msgstr "वरणाकृतिको रङ्ग फेर्न किटिक्क पार्नु होस्"
 
-#: ../src/richtext/richtextfontpage.cpp:276
-#: ../src/richtext/richtextfontpage.cpp:278
+#: ../src/richtext/richtextfontpage.cpp:267
+#: ../src/richtext/richtextfontpage.cpp:269
 msgid "Click to change the text background colour."
 msgstr "पाठको पृष्ठभूमि रङ्ग फेर्न किटिक्क पार्नु होस्"
 
-#: ../src/richtext/richtextfontpage.cpp:263
-#: ../src/richtext/richtextfontpage.cpp:265
+#: ../src/richtext/richtextfontpage.cpp:254
+#: ../src/richtext/richtextfontpage.cpp:256
 msgid "Click to change the text colour."
 msgstr "पाठको रङ्ग फेर्न किटिक्क पार्नु होस्"
 
@@ -2046,7 +2106,7 @@ msgstr "यो तहमा वरणाकृति छान्न किट�
 msgid "Click to close this window."
 msgstr "यो विन्डो बन्द गर्न किटिक्क पार्नु होस्"
 
-#: ../src/osx/carbon/fontdlg.cpp:596 ../src/osx/carbon/fontdlg.cpp:598
+#: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
 msgid "Click to confirm changes to the font."
 msgstr "वरणाकृति परिवर्तन यकिन गर्न किटिक्क पार्नु होस्"
 
@@ -2075,13 +2135,13 @@ msgstr "Click to create a नया सूचि शैली सिर्जन
 msgid "Click to create a new paragraph style."
 msgstr "नया अनुच्छेद शैली सिर्जना गर्न किटिक्क पार्नु होस्"
 
-#: ../src/richtext/richtexttabspage.cpp:137
-#: ../src/richtext/richtexttabspage.cpp:139
+#: ../src/richtext/richtexttabspage.cpp:133
+#: ../src/richtext/richtexttabspage.cpp:135
 msgid "Click to create a new tab position."
 msgstr "नया tab स्थान सिर्जना गर्न किटिक्क पार्नु होस्"
 
-#: ../src/richtext/richtexttabspage.cpp:149
-#: ../src/richtext/richtexttabspage.cpp:151
+#: ../src/richtext/richtexttabspage.cpp:145
+#: ../src/richtext/richtexttabspage.cpp:147
 msgid "Click to delete all tab positions."
 msgstr "सबै tab स्थानहरू मेटाउन किटिक्क पार्नु होस्"
 
@@ -2090,8 +2150,8 @@ msgstr "सबै tab स्थानहरू मेटाउन किटि�
 msgid "Click to delete the selected style."
 msgstr "चयन गरेको शैली मेटाउन किटिक्क पार्नु होस्"
 
-#: ../src/richtext/richtexttabspage.cpp:143
-#: ../src/richtext/richtexttabspage.cpp:145
+#: ../src/richtext/richtexttabspage.cpp:139
+#: ../src/richtext/richtexttabspage.cpp:141
 msgid "Click to delete the selected tab position."
 msgstr "चयन गरेको tab स्थान मेटाउन किटिक्क पार्नु होस्"
 
@@ -2129,7 +2189,7 @@ msgstr "यो विन्डो बन्द गर "
 msgid "Color"
 msgstr "रङ्ग"
 
-#: ../src/richtext/richtextformatdlg.cpp:725
+#: ../src/richtext/richtextformatdlg.cpp:781
 msgid "Colour"
 msgstr "रङ्ग"
 
@@ -2138,27 +2198,27 @@ msgstr "रङ्ग"
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "रङ्ग चयन पातो %0lx गल्तीले गर्दा असफल भयो ।"
 
-#: ../src/osx/carbon/fontdlg.cpp:566
+#: ../src/osx/carbon/fontdlg.cpp:550
 msgid "Colour:"
 msgstr "रङ्ग:"
 
-#: ../src/osx/carbon/dataview.cpp:900
+#: ../src/osx/carbon/dataview.cpp:898
 msgid "Column could not be added."
 msgstr "महल थप्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:899
+#: ../src/osx/carbon/dataview.cpp:897
 msgid "Column description could not be initialized."
 msgstr "महलको बयान सुरु भएन"
 
-#: ../src/osx/carbon/dataview.cpp:1538 ../src/osx/carbon/dataview.cpp:1559
+#: ../src/osx/carbon/dataview.cpp:1536 ../src/osx/carbon/dataview.cpp:1557
 msgid "Column index not found."
 msgstr "महलको अनुक्रमणिका भेटिएन"
 
-#: ../src/osx/carbon/dataview.cpp:1614
+#: ../src/osx/carbon/dataview.cpp:1612
 msgid "Column width could not be determined"
 msgstr "महलको छोडाइ यकिन भएन"
 
-#: ../src/osx/carbon/dataview.cpp:901
+#: ../src/osx/carbon/dataview.cpp:899
 msgid "Column width could not be set."
 msgstr "महलको छोडाइ तय गर्न सकिएन"
 
@@ -2174,7 +2234,7 @@ msgstr "आदेश लाइन argument %d लाई युनिकोडम
 msgid "Common dialog failed with error code %0lx."
 msgstr "गल्ती कोड %0lx ले गर्दा साझा पातो असफल भयो ।"
 
-#: ../src/gtk/window.cpp:4306
+#: ../src/gtk/window.cpp:4345
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2182,7 +2242,7 @@ msgstr ""
 "यो प्रणालीले क्षतिपूर्ति लाइ समर्थन गर्दैन । कृपया तपाइको विन्डो व्यवस्थापकमा यसलाई सक्षम "
 "बनाउनु होस् "
 
-#: ../src/html/helpwnd.cpp:1554
+#: ../src/html/helpwnd.cpp:1565
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "खाँदिएको HTML सहयोग फाइल (*.chm)|*.chm|"
 
@@ -2199,19 +2259,19 @@ msgstr "Config प्रविष्टि नाम '%c' सित सुरु
 msgid "Confirm"
 msgstr "यकिन गर्नु होस्"
 
-#: ../src/msw/mimetype.cpp:739
+#: ../src/msw/mimetype.cpp:715
 msgid "Confirm registry update"
 msgstr "registry अद्यावधिक यकिन गर्नु होस्"
 
-#: ../src/html/htmlwin.cpp:544
+#: ../src/html/htmlwin.cpp:557
 msgid "Connecting..."
 msgstr "जोड्दै छु"
 
-#: ../src/html/helpwnd.cpp:482
+#: ../src/html/helpwnd.cpp:483
 msgid "Contents"
 msgstr "सामाग्रीहरू"
 
-#: ../src/common/strconv.cpp:2261
+#: ../src/common/strconv.cpp:2271
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "वर्ण समूह '%s' मा परिवर्तन हुन सक्दैन"
@@ -2220,7 +2280,7 @@ msgstr "वर्ण समूह '%s' मा परिवर्तन हुन
 msgid "Convert"
 msgstr "बदलि देउ"
 
-#: ../src/html/htmlwin.cpp:1057
+#: ../src/html/htmlwin.cpp:1070
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "क्लिप पाटीमा उतारियो:\"%s\""
@@ -2237,24 +2297,33 @@ msgstr "नक्कल उतार"
 msgid "Copy selection"
 msgstr "चयनको नक्कल उतार "
 
+#: ../src/richtext/richtextborderspage.cpp:569
+#: ../src/richtext/richtextborderspage.cpp:604
+msgid "Corner"
+msgstr ""
+
+#: ../src/richtext/richtextborderspage.cpp:578
+msgid "Corner &radius:"
+msgstr ""
+
 #: ../src/html/chm.cpp:718
 #, c-format
 msgid "Could not create temporary file '%s'"
 msgstr "अस्ताइ फाइल '%s' सिर्जना गर्न सकिएन "
 
-#: ../src/osx/carbon/dataview.cpp:1285 ../src/osx/carbon/dataview.cpp:1672
+#: ../src/osx/carbon/dataview.cpp:1283 ../src/osx/carbon/dataview.cpp:1670
 msgid "Could not determine column index."
 msgstr "महलको अनुक्रमणिका पत्ता लागेन"
 
-#: ../src/osx/carbon/dataview.cpp:876
+#: ../src/osx/carbon/dataview.cpp:874
 msgid "Could not determine column's position"
 msgstr "महलको स्थान पत्ता लागेन"
 
-#: ../src/osx/carbon/dataview.cpp:843
+#: ../src/osx/carbon/dataview.cpp:841
 msgid "Could not determine number of columns."
 msgstr "महलको सङ्ख्या पत्तो लागेन"
 
-#: ../src/osx/carbon/dataview.cpp:975
+#: ../src/osx/carbon/dataview.cpp:973
 msgid "Could not determine number of items"
 msgstr "सामाग्रीको सङ्ख्या पत्ता लागेन"
 
@@ -2267,21 +2336,21 @@ msgstr "%s लाई %s मा तान्न सकिएन: %s"
 msgid "Could not find tab for id"
 msgstr "ID का लागि tab फेला परेन"
 
-#: ../src/osx/carbon/dataview.cpp:2556 ../src/osx/carbon/dataview.cpp:2591
-#: ../src/osx/carbon/dataview.cpp:2615 ../src/osx/carbon/dataview.cpp:2636
-#: ../src/osx/carbon/dataview.cpp:2773
+#: ../src/osx/carbon/dataview.cpp:2554 ../src/osx/carbon/dataview.cpp:2589
+#: ../src/osx/carbon/dataview.cpp:2613 ../src/osx/carbon/dataview.cpp:2634
+#: ../src/osx/carbon/dataview.cpp:2771
 msgid "Could not get header description."
 msgstr "शीर्षक बयान भेटिएन"
 
-#: ../src/osx/carbon/dataview.cpp:1169 ../src/osx/carbon/dataview.cpp:1195
+#: ../src/osx/carbon/dataview.cpp:1167 ../src/osx/carbon/dataview.cpp:1193
 msgid "Could not get items."
 msgstr "सामाग्री फेला परेन"
 
-#: ../src/osx/carbon/dataview.cpp:2659 ../src/osx/carbon/dataview.cpp:2724
+#: ../src/osx/carbon/dataview.cpp:2657 ../src/osx/carbon/dataview.cpp:2722
 msgid "Could not get property flags."
 msgstr "गुणहरूको झण्डा पाइ एन"
 
-#: ../src/osx/carbon/dataview.cpp:726
+#: ../src/osx/carbon/dataview.cpp:724
 msgid "Could not get selected items."
 msgstr "चयन गरेको सामाग्री फेला परेन"
 
@@ -2290,43 +2359,43 @@ msgstr "चयन गरेको सामाग्री फेला पर�
 msgid "Could not locate file '%s'."
 msgstr "फाइल '%s' पत्तो लागेन"
 
-#: ../src/osx/carbon/dataview.cpp:845
+#: ../src/osx/carbon/dataview.cpp:843
 msgid "Could not remove column."
 msgstr "महल हटाउन सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:642
+#: ../src/osx/carbon/dataview.cpp:640
 msgid "Could not retrieve number of items"
 msgstr "सामाग्रीको सङ्ख्या प्राप्त गर्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:2572
+#: ../src/osx/carbon/dataview.cpp:2570
 msgid "Could not set alignment."
 msgstr "पङ्क्ति बद्धता तय गर्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:2803
+#: ../src/osx/carbon/dataview.cpp:2801
 msgid "Could not set column width."
 msgstr "महलको छोडाइ तय गर्न सकिएन"
 
-#: ../src/common/filefn.cpp:1569
+#: ../src/common/filefn.cpp:1554
 msgid "Could not set current working directory"
 msgstr "चालू अवस्थामा रहेको घर्रा तय गर्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:2775
+#: ../src/osx/carbon/dataview.cpp:2773
 msgid "Could not set header description."
 msgstr "शीर्षक बयान तय गर्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:2596
+#: ../src/osx/carbon/dataview.cpp:2594
 msgid "Could not set icon."
 msgstr "प्रतिमा तय गर्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:2617
+#: ../src/osx/carbon/dataview.cpp:2615
 msgid "Could not set maximum width."
 msgstr "अधिकतम छोडाइ तय गर्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:2638
+#: ../src/osx/carbon/dataview.cpp:2636
 msgid "Could not set minimum width."
 msgstr "न्यूनतम छोडाइ तय गर्न सकिएन"
 
-#: ../src/osx/carbon/dataview.cpp:2664 ../src/osx/carbon/dataview.cpp:2729
+#: ../src/osx/carbon/dataview.cpp:2662 ../src/osx/carbon/dataview.cpp:2727
 msgid "Could not set property flags."
 msgstr "गुणहरूको झण्डा तय गर्न सकिएन"
 
@@ -2347,8 +2416,8 @@ msgstr "विन्डोमा तथ्याङ्क सार्न सक
 msgid "Couldn't acquire a mutex lock"
 msgstr "mutex चाबी पाउन सकिएन"
 
-#: ../src/msw/imaglist.cpp:166 ../src/msw/imaglist.cpp:197
-#: ../src/msw/imaglist.cpp:209 ../src/msw/dragimag.cpp:193
+#: ../src/msw/imaglist.cpp:189 ../src/msw/imaglist.cpp:226
+#: ../src/msw/imaglist.cpp:238 ../src/msw/dragimag.cpp:193
 #: ../src/msw/dragimag.cpp:232
 msgid "Couldn't add an image to the image list."
 msgstr "तस्विर सुचीमा तस्विर थप्न सकिएन"
@@ -2370,11 +2439,11 @@ msgstr "अनुवाद को लेखाजोखा गर्न सक�
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "चिन्ह '%s' गतिसित पुस्तकालयमा पाउन सकिएन"
 
-#: ../src/gtk/print.cpp:2014
+#: ../src/gtk/print.cpp:2010
 msgid "Couldn't get hatch style from wxBrush."
 msgstr "wxBrush बाट hatch शैली पाउन सकिएन "
 
-#: ../src/msw/thread.cpp:950
+#: ../src/msw/thread.cpp:945
 msgid "Couldn't get the current thread pointer"
 msgstr "चालू धागो बर्धक पाउन सकिएन"
 
@@ -2404,7 +2473,7 @@ msgstr "थैलीको नाम पाउनसकिएन"
 msgid "Couldn't open audio: %s"
 msgstr "श्रव्य हटाउन सकिएन: %s"
 
-#: ../src/msw/ole/dataobj.cpp:350
+#: ../src/msw/ole/dataobj.cpp:377
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr "क्लिप पाटीको स्वरूप '%s' दर्ता गर्न सकिएन"
@@ -2444,8 +2513,8 @@ msgstr "नया घर्राको सिर्जना गर्नु �
 msgid "Ctrl+"
 msgstr "Ctrl+"
 
-#: ../src/richtext/richtextctrl.cpp:325 ../src/osx/textctrl_osx.cpp:582
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2283
+#: ../src/richtext/richtextctrl.cpp:331 ../src/osx/textctrl_osx.cpp:582
+#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2334
 msgid "Cu&t"
 msgstr "&काट्नु होस्"
 
@@ -2493,23 +2562,23 @@ msgstr "DEL"
 msgid "DELETE"
 msgstr "मेटाइ देउ"
 
-#: ../src/common/imagbmp.cpp:1092
+#: ../src/common/imagbmp.cpp:1090
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB शीर्षक: अनुसंहिता bitdepth सित मिल्दैन "
 
-#: ../src/common/imagbmp.cpp:1040
+#: ../src/common/imagbmp.cpp:1038
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "DIB शीर्षक: फाइलको लागि तस्विरको उचाइ > 32767 pixels "
 
-#: ../src/common/imagbmp.cpp:1032
+#: ../src/common/imagbmp.cpp:1030
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "DIB शीर्षक: फाइलको लागि तस्विर छोडाइ >32767 pixels"
 
-#: ../src/common/imagbmp.cpp:1060
+#: ../src/common/imagbmp.cpp:1058
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB शीर्षक: फाइलमा अज्ञात bitdepth "
 
-#: ../src/common/imagbmp.cpp:1074
+#: ../src/common/imagbmp.cpp:1072
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB शीर्षक: फाइलमा अज्ञात अनुसंहिता"
 
@@ -2525,15 +2594,15 @@ msgstr "DL खाम, 110 x 220 मिमी"
 msgid "DOWN"
 msgstr "तल"
 
-#: ../src/richtext/richtextborderspage.cpp:545
+#: ../src/richtext/richtextborderspage.cpp:616
 msgid "Dashed"
 msgstr "Dashed"
 
-#: ../src/osx/carbon/dataview.cpp:1921
+#: ../src/osx/carbon/dataview.cpp:1919
 msgid "Data object has invalid data format"
 msgstr "तथ्याङ्क वस्तुको स्वरूप अमान्य किसिमको छ ।"
 
-#: ../src/osx/carbon/dataview.cpp:2491
+#: ../src/osx/carbon/dataview.cpp:2489
 msgid "Date renderer cannot render value; value type: "
 msgstr "मिति खोज्नाले मान पाइ एन ; मान को किसिम: "
 
@@ -2566,30 +2635,30 @@ msgstr "निर्धारित वरणाकृति"
 msgid "Default printer"
 msgstr "निर्धारित प्रिन्टर"
 
-#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:8095 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "मेटाइ देउ"
 
-#: ../src/richtext/richtexttabspage.cpp:148
+#: ../src/richtext/richtexttabspage.cpp:144
 msgid "Delete A&ll"
 msgstr "&सबै मेटाइ देउ "
 
-#: ../src/richtext/richtextbuffer.cpp:10637
+#: ../src/richtext/richtextbuffer.cpp:11105
 #, fuzzy
 msgid "Delete Column"
 msgstr "चयन मेटाइ देउ "
 
-#: ../src/richtext/richtextbuffer.cpp:10587
+#: ../src/richtext/richtextbuffer.cpp:11055
 #, fuzzy
 msgid "Delete Row"
 msgstr "मेटाइ देउ"
 
-#: ../src/richtext/richtextstyledlg.cpp:779
+#: ../src/richtext/richtextstyledlg.cpp:782
 msgid "Delete Style"
 msgstr "शैली मेटाइ देउ "
 
-#: ../src/richtext/richtextctrl.cpp:1231 ../src/richtext/richtextctrl.cpp:1452
+#: ../src/richtext/richtextctrl.cpp:1306 ../src/richtext/richtextctrl.cpp:1544
 msgid "Delete Text"
 msgstr "पाठ मेटाइ देउ "
 
@@ -2601,12 +2670,12 @@ msgstr "सामाग्री मेटाइ देउ "
 msgid "Delete selection"
 msgstr "चयन मेटाइ देउ "
 
-#: ../src/richtext/richtextstyledlg.cpp:779
+#: ../src/richtext/richtextstyledlg.cpp:782
 #, c-format
 msgid "Delete style %s?"
 msgstr "शैली %s मेटाउने हो?"
 
-#: ../src/unix/snglinst.cpp:295
+#: ../src/unix/snglinst.cpp:301
 #, c-format
 msgid "Deleted stale lock file '%s'."
 msgstr "बासी चाबी फाइल '%s'. हटाइयो ।"
@@ -2640,7 +2709,7 @@ msgstr ""
 "यो कम्प्युटरमा दूर पहुँच सेवा (RAS) स्थापना नघरैकोले डायल सेवा उपलब्ध हुन सकेन । कृपया "
 "यसलाई स्थापना गर्नु होला ।"
 
-#: ../src/generic/tipdlg.cpp:230
+#: ../src/generic/tipdlg.cpp:225
 msgid "Did you know..."
 msgstr "के तपाइलाई थाहा छ?"
 
@@ -2653,12 +2722,12 @@ msgstr "DirectFB %d गल्ती हुन पुग्यो ।"
 msgid "Directories"
 msgstr "घर्रा"
 
-#: ../src/common/filefn.cpp:1251
+#: ../src/common/filefn.cpp:1243
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "'%s' घर्रा सिर्जना गर्न सकिएन ।"
 
-#: ../src/common/filefn.cpp:1271
+#: ../src/common/filefn.cpp:1263
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "'%s' घर्रा मेटाउन सकिएन ।"
@@ -2675,7 +2744,7 @@ msgstr "घर्रा छदै छैन"
 msgid "Discard changes and reload the last saved version?"
 msgstr "के परिवर्तन लाई त्यागेर अन्तिम बचत संस्करणलाई वहन गर्ने हो?"
 
-#: ../src/html/helpwnd.cpp:512
+#: ../src/html/helpwnd.cpp:513
 msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
@@ -2683,15 +2752,15 @@ msgstr ""
 "प्रदान गरिएको शब्द खण्ड भएका सबै अनुसूची लाई देखाउ । खोजी ठूलो वा सानो वर्णको वास्ता "
 "गर्दैन । "
 
-#: ../src/html/helpwnd.cpp:692
+#: ../src/html/helpwnd.cpp:693
 msgid "Display options dialog"
 msgstr "विकल्प पातो देखाउ"
 
-#: ../src/html/helpwnd.cpp:326
+#: ../src/html/helpwnd.cpp:327
 msgid "Displays help as you browse the books on the left."
 msgstr "किताब पल्टाउँदा देब्रे पट्टि सहयोग देखाउँछ "
 
-#: ../src/msw/mimetype.cpp:732
+#: ../src/msw/mimetype.cpp:708
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
 "\" ?\n"
@@ -2724,11 +2793,11 @@ msgstr "अभिलेखन कर्ता"
 msgid "Documentation writers"
 msgstr "कागजातहरूका लेखकहरू"
 
-#: ../src/common/sizer.cpp:2680
+#: ../src/common/sizer.cpp:2684
 msgid "Don't Save"
 msgstr "बचत नगर"
 
-#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:611
+#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:624
 msgid "Done"
 msgstr "सकियो"
 
@@ -2736,11 +2805,11 @@ msgstr "सकियो"
 msgid "Done."
 msgstr "सकियो"
 
-#: ../src/richtext/richtextborderspage.cpp:544
+#: ../src/richtext/richtextborderspage.cpp:615
 msgid "Dotted"
 msgstr "थोप्लो थोप्लो"
 
-#: ../src/richtext/richtextborderspage.cpp:546
+#: ../src/richtext/richtextborderspage.cpp:617
 msgid "Double"
 msgstr "दुई वटा"
 
@@ -2757,7 +2826,7 @@ msgstr "दोहोरिएर प्रयोग भएको id : %d"
 msgid "Down"
 msgstr "तल"
 
-#: ../src/richtext/richtextctrl.cpp:814
+#: ../src/richtext/richtextctrl.cpp:848
 msgid "Drag"
 msgstr "घिसार्नू"
 
@@ -2773,7 +2842,7 @@ msgstr "अन्त्य"
 msgid "ENTER"
 msgstr "ENTER"
 
-#: ../src/unix/fswatcher_inotify.cpp:535
+#: ../src/unix/fswatcher_inotify.cpp:548
 msgid "EOF while reading from inotify descriptor"
 msgstr "inotify ब्याख्याकारबाट पढ्दा फाइलको अन्तमा पुगियो । "
 
@@ -2838,23 +2907,23 @@ msgstr "ठाडो पङ्क्ति बद्धता लाई यो�
 msgid "Enables a background colour."
 msgstr "पृष्ठभूमि रङ्ग लाई योग्य बनाउ"
 
-#: ../src/richtext/richtextstyledlg.cpp:931
+#: ../src/richtext/richtextstyledlg.cpp:934
 msgid "Enter a box style name"
 msgstr "बाकस शैलीको नाम लेख"
 
-#: ../src/richtext/richtextstyledlg.cpp:603
+#: ../src/richtext/richtextstyledlg.cpp:606
 msgid "Enter a character style name"
 msgstr "वर्ण शैलीको नाम लेख"
 
-#: ../src/richtext/richtextstyledlg.cpp:817
+#: ../src/richtext/richtextstyledlg.cpp:820
 msgid "Enter a list style name"
 msgstr "सूचि शैलीको नाम लेख"
 
-#: ../src/richtext/richtextstyledlg.cpp:890
+#: ../src/richtext/richtextstyledlg.cpp:893
 msgid "Enter a new style name"
 msgstr "नया शैलीको नाम लेख"
 
-#: ../src/richtext/richtextstyledlg.cpp:651
+#: ../src/richtext/richtextstyledlg.cpp:654
 msgid "Enter a paragraph style name"
 msgstr "अनुच्छेद शैलीको नाम लेख"
 
@@ -2898,11 +2967,11 @@ msgstr "गल्ती भएकोले kqueue instance बन्द हु�
 msgid "Error creating directory"
 msgstr "घर्रा सिर्जनामा गल्ती "
 
-#: ../src/common/imagbmp.cpp:1103
+#: ../src/common/imagbmp.cpp:1101
 msgid "Error in reading image DIB."
 msgstr "तस्विरको डिपो ट पढ्न गल्ती भयो ।"
 
-#: ../src/propgrid/propgrid.cpp:6563
+#: ../src/propgrid/propgrid.cpp:6550
 #, c-format
 msgid "Error in resource: %s"
 msgstr "श्रोतमा गल्ती: : %s"
@@ -2931,10 +3000,6 @@ msgstr "Esperanto (ISO-8859-3)"
 msgid "Estimated time:"
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:639
-msgid "Event queue overflowed"
-msgstr "Event queue overflowed"
-
 #: ../src/generic/dbgrptg.cpp:234
 msgid "Executable files (*.exe)|*.exe|"
 msgstr "Executable फाइलहरू(*.exe)|*.exe|"
@@ -2943,7 +3008,7 @@ msgstr "Executable फाइलहरू(*.exe)|*.exe|"
 msgid "Execute"
 msgstr "कार्यान्वयन गर"
 
-#: ../src/msw/utilsexc.cpp:888
+#: ../src/msw/utilsexc.cpp:887
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "आदेश '%s' को कार्यान्वयन असफल भयो ।"
@@ -2976,7 +3041,7 @@ msgstr "'%s' लाई '%s' मा खिच्ने काम असफल भ
 msgid "F"
 msgstr "F"
 
-#: ../src/propgrid/advprops.cpp:640
+#: ../src/propgrid/advprops.cpp:641
 msgid "Face Name"
 msgstr "अनुहारको नाम"
 
@@ -2998,7 +3063,7 @@ msgstr "bitmap तथ्याङ्कको लागि %luKb को भण�
 msgid "Failed to allocate colour for OpenGL"
 msgstr "OpenGL को लागि रङ्ग उपलब्ध गराउन सकिएन ।"
 
-#: ../src/unix/displayx11.cpp:288
+#: ../src/unix/displayx11.cpp:292
 msgid "Failed to change video mode"
 msgstr "श्रव्य दृश्य मुद्रामा बदल्न सकिएन"
 
@@ -3016,7 +3081,7 @@ msgstr "खानतलासी प्रतिवेदन घर्रा \"%
 msgid "Failed to close file handle"
 msgstr "फाइल को हातो बन्द गर्न सकिएन ।"
 
-#: ../src/unix/snglinst.cpp:334
+#: ../src/unix/snglinst.cpp:340
 #, c-format
 msgid "Failed to close lock file '%s'"
 msgstr "चाबी फाइल '%s' बन्द गर्न सकिएन ।"
@@ -3057,7 +3122,7 @@ msgstr "registry मान '%s' को नक्कल उतार्न सक
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "registry कुञ्जीको सामाग्री '%s' को नक्कल '%s' मा उतार्न सकिएन ।"
 
-#: ../src/common/filefn.cpp:1058
+#: ../src/common/filefn.cpp:1051
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "फाइल '%s' को नक्कल '%s' मा उतार्न सकिएन ।"
@@ -3071,19 +3136,19 @@ msgstr "registry उप-कुञ्जी '%s' को नक्कल '%s' म�
 msgid "Failed to create DDE string"
 msgstr "DDE पदावलीको सिर्जना गर्न सकिएन ।"
 
-#: ../src/msw/mdi.cpp:590
+#: ../src/msw/mdi.cpp:594
 msgid "Failed to create MDI parent frame."
 msgstr "MDI parent frame को सिर्जना गर्न सकिएन ।"
 
-#: ../src/common/filename.cpp:1080
+#: ../src/common/filename.cpp:1086
 msgid "Failed to create a temporary file name"
 msgstr "अस्ताई फाइलको नाम सिर्जना गर्न सकिएन ।"
 
-#: ../src/msw/utilsexc.cpp:235
+#: ../src/msw/utilsexc.cpp:234
 msgid "Failed to create an anonymous pipe"
 msgstr "anonymous pipe को सिर्जना गर्न सकिएन ।"
 
-#: ../src/msw/ole/automtn.cpp:522
+#: ../src/msw/ole/automtn.cpp:525
 #, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr "instance \"%s\" को सिर्जना गर्न सकिएन ।"
@@ -3115,7 +3180,7 @@ msgstr ""
 msgid "Failed to create epoll descriptor"
 msgstr "epoll ब्याख्याकार को सिर्जना गर्न सकिएन ।"
 
-#: ../src/msw/mimetype.cpp:198
+#: ../src/msw/mimetype.cpp:200
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
 msgstr "फाइलहरू '%s' का लागि registry प्रविष्टि सिर्जना गर्न सकिएन ।"
@@ -3129,7 +3194,7 @@ msgstr "स्तरीय फेला पार्ने/प्रतिस्
 msgid "Failed to create wake up pipe used by event loop."
 msgstr "event loop ले प्रयोग गर्ने Wake Up Pipe सिर्जना गर्न सकिएन ।"
 
-#: ../src/html/winpars.cpp:739
+#: ../src/html/winpars.cpp:730
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "%s अनुसंहितामा html कागजात प्रदर्शन गर्न सकिएन ।"
@@ -3138,7 +3203,7 @@ msgstr "%s अनुसंहितामा html कागजात प्र�
 msgid "Failed to empty the clipboard."
 msgstr "क्लिप पाटी रित्याउन सकिएन ।"
 
-#: ../src/unix/displayx11.cpp:265
+#: ../src/unix/displayx11.cpp:266
 msgid "Failed to enumerate video modes"
 msgstr "श्रव्य दृश्य मुद्रा गणना गर्न सकिएन ।"
 
@@ -3160,7 +3225,7 @@ msgstr "'%s' कार्यान्वयन गर्न सकिएन ।\
 msgid "Failed to execute curl, please install it in PATH."
 msgstr "curl कार्यान्वयन गर्न सकिएन, कृपया यसलाई PATH मा स्थापन गर्नु होस् ।"
 
-#: ../src/msw/ole/automtn.cpp:505
+#: ../src/msw/ole/automtn.cpp:508
 #, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr "\"%s\" को CLSID फेला पार्न सकिएन ।"
@@ -3175,7 +3240,7 @@ msgstr "नियमित अभिव्यक्ति%s सित मिल�
 msgid "Failed to get ISP names: %s"
 msgstr "ISP नामहरू %s पाउन सकिएन ।"
 
-#: ../src/msw/ole/automtn.cpp:574
+#: ../src/msw/ole/automtn.cpp:577
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr "\"%s\" का लागि पुराना स्वचालित परिदृष्य पाउन सकिएन ।"
@@ -3188,7 +3253,7 @@ msgstr "क्लिप पाटीबाट केही पनि पाउ�
 msgid "Failed to get the local system time"
 msgstr "कम्प्युटर प्रणालीमा स्थानीय समय भेटिएन ।"
 
-#: ../src/common/filefn.cpp:1453
+#: ../src/common/filefn.cpp:1445
 msgid "Failed to get the working directory"
 msgstr "कार्य गर्दै गरेको घर्रा पाउन सकिएन ।"
 
@@ -3209,7 +3274,7 @@ msgstr "OpenGL सुरु गर्न सकिएन ।"
 msgid "Failed to initiate dialup connection: %s"
 msgstr "%s डायलअप जडान गराउन सकिएन ।"
 
-#: ../src/gtk/textctrl.cpp:1117
+#: ../src/gtk/textctrl.cpp:1129
 msgid "Failed to insert text in the control."
 msgstr "नियन्त्रणमा पाठ लेख्न सकिएन ।"
 
@@ -3222,7 +3287,7 @@ msgstr "'%s' चाबी फाइल जाँच्न सकिएन ।"
 msgid "Failed to install signal handler"
 msgstr "सङ्केत चालक स्थापित गर्न सकिएन ।"
 
-#: ../src/unix/threadpsx.cpp:1162
+#: ../src/unix/threadpsx.cpp:1167
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -3292,7 +3357,7 @@ msgstr "चाबी फाइल '%s' मा चाबी लगाउन स�
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr "ब्याख्याकार %d (epoll ब्याख्याकार %d मा ) फेर बदल गर्न सकिएन ।"
 
-#: ../src/common/filename.cpp:2681
+#: ../src/common/filename.cpp:2687
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "'%s' फाइलको समय फेर बदल गर्न सकिएन ।"
@@ -3316,7 +3381,7 @@ msgstr "लेख्नका लागि '%s' खोल्न सकिएन 
 msgid "Failed to open CHM archive '%s'."
 msgstr "सङ्ग्रह '%s' खोल्न सकिएन ।"
 
-#: ../src/common/utilscmn.cpp:1135
+#: ../src/common/utilscmn.cpp:1142
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "निर्धारित Browser मा \"%s\" खोल्न सकिएन ।"
@@ -3331,7 +3396,7 @@ msgstr "अनुगमनका लागि घर्रा \"%s\" खोल�
 msgid "Failed to open display \"%s\"."
 msgstr "पटल \"%s\" खोल्न सकिएन ।"
 
-#: ../src/common/filename.cpp:1115
+#: ../src/common/filename.cpp:1121
 msgid "Failed to open temporary file."
 msgstr "अस्ताई फाइल खोल्न सकिएन ।"
 
@@ -3339,7 +3404,7 @@ msgstr "अस्ताई फाइल खोल्न सकिएन ।"
 msgid "Failed to open the clipboard."
 msgstr "क्लिप पाटी खोल्न सकिएन ।"
 
-#: ../src/common/translation.cpp:1170
+#: ../src/common/translation.cpp:1171
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
 msgstr "बहुवचन स्वरूप '%s' पठाउन सकिएन ।"
@@ -3378,7 +3443,7 @@ msgstr "Wake-Up pipe बाट पढ्न सकिएन ।"
 msgid "Failed to redirect child process input/output"
 msgstr "बाल प्रक्रिया लगानी/प्रतिफल फेरि पठाउन सकिएन ।"
 
-#: ../src/msw/utilsexc.cpp:697
+#: ../src/msw/utilsexc.cpp:696
 msgid "Failed to redirect the child process IO"
 msgstr "बाल प्रक्रिया लगानी/प्रतिफल फेरि पठाउन सकिएन ।"
 
@@ -3397,7 +3462,7 @@ msgstr "वर्णसेट '%s' को अनुसंहिता सम्�
 msgid "Failed to remove debug report file \"%s\""
 msgstr "खानतलासी प्रतिवेदन फाइल \"%s\" हटाउन सकिएन ।"
 
-#: ../src/unix/snglinst.cpp:322
+#: ../src/unix/snglinst.cpp:328
 #, c-format
 msgid "Failed to remove lock file '%s'"
 msgstr "चाबी फाइल '%s' हटाउन सकिएन ।"
@@ -3412,7 +3477,7 @@ msgstr "बासी चाबी फाइल '%s'. हटाउन सकि�
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "registry मान '%s' लाई '%s' मा नामा करण गर्न सकिएन ।"
 
-#: ../src/common/filefn.cpp:1168
+#: ../src/common/filefn.cpp:1161
 #, c-format
 msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
@@ -3428,7 +3493,7 @@ msgstr "registry कुञ्जी '%s' लाई '%s' मा नामा क�
 msgid "Failed to retrieve data from the clipboard."
 msgstr "क्लिप पाटीबाट तथ्याङ्क लिन सकिएन ।"
 
-#: ../src/common/filename.cpp:2777
+#: ../src/common/filename.cpp:2783
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "फाइल '%s' को समय लिन सकिएन ।"
@@ -3478,21 +3543,21 @@ msgstr "धागो प्राथमिकता %d कायम गर्न
 msgid "Failed to set temporary file permissions"
 msgstr "अस्ताई फाइल अनुमित राख्न सकिएन ।"
 
-#: ../src/gtk/textctrl.cpp:1058
+#: ../src/gtk/textctrl.cpp:1070
 msgid "Failed to set text in the text control."
 msgstr "पाठ नियन्त्रक मा पाठ राख्न सकिएन ।"
 
-#: ../src/unix/threadpsx.cpp:1293
+#: ../src/unix/threadpsx.cpp:1298
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "धागो स्वीकृति तहलाई %lu मा तय गर्न सकिएन ।"
 
-#: ../src/unix/threadpsx.cpp:1377 ../src/unix/threadpsx.cpp:1387
+#: ../src/unix/threadpsx.cpp:1382 ../src/unix/threadpsx.cpp:1392
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "धागो प्राथमिकता %d कायम गर्न सकिएन ।"
 
-#: ../src/unix/utilsunx.cpp:791
+#: ../src/unix/utilsunx.cpp:801
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr "न टालिएको पाइप जडान गर्न सकिएन, कार्यक्रम निष्क्रिय हुन सक्छ ।"
 
@@ -3509,7 +3574,7 @@ msgstr "DirectFB pipe लाई न टालिएको मुद्राम�
 msgid "Failed to switch wake up pipe to non-blocking mode"
 msgstr "wake Up pipe लाई न टालिएको मुद्रामा लान सकिएन ।"
 
-#: ../src/unix/threadpsx.cpp:1569
+#: ../src/unix/threadpsx.cpp:1574
 msgid "Failed to terminate a thread."
 msgstr "धागो लाई बन्द गर्न सकिएन ।"
 
@@ -3522,12 +3587,12 @@ msgstr "advise loop with DDE server बन्द गर्न सकिएन �
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "डायलअप जडान %s बन्द गर्न सकिएन ।"
 
-#: ../src/common/filename.cpp:2696
+#: ../src/common/filename.cpp:2702
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "फाइल '%s' लाइ छु सकिएन ।"
 
-#: ../src/unix/snglinst.cpp:328
+#: ../src/unix/snglinst.cpp:334
 #, c-format
 msgid "Failed to unlock lock file '%s'"
 msgstr "चाबी लागेको फाइल '%s' को चाबी खोल्न सकिएन ।"
@@ -3560,7 +3625,7 @@ msgstr "चाबी फाइल '%s' मा लेख्न सकिएन �
 msgid "False"
 msgstr "असत्य"
 
-#: ../src/propgrid/advprops.cpp:658
+#: ../src/propgrid/advprops.cpp:659
 msgid "Family"
 msgstr "परिवार"
 
@@ -3591,26 +3656,26 @@ msgid ""
 "Do you want to replace it?"
 msgstr "फाइल '%s' पहिले देखि नै छ, के तपाइ यसलाई मेटाएर नया राख्न चाहनु हुन्छ?"
 
-#: ../src/common/filefn.cpp:1207
+#: ../src/common/filefn.cpp:1199
 #, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "फाइल '%s' लाई हटाउन सकिएन ।"
 
-#: ../src/common/filefn.cpp:1187
+#: ../src/common/filefn.cpp:1180
 #, c-format
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "फाइल '%s' को नामा करण '%s' राख्न सकिएन ।"
 
-#: ../src/richtext/richtextctrl.cpp:2688 ../src/common/textcmn.cpp:921
+#: ../src/richtext/richtextctrl.cpp:2810 ../src/common/textcmn.cpp:935
 msgid "File couldn't be loaded."
 msgstr "फाइल वहन गर्न सकिएन ।"
 
-#: ../src/msw/filedlg.cpp:458
+#: ../src/msw/filedlg.cpp:462
 #, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr "फाइल पाटी गल्ती कोड %0lx ले असफल भयो ।"
 
-#: ../src/common/docview.cpp:1771
+#: ../src/common/docview.cpp:1778
 msgid "File error"
 msgstr "फाइलको गल्ती"
 
@@ -3622,7 +3687,7 @@ msgstr "फाइल को नाम पहिले देखि नै छ �
 msgid "Files"
 msgstr "फाइलहरू"
 
-#: ../src/common/filefn.cpp:1761
+#: ../src/common/filefn.cpp:1746
 #, c-format
 msgid "Files (%s)"
 msgstr "फाइलहरू (%s)"
@@ -3631,7 +3696,7 @@ msgstr "फाइलहरू (%s)"
 msgid "Filter"
 msgstr "फिल्टर"
 
-#: ../src/common/stockitem.cpp:158 ../src/html/helpwnd.cpp:500
+#: ../src/common/stockitem.cpp:158 ../src/html/helpwnd.cpp:501
 msgid "Find"
 msgstr "फेला पार"
 
@@ -3647,11 +3712,11 @@ msgstr "प्रथम पृष्ट"
 msgid "Fixed"
 msgstr "निश्चित "
 
-#: ../src/html/helpwnd.cpp:1219
+#: ../src/html/helpwnd.cpp:1220
 msgid "Fixed font:"
 msgstr "निश्चित वरणाकृति:"
 
-#: ../src/html/helpwnd.cpp:1282
+#: ../src/html/helpwnd.cpp:1283
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "निश्चित आकार face.<br> <b>मोटो</b> <i>कोल्टे</i> "
 
@@ -3667,24 +3732,24 @@ msgstr "फ्लपी"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13इन्च"
 
-#: ../src/richtext/richtextformatdlg.cpp:324 ../src/osx/carbon/fontdlg.cpp:473
+#: ../src/richtext/richtextformatdlg.cpp:345 ../src/osx/carbon/fontdlg.cpp:457
 #: ../src/common/stockitem.cpp:194
 msgid "Font"
 msgstr "वरणाकृति"
 
-#: ../src/richtext/richtextfontpage.cpp:230
+#: ../src/richtext/richtextfontpage.cpp:221
 msgid "Font &weight:"
 msgstr "वरणाकृति &भार:"
 
-#: ../src/html/helpwnd.cpp:1220
+#: ../src/html/helpwnd.cpp:1221
 msgid "Font size:"
 msgstr "वरणाकृतिको आकार:"
 
-#: ../src/richtext/richtextfontpage.cpp:217
+#: ../src/richtext/richtextfontpage.cpp:208
 msgid "Font st&yle:"
 msgstr "वरणाकृतिको &शैली:"
 
-#: ../src/osx/carbon/fontdlg.cpp:515
+#: ../src/osx/carbon/fontdlg.cpp:499
 msgid "Font:"
 msgstr "वरणाकृति:"
 
@@ -3705,7 +3770,7 @@ msgstr "प्रेषित गर"
 msgid "Forward hrefs are not supported"
 msgstr "hrefs प्रेषण समर्थन गर्न सकिँदैन ।"
 
-#: ../src/html/helpwnd.cpp:888
+#: ../src/html/helpwnd.cpp:889
 #, c-format
 msgid "Found %i matches"
 msgstr "%i मिल्दो झुल्दो पाइयो ।"
@@ -3734,7 +3799,7 @@ msgstr "GIF: यथेष्ट भण्डार छैन"
 msgid "GIF: unknown error!!!"
 msgstr "GIF: अज्ञात गल्ती!!!"
 
-#: ../src/gtk/window.cpp:4288
+#: ../src/gtk/window.cpp:4327
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3774,15 +3839,15 @@ msgstr "GetPropertyCollection called on a generic accessor"
 msgid "GetPropertyCollection called w/o valid collection getter"
 msgstr "GetPropertyCollection called w/o valid collection getter"
 
-#: ../src/html/helpwnd.cpp:673
+#: ../src/html/helpwnd.cpp:674
 msgid "Go back"
 msgstr "फर्केर जाउ"
 
-#: ../src/html/helpwnd.cpp:674
+#: ../src/html/helpwnd.cpp:675
 msgid "Go forward"
 msgstr "अगाडी जाउ"
 
-#: ../src/html/helpwnd.cpp:676
+#: ../src/html/helpwnd.cpp:677
 msgid "Go one level up in document hierarchy"
 msgstr "कागजातको मर्यादामा एक तह माथि जाउ"
 
@@ -3802,7 +3867,7 @@ msgstr "चित्रकाव्यकन कलाकार"
 msgid "Greek (ISO-8859-7)"
 msgstr "Greek (ISO-8859-7)"
 
-#: ../src/richtext/richtextborderspage.cpp:547
+#: ../src/richtext/richtextborderspage.cpp:618
 msgid "Groove"
 msgstr "दाँती"
 
@@ -3818,16 +3883,16 @@ msgstr "सहयोग"
 msgid "HOME"
 msgstr "गृह"
 
-#: ../src/html/helpwnd.cpp:1552
+#: ../src/html/helpwnd.cpp:1563
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "HTML सहयोग योजना (*.hhp)|*.hhp|"
 
-#: ../src/html/htmlwin.cpp:659
+#: ../src/html/htmlwin.cpp:672
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTML anchor %s छदै छैन ।"
 
-#: ../src/html/helpwnd.cpp:1550
+#: ../src/html/helpwnd.cpp:1561
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "HTML फाइलहरू (*.html;*.htm)|*.html;*.htm|"
 
@@ -3845,7 +3910,7 @@ msgstr "हिब्रु (ISO-8859-8)"
 msgid "Help"
 msgstr "सहयोग"
 
-#: ../src/html/helpwnd.cpp:1213
+#: ../src/html/helpwnd.cpp:1214
 msgid "Help Browser Options"
 msgstr "सहयोगी Browser विकल्पहरू"
 
@@ -3853,15 +3918,15 @@ msgstr "सहयोगी Browser विकल्पहरू"
 msgid "Help Index"
 msgstr "सहयोग अनुक्रमणिका"
 
-#: ../src/html/helpwnd.cpp:1534
+#: ../src/html/helpwnd.cpp:1545
 msgid "Help Printing"
 msgstr "सहयोग छापिँदै "
 
-#: ../src/html/helpwnd.cpp:814
+#: ../src/html/helpwnd.cpp:815
 msgid "Help Topics"
 msgstr "सहयोग शीर्षक"
 
-#: ../src/html/helpwnd.cpp:1551
+#: ../src/html/helpwnd.cpp:1562
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "सहयोग किताबहरू (*.htb)|*.htb|सहयोग किताबहरू (*.zip)|*.zip|"
 
@@ -3880,16 +3945,16 @@ msgstr "सहयोग फाइल \"%s\" पाइ एन ।"
 msgid "Help: %s"
 msgstr "सहयोग: %s"
 
-#: ../src/osx/menu_osx.cpp:602 ../src/osx/menu_osx.cpp:649
+#: ../src/osx/menu_osx.cpp:623
 #, c-format
 msgid "Hide %s"
 msgstr "%s लुकाउ "
 
-#: ../src/osx/menu_osx.cpp:604 ../src/osx/menu_osx.cpp:651
+#: ../src/osx/menu_osx.cpp:625
 msgid "Hide Others"
 msgstr "अरूलाई पनि लुकाउ "
 
-#: ../src/generic/infobar.cpp:85
+#: ../src/generic/infobar.cpp:84
 msgid "Hide this notification message."
 msgstr "सूचना सन्देश लुकाउ "
 
@@ -3906,26 +3971,26 @@ msgstr "गृह घर्रा"
 msgid "How the object will float relative to the text."
 msgstr "पाठको सापेक्षतामा कसरी वस्तु वहन गर्ला?"
 
-#: ../src/common/imagbmp.cpp:1118
+#: ../src/common/imagbmp.cpp:1116
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: मखुन्डो खण्ड पढाइमा गल्ती "
 
-#: ../src/common/imagbmp.cpp:1233 ../src/common/imagbmp.cpp:1294
-#: ../src/common/imagbmp.cpp:1305 ../src/common/imagbmp.cpp:1318
-#: ../src/common/imagbmp.cpp:1363 ../src/common/imagbmp.cpp:1375
-#: ../src/common/imagbmp.cpp:1386
+#: ../src/common/imagbmp.cpp:1231 ../src/common/imagbmp.cpp:1292
+#: ../src/common/imagbmp.cpp:1303 ../src/common/imagbmp.cpp:1316
+#: ../src/common/imagbmp.cpp:1361 ../src/common/imagbmp.cpp:1373
+#: ../src/common/imagbmp.cpp:1384
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: तस्विर फाइल लेखाइमा गल्ती !"
 
-#: ../src/common/imagbmp.cpp:1198
+#: ../src/common/imagbmp.cpp:1196
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: प्रतिमाको लागि तस्विर धेरै अग्लो भयो"
 
-#: ../src/common/imagbmp.cpp:1206
+#: ../src/common/imagbmp.cpp:1204
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: प्रतिमाको लागि तस्विर धेरै चौडा भयो"
 
-#: ../src/common/imagbmp.cpp:1466
+#: ../src/common/imagbmp.cpp:1464
 msgid "ICO: Invalid icon index."
 msgstr "ICO: प्रतिमा अनुक्रमणिका मिलेन"
 
@@ -3957,7 +4022,7 @@ msgstr "INSERT"
 msgid "ISO-2022-JP"
 msgstr "ISO-2022-JP"
 
-#: ../src/osx/carbon/dataview.cpp:2420
+#: ../src/osx/carbon/dataview.cpp:2418
 msgid "Icon & text renderer cannot render value; value type: "
 msgstr "प्रतिमा र पाठ renderer cannot render value; मानको किसिम: "
 
@@ -4026,7 +4091,7 @@ msgstr "तस्विर फाइल %d किसिमको छैन ।"
 msgid "Image is not of type %s."
 msgstr "तस्विर %s किसिमको छैन ।"
 
-#: ../src/msw/textctrl.cpp:399
+#: ../src/msw/textctrl.cpp:413
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -4038,27 +4103,27 @@ msgstr ""
 msgid "Impossible to get child process input"
 msgstr "शिशु प्रक्रिया लगानी प्राप्त गर्न सम्भव छैन ।"
 
-#: ../src/common/filefn.cpp:1074
+#: ../src/common/filefn.cpp:1067
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "फाइल '%s' को स्वीकृति पाउन सम्भव छैन ।"
 
-#: ../src/common/filefn.cpp:1088
+#: ../src/common/filefn.cpp:1081
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "फाइल '%s' मेटाएर अर्को फाइल बनाउन सम्भव छैन ।"
 
-#: ../src/common/filefn.cpp:1142
+#: ../src/common/filefn.cpp:1135
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "फाइल '%s' को स्वीकृति तय गर्न सम्भव छैन ।"
 
-#: ../src/common/gifdecod.cpp:818
+#: ../src/common/gifdecod.cpp:792
 #, c-format
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr "अशुद्ध GIF फ्रेम आकार (%u, %d) (फ्रेम #%u का लागि ) "
 
-#: ../src/msw/ole/automtn.cpp:624
+#: ../src/msw/ole/automtn.cpp:638
 msgid "Incorrect number of arguments."
 msgstr "अशुद्ध arguments सङ्ख्या "
 
@@ -4066,11 +4131,11 @@ msgstr "अशुद्ध arguments सङ्ख्या "
 msgid "Indent"
 msgstr "Indent"
 
-#: ../src/richtext/richtextformatdlg.cpp:330
+#: ../src/richtext/richtextformatdlg.cpp:351
 msgid "Indents && Spacing"
 msgstr "Indents र खालि स्थान"
 
-#: ../src/common/stockitem.cpp:166 ../src/html/helpwnd.cpp:525
+#: ../src/common/stockitem.cpp:166 ../src/html/helpwnd.cpp:526
 msgid "Index"
 msgstr "अनुक्रमणिका"
 
@@ -4090,23 +4155,23 @@ msgstr "post init मा सुरुवात असफल भयो, त्य
 msgid "Insert"
 msgstr "घुसाउ"
 
-#: ../src/richtext/richtextbuffer.cpp:7687
+#: ../src/richtext/richtextbuffer.cpp:7941
 msgid "Insert Field"
 msgstr "क्षेत्र घुसाउ"
 
-#: ../src/richtext/richtextbuffer.cpp:7598
-#: ../src/richtext/richtextbuffer.cpp:8551
+#: ../src/richtext/richtextbuffer.cpp:7852
+#: ../src/richtext/richtextbuffer.cpp:8805
 msgid "Insert Image"
 msgstr "तस्विर घुसाउ"
 
-#: ../src/richtext/richtextbuffer.cpp:7645
+#: ../src/richtext/richtextbuffer.cpp:7899
 msgid "Insert Object"
 msgstr "वस्तु घुसाउ"
 
-#: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7440
-#: ../src/richtext/richtextbuffer.cpp:7470
-#: ../src/richtext/richtextbuffer.cpp:7514
+#: ../src/richtext/richtextctrl.cpp:1247 ../src/richtext/richtextctrl.cpp:1454
+#: ../src/richtext/richtextbuffer.cpp:7694
+#: ../src/richtext/richtextbuffer.cpp:7724
+#: ../src/richtext/richtextbuffer.cpp:7768
 msgid "Insert Text"
 msgstr "पाठ घुसाउ"
 
@@ -4115,7 +4180,7 @@ msgstr "पाठ घुसाउ"
 msgid "Inserts a page break before the paragraph."
 msgstr "अनुच्छेद अगाडि पृष्ट विच्छेद गर।"
 
-#: ../src/richtext/richtextborderspage.cpp:549
+#: ../src/richtext/richtextborderspage.cpp:620
 msgid "Inset"
 msgstr "चित्र भित्रको चित्र"
 
@@ -4128,7 +4193,7 @@ msgstr "नमिल्दो GTK+ आदेश लाइन विकल्प,
 msgid "Invalid TIFF image index."
 msgstr "नमिल्दो TIFF तस्विर अनुक्रमणिका"
 
-#: ../src/osx/carbon/dataview.cpp:1782 ../src/osx/carbon/dataview.cpp:1877
+#: ../src/osx/carbon/dataview.cpp:1780 ../src/osx/carbon/dataview.cpp:1875
 msgid "Invalid data view item"
 msgstr "नमिल्दो तथ्याङ्क दृश्य सामाग्री"
 
@@ -4142,17 +4207,17 @@ msgstr "नमिल्दो ज्यामिति मानक '%s'"
 msgid "Invalid geometry specification '%s'"
 msgstr "नमिल्दो ज्यामिति मानक '%s'"
 
-#: ../src/unix/fswatcher_inotify.cpp:298
+#: ../src/unix/fswatcher_inotify.cpp:311
 #, c-format
 msgid "Invalid inotify event for \"%s\""
 msgstr ""
 
-#: ../src/unix/snglinst.cpp:306
+#: ../src/unix/snglinst.cpp:312
 #, c-format
 msgid "Invalid lock file '%s'."
 msgstr "नमिल्दो चाबी फाइल '%s'"
 
-#: ../src/common/translation.cpp:1111
+#: ../src/common/translation.cpp:1112
 msgid "Invalid message catalog."
 msgstr "नमिल्दो सन्देश सूची"
 
@@ -4174,8 +4239,8 @@ msgstr "नमिल्दो नियमित अभिव्यक्ति 
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr "मान %ld नमिल्दो छ (अभियोजन फाइलमा boolean कुञ्जी \"%s\" का लागि ) "
 
-#: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:333
-#: ../src/osx/carbon/fontdlg.cpp:547 ../src/common/stockitem.cpp:168
+#: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:349
+#: ../src/osx/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:168
 msgid "Italic"
 msgstr "कोल्टे"
 
@@ -4396,9 +4461,9 @@ msgstr "लेजर , 17 x 11इन्च"
 #: ../src/richtext/richtextliststylepage.cpp:249
 #: ../src/richtext/richtextliststylepage.cpp:252
 #: ../src/richtext/richtextliststylepage.cpp:253
-#: ../src/richtext/richtextbulletspage.cpp:199
-#: ../src/richtext/richtextbulletspage.cpp:202
-#: ../src/richtext/richtextbulletspage.cpp:203
+#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextbulletspage.cpp:189
+#: ../src/richtext/richtextbulletspage.cpp:190
 #: ../src/richtext/richtextsizepage.cpp:249
 msgid "Left"
 msgstr "देब्रे"
@@ -4476,7 +4541,7 @@ msgstr "लाइनको फरक:"
 msgid "Link contained '//', converted to absolute link."
 msgstr "लिङ्क मा '//' छ, पुर्ण लिङ्कमा बदलियो ।"
 
-#: ../src/richtext/richtextformatdlg.cpp:349
+#: ../src/richtext/richtextformatdlg.cpp:370
 msgid "List Style"
 msgstr "शैलीको सुची"
 
@@ -4484,22 +4549,22 @@ msgstr "शैलीको सुची"
 msgid "List styles"
 msgstr "शैलीहरूको सुची"
 
-#: ../src/richtext/richtextfontpage.cpp:206
-#: ../src/richtext/richtextfontpage.cpp:208
+#: ../src/richtext/richtextfontpage.cpp:197
+#: ../src/richtext/richtextfontpage.cpp:199
 msgid "Lists font sizes in points."
 msgstr "वरणाकृतिका आकारहरूको सुची (Points)"
 
-#: ../src/richtext/richtextfontpage.cpp:199
-#: ../src/richtext/richtextfontpage.cpp:201
+#: ../src/richtext/richtextfontpage.cpp:190
+#: ../src/richtext/richtextfontpage.cpp:192
 msgid "Lists the available fonts."
 msgstr "उपलब्ध वरणाकृतिहरूको सुची"
 
-#: ../src/common/fldlgcmn.cpp:325
+#: ../src/common/fldlgcmn.cpp:330
 #, c-format
 msgid "Load %s file"
 msgstr "%s फाइल वहन गर "
 
-#: ../src/html/htmlwin.cpp:575
+#: ../src/html/htmlwin.cpp:588
 msgid "Loading : "
 msgstr "वहन गरिदैं : "
 
@@ -4519,12 +4584,12 @@ msgid "Log saved to the file '%s'."
 msgstr "लग फाइल '%s' मा बचत भयो ।"
 
 #: ../src/richtext/richtextliststylepage.cpp:484
-#: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextbulletspage.cpp:276
 msgid "Lower case letters"
 msgstr "सानो वर्णहरू"
 
 #: ../src/richtext/richtextliststylepage.cpp:486
-#: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextbulletspage.cpp:278
 msgid "Lower case roman numerals"
 msgstr "सानो वर्ण रोमन सङ्ख्या"
 
@@ -4708,12 +4773,12 @@ msgstr "MacTurkish"
 msgid "MacVietnamese"
 msgstr "MacVietnamese"
 
-#: ../src/propgrid/advprops.cpp:2031
+#: ../src/propgrid/advprops.cpp:2012
 msgid "Make a selection:"
 msgstr "चयन गर"
 
-#: ../src/richtext/richtextformatdlg.cpp:362
-#: ../src/richtext/richtextmarginspage.cpp:172
+#: ../src/richtext/richtextformatdlg.cpp:383
+#: ../src/richtext/richtextmarginspage.cpp:171
 msgid "Margins"
 msgstr "सिमान्त"
 
@@ -4751,7 +4816,7 @@ msgstr "सन्देश"
 msgid "Metal theme"
 msgstr "धातु theme"
 
-#: ../src/msw/ole/automtn.cpp:641
+#: ../src/msw/ole/automtn.cpp:655
 msgid "Method or property not found."
 msgstr "विधि अथवा गुण पाइ एन ।"
 
@@ -4767,7 +4832,7 @@ msgstr "न्यून उचाइ:"
 msgid "Min width:"
 msgstr "न्यून छोडाइ:"
 
-#: ../src/msw/ole/automtn.cpp:657
+#: ../src/msw/ole/automtn.cpp:671
 msgid "Missing a required parameter."
 msgstr "आवश्यक parameter छुडेको छ"
 
@@ -4810,7 +4875,7 @@ msgstr "अघिल्लो अनुच्छेदमा वस्तुल�
 msgid "Moves the object to the previous paragraph."
 msgstr "पछिल्लो अनुच्छेदमा वस्तुलाई लैजान्छ । "
 
-#: ../src/richtext/richtextbuffer.cpp:9345
+#: ../src/richtext/richtextbuffer.cpp:9746
 msgid "Multiple Cell Properties"
 msgstr "बहु कोशिका गुणहरू"
 
@@ -4846,16 +4911,16 @@ msgstr "नया &सूचि शैली.."
 msgid "New &Paragraph Style..."
 msgstr "नया &अनुच्छेद शैली.."
 
-#: ../src/richtext/richtextstyledlg.cpp:603
-#: ../src/richtext/richtextstyledlg.cpp:608
-#: ../src/richtext/richtextstyledlg.cpp:651
-#: ../src/richtext/richtextstyledlg.cpp:656
-#: ../src/richtext/richtextstyledlg.cpp:817
-#: ../src/richtext/richtextstyledlg.cpp:822
-#: ../src/richtext/richtextstyledlg.cpp:890
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:931
-#: ../src/richtext/richtextstyledlg.cpp:936
+#: ../src/richtext/richtextstyledlg.cpp:606
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:654
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:820
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:893
+#: ../src/richtext/richtextstyledlg.cpp:901
+#: ../src/richtext/richtextstyledlg.cpp:934
+#: ../src/richtext/richtextstyledlg.cpp:939
 msgid "New Style"
 msgstr "नया शैली"
 
@@ -4872,11 +4937,11 @@ msgstr "नया सामाग्री"
 msgid "NewName"
 msgstr "नया नाम"
 
-#: ../src/generic/tipdlg.cpp:305
+#: ../src/generic/tipdlg.cpp:300
 msgid "Next"
 msgstr "अघिल्लो"
 
-#: ../src/common/prntbase.cpp:1537 ../src/html/helpwnd.cpp:678
+#: ../src/common/prntbase.cpp:1537 ../src/html/helpwnd.cpp:679
 msgid "Next page"
 msgstr "अघिल्लो पृष्ट"
 
@@ -4895,19 +4960,19 @@ msgstr "चलायमान सञ्चालक %ld जस्ताका �
 msgid "No bitmap handler for type %d defined."
 msgstr "%d किसिमको लागि कुनै पनि bitmap सञ्चालक परिभाषित गरिएको छैन।"
 
-#: ../src/osx/carbon/dataview.cpp:1784
+#: ../src/osx/carbon/dataview.cpp:1782
 msgid "No column existing."
 msgstr "महल छदै छैन"
 
-#: ../src/osx/carbon/dataview.cpp:1674
+#: ../src/osx/carbon/dataview.cpp:1672
 msgid "No column for the specified column existing."
 msgstr "भनिएको महलका लागि कुनै महल छैन ।"
 
-#: ../src/osx/carbon/dataview.cpp:1423
+#: ../src/osx/carbon/dataview.cpp:1421
 msgid "No column for the specified column position existing."
 msgstr "भनिएको महलको स्थानमा कुनै महल छैन ।"
 
-#: ../src/common/utilscmn.cpp:1049
+#: ../src/common/utilscmn.cpp:1056
 msgid "No default application configured for HTML files."
 msgstr "HTML फाइलहरूका लागि निर्धारित अनुप्रयोग अनियोजित छैन ।"
 
@@ -4957,15 +5022,15 @@ msgstr "तोकिएको %d किसिमका लागि तस्व
 msgid "No image handler for type %s defined."
 msgstr "तोकिएको %s किसिमका लागि तस्विर चालक छैन ।"
 
-#: ../src/html/helpwnd.cpp:871
+#: ../src/html/helpwnd.cpp:872
 msgid "No matching page found yet"
 msgstr "मिल्दो पृष्ट अझसम्म पाइ एन ।"
 
-#: ../src/osx/carbon/dataview.cpp:1676 ../src/osx/carbon/dataview.cpp:1786
+#: ../src/osx/carbon/dataview.cpp:1674 ../src/osx/carbon/dataview.cpp:1784
 msgid "No renderer or invalid renderer type specified for custom data column."
 msgstr "तोकिएको चलन चल्तीको तथ्याङ्क महल दोहोरो छैन अथवा नमिल्दो किसिमले गोहोरो छ ।"
 
-#: ../src/osx/carbon/dataview.cpp:1424
+#: ../src/osx/carbon/dataview.cpp:1422
 msgid "No renderer specified for column."
 msgstr "तोकिएको महल दोहोरिएको छैन"
 
@@ -4986,7 +5051,7 @@ msgstr "तस्विरमा प्रयोग नगरेको रङ्
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "फाइल \"%s\" मा वैध रङ्गिन नक्सा पाइ एन ।"
 
-#: ../src/richtext/richtextborderspage.cpp:542
+#: ../src/richtext/richtextborderspage.cpp:613
 #: ../src/richtext/richtextsizepage.cpp:248
 #: ../src/richtext/richtextsizepage.cpp:252
 msgid "None"
@@ -5000,15 +5065,15 @@ msgstr "Nordic (ISO-8859-10)"
 msgid "Normal"
 msgstr "साधारण"
 
-#: ../src/html/helpwnd.cpp:1276
+#: ../src/html/helpwnd.cpp:1277
 msgid "Normal face<br>and <u>underlined</u>. "
 msgstr "साधारण अनुहार<br>and <u> अधोरेखाङ्कित </u>. "
 
-#: ../src/html/helpwnd.cpp:1218
+#: ../src/html/helpwnd.cpp:1219
 msgid "Normal font:"
 msgstr "साधारण वरणाकृति:"
 
-#: ../src/propgrid/props.cpp:887
+#: ../src/propgrid/props.cpp:898
 #, c-format
 msgid "Not %s"
 msgstr "%s होइन"
@@ -5017,7 +5082,7 @@ msgstr "%s होइन"
 msgid "Not available"
 msgstr "उपलब्ध छैन"
 
-#: ../src/richtext/richtextfontpage.cpp:340
+#: ../src/richtext/richtextfontpage.cpp:356
 msgid "Not underlined"
 msgstr "अधोरेखाङ्कित होइन"
 
@@ -5029,32 +5094,32 @@ msgstr "टिप्पणी, 8 1/2 x 11इन्च"
 msgid "Notice"
 msgstr "सूचना"
 
-#: ../src/osx/carbon/dataview.cpp:902
+#: ../src/osx/carbon/dataview.cpp:900
 msgid "Number of columns could not be determined."
 msgstr "महलहरूको सङ्ख्या थाहा पाउन सकिएन ।"
 
 #: ../src/richtext/richtextliststylepage.cpp:487
-#: ../src/richtext/richtextbulletspage.cpp:292
+#: ../src/richtext/richtextbulletspage.cpp:279
 msgid "Numbered outline"
 msgstr "सङ्ख्यात्मक बाह्यरेखा"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "ठीक"
 
-#: ../src/msw/ole/automtn.cpp:681
+#: ../src/msw/ole/automtn.cpp:695
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr "%s मा OLE स्वचालित गल्ती : %s "
 
-#: ../include/wx/richtext/richtextimagedlg.h:39
+#: ../include/wx/richtext/richtextimagedlg.h:37
 msgid "Object Properties"
 msgstr "वस्तु गुणहरू"
 
-#: ../src/msw/ole/automtn.cpp:649
+#: ../src/msw/ole/automtn.cpp:663
 msgid "Object implementation does not support named arguments."
 msgstr "वस्तु कार्यान्वयनले नामाङ्कित तर्कलाई समर्थन गर्दैन ।"
 
@@ -5062,11 +5127,11 @@ msgstr "वस्तु कार्यान्वयनले नामाङ�
 msgid "Objects must have an id attribute"
 msgstr "वस्तुको id attribute हुनै पर्दछ "
 
-#: ../src/common/docview.cpp:1755 ../src/common/docview.cpp:1797
+#: ../src/common/docview.cpp:1762 ../src/common/docview.cpp:1804
 msgid "Open File"
 msgstr "फाइल पल्टाउ "
 
-#: ../src/html/helpwnd.cpp:684 ../src/html/helpwnd.cpp:1557
+#: ../src/html/helpwnd.cpp:685 ../src/html/helpwnd.cpp:1568
 msgid "Open HTML document"
 msgstr "HTML कागजात पल्टाउ "
 
@@ -5089,17 +5154,17 @@ msgstr "OpenGL function \"%s\" असफल भयो : %s (गल्ती %d)"
 msgid "Operation not permitted."
 msgstr "सञ्चालनको अनुमति छैन ।"
 
-#: ../src/common/cmdline.cpp:735
+#: ../src/common/cmdline.cpp:894
 #, c-format
 msgid "Option '%s' can't be negated"
 msgstr "विकल्प '%s' नकारात्मक हुन सक्दैन ।"
 
-#: ../src/common/cmdline.cpp:899
+#: ../src/common/cmdline.cpp:1058
 #, c-format
 msgid "Option '%s' requires a value."
 msgstr "विकल्प '%s' को एउटा मान हुनै पर्दछ"
 
-#: ../src/common/cmdline.cpp:982
+#: ../src/common/cmdline.cpp:1141
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "विकल्प '%s': '%s' मितिमा बदल्न सकिँदैन ।"
@@ -5117,16 +5182,16 @@ msgstr "झुकाव"
 msgid "Out of window IDs.  Recommend shutting down application."
 msgstr "विन्डो IDs भन्दा बाहिर. अनुप्रयोग लाई बन्द गर्न सिफारिस गरिन्छ ।"
 
-#: ../src/richtext/richtextborderspage.cpp:400
-#: ../src/richtext/richtextborderspage.cpp:533
+#: ../src/richtext/richtextborderspage.cpp:401
+#: ../src/richtext/richtextborderspage.cpp:559
 msgid "Outline"
 msgstr "बाह्यरेखा"
 
-#: ../src/richtext/richtextborderspage.cpp:550
+#: ../src/richtext/richtextborderspage.cpp:621
 msgid "Outset"
 msgstr "बाहिरी चित्र"
 
-#: ../src/msw/ole/automtn.cpp:645
+#: ../src/msw/ole/automtn.cpp:659
 msgid "Overflow while coercing argument values."
 msgstr "Overflow while coercing argument values"
 
@@ -5295,7 +5360,7 @@ msgstr "PRC खाम #9 Rounded 324 x 229 मिमी"
 msgid "PRINT"
 msgstr "छापी देउ"
 
-#: ../src/richtext/richtextmarginspage.cpp:286
+#: ../src/richtext/richtextmarginspage.cpp:285
 msgid "Padding"
 msgstr "ख्रेस्रा"
 
@@ -5339,7 +5404,7 @@ msgstr "पहिले नै दर्ता भएको वस्तु SetO
 msgid "Passing an unknown object to GetObject"
 msgstr "अज्ञात वस्तुलाई GetObject मा पठाइँदै छ "
 
-#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3242 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "टाँसि देउ"
@@ -5349,7 +5414,7 @@ msgid "Paste selection"
 msgstr "चयन टाँसि देउ "
 
 #: ../src/richtext/richtextliststylepage.cpp:222
-#: ../src/richtext/richtextbulletspage.cpp:172
+#: ../src/richtext/richtextbulletspage.cpp:159
 msgid "Peri&od"
 msgstr "&थोप्लो"
 
@@ -5357,7 +5422,7 @@ msgstr "&थोप्लो"
 msgid "Permissions"
 msgstr "अनुमति"
 
-#: ../src/richtext/richtextbuffer.cpp:11942
+#: ../src/richtext/richtextbuffer.cpp:12512
 msgid "Picture Properties"
 msgstr "तस्विरका गुणहरू"
 
@@ -5373,7 +5438,7 @@ msgstr "कृपया वैध वरणाकृति छान्नु �
 msgid "Please choose an existing file."
 msgstr "भण्डारमा भएको फाइल छान्नु होस् ।"
 
-#: ../src/html/helpwnd.cpp:813
+#: ../src/html/helpwnd.cpp:814
 msgid "Please choose the page to display:"
 msgstr "कृपया प्रदर्शन गर्नु पर्ने पृष्ट छान्नु होस् ।"
 
@@ -5400,24 +5465,24 @@ msgstr "कृपया देखाउने महलहरू चयन ग�
 msgid "Please wait while printing..."
 msgstr "कृपया पर्खनु होस् है छाप्ने काम हुँदैछ ।"
 
-#: ../src/propgrid/advprops.cpp:631
+#: ../src/propgrid/advprops.cpp:632
 msgid "Point Size"
 msgstr "थोप्लोको आकार"
 
-#: ../src/osx/carbon/dataview.cpp:1278 ../src/osx/carbon/dataview.cpp:1329
-#: ../src/osx/carbon/dataview.cpp:1420 ../src/osx/carbon/dataview.cpp:1443
-#: ../src/osx/carbon/dataview.cpp:1460 ../src/osx/carbon/dataview.cpp:1477
-#: ../src/osx/carbon/dataview.cpp:1670 ../src/osx/carbon/dataview.cpp:1779
-#: ../src/osx/carbon/dataview.cpp:1821 ../src/osx/carbon/dataview.cpp:1874
-#: ../src/osx/carbon/dataview.cpp:1997
+#: ../src/osx/carbon/dataview.cpp:1276 ../src/osx/carbon/dataview.cpp:1327
+#: ../src/osx/carbon/dataview.cpp:1418 ../src/osx/carbon/dataview.cpp:1441
+#: ../src/osx/carbon/dataview.cpp:1458 ../src/osx/carbon/dataview.cpp:1475
+#: ../src/osx/carbon/dataview.cpp:1668 ../src/osx/carbon/dataview.cpp:1777
+#: ../src/osx/carbon/dataview.cpp:1819 ../src/osx/carbon/dataview.cpp:1872
+#: ../src/osx/carbon/dataview.cpp:1995
 msgid "Pointer to data view control not set correctly."
 msgstr "तथ्याङ्क देखाउने नियन्त्रकको चुच्चो ठीक सित मिलाइएको छैन ।"
 
-#: ../src/osx/carbon/dataview.cpp:1279 ../src/osx/carbon/dataview.cpp:1338
-#: ../src/osx/carbon/dataview.cpp:1421 ../src/osx/carbon/dataview.cpp:1478
-#: ../src/osx/carbon/dataview.cpp:1671 ../src/osx/carbon/dataview.cpp:1780
-#: ../src/osx/carbon/dataview.cpp:1822 ../src/osx/carbon/dataview.cpp:1875
-#: ../src/osx/carbon/dataview.cpp:1998
+#: ../src/osx/carbon/dataview.cpp:1277 ../src/osx/carbon/dataview.cpp:1336
+#: ../src/osx/carbon/dataview.cpp:1419 ../src/osx/carbon/dataview.cpp:1476
+#: ../src/osx/carbon/dataview.cpp:1669 ../src/osx/carbon/dataview.cpp:1778
+#: ../src/osx/carbon/dataview.cpp:1820 ../src/osx/carbon/dataview.cpp:1873
+#: ../src/osx/carbon/dataview.cpp:1996
 msgid "Pointer to model not set correctly."
 msgstr "नमुना चुच्चो राम्ररी मिलाइएको छैन ।"
 
@@ -5437,7 +5502,7 @@ msgstr "PostScript फाइल"
 msgid "Preferences"
 msgstr "प्राथमिकताहरू"
 
-#: ../src/osx/menu_osx.cpp:643
+#: ../src/osx/menu_osx.cpp:614
 msgid "Preferences..."
 msgstr "प्राथमिकताहरू.."
 
@@ -5445,12 +5510,12 @@ msgstr "प्राथमिकताहरू.."
 msgid "Preparing"
 msgstr "तयारी हुदैछ ।"
 
-#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:576
-#: ../src/html/helpwnd.cpp:1235
+#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:560
+#: ../src/html/helpwnd.cpp:1236
 msgid "Preview:"
 msgstr "चेहरा:"
 
-#: ../src/common/prntbase.cpp:1523 ../src/html/helpwnd.cpp:677
+#: ../src/common/prntbase.cpp:1523 ../src/html/helpwnd.cpp:678
 msgid "Previous page"
 msgstr "पछिल्लो पृष्ट"
 
@@ -5460,7 +5525,7 @@ msgstr "पछिल्लो पृष्ट"
 msgid "Print"
 msgstr "छाप्ने काम गर"
 
-#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1250
+#: ../include/wx/prntbase.h:395 ../src/common/docview.cpp:1257
 msgid "Print Preview"
 msgstr "छापिने चेहरा"
 
@@ -5485,7 +5550,7 @@ msgstr "रङ्गिन छाप्ने काम"
 msgid "Print previe&w..."
 msgstr "&छापिने चेहरा"
 
-#: ../src/common/docview.cpp:1244
+#: ../src/common/docview.cpp:1251
 msgid "Print preview creation failed."
 msgstr "छापिने चेहराको सिर्जना असफल भयो ।"
 
@@ -5497,7 +5562,7 @@ msgstr "छापिने चेहरा"
 msgid "Print spooling"
 msgstr "छापिने काम बिग्रयो ।"
 
-#: ../src/html/helpwnd.cpp:688
+#: ../src/html/helpwnd.cpp:689
 msgid "Print this page"
 msgstr "यो पृष्ट छापी देउ"
 
@@ -5561,7 +5626,7 @@ msgid "Printing..."
 msgstr "छाप्ने काम दुदै च.."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2124
+#: ../src/common/docview.cpp:2121
 msgid "Printout"
 msgstr "छापिएका पानाहरू"
 
@@ -5571,7 +5636,7 @@ msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr "\"%s\" घर्रामा फाइल राख्दै खान तलासी प्रतिवेदनको प्रशोधन असफल भयो ।"
 
-#: ../src/osx/carbon/dataview.cpp:2472
+#: ../src/osx/carbon/dataview.cpp:2470
 msgid "Progress renderer cannot render value type; value type: "
 msgstr "प्रगति दोहोरो पन मान दोहोर्यादउन सकिँदैन; मानको किसिम: "
 
@@ -5587,7 +5652,7 @@ msgstr "गुणहरू"
 msgid "Property"
 msgstr "गुण"
 
-#: ../src/propgrid/propgrid.cpp:3144 ../src/propgrid/propgrid.cpp:3276
+#: ../src/propgrid/propgrid.cpp:3131 ../src/propgrid/propgrid.cpp:3263
 msgid "Property Error"
 msgstr "गुणको गल्ती"
 
@@ -5603,7 +5668,7 @@ msgstr "प्रश्न"
 msgid "Quit"
 msgstr "त्यागि देउ"
 
-#: ../src/osx/menu_osx.cpp:610 ../src/osx/menu_osx.cpp:657
+#: ../src/osx/menu_osx.cpp:631
 #, c-format
 msgid "Quit %s"
 msgstr "%s लाई त्यागि देउ "
@@ -5670,8 +5735,8 @@ msgstr ""
 msgid "Registry value '%s' already exists."
 msgstr "Registry मान '%s' पहिले देखि नै छ ।"
 
-#: ../src/richtext/richtextfontpage.cpp:332
-#: ../src/richtext/richtextfontpage.cpp:336
+#: ../src/richtext/richtextfontpage.cpp:348
+#: ../src/richtext/richtextfontpage.cpp:352
 msgid "Regular"
 msgstr "नियमित"
 
@@ -5691,11 +5756,11 @@ msgstr ""
 msgid "Remove"
 msgstr "हटाउ"
 
-#: ../src/richtext/richtextctrl.cpp:1430
+#: ../src/richtext/richtextctrl.cpp:1522
 msgid "Remove Bullet"
 msgstr "गोली चिन्ह हटाउ"
 
-#: ../src/html/helpwnd.cpp:440
+#: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
 msgstr "पृष्ट लाई बुकमार्कबाट हटाउ"
 
@@ -5704,11 +5769,11 @@ msgstr "पृष्ट लाई बुकमार्कबाट हटाउ
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
 msgstr "Renderer \"%s\" सित मिलान गर्न नसकिने संस्करण %d.%d भएकोले वहन गर्न सकिएन ।"
 
-#: ../src/osx/carbon/dataview.cpp:1430
+#: ../src/osx/carbon/dataview.cpp:1428
 msgid "Rendering failed."
 msgstr "दोहोरो पना असफल भयो ।"
 
-#: ../src/richtext/richtextbuffer.cpp:4214
+#: ../src/richtext/richtextbuffer.cpp:4415
 msgid "Renumber List"
 msgstr "फेरि सङ्ख्या राख"
 
@@ -5716,7 +5781,7 @@ msgstr "फेरि सङ्ख्या राख"
 msgid "Rep&lace"
 msgstr "&बदलि देउ"
 
-#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3402 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "प्रतिस्थापन गर"
 
@@ -5732,7 +5797,7 @@ msgstr "चयनको प्रतिस्थापन"
 msgid "Replace with:"
 msgstr "यसमा बदलि देउ :"
 
-#: ../src/common/valtext.cpp:161
+#: ../src/common/valtext.cpp:163
 msgid "Required information entry is empty."
 msgstr "चाहिएको सूचना प्रविष्टि खालि छ ।"
 
@@ -5745,12 +5810,16 @@ msgstr "श्रोत '%s' वैध सन्देश सूचि होइ
 msgid "Revert to Saved"
 msgstr "बचत उल्टियो "
 
-#: ../src/richtext/richtextborderspage.cpp:548
+#: ../src/richtext/richtextborderspage.cpp:619
 msgid "Ridge"
 msgstr "धुरी"
 
+#: ../src/richtext/richtextfontpage.cpp:313
+msgid "Rig&ht-to-left"
+msgstr ""
+
 #: ../src/richtext/richtextliststylepage.cpp:251
-#: ../src/richtext/richtextbulletspage.cpp:201
+#: ../src/richtext/richtextbulletspage.cpp:188
 #: ../src/richtext/richtextsizepage.cpp:250
 msgid "Right"
 msgstr "दाहिने"
@@ -5771,7 +5840,7 @@ msgid "Roman"
 msgstr "रोमन"
 
 #: ../src/richtext/richtextliststylepage.cpp:299
-#: ../src/richtext/richtextbulletspage.cpp:252
+#: ../src/richtext/richtextbulletspage.cpp:239
 msgid "S&tandard bullet name:"
 msgstr "&स्तरीय गोलीको नाम:"
 
@@ -5803,11 +5872,11 @@ msgstr "विशेष"
 msgid "SUBTRACT"
 msgstr "घटाउ"
 
-#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2678
+#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2682
 msgid "Save"
 msgstr "बचत गर"
 
-#: ../src/common/fldlgcmn.cpp:327
+#: ../src/common/fldlgcmn.cpp:332
 #, c-format
 msgid "Save %s file"
 msgstr "%s फाइललाई बचत गर "
@@ -5840,12 +5909,12 @@ msgstr "लग पुस्तिकाको सामाग्रीलाई 
 msgid "Script"
 msgstr "Script"
 
-#: ../src/generic/srchctlg.cpp:67 ../src/html/helpwnd.cpp:548
-#: ../src/html/helpwnd.cpp:563
+#: ../src/generic/srchctlg.cpp:67 ../src/html/helpwnd.cpp:549
+#: ../src/html/helpwnd.cpp:564
 msgid "Search"
 msgstr "खोजतलास"
 
-#: ../src/html/helpwnd.cpp:550
+#: ../src/html/helpwnd.cpp:551
 msgid ""
 "Search contents of help book(s) for all occurrences of the text you typed "
 "above"
@@ -5859,11 +5928,11 @@ msgstr "खोजी दिशा"
 msgid "Search for:"
 msgstr "यसलाई खोज्ने:"
 
-#: ../src/html/helpwnd.cpp:1065
+#: ../src/html/helpwnd.cpp:1066
 msgid "Search in all books"
 msgstr "सबै किताबहरूमा खोज ।"
 
-#: ../src/html/helpwnd.cpp:870
+#: ../src/html/helpwnd.cpp:871
 msgid "Searching..."
 msgstr "खोजतलास हुँदैछ "
 
@@ -5881,8 +5950,8 @@ msgstr "फाइल '%s' मा खोजीको गल्ती ।"
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr "फाइल '%s' (stdio ले ठूलो फाइललाई समर्थन गर्दै न ) मा खोजिको गल्ती । "
 
-#: ../src/richtext/richtextctrl.cpp:330 ../src/osx/textctrl_osx.cpp:587
-#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2288
+#: ../src/richtext/richtextctrl.cpp:336 ../src/osx/textctrl_osx.cpp:587
+#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2339
 msgid "Select &All"
 msgstr "&सबैलाई चयन गर"
 
@@ -5890,26 +5959,26 @@ msgstr "&सबैलाई चयन गर"
 msgid "Select All"
 msgstr "सबै चयन गर"
 
-#: ../src/common/docview.cpp:1877
+#: ../src/common/docview.cpp:1884
 msgid "Select a document template"
 msgstr "एउटा कागजात लेखोट चयन गर ।"
 
-#: ../src/common/docview.cpp:1951
+#: ../src/common/docview.cpp:1958
 msgid "Select a document view"
 msgstr "एउटा कागजातको दृश्य चयन गर"
 
-#: ../src/richtext/richtextfontpage.cpp:235
-#: ../src/richtext/richtextfontpage.cpp:237
+#: ../src/richtext/richtextfontpage.cpp:226
+#: ../src/richtext/richtextfontpage.cpp:228
 msgid "Select regular or bold."
 msgstr "नियमित अथवा मोटो कुनै लाई चयन गर"
 
-#: ../src/richtext/richtextfontpage.cpp:222
-#: ../src/richtext/richtextfontpage.cpp:224
+#: ../src/richtext/richtextfontpage.cpp:213
+#: ../src/richtext/richtextfontpage.cpp:215
 msgid "Select regular or italic style."
 msgstr "नियमित अथवा कोल्टे शैली कुनै एकलाई चयन गर"
 
-#: ../src/richtext/richtextfontpage.cpp:248
-#: ../src/richtext/richtextfontpage.cpp:250
+#: ../src/richtext/richtextfontpage.cpp:239
+#: ../src/richtext/richtextfontpage.cpp:241
 msgid "Select underlining or no underlining."
 msgstr "अदोरेखाङ्करण अथवा गैह्र अदोरेखाङ्करण लाई चयन गर ।"
 
@@ -5922,12 +5991,16 @@ msgstr "चयन"
 msgid "Selects the list level to edit."
 msgstr "सम्पादनका लागि सूचि तह चयन गर्छ ।"
 
-#: ../src/common/cmdline.cpp:918
+#: ../src/common/cmdline.cpp:1077
 #, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "विकल्प '%s' पछि विभाजक अपेक्षा गरिन्छ ।"
 
-#: ../src/richtext/richtextbuffer.cpp:10513
+#: ../src/osx/menu_osx.cpp:618
+msgid "Services"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
 msgstr "कोशिका शैली तय गर्नु होस् ।"
 
@@ -5935,7 +6008,7 @@ msgstr "कोशिका शैली तय गर्नु होस् ।"
 msgid "SetProperty called w/o valid setter"
 msgstr "SetProperty called w/o valid setter"
 
-#: ../src/common/filename.cpp:2632
+#: ../src/common/filename.cpp:2638
 msgid "Setting directory access times is not supported under this OS version"
 msgstr "घर्रा खोलेको समय अभिलेखनको कार्य यो सञ्चालन प्रणालीको संस्करणले समर्थन गर्दैन ।"
 
@@ -5959,7 +6032,7 @@ msgstr "&लुकाएका घर्राहरू देखाउ "
 msgid "Show &hidden files"
 msgstr "&लुकाएका फाइलहरू देखाउ "
 
-#: ../src/osx/menu_osx.cpp:605 ../src/osx/menu_osx.cpp:652
+#: ../src/osx/menu_osx.cpp:626
 msgid "Show All"
 msgstr "सबै देखाउ "
 
@@ -5967,11 +6040,11 @@ msgstr "सबै देखाउ "
 msgid "Show about dialog"
 msgstr "पातोको बारेमा देखाउ "
 
-#: ../src/html/helpwnd.cpp:502
+#: ../src/html/helpwnd.cpp:503
 msgid "Show all"
 msgstr " सबै देखाउ "
 
-#: ../src/html/helpwnd.cpp:513
+#: ../src/html/helpwnd.cpp:514
 msgid "Show all items in index"
 msgstr "सबै सामाग्रीलाई अनुक्रमणिकामा देखाउ "
 
@@ -5979,7 +6052,7 @@ msgstr "सबै सामाग्रीलाई अनुक्रमणि�
 msgid "Show hidden directories"
 msgstr "लुकाएका घर्राहरू देखाउ "
 
-#: ../src/html/helpwnd.cpp:671
+#: ../src/html/helpwnd.cpp:672
 msgid "Show/hide navigation panel"
 msgstr "आवागमन कक्ष देखाउ/लुकाउ "
 
@@ -5990,17 +6063,17 @@ msgstr "युनिकोड subset देखाउ छ ।"
 
 #: ../src/richtext/richtextliststylepage.cpp:472
 #: ../src/richtext/richtextliststylepage.cpp:474
-#: ../src/richtext/richtextbulletspage.cpp:276
-#: ../src/richtext/richtextbulletspage.cpp:278
+#: ../src/richtext/richtextbulletspage.cpp:263
+#: ../src/richtext/richtextbulletspage.cpp:265
 msgid "Shows a preview of the bullet settings."
 msgstr "गोलि चिन्ह अनुकूलताको चेहरा देखाउ छ ।"
 
-#: ../src/richtext/richtextfontpage.cpp:322
-#: ../src/richtext/richtextfontpage.cpp:324
+#: ../src/richtext/richtextfontpage.cpp:330
+#: ../src/richtext/richtextfontpage.cpp:332
 msgid "Shows a preview of the font settings."
 msgstr "वरणाकृति अनुकूलताको चेहरा देखाउ छ ।"
 
-#: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
+#: ../src/osx/carbon/fontdlg.cpp:564 ../src/osx/carbon/fontdlg.cpp:566
 msgid "Shows a preview of the font."
 msgstr "वरणाकृतिको चेहरा देखाउ छ ।"
 
@@ -6022,12 +6095,12 @@ msgstr "साधारण एकल रङ्गिन theme"
 msgid "Single"
 msgstr "एउटा"
 
-#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
+#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:377
 #: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "आकार"
 
-#: ../src/osx/carbon/fontdlg.cpp:525
+#: ../src/osx/carbon/fontdlg.cpp:509
 msgid "Size:"
 msgstr "आकार:"
 
@@ -6040,16 +6113,16 @@ msgstr "उफ्र"
 msgid "Slant"
 msgstr "छड्के"
 
-#: ../src/richtext/richtextfontpage.cpp:298
+#: ../src/richtext/richtextfontpage.cpp:289
 #, fuzzy
 msgid "Small C&apitals"
 msgstr "Ca&pitals"
 
-#: ../src/richtext/richtextborderspage.cpp:543
+#: ../src/richtext/richtextborderspage.cpp:614
 msgid "Solid"
 msgstr "ठोस"
 
-#: ../src/common/docview.cpp:1773
+#: ../src/common/docview.cpp:1780
 msgid "Sorry, could not open this file."
 msgstr "माफ गर्नु होस्, यो फाइल खोल्न सकिएन ।"
 
@@ -6057,15 +6130,15 @@ msgstr "माफ गर्नु होस्, यो फाइल खोल्
 msgid "Sorry, not enough memory to create a preview."
 msgstr "माफ गर्नु होस्, चेहरा सिर्जना गर्न यथेष्ट भण्डार छैन ।"
 
-#: ../src/richtext/richtextstyledlg.cpp:608
-#: ../src/richtext/richtextstyledlg.cpp:656
-#: ../src/richtext/richtextstyledlg.cpp:822
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:936
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:901
+#: ../src/richtext/richtextstyledlg.cpp:939
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "माफ गर्नु होस्, त्यो नाम लिइ सकियो । कृपया अर्को छान्नु होस् ।"
 
-#: ../src/common/docview.cpp:1796
+#: ../src/common/docview.cpp:1803
 msgid "Sorry, the format for this file is unknown."
 msgstr "माफ गर्नु होस्, यो फाइलको बनोट थाहा भएन ।"
 
@@ -6087,7 +6160,7 @@ msgid "Spell Check"
 msgstr "हिज्जे जाँच"
 
 #: ../src/richtext/richtextliststylepage.cpp:490
-#: ../src/richtext/richtextbulletspage.cpp:295
+#: ../src/richtext/richtextbulletspage.cpp:282
 msgid "Standard"
 msgstr "स्तरीय"
 
@@ -6117,23 +6190,23 @@ msgstr "Strikethrough"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "पदावलीको रङ्ग : गलत रङ्ग specification : %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:318 ../src/propgrid/advprops.cpp:647
+#: ../src/richtext/richtextformatdlg.cpp:339 ../src/propgrid/advprops.cpp:648
 msgid "Style"
 msgstr "शैली"
 
-#: ../include/wx/richtext/richtextstyledlg.h:47
+#: ../include/wx/richtext/richtextstyledlg.h:46
 msgid "Style Organiser"
 msgstr "शैली व्यवस्थापक"
 
-#: ../src/osx/carbon/fontdlg.cpp:534
+#: ../src/osx/carbon/fontdlg.cpp:518
 msgid "Style:"
 msgstr "शैली:"
 
-#: ../src/richtext/richtextfontpage.cpp:312
+#: ../src/richtext/richtextfontpage.cpp:303
 msgid "Subscrip&t"
 msgstr "&पैतालोमा"
 
-#: ../src/richtext/richtextfontpage.cpp:305
+#: ../src/richtext/richtextfontpage.cpp:296
 msgid "Supe&rscript"
 msgstr "&टाउकोमा"
 
@@ -6145,17 +6218,21 @@ msgstr "SuperA/SuperA/A4 227 x 356 mm"
 msgid "SuperB/SuperB/A3 305 x 487 mm"
 msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
+#: ../src/richtext/richtextfontpage.cpp:320
+msgid "Suppress hyphe&nation"
+msgstr ""
+
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
 msgstr "Swiss"
 
 #: ../src/richtext/richtextliststylepage.cpp:488
-#: ../src/richtext/richtextbulletspage.cpp:293
+#: ../src/richtext/richtextbulletspage.cpp:280
 msgid "Symbol"
 msgstr "चिन्ह"
 
 #: ../src/richtext/richtextliststylepage.cpp:288
-#: ../src/richtext/richtextbulletspage.cpp:240
+#: ../src/richtext/richtextbulletspage.cpp:227
 msgid "Symbol &font:"
 msgstr "चिन्ह &वरणाकृति:"
 
@@ -6193,7 +6270,7 @@ msgstr "TIFF: तस्विर लेखाइमा गल्ती "
 msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF: तस्विरको आकार असाधारण ठूलो छ ।"
 
-#: ../src/richtext/richtextbuffer.cpp:10794
+#: ../src/richtext/richtextbuffer.cpp:11262
 msgid "Table Properties"
 msgstr "तालिका गुणहरू"
 
@@ -6205,7 +6282,7 @@ msgstr "Tabloid Extra 11.69 x 18इन्च"
 msgid "Tabloid, 11 x 17 in"
 msgstr "Tabloid, 11 x 17इन्च"
 
-#: ../src/richtext/richtextformatdlg.cpp:336
+#: ../src/richtext/richtextformatdlg.cpp:357
 msgid "Tabs"
 msgstr "Tabs"
 
@@ -6213,11 +6290,11 @@ msgstr "Tabs"
 msgid "Teletype"
 msgstr "Teletype"
 
-#: ../src/common/docview.cpp:1878
+#: ../src/common/docview.cpp:1885
 msgid "Templates"
 msgstr "लेखोट"
 
-#: ../src/osx/carbon/dataview.cpp:2373
+#: ../src/osx/carbon/dataview.cpp:2371
 msgid "Text renderer cannot render value; value type: "
 msgstr "पाठ renderer ले मान दोहोर्या उन सक्दैन; मानको किसिम: "
 
@@ -6235,8 +6312,8 @@ msgstr "FTP सर्बरले पोर्ट आदेश समर्थ�
 
 #: ../src/richtext/richtextliststylepage.cpp:215
 #: ../src/richtext/richtextliststylepage.cpp:217
-#: ../src/richtext/richtextbulletspage.cpp:164
-#: ../src/richtext/richtextbulletspage.cpp:166
+#: ../src/richtext/richtextbulletspage.cpp:151
+#: ../src/richtext/richtextbulletspage.cpp:153
 msgid "The available bullet styles."
 msgstr "उपलब्ध गोलि चिन्हका शैलीहरू "
 
@@ -6250,13 +6327,33 @@ msgstr "उपलब्ध शैलीहरू"
 msgid "The background colour."
 msgstr "पृष्ठभूमिको रङ्ग"
 
-#: ../src/richtext/richtextmarginspage.cpp:268
-#: ../src/richtext/richtextmarginspage.cpp:270
+#: ../src/richtext/richtextborderspage.cpp:269
+#: ../src/richtext/richtextborderspage.cpp:271
+#: ../src/richtext/richtextborderspage.cpp:303
+#: ../src/richtext/richtextborderspage.cpp:305
+#: ../src/richtext/richtextborderspage.cpp:337
+#: ../src/richtext/richtextborderspage.cpp:339
+#: ../src/richtext/richtextborderspage.cpp:371
+#: ../src/richtext/richtextborderspage.cpp:373
+#: ../src/richtext/richtextborderspage.cpp:438
+#: ../src/richtext/richtextborderspage.cpp:440
+#: ../src/richtext/richtextborderspage.cpp:472
+#: ../src/richtext/richtextborderspage.cpp:474
+#: ../src/richtext/richtextborderspage.cpp:506
+#: ../src/richtext/richtextborderspage.cpp:508
+#: ../src/richtext/richtextborderspage.cpp:540
+#: ../src/richtext/richtextborderspage.cpp:542
+#, fuzzy
+msgid "The border line style."
+msgstr "वरणाकृतिको शैली"
+
+#: ../src/richtext/richtextmarginspage.cpp:267
+#: ../src/richtext/richtextmarginspage.cpp:269
 msgid "The bottom margin size."
 msgstr "पुछार सिमान्तको आकार"
 
-#: ../src/richtext/richtextmarginspage.cpp:382
-#: ../src/richtext/richtextmarginspage.cpp:384
+#: ../src/richtext/richtextmarginspage.cpp:381
+#: ../src/richtext/richtextmarginspage.cpp:383
 msgid "The bottom padding size."
 msgstr "पुछार ख्रेस्रा को आकार"
 
@@ -6271,10 +6368,10 @@ msgstr "पुछार स्थान "
 #: ../src/richtext/richtextliststylepage.cpp:256
 #: ../src/richtext/richtextliststylepage.cpp:275
 #: ../src/richtext/richtextliststylepage.cpp:277
-#: ../src/richtext/richtextbulletspage.cpp:204
-#: ../src/richtext/richtextbulletspage.cpp:206
-#: ../src/richtext/richtextbulletspage.cpp:227
-#: ../src/richtext/richtextbulletspage.cpp:229
+#: ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/richtext/richtextbulletspage.cpp:193
+#: ../src/richtext/richtextbulletspage.cpp:214
+#: ../src/richtext/richtextbulletspage.cpp:216
 msgid "The bullet character."
 msgstr "गोलि चिन्हको वर्ण"
 
@@ -6294,13 +6391,13 @@ msgstr ""
 " तपाइले यसको सट्टामा अर्को वर्णसेट छान्न सक्नु हुन्छ।\n"
 " अथवा अर्को साट्न सकिदैन भने [Cancel] गर्नु होस् । "
 
-#: ../src/msw/ole/dataobj.cpp:367
+#: ../src/msw/ole/dataobj.cpp:394
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "क्लिप पाटी बनोट '%d' अस्तित्वमा छैन ।"
 
-#: ../src/richtext/richtextstylepage.cpp:128
 #: ../src/richtext/richtextstylepage.cpp:130
+#: ../src/richtext/richtextstylepage.cpp:132
 msgid "The default style for the next paragraph."
 msgstr "अघिल्लो अनुच्छेदका लागि निर्धारित शैली "
 
@@ -6326,7 +6423,7 @@ msgstr ""
 "\n"
 "के तपाई जस्तो सुकै भए पनि छाप्न चाहनु हुन्छ?"
 
-#: ../src/common/docview.cpp:1184
+#: ../src/common/docview.cpp:1191
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -6364,12 +6461,12 @@ msgstr "त्यो वरणाकृति जसबाट चिन्ह �
 msgid "The font point size."
 msgstr "वरणाकृतिको आकार (थोप्लोमा)"
 
-#: ../src/osx/carbon/fontdlg.cpp:529 ../src/osx/carbon/fontdlg.cpp:531
+#: ../src/osx/carbon/fontdlg.cpp:513 ../src/osx/carbon/fontdlg.cpp:515
 msgid "The font size in points."
 msgstr "वरणाकृतिको आकार (थोप्लोमा).वरणाकृतिको आकार in थोप्लोs"
 
-#: ../src/richtext/richtextfontpage.cpp:190
-#: ../src/richtext/richtextfontpage.cpp:192
+#: ../src/richtext/richtextfontpage.cpp:181
+#: ../src/richtext/richtextfontpage.cpp:183
 msgid "The font size units, points or pixels."
 msgstr "वरणाकृति आकारको एकाई, विन्दु अथवा पिक्सेल"
 
@@ -6381,7 +6478,7 @@ msgstr "वरणाकृतिको शैली"
 msgid "The font weight."
 msgstr "वरणाकृतिको भार"
 
-#: ../src/common/docview.cpp:1465
+#: ../src/common/docview.cpp:1472
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
 msgstr "फाइल '%s' को बनोट पता लगाउन सकिएन ।"
@@ -6393,13 +6490,13 @@ msgstr "फाइल '%s' को बनोट पता लगाउन सक�
 msgid "The left indent."
 msgstr "देब्रे indent"
 
-#: ../src/richtext/richtextmarginspage.cpp:195
-#: ../src/richtext/richtextmarginspage.cpp:197
+#: ../src/richtext/richtextmarginspage.cpp:194
+#: ../src/richtext/richtextmarginspage.cpp:196
 msgid "The left margin size."
 msgstr "देब्रे सिमान्तको आकार"
 
-#: ../src/richtext/richtextmarginspage.cpp:309
-#: ../src/richtext/richtextmarginspage.cpp:311
+#: ../src/richtext/richtextmarginspage.cpp:308
+#: ../src/richtext/richtextmarginspage.cpp:310
 msgid "The left padding size."
 msgstr "देब्रे ख्रेस्रा को आकार"
 
@@ -6417,12 +6514,12 @@ msgstr "देब्रे स्थान "
 msgid "The line spacing."
 msgstr "हरफको अन्तर"
 
-#: ../src/richtext/richtextbulletspage.cpp:268
-#: ../src/richtext/richtextbulletspage.cpp:270
+#: ../src/richtext/richtextbulletspage.cpp:255
+#: ../src/richtext/richtextbulletspage.cpp:257
 msgid "The list item number."
 msgstr "सूचि सामाग्रीको सङ्ख्या"
 
-#: ../src/msw/ole/automtn.cpp:653
+#: ../src/msw/ole/automtn.cpp:667
 msgid "The locale ID is unknown."
 msgstr "स्थानीय ID थाहा भएन"
 
@@ -6490,7 +6587,7 @@ msgstr ""
 "निम्न लिखित फाइलहरू प्रतिवेदनमा समाबेस छन् ।. यदि यी फाइलहरुमा निजी सूचना छ भने\n"
 "कृपया टिक नगर्नु होला । यसो गरेमा यीनिहरूलाई प्रतिवेदनबाट हटाइने छ । \n"
 
-#: ../src/common/cmdline.cpp:1083
+#: ../src/common/cmdline.cpp:1248
 #, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "आवश्यक parameter '%s' तोकिएको थिएन ।"
@@ -6502,13 +6599,13 @@ msgstr "आवश्यक parameter '%s' तोकिएको थिएन ।
 msgid "The right indent."
 msgstr "दाहिने indent"
 
-#: ../src/richtext/richtextmarginspage.cpp:220
-#: ../src/richtext/richtextmarginspage.cpp:222
+#: ../src/richtext/richtextmarginspage.cpp:219
+#: ../src/richtext/richtextmarginspage.cpp:221
 msgid "The right margin size."
 msgstr "दाहिने सिमान्तको आकार"
 
-#: ../src/richtext/richtextmarginspage.cpp:334
-#: ../src/richtext/richtextmarginspage.cpp:336
+#: ../src/richtext/richtextmarginspage.cpp:333
+#: ../src/richtext/richtextmarginspage.cpp:335
 msgid "The right padding size."
 msgstr "दाहिने ख्रेस्रा को आकार"
 
@@ -6532,13 +6629,13 @@ msgstr "अनुच्छेद पछिको परक"
 msgid "The spacing before the paragraph."
 msgstr "अनुच्छेद अघिको परक "
 
-#: ../src/richtext/richtextstylepage.cpp:108
 #: ../src/richtext/richtextstylepage.cpp:110
+#: ../src/richtext/richtextstylepage.cpp:112
 msgid "The style name."
 msgstr "शैलीको name"
 
-#: ../src/richtext/richtextstylepage.cpp:118
 #: ../src/richtext/richtextstylepage.cpp:120
+#: ../src/richtext/richtextstylepage.cpp:122
 msgid "The style on which this style is based."
 msgstr "त्यो शैली जसमा यो शैली आधारित छ ।"
 
@@ -6547,30 +6644,30 @@ msgstr "त्यो शैली जसमा यो शैली आधार�
 msgid "The style preview."
 msgstr "शैलीको चेहरा"
 
-#: ../src/msw/ole/automtn.cpp:669
+#: ../src/msw/ole/automtn.cpp:683
 msgid "The system cannot find the file specified."
 msgstr "यो प्रणालीले तोकिएको फाइल फेला पार्न सक्दैन ।"
 
-#: ../src/richtext/richtexttabspage.cpp:118
-#: ../src/richtext/richtexttabspage.cpp:120
+#: ../src/richtext/richtexttabspage.cpp:114
+#: ../src/richtext/richtexttabspage.cpp:116
 msgid "The tab position."
 msgstr "tab को स्थान "
 
-#: ../src/richtext/richtexttabspage.cpp:124
+#: ../src/richtext/richtexttabspage.cpp:120
 msgid "The tab positions."
 msgstr "tab का स्थानहरू"
 
-#: ../src/richtext/richtextctrl.cpp:2705
+#: ../src/richtext/richtextctrl.cpp:2827
 msgid "The text couldn't be saved."
 msgstr "पाठलाई बचत गर्न सकेन"
 
-#: ../src/richtext/richtextmarginspage.cpp:243
-#: ../src/richtext/richtextmarginspage.cpp:245
+#: ../src/richtext/richtextmarginspage.cpp:242
+#: ../src/richtext/richtextmarginspage.cpp:244
 msgid "The top margin size."
 msgstr "सिरान सिमान्तको आकार"
 
-#: ../src/richtext/richtextmarginspage.cpp:357
-#: ../src/richtext/richtextmarginspage.cpp:359
+#: ../src/richtext/richtextmarginspage.cpp:356
+#: ../src/richtext/richtextmarginspage.cpp:358
 msgid "The top padding size."
 msgstr "सिरान ख्रेस्रा को आकार"
 
@@ -6581,10 +6678,15 @@ msgstr "सिरान ख्रेस्रा को आकार"
 msgid "The top position."
 msgstr "सिरान स्थान "
 
-#: ../src/common/cmdline.cpp:1061
+#: ../src/common/cmdline.cpp:1226
 #, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "विकल्प '%s' को मान तोक्न पर्छ ।"
+
+#: ../src/richtext/richtextborderspage.cpp:588
+#: ../src/richtext/richtextborderspage.cpp:590
+msgid "The value of the corner radius."
+msgstr ""
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -6599,7 +6701,7 @@ msgstr ""
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "wxGtkPrinterDC प्रयोग गर्न सकिँदैन ।"
 
-#: ../src/osx/carbon/dataview.cpp:1340
+#: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr "महल छैन अथवा तोकिएको महलको अनुक्रमणिका दोहोरियो ।"
 
@@ -6623,7 +6725,7 @@ msgstr "यो %s होइन ।"
 msgid "This platform does not support background transparency."
 msgstr "यो platform ले पृष्ठभूमि पारदर्शितालाई समर्थन गर्दैन ।"
 
-#: ../src/gtk/window.cpp:4317
+#: ../src/gtk/window.cpp:4356
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6638,23 +6740,23 @@ msgid ""
 msgstr ""
 "यो प्रणालीले मिति नियन्त्रक लिदैन, कृपया यसलाई comctl32.dll मा स्तर वृद्धि गर्नु होला ।"
 
-#: ../src/msw/thread.cpp:1300
+#: ../src/msw/thread.cpp:1295
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr "धागो module सुरु हुन सकेन: स्थानीय धागो भण्डारमा कुनै मान राख्न सकिँदैन ।"
 
-#: ../src/unix/threadpsx.cpp:1758
+#: ../src/unix/threadpsx.cpp:1763
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "धागो module को सुरुवात असफल भयो : धागो कुञ्जी सिर्जना गर्न असफल भयो ।"
 
-#: ../src/msw/thread.cpp:1288
+#: ../src/msw/thread.cpp:1283
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr "धागो module सुरु हुन सकेन: स्थानीय धागो भण्डारमा सुची राख्न सम्भव छैन ।"
 
-#: ../src/unix/threadpsx.cpp:1038
+#: ../src/unix/threadpsx.cpp:1043
 msgid "Thread priority setting is ignored."
 msgstr "धागो प्राथमिकता कायम लाइ बेवास्ता गरियो"
 
@@ -6674,7 +6776,7 @@ msgstr "FTP सर्बरको जडानलाई पर्ख दा स�
 msgid "Timer creation failed."
 msgstr "समय लेखन सिर्जना असफल भयो ।"
 
-#: ../src/generic/tipdlg.cpp:220
+#: ../src/generic/tipdlg.cpp:215
 msgid "Tip of the Day"
 msgstr "आजको विशेष कुरा"
 
@@ -6686,11 +6788,11 @@ msgstr "कुनै तौर तरिका उपलब्ध छैन ।!
 msgid "To:"
 msgstr "लाई:"
 
-#: ../src/osx/carbon/dataview.cpp:2451
+#: ../src/osx/carbon/dataview.cpp:2449
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "Toggle renderer cannot render value; value type: "
 
-#: ../src/richtext/richtextbuffer.cpp:7983
+#: ../src/richtext/richtextbuffer.cpp:8237
 msgid "Too many EndStyle calls!"
 msgstr "धेरै अन्त शैली बोलावट!"
 
@@ -6732,17 +6834,17 @@ msgstr "Turkish (ISO-8859-9)"
 msgid "Type"
 msgstr "टङ्कण"
 
-#: ../src/richtext/richtextfontpage.cpp:160
-#: ../src/richtext/richtextfontpage.cpp:162
+#: ../src/richtext/richtextfontpage.cpp:151
+#: ../src/richtext/richtextfontpage.cpp:153
 msgid "Type a font name."
 msgstr "वरणाकृतिको नाम टङ्कण गर"
 
-#: ../src/richtext/richtextfontpage.cpp:175
-#: ../src/richtext/richtextfontpage.cpp:177
+#: ../src/richtext/richtextfontpage.cpp:166
+#: ../src/richtext/richtextfontpage.cpp:168
 msgid "Type a size in points."
 msgstr "थोप्लोमा आकारलाई टङ्कण गर"
 
-#: ../src/msw/ole/automtn.cpp:665
+#: ../src/msw/ole/automtn.cpp:679
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr "Type mismatch in argument %u"
@@ -6803,7 +6905,7 @@ msgstr "path '%s' लाई बन्द गर्न सकिएन ।Unable 
 msgid "Unable to close the handle for '%s'"
 msgstr "हातो '%s' लाई बन्द गर्न सकिएन ।"
 
-#: ../include/wx/msw/private/fswatcher.h:240
+#: ../include/wx/msw/private/fswatcher.h:245
 msgid "Unable to create I/O completion port"
 msgstr "I/O completion port लाई सिर्जना गर्न सकिएन ।"
 
@@ -6819,7 +6921,7 @@ msgstr "inotify instance लाई सिर्जना गर्न सकि�
 msgid "Unable to create kqueue instance"
 msgstr "kqueue instance लाई सिर्जना गर्न सकिएन ।"
 
-#: ../include/wx/msw/private/fswatcher.h:229
+#: ../include/wx/msw/private/fswatcher.h:234
 msgid "Unable to dequeue completion packet"
 msgstr "completion packet लाई छरपस्ट गर्न सकिएन ।"
 
@@ -6827,7 +6929,7 @@ msgstr "completion packet लाई छरपस्ट गर्न सकिए
 msgid "Unable to get events from kqueue"
 msgstr "kqueue बाट घटना पाउन सकिएन ।"
 
-#: ../src/osx/carbon/dataview.cpp:1903
+#: ../src/osx/carbon/dataview.cpp:1901
 msgid "Unable to handle native drag&drop data"
 msgstr "स्थानीय घिसार्दै राखिने तथ्याङ्क चलाउन सकिएन ।"
 
@@ -6844,7 +6946,7 @@ msgstr "Hildon program लाई सुरुवात गर्न सकिए
 msgid "Unable to open path '%s'"
 msgstr "path '%s' खोल्न सकिएन ।"
 
-#: ../src/html/htmlwin.cpp:561
+#: ../src/html/htmlwin.cpp:574
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "अनुरोध गरिएको HTML कागजात: %s लाई खोल्न सकिएन ।"
@@ -6853,11 +6955,11 @@ msgstr "अनुरोध गरिएको HTML कागजात: %s ला
 msgid "Unable to play sound asynchronously."
 msgstr "ध्वनिलाई सिलसिला मिलाएर बजाउन सकिएन ।"
 
-#: ../include/wx/msw/private/fswatcher.h:207
+#: ../include/wx/msw/private/fswatcher.h:212
 msgid "Unable to post completion status"
 msgstr "समाप्तिको स्थिति पठाउन सकिएन ।"
 
-#: ../src/unix/fswatcher_inotify.cpp:530
+#: ../src/unix/fswatcher_inotify.cpp:543
 msgid "Unable to read from inotify descriptor"
 msgstr "inotify descriptor बाट पढ्न सकिएन ।"
 
@@ -6886,8 +6988,8 @@ msgstr "नमेटाउ"
 msgid "Underline"
 msgstr "अधोरेखाङ्कन"
 
-#: ../src/richtext/richtextfontpage.cpp:341 ../src/osx/carbon/fontdlg.cpp:556
-#: ../src/propgrid/advprops.cpp:655
+#: ../src/richtext/richtextfontpage.cpp:357 ../src/osx/carbon/fontdlg.cpp:540
+#: ../src/propgrid/advprops.cpp:656
 msgid "Underlined"
 msgstr "अधोरेखाङ्कित"
 
@@ -6899,17 +7001,17 @@ msgstr "उल्टाउ"
 msgid "Undo last action"
 msgstr "अन्तिमको काम उल्टाउ "
 
-#: ../src/common/cmdline.cpp:864
+#: ../src/common/cmdline.cpp:1023
 #, c-format
 msgid "Unexpected characters following option '%s'."
 msgstr "विकल्पहरू '%s' मा नसोचेका वर्णहरू "
 
-#: ../src/unix/fswatcher_inotify.cpp:261
+#: ../src/unix/fswatcher_inotify.cpp:262
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
 
-#: ../src/common/cmdline.cpp:1024
+#: ../src/common/cmdline.cpp:1189
 #, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "नसोचेका parameter '%s'"
@@ -6964,23 +7066,23 @@ msgstr "युनिकोड 8 bit (UTF-8)"
 msgid "Unindent"
 msgstr "Unindent"
 
-#: ../src/richtext/richtextborderspage.cpp:373
-#: ../src/richtext/richtextborderspage.cpp:375
+#: ../src/richtext/richtextborderspage.cpp:362
+#: ../src/richtext/richtextborderspage.cpp:364
 msgid "Units for the bottom border width."
 msgstr "पुछार सिमाना छोडाइ को एकाइ "
 
-#: ../src/richtext/richtextmarginspage.cpp:278
-#: ../src/richtext/richtextmarginspage.cpp:280
+#: ../src/richtext/richtextmarginspage.cpp:277
+#: ../src/richtext/richtextmarginspage.cpp:279
 msgid "Units for the bottom margin."
 msgstr "पुछार सिमान्तको एकाइ "
 
-#: ../src/richtext/richtextborderspage.cpp:517
-#: ../src/richtext/richtextborderspage.cpp:519
+#: ../src/richtext/richtextborderspage.cpp:531
+#: ../src/richtext/richtextborderspage.cpp:533
 msgid "Units for the bottom outline width."
 msgstr "पुछार बाह्य रेखा छोडाइको एकाइ "
 
-#: ../src/richtext/richtextmarginspage.cpp:392
-#: ../src/richtext/richtextmarginspage.cpp:394
+#: ../src/richtext/richtextmarginspage.cpp:391
+#: ../src/richtext/richtextmarginspage.cpp:393
 msgid "Units for the bottom padding."
 msgstr "पुछार ख्रेस्रा को एकाइ"
 
@@ -6989,23 +7091,29 @@ msgstr "पुछार ख्रेस्रा को एकाइ"
 msgid "Units for the bottom position."
 msgstr "पुछार स्थानको एकाइ"
 
-#: ../src/richtext/richtextborderspage.cpp:283
-#: ../src/richtext/richtextborderspage.cpp:285
+#: ../src/richtext/richtextborderspage.cpp:599
+#: ../src/richtext/richtextborderspage.cpp:601
+#, fuzzy
+msgid "Units for the corner radius."
+msgstr "सिरान ख्रेस्राको एकाइ"
+
+#: ../src/richtext/richtextborderspage.cpp:260
+#: ../src/richtext/richtextborderspage.cpp:262
 msgid "Units for the left border width."
 msgstr "देब्रे सिमाना छोडाइको एकाइ"
 
-#: ../src/richtext/richtextmarginspage.cpp:205
-#: ../src/richtext/richtextmarginspage.cpp:207
+#: ../src/richtext/richtextmarginspage.cpp:204
+#: ../src/richtext/richtextmarginspage.cpp:206
 msgid "Units for the left margin."
 msgstr "देब्रे सिमान्तको एकाइ"
 
-#: ../src/richtext/richtextborderspage.cpp:427
 #: ../src/richtext/richtextborderspage.cpp:429
+#: ../src/richtext/richtextborderspage.cpp:431
 msgid "Units for the left outline width."
 msgstr "देब्रे बाह्य रेखा छोडाइको एकाइ"
 
-#: ../src/richtext/richtextmarginspage.cpp:319
-#: ../src/richtext/richtextmarginspage.cpp:321
+#: ../src/richtext/richtextmarginspage.cpp:318
+#: ../src/richtext/richtextmarginspage.cpp:320
 msgid "Units for the left padding."
 msgstr "देब्रे ख्रेस्रा को एकाइ"
 
@@ -7044,23 +7152,23 @@ msgstr "वस्तु उचाइको एकाइ"
 msgid "Units for the object width."
 msgstr "वस्तु छोडाइको एकाइ"
 
-#: ../src/richtext/richtextborderspage.cpp:313
-#: ../src/richtext/richtextborderspage.cpp:315
+#: ../src/richtext/richtextborderspage.cpp:294
+#: ../src/richtext/richtextborderspage.cpp:296
 msgid "Units for the right border width."
 msgstr "दाहिने सिमाना छोडाइको एकाइ"
 
-#: ../src/richtext/richtextmarginspage.cpp:230
-#: ../src/richtext/richtextmarginspage.cpp:232
+#: ../src/richtext/richtextmarginspage.cpp:229
+#: ../src/richtext/richtextmarginspage.cpp:231
 msgid "Units for the right margin."
 msgstr "दाहिने सिमान्तको एकाइ"
 
-#: ../src/richtext/richtextborderspage.cpp:457
-#: ../src/richtext/richtextborderspage.cpp:459
+#: ../src/richtext/richtextborderspage.cpp:463
+#: ../src/richtext/richtextborderspage.cpp:465
 msgid "Units for the right outline width."
 msgstr "दाहिने बाह्य रेखा छोडाइको एकाइ"
 
-#: ../src/richtext/richtextmarginspage.cpp:344
-#: ../src/richtext/richtextmarginspage.cpp:346
+#: ../src/richtext/richtextmarginspage.cpp:343
+#: ../src/richtext/richtextmarginspage.cpp:345
 msgid "Units for the right padding."
 msgstr "दाहिने ख्रेस्राको एकाइ"
 
@@ -7069,23 +7177,23 @@ msgstr "दाहिने ख्रेस्राको एकाइ"
 msgid "Units for the right position."
 msgstr "दाहिने स्थानको एकाइ"
 
-#: ../src/richtext/richtextborderspage.cpp:343
-#: ../src/richtext/richtextborderspage.cpp:345
+#: ../src/richtext/richtextborderspage.cpp:328
+#: ../src/richtext/richtextborderspage.cpp:330
 msgid "Units for the top border width."
 msgstr "सिरान सिमाना छोडाइको एकाइ"
 
-#: ../src/richtext/richtextmarginspage.cpp:253
-#: ../src/richtext/richtextmarginspage.cpp:255
+#: ../src/richtext/richtextmarginspage.cpp:252
+#: ../src/richtext/richtextmarginspage.cpp:254
 msgid "Units for the top margin."
 msgstr "सिरान सिमान्तको एकाइ"
 
-#: ../src/richtext/richtextborderspage.cpp:487
-#: ../src/richtext/richtextborderspage.cpp:489
+#: ../src/richtext/richtextborderspage.cpp:497
+#: ../src/richtext/richtextborderspage.cpp:499
 msgid "Units for the top outline width."
 msgstr "सिरान बाह्य रेखा छोडाइको एकाइ"
 
-#: ../src/richtext/richtextmarginspage.cpp:367
-#: ../src/richtext/richtextmarginspage.cpp:369
+#: ../src/richtext/richtextmarginspage.cpp:366
+#: ../src/richtext/richtextmarginspage.cpp:368
 msgid "Units for the top padding."
 msgstr "सिरान ख्रेस्राको एकाइ"
 
@@ -7122,11 +7230,11 @@ msgstr "अज्ञात गुण %s"
 msgid "Unknown TIFF resolution unit %d ignored"
 msgstr "अज्ञात TIFF resolution एकाइ %d लाई बेवास्ता गरियो "
 
-#: ../src/osx/carbon/dataview.cpp:1978
+#: ../src/osx/carbon/dataview.cpp:1976
 msgid "Unknown data format"
 msgstr "अज्ञात तथ्याङ्क बनोट"
 
-#: ../src/unix/dlunix.cpp:325
+#: ../src/unix/dlunix.cpp:160
 msgid "Unknown dynamic library error"
 msgstr "अज्ञात गतिसित पुस्तकालय गल्ती"
 
@@ -7135,12 +7243,12 @@ msgstr "अज्ञात गतिसित पुस्तकालय गल
 msgid "Unknown encoding (%d)"
 msgstr "अज्ञात अनुसंहिता (%d)"
 
-#: ../src/msw/ole/automtn.cpp:677
+#: ../src/msw/ole/automtn.cpp:691
 #, c-format
 msgid "Unknown error %08x"
 msgstr "अज्ञात गल्ती %08x"
 
-#: ../src/msw/ole/automtn.cpp:636
+#: ../src/msw/ole/automtn.cpp:650
 msgid "Unknown exception"
 msgstr "अज्ञात नमिल्दो अवस्था"
 
@@ -7148,16 +7256,16 @@ msgstr "अज्ञात नमिल्दो अवस्था"
 msgid "Unknown image data format."
 msgstr "अज्ञात तस्विर तथ्याङ्क बनोट"
 
-#: ../src/common/cmdline.cpp:749
+#: ../src/common/cmdline.cpp:908
 #, c-format
 msgid "Unknown long option '%s'"
 msgstr "अज्ञात लामो विकल्प '%s'"
 
-#: ../src/msw/ole/automtn.cpp:620
+#: ../src/msw/ole/automtn.cpp:634
 msgid "Unknown name or named argument."
 msgstr "अज्ञात नाम अथवा नामाङ्कित तर्क"
 
-#: ../src/common/cmdline.cpp:764 ../src/common/cmdline.cpp:786
+#: ../src/common/cmdline.cpp:923 ../src/common/cmdline.cpp:945
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "अज्ञात विकल्प '%s'"
@@ -7172,7 +7280,7 @@ msgstr "Mime किसिम %s को entry मा '{' मल्दैन ।"
 msgid "Unnamed command"
 msgstr "बैनामै आदेश"
 
-#: ../src/propgrid/propgrid.cpp:398
+#: ../src/propgrid/propgrid.cpp:397
 msgid "Unspecified"
 msgstr "नतोकिएको"
 
@@ -7190,16 +7298,16 @@ msgid "Up"
 msgstr "माथि"
 
 #: ../src/richtext/richtextliststylepage.cpp:483
-#: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextbulletspage.cpp:275
 msgid "Upper case letters"
 msgstr "ठूलो खालको पाठ"
 
 #: ../src/richtext/richtextliststylepage.cpp:485
-#: ../src/richtext/richtextbulletspage.cpp:290
+#: ../src/richtext/richtextbulletspage.cpp:277
 msgid "Upper case roman numerals"
 msgstr "ठूलो खालको रोमन सङ्ख्या"
 
-#: ../src/common/cmdline.cpp:1155
+#: ../src/common/cmdline.cpp:1320
 #, c-format
 msgid "Usage: %s"
 msgstr "प्रयोग: %s"
@@ -7211,11 +7319,11 @@ msgstr "प्रयोग: %s"
 msgid "Use the current alignment setting."
 msgstr "चालू पङ्क्ति बद्ध अनुकूलताको प्रयोग गर"
 
-#: ../src/osx/carbon/dataview.cpp:2658 ../src/osx/carbon/dataview.cpp:2723
+#: ../src/osx/carbon/dataview.cpp:2656 ../src/osx/carbon/dataview.cpp:2721
 msgid "Valid pointer to native data view control does not exist"
 msgstr "स्थानीय तथ्याङ्क दृश्य नियन्त्रकका लागि वैध चुच्चो छैन ।"
 
-#: ../src/common/valtext.cpp:174
+#: ../src/common/valtext.cpp:179
 msgid "Validation conflict"
 msgstr "वैधता को विवाद"
 
@@ -7223,17 +7331,17 @@ msgstr "वैधता को विवाद"
 msgid "Value"
 msgstr "मान"
 
-#: ../src/propgrid/props.cpp:384
+#: ../src/propgrid/props.cpp:385
 #, c-format
 msgid "Value must be %s or higher."
 msgstr "मान %s अथवा यो भन्दा बढि हुनै पर्दछ ।"
 
-#: ../src/propgrid/props.cpp:411
+#: ../src/propgrid/props.cpp:412
 #, c-format
 msgid "Value must be %s or less."
 msgstr "मान %s अथवा यो भन्दा घटि हुनै पर्दछ ।"
 
-#: ../src/propgrid/props.cpp:388 ../src/propgrid/props.cpp:415
+#: ../src/propgrid/props.cpp:389 ../src/propgrid/props.cpp:416
 #, c-format
 msgid "Value must be between %s and %s."
 msgstr "मान %s र %s को बीचमा हुनै पर्दछ ।"
@@ -7255,7 +7363,7 @@ msgstr "विस्तृत दृश्यको रूपमा फाइल
 msgid "View files as a list view"
 msgstr "सूचि दृश्यको रूपमा फाइल हेर्नु होस् "
 
-#: ../src/common/docview.cpp:1952
+#: ../src/common/docview.cpp:1959
 msgid "Views"
 msgstr "दृश्यहरू"
 
@@ -7280,7 +7388,7 @@ msgstr " epoll ब्याख्याकार %d मा IO को पर्�
 msgid "Warning: "
 msgstr "चेतावनी: "
 
-#: ../src/propgrid/advprops.cpp:651
+#: ../src/propgrid/advprops.cpp:652
 msgid "Weight"
 msgstr "भार"
 
@@ -7300,7 +7408,7 @@ msgstr "वरणाकृति अधोरेखाङ्कित छ वा
 msgid "Whole word"
 msgstr "पुरै शब्द"
 
-#: ../src/html/helpwnd.cpp:547
+#: ../src/html/helpwnd.cpp:548
 msgid "Whole words only"
 msgstr "पुरै शब्दहरू मात्र"
 
@@ -7319,6 +7427,16 @@ msgstr "विन्डोज 2000"
 #: ../src/msw/utils.cpp:1302
 msgid "Windows 7"
 msgstr "विन्डोज 7"
+
+#: ../src/msw/utils.cpp:1308
+#, fuzzy
+msgid "Windows 8"
+msgstr "विन्डोज 98"
+
+#: ../src/msw/utils.cpp:1314
+#, fuzzy
+msgid "Windows 8.1"
+msgstr "विन्डोज 98"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7394,7 +7512,7 @@ msgstr "कोरिया ली विन्डोज (CP 949)"
 msgid "Windows ME"
 msgstr "विन्डोज ME"
 
-#: ../src/msw/utils.cpp:1310
+#: ../src/msw/utils.cpp:1322
 #, c-format
 msgid "Windows NT %lu.%lu"
 msgstr "विन्डोज NT %lu.%lu"
@@ -7409,6 +7527,16 @@ msgstr "विन्डोज सर्बर 2008"
 
 #: ../src/msw/utils.cpp:1301
 msgid "Windows Server 2008 R2"
+msgstr "विन्डोज सर्बर 2008 R2"
+
+#: ../src/msw/utils.cpp:1307
+#, fuzzy
+msgid "Windows Server 2012"
+msgstr "विन्डोज सर्बर 2003"
+
+#: ../src/msw/utils.cpp:1313
+#, fuzzy
+msgid "Windows Server 2012 R2"
 msgstr "विन्डोज सर्बर 2008 R2"
 
 #: ../src/common/fmapbase.cpp:166
@@ -7497,7 +7625,7 @@ msgstr "तपाइले खप्टिएको स्थानमा दु
 msgid "You cannot add a new directory to this section."
 msgstr "तपाइले यो खण्डमा नया घर्रा थप्न सक्नु हुन्न ।"
 
-#: ../src/propgrid/propgrid.cpp:3258
+#: ../src/propgrid/propgrid.cpp:3245
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr "तपाइले गल्ती मान राख्नु भयो । सम्पादनलाई रद्द गर्न ESC दबाउनु होस् ।"
 
@@ -7640,7 +7768,7 @@ msgstr "पुस्तकालय function का लागि नमिल्
 msgid "bad signature"
 msgstr "गलत हस्ताक्षर"
 
-#: ../src/common/zipstrm.cpp:1715
+#: ../src/common/zipstrm.cpp:1678
 msgid "bad zipfile offset to entry"
 msgstr "प्रविष्टिका लागि गलत zip फाइलको हातो"
 
@@ -7656,7 +7784,7 @@ msgstr "मोटो"
 msgid "buffer is too small for Windows directory."
 msgstr "विन्डोज घर्राको लागि buffer धेरै सानो छ ।"
 
-#: ../src/msw/utils.cpp:1316
+#: ../src/msw/utils.cpp:1328
 #, c-format
 msgid "build %lu"
 msgstr "निर्माण %lu"
@@ -7696,7 +7824,7 @@ msgstr "यदि फाइलको अन्त ब्याख्याका
 msgid "can't execute '%s'"
 msgstr "'%s' लाई कार्यान्वयन गर्न सकिँदैन ।"
 
-#: ../src/common/zipstrm.cpp:1490
+#: ../src/common/zipstrm.cpp:1453
 msgid "can't find central directory in zip"
 msgstr "zip मा केन्द्रीय घर्रा फेला पार्न सकिँदैन ।"
 
@@ -7770,7 +7898,7 @@ msgstr "अस्ताइ फाइल '%s' लाई हटाउन सकि
 msgid "can't seek on file descriptor %d"
 msgstr "फाइल ब्याख्याकार %d मा खोज्न सकिँदैन ।"
 
-#: ../src/common/textfile.cpp:299
+#: ../src/common/textfile.cpp:270
 #, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "buffer '%s' लाई disk मा लेख्न सकिँदैन ।"
@@ -7792,22 +7920,23 @@ msgstr "गल्ती जाँच सूचि"
 msgid "checksum failure reading tar header block"
 msgstr "tar header हिस्सा असफलता जाँच सुची "
 
-#: ../src/richtext/richtextborderspage.cpp:280
-#: ../src/richtext/richtextborderspage.cpp:310
-#: ../src/richtext/richtextborderspage.cpp:340
-#: ../src/richtext/richtextborderspage.cpp:370
-#: ../src/richtext/richtextborderspage.cpp:424
-#: ../src/richtext/richtextborderspage.cpp:454
-#: ../src/richtext/richtextborderspage.cpp:484
-#: ../src/richtext/richtextborderspage.cpp:514
-#: ../src/richtext/richtextmarginspage.cpp:202
-#: ../src/richtext/richtextmarginspage.cpp:227
-#: ../src/richtext/richtextmarginspage.cpp:250
-#: ../src/richtext/richtextmarginspage.cpp:275
-#: ../src/richtext/richtextmarginspage.cpp:316
-#: ../src/richtext/richtextmarginspage.cpp:341
-#: ../src/richtext/richtextmarginspage.cpp:364
-#: ../src/richtext/richtextmarginspage.cpp:389
+#: ../src/richtext/richtextborderspage.cpp:256
+#: ../src/richtext/richtextborderspage.cpp:290
+#: ../src/richtext/richtextborderspage.cpp:324
+#: ../src/richtext/richtextborderspage.cpp:358
+#: ../src/richtext/richtextborderspage.cpp:425
+#: ../src/richtext/richtextborderspage.cpp:459
+#: ../src/richtext/richtextborderspage.cpp:493
+#: ../src/richtext/richtextborderspage.cpp:527
+#: ../src/richtext/richtextborderspage.cpp:595
+#: ../src/richtext/richtextmarginspage.cpp:201
+#: ../src/richtext/richtextmarginspage.cpp:226
+#: ../src/richtext/richtextmarginspage.cpp:249
+#: ../src/richtext/richtextmarginspage.cpp:274
+#: ../src/richtext/richtextmarginspage.cpp:315
+#: ../src/richtext/richtextmarginspage.cpp:340
+#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:388
 #: ../src/richtext/richtextsizepage.cpp:339
 #: ../src/richtext/richtextsizepage.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:400
@@ -7833,7 +7962,7 @@ msgstr "8-bit अनुसंहिता मा रूपान्तरण अ
 msgid "ctrl"
 msgstr "नियन्त्रण"
 
-#: ../src/common/cmdline.cpp:1323
+#: ../src/common/cmdline.cpp:1488
 msgid "date"
 msgstr "मिति"
 
@@ -7845,7 +7974,7 @@ msgstr "दबाब विहीनता गल्ती"
 msgid "default"
 msgstr "निर्धारित"
 
-#: ../src/common/cmdline.cpp:1319
+#: ../src/common/cmdline.cpp:1484
 msgid "double"
 msgstr "दोबर"
 
@@ -7883,15 +8012,15 @@ msgstr "'%s' खोल्दा गल्ती "
 msgid "error opening file"
 msgstr "फाइल खोल्दा गल्ती"
 
-#: ../src/common/zipstrm.cpp:1576
+#: ../src/common/zipstrm.cpp:1539
 msgid "error reading zip central directory"
 msgstr "केन्द्रीय घर्रा पढ्दा गल्ती "
 
-#: ../src/common/zipstrm.cpp:1667
+#: ../src/common/zipstrm.cpp:1630
 msgid "error reading zip local header"
 msgstr "स्थानीय header पढ्दा गल्ती "
 
-#: ../src/common/zipstrm.cpp:2396
+#: ../src/common/zipstrm.cpp:2291
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
 msgstr "zip प्रविष्टि '%s' लेखाइमा गल्ती: गलत crc अथवा लम्बाइ"
@@ -7934,7 +8063,7 @@ msgstr "फाइल '%s', लाइन %d: अपरिवर्तित क�
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "फाइल '%s': वर्ण %c (%d लाइनमा ) अनपेक्षित छ ।"
 
-#: ../src/richtext/richtextbuffer.cpp:8358
+#: ../src/richtext/richtextbuffer.cpp:8612
 msgid "files"
 msgstr "फाइलहरू"
 
@@ -7942,7 +8071,7 @@ msgstr "फाइलहरू"
 msgid "first"
 msgstr "प्रथम"
 
-#: ../src/html/helpwnd.cpp:1265
+#: ../src/html/helpwnd.cpp:1266
 msgid "font size"
 msgstr "वरणाकृतिको आकार"
 
@@ -7954,12 +8083,12 @@ msgstr "चौधौं "
 msgid "fourth"
 msgstr "चौथो"
 
-#: ../src/common/appbase.cpp:695
+#: ../src/common/appbase.cpp:699
 msgid "generate verbose log messages"
 msgstr "लामो सन्देशहरू उत्पादन गर्छ ।"
 
-#: ../src/richtext/richtextbuffer.cpp:12212
-#: ../src/richtext/richtextbuffer.cpp:12322
+#: ../src/richtext/richtextbuffer.cpp:12782
+#: ../src/richtext/richtextbuffer.cpp:12892
 msgid "image"
 msgstr "तस्विर"
 
@@ -7983,7 +8112,7 @@ msgstr "विस्तारित tar header मा अवैध तथ्य�
 msgid "invalid message box return value"
 msgstr "सन्देश बाकसको मान अवैध छ । "
 
-#: ../src/common/zipstrm.cpp:1445
+#: ../src/common/zipstrm.cpp:1408
 msgid "invalid zip file"
 msgstr "अवैध zip फाइल"
 
@@ -8041,7 +8170,7 @@ msgstr "सामान्य"
 msgid "not implemented"
 msgstr "कार्यान्वयन नगरिएको "
 
-#: ../src/common/cmdline.cpp:1315
+#: ../src/common/cmdline.cpp:1480
 msgid "num"
 msgstr "num"
 
@@ -8053,77 +8182,76 @@ msgstr "वस्तु को XML पाठ टिप्पणी हुन स
 msgid "out of memory"
 msgstr "भण्डार क्षमता भन्दा बाहिर"
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:661
-msgid "percent"
-msgstr "प्रतिशत"
-
 #: ../src/common/debugrpt.cpp:519
 msgid "process context description"
 msgstr "प्रक्रिया सन्दर्भको बयान"
 
-#: ../src/richtext/richtextfontpage.cpp:186
-#: ../src/richtext/richtextfontpage.cpp:189
+#: ../src/richtext/richtextfontpage.cpp:177
+#: ../src/richtext/richtextfontpage.cpp:180
+#: ../src/richtext/richtextborderspage.cpp:257
+#: ../src/richtext/richtextborderspage.cpp:291
+#: ../src/richtext/richtextborderspage.cpp:325
+#: ../src/richtext/richtextborderspage.cpp:359
+#: ../src/richtext/richtextborderspage.cpp:426
+#: ../src/richtext/richtextborderspage.cpp:460
+#: ../src/richtext/richtextborderspage.cpp:494
+#: ../src/richtext/richtextborderspage.cpp:528
+#: ../src/richtext/richtextborderspage.cpp:596
 msgid "pt"
 msgstr "pt"
 
-#: ../src/richtext/richtextfontpage.cpp:187
-#: ../src/richtext/richtextborderspage.cpp:279
-#: ../src/richtext/richtextborderspage.cpp:281
-#: ../src/richtext/richtextborderspage.cpp:282
-#: ../src/richtext/richtextborderspage.cpp:309
-#: ../src/richtext/richtextborderspage.cpp:311
-#: ../src/richtext/richtextborderspage.cpp:312
-#: ../src/richtext/richtextborderspage.cpp:339
-#: ../src/richtext/richtextborderspage.cpp:341
-#: ../src/richtext/richtextborderspage.cpp:342
-#: ../src/richtext/richtextborderspage.cpp:369
-#: ../src/richtext/richtextborderspage.cpp:371
-#: ../src/richtext/richtextborderspage.cpp:372
-#: ../src/richtext/richtextborderspage.cpp:423
-#: ../src/richtext/richtextborderspage.cpp:425
-#: ../src/richtext/richtextborderspage.cpp:426
-#: ../src/richtext/richtextborderspage.cpp:453
-#: ../src/richtext/richtextborderspage.cpp:455
-#: ../src/richtext/richtextborderspage.cpp:456
-#: ../src/richtext/richtextborderspage.cpp:483
-#: ../src/richtext/richtextborderspage.cpp:485
-#: ../src/richtext/richtextborderspage.cpp:486
-#: ../src/richtext/richtextborderspage.cpp:513
-#: ../src/richtext/richtextborderspage.cpp:515
-#: ../src/richtext/richtextborderspage.cpp:516
-#: ../src/richtext/richtextmarginspage.cpp:201
+#: ../src/richtext/richtextfontpage.cpp:178
+#: ../src/richtext/richtextborderspage.cpp:255
+#: ../src/richtext/richtextborderspage.cpp:258
+#: ../src/richtext/richtextborderspage.cpp:259
+#: ../src/richtext/richtextborderspage.cpp:289
+#: ../src/richtext/richtextborderspage.cpp:292
+#: ../src/richtext/richtextborderspage.cpp:293
+#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:326
+#: ../src/richtext/richtextborderspage.cpp:327
+#: ../src/richtext/richtextborderspage.cpp:357
+#: ../src/richtext/richtextborderspage.cpp:360
+#: ../src/richtext/richtextborderspage.cpp:361
+#: ../src/richtext/richtextborderspage.cpp:424
+#: ../src/richtext/richtextborderspage.cpp:427
+#: ../src/richtext/richtextborderspage.cpp:428
+#: ../src/richtext/richtextborderspage.cpp:458
+#: ../src/richtext/richtextborderspage.cpp:461
+#: ../src/richtext/richtextborderspage.cpp:462
+#: ../src/richtext/richtextborderspage.cpp:492
+#: ../src/richtext/richtextborderspage.cpp:495
+#: ../src/richtext/richtextborderspage.cpp:496
+#: ../src/richtext/richtextborderspage.cpp:526
+#: ../src/richtext/richtextborderspage.cpp:529
+#: ../src/richtext/richtextborderspage.cpp:530
+#: ../src/richtext/richtextborderspage.cpp:594
+#: ../src/richtext/richtextborderspage.cpp:597
+#: ../src/richtext/richtextborderspage.cpp:598
+#: ../src/richtext/richtextmarginspage.cpp:200
+#: ../src/richtext/richtextmarginspage.cpp:202
 #: ../src/richtext/richtextmarginspage.cpp:203
-#: ../src/richtext/richtextmarginspage.cpp:204
-#: ../src/richtext/richtextmarginspage.cpp:226
+#: ../src/richtext/richtextmarginspage.cpp:225
+#: ../src/richtext/richtextmarginspage.cpp:227
 #: ../src/richtext/richtextmarginspage.cpp:228
-#: ../src/richtext/richtextmarginspage.cpp:229
-#: ../src/richtext/richtextmarginspage.cpp:249
+#: ../src/richtext/richtextmarginspage.cpp:248
+#: ../src/richtext/richtextmarginspage.cpp:250
 #: ../src/richtext/richtextmarginspage.cpp:251
-#: ../src/richtext/richtextmarginspage.cpp:252
-#: ../src/richtext/richtextmarginspage.cpp:274
+#: ../src/richtext/richtextmarginspage.cpp:273
+#: ../src/richtext/richtextmarginspage.cpp:275
 #: ../src/richtext/richtextmarginspage.cpp:276
-#: ../src/richtext/richtextmarginspage.cpp:277
-#: ../src/richtext/richtextmarginspage.cpp:315
+#: ../src/richtext/richtextmarginspage.cpp:314
+#: ../src/richtext/richtextmarginspage.cpp:316
 #: ../src/richtext/richtextmarginspage.cpp:317
-#: ../src/richtext/richtextmarginspage.cpp:318
-#: ../src/richtext/richtextmarginspage.cpp:340
+#: ../src/richtext/richtextmarginspage.cpp:339
+#: ../src/richtext/richtextmarginspage.cpp:341
 #: ../src/richtext/richtextmarginspage.cpp:342
-#: ../src/richtext/richtextmarginspage.cpp:343
-#: ../src/richtext/richtextmarginspage.cpp:363
+#: ../src/richtext/richtextmarginspage.cpp:362
+#: ../src/richtext/richtextmarginspage.cpp:364
 #: ../src/richtext/richtextmarginspage.cpp:365
-#: ../src/richtext/richtextmarginspage.cpp:366
-#: ../src/richtext/richtextmarginspage.cpp:388
+#: ../src/richtext/richtextmarginspage.cpp:387
+#: ../src/richtext/richtextmarginspage.cpp:389
 #: ../src/richtext/richtextmarginspage.cpp:390
-#: ../src/richtext/richtextmarginspage.cpp:391
 #: ../src/richtext/richtextsizepage.cpp:338
 #: ../src/richtext/richtextsizepage.cpp:341
 #: ../src/richtext/richtextsizepage.cpp:342
@@ -8165,12 +8293,12 @@ msgstr "rawctrl"
 msgid "read error"
 msgstr "पढ्नमा गल्ती"
 
-#: ../src/common/zipstrm.cpp:1882
+#: ../src/common/zipstrm.cpp:1845
 #, c-format
 msgid "reading zip stream (entry %s): bad crc"
 msgstr "zip stream (प्रविष्टि %s) पढिँदै: गलत crc"
 
-#: ../src/common/zipstrm.cpp:1877
+#: ../src/common/zipstrm.cpp:1840
 #, c-format
 msgid "reading zip stream (entry %s): bad length"
 msgstr "zip stream (प्रविष्टि %s) पढिँदै: गलत लम्बाइ"
@@ -8199,7 +8327,7 @@ msgstr "सातौं"
 msgid "shift"
 msgstr "shift"
 
-#: ../src/common/appbase.cpp:685
+#: ../src/common/appbase.cpp:689
 msgid "show this help message"
 msgstr "यो सहयोग सन्देश देखाउ "
 
@@ -8219,31 +8347,31 @@ msgstr "प्रयोगका लागि पटल मुद्रा त�
 msgid "specify the theme to use"
 msgstr "प्रयोगका लागि theme तोक्नु होला ।"
 
-#: ../src/richtext/richtextbuffer.cpp:8876
+#: ../src/richtext/richtextbuffer.cpp:9133
 msgid "standard/circle"
 msgstr "स्तरीय/वृत"
 
-#: ../src/richtext/richtextbuffer.cpp:8877
+#: ../src/richtext/richtextbuffer.cpp:9134
 msgid "standard/circle-outline"
 msgstr "स्तरीय/वृत-बाह्यरेखा"
 
-#: ../src/richtext/richtextbuffer.cpp:8879
+#: ../src/richtext/richtextbuffer.cpp:9136
 msgid "standard/diamond"
 msgstr "हिरा/हिरा"
 
-#: ../src/richtext/richtextbuffer.cpp:8878
+#: ../src/richtext/richtextbuffer.cpp:9135
 msgid "standard/square"
 msgstr "वर्ग/वर्ग"
 
-#: ../src/richtext/richtextbuffer.cpp:8880
+#: ../src/richtext/richtextbuffer.cpp:9137
 msgid "standard/triangle"
 msgstr "स्तरीय/त्रिभुज"
 
-#: ../src/common/zipstrm.cpp:1782
+#: ../src/common/zipstrm.cpp:1745
 msgid "stored file length not in Zip header"
 msgstr "फाइलको लम्बाइ Zip header भन्दा अन्तै भण्डार गर"
 
-#: ../src/common/cmdline.cpp:1311
+#: ../src/common/cmdline.cpp:1476
 msgid "str"
 msgstr "str"
 
@@ -8342,12 +8470,12 @@ msgstr "अज्ञात -%d"
 msgid "unnamed"
 msgstr "नाम नपाएको"
 
-#: ../src/common/docview.cpp:1606
+#: ../src/common/docview.cpp:1613
 #, c-format
 msgid "unnamed%d"
 msgstr "नाम नभएको %d"
 
-#: ../src/common/zipstrm.cpp:1796 ../src/common/zipstrm.cpp:2184
+#: ../src/common/zipstrm.cpp:1759 ../src/common/zipstrm.cpp:2079
 msgid "unsupported Zip compression method"
 msgstr "असमर्थित Zip दबाब विधि "
 
@@ -8368,11 +8496,11 @@ msgstr "wxGetTimeOfDay असफल भयो ।"
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr "wxPrintout::GetPageInfo ले शून्य maxPage दिन्छ ।"
 
-#: ../src/osx/carbon/dataview.cpp:1303
+#: ../src/osx/carbon/dataview.cpp:1301
 msgid "wxWidget control pointer is not a data view pointer"
 msgstr "wxWidget नियन्त्रक चुच्चो तथ्याङ्क दृश्य चुच्चो होइन ।"
 
-#: ../src/osx/carbon/dataview.cpp:907
+#: ../src/osx/carbon/dataview.cpp:905
 msgid "wxWidget's control not initialized."
 msgstr "wxWidget's नियन्त्रक सुरुवात गरिएको छैन ।"
 
@@ -8399,9 +8527,15 @@ msgid "zlib error %d"
 msgstr "zlib गल्ती %d"
 
 #: ../src/richtext/richtextliststylepage.cpp:496
-#: ../src/richtext/richtextbulletspage.cpp:301
+#: ../src/richtext/richtextbulletspage.cpp:288
 msgid "~"
 msgstr "~"
+
+#~ msgid "Event queue overflowed"
+#~ msgstr "Event queue overflowed"
+
+#~ msgid "percent"
+#~ msgstr "प्रतिशत"
 
 #~ msgid "Print preview"
 #~ msgstr "छापिने चेहरा"
