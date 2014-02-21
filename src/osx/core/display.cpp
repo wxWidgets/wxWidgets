@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/display_impl.h"
+#include "wx/scopedarray.h"
 #include "wx/osx/private.h"
 
 #if wxOSX_USE_COCOA_OR_CARBON
@@ -175,18 +176,14 @@ int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
 wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
 {
     CGDisplayCount theCount = GetCount();
-    CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];
+    wxScopedArray<CGDirectDisplayID> theIDs(theCount);
 
     CGDisplayErr err = wxOSXGetDisplayList(theCount, theIDs, &theCount);
     wxCHECK_MSG( err == CGDisplayNoErr, NULL, "wxOSXGetDisplayList() failed" );
 
     wxASSERT( n < theCount );
 
-    wxDisplayImplMacOSX *display = new wxDisplayImplMacOSX(n, theIDs[n]);
-
-    delete [] theIDs;
-
-    return display;
+    return new wxDisplayImplMacOSX(n, theIDs[n]);
 }
 
 // ============================================================================
