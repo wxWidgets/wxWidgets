@@ -141,17 +141,24 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
     PMResolution res;
     PMPrinter printer;
 
+    bool useDefaultResolution = true;
     m_err = PMSessionGetCurrentPrinter(native->GetPrintSession(), &printer);
     if (m_err == noErr)
     {
         m_err = PMPrinterGetOutputResolution( printer, native->GetPrintSettings(), &res) ;
-        if ( m_err == -9589 /* kPMKeyNotFound */ )
-        {
-            m_err = noErr ;
-            res.hRes = res.vRes = 300;
-        }
+        if (m_err == noErr)
+            useDefaultResolution = true;
     }
     
+    // Ignore errors which may occur while retrieving the resolution and just
+    // use the default one.
+    if ( useDefaultResolution )
+    {
+        res.hRes =
+        res.vRes = 300;
+        m_err = noErr ;
+    }
+
     m_maxX = wxCoord((double)m_maxX * res.hRes / 72.0);
     m_maxY = wxCoord((double)m_maxY * res.vRes / 72.0);
 
