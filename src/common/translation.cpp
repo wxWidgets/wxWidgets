@@ -46,6 +46,7 @@
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/fontmap.h"
+#include "wx/scopedptr.h"
 #include "wx/stdpaths.h"
 #include "wx/private/threadinfo.h"
 
@@ -1188,7 +1189,8 @@ bool wxMsgCatalogFile::FillHash(wxStringToStringHashMap& hash,
 
     // conversion to use to convert catalog strings to the GUI encoding
     wxMBConv *inputConv = NULL;
-    wxMBConv *inputConvPtr = NULL; // same as inputConv but safely deleteable
+
+    wxScopedPtr<wxMBConv> inputConvPtr; // just to delete inputConv if needed
 
     if ( !m_charset.empty() )
     {
@@ -1198,8 +1200,11 @@ bool wxMsgCatalogFile::FillHash(wxStringToStringHashMap& hash,
         if ( encCat != wxLocale::GetSystemEncoding() )
 #endif
         {
-            inputConvPtr =
             inputConv = new wxCSConv(m_charset);
+
+            // As we allocated it ourselves, we need to delete it, so ensure
+            // this happens.
+            inputConvPtr.reset(inputConv);
         }
     }
     else // no need or not possible to convert the encoding
@@ -1217,9 +1222,9 @@ bool wxMsgCatalogFile::FillHash(wxStringToStringHashMap& hash,
     // conversion to apply to msgid strings before looking them up: we only
     // need it if the msgids are neither in 7 bit ASCII nor in the same
     // encoding as the catalog
-    wxCSConv *sourceConv = msgIdCharset.empty() || (msgIdCharset == m_charset)
-                            ? NULL
-                            : new wxCSConv(msgIdCharset);
+    wxScopedPtr<wxCSConv> sourceConv;
+    if ( !msgIdCharset.empty() && (msgIdCharset != m_charset) )
+        sourceConv.reset(new wxCSConv(msgIdCharset));
 #endif // !wxUSE_UNICODE
 
     for (size_t32 i = 0; i < m_numStrings; i++)
@@ -1274,11 +1279,6 @@ bool wxMsgCatalogFile::FillHash(wxStringToStringHashMap& hash,
             ++index;
         }
     }
-
-#if !wxUSE_UNICODE
-    delete sourceConv;
-#endif
-    delete inputConvPtr;
 
     return true;
 }
