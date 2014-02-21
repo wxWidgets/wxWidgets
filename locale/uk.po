@@ -1,13 +1,13 @@
 # translation of wxstd.pot to Ukrainian
 # This file is distributed under the same license as the wxWidgets package.
 #
-# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2010, 2011, 2012, 2013.
+# Yuri Chornoivan <yurchor@ukr.net>, 2007, 2010, 2011, 2012, 2013, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2013-07-10 20:12+0300\n"
+"PO-Revision-Date: 2014-02-21 19:09+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -100,9 +100,8 @@ msgstr "#9 Конверт, 3 7/8 x 8 7/8 дюйм"
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
-#, fuzzy
 msgid "%"
-msgstr "%s"
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -685,7 +684,7 @@ msgstr "&Символ:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "С&инхронізувати значення"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -759,14 +758,14 @@ msgid "&Yes"
 msgstr "&Так"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "«%s» має містити тільки символи алфавіту."
+msgstr "«%s» містить некоректні символи"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "«%s» має містити тільки символи алфавіту."
+msgstr "«%s» містить некоректні символи"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -784,14 +783,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "«%s» — помилковий каталог повідомлень."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "«%s» — помилковий каталог повідомлень."
+msgstr "«%s» немає серед коректних рядків"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "«%s» помилкове"
+msgstr "«%s» є одним з помилкових рядків"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
@@ -1173,9 +1172,8 @@ msgid "About %s"
 msgstr "Про %s"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Про програму"
+msgstr "Про програму…"
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1190,12 +1188,10 @@ msgid "Add"
 msgstr "Додати"
 
 #: ../src/richtext/richtextbuffer.cpp:11219
-#, fuzzy
 msgid "Add Column"
 msgstr "Додати стовпчик"
 
 #: ../src/richtext/richtextbuffer.cpp:11156
-#, fuzzy
 msgid "Add Row"
 msgstr "Додати рядок"
 
@@ -1288,7 +1284,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Необов’язковий радіус закруглення кутів."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1964,7 +1960,7 @@ msgstr "Позначте, щоб додати праву дужку"
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Позначте, якщо слід редагувати усі межі одночасно."
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -1975,9 +1971,9 @@ msgstr "Позначте, щоб додати до позначки дужку."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "Клацніть, щоб змінити колір тексту."
+msgstr ""
+"Позначте, щоб визначити використання писемності із записом справа ліворуч."
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -2024,7 +2020,7 @@ msgstr "Позначте, щоб перетворити текст на верх
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "Позначте, щоб придушити перенесення слів."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2309,11 +2305,11 @@ msgstr "Копіювати позначене"
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Кут"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "&Радіус закруглення:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2656,12 +2652,10 @@ msgid "Delete A&ll"
 msgstr "Вилучити в&се"
 
 #: ../src/richtext/richtextbuffer.cpp:11105
-#, fuzzy
 msgid "Delete Column"
 msgstr "Вилучити стовпчик"
 
 #: ../src/richtext/richtextbuffer.cpp:11055
-#, fuzzy
 msgid "Delete Row"
 msgstr "Вилучити рядок"
 
@@ -5861,7 +5855,7 @@ msgstr "Гребінь"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "С&права ліворуч"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -6043,7 +6037,7 @@ msgstr "Після параметра «%s» слід використовува
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Служби"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6267,7 +6261,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 мм"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Приду&шити перенесення слів"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6390,9 +6384,8 @@ msgstr "Колір тла."
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "Стиль шрифту."
+msgstr "Стиль лінії рамки."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6735,7 +6728,7 @@ msgstr "Значення параметра «%s» повинно бути за�
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Значення радіуса закруглення."
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -7158,9 +7151,8 @@ msgstr "Одиниці виміру нижньої позиції."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Одиниці виміру верхньої фаски."
+msgstr "Одиниці виміру радіуса закруглення."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7495,14 +7487,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7596,14 +7586,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
