@@ -1,18 +1,18 @@
 # Xabier Aramendi <azpidatziak@gmail.com>, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWidgets 3.0\n"
+"Project-Id-Version: wxWidgets\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2013-11-02 14:37+0100\n"
-"Last-Translator: Xabier Aramendi (Azpidatziak) <azpidatziak@gmail.com>\n"
+"PO-Revision-Date: 2014-02-21 22:22+0100\n"
+"Last-Translator: Xabier Aramendi <azpidatziak@gmail.com>\n"
 "Language-Team: (EUS_Xabier Aramendi) <azpidatziak@gmail.com>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.2\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -96,9 +96,8 @@ msgstr "#9 Gutunazala, 3 7/8 x 8 7/8 in"
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
-#, fuzzy
 msgid "%"
-msgstr "%s"
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -168,7 +167,7 @@ msgstr "&Oraingo Neurria"
 
 #: ../src/richtext/richtextindentspage.cpp:262
 msgid "&After a paragraph:"
-msgstr "&Esaldia baten ondoren:"
+msgstr "&Esaldi baten ondoren:"
 
 #: ../src/richtext/richtextindentspage.cpp:128
 #: ../src/richtext/richtextliststylepage.cpp:319
@@ -680,7 +679,7 @@ msgstr "&Ikurra:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Aldiberetu balioak"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -754,14 +753,14 @@ msgid "&Yes"
 msgstr "&Bai"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' alfabetoko hizkiak bakarrik izan behar ditu."
+msgstr "'%s' legezkanpoko hizkiak ditu"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' alfabetoko hizkiak bakarrik izan behar ditu."
+msgstr "'%s' ez dago hizki baliogarriz osatuta bakarrik"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -779,14 +778,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' ez da mezu katalogo baliozkoa."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' ez da mezu katalogo baliozkoa."
+msgstr "'%s' ez da kate baliogarrietako bat"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' baliogabea da"
+msgstr "'%s' kate baliogabeetako bat da"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
@@ -1168,9 +1167,8 @@ msgid "About %s"
 msgstr "%s-ri buruz"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Honi buruz"
+msgstr "Honi buruz..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1182,7 +1180,7 @@ msgstr "Oraingo Neurria"
 
 #: ../src/common/stockitem.cpp:140
 msgid "Add"
-msgstr "Gehitua"
+msgstr "Gehitu"
 
 #: ../src/richtext/richtextbuffer.cpp:11219
 msgid "Add Column"
@@ -1194,7 +1192,7 @@ msgstr "Gehitu Lerroa"
 
 #: ../src/html/helpwnd.cpp:440
 msgid "Add current page to bookmarks"
-msgstr "Gehitu uneko orrialdea lastermarketara"
+msgstr "Gehitu oraingo orrialdea lastermarketara"
 
 #: ../src/generic/colrdlgg.cpp:283
 msgid "Add to custom colours"
@@ -1281,7 +1279,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Aukerazko bazterreko erradio bat inguru bazterrak gehitzeko."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1509,7 +1507,7 @@ msgstr "C orria, 17 x 22 in"
 
 #: ../src/generic/logg.cpp:520
 msgid "C&lear"
-msgstr "Ga&rbitu"
+msgstr "&Garbitu"
 
 #: ../src/generic/fontdlgg.cpp:406
 msgid "C&olour:"
@@ -1625,12 +1623,12 @@ msgstr "Ezin dira '%s' giltzaren balioak zenbakitu"
 #: ../src/msw/registry.cpp:1379
 #, c-format
 msgid "Can't export value of unsupported type %d."
-msgstr "Ezin da %d hizkimota sostengatugabetik balioa esportatu."
+msgstr "Ezin da %d hizkimota sostengugabetik balioa esportatu."
 
 #: ../src/common/ffile.cpp:236
 #, c-format
 msgid "Can't find current position in file '%s'"
-msgstr "Ezin da aurkitu uneko kokapena '%s' agirian"
+msgstr "Ezin da aurkitu oraingo kokapena '%s' agirian"
 
 #: ../src/msw/registry.cpp:416
 #, c-format
@@ -1954,7 +1952,7 @@ msgstr "Hautatu eskuin hitzarte bat gehitzeko"
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Hautatu hertz guztiak aldiberean editatzeko"
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -1965,9 +1963,8 @@ msgstr "Hautatu buletak hitzartean jartzeko."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "Klikatu idazki margoa aldatzeko."
+msgstr "Hautatu eskuin-ezker idazketa antolakuntza adierazteko."
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -1994,7 +1991,7 @@ msgstr "Hautatu erakusteko lerro bat idazkian zehar."
 #: ../src/richtext/richtextfontpage.cpp:284
 #: ../src/richtext/richtextfontpage.cpp:286
 msgid "Check to show the text in capitals."
-msgstr "Egiaztatu idazkia hizki larritan erakusteko"
+msgstr "Hautatu idazkia hizki larritan erakusteko"
 
 #: ../src/richtext/richtextfontpage.cpp:291
 #: ../src/richtext/richtextfontpage.cpp:293
@@ -2014,7 +2011,7 @@ msgstr "Hautatu erakusteko idazkia gaineskriptean."
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "Hautatu elkarmarratzea kentzeko."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2104,12 +2101,12 @@ msgstr "Klikatu leiho hau isteko."
 
 #: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
 msgid "Click to confirm changes to the font."
-msgstr "Klikatu hizkian aldaketak berresteko."
+msgstr "Klikatu hizkian aldaketak baieztatzeko."
 
 #: ../src/generic/fontdlgg.cpp:477 ../src/generic/fontdlgg.cpp:479
 #: ../src/generic/fontdlgg.cpp:484 ../src/generic/fontdlgg.cpp:486
 msgid "Click to confirm the font selection."
-msgstr "Klikatu hizki hautapena berresteko."
+msgstr "Klikatu hizki hautapena baieztatzeko."
 
 #: ../src/richtext/richtextstyledlg.cpp:244
 #: ../src/richtext/richtextstyledlg.cpp:246
@@ -2134,32 +2131,32 @@ msgstr "Klikatu esaldi estilo berria sortzeko."
 #: ../src/richtext/richtexttabspage.cpp:133
 #: ../src/richtext/richtexttabspage.cpp:135
 msgid "Click to create a new tab position."
-msgstr "Klikatu ezabatzeko fitxa guztien kokapena."
+msgstr "Klikatu tab guztien kokapena sortzeko."
 
 #: ../src/richtext/richtexttabspage.cpp:145
 #: ../src/richtext/richtexttabspage.cpp:147
 msgid "Click to delete all tab positions."
-msgstr "Klikatu ezabatzeko fitxa guztien kokapena."
+msgstr "Klikatu tab guztien kokapena ezabatzeko ."
 
 #: ../src/richtext/richtextstyledlg.cpp:270
 #: ../src/richtext/richtextstyledlg.cpp:272
 msgid "Click to delete the selected style."
-msgstr "Klikatu ezabatzeko hautatutako estiloa."
+msgstr "Klikatu hautaturiko estiloa ezabatzeko."
 
 #: ../src/richtext/richtexttabspage.cpp:139
 #: ../src/richtext/richtexttabspage.cpp:141
 msgid "Click to delete the selected tab position."
-msgstr "Klikatu ezabatzeko hautatutako fitxa kokopena."
+msgstr "Klikatu hautatutako tab kokopena ezabatzeko."
 
 #: ../src/richtext/richtextstyledlg.cpp:264
 #: ../src/richtext/richtextstyledlg.cpp:266
 msgid "Click to edit the selected style."
-msgstr "Klikatu editatzeko hautatutako estiloa "
+msgstr "Klikatu hautatutako estiloa editatzeko."
 
 #: ../src/richtext/richtextstyledlg.cpp:258
 #: ../src/richtext/richtextstyledlg.cpp:260
 msgid "Click to rename the selected style."
-msgstr "Klikatu birrizendatzeko hautatutako estiloa."
+msgstr "Klikatu hautatutako estiloa berrizendatzeko."
 
 #: ../src/generic/dbgrptg.cpp:97 ../src/generic/progdlgg.cpp:804
 #: ../src/generic/progdlgg.cpp:809 ../src/richtext/richtextstyledlg.cpp:277
@@ -2175,7 +2172,7 @@ msgstr "Itxi Denak"
 
 #: ../src/common/stockitem.cpp:266
 msgid "Close current document"
-msgstr "Itxi uneko agiria"
+msgstr "Itxi oraingo agiria"
 
 #: ../src/generic/logg.cpp:522
 msgid "Close this window"
@@ -2297,11 +2294,11 @@ msgstr "Kopiatu hautapena"
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Bazterrra"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "Bazter er&radioa:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2331,7 +2328,7 @@ msgstr "Ezin da %s atera %s-n: %s"
 
 #: ../src/generic/tabg.cpp:1048
 msgid "Could not find tab for id"
-msgstr "Ezin da id-arentzao fitxa lortu"
+msgstr "Ezin da id-arentzako tab aurkitu"
 
 #: ../src/osx/carbon/dataview.cpp:2554 ../src/osx/carbon/dataview.cpp:2589
 #: ../src/osx/carbon/dataview.cpp:2613 ../src/osx/carbon/dataview.cpp:2634
@@ -2374,7 +2371,7 @@ msgstr "Ezin da zutabe zabalera ezarri."
 
 #: ../src/common/filefn.cpp:1554
 msgid "Could not set current working directory"
-msgstr "Ezinezkoa uneko lan zuzenbidea ezartzea"
+msgstr "Ezinezkoa oraingo lan zuzenbidea ezartzea"
 
 #: ../src/osx/carbon/dataview.cpp:2773
 msgid "Could not set header description."
@@ -2442,7 +2439,7 @@ msgstr "Ezinezkoa itzal estiloa lortzea wxBrush-tik."
 
 #: ../src/msw/thread.cpp:945
 msgid "Couldn't get the current thread pointer"
-msgstr "Ezinezkoa uneko hari puntua lortzea"
+msgstr "Ezinezkoa oraingo hari puntua lortzea"
 
 #: ../src/osx/carbon/overlay.cpp:129
 msgid "Couldn't init the context on the overlay window"
@@ -2519,7 +2516,7 @@ msgstr "Eba&ki"
 
 #: ../src/generic/filectrlg.cpp:956
 msgid "Current directory:"
-msgstr "Uneko zuzenbidea:"
+msgstr "Oraingo zuzenbidea:"
 
 #: ../src/gtk/print.cpp:759
 msgid "Custom size"
@@ -3071,12 +3068,12 @@ msgstr "Hutsegitea bideo modua aldatzerakoan"
 #: ../src/common/image.cpp:3139
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
-msgstr "Hutsegitea \"%s\" irudi agiriaren heuskarria egiaztatzean"
+msgstr "Hutsegitea \"%s\" irudi agiriaren heuskarria egiaztatzerakoan"
 
 #: ../src/common/debugrpt.cpp:244
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "Hutsegitea \"%s\" garbiketa jakinarazpen zuzenbidea garbitzean"
+msgstr "Hutsegitea \"%s\" garbiketa jakinarazpen zuzenbidea garbitzerakoan"
 
 #: ../src/common/filename.cpp:211
 msgid "Failed to close file handle"
@@ -3209,7 +3206,7 @@ msgstr "Hutsegitea gakoa husterakoan."
 
 #: ../src/unix/displayx11.cpp:266
 msgid "Failed to enumerate video modes"
-msgstr "Hutsegita bideo moduak zenbakitzean"
+msgstr "Hutsegita bideo moduak zenbakitzerakoan"
 
 #: ../src/msw/dde.cpp:727
 msgid "Failed to establish an advise loop with DDE server"
@@ -3223,7 +3220,7 @@ msgstr "Hutsegitea urrutizkin elkarketa ezartzerakoan: %s"
 #: ../src/unix/utilsunx.cpp:617
 #, c-format
 msgid "Failed to execute '%s'\n"
-msgstr "Hutsegitea '%s' exekutatzeraoan\n"
+msgstr "Hutsegitea '%s' exekutatzerakoan\n"
 
 #: ../src/common/debugrpt.cpp:725
 msgid "Failed to execute curl, please install it in PATH."
@@ -3585,7 +3582,7 @@ msgstr "Hutsegitea iratzar hodia ez-blokeatzen modura aldatzerakoan"
 
 #: ../src/unix/threadpsx.cpp:1574
 msgid "Failed to terminate a thread."
-msgstr "Hutsegitea hari bat amaitzean."
+msgstr "Hutsegitea hari bat amaitzerakoan."
 
 #: ../src/msw/dde.cpp:746
 msgid "Failed to terminate the advise loop with DDE server"
@@ -3599,12 +3596,12 @@ msgstr "Hutsegitea urrutizkin elkarketa amaitzerakoan: %s"
 #: ../src/common/filename.cpp:2702
 #, c-format
 msgid "Failed to touch the file '%s'"
-msgstr "Hutsegitea '%s' agiria ikutzean"
+msgstr "Hutsegitea '%s' agiria ikutzerakoan"
 
 #: ../src/unix/snglinst.cpp:334
 #, c-format
 msgid "Failed to unlock lock file '%s'"
-msgstr "Hutsegitea '%s' blokeo agiria desblokeatzean"
+msgstr "Hutsegitea '%s' blokeo agiria desblokeatzerakoan"
 
 #: ../src/msw/dde.cpp:314
 #, c-format
@@ -3619,7 +3616,7 @@ msgstr ""
 
 #: ../src/common/fileconf.cpp:1037
 msgid "Failed to update user configuration file."
-msgstr "Hutsegitea erabiltzaile itxurapen agiria eguneratzean."
+msgstr "Hutsegitea erabiltzaile itxurapen agiria eguneratzerakoan."
 
 #: ../src/common/debugrpt.cpp:738
 #, c-format
@@ -3872,7 +3869,7 @@ msgstr "Joan gaineko zuzenbidera"
 
 #: ../src/generic/aboutdlgg.cpp:76
 msgid "Graphics art by "
-msgstr "Grafikogilea"
+msgstr "Grafiko egilea"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "Greek (ISO-8859-7)"
@@ -3909,7 +3906,7 @@ msgstr "HTML agiriak (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/common/stockitem.cpp:162
 msgid "Harddisk"
-msgstr "Diska gogorra"
+msgstr "Diska-gogorra"
 
 #: ../src/common/fmapbase.cpp:155
 msgid "Hebrew (ISO-8859-8)"
@@ -3995,11 +3992,11 @@ msgstr "ICO: Akatsa irudi agiria idazterakoan!"
 
 #: ../src/common/imagbmp.cpp:1196
 msgid "ICO: Image too tall for an icon."
-msgstr "ICO: Irudi garaiegia ikono batentzat."
+msgstr "ICO: Irudi garaiegia ikur batentzat."
 
 #: ../src/common/imagbmp.cpp:1204
 msgid "ICO: Image too wide for an icon."
-msgstr "ICO: Irudi zabalegia ikono batentzat."
+msgstr "ICO: Irudi zabalegia ikur batentzat."
 
 #: ../src/common/imagbmp.cpp:1464
 msgid "ICO: Invalid icon index."
@@ -4007,7 +4004,7 @@ msgstr "ICO: ikono aurkibide baliogabea."
 
 #: ../src/common/imagiff.cpp:759
 msgid "IFF: data stream seems to be truncated."
-msgstr "IFF: datu jarioa etanda dagoela dirudi."
+msgstr "IFF: datu jarioa etenda dagoela dirudi."
 
 #: ../src/common/imagiff.cpp:743
 msgid "IFF: error in IFF image format."
@@ -4378,7 +4375,7 @@ msgstr "ZT_AMAIERA"
 
 #: ../src/common/accelcmn.cpp:87
 msgid "KP_ENTER"
-msgstr "ZT_ENTER"
+msgstr "ZT_SARTU"
 
 #: ../src/common/accelcmn.cpp:101
 msgid "KP_EQUAL"
@@ -4390,7 +4387,7 @@ msgstr "ZT_HASIERA"
 
 #: ../src/common/accelcmn.cpp:99
 msgid "KP_INSERT"
-msgstr "ZT_SARTU"
+msgstr "ZT_TXERTATU"
 
 #: ../src/common/accelcmn.cpp:89
 msgid "KP_LEFT"
@@ -5779,7 +5776,7 @@ msgstr "Kendu Buleta"
 
 #: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
-msgstr "Kendu uneko orrialdea lastermarketatik"
+msgstr "Kendu oraingo orrialdea lastermarketatik"
 
 #: ../src/common/rendcmn.cpp:194
 #, c-format
@@ -5834,7 +5831,7 @@ msgstr "Haria"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "E&skuin-ezker"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -5913,11 +5910,11 @@ msgstr "Gorde honela"
 
 #: ../src/common/stockitem.cpp:267
 msgid "Save current document"
-msgstr "Gorde uneko agiria"
+msgstr "Gorde oraingo agiria"
 
 #: ../src/common/stockitem.cpp:268
 msgid "Save current document with a different filename"
-msgstr "Gorde uneko agiria agirizen ezberdinarekin"
+msgstr "Gorde oraingo agiria agirizen ezberdinarekin"
 
 #: ../src/generic/logg.cpp:518
 msgid "Save log contents to file"
@@ -6019,7 +6016,7 @@ msgstr "Banantzailea '%s' aukeraren ondoren itxaroten da."
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Zerbitzuak"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6241,7 +6238,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Kendu elkar&marratzea"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6304,7 +6301,7 @@ msgstr "Tabloidea, 11 x 17 in"
 
 #: ../src/richtext/richtextformatdlg.cpp:357
 msgid "Tabs"
-msgstr "Fitxak"
+msgstr "Hegatsak"
 
 #: ../src/generic/fontdlgg.cpp:327
 msgid "Teletype"
@@ -6363,9 +6360,8 @@ msgstr "Barren margoa."
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "Hizki estiloa."
+msgstr "Hertzeko lerroaren estiloa."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6707,7 +6703,7 @@ msgstr "'%s' aukerarentzako balioa adierazi behar da."
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Bazterreko erradioaren balioa."
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -6793,11 +6789,11 @@ msgstr "Hari lehentasun ezarpena ezikusia da."
 
 #: ../src/msw/mdi.cpp:172
 msgid "Tile &Horizontally"
-msgstr "Eradonki &Etzana"
+msgstr "Teila &Etzana"
 
 #: ../src/msw/mdi.cpp:173
 msgid "Tile &Vertically"
-msgstr "Eradonki &Zutia"
+msgstr "Teila &Zutia"
 
 #: ../src/common/ftp.cpp:202
 msgid "Timeout while waiting for FTP server to connect, try passive mode."
@@ -6807,7 +6803,7 @@ msgstr ""
 
 #: ../src/os2/timer.cpp:99
 msgid "Timer creation failed."
-msgstr "Denboragaiu sortze hutsegitea."
+msgstr "Denboragailu sortze hutsegitea."
 
 #: ../src/generic/tipdlg.cpp:215
 msgid "Tip of the Day"
@@ -7019,7 +7015,7 @@ msgstr "Desezabatu"
 
 #: ../src/common/stockitem.cpp:202
 msgid "Underline"
-msgstr "Azpimarratuta"
+msgstr "Azpimarratua"
 
 #: ../src/richtext/richtextfontpage.cpp:357 ../src/osx/carbon/fontdlg.cpp:540
 #: ../src/propgrid/advprops.cpp:656
@@ -7122,13 +7118,12 @@ msgstr "Beheko betegarriarentzako unitateak."
 #: ../src/richtext/richtextsizepage.cpp:664
 #: ../src/richtext/richtextsizepage.cpp:666
 msgid "Units for the bottom position."
-msgstr "Beheko kokapenerako batasunak."
+msgstr "Beheko kokapenerako unitateak."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Goiko betegarriarentzako unitateak."
+msgstr "Bazterreko erradiorako unitateak."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7153,7 +7148,7 @@ msgstr "Ezkerreko betegarriarentzako unitateak."
 #: ../src/richtext/richtextsizepage.cpp:559
 #: ../src/richtext/richtextsizepage.cpp:561
 msgid "Units for the left position."
-msgstr "Ezker kokapenerako batasunak."
+msgstr "Ezker kokapenerako unitateak."
 
 #: ../src/richtext/richtextsizepage.cpp:485
 #: ../src/richtext/richtextsizepage.cpp:487
@@ -7208,7 +7203,7 @@ msgstr "Eskuin betegarriarentzako unitateak."
 #: ../src/richtext/richtextsizepage.cpp:629
 #: ../src/richtext/richtextsizepage.cpp:631
 msgid "Units for the right position."
-msgstr "Eskuin kokapenerako batasunak."
+msgstr "Eskuin kokapenerako unitateak."
 
 #: ../src/richtext/richtextborderspage.cpp:328
 #: ../src/richtext/richtextborderspage.cpp:330
@@ -7233,7 +7228,7 @@ msgstr "Goiko betegarriarentzako unitateak."
 #: ../src/richtext/richtextsizepage.cpp:594
 #: ../src/richtext/richtextsizepage.cpp:596
 msgid "Units for the top position."
-msgstr "Goiko kokapenerako batasunak."
+msgstr "Goiko kokapenerako unitateak."
 
 #: ../src/generic/progdlgg.cpp:382 ../src/generic/progdlgg.cpp:655
 msgid "Unknown"
@@ -7251,7 +7246,7 @@ msgstr "Objetu ezezaguna igaro da GetObjectClassInfo-ra"
 #: ../src/common/imagpng.cpp:614
 #, c-format
 msgid "Unknown PNG resolution unit %d"
-msgstr "PNG bereizmen batasun ezezaguna %d"
+msgstr "PNG bereizmen unitate ezezaguna %d"
 
 #: ../src/common/xtixml.cpp:327
 #, c-format
@@ -7261,7 +7256,7 @@ msgstr "Ezaugarri %s ezezaguna"
 #: ../src/common/imagtiff.cpp:532
 #, c-format
 msgid "Unknown TIFF resolution unit %d ignored"
-msgstr "TIFF bereizmen batasun ezezaguna %d baztertuta"
+msgstr "TIFF bereizmen unitate ezezaguna %d baztertuta"
 
 #: ../src/osx/carbon/dataview.cpp:1976
 msgid "Unknown data format"
@@ -7350,7 +7345,7 @@ msgstr "Erabilia: %s"
 #: ../src/richtext/richtextliststylepage.cpp:358
 #: ../src/richtext/richtextliststylepage.cpp:360
 msgid "Use the current alignment setting."
-msgstr "Erabili uneko lerrokapen ezarpena."
+msgstr "Erabili oraingo lerrokapen ezarpena."
 
 #: ../src/osx/carbon/dataview.cpp:2656 ../src/osx/carbon/dataview.cpp:2721
 msgid "Valid pointer to native data view control does not exist"
@@ -7462,14 +7457,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7563,14 +7556,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
@@ -7865,7 +7856,8 @@ msgstr "ezin da aurkitu agiri luzera %d agiri azaltzailean"
 
 #: ../src/msw/utils.cpp:373
 msgid "can't find user's HOME, using current directory."
-msgstr "ezin da aurkitu erabiltzailearen HASIERA, uneko zuzenbidea erabiltzen."
+msgstr ""
+"ezin da aurkitu erabiltzailearen HASIERA, oraingo zuzenbidea erabiltzen."
 
 #: ../src/common/file.cpp:382
 #, c-format
@@ -8115,7 +8107,7 @@ msgstr "laugarren"
 
 #: ../src/common/appbase.cpp:699
 msgid "generate verbose log messages"
-msgstr "sortu verbose ohar mezuak"
+msgstr "sortu ohar mezu berritsuak"
 
 #: ../src/richtext/richtextbuffer.cpp:12782
 #: ../src/richtext/richtextbuffer.cpp:12892
@@ -8564,11 +8556,11 @@ msgstr "~"
 #~ msgid "Event queue overflowed"
 #~ msgstr "Gertaera lerroak gainezka eginda"
 
-#~ msgid "percent"
-#~ msgstr "ehuneko"
-
 #~ msgid "Print preview"
 #~ msgstr "Irarketa aurreikuspena"
+
+#~ msgid "percent"
+#~ msgstr "ehuneko"
 
 #~ msgid "'"
 #~ msgstr "'"
