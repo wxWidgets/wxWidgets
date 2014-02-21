@@ -2977,7 +2977,10 @@ CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffe
 {
     wxMemoryBuffer* b = new wxMemoryBuffer( buf );
     if ( b->GetDataLen() == 0 )
+    {
+        delete b;
         return NULL;
+    }
 
     return CGDataProviderCreateWithData( b , (const void *) b->GetData() , b->GetDataLen() ,
                                                  wxMacReleaseMemoryBufferProviderCallback );
