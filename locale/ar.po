@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-01 19:04+0200\n"
+"POT-Creation-Date: 2014-02-21 14:54+0100\n"
 "PO-Revision-Date: 2012-03-22 18:41+0200\n"
 "Last-Translator: Fatma Mehanna <fatma.mehanna@gmail.com>\n"
 "Language-Team: arabictranslationteam@googlegroups.com\n"
@@ -91,6 +91,19 @@ msgstr "#14 Envelope, 5 x 11 1/2 in"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 Envelope, 3 7/8 x 8 7/8 in"
 
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
+msgid "%"
+msgstr ""
+
 #: ../src/html/helpwnd.cpp:1044
 #, fuzzy, c-format
 msgid "%d of %lu"
@@ -144,7 +157,7 @@ msgstr "%s تحذير"
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s did not fit the tar header for entry '%s'"
 
-#: ../src/common/fldlgcmn.cpp:106
+#: ../src/common/fldlgcmn.cpp:124
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "%s ملفات(%s)|%s"
@@ -208,8 +221,8 @@ msgstr "&عريض:"
 msgid "&Bottom"
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:359
-#: ../src/richtext/richtextborderspage.cpp:503
+#: ../src/richtext/richtextborderspage.cpp:343
+#: ../src/richtext/richtextborderspage.cpp:512
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
 #: ../src/richtext/richtextsizepage.cpp:637
@@ -217,7 +230,7 @@ msgstr ""
 msgid "&Bottom:"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:3530
+#: ../include/wx/richtext/richtextbuffer.h:3578
 #, fuzzy
 msgid "&Box"
 msgstr "&عريض:"
@@ -232,7 +245,7 @@ msgid "&CD-Rom"
 msgstr ""
 
 #: ../src/generic/wizard.cpp:432 ../src/generic/fontdlgg.cpp:470
-#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:588
+#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:572
 #: ../src/common/stockitem.cpp:145
 msgid "&Cancel"
 msgstr "&إلغاء"
@@ -241,7 +254,7 @@ msgstr "&إلغاء"
 msgid "&Cascade"
 msgstr "&متتالي"
 
-#: ../include/wx/richtext/richtextbuffer.h:5587
+#: ../include/wx/richtext/richtextbuffer.h:5639
 #, fuzzy
 msgid "&Cell"
 msgstr "&إلغاء"
@@ -274,8 +287,8 @@ msgstr "&لون:"
 msgid "&Convert"
 msgstr "محتويات"
 
-#: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2284
+#: ../src/richtext/richtextctrl.cpp:332 ../src/osx/textctrl_osx.cpp:583
+#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2335
 msgid "&Copy"
 msgstr "&نسخ"
 
@@ -292,8 +305,8 @@ msgid "&Debug report preview:"
 msgstr "&تقرير معاينة الخطأ البرمجي:"
 
 #: ../src/richtext/richtexttabspage.cpp:142
-#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2286
+#: ../src/richtext/richtextctrl.cpp:334 ../src/osx/textctrl_osx.cpp:585
+#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2337
 msgid "&Delete"
 msgstr "&حذف"
 
@@ -388,7 +401,7 @@ msgid "&Height:"
 msgstr "&يمين:"
 
 #: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
-#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:785
+#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:776
 #: ../src/common/stockitem.cpp:163 ../src/html/helpfrm.cpp:147
 msgid "&Help"
 msgstr "&مساعدة"
@@ -444,8 +457,8 @@ msgid "&Left"
 msgstr "&سيار"
 
 #: ../src/richtext/richtextindentspage.cpp:195
-#: ../src/richtext/richtextborderspage.cpp:269
-#: ../src/richtext/richtextborderspage.cpp:413
+#: ../src/richtext/richtextborderspage.cpp:241
+#: ../src/richtext/richtextborderspage.cpp:410
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
@@ -514,7 +527,7 @@ msgid "&Number:"
 msgstr "&رقم:"
 
 #: ../src/generic/fontdlgg.cpp:475 ../src/generic/fontdlgg.cpp:482
-#: ../src/osx/carbon/fontdlg.cpp:594 ../src/common/stockitem.cpp:178
+#: ../src/osx/carbon/fontdlg.cpp:578 ../src/common/stockitem.cpp:178
 msgid "&OK"
 msgstr "&موافق"
 
@@ -531,12 +544,12 @@ msgstr "&مستوى التخطيط:"
 msgid "&Page Break"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:327 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2285
+#: ../src/richtext/richtextctrl.cpp:333 ../src/osx/textctrl_osx.cpp:584
+#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2336
 msgid "&Paste"
 msgstr "&لصق"
 
-#: ../include/wx/richtext/richtextbuffer.h:4655
+#: ../include/wx/richtext/richtextbuffer.h:4705
 msgid "&Picture"
 msgstr ""
 
@@ -571,7 +584,7 @@ msgstr "&سابق"
 msgid "&Print..."
 msgstr "&طباعة..."
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
+#: ../src/richtext/richtextctrl.cpp:338 ../src/richtext/richtextctrl.cpp:5054
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "&الخصائص"
@@ -580,9 +593,9 @@ msgstr "&الخصائص"
 msgid "&Quit"
 msgstr "&إنهاء"
 
-#: ../src/richtext/richtextctrl.cpp:323 ../src/osx/textctrl_osx.cpp:580
+#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:580
 #: ../src/common/stockitem.cpp:185 ../src/common/cmdproc.cpp:293
-#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2281
+#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2332
 msgid "&Redo"
 msgstr "&تكرار الفعل"
 
@@ -612,8 +625,8 @@ msgid "&Right"
 msgstr "&يمين"
 
 #: ../src/richtext/richtextindentspage.cpp:213
-#: ../src/richtext/richtextborderspage.cpp:299
-#: ../src/richtext/richtextborderspage.cpp:443
+#: ../src/richtext/richtextborderspage.cpp:275
+#: ../src/richtext/richtextborderspage.cpp:444
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
@@ -686,7 +699,12 @@ msgstr "&فرعي:"
 msgid "&Symbol:"
 msgstr "&رمز:"
 
-#: ../include/wx/richtext/richtextbuffer.h:5679
+#: ../src/richtext/richtextborderspage.cpp:379
+#: ../src/richtext/richtextborderspage.cpp:548
+msgid "&Synchronize values"
+msgstr ""
+
+#: ../include/wx/richtext/richtextbuffer.h:5733
 msgid "&Table"
 msgstr ""
 
@@ -695,8 +713,8 @@ msgstr ""
 msgid "&Top"
 msgstr "&نسخ"
 
-#: ../src/richtext/richtextborderspage.cpp:329
-#: ../src/richtext/richtextborderspage.cpp:473
+#: ../src/richtext/richtextborderspage.cpp:309
+#: ../src/richtext/richtextborderspage.cpp:478
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
 #: ../src/richtext/richtextsizepage.cpp:567
@@ -713,9 +731,9 @@ msgstr "&خط سفلي"
 msgid "&Underlining:"
 msgstr "&وضع خط تحته"
 
-#: ../src/richtext/richtextctrl.cpp:322 ../src/osx/textctrl_osx.cpp:579
+#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:579
 #: ../src/common/stockitem.cpp:203 ../src/common/cmdproc.cpp:271
-#: ../src/msw/textctrl.cpp:2280
+#: ../src/msw/textctrl.cpp:2331
 msgid "&Undo"
 msgstr "&تراجع"
 
@@ -766,8 +784,8 @@ msgstr "&نعم"
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' به مزيد'..', تم تجاهله."
 
-#: ../src/common/valtext.cpp:249 ../src/common/valtext.cpp:251
-#: ../src/common/valtext.cpp:253 ../src/common/valtext.cpp:255
+#: ../src/common/valtext.cpp:165 ../src/common/valtext.cpp:167
+#: ../src/common/valtext.cpp:254 ../src/common/valtext.cpp:256
 #, c-format
 msgid "'%s' is invalid"
 msgstr "'%s' خطأ"
@@ -787,27 +805,27 @@ msgstr "'%s' ليست رسالة صحيحة بالفهرس."
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' من المحتمل أن تكون ذاكرة ثنائية."
 
-#: ../src/common/valtext.cpp:247
+#: ../src/common/valtext.cpp:252
 #, c-format
 msgid "'%s' should be numeric."
 msgstr "'%s' ينبغي أن يكون رقمي."
 
-#: ../src/common/valtext.cpp:239
+#: ../src/common/valtext.cpp:244
 #, c-format
 msgid "'%s' should only contain ASCII characters."
 msgstr "'%s' ينبغي أن يحتوي على أحرف لها مكافئ رقمي."
 
-#: ../src/common/valtext.cpp:241
+#: ../src/common/valtext.cpp:246
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
 msgstr "'%s' ينبغي أن يحتوي على أحرف أبجدية."
 
-#: ../src/common/valtext.cpp:243
+#: ../src/common/valtext.cpp:248
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' ينبغي أن يحتوي على أحرف أبجدية أو رقمية."
 
-#: ../src/common/valtext.cpp:245
+#: ../src/common/valtext.cpp:250
 #, fuzzy, c-format
 msgid "'%s' should only contain digits."
 msgstr "'%s' ينبغي أن يحتوي على أحرف لها مكافئ رقمي."
@@ -840,7 +858,7 @@ msgstr "(إشارات مرجعية)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:831
+#: ../src/richtext/richtextformatdlg.cpp:867
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -865,7 +883,7 @@ msgstr "*)"
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1324
+#: ../src/msw/utils.cpp:1336
 msgid ", 64-bit edition"
 msgstr ""
 
@@ -981,37 +999,37 @@ msgstr ": تشفير مجهول"
 msgid "< &Back"
 msgstr "< &Back"
 
-#: ../src/osx/carbon/fontdlg.cpp:608 ../src/osx/carbon/fontdlg.cpp:815
-#: ../src/osx/carbon/fontdlg.cpp:835
+#: ../src/osx/carbon/fontdlg.cpp:592 ../src/osx/carbon/fontdlg.cpp:799
+#: ../src/osx/carbon/fontdlg.cpp:819
 msgid "<Any Decorative>"
 msgstr "<Any Decorative>"
 
-#: ../src/osx/carbon/fontdlg.cpp:609 ../src/osx/carbon/fontdlg.cpp:817
-#: ../src/osx/carbon/fontdlg.cpp:837
+#: ../src/osx/carbon/fontdlg.cpp:593 ../src/osx/carbon/fontdlg.cpp:801
+#: ../src/osx/carbon/fontdlg.cpp:821
 msgid "<Any Modern>"
 msgstr "<Any Modern>"
 
-#: ../src/osx/carbon/fontdlg.cpp:607 ../src/osx/carbon/fontdlg.cpp:813
-#: ../src/osx/carbon/fontdlg.cpp:833
+#: ../src/osx/carbon/fontdlg.cpp:591 ../src/osx/carbon/fontdlg.cpp:797
+#: ../src/osx/carbon/fontdlg.cpp:817
 msgid "<Any Roman>"
 msgstr "<Any Roman>"
 
-#: ../src/osx/carbon/fontdlg.cpp:610 ../src/osx/carbon/fontdlg.cpp:819
-#: ../src/osx/carbon/fontdlg.cpp:839
+#: ../src/osx/carbon/fontdlg.cpp:594 ../src/osx/carbon/fontdlg.cpp:803
+#: ../src/osx/carbon/fontdlg.cpp:823
 msgid "<Any Script>"
 msgstr "<Any Script>"
 
-#: ../src/osx/carbon/fontdlg.cpp:611 ../src/osx/carbon/fontdlg.cpp:824
-#: ../src/osx/carbon/fontdlg.cpp:843
+#: ../src/osx/carbon/fontdlg.cpp:595 ../src/osx/carbon/fontdlg.cpp:808
+#: ../src/osx/carbon/fontdlg.cpp:827
 msgid "<Any Swiss>"
 msgstr "<Any Swiss>"
 
-#: ../src/osx/carbon/fontdlg.cpp:612 ../src/osx/carbon/fontdlg.cpp:821
-#: ../src/osx/carbon/fontdlg.cpp:841
+#: ../src/osx/carbon/fontdlg.cpp:596 ../src/osx/carbon/fontdlg.cpp:805
+#: ../src/osx/carbon/fontdlg.cpp:825
 msgid "<Any Teletype>"
 msgstr "<Any Teletype>"
 
-#: ../src/osx/carbon/fontdlg.cpp:606
+#: ../src/osx/carbon/fontdlg.cpp:590
 msgid "<Any>"
 msgstr "<Any>"
 
@@ -1149,8 +1167,8 @@ msgstr "A6 105 x 148 mm"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 مدور 148 x 105 mm"
 
-#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:526
-#: ../src/osx/carbon/fontdlg.cpp:339
+#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:527
+#: ../src/osx/carbon/fontdlg.cpp:323
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
@@ -1162,15 +1180,21 @@ msgstr "جمع"
 msgid "ASCII"
 msgstr "أسكي"
 
-#: ../src/osx/menu_osx.cpp:630 ../src/common/stockitem.cpp:139
+#: ../src/common/stockitem.cpp:139
 #, fuzzy
 msgid "About"
 msgstr "&عن..."
 
-#: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
+#: ../src/generic/aboutdlgg.cpp:140 ../src/osx/menu_osx.cpp:603
+#: ../src/msw/aboutdlg.cpp:64
 #, fuzzy, c-format
 msgid "About %s"
 msgstr "حول"
+
+#: ../src/osx/menu_osx.cpp:605
+#, fuzzy
+msgid "About..."
+msgstr "&نبذة عن..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1185,11 +1209,11 @@ msgstr "&المقاس الحقيقي"
 msgid "Add"
 msgstr "أضف"
 
-#: ../src/richtext/richtextbuffer.cpp:10751
+#: ../src/richtext/richtextbuffer.cpp:11056
 msgid "Add Column"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10688
+#: ../src/richtext/richtextbuffer.cpp:10993
 msgid "Add Row"
 msgstr ""
 
@@ -1214,11 +1238,11 @@ msgstr "AddToPropertyCollection called w/o valid adder"
 msgid "Adding book %s"
 msgstr "إضافة كتاب %s"
 
-#: ../src/osx/carbon/dataview.cpp:1933
+#: ../src/osx/carbon/dataview.cpp:1931
 msgid "Adding flavor TEXT failed"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1954
+#: ../src/osx/carbon/dataview.cpp:1952
 msgid "Adding flavor utxt failed"
 msgstr ""
 
@@ -1247,16 +1271,16 @@ msgstr "&محاذاة"
 msgid "All"
 msgstr "الكل"
 
-#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:89
+#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:107
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "كل الملفات (%s)|%s"
 
-#: ../include/wx/defs.h:2922
+#: ../include/wx/defs.h:2933
 msgid "All files (*)|*"
 msgstr "كل الملفات (*)|*"
 
-#: ../include/wx/defs.h:2919
+#: ../include/wx/defs.h:2930
 msgid "All files (*.*)|*.*"
 msgstr "كل الملفات (*.*)|*.*"
 
@@ -1294,8 +1318,7 @@ msgstr "ملف الحركة ليس من نوع %ld."
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "إرفاق تقرير بالملف '%s' (اختيار [لا] سيتخطاه)?"
 
-#: ../src/osx/menu_osx.cpp:602 ../src/osx/menu_osx.cpp:610
-#: ../src/osx/menu_osx.cpp:649 ../src/osx/menu_osx.cpp:657
+#: ../src/osx/menu_osx.cpp:623 ../src/osx/menu_osx.cpp:631
 #, fuzzy
 msgid "Application"
 msgstr "تحديد"
@@ -1314,7 +1337,7 @@ msgstr "عربي"
 msgid "Arabic (ISO-8859-6)"
 msgstr "عربي (ISO-8859-6)"
 
-#: ../src/msw/ole/automtn.cpp:661
+#: ../src/msw/ole/automtn.cpp:675
 #, c-format
 msgid "Argument %u not found."
 msgstr ""
@@ -1424,7 +1447,7 @@ msgid "Back"
 msgstr "&رجوع"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
-#: ../src/richtext/richtextformatdlg.cpp:374
+#: ../src/richtext/richtextformatdlg.cpp:375
 #, fuzzy
 msgid "Background"
 msgstr "لون الخلفية"
@@ -1434,7 +1457,7 @@ msgstr "لون الخلفية"
 msgid "Background &colour:"
 msgstr "لون الخلفية"
 
-#: ../src/osx/carbon/fontdlg.cpp:406
+#: ../src/osx/carbon/fontdlg.cpp:390
 msgid "Background colour"
 msgstr "لون الخلفية"
 
@@ -1455,21 +1478,21 @@ msgstr "قبل الفقرة:"
 msgid "Bitmap"
 msgstr "Bitmap"
 
-#: ../src/osx/carbon/dataview.cpp:2396
+#: ../src/osx/carbon/dataview.cpp:2394
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr ""
 
 #: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:337
-#: ../src/osx/carbon/fontdlg.cpp:540 ../src/common/stockitem.cpp:143
+#: ../src/osx/carbon/fontdlg.cpp:524 ../src/common/stockitem.cpp:143
 msgid "Bold"
 msgstr "عريض"
 
-#: ../src/richtext/richtextborderspage.cpp:256
-#: ../src/richtext/richtextborderspage.cpp:389
+#: ../src/richtext/richtextborderspage.cpp:228
+#: ../src/richtext/richtextborderspage.cpp:386
 msgid "Border"
 msgstr ""
 
-#: ../src/richtext/richtextformatdlg.cpp:368
+#: ../src/richtext/richtextformatdlg.cpp:369
 msgid "Borders"
 msgstr ""
 
@@ -1481,7 +1504,7 @@ msgstr ""
 msgid "Bottom margin (mm):"
 msgstr "الهامش الأسفل (mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:8919
+#: ../src/richtext/richtextbuffer.cpp:9026
 #, fuzzy
 msgid "Box Properties"
 msgstr "&الخصائص"
@@ -1504,7 +1527,7 @@ msgstr "إزا&حة تنقيط:"
 msgid "Bullet style"
 msgstr "إسلوب التنقيط"
 
-#: ../src/richtext/richtextformatdlg.cpp:342
+#: ../src/richtext/richtextformatdlg.cpp:343
 msgid "Bullets"
 msgstr "نقاط"
 
@@ -1595,7 +1618,7 @@ msgstr "لا يمكن إنشاء مفتاح السجل '%s'"
 msgid "Can't create thread"
 msgstr "لا يمكن إنشاء الموضوع"
 
-#: ../src/msw/window.cpp:3793
+#: ../src/msw/window.cpp:3787
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "لا يمكن إنشاء نافذة من تصنيف %s"
@@ -1650,7 +1673,7 @@ msgstr "Can't initialize zlib deflate stream."
 msgid "Can't initialize zlib inflate stream."
 msgstr "Can't initialize zlib inflate stream."
 
-#: ../src/msw/fswatcher.cpp:432
+#: ../src/msw/fswatcher.cpp:456
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr ""
@@ -1722,11 +1745,11 @@ msgstr "إلغاء"
 msgid "Cannot create mutex."
 msgstr "لا يمكن إنشاء كائن مزامن."
 
-#: ../src/osx/carbon/dataview.cpp:895
+#: ../src/osx/carbon/dataview.cpp:893
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr ""
 
-#: ../src/common/filefn.cpp:1336
+#: ../src/common/filefn.cpp:1335
 #, fuzzy, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "لا يمكن حصر ملفات '%s'"
@@ -1745,21 +1768,21 @@ msgstr "تعذر الحصول على محاورة اتصال نشطة: %s"
 msgid "Cannot find the location of address book file"
 msgstr "تعذر وجود موقع ملف دفتر العناوين"
 
-#: ../src/msw/ole/automtn.cpp:562
+#: ../src/msw/ole/automtn.cpp:565
 #, fuzzy, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "تعذر الحصول على محاورة اتصال نشطة: %s"
 
-#: ../src/unix/threadpsx.cpp:1030
+#: ../src/unix/threadpsx.cpp:1035
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "تعذر الحصول على أولوية ترتيب أولوية سياسة الجدول %d"
 
-#: ../src/unix/utilsunx.cpp:988
+#: ../src/unix/utilsunx.cpp:998
 msgid "Cannot get the hostname"
 msgstr "تعذر الحصول على اسم المضيف"
 
-#: ../src/unix/utilsunx.cpp:1024
+#: ../src/unix/utilsunx.cpp:1034
 msgid "Cannot get the official hostname"
 msgstr "تعذر الحصول على اسم المضيف الرسمي"
 
@@ -1834,12 +1857,12 @@ msgstr "تعذر قراءة اسم النوع من '%s'!"
 msgid "Cannot resume thread %lu"
 msgstr "لا يمكن استئناف الموضوع %lu"
 
-#: ../src/msw/thread.cpp:923
+#: ../src/msw/thread.cpp:918
 #, fuzzy, c-format
 msgid "Cannot resume thread %lx"
 msgstr "لا يمكن استئناف الموضوع %x"
 
-#: ../src/unix/threadpsx.cpp:1011
+#: ../src/unix/threadpsx.cpp:1016
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "تعذر استرجاع سياسة جدول الموضوع"
 
@@ -1858,12 +1881,12 @@ msgstr "لا يمكن بدأ الموضوع: خطأ بكتابة tls."
 msgid "Cannot suspend thread %lu"
 msgstr "لا يمكن توقف الموضوع %lu"
 
-#: ../src/msw/thread.cpp:907
+#: ../src/msw/thread.cpp:902
 #, fuzzy, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "لا يمكن توقف الموضوع %x"
 
-#: ../src/msw/thread.cpp:830
+#: ../src/msw/thread.cpp:825
 #, fuzzy
 msgid "Cannot wait for thread termination"
 msgstr "تعذر الانتظار حتى إنهاء الموضوع"
@@ -1876,7 +1899,7 @@ msgstr "حساس لحالة الأحرف"
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9347
+#: ../src/richtext/richtextbuffer.cpp:9598
 #, fuzzy
 msgid "Cell Properties"
 msgstr "&الخصائص"
@@ -1920,22 +1943,22 @@ msgstr "وسط"
 msgid "Ch&oose..."
 msgstr "اخ&تر"
 
-#: ../src/richtext/richtextbuffer.cpp:4041
+#: ../src/richtext/richtextbuffer.cpp:4107
 msgid "Change List Style"
 msgstr "تغيير إسلوب القائمة"
 
-#: ../src/richtext/richtextbuffer.cpp:3392
+#: ../src/richtext/richtextbuffer.cpp:3458
 #, fuzzy
 msgid "Change Object Style"
 msgstr "تغيير نمط"
 
-#: ../src/richtext/richtextbuffer.cpp:3658
-#: ../src/richtext/richtextbuffer.cpp:7749
+#: ../src/richtext/richtextbuffer.cpp:3724
+#: ../src/richtext/richtextbuffer.cpp:7853
 #, fuzzy
 msgid "Change Properties"
 msgstr "&الخصائص"
 
-#: ../src/richtext/richtextbuffer.cpp:3209
+#: ../src/richtext/richtextbuffer.cpp:3275
 msgid "Change Style"
 msgstr "تغيير نمط"
 
@@ -1962,6 +1985,13 @@ msgstr "حدد كي تقوم بوضع نقطة بعد التنقيط"
 msgid "Check to add a right parenthesis."
 msgstr "حدد كي تقوم بوضع قوس مزخرف يمين"
 
+#: ../src/richtext/richtextborderspage.cpp:381
+#: ../src/richtext/richtextborderspage.cpp:383
+#: ../src/richtext/richtextborderspage.cpp:550
+#: ../src/richtext/richtextborderspage.cpp:552
+msgid "Check to edit all borders simultaneously."
+msgstr ""
+
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
 #: ../src/richtext/richtextbulletspage.cpp:181
@@ -1969,15 +1999,15 @@ msgstr "حدد كي تقوم بوضع قوس مزخرف يمين"
 msgid "Check to enclose the bullet in parentheses."
 msgstr "حدد كي تغلق الأقواس والتنقيط"
 
-#: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
+#: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
 msgstr "حدد كي تجعل الخط عريض"
 
-#: ../src/osx/carbon/fontdlg.cpp:549 ../src/osx/carbon/fontdlg.cpp:551
+#: ../src/osx/carbon/fontdlg.cpp:533 ../src/osx/carbon/fontdlg.cpp:535
 msgid "Check to make the font italic."
 msgstr "حدد كي تجعل الخط مائلا"
 
-#: ../src/osx/carbon/fontdlg.cpp:558 ../src/osx/carbon/fontdlg.cpp:560
+#: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
 msgid "Check to make the font underlined."
 msgstr "حدد كي تجضع تحته خط"
 
@@ -2016,12 +2046,12 @@ msgstr "حدد كي تظهر النص لأعلى"
 msgid "Choose ISP to dial"
 msgstr "اختر isp للاتصال"
 
-#: ../src/propgrid/props.cpp:1643
+#: ../src/propgrid/props.cpp:1653
 #, fuzzy
 msgid "Choose a directory:"
 msgstr "إنشاء مجلد"
 
-#: ../src/propgrid/props.cpp:1702
+#: ../src/propgrid/props.cpp:1712
 #, fuzzy
 msgid "Choose a file"
 msgstr "اختر الخط"
@@ -2044,7 +2074,7 @@ msgstr ""
 msgid "Cl&ose"
 msgstr "إ&غلاق"
 
-#: ../src/msw/ole/automtn.cpp:673
+#: ../src/msw/ole/automtn.cpp:687
 #, fuzzy
 msgid "Class not registered."
 msgstr "لا يمكن استئناف الموضوع %x"
@@ -2070,7 +2100,7 @@ msgstr "انقر لتطبيق الإسلوب المختار"
 msgid "Click to browse for a symbol."
 msgstr "انقر للبحث عن رمز"
 
-#: ../src/osx/carbon/fontdlg.cpp:589 ../src/osx/carbon/fontdlg.cpp:591
+#: ../src/osx/carbon/fontdlg.cpp:573 ../src/osx/carbon/fontdlg.cpp:575
 msgid "Click to cancel changes to the font."
 msgstr "انقر لإلغاء تغييرات الخط"
 
@@ -2078,7 +2108,7 @@ msgstr "انقر لإلغاء تغييرات الخط"
 msgid "Click to cancel the font selection."
 msgstr "انقر لإلغاء تحديد الخط"
 
-#: ../src/osx/carbon/fontdlg.cpp:570 ../src/osx/carbon/fontdlg.cpp:572
+#: ../src/osx/carbon/fontdlg.cpp:554 ../src/osx/carbon/fontdlg.cpp:556
 msgid "Click to change the font colour."
 msgstr "انقر لتغيير لون الخط"
 
@@ -2103,7 +2133,7 @@ msgstr "انقر لاختيار الخط المناسب لهذا المستوى"
 msgid "Click to close this window."
 msgstr "انقر لإغلاق هذه النافذة"
 
-#: ../src/osx/carbon/fontdlg.cpp:596 ../src/osx/carbon/fontdlg.cpp:598
+#: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
 msgid "Click to confirm changes to the font."
 msgstr "انقر لتأكيد تغييرات الخط"
 
@@ -2188,7 +2218,7 @@ msgstr "إغلاق هذه النافذة"
 msgid "Color"
 msgstr "لون"
 
-#: ../src/richtext/richtextformatdlg.cpp:725
+#: ../src/richtext/richtextformatdlg.cpp:761
 msgid "Colour"
 msgstr "لون"
 
@@ -2197,28 +2227,28 @@ msgstr "لون"
 msgid "Colour selection dialog failed with error %0lx."
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:566
+#: ../src/osx/carbon/fontdlg.cpp:550
 msgid "Colour:"
 msgstr "لون:"
 
-#: ../src/osx/carbon/dataview.cpp:900
+#: ../src/osx/carbon/dataview.cpp:898
 #, fuzzy
 msgid "Column could not be added."
 msgstr "تعذر تحميل الملف"
 
-#: ../src/osx/carbon/dataview.cpp:899
+#: ../src/osx/carbon/dataview.cpp:897
 msgid "Column description could not be initialized."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1538 ../src/osx/carbon/dataview.cpp:1559
+#: ../src/osx/carbon/dataview.cpp:1536 ../src/osx/carbon/dataview.cpp:1557
 msgid "Column index not found."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1614
+#: ../src/osx/carbon/dataview.cpp:1612
 msgid "Column width could not be determined"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:901
+#: ../src/osx/carbon/dataview.cpp:899
 msgid "Column width could not be set."
 msgstr ""
 
@@ -2234,7 +2264,7 @@ msgstr ""
 msgid "Common dialog failed with error code %0lx."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4306
+#: ../src/gtk/window.cpp:4357
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2257,11 +2287,11 @@ msgstr ""
 msgid "Confirm"
 msgstr "تأكيد"
 
-#: ../src/msw/mimetype.cpp:739
+#: ../src/msw/mimetype.cpp:744
 msgid "Confirm registry update"
 msgstr "تأكيد تحديثات السجل"
 
-#: ../src/html/htmlwin.cpp:544
+#: ../src/html/htmlwin.cpp:547
 msgid "Connecting..."
 msgstr "جاري الاتصال..."
 
@@ -2269,7 +2299,7 @@ msgstr "جاري الاتصال..."
 msgid "Contents"
 msgstr "محتويات"
 
-#: ../src/common/strconv.cpp:2261
+#: ../src/common/strconv.cpp:2271
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr ""
@@ -2279,7 +2309,7 @@ msgstr ""
 msgid "Convert"
 msgstr "محتويات"
 
-#: ../src/html/htmlwin.cpp:1057
+#: ../src/html/htmlwin.cpp:1060
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "نسخ إلى الحافظة:\"%s\""
@@ -2301,20 +2331,20 @@ msgstr "نسخ إختيار"
 msgid "Could not create temporary file '%s'"
 msgstr "تعذر إنشاء الملف المؤقت '%s'"
 
-#: ../src/osx/carbon/dataview.cpp:1285 ../src/osx/carbon/dataview.cpp:1672
+#: ../src/osx/carbon/dataview.cpp:1283 ../src/osx/carbon/dataview.cpp:1670
 #, fuzzy
 msgid "Could not determine column index."
 msgstr "تعذر بدأ معاينة المستند."
 
-#: ../src/osx/carbon/dataview.cpp:876
+#: ../src/osx/carbon/dataview.cpp:874
 msgid "Could not determine column's position"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:843
+#: ../src/osx/carbon/dataview.cpp:841
 msgid "Could not determine number of columns."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:975
+#: ../src/osx/carbon/dataview.cpp:973
 #, fuzzy
 msgid "Could not determine number of items"
 msgstr "تعذر إنهاء الموضوع"
@@ -2328,24 +2358,24 @@ msgstr "تعذر فك %s into %s: %s"
 msgid "Could not find tab for id"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:2556 ../src/osx/carbon/dataview.cpp:2591
-#: ../src/osx/carbon/dataview.cpp:2615 ../src/osx/carbon/dataview.cpp:2636
-#: ../src/osx/carbon/dataview.cpp:2773
+#: ../src/osx/carbon/dataview.cpp:2554 ../src/osx/carbon/dataview.cpp:2589
+#: ../src/osx/carbon/dataview.cpp:2613 ../src/osx/carbon/dataview.cpp:2634
+#: ../src/osx/carbon/dataview.cpp:2771
 #, fuzzy
 msgid "Could not get header description."
 msgstr "تعذر بدأ الطباعة."
 
-#: ../src/osx/carbon/dataview.cpp:1169 ../src/osx/carbon/dataview.cpp:1195
+#: ../src/osx/carbon/dataview.cpp:1167 ../src/osx/carbon/dataview.cpp:1193
 #, fuzzy
 msgid "Could not get items."
 msgstr "تعذر تحديد مكان الملف '%s'"
 
-#: ../src/osx/carbon/dataview.cpp:2659 ../src/osx/carbon/dataview.cpp:2724
+#: ../src/osx/carbon/dataview.cpp:2657 ../src/osx/carbon/dataview.cpp:2722
 #, fuzzy
 msgid "Could not get property flags."
 msgstr "تعذر إنشاء الملف المؤقت '%s'"
 
-#: ../src/osx/carbon/dataview.cpp:726
+#: ../src/osx/carbon/dataview.cpp:724
 #, fuzzy
 msgid "Could not get selected items."
 msgstr "تعذر تحديد مكان الملف '%s'"
@@ -2355,52 +2385,52 @@ msgstr "تعذر تحديد مكان الملف '%s'"
 msgid "Could not locate file '%s'."
 msgstr "تعذر تحديد مكان الملف '%s'"
 
-#: ../src/osx/carbon/dataview.cpp:845
+#: ../src/osx/carbon/dataview.cpp:843
 #, fuzzy
 msgid "Could not remove column."
 msgstr "تعذر إنشاء مؤشر."
 
-#: ../src/osx/carbon/dataview.cpp:642
+#: ../src/osx/carbon/dataview.cpp:640
 #, fuzzy
 msgid "Could not retrieve number of items"
 msgstr "تعذر إنشاء الملف المؤقت '%s'"
 
-#: ../src/osx/carbon/dataview.cpp:2572
+#: ../src/osx/carbon/dataview.cpp:2570
 #, fuzzy
 msgid "Could not set alignment."
 msgstr "تعذر بدأ الطباعة."
 
-#: ../src/osx/carbon/dataview.cpp:2803
+#: ../src/osx/carbon/dataview.cpp:2801
 #, fuzzy
 msgid "Could not set column width."
 msgstr "تعذر بدأ معاينة المستند."
 
-#: ../src/common/filefn.cpp:1569
+#: ../src/common/filefn.cpp:1568
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "تعذر بدأ معاينة المستند."
 
-#: ../src/osx/carbon/dataview.cpp:2775
+#: ../src/osx/carbon/dataview.cpp:2773
 #, fuzzy
 msgid "Could not set header description."
 msgstr "تعذر بدأ الطباعة."
 
-#: ../src/osx/carbon/dataview.cpp:2596
+#: ../src/osx/carbon/dataview.cpp:2594
 #, fuzzy
 msgid "Could not set icon."
 msgstr "تعذر بدأ الطباعة."
 
-#: ../src/osx/carbon/dataview.cpp:2617
+#: ../src/osx/carbon/dataview.cpp:2615
 #, fuzzy
 msgid "Could not set maximum width."
 msgstr "تعذر بدأ الطباعة."
 
-#: ../src/osx/carbon/dataview.cpp:2638
+#: ../src/osx/carbon/dataview.cpp:2636
 #, fuzzy
 msgid "Could not set minimum width."
 msgstr "تعذر بدأ الطباعة."
 
-#: ../src/osx/carbon/dataview.cpp:2664 ../src/osx/carbon/dataview.cpp:2729
+#: ../src/osx/carbon/dataview.cpp:2662 ../src/osx/carbon/dataview.cpp:2727
 #, fuzzy
 msgid "Could not set property flags."
 msgstr "تعذر بدأ الطباعة."
@@ -2422,8 +2452,8 @@ msgstr "تعذر نقل البيانات إلى النافذة"
 msgid "Couldn't acquire a mutex lock"
 msgstr ""
 
-#: ../src/msw/imaglist.cpp:166 ../src/msw/imaglist.cpp:197
-#: ../src/msw/imaglist.cpp:209 ../src/msw/dragimag.cpp:193
+#: ../src/msw/imaglist.cpp:189 ../src/msw/imaglist.cpp:226
+#: ../src/msw/imaglist.cpp:238 ../src/msw/dragimag.cpp:193
 #: ../src/msw/dragimag.cpp:232
 msgid "Couldn't add an image to the image list."
 msgstr "تعذر إضافة صورة لقائمة الصور."
@@ -2446,11 +2476,11 @@ msgstr "تعذر إنهاء الموضوع"
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "تعذر العثور على الرمز '%s' بمكتبة متحركة"
 
-#: ../src/gtk/print.cpp:2014
+#: ../src/gtk/print.cpp:2010
 msgid "Couldn't get hatch style from wxBrush."
 msgstr ""
 
-#: ../src/msw/thread.cpp:950
+#: ../src/msw/thread.cpp:945
 msgid "Couldn't get the current thread pointer"
 msgstr ""
 
@@ -2481,7 +2511,7 @@ msgstr ""
 msgid "Couldn't open audio: %s"
 msgstr "تعذر فتح الملف الصوتي: %s"
 
-#: ../src/msw/ole/dataobj.cpp:350
+#: ../src/msw/ole/dataobj.cpp:377
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr "تعذر تسجيل تنسق الحافظة '%s'"
@@ -2522,8 +2552,8 @@ msgstr "إنشاء مجلد جديد"
 msgid "Ctrl+"
 msgstr "Ctrl-"
 
-#: ../src/richtext/richtextctrl.cpp:325 ../src/osx/textctrl_osx.cpp:582
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2283
+#: ../src/richtext/richtextctrl.cpp:331 ../src/osx/textctrl_osx.cpp:582
+#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2334
 msgid "Cu&t"
 msgstr "ق&ص"
 
@@ -2572,23 +2602,23 @@ msgstr "DEL"
 msgid "DELETE"
 msgstr "حذف"
 
-#: ../src/common/imagbmp.cpp:1092
+#: ../src/common/imagbmp.cpp:1096
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1040
+#: ../src/common/imagbmp.cpp:1044
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1032
+#: ../src/common/imagbmp.cpp:1036
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1060
+#: ../src/common/imagbmp.cpp:1064
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1074
+#: ../src/common/imagbmp.cpp:1078
 msgid "DIB Header: Unknown encoding in file."
 msgstr ""
 
@@ -2604,15 +2634,15 @@ msgstr ""
 msgid "DOWN"
 msgstr "أسفل"
 
-#: ../src/richtext/richtextborderspage.cpp:545
+#: ../src/richtext/richtextborderspage.cpp:567
 msgid "Dashed"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1921
+#: ../src/osx/carbon/dataview.cpp:1919
 msgid "Data object has invalid data format"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:2491
+#: ../src/osx/carbon/dataview.cpp:2489
 msgid "Date renderer cannot render value; value type: "
 msgstr ""
 
@@ -2646,7 +2676,7 @@ msgstr "الطابعة الافتراضية"
 msgid "Default printer"
 msgstr "الطابعة الافتراضية"
 
-#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7945 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "حذف"
@@ -2655,21 +2685,21 @@ msgstr "حذف"
 msgid "Delete A&ll"
 msgstr "حذف ال&كل"
 
-#: ../src/richtext/richtextbuffer.cpp:10637
+#: ../src/richtext/richtextbuffer.cpp:10942
 #, fuzzy
 msgid "Delete Column"
 msgstr "حذف إختيار"
 
-#: ../src/richtext/richtextbuffer.cpp:10587
+#: ../src/richtext/richtextbuffer.cpp:10892
 #, fuzzy
 msgid "Delete Row"
 msgstr "حذف"
 
-#: ../src/richtext/richtextstyledlg.cpp:779
+#: ../src/richtext/richtextstyledlg.cpp:782
 msgid "Delete Style"
 msgstr "حذف الإسلوب"
 
-#: ../src/richtext/richtextctrl.cpp:1231 ../src/richtext/richtextctrl.cpp:1452
+#: ../src/richtext/richtextctrl.cpp:1300 ../src/richtext/richtextctrl.cpp:1538
 msgid "Delete Text"
 msgstr "حذف النص"
 
@@ -2681,12 +2711,12 @@ msgstr "حذف عنصر"
 msgid "Delete selection"
 msgstr "حذف إختيار"
 
-#: ../src/richtext/richtextstyledlg.cpp:779
+#: ../src/richtext/richtextstyledlg.cpp:782
 #, c-format
 msgid "Delete style %s?"
 msgstr "حذف الإسلوب %s?"
 
-#: ../src/unix/snglinst.cpp:295
+#: ../src/unix/snglinst.cpp:301
 #, c-format
 msgid "Deleted stale lock file '%s'."
 msgstr ""
@@ -2732,12 +2762,12 @@ msgstr ""
 msgid "Directories"
 msgstr "مجلدات"
 
-#: ../src/common/filefn.cpp:1251
+#: ../src/common/filefn.cpp:1250
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "تعذر إعادة إنشاء المجلد '%s' لنفسه"
 
-#: ../src/common/filefn.cpp:1271
+#: ../src/common/filefn.cpp:1270
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "تعذر إعادة إنشاء المجلد '%s' لنفسه"
@@ -2768,7 +2798,7 @@ msgstr "عرض محاورة الخيارات"
 msgid "Displays help as you browse the books on the left."
 msgstr "يعرض المساعدة أثناء تصفح الكتب على اليسار"
 
-#: ../src/msw/mimetype.cpp:732
+#: ../src/msw/mimetype.cpp:737
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
 "\" ?\n"
@@ -2796,11 +2826,11 @@ msgstr "ملفات المساعدة بواسطة"
 msgid "Documentation writers"
 msgstr "كتاب ملفات المساعدة"
 
-#: ../src/common/sizer.cpp:2680
+#: ../src/common/sizer.cpp:2704
 msgid "Don't Save"
 msgstr "لا تحفظ"
 
-#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:611
+#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:614
 msgid "Done"
 msgstr "تم"
 
@@ -2808,11 +2838,11 @@ msgstr "تم"
 msgid "Done."
 msgstr "تم."
 
-#: ../src/richtext/richtextborderspage.cpp:544
+#: ../src/richtext/richtextborderspage.cpp:566
 msgid "Dotted"
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:546
+#: ../src/richtext/richtextborderspage.cpp:568
 msgid "Double"
 msgstr ""
 
@@ -2829,7 +2859,7 @@ msgstr ""
 msgid "Down"
 msgstr "Down"
 
-#: ../src/richtext/richtextctrl.cpp:814
+#: ../src/richtext/richtextctrl.cpp:842
 msgid "Drag"
 msgstr ""
 
@@ -2845,7 +2875,7 @@ msgstr "END"
 msgid "ENTER"
 msgstr "ENTER"
 
-#: ../src/unix/fswatcher_inotify.cpp:535
+#: ../src/unix/fswatcher_inotify.cpp:548
 msgid "EOF while reading from inotify descriptor"
 msgstr ""
 
@@ -2914,24 +2944,24 @@ msgstr "&محاذاة"
 msgid "Enables a background colour."
 msgstr "لون الخلفية"
 
-#: ../src/richtext/richtextstyledlg.cpp:931
+#: ../src/richtext/richtextstyledlg.cpp:934
 #, fuzzy
 msgid "Enter a box style name"
 msgstr "ادخل اسم إسلوب جديد"
 
-#: ../src/richtext/richtextstyledlg.cpp:603
+#: ../src/richtext/richtextstyledlg.cpp:606
 msgid "Enter a character style name"
 msgstr "ادخل اسم إسلوب حرف جديد"
 
-#: ../src/richtext/richtextstyledlg.cpp:817
+#: ../src/richtext/richtextstyledlg.cpp:820
 msgid "Enter a list style name"
 msgstr "ادخل اسم إسلوب قائمة جديد"
 
-#: ../src/richtext/richtextstyledlg.cpp:890
+#: ../src/richtext/richtextstyledlg.cpp:893
 msgid "Enter a new style name"
 msgstr "ادخل اسم إسلوب جديد"
 
-#: ../src/richtext/richtextstyledlg.cpp:651
+#: ../src/richtext/richtextstyledlg.cpp:654
 msgid "Enter a paragraph style name"
 msgstr "ادخل اسم إسلوب فقرة"
 
@@ -2976,11 +3006,11 @@ msgstr ""
 msgid "Error creating directory"
 msgstr "خطأ بإنشاء المجلد"
 
-#: ../src/common/imagbmp.cpp:1103
+#: ../src/common/imagbmp.cpp:1107
 msgid "Error in reading image DIB."
 msgstr ""
 
-#: ../src/propgrid/propgrid.cpp:6563
+#: ../src/propgrid/propgrid.cpp:6565
 #, c-format
 msgid "Error in resource: %s"
 msgstr ""
@@ -3010,10 +3040,6 @@ msgstr ""
 msgid "Estimated time:"
 msgstr "الوقت التقديري:"
 
-#: ../src/unix/fswatcher_inotify.cpp:639
-msgid "Event queue overflowed"
-msgstr ""
-
 #: ../src/generic/dbgrptg.cpp:234
 #, fuzzy
 msgid "Executable files (*.exe)|*.exe|"
@@ -3023,7 +3049,7 @@ msgstr "كل الملفات (*.*)|*.*"
 msgid "Execute"
 msgstr ""
 
-#: ../src/msw/utilsexc.cpp:888
+#: ../src/msw/utilsexc.cpp:887
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr ""
@@ -3079,7 +3105,7 @@ msgstr ""
 msgid "Failed to allocate colour for OpenGL"
 msgstr ""
 
-#: ../src/unix/displayx11.cpp:288
+#: ../src/unix/displayx11.cpp:292
 msgid "Failed to change video mode"
 msgstr ""
 
@@ -3097,7 +3123,7 @@ msgstr ""
 msgid "Failed to close file handle"
 msgstr ""
 
-#: ../src/unix/snglinst.cpp:334
+#: ../src/unix/snglinst.cpp:340
 #, c-format
 msgid "Failed to close lock file '%s'"
 msgstr ""
@@ -3153,19 +3179,19 @@ msgstr ""
 msgid "Failed to create DDE string"
 msgstr ""
 
-#: ../src/msw/mdi.cpp:590
+#: ../src/msw/mdi.cpp:594
 msgid "Failed to create MDI parent frame."
 msgstr ""
 
-#: ../src/common/filename.cpp:1080
+#: ../src/common/filename.cpp:1086
 msgid "Failed to create a temporary file name"
 msgstr ""
 
-#: ../src/msw/utilsexc.cpp:235
+#: ../src/msw/utilsexc.cpp:234
 msgid "Failed to create an anonymous pipe"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:522
+#: ../src/msw/ole/automtn.cpp:525
 #, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr ""
@@ -3219,7 +3245,7 @@ msgstr ""
 msgid "Failed to empty the clipboard."
 msgstr ""
 
-#: ../src/unix/displayx11.cpp:265
+#: ../src/unix/displayx11.cpp:266
 msgid "Failed to enumerate video modes"
 msgstr ""
 
@@ -3241,7 +3267,7 @@ msgstr ""
 msgid "Failed to execute curl, please install it in PATH."
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:505
+#: ../src/msw/ole/automtn.cpp:508
 #, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr ""
@@ -3256,7 +3282,7 @@ msgstr ""
 msgid "Failed to get ISP names: %s"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:574
+#: ../src/msw/ole/automtn.cpp:577
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr ""
@@ -3269,7 +3295,7 @@ msgstr ""
 msgid "Failed to get the local system time"
 msgstr ""
 
-#: ../src/common/filefn.cpp:1453
+#: ../src/common/filefn.cpp:1452
 msgid "Failed to get the working directory"
 msgstr ""
 
@@ -3290,7 +3316,7 @@ msgstr ""
 msgid "Failed to initiate dialup connection: %s"
 msgstr "تعذر الحصول على محاورة اتصال نشطة: %s"
 
-#: ../src/gtk/textctrl.cpp:1117
+#: ../src/gtk/textctrl.cpp:1129
 msgid "Failed to insert text in the control."
 msgstr ""
 
@@ -3303,7 +3329,7 @@ msgstr ""
 msgid "Failed to install signal handler"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1162
+#: ../src/unix/threadpsx.cpp:1167
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -3373,7 +3399,7 @@ msgstr ""
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr ""
 
-#: ../src/common/filename.cpp:2681
+#: ../src/common/filename.cpp:2687
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr ""
@@ -3397,7 +3423,7 @@ msgstr ""
 msgid "Failed to open CHM archive '%s'."
 msgstr ""
 
-#: ../src/common/utilscmn.cpp:1135
+#: ../src/common/utilscmn.cpp:1142
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr ""
@@ -3412,7 +3438,7 @@ msgstr ""
 msgid "Failed to open display \"%s\"."
 msgstr ""
 
-#: ../src/common/filename.cpp:1115
+#: ../src/common/filename.cpp:1121
 msgid "Failed to open temporary file."
 msgstr ""
 
@@ -3459,7 +3485,7 @@ msgstr ""
 msgid "Failed to redirect child process input/output"
 msgstr ""
 
-#: ../src/msw/utilsexc.cpp:697
+#: ../src/msw/utilsexc.cpp:696
 msgid "Failed to redirect the child process IO"
 msgstr ""
 
@@ -3478,7 +3504,7 @@ msgstr ""
 msgid "Failed to remove debug report file \"%s\""
 msgstr ""
 
-#: ../src/unix/snglinst.cpp:322
+#: ../src/unix/snglinst.cpp:328
 #, c-format
 msgid "Failed to remove lock file '%s'"
 msgstr ""
@@ -3509,7 +3535,7 @@ msgstr ""
 msgid "Failed to retrieve data from the clipboard."
 msgstr ""
 
-#: ../src/common/filename.cpp:2777
+#: ../src/common/filename.cpp:2783
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr ""
@@ -3559,21 +3585,21 @@ msgstr "فشل عند إغلاق الحافظة"
 msgid "Failed to set temporary file permissions"
 msgstr ""
 
-#: ../src/gtk/textctrl.cpp:1058
+#: ../src/gtk/textctrl.cpp:1070
 msgid "Failed to set text in the text control."
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1293
+#: ../src/unix/threadpsx.cpp:1298
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1377 ../src/unix/threadpsx.cpp:1387
+#: ../src/unix/threadpsx.cpp:1382 ../src/unix/threadpsx.cpp:1392
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:791
+#: ../src/unix/utilsunx.cpp:801
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 
@@ -3590,7 +3616,7 @@ msgstr ""
 msgid "Failed to switch wake up pipe to non-blocking mode"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1569
+#: ../src/unix/threadpsx.cpp:1574
 msgid "Failed to terminate a thread."
 msgstr ""
 
@@ -3603,12 +3629,12 @@ msgstr ""
 msgid "Failed to terminate the dialup connection: %s"
 msgstr ""
 
-#: ../src/common/filename.cpp:2696
+#: ../src/common/filename.cpp:2702
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr ""
 
-#: ../src/unix/snglinst.cpp:328
+#: ../src/unix/snglinst.cpp:334
 #, c-format
 msgid "Failed to unlock lock file '%s'"
 msgstr ""
@@ -3675,7 +3701,7 @@ msgstr ""
 "الملف '%s' موجود بالفعل.\n"
 "هل تريد حقا استبداله؟"
 
-#: ../src/common/filefn.cpp:1207
+#: ../src/common/filefn.cpp:1206
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "تعذر إعادة إنشاء المجلد '%s' لنفسه"
@@ -3685,11 +3711,11 @@ msgstr "تعذر إعادة إنشاء المجلد '%s' لنفسه"
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "تعذر إعادة إنشاء المجلد '%s' لنفسه"
 
-#: ../src/richtext/richtextctrl.cpp:2688 ../src/common/textcmn.cpp:921
+#: ../src/richtext/richtextctrl.cpp:2774 ../src/common/textcmn.cpp:935
 msgid "File couldn't be loaded."
 msgstr "تعذر تحميل الملف"
 
-#: ../src/msw/filedlg.cpp:458
+#: ../src/msw/filedlg.cpp:462
 #, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr ""
@@ -3706,7 +3732,7 @@ msgstr "اسم الملف موجود بالفعل."
 msgid "Files"
 msgstr "ملفات"
 
-#: ../src/common/filefn.cpp:1761
+#: ../src/common/filefn.cpp:1760
 #, c-format
 msgid "Files (%s)"
 msgstr "ملفات (%s)"
@@ -3755,7 +3781,7 @@ msgstr "نسخ"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr ""
 
-#: ../src/richtext/richtextformatdlg.cpp:324 ../src/osx/carbon/fontdlg.cpp:473
+#: ../src/richtext/richtextformatdlg.cpp:325 ../src/osx/carbon/fontdlg.cpp:457
 #: ../src/common/stockitem.cpp:194
 msgid "Font"
 msgstr "خط"
@@ -3772,7 +3798,7 @@ msgstr "مقاس الخط:"
 msgid "Font st&yle:"
 msgstr "نم&ط الخط:"
 
-#: ../src/osx/carbon/fontdlg.cpp:515
+#: ../src/osx/carbon/fontdlg.cpp:499
 msgid "Font:"
 msgstr "خط:"
 
@@ -3823,7 +3849,7 @@ msgstr ""
 msgid "GIF: unknown error!!!"
 msgstr ""
 
-#: ../src/gtk/window.cpp:4288
+#: ../src/gtk/window.cpp:4339
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3889,7 +3915,7 @@ msgstr "فن الرسوم بواسطة"
 msgid "Greek (ISO-8859-7)"
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:547
+#: ../src/richtext/richtextborderspage.cpp:569
 msgid "Groove"
 msgstr ""
 
@@ -3909,7 +3935,7 @@ msgstr "رئيسي"
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr ""
 
-#: ../src/html/htmlwin.cpp:659
+#: ../src/html/htmlwin.cpp:662
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr ""
@@ -3967,16 +3993,16 @@ msgstr ""
 msgid "Help: %s"
 msgstr "مساعدة: %s"
 
-#: ../src/osx/menu_osx.cpp:602 ../src/osx/menu_osx.cpp:649
+#: ../src/osx/menu_osx.cpp:623
 #, fuzzy, c-format
 msgid "Hide %s"
 msgstr "&تفاصيل"
 
-#: ../src/osx/menu_osx.cpp:604 ../src/osx/menu_osx.cpp:651
+#: ../src/osx/menu_osx.cpp:625
 msgid "Hide Others"
 msgstr ""
 
-#: ../src/generic/infobar.cpp:85
+#: ../src/generic/infobar.cpp:84
 msgid "Hide this notification message."
 msgstr ""
 
@@ -3993,26 +4019,26 @@ msgstr "مجلد رئيسي"
 msgid "How the object will float relative to the text."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1118
+#: ../src/common/imagbmp.cpp:1122
 msgid "ICO: Error in reading mask DIB."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1233 ../src/common/imagbmp.cpp:1294
-#: ../src/common/imagbmp.cpp:1305 ../src/common/imagbmp.cpp:1318
-#: ../src/common/imagbmp.cpp:1363 ../src/common/imagbmp.cpp:1375
-#: ../src/common/imagbmp.cpp:1386
+#: ../src/common/imagbmp.cpp:1237 ../src/common/imagbmp.cpp:1298
+#: ../src/common/imagbmp.cpp:1309 ../src/common/imagbmp.cpp:1322
+#: ../src/common/imagbmp.cpp:1367 ../src/common/imagbmp.cpp:1379
+#: ../src/common/imagbmp.cpp:1390
 msgid "ICO: Error writing the image file!"
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1198
+#: ../src/common/imagbmp.cpp:1202
 msgid "ICO: Image too tall for an icon."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1206
+#: ../src/common/imagbmp.cpp:1210
 msgid "ICO: Image too wide for an icon."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1466
+#: ../src/common/imagbmp.cpp:1470
 msgid "ICO: Invalid icon index."
 msgstr ""
 
@@ -4044,7 +4070,7 @@ msgstr "إدراج"
 msgid "ISO-2022-JP"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:2420
+#: ../src/osx/carbon/dataview.cpp:2418
 msgid "Icon & text renderer cannot render value; value type: "
 msgstr ""
 
@@ -4107,7 +4133,7 @@ msgstr "ملف الحركة ليس من نوع %ld."
 msgid "Image is not of type %s."
 msgstr "ملف الحركة ليس من نوع %ld."
 
-#: ../src/msw/textctrl.cpp:399
+#: ../src/msw/textctrl.cpp:413
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -4137,7 +4163,7 @@ msgstr ""
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:624
+#: ../src/msw/ole/automtn.cpp:638
 msgid "Incorrect number of arguments."
 msgstr ""
 
@@ -4145,7 +4171,7 @@ msgstr ""
 msgid "Indent"
 msgstr ""
 
-#: ../src/richtext/richtextformatdlg.cpp:330
+#: ../src/richtext/richtextformatdlg.cpp:331
 msgid "Indents && Spacing"
 msgstr ""
 
@@ -4169,25 +4195,25 @@ msgstr ""
 msgid "Insert"
 msgstr "إدراج"
 
-#: ../src/richtext/richtextbuffer.cpp:7687
+#: ../src/richtext/richtextbuffer.cpp:7791
 #, fuzzy
 msgid "Insert Field"
 msgstr "إدراج نص"
 
-#: ../src/richtext/richtextbuffer.cpp:7598
-#: ../src/richtext/richtextbuffer.cpp:8551
+#: ../src/richtext/richtextbuffer.cpp:7702
+#: ../src/richtext/richtextbuffer.cpp:8655
 msgid "Insert Image"
 msgstr "إدراج صورة"
 
-#: ../src/richtext/richtextbuffer.cpp:7645
+#: ../src/richtext/richtextbuffer.cpp:7749
 #, fuzzy
 msgid "Insert Object"
 msgstr "إدراج نص"
 
-#: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7440
-#: ../src/richtext/richtextbuffer.cpp:7470
-#: ../src/richtext/richtextbuffer.cpp:7514
+#: ../src/richtext/richtextctrl.cpp:1241 ../src/richtext/richtextctrl.cpp:1448
+#: ../src/richtext/richtextbuffer.cpp:7544
+#: ../src/richtext/richtextbuffer.cpp:7574
+#: ../src/richtext/richtextbuffer.cpp:7618
 msgid "Insert Text"
 msgstr "إدراج نص"
 
@@ -4196,7 +4222,7 @@ msgstr "إدراج نص"
 msgid "Inserts a page break before the paragraph."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:549
+#: ../src/richtext/richtextborderspage.cpp:571
 #, fuzzy
 msgid "Inset"
 msgstr "إدراج"
@@ -4210,7 +4236,7 @@ msgstr ""
 msgid "Invalid TIFF image index."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1782 ../src/osx/carbon/dataview.cpp:1877
+#: ../src/osx/carbon/dataview.cpp:1780 ../src/osx/carbon/dataview.cpp:1875
 msgid "Invalid data view item"
 msgstr ""
 
@@ -4224,12 +4250,12 @@ msgstr ""
 msgid "Invalid geometry specification '%s'"
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:298
+#: ../src/unix/fswatcher_inotify.cpp:311
 #, c-format
 msgid "Invalid inotify event for \"%s\""
 msgstr ""
 
-#: ../src/unix/snglinst.cpp:306
+#: ../src/unix/snglinst.cpp:312
 #, c-format
 msgid "Invalid lock file '%s'."
 msgstr ""
@@ -4258,7 +4284,7 @@ msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
 
 #: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:333
-#: ../src/osx/carbon/fontdlg.cpp:547 ../src/common/stockitem.cpp:168
+#: ../src/osx/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:168
 msgid "Italic"
 msgstr "مائل"
 
@@ -4562,7 +4588,7 @@ msgstr "مسافة السطر:"
 msgid "Link contained '//', converted to absolute link."
 msgstr ""
 
-#: ../src/richtext/richtextformatdlg.cpp:349
+#: ../src/richtext/richtextformatdlg.cpp:350
 msgid "List Style"
 msgstr "إسلوب القائمة"
 
@@ -4580,12 +4606,12 @@ msgstr "قوائم أحجام الخط بالدرجات"
 msgid "Lists the available fonts."
 msgstr "قوائم الخطوط المتاحة"
 
-#: ../src/common/fldlgcmn.cpp:325
+#: ../src/common/fldlgcmn.cpp:343
 #, c-format
 msgid "Load %s file"
 msgstr ""
 
-#: ../src/html/htmlwin.cpp:575
+#: ../src/html/htmlwin.cpp:578
 msgid "Loading : "
 msgstr "تحميل:"
 
@@ -4795,12 +4821,12 @@ msgstr ""
 msgid "MacVietnamese"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2031
+#: ../src/propgrid/advprops.cpp:2013
 #, fuzzy
 msgid "Make a selection:"
 msgstr "حذف إختيار"
 
-#: ../src/richtext/richtextformatdlg.cpp:362
+#: ../src/richtext/richtextformatdlg.cpp:363
 #: ../src/richtext/richtextmarginspage.cpp:172
 msgid "Margins"
 msgstr ""
@@ -4841,7 +4867,7 @@ msgstr "%s رسالة"
 msgid "Metal theme"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:641
+#: ../src/msw/ole/automtn.cpp:655
 msgid "Method or property not found."
 msgstr ""
 
@@ -4858,7 +4884,7 @@ msgstr "محاذاة لليمين"
 msgid "Min width:"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:657
+#: ../src/msw/ole/automtn.cpp:671
 msgid "Missing a required parameter."
 msgstr ""
 
@@ -4901,7 +4927,7 @@ msgstr ""
 msgid "Moves the object to the previous paragraph."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9345
+#: ../src/richtext/richtextbuffer.cpp:9596
 #, fuzzy
 msgid "Multiple Cell Properties"
 msgstr "خيارات الطباعة"
@@ -4941,16 +4967,16 @@ msgstr ""
 msgid "New &Paragraph Style..."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:603
-#: ../src/richtext/richtextstyledlg.cpp:608
-#: ../src/richtext/richtextstyledlg.cpp:651
-#: ../src/richtext/richtextstyledlg.cpp:656
-#: ../src/richtext/richtextstyledlg.cpp:817
-#: ../src/richtext/richtextstyledlg.cpp:822
-#: ../src/richtext/richtextstyledlg.cpp:890
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:931
-#: ../src/richtext/richtextstyledlg.cpp:936
+#: ../src/richtext/richtextstyledlg.cpp:606
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:654
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:820
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:893
+#: ../src/richtext/richtextstyledlg.cpp:901
+#: ../src/richtext/richtextstyledlg.cpp:934
+#: ../src/richtext/richtextstyledlg.cpp:939
 msgid "New Style"
 msgstr "نمط جديد"
 
@@ -4990,19 +5016,19 @@ msgstr ""
 msgid "No bitmap handler for type %d defined."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1784
+#: ../src/osx/carbon/dataview.cpp:1782
 msgid "No column existing."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1674
+#: ../src/osx/carbon/dataview.cpp:1672
 msgid "No column for the specified column existing."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1423
+#: ../src/osx/carbon/dataview.cpp:1421
 msgid "No column for the specified column position existing."
 msgstr ""
 
-#: ../src/common/utilscmn.cpp:1049
+#: ../src/common/utilscmn.cpp:1056
 msgid "No default application configured for HTML files."
 msgstr ""
 
@@ -5050,11 +5076,11 @@ msgstr ""
 msgid "No matching page found yet"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1676 ../src/osx/carbon/dataview.cpp:1786
+#: ../src/osx/carbon/dataview.cpp:1674 ../src/osx/carbon/dataview.cpp:1784
 msgid "No renderer or invalid renderer type specified for custom data column."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1424
+#: ../src/osx/carbon/dataview.cpp:1422
 msgid "No renderer specified for column."
 msgstr ""
 
@@ -5075,7 +5101,7 @@ msgstr ""
 msgid "No valid mappings found in the file \"%s\"."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:542
+#: ../src/richtext/richtextborderspage.cpp:564
 #: ../src/richtext/richtextsizepage.cpp:248
 #: ../src/richtext/richtextsizepage.cpp:252
 #, fuzzy
@@ -5098,7 +5124,7 @@ msgstr ""
 msgid "Normal font:"
 msgstr ""
 
-#: ../src/propgrid/props.cpp:887
+#: ../src/propgrid/props.cpp:897
 #, fuzzy, c-format
 msgid "Not %s"
 msgstr "&ملحوظات:"
@@ -5119,7 +5145,7 @@ msgstr ""
 msgid "Notice"
 msgstr "ملحوظة"
 
-#: ../src/osx/carbon/dataview.cpp:902
+#: ../src/osx/carbon/dataview.cpp:900
 msgid "Number of columns could not be determined."
 msgstr ""
 
@@ -5130,22 +5156,22 @@ msgstr ""
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "موافق"
 
-#: ../src/msw/ole/automtn.cpp:681
+#: ../src/msw/ole/automtn.cpp:695
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr ""
 
-#: ../include/wx/richtext/richtextimagedlg.h:39
+#: ../include/wx/richtext/richtextimagedlg.h:38
 #, fuzzy
 msgid "Object Properties"
 msgstr "خيارات الطباعة"
 
-#: ../src/msw/ole/automtn.cpp:649
+#: ../src/msw/ole/automtn.cpp:663
 msgid "Object implementation does not support named arguments."
 msgstr ""
 
@@ -5208,17 +5234,17 @@ msgstr ""
 msgid "Out of window IDs.  Recommend shutting down application."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:400
-#: ../src/richtext/richtextborderspage.cpp:533
+#: ../src/richtext/richtextborderspage.cpp:397
+#: ../src/richtext/richtextborderspage.cpp:555
 #, fuzzy
 msgid "Outline"
 msgstr "&مستوى التخطيط:"
 
-#: ../src/richtext/richtextborderspage.cpp:550
+#: ../src/richtext/richtextborderspage.cpp:572
 msgid "Outset"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:645
+#: ../src/msw/ole/automtn.cpp:659
 msgid "Overflow while coercing argument values."
 msgstr ""
 
@@ -5431,7 +5457,7 @@ msgstr ""
 msgid "Passing an unknown object to GetObject"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3206 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "لصق"
@@ -5449,7 +5475,7 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:11942
+#: ../src/richtext/richtextbuffer.cpp:12271
 #, fuzzy
 msgid "Picture Properties"
 msgstr "خيارات الطباعة"
@@ -5495,20 +5521,20 @@ msgstr ""
 msgid "Point Size"
 msgstr "مقاس الخط:"
 
-#: ../src/osx/carbon/dataview.cpp:1278 ../src/osx/carbon/dataview.cpp:1329
-#: ../src/osx/carbon/dataview.cpp:1420 ../src/osx/carbon/dataview.cpp:1443
-#: ../src/osx/carbon/dataview.cpp:1460 ../src/osx/carbon/dataview.cpp:1477
-#: ../src/osx/carbon/dataview.cpp:1670 ../src/osx/carbon/dataview.cpp:1779
-#: ../src/osx/carbon/dataview.cpp:1821 ../src/osx/carbon/dataview.cpp:1874
-#: ../src/osx/carbon/dataview.cpp:1997
+#: ../src/osx/carbon/dataview.cpp:1276 ../src/osx/carbon/dataview.cpp:1327
+#: ../src/osx/carbon/dataview.cpp:1418 ../src/osx/carbon/dataview.cpp:1441
+#: ../src/osx/carbon/dataview.cpp:1458 ../src/osx/carbon/dataview.cpp:1475
+#: ../src/osx/carbon/dataview.cpp:1668 ../src/osx/carbon/dataview.cpp:1777
+#: ../src/osx/carbon/dataview.cpp:1819 ../src/osx/carbon/dataview.cpp:1872
+#: ../src/osx/carbon/dataview.cpp:1995
 msgid "Pointer to data view control not set correctly."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1279 ../src/osx/carbon/dataview.cpp:1338
-#: ../src/osx/carbon/dataview.cpp:1421 ../src/osx/carbon/dataview.cpp:1478
-#: ../src/osx/carbon/dataview.cpp:1671 ../src/osx/carbon/dataview.cpp:1780
-#: ../src/osx/carbon/dataview.cpp:1822 ../src/osx/carbon/dataview.cpp:1875
-#: ../src/osx/carbon/dataview.cpp:1998
+#: ../src/osx/carbon/dataview.cpp:1277 ../src/osx/carbon/dataview.cpp:1336
+#: ../src/osx/carbon/dataview.cpp:1419 ../src/osx/carbon/dataview.cpp:1476
+#: ../src/osx/carbon/dataview.cpp:1669 ../src/osx/carbon/dataview.cpp:1778
+#: ../src/osx/carbon/dataview.cpp:1820 ../src/osx/carbon/dataview.cpp:1873
+#: ../src/osx/carbon/dataview.cpp:1996
 msgid "Pointer to model not set correctly."
 msgstr ""
 
@@ -5530,7 +5556,7 @@ msgstr ""
 msgid "Preferences"
 msgstr "&التفضيلات"
 
-#: ../src/osx/menu_osx.cpp:643
+#: ../src/osx/menu_osx.cpp:614
 #, fuzzy
 msgid "Preferences..."
 msgstr "&التفضيلات"
@@ -5539,7 +5565,7 @@ msgstr "&التفضيلات"
 msgid "Preparing"
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:576
+#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:560
 #: ../src/html/helpwnd.cpp:1235
 msgid "Preview:"
 msgstr "معاينة:"
@@ -5660,7 +5686,7 @@ msgid "Printing..."
 msgstr "طبع..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2124
+#: ../src/common/docview.cpp:2114
 #, fuzzy
 msgid "Printout"
 msgstr "طابعة"
@@ -5671,7 +5697,7 @@ msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:2472
+#: ../src/osx/carbon/dataview.cpp:2470
 msgid "Progress renderer cannot render value type; value type: "
 msgstr ""
 
@@ -5689,7 +5715,7 @@ msgstr "&الخصائص"
 msgid "Property"
 msgstr "&الخصائص"
 
-#: ../src/propgrid/propgrid.cpp:3144 ../src/propgrid/propgrid.cpp:3276
+#: ../src/propgrid/propgrid.cpp:3146 ../src/propgrid/propgrid.cpp:3278
 #, fuzzy
 msgid "Property Error"
 msgstr "خطأ في الطباعة"
@@ -5707,7 +5733,7 @@ msgstr "سؤال"
 msgid "Quit"
 msgstr "&إنهاء"
 
-#: ../src/osx/menu_osx.cpp:610 ../src/osx/menu_osx.cpp:657
+#: ../src/osx/menu_osx.cpp:631
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "&إنهاء"
@@ -5797,7 +5823,7 @@ msgstr "الوقت المتبقي:"
 msgid "Remove"
 msgstr "إزالة"
 
-#: ../src/richtext/richtextctrl.cpp:1430
+#: ../src/richtext/richtextctrl.cpp:1516
 #, fuzzy
 msgid "Remove Bullet"
 msgstr "إزالة"
@@ -5811,11 +5837,11 @@ msgstr "إزالة الصفحة الحالية من الإشارات المرج�
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1430
+#: ../src/osx/carbon/dataview.cpp:1428
 msgid "Rendering failed."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:4214
+#: ../src/richtext/richtextbuffer.cpp:4280
 msgid "Renumber List"
 msgstr ""
 
@@ -5823,7 +5849,7 @@ msgstr ""
 msgid "Rep&lace"
 msgstr "است&بدال"
 
-#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3366 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "استبدال"
 
@@ -5839,7 +5865,7 @@ msgstr "استبدال التحديد"
 msgid "Replace with:"
 msgstr "استبدال ب:"
 
-#: ../src/common/valtext.cpp:161
+#: ../src/common/valtext.cpp:163
 msgid "Required information entry is empty."
 msgstr ""
 
@@ -5852,7 +5878,7 @@ msgstr "'%s' ليست رسالة صحيحة بالفهرس."
 msgid "Revert to Saved"
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:548
+#: ../src/richtext/richtextborderspage.cpp:570
 #, fuzzy
 msgid "Ridge"
 msgstr "يمين"
@@ -5911,11 +5937,11 @@ msgstr "خاص"
 msgid "SUBTRACT"
 msgstr "طرح"
 
-#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2678
+#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2702
 msgid "Save"
 msgstr "حفظ"
 
-#: ../src/common/fldlgcmn.cpp:327
+#: ../src/common/fldlgcmn.cpp:345
 #, c-format
 msgid "Save %s file"
 msgstr "حفظ %s ملف"
@@ -5990,8 +6016,8 @@ msgstr ""
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:330 ../src/osx/textctrl_osx.cpp:587
-#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2288
+#: ../src/richtext/richtextctrl.cpp:336 ../src/osx/textctrl_osx.cpp:587
+#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2339
 msgid "Select &All"
 msgstr "تحديد ال&كل"
 
@@ -6037,7 +6063,11 @@ msgstr ""
 msgid "Separator expected after the option '%s'."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10513
+#: ../src/osx/menu_osx.cpp:618
+msgid "Services"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10818
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "تغيير نمط"
@@ -6046,7 +6076,7 @@ msgstr "تغيير نمط"
 msgid "SetProperty called w/o valid setter"
 msgstr ""
 
-#: ../src/common/filename.cpp:2632
+#: ../src/common/filename.cpp:2638
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
@@ -6071,7 +6101,7 @@ msgstr ""
 msgid "Show &hidden files"
 msgstr ""
 
-#: ../src/osx/menu_osx.cpp:605 ../src/osx/menu_osx.cpp:652
+#: ../src/osx/menu_osx.cpp:626
 #, fuzzy
 msgid "Show All"
 msgstr "عرض الكل"
@@ -6113,7 +6143,7 @@ msgstr ""
 msgid "Shows a preview of the font settings."
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
+#: ../src/osx/carbon/fontdlg.cpp:564 ../src/osx/carbon/fontdlg.cpp:566
 msgid "Shows a preview of the font."
 msgstr ""
 
@@ -6135,12 +6165,12 @@ msgstr ""
 msgid "Single"
 msgstr "مفرد"
 
-#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
+#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:357
 #: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "حجم"
 
-#: ../src/osx/carbon/fontdlg.cpp:525
+#: ../src/osx/carbon/fontdlg.cpp:509
 msgid "Size:"
 msgstr "حجم:"
 
@@ -6158,7 +6188,7 @@ msgstr ""
 msgid "Small C&apitals"
 msgstr "أحرف &كبيرة"
 
-#: ../src/richtext/richtextborderspage.cpp:543
+#: ../src/richtext/richtextborderspage.cpp:565
 #, fuzzy
 msgid "Solid"
 msgstr "عريض"
@@ -6171,11 +6201,11 @@ msgstr ""
 msgid "Sorry, not enough memory to create a preview."
 msgstr ""
 
-#: ../src/richtext/richtextstyledlg.cpp:608
-#: ../src/richtext/richtextstyledlg.cpp:656
-#: ../src/richtext/richtextstyledlg.cpp:822
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:936
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:901
+#: ../src/richtext/richtextstyledlg.cpp:939
 msgid "Sorry, that name is taken. Please choose another."
 msgstr ""
 
@@ -6233,15 +6263,15 @@ msgstr "&يتوسطه خط"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr ""
 
-#: ../src/richtext/richtextformatdlg.cpp:318 ../src/propgrid/advprops.cpp:647
+#: ../src/richtext/richtextformatdlg.cpp:319 ../src/propgrid/advprops.cpp:647
 msgid "Style"
 msgstr "نمط"
 
-#: ../include/wx/richtext/richtextstyledlg.h:47
+#: ../include/wx/richtext/richtextstyledlg.h:46
 msgid "Style Organiser"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:534
+#: ../src/osx/carbon/fontdlg.cpp:518
 msgid "Style:"
 msgstr ""
 
@@ -6308,7 +6338,7 @@ msgstr ""
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10794
+#: ../src/richtext/richtextbuffer.cpp:11099
 #, fuzzy
 msgid "Table Properties"
 msgstr "&الخصائص"
@@ -6321,7 +6351,7 @@ msgstr ""
 msgid "Tabloid, 11 x 17 in"
 msgstr ""
 
-#: ../src/richtext/richtextformatdlg.cpp:336
+#: ../src/richtext/richtextformatdlg.cpp:337
 msgid "Tabs"
 msgstr ""
 
@@ -6333,7 +6363,7 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:2373
+#: ../src/osx/carbon/dataview.cpp:2371
 msgid "Text renderer cannot render value; value type: "
 msgstr ""
 
@@ -6366,6 +6396,25 @@ msgstr ""
 #, fuzzy
 msgid "The background colour."
 msgstr "لون الخلفية"
+
+#: ../src/richtext/richtextborderspage.cpp:265
+#: ../src/richtext/richtextborderspage.cpp:267
+#: ../src/richtext/richtextborderspage.cpp:299
+#: ../src/richtext/richtextborderspage.cpp:301
+#: ../src/richtext/richtextborderspage.cpp:333
+#: ../src/richtext/richtextborderspage.cpp:335
+#: ../src/richtext/richtextborderspage.cpp:367
+#: ../src/richtext/richtextborderspage.cpp:369
+#: ../src/richtext/richtextborderspage.cpp:434
+#: ../src/richtext/richtextborderspage.cpp:436
+#: ../src/richtext/richtextborderspage.cpp:468
+#: ../src/richtext/richtextborderspage.cpp:470
+#: ../src/richtext/richtextborderspage.cpp:502
+#: ../src/richtext/richtextborderspage.cpp:504
+#: ../src/richtext/richtextborderspage.cpp:536
+#: ../src/richtext/richtextborderspage.cpp:538
+msgid "The border line style."
+msgstr ""
 
 #: ../src/richtext/richtextmarginspage.cpp:268
 #: ../src/richtext/richtextmarginspage.cpp:270
@@ -6409,7 +6458,7 @@ msgid ""
 "[Cancel] if it cannot be replaced"
 msgstr ""
 
-#: ../src/msw/ole/dataobj.cpp:367
+#: ../src/msw/ole/dataobj.cpp:394
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr ""
@@ -6471,7 +6520,7 @@ msgstr ""
 msgid "The font point size."
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:529 ../src/osx/carbon/fontdlg.cpp:531
+#: ../src/osx/carbon/fontdlg.cpp:513 ../src/osx/carbon/fontdlg.cpp:515
 msgid "The font size in points."
 msgstr ""
 
@@ -6530,7 +6579,7 @@ msgstr ""
 msgid "The list item number."
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:653
+#: ../src/msw/ole/automtn.cpp:667
 msgid "The locale ID is unknown."
 msgstr ""
 
@@ -6654,7 +6703,7 @@ msgstr ""
 msgid "The style preview."
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:669
+#: ../src/msw/ole/automtn.cpp:683
 msgid "The system cannot find the file specified."
 msgstr ""
 
@@ -6667,7 +6716,7 @@ msgstr ""
 msgid "The tab positions."
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:2705
+#: ../src/richtext/richtextctrl.cpp:2791
 msgid "The text couldn't be saved."
 msgstr ""
 
@@ -6704,7 +6753,7 @@ msgstr ""
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1340
+#: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr ""
 
@@ -6728,7 +6777,7 @@ msgstr ""
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4317
+#: ../src/gtk/window.cpp:4368
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6740,23 +6789,23 @@ msgid ""
 "comctl32.dll"
 msgstr ""
 
-#: ../src/msw/thread.cpp:1300
+#: ../src/msw/thread.cpp:1295
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1758
+#: ../src/unix/threadpsx.cpp:1763
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr ""
 
-#: ../src/msw/thread.cpp:1288
+#: ../src/msw/thread.cpp:1283
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:1038
+#: ../src/unix/threadpsx.cpp:1043
 msgid "Thread priority setting is ignored."
 msgstr ""
 
@@ -6788,11 +6837,11 @@ msgstr ""
 msgid "To:"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:2451
+#: ../src/osx/carbon/dataview.cpp:2449
 msgid "Toggle renderer cannot render value; value type: "
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:7983
+#: ../src/richtext/richtextbuffer.cpp:8087
 msgid "Too many EndStyle calls!"
 msgstr ""
 
@@ -6845,7 +6894,7 @@ msgstr ""
 msgid "Type a size in points."
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:665
+#: ../src/msw/ole/automtn.cpp:679
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr ""
@@ -6904,7 +6953,7 @@ msgstr ""
 msgid "Unable to close the handle for '%s'"
 msgstr "فشل عند إغلاق الحافظة"
 
-#: ../include/wx/msw/private/fswatcher.h:240
+#: ../include/wx/msw/private/fswatcher.h:245
 msgid "Unable to create I/O completion port"
 msgstr ""
 
@@ -6920,7 +6969,7 @@ msgstr ""
 msgid "Unable to create kqueue instance"
 msgstr ""
 
-#: ../include/wx/msw/private/fswatcher.h:229
+#: ../include/wx/msw/private/fswatcher.h:234
 msgid "Unable to dequeue completion packet"
 msgstr ""
 
@@ -6928,7 +6977,7 @@ msgstr ""
 msgid "Unable to get events from kqueue"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1903
+#: ../src/osx/carbon/dataview.cpp:1901
 msgid "Unable to handle native drag&drop data"
 msgstr ""
 
@@ -6945,7 +6994,7 @@ msgstr ""
 msgid "Unable to open path '%s'"
 msgstr ""
 
-#: ../src/html/htmlwin.cpp:561
+#: ../src/html/htmlwin.cpp:564
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr ""
@@ -6954,11 +7003,11 @@ msgstr ""
 msgid "Unable to play sound asynchronously."
 msgstr ""
 
-#: ../include/wx/msw/private/fswatcher.h:207
+#: ../include/wx/msw/private/fswatcher.h:212
 msgid "Unable to post completion status"
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:530
+#: ../src/unix/fswatcher_inotify.cpp:543
 msgid "Unable to read from inotify descriptor"
 msgstr ""
 
@@ -6988,7 +7037,7 @@ msgstr ""
 msgid "Underline"
 msgstr "&خط سفلي"
 
-#: ../src/richtext/richtextfontpage.cpp:341 ../src/osx/carbon/fontdlg.cpp:556
+#: ../src/richtext/richtextfontpage.cpp:341 ../src/osx/carbon/fontdlg.cpp:540
 #: ../src/propgrid/advprops.cpp:655
 msgid "Underlined"
 msgstr ""
@@ -7007,7 +7056,7 @@ msgstr ""
 msgid "Unexpected characters following option '%s'."
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:261
+#: ../src/unix/fswatcher_inotify.cpp:262
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
@@ -7069,8 +7118,8 @@ msgstr ""
 msgid "Unindent"
 msgstr "&عدم إزاحة"
 
-#: ../src/richtext/richtextborderspage.cpp:373
-#: ../src/richtext/richtextborderspage.cpp:375
+#: ../src/richtext/richtextborderspage.cpp:358
+#: ../src/richtext/richtextborderspage.cpp:360
 msgid "Units for the bottom border width."
 msgstr ""
 
@@ -7079,8 +7128,8 @@ msgstr ""
 msgid "Units for the bottom margin."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:517
-#: ../src/richtext/richtextborderspage.cpp:519
+#: ../src/richtext/richtextborderspage.cpp:527
+#: ../src/richtext/richtextborderspage.cpp:529
 msgid "Units for the bottom outline width."
 msgstr ""
 
@@ -7095,8 +7144,8 @@ msgstr ""
 msgid "Units for the bottom position."
 msgstr "تعذر الانتظار حتى إنهاء الموضوع"
 
-#: ../src/richtext/richtextborderspage.cpp:283
-#: ../src/richtext/richtextborderspage.cpp:285
+#: ../src/richtext/richtextborderspage.cpp:256
+#: ../src/richtext/richtextborderspage.cpp:258
 msgid "Units for the left border width."
 msgstr ""
 
@@ -7105,8 +7154,8 @@ msgstr ""
 msgid "Units for the left margin."
 msgstr ""
 
+#: ../src/richtext/richtextborderspage.cpp:425
 #: ../src/richtext/richtextborderspage.cpp:427
-#: ../src/richtext/richtextborderspage.cpp:429
 msgid "Units for the left outline width."
 msgstr ""
 
@@ -7151,8 +7200,8 @@ msgstr ""
 msgid "Units for the object width."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:313
-#: ../src/richtext/richtextborderspage.cpp:315
+#: ../src/richtext/richtextborderspage.cpp:290
+#: ../src/richtext/richtextborderspage.cpp:292
 msgid "Units for the right border width."
 msgstr ""
 
@@ -7161,8 +7210,8 @@ msgstr ""
 msgid "Units for the right margin."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:457
 #: ../src/richtext/richtextborderspage.cpp:459
+#: ../src/richtext/richtextborderspage.cpp:461
 msgid "Units for the right outline width."
 msgstr ""
 
@@ -7176,8 +7225,8 @@ msgstr ""
 msgid "Units for the right position."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:343
-#: ../src/richtext/richtextborderspage.cpp:345
+#: ../src/richtext/richtextborderspage.cpp:324
+#: ../src/richtext/richtextborderspage.cpp:326
 msgid "Units for the top border width."
 msgstr ""
 
@@ -7187,8 +7236,8 @@ msgstr ""
 msgid "Units for the top margin."
 msgstr "تعذر الانتظار حتى إنهاء الموضوع"
 
-#: ../src/richtext/richtextborderspage.cpp:487
-#: ../src/richtext/richtextborderspage.cpp:489
+#: ../src/richtext/richtextborderspage.cpp:493
+#: ../src/richtext/richtextborderspage.cpp:495
 msgid "Units for the top outline width."
 msgstr ""
 
@@ -7231,11 +7280,11 @@ msgstr "خاصية غير معروفة %s"
 msgid "Unknown TIFF resolution unit %d ignored"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1978
+#: ../src/osx/carbon/dataview.cpp:1976
 msgid "Unknown data format"
 msgstr ""
 
-#: ../src/unix/dlunix.cpp:325
+#: ../src/unix/dlunix.cpp:160
 msgid "Unknown dynamic library error"
 msgstr ""
 
@@ -7244,12 +7293,12 @@ msgstr ""
 msgid "Unknown encoding (%d)"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:677
+#: ../src/msw/ole/automtn.cpp:691
 #, fuzzy, c-format
 msgid "Unknown error %08x"
 msgstr "خطأ غير معروف"
 
-#: ../src/msw/ole/automtn.cpp:636
+#: ../src/msw/ole/automtn.cpp:650
 #, fuzzy
 msgid "Unknown exception"
 msgstr "خطأ غير معروف"
@@ -7264,7 +7313,7 @@ msgstr "نهاية سطر غير معروف"
 msgid "Unknown long option '%s'"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:620
+#: ../src/msw/ole/automtn.cpp:634
 msgid "Unknown name or named argument."
 msgstr ""
 
@@ -7323,11 +7372,11 @@ msgstr ""
 msgid "Use the current alignment setting."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:2658 ../src/osx/carbon/dataview.cpp:2723
+#: ../src/osx/carbon/dataview.cpp:2656 ../src/osx/carbon/dataview.cpp:2721
 msgid "Valid pointer to native data view control does not exist"
 msgstr ""
 
-#: ../src/common/valtext.cpp:174
+#: ../src/common/valtext.cpp:179
 msgid "Validation conflict"
 msgstr ""
 
@@ -7437,6 +7486,16 @@ msgstr "&نافذة"
 msgid "Windows 7"
 msgstr "&نافذة"
 
+#: ../src/msw/utils.cpp:1308
+#, fuzzy
+msgid "Windows 8"
+msgstr "&نافذة"
+
+#: ../src/msw/utils.cpp:1314
+#, fuzzy
+msgid "Windows 8.1"
+msgstr "&نافذة"
+
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
 msgstr ""
@@ -7511,7 +7570,7 @@ msgstr ""
 msgid "Windows ME"
 msgstr ""
 
-#: ../src/msw/utils.cpp:1310
+#: ../src/msw/utils.cpp:1322
 #, c-format
 msgid "Windows NT %lu.%lu"
 msgstr ""
@@ -7526,6 +7585,15 @@ msgstr ""
 
 #: ../src/msw/utils.cpp:1301
 msgid "Windows Server 2008 R2"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1307
+#, fuzzy
+msgid "Windows Server 2012"
+msgstr "&نافذة"
+
+#: ../src/msw/utils.cpp:1313
+msgid "Windows Server 2012 R2"
 msgstr ""
 
 #: ../src/common/fmapbase.cpp:166
@@ -7616,7 +7684,7 @@ msgstr ""
 msgid "You cannot add a new directory to this section."
 msgstr ""
 
-#: ../src/propgrid/propgrid.cpp:3258
+#: ../src/propgrid/propgrid.cpp:3260
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 
@@ -7759,7 +7827,7 @@ msgstr ""
 msgid "buffer is too small for Windows directory."
 msgstr ""
 
-#: ../src/msw/utils.cpp:1316
+#: ../src/msw/utils.cpp:1328
 #, c-format
 msgid "build %lu"
 msgstr ""
@@ -7873,7 +7941,7 @@ msgstr ""
 msgid "can't seek on file descriptor %d"
 msgstr ""
 
-#: ../src/common/textfile.cpp:299
+#: ../src/common/textfile.cpp:270
 #, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr ""
@@ -7895,14 +7963,14 @@ msgstr ""
 msgid "checksum failure reading tar header block"
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:280
-#: ../src/richtext/richtextborderspage.cpp:310
-#: ../src/richtext/richtextborderspage.cpp:340
-#: ../src/richtext/richtextborderspage.cpp:370
-#: ../src/richtext/richtextborderspage.cpp:424
-#: ../src/richtext/richtextborderspage.cpp:454
-#: ../src/richtext/richtextborderspage.cpp:484
-#: ../src/richtext/richtextborderspage.cpp:514
+#: ../src/richtext/richtextborderspage.cpp:252
+#: ../src/richtext/richtextborderspage.cpp:286
+#: ../src/richtext/richtextborderspage.cpp:320
+#: ../src/richtext/richtextborderspage.cpp:354
+#: ../src/richtext/richtextborderspage.cpp:421
+#: ../src/richtext/richtextborderspage.cpp:455
+#: ../src/richtext/richtextborderspage.cpp:489
+#: ../src/richtext/richtextborderspage.cpp:523
 #: ../src/richtext/richtextmarginspage.cpp:202
 #: ../src/richtext/richtextmarginspage.cpp:227
 #: ../src/richtext/richtextmarginspage.cpp:250
@@ -8037,7 +8105,7 @@ msgstr ""
 msgid "file '%s': unexpected character %c at line %d."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8358
+#: ../src/richtext/richtextbuffer.cpp:8462
 msgid "files"
 msgstr ""
 
@@ -8057,12 +8125,12 @@ msgstr ""
 msgid "fourth"
 msgstr ""
 
-#: ../src/common/appbase.cpp:695
+#: ../src/common/appbase.cpp:699
 msgid "generate verbose log messages"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:12212
-#: ../src/richtext/richtextbuffer.cpp:12322
+#: ../src/richtext/richtextbuffer.cpp:12541
+#: ../src/richtext/richtextbuffer.cpp:12651
 msgid "image"
 msgstr "صورة"
 
@@ -8157,53 +8225,48 @@ msgstr ""
 msgid "out of memory"
 msgstr ""
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:661
-msgid "percent"
-msgstr ""
-
 #: ../src/common/debugrpt.cpp:519
 msgid "process context description"
 msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:186
 #: ../src/richtext/richtextfontpage.cpp:189
+#: ../src/richtext/richtextborderspage.cpp:253
+#: ../src/richtext/richtextborderspage.cpp:287
+#: ../src/richtext/richtextborderspage.cpp:321
+#: ../src/richtext/richtextborderspage.cpp:355
+#: ../src/richtext/richtextborderspage.cpp:422
+#: ../src/richtext/richtextborderspage.cpp:456
+#: ../src/richtext/richtextborderspage.cpp:490
+#: ../src/richtext/richtextborderspage.cpp:524
 msgid "pt"
 msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:187
-#: ../src/richtext/richtextborderspage.cpp:279
-#: ../src/richtext/richtextborderspage.cpp:281
-#: ../src/richtext/richtextborderspage.cpp:282
-#: ../src/richtext/richtextborderspage.cpp:309
-#: ../src/richtext/richtextborderspage.cpp:311
-#: ../src/richtext/richtextborderspage.cpp:312
-#: ../src/richtext/richtextborderspage.cpp:339
-#: ../src/richtext/richtextborderspage.cpp:341
-#: ../src/richtext/richtextborderspage.cpp:342
-#: ../src/richtext/richtextborderspage.cpp:369
-#: ../src/richtext/richtextborderspage.cpp:371
-#: ../src/richtext/richtextborderspage.cpp:372
+#: ../src/richtext/richtextborderspage.cpp:251
+#: ../src/richtext/richtextborderspage.cpp:254
+#: ../src/richtext/richtextborderspage.cpp:255
+#: ../src/richtext/richtextborderspage.cpp:285
+#: ../src/richtext/richtextborderspage.cpp:288
+#: ../src/richtext/richtextborderspage.cpp:289
+#: ../src/richtext/richtextborderspage.cpp:319
+#: ../src/richtext/richtextborderspage.cpp:322
+#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:353
+#: ../src/richtext/richtextborderspage.cpp:356
+#: ../src/richtext/richtextborderspage.cpp:357
+#: ../src/richtext/richtextborderspage.cpp:420
 #: ../src/richtext/richtextborderspage.cpp:423
-#: ../src/richtext/richtextborderspage.cpp:425
-#: ../src/richtext/richtextborderspage.cpp:426
-#: ../src/richtext/richtextborderspage.cpp:453
-#: ../src/richtext/richtextborderspage.cpp:455
-#: ../src/richtext/richtextborderspage.cpp:456
-#: ../src/richtext/richtextborderspage.cpp:483
-#: ../src/richtext/richtextborderspage.cpp:485
-#: ../src/richtext/richtextborderspage.cpp:486
-#: ../src/richtext/richtextborderspage.cpp:513
-#: ../src/richtext/richtextborderspage.cpp:515
-#: ../src/richtext/richtextborderspage.cpp:516
+#: ../src/richtext/richtextborderspage.cpp:424
+#: ../src/richtext/richtextborderspage.cpp:454
+#: ../src/richtext/richtextborderspage.cpp:457
+#: ../src/richtext/richtextborderspage.cpp:458
+#: ../src/richtext/richtextborderspage.cpp:488
+#: ../src/richtext/richtextborderspage.cpp:491
+#: ../src/richtext/richtextborderspage.cpp:492
+#: ../src/richtext/richtextborderspage.cpp:522
+#: ../src/richtext/richtextborderspage.cpp:525
+#: ../src/richtext/richtextborderspage.cpp:526
 #: ../src/richtext/richtextmarginspage.cpp:201
 #: ../src/richtext/richtextmarginspage.cpp:203
 #: ../src/richtext/richtextmarginspage.cpp:204
@@ -8303,7 +8366,7 @@ msgstr ""
 msgid "shift"
 msgstr ""
 
-#: ../src/common/appbase.cpp:685
+#: ../src/common/appbase.cpp:689
 msgid "show this help message"
 msgstr ""
 
@@ -8323,23 +8386,23 @@ msgstr ""
 msgid "specify the theme to use"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8876
+#: ../src/richtext/richtextbuffer.cpp:8983
 msgid "standard/circle"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8877
+#: ../src/richtext/richtextbuffer.cpp:8984
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8879
+#: ../src/richtext/richtextbuffer.cpp:8986
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8878
+#: ../src/richtext/richtextbuffer.cpp:8985
 msgid "standard/square"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8880
+#: ../src/richtext/richtextbuffer.cpp:8987
 msgid "standard/triangle"
 msgstr ""
 
@@ -8473,11 +8536,11 @@ msgstr ""
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1303
+#: ../src/osx/carbon/dataview.cpp:1301
 msgid "wxWidget control pointer is not a data view pointer"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:907
+#: ../src/osx/carbon/dataview.cpp:905
 msgid "wxWidget's control not initialized."
 msgstr ""
 
@@ -8571,9 +8634,6 @@ msgstr "~"
 
 #~ msgid "%s: ill-formed resource file syntax."
 #~ msgstr "%s: ill-formed resource file syntax."
-
-#~ msgid "&About..."
-#~ msgstr "&نبذة عن..."
 
 #~ msgid "&Goto..."
 #~ msgstr "&إذهب إلى..."

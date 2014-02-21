@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-01 19:04+0200\n"
+"POT-Creation-Date: 2014-02-21 14:54+0100\n"
 "PO-Revision-Date: 2009-04-23 18:29+0900\n"
 "Last-Translator: 정성기 <dragoneyes.org@gmail.com>\n"
 "Language-Team: Korean <Korean>\n"
@@ -86,6 +86,20 @@ msgstr "#14 봉투, 5 x 11 1/2 in"
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 봉투, 3 7/8 x 8 7/8 in"
 
+#: ../src/richtext/richtextsizepage.cpp:340
+#: ../src/richtext/richtextsizepage.cpp:374
+#: ../src/richtext/richtextsizepage.cpp:401
+#: ../src/richtext/richtextsizepage.cpp:428
+#: ../src/richtext/richtextsizepage.cpp:455
+#: ../src/richtext/richtextsizepage.cpp:482
+#: ../src/richtext/richtextsizepage.cpp:556
+#: ../src/richtext/richtextsizepage.cpp:591
+#: ../src/richtext/richtextsizepage.cpp:626
+#: ../src/richtext/richtextsizepage.cpp:661
+#, fuzzy
+msgid "%"
+msgstr "%s"
+
 #: ../src/html/helpwnd.cpp:1044
 #, fuzzy, c-format
 msgid "%d of %lu"
@@ -138,7 +152,7 @@ msgstr "경고 : %s"
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s 발생 '%s' 파일의 tar 헤더 정보가 손상되었습니다"
 
-#: ../src/common/fldlgcmn.cpp:106
+#: ../src/common/fldlgcmn.cpp:124
 #, c-format
 msgid "%s files (%s)|%s"
 msgstr "%s 파일 (%s)|%s"
@@ -202,8 +216,8 @@ msgstr "굵게(&B)"
 msgid "&Bottom"
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:359
-#: ../src/richtext/richtextborderspage.cpp:503
+#: ../src/richtext/richtextborderspage.cpp:343
+#: ../src/richtext/richtextborderspage.cpp:512
 #: ../src/richtext/richtextmarginspage.cpp:260
 #: ../src/richtext/richtextmarginspage.cpp:374
 #: ../src/richtext/richtextsizepage.cpp:637
@@ -211,7 +225,7 @@ msgstr ""
 msgid "&Bottom:"
 msgstr ""
 
-#: ../include/wx/richtext/richtextbuffer.h:3530
+#: ../include/wx/richtext/richtextbuffer.h:3578
 #, fuzzy
 msgid "&Box"
 msgstr "굵게(&B)"
@@ -226,7 +240,7 @@ msgid "&CD-Rom"
 msgstr ""
 
 #: ../src/generic/wizard.cpp:432 ../src/generic/fontdlgg.cpp:470
-#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:588
+#: ../src/generic/fontdlgg.cpp:489 ../src/osx/carbon/fontdlg.cpp:572
 #: ../src/common/stockitem.cpp:145
 msgid "&Cancel"
 msgstr "취소(&C)"
@@ -235,7 +249,7 @@ msgstr "취소(&C)"
 msgid "&Cascade"
 msgstr "계단식(&C)"
 
-#: ../include/wx/richtext/richtextbuffer.h:5587
+#: ../include/wx/richtext/richtextbuffer.h:5639
 #, fuzzy
 msgid "&Cell"
 msgstr "취소(&C)"
@@ -268,8 +282,8 @@ msgstr "색상(&D):"
 msgid "&Convert"
 msgstr "목차"
 
-#: ../src/richtext/richtextctrl.cpp:326 ../src/osx/textctrl_osx.cpp:583
-#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2284
+#: ../src/richtext/richtextctrl.cpp:332 ../src/osx/textctrl_osx.cpp:583
+#: ../src/common/stockitem.cpp:150 ../src/msw/textctrl.cpp:2335
 msgid "&Copy"
 msgstr "복사(&D)"
 
@@ -287,8 +301,8 @@ msgid "&Debug report preview:"
 msgstr "디버그 보고서 미리보기(&D):"
 
 #: ../src/richtext/richtexttabspage.cpp:142
-#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:585
-#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2286
+#: ../src/richtext/richtextctrl.cpp:334 ../src/osx/textctrl_osx.cpp:585
+#: ../src/common/stockitem.cpp:152 ../src/msw/textctrl.cpp:2337
 msgid "&Delete"
 msgstr "지우기(&D)"
 
@@ -383,7 +397,7 @@ msgid "&Height:"
 msgstr "두께(&W):"
 
 #: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
-#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:785
+#: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:776
 #: ../src/common/stockitem.cpp:163 ../src/html/helpfrm.cpp:147
 msgid "&Help"
 msgstr "도움말(&H)"
@@ -440,8 +454,8 @@ msgid "&Left"
 msgstr "왼쪽(&L)"
 
 #: ../src/richtext/richtextindentspage.cpp:195
-#: ../src/richtext/richtextborderspage.cpp:269
-#: ../src/richtext/richtextborderspage.cpp:413
+#: ../src/richtext/richtextborderspage.cpp:241
+#: ../src/richtext/richtextborderspage.cpp:410
 #: ../src/richtext/richtextliststylepage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:187
 #: ../src/richtext/richtextmarginspage.cpp:301
@@ -510,7 +524,7 @@ msgid "&Number:"
 msgstr "번호(&N):"
 
 #: ../src/generic/fontdlgg.cpp:475 ../src/generic/fontdlgg.cpp:482
-#: ../src/osx/carbon/fontdlg.cpp:594 ../src/common/stockitem.cpp:178
+#: ../src/osx/carbon/fontdlg.cpp:578 ../src/common/stockitem.cpp:178
 msgid "&OK"
 msgstr "확인(&O)"
 
@@ -527,12 +541,12 @@ msgstr "들여쓰기 단계(&O)"
 msgid "&Page Break"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:327 ../src/osx/textctrl_osx.cpp:584
-#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2285
+#: ../src/richtext/richtextctrl.cpp:333 ../src/osx/textctrl_osx.cpp:584
+#: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2336
 msgid "&Paste"
 msgstr "붙여넣기(&P)"
 
-#: ../include/wx/richtext/richtextbuffer.h:4655
+#: ../include/wx/richtext/richtextbuffer.h:4705
 msgid "&Picture"
 msgstr ""
 
@@ -567,7 +581,7 @@ msgstr "이전 페이지"
 msgid "&Print..."
 msgstr "인쇄...(&P)"
 
-#: ../src/richtext/richtextctrl.cpp:332 ../src/richtext/richtextctrl.cpp:4945
+#: ../src/richtext/richtextctrl.cpp:338 ../src/richtext/richtextctrl.cpp:5054
 #: ../src/common/stockitem.cpp:184
 msgid "&Properties"
 msgstr "특성(&P)"
@@ -576,9 +590,9 @@ msgstr "특성(&P)"
 msgid "&Quit"
 msgstr "종료(&Q)"
 
-#: ../src/richtext/richtextctrl.cpp:323 ../src/osx/textctrl_osx.cpp:580
+#: ../src/richtext/richtextctrl.cpp:329 ../src/osx/textctrl_osx.cpp:580
 #: ../src/common/stockitem.cpp:185 ../src/common/cmdproc.cpp:293
-#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2281
+#: ../src/common/cmdproc.cpp:300 ../src/msw/textctrl.cpp:2332
 msgid "&Redo"
 msgstr "다시실행(&R)"
 
@@ -608,8 +622,8 @@ msgid "&Right"
 msgstr "오른쪽(&R):"
 
 #: ../src/richtext/richtextindentspage.cpp:213
-#: ../src/richtext/richtextborderspage.cpp:299
-#: ../src/richtext/richtextborderspage.cpp:443
+#: ../src/richtext/richtextborderspage.cpp:275
+#: ../src/richtext/richtextborderspage.cpp:444
 #: ../src/richtext/richtextliststylepage.cpp:399
 #: ../src/richtext/richtextmarginspage.cpp:212
 #: ../src/richtext/richtextmarginspage.cpp:326
@@ -682,7 +696,12 @@ msgstr "분류(&S):"
 msgid "&Symbol:"
 msgstr "심볼(&S):"
 
-#: ../include/wx/richtext/richtextbuffer.h:5679
+#: ../src/richtext/richtextborderspage.cpp:379
+#: ../src/richtext/richtextborderspage.cpp:548
+msgid "&Synchronize values"
+msgstr ""
+
+#: ../include/wx/richtext/richtextbuffer.h:5733
 #, fuzzy
 msgid "&Table"
 msgstr "탭"
@@ -692,8 +711,8 @@ msgstr "탭"
 msgid "&Top"
 msgstr "복사(&D)"
 
-#: ../src/richtext/richtextborderspage.cpp:329
-#: ../src/richtext/richtextborderspage.cpp:473
+#: ../src/richtext/richtextborderspage.cpp:309
+#: ../src/richtext/richtextborderspage.cpp:478
 #: ../src/richtext/richtextmarginspage.cpp:235
 #: ../src/richtext/richtextmarginspage.cpp:349
 #: ../src/richtext/richtextsizepage.cpp:567
@@ -710,9 +729,9 @@ msgstr "밑줄(&U)"
 msgid "&Underlining:"
 msgstr "밑줄(&U):"
 
-#: ../src/richtext/richtextctrl.cpp:322 ../src/osx/textctrl_osx.cpp:579
+#: ../src/richtext/richtextctrl.cpp:328 ../src/osx/textctrl_osx.cpp:579
 #: ../src/common/stockitem.cpp:203 ../src/common/cmdproc.cpp:271
-#: ../src/msw/textctrl.cpp:2280
+#: ../src/msw/textctrl.cpp:2331
 msgid "&Undo"
 msgstr "실행취소(&U)"
 
@@ -764,8 +783,8 @@ msgstr "예(&Y)"
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' 에서  '..' 는 무시합니다."
 
-#: ../src/common/valtext.cpp:249 ../src/common/valtext.cpp:251
-#: ../src/common/valtext.cpp:253 ../src/common/valtext.cpp:255
+#: ../src/common/valtext.cpp:165 ../src/common/valtext.cpp:167
+#: ../src/common/valtext.cpp:254 ../src/common/valtext.cpp:256
 #, c-format
 msgid "'%s' is invalid"
 msgstr "'%s'이(가) 잘못되었습니다"
@@ -785,27 +804,27 @@ msgstr "'%s'은 메시지 카탈로그가 아닙니다."
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' 는 이진 버퍼 입니다."
 
-#: ../src/common/valtext.cpp:247
+#: ../src/common/valtext.cpp:252
 #, c-format
 msgid "'%s' should be numeric."
 msgstr "'%s' 에 숫자 이외의 문자가 입력되었습니다."
 
-#: ../src/common/valtext.cpp:239
+#: ../src/common/valtext.cpp:244
 #, c-format
 msgid "'%s' should only contain ASCII characters."
 msgstr "문자열 '%s' 에는 ASCII 이외의 문자가 입력되었습니다."
 
-#: ../src/common/valtext.cpp:241
+#: ../src/common/valtext.cpp:246
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
 msgstr "문자열 '%s' 에는 알파벳 이외의 문자가 입력되었습니다."
 
-#: ../src/common/valtext.cpp:243
+#: ../src/common/valtext.cpp:248
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "문자열 '%s' 에는 알파벳 및 숫자 이외의 문자가 입력되었습니다."
 
-#: ../src/common/valtext.cpp:245
+#: ../src/common/valtext.cpp:250
 #, fuzzy, c-format
 msgid "'%s' should only contain digits."
 msgstr "문자열 '%s' 에는 ASCII 이외의 문자가 입력되었습니다."
@@ -838,7 +857,7 @@ msgstr "(책갈피)"
 #: ../src/richtext/richtextindentspage.cpp:287
 #: ../src/richtext/richtextindentspage.cpp:311
 #: ../src/richtext/richtextindentspage.cpp:326
-#: ../src/richtext/richtextformatdlg.cpp:831
+#: ../src/richtext/richtextformatdlg.cpp:867
 #: ../src/richtext/richtextfontpage.cpp:331
 #: ../src/richtext/richtextfontpage.cpp:335
 #: ../src/richtext/richtextfontpage.cpp:339
@@ -863,7 +882,7 @@ msgstr "*)"
 msgid "+"
 msgstr "+"
 
-#: ../src/msw/utils.cpp:1324
+#: ../src/msw/utils.cpp:1336
 msgid ", 64-bit edition"
 msgstr ""
 
@@ -978,37 +997,37 @@ msgstr ": 알 수 없는 문자 인코딩"
 msgid "< &Back"
 msgstr "< &뒤로"
 
-#: ../src/osx/carbon/fontdlg.cpp:608 ../src/osx/carbon/fontdlg.cpp:815
-#: ../src/osx/carbon/fontdlg.cpp:835
+#: ../src/osx/carbon/fontdlg.cpp:592 ../src/osx/carbon/fontdlg.cpp:799
+#: ../src/osx/carbon/fontdlg.cpp:819
 msgid "<Any Decorative>"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:609 ../src/osx/carbon/fontdlg.cpp:817
-#: ../src/osx/carbon/fontdlg.cpp:837
+#: ../src/osx/carbon/fontdlg.cpp:593 ../src/osx/carbon/fontdlg.cpp:801
+#: ../src/osx/carbon/fontdlg.cpp:821
 msgid "<Any Modern>"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:607 ../src/osx/carbon/fontdlg.cpp:813
-#: ../src/osx/carbon/fontdlg.cpp:833
+#: ../src/osx/carbon/fontdlg.cpp:591 ../src/osx/carbon/fontdlg.cpp:797
+#: ../src/osx/carbon/fontdlg.cpp:817
 msgid "<Any Roman>"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:610 ../src/osx/carbon/fontdlg.cpp:819
-#: ../src/osx/carbon/fontdlg.cpp:839
+#: ../src/osx/carbon/fontdlg.cpp:594 ../src/osx/carbon/fontdlg.cpp:803
+#: ../src/osx/carbon/fontdlg.cpp:823
 msgid "<Any Script>"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:611 ../src/osx/carbon/fontdlg.cpp:824
-#: ../src/osx/carbon/fontdlg.cpp:843
+#: ../src/osx/carbon/fontdlg.cpp:595 ../src/osx/carbon/fontdlg.cpp:808
+#: ../src/osx/carbon/fontdlg.cpp:827
 msgid "<Any Swiss>"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:612 ../src/osx/carbon/fontdlg.cpp:821
-#: ../src/osx/carbon/fontdlg.cpp:841
+#: ../src/osx/carbon/fontdlg.cpp:596 ../src/osx/carbon/fontdlg.cpp:805
+#: ../src/osx/carbon/fontdlg.cpp:825
 msgid "<Any Teletype>"
 msgstr ""
 
-#: ../src/osx/carbon/fontdlg.cpp:606
+#: ../src/osx/carbon/fontdlg.cpp:590
 msgid "<Any>"
 msgstr ""
 
@@ -1147,8 +1166,8 @@ msgstr "A6 105 x 148 mm"
 msgid "A6 Rotated 148 x 105 mm"
 msgstr "A6 Rotated 148 x 105 mm"
 
-#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:526
-#: ../src/osx/carbon/fontdlg.cpp:339
+#: ../src/generic/fontdlgg.cpp:83 ../src/richtext/richtextformatdlg.cpp:527
+#: ../src/osx/carbon/fontdlg.cpp:323
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
@@ -1160,15 +1179,21 @@ msgstr ""
 msgid "ASCII"
 msgstr "아스키"
 
-#: ../src/osx/menu_osx.cpp:630 ../src/common/stockitem.cpp:139
+#: ../src/common/stockitem.cpp:139
 #, fuzzy
 msgid "About"
 msgstr "이 프로그램은(&A)"
 
-#: ../src/generic/aboutdlgg.cpp:140 ../src/msw/aboutdlg.cpp:64
+#: ../src/generic/aboutdlgg.cpp:140 ../src/osx/menu_osx.cpp:603
+#: ../src/msw/aboutdlg.cpp:64
 #, c-format
 msgid "About %s"
 msgstr "%s 정보"
+
+#: ../src/osx/menu_osx.cpp:605
+#, fuzzy
+msgid "About..."
+msgstr "이 프로그램은(&A)"
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1183,11 +1208,11 @@ msgstr "실제 크기(&A)"
 msgid "Add"
 msgstr "추가"
 
-#: ../src/richtext/richtextbuffer.cpp:10751
+#: ../src/richtext/richtextbuffer.cpp:11056
 msgid "Add Column"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10688
+#: ../src/richtext/richtextbuffer.cpp:10993
 msgid "Add Row"
 msgstr ""
 
@@ -1212,11 +1237,11 @@ msgstr ""
 msgid "Adding book %s"
 msgstr "'%s' 북파일 추가"
 
-#: ../src/osx/carbon/dataview.cpp:1933
+#: ../src/osx/carbon/dataview.cpp:1931
 msgid "Adding flavor TEXT failed"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1954
+#: ../src/osx/carbon/dataview.cpp:1952
 msgid "Adding flavor utxt failed"
 msgstr ""
 
@@ -1245,16 +1270,16 @@ msgstr "정렬(&A)"
 msgid "All"
 msgstr "모두"
 
-#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:89
+#: ../src/generic/filectrlg.cpp:1205 ../src/common/fldlgcmn.cpp:107
 #, c-format
 msgid "All files (%s)|%s"
 msgstr "모든 파일 (%s)|%s"
 
-#: ../include/wx/defs.h:2922
+#: ../include/wx/defs.h:2933
 msgid "All files (*)|*"
 msgstr "모든 파일 (*)|*"
 
-#: ../include/wx/defs.h:2919
+#: ../include/wx/defs.h:2930
 msgid "All files (*.*)|*.*"
 msgstr "모든 파일 (*.*)|*.*"
 
@@ -1292,8 +1317,7 @@ msgstr "%ld 타입은 애니매이션 파일이 아닙니다."
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "'%s' 파일에 로그를 추가 하시겠습니까 (아니요 시 덮어쓰기 수행)?"
 
-#: ../src/osx/menu_osx.cpp:602 ../src/osx/menu_osx.cpp:610
-#: ../src/osx/menu_osx.cpp:649 ../src/osx/menu_osx.cpp:657
+#: ../src/osx/menu_osx.cpp:623 ../src/osx/menu_osx.cpp:631
 #, fuzzy
 msgid "Application"
 msgstr "선택"
@@ -1312,7 +1336,7 @@ msgstr "아랍어"
 msgid "Arabic (ISO-8859-6)"
 msgstr "아랍어 (ISO-8859-6)"
 
-#: ../src/msw/ole/automtn.cpp:661
+#: ../src/msw/ole/automtn.cpp:675
 #, fuzzy, c-format
 msgid "Argument %u not found."
 msgstr "Column index를 찾을수 없습니다."
@@ -1423,7 +1447,7 @@ msgid "Back"
 msgstr "뒤로(&B)"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
-#: ../src/richtext/richtextformatdlg.cpp:374
+#: ../src/richtext/richtextformatdlg.cpp:375
 #, fuzzy
 msgid "Background"
 msgstr "배경 색"
@@ -1433,7 +1457,7 @@ msgstr "배경 색"
 msgid "Background &colour:"
 msgstr "배경 색"
 
-#: ../src/osx/carbon/fontdlg.cpp:406
+#: ../src/osx/carbon/fontdlg.cpp:390
 msgid "Background colour"
 msgstr "배경 색"
 
@@ -1454,23 +1478,23 @@ msgstr "단락 전:"
 msgid "Bitmap"
 msgstr "비트맵"
 
-#: ../src/osx/carbon/dataview.cpp:2396
+#: ../src/osx/carbon/dataview.cpp:2394
 #, fuzzy
 msgid "Bitmap renderer cannot render value; value type: "
 msgstr "비트맵 Renderer가 데이타 타입 및 데이타를 처리할 수 없습니다."
 
 #: ../src/generic/fontdlgg.cpp:333 ../src/richtext/richtextfontpage.cpp:337
-#: ../src/osx/carbon/fontdlg.cpp:540 ../src/common/stockitem.cpp:143
+#: ../src/osx/carbon/fontdlg.cpp:524 ../src/common/stockitem.cpp:143
 msgid "Bold"
 msgstr "굵게"
 
-#: ../src/richtext/richtextborderspage.cpp:256
-#: ../src/richtext/richtextborderspage.cpp:389
+#: ../src/richtext/richtextborderspage.cpp:228
+#: ../src/richtext/richtextborderspage.cpp:386
 #, fuzzy
 msgid "Border"
 msgstr "Modern"
 
-#: ../src/richtext/richtextformatdlg.cpp:368
+#: ../src/richtext/richtextformatdlg.cpp:369
 #, fuzzy
 msgid "Borders"
 msgstr "Modern"
@@ -1483,7 +1507,7 @@ msgstr ""
 msgid "Bottom margin (mm):"
 msgstr "버튼 여백(mm):"
 
-#: ../src/richtext/richtextbuffer.cpp:8919
+#: ../src/richtext/richtextbuffer.cpp:9026
 #, fuzzy
 msgid "Box Properties"
 msgstr "특성(&P)"
@@ -1506,7 +1530,7 @@ msgstr "글머리 정렬(&A)"
 msgid "Bullet style"
 msgstr "글머리 모양새"
 
-#: ../src/richtext/richtextformatdlg.cpp:342
+#: ../src/richtext/richtextformatdlg.cpp:343
 msgid "Bullets"
 msgstr "글머리"
 
@@ -1597,7 +1621,7 @@ msgstr "레지스터 키 '%s'  생성 할 수 없습니다"
 msgid "Can't create thread"
 msgstr "쓰레드 생성 할 수 없습니다"
 
-#: ../src/msw/window.cpp:3793
+#: ../src/msw/window.cpp:3787
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "클래스 %s 에서 윈도우생성 할 수 없습니다"
@@ -1650,7 +1674,7 @@ msgstr "zlib에서 사용할 압축용 버퍼 할당하지 못했습니다."
 msgid "Can't initialize zlib inflate stream."
 msgstr "zlib에서 사용할 압축용 버퍼 할당하지 못했습니다."
 
-#: ../src/msw/fswatcher.cpp:432
+#: ../src/msw/fswatcher.cpp:456
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
 msgstr ""
@@ -1720,14 +1744,14 @@ msgstr "취소"
 msgid "Cannot create mutex."
 msgstr "뮤텍스 생성 할 수 없습니다"
 
-#: ../src/osx/carbon/dataview.cpp:895
+#: ../src/osx/carbon/dataview.cpp:893
 #, fuzzy
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr ""
 "새로운 Column ID를 만들수 없습니다. 아마도 Column의 개수가 최대치에 도달한것 "
 "같습니다."
 
-#: ../src/common/filefn.cpp:1336
+#: ../src/common/filefn.cpp:1335
 #, c-format
 msgid "Cannot enumerate files '%s'"
 msgstr "'%s' 에 해당하는 파일을 찾을 수 없습니다"
@@ -1746,21 +1770,21 @@ msgstr "동작중인 전화 연결을 찾을수 없습니다: %s"
 msgid "Cannot find the location of address book file"
 msgstr "주소록 파일에서 위치를 찾을 수 없습니다."
 
-#: ../src/msw/ole/automtn.cpp:562
+#: ../src/msw/ole/automtn.cpp:565
 #, fuzzy, c-format
 msgid "Cannot get an active instance of \"%s\""
 msgstr "동작중인 전화 연결을 찾을수 없습니다: %s"
 
-#: ../src/unix/threadpsx.cpp:1030
+#: ../src/unix/threadpsx.cpp:1035
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "스케줄링 정책 %d 에서 우선순위 범위를 얻을 수 없습니다."
 
-#: ../src/unix/utilsunx.cpp:988
+#: ../src/unix/utilsunx.cpp:998
 msgid "Cannot get the hostname"
 msgstr "hostname을 얻을 수 없습니다"
 
-#: ../src/unix/utilsunx.cpp:1024
+#: ../src/unix/utilsunx.cpp:1034
 msgid "Cannot get the official hostname"
 msgstr "공식 hostname을 얻을 수 없습니다"
 
@@ -1835,12 +1859,12 @@ msgstr "'%s' 에서 장치이름을 읽어올 수 없습니다."
 msgid "Cannot resume thread %lu"
 msgstr "쓰레드 %lu 를 다시시작 실패"
 
-#: ../src/msw/thread.cpp:923
+#: ../src/msw/thread.cpp:918
 #, fuzzy, c-format
 msgid "Cannot resume thread %lx"
 msgstr "쓰레드 %x 를 다시시작 할 수 없습니다"
 
-#: ../src/unix/threadpsx.cpp:1011
+#: ../src/unix/threadpsx.cpp:1016
 msgid "Cannot retrieve thread scheduling policy."
 msgstr "스레드 스케줄링 정책을 찾을 수 없습니다."
 
@@ -1858,12 +1882,12 @@ msgstr "쓰레드 시작 실패: TLS 쓰기 오류."
 msgid "Cannot suspend thread %lu"
 msgstr "쓰레드 %lu 일시정지 할 수 없습니다"
 
-#: ../src/msw/thread.cpp:907
+#: ../src/msw/thread.cpp:902
 #, fuzzy, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "쓰레드 %x 일시정지 할 수 없습니다"
 
-#: ../src/msw/thread.cpp:830
+#: ../src/msw/thread.cpp:825
 msgid "Cannot wait for thread termination"
 msgstr "쓰레드 종료 실패로 Thread를 강제로 종료합니다"
 
@@ -1875,7 +1899,7 @@ msgstr "대/소문자 구분"
 msgid "Categorized Mode"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:9347
+#: ../src/richtext/richtextbuffer.cpp:9598
 #, fuzzy
 msgid "Cell Properties"
 msgstr "특성(&P)"
@@ -1919,22 +1943,22 @@ msgstr "중앙(&T)"
 msgid "Ch&oose..."
 msgstr "선택(&o)..."
 
-#: ../src/richtext/richtextbuffer.cpp:4041
+#: ../src/richtext/richtextbuffer.cpp:4107
 msgid "Change List Style"
 msgstr "목록 모양새 바꾸기"
 
-#: ../src/richtext/richtextbuffer.cpp:3392
+#: ../src/richtext/richtextbuffer.cpp:3458
 #, fuzzy
 msgid "Change Object Style"
 msgstr "목록 모양새 바꾸기"
 
-#: ../src/richtext/richtextbuffer.cpp:3658
-#: ../src/richtext/richtextbuffer.cpp:7749
+#: ../src/richtext/richtextbuffer.cpp:3724
+#: ../src/richtext/richtextbuffer.cpp:7853
 #, fuzzy
 msgid "Change Properties"
 msgstr "특성(&P)"
 
-#: ../src/richtext/richtextbuffer.cpp:3209
+#: ../src/richtext/richtextbuffer.cpp:3275
 msgid "Change Style"
 msgstr "모양새 바꾸기"
 
@@ -1962,6 +1986,13 @@ msgstr "글머리 뒤에 마침표 추가."
 msgid "Check to add a right parenthesis."
 msgstr "오른쪽 괄호 추가"
 
+#: ../src/richtext/richtextborderspage.cpp:381
+#: ../src/richtext/richtextborderspage.cpp:383
+#: ../src/richtext/richtextborderspage.cpp:550
+#: ../src/richtext/richtextborderspage.cpp:552
+msgid "Check to edit all borders simultaneously."
+msgstr ""
+
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
 #: ../src/richtext/richtextbulletspage.cpp:181
@@ -1969,15 +2000,15 @@ msgstr "오른쪽 괄호 추가"
 msgid "Check to enclose the bullet in parentheses."
 msgstr "글머리에 괄호추가"
 
-#: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
+#: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
 msgstr "글꼴을 굵게"
 
-#: ../src/osx/carbon/fontdlg.cpp:549 ../src/osx/carbon/fontdlg.cpp:551
+#: ../src/osx/carbon/fontdlg.cpp:533 ../src/osx/carbon/fontdlg.cpp:535
 msgid "Check to make the font italic."
 msgstr "글꼴을 기울임"
 
-#: ../src/osx/carbon/fontdlg.cpp:558 ../src/osx/carbon/fontdlg.cpp:560
+#: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
 msgid "Check to make the font underlined."
 msgstr "글꼴에 밑줄을 추가."
 
@@ -2016,12 +2047,12 @@ msgstr "위 첨자로 보기"
 msgid "Choose ISP to dial"
 msgstr "ISP에 전화 연결 "
 
-#: ../src/propgrid/props.cpp:1643
+#: ../src/propgrid/props.cpp:1653
 #, fuzzy
 msgid "Choose a directory:"
 msgstr "디렉토리 생성"
 
-#: ../src/propgrid/props.cpp:1702
+#: ../src/propgrid/props.cpp:1712
 #, fuzzy
 msgid "Choose a file"
 msgstr "글꼴 선택"
@@ -2044,7 +2075,7 @@ msgstr "순환 종속성 모듈 \"%s\" 을 발견하였습니다."
 msgid "Cl&ose"
 msgstr "닫기(&O)"
 
-#: ../src/msw/ole/automtn.cpp:673
+#: ../src/msw/ole/automtn.cpp:687
 #, fuzzy
 msgid "Class not registered."
 msgstr "쓰레드 생성 할 수 없습니다"
@@ -2070,7 +2101,7 @@ msgstr "선택한 모양새를 적용하려면 클릭하십시오"
 msgid "Click to browse for a symbol."
 msgstr "기호 탐색창을 보시려면 여기를 누르십시오."
 
-#: ../src/osx/carbon/fontdlg.cpp:589 ../src/osx/carbon/fontdlg.cpp:591
+#: ../src/osx/carbon/fontdlg.cpp:573 ../src/osx/carbon/fontdlg.cpp:575
 msgid "Click to cancel changes to the font."
 msgstr "글꼴 변경을 취소하려면 여기를 누르십시오."
 
@@ -2078,7 +2109,7 @@ msgstr "글꼴 변경을 취소하려면 여기를 누르십시오."
 msgid "Click to cancel the font selection."
 msgstr "선택한 글꼴을 취소하려면 여기를 누르십시오."
 
-#: ../src/osx/carbon/fontdlg.cpp:570 ../src/osx/carbon/fontdlg.cpp:572
+#: ../src/osx/carbon/fontdlg.cpp:554 ../src/osx/carbon/fontdlg.cpp:556
 msgid "Click to change the font colour."
 msgstr "글꼴의 색상을 변경 하려면 여기를 누르십시오."
 
@@ -2103,7 +2134,7 @@ msgstr "현재 단계의 글꼴을 선택 하시려면 클릭하십시오.."
 msgid "Click to close this window."
 msgstr "현재 창을 닫으려면 여기를 누르십시오."
 
-#: ../src/osx/carbon/fontdlg.cpp:596 ../src/osx/carbon/fontdlg.cpp:598
+#: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
 msgid "Click to confirm changes to the font."
 msgstr "글꼴을 변경 적용하려면 여기를 누르십시오."
 
@@ -2188,7 +2219,7 @@ msgstr "현재 창을 닫습니다."
 msgid "Color"
 msgstr "색상"
 
-#: ../src/richtext/richtextformatdlg.cpp:725
+#: ../src/richtext/richtextformatdlg.cpp:761
 msgid "Colour"
 msgstr "색상"
 
@@ -2197,27 +2228,27 @@ msgstr "색상"
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "색상 선택창에서 오류 발생 : %0lx"
 
-#: ../src/osx/carbon/fontdlg.cpp:566
+#: ../src/osx/carbon/fontdlg.cpp:550
 msgid "Colour:"
 msgstr "색상:"
 
-#: ../src/osx/carbon/dataview.cpp:900
+#: ../src/osx/carbon/dataview.cpp:898
 msgid "Column could not be added."
 msgstr "Column을 추가할수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:899
+#: ../src/osx/carbon/dataview.cpp:897
 msgid "Column description could not be initialized."
 msgstr "Column 정보를 초기화 할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1538 ../src/osx/carbon/dataview.cpp:1559
+#: ../src/osx/carbon/dataview.cpp:1536 ../src/osx/carbon/dataview.cpp:1557
 msgid "Column index not found."
 msgstr "Column index를 찾을수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1614
+#: ../src/osx/carbon/dataview.cpp:1612
 msgid "Column width could not be determined"
 msgstr "Column 너비를 정의할수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:901
+#: ../src/osx/carbon/dataview.cpp:899
 msgid "Column width could not be set."
 msgstr "Column 너비를 설정할 수 없습니다."
 
@@ -2233,7 +2264,7 @@ msgstr "명령행 인자 %d는 유니코드로 변경할수 없어 인자를 무
 msgid "Common dialog failed with error code %0lx."
 msgstr "색상 선택창에서 오류 발생 : %0lx"
 
-#: ../src/gtk/window.cpp:4306
+#: ../src/gtk/window.cpp:4357
 msgid ""
 "Compositing not supported by this system, please enable it in your Window "
 "Manager."
@@ -2256,11 +2287,11 @@ msgstr "설정파일에 문자열은 '%c' 로 시작할 수 없습니다."
 msgid "Confirm"
 msgstr "확인"
 
-#: ../src/msw/mimetype.cpp:739
+#: ../src/msw/mimetype.cpp:744
 msgid "Confirm registry update"
 msgstr "레지스트 업데이트 확인"
 
-#: ../src/html/htmlwin.cpp:544
+#: ../src/html/htmlwin.cpp:547
 msgid "Connecting..."
 msgstr "연결중..."
 
@@ -2268,7 +2299,7 @@ msgstr "연결중..."
 msgid "Contents"
 msgstr "목차"
 
-#: ../src/common/strconv.cpp:2261
+#: ../src/common/strconv.cpp:2271
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "문자 인코딩 '%s' 으로의 변환이 실패했습니다."
@@ -2278,7 +2309,7 @@ msgstr "문자 인코딩 '%s' 으로의 변환이 실패했습니다."
 msgid "Convert"
 msgstr "목차"
 
-#: ../src/html/htmlwin.cpp:1057
+#: ../src/html/htmlwin.cpp:1060
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "클립보드로 복사:\"%s\""
@@ -2300,20 +2331,20 @@ msgstr "선택한 부분 복사"
 msgid "Could not create temporary file '%s'"
 msgstr "임시 파일 '%s' 을 만들수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1285 ../src/osx/carbon/dataview.cpp:1672
+#: ../src/osx/carbon/dataview.cpp:1283 ../src/osx/carbon/dataview.cpp:1670
 msgid "Could not determine column index."
 msgstr "Column index를 정의할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:876
+#: ../src/osx/carbon/dataview.cpp:874
 msgid "Could not determine column's position"
 msgstr "Column 위치를 정의할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:843
+#: ../src/osx/carbon/dataview.cpp:841
 #, fuzzy
 msgid "Could not determine number of columns."
 msgstr "다수의 아이템을 정의할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:975
+#: ../src/osx/carbon/dataview.cpp:973
 msgid "Could not determine number of items"
 msgstr "다수의 아이템을 정의할 수 없습니다."
 
@@ -2326,21 +2357,21 @@ msgstr "%s 를 %s 에서 추출할 수 없음: %s"
 msgid "Could not find tab for id"
 msgstr "tab ID를 찿을 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2556 ../src/osx/carbon/dataview.cpp:2591
-#: ../src/osx/carbon/dataview.cpp:2615 ../src/osx/carbon/dataview.cpp:2636
-#: ../src/osx/carbon/dataview.cpp:2773
+#: ../src/osx/carbon/dataview.cpp:2554 ../src/osx/carbon/dataview.cpp:2589
+#: ../src/osx/carbon/dataview.cpp:2613 ../src/osx/carbon/dataview.cpp:2634
+#: ../src/osx/carbon/dataview.cpp:2771
 msgid "Could not get header description."
 msgstr "헤더 정보를 얻을 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1169 ../src/osx/carbon/dataview.cpp:1195
+#: ../src/osx/carbon/dataview.cpp:1167 ../src/osx/carbon/dataview.cpp:1193
 msgid "Could not get items."
 msgstr "아이템을 얻을 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2659 ../src/osx/carbon/dataview.cpp:2724
+#: ../src/osx/carbon/dataview.cpp:2657 ../src/osx/carbon/dataview.cpp:2722
 msgid "Could not get property flags."
 msgstr "속성 플래그를 얻을 수 없습니다"
 
-#: ../src/osx/carbon/dataview.cpp:726
+#: ../src/osx/carbon/dataview.cpp:724
 msgid "Could not get selected items."
 msgstr "선택한 아이템을 얻을 수 없습니다."
 
@@ -2349,44 +2380,44 @@ msgstr "선택한 아이템을 얻을 수 없습니다."
 msgid "Could not locate file '%s'."
 msgstr "'%s' 파일을 찾을 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:845
+#: ../src/osx/carbon/dataview.cpp:843
 msgid "Could not remove column."
 msgstr "Column을 지울 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:642
+#: ../src/osx/carbon/dataview.cpp:640
 msgid "Could not retrieve number of items"
 msgstr "다수의 아이템을 복구할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2572
+#: ../src/osx/carbon/dataview.cpp:2570
 msgid "Could not set alignment."
 msgstr "정렬 방식을 지정할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2803
+#: ../src/osx/carbon/dataview.cpp:2801
 msgid "Could not set column width."
 msgstr "Column의 너비를 지정할 수 없습니다"
 
-#: ../src/common/filefn.cpp:1569
+#: ../src/common/filefn.cpp:1568
 #, fuzzy
 msgid "Could not set current working directory"
 msgstr "작업 디렉토리를 가져오는데 실패했습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2775
+#: ../src/osx/carbon/dataview.cpp:2773
 msgid "Could not set header description."
 msgstr "헤더 정보를 설정할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2596
+#: ../src/osx/carbon/dataview.cpp:2594
 msgid "Could not set icon."
 msgstr "아이콘을 지정할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2617
+#: ../src/osx/carbon/dataview.cpp:2615
 msgid "Could not set maximum width."
 msgstr "최대 너비를 지정할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2638
+#: ../src/osx/carbon/dataview.cpp:2636
 msgid "Could not set minimum width."
 msgstr "최소 너비를 지정할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:2664 ../src/osx/carbon/dataview.cpp:2729
+#: ../src/osx/carbon/dataview.cpp:2662 ../src/osx/carbon/dataview.cpp:2727
 msgid "Could not set property flags."
 msgstr "속성 플래그를 지정할 수 없습니다."
 
@@ -2407,8 +2438,8 @@ msgstr "데이타를 창으로 내보낼 수 없습니다."
 msgid "Couldn't acquire a mutex lock"
 msgstr "뮤텍스 잠금을 실패했습니다."
 
-#: ../src/msw/imaglist.cpp:166 ../src/msw/imaglist.cpp:197
-#: ../src/msw/imaglist.cpp:209 ../src/msw/dragimag.cpp:193
+#: ../src/msw/imaglist.cpp:189 ../src/msw/imaglist.cpp:226
+#: ../src/msw/imaglist.cpp:238 ../src/msw/dragimag.cpp:193
 #: ../src/msw/dragimag.cpp:232
 msgid "Couldn't add an image to the image list."
 msgstr "이미지 목록에 이미지를 추가할 수 없습니다."
@@ -2431,11 +2462,11 @@ msgstr "스레드를 종료할 수없습니다."
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "동적 Library에서 '%s' 기호를 찾을 수 없습니다."
 
-#: ../src/gtk/print.cpp:2014
+#: ../src/gtk/print.cpp:2010
 msgid "Couldn't get hatch style from wxBrush."
 msgstr "wxBrush 에서 무늬 모양새를 얻지 못했습니다."
 
-#: ../src/msw/thread.cpp:950
+#: ../src/msw/thread.cpp:945
 msgid "Couldn't get the current thread pointer"
 msgstr "현재 쓰레드 포인터를 얻지 못했습니다."
 
@@ -2467,7 +2498,7 @@ msgstr "타이머를 생성할 수 없습니다."
 msgid "Couldn't open audio: %s"
 msgstr "오디오 열기 실패: %s"
 
-#: ../src/msw/ole/dataobj.cpp:350
+#: ../src/msw/ole/dataobj.cpp:377
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr "%s 형식을 클립보드에 등록할 수 없습니다."
@@ -2507,8 +2538,8 @@ msgstr "새 디렉토리를 생성"
 msgid "Ctrl+"
 msgstr ""
 
-#: ../src/richtext/richtextctrl.cpp:325 ../src/osx/textctrl_osx.cpp:582
-#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2283
+#: ../src/richtext/richtextctrl.cpp:331 ../src/osx/textctrl_osx.cpp:582
+#: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2334
 msgid "Cu&t"
 msgstr "잘라내기(&T)"
 
@@ -2557,23 +2588,23 @@ msgstr ""
 msgid "DELETE"
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1092
+#: ../src/common/imagbmp.cpp:1096
 msgid "DIB Header: Encoding doesn't match bitdepth."
 msgstr "DIB 헤더: 인코딩이 해상도와 일치 하지 않습니다."
 
-#: ../src/common/imagbmp.cpp:1040
+#: ../src/common/imagbmp.cpp:1044
 msgid "DIB Header: Image height > 32767 pixels for file."
 msgstr "DIB 헤더: 이미지 높이가  32767 픽셀 보다 큽니다."
 
-#: ../src/common/imagbmp.cpp:1032
+#: ../src/common/imagbmp.cpp:1036
 msgid "DIB Header: Image width > 32767 pixels for file."
 msgstr "DIB 헤더: 이미지 너비가 32767 픽셀 보다 큽니다."
 
-#: ../src/common/imagbmp.cpp:1060
+#: ../src/common/imagbmp.cpp:1064
 msgid "DIB Header: Unknown bitdepth in file."
 msgstr "DIB 헤더: 알수 없는 해상도."
 
-#: ../src/common/imagbmp.cpp:1074
+#: ../src/common/imagbmp.cpp:1078
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB 헤더 : 알수없는 인코딩."
 
@@ -2589,15 +2620,15 @@ msgstr "DL 봉투, 110 x 220 mm"
 msgid "DOWN"
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:545
+#: ../src/richtext/richtextborderspage.cpp:567
 msgid "Dashed"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1921
+#: ../src/osx/carbon/dataview.cpp:1919
 msgid "Data object has invalid data format"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:2491
+#: ../src/osx/carbon/dataview.cpp:2489
 #, fuzzy
 msgid "Date renderer cannot render value; value type: "
 msgstr "데이타 Renderer가 데이타 타입 및 데이타를 처리할 수 없습니다."
@@ -2631,7 +2662,7 @@ msgstr "기본 글꼴"
 msgid "Default printer"
 msgstr "프린터 기본값"
 
-#: ../src/richtext/richtextbuffer.cpp:7841 ../src/common/stockitem.cpp:152
+#: ../src/richtext/richtextbuffer.cpp:7945 ../src/common/stockitem.cpp:152
 #: ../src/stc/stc_i18n.cpp:20
 msgid "Delete"
 msgstr "지우기"
@@ -2640,21 +2671,21 @@ msgstr "지우기"
 msgid "Delete A&ll"
 msgstr "모두 지우기(&L)"
 
-#: ../src/richtext/richtextbuffer.cpp:10637
+#: ../src/richtext/richtextbuffer.cpp:10942
 #, fuzzy
 msgid "Delete Column"
 msgstr "선택한 부분 지우기"
 
-#: ../src/richtext/richtextbuffer.cpp:10587
+#: ../src/richtext/richtextbuffer.cpp:10892
 #, fuzzy
 msgid "Delete Row"
 msgstr "지우기"
 
-#: ../src/richtext/richtextstyledlg.cpp:779
+#: ../src/richtext/richtextstyledlg.cpp:782
 msgid "Delete Style"
 msgstr "모양새 지우기"
 
-#: ../src/richtext/richtextctrl.cpp:1231 ../src/richtext/richtextctrl.cpp:1452
+#: ../src/richtext/richtextctrl.cpp:1300 ../src/richtext/richtextctrl.cpp:1538
 msgid "Delete Text"
 msgstr "텍스트 삭제"
 
@@ -2666,12 +2697,12 @@ msgstr "아이템 지우기"
 msgid "Delete selection"
 msgstr "선택한 부분 지우기"
 
-#: ../src/richtext/richtextstyledlg.cpp:779
+#: ../src/richtext/richtextstyledlg.cpp:782
 #, c-format
 msgid "Delete style %s?"
 msgstr "'%s' 모양새를 지우시겠습니다까?"
 
-#: ../src/unix/snglinst.cpp:295
+#: ../src/unix/snglinst.cpp:301
 #, c-format
 msgid "Deleted stale lock file '%s'."
 msgstr "오래된 잠금 파일 '%s' 삭제."
@@ -2717,12 +2748,12 @@ msgstr "Direct 가속시 오류 %d 발생."
 msgid "Directories"
 msgstr "디렉토리"
 
-#: ../src/common/filefn.cpp:1251
+#: ../src/common/filefn.cpp:1250
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "'%s' 디렉토리를 만들 수 없습니다."
 
-#: ../src/common/filefn.cpp:1271
+#: ../src/common/filefn.cpp:1270
 #, fuzzy, c-format
 msgid "Directory '%s' couldn't be deleted"
 msgstr "'%s' 디렉토리를 만들 수 없습니다."
@@ -2755,7 +2786,7 @@ msgstr "보기 설정 창"
 msgid "Displays help as you browse the books on the left."
 msgstr "왼쪽에 도움말 탐색창을 표시합니다."
 
-#: ../src/msw/mimetype.cpp:732
+#: ../src/msw/mimetype.cpp:737
 msgid ""
 "Do you want to overwrite the command used to %s files with extension \"%s"
 "\" ?\n"
@@ -2788,11 +2819,11 @@ msgstr "문서화"
 msgid "Documentation writers"
 msgstr "문서 작성자"
 
-#: ../src/common/sizer.cpp:2680
+#: ../src/common/sizer.cpp:2704
 msgid "Don't Save"
 msgstr "저장 하지 않음"
 
-#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:611
+#: ../src/msw/frame.cpp:122 ../src/html/htmlwin.cpp:614
 msgid "Done"
 msgstr "완료"
 
@@ -2800,12 +2831,12 @@ msgstr "완료"
 msgid "Done."
 msgstr "완료."
 
-#: ../src/richtext/richtextborderspage.cpp:544
+#: ../src/richtext/richtextborderspage.cpp:566
 #, fuzzy
 msgid "Dotted"
 msgstr "완료"
 
-#: ../src/richtext/richtextborderspage.cpp:546
+#: ../src/richtext/richtextborderspage.cpp:568
 #, fuzzy
 msgid "Double"
 msgstr "완료"
@@ -2823,7 +2854,7 @@ msgstr "객체 ID가 이미 정의되어 있습니다: %d"
 msgid "Down"
 msgstr "아래로"
 
-#: ../src/richtext/richtextctrl.cpp:814
+#: ../src/richtext/richtextctrl.cpp:842
 msgid "Drag"
 msgstr ""
 
@@ -2839,7 +2870,7 @@ msgstr ""
 msgid "ENTER"
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:535
+#: ../src/unix/fswatcher_inotify.cpp:548
 #, fuzzy
 msgid "EOF while reading from inotify descriptor"
 msgstr "파일 디스크립터 %d 에서 데이타를 읽어 올 수 없습니다."
@@ -2910,24 +2941,24 @@ msgstr "정렬 방식을 지정할 수 없습니다."
 msgid "Enables a background colour."
 msgstr "배경 색"
 
-#: ../src/richtext/richtextstyledlg.cpp:931
+#: ../src/richtext/richtextstyledlg.cpp:934
 #, fuzzy
 msgid "Enter a box style name"
 msgstr "새 모양새 이름을 입력하십시오"
 
-#: ../src/richtext/richtextstyledlg.cpp:603
+#: ../src/richtext/richtextstyledlg.cpp:606
 msgid "Enter a character style name"
 msgstr "글꼴 모양새 이름을 입력하십시오"
 
-#: ../src/richtext/richtextstyledlg.cpp:817
+#: ../src/richtext/richtextstyledlg.cpp:820
 msgid "Enter a list style name"
 msgstr "목록 모양새 이름을 입력하십시오"
 
-#: ../src/richtext/richtextstyledlg.cpp:890
+#: ../src/richtext/richtextstyledlg.cpp:893
 msgid "Enter a new style name"
 msgstr "새 모양새 이름을 입력하십시오"
 
-#: ../src/richtext/richtextstyledlg.cpp:651
+#: ../src/richtext/richtextstyledlg.cpp:654
 msgid "Enter a paragraph style name"
 msgstr "단락 모양새 이름을 입력하십시오"
 
@@ -2972,11 +3003,11 @@ msgstr "Epoll 디스크립터 닫기 실패"
 msgid "Error creating directory"
 msgstr "디렉토리 생성 오류"
 
-#: ../src/common/imagbmp.cpp:1103
+#: ../src/common/imagbmp.cpp:1107
 msgid "Error in reading image DIB."
 msgstr "DIB 이미지 읽기 오류."
 
-#: ../src/propgrid/propgrid.cpp:6563
+#: ../src/propgrid/propgrid.cpp:6565
 #, c-format
 msgid "Error in resource: %s"
 msgstr ""
@@ -3005,10 +3036,6 @@ msgstr "남유럽어 (ISO-8859-3)"
 msgid "Estimated time:"
 msgstr "예상 시간:"
 
-#: ../src/unix/fswatcher_inotify.cpp:639
-msgid "Event queue overflowed"
-msgstr ""
-
 #: ../src/generic/dbgrptg.cpp:234
 #, fuzzy
 msgid "Executable files (*.exe)|*.exe|"
@@ -3018,7 +3045,7 @@ msgstr "실행 파일 (*.exe)|*.exe|All files (*.*)|*.*||"
 msgid "Execute"
 msgstr ""
 
-#: ../src/msw/utilsexc.cpp:888
+#: ../src/msw/utilsexc.cpp:887
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "'%s' 명령 실행 실패"
@@ -3074,7 +3101,7 @@ msgstr "비트맵 데이타를  위한 메모리(%luKb) 할당이 실패했습�
 msgid "Failed to allocate colour for OpenGL"
 msgstr "OpenGL 색상 할당을 실패 했습니다."
 
-#: ../src/unix/displayx11.cpp:288
+#: ../src/unix/displayx11.cpp:292
 msgid "Failed to change video mode"
 msgstr "비디오 모드 변경을 실패했습니다."
 
@@ -3092,7 +3119,7 @@ msgstr "디버그 보고서 디렉토리 \"%s\" 를 비우는데 실패했습니
 msgid "Failed to close file handle"
 msgstr "파일 닫기를 실패했습니다."
 
-#: ../src/unix/snglinst.cpp:334
+#: ../src/unix/snglinst.cpp:340
 #, c-format
 msgid "Failed to close lock file '%s'"
 msgstr "'%s' 파일을 지우는 실패했습니다(잠금 파일)."
@@ -3148,19 +3175,19 @@ msgstr "레지스터 서브키 '%s' 에서 '%s' 로의 값 복사가 실패 했�
 msgid "Failed to create DDE string"
 msgstr "DDE 문자열 생성을 실패 했습니다."
 
-#: ../src/msw/mdi.cpp:590
+#: ../src/msw/mdi.cpp:594
 msgid "Failed to create MDI parent frame."
 msgstr "MDI의 프레임 생성을 실패 했습니다."
 
-#: ../src/common/filename.cpp:1080
+#: ../src/common/filename.cpp:1086
 msgid "Failed to create a temporary file name"
 msgstr "임시 파일을 생성을 실패했습니다"
 
-#: ../src/msw/utilsexc.cpp:235
+#: ../src/msw/utilsexc.cpp:234
 msgid "Failed to create an anonymous pipe"
 msgstr "익명 파이프 생성을 실패했습니다."
 
-#: ../src/msw/ole/automtn.cpp:522
+#: ../src/msw/ole/automtn.cpp:525
 #, fuzzy, c-format
 msgid "Failed to create an instance of \"%s\""
 msgstr "디렉토리 \"%s\" 생성을 실패했습니다."
@@ -3215,7 +3242,7 @@ msgstr "%s 인코딩으로 HTML 문서 보기 실패"
 msgid "Failed to empty the clipboard."
 msgstr "클립보드를 비우는데 실패했습니다."
 
-#: ../src/unix/displayx11.cpp:265
+#: ../src/unix/displayx11.cpp:266
 msgid "Failed to enumerate video modes"
 msgstr "디스플레이 모드 찾을 수 없습니다."
 
@@ -3237,7 +3264,7 @@ msgstr "'%s' 실행을 실패했습니다.\n"
 msgid "Failed to execute curl, please install it in PATH."
 msgstr "Curl 을 실행할 수 없습니다. PATH 폴더에 설치해 주세요."
 
-#: ../src/msw/ole/automtn.cpp:505
+#: ../src/msw/ole/automtn.cpp:508
 #, fuzzy, c-format
 msgid "Failed to find CLSID of \"%s\""
 msgstr "'%s' 디스플레이를 여는 데 실패했습니다."
@@ -3252,7 +3279,7 @@ msgstr "정규 표현식 %s 에 대한 검색 실패"
 msgid "Failed to get ISP names: %s"
 msgstr "ISP 이름을 가져오기 실패: %s"
 
-#: ../src/msw/ole/automtn.cpp:574
+#: ../src/msw/ole/automtn.cpp:577
 #, fuzzy, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
 msgstr "디렉토리 \"%s\" 생성을 실패했습니다."
@@ -3265,7 +3292,7 @@ msgstr "클립보드 데이타를 가져오는데 실패했습니다."
 msgid "Failed to get the local system time"
 msgstr "로컬 시스템이 시간을 얻어올 수 없습니다."
 
-#: ../src/common/filefn.cpp:1453
+#: ../src/common/filefn.cpp:1452
 msgid "Failed to get the working directory"
 msgstr "작업 디렉토리를 가져오는데 실패했습니다."
 
@@ -3286,7 +3313,7 @@ msgstr "OpenGL 초기화를 실패했습니다."
 msgid "Failed to initiate dialup connection: %s"
 msgstr "dialup 연결을 초기화 하는데 실패: %s"
 
-#: ../src/gtk/textctrl.cpp:1117
+#: ../src/gtk/textctrl.cpp:1129
 msgid "Failed to insert text in the control."
 msgstr "컨트롤에 텍스트 삽입 실패."
 
@@ -3299,7 +3326,7 @@ msgstr "'%s' 파일 조사를 실패했습니다(잠금 파일)."
 msgid "Failed to install signal handler"
 msgstr "Signal 등록을 실패했습니다."
 
-#: ../src/unix/threadpsx.cpp:1162
+#: ../src/unix/threadpsx.cpp:1167
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
@@ -3370,7 +3397,7 @@ msgstr "'%s' 잠금 파일의 잠금 실패 "
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr "Epoll 디스크립터 %d에서  파일 디스크립터 %d의 수정을 실패 했습니다."
 
-#: ../src/common/filename.cpp:2681
+#: ../src/common/filename.cpp:2687
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "%s 번 파일을 수정하는 데 실패"
@@ -3394,7 +3421,7 @@ msgstr "'%s' 파일을 쓰기 모드로 여는 데 실패했습니다."
 msgid "Failed to open CHM archive '%s'."
 msgstr "'%s' CHM 파일을 여는 데 실패했습니다."
 
-#: ../src/common/utilscmn.cpp:1135
+#: ../src/common/utilscmn.cpp:1142
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "기본 탐색창에서 URL \"%s\" 여는데 실패했습니다."
@@ -3409,7 +3436,7 @@ msgstr "'%s' 파일을 쓰기 모드로 여는 데 실패했습니다."
 msgid "Failed to open display \"%s\"."
 msgstr "'%s' 디스플레이를 여는 데 실패했습니다."
 
-#: ../src/common/filename.cpp:1115
+#: ../src/common/filename.cpp:1121
 msgid "Failed to open temporary file."
 msgstr "임시 파일을 여는 데 실패했습니다."
 
@@ -3457,7 +3484,7 @@ msgstr "Wake-up 파이프에서 읽는 데 실패했습니다."
 msgid "Failed to redirect child process input/output"
 msgstr "자식 프로세스의 입력 또는 출력의 리다이렉트 실패"
 
-#: ../src/msw/utilsexc.cpp:697
+#: ../src/msw/utilsexc.cpp:696
 msgid "Failed to redirect the child process IO"
 msgstr "자식 프로세스의 입출력 리다이렉트 실패"
 
@@ -3476,7 +3503,7 @@ msgstr "'%s' 에 대한 서브 인코딩을 알수 없습니다."
 msgid "Failed to remove debug report file \"%s\""
 msgstr "디버그 보고서 파일 \"%s\" 의 삭제를 실패했습니다."
 
-#: ../src/unix/snglinst.cpp:322
+#: ../src/unix/snglinst.cpp:328
 #, c-format
 msgid "Failed to remove lock file '%s'"
 msgstr "'%s' 잠금 파일을 지우는 데 실패했습니다"
@@ -3508,7 +3535,7 @@ msgstr "'%s' 레지스트 키를 '%s'로 변경 실패"
 msgid "Failed to retrieve data from the clipboard."
 msgstr "클립 보드에서 데이터 가져오기를 실패했습니다."
 
-#: ../src/common/filename.cpp:2777
+#: ../src/common/filename.cpp:2783
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "'%s' 번 파일검색 실패 "
@@ -3558,21 +3585,21 @@ msgstr "스레드 우선순위(%d) 설정을 실패했습니다."
 msgid "Failed to set temporary file permissions"
 msgstr "임시 파일의 접근 권한 설정을 실패 했습니다."
 
-#: ../src/gtk/textctrl.cpp:1058
+#: ../src/gtk/textctrl.cpp:1070
 msgid "Failed to set text in the text control."
 msgstr "텍스트 Control의 텍스트 입력 실패(인코딩 변환문제)"
 
-#: ../src/unix/threadpsx.cpp:1293
+#: ../src/unix/threadpsx.cpp:1298
 #, fuzzy, c-format
 msgid "Failed to set thread concurrency level to %lu"
 msgstr "스레드 우선순위(%d) 설정을 실패했습니다."
 
-#: ../src/unix/threadpsx.cpp:1377 ../src/unix/threadpsx.cpp:1387
+#: ../src/unix/threadpsx.cpp:1382 ../src/unix/threadpsx.cpp:1392
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "스레드 우선순위(%d) 설정을 실패했습니다."
 
-#: ../src/unix/utilsunx.cpp:791
+#: ../src/unix/utilsunx.cpp:801
 msgid "Failed to set up non-blocking pipe, the program might hang."
 msgstr ""
 
@@ -3590,7 +3617,7 @@ msgstr "비동기 모드에서 파이프를 Wake-up 상태롤 변경하는데 �
 msgid "Failed to switch wake up pipe to non-blocking mode"
 msgstr "비동기 모드에서 파이프를 Wake-up 상태롤 변경하는데 실패"
 
-#: ../src/unix/threadpsx.cpp:1569
+#: ../src/unix/threadpsx.cpp:1574
 msgid "Failed to terminate a thread."
 msgstr "스레드를 종료를 실패했습니다."
 
@@ -3603,12 +3630,12 @@ msgstr "DDE 서버의 어드바이스를 종료할 수 없습니다."
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "전화연결 종료 실패: %s"
 
-#: ../src/common/filename.cpp:2696
+#: ../src/common/filename.cpp:2702
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "'%s' 파일 만들기 실패"
 
-#: ../src/unix/snglinst.cpp:328
+#: ../src/unix/snglinst.cpp:334
 #, c-format
 msgid "Failed to unlock lock file '%s'"
 msgstr "'%s' 파일의 잠금 해제 실패"
@@ -3673,7 +3700,7 @@ msgid ""
 "Do you want to replace it?"
 msgstr "'%s' 파일이 이미 있습니다.  이 파일을 바꾸시겠습니까?"
 
-#: ../src/common/filefn.cpp:1207
+#: ../src/common/filefn.cpp:1206
 #, fuzzy, c-format
 msgid "File '%s' couldn't be removed"
 msgstr "'%s' 디렉토리를 만들 수 없습니다."
@@ -3683,11 +3710,11 @@ msgstr "'%s' 디렉토리를 만들 수 없습니다."
 msgid "File '%s' couldn't be renamed '%s'"
 msgstr "'%s' 디렉토리를 만들 수 없습니다."
 
-#: ../src/richtext/richtextctrl.cpp:2688 ../src/common/textcmn.cpp:921
+#: ../src/richtext/richtextctrl.cpp:2774 ../src/common/textcmn.cpp:935
 msgid "File couldn't be loaded."
 msgstr "파일을 읽어올 수 없습니다."
 
-#: ../src/msw/filedlg.cpp:458
+#: ../src/msw/filedlg.cpp:462
 #, fuzzy, c-format
 msgid "File dialog failed with error code %0lx."
 msgstr "색상 선택창에서 오류 발생 : %0lx"
@@ -3704,7 +3731,7 @@ msgstr "파일이 이미 있습니다."
 msgid "Files"
 msgstr "파일"
 
-#: ../src/common/filefn.cpp:1761
+#: ../src/common/filefn.cpp:1760
 #, c-format
 msgid "Files (%s)"
 msgstr "파일 (%s)"
@@ -3753,7 +3780,7 @@ msgstr "복사"
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "Folio, 8 1/2 x 13 in"
 
-#: ../src/richtext/richtextformatdlg.cpp:324 ../src/osx/carbon/fontdlg.cpp:473
+#: ../src/richtext/richtextformatdlg.cpp:325 ../src/osx/carbon/fontdlg.cpp:457
 #: ../src/common/stockitem.cpp:194
 msgid "Font"
 msgstr "Font"
@@ -3770,7 +3797,7 @@ msgstr "글꼴 크기:"
 msgid "Font st&yle:"
 msgstr "글꼴 모양새(&Y):"
 
-#: ../src/osx/carbon/fontdlg.cpp:515
+#: ../src/osx/carbon/fontdlg.cpp:499
 msgid "Font:"
 msgstr "글꼴:"
 
@@ -3821,7 +3848,7 @@ msgstr "GIF: 메모리가 부족합니다"
 msgid "GIF: unknown error!!!"
 msgstr "GIF: 알 수 없는 오류 발생!!!"
 
-#: ../src/gtk/window.cpp:4288
+#: ../src/gtk/window.cpp:4339
 msgid ""
 "GTK+ installed on this machine is too old to support screen compositing, "
 "please install GTK+ 2.12 or later."
@@ -3887,7 +3914,7 @@ msgstr "그래픽"
 msgid "Greek (ISO-8859-7)"
 msgstr "그리스어 (ISO-8859-7)"
 
-#: ../src/richtext/richtextborderspage.cpp:547
+#: ../src/richtext/richtextborderspage.cpp:569
 msgid "Groove"
 msgstr ""
 
@@ -3907,7 +3934,7 @@ msgstr ""
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "HTML 도움말 프로젝트 (*.hhp)|*.hhp|"
 
-#: ../src/html/htmlwin.cpp:659
+#: ../src/html/htmlwin.cpp:662
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTML anchor %s 가 없습니다."
@@ -3965,16 +3992,16 @@ msgstr "도움말 파일 \"%s\" 이 없습니다."
 msgid "Help: %s"
 msgstr "도움말: %s"
 
-#: ../src/osx/menu_osx.cpp:602 ../src/osx/menu_osx.cpp:649
+#: ../src/osx/menu_osx.cpp:623
 #, fuzzy, c-format
 msgid "Hide %s"
 msgstr "도움말: %s"
 
-#: ../src/osx/menu_osx.cpp:604 ../src/osx/menu_osx.cpp:651
+#: ../src/osx/menu_osx.cpp:625
 msgid "Hide Others"
 msgstr ""
 
-#: ../src/generic/infobar.cpp:85
+#: ../src/generic/infobar.cpp:84
 msgid "Hide this notification message."
 msgstr ""
 
@@ -3991,26 +4018,26 @@ msgstr "홈 디렉토리"
 msgid "How the object will float relative to the text."
 msgstr ""
 
-#: ../src/common/imagbmp.cpp:1118
+#: ../src/common/imagbmp.cpp:1122
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: DIB 마스크에서 읽기 오류가 발생했습니다."
 
-#: ../src/common/imagbmp.cpp:1233 ../src/common/imagbmp.cpp:1294
-#: ../src/common/imagbmp.cpp:1305 ../src/common/imagbmp.cpp:1318
-#: ../src/common/imagbmp.cpp:1363 ../src/common/imagbmp.cpp:1375
-#: ../src/common/imagbmp.cpp:1386
+#: ../src/common/imagbmp.cpp:1237 ../src/common/imagbmp.cpp:1298
+#: ../src/common/imagbmp.cpp:1309 ../src/common/imagbmp.cpp:1322
+#: ../src/common/imagbmp.cpp:1367 ../src/common/imagbmp.cpp:1379
+#: ../src/common/imagbmp.cpp:1390
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: 이미지 파일 쓰기 오류!"
 
-#: ../src/common/imagbmp.cpp:1198
+#: ../src/common/imagbmp.cpp:1202
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: 아이콘 이미지가 너무큼(길이)"
 
-#: ../src/common/imagbmp.cpp:1206
+#: ../src/common/imagbmp.cpp:1210
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: 아이콘 이미지가 너무큼(너비)"
 
-#: ../src/common/imagbmp.cpp:1466
+#: ../src/common/imagbmp.cpp:1470
 msgid "ICO: Invalid icon index."
 msgstr "ICO: ICON 인덱스가 잘못되었습니다."
 
@@ -4042,7 +4069,7 @@ msgstr ""
 msgid "ISO-2022-JP"
 msgstr "일본어 (ISO-2022-JP)"
 
-#: ../src/osx/carbon/dataview.cpp:2420
+#: ../src/osx/carbon/dataview.cpp:2418
 #, fuzzy
 msgid "Icon & text renderer cannot render value; value type: "
 msgstr "아이콘 및 문서 Renderer가 타입및 값을 처리할 수 없습니다"
@@ -4111,7 +4138,7 @@ msgstr "%ld 타입은 이미지 파일이 아닙니다."
 msgid "Image is not of type %s."
 msgstr "%s 타입은 이미지 파일이 아닙니다."
 
-#: ../src/msw/textctrl.cpp:399
+#: ../src/msw/textctrl.cpp:413
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
@@ -4143,7 +4170,7 @@ msgstr "'%s' 파일의 접근권한을 변경할 수 없습니다."
 msgid "Incorrect GIF frame size (%u, %d) for the frame #%u"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:624
+#: ../src/msw/ole/automtn.cpp:638
 msgid "Incorrect number of arguments."
 msgstr ""
 
@@ -4151,7 +4178,7 @@ msgstr ""
 msgid "Indent"
 msgstr "들여쓰기"
 
-#: ../src/richtext/richtextformatdlg.cpp:330
+#: ../src/richtext/richtextformatdlg.cpp:331
 msgid "Indents && Spacing"
 msgstr "들여쓰기 && 줄 간격"
 
@@ -4175,25 +4202,25 @@ msgstr "등록된 모듈들의 초기화를 실패했습니다."
 msgid "Insert"
 msgstr "넣기"
 
-#: ../src/richtext/richtextbuffer.cpp:7687
+#: ../src/richtext/richtextbuffer.cpp:7791
 #, fuzzy
 msgid "Insert Field"
 msgstr "텍스트 넣기"
 
-#: ../src/richtext/richtextbuffer.cpp:7598
-#: ../src/richtext/richtextbuffer.cpp:8551
+#: ../src/richtext/richtextbuffer.cpp:7702
+#: ../src/richtext/richtextbuffer.cpp:8655
 msgid "Insert Image"
 msgstr "그림 넣기"
 
-#: ../src/richtext/richtextbuffer.cpp:7645
+#: ../src/richtext/richtextbuffer.cpp:7749
 #, fuzzy
 msgid "Insert Object"
 msgstr "텍스트 넣기"
 
-#: ../src/richtext/richtextctrl.cpp:1172 ../src/richtext/richtextctrl.cpp:1362
-#: ../src/richtext/richtextbuffer.cpp:7440
-#: ../src/richtext/richtextbuffer.cpp:7470
-#: ../src/richtext/richtextbuffer.cpp:7514
+#: ../src/richtext/richtextctrl.cpp:1241 ../src/richtext/richtextctrl.cpp:1448
+#: ../src/richtext/richtextbuffer.cpp:7544
+#: ../src/richtext/richtextbuffer.cpp:7574
+#: ../src/richtext/richtextbuffer.cpp:7618
 msgid "Insert Text"
 msgstr "텍스트 넣기"
 
@@ -4203,7 +4230,7 @@ msgstr "텍스트 넣기"
 msgid "Inserts a page break before the paragraph."
 msgstr "단락 전 간격"
 
-#: ../src/richtext/richtextborderspage.cpp:549
+#: ../src/richtext/richtextborderspage.cpp:571
 #, fuzzy
 msgid "Inset"
 msgstr "넣기"
@@ -4219,7 +4246,7 @@ msgstr ""
 msgid "Invalid TIFF image index."
 msgstr "TIFF 이미지가 잘못되었습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1782 ../src/osx/carbon/dataview.cpp:1877
+#: ../src/osx/carbon/dataview.cpp:1780 ../src/osx/carbon/dataview.cpp:1875
 msgid "Invalid data view item"
 msgstr "아이템 데이타뷰가 잘못되었습니다."
 
@@ -4233,12 +4260,12 @@ msgstr "설정된 디스플레이 모드('%s')가 없습니다. "
 msgid "Invalid geometry specification '%s'"
 msgstr "잘못된 Geometry 지정: '%s'"
 
-#: ../src/unix/fswatcher_inotify.cpp:298
+#: ../src/unix/fswatcher_inotify.cpp:311
 #, c-format
 msgid "Invalid inotify event for \"%s\""
 msgstr ""
 
-#: ../src/unix/snglinst.cpp:306
+#: ../src/unix/snglinst.cpp:312
 #, c-format
 msgid "Invalid lock file '%s'."
 msgstr "'%s' 잠금 파일이 없습니다."
@@ -4271,7 +4298,7 @@ msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
 
 #: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:333
-#: ../src/osx/carbon/fontdlg.cpp:547 ../src/common/stockitem.cpp:168
+#: ../src/osx/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:168
 msgid "Italic"
 msgstr "기울임"
 
@@ -4574,7 +4601,7 @@ msgstr "줄 간격:"
 msgid "Link contained '//', converted to absolute link."
 msgstr "링크에 '//' 가 포함되어 있어, 절대주소로 변환 합니다."
 
-#: ../src/richtext/richtextformatdlg.cpp:349
+#: ../src/richtext/richtextformatdlg.cpp:350
 msgid "List Style"
 msgstr "목록 모양새"
 
@@ -4592,12 +4619,12 @@ msgstr "목록의 글꼴 크기."
 msgid "Lists the available fonts."
 msgstr "목록에서 사용가능한 글꼴"
 
-#: ../src/common/fldlgcmn.cpp:325
+#: ../src/common/fldlgcmn.cpp:343
 #, c-format
 msgid "Load %s file"
 msgstr "%s 파일 불러오기"
 
-#: ../src/html/htmlwin.cpp:575
+#: ../src/html/htmlwin.cpp:578
 msgid "Loading : "
 msgstr "불러오는 중:"
 
@@ -4810,12 +4837,12 @@ msgstr ""
 msgid "MacVietnamese"
 msgstr ""
 
-#: ../src/propgrid/advprops.cpp:2031
+#: ../src/propgrid/advprops.cpp:2013
 #, fuzzy
 msgid "Make a selection:"
 msgstr "선택한 부분을 붙여 넣기"
 
-#: ../src/richtext/richtextformatdlg.cpp:362
+#: ../src/richtext/richtextformatdlg.cpp:363
 #: ../src/richtext/richtextmarginspage.cpp:172
 msgid "Margins"
 msgstr ""
@@ -4857,7 +4884,7 @@ msgstr "알림 : %s"
 msgid "Metal theme"
 msgstr "메탈 테마"
 
-#: ../src/msw/ole/automtn.cpp:641
+#: ../src/msw/ole/automtn.cpp:655
 msgid "Method or property not found."
 msgstr ""
 
@@ -4874,7 +4901,7 @@ msgstr "글꼴 굵기(&W):"
 msgid "Min width:"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:657
+#: ../src/msw/ole/automtn.cpp:671
 msgid "Missing a required parameter."
 msgstr ""
 
@@ -4919,7 +4946,7 @@ msgstr "다음 단락의 기본 모양새"
 msgid "Moves the object to the previous paragraph."
 msgstr "이전 HTML 페이지로 이동"
 
-#: ../src/richtext/richtextbuffer.cpp:9345
+#: ../src/richtext/richtextbuffer.cpp:9596
 msgid "Multiple Cell Properties"
 msgstr ""
 
@@ -4957,16 +4984,16 @@ msgstr "새 목록 모양새(&L)"
 msgid "New &Paragraph Style..."
 msgstr "새 단락 모양새(&P)"
 
-#: ../src/richtext/richtextstyledlg.cpp:603
-#: ../src/richtext/richtextstyledlg.cpp:608
-#: ../src/richtext/richtextstyledlg.cpp:651
-#: ../src/richtext/richtextstyledlg.cpp:656
-#: ../src/richtext/richtextstyledlg.cpp:817
-#: ../src/richtext/richtextstyledlg.cpp:822
-#: ../src/richtext/richtextstyledlg.cpp:890
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:931
-#: ../src/richtext/richtextstyledlg.cpp:936
+#: ../src/richtext/richtextstyledlg.cpp:606
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:654
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:820
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:893
+#: ../src/richtext/richtextstyledlg.cpp:901
+#: ../src/richtext/richtextstyledlg.cpp:934
+#: ../src/richtext/richtextstyledlg.cpp:939
 msgid "New Style"
 msgstr "새 모양새"
 
@@ -5006,20 +5033,20 @@ msgstr "%ld 타입에 대한 애니매이션 핸들러가 없습니다."
 msgid "No bitmap handler for type %d defined."
 msgstr "타입 %d 에대한 비트맵 핸들러가 정의되지 않았습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1784
+#: ../src/osx/carbon/dataview.cpp:1782
 msgid "No column existing."
 msgstr "Column 이 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1674
+#: ../src/osx/carbon/dataview.cpp:1672
 #, fuzzy
 msgid "No column for the specified column existing."
 msgstr "지정된 Column 인덱스에 데이타가 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1423
+#: ../src/osx/carbon/dataview.cpp:1421
 msgid "No column for the specified column position existing."
 msgstr "지정된 Column 위치에 데이타가 없습니다."
 
-#: ../src/common/utilscmn.cpp:1049
+#: ../src/common/utilscmn.cpp:1056
 msgid "No default application configured for HTML files."
 msgstr "HTML 기본 브라우저가 없습니다."
 
@@ -5073,12 +5100,12 @@ msgstr "타입 %s 에대한 이미지 핸들러가 정의되지 않았습니다.
 msgid "No matching page found yet"
 msgstr "일치하는 페이지를 찾을 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1676 ../src/osx/carbon/dataview.cpp:1786
+#: ../src/osx/carbon/dataview.cpp:1674 ../src/osx/carbon/dataview.cpp:1784
 #, fuzzy
 msgid "No renderer or invalid renderer type specified for custom data column."
 msgstr "사용자 정의 Column 에 지정된 Randerer  잘못되었습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1424
+#: ../src/osx/carbon/dataview.cpp:1422
 #, fuzzy
 msgid "No renderer specified for column."
 msgstr "Column 을 위한 Renderer가 지정되지 않았습니다."
@@ -5100,7 +5127,7 @@ msgstr "이미지에 사용되지 않은 색상"
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "\"%s\" 로 검색된 파일이 없습니다."
 
-#: ../src/richtext/richtextborderspage.cpp:542
+#: ../src/richtext/richtextborderspage.cpp:564
 #: ../src/richtext/richtextsizepage.cpp:248
 #: ../src/richtext/richtextsizepage.cpp:252
 #, fuzzy
@@ -5123,7 +5150,7 @@ msgstr "일반 모습<br>그리고 <u>밑줄</u>. "
 msgid "Normal font:"
 msgstr "보통 글꼴:"
 
-#: ../src/propgrid/props.cpp:887
+#: ../src/propgrid/props.cpp:897
 #, fuzzy, c-format
 msgid "Not %s"
 msgstr "%s 정보"
@@ -5145,7 +5172,7 @@ msgstr "Note, 8 1/2 x 11 in"
 msgid "Notice"
 msgstr "알림"
 
-#: ../src/osx/carbon/dataview.cpp:902
+#: ../src/osx/carbon/dataview.cpp:900
 #, fuzzy
 msgid "Number of columns could not be determined."
 msgstr "Column 너비를 정의할수 없습니다."
@@ -5157,22 +5184,22 @@ msgstr "Numbered  형태"
 
 #: ../include/wx/msgdlg.h:273 ../src/richtext/richtextstyledlg.cpp:297
 #: ../src/common/stockitem.cpp:178 ../src/msw/msgdlg.cpp:489
-#: ../src/msw/msgdlg.cpp:799 ../src/msw/dialog.cpp:120
+#: ../src/msw/msgdlg.cpp:795 ../src/msw/dialog.cpp:120
 #: ../src/gtk1/fontdlg.cpp:138
 msgid "OK"
 msgstr "확인"
 
-#: ../src/msw/ole/automtn.cpp:681
+#: ../src/msw/ole/automtn.cpp:695
 #, c-format
 msgid "OLE Automation error in %s: %s"
 msgstr ""
 
-#: ../include/wx/richtext/richtextimagedlg.h:39
+#: ../include/wx/richtext/richtextimagedlg.h:38
 #, fuzzy
 msgid "Object Properties"
 msgstr "특성(&P)"
 
-#: ../src/msw/ole/automtn.cpp:649
+#: ../src/msw/ole/automtn.cpp:663
 msgid "Object implementation does not support named arguments."
 msgstr ""
 
@@ -5235,17 +5262,17 @@ msgstr "방향"
 msgid "Out of window IDs.  Recommend shutting down application."
 msgstr "원도우 ID가 잘못되었습니다. 응용 프로그램을 종료합니다."
 
-#: ../src/richtext/richtextborderspage.cpp:400
-#: ../src/richtext/richtextborderspage.cpp:533
+#: ../src/richtext/richtextborderspage.cpp:397
+#: ../src/richtext/richtextborderspage.cpp:555
 #, fuzzy
 msgid "Outline"
 msgstr "들여쓰기 단계(&O)"
 
-#: ../src/richtext/richtextborderspage.cpp:550
+#: ../src/richtext/richtextborderspage.cpp:572
 msgid "Outset"
 msgstr ""
 
-#: ../src/msw/ole/automtn.cpp:645
+#: ../src/msw/ole/automtn.cpp:659
 msgid "Overflow while coercing argument values."
 msgstr ""
 
@@ -5459,7 +5486,7 @@ msgstr "이미 등록된 객체입니다. 무시함"
 msgid "Passing an unknown object to GetObject"
 msgstr "알수없는 객체입니다. 무시함"
 
-#: ../src/richtext/richtextctrl.cpp:3117 ../src/common/stockitem.cpp:180
+#: ../src/richtext/richtextctrl.cpp:3206 ../src/common/stockitem.cpp:180
 #: ../src/stc/stc_i18n.cpp:19
 msgid "Paste"
 msgstr "붙여 넣기"
@@ -5477,7 +5504,7 @@ msgstr "마침표(&O)"
 msgid "Permissions"
 msgstr "권한"
 
-#: ../src/richtext/richtextbuffer.cpp:11942
+#: ../src/richtext/richtextbuffer.cpp:12271
 #, fuzzy
 msgid "Picture Properties"
 msgstr "특성(&P)"
@@ -5527,21 +5554,21 @@ msgstr "인쇄중 입니다.\n"
 msgid "Point Size"
 msgstr "크기(&P):"
 
-#: ../src/osx/carbon/dataview.cpp:1278 ../src/osx/carbon/dataview.cpp:1329
-#: ../src/osx/carbon/dataview.cpp:1420 ../src/osx/carbon/dataview.cpp:1443
-#: ../src/osx/carbon/dataview.cpp:1460 ../src/osx/carbon/dataview.cpp:1477
-#: ../src/osx/carbon/dataview.cpp:1670 ../src/osx/carbon/dataview.cpp:1779
-#: ../src/osx/carbon/dataview.cpp:1821 ../src/osx/carbon/dataview.cpp:1874
-#: ../src/osx/carbon/dataview.cpp:1997
+#: ../src/osx/carbon/dataview.cpp:1276 ../src/osx/carbon/dataview.cpp:1327
+#: ../src/osx/carbon/dataview.cpp:1418 ../src/osx/carbon/dataview.cpp:1441
+#: ../src/osx/carbon/dataview.cpp:1458 ../src/osx/carbon/dataview.cpp:1475
+#: ../src/osx/carbon/dataview.cpp:1668 ../src/osx/carbon/dataview.cpp:1777
+#: ../src/osx/carbon/dataview.cpp:1819 ../src/osx/carbon/dataview.cpp:1872
+#: ../src/osx/carbon/dataview.cpp:1995
 #, fuzzy
 msgid "Pointer to data view control not set correctly."
 msgstr "데이타뷰 컨트롤 설정이 잘못되었습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1279 ../src/osx/carbon/dataview.cpp:1338
-#: ../src/osx/carbon/dataview.cpp:1421 ../src/osx/carbon/dataview.cpp:1478
-#: ../src/osx/carbon/dataview.cpp:1671 ../src/osx/carbon/dataview.cpp:1780
-#: ../src/osx/carbon/dataview.cpp:1822 ../src/osx/carbon/dataview.cpp:1875
-#: ../src/osx/carbon/dataview.cpp:1998
+#: ../src/osx/carbon/dataview.cpp:1277 ../src/osx/carbon/dataview.cpp:1336
+#: ../src/osx/carbon/dataview.cpp:1419 ../src/osx/carbon/dataview.cpp:1476
+#: ../src/osx/carbon/dataview.cpp:1669 ../src/osx/carbon/dataview.cpp:1778
+#: ../src/osx/carbon/dataview.cpp:1820 ../src/osx/carbon/dataview.cpp:1873
+#: ../src/osx/carbon/dataview.cpp:1996
 #, fuzzy
 msgid "Pointer to model not set correctly."
 msgstr "모델 설정이 잘못되었습니다."
@@ -5564,7 +5591,7 @@ msgstr "PostScript 파일"
 msgid "Preferences"
 msgstr "설정(&P)"
 
-#: ../src/osx/menu_osx.cpp:643
+#: ../src/osx/menu_osx.cpp:614
 #, fuzzy
 msgid "Preferences..."
 msgstr "설정(&P)"
@@ -5573,7 +5600,7 @@ msgstr "설정(&P)"
 msgid "Preparing"
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:576
+#: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:560
 #: ../src/html/helpwnd.cpp:1235
 msgid "Preview:"
 msgstr "미리보기:"
@@ -5694,7 +5721,7 @@ msgid "Printing..."
 msgstr "인쇄중..."
 
 #: ../include/wx/richtext/richtextprint.h:109 ../include/wx/prntbase.h:263
-#: ../src/common/docview.cpp:2124
+#: ../src/common/docview.cpp:2114
 #, fuzzy
 msgid "Printout"
 msgstr "인쇄"
@@ -5705,7 +5732,7 @@ msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr "디버그 보고서 생성 작업이 실패습니다(\"%s\" 디렉토리). "
 
-#: ../src/osx/carbon/dataview.cpp:2472
+#: ../src/osx/carbon/dataview.cpp:2470
 #, fuzzy
 msgid "Progress renderer cannot render value type; value type: "
 msgstr "Renderer 가 타입 및 값을 처리할수 없습니다."
@@ -5724,7 +5751,7 @@ msgstr "특성(&P)"
 msgid "Property"
 msgstr "특성(&P)"
 
-#: ../src/propgrid/propgrid.cpp:3144 ../src/propgrid/propgrid.cpp:3276
+#: ../src/propgrid/propgrid.cpp:3146 ../src/propgrid/propgrid.cpp:3278
 #, fuzzy
 msgid "Property Error"
 msgstr "인쇄 오류"
@@ -5742,7 +5769,7 @@ msgstr "질문"
 msgid "Quit"
 msgstr "종료(&Q)"
 
-#: ../src/osx/menu_osx.cpp:610 ../src/osx/menu_osx.cpp:657
+#: ../src/osx/menu_osx.cpp:631
 #, fuzzy, c-format
 msgid "Quit %s"
 msgstr "종료(&Q)"
@@ -5832,7 +5859,7 @@ msgstr "남은 시간:"
 msgid "Remove"
 msgstr "지우기"
 
-#: ../src/richtext/richtextctrl.cpp:1430
+#: ../src/richtext/richtextctrl.cpp:1516
 #, fuzzy
 msgid "Remove Bullet"
 msgstr "지우기"
@@ -5846,11 +5873,11 @@ msgstr "현재 페이지의 책갈피를 제거 합니다."
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
 msgstr "Renderer \"%s\" 버전 %d.%d  는 호환되지 않습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1430
+#: ../src/osx/carbon/dataview.cpp:1428
 msgid "Rendering failed."
 msgstr "Rendering 실패"
 
-#: ../src/richtext/richtextbuffer.cpp:4214
+#: ../src/richtext/richtextbuffer.cpp:4280
 msgid "Renumber List"
 msgstr "목록 번호 다시 매기기"
 
@@ -5858,7 +5885,7 @@ msgstr "목록 번호 다시 매기기"
 msgid "Rep&lace"
 msgstr "바꾸기(&L)"
 
-#: ../src/richtext/richtextctrl.cpp:3277 ../src/common/stockitem.cpp:188
+#: ../src/richtext/richtextctrl.cpp:3366 ../src/common/stockitem.cpp:188
 msgid "Replace"
 msgstr "바꾸기"
 
@@ -5874,7 +5901,7 @@ msgstr "현재 선택 바꾸기"
 msgid "Replace with:"
 msgstr "다음으로 바꾸기:"
 
-#: ../src/common/valtext.cpp:161
+#: ../src/common/valtext.cpp:163
 msgid "Required information entry is empty."
 msgstr ""
 
@@ -5887,7 +5914,7 @@ msgstr "'%s'은 메시지 카탈로그가 아닙니다."
 msgid "Revert to Saved"
 msgstr "저장된 상태로 되돌리기"
 
-#: ../src/richtext/richtextborderspage.cpp:548
+#: ../src/richtext/richtextborderspage.cpp:570
 #, fuzzy
 msgid "Ridge"
 msgstr "오른쪽"
@@ -5946,11 +5973,11 @@ msgstr ""
 msgid "SUBTRACT"
 msgstr ""
 
-#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2678
+#: ../src/common/stockitem.cpp:190 ../src/common/sizer.cpp:2702
 msgid "Save"
 msgstr "저장"
 
-#: ../src/common/fldlgcmn.cpp:327
+#: ../src/common/fldlgcmn.cpp:345
 #, c-format
 msgid "Save %s file"
 msgstr "%s 파일 저장"
@@ -6026,8 +6053,8 @@ msgstr "'%s' 파일에서 찾을 수 없습니다."
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr "파일 '%s' 에서 찾기 실패(큰 파일형식을 지원하지 않습니다.)"
 
-#: ../src/richtext/richtextctrl.cpp:330 ../src/osx/textctrl_osx.cpp:587
-#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2288
+#: ../src/richtext/richtextctrl.cpp:336 ../src/osx/textctrl_osx.cpp:587
+#: ../src/common/stockitem.cpp:192 ../src/msw/textctrl.cpp:2339
 msgid "Select &All"
 msgstr "모두 선택(&A)"
 
@@ -6072,7 +6099,11 @@ msgstr "편집할 목록 단계를 선택하시오."
 msgid "Separator expected after the option '%s'."
 msgstr "옵션 '%s' 에 구분자가 없습니다."
 
-#: ../src/richtext/richtextbuffer.cpp:10513
+#: ../src/osx/menu_osx.cpp:618
+msgid "Services"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:10818
 #, fuzzy
 msgid "Set Cell Style"
 msgstr "모양새 지우기"
@@ -6081,7 +6112,7 @@ msgstr "모양새 지우기"
 msgid "SetProperty called w/o valid setter"
 msgstr ""
 
-#: ../src/common/filename.cpp:2632
+#: ../src/common/filename.cpp:2638
 msgid "Setting directory access times is not supported under this OS version"
 msgstr ""
 
@@ -6105,7 +6136,7 @@ msgstr "숨김 폴더 표시(&H)"
 msgid "Show &hidden files"
 msgstr "숨겨진 파일 표시(&H)"
 
-#: ../src/osx/menu_osx.cpp:605 ../src/osx/menu_osx.cpp:652
+#: ../src/osx/menu_osx.cpp:626
 #, fuzzy
 msgid "Show All"
 msgstr "모두 표시"
@@ -6147,7 +6178,7 @@ msgstr "글머리 설정 미리보기."
 msgid "Shows a preview of the font settings."
 msgstr "글꼴의 미리 보기를 표시"
 
-#: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
+#: ../src/osx/carbon/fontdlg.cpp:564 ../src/osx/carbon/fontdlg.cpp:566
 msgid "Shows a preview of the font."
 msgstr "글꼴 미리보기"
 
@@ -6169,12 +6200,12 @@ msgstr "Simple monochrome 테마"
 msgid "Single"
 msgstr "일반"
 
-#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:356
+#: ../src/generic/filectrlg.cpp:460 ../src/richtext/richtextformatdlg.cpp:357
 #: ../src/richtext/richtextsizepage.cpp:299
 msgid "Size"
 msgstr "크기"
 
-#: ../src/osx/carbon/fontdlg.cpp:525
+#: ../src/osx/carbon/fontdlg.cpp:509
 msgid "Size:"
 msgstr "크기:"
 
@@ -6192,7 +6223,7 @@ msgstr "대각선"
 msgid "Small C&apitals"
 msgstr "대문자(&P)"
 
-#: ../src/richtext/richtextborderspage.cpp:543
+#: ../src/richtext/richtextborderspage.cpp:565
 #, fuzzy
 msgid "Solid"
 msgstr "굵게"
@@ -6205,11 +6236,11 @@ msgstr "파일을 열 수 없습니다."
 msgid "Sorry, not enough memory to create a preview."
 msgstr "메모리가 부족하여 미리보기를 할 수 없습니다."
 
-#: ../src/richtext/richtextstyledlg.cpp:608
-#: ../src/richtext/richtextstyledlg.cpp:656
-#: ../src/richtext/richtextstyledlg.cpp:822
-#: ../src/richtext/richtextstyledlg.cpp:898
-#: ../src/richtext/richtextstyledlg.cpp:936
+#: ../src/richtext/richtextstyledlg.cpp:611
+#: ../src/richtext/richtextstyledlg.cpp:659
+#: ../src/richtext/richtextstyledlg.cpp:825
+#: ../src/richtext/richtextstyledlg.cpp:901
+#: ../src/richtext/richtextstyledlg.cpp:939
 msgid "Sorry, that name is taken. Please choose another."
 msgstr "이미 존재하는 이름입니다. 다른 이름을 선택하십시오."
 
@@ -6268,15 +6299,15 @@ msgstr "취소선(&S)"
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "색상코드를 문자열로 변환 : 색상 지정이 잘못되었습니다 : %s"
 
-#: ../src/richtext/richtextformatdlg.cpp:318 ../src/propgrid/advprops.cpp:647
+#: ../src/richtext/richtextformatdlg.cpp:319 ../src/propgrid/advprops.cpp:647
 msgid "Style"
 msgstr "모양새"
 
-#: ../include/wx/richtext/richtextstyledlg.h:47
+#: ../include/wx/richtext/richtextstyledlg.h:46
 msgid "Style Organiser"
 msgstr "모양새 관리"
 
-#: ../src/osx/carbon/fontdlg.cpp:534
+#: ../src/osx/carbon/fontdlg.cpp:518
 msgid "Style:"
 msgstr "모양새:"
 
@@ -6343,7 +6374,7 @@ msgstr "TIFF: 이미지 쓰기 오류"
 msgid "TIFF: Image size is abnormally big."
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:10794
+#: ../src/richtext/richtextbuffer.cpp:11099
 #, fuzzy
 msgid "Table Properties"
 msgstr "특성(&P)"
@@ -6356,7 +6387,7 @@ msgstr "Tabloid Extra 11.69 x 18 in"
 msgid "Tabloid, 11 x 17 in"
 msgstr "Tabloid, 11 x 17 in"
 
-#: ../src/richtext/richtextformatdlg.cpp:336
+#: ../src/richtext/richtextformatdlg.cpp:337
 msgid "Tabs"
 msgstr "탭"
 
@@ -6368,7 +6399,7 @@ msgstr ""
 msgid "Templates"
 msgstr "템플릿"
 
-#: ../src/osx/carbon/dataview.cpp:2373
+#: ../src/osx/carbon/dataview.cpp:2371
 #, fuzzy
 msgid "Text renderer cannot render value; value type: "
 msgstr "텍스트 Renderer 가 타입및 값을 처리할 수 없습니다."
@@ -6402,6 +6433,26 @@ msgstr "사용가능한 모양새"
 #, fuzzy
 msgid "The background colour."
 msgstr "배경 색"
+
+#: ../src/richtext/richtextborderspage.cpp:265
+#: ../src/richtext/richtextborderspage.cpp:267
+#: ../src/richtext/richtextborderspage.cpp:299
+#: ../src/richtext/richtextborderspage.cpp:301
+#: ../src/richtext/richtextborderspage.cpp:333
+#: ../src/richtext/richtextborderspage.cpp:335
+#: ../src/richtext/richtextborderspage.cpp:367
+#: ../src/richtext/richtextborderspage.cpp:369
+#: ../src/richtext/richtextborderspage.cpp:434
+#: ../src/richtext/richtextborderspage.cpp:436
+#: ../src/richtext/richtextborderspage.cpp:468
+#: ../src/richtext/richtextborderspage.cpp:470
+#: ../src/richtext/richtextborderspage.cpp:502
+#: ../src/richtext/richtextborderspage.cpp:504
+#: ../src/richtext/richtextborderspage.cpp:536
+#: ../src/richtext/richtextborderspage.cpp:538
+#, fuzzy
+msgid "The border line style."
+msgstr "글꼴 모양새"
 
 #: ../src/richtext/richtextmarginspage.cpp:268
 #: ../src/richtext/richtextmarginspage.cpp:270
@@ -6450,7 +6501,7 @@ msgstr ""
 "다름 문자집합을 선택하십시오.\n"
 "변경하지 원치 않으면 [취소] 클릭십시오."
 
-#: ../src/msw/ole/dataobj.cpp:367
+#: ../src/msw/ole/dataobj.cpp:394
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "%d 포맷이 클립보드에 없습니다."
@@ -6516,7 +6567,7 @@ msgstr "기호의 글꼴."
 msgid "The font point size."
 msgstr "글꼴 크기"
 
-#: ../src/osx/carbon/fontdlg.cpp:529 ../src/osx/carbon/fontdlg.cpp:531
+#: ../src/osx/carbon/fontdlg.cpp:513 ../src/osx/carbon/fontdlg.cpp:515
 msgid "The font size in points."
 msgstr "포인트로 나타낸 글꼴 크기"
 
@@ -6578,7 +6629,7 @@ msgstr "줄 간격"
 msgid "The list item number."
 msgstr "목록 번호 매기기."
 
-#: ../src/msw/ole/automtn.cpp:653
+#: ../src/msw/ole/automtn.cpp:667
 msgid "The locale ID is unknown."
 msgstr ""
 
@@ -6714,7 +6765,7 @@ msgstr "기본 모양새."
 msgid "The style preview."
 msgstr "모양새 미리보기"
 
-#: ../src/msw/ole/automtn.cpp:669
+#: ../src/msw/ole/automtn.cpp:683
 msgid "The system cannot find the file specified."
 msgstr ""
 
@@ -6727,7 +6778,7 @@ msgstr "탭 위치"
 msgid "The tab positions."
 msgstr "탭 위치"
 
-#: ../src/richtext/richtextctrl.cpp:2705
+#: ../src/richtext/richtextctrl.cpp:2791
 msgid "The text couldn't be saved."
 msgstr "텍스트를 저장할 수 없습니다."
 
@@ -6769,7 +6820,7 @@ msgstr ""
 msgid "The wxGtkPrinterDC cannot be used."
 msgstr "wxGtkPrinterDC 를 사용할 수 없습니다."
 
-#: ../src/osx/carbon/dataview.cpp:1340
+#: ../src/osx/carbon/dataview.cpp:1338
 msgid "There is no column or renderer for the specified column index."
 msgstr "색인에서 지정한 Randerer 혹은 Column이 없습니다."
 
@@ -6794,7 +6845,7 @@ msgstr "PCX: PCX 파일이 아닙니다."
 msgid "This platform does not support background transparency."
 msgstr ""
 
-#: ../src/gtk/window.cpp:4317
+#: ../src/gtk/window.cpp:4368
 msgid ""
 "This program was compiled with a too old version of GTK+, please rebuild "
 "with GTK+ 2.12 or newer."
@@ -6808,23 +6859,23 @@ msgstr ""
 "현재 시스템은 데이타 컨트롤을 지원 하지 않습니다, comctl32.dll 업데이트를 확"
 "인하세요."
 
-#: ../src/msw/thread.cpp:1300
+#: ../src/msw/thread.cpp:1295
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
 msgstr "쓰레드 모듈 초기화 실패:TLS 초기화 실패 "
 
-#: ../src/unix/threadpsx.cpp:1758
+#: ../src/unix/threadpsx.cpp:1763
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "쓰레드 모듈 초기화 실패: 쓰레드 키 생성 실패"
 
-#: ../src/msw/thread.cpp:1288
+#: ../src/msw/thread.cpp:1283
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr "쓰레드 모듈 초기화 실패:TLS 인덱스 할당 실패"
 
-#: ../src/unix/threadpsx.cpp:1038
+#: ../src/unix/threadpsx.cpp:1043
 msgid "Thread priority setting is ignored."
 msgstr "쓰레드 우선순위 설정을 무시합니다."
 
@@ -6856,12 +6907,12 @@ msgstr "유용한 팁이 없습니다."
 msgid "To:"
 msgstr "수신:"
 
-#: ../src/osx/carbon/dataview.cpp:2451
+#: ../src/osx/carbon/dataview.cpp:2449
 #, fuzzy
 msgid "Toggle renderer cannot render value; value type: "
 msgstr "Toggle renderer 가 타입및 값을 처리할 수 없습니다."
 
-#: ../src/richtext/richtextbuffer.cpp:7983
+#: ../src/richtext/richtextbuffer.cpp:8087
 msgid "Too many EndStyle calls!"
 msgstr "EndStyle 함수를 너무 많이 호출함"
 
@@ -6914,7 +6965,7 @@ msgstr "글꼴 이름"
 msgid "Type a size in points."
 msgstr "포인트로 나타낸 글꼴 크기"
 
-#: ../src/msw/ole/automtn.cpp:665
+#: ../src/msw/ole/automtn.cpp:679
 #, c-format
 msgid "Type mismatch in argument %u."
 msgstr ""
@@ -6975,7 +7026,7 @@ msgstr "'%s' 파일을 지우는 실패했습니다(잠금 파일)."
 msgid "Unable to close the handle for '%s'"
 msgstr "파일 닫기를 실패했습니다."
 
-#: ../include/wx/msw/private/fswatcher.h:240
+#: ../include/wx/msw/private/fswatcher.h:245
 #, fuzzy
 msgid "Unable to create I/O completion port"
 msgstr "Epoll 디스크립터 생성을 실패했습니다."
@@ -6995,7 +7046,7 @@ msgstr "DDE 문자열 생성을 실패 했습니다."
 msgid "Unable to create kqueue instance"
 msgstr "DDE 문자열 생성을 실패 했습니다."
 
-#: ../include/wx/msw/private/fswatcher.h:229
+#: ../include/wx/msw/private/fswatcher.h:234
 msgid "Unable to dequeue completion packet"
 msgstr ""
 
@@ -7003,7 +7054,7 @@ msgstr ""
 msgid "Unable to get events from kqueue"
 msgstr ""
 
-#: ../src/osx/carbon/dataview.cpp:1903
+#: ../src/osx/carbon/dataview.cpp:1901
 msgid "Unable to handle native drag&drop data"
 msgstr ""
 
@@ -7020,7 +7071,7 @@ msgstr "Hildon 프로그램을 초기화할 수 없습니다."
 msgid "Unable to open path '%s'"
 msgstr "'%s' CHM 파일을 여는 데 실패했습니다."
 
-#: ../src/html/htmlwin.cpp:561
+#: ../src/html/htmlwin.cpp:564
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "HTML 문서를 열 수 없습니다: %s"
@@ -7029,11 +7080,11 @@ msgstr "HTML 문서를 열 수 없습니다: %s"
 msgid "Unable to play sound asynchronously."
 msgstr "사운드를 비동기로 재생할 수 없습니다."
 
-#: ../include/wx/msw/private/fswatcher.h:207
+#: ../include/wx/msw/private/fswatcher.h:212
 msgid "Unable to post completion status"
 msgstr ""
 
-#: ../src/unix/fswatcher_inotify.cpp:530
+#: ../src/unix/fswatcher_inotify.cpp:543
 #, fuzzy
 msgid "Unable to read from inotify descriptor"
 msgstr "파일 디스크립터 %d 에서 데이타를 읽어 올 수 없습니다."
@@ -7064,7 +7115,7 @@ msgstr "되살리기"
 msgid "Underline"
 msgstr "밑줄(&U)"
 
-#: ../src/richtext/richtextfontpage.cpp:341 ../src/osx/carbon/fontdlg.cpp:556
+#: ../src/richtext/richtextfontpage.cpp:341 ../src/osx/carbon/fontdlg.cpp:540
 #: ../src/propgrid/advprops.cpp:655
 msgid "Underlined"
 msgstr "밑줄"
@@ -7082,7 +7133,7 @@ msgstr "마지막 동작을 취소합니다"
 msgid "Unexpected characters following option '%s'."
 msgstr "'%s' 옵션에서 예기치 않은 문자가 있습니다."
 
-#: ../src/unix/fswatcher_inotify.cpp:261
+#: ../src/unix/fswatcher_inotify.cpp:262
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
@@ -7144,8 +7195,8 @@ msgstr "유니코드 (UTF-8)"
 msgid "Unindent"
 msgstr "내어쓰기"
 
-#: ../src/richtext/richtextborderspage.cpp:373
-#: ../src/richtext/richtextborderspage.cpp:375
+#: ../src/richtext/richtextborderspage.cpp:358
+#: ../src/richtext/richtextborderspage.cpp:360
 msgid "Units for the bottom border width."
 msgstr ""
 
@@ -7154,8 +7205,8 @@ msgstr ""
 msgid "Units for the bottom margin."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:517
-#: ../src/richtext/richtextborderspage.cpp:519
+#: ../src/richtext/richtextborderspage.cpp:527
+#: ../src/richtext/richtextborderspage.cpp:529
 msgid "Units for the bottom outline width."
 msgstr ""
 
@@ -7170,8 +7221,8 @@ msgstr ""
 msgid "Units for the bottom position."
 msgstr "쓰레드를 종료할 수 없습니다."
 
-#: ../src/richtext/richtextborderspage.cpp:283
-#: ../src/richtext/richtextborderspage.cpp:285
+#: ../src/richtext/richtextborderspage.cpp:256
+#: ../src/richtext/richtextborderspage.cpp:258
 msgid "Units for the left border width."
 msgstr ""
 
@@ -7180,8 +7231,8 @@ msgstr ""
 msgid "Units for the left margin."
 msgstr ""
 
+#: ../src/richtext/richtextborderspage.cpp:425
 #: ../src/richtext/richtextborderspage.cpp:427
-#: ../src/richtext/richtextborderspage.cpp:429
 msgid "Units for the left outline width."
 msgstr ""
 
@@ -7230,8 +7281,8 @@ msgstr ""
 msgid "Units for the object width."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:313
-#: ../src/richtext/richtextborderspage.cpp:315
+#: ../src/richtext/richtextborderspage.cpp:290
+#: ../src/richtext/richtextborderspage.cpp:292
 msgid "Units for the right border width."
 msgstr ""
 
@@ -7240,8 +7291,8 @@ msgstr ""
 msgid "Units for the right margin."
 msgstr ""
 
-#: ../src/richtext/richtextborderspage.cpp:457
 #: ../src/richtext/richtextborderspage.cpp:459
+#: ../src/richtext/richtextborderspage.cpp:461
 msgid "Units for the right outline width."
 msgstr ""
 
@@ -7256,8 +7307,8 @@ msgstr ""
 msgid "Units for the right position."
 msgstr "쓰레드를 종료할 수 없습니다."
 
-#: ../src/richtext/richtextborderspage.cpp:343
-#: ../src/richtext/richtextborderspage.cpp:345
+#: ../src/richtext/richtextborderspage.cpp:324
+#: ../src/richtext/richtextborderspage.cpp:326
 msgid "Units for the top border width."
 msgstr ""
 
@@ -7267,8 +7318,8 @@ msgstr ""
 msgid "Units for the top margin."
 msgstr "쓰레드를 종료할 수 없습니다."
 
-#: ../src/richtext/richtextborderspage.cpp:487
-#: ../src/richtext/richtextborderspage.cpp:489
+#: ../src/richtext/richtextborderspage.cpp:493
+#: ../src/richtext/richtextborderspage.cpp:495
 msgid "Units for the top outline width."
 msgstr ""
 
@@ -7311,12 +7362,12 @@ msgstr "속성 %s 을 찾을 수 없습니다."
 msgid "Unknown TIFF resolution unit %d ignored"
 msgstr "알 수 없는 TIFF 해상도 단위(%d)임, 무시합니다."
 
-#: ../src/osx/carbon/dataview.cpp:1978
+#: ../src/osx/carbon/dataview.cpp:1976
 #, fuzzy
 msgid "Unknown data format"
 msgstr "데이터에 잘못된 형식이 있습니다."
 
-#: ../src/unix/dlunix.cpp:325
+#: ../src/unix/dlunix.cpp:160
 msgid "Unknown dynamic library error"
 msgstr "알수 없는 동적 Library 오류"
 
@@ -7325,12 +7376,12 @@ msgstr "알수 없는 동적 Library 오류"
 msgid "Unknown encoding (%d)"
 msgstr "인코딩 %d 를 찾을수 없습니다."
 
-#: ../src/msw/ole/automtn.cpp:677
+#: ../src/msw/ole/automtn.cpp:691
 #, fuzzy, c-format
 msgid "Unknown error %08x"
 msgstr "%08x 의 DDE 오류 메세지를 찾을 수 없습니다."
 
-#: ../src/msw/ole/automtn.cpp:636
+#: ../src/msw/ole/automtn.cpp:650
 #, fuzzy
 msgid "Unknown exception"
 msgstr "%s 옵션을 찾을 수 없습니다."
@@ -7345,7 +7396,7 @@ msgstr "데이터에 잘못된 형식이 있습니다."
 msgid "Unknown long option '%s'"
 msgstr "%s 옵션을 찾을 수 없습니다."
 
-#: ../src/msw/ole/automtn.cpp:620
+#: ../src/msw/ole/automtn.cpp:634
 msgid "Unknown name or named argument."
 msgstr ""
 
@@ -7404,12 +7455,12 @@ msgstr "사용법: %s"
 msgid "Use the current alignment setting."
 msgstr "현재 정렬 방식 사용"
 
-#: ../src/osx/carbon/dataview.cpp:2658 ../src/osx/carbon/dataview.cpp:2723
+#: ../src/osx/carbon/dataview.cpp:2656 ../src/osx/carbon/dataview.cpp:2721
 #, fuzzy
 msgid "Valid pointer to native data view control does not exist"
 msgstr "OS API 데이타뷰 컨트롤에 대한 유효한 포인터가 존재하지 않습니다."
 
-#: ../src/common/valtext.cpp:174
+#: ../src/common/valtext.cpp:179
 msgid "Validation conflict"
 msgstr "충돌"
 
@@ -7519,6 +7570,16 @@ msgstr "창(&W)"
 msgid "Windows 7"
 msgstr "창(&W)"
 
+#: ../src/msw/utils.cpp:1308
+#, fuzzy
+msgid "Windows 8"
+msgstr "창(&W)"
+
+#: ../src/msw/utils.cpp:1314
+#, fuzzy
+msgid "Windows 8.1"
+msgstr "창(&W)"
+
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
 msgstr ""
@@ -7597,7 +7658,7 @@ msgstr "Windows 한국어 (CP 949)"
 msgid "Windows ME"
 msgstr ""
 
-#: ../src/msw/utils.cpp:1310
+#: ../src/msw/utils.cpp:1322
 #, c-format
 msgid "Windows NT %lu.%lu"
 msgstr ""
@@ -7615,6 +7676,16 @@ msgstr "Windows 히브리어 (CP 1255)"
 #: ../src/msw/utils.cpp:1301
 #, fuzzy
 msgid "Windows Server 2008 R2"
+msgstr "Windows 히브리어 (CP 1255)"
+
+#: ../src/msw/utils.cpp:1307
+#, fuzzy
+msgid "Windows Server 2012"
+msgstr "Windows 그리스어 (CP 1253)"
+
+#: ../src/msw/utils.cpp:1313
+#, fuzzy
+msgid "Windows Server 2012 R2"
 msgstr "Windows 히브리어 (CP 1255)"
 
 #: ../src/common/fmapbase.cpp:166
@@ -7707,7 +7778,7 @@ msgstr "오버레이를 두번 초기화 할 수 없습니다."
 msgid "You cannot add a new directory to this section."
 msgstr "이 섹션에 새 디렉토리를 추가할 수 없습니다."
 
-#: ../src/propgrid/propgrid.cpp:3258
+#: ../src/propgrid/propgrid.cpp:3260
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
 
@@ -7867,7 +7938,7 @@ msgstr "굵게"
 msgid "buffer is too small for Windows directory."
 msgstr "윈도우 디렉토리를 위한 버퍼가 너무 작습니다."
 
-#: ../src/msw/utils.cpp:1316
+#: ../src/msw/utils.cpp:1328
 #, c-format
 msgid "build %lu"
 msgstr ""
@@ -7982,7 +8053,7 @@ msgstr "'%s' 임시 파일을 지울 수 없습니다"
 msgid "can't seek on file descriptor %d"
 msgstr "파일 디스크립터 %d 찾을 수 없습니다."
 
-#: ../src/common/textfile.cpp:299
+#: ../src/common/textfile.cpp:270
 #, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "문자열 '%s' 를 디스크에 쓸 수 없습니다."
@@ -8004,14 +8075,14 @@ msgstr "체크섬 오류"
 msgid "checksum failure reading tar header block"
 msgstr "tar의 Checksum 실패"
 
-#: ../src/richtext/richtextborderspage.cpp:280
-#: ../src/richtext/richtextborderspage.cpp:310
-#: ../src/richtext/richtextborderspage.cpp:340
-#: ../src/richtext/richtextborderspage.cpp:370
-#: ../src/richtext/richtextborderspage.cpp:424
-#: ../src/richtext/richtextborderspage.cpp:454
-#: ../src/richtext/richtextborderspage.cpp:484
-#: ../src/richtext/richtextborderspage.cpp:514
+#: ../src/richtext/richtextborderspage.cpp:252
+#: ../src/richtext/richtextborderspage.cpp:286
+#: ../src/richtext/richtextborderspage.cpp:320
+#: ../src/richtext/richtextborderspage.cpp:354
+#: ../src/richtext/richtextborderspage.cpp:421
+#: ../src/richtext/richtextborderspage.cpp:455
+#: ../src/richtext/richtextborderspage.cpp:489
+#: ../src/richtext/richtextborderspage.cpp:523
 #: ../src/richtext/richtextmarginspage.cpp:202
 #: ../src/richtext/richtextmarginspage.cpp:227
 #: ../src/richtext/richtextmarginspage.cpp:250
@@ -8146,7 +8217,7 @@ msgstr "파일[%s], 행[%d]: 변경 불가능한 키값 '%s'는 무시합니다.
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "'%s' 파일: 잘못입력된 문자 데이터 %c (%d번째 줄)"
 
-#: ../src/richtext/richtextbuffer.cpp:8358
+#: ../src/richtext/richtextbuffer.cpp:8462
 msgid "files"
 msgstr "파일"
 
@@ -8166,12 +8237,12 @@ msgstr "열네 번째"
 msgid "fourth"
 msgstr "네 번째"
 
-#: ../src/common/appbase.cpp:695
+#: ../src/common/appbase.cpp:699
 msgid "generate verbose log messages"
 msgstr "자세한 로그 메시지 생성"
 
-#: ../src/richtext/richtextbuffer.cpp:12212
-#: ../src/richtext/richtextbuffer.cpp:12322
+#: ../src/richtext/richtextbuffer.cpp:12541
+#: ../src/richtext/richtextbuffer.cpp:12651
 msgid "image"
 msgstr "그림"
 
@@ -8266,53 +8337,48 @@ msgstr "텍스트 자식 노드가 없습니다. "
 msgid "out of memory"
 msgstr "메모리 부족"
 
-#: ../src/richtext/richtextsizepage.cpp:340
-#: ../src/richtext/richtextsizepage.cpp:374
-#: ../src/richtext/richtextsizepage.cpp:401
-#: ../src/richtext/richtextsizepage.cpp:428
-#: ../src/richtext/richtextsizepage.cpp:455
-#: ../src/richtext/richtextsizepage.cpp:482
-#: ../src/richtext/richtextsizepage.cpp:556
-#: ../src/richtext/richtextsizepage.cpp:591
-#: ../src/richtext/richtextsizepage.cpp:626
-#: ../src/richtext/richtextsizepage.cpp:661
-msgid "percent"
-msgstr ""
-
 #: ../src/common/debugrpt.cpp:519
 msgid "process context description"
 msgstr "프로세스 상태 설명"
 
 #: ../src/richtext/richtextfontpage.cpp:186
 #: ../src/richtext/richtextfontpage.cpp:189
+#: ../src/richtext/richtextborderspage.cpp:253
+#: ../src/richtext/richtextborderspage.cpp:287
+#: ../src/richtext/richtextborderspage.cpp:321
+#: ../src/richtext/richtextborderspage.cpp:355
+#: ../src/richtext/richtextborderspage.cpp:422
+#: ../src/richtext/richtextborderspage.cpp:456
+#: ../src/richtext/richtextborderspage.cpp:490
+#: ../src/richtext/richtextborderspage.cpp:524
 msgid "pt"
 msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:187
-#: ../src/richtext/richtextborderspage.cpp:279
-#: ../src/richtext/richtextborderspage.cpp:281
-#: ../src/richtext/richtextborderspage.cpp:282
-#: ../src/richtext/richtextborderspage.cpp:309
-#: ../src/richtext/richtextborderspage.cpp:311
-#: ../src/richtext/richtextborderspage.cpp:312
-#: ../src/richtext/richtextborderspage.cpp:339
-#: ../src/richtext/richtextborderspage.cpp:341
-#: ../src/richtext/richtextborderspage.cpp:342
-#: ../src/richtext/richtextborderspage.cpp:369
-#: ../src/richtext/richtextborderspage.cpp:371
-#: ../src/richtext/richtextborderspage.cpp:372
+#: ../src/richtext/richtextborderspage.cpp:251
+#: ../src/richtext/richtextborderspage.cpp:254
+#: ../src/richtext/richtextborderspage.cpp:255
+#: ../src/richtext/richtextborderspage.cpp:285
+#: ../src/richtext/richtextborderspage.cpp:288
+#: ../src/richtext/richtextborderspage.cpp:289
+#: ../src/richtext/richtextborderspage.cpp:319
+#: ../src/richtext/richtextborderspage.cpp:322
+#: ../src/richtext/richtextborderspage.cpp:323
+#: ../src/richtext/richtextborderspage.cpp:353
+#: ../src/richtext/richtextborderspage.cpp:356
+#: ../src/richtext/richtextborderspage.cpp:357
+#: ../src/richtext/richtextborderspage.cpp:420
 #: ../src/richtext/richtextborderspage.cpp:423
-#: ../src/richtext/richtextborderspage.cpp:425
-#: ../src/richtext/richtextborderspage.cpp:426
-#: ../src/richtext/richtextborderspage.cpp:453
-#: ../src/richtext/richtextborderspage.cpp:455
-#: ../src/richtext/richtextborderspage.cpp:456
-#: ../src/richtext/richtextborderspage.cpp:483
-#: ../src/richtext/richtextborderspage.cpp:485
-#: ../src/richtext/richtextborderspage.cpp:486
-#: ../src/richtext/richtextborderspage.cpp:513
-#: ../src/richtext/richtextborderspage.cpp:515
-#: ../src/richtext/richtextborderspage.cpp:516
+#: ../src/richtext/richtextborderspage.cpp:424
+#: ../src/richtext/richtextborderspage.cpp:454
+#: ../src/richtext/richtextborderspage.cpp:457
+#: ../src/richtext/richtextborderspage.cpp:458
+#: ../src/richtext/richtextborderspage.cpp:488
+#: ../src/richtext/richtextborderspage.cpp:491
+#: ../src/richtext/richtextborderspage.cpp:492
+#: ../src/richtext/richtextborderspage.cpp:522
+#: ../src/richtext/richtextborderspage.cpp:525
+#: ../src/richtext/richtextborderspage.cpp:526
 #: ../src/richtext/richtextmarginspage.cpp:201
 #: ../src/richtext/richtextmarginspage.cpp:203
 #: ../src/richtext/richtextmarginspage.cpp:204
@@ -8412,7 +8478,7 @@ msgstr "일곱 번째"
 msgid "shift"
 msgstr ""
 
-#: ../src/common/appbase.cpp:685
+#: ../src/common/appbase.cpp:689
 msgid "show this help message"
 msgstr "이 도움말 계속 보기."
 
@@ -8432,25 +8498,25 @@ msgstr "디스플레이 모드 지정(예:640x480-16)"
 msgid "specify the theme to use"
 msgstr "사용할 테마"
 
-#: ../src/richtext/richtextbuffer.cpp:8876
+#: ../src/richtext/richtextbuffer.cpp:8983
 #, fuzzy
 msgid "standard/circle"
 msgstr "표준"
 
-#: ../src/richtext/richtextbuffer.cpp:8877
+#: ../src/richtext/richtextbuffer.cpp:8984
 msgid "standard/circle-outline"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8879
+#: ../src/richtext/richtextbuffer.cpp:8986
 msgid "standard/diamond"
 msgstr ""
 
-#: ../src/richtext/richtextbuffer.cpp:8878
+#: ../src/richtext/richtextbuffer.cpp:8985
 #, fuzzy
 msgid "standard/square"
 msgstr "표준"
 
-#: ../src/richtext/richtextbuffer.cpp:8880
+#: ../src/richtext/richtextbuffer.cpp:8987
 msgid "standard/triangle"
 msgstr ""
 
@@ -8584,11 +8650,11 @@ msgstr "wxGetTimeOfDay 함수 실패"
 msgid "wxPrintout::GetPageInfo gives a null maxPage."
 msgstr "wxPrintout::GetPageInfo: maxPage가 0입니다."
 
-#: ../src/osx/carbon/dataview.cpp:1303
+#: ../src/osx/carbon/dataview.cpp:1301
 msgid "wxWidget control pointer is not a data view pointer"
 msgstr "wxWidget 컨트롤 포인터가 데이타뷰 포인터가 아닙니다."
 
-#: ../src/osx/carbon/dataview.cpp:907
+#: ../src/osx/carbon/dataview.cpp:905
 #, fuzzy
 msgid "wxWidget's control not initialized."
 msgstr "모델 위치가 초기화 되지 않았습니다."
@@ -8710,9 +8776,6 @@ msgstr "~"
 
 #~ msgid "%.*f kB"
 #~ msgstr "%.*f 킬로바이트(kB)"
-
-#~ msgid "%s"
-#~ msgstr "%s"
 
 #~ msgid "%s B"
 #~ msgstr "%s 바이트(byte)"
