@@ -340,13 +340,13 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 
         int mode = wxPG_PROPERTY_VALIDATION_SATURATE;
 
-        if ( property->GetAttributeAsLong(wxT("Wrap"), 0) )
+        if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_WRAP, 0) )
             mode = wxPG_PROPERTY_VALIDATION_WRAP;
 
         if ( property->GetValueType() == wxT("double") )
         {
             double v_d;
-            double step = property->GetAttributeAsDouble(wxT("Step"), 1.0);
+            double step = property->GetAttributeAsDouble(wxPG_ATTR_SPINCTRL_STEP, 1.0);
 
             // Try double
             if ( s.ToDouble(&v_d) )
@@ -372,7 +372,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
         else
         {
             wxLongLong_t v_ll;
-            wxLongLong_t step = property->GetAttributeAsLong(wxT("Step"), 1);
+            wxLongLong_t step = property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_STEP, 1);
 
             // Try (long) long
             if ( s.ToLongLong(&v_ll, 10) )
