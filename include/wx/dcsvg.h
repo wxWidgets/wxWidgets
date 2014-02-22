@@ -25,9 +25,42 @@
 
 class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
 
-
-
 class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
+
+// Base class for bitmap handlers used by wxSVGFileDC, used by the standard
+// "embed" and "link" handlers below but can also be used to create a custom
+// handler.
+class WXDLLIMPEXP_CORE wxSVGBitmapHandler
+{
+public:
+    // Write the representation of the given bitmap, appearing at the specified
+    // position, to the provided stream.
+    virtual bool ProcessBitmap(const wxBitmap& bitmap,
+                               wxCoord x, wxCoord y,
+                               wxOutputStream& stream) const = 0;
+
+    virtual ~wxSVGBitmapHandler() {}
+};
+
+// Predefined standard bitmap handler: creates a file, stores the bitmap in
+// this file and uses the file URI in the generated SVG.
+class WXDLLIMPEXP_CORE wxSVGBitmapFileHandler : public wxSVGBitmapHandler
+{
+public:
+    virtual bool ProcessBitmap(const wxBitmap& bitmap,
+                               wxCoord x, wxCoord y,
+                               wxOutputStream& stream) const;
+};
+
+// Predefined handler which embeds the bitmap (base64-encoding it) inside the
+// generated SVG file.
+class WXDLLIMPEXP_CORE wxSVGBitmapEmbedHandler : public wxSVGBitmapHandler
+{
+public:
+    virtual bool ProcessBitmap(const wxBitmap& bitmap,
+                               wxCoord x, wxCoord y,
+                               wxOutputStream& stream) const;
+};
 
 class WXDLLIMPEXP_CORE wxSVGFileDCImpl : public wxDCImpl
 {
@@ -93,6 +126,8 @@ public:
     virtual void SetPen(const wxPen& pen);
 
     virtual void* GetHandle() const { return NULL; }
+
+    void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
 private:
    virtual bool DoGetPixel(wxCoord, wxCoord, wxColour *) const
@@ -197,6 +232,7 @@ private:
    bool                m_graphics_changed;  // set by Set{Brush,Pen}()
    int                 m_width, m_height;
    double              m_dpi;
+   wxSVGBitmapHandler* m_bmp_handler; // class to handle bitmaps
 
    // The clipping nesting level is incremented by every call to
    // SetClippingRegion() and reset when DestroyClippingRegion() is called.
@@ -220,6 +256,11 @@ public:
         : wxDC(new wxSVGFileDCImpl(this, filename, width, height, dpi))
     {
     }
+
+    // wxSVGFileDC-specific methods:
+
+    // Use a custom bitmap handler: takes ownership of the handler.
+    void SetBitmapHandler(wxSVGBitmapHandler* handler);
 };
 
 #endif // wxUSE_SVG

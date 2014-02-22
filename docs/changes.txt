@@ -26,6 +26,7 @@ All:
 All (GUI):
 
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
+- Add support for embedding bitmaps in generated SVG in wxSVGFileDC (iwbnwif).
 - Add support for sorting wxDataViewCtrl by multiple columns (Trigve).
 - Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
