@@ -1834,6 +1834,9 @@ void wxWidgetCocoaImpl::Init()
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
 {
+    if ( GetWXPeer() && GetWXPeer()->IsFrozen() )
+        [[m_osxView window] enableFlushWindow];
+    
     RemoveAssociations( this );
 
     if ( !IsRootControl() )
