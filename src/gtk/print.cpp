@@ -53,8 +53,7 @@ wxFORCE_LINK_THIS_MODULE(gtk_print)
 
 #include "wx/gtk/private/object.h"
 
-// Useful to convert angles from/to Rad to/from Deg.
-static const double RAD2DEG  = 180.0 / M_PI;
+// Useful to convert angles from degrees to radians.
 static const double DEG2RAD  = M_PI / 180.0;
 
 //----------------------------------------------------------------------------
