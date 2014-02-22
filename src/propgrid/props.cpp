@@ -54,6 +54,8 @@
 #include "wx/propgrid/propgrid.h"
 #include "wx/numformatter.h"
 
+#include <float.h>
+
 #define wxPG_CUSTOM_IMAGE_WIDTH     20 // for wxColourProperty etc.
 
 
@@ -342,7 +344,8 @@ bool wxIntProperty::IntToValue( wxVariant& variant, int value, int WXUNUSED(argF
 // implementations.
 //
 // Note that 'value' is reference on purpose, so we can write
-// back to it when mode is wxPG_PROPERTY_VALIDATION_SATURATE.
+// back to it when mode is wxPG_PROPERTY_VALIDATION_SATURATE or wxPG_PROPERTY_VALIDATION_WRAP.
+// For argument 'value' of type 'double' there is a specialized function (below).
 //
 template<typename T>
 bool NumericValidation( const wxPGProperty* property,
@@ -369,6 +372,115 @@ bool NumericValidation( const wxPGProperty* property,
     {
         variant.Convert(&max);
         maxOk = true;
+    }
+
+    if ( minOk )
+    {
+        if ( value < min )
+        {
+            if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
+            {
+                wxString msg;
+                wxString smin = wxString::Format(strFmt, min);
+                wxString smax = wxString::Format(strFmt, max);
+                if ( !maxOk )
+                    msg = wxString::Format(
+                                _("Value must be %s or higher."),
+                                smin.c_str());
+                else
+                    msg = wxString::Format(
+                                _("Value must be between %s and %s."),
+                                smin.c_str(), smax.c_str());
+                pValidationInfo->SetFailureMessage(msg);
+            }
+            else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
+                value = min;
+            else
+                value = max - (min - value);
+            return false;
+        }
+    }
+
+    if ( maxOk )
+    {
+        if ( value > max )
+        {
+            if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
+            {
+                wxString msg;
+                wxString smin = wxString::Format(strFmt, min);
+                wxString smax = wxString::Format(strFmt, max);
+                if ( !minOk )
+                    msg = wxString::Format(
+                                _("Value must be %s or less."),
+                                smax.c_str());
+                else
+                    msg = wxString::Format(
+                                _("Value must be between %s and %s."),
+                                smin.c_str(), smax.c_str());
+                pValidationInfo->SetFailureMessage(msg);
+            }
+            else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
+                value = max;
+            else
+                value = min + (value - max);
+            return false;
+        }
+    }
+    return true;
+}
+
+// Template specialization for argument 'value' of type 'double'.
+// It takes into account required precision of the numbers
+// to avoid rounding and conversion errors.
+template<>
+bool NumericValidation( const wxPGProperty* property,
+                        double& value,
+                        wxPGValidationInfo* pValidationInfo,
+                        int mode,
+                        const wxString& strFmt )
+{
+    double min = DBL_MIN;
+    double max = DBL_MAX;
+    wxVariant variant;
+    bool minOk = false;
+    bool maxOk = false;
+
+    variant = property->GetAttribute(wxPGGlobalVars->m_strMin);
+    if ( !variant.IsNull() )
+    {
+        variant.Convert(&min);
+        minOk = true;
+    }
+
+    variant = property->GetAttribute(wxPGGlobalVars->m_strMax);
+    if ( !variant.IsNull() )
+    {
+        variant.Convert(&max);
+        maxOk = true;
+    }
+
+    if ( minOk || maxOk )
+    {
+        // Get required precision.
+        int precision = -1;
+        variant = property->GetAttribute(wxPG_FLOAT_PRECISION);
+        if ( !variant.IsNull() )
+        {
+            precision = variant.GetInteger();
+        }
+
+        // Round current value to the required precision.
+        wxString strVal = wxNumberFormatter::ToString(value, precision, wxNumberFormatter::Style_None);
+        strVal.ToDouble(&value);
+
+        // Round minimal value to the required precision.
+        strVal = wxNumberFormatter::ToString(min, precision, wxNumberFormatter::Style_None);
+        strVal.ToDouble(&min);
+
+        // Round maximal value to the required precision.
+        strVal = wxNumberFormatter::ToString(max, precision, wxNumberFormatter::Style_None);
+        strVal.ToDouble(&max);
     }
 
     if ( minOk )

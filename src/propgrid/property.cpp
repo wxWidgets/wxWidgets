@@ -1770,6 +1770,10 @@ wxVariant wxPGProperty::DoGetAttribute( const wxString& WXUNUSED(name) ) const
 
 wxVariant wxPGProperty::GetAttribute( const wxString& name ) const
 {
+    wxVariant value = DoGetAttribute(name);
+    if ( !value.IsNull() )
+        return value;
+
     return m_attributes.FindValue(name);
 }
 

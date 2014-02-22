@@ -362,7 +362,14 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                 // Min/Max check
                 wxFloatProperty::DoValidation(property, v_d, NULL, mode);
 
-                s = wxNumberFormatter::ToString(v_d, -1, wxNumberFormatter::Style_None);
+                int precision = -1;
+                wxVariant v = property->GetAttribute(wxPG_FLOAT_PRECISION);
+                if ( !v.IsNull() )
+                {
+                    precision = v.GetInteger();
+                }
+
+                s = wxNumberFormatter::ToString(v_d, precision, wxNumberFormatter::Style_NoTrailingZeroes);
             }
             else
             {
