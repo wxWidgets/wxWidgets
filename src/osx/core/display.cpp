@@ -178,7 +178,7 @@ wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
     CGDisplayCount theCount = GetCount();
     wxScopedArray<CGDirectDisplayID> theIDs(theCount);
 
-    CGDisplayErr err = wxOSXGetDisplayList(theCount, theIDs, &theCount);
+    CGDisplayErr err = wxOSXGetDisplayList(theCount, theIDs.get(), &theCount);
     wxCHECK_MSG( err == CGDisplayNoErr, NULL, "wxOSXGetDisplayList() failed" );
 
     wxCHECK_MSG( n < theCount, NULL, wxS("Invalid display index") );
