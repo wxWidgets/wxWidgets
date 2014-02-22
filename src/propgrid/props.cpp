@@ -822,6 +822,16 @@ bool wxFloatProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     return false;
 }
 
+wxVariant wxFloatProperty::DoGetAttribute( const wxString& name ) const
+{
+    wxVariant value;
+    if ( name == wxPG_FLOAT_PRECISION )
+    {
+        value = (long)m_precision;
+    }
+    return value;
+}
+
 wxValidator*
 wxFloatProperty::GetClassValidator()
 {

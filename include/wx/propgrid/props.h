@@ -316,6 +316,8 @@ public:
                                 const wxString& text,
                                 int argFlags = 0 ) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
+    virtual wxVariant DoGetAttribute( const wxString& name ) const;
+
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
 
