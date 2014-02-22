@@ -358,30 +358,37 @@ typedef short int WXTYPE;
 #endif
 
 #if defined(__has_include)
-    #if !defined(HAVE_TYPE_TRAITS) && __has_include(<type_traits>)
-        #define HAVE_TYPE_TRAITS
+    /*
+        Notice that we trust our configure tests more than __has_include(),
+        notably the latter can return true even if the header exists but isn't
+        actually usable, as it happens with <type_traits> in non C++11 mode.
+        So if configure already detected at least one working alternative,
+        just use it.
+     */
+    #if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
+        #if __has_include(<type_traits>)
+            #define HAVE_TYPE_TRAITS
+        #elif __has_include(<tr1/type_traits>)
+            #define HAVE_TR1_TYPE_TRAITS
+        #endif
     #endif
 
-    #if !defined(HAVE_TR1_TYPE_TRAITS) && __has_include(<tr1/type_traits>)
-        #define HAVE_TR1_TYPE_TRAITS
+    #if !defined(HAVE_STD_UNORDERED_MAP) && !defined(HAVE_TR1_UNORDERED_MAP)
+        #if __has_include(<unordered_map>)
+            #define HAVE_STD_UNORDERED_MAP
+        #elif __has_include(<tr1/unordered_map>)
+            #define HAVE_TR1_UNORDERED_MAP
+        #endif
     #endif
 
-    #if !defined(HAVE_STD_UNORDERED_MAP) && __has_include(<unordered_map>)
-        #define HAVE_STD_UNORDERED_MAP
+    #if !defined(HAVE_STD_UNORDERED_SET) && !defined(HAVE_TR1_UNORDERED_SET)
+        #if __has_include(<unordered_set>)
+            #define HAVE_STD_UNORDERED_SET
+        #elif __has_include(<tr1/unordered_set>)
+            #define HAVE_TR1_UNORDERED_SET
+        #endif
     #endif
-
-    #if !defined(HAVE_TR1_UNORDERED_MAP) && __has_include(<tr1/unordered_map>)
-        #define HAVE_TR1_UNORDERED_MAP
-    #endif
-
-    #if !defined(HAVE_STD_UNORDERED_SET) && __has_include(<unordered_set>)
-        #define HAVE_STD_UNORDERED_SET
-    #endif
-
-    #if !defined(HAVE_TR1_UNORDERED_SET) && __has_include(<tr1/unordered_set>)
-        #define HAVE_TR1_UNORDERED_SET
-    #endif
-#endif // defined(__has_include)
+#endif /* defined(__has_include) */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 
