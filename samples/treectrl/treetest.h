@@ -105,7 +105,6 @@ public:
 
     void DoSortChildren(const wxTreeItemId& item, bool reverse = false)
         { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
-    void DoEnsureVisible() { if (m_lastItem.IsOk()) EnsureVisible(m_lastItem); }
 
     void DoToggleIcon(const wxTreeItemId& item);
     void DoToggleState(const wxTreeItemId& item);
@@ -113,8 +112,6 @@ public:
     void ShowMenu(wxTreeItemId id, const wxPoint& pt);
 
     int ImageSize(void) const { return m_imageSize; }
-
-    void SetLastItem(wxTreeItemId id) { m_lastItem = id; }
 
     void SetAlternateImages(bool show) { m_alternateImages = show; }
     bool AlternateImages() const { return m_alternateImages; }
@@ -152,8 +149,7 @@ private:
 
     int          m_imageSize;               // current size of images
     bool         m_reverseSort;             // flag for OnCompareItems
-    wxTreeItemId m_lastItem,                // for OnEnsureVisible()
-                 m_draggedItem;             // item being dragged right now
+    wxTreeItemId m_draggedItem;             // item being dragged right now
     bool         m_alternateImages;
     bool         m_alternateStates;
 
