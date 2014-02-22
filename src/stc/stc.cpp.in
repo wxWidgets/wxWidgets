@@ -626,10 +626,17 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
 #endif // !wxUSE_TEXTCTRL
 
 #if wxUSE_DRAG_AND_DROP
-wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
-        return m_swx->DoDragOver(x, y, def);
+wxDragResult wxStyledTextCtrl::DoDragEnter(wxCoord x, wxCoord y, wxDragResult def) {
+    return m_swx->DoDragEnter(x, y, def);
 }
 
+wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
+    return m_swx->DoDragOver(x, y, def);
+}
+
+void wxStyledTextCtrl::DoDragLeave() {
+    m_swx->DoDragLeave();
+}
 
 bool wxStyledTextCtrl::DoDropText(long x, long y, const wxString& data) {
     return m_swx->DoDropText(x, y, data);

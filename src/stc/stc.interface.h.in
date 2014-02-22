@@ -279,9 +279,23 @@ public:
     bool LoadFile(const wxString& filename);
 
     /**
+       Allow for simulating a DnD DragEnter
+
+       @since 3.1.0
+    */
+    wxDragResult DoDragEnter(wxCoord x, wxCoord y, wxDragResult defaultRes);
+
+    /**
        Allow for simulating a DnD DragOver
     */
     wxDragResult DoDragOver(wxCoord x, wxCoord y, wxDragResult defaultRes);
+
+    /**
+       Allow for simulating a DnD DragLeave
+
+       @since 3.1.0
+    */
+    void DoDragLeave();
 
     /**
        Allow for simulating a DnD DropText

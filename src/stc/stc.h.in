@@ -221,8 +221,14 @@ public:
 #endif // !wxUSE_TEXTCTRL
 
 #ifdef STC_USE_DND
+    // Allow for simulating a DnD DragEnter
+    wxDragResult DoDragEnter(wxCoord x, wxCoord y, wxDragResult def);
+
     // Allow for simulating a DnD DragOver
     wxDragResult DoDragOver(wxCoord x, wxCoord y, wxDragResult def);
+
+    // Allow for simulating a DnD DragLeave
+    void DoDragLeave();
 
     // Allow for simulating a DnD DropText
     bool DoDropText(long x, long y, const wxString& data);
