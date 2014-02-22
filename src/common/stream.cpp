@@ -390,7 +390,7 @@ char wxStreamBuffer::GetChar()
 
 size_t wxStreamBuffer::Read(void *buffer, size_t size)
 {
-    wxASSERT_MSG( buffer, wxT("Warning: Null pointer is about to be used") );
+    wxCHECK_MSG( buffer, 0, wxT("NULL data pointer") );
 
     /* Clear buffer first */
     memset(buffer, 0x00, size);
@@ -471,7 +471,7 @@ size_t wxStreamBuffer::Read(wxStreamBuffer *dbuf)
 
 size_t wxStreamBuffer::Write(const void *buffer, size_t size)
 {
-    wxASSERT_MSG( buffer, wxT("Warning: Null pointer is about to be send") );
+    wxCHECK_MSG( buffer, 0, wxT("NULL data pointer") );
 
     if (m_stream)
     {
@@ -771,7 +771,7 @@ char *wxInputStream::AllocSpaceWBack(size_t needed_size)
 
 size_t wxInputStream::GetWBack(void *buf, size_t size)
 {
-    wxASSERT_MSG( buf, wxT("Warning: Null pointer is about to be used") );
+    wxCHECK_MSG( buf, 0, wxT("NULL data pointer") );
 
     /* Clear buffer first */
     memset(buf, 0x00, size);
@@ -807,7 +807,7 @@ size_t wxInputStream::GetWBack(void *buf, size_t size)
 
 size_t wxInputStream::Ungetch(const void *buf, size_t bufsize)
 {
-    wxASSERT_MSG( buf, wxT("Warning: Null pointer is about to be used in Ungetch()") );
+    wxCHECK_MSG( buf, 0, wxT("NULL data pointer") );
 
     if ( m_lasterror != wxSTREAM_NO_ERROR && m_lasterror != wxSTREAM_EOF )
     {
@@ -841,7 +841,7 @@ int wxInputStream::GetC()
 
 wxInputStream& wxInputStream::Read(void *buf, size_t size)
 {
-    wxASSERT_MSG( buf, wxT("Warning: Null pointer is about to be read") );
+    wxCHECK_MSG( buf, *this, wxT("NULL data pointer") );
 
     char *p = (char *)buf;
     m_lastcount = 0;
