@@ -324,6 +324,15 @@ public:
         That value is compatible with previous (before gravity was introduced)
         behaviour of wxSplitterWindow.
 
+        Notice that when sash gravity for a newly created splitter window, it
+        is often necessary to explicitly set the splitter size using SetSize()
+        to ensure that is big enough for its initial sash position. Otherwise,
+        i.e. if the window is created with the default tiny size and only
+        resized to its correct size later, the initial sash position will be
+        affected by the gravity and typically result in sash being at the
+        rightmost position for the gravity of 1. See the example code creating
+        wxSplitterWindow in the splitter sample for more details.
+
         @see GetSashGravity()
     */
     void SetSashGravity(double gravity);
