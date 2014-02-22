@@ -99,7 +99,7 @@ msgstr "#9 Umschlag, 3 7/8 x 8 7/8 Zoll"
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -681,7 +681,7 @@ msgstr "&Symbol:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Werte synchronisieren"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -755,14 +755,14 @@ msgid "&Yes"
 msgstr "&Ja"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' sollte nur alphabetische Zeichen enthalten."
+msgstr "'%s' enthält ungültige Zeichen."
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' sollte nur alphabetische Zeichen enthalten."
+msgstr "'%s' enthält nicht nur gültige Zeichen."
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -780,14 +780,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' ist kein gültiger Nachrichtenkatalog."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' ist kein gültiger Nachrichtenkatalog."
+msgstr "'%s' ist keine gültige Zeichenkette."
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' ist ungültig"
+msgstr "'%s' ist eine ungültige Zeichenkette"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
@@ -1169,9 +1169,8 @@ msgid "About %s"
 msgstr "Über %s"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Über"
+msgstr "Über..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1186,12 +1185,10 @@ msgid "Add"
 msgstr "Hinzufügen"
 
 #: ../src/richtext/richtextbuffer.cpp:11219
-#, fuzzy
 msgid "Add Column"
 msgstr "Spalte hinzufügen"
 
 #: ../src/richtext/richtextbuffer.cpp:11156
-#, fuzzy
 msgid "Add Row"
 msgstr "Zeile hinzufügen"
 
@@ -1284,7 +1281,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Optionaler Eckradius, um abgerundete Ecken hinzuzufügen."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1857,7 +1854,7 @@ msgid "Cannot suspend thread %lu"
 msgstr "Kann Thread %lu nicht anhalten."
 
 #: ../src/msw/thread.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
 msgstr "Kann Thread %lx nicht anhalten."
 
@@ -1962,7 +1959,7 @@ msgstr "Klicken um eine schließende Klammer hinzuzufügen."
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Markieren um alle Ecken gleichzeitig anzupassen."
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -1973,9 +1970,8 @@ msgstr "Klicken um den Gliederungspunkt in Klammern zu setzen."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "Klicken um die Textfarbe zu ändern."
+msgstr "Markieren um rechts-nach-links-Textausrichtung zu aktivieren."
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -2022,7 +2018,7 @@ msgstr "Klicken um den Text hochgestellt anzuzeigen."
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "Markieren um Silbentrennung zu unterdrücken."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2307,11 +2303,11 @@ msgstr "Auswahl kopieren"
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Ecke"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "Eck&radius:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2655,12 +2651,10 @@ msgid "Delete A&ll"
 msgstr "A&lles löschen"
 
 #: ../src/richtext/richtextbuffer.cpp:11105
-#, fuzzy
 msgid "Delete Column"
 msgstr "Spalte löschen"
 
 #: ../src/richtext/richtextbuffer.cpp:11055
-#, fuzzy
 msgid "Delete Row"
 msgstr "Zeile löschen"
 
@@ -5864,7 +5858,7 @@ msgstr "Grat"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "Rec&hts nach links"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -6050,7 +6044,7 @@ msgstr "Trennungszeichen nach der Option '%s' erwartet."
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Dienste"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6273,7 +6267,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Silbe&ntrennung unterdrücken"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6395,9 +6389,8 @@ msgstr "Die Hintergrundfarbe."
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "Die Schriftschitt."
+msgstr "Das Rahmenlinien-Format."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6741,7 +6734,7 @@ msgstr "Der Wert für die Option '%s' muss angegeben werden."
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Wert des Eckradius."
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -7168,9 +7161,8 @@ msgstr "Einheit für den Abstand nach unten."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Einheit für die obere Auffüllung"
+msgstr "Einheit des Eckradius."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7507,14 +7499,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7608,14 +7598,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
