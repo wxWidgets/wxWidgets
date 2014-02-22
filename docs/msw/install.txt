@@ -96,22 +96,41 @@ Microsoft Visual C++ Compilation
 
 * From the IDE using the provided project files:
 
-Ready to use project files are provided for VC++ versions 6, 7, 8, 9
-and 10 (also known as MSVS 6, 2003, 2005, 2008 and 2010 respectively).
-For VC++ 11 (2012, respectively), you need to import the existing VC10
-project files into VC11 IDE first.
+Ready to use project files are provided for VC++ versions 6, 7, 8, 9,
+10, 11 and 12 (also known as MSVS 6, 2003, 2005, 2008, 2010, 2012 and 2013
+respectively).
 
-Simply open wx_vcN.sln (for N=7, 8, 9 or 10) or wx.dsw (for VC6) file,
+Simply open wx_vcN.sln (for N=7, 8, 9, 10, 11 or 12) or wx.dsw (for VC6) file,
 select the appropriate configuration (Debug or Release, static or DLL)
 and build the solution. Notice that when building a DLL configuration,
 you may need to perform the build several times because the projects
 are not always built in the correct order, and this may result in link
 errors. Simply do the build again, up to 3 times, to fix this.
 
-Notice that x64 configurations are only included in VC10 project
+Notice that x64 configurations are only included in VC10 and later project
 currently. If you want to build Win64 libraries with the previous
 compiler versions, the simplest solution is to use the makefiles as
 described above.
+
+Special note for VC11 and VC12 projects: it is possible to customize the build
+by creating wx_vcN_local.props (N=11 or 12) file in build\msw directory which
+is used, if it exists, by the projects. The settings in this file override the
+default values for the properties such as wxCfg (corresponding to the CFG
+makefile variable described below) or wxVendor (corresponding to VENDOR). For
+example, you could set wxCompilerPrefix to "vc120" in your local properties
+file:
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+      <PropertyGroup Label="UserMacros">
+        <wxCompilerPrefix>vc120</wxCompilerPrefix>
+      </PropertyGroup>
+    </Project>
+
+to use "vc120" prefix for the build directories used by VC12 and so to allow
+its build files to coexist with the files produced by the other MSVC versions.
+Notice that by using a separate local props file you ensure that your changes
+won't be lost when updating to a future wxWidgets version.
 
 
 Cygwin/MinGW Compilation
