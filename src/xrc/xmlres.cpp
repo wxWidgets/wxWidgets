@@ -1262,8 +1262,6 @@ wxIdRangeManager::~wxIdRangeManager()
         delete *i;
     }
     m_IdRanges.clear();
-
-    delete ms_instance;
 }
 
 void wxIdRangeManager::AddRange(const wxXmlNode* node)
