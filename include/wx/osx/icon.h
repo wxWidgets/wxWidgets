@@ -52,7 +52,11 @@ public:
     wxSize GetSize() const { return wxSize(GetWidth(), GetHeight()); }
 
     WXHICON GetHICON() const;
-
+    
+#if wxOSX_USE_COCOA
+    WX_NSImage GetNSImage() const ;
+#endif
+    
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
