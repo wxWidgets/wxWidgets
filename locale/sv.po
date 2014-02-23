@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 14:54+0100\n"
-"PO-Revision-Date: 2013-07-14 03:12+0100\n"
+"PO-Revision-Date: 2014-02-23 11:45+0100\n"
 "Last-Translator: Jonas Rydberg <jonas@drevo.se>\n"
 "Language-Team: wxWidgets translators <wx-translators@googlegroups.com>\n"
 "Language: sv\n"
@@ -94,9 +94,8 @@ msgstr "#9 kuvert, 3 7/8 x 8 7/8 tum"
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
-#, fuzzy
 msgid "%"
-msgstr "%s B"
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1044
 #, c-format
@@ -678,7 +677,7 @@ msgstr "&Symbol:"
 #: ../src/richtext/richtextborderspage.cpp:379
 #: ../src/richtext/richtextborderspage.cpp:548
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Synkronisera värden"
 
 #: ../include/wx/richtext/richtextbuffer.h:5733
 msgid "&Table"
@@ -1049,14 +1048,12 @@ msgid "A standard bullet name."
 msgstr "Ett standard punktlisttecken."
 
 #: ../src/common/paper.cpp:218
-#, fuzzy
 msgid "A0 sheet, 841 x 1189 mm"
-msgstr "A4 ark, 210 x 297 mm"
+msgstr "A0 ark, 841 x 1189 mm"
 
 #: ../src/common/paper.cpp:219
-#, fuzzy
 msgid "A1 sheet, 594 x 841 mm"
-msgstr "A3 ark, 297 x 420 mm"
+msgstr "A1 ark, 594 x 841 mm"
 
 #: ../src/common/paper.cpp:160
 msgid "A2 420 x 594 mm"
@@ -1084,7 +1081,7 @@ msgstr "A3 ark, 297 x 420 mm"
 
 #: ../src/common/paper.cpp:147
 msgid "A4 Extra 9.27 x 12.69 in"
-msgstr "A4 Extra 9,27 x 12,69 tum"
+msgstr "A4 extra 9,27 x 12,69 tum"
 
 #: ../src/common/paper.cpp:154
 msgid "A4 Plus 210 x 330 mm"
@@ -1112,7 +1109,7 @@ msgstr "A5 extra 174 x 235 mm"
 
 #: ../src/common/paper.cpp:173
 msgid "A5 Rotated 210 x 148 mm"
-msgstr "A5 Roterad 210 x 148 mm"
+msgstr "A5 roterad 210 x 148 mm"
 
 #: ../src/common/paper.cpp:155
 msgid "A5 Transverse 148 x 210 mm"
@@ -1154,9 +1151,8 @@ msgid "About %s"
 msgstr "Om %s"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Om"
+msgstr "Om..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1171,12 +1167,10 @@ msgid "Add"
 msgstr "Lägg till"
 
 #: ../src/richtext/richtextbuffer.cpp:11056
-#, fuzzy
 msgid "Add Column"
 msgstr "Lägg till kolumn"
 
 #: ../src/richtext/richtextbuffer.cpp:10993
-#, fuzzy
 msgid "Add Row"
 msgstr "Lägg till rad"
 
@@ -1937,7 +1931,7 @@ msgstr "Kryssa i för att lägga till en högerparantes."
 #: ../src/richtext/richtextborderspage.cpp:550
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Kryssa i för att redigera alla ramar samtidigt"
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -2470,9 +2464,8 @@ msgid "Create new directory"
 msgstr "Skapa ny katalog"
 
 #: ../src/common/accelcmn.cpp:322
-#, fuzzy
 msgid "Ctrl+"
-msgstr "Ctrl-"
+msgstr "Ctrl+"
 
 #: ../src/richtext/richtextctrl.cpp:331 ../src/osx/textctrl_osx.cpp:582
 #: ../src/common/stockitem.cpp:151 ../src/msw/textctrl.cpp:2334
@@ -2606,12 +2599,10 @@ msgid "Delete A&ll"
 msgstr "Ta bort a&llt"
 
 #: ../src/richtext/richtextbuffer.cpp:10942
-#, fuzzy
 msgid "Delete Column"
 msgstr "Ta bort kolumn"
 
 #: ../src/richtext/richtextbuffer.cpp:10892
-#, fuzzy
 msgid "Delete Row"
 msgstr "Ta bort rad"
 
@@ -2828,9 +2819,8 @@ msgid "Edit item"
 msgstr "Redigera post"
 
 #: ../include/wx/generic/progdlgg.h:84
-#, fuzzy
 msgid "Elapsed time:"
-msgstr "Passerad tid : "
+msgstr "Passerad tid: "
 
 #: ../src/richtext/richtextsizepage.cpp:353
 #: ../src/richtext/richtextsizepage.cpp:355
@@ -2960,7 +2950,6 @@ msgid "Esperanto (ISO-8859-3)"
 msgstr "Esperanto (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
-#, fuzzy
 msgid "Estimated time:"
 msgstr "Uppskattad tid: "
 
@@ -3988,7 +3977,7 @@ msgstr "INSERT"
 
 #: ../src/common/fmapbase.cpp:197
 msgid "ISO-2022-JP"
-msgstr ""
+msgstr "ISO-2022-JP"
 
 #: ../src/osx/carbon/dataview.cpp:2418
 msgid "Icon & text renderer cannot render value; value type: "
@@ -4419,8 +4408,8 @@ msgstr "Sista sida"
 #, c-format
 msgid "Last repeated message (\"%s\", %lu time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %lu times) wasn't output"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Senast upprepade meddelande(\"%s\", %lu gång) skrevs inte ut"
+msgstr[1] "Senast upprepade meddelande(\"%s\", %lu gånger) skrevs inte ut"
 
 #: ../src/common/paper.cpp:104
 msgid "Ledger, 17 x 11 in"
@@ -4582,173 +4571,164 @@ msgid "Ma&ximize"
 msgstr "Ma&ximera"
 
 #: ../src/common/fmapbase.cpp:203
-#, fuzzy
 msgid "MacArabic"
-msgstr "Arabiska"
+msgstr "MacArabiska"
 
 #: ../src/common/fmapbase.cpp:222
-#, fuzzy
 msgid "MacArmenian"
-msgstr "Roman"
+msgstr "MacArmeniska"
 
 #: ../src/common/fmapbase.cpp:211
 msgid "MacBengali"
-msgstr ""
+msgstr "MacBengaliska"
 
 #: ../src/common/fmapbase.cpp:217
 msgid "MacBurmese"
-msgstr ""
+msgstr "MacBurmesiska"
 
 #: ../src/common/fmapbase.cpp:236
 msgid "MacCeltic"
-msgstr ""
+msgstr "MacKeltiska"
 
 #: ../src/common/fmapbase.cpp:227
-#, fuzzy
 msgid "MacCentralEurRoman"
-msgstr "Roman"
+msgstr "MacCentraleurromanska"
 
 #: ../src/common/fmapbase.cpp:223
 msgid "MacChineseSimp"
-msgstr ""
+msgstr "MacFörenkladKinesiska"
 
 #: ../src/common/fmapbase.cpp:201
 msgid "MacChineseTrad"
-msgstr ""
+msgstr "MacTratitionellKinesiska"
 
 #: ../src/common/fmapbase.cpp:233
 msgid "MacCroatian"
-msgstr ""
+msgstr "MacKroatiska"
 
 #: ../src/common/fmapbase.cpp:206
 msgid "MacCyrillic"
-msgstr ""
+msgstr "MacKyrilliska"
 
 #: ../src/common/fmapbase.cpp:207
 msgid "MacDevanagari"
-msgstr ""
+msgstr "MacDevanagari"
 
 #: ../src/common/fmapbase.cpp:231
 msgid "MacDingbats"
-msgstr ""
+msgstr "MacDingbats"
 
 #: ../src/common/fmapbase.cpp:226
-#, fuzzy
 msgid "MacEthiopic"
-msgstr "Arabiska"
+msgstr "MacEtiopiska"
 
 #: ../src/common/fmapbase.cpp:229
-#, fuzzy
 msgid "MacExtArabic"
-msgstr "Arabiska"
+msgstr "MacUtökadArabiska"
 
 #: ../src/common/fmapbase.cpp:237
 msgid "MacGaelic"
-msgstr ""
+msgstr "MacGaeliska"
 
 #: ../src/common/fmapbase.cpp:221
 msgid "MacGeorgian"
-msgstr ""
+msgstr "MacGeorigiska"
 
 #: ../src/common/fmapbase.cpp:205
 msgid "MacGreek"
-msgstr ""
+msgstr "MacGrekiska"
 
 #: ../src/common/fmapbase.cpp:209
 msgid "MacGujarati"
-msgstr ""
+msgstr "MacGujarati"
 
 #: ../src/common/fmapbase.cpp:208
 msgid "MacGurmukhi"
-msgstr ""
+msgstr "MacGurmukhi"
 
 #: ../src/common/fmapbase.cpp:204
 msgid "MacHebrew"
-msgstr ""
+msgstr "MacHebreiska"
 
 #: ../src/common/fmapbase.cpp:234
 msgid "MacIcelandic"
-msgstr ""
+msgstr "MacIsländska"
 
 #: ../src/common/fmapbase.cpp:200
 msgid "MacJapanese"
-msgstr ""
+msgstr "MacJapanska"
 
 #: ../src/common/fmapbase.cpp:214
 msgid "MacKannada"
-msgstr ""
+msgstr "MacKannada"
 
 #: ../src/common/fmapbase.cpp:238
 msgid "MacKeyboardGlyphs"
-msgstr ""
+msgstr "MacTangentborstecken"
 
 #: ../src/common/fmapbase.cpp:218
 msgid "MacKhmer"
-msgstr ""
+msgstr "MacKhmer"
 
 #: ../src/common/fmapbase.cpp:202
 msgid "MacKorean"
-msgstr ""
+msgstr "MacKoreanska"
 
 #: ../src/common/fmapbase.cpp:220
 msgid "MacLaotian"
-msgstr ""
+msgstr "MacLaotian"
 
 #: ../src/common/fmapbase.cpp:215
 msgid "MacMalayalam"
-msgstr ""
+msgstr "MacMalayalam"
 
 #: ../src/common/fmapbase.cpp:225
 msgid "MacMongolian"
-msgstr ""
+msgstr "MacMongoliska"
 
 #: ../src/common/fmapbase.cpp:210
 msgid "MacOriya"
-msgstr ""
+msgstr "MacOriya"
 
 #: ../src/common/fmapbase.cpp:199
-#, fuzzy
 msgid "MacRoman"
-msgstr "Roman"
+msgstr "MacRoman"
 
 #: ../src/common/fmapbase.cpp:235
-#, fuzzy
 msgid "MacRomanian"
-msgstr "Roman"
+msgstr "MacRumänska"
 
 #: ../src/common/fmapbase.cpp:216
-#, fuzzy
 msgid "MacSinhalese"
-msgstr "Matcha skiftläge"
+msgstr "MacSingalesiska"
 
 #: ../src/common/fmapbase.cpp:230
-#, fuzzy
 msgid "MacSymbol"
-msgstr "Symbol"
+msgstr "MacSymbol"
 
 #: ../src/common/fmapbase.cpp:212
 msgid "MacTamil"
-msgstr ""
+msgstr "MacTamilska"
 
 #: ../src/common/fmapbase.cpp:213
 msgid "MacTelugu"
-msgstr ""
+msgstr "MacTelugu"
 
 #: ../src/common/fmapbase.cpp:219
 msgid "MacThai"
-msgstr ""
+msgstr "MacThailändska"
 
 #: ../src/common/fmapbase.cpp:224
 msgid "MacTibetan"
-msgstr ""
+msgstr "MacTibetanska"
 
 #: ../src/common/fmapbase.cpp:232
 msgid "MacTurkish"
-msgstr ""
+msgstr "MacTurksiska"
 
 #: ../src/common/fmapbase.cpp:228
 msgid "MacVietnamese"
-msgstr ""
+msgstr "MacVietnamesiska"
 
 #: ../src/propgrid/advprops.cpp:2013
 msgid "Make a selection:"
@@ -5665,9 +5645,8 @@ msgid "RIGHT"
 msgstr "HÖGER"
 
 #: ../src/common/accelcmn.cpp:327
-#, fuzzy
 msgid "RawCtrl+"
-msgstr "Ctrl-"
+msgstr "ObehandladCtrl+"
 
 #: ../src/common/ffile.cpp:113 ../src/common/ffile.cpp:134
 #, c-format
@@ -5730,7 +5709,6 @@ msgid "Relevant entries:"
 msgstr "Relevanta poster:"
 
 #: ../include/wx/generic/progdlgg.h:86
-#, fuzzy
 msgid "Remaining time:"
 msgstr "Återstående tid: "
 
@@ -5979,7 +5957,7 @@ msgstr "Avgränsare förväntad efter flaggan \"%s\"."
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Tjänster"
 
 #: ../src/richtext/richtextbuffer.cpp:10818
 msgid "Set Cell Style"
@@ -6002,9 +5980,8 @@ msgid "Several active dialup connections found, choosing one randomly."
 msgstr "Flera aktiva uppringningsanslutningar hittades, väljer en slumpvis."
 
 #: ../src/common/accelcmn.cpp:324
-#, fuzzy
 msgid "Shift+"
-msgstr "Skift-"
+msgstr "Skift+"
 
 #: ../src/generic/dirdlgg.cpp:170
 msgid "Show &hidden directories"
@@ -6319,9 +6296,8 @@ msgstr "Bakgrundsfärgen."
 #: ../src/richtext/richtextborderspage.cpp:504
 #: ../src/richtext/richtextborderspage.cpp:536
 #: ../src/richtext/richtextborderspage.cpp:538
-#, fuzzy
 msgid "The border line style."
-msgstr "Typsnittets stil."
+msgstr "Ramens linjestil."
 
 #: ../src/richtext/richtextmarginspage.cpp:268
 #: ../src/richtext/richtextmarginspage.cpp:270
@@ -6535,10 +6511,10 @@ msgid "The outline level."
 msgstr "Sammanfattningsnivån."
 
 #: ../src/common/log.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid "The previous message repeated %lu time."
 msgid_plural "The previous message repeated %lu times."
-msgstr[0] "Föregående meddelande upprepat en gång."
+msgstr[0] "Föregående meddelande upprepat %lu gång."
 msgstr[1] "Föregående meddelande upprepat %lu gånger."
 
 #: ../src/common/log.cpp:274
@@ -7405,14 +7381,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7453,14 +7427,12 @@ msgid "Windows Central European (CP 1250)"
 msgstr "Windows centraleuropeisk (CP 1250)"
 
 #: ../src/common/fmapbase.cpp:168
-#, fuzzy
 msgid "Windows Chinese Simplified (CP 936) or GB-2312"
-msgstr "Windows förenklad kinesiska (CP 936)"
+msgstr "Windows förenklad kinesiska (CP 936) eller GB-2312"
 
 #: ../src/common/fmapbase.cpp:170
-#, fuzzy
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
-msgstr "Windows traditionelll kinesiska (CP 950)"
+msgstr "Windows traditionelll kinesiska (CP 950) eller Big-5"
 
 #: ../src/common/fmapbase.cpp:172
 msgid "Windows Cyrillic (CP 1251)"
@@ -7475,14 +7447,12 @@ msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows hebreisk (CP 1255)"
 
 #: ../src/common/fmapbase.cpp:167
-#, fuzzy
 msgid "Windows Japanese (CP 932) or Shift-JIS"
-msgstr "Windows japansk (CP 932)"
+msgstr "Windows japansk (CP 932) eller Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Windows arabisk (CP 1256)"
+msgstr "Windows Johab (CP 1361)"
 
 #: ../src/common/fmapbase.cpp:169
 msgid "Windows Korean (CP 949)"
@@ -7510,14 +7480,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
@@ -7528,9 +7496,8 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Windows turkisk (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:179
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Windows grekisk (CP 1253)"
+msgstr "Windows Vietnamesiska (CP 1258)"
 
 #: ../src/msw/utils.cpp:1296
 msgid "Windows Vista"
@@ -7549,9 +7516,8 @@ msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
 #: ../src/common/fmapbase.cpp:165
-#, fuzzy
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
-msgstr "Windows kyrillisk (CP 1251)"
+msgstr "Windows/DOS OEM Kyrillisk (CP 1251)"
 
 #: ../src/common/ffile.cpp:148
 #, c-format
@@ -8263,9 +8229,8 @@ msgid "px"
 msgstr "px"
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgid "rawctrl"
-msgstr "ctrl"
+msgstr "obehandladctrl"
 
 #: ../src/html/chm.cpp:333
 msgid "read error"
@@ -8326,29 +8291,24 @@ msgid "specify the theme to use"
 msgstr "ange tema att använda"
 
 #: ../src/richtext/richtextbuffer.cpp:8983
-#, fuzzy
 msgid "standard/circle"
-msgstr "Standard"
+msgstr "standard/cirkel"
 
 #: ../src/richtext/richtextbuffer.cpp:8984
-#, fuzzy
 msgid "standard/circle-outline"
-msgstr "Standard"
+msgstr "standard/cirkelram"
 
 #: ../src/richtext/richtextbuffer.cpp:8986
-#, fuzzy
 msgid "standard/diamond"
-msgstr "Standard"
+msgstr "standard/diamant"
 
 #: ../src/richtext/richtextbuffer.cpp:8985
-#, fuzzy
 msgid "standard/square"
-msgstr "Standard"
+msgstr "standard/kvadrat"
 
 #: ../src/richtext/richtextbuffer.cpp:8987
-#, fuzzy
 msgid "standard/triangle"
-msgstr "Standard"
+msgstr "standard/triangel"
 
 #: ../src/common/zipstrm.cpp:1782
 msgid "stored file length not in Zip header"
