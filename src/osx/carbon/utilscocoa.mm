@@ -447,6 +447,20 @@ WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor )
     return( newImage );
 }
 
+WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromIconRef( WXHICON iconref )
+{
+    NSImage  *newImage = [[NSImage alloc] initWithIconRef:iconref];
+    [newImage autorelease];
+    return( newImage );
+}
+
+CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromNSImage( WX_NSImage nsimage, CGRect* r, CGContextRef cg)
+{
+    return [nsimage CGImageForProposedRect:r
+                                   context:[NSGraphicsContext graphicsContextWithGraphicsPort:cg flipped:NO]
+                                            hints:nil];
+}
+
 CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage nsimage)
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
