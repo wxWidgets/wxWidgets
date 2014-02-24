@@ -456,8 +456,9 @@ WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromIconRef( WXHICON iconref )
 
 CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromNSImage( WX_NSImage nsimage, CGRect* r, CGContextRef cg)
 {
-    return [nsimage CGImageForProposedRect:r
-                                   context:[NSGraphicsContext graphicsContextWithGraphicsPort:cg flipped:NO]
+    NSRect nsRect = NSRectFromCGRect(*r);
+    return [nsimage CGImageForProposedRect:&nsRect
+                                   context:[NSGraphicsContext graphicsContextWithGraphicsPort:cg flipped:YES]
                                             hints:nil];
 }
 
