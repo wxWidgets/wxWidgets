@@ -51,6 +51,7 @@
 #endif
 #ifdef __WXGTK3__
     #include "wx/graphics.h"
+    #include "wx/gtk/private.h"
 #endif
 #endif
 
@@ -421,20 +422,27 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
     if (!window->m_wxwindow) return;
     if (!gtk_widget_is_drawable(window->m_wxwindow)) return;
 
+#ifdef __WXGTK3__
+    cairo_t* cr = static_cast<cairo_t*>(dc.GetGraphicsContext()->GetNativeContext());
+    // invert orientation for widget (horizontal GtkPaned has a vertical splitter)
+    wxOrientation orient = orientation == wxVERTICAL ? wxHORIZONTAL : wxVERTICAL;
+    GtkWidget* widget = wxGTKPrivate::GetSplitterWidget(orient);
+    GtkStyleContext* sc = gtk_widget_get_style_context(widget);
+    gtk_style_context_save(sc);
+
+    gtk_style_context_add_class(sc, GTK_STYLE_CLASS_PANE_SEPARATOR);
+    gtk_render_handle(sc, cr, rect.x, rect.y, rect.width, rect.height);
+
+    gtk_style_context_restore(sc);
+#else
     gtk_paint_handle
     (
         gtk_widget_get_style(window->m_wxwindow),
-#ifdef __WXGTK3__
-        static_cast<cairo_t*>(dc.GetGraphicsContext()->GetNativeContext()),
-#else
         window->GTKGetDrawingWindow(),
-#endif
         // flags & wxCONTROL_CURRENT ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL,
         GTK_STATE_NORMAL,
         GTK_SHADOW_NONE,
-#ifndef __WXGTK3__
         NULL /* no clipping */,
-#endif
         window->m_wxwindow,
         "paned",
         rect.x,
@@ -443,6 +451,7 @@ void wxAuiDefaultDockArt::DrawSash(wxDC& dc, wxWindow *window, int orientation, 
         rect.height,
         (orientation == wxVERTICAL) ? GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL
     );
+#endif // !__WXGTK3__
 
 #else
     wxUnusedVar(window);
