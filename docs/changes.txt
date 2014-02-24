@@ -608,8 +608,9 @@ wxGTK:
 - Fix wxPopupTransientWindow mouse events with GTK3,
   also fixes wxOwnerDrawnComboBox, wxDatePickerCtrl.
 - Fix cursor inheritance.
-- Fix wxStaticBoxSizer size calculation
-- Fix AUI panel re-docking
+- Fix wxStaticBoxSizer size calculation.
+- Fix AUI panel re-docking.
+- Add support for wxDD_DIR_MUST_EXIST to wxDirDialog.
 
 wxMSW:
 
