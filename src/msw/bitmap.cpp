@@ -74,6 +74,11 @@ public:
 #if wxUSE_WXDIB
     // Takes ownership of the given DIB.
     bool AssignDIB(wxDIB& dib);
+
+    // Also takes ownership of the given DIB, but doesn't change any other
+    // fields (which are supposed to be already set), and just updates
+    // m_hasAlpha because 32 bit DIBs always do have it.
+    void Set32bppHDIB(HBITMAP hdib);
 #endif // wxUSE_WXDIB
 
 
@@ -310,6 +315,15 @@ bool wxBitmapRefData::AssignDIB(wxDIB& dib)
     return true;
 }
 
+void wxBitmapRefData::Set32bppHDIB(HBITMAP hdib)
+{
+    Free();
+
+    m_isDIB = true;
+    m_hasAlpha = true;
+    m_hBitmap = hdib;
+}
+
 #endif // wxUSE_WXDIB
 
 // ----------------------------------------------------------------------------
@@ -424,11 +438,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
             {
                 HBITMAP hdib = 0;
                 if ( CheckAlpha(iconInfo.hbmColor, &hdib) )
-                {
-                    refData->m_hasAlpha = true;
-                    ::DeleteObject(refData->m_hBitmap);
-                    refData->m_hBitmap = hdib;
-                }
+                    refData->Set32bppHDIB(hdib);
             }
             break;
 #endif // wxUSE_WXDIB
