@@ -394,6 +394,48 @@ static bool CheckAlpha(HBITMAP hbmp, HBITMAP* hdib = NULL)
     return false;
 }
 
+// Return HDIB containing premultiplied bitmap data if the original bitmap is
+// not premultiplied, otherwise return NULL.
+//
+// Semantics is a bit weird here again because we want to avoid throwing the
+// wxDIB we create here away if possible.
+//
+// Also notice that this function uses a heuristics for determining whether the
+// original bitmap uses premultiplied alpha or not and can return NULL for some
+// bitmaps not using premultiplied alpha. And while this should be relatively
+// rare in practice, we really ought to allow the user to specify this
+// explicitly.
+static HBITMAP CreatePremultipliedDIBIfNeeded(HBITMAP hbmp)
+{
+    // Check if 32-bit bitmap realy has premultiplied RGB data
+    // and premuliply it if necessary.
+
+    BITMAP bm;
+    if ( !::GetObject(hbmp, sizeof(bm), &bm) || (bm.bmBitsPixel != 32) )
+        return NULL;
+
+    wxDIB dib(hbmp);
+    if ( !dib.IsOk() )
+        return NULL;
+
+    unsigned char* pixels = dib.GetData();
+    unsigned char* const end = pixels + 4*dib.GetWidth()*dib.GetHeight();
+    for ( ; pixels < end; pixels += 4 )
+    {
+        const unsigned char a = pixels[3];
+        if ( a > 0 && (pixels[0] > a || pixels[1] > a || pixels[2] > a) )
+        {
+            // Data is certainly not premultiplied by alpha if any of the
+            // values is smaller than the value of alpha itself.
+            PremultiplyPixels(dib.GetData(), end);
+
+            return dib.Detach();
+        }
+    }
+
+    return NULL;
+}
+
 bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
                                     wxBitmapTransparency transp)
 {
@@ -1113,7 +1155,17 @@ bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
     {
         m_refData = new wxBitmapRefData;
 
-        return handler->LoadFile(this, filename, type, -1, -1);
+        if ( !handler->LoadFile(this, filename, type, -1, -1) )
+            return false;
+
+        // wxBitmap must contain premultiplied data, but external files are not
+        // always in this format, so try to detect whether this is the case and
+        // create a premultiplied DIB if it really is.
+        HBITMAP hdib = CreatePremultipliedDIBIfNeeded(GetHbitmap());
+        if ( hdib )
+            static_cast<wxBitmapRefData*>(m_refData)->Set32bppHDIB(hdib);
+
+        return true;
     }
 #if wxUSE_IMAGE && wxUSE_WXDIB
     else // no bitmap handler found
