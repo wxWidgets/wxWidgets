@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2013-10-07 20:21+0530\n"
+"PO-Revision-Date: 2014-02-24 21:51+0530\n"
 "Last-Translator: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language-Team: DINAKAR T.D. <td.dinkar@gmail.com>\n"
 "Language: ta\n"
@@ -96,7 +96,7 @@ msgstr "#9 அஞ்சல் உறை, 3 7/8 x 8 7/8 in"
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -678,7 +678,7 @@ msgstr "குறியெழுத்து:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "மதிப்புகளை ஒத்திசைவாக்குக"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -752,14 +752,14 @@ msgid "&Yes"
 msgstr "ஆ&ம்"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' அகர வரியுருக்களை மட்டும் உள்ளடங்கியதாக இருக்க வேண்டும்"
+msgstr "'%s' ஏற்க முடியாதவரியுருக்களைக் கொண்டுள்ளது"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' அகர வரியுருக்களை மட்டும் உள்ளடங்கியதாக இருக்க வேண்டும்"
+msgstr "ஏற்கக் கூடிய வரியுருக்களை மட்டுமே '%s' கொண்டிருக்கவில்லை"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -777,14 +777,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' ஏற்க முடியாத தகவல் பட்டியலாகும்"
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' ஏற்க முடியாத தகவல் பட்டியலாகும்"
+msgstr "ஏற்கக்கூடிய சரங்களில் ஒன்றாக '%s' இல்லை"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' ஏற்க முடியாதது"
+msgstr "ஏற்க முடியாத சரங்களில் ஒன்றாக '%s' உள்ளது"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
@@ -1166,7 +1166,6 @@ msgid "About %s"
 msgstr "%s குறித்து"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
 msgstr "குறித்து..."
 
@@ -1280,6 +1279,7 @@ msgstr "நிலை மாற்றி+"
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
 msgstr ""
+"வட்டவடிவ எல்லைக் கோணங்களை உருவாக்க விருப்பத் தேர்வாக அமைந்திருக்கும் எல்லைக் கோணத்தின் ஆரம்."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1945,27 +1945,26 @@ msgstr "தோட்டாவிற்கு பிறகு ஒரு புள
 #: ../src/richtext/richtextbulletspage.cpp:175
 #: ../src/richtext/richtextbulletspage.cpp:177
 msgid "Check to add a right parenthesis."
-msgstr "வல பிறை வைக்கப்பட்டுள்ளதை உறுதி செய்க. "
+msgstr "வலப்பிறை வைக்கப்பட்டுள்ளதை உறுதி செய்க. "
 
 #: ../src/richtext/richtextborderspage.cpp:385
 #: ../src/richtext/richtextborderspage.cpp:387
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "எல்லா எல்லைகளையும் ஒரே நேரத்தில் தொகுப்பதற்கு உறுதி செய்க"
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
 #: ../src/richtext/richtextbulletspage.cpp:168
 #: ../src/richtext/richtextbulletspage.cpp:170
 msgid "Check to enclose the bullet in parentheses."
-msgstr "தோட்டா அடைப்புக் குறிகளினுள் இருப்பதை உறுதி செய்க."
+msgstr "அடைப்புக் குறிகளினுள் தோட்டா இருப்பதை உறுதி செய்க."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "உரையின் நிறத்தை மாற்ற சொடுக்கவும்."
+msgstr "உரையின் வரைவு வலமிருந்து இடமாகக் காட்டப்படுவதை உறுதி செய்க"
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -1982,7 +1981,7 @@ msgstr "எழுத்துரு அடிக்கோடிடப்பட�
 #: ../src/richtext/richtextstyledlg.cpp:289
 #: ../src/richtext/richtextstyledlg.cpp:291
 msgid "Check to restart numbering."
-msgstr "எண்ணிடல் மறுதுவக்கம் செய்யப்பட்டிருப்பதை உறுதி செய்க."
+msgstr "எண்ணிடல் மறுதுவக்கப்படுவதை உறுதி செய்க."
 
 #: ../src/richtext/richtextfontpage.cpp:277
 #: ../src/richtext/richtextfontpage.cpp:279
@@ -2012,7 +2011,7 @@ msgstr "மேலெழுத்துகளில் உரை காட்ட�
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "இணைக்கோடு மறைக்கப்படுவதை உறுதி செய்க."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2294,11 +2293,11 @@ msgstr "தெரிவினை படியெடு"
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "எல்லைக் கோணம்"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "எல்லைக் கோணத்தின் ஆரம்"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2565,11 +2564,11 @@ msgstr "DIB மேலுரை: குறியாக்கம் bitdepth-உ�
 
 #: ../src/common/imagbmp.cpp:1038
 msgid "DIB Header: Image height > 32767 pixels for file."
-msgstr "DIB மேலுரை: கோப்பிற்கான பட உயரம் > 32767 பிக்சல்ஸ். "
+msgstr "DIB மேலுரை: கோப்பிற்கான பட உயரம் > 32767 படவணுக்கள். "
 
 #: ../src/common/imagbmp.cpp:1030
 msgid "DIB Header: Image width > 32767 pixels for file."
-msgstr "DIB மேலுரை: கோப்பிற்கான பட உயரம் > 32767 பிக்சல்ஸ்."
+msgstr "DIB மேலுரை: கோப்பிற்கான பட உயரம் > 32767 படவணுக்கள்."
 
 #: ../src/common/imagbmp.cpp:1058
 msgid "DIB Header: Unknown bitdepth in file."
@@ -2701,7 +2700,7 @@ msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
 msgstr ""
-"தொலை அணுகு தொண்டு (RAS) இக்கணினியில் நிறுவப்படவில்லையென்பதால், சுழல் செயல்கள் இல்லாமல் "
+"தொலை அணுகுப் பணி (RAS) இக்கணினியில் நிறுவப்படவில்லையென்பதால், சுழல் செயல்கள் இல்லாமல் "
 "உள்ளது. கருணைக்கூர்ந்து RAS-ஐ நிறுவவும்."
 
 #: ../src/generic/tipdlg.cpp:225
@@ -3237,7 +3236,7 @@ msgstr "வழக்கமான வெளிப்பாட்டிற்க�
 #: ../src/msw/dialup.cpp:716
 #, c-format
 msgid "Failed to get ISP names: %s"
-msgstr "இணையத் தொண்டு வழங்குவோர் (ISP) பெயர்களை பெறுவதில் தோல்வி: %s"
+msgstr "இணையப் பணி வழங்குவோர் (ISP) பெயர்களை பெறுவதில் தோல்வி: %s"
 
 #: ../src/msw/ole/automtn.cpp:577
 #, c-format
@@ -5825,7 +5824,7 @@ msgstr "முகடு"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "வலமிருந்து இடம்"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -6008,7 +6007,7 @@ msgstr "'%s' விருப்பத் தேர்விற்குப் �
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "பணிகள்"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6229,7 +6228,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "இணைக்கோட்டை மறை"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6351,9 +6350,8 @@ msgstr "பின்னணி நிறம்"
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "எழுத்துரு பாங்கு."
+msgstr "எல்லைக் கோட்டின் பாங்கு."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6694,7 +6692,7 @@ msgstr "'%s' விருப்பத் தேர்விற்கான ம�
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "எல்லைக் கோணத்தின் மதிப்பு."
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -6702,8 +6700,8 @@ msgid ""
 "The version of remote access service (RAS) installed on this machine is too "
 "old, please upgrade (the following required function is missing: %s)."
 msgstr ""
-"இந்தக் கணினியில் நிறுவப்பட்டுள்ள தொலை அணுகி தொண்டின் (RAS) பதிப்பு மிகப் பழையது, "
-"கருணைக் கூர்ந்து மேம்படுத்தவும்  (பின்வரும் தேவையான செயல் தவறவிடப்பட்டுள்ளது: %s)."
+"இந்தக் கணினியில் நிறுவப்பட்டுள்ள தொலை அணுகுப் பணி (RAS) பதிப்பு மிகப் பழையது, கருணைக் "
+"கூர்ந்து மேம்படுத்தவும்  (பின்வரும் தேவையான செயல் தவறவிடப்பட்டுள்ளது: %s)."
 
 #: ../src/gtk/print.cpp:959
 msgid "The wxGtkPrinterDC cannot be used."
@@ -7113,9 +7111,8 @@ msgstr "கீழ் நிலைக்கான தொகுதிகள்."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "மேல் எழுத்து திணிமத்திற்கான தொகுதிகள்."
+msgstr "எல்லைக் கோண ஆரத்திற்கான தொகுதிகள்"
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7449,14 +7446,12 @@ msgid "Windows 7"
 msgstr "விண்டோஸ் 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "விண்டோஸ் 98"
+msgstr "விண்டோஸ் 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "விண்டோஸ் 98"
+msgstr "விண்டோஸ் 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7550,14 +7545,12 @@ msgid "Windows Server 2008 R2"
 msgstr "விண்டோஸ் வழங்கி 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "விண்டோஸ் வழங்கி 2003"
+msgstr "விண்டோஸ் வழங்கி 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "விண்டோஸ் வழங்கி 2008 R2"
+msgstr "விண்டோஸ் வழங்கி 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
@@ -7603,7 +7596,7 @@ msgstr "XML parsing பிழை: '%s', %d வரியில்"
 
 #: ../src/common/xpmdecod.cpp:796
 msgid "XPM: Malformed pixel data!"
-msgstr "XPM: விகாரமான பிக்ஸல் தரவு!"
+msgstr "XPM: விகாரமான படவணுத் தரவு!"
 
 #: ../src/common/xpmdecod.cpp:705
 #, c-format
