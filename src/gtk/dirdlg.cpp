@@ -93,6 +93,15 @@ bool wxDirDialog::Create(wxWindow* parent,
     g_object_ref(m_widget);
 
     gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);
+#if GTK_CHECK_VERSION(2,18,0)
+#ifndef __WXGTK3__
+    if (gtk_check_version(2,18,0) == NULL)
+#endif
+    {
+        gtk_file_chooser_set_create_folders(
+            GTK_FILE_CHOOSER(m_widget), (style & wxDD_DIR_MUST_EXIST) == 0);
+    }
+#endif
 
     // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
     // the dialog when the user press ESC on the dialog: in that case a second call to
