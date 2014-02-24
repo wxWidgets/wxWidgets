@@ -2250,23 +2250,21 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
+#if wxOSX_USE_CARBON
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
     CGContextScaleCTM( m_cgContext, 1, -1 );
-#if wxOSX_USE_COCOA_OR_CARBON
-#if 1
     CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
     PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
         NULL , kPlotIconRefNormalFlags , icon.GetHICON() );
-#else
-    CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
+    CGContextRestoreGState( m_cgContext );
+#elif wxOSX_USE_COCOA
+    CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     const WX_NSImage nsImage = icon.GetNSImage();
     
     CGImageRef cgImage = wxOSXGetCGImageFromNSImage( nsImage , &r, m_cgContext );
     wxMacDrawCGImage( m_cgContext, &r, cgImage);
 #endif
-#endif
-    CGContextRestoreGState( m_cgContext );
     
     CheckInvariants();
 }
