@@ -1552,7 +1552,8 @@
 #   endif
 #endif
 
-#define wxUSE_BOOKCTRL (wxUSE_NOTEBOOK || \
+#define wxUSE_BOOKCTRL (wxUSE_AUI || \
+                        wxUSE_NOTEBOOK || \
                         wxUSE_LISTBOOK || \
                         wxUSE_CHOICEBOOK || \
                         wxUSE_TOOLBOOK || \
