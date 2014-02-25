@@ -2308,21 +2308,20 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
 
     if ( itemY + itemHeight > start_y*PIXELS_PER_UNIT + clientHeight )
     {
-        // need to scroll up by enough to show this item fully
+        // need to scroll down by enough to show this item fully
         itemY += itemHeight - clientHeight;
-#ifdef __WXOSX__
+
         // because itemY below will be divided by PIXELS_PER_UNIT it may
         // be rounded down, with the result of the item still only being 
         // partially visible, so make sure we are rounding up
-        itemY += PIXELS_PER_UNIT-1;
-#endif
+        itemY += PIXELS_PER_UNIT - 1;
     }
     else if ( itemY > start_y*PIXELS_PER_UNIT )
     {
         // item is already fully visible, don't do anything
         return;
     }
-    //else: scroll down to make this item the top one displayed
+    //else: scroll up to make this item the top one displayed
 
     Scroll(-1, itemY/PIXELS_PER_UNIT);
 }
