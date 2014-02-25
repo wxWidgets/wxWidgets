@@ -94,6 +94,7 @@ public:
     void OnRMouseUp(wxMouseEvent& event);
     void OnRMouseDClick(wxMouseEvent& event);
 
+    wxTreeItemId GetLastTreeITem() const;
     void GetItemsRecursively(const wxTreeItemId& idParent,
                              wxTreeItemIdValue cookie = 0);
 
@@ -137,6 +138,7 @@ protected:
     }
 
 private:
+    // Find the very last item in the tree.
     void AddItemsRecursively(const wxTreeItemId& idParent,
                              size_t nChildren,
                              size_t depth,
