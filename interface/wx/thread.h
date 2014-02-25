@@ -336,7 +336,7 @@ public:
             wxDECLARE_EVENT_TABLE();
         };
 
-        wxDEFINE_EVENT(myEVT_THREAD_UPDATE, wxThreadEvent)
+        wxDEFINE_EVENT(myEVT_THREAD_UPDATE, wxThreadEvent);
         wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
             EVT_THREAD(wxID_ANY, myEVT_THREAD_UPDATE, MyFrame::OnThreadUpdate)
             EVT_CLOSE(MyFrame::OnClose)
@@ -791,8 +791,8 @@ enum wxThreadError
         EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_COMPLETED, MyFrame::OnThreadCompletion)
     wxEND_EVENT_TABLE()
 
-    wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_COMPLETED, wxThreadEvent)
-    wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent)
+    wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_COMPLETED, wxThreadEvent);
+    wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent);
 
     void MyFrame::DoStartThread()
     {
