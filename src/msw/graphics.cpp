@@ -946,7 +946,9 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    Init(font.GetFaceName(), font.GetPointSize(), style, col, UnitPoint);
+    // Create font which size is measured in logical units
+    // and let the system rescale it according to the target resolution.
+    Init(font.GetFaceName(), font.GetPixelSize().GetHeight(), style, col, UnitPixel);
 }
 
 wxGDIPlusFontData::wxGDIPlusFontData(wxGraphicsRenderer* renderer,
