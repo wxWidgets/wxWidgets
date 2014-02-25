@@ -1569,12 +1569,13 @@ wxImage wxCairoBitmapData::ConvertToImage() const
             {
                 const wxUint32 argb = *src++;
 
-                *alpha++ = (argb & 0xff000000) >> 24;
+                const unsigned char a = argb >> 24;
+                *alpha++ = a;
 
                 // Copy the RGB data undoing the pre-multiplication.
-                *dst++ = Unpremultiply(*alpha, (argb & 0x00ff0000) >> 16);
-                *dst++ = Unpremultiply(*alpha, (argb & 0x0000ff00) >>  8);
-                *dst++ = Unpremultiply(*alpha, (argb & 0x000000ff));
+                *dst++ = Unpremultiply(a, argb >> 16);
+                *dst++ = Unpremultiply(a, argb >>  8);
+                *dst++ = Unpremultiply(a, argb);
             }
 
             src = rowStart + stride;
