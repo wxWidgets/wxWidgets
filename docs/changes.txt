@@ -598,6 +598,7 @@ All (GUI):
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Make wxHTML more efficient when displaying large tables (Kinaou Hervé).
 - Prevent wxGrid rows/columns from becoming too small on double click.
+- Fix wxGraphicsBitmap::ConvertToImage() when using Cairo.
 
 wxGTK:
 
