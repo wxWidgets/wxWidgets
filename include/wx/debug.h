@@ -191,7 +191,7 @@
 /*  as wxCHECK2 but with a message explaining why we fail */
 
 #ifdef __GNUC__
-    #define wxFORCE_SEMICOLON typedef int wxDummyCheckInt
+    #define wxFORCE_SEMICOLON typedef int wxDummyCheckInt __attribute__((unused))
     /* Note: old gcc versions (e.g. 2.8) give an internal compiler error */
     /*     on a simple forward declaration, when used in a template    */
     /*     function, so rather use a dummy typedef which does work...  */
