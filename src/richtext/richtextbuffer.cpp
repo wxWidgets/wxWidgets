@@ -1995,6 +1995,8 @@ void wxRichTextParagraphLayoutBox::MoveAnchoredObjectToParagraph(wxRichTextParag
 /// Draw the item
 bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wxRichTextRange& range, const wxRichTextSelection& selection, const wxRect& rect, int descent, int style)
 {
+    context.SetLayingOut(false);
+
     if (!IsShown())
         return true;
 
@@ -2054,6 +2056,8 @@ bool wxRichTextParagraphLayoutBox::Draw(wxDC& dc, wxRichTextDrawingContext& cont
 /// Lay the item out
 bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style)
 {
+    context.SetLayingOut(true);
+
     Move(rect.GetPosition());
 
     if (!IsShown())
@@ -5307,7 +5311,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
     // Add the last line - it's the current pos -> last para pos
     // Subtract -1 because the last position is always the end-paragraph position.
-    if (lastCompletedEndPos <= GetRange().GetEnd()-1)
+    if ((lastCompletedEndPos < GetRange().GetEnd()-1) || lineCount == 0)
     {
         int startOffset = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
         availableRect = wxRect(rect.x + startOffset, rect.y + currentPosition.y,
@@ -12216,6 +12220,10 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
 {
     if (!m_imageBlock.IsOk())
         return false;
+
+    // Don't repeat unless absolutely necessary
+    if (m_imageCache.IsOk() && !resetCache && !context.GetLayingOut())
+        return true;
 
     if (!context.GetImagesEnabled())
     {

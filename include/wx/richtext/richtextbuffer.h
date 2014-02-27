@@ -2211,7 +2211,7 @@ public:
     */
     wxRichTextDrawingContext(wxRichTextBuffer* buffer);
 
-    void Init() { m_buffer = NULL; m_enableVirtualAttributes = true; m_enableImages = true; }
+    void Init() { m_buffer = NULL; m_enableVirtualAttributes = true; m_enableImages = true; m_layingOut = false; }
 
     /**
         Does this object have virtual attributes?
@@ -2281,9 +2281,22 @@ public:
 
     bool GetImagesEnabled() const { return m_enableImages; }
 
+    /**
+        Set laying out flag
+    */
+
+    void SetLayingOut(bool b) { m_layingOut = b; }
+
+    /**
+        Returns @true if laying out.
+    */
+
+    bool GetLayingOut() const { return m_layingOut; }
+
     wxRichTextBuffer*   m_buffer;
     bool                m_enableVirtualAttributes;
     bool                m_enableImages;
+    bool                m_layingOut;
 };
 
 /**
