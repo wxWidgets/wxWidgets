@@ -654,8 +654,17 @@ wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
 
     wxPrintfConvSpecParser<CharType> parser(format);
 
-    wxCHECK_MSG( n <= parser.nargs, wxFormatString::Arg_Unknown,
-                 "more arguments than format string specifiers?" );
+    if ( n > parser.nargs )
+    {
+        // The n-th argument doesn't appear in the format string and is unused.
+        // This can happen e.g. if a translation of the format string is used
+        // and the translation language tends to avoid numbers in singular forms.
+        // The translator would then typically replace "%d" with "One" (e.g. in
+        // Hebrew). Passing too many vararg arguments does not harm, so its
+        // better to be more permissive here and allow legitimate uses in favour
+        // of catching harmless errors.
+        return wxFormatString::Arg_Unused;
+    }
 
     wxCHECK_MSG( parser.pspec[n-1] != NULL, wxFormatString::Arg_Unknown,
                  "requested argument not found - invalid format string?" );

@@ -155,6 +155,9 @@ public:
     // a char* string is also a pointer and an integer is also a char.
     enum ArgumentType
     {
+        Arg_Unused      = 0, // not used at all; the value of 0 is chosen to
+                             // conveniently pass wxASSERT_ARG_TYPE's check
+
         Arg_Char        = 0x0001,    // character as char %c
         Arg_Pointer     = 0x0002,    // %p
         Arg_String      = 0x0004 | Arg_Pointer, // any form of string (%s and %p too)
