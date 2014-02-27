@@ -14136,6 +14136,16 @@ void wxTextAttrCollectCommonAttributes(wxTextAttr& currentStyle, const wxTextAtt
         currentStyle.RemoveFlag(wxTEXT_ATTR_LINE_SPACING);
     }
 
+    if (attr.HasPageBreak() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_PAGE_BREAK))
+    {
+        currentStyle.SetPageBreak(true);
+    }
+    else if (!attr.HasPageBreak() && currentStyle.HasPageBreak())
+    {
+        clashingAttr.AddFlag(wxTEXT_ATTR_PAGE_BREAK);
+        currentStyle.RemoveFlag(wxTEXT_ATTR_PAGE_BREAK);
+    }
+
     if (attr.HasCharacterStyleName() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_CHARACTER_STYLE_NAME))
     {
         if (currentStyle.HasCharacterStyleName())
