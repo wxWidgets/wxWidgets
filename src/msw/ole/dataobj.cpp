@@ -233,8 +233,8 @@ private:
     {
     public:
         // Ctor takes ownership of the pointers.
-        SystemDataEntry(FORMATETC *pformatetc, STGMEDIUM *pmedium)
-            : pformatetc(pformatetc), pmedium(pmedium)
+        SystemDataEntry(FORMATETC *pformatetc_, STGMEDIUM *pmedium_)
+            : pformatetc(pformatetc_), pmedium(pmedium_)
         {
         }
 

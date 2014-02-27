@@ -273,8 +273,8 @@ protected:
     struct wxEventProcessingData
     {
         wxEventProcessingData(const FILE_NOTIFY_INFORMATION* ne,
-                              const wxFSWatchEntryMSW* watch) :
-            nativeEvent(ne), watch(watch)
+                              const wxFSWatchEntryMSW* watch_) :
+            nativeEvent(ne), watch(watch_)
         {}
 
         const FILE_NOTIFY_INFORMATION* nativeEvent;
