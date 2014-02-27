@@ -5157,7 +5157,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
 
     // Add the last line - it's the current pos -> last para pos
     // Substract -1 because the last position is always the end-paragraph position.
-    if (lastCompletedEndPos <= GetRange().GetEnd()-1)
+    if ((lastCompletedEndPos < GetRange().GetEnd()-1) || lineCount == 0)
     {
         int startOffset = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
         availableRect = wxRect(rect.x + startOffset, rect.y + currentPosition.y,
