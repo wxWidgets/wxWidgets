@@ -392,6 +392,12 @@ bool wxTextAttr::EqPartial(const wxTextAttr& attr, bool weakTest) const
     if ((HasPageBreak() != attr.HasPageBreak()))
          return false;
 
+    if ((GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE) != (attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE))
+         return false;
+
+    if ((GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER) != (attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER))
+         return false;
+
     if (HasTextEffects() && attr.HasTextEffects())
     {
         if (!BitlistsEqPartial(GetTextEffects(), attr.GetTextEffects(), GetTextEffectFlags()))
@@ -703,6 +709,18 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
     {
         if (!(compareWith && compareWith->HasPageBreak()))
             destStyle.SetPageBreak();
+    }
+
+    if (style.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE)
+    {
+        if (!(compareWith && (compareWith->GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE)))
+            destStyle.SetFlags(destStyle.GetFlags()|wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE);
+    }
+
+    if (style.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER)
+    {
+        if (!(compareWith && (compareWith->GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER)))
+            destStyle.SetFlags(destStyle.GetFlags()|wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER);
     }
 
     if (style.HasTextEffects())

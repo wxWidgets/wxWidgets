@@ -14445,6 +14445,36 @@ void wxTextAttrCollectCommonAttributes(wxTextAttr& currentStyle, const wxTextAtt
         currentStyle.RemoveFlag(wxTEXT_ATTR_LINE_SPACING);
     }
 
+    if (attr.HasPageBreak() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_PAGE_BREAK))
+    {
+        currentStyle.SetPageBreak(true);
+    }
+    else if (!attr.HasPageBreak() && currentStyle.HasPageBreak())
+    {
+        clashingAttr.AddFlag(wxTEXT_ATTR_PAGE_BREAK);
+        currentStyle.RemoveFlag(wxTEXT_ATTR_PAGE_BREAK);
+    }
+
+    if ((attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE) && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE))
+    {
+        currentStyle.AddFlag(wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE);
+    }
+    else if (!(attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE) && (currentStyle.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE))
+    {
+        clashingAttr.AddFlag(wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE);
+        currentStyle.RemoveFlag(wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE);
+    }
+
+    if ((attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER) && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER))
+    {
+        currentStyle.AddFlag(wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER);
+    }
+    else if (!(attr.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER) && (currentStyle.GetFlags() & wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER))
+    {
+        clashingAttr.AddFlag(wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER);
+        currentStyle.RemoveFlag(wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER);
+    }
+
     if (attr.HasCharacterStyleName() && !wxHasStyle(forbiddenFlags, wxTEXT_ATTR_CHARACTER_STYLE_NAME))
     {
         if (currentStyle.HasCharacterStyleName())
