@@ -995,6 +995,12 @@ public:
         been added using the Bind<>() method. There is no way to unbind
         functions bound using the (static) event tables.
 
+        @note Currently functors are compared by their address which,
+        unfortunately, doesn't work correctly if the same address is reused for
+        two different functor objects. Because of this, using Unbind() is not
+        recommended if there are multiple functors using the same @a eventType
+        and @a id and @a lastId as a wrong one could be unbound.
+
         @param eventType
             The event type associated with this event handler.
         @param functor
