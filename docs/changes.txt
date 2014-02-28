@@ -634,6 +634,7 @@ wxMSW:
 - Fix checking menu items before appending them to the menu.
 - Fix crash when adding/removing the same path to/from wxFileSystemWatcher.
 - Draw "classic" disabled owner drawn buttons better (Artur Wieczorek).
+- Fix width of the vertical toolbars (Artur Wieczorek).
 
 wxOSX:
 
