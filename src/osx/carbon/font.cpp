@@ -199,6 +199,8 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data) : wxGDIRefData()
 // implementation
 // ============================================================================
 
+wxStringToStringHashMap gs_FontFamilyToPSName;
+
 // ----------------------------------------------------------------------------
 // wxFontRefData
 // ----------------------------------------------------------------------------
@@ -466,7 +468,16 @@ void wxFontRefData::MacFindFont()
         m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];
         if ( !m_ctFont )
         {
-            m_ctFont.reset(CTFontCreateWithName( wxCFStringRef(m_info.m_faceName), m_info.m_pointSize , NULL ));
+            wxCFStringRef fontname(m_info.m_faceName);
+            
+            wxStringToStringHashMap::const_iterator it = gs_FontFamilyToPSName.find(m_info.m_faceName);
+            
+            if ( it != gs_FontFamilyToPSName.end() )
+                fontname = it->second;
+            else
+                fontname = m_info.m_faceName;
+            
+            m_ctFont.reset(CTFontCreateWithName( fontname, m_info.m_pointSize , NULL ));
             if ( m_ctFont.get() == NULL )
             {
                 // TODO try fallbacks according to font type
@@ -474,6 +485,10 @@ void wxFontRefData::MacFindFont()
             }
             else
             {
+                if ( it == gs_FontFamilyToPSName.end() )
+                {
+                    m_info.UpdateNamesMap(m_info.m_faceName, m_ctFont);
+                }
                 if ( traits != 0 )
                 {
                     // attempt native font variant, if not available, fallback to italic emulation mode and remove bold
@@ -501,7 +516,7 @@ void wxFontRefData::MacFindFont()
 
                         if ( fontWithTraits == NULL )
                         {
-                            fontWithTraits = CTFontCreateWithName( wxCFStringRef(m_info.m_faceName), m_info.m_pointSize, remainingTransform );
+                            fontWithTraits = CTFontCreateWithName( fontname, m_info.m_pointSize, remainingTransform );
                         }
 
                     }
@@ -1014,6 +1029,8 @@ void wxNativeFontInfo::Init(CTFontDescriptorRef descr)
 
     wxCFStringRef familyName( (CFStringRef) CTFontDescriptorCopyAttribute(descr, kCTFontFamilyNameAttribute));
     m_faceName = familyName.AsString();
+    
+    UpdateNamesMap(m_faceName, descr);
 }
 
 void wxNativeFontInfo::EnsureValid()
@@ -1305,5 +1322,24 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
 void wxNativeFontInfo::SetStrikethrough(bool WXUNUSED(strikethrough))
 {
 }
+
+void wxNativeFontInfo::UpdateNamesMap(const wxString& familyName, CTFontDescriptorRef descr)
+{
+    if ( gs_FontFamilyToPSName.find(familyName) == gs_FontFamilyToPSName.end() )
+    {
+        wxCFStringRef psName( (CFStringRef) CTFontDescriptorCopyAttribute(descr, kCTFontNameAttribute));
+        gs_FontFamilyToPSName[familyName] = psName.AsString();
+    }
+}
+
+void wxNativeFontInfo::UpdateNamesMap(const wxString& familyName, CTFontRef font)
+{
+    if ( gs_FontFamilyToPSName.find(familyName) == gs_FontFamilyToPSName.end() )
+    {
+        wxCFRef<CTFontDescriptorRef> descr(CTFontCopyFontDescriptor( font ));
+        UpdateNamesMap(familyName, descr);
+    }
+}
+
 
 
