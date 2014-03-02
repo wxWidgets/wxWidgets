@@ -395,7 +395,12 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
 
     // Process all pending events too, this is consistent with wxMSW behaviour
     // and the behaviour of wxGTK itself in the previous versions.
-    if ( wxTheApp )
+    //
+    // Notice however that we must not do it if we're asked to process only the
+    // events of specific kind, as pending events could be of any kind at all
+    // (ideal would be to have a filtering version of ProcessPendingEvents()
+    // too but we don't have this right now).
+    if ( eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp )
         wxTheApp->ProcessPendingEvents();
 
     if (eventsToProcess != wxEVT_CATEGORY_CLIPBOARD)

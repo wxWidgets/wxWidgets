@@ -435,7 +435,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     }
 
     // if there are pending events, we must process them.
-    if (wxTheApp)
+    if ( eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp )
         wxTheApp->ProcessPendingEvents();
 
     // put back unprocessed events in the queue

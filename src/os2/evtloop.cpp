@@ -400,7 +400,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     //
     // If they are pending events, we must process them.
     //
-    if (wxTheApp)
+    if (eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp)
     {
         wxTheApp->ProcessPendingEvents();
         wxTheApp->HandleSockets();

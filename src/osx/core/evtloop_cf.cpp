@@ -214,7 +214,7 @@ bool wxCFEventLoop::YieldFor(long eventsToProcess)
     while ( ProcessIdle() ) {}
 
     // if there are pending events, we must process them.
-    if (wxTheApp)
+    if ( eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp )
         wxTheApp->ProcessPendingEvents();
 
 #if wxUSE_LOG
