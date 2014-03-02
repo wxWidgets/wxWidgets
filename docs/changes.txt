@@ -639,6 +639,7 @@ wxMSW:
 
 wxOSX:
 
+- Fix buffer overrun in drag-and-drop code (Kristian Duske).
 - Fix incorrect joystick detection in configure (Lauri Nurmi).
 - Fix crash in wxDataViewCtrl when cancelling choice selection (hartwigw).
 - Implement support for wxGA_VERTICAL in wxGauge (themindiswatching).
