@@ -113,7 +113,7 @@ wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer,
                                     wxInt32 maximum,
                                     const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style),
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
@@ -123,6 +123,10 @@ wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer,
     [v setMaxValue: maximum];
     [v setIndeterminate:FALSE];
     [v setDoubleValue: (double) value];
+    if (style & wxGA_VERTICAL)
+    {
+        [v setBoundsRotation:-90.0];
+    }
     wxWidgetCocoaImpl* c = new wxOSXGaugeCocoaImpl( wxpeer, v );
     return c;
 }
