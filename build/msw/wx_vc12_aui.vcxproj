@@ -494,6 +494,7 @@
     <ClCompile Include="..\..\src\aui\framemanager.cpp" />
     <ClCompile Include="..\..\src\aui\tabart.cpp" />
     <ClCompile Include="..\..\src\aui\tabmdi.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_auinotbk.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_auitoolb.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -505,7 +506,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\wx\xrc\xh_auitoolb.h" />
     <CustomBuild Include="..\..\include\wx\msw\setup.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">Creating $(OutDir)$(wxIncSubDir)\wx\setup.h</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">Creating $(OutDir)$(wxIncSubDir)\wx\setup.h</Message>
@@ -574,6 +574,8 @@
     <ClInclude Include="..\..\include\wx\aui\framemanager.h" />
     <ClInclude Include="..\..\include\wx\aui\tabart.h" />
     <ClInclude Include="..\..\include\wx\aui\tabmdi.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_auinotbk.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_auitoolb.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

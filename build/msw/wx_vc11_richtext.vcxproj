@@ -497,6 +497,7 @@
     <ClCompile Include="..\..\src\richtext\richtextstyles.cpp" />
     <ClCompile Include="..\..\src\richtext\richtextsymboldlg.cpp" />
     <ClCompile Include="..\..\src\richtext\richtextxml.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_richtext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -588,6 +589,7 @@
     <ClInclude Include="..\..\include\wx\richtext\richtextsymboldlg.h" />
     <ClInclude Include="..\..\include\wx\richtext\richtextuicustomization.h" />
     <ClInclude Include="..\..\include\wx\richtext\richtextxml.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_richtext.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
