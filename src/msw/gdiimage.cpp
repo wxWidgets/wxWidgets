@@ -393,15 +393,28 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
                                 int WXUNUSED(desiredWidth),
                                 int WXUNUSED(desiredHeight))
 {
-#if wxUSE_WXDIB
     wxCHECK_MSG( bitmap, false, wxT("NULL bitmap in LoadFile") );
 
+#if wxUSE_WXDIB
+    // Try loading using native Windows LoadImage() first.
     wxDIB dib(name);
+    if ( dib.IsOk() )
+        return bitmap->CopyFromDIB(dib);
+#endif // wxUSE_WXDIB
 
-    return dib.IsOk() && bitmap->CopyFromDIB(dib);
-#else
+    // Some valid bitmap files are not supported by LoadImage(), e.g. those
+    // with negative height. Try to use our own bitmap loading code which does
+    // support them.
+#if wxUSE_IMAGE
+    wxImage img(name, wxBITMAP_TYPE_BMP);
+    if ( img.IsOk() )
+    {
+        *bitmap = wxBitmap(img);
+        return true;
+    }
+#endif // wxUSE_IMAGE
+
     return false;
-#endif
 }
 
 bool wxBMPFileHandler::SaveFile(const wxBitmap *bitmap,

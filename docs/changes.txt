@@ -635,6 +635,7 @@ wxMSW:
 - Fix crash when adding/removing the same path to/from wxFileSystemWatcher.
 - Draw "classic" disabled owner drawn buttons better (Artur Wieczorek).
 - Fix width of the vertical toolbars (Artur Wieczorek).
+- Fix loading of top to bottom BMP files in wxBitmap (Artur Wieczorek).
 
 wxOSX:
 
