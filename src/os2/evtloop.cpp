@@ -368,19 +368,10 @@ bool wxGUIEventLoop::Dispatch()
 //
 // Yield to incoming messages
 //
-bool wxGUIEventLoop::YieldFor(long eventsToProcess)
+void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 {
     HAB vHab = 0;
     QMSG vMsg;
-
-    //
-    // Disable log flushing from here because a call to wxYield() shouldn't
-    // normally result in message boxes popping up &c
-    //
-    wxLog::Suspend();
-
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
 
     //
     // We want to go back to the main message loop
@@ -397,20 +388,10 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
             break;
     }
 
-    //
-    // If they are pending events, we must process them.
-    //
+    wxEventLoopBase::DoYieldFor(eventsToProcess);
+
     if (eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp)
     {
-        wxTheApp->ProcessPendingEvents();
         wxTheApp->HandleSockets();
     }
-
-    //
-    // Let the logs be flashed again
-    //
-    wxLog::Resume();
-    m_isInsideYield = false;
-
-    return true;
 } // end of wxYield

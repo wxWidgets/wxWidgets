@@ -34,7 +34,6 @@
 #include "wx/thread.h"
 #include "wx/except.h"
 #include "wx/msw/private.h"
-#include "wx/scopeguard.h"
 
 #include "wx/tooltip.h"
 #if wxUSE_THREADS
@@ -264,23 +263,8 @@ void wxGUIEventLoop::WakeUp()
 #include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY(wxMSGArray);
 
-bool wxGUIEventLoop::YieldFor(long eventsToProcess)
+void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 {
-    // set the flag and don't forget to reset it before returning
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
-
-    wxON_BLOCK_EXIT_SET(m_isInsideYield, false);
-
-#if wxUSE_LOG
-    // disable log flushing from here because a call to wxYield() shouldn't
-    // normally result in message boxes popping up &c
-    wxLog::Suspend();
-
-    // ensure the logs will be flashed again when we exit
-    wxON_BLOCK_EXIT0(wxLog::Resume);
-#endif // wxUSE_LOG
-
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
     MSG msg;
@@ -434,9 +418,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
         }
     }
 
-    // if there are pending events, we must process them.
-    if ( eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp )
-        wxTheApp->ProcessPendingEvents();
+    wxEventLoopBase::DoYieldFor(eventsToProcess);
 
     // put back unprocessed events in the queue
     DWORD id = GetCurrentThreadId();
@@ -447,6 +429,4 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     }
 
     m_arrMSG.Clear();
-
-    return true;
 }

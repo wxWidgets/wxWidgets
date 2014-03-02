@@ -361,25 +361,8 @@ static void wxgtk_main_do_event(GdkEvent* event, void* data)
 }
 }
 
-bool wxGUIEventLoop::YieldFor(long eventsToProcess)
+void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 {
-#if wxUSE_THREADS
-    if ( !wxThread::IsMain() )
-    {
-        // can't call gtk_main_iteration() from other threads like this
-        return true;
-    }
-#endif // wxUSE_THREADS
-
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
-
-#if wxUSE_LOG
-    // disable log flushing from here because a call to wxYield() shouldn't
-    // normally result in message boxes popping up &c
-    wxLog::Suspend();
-#endif
-
     // temporarily replace the global GDK event handler with our function, which
     // categorizes the events and using m_eventsToProcessInsideYield decides
     // if an event should be processed immediately or not
@@ -393,15 +376,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
         gtk_main_iteration();
     gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
 
-    // Process all pending events too, this is consistent with wxMSW behaviour
-    // and the behaviour of wxGTK itself in the previous versions.
-    //
-    // Notice however that we must not do it if we're asked to process only the
-    // events of specific kind, as pending events could be of any kind at all
-    // (ideal would be to have a filtering version of ProcessPendingEvents()
-    // too but we don't have this right now).
-    if ( eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp )
-        wxTheApp->ProcessPendingEvents();
+    wxEventLoopBase::DoYieldFor(eventsToProcess);
 
     if (eventsToProcess != wxEVT_CATEGORY_CLIPBOARD)
     {
@@ -429,13 +404,4 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     }
 
     m_arrGdkEvents.Clear();
-
-#if wxUSE_LOG
-    // let the logs be flashed again
-    wxLog::Resume();
-#endif
-
-    m_isInsideYield = false;
-
-    return true;
 }

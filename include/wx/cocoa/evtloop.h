@@ -24,10 +24,10 @@ public:
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp() { }
-    virtual bool YieldFor(long eventsToProcess);
 
 protected:
     virtual int DoRun();
+    virtual void DoYieldFor(long eventsToProcess);
 
     int m_exitcode;
 

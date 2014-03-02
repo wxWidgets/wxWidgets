@@ -116,6 +116,49 @@ bool wxEventLoopBase::Yield(bool onlyIfNeeded)
     return YieldFor(wxEVT_CATEGORY_ALL);
 }
 
+bool wxEventLoopBase::YieldFor(long eventsToProcess)
+{
+#if wxUSE_THREADS
+    if ( !wxThread::IsMain() )
+    {
+        // Don't ever dispatch events from non-main threads.
+        return false;
+    }
+#endif // wxUSE_THREADS
+
+    // set the flag and don't forget to reset it before returning
+    m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
+
+    wxON_BLOCK_EXIT_SET(m_isInsideYield, false);
+
+#if wxUSE_LOG
+    // disable log flushing from here because a call to wxYield() shouldn't
+    // normally result in message boxes popping up &c
+    wxLog::Suspend();
+
+    // ensure the logs will be flashed again when we exit
+    wxON_BLOCK_EXIT0(wxLog::Resume);
+#endif
+
+    DoYieldFor(eventsToProcess);
+
+    return true;
+}
+
+void wxEventLoopBase::DoYieldFor(long eventsToProcess)
+{
+    // Normally yielding dispatches not only the pending native events, but
+    // also the events pending in wxWidgets itself.
+    //
+    // Notice however that we must not do it if we're asked to process only the
+    // events of specific kind, as pending events could be of any kind at all
+    // (ideal would be to have a filtering version of ProcessPendingEvents()
+    // too but we don't have this right now).
+    if ( eventsToProcess == wxEVT_CATEGORY_ALL && wxTheApp )
+        wxTheApp->ProcessPendingEvents();
+}
+
 #if wxUSE_EVENTLOOP_SOURCE
 
 wxEventLoopSource*

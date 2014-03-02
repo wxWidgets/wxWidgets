@@ -38,10 +38,10 @@ public:
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
     virtual bool IsOk() const { return m_dispatcher != NULL; }
-    virtual bool YieldFor(long WXUNUSED(eventsToProcess)) { return true; }
 
 protected:
     virtual void OnNextIteration();
+    virtual void DoYieldFor(long eventsToProcess);
 
 private:
     // pipe used for wake up messages: when a child thread wants to wake up

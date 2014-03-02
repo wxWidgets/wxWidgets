@@ -54,10 +54,10 @@ public:
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
-    virtual bool YieldFor(long eventsToProcess);
 
 protected:
     virtual void OnNextIteration();
+    virtual void DoYieldFor(long eventsToProcess);
 
 private:
     // check if the given window is a child of ms_winCritical (which must be

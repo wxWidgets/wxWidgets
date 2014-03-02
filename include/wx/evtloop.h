@@ -153,7 +153,12 @@ public:
     //          may result in calling the same event handler again), use
     //          with _extreme_ care or, better, don't use at all!
     bool Yield(bool onlyIfNeeded = false);
-    virtual bool YieldFor(long eventsToProcess) = 0;
+
+    // more selective version of Yield()
+    //
+    // notice that it is virtual for backwards-compatibility but new code
+    // should override DoYieldFor() and not YieldFor() itself
+    virtual bool YieldFor(long eventsToProcess);
 
     // returns true if the main thread is inside a Yield() call
     virtual bool IsYielding() const
@@ -181,6 +186,16 @@ public:
 protected:
     // real implementation of Run()
     virtual int DoRun() = 0;
+
+    // And the real, port-specific, implementation of YieldFor().
+    //
+    // The base class version is pure virtual to ensure that it is overridden
+    // in the derived classes but does have an implementation which processes
+    // pending events in wxApp if eventsToProcess allows it, and so should be
+    // called from the overridden version at an appropriate place (i.e. after
+    // processing the native events but before doing anything else that could
+    // be affected by pending events dispatching).
+    virtual void DoYieldFor(long eventsToProcess) = 0;
 
     // this function should be called before the event loop terminates, whether
     // this happens normally (because of Exit() call) or abnormally (because of
@@ -313,10 +328,10 @@ public:
         }
     }
     virtual void WakeUp() { }
-    virtual bool YieldFor(long eventsToProcess);
 
 protected:
     virtual int DoRun();
+    virtual void DoYieldFor(long eventsToProcess);
 
     // the pointer to the port specific implementation class
     wxEventLoopImpl *m_impl;

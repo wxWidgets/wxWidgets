@@ -42,8 +42,6 @@ public:
     // to it (can be called from non main thread)
     virtual void WakeUp();
 
-    virtual bool YieldFor(long eventsToProcess);
-
     bool ShouldProcessIdleEvents() const { return m_processIdleEvents ; }
     
 #if wxUSE_UIACTIONSIMULATOR
@@ -56,6 +54,8 @@ protected:
     // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
     // terminating when Exit() is called
     virtual int DoRun();
+
+    virtual void DoYieldFor(long eventsToProcess);
 
     void CommonModeObserverCallBack(CFRunLoopObserverRef observer, int activity);
     void DefaultModeObserverCallBack(CFRunLoopObserverRef observer, int activity);

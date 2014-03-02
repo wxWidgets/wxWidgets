@@ -40,10 +40,12 @@ public:
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
-    virtual bool YieldFor(long WXUNUSED(eventsToProcess)) { return true; }
 
     // Windows-specific function to process a single message
     virtual void ProcessMessage(WXMSG *msg);
+
+protected:
+    virtual void DoYieldFor(long eventsToProcess);
 };
 
 #endif // wxUSE_CONSOLE_EVENTLOOP

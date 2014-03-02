@@ -26,13 +26,13 @@ public:
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
-    virtual bool YieldFor(long eventsToProcess);
 
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
         { m_arrGdkEvents.Add(ev); }
 
 protected:
     virtual int DoRun();
+    virtual void DoYieldFor(long eventsToProcess);
 
 private:
     // the exit code of this event loop
