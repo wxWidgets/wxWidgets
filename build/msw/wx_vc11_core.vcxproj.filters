@@ -1573,9 +1573,6 @@
     <ClInclude Include="..\..\include\wx\ribbon\buttonbar.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\cairo.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\calctrl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

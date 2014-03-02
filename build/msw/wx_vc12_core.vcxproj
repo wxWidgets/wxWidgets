@@ -1404,7 +1404,6 @@
     <ClInclude Include="..\..\include\wx\busyinfo.h" />
     <ClInclude Include="..\..\include\wx\button.h" />
     <ClInclude Include="..\..\include\wx\ribbon\buttonbar.h" />
-    <ClInclude Include="..\..\include\wx\cairo.h" />
     <ClInclude Include="..\..\include\wx\calctrl.h" />
     <ClInclude Include="..\..\include\wx\caret.h" />
     <ClInclude Include="..\..\include\wx\checkbox.h" />
