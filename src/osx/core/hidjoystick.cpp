@@ -189,7 +189,7 @@ wxPoint wxJoystick::GetPosition() const
 }
 int wxJoystick::GetPosition(unsigned int axis) const
 {
-    wxCHECK_MSG(axis < GetNumberAxes(), 0, "Invalid joystick axis");
+    wxCHECK_MSG(axis < (unsigned)GetNumberAxes(), 0, "Invalid joystick axis");
     if (m_thread)
         return m_thread->m_axe[axis];
     return 0;
