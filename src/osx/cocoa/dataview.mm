@@ -2876,8 +2876,19 @@ wxDataViewChoiceRenderer::OSXOnCellChanged(NSObject *value,
 {
     // At least under OS X 10.7 we get the index of the item selected and not
     // its string.
+    const long choiceIndex = ObjectToLong(value);
+
+    // We can receive -1 if the selection was cancelled, just ignore it.
+    if ( choiceIndex == -1 )
+        return;
+
+    // If it's not -1, it must be valid, but avoid crashing in GetChoice()
+    // below if it isn't, for some reason.
+    wxCHECK_RET( choiceIndex >= 0 && (size_t)choiceIndex < GetChoices().size(),
+                 wxS("Choice index out of range.") );
+
     wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
-    model->ChangeValue(GetChoice(ObjectToLong(value)), item, col);
+    model->ChangeValue(GetChoice(choiceIndex), item, col);
 }
 
 bool wxDataViewChoiceRenderer::MacRender()

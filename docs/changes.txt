@@ -640,6 +640,7 @@ wxMSW:
 wxOSX:
 
 - Fix incorrect joystick detection in configure (Lauri Nurmi).
+- Fix crash in wxDataViewCtrl when cancelling choice selection (hartwigw).
 - Add support for wxEVT_COMBOBOX_DROPDOWN and wxEVT_COMBOBOX_CLOSEUP
   events to wxOSX/Cocoa (Igor Korot).
 
