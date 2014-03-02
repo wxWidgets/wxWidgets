@@ -528,24 +528,27 @@ void TextCtrlTestCase::LongText()
     delete m_text;
     CreateText(wxTE_MULTILINE|wxTE_DONTWRAP);
 
+    const int numLines = 1000;
+    const int lenPattern = 100;
+    int i;
+
     // Pattern for the line.
-    wxChar linePattern[100+1];
-    for (int i = 0; i < WXSIZEOF(linePattern) - 1; i++)
+    wxChar linePattern[lenPattern+1];
+    for (i = 0; i < lenPattern - 1; i++)
     {
         linePattern[i] = wxChar('0' + i % 10);
     }
     linePattern[WXSIZEOF(linePattern) - 1] = wxChar('\0');
 
     // Fill the control.
-    const int numLines = 1000;
     m_text->SetMaxLength(15000);
-    for (int i = 0; i < numLines; i++)
+    for (i = 0; i < numLines; i++)
     {
         m_text->AppendText(wxString::Format(wxT("[%3d] %s\n"), i, linePattern));
     }
 
     // Check the content.
-    for (int i = 0; i < numLines; i++)
+    for (i = 0; i < numLines; i++)
     {
         wxString pattern = wxString::Format(wxT("[%3d] %s"), i, linePattern);
         wxString line = m_text->GetLineText(i);
