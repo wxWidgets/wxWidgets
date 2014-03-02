@@ -673,7 +673,11 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
 
     const UINT id = GetMSWId();
     HMENU hMenu = GetHMenuOf(m_parentMenu);
-    if ( !hMenu || ::GetMenuState(hMenu, id, MF_BYCOMMAND) == (UINT)-1 )
+    if ( !hMenu )
+        return;
+
+    const UINT state = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
+    if ( state == (UINT)-1 )
         return;
 
     // update the text of the native menu item
@@ -708,7 +712,11 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     // items however as otherwise their size wouldn't be recalculated as
     // WM_MEASUREITEM wouldn't be sent and this could result in display
     // problems if the length of the menu item changed significantly.
-    if ( !IsOwnerDrawn() )
+    //
+    // Also notice that we shouldn't use our IsOwnerDrawn() because it can be
+    // true because it was set by e.g. SetBitmap(), even if the item wasn't
+    // made owner drawn at Windows level.
+    if ( !(state & MF_OWNERDRAW) )
 #endif // wxUSE_OWNER_DRAWN
     {
         if ( isLaterThanWin95 )
