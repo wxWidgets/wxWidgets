@@ -14,7 +14,7 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.4\n"
 "X-Poedit-SearchPath-0: \n"
 
 #: ../src/common/debugrpt.cpp:591
@@ -99,9 +99,8 @@ msgstr "#9 Plic, 3 7/8 x 8 7/8 in"
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
-#, fuzzy
 msgid "%"
-msgstr "%s"
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1044
 #, c-format
@@ -684,7 +683,7 @@ msgstr "&Simbol:"
 #: ../src/richtext/richtextborderspage.cpp:379
 #: ../src/richtext/richtextborderspage.cpp:548
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Sincronizează valorile"
 
 #: ../include/wx/richtext/richtextbuffer.h:5733
 msgid "&Table"
@@ -1158,9 +1157,8 @@ msgid "About %s"
 msgstr "Despre %s"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Despre"
+msgstr "Despre..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1946,7 +1944,7 @@ msgstr "Bifează pentru a adăuga paranteză închisă."
 #: ../src/richtext/richtextborderspage.cpp:550
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Bifează pentru a edita simultan toate marginile."
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -6005,7 +6003,7 @@ msgstr "Lipsește separatorul după opțiunea '%s'."
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Servicii"
 
 #: ../src/richtext/richtextbuffer.cpp:10818
 msgid "Set Cell Style"
@@ -6348,9 +6346,8 @@ msgstr "Culoarea de fundal."
 #: ../src/richtext/richtextborderspage.cpp:504
 #: ../src/richtext/richtextborderspage.cpp:536
 #: ../src/richtext/richtextborderspage.cpp:538
-#, fuzzy
 msgid "The border line style."
-msgstr "Stilul fontului."
+msgstr "Stilul liniei de contur."
 
 #: ../src/richtext/richtextmarginspage.cpp:268
 #: ../src/richtext/richtextmarginspage.cpp:270
@@ -7444,14 +7441,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7545,14 +7540,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
