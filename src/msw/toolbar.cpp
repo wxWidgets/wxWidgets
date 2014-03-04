@@ -1743,12 +1743,24 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
     // Find bounding box for any toolbar item.
     RECT r;
     ::SetRectEmpty(&r);
-    for( int i = 0; i < toolsCount; i++ )
+    wxToolBarToolsList::compatibility_iterator node;
+    int i = 0;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext(), i++)
     {
-        RECT ritem = wxGetTBItemRect(GetHwnd(), i);
-        ::OffsetRect(&ritem, -ritem.left, -ritem.top); // Shift origin to (0,0)
-        ::UnionRect(&r, &r, &ritem);
+        wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
+
+        // Separators shouldn't be taken into account as they are sometimes
+        // reported to have the width of the entire client area by the toolbar.
+        // And we know that they are not the biggest items in the toolbar in
+        // any case, so just skip them.
+        if( !tool->IsSeparator() )
+        {
+            RECT ritem = wxGetTBItemRect(GetHwnd(), i);
+            ::OffsetRect(&ritem, -ritem.left, -ritem.top); // Shift origin to (0,0)
+            ::UnionRect(&r, &r, &ritem);
+        }
     }
+
     if ( !r.right )
         return false;
 
