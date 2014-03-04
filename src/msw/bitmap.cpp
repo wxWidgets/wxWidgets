@@ -130,9 +130,12 @@ public:
 private:
     void Init();
 
-    // Use the given bitmap handle and take the rest of the characteristics
-    // (size, depth, ...) from the given DIB.
-    void InitFromDIB(const wxDIB& dib, HBITMAP hbitmap);
+    // Initialize using the given DIB but use (and take ownership of) the
+    // bitmap handle if it is valid, assuming it's a DDB. If it's not valid,
+    // use the DIB handle itself taking ownership of it (i.e. wxDIB will become
+    // invalid when this function returns even though we take it as const
+    // reference because this is how it's passed to us).
+    void InitFromDIB(const wxDIB& dib, HBITMAP hbitmap = NULL);
 
 
     // optional mask for transparent drawing
@@ -272,14 +275,31 @@ void wxBitmapRefData::InitFromDIB(const wxDIB& dib, HBITMAP hbitmap)
     m_height = dib.GetHeight();
     m_depth = dib.GetDepth();
 
-    m_hBitmap = (WXHBITMAP)hbitmap;
-
 #if wxUSE_PALETTE
     wxPalette *palette = dib.CreatePalette();
     if ( palette )
         m_bitmapPalette = *palette;
     delete palette;
 #endif // wxUSE_PALETTE
+
+    if ( hbitmap )
+    {
+        // We assume it's a DDB, otherwise there would be no point in passing
+        // it to us in addition to the DIB.
+        m_isDIB = false;
+    }
+    else // No valid DDB provided
+    {
+        // Just use DIB itself.
+        m_isDIB = true;
+
+        // Notice that we must not try to use the DIB after calling Detach() on
+        // it, e.g. this must be done after calling CreatePalette() above.
+        hbitmap = const_cast<wxDIB &>(dib).Detach();
+    }
+
+    // In any case, take ownership of this bitmap.
+    m_hBitmap = (WXHBITMAP)hbitmap;
 }
 
 void wxBitmapRefData::CopyFromDIB(const wxDIB& dib)
@@ -287,14 +307,11 @@ void wxBitmapRefData::CopyFromDIB(const wxDIB& dib)
     wxCHECK_RET( !IsOk(), "bitmap already initialized" );
     wxCHECK_RET( dib.IsOk(), wxT("invalid DIB in CopyFromDIB") );
 
+    HBITMAP hbitmap;
 #ifdef SOMETIMES_USE_DIB
-    HBITMAP hbitmap = dib.CreateDDB();
-    if ( !hbitmap )
-        return;
-    m_isDIB = false;
+    hbitmap = dib.CreateDDB();
 #else // ALWAYS_USE_DIB
-    HBITMAP hbitmap = const_cast<wxDIB &>(dib).Detach();
-    m_isDIB = true;
+    hbitmap = NULL;
 #endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
 
     InitFromDIB(dib, hbitmap);
@@ -308,9 +325,7 @@ bool wxBitmapRefData::AssignDIB(wxDIB& dib)
         return false;
 
     Free();
-
-    m_isDIB = true;
-    InitFromDIB(dib, dib.Detach());
+    InitFromDIB(dib);
 
     return true;
 }
