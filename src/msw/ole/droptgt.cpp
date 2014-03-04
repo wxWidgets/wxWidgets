@@ -218,6 +218,16 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     }
 #endif // 0
 
+    if ( !m_pTarget->MSWIsAcceptedData(pIDataSource) ) {
+      // we don't accept this kind of data
+      *pdwEffect = DROPEFFECT_NONE;
+
+      // Don't do anything else if we don't support this format at all, notably
+      // don't call our OnEnter() below which would show misleading cursor to
+      // the user.
+      return S_OK;
+    }
+
     // for use in OnEnter and OnDrag calls
     m_pTarget->MSWSetDataSource(pIDataSource);
 
@@ -225,25 +235,18 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     m_pIDataObject = pIDataSource;
     m_pIDataObject->AddRef();
 
-    if ( !m_pTarget->MSWIsAcceptedData(pIDataSource) ) {
-        // we don't accept this kind of data
-        *pdwEffect = DROPEFFECT_NONE;
-    }
-    else
+    // we need client coordinates to pass to wxWin functions
+    if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
     {
-        // we need client coordinates to pass to wxWin functions
-        if ( !ScreenToClient(m_hwnd, (POINT *)&pt) )
-        {
-            wxLogLastError(wxT("ScreenToClient"));
-        }
-
-        // give some visual feedback
-        *pdwEffect = ConvertDragResultToEffect(
-            m_pTarget->OnEnter(pt.x, pt.y, ConvertDragEffectToResult(
-                GetDropEffect(grfKeyState, m_pTarget->GetDefaultAction(), *pdwEffect))
-                        )
-                     );
+        wxLogLastError(wxT("ScreenToClient"));
     }
+
+    // give some visual feedback
+    *pdwEffect = ConvertDragResultToEffect(
+        m_pTarget->OnEnter(pt.x, pt.y, ConvertDragEffectToResult(
+            GetDropEffect(grfKeyState, m_pTarget->GetDefaultAction(), *pdwEffect))
+                    )
+                  );
 
     // update drag image
     const wxDragResult res = ConvertDragEffectToResult(*pdwEffect);
