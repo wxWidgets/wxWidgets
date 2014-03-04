@@ -121,7 +121,7 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
     bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
 
     // handle WM_EXITMENULOOP message for Win95 only
@@ -135,7 +135,7 @@ public:
 
     // Find the menu corresponding to the given handle.
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
 protected:
     // common part of all ctors

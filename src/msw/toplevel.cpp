@@ -1481,7 +1481,7 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
     }
 }
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
 
 bool
 wxTopLevelWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
@@ -1588,7 +1588,7 @@ wxMenu* wxTopLevelWindowMSW::MSWFindMenuFromHMENU(WXHMENU WXUNUSED(hMenu))
     return NULL;
 }
 
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
 
 
