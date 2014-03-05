@@ -431,7 +431,7 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
             break;
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-#if wxUSE_MENUS
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
         case WM_INITMENUPOPUP:
             processed = HandleMenuPopup(wxEVT_MENU_OPEN, (WXHMENU)wParam);
             break;
@@ -459,7 +459,7 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
         case WM_UNINITMENUPOPUP:
             processed = HandleMenuPopup(wxEVT_MENU_CLOSE, (WXHMENU)wParam);
             break;
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS && !__WXUNIVERSAL__
 #endif // !__WXMICROWIN__
     }
 
