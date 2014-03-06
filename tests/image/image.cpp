@@ -147,8 +147,8 @@ void ImageTestCase::LoadFromSocketStream()
         wxBitmapType type;
     } testData[] =
     {
-        { "http://www.wxwidgets.org/logo9.jpg", wxBITMAP_TYPE_JPEG },
-        { "http://www.wxwidgets.org/favicon.ico", wxBITMAP_TYPE_ICO }
+        { "http://www.wxwidgets.org/assets/img/header-logo.png", wxBITMAP_TYPE_PNG },
+        { "http://www.wxwidgets.org/assets/ico/favicon-1.ico", wxBITMAP_TYPE_ICO }
     };
 
     for (unsigned int i=0; i<WXSIZEOF(testData); i++)
