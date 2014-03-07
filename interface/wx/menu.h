@@ -652,6 +652,8 @@ public:
         Adds the given @a submenu to this menu. @a text is the text shown in the
         menu for it and @a help is the help string shown in the status bar when the
         submenu item is selected.
+
+        @see Insert(), Prepend()
     */
     wxMenuItem* AppendSubMenu(wxMenu* submenu, const wxString& text,
                               const wxString& help = wxEmptyString);
@@ -866,6 +868,16 @@ public:
                        wxItemKind kind = wxITEM_NORMAL);
 
     /**
+        Inserts the given @a submenu before the position @a pos.
+        @a text is the text shown in the menu for it and @a help is the
+        help string shown in the status bar when the submenu item is selected.
+
+        @see AppendSubMenu(), Prepend()
+    */
+    wxMenuItem* Insert(size_t pos, int id, const wxString& text,
+                       wxMenu* submenu, const wxString& help = wxEmptyString);
+
+    /**
         Inserts a checkable item at the given position.
 
         @see Insert(), AppendCheckItem()
@@ -929,6 +941,14 @@ public:
     wxMenuItem* Prepend(int id, const wxString& item = wxEmptyString,
                         const wxString& helpString = wxEmptyString,
                         wxItemKind kind = wxITEM_NORMAL);
+
+    /**
+        Inserts the given @a submenu at position 0.
+
+        @see AppendSubMenu(), Insert()
+    */
+    wxMenuItem* Prepend(int id, const wxString& text, wxMenu* submenu,
+                        const wxString& help = wxEmptyString);
 
     /**
         Inserts a checkable item at position 0.
