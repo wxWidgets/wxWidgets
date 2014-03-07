@@ -4271,7 +4271,7 @@ void wxWindowGTK::GTKApplyStyle(GtkWidget* widget, GtkRcStyle* WXUNUSED_IN_GTK3(
 #ifdef __WXGTK3__
     const PangoFontDescription* pfd = NULL;
     if (m_font.IsOk())
-        pfd = pango_font_description_copy(m_font.GetNativeFontInfo()->description);
+        pfd = m_font.GetNativeFontInfo()->description;
     gtk_widget_override_font(widget, pfd);
     gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, m_foregroundColour);
     gtk_widget_override_background_color(widget, GTK_STATE_FLAG_NORMAL, m_backgroundColour);
