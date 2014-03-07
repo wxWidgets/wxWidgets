@@ -3696,39 +3696,46 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 #endif
         }
     }
-    else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
+    else if ( event.LeftUp() || event.RightUp() )
     {
-        ReleaseMouse();
-
-        // erase the highlighting
-        DrawDropEffect(m_dropTarget);
-
-        if ( m_oldSelection )
+        if ( m_isDragging )
         {
-            m_oldSelection->SetHilight(true);
-            RefreshLine(m_oldSelection);
-            m_oldSelection = NULL;
-        }
+            ReleaseMouse();
 
-        // generate the drag end event
-        wxTreeEvent eventEndDrag(wxEVT_TREE_END_DRAG,  this, item);
+            // erase the highlighting
+            DrawDropEffect(m_dropTarget);
 
-        eventEndDrag.m_pointDrag = CalcScrolledPosition(pt);
+            if ( m_oldSelection )
+            {
+                m_oldSelection->SetHilight(true);
+                RefreshLine(m_oldSelection);
+                m_oldSelection = NULL;
+            }
 
-        (void)GetEventHandler()->ProcessEvent(eventEndDrag);
+            // generate the drag end event
+            wxTreeEvent eventEndDrag(wxEVT_TREE_END_DRAG,  this, item);
 
-        m_isDragging = false;
-        m_dropTarget = NULL;
+            eventEndDrag.m_pointDrag = CalcScrolledPosition(pt);
 
-        SetCursor(m_oldCursor);
+            (void)GetEventHandler()->ProcessEvent(eventEndDrag);
+
+            m_isDragging = false;
+            m_dropTarget = NULL;
+
+            SetCursor(m_oldCursor);
 
 #if defined( __WXMSW__ ) || defined(__WXMAC__) || defined(__WXGTK20__)
-        Update();
+            Update();
 #else
-        // TODO: remove this call or use wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI)
-        //       instead (needs to be tested!)
-        wxYieldIfNeeded();
+            // TODO: remove this call or use wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI)
+            //       instead (needs to be tested!)
+            wxYieldIfNeeded();
 #endif
+        }
+        else
+        {
+            event.Skip();
+        }
     }
     else
     {
