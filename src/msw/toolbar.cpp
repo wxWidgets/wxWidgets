@@ -244,11 +244,12 @@ private:
 // helper functions
 // ----------------------------------------------------------------------------
 
-// return the rectangle of the item at the given index
+// Return the rectangle of the item at the given index and, if specified, with
+// the given id.
 //
-// returns an empty (0, 0, 0, 0) rectangle if fails so the caller may compare
-// r.right or r.bottom with 0 to check for this
-static RECT wxGetTBItemRect(HWND hwnd, int index)
+// Returns an empty (0, 0, 0, 0) rectangle if fails so the caller may compare
+// r.right or r.bottom with 0 to check for this.
+static RECT wxGetTBItemRect(HWND hwnd, int index, int id = wxID_NONE)
 {
     RECT r;
 
@@ -256,12 +257,34 @@ static RECT wxGetTBItemRect(HWND hwnd, int index)
     // only appeared in v4.70 of comctl32.dll
     if ( !::SendMessage(hwnd, TB_GETITEMRECT, index, (LPARAM)&r) )
     {
-        wxLogLastError(wxT("TB_GETITEMRECT"));
+        // This call can return false status even when there is no real error,
+        // e.g. for a hidden button, so check for this to avoid spurious logs.
+        const DWORD err = ::GetLastError();
+        if ( err != ERROR_SUCCESS )
+        {
+            bool reportError = true;
 
-        r.top =
-        r.left =
-        r.right =
-        r.bottom = 0;
+            if ( id != wxID_NONE )
+            {
+                const LRESULT state = ::SendMessage(hwnd, TB_GETSTATE, id, 0);
+                if ( state != -1 && (state & TBSTATE_HIDDEN) )
+                {
+                    // There is no real error to report after all.
+                    reportError = false;
+                }
+                else // It is not hidden.
+                {
+                    // So it must have been a real error, report it with the
+                    // original error code and not the one from TB_GETSTATE.
+                    ::SetLastError(err);
+                }
+            }
+
+            if ( reportError )
+                wxLogLastError(wxT("TB_GETITEMRECT"));
+        }
+
+        ::SetRectEmpty(&r);
     }
 
     return r;
@@ -998,7 +1021,14 @@ bool wxToolBar::Realize()
                 }
 
                 button.idCommand = tool->GetId();
-                button.fsState = TBSTATE_ENABLED;
+
+                // We don't embed controls in the vertical toolbar but for
+                // every control there must exist a corresponding button to
+                // keep indexes the same as in the horizontal case.
+                if ( IsVertical() && tool->IsControl() )
+                    button.fsState = TBSTATE_HIDDEN;
+                else
+                    button.fsState = TBSTATE_ENABLED;
                 button.fsStyle = TBSTYLE_SEP;
                 break;
 
@@ -1112,7 +1142,7 @@ bool wxToolBar::Realize()
     {
         wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
 
-        const RECT r = wxGetTBItemRect(GetHwnd(), toolIndex);
+        const RECT r = wxGetTBItemRect(GetHwnd(), toolIndex, tool->GetId());
 
         if ( !tool->IsControl() )
         {
@@ -1124,15 +1154,17 @@ bool wxToolBar::Realize()
             continue;
         }
 
+        wxControl * const control = tool->GetControl();
         if ( IsVertical() )
         {
             // don't embed controls in the vertical toolbar, this doesn't look
             // good and wxGTK doesn't do it neither (and the code below can't
             // deal with this case)
+            control->Hide();
             continue;
         }
 
-        wxControl * const control = tool->GetControl();
+        control->Show();
         wxStaticText * const staticText = tool->GetStaticText();
 
         wxSize size = control->GetSize();
