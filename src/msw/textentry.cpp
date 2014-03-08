@@ -102,6 +102,10 @@ DEFINE_GUID(wxIID_IAutoCompleteDropDown,
 DEFINE_GUID(wxCLSID_AutoComplete,
     0x00bb2763, 0x6a77, 0x11d0, 0xa5, 0x35, 0x00, 0xc0, 0x4f, 0xd7, 0xd0, 0x62);
 
+#ifndef ACDD_VISIBLE
+    #define ACDD_VISIBLE 0x0001
+#endif
+
 // Small helper class which can be used to ensure thread safety even when
 // wxUSE_THREADS==0 (and hence wxCriticalSection does nothing).
 class CSLock
@@ -433,6 +437,10 @@ public:
                                        ACO_UPDOWNKEYDROPSLIST);
             pAutoComplete2->Release();
         }
+
+        wxBIND_OR_CONNECT_HACK(m_win, wxEVT_CHAR_HOOK, wxKeyEventHandler,
+                               wxTextAutoCompleteData::OnCharHook,
+                               this);
     }
 
     ~wxTextAutoCompleteData()
@@ -568,6 +576,28 @@ private:
         event.Skip();
     }
 
+    void OnCharHook(wxKeyEvent& event)
+    {
+        // If the autocomplete drop-down list is currently displayed when the
+        // user presses Escape, we need to dismiss it manually from here as
+        // Escape could be eaten by something else (e.g. EVT_CHAR_HOOK in the
+        // dialog that this control is found in) otherwise.
+        if ( event.GetKeyCode() == WXK_ESCAPE )
+        {
+            DWORD dwFlags = 0;
+            if ( SUCCEEDED(m_autoCompleteDropDown->GetDropDownStatus(&dwFlags,
+                                                                     NULL))
+                    && dwFlags == ACDD_VISIBLE )
+            {
+                ::SendMessage(GetHwndOf(m_win), WM_KEYDOWN, WXK_ESCAPE, 0);
+
+                // Do not skip the event in this case, we've already handled it.
+                return;
+            }
+        }
+
+        event.Skip();
+    }
 
     // The text entry we're associated with.
     wxTextEntry * const m_entry;
