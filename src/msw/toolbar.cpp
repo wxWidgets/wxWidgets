@@ -1886,8 +1886,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                 }
                 else
                 {
-                    rcItem.top = 0;
-                    rcItem.bottom = rectTotal.height;
+                    rcItem.bottom = rcItem.top + rectTotal.height / m_maxRows;
                 }
 
                 rgnDummySeps.Union(wxRectFromRECT(rcItem));
