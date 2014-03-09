@@ -688,8 +688,6 @@ bool wxGetKeyState (wxKeyCode key)
             }
         }
 
-        wxASSERT_MSG(wxHIDModule::sm_keyboards.GetCount() != 0,
-                     wxT("No keyboards found!"));
     }
 
     for(size_t i = 0; i < wxHIDModule::sm_keyboards.GetCount(); ++i)
