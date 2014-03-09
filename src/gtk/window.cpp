@@ -3541,8 +3541,15 @@ wxWindowGTK::AdjustForLayoutDirection(wxCoord x,
 void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, WindowOrder move)
 {
     wxWindowBase::DoMoveInTabOrder(win, move);
-    m_dirtyTabOrder = true;
-    wxTheApp->WakeUpIdle();
+
+    // Update the TAB order at GTK+ level too, but do it slightly later in case
+    // we're changing the TAB order of several controls at once, as is common.
+    wxWindow* const parent = GetParent();
+    if ( parent )
+    {
+        parent->m_dirtyTabOrder = true;
+        wxTheApp->WakeUpIdle();
+    }
 }
 
 bool wxWindowGTK::DoNavigateIn(int flags)
