@@ -177,6 +177,7 @@ BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
     EVT_MOUSE_CAPTURE_LOST(wxRichTextCtrl::OnCaptureLost)
     EVT_CONTEXT_MENU(wxRichTextCtrl::OnContextMenu)
     EVT_SYS_COLOUR_CHANGED(wxRichTextCtrl::OnSysColourChanged)
+    EVT_TIMER(wxID_ANY, wxRichTextCtrl::OnTimer)
 
     EVT_MENU(wxID_UNDO, wxRichTextCtrl::OnUndo)
     EVT_UPDATE_UI(wxID_UNDO, wxRichTextCtrl::OnUpdateUndo)
@@ -350,6 +351,8 @@ wxRichTextCtrl::~wxRichTextCtrl()
     GetBuffer().RemoveEventHandler(this);
 
     delete m_contextMenu;
+
+    m_delayedImageProcessingTimer.Stop();
 }
 
 /// Member initialisation
@@ -382,6 +385,10 @@ void wxRichTextCtrl::Init()
     m_setupScrollbarsCountInOnSize = 0;
 
     m_enableImages = true;
+
+    m_enableDelayedImageLoading = false;
+    m_delayedImageProcessingRequired = false;
+    m_delayedImageProcessingTime = 0;
 }
 
 void wxRichTextCtrl::DoThaw()
@@ -2602,6 +2609,9 @@ void wxRichTextCtrl::OnSize(wxSizeEvent& event)
     // OnSize was the source of a scrollbar change.
     m_setupScrollbarsCountInOnSize = m_setupScrollbarsCount;
 
+    if (GetDelayedImageLoading())
+        RequestDelayedImageProcessing();
+
     event.Skip();
 }
 
@@ -2640,6 +2650,16 @@ void wxRichTextCtrl::OnIdle(wxIdleEvent& event)
         GetBuffer().Invalidate(wxRICHTEXT_ALL);
         ShowPosition(m_fullLayoutSavedPosition);
         Refresh(false);
+    }
+
+    const int imageProcessingInterval = wxRICHTEXT_DEFAULT_DELAYED_IMAGE_PROCESSING_INTERVAL;
+
+    if (m_enableDelayedImageLoading && m_delayedImageProcessingRequired && (wxGetLocalTimeMillis() > (m_delayedImageProcessingTime + imageProcessingInterval)))
+    {
+        m_delayedImageProcessingTimer.Stop();
+        m_delayedImageProcessingRequired = false;
+        m_delayedImageProcessingTime = 0;
+        ProcessDelayedImageLoading(true);
     }
 
     if (m_caretPositionForDefaultStyle != -2)
@@ -4045,6 +4065,9 @@ bool wxRichTextCtrl::LayoutContent(bool onlyVisibleRect)
 
         if (!IsFrozen() && !onlyVisibleRect)
             SetupScrollbars();
+
+        if (GetDelayedImageLoading())
+            RequestDelayedImageProcessing();
     }
 
     return true;
@@ -4668,6 +4691,15 @@ bool wxRichTextCtrl::RefreshForSelectionChange(const wxRichTextSelection& oldSel
     return true;
 }
 
+// Overrides standard refresh in order to provoke delayed image loading.
+void wxRichTextCtrl::Refresh( bool eraseBackground, const wxRect *rect)
+{
+    if (GetDelayedImageLoading())
+        RequestDelayedImageProcessing();
+
+    wxWindow::Refresh(eraseBackground, rect);
+}
+
 // margins functions
 bool wxRichTextCtrl::DoSetMargins(const wxPoint& pt)
 {
@@ -4904,6 +4936,112 @@ wxRect wxRichTextCtrl::GetScaledRect(const wxRect& rect) const
     else
         return wxRect((int) (0.5 + double(rect.x) * GetScale()), (int) (0.5 + double(rect.y) * GetScale()),
                       (int) (0.5 + double(rect.width) * GetScale()), (int) (0.5 + double(rect.height) * GetScale()));
+}
+
+// Do delayed image loading and garbage-collect other images
+bool wxRichTextCtrl::ProcessDelayedImageLoading(bool refresh)
+{
+    int loadCount = 0;
+
+    wxSize clientSize = GetUnscaledSize(GetClientSize());
+    wxPoint firstVisiblePt = GetUnscaledPoint(GetFirstVisiblePoint());
+    wxRect screenRect(firstVisiblePt, clientSize);
+
+    // Expand screen rect so that we actually process images in the vicinity,
+    // for smoother paging and scrolling.
+    screenRect.y -= (clientSize.y*3);
+    screenRect.height += (clientSize.y*6);
+    ProcessDelayedImageLoading(screenRect, & GetBuffer(), loadCount);
+
+    if (loadCount > 0 && refresh)
+    {
+        wxWindow::Refresh(false);
+    }
+
+    return loadCount > 0;
+}
+
+bool wxRichTextCtrl::ProcessDelayedImageLoading(const wxRect& screenRect, wxRichTextParagraphLayoutBox* box, int& loadCount)
+{
+    if (!box || !box->IsShown())
+        return true;
+
+    wxRichTextObjectList::compatibility_iterator node = box->GetChildren().GetFirst();
+    while (node)
+    {
+        // Could be a cell or a paragraph
+        wxRichTextCompositeObject* composite = wxDynamicCast(node->GetData(), wxRichTextCompositeObject);
+        if (composite->IsTopLevel())
+            ProcessDelayedImageLoading(screenRect, wxDynamicCast(composite, wxRichTextParagraphLayoutBox), loadCount);
+        else // assume a paragraph
+        {
+            wxRichTextObjectList::compatibility_iterator node2 = composite->GetChildren().GetFirst();
+            while (node2)
+            {
+                wxRichTextObject* obj = node2->GetData();
+                if (obj->IsTopLevel())
+                    ProcessDelayedImageLoading(screenRect, wxDynamicCast(obj, wxRichTextParagraphLayoutBox), loadCount);
+                else
+                {
+                    wxRichTextImage* imageObj = wxDynamicCast(obj, wxRichTextImage);
+                    if (imageObj && imageObj->IsShown())
+                    {
+                        const wxRect& rect(imageObj->GetRect());
+                        if ((rect.GetBottom() < screenRect.GetTop()) || (rect.GetTop() > screenRect.GetBottom()))
+                        {
+                            // Off-screen
+                            imageObj->ResetImageCache();
+                        }
+                        else
+                        {
+                            // On-screen
+                            wxRichTextDrawingContext context(& GetBuffer());
+                            context.SetLayingOut(true);
+                            context.EnableDelayedImageLoading(false);
+
+                            wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
+                            marginRect = imageObj->GetRect(); // outer rectangle, will calculate contentRect
+                            if (marginRect.GetSize() != wxDefaultSize)
+                            {
+                                wxClientDC dc(this);
+                                wxRichTextAttr attr(imageObj->GetAttributes());
+                                imageObj->AdjustAttributes(attr, context);
+                                imageObj->GetBoxRects(dc, & GetBuffer(), attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);
+
+                                wxImage image;
+                                bool changed = false;
+                                if (imageObj->LoadAndScaleImageCache(image, contentRect.GetSize(), false, changed) && changed)
+                                {
+                                    loadCount ++;
+                                }
+                            }
+                        }
+                    }
+                }
+                node2 = node2->GetNext();
+            }
+        }
+
+        node = node->GetNext();
+    }
+
+    return true;
+}
+
+void wxRichTextCtrl::RequestDelayedImageProcessing()
+{
+    SetDelayedImageProcessingRequired(true);
+    SetDelayedImageProcessingTime(wxGetLocalTimeMillis());
+    m_delayedImageProcessingTimer.SetOwner(this, GetId());
+    m_delayedImageProcessingTimer.Start(wxRICHTEXT_DEFAULT_DELAYED_IMAGE_PROCESSING_INTERVAL);
+}
+
+void wxRichTextCtrl::OnTimer(wxTimerEvent& event)
+{
+    if (event.GetId() == GetId())
+        wxWakeUpIdle();
+    else
+        event.Skip();
 }
 
 #if wxRICHTEXT_USE_OWN_CARET

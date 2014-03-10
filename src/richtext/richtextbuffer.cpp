@@ -5150,7 +5150,8 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         }
         while (doLoop);
 
-        if (child->IsTopLevel())
+        // 2014-03-08: also need to set object positions
+        //if (child->IsTopLevel())
         {
             // We can move it to the correct position at this point
             // TODO: probably need to add margin
@@ -12213,17 +12214,24 @@ wxRichTextImage::~wxRichTextImage()
 void wxRichTextImage::Init()
 {
     m_originalImageSize = wxSize(-1, -1);
+    m_imageState = ImageState_Unloaded;
 }
 
 /// Create a cached image at the required size
-bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context, bool resetCache, const wxSize& parentSize)
+bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context, wxSize& retImageSize, bool resetCache, const wxSize& parentSize)
 {
     if (!m_imageBlock.IsOk())
+    {
+        m_imageState = ImageState_Bad;
         return false;
+    }
 
     // Don't repeat unless absolutely necessary
     if (m_imageCache.IsOk() && !resetCache && !context.GetLayingOut())
+    {
+        retImageSize = wxSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
         return true;
+    }
 
     if (!context.GetImagesEnabled())
     {
@@ -12231,7 +12239,9 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
         {
             wxBitmap bitmap(image_placeholder24x24_xpm);
             m_imageCache = bitmap;
+            m_imageState = ImageState_Loaded;
         }
+        retImageSize = wxSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
         return true;
     }
 
@@ -12243,13 +12253,15 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
     if (resetCache || m_originalImageSize.GetWidth() <= 0 || m_originalImageSize.GetHeight() <= 0)
     {
         m_imageCache = wxNullBitmap;
+        m_imageState = ImageState_Unloaded;
 
-        m_imageBlock.Load(image);
-        if (!image.IsOk())
+        if (!m_imageBlock.Load(image) || !image.IsOk())
         {
             wxBitmap bitmap(image_placeholder24x24_xpm);
             m_imageCache = bitmap;
             m_originalImageSize = wxSize(bitmap.GetWidth(), bitmap.GetHeight());
+            m_imageState = ImageState_Bad;
+            retImageSize = wxSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
             return false;
         }
 
@@ -12359,23 +12371,48 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
     width = wxMax(1, width);
     height = wxMax(1, height);
 
+    retImageSize = wxSize(width, height);
+
+    bool changed = false;
+    return LoadAndScaleImageCache(image, retImageSize, context.GetDelayedImageLoading(), changed);
+}
+
+// Do the loading and scaling
+bool wxRichTextImage::LoadAndScaleImageCache(wxImage& image, const wxSize& sz, bool delayLoading, bool& changed)
+{
+    int width = sz.x;
+    int height = sz.y;
+
     if (m_imageCache.IsOk() && m_imageCache.GetWidth() == width && m_imageCache.GetHeight() == height)
     {
         // Do nothing, we didn't need to change the image cache
+        changed = false;
     }
     else
     {
+        changed = true;
+
+        if (delayLoading)
+        {
+            if (m_imageCache.IsOk())
+                m_imageCache = wxNullBitmap;
+            m_imageState = ImageState_Unloaded;
+            return true;
+        }
+
         if (!image.IsOk())
         {
-            m_imageBlock.Load(image);
-            if (!image.IsOk())
+            if (!m_imageBlock.Load(image) || !image.IsOk())
             {
                 wxBitmap bitmap(image_placeholder24x24_xpm);
                 m_imageCache = bitmap;
                 m_originalImageSize = wxSize(bitmap.GetWidth(), bitmap.GetHeight());
+                m_imageState = ImageState_Bad;
                 return false;
             }
         }
+
+        m_originalImageSize = wxSize(image.GetWidth(), image.GetHeight());
 
         if (image.GetWidth() == width && image.GetHeight() == height)
             m_imageCache = wxBitmap(image);
@@ -12397,6 +12434,11 @@ bool wxRichTextImage::LoadImageCache(wxDC& dc, wxRichTextDrawingContext& context
         }
     }
 
+    if (m_imageCache.IsOk())
+        m_imageState = ImageState_Loaded;
+    else
+        m_imageState = ImageState_Bad;
+
     return m_imageCache.IsOk();
 }
 
@@ -12405,9 +12447,6 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
 {
     if (!IsShown())
         return true;
-
-    if (!m_imageCache.IsOk())
-        return false;
 
     wxRichTextAttr attr(GetAttributes());
     AdjustAttributes(attr, context);
@@ -12419,7 +12458,14 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
     marginRect = rect; // outer rectangle, will calculate contentRect
     GetBoxRects(dc, GetBuffer(), attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);
 
-    dc.DrawBitmap(m_imageCache, contentRect.x, contentRect.y, true);
+    if (m_imageCache.IsOk())
+        dc.DrawBitmap(m_imageCache, contentRect.x, contentRect.y, true);
+    else
+    {
+        dc.SetPen(*wxLIGHT_GREY_PEN);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(contentRect);
+    }
 
     if (selection.WithinSelection(GetRange().GetStart(), this))
     {
@@ -12436,10 +12482,10 @@ bool wxRichTextImage::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
 /// Lay the item out
 bool wxRichTextImage::Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int WXUNUSED(style))
 {
-    if (!LoadImageCache(dc, context, false, parentRect.GetSize()))
+    wxSize imageSize;
+    if (!LoadImageCache(dc, context, imageSize, false, parentRect.GetSize()))
         return false;
 
-    wxSize imageSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
     wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
     contentRect = wxRect(wxPoint(0,0), imageSize);
 
@@ -12465,7 +12511,8 @@ bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
     if (!range.IsWithin(GetRange()))
         return false;
 
-    if (!((wxRichTextImage*)this)->LoadImageCache(dc, context, false, parentSize))
+    wxSize imageSize;
+    if (!((wxRichTextImage*)this)->LoadImageCache(dc, context, imageSize, false, parentSize))
     {
         size.x = 0; size.y = 0;
         if (partialExtents)
@@ -12476,7 +12523,6 @@ bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
     wxRichTextAttr attr(GetAttributes());
     ((wxRichTextObject*)this)->AdjustAttributes(attr, context);
 
-    wxSize imageSize(m_imageCache.GetWidth(), m_imageCache.GetHeight());
     wxRect marginRect, borderRect, contentRect, paddingRect, outlineRect;
     contentRect = wxRect(wxPoint(0,0), imageSize);
     GetBoxRects(dc, GetBuffer(), attr, marginRect, borderRect, contentRect, paddingRect, outlineRect);
@@ -15040,6 +15086,7 @@ wxRichTextDrawingContext::wxRichTextDrawingContext(wxRichTextBuffer* buffer)
     {
         EnableVirtualAttributes(m_buffer->GetRichTextCtrl()->GetVirtualAttributesEnabled());
         m_enableImages = m_buffer->GetRichTextCtrl()->GetImagesEnabled();
+        m_enableDelayedImageLoading = m_buffer->GetRichTextCtrl()->GetDelayedImageLoading();
     }
 }
 

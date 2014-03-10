@@ -17,7 +17,7 @@
 
 #include "wx/scrolwin.h"
 #include "wx/caret.h"
-
+#include "wx/timer.h"
 #include "wx/textctrl.h"
 
 #if wxUSE_DRAG_AND_DROP
@@ -79,6 +79,8 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextStyleDefinition;
 #define wxRICHTEXT_DEFAULT_DELAYED_LAYOUT_THRESHOLD 20000
 // Milliseconds before layout occurs after resize
 #define wxRICHTEXT_DEFAULT_LAYOUT_INTERVAL 50
+// Milliseconds before delayed image processing occurs
+#define wxRICHTEXT_DEFAULT_DELAYED_IMAGE_PROCESSING_INTERVAL 200
 
 /* Identifiers
  */
@@ -1981,6 +1983,12 @@ public:
     bool RefreshForSelectionChange(const wxRichTextSelection& oldSelection, const wxRichTextSelection& newSelection);
 
     /**
+        Overrides standard refresh in order to provoke delayed image loading.
+    */
+    virtual void Refresh( bool eraseBackground = true,
+                       const wxRect *rect = (const wxRect *) NULL );
+
+    /**
         Sets the caret position.
 
         The caret position is the character position just before the caret.
@@ -2134,6 +2142,38 @@ public:
 
     bool GetImagesEnabled() const { return m_enableImages; }
 
+    /**
+        Enable or disable delayed image loading
+    */
+
+    void EnableDelayedImageLoading(bool b) { m_enableDelayedImageLoading = b; }
+
+    /**
+        Returns @true if delayed image loading is enabled.
+    */
+
+    bool GetDelayedImageLoading() const { return m_enableDelayedImageLoading; }
+
+    /**
+        Gets the flag indicating that delayed image processing is required.
+    */
+    bool GetDelayedImageProcessingRequired() const { return m_delayedImageProcessingRequired; }
+
+    /**
+        Sets the flag indicating that delayed image processing is required.
+    */
+    void SetDelayedImageProcessingRequired(bool b) { m_delayedImageProcessingRequired = b; }
+
+    /**
+        Returns the last time delayed image processing was performed.
+    */
+    wxLongLong GetDelayedImageProcessingTime() const { return m_delayedImageProcessingTime; }
+
+    /**
+        Sets the last time delayed image processing was performed.
+    */
+    void SetDelayedImageProcessingTime(wxLongLong t) { m_delayedImageProcessingTime = t; }
+
 #ifdef DOXYGEN
     /**
         Returns the content of the entire control as a string.
@@ -2208,6 +2248,22 @@ public:
 
     // implement wxTextEntry methods
     virtual wxString DoGetValue() const;
+
+    /**
+        Do delayed image loading and garbage-collect other images
+    */
+    bool ProcessDelayedImageLoading(bool refresh);
+    bool ProcessDelayedImageLoading(const wxRect& screenRect, wxRichTextParagraphLayoutBox* box, int& loadCount);
+
+    /**
+        Request delayed image processing.
+    */
+    void RequestDelayedImageProcessing();
+
+    /**
+        Respond to timer events.
+    */
+    void OnTimer(wxTimerEvent& event);
 
 protected:
     // implement the wxTextEntry pure virtual method
@@ -2336,6 +2392,12 @@ protected:
 
     /// Whether images are enabled for this control
     bool                    m_enableImages;
+
+    /// Whether delayed image loading is enabled for this control
+    bool                    m_enableDelayedImageLoading;
+    bool                    m_delayedImageProcessingRequired;
+    wxLongLong              m_delayedImageProcessingTime;
+    wxTimer                 m_delayedImageProcessingTimer;
 };
 
 #if wxUSE_DRAG_AND_DROP
