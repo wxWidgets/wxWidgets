@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/button.h
 // Purpose:     wxButtonBase class
-// Author:      Vadim Zetlin
+// Author:      Vadim Zeitlin
 // Modified by:
 // Created:     15.08.00
-// Copyright:   (c) Vadim Zetlin
+// Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/anybutton.h
 // Purpose:     wxAnyButtonBase class
-// Author:      Vadim Zetlin
+// Author:      Vadim Zeitlin
 // Created:     2000-08-15 (extracted from button.h)
-// Copyright:   (c) Vadim Zetlin
+// Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
