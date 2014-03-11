@@ -510,6 +510,16 @@ wxFont wxFont::Bold() const
     return font;
 }
 
+wxFont wxFont::GetBaseFont() const
+{
+    wxFont font(*this);
+    font.SetStyle(wxFONTSTYLE_NORMAL);
+    font.SetWeight(wxFONTWEIGHT_NORMAL );
+    font.SetUnderlined(false);
+    font.SetStrikethrough(false);
+    return font;
+}
+
 wxFont& wxFont::MakeItalic()
 {
     SetStyle(wxFONTSTYLE_ITALIC);

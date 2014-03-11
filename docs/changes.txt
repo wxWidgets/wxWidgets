@@ -37,6 +37,7 @@ All (GUI):
 - Fix wxRearrangeList::Check() which asserted and misbehaved before.
 - Optimized wxRTC insertion and deletion when floating objects are present.
 - Added on-demand image loading option to wxRTC.
+- Add wxFont::GetBaseFont() (Melroy Tellis).
 
 wxGTK:
 

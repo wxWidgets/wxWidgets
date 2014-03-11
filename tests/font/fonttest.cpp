@@ -202,6 +202,13 @@ void FontTestCase::GetSet()
         CPPUNIT_ASSERT( test.IsOk() );
         CPPUNIT_ASSERT_EQUAL( true, test.GetUnderlined() );
 
+        const wxFont fontBase = test.GetBaseFont();
+        CPPUNIT_ASSERT( fontBase.IsOk() );
+        CPPUNIT_ASSERT( !fontBase.GetUnderlined() );
+        CPPUNIT_ASSERT( !fontBase.GetStrikethrough() );
+        CPPUNIT_ASSERT_EQUAL( wxFONTWEIGHT_NORMAL, fontBase.GetWeight() );
+        CPPUNIT_ASSERT_EQUAL( wxFONTSTYLE_NORMAL, fontBase.GetStyle() );
+
         // test Get/SetStrikethrough()
 
         // Strike through support not implemented in wxOSX currently.

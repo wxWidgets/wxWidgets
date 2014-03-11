@@ -608,6 +608,14 @@ public:
     //@{
 
     /**
+       Returns a font with the same face/size as the given one but with normal
+       weight and style and not underlined nor stricken through.
+
+       @since 3.1.0
+    */
+    wxFont GetBaseFont() const;
+
+    /**
         Returns the encoding of this font.
 
         Note that under wxGTK the returned value is always @c wxFONTENCODING_UTF8.

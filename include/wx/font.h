@@ -507,6 +507,7 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     wxFont& Scale(float x); \
     /* functions for creating fonts based on this one */ \
     wxFont Bold() const; \
+    wxFont GetBaseFont() const; \
     wxFont Italic() const; \
     wxFont Underlined() const; \
     wxFont Strikethrough() const; \
