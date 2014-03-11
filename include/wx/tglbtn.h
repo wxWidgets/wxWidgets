@@ -57,15 +57,7 @@ public:
         }
     }
 
-    // Buttons on MSW can look bad if they are not native colours, because
-    // then they become owner-drawn and not theme-drawn.  Disable it here
-    // in wxToggleButtonBase to make it consistent.
-    virtual bool ShouldInheritColours() const { return false; }
-
 protected:
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
-
     wxDECLARE_NO_COPY_CLASS(wxToggleButtonBase);
 };
 
