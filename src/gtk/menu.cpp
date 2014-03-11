@@ -86,6 +86,36 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
     win->HandleWindowEvent( event );
 }
 
+// Return the top level menu containing this menu (possibly this menu itself).
+static wxMenu* GetRootParentMenu(wxMenu* menu)
+{
+    while ( menu->GetParent() )
+        menu = menu->GetParent();
+
+    return menu;
+}
+
+// Call SetGtkLabel() to update the labels of all the items in this items sub
+// menu, recursively.
+static void UpdateSubMenuItemLabels(wxMenuItem* itemMenu)
+{
+    wxMenu* const menu = itemMenu->GetSubMenu();
+    wxCHECK_RET( menu, "should only be called for sub menus" );
+
+    const wxMenuItemList& items = menu->GetMenuItems();
+    for ( wxMenuItemList::const_iterator
+            it = items.begin(); it != items.end(); ++it )
+    {
+        wxMenuItem* const item = *it;
+        if ( !item->IsSeparator() )
+        {
+            item->SetGtkLabel();
+            if ( item->IsSubMenu() )
+                UpdateSubMenuItemLabels(item);
+        }
+    }
+}
+
 //-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
@@ -658,7 +688,7 @@ void wxMenuItem::SetItemLabel( const wxString& str )
         if (accel_key)
         {
             gtk_widget_remove_accelerator(
-                m_menuItem, m_parentMenu->m_accel, accel_key, accel_mods);
+                m_menuItem, GetRootParentMenu(m_parentMenu)->m_accel, accel_key, accel_mods);
         }
     }
 #endif // wxUSE_ACCEL
@@ -679,7 +709,7 @@ void wxMenuItem::SetGtkLabel()
     if (accel_key)
     {
         gtk_widget_add_accelerator(
-            m_menuItem, "activate", m_parentMenu->m_accel,
+            m_menuItem, "activate", GetRootParentMenu(m_parentMenu)->m_accel,
             accel_key, accel_mods, GTK_ACCEL_VISIBLE);
     }
 #endif // wxUSE_ACCEL
@@ -931,6 +961,9 @@ void wxMenu::GtkAppend(wxMenuItem* mitem, int pos)
     if ( !mitem->IsSeparator() )
     {
         mitem->SetGtkLabel();
+        if ( mitem->IsSubMenu() )
+            UpdateSubMenuItemLabels(mitem);
+
         g_signal_connect (menuItem, "select",
                           G_CALLBACK(menuitem_select), mitem);
         g_signal_connect (menuItem, "deselect",
