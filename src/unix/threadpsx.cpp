@@ -1364,36 +1364,67 @@ void wxThread::SetPriority(unsigned int prio)
 
         case STATE_RUNNING:
         case STATE_PAUSED:
+            {
 #ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
-#if defined(__LINUX__)
-            // On Linux, pthread_setschedparam with SCHED_OTHER does not allow
-            // a priority other than 0.  Instead, we use the BSD setpriority
-            // which alllows us to set a 'nice' value between 20 to -20.  Only
-            // super user can set a value less than zero (more negative yields
-            // higher priority).  setpriority set the static priority of a
-            // process, but this is OK since Linux is configured as a thread
-            // per process.
-            //
-            // FIXME this is not true for 2.6!!
+                // We map our priority values to pthreads scheduling params as
+                // follows:
+                //      0..20  to SCHED_IDLE
+                //     21..40  to SCHED_BATCH
+                //     41..60  to SCHED_OTHER
+                //     61..80  to SCHED_RR
+                //     81..100 to SCHED_FIFO
+                //
+                // For the last two, we can also use the additional priority
+                // parameter which must be in 1..99 range under Linux (TODO:
+                // what should be used for the other systems?).
+                struct sched_param sparam = { 0 };
 
-            // map wx priorites 0..100 to Unix priorities 20..-20
-            if ( setpriority(PRIO_PROCESS, 0, -(2*(int)prio)/5 + 20) == -1 )
-            {
-                wxLogError(_("Failed to set thread priority %d."), prio);
-            }
-#else // __LINUX__
-            {
-                struct sched_param sparam;
-                sparam.sched_priority = prio;
+                // The only scheduling policy guaranteed to be supported
+                // everywhere is this one.
+                int policy = SCHED_OTHER;
+#ifdef SCHED_IDLE
+                if ( prio <= 20 )
+                    policy = SCHED_IDLE;
+#endif
+#ifdef SCHED_BATCH
+                if ( 20 < prio && prio <= 40 )
+                    policy = SCHED_BATCH;
+#endif
+#ifdef SCHED_RR
+                if ( 60 < prio && prio <= 80 )
+                    policy = SCHED_RR;
+#endif
+#ifdef SCHED_FIFO
+                if ( 80 < prio )
+                    policy = SCHED_FIFO;
+#endif
+
+                // This test is not redundant as it takes care of the systems
+                // where neither SCHED_RR nor SCHED_FIFO are defined.
+                if ( prio > 60 && policy != SCHED_OTHER )
+                {
+                    // There is no good way to map our 20 possible priorities
+                    // (61..80 or 81..100) to the 99 pthread priorities, so we
+                    // do the best that we can and ensure that the extremes of
+                    // our range are mapped to the pthread extremes and all the
+                    // rest fall in between.
+
+                    // This gets us to 1..96 range.
+                    sparam.sched_priority = ((prio - 61) % 20)*5 + 1;
+
+                    // And we artificially increase our highest priority to the
+                    // highest pthread one.
+                    if ( sparam.sched_priority == 96 )
+                        sparam.sched_priority = 99;
+                }
 
                 if ( pthread_setschedparam(m_internal->GetId(),
-                                           SCHED_OTHER, &sparam) != 0 )
+                                           policy, &sparam) != 0 )
                 {
                     wxLogError(_("Failed to set thread priority %d."), prio);
                 }
-            }
-#endif // __LINUX__
 #endif // HAVE_THREAD_PRIORITY_FUNCTIONS
+            }
             break;
 
         case STATE_EXITED:
