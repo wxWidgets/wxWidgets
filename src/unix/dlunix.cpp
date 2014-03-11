@@ -280,5 +280,25 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
     return dlls;
 }
 
+
+/* static */
+void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
+{
+#ifdef HAVE_DLADDR
+    Dl_info di = { 0 };
+
+    if ( dladdr(addr, &di) == 0 )
+        return NULL;
+
+    if ( path )
+        *path = di.dli_fname;
+
+    return di.dli_fbase;
+#endif // HAVE_DLADDR
+
+    return NULL;
+}
+
+
 #endif // wxUSE_DYNLIB_CLASS
 

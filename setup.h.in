@@ -1071,6 +1071,9 @@
 /* Define if you have the dlerror function.  */
 #undef HAVE_DLERROR
 
+/* Define if you have the dladdr function.  */
+#undef HAVE_DLADDR
+
 /* Define if you have Posix fnctl() function. */
 #undef HAVE_FCNTL
 

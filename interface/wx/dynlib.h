@@ -196,6 +196,21 @@ public:
     static wxDynamicLibraryDetailsArray ListLoaded();
 
     /**
+        Returns the load address of the module containing the specified address
+        or @NULL if not found.
+
+        If the second argument @a path is not @NULL, it is filled with the full
+        path to the file the module was loaded from upon a successful return.
+
+        This method is implemented under MSW and Unix platforms providing
+        `dladdr()` call (which include Linux and various BSD systems) and
+        always returns @NULL elsewhere.
+
+        @since 3.1.0
+    */
+    static void* GetModuleFromAddress(const void* addr, wxString* path = NULL);
+
+    /**
         Loads DLL with the given @a name into memory. The @a flags argument can
         be a combination of the styles outlined in the class description.
 

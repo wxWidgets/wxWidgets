@@ -22,6 +22,7 @@ All:
 
 - Allow iterating over wxCmdLineParser arguments in order (Armel Asselin).
 - Add wxScopedArray ctor taking the number of elements to allocate.
+- Add wxDynamicLibrary::GetModuleFromAddress() (Luca Bacci).
 
 All (GUI):
 

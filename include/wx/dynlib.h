@@ -347,6 +347,12 @@ public:
     // string on others:
     static wxString GetPluginsDirectory();
 
+    // Return the load address of the module containing the given address or
+    // NULL if not found.
+    //
+    // If path output parameter is non-NULL, fill it with the full path to this
+    // module disk file on success.
+    static void* GetModuleFromAddress(const void* addr, wxString* path = NULL);
 
 #ifdef __WINDOWS__
     // return the handle (HMODULE/HINSTANCE) of the DLL with the given name

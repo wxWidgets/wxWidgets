@@ -297,6 +297,79 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
     return dlls;
 }
 
+// ----------------------------------------------------------------------------
+// Getting the module from an address inside it
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// Tries to dynamically load GetModuleHandleEx() from kernel32.dll and call it
+// to get the module handle from the given address. Returns NULL if it fails to
+// either resolve the function (which can only happen on pre-Vista systems
+// normally) or if the function itself failed.
+HMODULE CallGetModuleHandleEx(const void* addr)
+{
+    typedef BOOL (WINAPI *GetModuleHandleEx_t)(DWORD, LPCTSTR, HMODULE *);
+    static const GetModuleHandleEx_t INVALID_FUNC_PTR = (GetModuleHandleEx_t)-1;
+
+    static GetModuleHandleEx_t s_pfnGetModuleHandleEx = INVALID_FUNC_PTR;
+    if ( s_pfnGetModuleHandleEx == INVALID_FUNC_PTR )
+    {
+        wxDynamicLibrary dll(wxT("kernel32.dll"), wxDL_VERBATIM);
+
+        wxDL_INIT_FUNC_AW(s_pfn, GetModuleHandleEx, dll);
+
+        // dll object can be destroyed, kernel32.dll won't be unloaded anyhow
+    }
+
+    if ( !s_pfnGetModuleHandleEx )
+        return NULL;
+
+    // flags are GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT |
+    //           GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+    HMODULE hmod;
+    if ( !s_pfnGetModuleHandleEx(6, (LPCTSTR)addr, &hmod) )
+        return NULL;
+
+    return hmod;
+}
+
+} // anonymous namespace
+
+/* static */
+void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
+{
+    HMODULE hmod = CallGetModuleHandleEx(addr);
+    if ( !hmod )
+    {
+        wxLogLastError(wxT("GetModuleHandleEx"));
+        return NULL;
+    }
+
+    if ( path )
+    {
+        TCHAR libname[MAX_PATH];
+        if ( !::GetModuleFileName(hmod, libname, MAX_PATH) )
+        {
+            // GetModuleFileName could also return extended-length paths (paths
+            // prepended with "//?/", maximum length is 32767 charachters) so,
+            // in principle, MAX_PATH could be unsufficient and we should try
+            // increasing the buffer size here.
+            wxLogLastError(wxT("GetModuleFromAddress"));
+            return NULL;
+        }
+
+        libname[MAX_PATH-1] = wxT('\0');
+
+        *path = libname;
+    }
+
+    // In Windows HMODULE is actually the base address of the module so we
+    // can just cast it to the address.
+    return reinterpret_cast<void *>(hmod);
+}
+
 /* static */
 WXHMODULE wxDynamicLibrary::MSWGetModuleHandle(const wxString& name, void *addr)
 {
@@ -304,33 +377,9 @@ WXHMODULE wxDynamicLibrary::MSWGetModuleHandle(const wxString& name, void *addr)
     // because the former works correctly for comctl32.dll while the latter
     // returns NULL when comctl32.dll version 6 is used under XP (note that
     // GetModuleHandleEx() is only available under XP and later, coincidence?)
+    HMODULE hmod = CallGetModuleHandleEx(addr);
 
-    // check if we can use GetModuleHandleEx
-    typedef BOOL (WINAPI *GetModuleHandleEx_t)(DWORD, LPCTSTR, HMODULE *);
-
-    static const GetModuleHandleEx_t INVALID_FUNC_PTR = (GetModuleHandleEx_t)-1;
-
-    static GetModuleHandleEx_t s_pfnGetModuleHandleEx = INVALID_FUNC_PTR;
-    if ( s_pfnGetModuleHandleEx == INVALID_FUNC_PTR )
-    {
-        wxDynamicLibrary dll(wxT("kernel32.dll"), wxDL_VERBATIM);
-        s_pfnGetModuleHandleEx =
-            (GetModuleHandleEx_t)dll.GetSymbolAorW(wxT("GetModuleHandleEx"));
-
-        // dll object can be destroyed, kernel32.dll won't be unloaded anyhow
-    }
-
-    // get module handle from its address
-    if ( s_pfnGetModuleHandleEx )
-    {
-        // flags are GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT |
-        //           GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
-        HMODULE hmod;
-        if ( s_pfnGetModuleHandleEx(6, (LPCTSTR)addr, &hmod) && hmod )
-            return hmod;
-    }
-
-    return ::GetModuleHandle(name.t_str());
+    return hmod ? hmod : ::GetModuleHandle(name.t_str());
 }
 
 #endif // wxUSE_DYNLIB_CLASS

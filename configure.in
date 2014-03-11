@@ -5442,6 +5442,12 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                         AC_CHECK_LIB(dl, dlerror, AC_DEFINE(HAVE_DLERROR))
                     ]
                 )
+                AC_CHECK_FUNCS(dladdr,
+                    AC_DEFINE(HAVE_DLADDR),
+                    [
+                        AC_CHECK_LIB(dl, dladdr, AC_DEFINE(HAVE_DLADDR))
+                    ]
+                )
             fi
         fi
 

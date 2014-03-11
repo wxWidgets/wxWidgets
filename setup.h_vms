@@ -1177,6 +1177,9 @@ typedef pid_t GPid;
 /* Define if you have the dlerror function.  */
 #define HAVE_DLERROR 1
 
+/* Define if you have the dladdr function.  */
+#undef HAVE_DLADDR
+
 /* Define if you have Posix fnctl() function. */
 #define HAVE_FCNTL 1
 
