@@ -100,9 +100,13 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         return false;
     }
 
-    // get the format of the BMP file to save, else use 24bpp
+    // For icons, save alpha channel if available.
+    const bool saveAlpha = !IsBmp && image->HasAlpha();
+
+    // get the format of the BMP file to save,
+    // else (and always if alpha channel is present) use 24bpp
     unsigned format = wxBMP_24BPP;
-    if ( image->HasOption(wxIMAGE_OPTION_BMP_FORMAT) )
+    if ( image->HasOption(wxIMAGE_OPTION_BMP_FORMAT) && !saveAlpha )
         format = image->GetOptionInt(wxIMAGE_OPTION_BMP_FORMAT);
 
     wxUint16 bpp;     // # of bits per pixel
@@ -138,10 +142,10 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         bpp = 8;
         palette_size = 256;
     }
-    else  // you get 24bpp
+    else  // you get 24bpp or 32bpp with alpha
     {
         format = wxBMP_24BPP;
-        bpp = 24;
+        bpp = saveAlpha ? 32 : 24;
         palette_size = 0;
     }
 
@@ -351,12 +355,14 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
     // pointer to the image data, use quantized if available
     wxUint8 *data = (wxUint8*) image->GetData();
+    const unsigned char* const alpha = saveAlpha ? image->GetAlpha() : NULL;
     if (q_image) if (q_image->IsOk()) data = (wxUint8*) q_image->GetData();
 
     wxUint8 *buffer = new wxUint8[row_width];
     memset(buffer, 0, row_width);
     int y; unsigned x;
     long int pixel;
+    const int dstPixLen = saveAlpha ? 4 : 3;
 
     for (y = image->GetHeight() -1; y >= 0; y--)
     {
@@ -366,9 +372,11 @@ bool wxBMPHandler::SaveDib(wxImage *image,
             {
                 pixel = 3*(y*width + x);
 
-                buffer[3*x    ] = data[pixel+2];
-                buffer[3*x + 1] = data[pixel+1];
-                buffer[3*x + 2] = data[pixel];
+                buffer[dstPixLen*x    ] = data[pixel+2];
+                buffer[dstPixLen*x + 1] = data[pixel+1];
+                buffer[dstPixLen*x + 2] = data[pixel];
+                if ( saveAlpha )
+                    buffer[dstPixLen*x + 3] = alpha[y*width + x];
             }
         }
         else if ((format == wxBMP_8BPP) ||       // 1 byte per pixel in color
@@ -1281,7 +1289,13 @@ bool wxICOHandler::SaveFile(wxImage *image,
         const int colours = image->CountColours(257);
         int bppFormat;
         int bpp;
-        if ( colours > 256 )
+        if ( image->HasAlpha() )
+        {
+            // Icons with alpha channel are always stored in ARGB format.
+            bppFormat = wxBMP_24BPP;
+            bpp = 32;
+        }
+        else if ( colours > 256 )
         {
             bppFormat = wxBMP_24BPP;
             bpp = 24;
