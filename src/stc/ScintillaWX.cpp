@@ -283,7 +283,7 @@ void ScintillaWX::Finalise() {
 
 void ScintillaWX::StartDrag() {
 #if wxUSE_DRAG_AND_DROP
-    wxString dragText = stc2wx(drag.s, drag.len);
+    wxString dragText = stc2wx(drag.Data(), drag.Length());
 
     // Send an event to allow the drag text to be changed
     wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
@@ -420,7 +420,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
     int horizEnd = scrollWidth;
     if (horizEnd < 0)
         horizEnd = 0;
-    if (!horizontalScrollBarVisible || (wrapState != eWrapNone))
+    if (!horizontalScrollBarVisible || Wrapping())
         horizEnd = 0;
     int pageWidth = rcText.Width();
 
@@ -523,12 +523,12 @@ void ScintillaWX::Paste() {
 
 void ScintillaWX::CopyToClipboard(const SelectionText& st) {
 #if wxUSE_CLIPBOARD
-    if ( !st.len )
+    if ( !st.LengthWithTerminator() )
         return;
 
     wxTheClipboard->UsePrimarySelection(false);
     if (wxTheClipboard->Open()) {
-        wxString text = wxTextBuffer::Translate(stc2wx(st.s, st.len-1));
+        wxString text = wxTextBuffer::Translate(stc2wx(st.Data(), st.Length()));
         wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
@@ -591,7 +591,7 @@ void ScintillaWX::ClaimSelection() {
         CopySelectionRange(&st);
         wxTheClipboard->UsePrimarySelection(true);
         if (wxTheClipboard->Open()) {
-            wxString text = stc2wx(st.s, st.len);
+            wxString text = stc2wx(st.Data(), st.Length());
             wxTheClipboard->SetData(new wxTextDataObject(text));
             wxTheClipboard->Close();
         }

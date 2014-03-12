@@ -50,12 +50,12 @@ CC_DEFINE =
 .c.obj :
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
-OBJECTS=Accessor.obj,CharacterSet.obj,LexerBase.obj,LexerModule.obj,\
-	LexerNoExceptions.obj,LexerSimple.obj,PropSetSimple.obj,\
+OBJECTS=Accessor.obj,CharacterCategory.obj,CharacterSet.obj,LexerBase.obj,\
+	LexerModule.obj,LexerNoExceptions.obj,LexerSimple.obj,PropSetSimple.obj,\
 	StyleContext.obj,WordList.obj
 
-SOURCES=Accessor.cxx,CharacterSet.cxx,LexerBase.cxx,LexerModule.cxx,\
-	LexerNoExceptions.cxx,LexerSimple.cxx,PropSetSimple.cxx,\
+SOURCES=Accessor.cxx,CharacterCategory.cxx,CharacterSet.cxx,LexerBase.cxx,\
+	LexerModule.cxx,LexerNoExceptions.cxx,LexerSimple.cxx,PropSetSimple.cxx,\
 	StyleContext.cxx,WordList.cxx
 
 all : $(SOURCES)
@@ -83,6 +83,7 @@ all : $(SOURCES)
 $(OBJECTS) : [----.include.wx]setup.h
 
 Accessor.obj : Accessor.cxx
+CharacterCategory.obj : CharacterCategory.cxx
 CharacterSet.obj : CharacterSet.cxx
 LexerBase.obj : LexerBase.cxx
 LexerModule.obj : LexerModule.cxx

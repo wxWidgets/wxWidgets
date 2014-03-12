@@ -60,37 +60,39 @@ OBJECTS=LexA68k.obj,LexAbaqus.obj,LexAda.obj,LexAPDL.obj,LexAsm.obj,\
 	LexCPP.obj,LexCrontab.obj,LexCsound.obj,LexCSS.obj,LexD.obj,\
 	LexECL.obj,LexEiffel.obj,LexErlang.obj,LexEScript.obj,LexFlagship.obj,\
 	LexForth.obj,LexFortran.obj,LexGAP.obj,LexGui4Cli.obj,LexHaskell.obj,\
-	LexHTML.obj,LexInno.obj,LexKix.obj,LexLisp.obj,LexLout.obj,LexLua.obj,\
-        LexMagik.obj,LexMarkdown.obj,LexMatlab.obj,LexMetapost.obj
+	LexHTML.obj,LexInno.obj,LexKix.obj,LexKVIrc.obj,LexLaTeX.obj,LexLisp.obj,\
+	LexLout.obj,LexLua.obj,LexMagik.obj,LexMarkdown.obj,LexMatlab.obj,\
+        LexMetapost.obj
 
 OBJECTS1=LexMMIXAL.obj,LexModula.obj,LexMPT.obj,LexMSSQL.obj,LexMySQL.obj,\
 	LexNimrod.obj,LexNsis.obj,LexOpal.obj,LexOScript.obj,LexOthers.obj,\
-	LexPascal.obj,LexPB.obj,LexPerl.obj,LexPLM.obj,LexPOV.obj,\
+	LexPascal.obj,LexPB.obj,LexPerl.obj,LexPLM.obj,LexPO.obj,LexPOV.obj,\
 	LexPowerPro.obj,LexPowerShell.obj,LexProgress.obj,LexPS.obj,\
-	LexPython.obj,LexR.obj,LexRebol.obj,LexRuby.obj,LexScriptol.obj,\
-	LexSmalltalk.obj,LexSML.obj,LexSorcus.obj,LexSpecman.obj,LexSpice.obj,\
-	LexSQL.obj,LexTACL.obj,LexTADS3.obj,LexTAL.obj,LexTCL.obj,LexTCMD.obj,\
-	LexTeX.obj,LexTxt2tags.obj,LexVB.obj,LexVerilog.obj,LexVHDL.obj,\
-	LexVisualProlog.obj,LexYAML.obj
+	LexPython.obj,LexR.obj,LexRebol.obj,LexRuby.obj,LexRust.obj,\
+	LexScriptol.obj,LexSmalltalk.obj,LexSML.obj,LexSorcus.obj,LexSpecman.obj,\
+	LexSpice.obj,LexSQL.obj,LexSTTXT.obj,LexTACL.obj,LexTADS3.obj,LexTAL.obj,\
+	LexTCL.obj,LexTCMD.obj,LexTeX.obj,LexTxt2tags.obj,LexVB.obj,\
+	LexVerilog.obj,LexVHDL.obj,LexVisualProlog.obj,LexYAML.obj
 
 SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexAsn1.cxx,LexASY.cxx,LexAU3.cxx,LexAVE.cxx,LexAVS.cxx,LexBaan.cxx,\
 	LexBash.cxx,LexBasic.cxx,LexBullant.cxx,LexCaml.cxx,LexCLW.cxx,\
 	LexCmake.cxx,LexCOBOL.cxx,LexCoffeeScript.cxx,LexConf.cxx,\
-	LexCPP.cxx,LexCrontab.cxx,LexCsound.cxx,LexCSS.cxx,LexD.cxx,\
+	LexCPP.cxx,LexCrontab.cxx,LexCsound.cxx,LexCSS.cxx,LexD.cxx,LexDMAP.cxx,\
 	LexECL.cxx,LexEiffel.cxx,LexErlang.cxx,LexEScript.cxx,LexFlagship.cxx,\
 	LexForth.cxx,LexFortran.cxx,LexGAP.cxx,LexGui4Cli.cxx,LexHaskell.cxx,\
-	LexHTML.cxx,LexInno.cxx,LexKix.cxx,LexLisp.cxx,LexLout.cxx,LexLua.cxx,\
-        LexMagik.cxx,LexMarkdown.cxx,LexMatlab.cxx,LexMetapost.cxx,\
+	LexHTML.cxx,LexInno.cxx,LexKix.cxx,LexKVIrc.cxx,LexLaTeX.cxx,LexLisp.cxx,\
+	LexLout.cxx,LexLua.cxx,LexMagik.cxx,LexMarkdown.cxx,LexMatlab.cxx,\
+        LexMetapost.cxx,\
 	LexMMIXAL.cxx,LexModula.cxx,LexMPT.cxx,LexMSSQL.cxx,LexMySQL.cxx,\
 	LexNimrod.cxx,LexNsis.cxx,LexOpal.cxx,LexOScript.cxx,LexOthers.cxx,\
-	LexPascal.cxx,LexPB.cxx,LexPerl.cxx,LexPLM.cxx,LexPOV.cxx,\
+	LexPascal.cxx,LexPB.cxx,LexPerl.cxx,LexPLM.cxx,LexPO.cxx,LexPOV.cxx,\
 	LexPowerPro.cxx,LexPowerShell.cxx,LexProgress.cxx,LexPS.cxx,\
-	LexPython.cxx,LexR.cxx,LexRebol.cxx,LexRuby.cxx,LexScriptol.cxx,\
-	LexSmalltalk.cxx,LexSML.cxx,LexSorcus.cxx,LexSpecman.cxx,LexSpice.cxx,\
-	LexSQL.cxx,LexTACL.cxx,LexTADS3.cxx,LexTAL.cxx,LexTCL.cxx,LexTCMD.cxx,\
-	LexTeX.cxx,LexTxt2tags.cxx,LexVB.cxx,LexVerilog.cxx,LexVHDL.cxx,\
-	LexVisualProlog.cxx,LexYAML.cxx
+	LexPython.cxx,LexR.cxx,LexRebol.cxx,LexRuby.cxx,LexRust.cxx,\
+	LexScriptol.cxx,LexSmalltalk.cxx,LexSML.cxx,LexSorcus.cxx,LexSpecman.cxx,\
+	LexSpice.cxx,LexSQL.cxx,LexSTTXT.cxx,LexTACL.cxx,LexTADS3.cxx,LexTAL.cxx,\
+	LexTCL.cxx,LexTCMD.cxx,LexTeX.cxx,LexTxt2tags.cxx,LexVB.cxx,\
+	LexVerilog.cxx,LexVHDL.cxx,LexVisualProlog.cxx,LexYAML.cxx
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -147,6 +149,7 @@ LexCrontab.obj : LexCrontab.cxx
 LexCsound.obj : LexCsound.cxx
 LexCSS.obj : LexCSS.cxx
 LexD.obj : LexD.cxx
+LexDMAP.obj : LexDMAP.cxx
 LexECL.obj : LexECL.cxx
 LexEiffel.obj : LexEiffel.cxx
 LexErlang.obj : LexErlang.cxx
@@ -160,6 +163,8 @@ LexHaskell.obj : LexHaskell.cxx
 LexHTML.obj : LexHTML.cxx
 LexInno.obj : LexInno.cxx
 LexKix.obj : LexKix.cxx
+LexKVIrc.obj : LexKVIrc.cxx
+LexLaTeX.obj : LexLaTeX.cxx
 LexLisp.obj : LexLisp.cxx
 LexLout.obj : LexLout.cxx
 LexLua.obj : LexLua.cxx
@@ -181,6 +186,7 @@ LexPascal.obj : LexPascal.cxx
 LexPB.obj : LexPB.cxx
 LexPerl.obj : LexPerl.cxx
 LexPLM.obj : LexPLM.cxx
+LexPO.obj : LexPO.cxx
 LexPOV.obj : LexPOV.cxx
 LexPowerPro.obj : LexPowerPro.cxx
 LexPowerShell.obj : LexPowerShell.cxx
@@ -190,6 +196,7 @@ LexPython.obj : LexPython.cxx
 LexR.obj : LexR.cxx
 LexRebol.obj : LexRebol.cxx
 LexRuby.obj : LexRuby.cxx
+LexRust.obj : LexRust.cxx
 LexScriptol.obj : LexScriptol.cxx
 LexSmalltalk.obj : LexSmalltalk.cxx
 LexSML.obj : LexSML.cxx
@@ -197,6 +204,7 @@ LexSorcus.obj : LexSorcus.cxx
 LexSpecman.obj : LexSpecman.cxx
 LexSpice.obj : LexSpice.cxx
 LexSQL.obj : LexSQL.cxx
+LexSTTXT.obj : LexSTTXT.cxx
 LexTACL.obj : LexTACL.cxx
 LexTADS3.obj : LexTADS3.cxx
 LexTAL.obj : LexTAL.cxx

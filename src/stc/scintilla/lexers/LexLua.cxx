@@ -132,55 +132,38 @@ static void ColouriseLuaDoc(
 		if (sc.state == SCE_LUA_OPERATOR) {
 			if (sc.ch == ':' && sc.chPrev == ':') {	// :: <label> :: forward scan
 				sc.Forward();
-				int ln = 0, maxln = startPos + length - sc.currentPos;
-				int c;
-				while (ln < maxln) {		// determine line extent
-					c = sc.GetRelative(ln);
-					if (c == '\r' || c == '\n')
-						break;
+				int ln = 0;
+				while (IsASpaceOrTab(sc.GetRelative(ln)))	// skip over spaces/tabs
 					ln++;
-				}
-				maxln = ln; ln = 0;
-				while (ln < maxln) {		// skip over spaces/tabs
-					if (!IsASpaceOrTab(sc.GetRelative(ln)))
-						break;
-					ln++;
-				}
 				int ws1 = ln;
 				if (setWordStart.Contains(sc.GetRelative(ln))) {
-					int i = 0;
+					int c, i = 0;
 					char s[100];
-					while (ln < maxln) {	// get potential label
-						c = sc.GetRelative(ln);
-						if (!setWord.Contains(c))
-							break;
+					while (setWord.Contains(c = sc.GetRelative(ln))) {	// get potential label
 						if (i < 90)
 							s[i++] = c;
 						ln++;
 					}
 					s[i] = '\0'; int lbl = ln;
 					if (!keywords.InList(s)) {
-						while (ln < maxln) {		// skip over spaces/tabs
-							if (!IsASpaceOrTab(sc.GetRelative(ln)))
-								break;
+						while (IsASpaceOrTab(sc.GetRelative(ln)))	// skip over spaces/tabs
 							ln++;
-						}
 						int ws2 = ln - lbl;
 						if (sc.GetRelative(ln) == ':' && sc.GetRelative(ln + 1) == ':') {
 							// final :: found, complete valid label construct
 							sc.ChangeState(SCE_LUA_LABEL);
 							if (ws1) {
 								sc.SetState(SCE_LUA_DEFAULT);
-								sc.Forward(ws1);
+								sc.ForwardBytes(ws1);
 							}
 							sc.SetState(SCE_LUA_LABEL);
-							sc.Forward(lbl - ws1);
+							sc.ForwardBytes(lbl - ws1);
 							if (ws2) {
 								sc.SetState(SCE_LUA_DEFAULT);
-								sc.Forward(ws2);
+								sc.ForwardBytes(ws2);
 							}
 							sc.SetState(SCE_LUA_LABEL);
-							sc.Forward(2);
+							sc.ForwardBytes(2);
 						}
 					}
 				}
@@ -374,7 +357,6 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 	char chNext = styler[startPos];
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	int styleNext = styler.StyleAt(startPos);
-	char s[10];
 
 	for (unsigned int i = startPos; i < lengthDoc; i++) {
 		char ch = chNext;
@@ -384,6 +366,7 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 		if (style == SCE_LUA_WORD) {
 			if (ch == 'i' || ch == 'd' || ch == 'f' || ch == 'e' || ch == 'r' || ch == 'u') {
+				char s[10] = "";
 				for (unsigned int j = 0; j < 8; j++) {
 					if (!iswordchar(styler[i + j])) {
 						break;

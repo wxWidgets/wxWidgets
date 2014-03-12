@@ -53,18 +53,18 @@ CC_DEFINE =
 .c.obj :
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
-OBJECTS=AutoComplete.obj,CallTip.obj,Catalogue.obj,CellBuffer.obj,\
-	CharClassify.obj,ContractionState.obj,Decoration.obj,Document.obj,\
-	Editor.obj,ExternalLexer.obj,Indicator.obj,KeyMap.obj,LineMarker.obj,\
-	PerLine.obj,PositionCache.obj,RESearch.obj,RunStyles.obj,\
-	ScintillaBase.obj,Selection.obj,Style.obj,UniConversion.obj,\
+OBJECTS=AutoComplete.obj,CallTip.obj,CaseConvert.obj,CaseFolder.obj,\
+	Catalogue.obj,CellBuffer.obj,CharClassify.obj,ContractionState.obj,\
+	Decoration.obj,Document.obj,Editor.obj,ExternalLexer.obj,Indicator.obj,\
+	KeyMap.obj,LineMarker.obj,PerLine.obj,PositionCache.obj,RESearch.obj,\
+	RunStyles.obj,ScintillaBase.obj,Selection.obj,Style.obj,UniConversion.obj,\
 	ViewStyle.obj,XPM.obj
 
-SOURCES=AutoComplete.cxx,CallTip.cxx,Catalogue.cxx,CellBuffer.cxx,\
-	CharClassify.cxx,ContractionState.cxx,Decoration.cxx,Document.cxx,\
-	Editor.cxx,ExternalLexer.cxx,Indicator.cxx,KeyMap.cxx,LineMarker.cxx,\
-	PerLine.cxx,PositionCache.cxx,RESearch.cxx,RunStyles.cxx,\
-	ScintillaBase.cxx,Selection.cxx,Style.cxx,UniConversion.cxx,\
+SOURCES=AutoComplete.cxx,CallTip.cxx,CaseConvert.cxx,CaseFolder.cxx,\
+	Catalogue.cxx,CellBuffer.cxx,CharClassify.cxx,ContractionState.cxx,\
+	Decoration.cxx,Document.cxx,Editor.cxx,ExternalLexer.cxx,Indicator.cxx,\
+	KeyMap.cxx,LineMarker.cxx,PerLine.cxx,PositionCache.cxx,RESearch.cxx,\
+	RunStyles.cxx,ScintillaBase.cxx,Selection.cxx,Style.cxx,UniConversion.cxx,\
 	ViewStyle.cxx,XPM.cxx
 
 all : $(SOURCES)
@@ -93,6 +93,8 @@ $(OBJECTS) : [----.include.wx]setup.h
 
 AutoComplete.obj : AutoComplete.cxx
 CallTip.obj : CallTip.cxx
+CaseConvert.obj : CaseConvert.cxx
+CaseFolder.obj : CaseFolder.cxx
 Catalogue.obj : Catalogue.cxx
 CellBuffer.obj : CellBuffer.cxx
 CharClassify.obj : CharClassify.cxx

@@ -217,6 +217,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexCsound.o \
 	$(OBJS)\wxscintilla_LexCSS.o \
 	$(OBJS)\wxscintilla_LexD.o \
+	$(OBJS)\wxscintilla_LexDMAP.o \
 	$(OBJS)\wxscintilla_LexECL.o \
 	$(OBJS)\wxscintilla_LexEiffel.o \
 	$(OBJS)\wxscintilla_LexErlang.o \
@@ -230,6 +231,8 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexHTML.o \
 	$(OBJS)\wxscintilla_LexInno.o \
 	$(OBJS)\wxscintilla_LexKix.o \
+	$(OBJS)\wxscintilla_LexKVIrc.o \
+	$(OBJS)\wxscintilla_LexLaTeX.o \
 	$(OBJS)\wxscintilla_LexLisp.o \
 	$(OBJS)\wxscintilla_LexLout.o \
 	$(OBJS)\wxscintilla_LexLua.o \
@@ -251,6 +254,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexPB.o \
 	$(OBJS)\wxscintilla_LexPerl.o \
 	$(OBJS)\wxscintilla_LexPLM.o \
+	$(OBJS)\wxscintilla_LexPO.o \
 	$(OBJS)\wxscintilla_LexPOV.o \
 	$(OBJS)\wxscintilla_LexPowerPro.o \
 	$(OBJS)\wxscintilla_LexPowerShell.o \
@@ -260,6 +264,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexR.o \
 	$(OBJS)\wxscintilla_LexRebol.o \
 	$(OBJS)\wxscintilla_LexRuby.o \
+	$(OBJS)\wxscintilla_LexRust.o \
 	$(OBJS)\wxscintilla_LexScriptol.o \
 	$(OBJS)\wxscintilla_LexSmalltalk.o \
 	$(OBJS)\wxscintilla_LexSML.o \
@@ -267,6 +272,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexSpecman.o \
 	$(OBJS)\wxscintilla_LexSpice.o \
 	$(OBJS)\wxscintilla_LexSQL.o \
+	$(OBJS)\wxscintilla_LexSTTXT.o \
 	$(OBJS)\wxscintilla_LexTACL.o \
 	$(OBJS)\wxscintilla_LexTADS3.o \
 	$(OBJS)\wxscintilla_LexTAL.o \
@@ -280,6 +286,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexVisualProlog.o \
 	$(OBJS)\wxscintilla_LexYAML.o \
 	$(OBJS)\wxscintilla_Accessor.o \
+	$(OBJS)\wxscintilla_CharacterCategory.o \
 	$(OBJS)\wxscintilla_CharacterSet.o \
 	$(OBJS)\wxscintilla_LexerBase.o \
 	$(OBJS)\wxscintilla_LexerModule.o \
@@ -290,6 +297,8 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_WordList.o \
 	$(OBJS)\wxscintilla_AutoComplete.o \
 	$(OBJS)\wxscintilla_CallTip.o \
+	$(OBJS)\wxscintilla_CaseConvert.o \
+	$(OBJS)\wxscintilla_CaseFolder.o \
 	$(OBJS)\wxscintilla_Catalogue.o \
 	$(OBJS)\wxscintilla_CellBuffer.o \
 	$(OBJS)\wxscintilla_CharClassify.o \
@@ -6140,6 +6149,9 @@ $(OBJS)\wxscintilla_LexCSS.o: ../../src/stc/scintilla/lexers/LexCSS.cxx
 $(OBJS)\wxscintilla_LexD.o: ../../src/stc/scintilla/lexers/LexD.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexDMAP.o: ../../src/stc/scintilla/lexers/LexDMAP.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_LexECL.o: ../../src/stc/scintilla/lexers/LexECL.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6177,6 +6189,12 @@ $(OBJS)\wxscintilla_LexInno.o: ../../src/stc/scintilla/lexers/LexInno.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexKix.o: ../../src/stc/scintilla/lexers/LexKix.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexKVIrc.o: ../../src/stc/scintilla/lexers/LexKVIrc.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexLaTeX.o: ../../src/stc/scintilla/lexers/LexLaTeX.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexLisp.o: ../../src/stc/scintilla/lexers/LexLisp.cxx
@@ -6242,6 +6260,9 @@ $(OBJS)\wxscintilla_LexPerl.o: ../../src/stc/scintilla/lexers/LexPerl.cxx
 $(OBJS)\wxscintilla_LexPLM.o: ../../src/stc/scintilla/lexers/LexPLM.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexPO.o: ../../src/stc/scintilla/lexers/LexPO.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_LexPOV.o: ../../src/stc/scintilla/lexers/LexPOV.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6269,6 +6290,9 @@ $(OBJS)\wxscintilla_LexRebol.o: ../../src/stc/scintilla/lexers/LexRebol.cxx
 $(OBJS)\wxscintilla_LexRuby.o: ../../src/stc/scintilla/lexers/LexRuby.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexRust.o: ../../src/stc/scintilla/lexers/LexRust.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_LexScriptol.o: ../../src/stc/scintilla/lexers/LexScriptol.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6288,6 +6312,9 @@ $(OBJS)\wxscintilla_LexSpice.o: ../../src/stc/scintilla/lexers/LexSpice.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexSQL.o: ../../src/stc/scintilla/lexers/LexSQL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexSTTXT.o: ../../src/stc/scintilla/lexers/LexSTTXT.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexTACL.o: ../../src/stc/scintilla/lexers/LexTACL.cxx
@@ -6329,6 +6356,9 @@ $(OBJS)\wxscintilla_LexYAML.o: ../../src/stc/scintilla/lexers/LexYAML.cxx
 $(OBJS)\wxscintilla_Accessor.o: ../../src/stc/scintilla/lexlib/Accessor.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_CharacterCategory.o: ../../src/stc/scintilla/lexlib/CharacterCategory.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_CharacterSet.o: ../../src/stc/scintilla/lexlib/CharacterSet.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6357,6 +6387,12 @@ $(OBJS)\wxscintilla_AutoComplete.o: ../../src/stc/scintilla/src/AutoComplete.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_CallTip.o: ../../src/stc/scintilla/src/CallTip.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_CaseConvert.o: ../../src/stc/scintilla/src/CaseConvert.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_CaseFolder.o: ../../src/stc/scintilla/src/CaseFolder.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_Catalogue.o: ../../src/stc/scintilla/src/Catalogue.cxx

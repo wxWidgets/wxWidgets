@@ -147,6 +147,14 @@ SOURCE=..\..\src\stc\scintilla\src\CallTip.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\CaseConvert.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\CaseFolder.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\Catalogue.cxx
 # End Source File
 # Begin Source File
@@ -156,6 +164,10 @@ SOURCE=..\..\src\stc\scintilla\src\CellBuffer.cxx
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\CharClassify.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexlib\CharacterCategory.cxx
 # End Source File
 # Begin Source File
 
@@ -291,6 +303,10 @@ SOURCE=..\..\src\stc\scintilla\lexers\LexD.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\lexers\LexDMAP.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\lexers\LexECL.cxx
 # End Source File
 # Begin Source File
@@ -339,7 +355,15 @@ SOURCE=..\..\src\stc\scintilla\lexers\LexInno.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\lexers\LexKVIrc.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\lexers\LexKix.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexLaTeX.cxx
 # End Source File
 # Begin Source File
 
@@ -419,6 +443,10 @@ SOURCE=..\..\src\stc\scintilla\lexers\LexPLM.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\lexers\LexPO.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\lexers\LexPOV.cxx
 # End Source File
 # Begin Source File
@@ -463,11 +491,19 @@ SOURCE=..\..\src\stc\scintilla\lexers\LexRuby.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\lexers\LexRust.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\lexers\LexSML.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\lexers\LexSQL.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\lexers\LexSTTXT.cxx
 # End Source File
 # Begin Source File
 

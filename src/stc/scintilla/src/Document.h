@@ -19,6 +19,8 @@ namespace Scintilla {
 typedef int Position;
 const Position invalidPosition = -1;
 
+enum EncodingFamily { efEightBit, efUnicode, efDBCS };
+
 /**
  * The range class represents a range of text in a document.
  * The two values are not sorted as one end may be more significant than the other
@@ -30,7 +32,7 @@ public:
 	Position start;
 	Position end;
 
-	Range(Position pos=0) :
+	explicit Range(Position pos=0) :
 		start(pos), end(pos) {
 	}
 	Range(Position start_, Position end_) :
@@ -128,23 +130,23 @@ public:
 		firstChangeableLineAfter = -1;
 	}
 
-	bool NeedsDrawing(int line) {
+	bool NeedsDrawing(int line) const {
 		return isEnabled && (line <= firstChangeableLineBefore || line >= firstChangeableLineAfter);
 	}
 
-	bool IsFoldBlockHighlighted(int line) {
+	bool IsFoldBlockHighlighted(int line) const {
 		return isEnabled && beginFoldBlock != -1 && beginFoldBlock <= line && line <= endFoldBlock;
 	}
 
-	bool IsHeadOfFoldBlock(int line) {
+	bool IsHeadOfFoldBlock(int line) const {
 		return beginFoldBlock == line && line < endFoldBlock;
 	}
 
-	bool IsBodyOfFoldBlock(int line) {
+	bool IsBodyOfFoldBlock(int line) const {
 		return beginFoldBlock != -1 && beginFoldBlock < line && line < endFoldBlock;
 	}
 
-	bool IsTailOfFoldBlock(int line) {
+	bool IsTailOfFoldBlock(int line) const {
 		return beginFoldBlock != -1 && beginFoldBlock < line && line == endFoldBlock;
 	}
 
@@ -155,24 +157,6 @@ public:
 	bool isEnabled;
 };
 
-class CaseFolder {
-public:
-	virtual ~CaseFolder() {
-	}
-	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) = 0;
-};
-
-class CaseFolderTable : public CaseFolder {
-protected:
-	char mapping[256];
-public:
-	CaseFolderTable();
-	virtual ~CaseFolderTable();
-	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed);
-	void SetTranslation(char ch, char chTranslation);
-	void StandardASCII();
-};
-
 class Document;
 
 class LexInterface {
@@ -181,11 +165,12 @@ protected:
 	ILexer *instance;
 	bool performingStyle;	///< Prevent reentrance
 public:
-	LexInterface(Document *pdoc_) : pdoc(pdoc_), instance(0), performingStyle(false) {
+	explicit LexInterface(Document *pdoc_) : pdoc(pdoc_), instance(0), performingStyle(false) {
 	}
 	virtual ~LexInterface() {
 	}
 	void Colourise(int start, int end);
+	int LineEndTypesSupported();
 	bool UseContainerLexing() const {
 		return instance == 0;
 	}
@@ -193,25 +178,26 @@ public:
 
 /**
  */
-class Document : PerLine, public IDocument, public ILoader {
+class Document : PerLine, public IDocumentWithLineEnd, public ILoader {
 
 public:
 	/** Used to pair watcher pointer with user data. */
-	class WatcherWithUserData {
-	public:
+	struct WatcherWithUserData {
 		DocWatcher *watcher;
 		void *userData;
-		WatcherWithUserData() {
-			watcher = 0;
-			userData = 0;
+		WatcherWithUserData(DocWatcher *watcher_=0, void *userData_=0) :
+			watcher(watcher_), userData(userData_) {
+		}
+		bool operator==(const WatcherWithUserData &other) const {
+			return (watcher == other.watcher) && (userData == other.userData);
 		}
 	};
 
-	enum charClassification { ccSpace, ccNewLine, ccWord, ccPunctuation };
 private:
 	int refCount;
 	CellBuffer cb;
 	CharClassify charClass;
+	CaseFolder *pcf;
 	char stylingMask;
 	int endStyled;
 	int styleClock;
@@ -219,8 +205,7 @@ private:
 	int enteredStyling;
 	int enteredReadOnlyCount;
 
-	WatcherWithUserData *watchers;
-	int lenWatchers;
+	std::vector<WatcherWithUserData> watchers;
 
 	// ldSize is not real data - it is for dimensions and loops
 	enum lineData { ldMarkers, ldLevels, ldState, ldMargin, ldAnnotation, ldSize };
@@ -239,6 +224,7 @@ public:
 	int eolMode;
 	/// Can also be SC_CP_UTF8 to enable UTF-8 mode
 	int dbcsCodePage;
+	int lineEndBitSet;
 	int tabInChars;
 	int indentInChars;
 	int actualIndentInChars;
@@ -255,26 +241,34 @@ public:
 	int SCI_METHOD Release();
 
 	virtual void Init();
+	int LineEndTypesSupported() const;
+	bool SetDBCSCodePage(int dbcsCodePage_);
+	int GetLineEndTypesAllowed() const { return cb.GetLineEndTypes(); }
+	bool SetLineEndTypesAllowed(int lineEndBitSet_);
+	int GetLineEndTypesActive() const { return cb.GetLineEndTypes(); }
 	virtual void InsertLine(int line);
 	virtual void RemoveLine(int line);
 
 	int SCI_METHOD Version() const {
-		return dvOriginal;
+		return dvLineEnd;
 	}
 
 	void SCI_METHOD SetErrorStatus(int status);
 
 	int SCI_METHOD LineFromPosition(int pos) const;
-	int ClampPositionIntoDocument(int pos);
-	bool IsCrLf(int pos);
+	int ClampPositionIntoDocument(int pos) const;
+	bool IsCrLf(int pos) const;
 	int LenChar(int pos);
 	bool InGoodUTF8(int pos, int &start, int &end) const;
 	int MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd=true);
 	int NextPosition(int pos, int moveDir) const;
-	bool NextCharacter(int &pos, int moveDir);	// Returns true if pos changed
+	bool NextCharacter(int &pos, int moveDir) const;	// Returns true if pos changed
+	int SCI_METHOD GetRelativePosition(int positionStart, int characterOffset) const;
+	int SCI_METHOD GetCharacterAndWidth(int position, int *pWidth) const;
 	int SCI_METHOD CodePage() const;
 	bool SCI_METHOD IsDBCSLeadByte(char ch) const;
-	int SafeSegment(const char *text, int length, int lengthSegment);
+	int SafeSegment(const char *text, int length, int lengthSegment) const;
+	EncodingFamily CodePageFamily() const;
 
 	// Gateways to modifying document
 	void ModifiedAt(int pos);
@@ -285,18 +279,18 @@ public:
 	void * SCI_METHOD ConvertToDocument();
 	int Undo();
 	int Redo();
-	bool CanUndo() { return cb.CanUndo(); }
-	bool CanRedo() { return cb.CanRedo(); }
+	bool CanUndo() const { return cb.CanUndo(); }
+	bool CanRedo() const { return cb.CanRedo(); }
 	void DeleteUndoHistory() { cb.DeleteUndoHistory(); }
 	bool SetUndoCollection(bool collectUndo) {
 		return cb.SetUndoCollection(collectUndo);
 	}
-	bool IsCollectingUndo() { return cb.IsCollectingUndo(); }
+	bool IsCollectingUndo() const { return cb.IsCollectingUndo(); }
 	void BeginUndoAction() { cb.BeginUndoAction(); }
 	void EndUndoAction() { cb.EndUndoAction(); }
 	void AddUndoAction(int token, bool mayCoalesce) { cb.AddUndoAction(token, mayCoalesce); }
 	void SetSavePoint();
-	bool IsSavePoint() { return cb.IsSavePoint(); }
+	bool IsSavePoint() const { return cb.IsSavePoint(); }
 	const char * SCI_METHOD BufferPointer() { return cb.BufferPointer(); }
 	const char *RangePointer(int position, int rangeLength) { return cb.RangePointer(position, rangeLength); }
 	int GapPosition() const { return cb.GapPosition(); }
@@ -308,18 +302,17 @@ public:
 	int CountCharacters(int startPos, int endPos);
 	int FindColumn(int line, int column);
 	void Indent(bool forwards, int lineBottom, int lineTop);
-	static char *TransformLineEnds(int *pLenOut, const char *s, size_t len, int eolModeWanted);
+	static std::string TransformLineEnds(const char *s, size_t len, int eolModeWanted);
 	void ConvertLineEnds(int eolModeSet);
 	void SetReadOnly(bool set) { cb.SetReadOnly(set); }
-	bool IsReadOnly() { return cb.IsReadOnly(); }
+	bool IsReadOnly() const { return cb.IsReadOnly(); }
 
 	bool InsertChar(int pos, char ch);
 	bool InsertCString(int position, const char *s);
-	void ChangeChar(int pos, char ch);
 	void DelChar(int pos);
 	void DelCharBack(int pos);
 
-	char CharAt(int position) { return cb.CharAt(position); }
+	char CharAt(int position) const { return cb.CharAt(position); }
 	void SCI_METHOD GetCharRange(char *buffer, int position, int lengthRetrieve) const {
 		cb.GetCharRange(buffer, position, lengthRetrieve);
 	}
@@ -336,16 +329,17 @@ public:
 	void DeleteAllMarks(int markerNum);
 	int LineFromHandle(int markerHandle);
 	int SCI_METHOD LineStart(int line) const;
-	int LineEnd(int line) const;
+	int SCI_METHOD LineEnd(int line) const;
 	int LineEndPosition(int position) const;
 	bool IsLineEndPosition(int position) const;
+	bool IsPositionInLineEnd(int position) const;
 	int VCHomePosition(int position) const;
 
 	int SCI_METHOD SetLevel(int line, int level);
 	int SCI_METHOD GetLevel(int line) const;
 	void ClearLevels();
 	int GetLastChild(int lineParent, int level=-1, int lastLine=-1);
-	int GetFoldParent(int line);
+	int GetFoldParent(int line) const;
 	void GetHighlightDelimiters(HighlightDelimiter &hDelimiter, int line, int lastLine);
 
 	void Indent(bool forwards);
@@ -354,13 +348,13 @@ public:
 	int NextWordEnd(int pos, int delta);
 	int SCI_METHOD Length() const { return cb.Length(); }
 	void Allocate(int newSize) { cb.Allocate(newSize); }
-	bool MatchesWordOptions(bool word, bool wordStart, int pos, int length);
+	bool MatchesWordOptions(bool word, bool wordStart, int pos, int length) const;
+	bool HasCaseFolder(void) const;
+	void SetCaseFolder(CaseFolder *pcf_);
 	long FindText(int minPos, int maxPos, const char *search, bool caseSensitive, bool word,
-		bool wordStart, bool regExp, int flags, int *length, CaseFolder *pcf);
+		bool wordStart, bool regExp, int flags, int *length);
 	const char *SubstituteByPosition(const char *text, int *length);
 	int LinesTotal() const;
-
-	void ChangeCase(Range r, bool makeUpperCase);
 
 	void SetDefaultCharClasses(bool includeWordClass);
 	void SetCharClasses(const unsigned char *chars, CharClassify::cc newCharClass);
@@ -369,10 +363,10 @@ public:
 	void SCI_METHOD StartStyling(int position, char mask);
 	bool SCI_METHOD SetStyleFor(int length, char style);
 	bool SCI_METHOD SetStyles(int length, const char *styles);
-	int GetEndStyled() { return endStyled; }
+	int GetEndStyled() const { return endStyled; }
 	void EnsureStyledTo(int pos);
 	void LexerChanged();
-	int GetStyleClock() { return styleClock; }
+	int GetStyleClock() const { return styleClock; }
 	void IncrementStyleClock();
 	void SCI_METHOD DecorationSetCurrentIndicator(int indicator) {
 		decorations.SetCurrentIndicator(indicator);
@@ -384,42 +378,37 @@ public:
 	int GetMaxLineState();
 	void SCI_METHOD ChangeLexerState(int start, int end);
 
-	StyledText MarginStyledText(int line);
+	StyledText MarginStyledText(int line) const;
 	void MarginSetStyle(int line, int style);
 	void MarginSetStyles(int line, const unsigned char *styles);
 	void MarginSetText(int line, const char *text);
-	int MarginLength(int line) const;
 	void MarginClearAll();
 
-	bool AnnotationAny() const;
-	StyledText AnnotationStyledText(int line);
+	StyledText AnnotationStyledText(int line) const;
 	void AnnotationSetText(int line, const char *text);
 	void AnnotationSetStyle(int line, int style);
 	void AnnotationSetStyles(int line, const unsigned char *styles);
-	int AnnotationLength(int line) const;
 	int AnnotationLines(int line) const;
 	void AnnotationClearAll();
 
 	bool AddWatcher(DocWatcher *watcher, void *userData);
 	bool RemoveWatcher(DocWatcher *watcher, void *userData);
-	const WatcherWithUserData *GetWatchers() const { return watchers; }
-	int GetLenWatchers() const { return lenWatchers; }
 
-	CharClassify::cc WordCharClass(unsigned char ch);
-	bool IsWordPartSeparator(char ch);
+	CharClassify::cc WordCharClass(unsigned char ch) const;
+	bool IsWordPartSeparator(char ch) const;
 	int WordPartLeft(int pos);
 	int WordPartRight(int pos);
 	int ExtendStyleRange(int pos, int delta, bool singleLine = false);
 	bool IsWhiteLine(int line) const;
-	int ParaUp(int pos);
-	int ParaDown(int pos);
-	int IndentSize() { return actualIndentInChars; }
+	int ParaUp(int pos) const;
+	int ParaDown(int pos) const;
+	int IndentSize() const { return actualIndentInChars; }
 	int BraceMatch(int position, int maxReStyle);
 
 private:
-	bool IsWordStartAt(int pos);
-	bool IsWordEndAt(int pos);
-	bool IsWordAt(int start, int end);
+	bool IsWordStartAt(int pos) const;
+	bool IsWordEndAt(int pos) const;
+	bool IsWordAt(int start, int end) const;
 
 	void NotifyModifyAttempt();
 	void NotifySavePoint(bool atSavePoint);
@@ -454,12 +443,12 @@ public:
  */
 class DocModification {
 public:
-  	int modificationType;
+	int modificationType;
 	int position;
- 	int length;
- 	int linesAdded;	/**< Negative if lines deleted. */
- 	const char *text;	/**< Only valid for changes to text, not for changes to style. */
- 	int line;
+	int length;
+	int linesAdded;	/**< Negative if lines deleted. */
+	const char *text;	/**< Only valid for changes to text, not for changes to style. */
+	int line;
 	int foldLevelNow;
 	int foldLevelPrev;
 	int annotationLinesAdded;

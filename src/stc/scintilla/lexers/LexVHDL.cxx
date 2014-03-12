@@ -51,7 +51,7 @@ static inline bool IsAWordStart(const int ch) {
 }
 
 /***************************************/
-inline bool IsABlank(unsigned int ch) {
+static inline bool IsABlank(unsigned int ch) {
     return (ch == ' ') || (ch == 0x09) || (ch == 0x0b) ;
 }
 

@@ -1,19 +1,19 @@
-This directory contains copies of the scintilla/src and
-scintilla/include directories from the Scintilla source distribution.
-All other code needed to implement Scintilla on top of wxWidgets is
-located in the directory above this one.
+This directory contains copies of the src, include, lexers, and lexlib
+directories from the Scintilla source distribution. All other code
+needed to implement Scintilla on top of wxWidgets is located in the
+directory above this one.
 
-The current version of the Scintilla code is 3.21
+The current version of the Scintilla code is 3.3.9
 
 These are the basic steps needed to update the version of Scintilla used by wxSTC.  
 
 1. Copy include, lexers, lexlib and src folders to src/stc/scintilla
 
-2. Examine diffs between the new src/stc/scintilla/Scintilla.iface
+2. Examine diffs between the new src/stc/scintilla/include/Scintilla.iface
 file and the version in SVN.  You should get familiar especially with
 new method names or constants because some of them may need to be
 tweaked to conform to similar naming patterns already used.  (See step
-#5 below.)
+#6 below.)
 
 3. Identify new source files and update build/bakefiles/scintilla.bkl
 accordingly so the new files will get built.  Use bakefile to
@@ -27,7 +27,10 @@ code from the Scintilla source tree as a guide if needed.  You may
 have to make a few tweaks to src/stc/scintilla/include/Platform.h to
 keep the compile working cleanly, but try to keep them minimal.
 
-5. Edit the gen_iface.py file.  This is where the Scintilla.iface file
+5. Adjust the version number in wxStyledTextCtrl::GetLibraryVersionInfo()
+in src/stc/stc.cpp.in.
+
+6. Edit the gen_iface.py file.  This is where the Scintilla.iface file
 is read and the code for stc.h and stc.cpp is generated.  For all new
 methods or constant names check if there are similarly named things
 defined here that are having something special done to them, and then
@@ -41,18 +44,18 @@ and could conceivably be bound to a key event) then I make sure that
 it's ID is in cmdValues or included in one of the existing ranges in
 that list.
 
-6. Run gen_iface.py.
+7. Run gen_iface.py.
 
-7. Any other new methods should be checked to ensure that the
+8. Any other new methods should be checked to ensure that the
 generated code is appropriate for what they are doing and if not then
 in gen_iface.py you can supply custom function bodies for them
 instead.
 
-8. Add documentation code for any new methods to
+9. Add documentation code for any new methods to
 interface/wx/stc/stc.h, also check any documentation-only changes from
 Scintilla.iface and see if the existing docs for those items should be
 updated too.
 
-9. Build and test.
+10. Build and test.
 
-10. Submit patch to wxTrac.
+11. Submit patch to wxTrac.

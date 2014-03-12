@@ -55,7 +55,8 @@ cmdValues = [ 2011,
               (2450, 2455),
               2518,
               (2619, 2621),
-              (2628, 2629)
+              (2628, 2629),
+              (2652, 2653)
             ]
 
 
@@ -405,6 +406,8 @@ methodOverrideMap = {
     'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
     'AutoCSetCaseInsensitiveBehaviour'     : ('AutoCompSetCaseInsensitiveBehaviour', 0, 0, 0),
     'AutoCGetCaseInsensitiveBehaviour'     : ('AutoCompGetCaseInsensitiveBehaviour', 0, 0, 0),
+    'AutoCSetOrder'         : ('AutoCompSetOrder', 0, 0, 0),
+    'AutoCGetOrder'         : ('AutoCompGetOrder', 0, 0, 0),
 
     'RegisterImage' :
     (0,
@@ -584,6 +587,7 @@ methodOverrideMap = {
     'GetDirectPointer' : (None, 0, 0, 0),
 
     'CallTipPosStart'   : ('CallTipPosAtStart', 0, 0, 0),
+    'CallTipSetPosStart': ('CallTipSetPosAtStart', 0, 0, 0),
     'CallTipSetHlt'     : ('CallTipSetHighlight', 0, 0, 0),
     'CallTipSetBack'    : ('CallTipSetBackground', 0, 0, 0),
     'CallTipSetFore'    : ('CallTipSetForeground', 0, 0, 0),
@@ -913,6 +917,22 @@ methodOverrideMap = {
          return (void*)(sptr_t)SendMsg(%s, bytes); """,
      0),
 
+    'GetRepresentation' :
+    (0,
+     'wxString %s(const wxString& encodedCharacter) const;',
+     '''wxString %s(const wxString& encodedCharacter) const {
+         int msg = %s;
+         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     0),
+
      'PrivateLexerCall' :
      (0,
       'void* %s(int operation, void* pointer);',
@@ -923,6 +943,22 @@ methodOverrideMap = {
     'GetMultiPaste' : 
     (0, 0, 0, 
     ('Retrieve the effect of pasting when there are multiple selections.',)),
+
+    'GetSubStyleBases' :
+    (0,
+     'wxString %s() const;',
+     '''wxString %s() const {
+         int msg = %s;
+         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         if (!len) return wxEmptyString;
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, 0, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);''',
+     0),
     
     '' : ('', 0, 0, 0),
 

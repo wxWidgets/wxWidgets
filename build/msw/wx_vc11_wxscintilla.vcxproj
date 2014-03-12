@@ -434,8 +434,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\stc\scintilla\lexlib\Accessor.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\lexlib\CharacterCategory.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\src\AutoComplete.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\src\CallTip.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\src\CaseConvert.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\src\CaseFolder.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\src\Catalogue.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\src\CellBuffer.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\src\CharClassify.cxx" />
@@ -472,6 +475,7 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexCrontab.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexCsound.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexD.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexDMAP.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexECL.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexEScript.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexEiffel.cxx" />
@@ -485,6 +489,8 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexHaskell.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexInno.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexKix.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexKVIrc.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexLatex.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexLisp.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexLout.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexLua.cxx" />
@@ -504,6 +510,7 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexOthers.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexPB.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexPLM.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexPO.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexPOV.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexPS.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexPascal.cxx" />
@@ -515,8 +522,10 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexR.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexRebol.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexRuby.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexRust.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexSML.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexSQL.cxx" />
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexSTTXT.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexScriptol.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexSmalltalk.cxx" />
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexSorcus.cxx" />

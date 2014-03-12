@@ -67,6 +67,7 @@
 #define wxSTC_MARK_AVAILABLE 28
 #define wxSTC_MARK_UNDERLINE 29
 #define wxSTC_MARK_RGBAIMAGE 30
+#define wxSTC_MARK_BOOKMARK 31
 #define wxSTC_MARK_CHARACTER 10000
 
 /// Markers used for outlining column.
@@ -78,6 +79,7 @@
 #define wxSTC_MARKNUM_FOLDER 30
 #define wxSTC_MARKNUM_FOLDEROPEN 31
 #define wxSTC_MASK_FOLDERS 0xFE000000
+#define wxSTC_MAX_MARGIN 4
 #define wxSTC_MARGIN_SYMBOL 0
 #define wxSTC_MARGIN_NUMBER 1
 #define wxSTC_MARGIN_BACK 2
@@ -142,6 +144,8 @@
 #define wxSTC_INDIC_DOTS 10
 #define wxSTC_INDIC_SQUIGGLELOW 11
 #define wxSTC_INDIC_DOTBOX 12
+#define wxSTC_INDIC_SQUIGGLEPIXMAP 13
+#define wxSTC_INDIC_COMPOSITIONTHICK 14
 #define wxSTC_INDIC_MAX 31
 #define wxSTC_INDIC_CONTAINER 8
 #define wxSTC_INDIC0_MASK 0x20
@@ -167,8 +171,8 @@
 
 /// PrintColourMode - only the default-background is forced to be white for printing.
 #define wxSTC_PRINT_COLOURONWHITEDEFAULTBG 4
-#define wxSTC_FIND_WHOLEWORD 2
-#define wxSTC_FIND_MATCHCASE 4
+#define wxSTC_FIND_WHOLEWORD 0x2
+#define wxSTC_FIND_MATCHCASE 0x4
 #define wxSTC_FIND_WORDSTART 0x00100000
 #define wxSTC_FIND_REGEXP 0x00200000
 #define wxSTC_FIND_POSIX 0x00400000
@@ -176,6 +180,12 @@
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
 #define wxSTC_FOLDLEVELNUMBERMASK 0x0FFF
+#define wxSTC_FOLDACTION_CONTRACT 0
+#define wxSTC_FOLDACTION_EXPAND 1
+#define wxSTC_FOLDACTION_TOGGLE 2
+#define wxSTC_AUTOMATICFOLD_SHOW 0x0001
+#define wxSTC_AUTOMATICFOLD_CLICK 0x0002
+#define wxSTC_AUTOMATICFOLD_CHANGE 0x0004
 #define wxSTC_FOLDFLAG_LINEBEFORE_EXPANDED 0x0002
 #define wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED 0x0004
 #define wxSTC_FOLDFLAG_LINEAFTER_EXPANDED 0x0008
@@ -254,6 +264,9 @@
 #define wxSTC_SEL_THIN 3
 #define wxSTC_CASEINSENSITIVEBEHAVIOUR_RESPECTCASE 0
 #define wxSTC_CASEINSENSITIVEBEHAVIOUR_IGNORECASE 1
+#define wxSTC_ORDER_PRESORTED 0
+#define wxSTC_ORDER_PERFORMSORT 1
+#define wxSTC_ORDER_CUSTOM 2
 #define wxSTC_CARETSTICKY_OFF 0
 #define wxSTC_CARETSTICKY_ON 1
 #define wxSTC_CARETSTICKY_WHITESPACE 2
@@ -448,6 +461,11 @@
 #define wxSTC_LEX_ECL 105
 #define wxSTC_LEX_OSCRIPT 106
 #define wxSTC_LEX_VISUALPROLOG 107
+#define wxSTC_LEX_LITERATEHASKELL 108
+#define wxSTC_LEX_STTXT 109
+#define wxSTC_LEX_KVIRC 110
+#define wxSTC_LEX_RUST 111
+#define wxSTC_LEX_DMAP 112
 
 /// When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 /// value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -496,6 +514,8 @@
 #define wxSTC_C_TRIPLEVERBATIM 21
 #define wxSTC_C_HASHQUOTEDSTRING 22
 #define wxSTC_C_PREPROCESSORCOMMENT 23
+#define wxSTC_C_PREPROCESSORCOMMENTDOC 24
+#define wxSTC_C_USERLITERAL 25
 
 /// Lexical states for SCLEX_D
 #define wxSTC_D_DEFAULT 0
@@ -786,6 +806,10 @@
 #define wxSTC_B_ERROR 16
 #define wxSTC_B_HEXNUMBER 17
 #define wxSTC_B_BINNUMBER 18
+#define wxSTC_B_COMMENTBLOCK 19
+#define wxSTC_B_DOCLINE 20
+#define wxSTC_B_DOCBLOCK 21
+#define wxSTC_B_DOCKEYWORD 22
 
 /// Lexical states for SCLEX_PROPERTIES
 #define wxSTC_PROPS_DEFAULT 0
@@ -856,6 +880,7 @@
 #define wxSTC_ERR_TIDY 19
 #define wxSTC_ERR_JAVA_STACK 20
 #define wxSTC_ERR_VALUE 21
+#define wxSTC_ERR_GCC_INCLUDED_FROM 22
 
 /// Lexical states for SCLEX_BATCH
 #define wxSTC_BAT_DEFAULT 0
@@ -1481,6 +1506,12 @@
 #define wxSTC_HA_COMMENTBLOCK 14
 #define wxSTC_HA_COMMENTBLOCK2 15
 #define wxSTC_HA_COMMENTBLOCK3 16
+#define wxSTC_HA_PRAGMA 17
+#define wxSTC_HA_PREPROCESSOR 18
+#define wxSTC_HA_STRINGEOL 19
+#define wxSTC_HA_RESERVED_OPERATOR 20
+#define wxSTC_HA_LITERATE_COMMENT 21
+#define wxSTC_HA_LITERATE_CODEDELIM 22
 
 /// Lexical states of SCLEX_TADS3
 #define wxSTC_T3_DEFAULT 0
@@ -1787,7 +1818,7 @@
 #define wxSTC_R_INFIX 10
 #define wxSTC_R_INFIXEOL 11
 
-/// Lexical state for SCLEX_MAGIKSF
+/// Lexical state for SCLEX_MAGIK
 #define wxSTC_MAGIK_DEFAULT 0
 #define wxSTC_MAGIK_COMMENT 1
 #define wxSTC_MAGIK_HYPER_COMMENT 16
@@ -1821,6 +1852,9 @@
 #define wxSTC_POWERSHELL_FUNCTION 11
 #define wxSTC_POWERSHELL_USER1 12
 #define wxSTC_POWERSHELL_COMMENTSTREAM 13
+#define wxSTC_POWERSHELL_HERE_STRING 14
+#define wxSTC_POWERSHELL_HERE_CHARACTER 15
+#define wxSTC_POWERSHELL_COMMENTDOCKEYWORD 16
 
 /// Lexical state for SCLEX_MYSQL
 #define wxSTC_MYSQL_DEFAULT 0
@@ -1845,6 +1879,7 @@
 #define wxSTC_MYSQL_USER2 19
 #define wxSTC_MYSQL_USER3 20
 #define wxSTC_MYSQL_HIDDENCOMMAND 21
+#define wxSTC_MYSQL_PLACEHOLDER 22
 
 /// Lexical state for SCLEX_PO
 #define wxSTC_PO_DEFAULT 0
@@ -1856,6 +1891,13 @@
 #define wxSTC_PO_MSGCTXT 6
 #define wxSTC_PO_MSGCTXT_TEXT 7
 #define wxSTC_PO_FUZZY 8
+#define wxSTC_PO_PROGRAMMER_COMMENT 9
+#define wxSTC_PO_REFERENCE 10
+#define wxSTC_PO_FLAGS 11
+#define wxSTC_PO_MSGID_TEXT_EOL 12
+#define wxSTC_PO_MSGSTR_TEXT_EOL 13
+#define wxSTC_PO_MSGCTXT_TEXT_EOL 14
+#define wxSTC_PO_ERROR 15
 
 /// Lexical states for SCLEX_PASCAL
 #define wxSTC_PAS_DEFAULT 0
@@ -2038,7 +2080,6 @@
 #define wxSTC_COFFEESCRIPT_GLOBALCLASS 19
 #define wxSTC_COFFEESCRIPT_STRINGRAW 20
 #define wxSTC_COFFEESCRIPT_TRIPLEVERBATIM 21
-#define wxSTC_COFFEESCRIPT_HASHQUOTEDSTRING 22
 #define wxSTC_COFFEESCRIPT_COMMENTBLOCK 22
 #define wxSTC_COFFEESCRIPT_VERBOSE_REGEX 23
 #define wxSTC_COFFEESCRIPT_VERBOSE_REGEX_COMMENT 24
@@ -2135,6 +2176,86 @@
 #define wxSTC_VISUALPROLOG_STRING_VERBATIM 20
 #define wxSTC_VISUALPROLOG_STRING_VERBATIM_SPECIAL 21
 #define wxSTC_VISUALPROLOG_STRING_VERBATIM_EOL 22
+
+/// Lexical states for SCLEX_STTXT
+#define wxSTC_STTXT_DEFAULT 0
+#define wxSTC_STTXT_COMMENT 1
+#define wxSTC_STTXT_COMMENTLINE 2
+#define wxSTC_STTXT_KEYWORD 3
+#define wxSTC_STTXT_TYPE 4
+#define wxSTC_STTXT_FUNCTION 5
+#define wxSTC_STTXT_FB 6
+#define wxSTC_STTXT_NUMBER 7
+#define wxSTC_STTXT_HEXNUMBER 8
+#define wxSTC_STTXT_PRAGMA 9
+#define wxSTC_STTXT_OPERATOR 10
+#define wxSTC_STTXT_CHARACTER 11
+#define wxSTC_STTXT_STRING1 12
+#define wxSTC_STTXT_STRING2 13
+#define wxSTC_STTXT_STRINGEOL 14
+#define wxSTC_STTXT_IDENTIFIER 15
+#define wxSTC_STTXT_DATETIME 16
+#define wxSTC_STTXT_VARS 17
+#define wxSTC_STTXT_PRAGMAS 18
+
+/// Lexical states for SCLEX_KVIRC
+#define wxSTC_KVIRC_DEFAULT 0
+#define wxSTC_KVIRC_COMMENT 1
+#define wxSTC_KVIRC_COMMENTBLOCK 2
+#define wxSTC_KVIRC_STRING 3
+#define wxSTC_KVIRC_WORD 4
+#define wxSTC_KVIRC_KEYWORD 5
+#define wxSTC_KVIRC_FUNCTION_KEYWORD 6
+#define wxSTC_KVIRC_FUNCTION 7
+#define wxSTC_KVIRC_VARIABLE 8
+#define wxSTC_KVIRC_NUMBER 9
+#define wxSTC_KVIRC_OPERATOR 10
+#define wxSTC_KVIRC_STRING_FUNCTION 11
+#define wxSTC_KVIRC_STRING_VARIABLE 12
+
+/// Lexical states for SCLEX_RUST
+#define wxSTC_RUST_DEFAULT 0
+#define wxSTC_RUST_COMMENTBLOCK 1
+#define wxSTC_RUST_COMMENTLINE 2
+#define wxSTC_RUST_COMMENTBLOCKDOC 3
+#define wxSTC_RUST_COMMENTLINEDOC 4
+#define wxSTC_RUST_NUMBER 5
+#define wxSTC_RUST_WORD 6
+#define wxSTC_RUST_WORD2 7
+#define wxSTC_RUST_WORD3 8
+#define wxSTC_RUST_WORD4 9
+#define wxSTC_RUST_WORD5 10
+#define wxSTC_RUST_WORD6 11
+#define wxSTC_RUST_WORD7 12
+#define wxSTC_RUST_STRING 13
+#define wxSTC_RUST_STRINGR 14
+#define wxSTC_RUST_CHARACTER 15
+#define wxSTC_RUST_OPERATOR 16
+#define wxSTC_RUST_IDENTIFIER 17
+#define wxSTC_RUST_LIFETIME 18
+#define wxSTC_RUST_MACRO 19
+#define wxSTC_RUST_LEXERROR 20
+
+/// Lexical states for SCLEX_DMAP
+#define wxSTC_DMAP_DEFAULT 0
+#define wxSTC_DMAP_COMMENT 1
+#define wxSTC_DMAP_NUMBER 2
+#define wxSTC_DMAP_STRING1 3
+#define wxSTC_DMAP_STRING2 4
+#define wxSTC_DMAP_STRINGEOL 5
+#define wxSTC_DMAP_OPERATOR 6
+#define wxSTC_DMAP_IDENTIFIER 7
+#define wxSTC_DMAP_WORD 8
+#define wxSTC_DMAP_WORD2 9
+#define wxSTC_DMAP_WORD3 10
+
+/// Events
+/// GTK+ Specific to work around focus and accelerator problems:
+/// Line end types which may be used in addition to LF, CR, and CRLF
+/// SC_LINE_END_TYPE_UNICODE includes U+2028 Line Separator,
+/// U+2029 Paragraph Separator, and U+0085 Next Line
+#define wxSTC_LINE_END_TYPE_DEFAULT 0
+#define wxSTC_LINE_END_TYPE_UNICODE 1
 
 //}}}
 
@@ -2428,6 +2549,13 @@
 
 /// Scroll to end of document.
 #define wxSTC_CMD_SCROLLTOEND 2629
+
+/// Move caret to before first visible character on display line.
+/// If already there move to first character on display line.
+#define wxSTC_CMD_VCHOMEDISPLAY 2652
+
+/// Like VCHomeDisplay but extending selection to new caret position.
+#define wxSTC_CMD_VCHOMEDISPLAYEXTEND 2653
 
 //}}}
 
@@ -3620,6 +3748,13 @@ public:
     void EnsureCaretVisible();
 
     /**
+        Scroll the argument positions and the range between them into view giving
+        priority to the primary position then the secondary position.
+        This may be used to make a search match visible.
+    */
+    void ScrollRange(int secondary, int primary);
+
+    /**
         Replace the selected text with the argument text.
     */
     void ReplaceSelection(const wxString& text);
@@ -3781,6 +3916,11 @@ public:
     int CallTipPosAtStart();
 
     /**
+        Set the start position in order to change when backspacing removes the calltip.
+    */
+    void CallTipSetPosAtStart(int posStart);
+
+    /**
         Highlight a segment of the definition.
     */
     void CallTipSetHighlight(int start, int end);
@@ -3883,9 +4023,39 @@ public:
     void ToggleFold(int line);
 
     /**
+        Expand or contract a fold header.
+    */
+    void FoldLine(int line, int action);
+
+    /**
+        Expand or contract a fold header and its children.
+    */
+    void FoldChildren(int line, int action);
+
+    /**
+        Expand a fold header and all children. Use the level argument instead of the line's current level.
+    */
+    void ExpandChildren(int line, int level);
+
+    /**
+        Expand or contract all fold headers.
+    */
+    void FoldAll(int action);
+
+    /**
         Ensure a particular line is visible by expanding any header line hiding it.
     */
     void EnsureVisible(int line);
+
+    /**
+        Set automatic folding behaviours.
+    */
+    void SetAutomaticFold(int automaticFold);
+
+    /**
+        Get automatic folding behaviours.
+    */
+    int GetAutomaticFold() const;
 
     /**
         Set some style options for folding.
@@ -4730,6 +4900,12 @@ public:
     int PositionAfter(int pos);
 
     /**
+        Given a valid document position, return a position that differs in a number
+        of characters. Returned value is always between 0 and last position in document.
+    */
+    int PositionRelative(int pos, int relative);
+
+    /**
         Copy a range of text to the clipboard. Positions are clipped into the document.
     */
     void CopyRange(int start, int end);
@@ -4888,6 +5064,16 @@ public:
         Get auto-completion case insensitive behaviour.
     */
     int AutoCompGetCaseInsensitiveBehaviour() const;
+
+    /**
+        Set the way autocompletion lists are ordered.
+    */
+    void AutoCompSetOrder(int order);
+
+    /**
+        Get the way autocompletion lists are ordered.
+    */
+    int AutoCompGetOrder() const;
 
     /**
         Enlarge the document to a particular size of text bytes.
@@ -5205,6 +5391,16 @@ public:
     int AnnotationGetStyleOffset() const;
 
     /**
+        Release all extended (>255) style numbers
+    */
+    void ReleaseAllExtendedStyles();
+
+    /**
+        Allocate some extended (>255) style numbers and return the start of the range
+    */
+    int AllocateExtendedStyles(int numberStyles);
+
+    /**
         Add a container action to the undo stack
     */
     void AddUndoAction(int token, int flags);
@@ -5219,6 +5415,16 @@ public:
         Return INVALID_POSITION if not close to text.
     */
     int CharPositionFromPointClose(int x, int y);
+
+    /**
+        Set whether switching to rectangular mode while selecting with the mouse is allowed.
+    */
+    void SetMouseSelectionRectangularSwitch(bool mouseSelectionRectangularSwitch);
+
+    /**
+        Whether switching to rectangular mode while selecting with the mouse is allowed.
+    */
+    bool GetMouseSelectionRectangularSwitch() const;
 
     /**
         Set whether multiple selections can be made
@@ -5266,6 +5472,11 @@ public:
     int GetSelections() const;
 
     /**
+        Is every selected range empty?
+    */
+    bool GetSelectionEmpty() const;
+
+    /**
         Clear selections to a single empty stream selection
     */
     void ClearSelections();
@@ -5274,6 +5485,11 @@ public:
         Add a selection
     */
     int AddSelection(int caret, int anchor);
+
+    /**
+        Drop one selection
+    */
+    void DropSelectionN(int selection);
 
     /**
         Set the main selection
@@ -5426,6 +5642,11 @@ public:
     void RGBAImageSetHeight(int height);
 
     /**
+        Set the scale factor in percent for future RGBA image data.
+    */
+    void RGBAImageSetScale(int scalePercent);
+
+    /**
         Define a marker from RGBA data.
         It has the width and height from RGBAImageSetWidth/Height
     */
@@ -5461,6 +5682,42 @@ public:
         Create an ILoader*.
     */
     void* CreateLoader(int bytes) const;
+
+    /**
+        Move caret to before first visible character on display line.
+        If already there move to first character on display line.
+    */
+    void VCHomeDisplay();
+
+    /**
+        Like VCHomeDisplay but extending selection to new caret position.
+    */
+    void VCHomeDisplayExtend();
+
+    /**
+        Is the caret line always visible?
+    */
+    bool GetCaretLineVisibleAlways() const;
+
+    /**
+        Sets the caret line to always visible.
+    */
+    void SetCaretLineVisibleAlways(bool alwaysVisible);
+
+    /**
+        Set the way a character is drawn.
+    */
+    void SetRepresentation(const wxString& encodedCharacter, const wxString& representation);
+
+    /**
+        Get the way a character is drawn.
+    */
+    wxString GetRepresentation(const wxString& encodedCharacter) const;
+
+    /**
+        Remove a character representation.
+    */
+    void ClearRepresentation(const wxString& encodedCharacter);
 
     /**
         Start notifying the container of all key presses and commands.
@@ -5548,6 +5805,73 @@ public:
         Retrieve a '\n' separated list of descriptions of the keyword sets understood by the current lexer.
     */
     wxString DescribeKeyWordSets() const;
+
+    /**
+        Set the line end types that the application wants to use. May not be used if incompatible with lexer or encoding.
+    */
+    void SetLineEndTypesAllowed(int lineEndBitSet);
+
+    /**
+        Get the line end types currently allowed.
+    */
+    int GetLineEndTypesAllowed() const;
+
+    /**
+        Get the line end types currently recognised. May be a subset of the allowed types due to lexer limitation.
+    */
+    int GetLineEndTypesActive() const;
+
+    /**
+        Bit set of LineEndType enumertion for which line ends beyond the standard
+        LF, CR, and CRLF are supported by the lexer.
+    */
+    int GetLineEndTypesSupported() const;
+
+    /**
+        Allocate a set of sub styles for a particular base style, returning start of range
+    */
+    int AllocateSubStyles(int styleBase, int numberStyles);
+
+    /**
+        The starting style number for the sub styles associated with a base style
+    */
+    int GetSubStylesStart(int styleBase) const;
+
+    /**
+        The number of sub styles associated with a base style
+    */
+    int GetSubStylesLength(int styleBase) const;
+
+    /**
+        For a sub style, return the base style, else return the argument.
+    */
+    int GetStyleFromSubStyle(int subStyle) const;
+
+    /**
+        For a secondary style, return the primary style, else return the argument.
+    */
+    int GetPrimaryStyleFromStyle(int style) const;
+
+    /**
+        Free allocated sub styles
+    */
+    void FreeSubStyles();
+
+    /**
+        Set the identifiers that are shown in a particular style
+    */
+    void SetIdentifiers(int style, const wxString& identifiers);
+
+    /**
+        Where styles are duplicated by a feature such as active/inactive code
+        return the distance between the two types.
+    */
+    int DistanceToSecondaryStyles() const;
+
+    /**
+        Get the set of base styles that can be extended with sub styles
+    */
+    wxString GetSubStyleBases() const;
 
     //}}}
 

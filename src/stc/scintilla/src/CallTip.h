@@ -17,7 +17,7 @@ namespace Scintilla {
 class CallTip {
 	int startHighlight;    // character offset to start and...
 	int endHighlight;      // ...end of highlighted text
-	char *val;
+	std::string val;
 	Font font;
 	PRectangle rectUp;      // rectangle of last up angle in the tip
 	PRectangle rectDown;    // rectangle of last down arrow in the tip
@@ -35,7 +35,7 @@ class CallTip {
 		bool highlight, bool draw);
 	int PaintContents(Surface *surfaceWindow, bool draw);
 	bool IsTabCharacter(char c) const;
-	int NextTabPos(int x);
+	int NextTabPos(int x) const;
 
 public:
 	Window wCallTip;
@@ -49,6 +49,11 @@ public:
 	ColourDesired colourLight;
 	int codePage;
 	int clickPlace;
+
+	int insetX; // text inset in x from calltip border
+	int widthArrow;
+	int borderHeight;
+	int verticalOffset; // pixel offset up or down of the calltip with respect to the line
 
 	CallTip();
 	~CallTip();

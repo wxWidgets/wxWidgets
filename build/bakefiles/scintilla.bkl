@@ -81,6 +81,7 @@
             src/stc/scintilla/lexers/LexCsound.cxx
             src/stc/scintilla/lexers/LexCSS.cxx
             src/stc/scintilla/lexers/LexD.cxx
+            src/stc/scintilla/lexers/LexDMAP.cxx
             src/stc/scintilla/lexers/LexECL.cxx
             src/stc/scintilla/lexers/LexEiffel.cxx
             src/stc/scintilla/lexers/LexErlang.cxx
@@ -94,6 +95,8 @@
             src/stc/scintilla/lexers/LexHTML.cxx
             src/stc/scintilla/lexers/LexInno.cxx
             src/stc/scintilla/lexers/LexKix.cxx
+            src/stc/scintilla/lexers/LexKVIrc.cxx
+            src/stc/scintilla/lexers/LexLaTeX.cxx
             src/stc/scintilla/lexers/LexLisp.cxx
             src/stc/scintilla/lexers/LexLout.cxx
             src/stc/scintilla/lexers/LexLua.cxx
@@ -115,6 +118,7 @@
             src/stc/scintilla/lexers/LexPB.cxx
             src/stc/scintilla/lexers/LexPerl.cxx
             src/stc/scintilla/lexers/LexPLM.cxx
+            src/stc/scintilla/lexers/LexPO.cxx
             src/stc/scintilla/lexers/LexPOV.cxx
             src/stc/scintilla/lexers/LexPowerPro.cxx
             src/stc/scintilla/lexers/LexPowerShell.cxx
@@ -124,6 +128,7 @@
             src/stc/scintilla/lexers/LexR.cxx
             src/stc/scintilla/lexers/LexRebol.cxx
             src/stc/scintilla/lexers/LexRuby.cxx
+            src/stc/scintilla/lexers/LexRust.cxx
             src/stc/scintilla/lexers/LexScriptol.cxx
             src/stc/scintilla/lexers/LexSmalltalk.cxx
             src/stc/scintilla/lexers/LexSML.cxx
@@ -131,6 +136,7 @@
             src/stc/scintilla/lexers/LexSpecman.cxx
             src/stc/scintilla/lexers/LexSpice.cxx
             src/stc/scintilla/lexers/LexSQL.cxx
+            src/stc/scintilla/lexers/LexSTTXT.cxx
             src/stc/scintilla/lexers/LexTACL.cxx
             src/stc/scintilla/lexers/LexTADS3.cxx
             src/stc/scintilla/lexers/LexTAL.cxx
@@ -144,6 +150,7 @@
             src/stc/scintilla/lexers/LexVisualProlog.cxx
             src/stc/scintilla/lexers/LexYAML.cxx
             src/stc/scintilla/lexlib/Accessor.cxx
+            src/stc/scintilla/lexlib/CharacterCategory.cxx
             src/stc/scintilla/lexlib/CharacterSet.cxx
             src/stc/scintilla/lexlib/LexerBase.cxx
             src/stc/scintilla/lexlib/LexerModule.cxx
@@ -154,6 +161,8 @@
             src/stc/scintilla/lexlib/WordList.cxx
             src/stc/scintilla/src/AutoComplete.cxx
             src/stc/scintilla/src/CallTip.cxx
+            src/stc/scintilla/src/CaseConvert.cxx
+            src/stc/scintilla/src/CaseFolder.cxx
             src/stc/scintilla/src/Catalogue.cxx
             src/stc/scintilla/src/CellBuffer.cxx
             src/stc/scintilla/src/CharClassify.cxx

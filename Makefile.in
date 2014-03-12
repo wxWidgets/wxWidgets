@@ -247,6 +247,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexCsound.o \
 	wxscintilla_LexCSS.o \
 	wxscintilla_LexD.o \
+	wxscintilla_LexDMAP.o \
 	wxscintilla_LexECL.o \
 	wxscintilla_LexEiffel.o \
 	wxscintilla_LexErlang.o \
@@ -260,6 +261,8 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexHTML.o \
 	wxscintilla_LexInno.o \
 	wxscintilla_LexKix.o \
+	wxscintilla_LexKVIrc.o \
+	wxscintilla_LexLaTeX.o \
 	wxscintilla_LexLisp.o \
 	wxscintilla_LexLout.o \
 	wxscintilla_LexLua.o \
@@ -281,6 +284,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexPB.o \
 	wxscintilla_LexPerl.o \
 	wxscintilla_LexPLM.o \
+	wxscintilla_LexPO.o \
 	wxscintilla_LexPOV.o \
 	wxscintilla_LexPowerPro.o \
 	wxscintilla_LexPowerShell.o \
@@ -290,6 +294,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexR.o \
 	wxscintilla_LexRebol.o \
 	wxscintilla_LexRuby.o \
+	wxscintilla_LexRust.o \
 	wxscintilla_LexScriptol.o \
 	wxscintilla_LexSmalltalk.o \
 	wxscintilla_LexSML.o \
@@ -297,6 +302,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexSpecman.o \
 	wxscintilla_LexSpice.o \
 	wxscintilla_LexSQL.o \
+	wxscintilla_LexSTTXT.o \
 	wxscintilla_LexTACL.o \
 	wxscintilla_LexTADS3.o \
 	wxscintilla_LexTAL.o \
@@ -310,6 +316,7 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_LexVisualProlog.o \
 	wxscintilla_LexYAML.o \
 	wxscintilla_Accessor.o \
+	wxscintilla_CharacterCategory.o \
 	wxscintilla_CharacterSet.o \
 	wxscintilla_LexerBase.o \
 	wxscintilla_LexerModule.o \
@@ -320,6 +327,8 @@ WXSCINTILLA_OBJECTS =  \
 	wxscintilla_WordList.o \
 	wxscintilla_AutoComplete.o \
 	wxscintilla_CallTip.o \
+	wxscintilla_CaseConvert.o \
+	wxscintilla_CaseFolder.o \
 	wxscintilla_Catalogue.o \
 	wxscintilla_CellBuffer.o \
 	wxscintilla_CharClassify.o \
@@ -16600,6 +16609,9 @@ wxscintilla_LexCSS.o: $(srcdir)/src/stc/scintilla/lexers/LexCSS.cxx
 wxscintilla_LexD.o: $(srcdir)/src/stc/scintilla/lexers/LexD.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexD.cxx
 
+wxscintilla_LexDMAP.o: $(srcdir)/src/stc/scintilla/lexers/LexDMAP.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexDMAP.cxx
+
 wxscintilla_LexECL.o: $(srcdir)/src/stc/scintilla/lexers/LexECL.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexECL.cxx
 
@@ -16638,6 +16650,12 @@ wxscintilla_LexInno.o: $(srcdir)/src/stc/scintilla/lexers/LexInno.cxx
 
 wxscintilla_LexKix.o: $(srcdir)/src/stc/scintilla/lexers/LexKix.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexKix.cxx
+
+wxscintilla_LexKVIrc.o: $(srcdir)/src/stc/scintilla/lexers/LexKVIrc.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexKVIrc.cxx
+
+wxscintilla_LexLaTeX.o: $(srcdir)/src/stc/scintilla/lexers/LexLaTeX.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexLaTeX.cxx
 
 wxscintilla_LexLisp.o: $(srcdir)/src/stc/scintilla/lexers/LexLisp.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexLisp.cxx
@@ -16702,6 +16720,9 @@ wxscintilla_LexPerl.o: $(srcdir)/src/stc/scintilla/lexers/LexPerl.cxx
 wxscintilla_LexPLM.o: $(srcdir)/src/stc/scintilla/lexers/LexPLM.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexPLM.cxx
 
+wxscintilla_LexPO.o: $(srcdir)/src/stc/scintilla/lexers/LexPO.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexPO.cxx
+
 wxscintilla_LexPOV.o: $(srcdir)/src/stc/scintilla/lexers/LexPOV.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexPOV.cxx
 
@@ -16729,6 +16750,9 @@ wxscintilla_LexRebol.o: $(srcdir)/src/stc/scintilla/lexers/LexRebol.cxx
 wxscintilla_LexRuby.o: $(srcdir)/src/stc/scintilla/lexers/LexRuby.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexRuby.cxx
 
+wxscintilla_LexRust.o: $(srcdir)/src/stc/scintilla/lexers/LexRust.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexRust.cxx
+
 wxscintilla_LexScriptol.o: $(srcdir)/src/stc/scintilla/lexers/LexScriptol.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexScriptol.cxx
 
@@ -16749,6 +16773,9 @@ wxscintilla_LexSpice.o: $(srcdir)/src/stc/scintilla/lexers/LexSpice.cxx
 
 wxscintilla_LexSQL.o: $(srcdir)/src/stc/scintilla/lexers/LexSQL.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexSQL.cxx
+
+wxscintilla_LexSTTXT.o: $(srcdir)/src/stc/scintilla/lexers/LexSTTXT.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexSTTXT.cxx
 
 wxscintilla_LexTACL.o: $(srcdir)/src/stc/scintilla/lexers/LexTACL.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexers/LexTACL.cxx
@@ -16789,6 +16816,9 @@ wxscintilla_LexYAML.o: $(srcdir)/src/stc/scintilla/lexers/LexYAML.cxx
 wxscintilla_Accessor.o: $(srcdir)/src/stc/scintilla/lexlib/Accessor.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexlib/Accessor.cxx
 
+wxscintilla_CharacterCategory.o: $(srcdir)/src/stc/scintilla/lexlib/CharacterCategory.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexlib/CharacterCategory.cxx
+
 wxscintilla_CharacterSet.o: $(srcdir)/src/stc/scintilla/lexlib/CharacterSet.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/lexlib/CharacterSet.cxx
 
@@ -16818,6 +16848,12 @@ wxscintilla_AutoComplete.o: $(srcdir)/src/stc/scintilla/src/AutoComplete.cxx
 
 wxscintilla_CallTip.o: $(srcdir)/src/stc/scintilla/src/CallTip.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/CallTip.cxx
+
+wxscintilla_CaseConvert.o: $(srcdir)/src/stc/scintilla/src/CaseConvert.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/CaseConvert.cxx
+
+wxscintilla_CaseFolder.o: $(srcdir)/src/stc/scintilla/src/CaseFolder.cxx
+	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/CaseFolder.cxx
 
 wxscintilla_Catalogue.o: $(srcdir)/src/stc/scintilla/src/Catalogue.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/Catalogue.cxx
@@ -40771,6 +40807,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/generic/private
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
+	mkdir $(DISTDIR)/include/wx/richtext/bitmaps
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/ribbon
 	mkdir $(DISTDIR)/include/wx/persist
@@ -40788,6 +40825,7 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/generic/private/*.h $(DISTDIR)/include/wx/generic/private
 	$(CP_P) $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
+	$(CP_P) $(INCDIR)/wx/richtext/bitmaps/*.xpm $(DISTDIR)/include/wx/richtext/bitmaps
 	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
 	$(CP_P) $(INCDIR)/wx/ribbon/*.h $(DISTDIR)/include/wx/ribbon
 	$(CP_P) $(INCDIR)/wx/persist/*.h $(DISTDIR)/include/wx/persist
@@ -40898,6 +40936,7 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/msw
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
+	mkdir $(DISTDIR)/include/wx/richtext/bitmaps
 	mkdir $(DISTDIR)/include/wx/aui
 	mkdir $(DISTDIR)/include/wx/ribbon
 	mkdir $(DISTDIR)/include/wx/persist

@@ -257,6 +257,12 @@
 				RelativePath="..\..\src\stc\scintilla\src\CallTip.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\CaseConvert.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\CaseFolder.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\Catalogue.cxx">
 			</File>
 			<File
@@ -264,6 +270,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\CharClassify.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexlib\CharacterCategory.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexlib\CharacterSet.cxx">
@@ -365,6 +374,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexD.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexDMAP.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexECL.cxx">
 			</File>
 			<File
@@ -401,7 +413,13 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexInno.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexKVIrc.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexKix.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexLaTeX.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexLisp.cxx">
@@ -461,6 +479,9 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexPLM.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexPO.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexPOV.cxx">
 			</File>
 			<File
@@ -494,10 +515,16 @@
 				RelativePath="..\..\src\stc\scintilla\lexers\LexRuby.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexRust.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexSML.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexSQL.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\lexers\LexSTTXT.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\lexers\LexScriptol.cxx">

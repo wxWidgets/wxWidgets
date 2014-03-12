@@ -3847,6 +3847,7 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexCsound.obj &
 	$(OBJS)\wxscintilla_LexCSS.obj &
 	$(OBJS)\wxscintilla_LexD.obj &
+	$(OBJS)\wxscintilla_LexDMAP.obj &
 	$(OBJS)\wxscintilla_LexECL.obj &
 	$(OBJS)\wxscintilla_LexEiffel.obj &
 	$(OBJS)\wxscintilla_LexErlang.obj &
@@ -3860,6 +3861,8 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexHTML.obj &
 	$(OBJS)\wxscintilla_LexInno.obj &
 	$(OBJS)\wxscintilla_LexKix.obj &
+	$(OBJS)\wxscintilla_LexKVIrc.obj &
+	$(OBJS)\wxscintilla_LexLaTeX.obj &
 	$(OBJS)\wxscintilla_LexLisp.obj &
 	$(OBJS)\wxscintilla_LexLout.obj &
 	$(OBJS)\wxscintilla_LexLua.obj &
@@ -3881,6 +3884,7 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexPB.obj &
 	$(OBJS)\wxscintilla_LexPerl.obj &
 	$(OBJS)\wxscintilla_LexPLM.obj &
+	$(OBJS)\wxscintilla_LexPO.obj &
 	$(OBJS)\wxscintilla_LexPOV.obj &
 	$(OBJS)\wxscintilla_LexPowerPro.obj &
 	$(OBJS)\wxscintilla_LexPowerShell.obj &
@@ -3890,6 +3894,7 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexR.obj &
 	$(OBJS)\wxscintilla_LexRebol.obj &
 	$(OBJS)\wxscintilla_LexRuby.obj &
+	$(OBJS)\wxscintilla_LexRust.obj &
 	$(OBJS)\wxscintilla_LexScriptol.obj &
 	$(OBJS)\wxscintilla_LexSmalltalk.obj &
 	$(OBJS)\wxscintilla_LexSML.obj &
@@ -3897,6 +3902,7 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexSpecman.obj &
 	$(OBJS)\wxscintilla_LexSpice.obj &
 	$(OBJS)\wxscintilla_LexSQL.obj &
+	$(OBJS)\wxscintilla_LexSTTXT.obj &
 	$(OBJS)\wxscintilla_LexTACL.obj &
 	$(OBJS)\wxscintilla_LexTADS3.obj &
 	$(OBJS)\wxscintilla_LexTAL.obj &
@@ -3910,6 +3916,7 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_LexVisualProlog.obj &
 	$(OBJS)\wxscintilla_LexYAML.obj &
 	$(OBJS)\wxscintilla_Accessor.obj &
+	$(OBJS)\wxscintilla_CharacterCategory.obj &
 	$(OBJS)\wxscintilla_CharacterSet.obj &
 	$(OBJS)\wxscintilla_LexerBase.obj &
 	$(OBJS)\wxscintilla_LexerModule.obj &
@@ -3920,6 +3927,8 @@ WXSCINTILLA_OBJECTS =  &
 	$(OBJS)\wxscintilla_WordList.obj &
 	$(OBJS)\wxscintilla_AutoComplete.obj &
 	$(OBJS)\wxscintilla_CallTip.obj &
+	$(OBJS)\wxscintilla_CaseConvert.obj &
+	$(OBJS)\wxscintilla_CaseFolder.obj &
 	$(OBJS)\wxscintilla_Catalogue.obj &
 	$(OBJS)\wxscintilla_CellBuffer.obj &
 	$(OBJS)\wxscintilla_CharClassify.obj &
@@ -6412,6 +6421,9 @@ $(OBJS)\wxscintilla_LexCSS.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\Lex
 $(OBJS)\wxscintilla_LexD.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexD.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_LexDMAP.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexDMAP.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_LexECL.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexECL.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
@@ -6449,6 +6461,12 @@ $(OBJS)\wxscintilla_LexInno.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\Le
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexKix.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexKix.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_LexKVIrc.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexKVIrc.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_LexLaTeX.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexLaTeX.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexLisp.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexLisp.cxx
@@ -6514,6 +6532,9 @@ $(OBJS)\wxscintilla_LexPerl.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\Le
 $(OBJS)\wxscintilla_LexPLM.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexPLM.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_LexPO.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexPO.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_LexPOV.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexPOV.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
@@ -6541,6 +6562,9 @@ $(OBJS)\wxscintilla_LexRebol.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\L
 $(OBJS)\wxscintilla_LexRuby.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexRuby.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_LexRust.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexRust.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_LexScriptol.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexScriptol.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
@@ -6560,6 +6584,9 @@ $(OBJS)\wxscintilla_LexSpice.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\L
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexSQL.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexSQL.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_LexSTTXT.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexSTTXT.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_LexTACL.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\LexTACL.cxx
@@ -6601,6 +6628,9 @@ $(OBJS)\wxscintilla_LexYAML.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexers\Le
 $(OBJS)\wxscintilla_Accessor.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexlib\Accessor.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
+$(OBJS)\wxscintilla_CharacterCategory.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexlib\CharacterCategory.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
 $(OBJS)\wxscintilla_CharacterSet.obj :  .AUTODEPEND ..\..\src\stc\scintilla\lexlib\CharacterSet.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
@@ -6629,6 +6659,12 @@ $(OBJS)\wxscintilla_AutoComplete.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_CallTip.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\CallTip.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_CaseConvert.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\CaseConvert.cxx
+	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
+
+$(OBJS)\wxscintilla_CaseFolder.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\CaseFolder.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\wxscintilla_Catalogue.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\Catalogue.cxx

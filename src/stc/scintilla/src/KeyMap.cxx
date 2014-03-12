@@ -5,6 +5,11 @@
 // Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <stdlib.h>
+
+#include <vector>
+#include <map>
+
 #include "Platform.h"
 
 #include "Scintilla.h"
@@ -15,7 +20,7 @@
 using namespace Scintilla;
 #endif
 
-KeyMap::KeyMap() : kmap(0), len(0), alloc(0) {
+KeyMap::KeyMap() {
 	for (int i = 0; MapDefault[i].key; i++) {
 		AssignCmdKey(MapDefault[i].key,
 			MapDefault[i].modifiers,
@@ -28,42 +33,16 @@ KeyMap::~KeyMap() {
 }
 
 void KeyMap::Clear() {
-	delete []kmap;
-	kmap = 0;
-	len = 0;
-	alloc = 0;
+	kmap.clear();
 }
 
 void KeyMap::AssignCmdKey(int key, int modifiers, unsigned int msg) {
-	if ((len+1) >= alloc) {
-		KeyToCommand *ktcNew = new KeyToCommand[alloc + 5];
-		if (!ktcNew)
-			return;
-		for (int k = 0; k < len; k++)
-			ktcNew[k] = kmap[k];
-		alloc += 5;
-		delete []kmap;
-		kmap = ktcNew;
-	}
-	for (int keyIndex = 0; keyIndex < len; keyIndex++) {
-		if ((key == kmap[keyIndex].key) && (modifiers == kmap[keyIndex].modifiers)) {
-			kmap[keyIndex].msg = msg;
-			return;
-		}
-	}
-	kmap[len].key = key;
-	kmap[len].modifiers = modifiers;
-	kmap[len].msg = msg;
-	len++;
+	kmap[KeyModifiers(key, modifiers)] = msg;
 }
 
-unsigned int KeyMap::Find(int key, int modifiers) {
-	for (int i = 0; i < len; i++) {
-		if ((key == kmap[i].key) && (modifiers == kmap[i].modifiers)) {
-			return kmap[i].msg;
-		}
-	}
-	return 0;
+unsigned int KeyMap::Find(int key, int modifiers) const {
+	std::map<KeyModifiers, unsigned int>::const_iterator it = kmap.find(KeyModifiers(key, modifiers));
+	return (it == kmap.end()) ? 0 : it->second;
 }
 
 #if PLAT_GTK_MACOSX
