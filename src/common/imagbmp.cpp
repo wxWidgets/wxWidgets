@@ -1435,8 +1435,13 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
 
         alreadySeeked += stream.LastRead();
 
+        // ICO file format uses only a single byte for width and if it is 0, it
+        // means that the width is actually 256 pixels.
+        const wxUint16
+            widthReal = pCurrentEntry->bWidth ? pCurrentEntry->bWidth : 256;
+
         // bHeight and bColorCount are wxUint8
-        if ( pCurrentEntry->bWidth >= wMax )
+        if ( widthReal >= wMax )
         {
             // see if we have more colors, ==0 indicates > 8bpp:
             if ( pCurrentEntry->bColorCount == 0 )
@@ -1444,7 +1449,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
             if ( pCurrentEntry->bColorCount >= colmax )
             {
                 iSel = i;
-                wMax = pCurrentEntry->bWidth;
+                wMax = widthReal;
                 colmax = pCurrentEntry->bColorCount;
             }
         }
