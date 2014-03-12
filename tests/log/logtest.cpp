@@ -23,6 +23,12 @@
 
 #include "wx/scopeguard.h"
 
+#ifdef __WINDOWS__
+    #include "wx/msw/wrapwin.h"
+#else
+    #include <errno.h>
+#endif
+
 #if WXWIN_COMPATIBILITY_2_8
     // we override deprecated DoLog() and DoLogString() in this test, suppress
     // warnings about it
@@ -348,11 +354,13 @@ void LogTestCase::SysError()
     CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Error (", &s) );
     WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 17") );
 
-    // The last error code seems to be set somewhere in MinGW CRT as its value
-    // is just not what we expect (ERROR_INVALID_PARAMETER instead of 0 and 0
-    // instead of ERROR_FILE_NOT_FOUND) so exclude the tests which rely on last
-    // error being preserved for this compiler.
-#ifndef __MINGW32__
+    // Try to ensure that the system error is 0.
+#ifdef __WINDOWS__
+    ::SetLastError(0);
+#else
+    errno = 0;
+#endif
+
     wxLogSysError("Success");
     CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Success (", &s) );
     WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 0") );
@@ -361,7 +369,6 @@ void LogTestCase::SysError()
     wxLogSysError("Not found");
     CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Not found (", &s) );
     WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 2") );
-#endif // __MINGW32__
 }
 
 void LogTestCase::NoWarnings()
