@@ -1274,8 +1274,34 @@ bool wxICOHandler::SaveFile(wxImage *image,
                     mask.SetRGB(i, j, 0, 0, 0 );
         }
         // Set the formats for image and mask
-        // (Windows never saves with more than 8 colors):
-        image->SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_8BPP);
+
+        // The format depends on the number of the colours used, so count them,
+        // but stop at 257 because we have to use 24 bpp anyhow if we have that
+        // many of them.
+        const int colours = image->CountColours(257);
+        int bppFormat;
+        int bpp;
+        if ( colours > 256 )
+        {
+            bppFormat = wxBMP_24BPP;
+            bpp = 24;
+        }
+        else if ( colours > 16 )
+        {
+            bppFormat = wxBMP_8BPP;
+            bpp = 8;
+        }
+        else if ( colours > 2 )
+        {
+            bppFormat = wxBMP_4BPP;
+            bpp = 4;
+        }
+        else
+        {
+            bppFormat = wxBMP_1BPP;
+            bpp = 1;
+        }
+        image->SetOption(wxIMAGE_OPTION_BMP_FORMAT, bppFormat);
 
         // monochome bitmap:
         mask.SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_1BPP_BW);
@@ -1352,7 +1378,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
         icondirentry.bColorCount = 0;
         icondirentry.bReserved = 0;
         icondirentry.wPlanes = wxUINT16_SWAP_ON_BE(1);
-        icondirentry.wBitCount = wxUINT16_SWAP_ON_BE(wxBMP_8BPP);
+        icondirentry.wBitCount = wxUINT16_SWAP_ON_BE(bpp);
         if ( type == 2 /*CUR*/)
         {
             int hx = image->HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X) ?

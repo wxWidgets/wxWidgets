@@ -54,7 +54,7 @@ wxMSW:
 - Support multiline strings in wxDC::DrawRotatedText() (Artur Wieczorek).
 - Fix stretchable spacers in vertical toolbars (Artur Wieczorek).
 - Add wxEnhMetaFile::Detach() (Luca Bacci).
-- Add support for saving 256*256 ICOs in PNG format (Artur Wieczorek).
+- Add support for saving 256*256 24bpp ICOs in PNG format (Artur Wieczorek).
 
 wxOSX/Cocoa:
 
