@@ -1479,7 +1479,52 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
         if (offset != 0 && stream.SeekI(offset, wxFromCurrent) == wxInvalidOffset)
             return false;
 
-        bResult = LoadDib(image, stream, verbose, false /* not BMP */);
+#if wxUSE_LIBPNG
+        // We can't fall back to loading an icon in the usual BMP format after
+        // trying to load it as PNG if we have an unseekable stream, so to
+        // avoid breaking the existing code which does successfully load icons
+        // from such streams, we only try to load them as PNGs if we can unwind
+        // back later.
+        //
+        // Ideal would be to modify LoadDib() to accept the first 8 bytes not
+        // coming from the stream but from the signature buffer below, as then
+        // we'd be able to load PNG icons from any kind of streams.
+        bool isPNG;
+        if ( stream.IsSeekable() )
+        {
+            // Check for the PNG signature first to avoid wasting time on
+            // trying to load typical ICO files which are not PNGs at all.
+            static const unsigned char signaturePNG[] =
+            {
+                0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A
+            };
+            static const int signatureLen = WXSIZEOF(signaturePNG);
+
+            unsigned char signature[signatureLen];
+            if ( !stream.ReadAll(signature, signatureLen) )
+                return false;
+
+            isPNG = memcmp(signature, signaturePNG, signatureLen) == 0;
+
+            // Rewind to the beginning of the image in any case.
+            if ( stream.SeekI(-signatureLen, wxFromCurrent) == wxInvalidOffset )
+                return false;
+        }
+        else // Not seekable stream
+        {
+            isPNG = false;
+        }
+
+        if ( isPNG )
+        {
+            wxPNGHandler handlerPNG;
+            bResult = handlerPNG.LoadFile(image, stream, verbose);
+        }
+        else
+#endif // wxUSE_LIBPNG
+        {
+            bResult = LoadDib(image, stream, verbose, false /* not BMP */);
+        }
         bool bIsCursorType = (this->GetType() == wxBITMAP_TYPE_CUR) || (this->GetType() == wxBITMAP_TYPE_ANI);
         if ( bResult && bIsCursorType && nType == 2 )
         {
