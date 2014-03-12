@@ -34,6 +34,7 @@
 #include "wx/quantize.h"
 #include "wx/scopeguard.h"
 #include "wx/scopedarray.h"
+#include "wx/scopedptr.h"
 #include "wx/anidecod.h"
 
 // For memcpy
@@ -270,9 +271,9 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         }
     }
 
-    wxPalette *palette = NULL; // entries for quantized images
-    wxUint8 *rgbquad = NULL;   // for the RGBQUAD bytes for the colormap
-    wxImage *q_image = NULL;   // destination for quantized image
+    wxScopedPtr<wxPalette> palette; // entries for quantized images
+    wxScopedArray<wxUint8> rgbquad; // for the RGBQUAD bytes for the colormap
+    wxScopedPtr<wxImage> q_image;   // destination for quantized image
 
     // if <24bpp use quantization to reduce colors for *some* of the formats
     if ( (format == wxBMP_1BPP) || (format == wxBMP_4BPP) ||
@@ -281,24 +282,27 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         // make a new palette and quantize the image
         if (format != wxBMP_8BPP_PALETTE)
         {
-            q_image = new wxImage();
+            q_image.reset(new wxImage());
 
             // I get a delete error using Quantize when desired colors > 236
             int quantize = ((palette_size > 236) ? 236 : palette_size);
             // fill the destination too, it gives much nicer 4bpp images
-            wxQuantize::Quantize( *image, *q_image, &palette, quantize, 0,
+            wxPalette* paletteTmp;
+            wxQuantize::Quantize( *image, *q_image, &paletteTmp, quantize, 0,
                                   wxQUANTIZE_FILL_DESTINATION_IMAGE );
+            palette.reset(paletteTmp);
         }
         else
         {
 #if wxUSE_PALETTE
-            palette = new wxPalette(image->GetPalette());
+            palette.reset(new wxPalette(image->GetPalette()));
 #endif // wxUSE_PALETTE
         }
 
         int i;
         unsigned char r, g, b;
-        rgbquad = new wxUint8 [palette_size*4];
+        wxScopedArray<wxUint8> rgbquadTmp(palette_size*4);
+        rgbquad.swap(rgbquadTmp);
 
         for (i = 0; i < palette_size; i++)
         {
@@ -317,7 +321,8 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     else if ( (format == wxBMP_8BPP_GREY) || (format == wxBMP_8BPP_RED) ||
               (format == wxBMP_1BPP_BW) )
     {
-        rgbquad = new wxUint8 [palette_size*4];
+        wxScopedArray<wxUint8> rgbquadTmp(palette_size*4);
+        rgbquad.swap(rgbquadTmp);
 
         for ( int i = 0; i < palette_size; i++ )
         {
@@ -336,21 +341,15 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     {
         if ( !IsMask )
         {
-            if ( !stream.WriteAll(rgbquad, palette_size*4) )
+            if ( !stream.WriteAll(rgbquad.get(), palette_size*4) )
             {
                 if (verbose)
                 {
                     wxLogError(_("BMP: Couldn't write RGB color map."));
                 }
-                delete[] rgbquad;
-#if wxUSE_PALETTE
-                delete palette;
-#endif // wxUSE_PALETTE
-                delete q_image;
                 return false;
             }
-            }
-        delete []rgbquad;
+        }
     }
 
     // pointer to the image data, use quantized if available
@@ -359,8 +358,8 @@ bool wxBMPHandler::SaveDib(wxImage *image,
                                         : image->GetData();
     const unsigned char* const alpha = saveAlpha ? image->GetAlpha() : NULL;
 
-    wxUint8 *buffer = new wxUint8[row_width];
-    memset(buffer, 0, row_width);
+    wxScopedArray<wxUint8> buffer(row_width);
+    memset(buffer.get(), 0, row_width);
     int y; unsigned x;
     long int pixel;
     const int dstPixLen = saveAlpha ? 4 : 3;
@@ -476,25 +475,15 @@ bool wxBMPHandler::SaveDib(wxImage *image,
             }
         }
 
-        if ( !stream.WriteAll(buffer, row_width) )
+        if ( !stream.WriteAll(buffer.get(), row_width) )
         {
             if (verbose)
             {
                 wxLogError(_("BMP: Couldn't write data."));
             }
-            delete[] buffer;
-#if wxUSE_PALETTE
-            delete palette;
-#endif // wxUSE_PALETTE
-            delete q_image;
             return false;
         }
     }
-    delete[] buffer;
-#if wxUSE_PALETTE
-    delete palette;
-#endif // wxUSE_PALETTE
-    delete q_image;
 
     return true;
 }
