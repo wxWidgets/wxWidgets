@@ -1188,8 +1188,8 @@ bool wxICOHandler::SaveFile(wxImage *image,
                             bool verbose)
 
 {
-    //sanity check; icon must be less than 127 pixels high and 255 wide
-    if ( image->GetHeight () > 127 )
+    // sanity check; icon must be no larger than 256x256
+    if ( image->GetHeight () > 256 )
     {
         if ( verbose )
         {
@@ -1197,7 +1197,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
         }
         return false;
     }
-    if ( image->GetWidth () > 255 )
+    if ( image->GetWidth () > 256 )
     {
         if ( verbose )
         {
@@ -1284,25 +1284,48 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
         //calculate size and offset of image and mask
         wxCountingOutputStream cStream;
-        bool bResult = SaveDib(image, cStream, verbose, IsBmp, IsMask);
-        if ( !bResult )
+        bool bResult;
+#if wxUSE_LIBPNG
+        // Typically, icons larger then 128x128 are saved as PNG images.
+        bool saveAsPNG = false;
+        if ( image->GetHeight() > 128 || image->GetWidth() > 128 )
         {
-            if ( verbose )
+            wxPNGHandler handlerPNG;
+            bResult = handlerPNG.SaveFile(image, cStream, verbose);
+            if ( !bResult )
             {
-                wxLogError(_("ICO: Error writing the image file!"));
+                if ( verbose )
+                {
+                    wxLogError(_("ICO: Error writing the image file!"));
+                }
+                return false;
             }
-            return false;
-        }
-        IsMask = true;
 
-        bResult = SaveDib(&mask, cStream, verbose, IsBmp, IsMask);
-        if ( !bResult )
+            saveAsPNG = true;
+        }
+        if ( !saveAsPNG )
+#endif // wxUSE_LIBPNG
         {
-            if ( verbose )
+            bResult = SaveDib(image, cStream, verbose, IsBmp, IsMask);
+            if ( !bResult )
             {
-                wxLogError(_("ICO: Error writing the image file!"));
+                if ( verbose )
+                {
+                    wxLogError(_("ICO: Error writing the image file!"));
+                }
+                return false;
             }
-            return false;
+            IsMask = true;
+
+            bResult = SaveDib(&mask, cStream, verbose, IsBmp, IsMask);
+            if ( !bResult )
+            {
+                if ( verbose )
+                {
+                    wxLogError(_("ICO: Error writing the image file!"));
+                }
+                return false;
+            }
         }
         wxUint32 Size = cStream.GetSize();
 
@@ -1321,8 +1344,11 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
         offset = offset + sizeof(ICONDIRENTRY);
 
+        // Notice that the casts work correctly for width/height of 256 as it's
+        // represented by 0 in ICO file format -- and larger values are not
+        // allowed at all.
         icondirentry.bWidth = (wxUint8)image->GetWidth();
-        icondirentry.bHeight = (wxUint8)(2 * image->GetHeight());
+        icondirentry.bHeight = (wxUint8)image->GetHeight();
         icondirentry.bColorCount = 0;
         icondirentry.bReserved = 0;
         icondirentry.wPlanes = wxUINT16_SWAP_ON_BE(1);
@@ -1364,26 +1390,44 @@ bool wxICOHandler::SaveFile(wxImage *image,
         }
 
         // actually save it:
-        IsMask = false;
-        bResult = SaveDib(image, stream, verbose, IsBmp, IsMask);
-        if ( !bResult )
+#if wxUSE_LIBPNG
+        if ( saveAsPNG )
         {
-            if ( verbose )
+            wxPNGHandler handlerPNG;
+            bResult = handlerPNG.SaveFile(image, stream, verbose);
+            if ( !bResult )
             {
-                wxLogError(_("ICO: Error writing the image file!"));
+                if ( verbose )
+                {
+                    wxLogError(_("ICO: Error writing the image file!"));
+                }
+                return false;
             }
-            return false;
         }
-        IsMask = true;
-
-        bResult = SaveDib(&mask, stream, verbose, IsBmp, IsMask);
-        if ( !bResult )
+        else
+#endif // wxUSE_LIBPNG
         {
-            if ( verbose )
+            IsMask = false;
+            bResult = SaveDib(image, stream, verbose, IsBmp, IsMask);
+            if ( !bResult )
             {
-                wxLogError(_("ICO: Error writing the image file!"));
+                if ( verbose )
+                {
+                    wxLogError(_("ICO: Error writing the image file!"));
+                }
+                return false;
             }
-            return false;
+            IsMask = true;
+
+            bResult = SaveDib(&mask, stream, verbose, IsBmp, IsMask);
+            if ( !bResult )
+            {
+                if ( verbose )
+                {
+                    wxLogError(_("ICO: Error writing the image file!"));
+                }
+                return false;
+            }
         }
 
     } // end of for loop
