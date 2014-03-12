@@ -599,6 +599,7 @@ All (GUI):
 - Make wxHTML more efficient when displaying large tables (Kinaou Hervé).
 - Prevent wxGrid rows/columns from becoming too small on double click.
 - Fix wxGraphicsBitmap::ConvertToImage() when using Cairo.
+- Support loading ICO files with data in PNG format (Artur Wieczorek).
 
 wxGTK:
 
