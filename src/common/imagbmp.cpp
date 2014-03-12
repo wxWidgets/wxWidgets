@@ -1403,10 +1403,9 @@ bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
 }
 
 bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
-                            bool WXUNUSED(verbose), int index)
+                            bool verbose, int index)
 {
     bool bResult wxDUMMY_INITIALIZE(false);
-    bool IsBmp = false;
 
     ICONDIR IconDir;
 
@@ -1480,7 +1479,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
         if (offset != 0 && stream.SeekI(offset, wxFromCurrent) == wxInvalidOffset)
             return false;
 
-        bResult = LoadDib(image, stream, true, IsBmp);
+        bResult = LoadDib(image, stream, verbose, false /* not BMP */);
         bool bIsCursorType = (this->GetType() == wxBITMAP_TYPE_CUR) || (this->GetType() == wxBITMAP_TYPE_ANI);
         if ( bResult && bIsCursorType && nType == 2 )
         {
