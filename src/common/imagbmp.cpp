@@ -1419,8 +1419,8 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     wxUint16 nType = wxUINT16_SWAP_ON_BE(IconDir.idType);
 
     // loop round the icons and choose the best one:
-    ICONDIRENTRY *pIconDirEntry = new ICONDIRENTRY[nIcons];
-    ICONDIRENTRY *pCurrentEntry = pIconDirEntry;
+    wxScopedArray<ICONDIRENTRY> pIconDirEntry(nIcons);
+    ICONDIRENTRY *pCurrentEntry = pIconDirEntry.get();
     int wMax = 0;
     int colmax = 0;
     int iSel = wxNOT_FOUND;
@@ -1467,7 +1467,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     else
     {
         // seek to selected icon:
-        pCurrentEntry = pIconDirEntry + iSel;
+        pCurrentEntry = pIconDirEntry.get() + iSel;
 
         // NOTE: seeking a positive amount in wxFromCurrent mode allows us to
         //       load even non-seekable streams (see wxInputStream::SeekI docs)!
@@ -1484,8 +1484,6 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
             image->SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, wxUINT16_SWAP_ON_BE(pCurrentEntry->wBitCount));
         }
     }
-
-    delete [] pIconDirEntry;
 
     return bResult;
 }
