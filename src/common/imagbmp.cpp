@@ -1425,7 +1425,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     wxUint16 nType = wxUINT16_SWAP_ON_BE(IconDir.idType);
 
     // loop round the icons and choose the best one:
-    wxScopedArray<ICONDIRENTRY> pIconDirEntry(nIcons);
+    wxScopedArray<ICONDIRENTRY> pIconDirEntry(new ICONDIRENTRY[nIcons]);
     ICONDIRENTRY *pCurrentEntry = pIconDirEntry.get();
     int wMax = 0;
     int colmax = 0;
