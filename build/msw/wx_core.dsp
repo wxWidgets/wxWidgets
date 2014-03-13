@@ -2888,6 +2888,10 @@ SOURCE=..\..\include\wx\position.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\preferences.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\print.h
 # End Source File
 # Begin Source File
@@ -3161,6 +3165,10 @@ SOURCE=..\..\include\wx\taskbar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tbarbase.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\testing.h
 # End Source File
 # Begin Source File
 

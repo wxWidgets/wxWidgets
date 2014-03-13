@@ -3142,6 +3142,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\preferences.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\print.h"
 				>
 			</File>
@@ -3415,6 +3419,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tbarbase.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\testing.h"
 				>
 			</File>
 			<File
