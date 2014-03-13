@@ -879,6 +879,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/panel.h
     wx/pen.h
     wx/position.h
+    wx/preferences.h
     wx/radiobox.h
     wx/radiobut.h
     wx/range.h
@@ -896,6 +897,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/statbox.h
     wx/stattext.h
     wx/statusbr.h
+    wx/testing.h
     wx/textcompleter.h
     wx/textctrl.h
     wx/textdlg.h

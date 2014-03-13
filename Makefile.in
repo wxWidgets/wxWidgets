@@ -4148,6 +4148,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/panel.h \
 	wx/pen.h \
 	wx/position.h \
+	wx/preferences.h \
 	wx/radiobox.h \
 	wx/radiobut.h \
 	wx/range.h \
@@ -4165,6 +4166,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/statbox.h \
 	wx/stattext.h \
 	wx/statusbr.h \
+	wx/testing.h \
 	wx/textcompleter.h \
 	wx/textctrl.h \
 	wx/textdlg.h \
