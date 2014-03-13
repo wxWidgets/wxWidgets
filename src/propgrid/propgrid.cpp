@@ -211,15 +211,13 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
 
 wxPGGlobalVarsClass::~wxPGGlobalVarsClass()
 {
-    size_t i;
-
     delete m_defaultRenderer;
 
     // This will always have one ref
     delete m_fontFamilyChoices;
 
 #if wxUSE_VALIDATORS
-    for ( i=0; i<m_arrValidators.size(); i++ )
+    for ( size_t i = 0; i < m_arrValidators.size(); i++ )
         delete ((wxValidator*)m_arrValidators[i]);
 #endif
 
