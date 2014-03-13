@@ -643,6 +643,7 @@ wxMSW:
 - Fix width of the vertical toolbars (Artur Wieczorek).
 - Fix handling of controls in the vertical toolbars (Artur Wieczorek).
 - Fix loading of top to bottom BMP files in wxBitmap (Artur Wieczorek).
+- Fix resource leak in wxStaticBitmap with RGBA icons (Artur Wieczorek).
 
 wxOSX:
 
