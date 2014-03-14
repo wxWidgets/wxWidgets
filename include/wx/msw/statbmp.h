@@ -60,7 +60,7 @@ protected:
     virtual wxSize DoGetBestClientSize() const;
 
     // ctor/dtor helpers
-    void Init() { m_isIcon = true; m_image = NULL; m_currentHandle = 0; }
+    void Init();
     void Free();
 
     // true if icon/bitmap is valid
@@ -85,9 +85,16 @@ protected:
     WXHANDLE m_currentHandle;
 
 private:
+    // Flag indicating whether we own m_currentHandle, i.e. should delete it.
+    bool m_ownsCurrentHandle;
+
     // Replace the image at the native control level with the given HBITMAP or
     // HICON (which can be 0) and destroy the previous image if necessary.
     void MSWReplaceImageHandle(WXLPARAM handle);
+
+    // Delete the current handle only if we own it.
+    void DeleteCurrentHandleIfNeeded();
+
 
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
     wxDECLARE_EVENT_TABLE();

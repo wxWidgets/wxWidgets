@@ -188,9 +188,28 @@ wxBitmap wxStaticBitmap::GetBitmap() const
     }
 }
 
+void wxStaticBitmap::Init()
+{
+    m_isIcon = true;
+    m_image = NULL;
+    m_currentHandle = 0;
+    m_ownsCurrentHandle = false;
+}
+
+void wxStaticBitmap::DeleteCurrentHandleIfNeeded()
+{
+    if ( m_ownsCurrentHandle )
+    {
+        ::DeleteObject(m_currentHandle);
+        m_ownsCurrentHandle = false;
+    }
+}
+
 void wxStaticBitmap::Free()
 {
     MSWReplaceImageHandle(0);
+
+    DeleteCurrentHandleIfNeeded();
 
     wxDELETE(m_image);
 }
@@ -281,9 +300,12 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     GetSize(&w, &h);
 
 #ifdef __WIN32__
-    HANDLE handle = (HANDLE)m_image->GetHandle();
+    // Normally we just use the handle of provided image but in some cases we
+    // create our own temporary bitmap, so the actual handle may end up being
+    // different from the original one.
+    const HANDLE handleOrig = (HANDLE)m_image->GetHandle();
+    HANDLE handle = handleOrig;
 
-    AutoHBITMAP hbmpRelease;
     if ( !m_isIcon )
     {
         // wxBitmap normally stores alpha in pre-multiplied format but
@@ -297,9 +319,6 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
             // not-premultiplied alpha values.
             handle = wxDIB(bmp.ConvertToImage(),
                            wxDIB::PixelFormat_NotPreMultiplied).Detach();
-
-            // Ensure that this temporary HBITMAP will be destroyed.
-            hbmpRelease.Init((HBITMAP)handle);
         }
     }
     LONG style = ::GetWindowLong( (HWND)GetHWND(), GWL_STYLE ) ;
@@ -308,10 +327,10 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 
     MSWReplaceImageHandle((WXLPARAM)handle);
 
-    // Save bitmap handle only if it's not a temporary one, otherwise it's
-    // going to be destroyed right now anyhow.
-    if ( !hbmpRelease )
-        m_currentHandle = (WXHANDLE)handle;
+    DeleteCurrentHandleIfNeeded();
+
+    m_currentHandle = (WXHANDLE)handle;
+    m_ownsCurrentHandle = handle != handleOrig;
 
 #endif // Win32
 
