@@ -60,7 +60,7 @@ protected:
                  bool IsBmp, bool IsMask);
     bool DoLoadDib(wxImage *image, int width, int height, int bpp, int ncolors,
                    int comp, wxFileOffset bmpOffset, wxInputStream& stream,
-                   bool verbose, bool IsBmp, bool hasPalette);
+                   bool verbose, bool IsBmp, bool hasPalette, int colEntrySize = 4);
     bool LoadDib(wxImage *image, wxInputStream& stream, bool verbose, bool IsBmp);
 #endif // wxUSE_STREAMS
 

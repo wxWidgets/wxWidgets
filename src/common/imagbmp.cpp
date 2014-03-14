@@ -499,7 +499,8 @@ struct BMPPalette
 bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                              int bpp, int ncolors, int comp,
                              wxFileOffset bmpOffset, wxInputStream& stream,
-                             bool verbose, bool IsBmp, bool hasPalette)
+                             bool verbose, bool IsBmp, bool hasPalette,
+                             int colEntrySize)
 {
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0, amask = 0;
     int             rshift = 0, gshift = 0, bshift = 0, ashift = 0;
@@ -585,7 +586,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
         {
             if (hasPalette)
             {
-                if ( !stream.ReadAll(bbuf, 4) )
+                if ( !stream.ReadAll(bbuf, colEntrySize) )
                     return false;
 
                 cmap[j].b = bbuf[0];
@@ -997,28 +998,57 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     wxInt32         dbuf[4];
     wxInt8          bbuf[4];
 
+    // offset to bitmap data
+    wxFileOffset offset;
+    // DIB header size (used to distinguish different versions of DIB header)
+    wxInt32 hdrSize;
     if ( IsBmp )
     {
         // read the header off the .BMP format file
         if ( !stream.ReadAll(bbuf, 2) ||
              !stream.ReadAll(dbuf, 16) )
             return false;
+
+        #if 0 // unused
+            wxInt32 size = wxINT32_SWAP_ON_BE(dbuf[0]);
+        #endif
+        offset = wxINT32_SWAP_ON_BE(dbuf[2]);
+        hdrSize = wxINT32_SWAP_ON_BE(dbuf[3]);
     }
     else
     {
         if ( !stream.ReadAll(dbuf, 4) )
             return false;
+
+        offset = wxInvalidOffset; // not used in loading ICO/CUR DIBs
+        hdrSize = wxINT32_SWAP_ON_BE(dbuf[0]);
     }
-    #if 0 // unused
-        wxInt32 size = wxINT32_SWAP_ON_BE(dbuf[0]);
-    #endif
-    wxFileOffset offset = wxINT32_SWAP_ON_BE(dbuf[2]);
 
-    if ( !stream.ReadAll(dbuf, 4 * 2) )
-        return false;
+    // Bitmap files come in old v1 format using BITMAPCOREHEADER or a newer
+    // format (typically BITMAPV5HEADER, in use since Windows 98, but we don't
+    // really support any features specific to later formats such as gamma
+    // correction or ICC profiles, so it doesn't matter much to us).
+    const bool usesV1 = hdrSize == 12;
 
-    int width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
-    int height = wxINT32_SWAP_ON_BE((int)dbuf[1]);
+    int width;
+    int height;
+    if ( usesV1 )
+    {
+        wxInt16 buf[2];
+        if ( !stream.ReadAll(buf, sizeof(buf)) )
+            return false;
+
+        width = wxINT16_SWAP_ON_BE((short)buf[0]);
+        height = wxINT16_SWAP_ON_BE((short)buf[1]);
+    }
+    else // We have at least BITMAPINFOHEADER
+    {
+        if ( !stream.ReadAll(dbuf, 4 * 2) )
+            return false;
+
+        width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
+        height = wxINT32_SWAP_ON_BE((int)dbuf[1]);
+    }
     if ( !IsBmp)height = height  / 2; // for icons divide by 2
 
     if ( width > 32767 )
@@ -1058,24 +1088,61 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         return false;
     }
 
-    if ( !stream.ReadAll(dbuf, 4 * 4) )
-        return false;
-
-    int comp = wxINT32_SWAP_ON_BE((int)dbuf[0]);
-    if ( comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 &&
-         comp != BI_BITFIELDS )
+    class Resolution
     {
-        if (verbose)
+    public:
+        Resolution()
         {
-            wxLogError( _("DIB Header: Unknown encoding in file.") );
+            m_valid = false;
         }
-        return false;
+
+        void Init(int x, int y)
+        {
+            m_x = x;
+            m_y = y;
+            m_valid = false;
+        }
+
+        bool IsValid() const { return m_valid; }
+
+        int GetX() const { return m_x; }
+        int GetY() const { return m_y; }
+
+    private:
+        int m_x, m_y;
+        bool m_valid;
+    } res;
+    int comp;
+    int ncolors;
+
+    if ( usesV1 )
+    {
+        // The only possible format is BI_RGB and colours count is not used.
+        comp = BI_RGB;
+        ncolors = 0;
     }
+    else // We have at least BITMAPINFOHEADER
+    {
+        if ( !stream.ReadAll(dbuf, 4 * 4) )
+            return false;
 
-    if ( !stream.ReadAll(dbuf, 4 * 2) )
-        return false;
+        comp = wxINT32_SWAP_ON_BE((int)dbuf[0]);
+        if ( comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 &&
+             comp != BI_BITFIELDS )
+        {
+            if (verbose)
+            {
+                wxLogError( _("DIB Header: Unknown encoding in file.") );
+            }
+            return false;
+        }
 
-    int ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
+        if ( !stream.ReadAll(dbuf, 4 * 2) )
+            return false;
+
+        ncolors = wxINT32_SWAP_ON_BE( (int)dbuf[0] );
+        res.Init(dbuf[2]/100, dbuf[3]/100);
+    }
     if (ncolors == 0)
         ncolors = 1 << bpp;
     /* some more sanity checks */
@@ -1092,7 +1159,8 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 
     //read DIB; this is the BMP image or the XOR part of an icon image
     if ( !DoLoadDib(image, width, height, bpp, ncolors, comp, offset, stream,
-                    verbose, IsBmp, true) )
+                    verbose, IsBmp, true,
+                    usesV1 ? 3 : 4) )
     {
         if (verbose)
         {
@@ -1120,9 +1188,12 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
 
     // the resolution in the bitmap header is in meters, convert to centimeters
-    image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, wxIMAGE_RESOLUTION_CM);
-    image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, dbuf[2]/100);
-    image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, dbuf[3]/100);
+    if ( res.IsValid() )
+    {
+        image->SetOption(wxIMAGE_OPTION_RESOLUTIONUNIT, wxIMAGE_RESOLUTION_CM);
+        image->SetOption(wxIMAGE_OPTION_RESOLUTIONX, res.GetX());
+        image->SetOption(wxIMAGE_OPTION_RESOLUTIONY, res.GetY());
+    }
 
     return true;
 }
