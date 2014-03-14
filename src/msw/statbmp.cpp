@@ -190,6 +190,8 @@ wxBitmap wxStaticBitmap::GetBitmap() const
 
 void wxStaticBitmap::Free()
 {
+    MSWReplaceImageHandle(0);
+
     wxDELETE(m_image);
 }
 
@@ -251,6 +253,19 @@ void wxStaticBitmap::SetImage( const wxGDIImage* image )
     SetImageNoCopy( convertedImage );
 }
 
+void wxStaticBitmap::MSWReplaceImageHandle(WXLPARAM handle)
+{
+    HGDIOBJ oldHandle = (HGDIOBJ)::SendMessage(GetHwnd(), STM_SETIMAGE,
+                  m_isIcon ? IMAGE_ICON : IMAGE_BITMAP, (LPARAM)handle);
+    // detect if this is still the handle we passed before or
+    // if the static-control made a copy of the bitmap!
+    if (oldHandle != 0 && oldHandle != (HGDIOBJ) m_currentHandle)
+    {
+        // the static control made a copy and we are responsible for deleting it
+        ::DeleteObject((HGDIOBJ) oldHandle);
+    }
+}
+
 void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 {
     Free();
@@ -290,15 +305,8 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     LONG style = ::GetWindowLong( (HWND)GetHWND(), GWL_STYLE ) ;
     ::SetWindowLong( (HWND)GetHWND(), GWL_STYLE, ( style & ~( SS_BITMAP|SS_ICON ) ) |
                      ( m_isIcon ? SS_ICON : SS_BITMAP ) );
-    HGDIOBJ oldHandle = (HGDIOBJ)::SendMessage(GetHwnd(), STM_SETIMAGE,
-                  m_isIcon ? IMAGE_ICON : IMAGE_BITMAP, (LPARAM)handle);
-    // detect if this is still the handle we passed before or
-    // if the static-control made a copy of the bitmap!
-    if (oldHandle != 0 && oldHandle != (HGDIOBJ) m_currentHandle)
-    {
-        // the static control made a copy and we are responsible for deleting it
-        ::DeleteObject((HGDIOBJ) oldHandle);
-    }
+
+    MSWReplaceImageHandle((WXLPARAM)handle);
 
     // Save bitmap handle only if it's not a temporary one, otherwise it's
     // going to be destroyed right now anyhow.
