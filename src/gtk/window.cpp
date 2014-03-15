@@ -1534,10 +1534,10 @@ gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
 
 //-----------------------------------------------------------------------------
 
-static void SendSetCursorEvent(wxWindow* win, int x, int y)
+static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
 {
     wxSetCursorEvent event(x, y);
-    wxWindow* w = win;
+    wxWindowGTK* w = win;
     do {
         if (w->GTKProcessEvent(event))
         {
@@ -3733,7 +3733,7 @@ void wxWindowGTK::GTKUpdateCursor(bool isBusyOrGlobalCursor, bool isRealize, con
             isBusyOrGlobalCursor = true;
         else if (wxIsBusy())
         {
-            wxWindow* win = wxGetTopLevelParent(this);
+            wxWindow* win = wxGetTopLevelParent(static_cast<wxWindow*>(this));
             if (win && win->m_widget && !gtk_window_get_modal(GTK_WINDOW(win->m_widget)))
                 isBusyOrGlobalCursor = true;
         }
