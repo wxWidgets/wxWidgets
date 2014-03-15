@@ -219,6 +219,10 @@ static wxWindowGTK *gs_deferredFocusOut = NULL;
 GdkEvent    *g_lastMouseEvent = NULL;
 int          g_lastButtonNumber = 0;
 
+#ifdef __WXGTK3__
+static GList* gs_sizeRevalidateList;
+#endif
+
 //-----------------------------------------------------------------------------
 // debug
 //-----------------------------------------------------------------------------
@@ -2032,6 +2036,17 @@ static void unrealize(GtkWidget*, wxWindow* win)
     win->GTKHandleUnrealize();
 }
 
+#if GTK_CHECK_VERSION(3,8,0)
+//-----------------------------------------------------------------------------
+// "layout" from GdkFrameClock
+//-----------------------------------------------------------------------------
+
+static void frame_clock_layout(GdkFrameClock*, wxWindow* win)
+{
+    win->GTKSizeRevalidate();
+}
+#endif // GTK_CHECK_VERSION(3,8,0)
+
 } // extern "C"
 
 void wxWindowGTK::GTKHandleRealized()
@@ -2077,13 +2092,26 @@ void wxWindowGTK::GTKHandleRealized()
     }
 #endif
 
+    const bool isTopLevel = IsTopLevel();
+#if GTK_CHECK_VERSION(3,8,0)
+    if (isTopLevel && gtk_check_version(3,8,0) == NULL)
+    {
+        GdkFrameClock* clock = gtk_widget_get_frame_clock(m_widget);
+        if (clock &&
+            !g_signal_handler_find(clock, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this))
+        {
+            g_signal_connect(clock, "layout", G_CALLBACK(frame_clock_layout), this);
+        }
+    }
+#endif
+
     wxWindowCreateEvent event(static_cast<wxWindow*>(this));
     event.SetEventObject( this );
     GTKProcessEvent( event );
 
     GTKUpdateCursor(false, true);
 
-    if (m_wxwindow && IsTopLevel())
+    if (m_wxwindow && isTopLevel)
     {
         // attaching to style changed signal after realization avoids initial
         // changes we don't care about
@@ -2476,6 +2504,8 @@ wxWindowGTK::~wxWindowGTK()
 #ifdef __WXGTK3__
     if (m_styleProvider)
         g_object_unref(m_styleProvider);
+
+    gs_sizeRevalidateList = g_list_remove(gs_sizeRevalidateList, this);
 #endif
 
     if (m_widget)
@@ -4519,6 +4549,32 @@ GdkWindow *wxWindowGTK::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     return m_wxwindow ? GTKGetDrawingWindow() : gtk_widget_get_window(m_widget);
 }
 
+#ifdef __WXGTK3__
+void wxWindowGTK::GTKSizeRevalidate()
+{
+    GList* next;
+    for (GList* p = gs_sizeRevalidateList; p; p = next)
+    {
+        next = p->next;
+        wxWindow* win = static_cast<wxWindow*>(p->data);
+        if (wxGetTopLevelParent(win) == this)
+        {
+            win->InvalidateBestSize();
+            gs_sizeRevalidateList = g_list_delete_link(gs_sizeRevalidateList, p);
+        }
+    }
+}
+
+extern "C" {
+static gboolean before_resize(void* data)
+{
+    wxWindow* win = static_cast<wxWindow*>(data);
+    win->InvalidateBestSize();
+    return false;
+}
+}
+#endif // __WXGTK3__
+
 bool wxWindowGTK::SetFont( const wxFont &font )
 {
     if (!wxWindowBase::SetFont(font))
@@ -4530,6 +4586,24 @@ bool wxWindowGTK::SetFont( const wxFont &font )
         // even if the font changed from valid to wxNullFont):
         GTKApplyWidgetStyle(true);
     }
+
+#ifdef __WXGTK3__
+    // Starting with GTK 3.6, style information is cached, and the cache is only
+    // updated before resizing, or when showing a TLW. If a different size font
+    // is set, our best size calculation will be wrong. All we can do is
+    // invalidate the best size right before the style cache is updated, so any
+    // subsequent best size requests use the correct font.
+    if (gtk_check_version(3,8,0) == NULL)
+        gs_sizeRevalidateList = g_list_append(gs_sizeRevalidateList, this);
+    else if (gtk_check_version(3,6,0) == NULL)
+    {
+        wxWindow* tlw = wxGetTopLevelParent(static_cast<wxWindow*>(this));
+        if (tlw->m_widget && gtk_widget_get_visible(tlw->m_widget))
+            g_idle_add_full(GTK_PRIORITY_RESIZE - 1, before_resize, this, NULL);
+        else
+            gs_sizeRevalidateList = g_list_append(gs_sizeRevalidateList, this);
+    }
+#endif
 
     return true;
 }

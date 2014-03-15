@@ -61,11 +61,13 @@ bool wxControl::Create( wxWindow *parent,
 bool wxControl::SetFont(const wxFont& font)
 {
     const bool changed = base_type::SetFont(font);
-    if (changed && !gtk_widget_get_realized(m_widget))
+    if (changed && !gtk_widget_get_realized(m_widget) && gtk_check_version(3,5,0))
     {
         // GTK defers sending "style-updated" until widget is realized, but
         // GetBestSize() won't compute correct result until the signal is sent,
         // so we have to do it now
+        // But don't bother for GTK > 3.4, the change won't take effect until
+        // GTK updates it's style cache
         g_signal_emit_by_name(m_widget, "style-updated");
     }
     return changed;

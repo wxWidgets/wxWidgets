@@ -463,6 +463,7 @@ public:
     {
         return m_paintContext;
     }
+    void GTKSizeRevalidate();
 #endif
 
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
