@@ -228,7 +228,12 @@ int wxDirDialog::ShowModal()
     // Use IFileDialog under new enough Windows, it's more user-friendly.
     int rc;
 #if wxUSE_IFILEDIALOG
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    // While the new dialog is available under Vista, it may return a wrong
+    // path there (see http://support.microsoft.com/kb/969885/en-us), so we
+    // don't use it there by default. We could improve the version test to
+    // allow its use if the comdlg32.dll version is greater than 6.0.6002.22125
+    // as this means that the hotfix correcting this bug is installed.
+    if ( wxGetWinVersion() > wxWinVersion_Vista )
     {
         rc = ShowIFileDialog(hWndParent);
     }
