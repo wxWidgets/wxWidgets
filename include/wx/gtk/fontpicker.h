@@ -2,7 +2,7 @@
 // Name:        wx/gtk/fontpicker.h
 // Purpose:     wxFontButton header
 // Author:      Francesco Montorsi
-// Modified by:
+// Modified by: Pana Alexandru
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -43,6 +43,12 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxFontPickerWidgetNameStr);
 
+    virtual wxColour GetSelectedColour() const
+        { return m_selectedColour; }
+
+    void SetSelectedColour(const wxColour &colour)
+        { m_selectedColour = colour; }
+
     virtual ~wxFontButton();
 
 protected:
@@ -55,6 +61,11 @@ public:     // used by the GTK callback only
         { m_selectedFont.SetNativeFontInfo(wxString::FromAscii(gtkdescription)); }
 
 private:
+
+    // This can't be changed by the user, but is provided to
+    // satisfy the wxFontPickerWidgetBase interface.
+    wxColour m_selectedColour;
+
     DECLARE_DYNAMIC_CLASS(wxFontButton)
 };
 

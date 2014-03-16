@@ -2,7 +2,7 @@
 // Name:        src/generic/fontpickerg.cpp
 // Purpose:     wxGenericFontButton class implementation
 // Author:      Francesco Montorsi
-// Modified by:
+// Modified by: Pana Alexandru
 // Created:     15/04/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
@@ -62,9 +62,10 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
             wxCommandEventHandler(wxGenericFontButton::OnButtonClick),
             NULL, this);
 
+    InitFontData();
+
     m_selectedFont = initial.IsOk() ? initial : *wxNORMAL_FONT;
     UpdateFont();
-    InitFontData();
 
     return true;
 }

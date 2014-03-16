@@ -2,7 +2,7 @@
 // Name:        wx/fontpicker.h
 // Purpose:     wxFontPickerCtrl base header
 // Author:      Francesco Montorsi
-// Modified by:
+// Modified by: Pana Alexandru
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows Licence
@@ -41,6 +41,9 @@ public:
     virtual void SetSelectedFont(const wxFont &f)
         { m_selectedFont = f; UpdateFont(); }
 
+    virtual wxColour GetSelectedColour() const = 0;
+    virtual void SetSelectedColour(const wxColour &colour) = 0;
+
 protected:
 
     virtual void UpdateFont() = 0;
@@ -59,7 +62,7 @@ protected:
 // E.g. choosing "Times New Roman bold, italic with size 10" from the fontdialog,
 //      updates the wxFontButtonGeneric's label (overwriting any previous label)
 //      with the "Times New Roman, 10" text (only fontface + fontsize is displayed
-//      to avoid extralong labels).
+//      to avoid extra long labels).
 #define wxFNTP_FONTDESC_AS_LABEL      0x0008
 
 // uses the currently selected font to draw the label of the button
@@ -91,7 +94,7 @@ protected:
 
 // ----------------------------------------------------------------------------
 // wxFontPickerCtrl: platform-independent class which embeds the
-// platform-dependent wxFontPickerWidget andm if wxFNTP_USE_TEXTCTRL style is
+// platform-dependent wxFontPickerWidget and if wxFNTP_USE_TEXTCTRL style is
 // used, a textctrl next to it.
 // ----------------------------------------------------------------------------
 
@@ -128,17 +131,24 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxFontPickerCtrlNameStr);
 
-
 public:         // public API
 
     // get the font chosen
     wxFont GetSelectedFont() const
-        { return ((wxFontPickerWidget *)m_picker)->GetSelectedFont(); }
+        { return getPickerWidget()->GetSelectedFont(); }
 
     // sets currently displayed font
     void SetSelectedFont(const wxFont& f);
 
-    // set/get the max pointsize
+	// returns the selected color
+	wxColour GetSelectedColour() const
+		{ return getPickerWidget()->GetSelectedColour(); }
+
+	// sets the currently selected color
+	void SetSelectedColour(const wxColour& colour)
+		{ getPickerWidget()->SetSelectedColour(colour); }
+
+	// set/get the max point size
     void SetMaxPointSize(unsigned int max)
         { m_nMaxPointSize=max; }
     unsigned int GetMaxPointSize() const
@@ -166,6 +176,9 @@ protected:
     unsigned int m_nMaxPointSize;
 
 private:
+	wxFontPickerWidget* getPickerWidget() const
+		{ return static_cast<wxFontPickerWidget*>(m_picker); }
+
     DECLARE_DYNAMIC_CLASS(wxFontPickerCtrl)
 };
 
@@ -217,5 +230,4 @@ typedef void (wxEvtHandler::*wxFontPickerEventFunction)(wxFontPickerEvent&);
 
 #endif // wxUSE_FONTPICKERCTRL
 
-#endif
-    // _WX_FONTPICKER_H_BASE_
+#endif // _WX_FONTPICKER_H_BASE_
