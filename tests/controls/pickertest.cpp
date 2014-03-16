@@ -2,6 +2,7 @@
 // Name:        tests/controls/pickertest.cpp
 // Purpose:     Tests for various wxPickerBase based classes
 // Author:      Steven Lamerton
+// Modified By: Pana Alexandru
 // Created:     2010-08-07
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
@@ -172,7 +173,10 @@ private:
 
     CPPUNIT_TEST_SUITE( FontPickerCtrlTestCase );
         wxPICKER_BASE_TESTS();
+        CPPUNIT_TEST( ColourSelection );
     CPPUNIT_TEST_SUITE_END();
+
+    void ColourSelection();
 
     wxFontPickerCtrl *m_font;
 
@@ -198,4 +202,17 @@ void FontPickerCtrlTestCase::tearDown()
     wxDELETE(m_font);
 }
 
+void FontPickerCtrlTestCase::ColourSelection()
+{
+    wxUint32 colourRGB = 0xFF4269;
+    wxColour selectedColour(colourRGB);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default font picker color must be black",
+        m_font->GetSelectedColour().GetRGB(), wxColour(*wxBLACK).GetRGB());
+
+    m_font->SetSelectedColour(selectedColour);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Font picker did not react to color selection",
+        m_font->GetSelectedColour().GetRGB(), colourRGB);
+}
 #endif //wxUSE_FONTPICKERCTRL
