@@ -15,8 +15,11 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
 
+#include "wx/affinematrix2d.h"
 #include "wx/geometry.h"
+#include "wx/colour.h"
 #include "wx/dynarray.h"
+#include "wx/font.h"
 #include "wx/image.h"
 #include "wx/vector.h"
 
