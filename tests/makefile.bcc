@@ -30,7 +30,7 @@ LIBDIRNAME = \
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEST_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\include \
@@ -122,8 +122,30 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_weakref.obj \
 	$(OBJS)\test_xlocale.obj \
 	$(OBJS)\test_xmltest.obj
+TEST_DRAWING_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
+	$(CPPUNIT_CFLAGS) -Hu -H=$(OBJS)\testprec_test_drawing.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
+TEST_DRAWING_OBJECTS =  \
+	$(OBJS)\test_drawing_dummy.obj \
+	$(OBJS)\test_drawing_test.obj \
+	$(OBJS)\test_drawing_drawing.obj \
+	$(OBJS)\test_drawing_plugindriver.obj \
+	$(OBJS)\test_drawing_basictest.obj
+TEST_DRAWINGPLUGIN_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
+	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) $(__DLLFLAG_p) $(CPPFLAGS) $(CXXFLAGS)
+TEST_DRAWINGPLUGIN_OBJECTS =  \
+	$(OBJS)\test_drawingplugin_pluginsample.obj
 TEST_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\include \
@@ -258,41 +280,47 @@ EXTRALIBS_FOR_BASE =
 !if "$(MONOLITHIC)" == "1"
 __LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
 !endif
+!if "$(MONOLITHIC)" == "1"
+__LIB_PNG_IF_MONO_p_1 = $(__LIB_PNG_p)
+!endif
+!if "$(MONOLITHIC)" == "1"
+__LIB_PNG_IF_MONO_p_2 = $(__LIB_PNG_p)
+!endif
 !if "$(USE_GUI)" == "1"
 __test_gui___depname = $(OBJS)\test_gui.exe
 !endif
 !if "$(WXUNIV)" == "1"
-__WXUNIV_DEFINE_p_3 = -d__WXUNIVERSAL__
+__WXUNIV_DEFINE_p_7 = -d__WXUNIVERSAL__
 !endif
 !if "$(DEBUG_FLAG)" == "0"
-__DEBUG_DEFINE_p_3 = -dwxDEBUG_LEVEL=0
+__DEBUG_DEFINE_p_7 = -dwxDEBUG_LEVEL=0
 !endif
 !if "$(BUILD)" == "release"
-__NDEBUG_DEFINE_p_3 = -dNDEBUG
+__NDEBUG_DEFINE_p_7 = -dNDEBUG
 !endif
 !if "$(USE_EXCEPTIONS)" == "0"
-__EXCEPTIONS_DEFINE_p_3 = -dwxNO_EXCEPTIONS
+__EXCEPTIONS_DEFINE_p_7 = -dwxNO_EXCEPTIONS
 !endif
 !if "$(USE_RTTI)" == "0"
-__RTTI_DEFINE_p_3 = -dwxNO_RTTI
+__RTTI_DEFINE_p_7 = -dwxNO_RTTI
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREAD_DEFINE_p_3 = -dwxNO_THREADS
+__THREAD_DEFINE_p_7 = -dwxNO_THREADS
 !endif
 !if "$(UNICODE)" == "0"
-__UNICODE_DEFINE_p_3 = -dwxUSE_UNICODE=0
+__UNICODE_DEFINE_p_7 = -dwxUSE_UNICODE=0
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_3 = -d_UNICODE
+__UNICODE_DEFINE_p_7 = -d_UNICODE
 !endif
 !if "$(MSLU)" == "1"
-__MSLU_DEFINE_p_3 = -dwxUSE_UNICODE_MSLU=1
+__MSLU_DEFINE_p_7 = -dwxUSE_UNICODE_MSLU=1
 !endif
 !if "$(USE_CAIRO)" == "1"
-____CAIRO_INCLUDEDIR_FILENAMES_3_p = -i$(CAIRO_ROOT)\include\cairo
+____CAIRO_INCLUDEDIR_FILENAMES_7_p = -i$(CAIRO_ROOT)\include\cairo
 !endif
 !if "$(SHARED)" == "1"
-__DLLFLAG_p_3 = -dWXUSINGDLL
+__DLLFLAG_p_7 = -dWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(USE_WEBVIEW)" == "1"
 __WXLIB_WEBVIEW_p = \
@@ -318,10 +346,6 @@ __WXLIB_ADV_p = \
 __WXLIB_HTML_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
 !endif
-!if "$(MONOLITHIC)" == "0"
-__WXLIB_CORE_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
-!endif
 !if "$(MONOLITHIC)" == "1" && "$(USE_STC)" == "1"
 __LIB_SCINTILLA_IF_MONO_p = wxscintilla$(WXDEBUGFLAG).lib
 !endif
@@ -330,6 +354,14 @@ __LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_XML_p = \
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_NET_p = \
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG = -Od
@@ -344,10 +376,10 @@ __THREADSFLAG =
 __THREADSFLAG = mt
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG_0 = 
+__THREADSFLAG_2 =
 !endif
 !if "$(USE_THREADS)" == "1"
-__THREADSFLAG_0 = -tWM
+__THREADSFLAG_2 = -tWM
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS = -tWR
@@ -356,10 +388,10 @@ __RUNTIME_LIBS = -tWR
 __RUNTIME_LIBS = 
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
-__RUNTIME_LIBS_0 = i
+__RUNTIME_LIBS_2 = i
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_0 = 
+__RUNTIME_LIBS_2 =
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -395,12 +427,8 @@ ____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
 __DLLFLAG_p = -DWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
-__WXLIB_NET_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
-!endif
-!if "$(MONOLITHIC)" == "0"
-__WXLIB_XML_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
+__WXLIB_CORE_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = \
@@ -442,7 +470,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_gui___depname) data data-images fr
+all: $(OBJS)\test.exe $(OBJS)\test_drawing.exe $(OBJS)\test_drawingplugin.dll $(__test_gui___depname) data data-images fr
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -454,6 +482,18 @@ clean:
 	-if exist $(OBJS)\test.ild del $(OBJS)\test.ild
 	-if exist $(OBJS)\test.ilf del $(OBJS)\test.ilf
 	-if exist $(OBJS)\test.ils del $(OBJS)\test.ils
+	-if exist $(OBJS)\test_drawing.exe del $(OBJS)\test_drawing.exe
+	-if exist $(OBJS)\test_drawing.tds del $(OBJS)\test_drawing.tds
+	-if exist $(OBJS)\test_drawing.ilc del $(OBJS)\test_drawing.ilc
+	-if exist $(OBJS)\test_drawing.ild del $(OBJS)\test_drawing.ild
+	-if exist $(OBJS)\test_drawing.ilf del $(OBJS)\test_drawing.ilf
+	-if exist $(OBJS)\test_drawing.ils del $(OBJS)\test_drawing.ils
+	-if exist $(OBJS)\test_drawingplugin.dll del $(OBJS)\test_drawingplugin.dll
+	-if exist $(OBJS)\test_drawingplugin.tds del $(OBJS)\test_drawingplugin.tds
+	-if exist $(OBJS)\test_drawingplugin.ilc del $(OBJS)\test_drawingplugin.ilc
+	-if exist $(OBJS)\test_drawingplugin.ild del $(OBJS)\test_drawingplugin.ild
+	-if exist $(OBJS)\test_drawingplugin.ilf del $(OBJS)\test_drawingplugin.ilf
+	-if exist $(OBJS)\test_drawingplugin.ils del $(OBJS)\test_drawingplugin.ils
 	-if exist $(OBJS)\test_gui.exe del $(OBJS)\test_gui.exe
 	-if exist $(OBJS)\test_gui.tds del $(OBJS)\test_gui.tds
 	-if exist $(OBJS)\test_gui.ilc del $(OBJS)\test_gui.ilc
@@ -463,13 +503,23 @@ clean:
 
 $(OBJS)\test.exe: $(OBJS)\test_dummy.obj  $(TEST_OBJECTS)
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(CPPUNIT_LIBS) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,,
+	c0x32.obj $(TEST_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
+|
+
+$(OBJS)\test_drawing.exe: $(OBJS)\test_drawing_dummy.obj  $(TEST_DRAWING_OBJECTS)
+	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(CPPUNIT_LIBS) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	c0x32.obj $(TEST_DRAWING_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_1) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
+|
+
+$(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
+	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
+	c0d32.obj $(TEST_DRAWINGPLUGIN_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_2) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
 |
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS)  $(OBJS)\test_gui_sample.res
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(CPPUNIT_LIBS) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\test_gui_sample.res
+	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\test_gui_sample.res
 |
 !endif
 
@@ -740,8 +790,26 @@ $(OBJS)\test_xlocale.obj: .\xlocale\xlocale.cpp
 $(OBJS)\test_xmltest.obj: .\xml\xmltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\xml\xmltest.cpp
 
+$(OBJS)\test_drawing_dummy.obj: .\dummy.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_DRAWING_CXXFLAGS) -H .\dummy.cpp
+
+$(OBJS)\test_drawing_test.obj: .\test.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_DRAWING_CXXFLAGS) .\test.cpp
+
+$(OBJS)\test_drawing_drawing.obj: .\drawing\drawing.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_DRAWING_CXXFLAGS) .\drawing\drawing.cpp
+
+$(OBJS)\test_drawing_plugindriver.obj: .\drawing\plugindriver.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_DRAWING_CXXFLAGS) .\drawing\plugindriver.cpp
+
+$(OBJS)\test_drawing_basictest.obj: .\drawing\basictest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_DRAWING_CXXFLAGS) .\drawing\basictest.cpp
+
+$(OBJS)\test_drawingplugin_pluginsample.obj: .\drawing\pluginsample.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) .\drawing\pluginsample.cpp
+
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) -i. $(__DLLFLAG_p_3) -i.\..\samples -dNOPCH .\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_7) $(__DEBUG_DEFINE_p_7) $(__NDEBUG_DEFINE_p_7) $(__EXCEPTIONS_DEFINE_p_7) $(__RTTI_DEFINE_p_7) $(__THREAD_DEFINE_p_7) $(__UNICODE_DEFINE_p_7) $(__MSLU_DEFINE_p_7) -i$(SETUPHDIR) -i.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_7_p) -i. $(__DLLFLAG_p_7) -i.\..\samples -dNOPCH .\..\samples\sample.rc
 
 $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) -H .\dummy.cpp

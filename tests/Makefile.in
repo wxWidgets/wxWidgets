@@ -11,14 +11,18 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 datarootdir = @datarootdir@
 INSTALL = @INSTALL@
+SHARED_LD_MODULE_CXX = @SHARED_LD_MODULE_CXX@
+SO_SUFFIX_MODULE = @SO_SUFFIX_MODULE@
 EXEEXT = @EXEEXT@
 WINDRES = @WINDRES@
 SETFILE = @SETFILE@
+PIC_FLAG = @PIC_FLAG@
 ICC_PCH_USE_SWITCH = @ICC_PCH_USE_SWITCH@
 BK_DEPS = @BK_DEPS@
 BK_MAKE_PCH = @BK_MAKE_PCH@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
+DLLPREFIX_MODULE = @DLLPREFIX_MODULE@
 LIBS = @LIBS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
@@ -138,6 +142,23 @@ TEST_OBJECTS =  \
 	test_xlocale.o \
 	test_xmltest.o
 TEST_ODEP =  $(_____pch_testprec_test_testprec_h_gch___depname)
+TEST_DRAWING_CXXFLAGS = $(__test_drawing_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
+	-DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
+TEST_DRAWING_OBJECTS =  \
+	test_drawing_test.o \
+	test_drawing_drawing.o \
+	test_drawing_plugindriver.o \
+	test_drawing_basictest.o
+TEST_DRAWING_ODEP = \
+	$(_____pch_testprec_test_drawing_testprec_h_gch___depname)
+TEST_DRAWINGPLUGIN_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__DLLFLAG_p) $(PIC_FLAG) $(CXXWARNINGS) $(CPPFLAGS) \
+	$(CXXFLAGS)
+TEST_DRAWINGPLUGIN_OBJECTS =  \
+	test_drawingplugin_pluginsample.o
 TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
@@ -260,16 +281,27 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 @COND_USE_PCH_1@_____pch_testprec_test_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_test/testprec.h.gch
 @COND_MONOLITHIC_1@__LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
+@COND_PLATFORM_MAC_0@__test_drawing___mac_setfilecmd = @true
+@COND_PLATFORM_MAC_1@__test_drawing___mac_setfilecmd = \
+@COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL test_drawing$(EXEEXT)
+@COND_GCC_PCH_1@__test_drawing_PCH_INC = -I./.pch/testprec_test_drawing
+@COND_ICC_PCH_1@__test_drawing_PCH_INC = \
+@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@	./.pch/testprec_test_drawing/testprec.h.gch
+@COND_USE_PCH_1@_____pch_testprec_test_drawing_testprec_h_gch___depname \
+@COND_USE_PCH_1@	= ./.pch/testprec_test_drawing/testprec.h.gch
+@COND_MONOLITHIC_1@__LIB_PNG_IF_MONO_p_1 = $(__LIB_PNG_p)
+@COND_MONOLITHIC_1@__LIB_PNG_IF_MONO_p_2 = $(__LIB_PNG_p)
 @COND_USE_GUI_1@__test_gui___depname = test_gui$(EXEEXT)
 @COND_PLATFORM_MAC_0@__test_gui___mac_setfilecmd = @true
 @COND_PLATFORM_MAC_1@__test_gui___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL test_gui$(EXEEXT)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p_5 = --define __WXUNIVERSAL__
-@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_5 = --define wxDEBUG_LEVEL=0
-@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_5 = --define wxNO_EXCEPTIONS
-@COND_USE_RTTI_0@__RTTI_DEFINE_p_5 = --define wxNO_RTTI
-@COND_USE_THREADS_0@__THREAD_DEFINE_p_5 = --define wxNO_THREADS
-@COND_SHARED_1@__DLLFLAG_p_5 = --define WXUSINGDLL
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p_9 = --define __WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_9 = --define wxDEBUG_LEVEL=0
+@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_9 = --define wxNO_EXCEPTIONS
+@COND_USE_RTTI_0@__RTTI_DEFINE_p_9 = --define wxNO_RTTI
+@COND_USE_THREADS_0@__THREAD_DEFINE_p_9 = --define wxNO_THREADS
+@COND_SHARED_1@__DLLFLAG_p_9 = --define WXUSINGDLL
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__test_gui___win32rc = test_gui_sample_rc.o
@@ -312,9 +344,6 @@ COND_MONOLITHIC_0___WXLIB_ADV_p = \
 COND_MONOLITHIC_0___WXLIB_HTML_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_HTML_p = $(COND_MONOLITHIC_0___WXLIB_HTML_p)
-COND_MONOLITHIC_0___WXLIB_CORE_p = \
-	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
 @COND_MONOLITHIC_1_USE_STC_1@__LIB_SCINTILLA_IF_MONO_p \
 @COND_MONOLITHIC_1_USE_STC_1@	= \
 @COND_MONOLITHIC_1_USE_STC_1@	-lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -324,18 +353,21 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 @COND_USE_GUI_1_wxUSE_LIBJPEG_builtin@__LIB_JPEG_p \
 @COND_USE_GUI_1_wxUSE_LIBJPEG_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBJPEG_builtin@	-lwxjpeg$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+COND_MONOLITHIC_0___WXLIB_XML_p = \
+	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_XML_p = $(COND_MONOLITHIC_0___WXLIB_XML_p)
+COND_MONOLITHIC_0___WXLIB_NET_p = \
+	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
-COND_MONOLITHIC_0___WXLIB_NET_p = \
-	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
-COND_MONOLITHIC_0___WXLIB_XML_p = \
-	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_XML_p = $(COND_MONOLITHIC_0___WXLIB_XML_p)
+COND_MONOLITHIC_0___WXLIB_CORE_p = \
+	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
@@ -355,7 +387,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr
+all: test$(EXEEXT) test_drawing$(EXEEXT) $(DLLPREFIX_MODULE)test_drawingplugin.$(SO_SUFFIX_MODULE) $(__test_gui___depname) $(__test_gui_bundle___depname) data data-images fr
 
 install: 
 
@@ -367,6 +399,8 @@ clean:
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f test$(EXEEXT)
+	rm -f test_drawing$(EXEEXT)
+	rm -f $(DLLPREFIX_MODULE)test_drawingplugin.$(SO_SUFFIX_MODULE)
 	rm -f test_gui$(EXEEXT)
 	rm -rf test_gui.app
 
@@ -380,6 +414,17 @@ test$(EXEEXT): $(TEST_OBJECTS)
 
 @COND_USE_PCH_1@./.pch/testprec_test/testprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test/testprec.h.gch testprec.h $(CXX) $(TEST_CXXFLAGS)
+
+test_drawing$(EXEEXT): $(TEST_DRAWING_OBJECTS)
+	$(CXX) -o $@ $(TEST_DRAWING_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_1) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+
+	$(__test_drawing___mac_setfilecmd)
+
+@COND_USE_PCH_1@./.pch/testprec_test_drawing/testprec.h.gch:
+@COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_test_drawing/testprec.h.gch testprec.h $(CXX) $(TEST_DRAWING_CXXFLAGS)
+
+$(DLLPREFIX_MODULE)test_drawingplugin.$(SO_SUFFIX_MODULE): $(TEST_DRAWINGPLUGIN_OBJECTS)
+	$(SHARED_LD_MODULE_CXX) $@ $(TEST_DRAWINGPLUGIN_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_2) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 
 @COND_USE_GUI_1@test_gui$(EXEEXT): $(TEST_GUI_OBJECTS) $(__test_gui___win32rc)
 @COND_USE_GUI_1@	$(CXX) -o $@ $(TEST_GUI_OBJECTS)    -L$(LIBDIRNAME) $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LDFLAGS)  $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p) $(EXTRALIBS_MEDIA) $(__WXLIB_XRC_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
@@ -699,8 +744,23 @@ test_xlocale.o: $(srcdir)/xlocale/xlocale.cpp $(TEST_ODEP)
 test_xmltest.o: $(srcdir)/xml/xmltest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/xml/xmltest.cpp
 
+test_drawing_test.o: $(srcdir)/test.cpp $(TEST_DRAWING_ODEP)
+	$(CXXC) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(srcdir)/test.cpp
+
+test_drawing_drawing.o: $(srcdir)/drawing/drawing.cpp $(TEST_DRAWING_ODEP)
+	$(CXXC) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(srcdir)/drawing/drawing.cpp
+
+test_drawing_plugindriver.o: $(srcdir)/drawing/plugindriver.cpp $(TEST_DRAWING_ODEP)
+	$(CXXC) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(srcdir)/drawing/plugindriver.cpp
+
+test_drawing_basictest.o: $(srcdir)/drawing/basictest.cpp $(TEST_DRAWING_ODEP)
+	$(CXXC) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(srcdir)/drawing/basictest.cpp
+
+test_drawingplugin_pluginsample.o: $(srcdir)/drawing/pluginsample.cpp
+	$(CXXC) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(srcdir)/drawing/pluginsample.cpp
+
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5) $(__DEBUG_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_9) $(__DEBUG_DEFINE_p_9)  $(__EXCEPTIONS_DEFINE_p_9) $(__RTTI_DEFINE_p_9) $(__THREAD_DEFINE_p_9)   --include-dir $(srcdir) $(__DLLFLAG_p_9) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 test_gui_asserthelper.o: $(srcdir)/asserthelper.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/asserthelper.cpp
