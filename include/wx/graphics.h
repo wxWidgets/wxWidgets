@@ -17,7 +17,6 @@
 
 #include "wx/geometry.h"
 #include "wx/dynarray.h"
-#include "wx/dc.h"
 #include "wx/image.h"
 #include "wx/vector.h"
 
