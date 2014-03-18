@@ -10132,6 +10132,11 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     wxArrayInt minColWidthsNoWrap;
     minColWidthsNoWrap.Add(0, m_colCount);
 
+    // Record the maximum spanning widths
+    wxArrayInt spanningWidths, spanningWidthsSpanLengths;
+    spanningWidths.Add(0, m_colCount);
+    spanningWidthsSpanLengths.Add(0, m_colCount);
+
     wxSize tableSize(tableWidth, 0);
 
     int i, j, k;
@@ -10323,11 +10328,7 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     // (3) Process absolute or proportional widths of spanning columns,
     // now that we know what our fixed column widths are going to be.
     // Spanned cells will try to adjust columns so the span will fit.
-    // Even existing fixed column widths can be expanded if necessary.
-    // Actually, currently fixed columns widths aren't adjusted; instead,
-    // the algorithm favours earlier rows and adjusts unspecified column widths
-    // the first time only. After that, we can't know whether the column has been
-    // specified explicitly or not. (We could make a note if necessary.)
+    // Currently fixed columns widths aren't adjusted.
     for (j = 0; j < m_rowCount; j++)
     {
         int visibleCellCount = 0;
@@ -10367,15 +10368,6 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
                         }
                         else
                         {
-                            // Do we want to do this? It's the only chance we get to
-                            // use the cell's min/max sizes, so we need to work out
-                            // how we're going to balance the unspecified spanning cell
-                            // width with the possibility more-constrained constituent cell widths.
-                            // Say there's a tiny bitmap giving it a max width of 10 pixels. We
-                            // don't want to constraint all the spanned columns to fit into this cell.
-                            // OK, let's say that if any of the constituent columns don't fit,
-                            // then we simply stop constraining the columns; instead, we'll just fit the spanning
-                            // cells to the columns later.
                             cellWidth = cell->GetMinSize().x;
                             
                             if (cell->GetMaxSize().x > cellWidth)
@@ -10388,44 +10380,69 @@ bool wxRichTextTable::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
 
                         if (spanningWidth > 0)
                         {
-                            // Now share the spanning width between columns within that span
-                            int spanningWidthLeft = spanningWidth;
-                            int stretchColCount = 0;
-                            for (k = i; k < (i+spans); k++)
+                            if (spanningWidth > spanningWidths[i])
                             {
-                                int minColWidth = wxMax(minColWidths[k], minColWidthsNoWrap[k]);
-
-                                if (colWidths[k] > 0) // absolute or proportional width has been specified
-                                    spanningWidthLeft -= colWidths[k];
-                                else if (minColWidth > 0)
-                                    spanningWidthLeft -= minColWidth;
-                                else
-                                    stretchColCount ++;
-                            }
-                            // Now divide what's left between the remaining columns
-                            int colShare = 0;
-                            if (stretchColCount > 0)
-                                colShare = spanningWidthLeft / stretchColCount;
-                            int colShareRemainder = spanningWidthLeft - (colShare * stretchColCount);
-
-                            // If fixed-width columns are currently too big, then we'll later
-                            // stretch the spanned cell to fit.
-
-                            if (spanningWidthLeft > 0)
-                            {
-                                for (k = i; k < (i+spans); k++)
-                                {
-                                    int minColWidth = wxMax(minColWidths[k], minColWidthsNoWrap[k]);
-                                    if (colWidths[k] <= 0 && minColWidth <= 0) // absolute or proportional width has not been specified
-                                    {
-                                        int newWidth = colShare;
-                                        if (k == (i+spans-1))
-                                            newWidth += colShareRemainder; // ensure all pixels are filled
-                                        colWidths[k] = newWidth;
-                                    }
-                                }
+                                // Remember the largest spanning cell for this column,
+                                // so we can adjust the spanned columns in the next step.
+                                spanningWidths[i] = spanningWidth;
+                                spanningWidthsSpanLengths[i] = spans;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    // Complete the spanning width calculation, now we have the maximum spanning size
+    // for each spanning cell
+    for (i = 0; i < m_colCount; i++)
+    {
+        int spanningWidth = spanningWidths[i];
+        int spans = spanningWidthsSpanLengths[i];
+        if (spanningWidth > 0)
+        {
+            // Now share the spanning width between columns within that span
+            int spanningWidthLeft = spanningWidth;
+            int stretchColCount = 0;
+            for (k = i; k < (i+spans); k++)
+            {
+                int minColWidth = wxMax(minColWidths[k], minColWidthsNoWrap[k]);
+
+                if (colWidths[k] > 0) // absolute or proportional width has been specified
+                    spanningWidthLeft -= colWidths[k];
+                else if (minColWidth > 0)
+                {
+                    spanningWidthLeft -= minColWidth;
+                    // Allow this to stretch, otherwise we're likely to not allow
+                    // any stretching and the spanned column will end up tiny.
+                    stretchColCount ++;
+                }
+                else
+                    stretchColCount ++;
+            }
+            // Now divide what's left between the remaining columns
+            int colShare = 0;
+            if (stretchColCount > 0)
+                colShare = spanningWidthLeft / stretchColCount;
+            int colShareRemainder = spanningWidthLeft - (colShare * stretchColCount);
+
+            // If fixed-width columns are currently too big, then we'll later
+            // stretch the spanned cell to fit.
+            if (spanningWidthLeft > 0)
+            {
+                for (k = i; k < (i+spans); k++)
+                {
+                    int minColWidth = wxMax(minColWidths[k], minColWidthsNoWrap[k]);
+                    if (colWidths[k] <= 0) // absolute or proportional width has not been specified
+                    {
+                        int newWidth = colShare;
+                        if (minColWidth > 0)
+                            newWidth += minColWidth;
+
+                        if (k == (i+spans-1))
+                            newWidth += colShareRemainder; // ensure all pixels are filled
+                        minColWidths[k] = newWidth;
                     }
                 }
             }
