@@ -133,7 +133,7 @@ public:         // public API
 
     // get the font chosen
     wxFont GetSelectedFont() const
-        { return ((wxFontPickerWidget *)m_picker)->GetSelectedFont(); }
+        { return GetPickerWidget()->GetSelectedFont(); }
 
     // sets currently displayed font
     void SetSelectedFont(const wxFont& f);
@@ -166,6 +166,9 @@ protected:
     unsigned int m_nMaxPointSize;
 
 private:
+    wxFontPickerWidget* GetPickerWidget() const
+        { return static_cast<wxFontPickerWidget*>(m_picker); }
+
     DECLARE_DYNAMIC_CLASS(wxFontPickerCtrl)
 };
 
