@@ -35,6 +35,12 @@ public:
         Create(parent, id, initial, pos, size, style, validator, name);
     }
 
+    virtual wxColour GetSelectedColour() const
+        { return m_data.GetColour(); }
+
+    virtual void SetSelectedColour(const wxColour &colour)
+        { m_data.SetColour(colour); UpdateFont(); }
+
     virtual ~wxGenericFontButton() {}
 
 

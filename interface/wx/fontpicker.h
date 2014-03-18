@@ -110,6 +110,17 @@ public:
     unsigned int GetMaxPointSize() const;
 
     /**
+        Returns the currently selected colour.
+
+        Note that the colour of the font can only be set by the user under
+        Windows currently, elsewhere this method simply returns the colour
+        previously set by SetSelectedColour() or black if it hadn't been called.
+
+        @since 3.1.0
+    */
+    wxColour GetSelectedColour() const;
+
+    /**
         Returns the currently selected font.
         Note that this function is completely different from wxWindow::GetFont.
     */
@@ -125,6 +136,16 @@ public:
         font size when huge fonts do not make much sense.
     */
     void SetMaxPointSize(unsigned int max);
+
+    /**
+        Sets the font colour.
+
+        The font colour is actually only used under Windows currently, but this
+        function is available under all platforms for consistency.
+
+        @since 3.1.0
+    */
+    void SetSelectedColour(const wxColour& colour);
 
     /**
         Sets the currently selected font.

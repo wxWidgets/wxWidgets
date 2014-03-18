@@ -20,6 +20,7 @@
 #include "wx/filepicker.h"
 #include "wx/fontpicker.h"
 #include "pickerbasetest.h"
+#include "asserthelper.h"
 
 #if wxUSE_COLOURPICKERCTRL
 
@@ -172,7 +173,10 @@ private:
 
     CPPUNIT_TEST_SUITE( FontPickerCtrlTestCase );
         wxPICKER_BASE_TESTS();
+        CPPUNIT_TEST( ColourSelection );
     CPPUNIT_TEST_SUITE_END();
+
+    void ColourSelection();
 
     wxFontPickerCtrl *m_font;
 
@@ -198,4 +202,16 @@ void FontPickerCtrlTestCase::tearDown()
     wxDELETE(m_font);
 }
 
+void FontPickerCtrlTestCase::ColourSelection()
+{
+    wxColour selectedColour(0xFF4269UL);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default font picker color must be black",
+        m_font->GetSelectedColour(), wxColour(*wxBLACK));
+
+    m_font->SetSelectedColour(selectedColour);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Font picker did not react to color selection",
+        m_font->GetSelectedColour(), selectedColour);
+}
 #endif //wxUSE_FONTPICKERCTRL

@@ -54,6 +54,7 @@ wxMSW:
 - Fix loading of bitmap with non-pre-multiplied alpha (Artur Wieczorek).
 - Support multiline strings in wxDC::DrawRotatedText() (Artur Wieczorek).
 - Fix stretchable spacers in vertical toolbars (Artur Wieczorek).
+- Add font colour support to wxFontPickerCtrl (Pana Alexandru).
 - Add wxEnhMetaFile::Detach() (Luca Bacci).
 - Add support for saving 256*256 32bpp ICOs in PNG format (Artur Wieczorek).
 

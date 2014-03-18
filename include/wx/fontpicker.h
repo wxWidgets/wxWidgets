@@ -41,6 +41,9 @@ public:
     virtual void SetSelectedFont(const wxFont &f)
         { m_selectedFont = f; UpdateFont(); }
 
+    virtual wxColour GetSelectedColour() const = 0;
+    virtual void SetSelectedColour(const wxColour &colour) = 0;
+
 protected:
 
     virtual void UpdateFont() = 0;
@@ -138,7 +141,15 @@ public:         // public API
     // sets currently displayed font
     void SetSelectedFont(const wxFont& f);
 
-    // set/get the max pointsize
+    // returns the selected color
+    wxColour GetSelectedColour() const
+        { return GetPickerWidget()->GetSelectedColour(); }
+
+    // sets the currently selected color
+    void SetSelectedColour(const wxColour& colour)
+        { GetPickerWidget()->SetSelectedColour(colour); }
+
+    // set/get the max point size
     void SetMaxPointSize(unsigned int max)
         { m_nMaxPointSize=max; }
     unsigned int GetMaxPointSize() const
