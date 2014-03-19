@@ -46,9 +46,12 @@ public:
 
     const wxInputStream& GetInputStream() const { return m_input; }
 
-    wxUint32 Read32(int base = 10); // base may be between 2 and 36, inclusive, or the special 0 (= C format)
+    // base may be between 2 and 36, inclusive, or the special 0 (= C format)
+    wxUint64 Read64(int base = 10);
+    wxUint32 Read32(int base = 10);
     wxUint16 Read16(int base = 10);
     wxUint8  Read8(int base = 10);
+    wxInt64  Read64S(int base = 10);
     wxInt32  Read32S(int base = 10);
     wxInt16  Read16S(int base = 10);
     wxInt8   Read8S(int base = 10);
@@ -68,8 +71,10 @@ public:
 #endif // wxUSE_UNICODE
     wxTextInputStream& operator>>(wxInt16& i);
     wxTextInputStream& operator>>(wxInt32& i);
+    wxTextInputStream& operator>>(wxInt64& i);
     wxTextInputStream& operator>>(wxUint16& i);
     wxTextInputStream& operator>>(wxUint32& i);
+    wxTextInputStream& operator>>(wxUint64& i);
     wxTextInputStream& operator>>(double& i);
     wxTextInputStream& operator>>(float& f);
 
@@ -118,6 +123,7 @@ public:
     void SetMode( wxEOL mode = wxEOL_NATIVE );
     wxEOL GetMode() { return m_mode; }
 
+    void Write64(wxUint64 i);
     void Write32(wxUint32 i);
     void Write16(wxUint16 i);
     void Write8(wxUint8 i);
@@ -135,8 +141,10 @@ public:
 #endif // wxUSE_UNICODE
     wxTextOutputStream& operator<<(wxInt16 c);
     wxTextOutputStream& operator<<(wxInt32 c);
+    wxTextOutputStream& operator<<(wxInt64 c);
     wxTextOutputStream& operator<<(wxUint16 c);
     wxTextOutputStream& operator<<(wxUint32 c);
+    wxTextOutputStream& operator<<(wxUint64 c);
     wxTextOutputStream& operator<<(double f);
     wxTextOutputStream& operator<<(float f);
 

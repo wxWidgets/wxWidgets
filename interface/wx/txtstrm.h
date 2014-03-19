@@ -114,6 +114,24 @@ public:
     wxInt32 Read32S(int base = 10);
 
     /**
+        Reads a 64 bit unsigned integer from the stream.
+
+        See Read8() for the description of the @a base parameter.
+
+        @since 3.1.0
+    */
+    wxUint64 Read64(int base = 10);
+
+    /**
+        Reads a 64 bit signed integer from the stream.
+
+        See Read8() for the description of the @a base parameter.
+
+        @since 3.1.0
+    */
+    wxInt64 Read64S(int base = 10);
+
+    /**
         Reads a single unsigned byte from the stream, given in base @a base.
 
         The value of @a base must be comprised between 2 and 36, inclusive, or
@@ -283,14 +301,21 @@ public:
     void SetMode(wxEOL mode = wxEOL_NATIVE);
 
     /**
-        Writes the 16 bit integer @a i16 to the stream.
+        Writes the 64 bit integer @a i64 to the stream.
+
+        @since 3.1.0
     */
-    void Write16(wxUint16 i16);
+    void Write64(wxUint64 i64);
 
     /**
         Writes the 32 bit integer @a i32 to the stream.
     */
     void Write32(wxUint32 i32);
+
+    /**
+        Writes the 16 bit integer @a i16 to the stream.
+    */
+    void Write16(wxUint16 i16);
 
     /**
         Writes the single byte @a i8 to the stream.

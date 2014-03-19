@@ -24,6 +24,7 @@ All:
 - Add wxScopedArray ctor taking the number of elements to allocate.
 - Add wxDynamicLibrary::GetModuleFromAddress() (Luca Bacci).
 - Implement wxThread::SetPriority() for pthreads (Luca Bacci).
+- Add wxInt64 support to wxText{Input,Output}Stream (Alexander Bezzubikov).
 
 All (GUI):
 
