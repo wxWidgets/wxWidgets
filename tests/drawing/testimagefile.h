@@ -45,7 +45,7 @@ bool AreFilesContentsEqual(const wxString &filename, const wxString &refFilename
     WX_ASSERT_MESSAGE(\
         ("Files \"%s\" and \"%s\" differ.",\
             filename1, filename2),\
-        AreImagesFilesContentsEqual(filename1, filename2))
+        AreFilesContentsEqual(filename1, filename2))
 
 bool AreImagesFilesContentsEqual(const wxString &filename,
                                  const wxString &refFilename)
