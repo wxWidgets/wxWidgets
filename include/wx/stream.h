@@ -308,9 +308,9 @@ public:
     wxFilterInputStream(wxInputStream *stream);
     virtual ~wxFilterInputStream();
 
-    char Peek() { return m_parent_i_stream->Peek(); }
+    virtual char Peek() { return m_parent_i_stream->Peek(); }
 
-    wxFileOffset GetLength() const { return m_parent_i_stream->GetLength(); }
+    virtual wxFileOffset GetLength() const { return m_parent_i_stream->GetLength(); }
 
     wxInputStream *GetFilterInputStream() const { return m_parent_i_stream; }
 
@@ -330,7 +330,7 @@ public:
     wxFilterOutputStream(wxOutputStream *stream);
     virtual ~wxFilterOutputStream();
 
-    wxFileOffset GetLength() const { return m_parent_o_stream->GetLength(); }
+    virtual wxFileOffset GetLength() const { return m_parent_o_stream->GetLength(); }
 
     wxOutputStream *GetFilterOutputStream() const { return m_parent_o_stream; }
 
@@ -561,13 +561,13 @@ public:
 
     virtual ~wxBufferedInputStream();
 
-    char Peek();
-    wxInputStream& Read(void *buffer, size_t size);
+    virtual char Peek();
+    virtual wxInputStream& Read(void *buffer, size_t size);
 
     // Position functions
-    wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
-    wxFileOffset TellI() const;
-    bool IsSeekable() const { return m_parent_i_stream->IsSeekable(); }
+    virtual wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
+    virtual wxFileOffset TellI() const;
+    virtual bool IsSeekable() const { return m_parent_i_stream->IsSeekable(); }
 
     // the buffer given to the stream will be deleted by it
     void SetInputStreamBuffer(wxStreamBuffer *buffer);
@@ -604,17 +604,17 @@ public:
 
     virtual ~wxBufferedOutputStream();
 
-    wxOutputStream& Write(const void *buffer, size_t size);
+    virtual wxOutputStream& Write(const void *buffer, size_t size);
 
     // Position functions
-    wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
-    wxFileOffset TellO() const;
-    bool IsSeekable() const { return m_parent_o_stream->IsSeekable(); }
+    virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
+    virtual wxFileOffset TellO() const;
+    virtual bool IsSeekable() const { return m_parent_o_stream->IsSeekable(); }
 
     void Sync();
     bool Close();
 
-    wxFileOffset GetLength() const;
+    virtual wxFileOffset GetLength() const;
 
     // the buffer given to the stream will be deleted by it
     void SetOutputStreamBuffer(wxStreamBuffer *buffer);
