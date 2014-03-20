@@ -2466,6 +2466,8 @@ public:
 
         Vertical alignment should be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE
         or @c wxALIGN_BOTTOM.
+
+        @deprecated Please use SetCellAlignment(row, col, horiz, vert) instead.
     */
     void SetCellAlignment(int align, int row, int col);
 
@@ -2485,10 +2487,14 @@ public:
     void SetCellTextColour(int row, int col, const wxColour& colour);
     /**
         Sets the text colour for the given cell.
+
+        @deprecated Please use SetCellTextColour(row, col, colour)
     */
     void SetCellTextColour(const wxColour& val, int row, int col);
     /**
         Sets the text colour for all cells by default.
+
+        @deprecated Please use SetDefaultCellTextColour(colour) instead.
     */
     void SetCellTextColour(const wxColour& colour);
 
