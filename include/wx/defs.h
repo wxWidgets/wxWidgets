@@ -269,21 +269,21 @@ typedef short int WXTYPE;
     #define wxEXPLICIT
 #endif /*  HAVE_EXPLICIT/!HAVE_EXPLICIT */
 
-/*  check for override keyword support */
+/* check for override keyword support */
 #ifndef HAVE_OVERRIDE
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1400)
-        /*
-           VC++ 8.0+ support C++/CLI's override, sealed, and abstract in native
-           code as a nonstandard extension, and C++/CLI's override fortunately
-           matches C++11's
-         */
+    #if __cplusplus >= 201103L
+        /* All C++11 compilers should have it. */
         #define HAVE_OVERRIDE
-    #elif wxCHECK_GCC_VERSION(4, 7) && __cplusplus >= 201103L
+    #elif wxCHECK_VISUALC_VERSION(8)
+        /*
+           VC++ 8.0+ do support override keyword but don't define __cplusplus
+           as indicating C++11 support, so handle this case specially.
+         */
         #define HAVE_OVERRIDE
     #elif WX_HAS_CLANG_FEATURE(cxx_override_control)
         #define HAVE_OVERRIDE
     #endif
-#endif /*  !HAVE_OVERRIDE */
+#endif /* !HAVE_OVERRIDE */
 
 #ifdef HAVE_OVERRIDE
     #define wxOVERRIDE override

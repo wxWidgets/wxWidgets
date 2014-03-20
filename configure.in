@@ -1793,9 +1793,6 @@ WX_CPP_NEW_HEADERS(, AC_DEFINE(wxUSE_IOSTREAMH))
 dnl check whether C++ compiler supports explicit keyword
 WX_CPP_EXPLICIT
 
-dnl check whether C++ compiler supports override keyword
-WX_CPP_OVERRIDE
-
 dnl With Sun CC, temporaries have block scope by default. This flag is needed
 dnl to get the expression scope behaviour that conforms to the standard.
 if test "x$SUNCXX" = xyes; then

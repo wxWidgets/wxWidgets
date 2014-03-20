@@ -699,11 +699,6 @@
 #undef HAVE_EXPLICIT
 
 /*
- * Define if your compiler supports the override keyword
- */
-#undef HAVE_OVERRIDE
-
-/*
  * Define if your compiler has C99 va_copy
  */
 #undef HAVE_VA_COPY

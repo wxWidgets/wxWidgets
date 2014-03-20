@@ -256,39 +256,6 @@ AC_DEFUN([WX_CPP_EXPLICIT],
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl WX_CPP_OVERRIDE checks whether the C++ compiler support the override
-dnl keyword and defines HAVE_OVERRIDE if this is the case
-dnl ---------------------------------------------------------------------------
-
-AC_DEFUN([WX_CPP_OVERRIDE],
-[
-  AC_CACHE_CHECK([if C++ compiler supports the override keyword],
-                 wx_cv_override,
-  [
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
-
-    AC_TRY_COMPILE(
-      [
-        struct Base { virtual void Foo() = 0; };
-        struct Derived : Base { virtual void Foo() override { } };
-      ],
-      [
-        return 0;
-      ],
-      wx_cv_override=yes,
-      wx_cv_override=no
-    )
-
-    AC_LANG_RESTORE
-  ])
-
-  if test "$wx_cv_override" = "yes"; then
-    AC_DEFINE(HAVE_OVERRIDE)
-  fi
-])
-
-dnl ---------------------------------------------------------------------------
 dnl WX_CHECK_FUNCS(FUNCTIONS...,
 dnl                [ACTION-IF-FOUND],
 dnl                [ACTION-IF-NOT-FOUND],
