@@ -2244,8 +2244,9 @@ public:
 
     /**
         Override this to react to a left click.  This method will only be
-        called in @c wxDATAVIEW_CELL_ACTIVATABLE mode.  This method is
-        deprecated, please use ActivateCell instead.
+        called in @c wxDATAVIEW_CELL_ACTIVATABLE mode.
+
+        @deprecated Use ActivateCell instead.
     */
     virtual bool LeftClick( wxPoint cursor,
                             wxRect cell,
@@ -2254,8 +2255,9 @@ public:
                             unsigned int col );
 
     /**
-       Override this to react to the activation of a cell.  This method is
-       deprecated, please use ActivateCell instead.
+       Override this to react to the activation of a cell.
+
+       @deprecated Use ActivateCell instead.
     */
     virtual bool Activate(wxRect cell,
                           wxDataViewModel * model,
