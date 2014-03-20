@@ -236,6 +236,8 @@ typedef short int WXTYPE;
 /*  other feature tests */
 /*  ---------------------------------------------------------------------------- */
 
+#ifdef __cplusplus
+
 /*  Every ride down a slippery slope begins with a single step.. */
 /*  */
 /*  Yes, using nested classes is indeed against our coding standards in */
@@ -301,7 +303,7 @@ typedef short int WXTYPE;
    truncate from a larger to smaller type, static_cast<> can't be used for it
    as it results in warnings when using some compilers (SGI mipspro for example)
  */
-#if defined(__INTELC__) && defined(__cplusplus)
+#if defined(__INTELC__)
     template <typename T, typename X>
     inline T wx_truncate_cast_impl(X x)
     {
@@ -320,7 +322,7 @@ typedef short int WXTYPE;
 
     #define wx_truncate_cast(t, x) wx_truncate_cast_impl<t>(x)
 
-#elif defined(__cplusplus) && defined(__VISUALC__) && __VISUALC__ >= 1310
+#elif defined(__VISUALC__) && __VISUALC__ >= 1310
     template <typename T, typename X>
     inline T wx_truncate_cast_impl(X x)
     {
@@ -404,6 +406,8 @@ typedef short int WXTYPE;
         #endif
     #endif
 #endif /* defined(__has_include) */
+
+#endif /* __cplusplus */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 
