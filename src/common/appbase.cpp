@@ -938,7 +938,7 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
         const wxString& GetStackTrace() const { return m_stackTrace; }
 
     protected:
-        virtual void OnStackFrame(const wxStackFrame& frame)
+        virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
         {
             m_stackTrace << wxString::Format
                             (

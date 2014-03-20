@@ -76,7 +76,7 @@ class WXDLLIMPEXP_ADV wxFileTipProvider : public wxTipProvider
 public:
     wxFileTipProvider(const wxString& filename, size_t currentTip);
 
-    virtual wxString GetTip();
+    virtual wxString GetTip() wxOVERRIDE;
 
 private:
     wxTextFile m_textfile;

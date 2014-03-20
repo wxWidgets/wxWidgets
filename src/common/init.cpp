@@ -68,7 +68,7 @@ class wxDummyConsoleApp : public wxAppConsole
 public:
     wxDummyConsoleApp() { }
 
-    virtual int OnRun() { wxFAIL_MSG( wxT("unreachable code") ); return 0; }
+    virtual int OnRun() wxOVERRIDE { wxFAIL_MSG( wxT("unreachable code") ); return 0; }
     virtual bool DoYield(bool, long) { return true; }
 
     wxDECLARE_NO_COPY_CLASS(wxDummyConsoleApp);

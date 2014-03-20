@@ -31,7 +31,7 @@ public:
     wxIconRefData( WXHICON iconref, int desiredWidth, int desiredHeight );
     virtual ~wxIconRefData() { Free(); }
 
-    virtual bool IsOk() const { return m_iconRef != NULL; }
+    virtual bool IsOk() const wxOVERRIDE { return m_iconRef != NULL; }
 
     virtual void Free();
 

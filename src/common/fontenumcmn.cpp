@@ -39,7 +39,7 @@ public:
     wxSimpleFontEnumerator() { }
 
     // called by EnumerateFacenames
-    virtual bool OnFacename(const wxString& facename)
+    virtual bool OnFacename(const wxString& facename) wxOVERRIDE
     {
         m_arrFacenames.Add(facename);
         return true;
@@ -47,7 +47,7 @@ public:
 
     // called by EnumerateEncodings
     virtual bool OnFontEncoding(const wxString& WXUNUSED(facename),
-                                const wxString& encoding)
+                                const wxString& encoding) wxOVERRIDE
     {
         m_arrEncodings.Add(encoding);
         return true;

@@ -11386,7 +11386,7 @@ class wxRichTextModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxRichTextModule)
 public:
     wxRichTextModule() {}
-    bool OnInit()
+    bool OnInit() wxOVERRIDE
     {
         wxRichTextBuffer::SetRenderer(new wxRichTextStdRenderer);
         wxRichTextBuffer::InitStandardHandlers();
@@ -11404,7 +11404,7 @@ public:
 
         return true;
     }
-    void OnExit()
+    void OnExit() wxOVERRIDE
     {
         wxRichTextBuffer::CleanUpHandlers();
         wxRichTextBuffer::CleanUpDrawingHandlers();

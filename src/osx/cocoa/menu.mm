@@ -165,7 +165,7 @@ public :
 
     virtual ~wxMenuCocoaImpl();
 
-    virtual void InsertOrAppend(wxMenuItem *pItem, size_t pos)
+    virtual void InsertOrAppend(wxMenuItem *pItem, size_t pos) wxOVERRIDE
     {
         NSMenuItem* nsmenuitem = (NSMenuItem*) pItem->GetPeer()->GetHMenuItem();
         // make sure a call of SetSubMenu is also reflected (occurring after Create)
@@ -188,12 +188,12 @@ public :
             [m_osxMenu insertItem:nsmenuitem atIndex:pos];
     }
 
-    virtual void Remove( wxMenuItem *pItem )
+    virtual void Remove( wxMenuItem *pItem ) wxOVERRIDE
     {
         [m_osxMenu removeItem:(NSMenuItem*) pItem->GetPeer()->GetHMenuItem()];
     }
 
-    virtual void MakeRoot()
+    virtual void MakeRoot() wxOVERRIDE
     {
         wxMenu* peer = GetWXPeer();
         
@@ -230,13 +230,13 @@ public :
     {
     }
 
-    virtual void SetTitle( const wxString& text )
+    virtual void SetTitle( const wxString& text ) wxOVERRIDE
     {
         wxCFStringRef cfText(text);
         [m_osxMenu setTitle:cfText.AsNSString()];
     }
 
-    virtual void PopUp( wxWindow *win, int x, int y )
+    virtual void PopUp( wxWindow *win, int x, int y ) wxOVERRIDE
     {
         win->ScreenToClient( &x , &y ) ;
         NSView *view = win->GetPeer()->GetWXWidget();
@@ -254,7 +254,7 @@ public :
         [popUpButtonCell release];
     }
 
-    WXHMENU GetHMenu() { return m_osxMenu; }
+    WXHMENU GetHMenu() wxOVERRIDE { return m_osxMenu; }
 
     static wxMenuImpl* Create( wxMenu* peer, const wxString& title );
     static wxMenuImpl* CreateRootMenu( wxMenu* peer );

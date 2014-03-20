@@ -88,7 +88,7 @@ class wxRichTextCaretTimer: public wxTimer
     {
         m_caret = caret;
     }
-    virtual void Notify();
+    virtual void Notify() wxOVERRIDE;
     wxRichTextCaret* m_caret;
 };
 
@@ -111,8 +111,8 @@ public:
     // --------------
 
     // called by wxWindow (not using the event tables)
-    virtual void OnSetFocus();
-    virtual void OnKillFocus();
+    virtual void OnSetFocus() wxOVERRIDE;
+    virtual void OnKillFocus() wxOVERRIDE;
 
     // draw the caret on the given DC
     void DoDraw(wxDC *dc);
@@ -130,10 +130,10 @@ public:
     void EnableRefresh(bool b) { m_refreshEnabled = b; }
 
 protected:
-    virtual void DoShow();
-    virtual void DoHide();
-    virtual void DoMove();
-    virtual void DoSize();
+    virtual void DoShow() wxOVERRIDE;
+    virtual void DoHide() wxOVERRIDE;
+    virtual void DoMove() wxOVERRIDE;
+    virtual void DoSize() wxOVERRIDE;
 
     // refresh the caret
     void Refresh();

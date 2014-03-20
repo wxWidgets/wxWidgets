@@ -66,7 +66,7 @@ public:
         m_orient = orient;
     }
 
-    virtual void Notify();
+    virtual void Notify() wxOVERRIDE;
 
 private:
     wxScrolledWindow *m_win;
@@ -1846,8 +1846,8 @@ class wxHtmlWinModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxHtmlWinModule)
 public:
     wxHtmlWinModule() : wxModule() {}
-    bool OnInit() { return true; }
-    void OnExit() { wxHtmlWindow::CleanUpStatics(); }
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE { wxHtmlWindow::CleanUpStatics(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule)

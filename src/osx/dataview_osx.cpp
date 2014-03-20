@@ -62,15 +62,15 @@ public:
  //
  // inherited methods from wxDataViewModelNotifier
  //
-  virtual bool ItemAdded   (wxDataViewItem const &parent, wxDataViewItem const &item);
-  virtual bool ItemsAdded  (wxDataViewItem const& parent, wxDataViewItemArray const& items);
-  virtual bool ItemChanged (wxDataViewItem const& item);
-  virtual bool ItemsChanged(wxDataViewItemArray const& items);
-  virtual bool ItemDeleted (wxDataViewItem const& parent, wxDataViewItem const& item);
-  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items);
-  virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col);
-  virtual bool Cleared();
-  virtual void Resort();
+  virtual bool ItemAdded   (wxDataViewItem const &parent, wxDataViewItem const &item) wxOVERRIDE;
+  virtual bool ItemsAdded  (wxDataViewItem const& parent, wxDataViewItemArray const& items) wxOVERRIDE;
+  virtual bool ItemChanged (wxDataViewItem const& item) wxOVERRIDE;
+  virtual bool ItemsChanged(wxDataViewItemArray const& items) wxOVERRIDE;
+  virtual bool ItemDeleted (wxDataViewItem const& parent, wxDataViewItem const& item) wxOVERRIDE;
+  virtual bool ItemsDeleted(wxDataViewItem const& parent, wxDataViewItemArray const& items) wxOVERRIDE;
+  virtual bool ValueChanged(wxDataViewItem const& item, unsigned int col) wxOVERRIDE;
+  virtual bool Cleared() wxOVERRIDE;
+  virtual void Resort() wxOVERRIDE;
 
 protected:
  // if the dataview control can have a variable row height this method sets the dataview's control row height of

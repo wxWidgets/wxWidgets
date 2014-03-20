@@ -50,19 +50,19 @@ public :
     {
     }
 
-    void SetMaximum(wxInt32 v)
+    void SetMaximum(wxInt32 v) wxOVERRIDE
     {
         SetDeterminateMode();
         wxWidgetCocoaImpl::SetMaximum( v ) ;
     }
 
-    void SetValue(wxInt32 v)
+    void SetValue(wxInt32 v) wxOVERRIDE
     {
         SetDeterminateMode();
         wxWidgetCocoaImpl::SetValue( v ) ;
     }
 
-    void PulseGauge()
+    void PulseGauge() wxOVERRIDE
     {
         if ( ![(wxNSProgressIndicator*)m_osxView isIndeterminate] )
         {
@@ -71,7 +71,7 @@ public :
         }
     }
 
-    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const
+    void GetLayoutInset(int &left , int &top , int &right, int &bottom) const wxOVERRIDE
     {
         left = top = right = bottom = 0;
         NSControlSize size = [(wxNSProgressIndicator*)m_osxView controlSize];

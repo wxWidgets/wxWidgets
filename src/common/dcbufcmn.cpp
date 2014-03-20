@@ -45,8 +45,8 @@ class wxSharedDCBufferManager : public wxModule
 public:
     wxSharedDCBufferManager() { }
 
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDELETE(ms_buffer); }
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE { wxDELETE(ms_buffer); }
 
     static wxBitmap* GetBuffer(int w, int h)
     {

@@ -1687,6 +1687,33 @@ template <typename T> wxDELETEA(T*& array);
 #define wxEXPLICIT
 
 /**
+    @c wxOVERRIDE expands to the C++11 @c override keyword if it's supported by
+    the compiler or nothing otherwise.
+
+    This macro is useful for writing code which may be compiled by both C++11
+    and non-C++11 compilers and still allow the use of @c override for the
+    former.
+
+    Example of using this macro:
+    @code
+        class MyApp : public wxApp {
+        public:
+            virtual bool OnInit() wxOVERRIDE;
+
+            // This would result in an error from a C++11 compiler as the
+            // method doesn't actually override the base class OnExit() due to
+            // a typo in its name.
+            //virtual int OnEzit() wxOVERRIDE;
+        };
+    @endcode
+
+    @header{wx/defs.h}
+
+    @since 3.1.0
+ */
+#define wxOVERRIDE
+
+/**
     GNU C++ compiler gives a warning for any class whose destructor is private
     unless it has a friend. This warning may sometimes be useful but it doesn't
     make sense for reference counted class which always delete themselves

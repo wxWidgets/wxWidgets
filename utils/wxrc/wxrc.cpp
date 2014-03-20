@@ -223,8 +223,8 @@ class XmlResApp : public wxAppConsole
 {
 public:
     // don't use builtin cmd line parsing:
-    virtual bool OnInit() { return true; }
-    virtual int OnRun();
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual int OnRun() wxOVERRIDE;
 
 private:
     void ParseParams(const wxCmdLineParser& cmdline);

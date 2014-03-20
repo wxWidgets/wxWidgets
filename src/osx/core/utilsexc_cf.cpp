@@ -72,7 +72,7 @@ class wxCFEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
 {
 public:
     wxEventLoopSource *
-    AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags)
+    AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags) wxOVERRIDE
     {
         wxCHECK_MSG( fd != -1, NULL, "can't monitor invalid fd" );
 

@@ -480,7 +480,7 @@ public :
     {
     }
 
-    virtual void controlAction(WXWidget slf, void* _cmd, void *sender)
+    virtual void controlAction(WXWidget slf, void* _cmd, void *sender) wxOVERRIDE
     {
         wxDisclosureNSButton* db = (wxDisclosureNSButton*)m_osxView;
         [db toggle];

@@ -830,8 +830,8 @@ class wxHtmlPrintingModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxHtmlPrintingModule)
 public:
     wxHtmlPrintingModule() : wxModule() {}
-    bool OnInit() { return true; }
-    void OnExit() { wxHtmlPrintout::CleanUpStatics(); }
+    bool OnInit() wxOVERRIDE { return true; }
+    void OnExit() wxOVERRIDE { wxHtmlPrintout::CleanUpStatics(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlPrintingModule, wxModule)

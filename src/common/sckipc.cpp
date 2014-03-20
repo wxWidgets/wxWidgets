@@ -155,8 +155,8 @@ public:
     }
 
     // as ms_handler is initialized on demand, don't do anything in OnInit()
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDELETE(ms_handler); }
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE { wxDELETE(ms_handler); }
 
 private:
     static wxTCPEventHandler *ms_handler;

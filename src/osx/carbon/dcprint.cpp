@@ -55,13 +55,13 @@ class wxMacCarbonPrinterDC : public wxNativePrinterDC
 public :
     wxMacCarbonPrinterDC( wxPrintData* data ) ;
     virtual ~wxMacCarbonPrinterDC() ;
-    virtual bool StartDoc(  wxPrinterDC* dc , const wxString& message ) ;
-    virtual void EndDoc( wxPrinterDC* dc ) ;
-    virtual void StartPage( wxPrinterDC* dc ) ;
-    virtual void EndPage( wxPrinterDC* dc ) ;
-    virtual wxUint32 GetStatus() const { return m_err ; }
-    virtual void GetSize( int *w , int *h) const ;
-    virtual wxSize GetPPI() const ;
+    virtual bool StartDoc(  wxPrinterDC* dc , const wxString& message ) wxOVERRIDE ;
+    virtual void EndDoc( wxPrinterDC* dc ) wxOVERRIDE ;
+    virtual void StartPage( wxPrinterDC* dc ) wxOVERRIDE ;
+    virtual void EndPage( wxPrinterDC* dc ) wxOVERRIDE ;
+    virtual wxUint32 GetStatus() const wxOVERRIDE { return m_err ; }
+    virtual void GetSize( int *w , int *h) const wxOVERRIDE ;
+    virtual wxSize GetPPI() const wxOVERRIDE ;
 private :
     wxCoord m_maxX ;
     wxCoord m_maxY ;

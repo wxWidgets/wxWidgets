@@ -121,10 +121,10 @@ public:
         GetEntitiesParser()->SetEncoding(wxFONTENCODING_ISO8859_1);
     }
 
-    wxObject* GetProduct() { return NULL; }
+    wxObject* GetProduct() wxOVERRIDE { return NULL; }
 
 protected:
-    virtual void AddText(const wxString& WXUNUSED(txt)) {}
+    virtual void AddText(const wxString& WXUNUSED(txt)) wxOVERRIDE {}
 
     wxDECLARE_NO_COPY_CLASS(HP_Parser);
 };
@@ -158,8 +158,8 @@ class HP_TagHandler : public wxHtmlTagHandler
             m_count = 0;
             m_parentItem = NULL;
         }
-        wxString GetSupportedTags() { return wxT("UL,OBJECT,PARAM"); }
-        bool HandleTag(const wxHtmlTag& tag);
+        wxString GetSupportedTags() wxOVERRIDE { return wxT("UL,OBJECT,PARAM"); }
+        bool HandleTag(const wxHtmlTag& tag) wxOVERRIDE;
 
         void Reset(wxHtmlHelpDataItems& data)
         {

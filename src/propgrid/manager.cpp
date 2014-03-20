@@ -305,7 +305,7 @@ public:
         }
     }
 
-    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
     {
         return *m_columns[idx];
     }
@@ -343,7 +343,7 @@ private:
                                   wxPG_SPLITTER_FROM_EVENT);
     }
 
-    virtual bool ProcessEvent( wxEvent& event )
+    virtual bool ProcessEvent( wxEvent& event ) wxOVERRIDE
     {
         if ( event.IsKindOf(wxCLASSINFO(wxHeaderCtrlEvent)) )
         {
@@ -2086,7 +2086,7 @@ public:
         m_it.Init(manager->GetPage(0), flags);
     }
     virtual ~wxPGVIteratorBase_Manager() { }
-    virtual void Next()
+    virtual void Next() wxOVERRIDE
     {
         m_it.Next();
 

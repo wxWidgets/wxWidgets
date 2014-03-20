@@ -120,7 +120,7 @@ public:
         SetStandardFonts();
     }
 
-    virtual bool LoadPage(const wxString& location)
+    virtual bool LoadPage(const wxString& location) wxOVERRIDE
     {
         if ( !wxHtmlWindow::LoadPage(location) )
             return false;

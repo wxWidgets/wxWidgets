@@ -53,7 +53,7 @@ public:
 
     virtual ~wxMetafileRefData();
 
-    virtual bool IsOk() const { return m_data != NULL; }
+    virtual bool IsOk() const wxOVERRIDE { return m_data != NULL; }
 
     void Init();
 

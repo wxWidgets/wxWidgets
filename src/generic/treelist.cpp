@@ -363,24 +363,24 @@ public:
 
 
     // Implement the base class pure virtual methods.
-    virtual unsigned GetColumnCount() const;
-    virtual wxString GetColumnType(unsigned col) const;
+    virtual unsigned GetColumnCount() const wxOVERRIDE;
+    virtual wxString GetColumnType(unsigned col) const wxOVERRIDE;
     virtual void GetValue(wxVariant& variant,
                           const wxDataViewItem& item,
-                          unsigned col) const;
+                          unsigned col) const wxOVERRIDE;
     virtual bool SetValue(const wxVariant& variant,
                           const wxDataViewItem& item,
-                          unsigned col);
-    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const;
-    virtual bool IsContainer(const wxDataViewItem& item) const;
-    virtual bool HasContainerColumns(const wxDataViewItem& item) const;
+                          unsigned col) wxOVERRIDE;
+    virtual wxDataViewItem GetParent(const wxDataViewItem& item) const wxOVERRIDE;
+    virtual bool IsContainer(const wxDataViewItem& item) const wxOVERRIDE;
+    virtual bool HasContainerColumns(const wxDataViewItem& item) const wxOVERRIDE;
     virtual unsigned GetChildren(const wxDataViewItem& item,
-                                 wxDataViewItemArray& children) const;
-    virtual bool IsListModel() const { return m_isFlat; }
+                                 wxDataViewItemArray& children) const wxOVERRIDE;
+    virtual bool IsListModel() const wxOVERRIDE { return m_isFlat; }
     virtual int Compare(const wxDataViewItem& item1,
                         const wxDataViewItem& item2,
                         unsigned col,
-                        bool ascending) const;
+                        bool ascending) const wxOVERRIDE;
 
 private:
     // The control we're associated with.
@@ -456,18 +456,18 @@ public:
     {
     }
 
-    virtual bool SetValue(const wxVariant& value)
+    virtual bool SetValue(const wxVariant& value) wxOVERRIDE
     {
         m_value << value;
         return true;
     }
 
-    virtual bool GetValue(wxVariant& WXUNUSED(value)) const
+    virtual bool GetValue(wxVariant& WXUNUSED(value)) const wxOVERRIDE
     {
         return false;
     }
 
-    wxSize GetSize() const
+    wxSize GetSize() const wxOVERRIDE
     {
         wxSize size = GetCheckSize();
         size.x += MARGIN_CHECK_ICON;
@@ -494,7 +494,7 @@ public:
         return size;
     }
 
-    virtual bool Render(wxRect cell, wxDC* dc, int state)
+    virtual bool Render(wxRect cell, wxDC* dc, int state) wxOVERRIDE
     {
         // Draw the checkbox first.
         int renderFlags = 0;
@@ -552,7 +552,7 @@ public:
                               wxDataViewModel *model,
                               const wxDataViewItem & item,
                               unsigned int WXUNUSED(col),
-                              const wxMouseEvent *mouseEvent)
+                              const wxMouseEvent *mouseEvent) wxOVERRIDE
     {
         if ( mouseEvent )
         {

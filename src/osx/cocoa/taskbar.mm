@@ -88,9 +88,9 @@ class wxTaskBarIconDockImpl: public wxTaskBarIconImpl
 public:
     wxTaskBarIconDockImpl(wxTaskBarIcon *taskBarIcon);
     virtual ~wxTaskBarIconDockImpl();
-    virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
-    virtual bool RemoveIcon();
-    virtual bool PopupMenu(wxMenu *menu);
+    virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
+    virtual bool RemoveIcon() wxOVERRIDE;
+    virtual bool PopupMenu(wxMenu *menu) wxOVERRIDE;
 
     static WX_NSMenu OSXGetDockHMenu();
 protected:
@@ -120,11 +120,11 @@ public:
     wxTaskBarIconCustomStatusItemImpl(wxTaskBarIcon *taskBarIcon);
     virtual ~wxTaskBarIconCustomStatusItemImpl();
     
-    virtual bool IsStatusItem() const { return true; }
+    virtual bool IsStatusItem() const wxOVERRIDE { return true; }
 
-    virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString);
-    virtual bool RemoveIcon();
-    virtual bool PopupMenu(wxMenu *menu);
+    virtual bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
+    virtual bool RemoveIcon() wxOVERRIDE;
+    virtual bool PopupMenu(wxMenu *menu) wxOVERRIDE;
 protected:
     NSStatusItem *m_statusItem;
     wxOSXStatusItemTarget *m_target;

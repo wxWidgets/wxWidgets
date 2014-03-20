@@ -42,7 +42,7 @@ public:
             m_sound->DoStop();
     }
 
-    void Notify()
+    void Notify() wxOVERRIDE
     {
         if (m_sound)
             m_sound->SoundTask();

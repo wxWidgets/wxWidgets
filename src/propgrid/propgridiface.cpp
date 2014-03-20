@@ -805,7 +805,7 @@ public:
         m_it.Init( state, flags );
     }
     virtual ~wxPGVIteratorBase_State() { }
-    virtual void Next() { m_it.Next(); }
+    virtual void Next() wxOVERRIDE { m_it.Next(); }
 };
 
 wxPGVIterator wxPropertyGridInterface::GetVIterator( int flags ) const

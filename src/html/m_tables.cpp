@@ -99,9 +99,9 @@ public:
     wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale = 1.0);
     virtual ~wxHtmlTableCell();
 
-    virtual void RemoveExtraSpacing(bool top, bool bottom);
+    virtual void RemoveExtraSpacing(bool top, bool bottom) wxOVERRIDE;
 
-    virtual void Layout(int w);
+    virtual void Layout(int w) wxOVERRIDE;
 
     void AddRow(const wxHtmlTag& tag);
     void AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag);

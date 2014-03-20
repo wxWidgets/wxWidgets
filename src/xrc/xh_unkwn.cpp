@@ -45,8 +45,8 @@ public:
         SetBackgroundColour(wxColour(255, 0, 255));
     }
 
-    virtual void AddChild(wxWindowBase *child);
-    virtual void RemoveChild(wxWindowBase *child);
+    virtual void AddChild(wxWindowBase *child) wxOVERRIDE;
+    virtual void RemoveChild(wxWindowBase *child) wxOVERRIDE;
 
 protected:
     wxString m_controlName;

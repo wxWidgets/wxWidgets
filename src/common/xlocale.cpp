@@ -54,8 +54,8 @@ wxXLocale wxNullXLocale;
 class wxXLocaleModule : public wxModule
 {
 public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxDELETE(gs_cLocale); }
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE { wxDELETE(gs_cLocale); }
 
     DECLARE_DYNAMIC_CLASS(wxXLocaleModule)
 };

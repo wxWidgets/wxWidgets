@@ -25,6 +25,7 @@ All:
 - Add wxDynamicLibrary::GetModuleFromAddress() (Luca Bacci).
 - Implement wxThread::SetPriority() for pthreads (Luca Bacci).
 - Add wxInt64 support to wxText{Input,Output}Stream (Alexander Bezzubikov).
+- Define wxOVERRIDE as override for supporting compilers (Thomas Goyne).
 
 All (GUI):
 

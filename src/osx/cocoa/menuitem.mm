@@ -244,22 +244,22 @@ public :
 
     ~wxMenuItemCocoaImpl();
 
-    void SetBitmap( const wxBitmap& bitmap )
+    void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE
     {
         [m_osxMenuItem setImage:bitmap.GetNSImage()];
     }
 
-    void Enable( bool enable )
+    void Enable( bool enable ) wxOVERRIDE
     {
         [m_osxMenuItem setEnabled:enable];
     }
 
-    void Check( bool check )
+    void Check( bool check ) wxOVERRIDE
     {
         [m_osxMenuItem setState:( check ?  NSOnState :  NSOffState) ];
     }
 
-    void Hide( bool hide )
+    void Hide( bool hide ) wxOVERRIDE
     {
         // NB: setHidden is new as of 10.5 so we should not call it below there
         if ([m_osxMenuItem respondsToSelector:@selector(setHidden:)])
@@ -268,7 +268,7 @@ public :
             wxLogDebug("wxMenuItemCocoaImpl::Hide not yet supported under OS X < 10.5");
     }
 
-    void SetLabel( const wxString& text, wxAcceleratorEntry *entry )
+    void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) wxOVERRIDE
     {
         wxCFStringRef cfText(text);
         [m_osxMenuItem setTitle:cfText.AsNSString()];
@@ -276,9 +276,9 @@ public :
         wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
     }
     
-    bool DoDefault();
+    bool DoDefault() wxOVERRIDE;
 
-    void * GetHMenuItem() { return m_osxMenuItem; }
+    void * GetHMenuItem() wxOVERRIDE { return m_osxMenuItem; }
 
 protected :
     NSMenuItem* m_osxMenuItem ;

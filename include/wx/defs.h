@@ -269,6 +269,28 @@ typedef short int WXTYPE;
     #define wxEXPLICIT
 #endif /*  HAVE_EXPLICIT/!HAVE_EXPLICIT */
 
+/*  check for override keyword support */
+#ifndef HAVE_OVERRIDE
+    #if defined(__VISUALC__) && (__VISUALC__ >= 1400)
+        /*
+           VC++ 8.0+ support C++/CLI's override, sealed, and abstract in native
+           code as a nonstandard extension, and C++/CLI's override fortunately
+           matches C++11's
+         */
+        #define HAVE_OVERRIDE
+    #elif wxCHECK_GCC_VERSION(4, 7) && __cplusplus >= 201103L
+        #define HAVE_OVERRIDE
+    #elif WX_HAS_CLANG_FEATURE(cxx_override_control)
+        #define HAVE_OVERRIDE
+    #endif
+#endif /*  !HAVE_OVERRIDE */
+
+#ifdef HAVE_OVERRIDE
+    #define wxOVERRIDE override
+#else /*  !HAVE_OVERRIDE */
+    #define wxOVERRIDE
+#endif /*  HAVE_OVERRIDE/!HAVE_EXPLICIT */
+
 /* these macros are obsolete, use the standard C++ casts directly now */
 #define wx_static_cast(t, x) static_cast<t>(x)
 #define wx_const_cast(t, x) const_cast<t>(x)

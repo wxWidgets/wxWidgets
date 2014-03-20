@@ -52,15 +52,15 @@ public:
     {
     }
 
-    virtual wxRect GetGeometry() const;
-    virtual wxRect GetClientArea() const;
-    virtual wxString GetName() const { return wxString(); }
+    virtual wxRect GetGeometry() const wxOVERRIDE;
+    virtual wxRect GetClientArea() const wxOVERRIDE;
+    virtual wxString GetName() const wxOVERRIDE { return wxString(); }
 
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
-    virtual wxVideoMode GetCurrentMode() const;
-    virtual bool ChangeMode(const wxVideoMode& mode);
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
+    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
+    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
 
-    virtual bool IsPrimary() const;
+    virtual bool IsPrimary() const wxOVERRIDE;
 
 private:
     CGDirectDisplayID m_id;
@@ -73,9 +73,9 @@ class wxDisplayFactoryMacOSX : public wxDisplayFactory
 public:
     wxDisplayFactoryMacOSX() {}
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n);
-    virtual unsigned GetCount();
-    virtual int GetFromPoint(const wxPoint& pt);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual unsigned GetCount() wxOVERRIDE;
+    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
 
 protected:
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryMacOSX);

@@ -889,10 +889,10 @@ class wxMetaTagParser : public wxHtmlParser
 public:
     wxMetaTagParser() { }
 
-    wxObject* GetProduct() { return NULL; }
+    wxObject* GetProduct() wxOVERRIDE { return NULL; }
 
 protected:
-    virtual void AddText(const wxString& WXUNUSED(txt)) {}
+    virtual void AddText(const wxString& WXUNUSED(txt)) wxOVERRIDE {}
 
     wxDECLARE_NO_COPY_CLASS(wxMetaTagParser);
 };
@@ -901,8 +901,8 @@ class wxMetaTagHandler : public wxHtmlTagHandler
 {
 public:
     wxMetaTagHandler(wxString *retval) : wxHtmlTagHandler(), m_retval(retval) {}
-    wxString GetSupportedTags() { return wxT("META,BODY"); }
-    bool HandleTag(const wxHtmlTag& tag);
+    wxString GetSupportedTags() wxOVERRIDE { return wxT("META,BODY"); }
+    bool HandleTag(const wxHtmlTag& tag) wxOVERRIDE;
 
 private:
     wxString *m_retval;

@@ -1529,8 +1529,8 @@ class wxFileIconsTableModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxFileIconsTableModule)
 public:
     wxFileIconsTableModule() {}
-    bool OnInit() { wxTheFileIconsTable = new wxFileIconsTable; return true; }
-    void OnExit()
+    bool OnInit() wxOVERRIDE { wxTheFileIconsTable = new wxFileIconsTable; return true; }
+    void OnExit() wxOVERRIDE
     {
         wxDELETE(wxTheFileIconsTable);
     }
