@@ -398,10 +398,7 @@ void wxTextOutputStream::SetMode(wxEOL mode)
 
 void wxTextOutputStream::Write64(wxUint64 i)
 {
-    wxString str;
-    str.Printf(wxT("%" wxLongLongFmtSpec "u"), (unsigned long long)i);
-
-    WriteString(str);
+    WriteString(wxString::Format("%" wxLongLongFmtSpec "u", i));
 }
 
 void wxTextOutputStream::Write32(wxUint32 i)
