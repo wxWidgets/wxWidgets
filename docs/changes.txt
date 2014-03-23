@@ -645,6 +645,7 @@ wxMSW:
 - Fix handling of controls in the vertical toolbars (Artur Wieczorek).
 - Fix loading of top to bottom BMP files in wxBitmap (Artur Wieczorek).
 - Fix resource leak in wxStaticBitmap with RGBA icons (Artur Wieczorek).
+- Fix toolbar repainting after deleting a tool from it (Artur Wieczorek).
 - Fix handling of deleting directories in wxFileSystemWatcher (Eric Raijmakers).
 - Disable the use of new style wxDirDialog under Vista to work around a bug in
   its implementation under this system (jtrauntvein).
