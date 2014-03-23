@@ -150,6 +150,7 @@ public:
     {
         m_nSepCount = 0;
         m_staticText = NULL;
+        m_toBeDeleted  = false;
     }
 
     wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
@@ -174,6 +175,7 @@ public:
         }
 
         m_nSepCount = 1;
+        m_toBeDeleted  = false;
     }
 
     virtual ~wxToolBarTool()
@@ -233,9 +235,13 @@ public:
         }
     }
 
+    void ToBeDeleted() { m_toBeDeleted = true; }
+    bool IsToBeDeleted() const { return m_toBeDeleted; }
+
 private:
     size_t m_nSepCount;
     wxStaticText *m_staticText;
+    bool m_toBeDeleted;
 
     wxDECLARE_NO_COPY_CLASS(wxToolBarTool);
 };
@@ -617,48 +623,11 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
             return false;
         }
     }
+    static_cast<wxToolBarTool*>(tool)->ToBeDeleted();
 
     // and finally rearrange the tools
-
-    // search for any stretch spacers before the removed tool
-    bool hasPrecedingStrechables = false;
-    for ( wxToolBarToolsList::compatibility_iterator nodeStch = m_tools.GetFirst();
-                                 nodeStch != node; nodeStch = nodeStch->GetNext() )
-    {
-        if ( ((wxToolBarTool*)nodeStch->GetData())->IsStretchable() )
-        {
-            hasPrecedingStrechables = true;
-            break;
-        }
-    }
-
-    if ( hasPrecedingStrechables )
-    {
-        // if the removed tool is preceded by stretch spacers
-        // just redistribute the space
-        UpdateStretchableSpacersSize();
-    }
-    else
-    {
-        // reposition all the controls after this button but before any
-        // stretch spacer (the toolbar takes care of all normal items)
-        for ( /* node -> first after deleted */ ; node; node = node->GetNext() )
-        {
-            wxToolBarTool *tool2 = (wxToolBarTool*)node->GetData();
-
-            if ( tool2->IsControl() )
-            {
-                tool2->MoveBy(-delta);
-            }
-
-            // if a stretch spacer is found just redistribute the available space
-            else if ( tool2->IsStretchable() )
-            {
-                UpdateStretchableSpacersSize();
-                break;
-            }
-        }
-    }
+    // by recalculating stretchable spacers, if there are any
+    UpdateStretchableSpacersSize();
 
     InvalidateBestSize();
 
@@ -1318,9 +1287,13 @@ void wxToolBar::UpdateStretchableSpacersSize()
     unsigned numSpaces = 0;
     wxToolBarToolsList::compatibility_iterator node;
     int toolIndex = 0;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext(), toolIndex++ )
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
+
+        if ( tool->IsToBeDeleted() )
+            continue;
+
         if ( tool->IsStretchableSpace() )
         {
             // Count only enabled items
@@ -1328,6 +1301,8 @@ void wxToolBar::UpdateStretchableSpacersSize()
             if ( !::IsRectEmpty(&rcItem) )
                 numSpaces++;
         }
+
+        toolIndex++;
     }
 
     if ( !numSpaces )
@@ -1351,19 +1326,25 @@ void wxToolBar::UpdateStretchableSpacersSize()
     // correct place
     int offset = 0;
     toolIndex = 0;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext(), toolIndex++ )
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
+
+        if ( tool->IsToBeDeleted() )
+            continue;
 
         if ( tool->IsControl() && offset )
         {
             tool->MoveBy(offset);
-
+            toolIndex++;
             continue;
         }
 
         if ( !tool->IsStretchableSpace() )
+        {
+            toolIndex++;
             continue;
+        }
 
         const RECT rcOld = wxGetTBItemRect(GetHwnd(), toolIndex);
 
@@ -1398,6 +1379,8 @@ void wxToolBar::UpdateStretchableSpacersSize()
                 }
             }
         }
+
+        toolIndex++;
     }
 }
 
@@ -1837,12 +1820,20 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
     int rowPosX = INT_MIN;
     wxToolBarToolsList::compatibility_iterator node;
     int i = 0;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext(), i++)
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
+        wxToolBarTool * const
+            tool = static_cast<wxToolBarTool *>(node->GetData());
+        if ( tool->IsToBeDeleted() )
+            continue;
+
         // Skip hidden buttons
         const RECT rcItem = wxGetTBItemRect(GetHwnd(), i);
         if ( ::IsRectEmpty(&rcItem) )
+        {
+            i++;
             continue;
+        }
 
         if ( rcItem.top > rowPosX )
         {
@@ -1859,8 +1850,6 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
             ::SetRectEmpty(&rcRow);
         }
 
-        wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
-
         // Separators shouldn't be taken into account as they are sometimes
         // reported to have the width of the entire client area by the toolbar.
         // And we know that they are not the biggest items in the toolbar in
@@ -1870,6 +1859,8 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
             // Update bounding box of current row
             ::UnionRect(&rcRow, &rcRow, &rcItem);
         }
+
+        i++;
     }
 
     // Take into account the last row rectangle too.
@@ -1933,6 +1924,9 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
     {
         wxToolBarTool * const
             tool = static_cast<wxToolBarTool *>(node->GetData());
+
+        if ( tool->IsToBeDeleted() )
+            continue;
 
         if ( tool->IsControl() || tool->IsStretchableSpace() )
         {
