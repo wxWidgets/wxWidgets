@@ -51,7 +51,9 @@ private:
     void OnAdd(wxCommandEvent& event);
     void OnAddTree(wxCommandEvent& event);
     void OnRemove(wxCommandEvent& event);
+    void OnRemoveAll(wxCommandEvent& WXUNUSED(event));
     void OnRemoveUpdateUI(wxUpdateUIEvent& event);
+    void OnRemoveAllUpdateUI(wxUpdateUIEvent& event);
 
     void OnFileSystemEvent(wxFileSystemWatcherEvent& event);
     void LogEvent(const wxFileSystemWatcherEvent& event);
@@ -151,7 +153,8 @@ MyFrame::MyFrame(const wxString& title)
 
         BTN_ID_ADD = 200,
         BTN_ID_ADD_TREE,
-        BTN_ID_REMOVE
+        BTN_ID_REMOVE,
+        BTN_ID_REMOVE_ALL
     };
 
     // ================================================================
@@ -215,10 +218,12 @@ MyFrame::MyFrame(const wxString& title)
     wxButton* buttonAdd = new wxButton(panel, BTN_ID_ADD, "&Add");
     wxButton* buttonAddTree = new wxButton(panel, BTN_ID_ADD_TREE, "Add &tree");
     wxButton* buttonRemove = new wxButton(panel, BTN_ID_REMOVE, "&Remove");
+    wxButton* buttonRemoveAll = new wxButton(panel, BTN_ID_REMOVE_ALL, "Remove a&ll");
     wxSizer *btnSizer = new wxGridSizer(2);
     btnSizer->Add(buttonAdd, wxSizerFlags().Center().Border(wxALL));
     btnSizer->Add(buttonAddTree, wxSizerFlags().Center().Border(wxALL));
     btnSizer->Add(buttonRemove, wxSizerFlags().Center().Border(wxALL));
+    btnSizer->Add(buttonRemoveAll, wxSizerFlags().Center().Border(wxALL));
 
     // and put it all together
     leftSizer->Add(btnSizer, wxSizerFlags(0).Expand());
@@ -280,6 +285,10 @@ MyFrame::MyFrame(const wxString& title)
             wxCommandEventHandler(MyFrame::OnRemove));
     Connect(BTN_ID_REMOVE, wxEVT_UPDATE_UI,
             wxUpdateUIEventHandler(MyFrame::OnRemoveUpdateUI));
+    Connect(BTN_ID_REMOVE_ALL, wxEVT_BUTTON,
+            wxCommandEventHandler(MyFrame::OnRemoveAll));
+    Connect(BTN_ID_REMOVE_ALL, wxEVT_UPDATE_UI,
+            wxUpdateUIEventHandler(MyFrame::OnRemoveAllUpdateUI));
 
     // and show itself (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -453,9 +462,24 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnRemoveAll(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !m_watcher->RemoveAll() )
+    {
+        wxLogError("Error removing all paths from watched paths");
+    }
+
+    m_filesList->DeleteAllItems();
+}
+
 void MyFrame::OnRemoveUpdateUI(wxUpdateUIEvent& event)
 {
     event.Enable(m_filesList->GetFirstSelected() != wxNOT_FOUND);
+}
+
+void MyFrame::OnRemoveAllUpdateUI(wxUpdateUIEvent& event)
+{
+    event.Enable( m_filesList->GetItemCount() != 0 );
 }
 
 void MyFrame::OnFileSystemEvent(wxFileSystemWatcherEvent& event)
