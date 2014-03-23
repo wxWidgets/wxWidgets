@@ -118,6 +118,12 @@ private:
     // helper function for draw std menu check mark
     void DrawStdCheckMark(WXHDC hdc, const tagRECT* rc, wxODStatus stat);
 
+    // helper function to determine if the item must be owner-drawn
+    bool MustUseOwnerDrawn();
+
+    // helper function to get a handle of bitmap associated with item
+    WXHBITMAP GetHBitmapForMenu(bool checked = true);
+
 #else // !wxUSE_OWNER_DRAWN
     // Provide stubs for the public functions above to ensure that the code
     // still compiles without wxUSE_OWNER_DRAWN -- it makes sense to just drop
@@ -140,6 +146,9 @@ private:
              m_bmpUnchecked,   // (checked is used also for 'uncheckable' items)
              m_bmpDisabled;
 #endif // wxUSE_OWNER_DRAWN
+
+    // Give wxMenu access to our MustUseOwnerDrawn() and GetHBitmapForMenu().
+    friend class wxMenu;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuItem)
 };
