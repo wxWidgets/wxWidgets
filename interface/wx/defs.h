@@ -1219,13 +1219,24 @@ enum wxDuplexMode
 };
 
 /**
-    Print quality.
-*/
+    Predefined print quality constants.
+
+    @see ::wxPrintQuality
+ */
 #define wxPRINT_QUALITY_HIGH    -1
 #define wxPRINT_QUALITY_MEDIUM  -2
 #define wxPRINT_QUALITY_LOW     -3
 #define wxPRINT_QUALITY_DRAFT   -4
 
+/**
+    Specifies the print quality as either a predefined level or explicit
+    resolution.
+
+    The print quality may be one of ::wxPRINT_QUALITY_HIGH,
+    ::wxPRINT_QUALITY_MEDIUM, ::wxPRINT_QUALITY_LOW or ::wxPRINT_QUALITY_DRAFT
+    (which are all negative) or express the desired resolution, in DPI, e.g.
+    600.
+ */
 typedef int wxPrintQuality;
 
 /**
