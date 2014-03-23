@@ -77,18 +77,13 @@ public:
     void SetBitmaps(const wxBitmap& bmpChecked,
                     const wxBitmap& bmpUnchecked = wxNullBitmap)
     {
-        m_bmpChecked = bmpChecked;
-        m_bmpUnchecked = bmpUnchecked;
-        SetOwnerDrawn(true);
+        DoSetBitmap(bmpChecked, true);
+        DoSetBitmap(bmpUnchecked, false);
     }
 
     void SetBitmap(const wxBitmap& bmp, bool bChecked = true)
     {
-        if ( bChecked )
-            m_bmpChecked = bmp;
-        else
-            m_bmpUnchecked = bmp;
-        SetOwnerDrawn(true);
+        DoSetBitmap(bmp, bChecked);
     }
 
     void SetDisabledBitmap(const wxBitmap& bmpDisabled)
@@ -123,6 +118,9 @@ private:
 
     // helper function to get a handle of bitmap associated with item
     WXHBITMAP GetHBitmapForMenu(bool checked = true);
+
+    // helper function to set/change the bitmap
+    void DoSetBitmap(const wxBitmap& bmp, bool bChecked);
 
 #else // !wxUSE_OWNER_DRAWN
     // Provide stubs for the public functions above to ensure that the code

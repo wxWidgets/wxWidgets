@@ -52,6 +52,7 @@ wxMSW:
 
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
+- Fix setting menu item bitmaps after appending them (Artur Wieczorek).
 - Fix handling of selected images in wxBitmapButton (Artur Wieczorek).
 - Fix loading of bitmap with non-pre-multiplied alpha (Artur Wieczorek).
 - Support multiline strings in wxDC::DrawRotatedText() (Artur Wieczorek).

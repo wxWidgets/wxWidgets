@@ -740,6 +740,76 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
 
 #if wxUSE_OWNER_DRAWN
 
+void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
+{
+    if ( bChecked )
+    {
+        if ( m_bmpChecked.IsSameAs(bmp) )
+            return;
+
+        m_bmpChecked = bmp;
+    }
+    else
+    {
+        if ( m_bmpUnchecked.IsSameAs(bmp) )
+            return;
+
+        m_bmpUnchecked = bmp;
+    }
+
+    // already marked as owner-drawn, cannot be reverted
+    if ( IsOwnerDrawn() )
+        return;
+
+    // assume owner-drawn state, will be reset if we can use Windows bitmap
+    // support instead of making the item owner-drawn
+    SetOwnerDrawn(true);
+
+    if ( MustUseOwnerDrawn() )
+        return;
+
+    // the item can be not attached to any menu yet and SetBitmap() is still
+    // valid to call in this case and should do nothing else
+    if ( !m_parentMenu )
+        return;
+
+    HMENU hMenu = GetHMenuOf(m_parentMenu);
+    if ( !hMenu )
+        return;
+
+    const UINT id = GetMSWId();
+
+    const UINT state = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
+    if ( state == (UINT)-1 )
+        return;
+
+    // update the bitmap of the native menu item
+    // don't set hbmpItem for the checkable items as it would
+    // be used for both checked and unchecked state
+    WinStruct<MENUITEMINFO> mii;
+    if ( IsCheckable() )
+    {
+        mii.fMask = MIIM_CHECKMARKS;
+        mii.hbmpChecked = GetHBitmapForMenu(true);
+        mii.hbmpUnchecked = GetHBitmapForMenu(false);
+    }
+    else
+    {
+        mii.fMask = MIIM_BITMAP;
+        mii.hbmpItem = GetHBitmapForMenu();
+    }
+
+    if ( !::SetMenuItemInfo(hMenu, id, FALSE, &mii) )
+    {
+        wxLogLastError(wxT("SetMenuItemInfo"));
+        return;
+    }
+
+    // No need to really make the item owner drawn, Windows will draw its
+    // bitmap(s) for us.
+    SetOwnerDrawn(false);
+}
+
 int wxMenuItem::MeasureAccelWidth() const
 {
     wxString accel = GetItemLabel().AfterFirst(wxT('\t'));
