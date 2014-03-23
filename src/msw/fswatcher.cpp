@@ -224,12 +224,17 @@ bool wxIOCPThread::ReadEvents()
     unsigned long count = 0;
     wxFSWatchEntryMSW* watch = NULL;
     OVERLAPPED* overlapped = NULL;
-    if (!m_iocp->GetStatus(&count, &watch, &overlapped))
-        return true; // error was logged already, we don't want to exit
+    switch ( m_iocp->GetStatus(&count, &watch, &overlapped) )
+    {
+        case wxIOCPService::Status_OK:
+            break; // nothing special to do, continue normally
 
-    // this is our exit condition, so we return false
-    if (!count && !watch && !overlapped)
-        return false;
+        case wxIOCPService::Status_Error:
+            return true; // error was logged already, we don't want to exit
+
+        case wxIOCPService::Status_Exit:
+            return false; // stop reading events
+    }
 
     // if the thread got woken up but we got an empty packet it means that
     // there was an overflow, too many events and not all could fit in
