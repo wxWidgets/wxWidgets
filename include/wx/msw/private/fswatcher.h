@@ -225,7 +225,10 @@ public:
         // Special status indicating that we should exit retrieved.
         Status_Exit,
 
-        // Some error occurred.
+        // An error occurred because the watched directory was deleted.
+        Status_Deleted,
+
+        // Some other error occurred.
         Status_Error
     };
 
@@ -248,6 +251,14 @@ public:
             return *count || *watch || *overlapped ? Status_OK : Status_Exit;
         }
 
+        // An error is returned if the underlying directory has been deleted,
+        // but this is not really an unexpected failure, so handle it
+        // specially.
+        if ( wxSysErrorCode() == ERROR_ACCESS_DENIED &&
+                *watch && !wxFileName::DirExists((*watch)->GetPath()) )
+            return Status_Deleted;
+
+        // Some other error, at least log it.
         wxLogSysError(_("Unable to dequeue completion packet"));
 
         return Status_Error;

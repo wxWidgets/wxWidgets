@@ -232,6 +232,21 @@ bool wxIOCPThread::ReadEvents()
         case wxIOCPService::Status_Error:
             return true; // error was logged already, we don't want to exit
 
+        case wxIOCPService::Status_Deleted:
+            {
+                wxFileSystemWatcherEvent
+                    removeEvent(wxFSW_EVENT_DELETE,
+                                watch->GetPath(),
+                                wxFileName());
+                SendEvent(removeEvent);
+            }
+
+            // It isn't useful to continue watching this directory as it
+            // doesn't exist any more -- and even recreating a directory with
+            // the same name still wouldn't resume generating events for the
+            // existing wxIOCPService, so it's useless to continue.
+            return false;
+
         case wxIOCPService::Status_Exit:
             return false; // stop reading events
     }
