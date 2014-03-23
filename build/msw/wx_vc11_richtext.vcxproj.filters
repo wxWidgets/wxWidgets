@@ -58,6 +58,36 @@
     <ClCompile Include="..\..\src\xrc\xh_richtext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextbackgroundpage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextborderspage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextbulletspage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextfontpage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextindentspage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextliststylepage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextmarginspage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextsizepage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtextstylepage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\richtext\richtexttabspage.cpp">
+      <Filter>Common Headers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
