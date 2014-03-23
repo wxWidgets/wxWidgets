@@ -276,10 +276,16 @@ typedef short int WXTYPE;
     #if __cplusplus >= 201103L
         /* All C++11 compilers should have it. */
         #define HAVE_OVERRIDE
-    #elif wxCHECK_VISUALC_VERSION(8)
+    #elif wxCHECK_VISUALC_VERSION(11)
         /*
-           VC++ 8.0+ do support override keyword but don't define __cplusplus
-           as indicating C++11 support, so handle this case specially.
+           VC++ supports override keyword since version 8 but doesn't define
+           __cplusplus as indicating C++11 support (at least up to and
+           including 12), so handle its case specially.
+
+           Also note that while the keyword is supported, using it with
+           versions 8, 9 and 10 results in C4481 compiler warning ("nonstandard
+           extension used") and so we avoid using it there, you could disable
+           this warning and predefine HAVE_OVERRIDE if you don't care about it.
          */
         #define HAVE_OVERRIDE
     #elif WX_HAS_CLANG_FEATURE(cxx_override_control)
