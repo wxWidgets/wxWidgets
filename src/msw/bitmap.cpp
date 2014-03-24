@@ -243,6 +243,28 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
     {
         wxDIB dib((HBITMAP)(data.m_hBitmap));
         CopyFromDIB(dib);
+        BITMAP bm;
+        if ( ::GetObject(m_hBitmap, sizeof(bm), &bm) != sizeof(bm) )
+        {
+            wxLogLastError(wxT("GetObject(hBitmap@wxBitmapRefData)"));
+        }
+        else if ( m_depth != bm.bmBitsPixel )
+        {
+            // We got DDB with a different colour depth then we wanted, so we
+            // can't use it and need to continue using the DIB instead.
+            wxDIB dibDst(m_width, m_height, m_depth);
+            if ( dibDst.IsOk() )
+            {
+                memcpy(dibDst.GetData(), dib.GetData(),
+                        wxDIB::GetLineSize(m_width, m_depth)*m_height);
+                AssignDIB(dibDst);
+            }
+            else
+            {
+                // Nothing else left to do...
+                m_depth = bm.bmBitsPixel;
+            }
+        }
     }
 #endif // wxUSE_WXDIB
 }
