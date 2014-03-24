@@ -306,6 +306,7 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     const HANDLE handleOrig = (HANDLE)m_image->GetHandle();
     HANDLE handle = handleOrig;
 
+#if wxUSE_WXDIB
     if ( !m_isIcon )
     {
         // wxBitmap normally stores alpha in pre-multiplied format but
@@ -321,6 +322,7 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
                            wxDIB::PixelFormat_NotPreMultiplied).Detach();
         }
     }
+#endif // wxUSE_WXDIB
     LONG style = ::GetWindowLong( (HWND)GetHWND(), GWL_STYLE ) ;
     ::SetWindowLong( (HWND)GetHWND(), GWL_STYLE, ( style & ~( SS_BITMAP|SS_ICON ) ) |
                      ( m_isIcon ? SS_ICON : SS_BITMAP ) );

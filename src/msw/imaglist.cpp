@@ -378,10 +378,11 @@ wxBitmap wxImageList::GetBitmap(int index) const
     GetSize(index, bmp_width, bmp_height);
 
     wxBitmap bitmap(bmp_width, bmp_height);
+
+#if wxUSE_WXDIB && wxUSE_IMAGE
     wxMemoryDC dc;
     dc.SelectObject(bitmap);
 
-#if wxUSE_WXDIB && wxUSE_IMAGE
     IMAGEINFO ii;
     ImageList_GetImageInfo(GetHImageList(), index, &ii);
     if ( ii.hbmMask )
@@ -425,8 +426,6 @@ wxBitmap wxImageList::GetBitmap(int index) const
         // even if it requires more work (and takes more time).
         bitmap.MSWUpdateAlpha();
     }
-#else
-    wxBitmap bitmap;
 #endif
     return bitmap;
 }
