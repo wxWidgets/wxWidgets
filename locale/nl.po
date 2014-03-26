@@ -1,17 +1,24 @@
+# wxWidgets translations to Dutch
+# Copyright (C) 2014 wxWidgets developers
+# This file is distributed under the same license as the wxWidgets package.
+#
+# Translators:
+# Thomas De Rocker, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2013-10-30 10:18+0100\n"
-"Last-Translator: Dingoe <translations@gvmelle.com>\n"
-"Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
-"Language: nl_NL\n"
+"PO-Revision-Date: 2014-03-26 12:19+0100\n"
+"Last-Translator: Thomas De Rocker <thomasderocker@hotmail.com>\n"
+"Language-Team: Dutch (http://www.transifex.com/projects/p/"
+"wxwidgets_unofficial/language/nl/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -19,7 +26,7 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 "\n"
-"Gelieve dit rapport naar de programmabeheerder te sturen, alvast bedankt\n"
+"Zend dit rapport naar de programmabeheerder, bedankt!\n"
 
 #: ../src/richtext/richtextstyledlg.cpp:210
 #: ../src/richtext/richtextstyledlg.cpp:222
@@ -95,9 +102,8 @@ msgstr "Envelop nr.9, 3 7/8 x 8 7/8 inch"
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
-#, fuzzy
 msgid "%"
-msgstr "%s"
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -139,7 +145,7 @@ msgstr "%s Informatie"
 #: ../src/generic/preferencesg.cpp:110
 #, c-format
 msgid "%s Preferences"
-msgstr "%s Voorkeuren"
+msgstr "%s voorkeuren"
 
 #: ../src/generic/logg.cpp:234
 #, c-format
@@ -679,7 +685,7 @@ msgstr "&Symbool:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "Waarden &synchroniseren"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -753,14 +759,14 @@ msgid "&Yes"
 msgstr "&Ja"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' mag alleen letters bevatten."
+msgstr "'%s' bevat ongeldige tekens"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' mag alleen letters bevatten."
+msgstr "'%s' bestaat niet alleen uit geldige tekens"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -778,14 +784,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' is geen geldige berichtcatalogus."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' is geen geldige berichtcatalogus."
+msgstr "'%s' is niet een van de geldige strings"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' is ongeldig"
+msgstr "'%s' is een van de ongeldige strings"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
@@ -1167,9 +1173,8 @@ msgid "About %s"
 msgstr "Over %s"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Over"
+msgstr "Over..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1280,7 +1285,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Een optionele hoek-straal om afgeronde hoeken toe te voegen"
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1708,7 +1713,7 @@ msgstr "Kan niet schrijven naar deflate stream: %s"
 #: ../src/msw/msgdlg.cpp:489 ../src/msw/progdlg.cpp:673
 #: ../src/gtk1/fontdlg.cpp:144 ../src/motif/msgdlg.cpp:196
 msgid "Cancel"
-msgstr "Annuleren"
+msgstr "Annuleer"
 
 #: ../src/os2/thread.cpp:116
 msgid "Cannot create mutex."
@@ -1956,7 +1961,7 @@ msgstr "Klik om een rechterhaakje toe te voegen."
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Aanvinken om alle hoeken tegelijk te bewerken."
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -1967,9 +1972,8 @@ msgstr "Klik om het opsommingsteken tussen haakjes te zetten."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "Klik voor het veranderen van tekstkleur."
+msgstr "Aanvinken om rechts-naar-links tekstlay-out aan te geven"
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -2001,7 +2005,7 @@ msgstr "Aanvinken voor tekst in Hoofdletters."
 #: ../src/richtext/richtextfontpage.cpp:291
 #: ../src/richtext/richtextfontpage.cpp:293
 msgid "Check to show the text in small capitals."
-msgstr "Aanvinken om tekst in klein kapitaal weer te geven."
+msgstr "Aanvinken voor tekst in klein kapitaal"
 
 #: ../src/richtext/richtextfontpage.cpp:305
 #: ../src/richtext/richtextfontpage.cpp:307
@@ -2016,7 +2020,7 @@ msgstr "Aanvinken voor tekst in bovenschrift."
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "Aanvinken om woordafbreking te onderdrukken."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2301,11 +2305,11 @@ msgstr "Selectie kopiëren"
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Hoek"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "Hoek-st&raal:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2868,7 +2872,7 @@ msgstr "element bewerken"
 
 #: ../include/wx/generic/progdlgg.h:84
 msgid "Elapsed time:"
-msgstr "Verstreken tijd: "
+msgstr "Verstreken tijd:"
 
 #: ../src/richtext/richtextsizepage.cpp:353
 #: ../src/richtext/richtextsizepage.cpp:355
@@ -3000,7 +3004,7 @@ msgstr "Esperanto (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
 msgid "Estimated time:"
-msgstr "Geschatte tijd: "
+msgstr "Geschatte tijd:"
 
 #: ../src/generic/dbgrptg.cpp:234
 msgid "Executable files (*.exe)|*.exe|"
@@ -3544,7 +3548,7 @@ msgstr "Instellen van permissies op grendelbestand '%s' mislukt"
 
 #: ../src/unix/utilsunx.cpp:674
 msgid "Failed to set process priority"
-msgstr "Instellen van proces prioriteit mislukt."
+msgstr "Instellen van prioriteit van proces mislukt"
 
 #: ../src/common/file.cpp:576
 msgid "Failed to set temporary file permissions"
@@ -4223,7 +4227,7 @@ msgstr "Ongeldige geometrie specificatie '%s'"
 #: ../src/unix/fswatcher_inotify.cpp:311
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr "Ongeldige  inotify gebeurtenis voor \"%s\""
+msgstr "Ongeldige inotify-gebeurtenis voor \"%s\""
 
 #: ../src/unix/snglinst.cpp:312
 #, c-format
@@ -5432,7 +5436,6 @@ msgstr "Plakken"
 msgid "Paste selection"
 msgstr "Selectie plakken"
 
-# period like dot or period of time????
 #: ../src/richtext/richtextliststylepage.cpp:222
 #: ../src/richtext/richtextbulletspage.cpp:159
 msgid "Peri&od"
@@ -5773,7 +5776,7 @@ msgstr "Relevante ingangen:"
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Remaining time:"
-msgstr "Resterende tijd: "
+msgstr "Resterende tijd:"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Remove"
@@ -5840,7 +5843,7 @@ msgstr "Rug"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "Rech&ts-naar-links"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -6025,7 +6028,7 @@ msgstr "Scheidingsteken verwacht na de optie '%s'."
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Diensten"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6145,7 +6148,7 @@ msgstr "Schuin"
 
 #: ../src/richtext/richtextfontpage.cpp:289
 msgid "Small C&apitals"
-msgstr "Klein K&apitaal"
+msgstr "Klein kapitaal"
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Solid"
@@ -6249,7 +6252,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Woordafbreking onderdrukken"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6371,9 +6374,8 @@ msgstr "De achtergrondkleur."
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "De lettertypestijl."
+msgstr "Lijnstijl van de rand"
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6416,7 +6418,7 @@ msgid ""
 "[Cancel] if it cannot be replaced"
 msgstr ""
 "De tekenset '%s' is onbekend. U kunt een andere\n"
-"tekenset kiezen om te vervangen of kies [Annuleren]\n"
+"tekenset kiezen om te vervangen of kies [Annuleer]\n"
 "als het niet vervangen kan worden"
 
 #: ../src/msw/ole/dataobj.cpp:394
@@ -6715,7 +6717,7 @@ msgstr "De waarde voor de optie '%s' moet worden opgegeven/"
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Waarde van de hoek-straal."
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -7053,7 +7055,7 @@ msgstr "Onverwachte lettertekens na de optie '%s'."
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
 msgstr ""
-"Onverwachte gebeurtenis voor  \"%s\": geen overeenkomstige waak beschrijving."
+"Onverwachte gebeurtenis voor \"%s\": geen overeenkomende watch descriptor."
 
 #: ../src/common/cmdline.cpp:1189
 #, c-format
@@ -7137,9 +7139,8 @@ msgstr "Eenheden voor de onderpositie."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Eenheden voor de boven uitvulbreedte."
+msgstr "Eenheid van de hoek-straal."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7473,14 +7474,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7574,14 +7573,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
@@ -8587,747 +8584,3 @@ msgstr "zlib-fout %d"
 #: ../src/richtext/richtextbulletspage.cpp:288
 msgid "~"
 msgstr "~"
-
-#~ msgid "Event queue overflowed"
-#~ msgstr "Gebeurtenis wachtrij overloop"
-
-#~ msgid "percent"
-#~ msgstr "procent"
-
-#~ msgid "Print preview"
-#~ msgstr "Afdrukvoorbeeld"
-
-#~ msgid "'"
-#~ msgstr "'"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "6"
-#~ msgstr "6"
-
-#~ msgid "7"
-#~ msgstr "7"
-
-#~ msgid "8"
-#~ msgstr "8"
-
-#~ msgid "9"
-#~ msgstr "9"
-
-#~ msgid "Can't monitor non-existent path \"%s\" for changes."
-#~ msgstr "Kan niet bestaande pad \"%s\" niet controleren op veranderingen."
-
-#~ msgid "File system containing watched object was unmounted"
-#~ msgstr "Bestandsysteem met waargenomen object is ontkoppeld"
-
-#~ msgid "&Preview..."
-#~ msgstr "&Afdrukvoorbeeld..."
-
-#~ msgid "Enable vertical offset."
-#~ msgstr "De vertikale verschuiving inschakelen."
-
-#~ msgid "Preview..."
-#~ msgstr " Afdrukvoorbeeld..."
-
-#~ msgid "The vertical offset relative to the paragraph."
-#~ msgstr "The vertikale verschuiving relatief t.o.v. de paragraaf."
-
-#~ msgid "Units for the object offset."
-#~ msgstr "Eenheden voor de object verschuiving."
-
-#~ msgid "Vertical &Offset:"
-#~ msgstr "Vertikale &verschuiving:"
-
-#~ msgid "&Save..."
-#~ msgstr "O&pslaan..."
-
-#~ msgid "About "
-#~ msgstr "Info"
-
-#~ msgid "All files (*.*)|*"
-#~ msgstr "Alle bestanden (*.*)|*"
-
-#~ msgid "Cannot initialize SciTech MGL!"
-#~ msgstr "Kan SciTech MGL niet initialiseren!"
-
-#~ msgid "Cannot initialize display."
-#~ msgstr "Kan beeldscherm niet initialiseren."
-
-#~ msgid "Cannot start thread: error writing TLS"
-#~ msgstr "Kan thread niet starten: fout bij schrijven van TLS"
-
-#~ msgid "Close\tAlt-F4"
-#~ msgstr "Sluiten\tAlt-F4"
-
-#~ msgid "Couldn't create cursor."
-#~ msgstr "Kon cursor niet creëren"
-
-#~ msgid "Directory '%s' doesn't exist!"
-#~ msgstr "Map '%s' bestaat niet!"
-
-#~ msgid "File %s does not exist."
-#~ msgstr "Bestand %s bestaat niet."
-
-#~ msgid "Mode %ix%i-%i not available."
-#~ msgstr "Mode %ix%i-%i niet beschikbaar."
-
-#~ msgid "Paper Size"
-#~ msgstr "Papierformaat"
-
-#~ msgid "%.*f GB"
-#~ msgstr "%.*f GB"
-
-#~ msgid "%.*f MB"
-#~ msgstr "%.*f MB"
-
-#~ msgid "%.*f TB"
-#~ msgstr "%.*f TB"
-
-#~ msgid "%.*f kB"
-#~ msgstr "%.*f KB"
-
-#~ msgid "%s B"
-#~ msgstr "%s B"
-
-#~ msgid "&Goto..."
-#~ msgstr "&Ga naar…"
-
-#~ msgid "<<"
-#~ msgstr "<<"
-
-#~ msgid ">>"
-#~ msgstr ">>"
-
-#~ msgid ">>|"
-#~ msgstr ">>|"
-
-#~ msgid "Added item is invalid."
-#~ msgstr "toegevoegde element is ongeldig."
-
-#~ msgid "Archive doesnt contain #SYSTEM file"
-#~ msgstr "Archief bevat geen #SYSTEM-bestand"
-
-#~ msgid "BIG5"
-#~ msgstr "BIG5"
-
-#~ msgid "Can't check image format of file '%s': file does not exist."
-#~ msgstr ""
-#~ "Kan afbeeldingstype van bestand '%s' niet bepalen: bestand bestaat niet."
-
-#~ msgid "Can't load image from file '%s': file does not exist."
-#~ msgstr "Kan geen afbeelding laden uit bestand '%s': bestand bestaat niet."
-
-#~ msgid "Cannot convert dialog units: dialog unknown."
-#~ msgstr "Kan dialoog eenheden niet converteren: dialoog is onbekend."
-
-#~ msgid "Cannot convert from the charset '%s'!"
-#~ msgstr "Kan niet converteren van tekenset '%s'!"
-
-#~ msgid "Cannot find container for unknown control '%s'."
-#~ msgstr "Kan geen container vinden voor onbekende control '%s'."
-
-#~ msgid "Cannot find font node '%s'."
-#~ msgstr "Kan lettertype node '%s' niet vinden."
-
-#~ msgid "Cannot open file '%s'."
-#~ msgstr "Kan bestand '%s' niet openen."
-
-#~ msgid "Cannot parse coordinates from '%s'."
-#~ msgstr "Kan coördinaten niet ontleden van '%s'."
-
-#~ msgid "Cannot parse dimension from '%s'."
-#~ msgstr "Kan dimensie niet ontleden van '%s'."
-
-#~ msgid "Cant create the thread event queue"
-#~ msgstr "Kan thread gebeurtenis wachtrij niet aanmaken"
-
-#~ msgid "Changed item is invalid."
-#~ msgstr "Gewijzigde element is ongeldig."
-
-#~ msgid "Click to cancel this window."
-#~ msgstr "Klik om dit venster te annuleren."
-
-#~ msgid "Click to confirm your selection."
-#~ msgstr "Klik voor bevestiging van uw selectie."
-
-#~ msgid "Column does not have a renderer."
-#~ msgstr "Kolom heeft geen renderer"
-
-#~ msgid "Column pointer must not be NULL."
-#~ msgstr "Kolom Pointer mag niet NULL zijn."
-
-#~ msgid "Column's model column has no equivalent in the associated model."
-#~ msgstr ""
-#~ "Het kolommenmodel van deze kolom heeft geen tegenhanger in het "
-#~ "geassocieerde model.  "
-
-#~ msgid "Control is wrongly initialized."
-#~ msgstr "Control is foutief geïnitieerd."
-
-#~ msgid "Could not add column to internal structures."
-#~ msgstr "Kon geen kolom toevoegen aan interne structuur."
-
-#~ msgid "Could not unlock mutex"
-#~ msgstr "De mutex kan niet worden ontgrendeld."
-
-#~ msgid "Data view control is not correctly initialized"
-#~ msgstr "DataView Control is onjuist geïnitieerd."
-
-#~ msgid "Error while waiting on semaphore"
-#~ msgstr "Fout tijdens wachten op semafoor"
-
-#~ msgid "Failed to connect to session manager: %s"
-#~ msgstr "Verbinding naar sessiebeheerder %s mislukt"
-
-#~ msgid "Failed to create a status bar."
-#~ msgstr "Maken van statusbalk mislukt."
-
-#~ msgid "Failed to register OpenGL window class."
-#~ msgstr "Registreren van OpenGL venster class mislukt."
-
-#~ msgid "Fatal error"
-#~ msgstr "Fatale fout"
-
-#~ msgid "Fatal error: "
-#~ msgstr "Fatale fout: "
-
-#~ msgid "GB-2312"
-#~ msgstr "GB-2312"
-
-#~ msgid "Go forward to the next HTML page"
-#~ msgstr "Ga vooruit naar de volgende HTML pagina"
-
-#~ msgid "Goto Page"
-#~ msgstr "Ga naar pagina"
-
-#~ msgid ""
-#~ "HTML pagination algorithm generated more than the allowed maximum number "
-#~ "of pages and it can't continue any longer!"
-#~ msgstr ""
-#~ "Het HTML-pagineeralgoritme heeft meer dan het maximum aantal toegestane "
-#~ "pagina's gegenereerd en kan niet langer doorgaan!"
-
-#~ msgid "Help : %s"
-#~ msgstr "Help : %s"
-
-#~ msgid "I64"
-#~ msgstr "I64"
-
-#~ msgid "Internal error, illegal wxCustomTypeInfo"
-#~ msgstr "Interne fout, illegale wxCustomTypeInfo"
-
-#~ msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
-#~ msgstr "Ongeldige XRC bron '%s': heeft geen top node 'bron'."
-
-#~ msgid "No handler found for XML node '%s', class '%s'!"
-#~ msgstr "Geen handler gevonden voor XML node '%s', class '%s'!"
-
-#~ msgid "No image handler for type %ld defined."
-#~ msgstr "Geen afbeeldingshandler voor type %ld gedefinieerd."
-
-#~ msgid "No model associated with control."
-#~ msgstr "Er is geen model gekoppeld aan de control."
-
-#~ msgid "Owner not initialized."
-#~ msgstr "Eigenaar niet geïnitialiseerd."
-
-#~ msgid "Passed item is invalid."
-#~ msgstr "Doorgelaten element is ongeldig."
-
-#~ msgid "Passing a already registered object to SetObjectName"
-#~ msgstr "Al geregistreerd object doorgegeven aan SetObjectName"
-
-#~ msgid "Preparing help window..."
-#~ msgstr "Help venster aan het voorbereiden..."
-
-#~ msgid "Program aborted."
-#~ msgstr "Programma afgebroken."
-
-#~ msgid "Referenced object node with ref=\"%s\" not found!"
-#~ msgstr "Gerefereerd object node met ref=\"%s\" niet gevonden!"
-
-#~ msgid "Resource files must have same version number!"
-#~ msgstr "Bron bestanden moeten zelfde versie nummer hebben!"
-
-#~ msgid "SHIFT-JIS"
-#~ msgstr "SHIFT-JIS"
-
-#~ msgid "Search!"
-#~ msgstr "Zoeken!"
-
-#~ msgid "Sorry, could not open this file for saving."
-#~ msgstr "Sorry, kon dit bestand niet opslaan."
-
-#~ msgid "Sorry, could not save this file."
-#~ msgstr "Sorry, kon dit bestand niet opslaan."
-
-#~ msgid "Sorry, print preview needs a printer to be installed."
-#~ msgstr ""
-#~ "Het spijt ons, maar voor een afdrukvoorbeeld moet een printer "
-#~ "geïnstalleerd zijn. "
-
-#~ msgid "Status: "
-#~ msgstr "Status: "
-
-#~ msgid ""
-#~ "Streaming delegates for not already streamed objects not yet supported"
-#~ msgstr ""
-#~ "Streaming delegates voor niet al streaming objecten wordt nog niet "
-#~ "ondersteund"
-
-#~ msgid "Subclass '%s' not found for resource '%s', not subclassing!"
-#~ msgstr ""
-#~ "Subclass '%s' niet gevonden voor bron '%s', zal geen subclass maken!"
-
-#~ msgid "TIFF library error."
-#~ msgstr "TIFF: bibliotheek fout."
-
-#~ msgid "TIFF library warning."
-#~ msgstr "TIFF bibliotheek waarschuwing."
-
-#~ msgid ""
-#~ "The file '%s' couldn't be opened.\n"
-#~ "It has been removed from the most recently used files list."
-#~ msgstr ""
-#~ "Het bestand '%s' kon niet geopend worden.\n"
-#~ "Het is verwijderd van de meest recent gebruikt bestandenlijst."
-
-#~ msgid "The path '%s' contains too many \"..\"!"
-#~ msgstr "Het pad '%s' bevat teveel \"..\"!"
-
-#~ msgid "Trying to solve a NULL hostname: giving up"
-#~ msgstr "Poging om een lege hostnaam te vinden: bezig op te geven"
-
-#~ msgid "Unknown style flag "
-#~ msgstr "Onbekende stijl vlag"
-
-#~ msgid "Warning"
-#~ msgstr "Waarschuwing"
-
-#~ msgid "Windows 2000 (build %lu"
-#~ msgstr "Windows 2000 (build %lu"
-
-#~ msgid "XRC resource '%s' (class '%s') not found!"
-#~ msgstr "XRC bron '%s' (class '%s') niet gevonden!"
-
-#~ msgid "XRC resource: Cannot create animation from '%s'."
-#~ msgstr "XRC bron: Kan geen animatie maken van '%s'."
-
-#~ msgid "XRC resource: Cannot create bitmap from '%s'."
-#~ msgstr "XRC bron: Kan geen bitmap maken van '%s'."
-
-#~ msgid ""
-#~ "XRC resource: Incorrect colour specification '%s' for attribute '%s'."
-#~ msgstr ""
-#~ "XRC bron: Ongeldige kleur specificatie '%s' voor gegevenskenmerk '%s'."
-
-#~ msgid "[EMPTY]"
-#~ msgstr "[LEEG]"
-
-#~ msgid "catalog file for domain '%s' not found."
-#~ msgstr "catalogus-bestand voor domein '%s' niet gevonden."
-
-#~ msgid "delegate has no type info"
-#~ msgstr "delegate heeft geen type info"
-
-#~ msgid "encoding %i"
-#~ msgstr "Coderen van %i"
-
-#~ msgid "looking for catalog '%s' in path '%s'."
-#~ msgstr "bezig met zoeken van catalogus '%s' in pad '%s'."
-
-#~ msgid "m_peer is not or incorrectly initialized"
-#~ msgstr "m_peer is niet of incorrect geïnitializeerd"
-
-#~ msgid "wxRichTextFontPage"
-#~ msgstr "wxRichTextFontPage"
-
-#~ msgid "wxSearchEngine::LookFor must be called before scanning!"
-#~ msgstr "wxSearchEngine::LookFor moet aangeroepen worden voor het scannen!"
-
-#~ msgid "wxSocket: invalid signature in ReadMsg."
-#~ msgstr "wxSocket: ongeldige handtekening in ReadMsg."
-
-#~ msgid "wxSocket: unknown event!."
-#~ msgstr "wxSocket: onbekende gebeurtenis!"
-
-#~ msgid "|<<"
-#~ msgstr "|<<"
-
-#~ msgid "\t%s: %s\n"
-#~ msgstr "\t%s: %s\n"
-
-#~ msgid " Couldn't create the UnicodeConverter"
-#~ msgstr "De UnicodeConverter kon niet worden aangemaakt."
-
-#~ msgid "#define %s must be an integer."
-#~ msgstr "#define %s moet een geheel getal zijn."
-
-#~ msgid "%s not a bitmap resource specification."
-#~ msgstr "%s is geen bitmap-bronspecificatie."
-
-#~ msgid "%s not an icon resource specification."
-#~ msgstr "%s is geen pictogram-bronspecificatie."
-
-#~ msgid "%s: ill-formed resource file syntax."
-#~ msgstr "%s: incorrecte syntax voor bronbestand."
-
-#~ msgid "&Open"
-#~ msgstr "&Openen"
-
-#~ msgid "&Print"
-#~ msgstr "A&fdrukken"
-
-#~ msgid "*** A debug report has been generated\n"
-#~ msgstr "*** Een debugrapport is gegenereerd\n"
-
-#~ msgid "*** It can be found in \"%s\"\n"
-#~ msgstr "*** Het is te vinden in “%s”\n"
-
-#~ msgid ""
-#~ ", expected static, #include or #define\n"
-#~ "while parsing resource."
-#~ msgstr ""
-#~ ", verwachtte static, #include of #define\n"
-#~ "tijdens analyseren van bron."
-
-#~ msgid "Bitmap resource specification %s not found."
-#~ msgstr "Bitmap-bronspecificatie %s niet gevonden."
-
-#~ msgid "Closes the dialog without inserting a symbol."
-#~ msgstr "Sluit het dialoogvenster zonder een symbool in te voegen."
-
-#~ msgid ""
-#~ "Could not resolve control class or id '%s'. Use (non-zero) integer "
-#~ "instead\n"
-#~ " or provide #define (see manual for caveats)"
-#~ msgstr ""
-#~ "Kon control class of id '%s' niet herleiden. Gebruik een integer (niet "
-#~ "nul)\n"
-#~ "of zorg voor een #define (zie handleiding voor mogelijke problemen)"
-
-#~ msgid ""
-#~ "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
-#~ "or provide #define (see manual for caveats)"
-#~ msgstr ""
-#~ "Kon menu '%s' niet herleiden. Gebruik een integer (niet nul)\n"
-#~ "of zorg voor een #define (zie handleiding voor mogelijke problemen)"
-
-#, fuzzy
-#~ msgid "Couldn't end the context on the overlay window"
-#~ msgstr "Kon pointer naar huidige thread niet verkrijgen"
-
-#, fuzzy
-#~ msgid "Expected '*' while parsing resource."
-#~ msgstr "Fout tijdens ontleden stylesheet %s\n"
-
-#, fuzzy
-#~ msgid "Expected '=' while parsing resource."
-#~ msgstr "Fout tijdens ontleden stylesheet %s\n"
-
-#, fuzzy
-#~ msgid "Expected 'char' while parsing resource."
-#~ msgstr "'char' verwacht bij inlezen van bron."
-
-#~ msgid ""
-#~ "Failed to find XBM resource %s.\n"
-#~ "Forgot to use wxResourceLoadBitmapData?"
-#~ msgstr ""
-#~ "Vinden van XBM-bron %s mislukt.\n"
-#~ "Bent u vergeten wxResourceLoadBitmapData te gebruiken?"
-
-#~ msgid ""
-#~ "Failed to find XBM resource %s.\n"
-#~ "Forgot to use wxResourceLoadIconData?"
-#~ msgstr ""
-#~ "Vinden van XBM-brom %s mislukt.\n"
-#~ "Bent u vergeten wxResourceLoadIconData te gebruiken?"
-
-#~ msgid ""
-#~ "Failed to find XPM resource %s.\n"
-#~ "Forgot to use wxResourceLoadBitmapData?"
-#~ msgstr ""
-#~ "Vinden van XPM-bron %s mislukt.\n"
-#~ "Bent u vergeten wxResourceLoadBitmapData te gebruiken?"
-
-#~ msgid "Failed to get clipboard data."
-#~ msgstr "Verkrijgen van klembordgegevens mislukt."
-
-#~ msgid "Failed to load shared library '%s' Error '%s'"
-#~ msgstr "Laden van gedeelde bibliotheek '%s' mislukt Fout '%s'"
-
-#~ msgid "Found "
-#~ msgstr "Gevonden: "
-
-#, fuzzy
-#~ msgid "Icon resource specification %s not found."
-#~ msgstr "Bitmap-bronspecificatie %s niet gevonden."
-
-#~ msgid "Ill-formed resource file syntax."
-#~ msgstr "Incorrecte syntax voor bronbestand."
-
-#, fuzzy
-#~ msgid "Inserts the chosen symbol."
-#~ msgstr "Symbool niet gevonden"
-
-#, fuzzy
-#~ msgid "Long Conversions not supported"
-#~ msgstr "Volumenbeheer niet ondersteund"
-
-#~ msgid "No XPM icon facility available!"
-#~ msgstr "Geen XPM-pictogramfaciliteit beschikbaar!"
-
-#~ msgid "Option '%s' requires a value, '=' expected."
-#~ msgstr "Optie '%s' vereist een waarde, '=' verwacht"
-
-#, fuzzy
-#~ msgid "Select all"
-#~ msgstr "Selecteer alles"
-
-#, fuzzy
-#~ msgid "String conversions not supported"
-#~ msgstr "Volumenbeheer niet ondersteund"
-
-#, fuzzy
-#~ msgid "Unexpected end of file while parsing resource."
-#~ msgstr "Onverwacht bestandseinde in regel %d bij inlezen gegevens."
-
-#, fuzzy
-#~ msgid "Unrecognized style %s while parsing resource."
-#~ msgstr "Niet-herkende stijl %s tijdens inlezen van bron."
-
-#, fuzzy
-#~ msgid "Video Output"
-#~ msgstr "DirectX video uitvoer"
-
-#~ msgid "Warning: attempt to remove HTML tag handler from empty stack."
-#~ msgstr ""
-#~ "Waarschuwing: poging om HTML tag handler van lege stack te verwijderen."
-
-#~ msgid "establish"
-#~ msgstr "Maken"
-
-#~ msgid "initiate"
-#~ msgstr "Starten"
-
-#~ msgid "invalid eof() return value."
-#~ msgstr "ongeldige eof() return-waarde."
-
-#~ msgid "unknown line terminator"
-#~ msgstr "onbekend einderegelteken"
-
-#~ msgid "writing"
-#~ msgstr "bezig met schrijven"
-
-#~ msgid "."
-#~ msgstr "."
-
-#~ msgid "Cannot open URL '%s'"
-#~ msgstr "Kan URL '%s' niet openen"
-
-#~ msgid "Error "
-#~ msgstr "Fout "
-
-#, fuzzy
-#~ msgid "Failed to create directory %s/.gnome."
-#~ msgstr "Maken van MDI-hoofdvenster mislukt."
-
-#, fuzzy
-#~ msgid "Failed to create directory %s/mime-info."
-#~ msgstr "Maken van registersleutel '%s' mislukt."
-
-#~ msgid "Mailcap file %s, line %d: incomplete entry ignored."
-#~ msgstr "Mailcap-bestand %s, regel %d: incomplete ingang genegeerd."
-
-#~ msgid "Mime.types file %s, line %d: unterminated quoted string."
-#~ msgstr ""
-#~ "Mime.types-bestand %s, regel %d: niet-afgesloten aangehaalde tekstregel."
-
-#~ msgid "Unknown field in file %s, line %d: '%s'."
-#~ msgstr "Onbekend veld in bestand %s, regel %d: '%s''. "
-
-#~ msgid "bold "
-#~ msgstr "vet"
-
-#~ msgid "light "
-#~ msgstr "licht"
-
-#~ msgid "underlined "
-#~ msgstr "onderstreept"
-
-#, fuzzy
-#~ msgid "unsupported zip archive"
-#~ msgstr "Niet-ondersteund klembord-formaat."
-
-#, fuzzy
-#~ msgid ""
-#~ "Failed to get stack backtrace:\n"
-#~ "%s"
-#~ msgstr "Verkrijgen van namen van internetaanbieders mislukt: %s"
-
-#~ msgid "Loading Grey Ascii PNM image is not yet implemented."
-#~ msgstr ""
-#~ "Laden van Ascii PNM-afbeelding met grijswaarden nog niet geïmplementeerd."
-
-#~ msgid "Loading Grey Raw PNM image is not yet implemented."
-#~ msgstr ""
-#~ "Laden van Raw PNM-afbeelding met grijswaarden nog niet geïmplementeerd."
-
-#, fuzzy
-#~ msgid "Cannot wait on thread to exit."
-#~ msgstr "Kan niet wachten op thread-beëindiging"
-
-#~ msgid "Could not load Rich Edit DLL '%s'"
-#~ msgstr "Kon Rich Edit dll '%s' niet laden"
-
-#~ msgid "ZIP handler currently supports only local files!"
-#~ msgstr "ZIP handler ondersteunt momenteel alleen lokale bestanden!"
-
-#, fuzzy
-#~ msgid ""
-#~ "can't seek on file descriptor %d, large files support is not enabled."
-#~ msgstr "kan niet zoeken bij bestandsbeschrijving %d"
-
-#~ msgid "More..."
-#~ msgstr "Meer..."
-
-#~ msgid "Setup"
-#~ msgstr "Instellingen"
-
-#~ msgid "Backward"
-#~ msgstr "Achteruit"
-
-#~ msgid "GetUnusedColour:: No Unused Color in image "
-#~ msgstr "GetUnusedColour: Er is geen ongebruikte kleur in de afbeelding"
-
-#~ msgid ""
-#~ "Can't create list control window, check that comctl32.dll is installed."
-#~ msgstr ""
-#~ "Kan geen list-control venster maken, zorg dat comctl32.dll geïnstalleerd "
-#~ "is."
-
-#~ msgid "Can't delete value of key '%s'"
-#~ msgstr "Kan waarde van sleutel '%s' niet verwijderen"
-
-#~ msgid "gmtime() failed"
-#~ msgstr "gmtime() mislukt"
-
-#~ msgid "mktime() failed"
-#~ msgstr "kmtime() mislukt"
-
-#~ msgid "%d"
-#~ msgstr "%d"
-
-#~ msgid "%d...%d"
-#~ msgstr "%d...%d"
-
-#, fuzzy
-#~ msgid ""
-#~ "<html><body><table><tr><td>Normal face<br>(and <u>underlined</u>. "
-#~ "<i>Italic face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></"
-#~ "b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</"
-#~ "font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</"
-#~ "font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</"
-#~ "font><br><font size=+4>font size +4</font><br><td><p><tt>Fixed size face."
-#~ "<br> <b>bold</b> <i>italic</i> <b><i>bold italic <u>underlined</u></i></"
-#~ "b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</"
-#~ "font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</"
-#~ "font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</"
-#~ "font><br><font size=+4>font size +4</font></tt></table></body></html>"
-#~ msgstr ""
-#~ "<html><body>Normaal lettertype<br>en <u>onderstreept</u>. <i>Cursief "
-#~ "lettertype.</i> <b>Vet lettertype.</b> <b><i>Vet+cursief lettertype.</i></"
-#~ "b><br><font size=-2>lettergrootte -2</font><br><font "
-#~ "size=-1>lettergrootte -1</font><br><font size=+0>lettergrootte +0</"
-#~ "font><br><font size=+1>lettergrootte +1</font><br><font size="
-#~ "+2>lettergrootte +2</font><br><font size=+3>lettergrootte +3</"
-#~ "font><br><font size=+4>lettergrootte +4</font><br><p><tt>Niet-"
-#~ "proportioneel lettertype.<br> <b>vet</b> <i>cursief</i> <b><i>vet+cursief "
-#~ "<u>onderstreept</u></i></b><br><font size=-2>lettergrootte -2</"
-#~ "font><br><font size=-1>lettergrootte -1</font><br><font size="
-#~ "+0>lettergrootte +0</font><br><font size=+1>lettergrootte +1</"
-#~ "font><br><font size=+2>lettergrootte +2</font><br><font size="
-#~ "+3>lettergrootte +3</font><br><font size=+4>lettergrootte +4</font></tt></"
-#~ "body></html>"
-
-#~ msgid "Can't create dialog using memory template"
-#~ msgstr "Kan dialoog niet maken met gebruik van geheugen sjabloon"
-
-#~ msgid "Can't create dialog using template '%ul'"
-#~ msgstr "Kan dialoog niet maken met gebruik van sjabloon '%ul'"
-
-#~ msgid "Did you forget to include wx/os2/wx.rc in your resources?"
-#~ msgstr "Bent U vergeten wx/os2/wx.rc aan uw bronnen toe te voegen?"
-
-#~ msgid "Failed to create dialog. Incorrect DLGTEMPLATE?"
-#~ msgstr "Maken van dialoog mislukt. Foutieve DLGTEMPLATE?"
-
-#~ msgid "Fatal error: exiting"
-#~ msgstr "Fatale fout: bezig met afbreken"
-
-#~ msgid ""
-#~ "HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*."
-#~ "htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*."
-#~ "*)|*"
-#~ msgstr ""
-#~ "HTML-bestanden (*.htm)|*.htm|HTML-bestanden (*.html)|*.html|Helpbestanden "
-#~ "(*.htb)|*.htb|Helpbestanden (*.zip)|*.zip|HTML-Help Project (*.hhp)|*.hhp|"
-#~ "Alle bestanden (*.*)|*"
-
-#~ msgid "Load file"
-#~ msgstr "Laad bestand"
-
-#~ msgid "Save file"
-#~ msgstr "Bestand opslaan"
-
-#~ msgid "wxDllLoader failed to GetSymbol '%s'"
-#~ msgstr "wxDLLLoader kon niet GetSymbol '%s' verkrijgen"
-
-#~ msgid "wxDynamicLibrary failed to GetSymbol '%s'"
-#~ msgstr "wxDynamicLoader kon niet GetSymbol '%s' verkrijgen"
-
-#~ msgid "<DIR> "
-#~ msgstr "<DIR> "
-
-#~ msgid "<LINK> "
-#~ msgstr "<LINK> "
-
-#~ msgid "DIB Header: Cannot deal with 4bit encoded yet."
-#~ msgstr "DIB Header: kan geen 4-bits codering verwerken"
-
-#~ msgid "ReleaseMutex()"
-#~ msgstr "ReleaseMutex()"
-
-#~ msgid "Screenshot captured: "
-#~ msgstr "Screenshot opgeslagen:"
-
-#~ msgid "XRC resource: Cannot create dialog without instance."
-#~ msgstr "XRC bron: Kan geen dialoog maken zonder instantie."
-
-#~ msgid "large"
-#~ msgstr "groot"
-
-#~ msgid "medium"
-#~ msgstr "medium"
-
-#~ msgid "small"
-#~ msgstr "klein"
-
-#~ msgid "very large"
-#~ msgstr "zeer groot"
-
-#~ msgid "very small"
-#~ msgstr "zeer klein"
