@@ -121,6 +121,14 @@ static wxVector<HANDLE> gs_asyncThreads;
 struct wxExecuteData
 {
 public:
+    wxExecuteData()
+    {
+        // The rest is initialized in the code creating the objects of this
+        // class, but the thread handle can't be set until later, so initialize
+        // it here to ensure we never use an uninitialized value in our dtor.
+        hThread = 0;
+    }
+
     ~wxExecuteData()
     {
         if ( !::CloseHandle(hProcess) )
@@ -131,6 +139,7 @@ public:
 
     HWND       hWnd;          // window to send wxWM_PROC_TERMINATED to
     HANDLE     hProcess;      // handle of the process
+    HANDLE     hThread;       // handle of the thread monitoring its termination
     DWORD      dwProcessId;   // pid of the process
     wxProcess *handler;
     DWORD      dwExitCode;    // the exit code of the process
@@ -361,6 +370,21 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
         else
         {
             // asynchronous execution - we should do the clean up
+            for ( wxVector<HANDLE>::iterator it = gs_asyncThreads.begin();
+                  it != gs_asyncThreads.end();
+                  ++it )
+            {
+                if ( *it == data->hThread )
+                {
+                    gs_asyncThreads.erase(it);
+                    if ( !::CloseHandle(data->hThread) )
+                    {
+                        wxLogLastError(wxT("CloseHandle(hThread)"));
+                    }
+                    break;
+                }
+            }
+
             delete data;
         }
 
@@ -978,6 +1002,7 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler,
     }
 
     gs_asyncThreads.push_back(hThread);
+    data->hThread = hThread;
 
 #if wxUSE_IPC && !defined(__WXWINCE__)
     // second part of DDE hack: now establish the DDE conversation with the
