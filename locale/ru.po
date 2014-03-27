@@ -1,15 +1,15 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Dmitry Levichev <d.levichev@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.9.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2014-01-21 16:37+0400\n"
-"Last-Translator: Dmitry Levichev <d.levichev@gmail.com>\n"
+"PO-Revision-Date: 2014-03-27 12:47+0200\n"
+"Last-Translator: Pavel Maryanov <acid@jack.kiev.ua>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -25,8 +25,7 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 "\n"
-"Пожалуйста, отправьте этот отчет службе поддержки программы, благодарим "
-"заранее!\n"
+"Отправьте этот отчёт сопровождающему программы. Заранее спасибо.\n"
 
 #: ../src/richtext/richtextstyledlg.cpp:210
 #: ../src/richtext/richtextstyledlg.cpp:222
@@ -35,13 +34,12 @@ msgstr " "
 
 #: ../src/generic/dbgrptg.cpp:326
 msgid "              Thank you and we're sorry for the inconvenience!\n"
-msgstr ""
-"              Приносим извинения за доставленные неудобства, спасибо!\n"
+msgstr "              Приносим извинения за доставленные неудобства.\n"
 
 #: ../src/common/prntbase.cpp:546
-#, fuzzy, c-format
+#, c-format
 msgid " (copy %d of %d)"
-msgstr "Страница %d из %d"
+msgstr " (копия %d из %d)"
 
 #: ../src/common/log.cpp:425
 #, c-format
@@ -103,14 +101,13 @@ msgstr "Конверт #9, 3 7/8 x 8 7/8 дюйма"
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
-#, fuzzy
 msgid "%"
-msgstr "%s"
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
-#, fuzzy, c-format
+#, c-format
 msgid "%d of %lu"
-msgstr "%i из %i"
+msgstr "%d из %lu"
 
 #: ../src/html/helpwnd.cpp:1692 ../src/html/helpwnd.cpp:1730
 #, c-format
@@ -126,9 +123,9 @@ msgstr[1] "%ld байта"
 msgstr[2] "%ld байт"
 
 #: ../src/html/helpwnd.cpp:1047
-#, fuzzy, c-format
+#, c-format
 msgid "%lu of %lu"
-msgstr "%i из %i"
+msgstr "%lu из %lu"
 
 #: ../src/common/cmdline.cpp:1215
 #, c-format
@@ -146,9 +143,9 @@ msgid "%s Information"
 msgstr "Информация %s"
 
 #: ../src/generic/preferencesg.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "&Параметры"
+msgstr "Параметры %s"
 
 #: ../src/generic/logg.cpp:234
 #, c-format
@@ -167,9 +164,8 @@ msgstr "%s файлы (%s)|%s"
 
 #: ../src/common/stockitem.cpp:139 ../src/html/helpfrm.cpp:142
 #: ../src/html/helpfrm.cpp:144
-#, fuzzy
 msgid "&About"
-msgstr "О программе"
+msgstr "&О программе"
 
 #: ../src/common/stockitem.cpp:207
 msgid "&Actual Size"
@@ -177,7 +173,7 @@ msgstr "&Исходный размер"
 
 #: ../src/richtext/richtextindentspage.cpp:262
 msgid "&After a paragraph:"
-msgstr "И после абзаца:"
+msgstr "&После абзаца:"
 
 #: ../src/richtext/richtextindentspage.cpp:128
 #: ../src/richtext/richtextliststylepage.cpp:319
@@ -198,7 +194,7 @@ msgstr "&Упорядочить значки"
 
 #: ../src/common/stockitem.cpp:195
 msgid "&Ascending"
-msgstr "И восходящие"
+msgstr "По &возрастанию"
 
 #: ../src/common/stockitem.cpp:142
 msgid "&Back"
@@ -206,15 +202,15 @@ msgstr "&Назад"
 
 #: ../src/richtext/richtextstylepage.cpp:115
 msgid "&Based on:"
-msgstr "И на основе:"
+msgstr "&На основе:"
 
 #: ../src/richtext/richtextindentspage.cpp:253
 msgid "&Before a paragraph:"
-msgstr "И перед абзацем:"
+msgstr "&Перед абзацем:"
 
 #: ../src/richtext/richtextfontpage.cpp:262
 msgid "&Bg colour:"
-msgstr "&Фн. цвет:"
+msgstr "Цвет &фона:"
 
 #: ../src/common/stockitem.cpp:143
 msgid "&Bold"
@@ -222,7 +218,7 @@ msgstr "&Жирный"
 
 #: ../src/common/stockitem.cpp:144
 msgid "&Bottom"
-msgstr "И внизу"
+msgstr "C&низу"
 
 #: ../src/richtext/richtextborderspage.cpp:347
 #: ../src/richtext/richtextborderspage.cpp:516
@@ -230,9 +226,8 @@ msgstr "И внизу"
 #: ../src/richtext/richtextmarginspage.cpp:373
 #: ../src/richtext/richtextsizepage.cpp:637
 #: ../src/richtext/richtextsizepage.cpp:644
-#, fuzzy
 msgid "&Bottom:"
-msgstr "И внизу"
+msgstr "C&низу:"
 
 #: ../include/wx/richtext/richtextbuffer.h:3641
 msgid "&Box"
@@ -241,7 +236,7 @@ msgstr ""
 #: ../src/richtext/richtextliststylepage.cpp:210
 #: ../src/richtext/richtextbulletspage.cpp:146
 msgid "&Bullet style:"
-msgstr "И пуля стиль:"
+msgstr "Стиль &маркера:"
 
 #: ../src/common/stockitem.cpp:146
 msgid "&CD-Rom"
@@ -255,15 +250,15 @@ msgstr "&Отмена"
 
 #: ../src/msw/mdi.cpp:171
 msgid "&Cascade"
-msgstr "&Каскад"
+msgstr "&Каскадом"
 
 #: ../include/wx/richtext/richtextbuffer.h:5717
 msgid "&Cell"
-msgstr ""
+msgstr "&Ячейка"
 
 #: ../src/richtext/richtextsymboldlg.cpp:439
 msgid "&Character code:"
-msgstr "И символьный код:"
+msgstr "Код &символа:"
 
 #: ../src/common/stockitem.cpp:147
 msgid "&Clear"
@@ -328,7 +323,7 @@ msgstr "&Вниз"
 
 #: ../src/common/stockitem.cpp:154
 msgid "&Edit"
-msgstr "И редактирование"
+msgstr "&Правка"
 
 #: ../src/richtext/richtextstyledlg.cpp:263
 msgid "&Edit Style..."
@@ -336,7 +331,7 @@ msgstr "&Редактировать стиль..."
 
 #: ../src/common/stockitem.cpp:155
 msgid "&Execute"
-msgstr "И выполнение"
+msgstr "&Выполнение"
 
 #: ../src/common/stockitem.cpp:157 ../src/html/helpfrm.cpp:146
 msgid "&File"
@@ -356,7 +351,7 @@ msgstr "&Первый"
 
 #: ../src/richtext/richtextsizepage.cpp:244
 msgid "&Floating mode:"
-msgstr ""
+msgstr "&Плавающий режим:"
 
 #: ../src/common/stockitem.cpp:160
 msgid "&Floppy"
@@ -372,7 +367,7 @@ msgstr "Размер &шрифта:"
 
 #: ../src/richtext/richtextliststylepage.cpp:194
 msgid "&Font for Level..."
-msgstr "И шрифт Уровне..."
+msgstr "&Шрифт для уровня..."
 
 #: ../src/richtext/richtextfontpage.cpp:147
 #: ../src/richtext/richtextsymboldlg.cpp:400
@@ -381,7 +376,7 @@ msgstr "&Шрифт:"
 
 #: ../src/common/stockitem.cpp:161
 msgid "&Forward"
-msgstr "&Вперед"
+msgstr "&Вперёд"
 
 #: ../src/richtext/richtextsymboldlg.cpp:451
 msgid "&From:"
@@ -389,24 +384,22 @@ msgstr "&От:"
 
 #: ../src/common/stockitem.cpp:162
 msgid "&Harddisk"
-msgstr "И Harddisk"
+msgstr "&Жёсткий диск"
 
 #: ../src/richtext/richtextsizepage.cpp:351
 #: ../src/richtext/richtextsizepage.cpp:358
-#, fuzzy
 msgid "&Height:"
-msgstr "&Ширина:"
+msgstr "&Высота:"
 
 #: ../src/generic/wizard.cpp:435 ../src/richtext/richtextstyledlg.cpp:303
 #: ../src/richtext/richtextsymboldlg.cpp:479 ../src/osx/menu_osx.cpp:776
 #: ../src/common/stockitem.cpp:163 ../src/html/helpfrm.cpp:147
 msgid "&Help"
-msgstr "&Помощь"
+msgstr "&Справка"
 
 #: ../include/wx/richmsgdlg.h:30
-#, fuzzy
 msgid "&Hide details"
-msgstr "&Подробности"
+msgstr "&Скрыть подробности"
 
 #: ../src/common/stockitem.cpp:164
 msgid "&Home"
@@ -415,16 +408,16 @@ msgstr "В &начало"
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
 msgid "&Indentation (tenths of a mm)"
-msgstr "И отступы (с точностью до десятых долей мм)"
+msgstr "&Отступы (с точностью до десятых долей мм)"
 
 #: ../src/richtext/richtextindentspage.cpp:167
 #: ../src/richtext/richtextliststylepage.cpp:356
 msgid "&Indeterminate"
-msgstr "&Неопределенный"
+msgstr "&Неопределённый"
 
 #: ../src/common/stockitem.cpp:166
 msgid "&Index"
-msgstr "&Оглавление"
+msgstr "&Индекс"
 
 #: ../src/common/stockitem.cpp:167
 msgid "&Info"
@@ -436,12 +429,12 @@ msgstr "&Курсив"
 
 #: ../src/common/stockitem.cpp:169
 msgid "&Jump to"
-msgstr "И перейти к"
+msgstr "&Перейти к"
 
 #: ../src/richtext/richtextindentspage.cpp:153
 #: ../src/richtext/richtextliststylepage.cpp:342
 msgid "&Justified"
-msgstr "&Выровненый"
+msgstr "&По ширине"
 
 #: ../src/common/stockitem.cpp:174
 msgid "&Last"
@@ -450,7 +443,7 @@ msgstr "&Последний"
 #: ../src/richtext/richtextindentspage.cpp:139
 #: ../src/richtext/richtextliststylepage.cpp:328
 msgid "&Left"
-msgstr "И слева"
+msgstr "С&лева"
 
 #: ../src/richtext/richtextindentspage.cpp:195
 #: ../src/richtext/richtextborderspage.cpp:245
@@ -461,11 +454,11 @@ msgstr "И слева"
 #: ../src/richtext/richtextsizepage.cpp:532
 #: ../src/richtext/richtextsizepage.cpp:539
 msgid "&Left:"
-msgstr "И слева:"
+msgstr "С&лева:"
 
 #: ../src/richtext/richtextliststylepage.cpp:183
 msgid "&List level:"
-msgstr "И уровень списка:"
+msgstr "&Уровень списка:"
 
 #: ../src/generic/logg.cpp:523
 msgid "&Log"
@@ -497,9 +490,8 @@ msgid "&Next >"
 msgstr "&Следующий >"
 
 #: ../src/richtext/richtextsizepage.cpp:681
-#, fuzzy
 msgid "&Next Paragraph"
-msgstr "И после абзаца:"
+msgstr "&Следующий абзац"
 
 #: ../src/generic/tipdlg.cpp:271
 msgid "&Next Tip"
@@ -519,12 +511,12 @@ msgstr "&Заметки:"
 
 #: ../src/richtext/richtextbulletspage.cpp:251
 msgid "&Number:"
-msgstr "И число:"
+msgstr "&Число:"
 
 #: ../src/generic/fontdlgg.cpp:475 ../src/generic/fontdlgg.cpp:482
 #: ../src/osx/carbon/fontdlg.cpp:578 ../src/common/stockitem.cpp:178
 msgid "&OK"
-msgstr "&OK"
+msgstr "&ОК"
 
 #: ../src/generic/dbgrptg.cpp:342 ../src/common/stockitem.cpp:179
 #: ../src/html/helpfrm.cpp:137
@@ -533,11 +525,11 @@ msgstr "&Открыть..."
 
 #: ../src/richtext/richtextindentspage.cpp:222
 msgid "&Outline level:"
-msgstr "И уровень структуры:"
+msgstr "&Уровень структуры:"
 
 #: ../src/richtext/richtextindentspage.cpp:293
 msgid "&Page Break"
-msgstr ""
+msgstr "&Разрыв страницы"
 
 #: ../src/richtext/richtextctrl.cpp:333 ../src/osx/textctrl_osx.cpp:584
 #: ../src/common/stockitem.cpp:180 ../src/msw/textctrl.cpp:2336
@@ -546,7 +538,7 @@ msgstr "Вст&авить"
 
 #: ../include/wx/richtext/richtextbuffer.h:4783
 msgid "&Picture"
-msgstr ""
+msgstr "&Рисунок"
 
 #: ../src/generic/fontdlgg.cpp:422
 msgid "&Point size:"
@@ -554,11 +546,11 @@ msgstr "&Размер шрифта:"
 
 #: ../src/richtext/richtexttabspage.cpp:110
 msgid "&Position (tenths of a mm):"
-msgstr "И должность (с точностью до десятых долей мм):"
+msgstr "&Положение (с точностью до десятых долей мм):"
 
 #: ../src/richtext/richtextsizepage.cpp:514
 msgid "&Position mode:"
-msgstr ""
+msgstr "Режим &размещения:"
 
 #: ../src/common/stockitem.cpp:181
 msgid "&Preferences"
@@ -567,12 +559,11 @@ msgstr "&Параметры"
 #: ../src/aui/tabmdi.cpp:112 ../src/generic/mdig.cpp:101
 #: ../src/msw/mdi.cpp:177
 msgid "&Previous"
-msgstr "&Предыдущая"
+msgstr "&Предыдущий"
 
 #: ../src/richtext/richtextsizepage.cpp:675
-#, fuzzy
 msgid "&Previous Paragraph"
-msgstr "Предыдущая страница"
+msgstr "&Предыдущий абзац"
 
 #: ../src/common/stockitem.cpp:183
 msgid "&Print..."
@@ -599,7 +590,7 @@ msgstr "&Вернуть "
 
 #: ../src/richtext/richtextstyledlg.cpp:257
 msgid "&Rename Style..."
-msgstr "И Переименовать Стиль..."
+msgstr "&Переименовать стиль..."
 
 #: ../src/generic/fdrepdlg.cpp:179
 msgid "&Replace"
@@ -607,7 +598,7 @@ msgstr "&Заменить"
 
 #: ../src/richtext/richtextstyledlg.cpp:287
 msgid "&Restart numbering"
-msgstr "И нумерация"
+msgstr "&Перезапустить нумерацию"
 
 #: ../src/univ/themes/win32.cpp:3747
 msgid "&Restore"
@@ -616,7 +607,7 @@ msgstr "&Восстановить"
 #: ../src/richtext/richtextindentspage.cpp:146
 #: ../src/richtext/richtextliststylepage.cpp:335
 msgid "&Right"
-msgstr "&Направо"
+msgstr "Сп&рава"
 
 #: ../src/richtext/richtextindentspage.cpp:213
 #: ../src/richtext/richtextborderspage.cpp:279
@@ -627,16 +618,15 @@ msgstr "&Направо"
 #: ../src/richtext/richtextsizepage.cpp:602
 #: ../src/richtext/richtextsizepage.cpp:609
 msgid "&Right:"
-msgstr "&Направо:"
+msgstr "Сп&рава:"
 
 #: ../src/common/stockitem.cpp:190
 msgid "&Save"
 msgstr "&Сохранить"
 
 #: ../src/common/stockitem.cpp:191
-#, fuzzy
 msgid "&Save as"
-msgstr "Сохранить как"
+msgstr "&Сохранить как"
 
 #: ../include/wx/richmsgdlg.h:29
 #, fuzzy
@@ -645,7 +635,7 @@ msgstr "&Подробности"
 
 #: ../src/generic/tipdlg.cpp:265
 msgid "&Show tips at startup"
-msgstr "&Показывать советы при старте"
+msgstr "&Показывать советы при запуске"
 
 #: ../src/univ/themes/win32.cpp:3750
 msgid "&Size"
@@ -666,7 +656,7 @@ msgstr "&Интервал (с точностью до десятых долей 
 
 #: ../src/common/stockitem.cpp:197
 msgid "&Spell Check"
-msgstr "&Spell Check"
+msgstr "&Проверка правописания"
 
 #: ../src/common/stockitem.cpp:198
 msgid "&Stop"
@@ -674,7 +664,7 @@ msgstr "&Остановить"
 
 #: ../src/richtext/richtextfontpage.cpp:275 ../src/common/stockitem.cpp:199
 msgid "&Strikethrough"
-msgstr "И перечеркивания"
+msgstr "&Зачеркивание"
 
 #: ../src/generic/fontdlgg.cpp:382 ../src/richtext/richtextstylepage.cpp:106
 msgid "&Style:"
@@ -686,7 +676,7 @@ msgstr "&Стили:"
 
 #: ../src/richtext/richtextsymboldlg.cpp:413
 msgid "&Subset:"
-msgstr "И подмножества:"
+msgstr "&Подмножество:"
 
 #: ../src/richtext/richtextliststylepage.cpp:268
 #: ../src/richtext/richtextbulletspage.cpp:209
@@ -696,15 +686,15 @@ msgstr "&Символ:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Синхронизировать значения"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
-msgstr ""
+msgstr "&Таблица"
 
 #: ../src/common/stockitem.cpp:200
 msgid "&Top"
-msgstr "&Верх"
+msgstr "С&верху"
 
 #: ../src/richtext/richtextborderspage.cpp:313
 #: ../src/richtext/richtextborderspage.cpp:482
@@ -712,9 +702,8 @@ msgstr "&Верх"
 #: ../src/richtext/richtextmarginspage.cpp:348
 #: ../src/richtext/richtextsizepage.cpp:567
 #: ../src/richtext/richtextsizepage.cpp:574
-#, fuzzy
 msgid "&Top:"
-msgstr "&Верх"
+msgstr "С&верху:"
 
 #: ../src/generic/fontdlgg.cpp:444 ../src/common/stockitem.cpp:202
 msgid "&Underline"
@@ -743,9 +732,8 @@ msgid "&Up"
 msgstr "&Вверх"
 
 #: ../src/richtext/richtextsizepage.cpp:278
-#, fuzzy
 msgid "&Vertical alignment:"
-msgstr "Пуля И Выравнивания:"
+msgstr "Выравнивание по &вертикали:"
 
 #: ../src/generic/dbgrptg.cpp:340
 msgid "&View..."
@@ -753,12 +741,12 @@ msgstr "&Вид..."
 
 #: ../src/generic/fontdlgg.cpp:393
 msgid "&Weight:"
-msgstr "&Ширина:"
+msgstr "&Толщина:"
 
 #: ../src/richtext/richtextsizepage.cpp:317
 #: ../src/richtext/richtextsizepage.cpp:324
 msgid "&Width:"
-msgstr ""
+msgstr "&Ширина:"
 
 #: ../src/aui/tabmdi.cpp:311 ../src/aui/tabmdi.cpp:327
 #: ../src/aui/tabmdi.cpp:329 ../src/generic/mdig.cpp:294
@@ -772,9 +760,9 @@ msgid "&Yes"
 msgstr "&Да"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' должно содержать только символы алфавита."
+msgstr "'%s' содержит недопустмые знаки"
 
 #: ../src/common/valtext.cpp:254
 #, fuzzy, c-format
@@ -1080,7 +1068,7 @@ msgstr "Не пустая коллекция должна состоять из 
 #: ../src/richtext/richtextbulletspage.cpp:244
 #: ../src/richtext/richtextbulletspage.cpp:246
 msgid "A standard bullet name."
-msgstr "Стандартный пуля имя."
+msgstr "Стандартное название маркера."
 
 #: ../src/common/paper.cpp:218
 msgid "A0 sheet, 841 x 1189 mm"
@@ -1176,7 +1164,6 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: ../src/common/stockitem.cpp:139
-#, fuzzy
 msgid "About"
 msgstr "О программе"
 
@@ -1187,18 +1174,16 @@ msgid "About %s"
 msgstr "О программе %s"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "&О программе..."
+msgstr "О программе..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
 msgstr ""
 
 #: ../src/common/stockitem.cpp:207
-#, fuzzy
 msgid "Actual Size"
-msgstr "&Исходный размер"
+msgstr "Исходный размер"
 
 #: ../src/common/stockitem.cpp:140
 msgid "Add"
@@ -1206,11 +1191,11 @@ msgstr "Добавить"
 
 #: ../src/richtext/richtextbuffer.cpp:11219
 msgid "Add Column"
-msgstr ""
+msgstr "Добавить столбец"
 
 #: ../src/richtext/richtextbuffer.cpp:11156
 msgid "Add Row"
-msgstr ""
+msgstr "Добавить строку"
 
 #: ../src/html/helpwnd.cpp:440
 msgid "Add current page to bookmarks"
@@ -1243,7 +1228,7 @@ msgstr "Добавление вкус не utxt"
 
 #: ../src/common/preferencescmn.cpp:41
 msgid "Advanced"
-msgstr ""
+msgstr "Дополнительно"
 
 #: ../src/richtext/richtextliststylepage.cpp:435
 msgid "After a paragraph:"
@@ -1258,9 +1243,8 @@ msgid "Align Right"
 msgstr "Выровнять вправо"
 
 #: ../src/richtext/richtextsizepage.cpp:266
-#, fuzzy
 msgid "Alignment"
-msgstr "&Выравнивание"
+msgstr "Выравнивание"
 
 #: ../src/generic/prntdlgg.cpp:215
 msgid "All"
@@ -1347,9 +1331,8 @@ msgid "Artists"
 msgstr "Художники"
 
 #: ../src/common/stockitem.cpp:195
-#, fuzzy
 msgid "Ascending"
-msgstr "И восходящие"
+msgstr "По возрастанию"
 
 #: ../src/generic/filectrlg.cpp:468
 msgid "Attributes"
@@ -1443,20 +1426,17 @@ msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage не имеет собственного wxPalette."
 
 #: ../src/common/stockitem.cpp:142
-#, fuzzy
 msgid "Back"
-msgstr "&Назад"
+msgstr "Назад"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:119
 #: ../src/richtext/richtextformatdlg.cpp:395
-#, fuzzy
 msgid "Background"
-msgstr "Цвет фона"
+msgstr "Фон"
 
 #: ../src/richtext/richtextbackgroundpage.cpp:131
-#, fuzzy
 msgid "Background &colour:"
-msgstr "Цвет фона"
+msgstr "&Цвет фона:"
 
 #: ../src/osx/carbon/fontdlg.cpp:390
 msgid "Background colour"
@@ -1493,30 +1473,27 @@ msgstr "Жирный"
 #: ../src/richtext/richtextborderspage.cpp:232
 #: ../src/richtext/richtextborderspage.cpp:390
 msgid "Border"
-msgstr ""
+msgstr "Граница"
 
 #: ../src/richtext/richtextformatdlg.cpp:389
 msgid "Borders"
-msgstr ""
+msgstr "Границы"
 
 #: ../src/richtext/richtextsizepage.cpp:288 ../src/common/stockitem.cpp:144
-#, fuzzy
 msgid "Bottom"
-msgstr "И внизу"
+msgstr "Снизу"
 
 #: ../src/generic/prntdlgg.cpp:893
 msgid "Bottom margin (mm):"
 msgstr "Нижнее поле (мм):"
 
 #: ../src/richtext/richtextbuffer.cpp:9176
-#, fuzzy
 msgid "Box Properties"
-msgstr "&Свойства"
+msgstr ""
 
 #: ../src/richtext/richtextstyles.cpp:1061
-#, fuzzy
 msgid "Box styles"
-msgstr "Все стили"
+msgstr ""
 
 #: ../src/common/filepickercmn.cpp:43 ../src/common/filepickercmn.cpp:44
 msgid "Browse"
@@ -1525,15 +1502,15 @@ msgstr "Обзор"
 #: ../src/richtext/richtextliststylepage.cpp:245
 #: ../src/richtext/richtextbulletspage.cpp:182
 msgid "Bullet &Alignment:"
-msgstr "Пуля И Выравнивания:"
+msgstr "&Выравнивание маркера:"
 
 #: ../src/richtext/richtextliststylepage.cpp:309
 msgid "Bullet style"
-msgstr "Пуля стиль"
+msgstr "Cтиль маркера"
 
 #: ../src/richtext/richtextformatdlg.cpp:363
 msgid "Bullets"
-msgstr "Пули"
+msgstr "Маркеры"
 
 #: ../src/common/paper.cpp:99
 msgid "C sheet, 17 x 22 in"
@@ -1576,9 +1553,8 @@ msgid "CAPITAL"
 msgstr "КАПИТАЛ"
 
 #: ../src/common/stockitem.cpp:146
-#, fuzzy
 msgid "CD-Rom"
-msgstr "&CD-Rom"
+msgstr "CD-Rom"
 
 #: ../src/html/chm.cpp:815 ../src/html/chm.cpp:874
 msgid "CHM handler currently supports only local files!"
@@ -1901,9 +1877,8 @@ msgid "Categorized Mode"
 msgstr "Режим \" По Категориям"
 
 #: ../src/richtext/richtextbuffer.cpp:9748
-#, fuzzy
 msgid "Cell Properties"
-msgstr "&Свойства"
+msgstr "Свойства ячейки"
 
 #: ../src/common/fmapbase.cpp:161
 msgid "Celtic (ISO-8859-14)"
@@ -1935,9 +1910,8 @@ msgid "Centre text."
 msgstr "Центрировать текст."
 
 #: ../src/richtext/richtextsizepage.cpp:287
-#, fuzzy
 msgid "Centred"
-msgstr "Цен&трировано"
+msgstr "Ппо центру"
 
 #: ../src/richtext/richtextliststylepage.cpp:280
 #: ../src/richtext/richtextbulletspage.cpp:219
@@ -1946,22 +1920,20 @@ msgstr "Вы&брать..."
 
 #: ../src/richtext/richtextbuffer.cpp:4242
 msgid "Change List Style"
-msgstr "Изменить Стиль Списка"
+msgstr "Изменить стиль списка"
 
 #: ../src/richtext/richtextbuffer.cpp:3604
-#, fuzzy
 msgid "Change Object Style"
-msgstr "Изменить Стиль Списка"
+msgstr "Изменить стиль объекта"
 
 #: ../src/richtext/richtextbuffer.cpp:3870
 #: ../src/richtext/richtextbuffer.cpp:8003
-#, fuzzy
 msgid "Change Properties"
-msgstr "&Свойства"
+msgstr "Изменить свойства"
 
 #: ../src/richtext/richtextbuffer.cpp:3421
 msgid "Change Style"
-msgstr "Изменение Стиля"
+msgstr "Изменение стиля"
 
 #: ../src/common/fileconf.cpp:372
 #, c-format
@@ -1979,7 +1951,7 @@ msgstr "Стили символов"
 #: ../src/richtext/richtextbulletspage.cpp:161
 #: ../src/richtext/richtextbulletspage.cpp:163
 msgid "Check to add a period after the bullet."
-msgstr "Проверьте, чтобы добавить точки после того, как пуля."
+msgstr ""
 
 #: ../src/richtext/richtextliststylepage.cpp:238
 #: ../src/richtext/richtextliststylepage.cpp:240
@@ -2000,7 +1972,7 @@ msgstr ""
 #: ../src/richtext/richtextbulletspage.cpp:168
 #: ../src/richtext/richtextbulletspage.cpp:170
 msgid "Check to enclose the bullet in parentheses."
-msgstr "Проверьте, чтобы заключить пуля в скобках."
+msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
@@ -2091,9 +2063,8 @@ msgid "Class not registered."
 msgstr ""
 
 #: ../src/common/stockitem.cpp:147
-#, fuzzy
 msgid "Clear"
-msgstr "О&чистить"
+msgstr "Очистить"
 
 #: ../src/generic/logg.cpp:520
 msgid "Clear the log contents"
@@ -2224,9 +2195,8 @@ msgid "Close this window"
 msgstr "Закрыть это окно"
 
 #: ../src/common/stockitem.cpp:193
-#, fuzzy
 msgid "Color"
-msgstr "&Цвет"
+msgstr "Цвет"
 
 #: ../src/richtext/richtextformatdlg.cpp:781
 msgid "Colour"
@@ -2316,9 +2286,8 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "Преобразование кодировки в '%s' не работает."
 
 #: ../src/common/stockitem.cpp:149
-#, fuzzy
 msgid "Convert"
-msgstr "&Конвертировать"
+msgstr "Преобразовать"
 
 #: ../src/html/htmlwin.cpp:1070
 #, c-format
@@ -2691,14 +2660,12 @@ msgid "Delete A&ll"
 msgstr "Удалить вс&е"
 
 #: ../src/richtext/richtextbuffer.cpp:11105
-#, fuzzy
 msgid "Delete Column"
-msgstr "Удалить вс&е"
+msgstr "Удалить столбец"
 
 #: ../src/richtext/richtextbuffer.cpp:11055
-#, fuzzy
 msgid "Delete Row"
-msgstr "Удалить"
+msgstr "Удалить строку"
 
 #: ../src/richtext/richtextstyledlg.cpp:782
 msgid "Delete Style"
@@ -2732,9 +2699,8 @@ msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
 msgstr "Зависимость \"%s\" модуль \"%s\" не существует."
 
 #: ../src/common/stockitem.cpp:196
-#, fuzzy
 msgid "Descending"
-msgstr "&Убыванию"
+msgstr "По убыванию"
 
 #: ../src/generic/dirctrlg.cpp:626
 msgid "Desktop"
@@ -2761,9 +2727,9 @@ msgid "Did you know..."
 msgstr "А вы знаете, что..."
 
 #: ../src/dfb/wrapdfb.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "DirectFB error %d occurred."
-msgstr "Произошла ошибка %d в DirectFB."
+msgstr "Произошла ошибка DirectFB: %d"
 
 #: ../src/motif/filedlg.cpp:219
 msgid "Directories"
@@ -2829,9 +2795,8 @@ msgid "Do you want to save changes to %s?"
 msgstr "Хотите ли вы сохранить изменения в %s?"
 
 #: ../src/common/prntbase.cpp:525
-#, fuzzy
 msgid "Document:"
-msgstr "Документацию по "
+msgstr "Документ:"
 
 #: ../src/generic/aboutdlgg.cpp:73
 msgid "Documentation by "
@@ -2858,9 +2823,8 @@ msgid "Dotted"
 msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:617
-#, fuzzy
 msgid "Double"
-msgstr "двухместный"
+msgstr "Двойная"
 
 #: ../src/common/paper.cpp:177
 msgid "Double Japanese Postcard Rotated 148 x 200 mm"
@@ -2877,7 +2841,7 @@ msgstr "Вниз"
 
 #: ../src/richtext/richtextctrl.cpp:848
 msgid "Drag"
-msgstr ""
+msgstr "Перетащить"
 
 #: ../src/common/paper.cpp:101
 msgid "E sheet, 34 x 44 in"
@@ -2908,9 +2872,8 @@ msgid "EXECUTE"
 msgstr "ВЫПОЛНИТЬ"
 
 #: ../src/common/stockitem.cpp:154
-#, fuzzy
 msgid "Edit"
-msgstr "И редактирование"
+msgstr "Правка"
 
 #: ../src/generic/editlbox.cpp:272
 msgid "Edit item"
@@ -3057,14 +3020,12 @@ msgid "Estimated time:"
 msgstr "Расчетное время:"
 
 #: ../src/generic/dbgrptg.cpp:234
-#, fuzzy
 msgid "Executable files (*.exe)|*.exe|"
-msgstr "Исполняемые файлы (*.exe)|*.exe|Все файлы(*.*)|*.*||"
+msgstr "Исполняемые файлы (*.exe)|*.exe"
 
 #: ../src/common/stockitem.cpp:155
-#, fuzzy
 msgid "Execute"
-msgstr "И выполнение"
+msgstr "Выполнение"
 
 #: ../src/msw/utilsexc.cpp:887
 #, c-format
@@ -3765,14 +3726,12 @@ msgid "Find"
 msgstr "Найти"
 
 #: ../src/common/stockitem.cpp:159
-#, fuzzy
 msgid "First"
-msgstr "&Первый"
+msgstr "Первый"
 
 #: ../src/common/prntbase.cpp:1518
-#, fuzzy
 msgid "First page"
-msgstr "Следующая станица"
+msgstr "Первая страница"
 
 #: ../src/richtext/richtextsizepage.cpp:521
 #, fuzzy
@@ -3789,12 +3748,11 @@ msgstr "Шрифт с фиксированным размером.<br> <b>жир
 
 #: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
-msgstr ""
+msgstr "Плавающий"
 
 #: ../src/common/stockitem.cpp:160
-#, fuzzy
 msgid "Floppy"
-msgstr "&Дискета"
+msgstr "Дискета"
 
 #: ../src/common/paper.cpp:112
 msgid "Folio, 8 1/2 x 13 in"
@@ -3831,9 +3789,8 @@ msgid "Fork failed"
 msgstr "Неудачный fork"
 
 #: ../src/common/stockitem.cpp:161
-#, fuzzy
 msgid "Forward"
-msgstr "&Вперед"
+msgstr "Вперед"
 
 #: ../src/common/xtixml.cpp:235
 msgid "Forward hrefs are not supported"
@@ -3880,7 +3837,7 @@ msgstr "Тема GTK+"
 
 #: ../src/common/preferencescmn.cpp:39
 msgid "General"
-msgstr ""
+msgstr "Общие"
 
 #: ../src/common/prntbase.cpp:243
 msgid "Generic PostScript"
@@ -3964,9 +3921,8 @@ msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "Файлы HTML (*.html;*.htm)|*.html;*.htm|"
 
 #: ../src/common/stockitem.cpp:162
-#, fuzzy
 msgid "Harddisk"
-msgstr "И Harddisk"
+msgstr "Жёсткий диск"
 
 #: ../src/common/fmapbase.cpp:155
 msgid "Hebrew (ISO-8859-8)"
@@ -4016,11 +3972,11 @@ msgstr "Помощь: %s"
 #: ../src/osx/menu_osx.cpp:623
 #, c-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Скрыть %s"
 
 #: ../src/osx/menu_osx.cpp:625
 msgid "Hide Others"
-msgstr ""
+msgstr "Скрыть остальные"
 
 #: ../src/generic/infobar.cpp:84
 msgid "Hide this notification message."
@@ -4206,7 +4162,7 @@ msgstr "Отступ"
 
 #: ../src/richtext/richtextformatdlg.cpp:351
 msgid "Indents && Spacing"
-msgstr "Отступы И Интервалы"
+msgstr "Отступы и интервалы"
 
 #: ../src/common/stockitem.cpp:166 ../src/html/helpwnd.cpp:526
 msgid "Index"
@@ -4217,9 +4173,8 @@ msgid "Indian (ISO-8859-12)"
 msgstr "Индийский (ISO-8859-12)"
 
 #: ../src/common/stockitem.cpp:167
-#, fuzzy
 msgid "Info"
-msgstr "&Инфо"
+msgstr "Инфо"
 
 #: ../src/common/init.cpp:276
 msgid "Initialization failed in post init, aborting."
@@ -4230,26 +4185,24 @@ msgid "Insert"
 msgstr "Вставить"
 
 #: ../src/richtext/richtextbuffer.cpp:7941
-#, fuzzy
 msgid "Insert Field"
-msgstr "Вставить Текст"
+msgstr "Вставить поле"
 
 #: ../src/richtext/richtextbuffer.cpp:7852
 #: ../src/richtext/richtextbuffer.cpp:8805
 msgid "Insert Image"
-msgstr "Вставить Изображение"
+msgstr "Вставить изображение"
 
 #: ../src/richtext/richtextbuffer.cpp:7899
-#, fuzzy
 msgid "Insert Object"
-msgstr "Вставить Текст"
+msgstr "Вставить объект"
 
 #: ../src/richtext/richtextctrl.cpp:1247 ../src/richtext/richtextctrl.cpp:1454
 #: ../src/richtext/richtextbuffer.cpp:7694
 #: ../src/richtext/richtextbuffer.cpp:7724
 #: ../src/richtext/richtextbuffer.cpp:7768
 msgid "Insert Text"
-msgstr "Вставить Текст"
+msgstr "Вставить текст"
 
 #: ../src/richtext/richtextindentspage.cpp:295
 #: ../src/richtext/richtextindentspage.cpp:297
@@ -4389,9 +4342,8 @@ msgid "Japanese Postcard Rotated 148 x 100 mm"
 msgstr "Японская Открытка Поворачивается 148 x 100 мм"
 
 #: ../src/common/stockitem.cpp:169
-#, fuzzy
 msgid "Jump to"
-msgstr "И перейти к"
+msgstr "Перейти к"
 
 #: ../src/common/stockitem.cpp:171
 msgid "Justified"
@@ -4521,14 +4473,12 @@ msgid "Landscape"
 msgstr "Альбом"
 
 #: ../src/common/stockitem.cpp:174
-#, fuzzy
 msgid "Last"
-msgstr "&Последний"
+msgstr "Последний"
 
 #: ../src/common/prntbase.cpp:1542
-#, fuzzy
 msgid "Last page"
-msgstr "Следующая станица"
+msgstr "Последняя станица"
 
 #: ../src/common/log.cpp:309
 #, c-format
@@ -4864,20 +4814,19 @@ msgstr "Сделайте выбор:"
 #: ../src/richtext/richtextformatdlg.cpp:383
 #: ../src/richtext/richtextmarginspage.cpp:171
 msgid "Margins"
-msgstr ""
+msgstr "Поля"
 
 #: ../src/generic/fdrepdlg.cpp:147
 msgid "Match case"
 msgstr "С учетом регистра"
 
 #: ../src/richtext/richtextsizepage.cpp:463
-#, fuzzy
 msgid "Max height:"
-msgstr "&Ширина:"
+msgstr "Макс. высота:"
 
 #: ../src/richtext/richtextsizepage.cpp:436
 msgid "Max width:"
-msgstr ""
+msgstr "Макс. ширина:"
 
 #: ../src/unix/mediactrl.cpp:1006
 #, c-format
@@ -4895,7 +4844,7 @@ msgstr "Меню"
 
 #: ../src/common/msgout.cpp:124
 msgid "Message"
-msgstr ""
+msgstr "Сообщение"
 
 #: ../src/univ/themes/metal.cpp:168
 msgid "Metal theme"
@@ -4903,20 +4852,19 @@ msgstr "Тема Metal"
 
 #: ../src/msw/ole/automtn.cpp:655
 msgid "Method or property not found."
-msgstr ""
+msgstr "Метод или свойство не найдено."
 
 #: ../src/univ/themes/win32.cpp:3752
 msgid "Mi&nimize"
 msgstr "&Свернуть"
 
 #: ../src/richtext/richtextsizepage.cpp:409
-#, fuzzy
 msgid "Min height:"
-msgstr "&Вес шрифта:"
+msgstr "Мин. высота:"
 
 #: ../src/richtext/richtextsizepage.cpp:382
 msgid "Min width:"
-msgstr ""
+msgstr "Мин. ширина:"
 
 #: ../src/msw/ole/automtn.cpp:671
 msgid "Missing a required parameter."
@@ -4975,14 +4923,12 @@ msgid "Name"
 msgstr "Имя"
 
 #: ../src/common/stockitem.cpp:175
-#, fuzzy
 msgid "Network"
-msgstr "&Сеть"
+msgstr "Сеть"
 
 #: ../src/common/stockitem.cpp:176
-#, fuzzy
 msgid "New"
-msgstr "&Новый"
+msgstr "Новый"
 
 #: ../src/richtext/richtextstyledlg.cpp:243
 #, fuzzy
@@ -4995,11 +4941,11 @@ msgstr "Новый Символ &Стиль..."
 
 #: ../src/richtext/richtextstyledlg.cpp:237
 msgid "New &List Style..."
-msgstr "Новые И Стиль Списка..."
+msgstr "Новые стиль &списка..."
 
 #: ../src/richtext/richtextstyledlg.cpp:231
 msgid "New &Paragraph Style..."
-msgstr "Новые И Стиль Абзаца..."
+msgstr "Новый стиль &абзаца..."
 
 #: ../src/richtext/richtextstyledlg.cpp:606
 #: ../src/richtext/richtextstyledlg.cpp:611
@@ -5148,9 +5094,8 @@ msgstr "Никаких допустимых сопоставлений найт�
 #: ../src/richtext/richtextborderspage.cpp:613
 #: ../src/richtext/richtextsizepage.cpp:248
 #: ../src/richtext/richtextsizepage.cpp:252
-#, fuzzy
 msgid "None"
-msgstr "(Нет)"
+msgstr "Нет"
 
 #: ../src/common/fmapbase.cpp:157
 msgid "Nordic (ISO-8859-10)"
@@ -5211,9 +5156,8 @@ msgid "OLE Automation error in %s: %s"
 msgstr ""
 
 #: ../include/wx/richtext/richtextimagedlg.h:37
-#, fuzzy
 msgid "Object Properties"
-msgstr "&Свойства"
+msgstr "Свойства объекта"
 
 #: ../src/msw/ole/automtn.cpp:663
 msgid "Object implementation does not support named arguments."
@@ -5237,9 +5181,8 @@ msgid "Open file \"%s\""
 msgstr "Открыть файл \"%s\""
 
 #: ../src/common/stockitem.cpp:179
-#, fuzzy
 msgid "Open..."
-msgstr "&Открыть..."
+msgstr "Открыть..."
 
 #: ../src/osx/carbon/glcanvas.cpp:48
 #, c-format
@@ -5280,9 +5223,8 @@ msgstr "Из окна IDs. Рекомендуем завершение рабо�
 
 #: ../src/richtext/richtextborderspage.cpp:401
 #: ../src/richtext/richtextborderspage.cpp:559
-#, fuzzy
 msgid "Outline"
-msgstr "И уровень структуры:"
+msgstr "Структура"
 
 #: ../src/richtext/richtextborderspage.cpp:621
 msgid "Outset"
@@ -5459,7 +5401,7 @@ msgstr "ПЕЧАТЬ"
 
 #: ../src/richtext/richtextmarginspage.cpp:285
 msgid "Padding"
-msgstr ""
+msgstr "Отступ"
 
 #: ../src/common/prntbase.cpp:2044
 #, c-format
@@ -5520,9 +5462,8 @@ msgid "Permissions"
 msgstr "Разрешения"
 
 #: ../src/richtext/richtextbuffer.cpp:12512
-#, fuzzy
 msgid "Picture Properties"
-msgstr "&Свойства"
+msgstr "Свойства рисунка"
 
 #: ../include/wx/unix/pipe.h:47
 msgid "Pipe creation failed"
@@ -5591,27 +5532,24 @@ msgid "Portrait"
 msgstr "Портрет"
 
 #: ../src/richtext/richtextsizepage.cpp:496
-#, fuzzy
 msgid "Position"
-msgstr "Вопрос"
+msgstr "Положение"
 
 #: ../src/generic/prntdlgg.cpp:298
 msgid "PostScript file"
 msgstr "Файл PostScript"
 
 #: ../src/common/stockitem.cpp:181
-#, fuzzy
 msgid "Preferences"
-msgstr "&Параметры"
+msgstr "Параметры"
 
 #: ../src/osx/menu_osx.cpp:614
-#, fuzzy
 msgid "Preferences..."
-msgstr "&Параметры"
+msgstr "Параметры..."
 
 #: ../src/common/prntbase.cpp:529
 msgid "Preparing"
-msgstr ""
+msgstr "Подготовка"
 
 #: ../src/generic/fontdlgg.cpp:455 ../src/osx/carbon/fontdlg.cpp:560
 #: ../src/html/helpwnd.cpp:1236
@@ -5650,7 +5588,6 @@ msgid "Print in colour"
 msgstr "Печать в цвете"
 
 #: ../src/common/stockitem.cpp:182
-#, fuzzy
 msgid "Print previe&w..."
 msgstr "П&редварительный просмотр"
 
@@ -5659,9 +5596,8 @@ msgid "Print preview creation failed."
 msgstr "Сбой при создании предварительного просмотра печати."
 
 #: ../src/common/stockitem.cpp:182
-#, fuzzy
 msgid "Print preview..."
-msgstr "Предварительный просмотр печати"
+msgstr "Предварительный просмотр..."
 
 #: ../src/generic/prntdlgg.cpp:630
 msgid "Print spooling"
@@ -5676,9 +5612,8 @@ msgid "Print to File"
 msgstr "Печать в файл"
 
 #: ../src/common/stockitem.cpp:183
-#, fuzzy
 msgid "Print..."
-msgstr "&Печать..."
+msgstr "Печать..."
 
 #: ../src/generic/prntdlgg.cpp:493
 msgid "Printer"
@@ -5718,9 +5653,9 @@ msgid "Printing Error"
 msgstr "Ошибка печати"
 
 #: ../src/common/prntbase.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "Printing page %d of %d"
-msgstr "Печать страницы %d..."
+msgstr "Печать страницы %d из %d"
 
 #: ../src/generic/printps.cpp:201
 #, c-format
@@ -5753,9 +5688,8 @@ msgid "Progress:"
 msgstr ""
 
 #: ../src/common/stockitem.cpp:184
-#, fuzzy
 msgid "Properties"
-msgstr "&Свойства"
+msgstr "Свойства"
 
 #: ../src/propgrid/manager.cpp:237
 msgid "Property"
@@ -5775,14 +5709,13 @@ msgid "Question"
 msgstr "Вопрос"
 
 #: ../src/common/stockitem.cpp:156
-#, fuzzy
 msgid "Quit"
-msgstr "Вы&ход"
+msgstr "Выход"
 
 #: ../src/osx/menu_osx.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "Вы&ход"
+msgstr "Выход из %s"
 
 #: ../src/common/stockitem.cpp:263
 msgid "Quit this program"
@@ -5797,9 +5730,8 @@ msgid "RIGHT"
 msgstr "ПРАВО"
 
 #: ../src/common/accelcmn.cpp:327
-#, fuzzy
 msgid "RawCtrl+"
-msgstr "Ctrl+"
+msgstr "RawCtrl+"
 
 #: ../src/common/ffile.cpp:113 ../src/common/ffile.cpp:134
 #, c-format
@@ -5854,9 +5786,8 @@ msgid "Regular"
 msgstr "Регулярные"
 
 #: ../src/richtext/richtextsizepage.cpp:519
-#, fuzzy
 msgid "Relative"
-msgstr "Декоративный"
+msgstr ""
 
 #: ../src/generic/helpext.cpp:462
 msgid "Relevant entries:"
@@ -5871,9 +5802,8 @@ msgid "Remove"
 msgstr "Удалить"
 
 #: ../src/richtext/richtextctrl.cpp:1522
-#, fuzzy
 msgid "Remove Bullet"
-msgstr "Удалить"
+msgstr "Удалить маркер"
 
 #: ../src/html/helpwnd.cpp:441
 msgid "Remove current page from bookmarks"
@@ -5931,7 +5861,7 @@ msgstr ""
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "&Слева направо"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -5957,7 +5887,7 @@ msgstr "Прямой"
 #: ../src/richtext/richtextliststylepage.cpp:299
 #: ../src/richtext/richtextbulletspage.cpp:239
 msgid "S&tandard bullet name:"
-msgstr "S&противовирусной пуля имя:"
+msgstr "Стандартное название маркера:"
 
 #: ../src/common/accelcmn.cpp:82
 msgid "SCROLL_LOCK"
@@ -6005,7 +5935,6 @@ msgid "Save As"
 msgstr "Сохранить как"
 
 #: ../src/common/stockitem.cpp:191
-#, fuzzy
 msgid "Save as"
 msgstr "Сохранить как"
 
@@ -6115,12 +6044,11 @@ msgstr "После параметра '%s' ожидался разделител
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Службы"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
-#, fuzzy
 msgid "Set Cell Style"
-msgstr "Удалить стиль"
+msgstr "Задать стиль ячейки"
 
 #: ../include/wx/xtiprop.h:179
 msgid "SetProperty called w/o valid setter"
@@ -6152,7 +6080,6 @@ msgid "Show &hidden files"
 msgstr "Показать &скрытые файлы"
 
 #: ../src/osx/menu_osx.cpp:626
-#, fuzzy
 msgid "Show All"
 msgstr "Показать все"
 
@@ -6186,7 +6113,7 @@ msgstr "Показывает Unicode подмножество."
 #: ../src/richtext/richtextbulletspage.cpp:263
 #: ../src/richtext/richtextbulletspage.cpp:265
 msgid "Shows a preview of the bullet settings."
-msgstr "Показывает предварительный просмотр пуля настройки."
+msgstr "Предварительный просмотр параметров маркера."
 
 #: ../src/richtext/richtextfontpage.cpp:330
 #: ../src/richtext/richtextfontpage.cpp:332
@@ -6234,9 +6161,8 @@ msgid "Slant"
 msgstr "Наклонный"
 
 #: ../src/richtext/richtextfontpage.cpp:289
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "Ca&pitals"
+msgstr ""
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Solid"
@@ -6277,9 +6203,8 @@ msgid "Spacing"
 msgstr "Интервал"
 
 #: ../src/common/stockitem.cpp:197
-#, fuzzy
 msgid "Spell Check"
-msgstr "&Spell Check"
+msgstr "Проверка правописания"
 
 #: ../src/richtext/richtextliststylepage.cpp:490
 #: ../src/richtext/richtextbulletspage.cpp:282
@@ -6292,23 +6217,20 @@ msgstr "Statement, 5 1/2 x 8 1/2 дюйма"
 
 #: ../src/richtext/richtextsizepage.cpp:518
 #: ../src/richtext/richtextsizepage.cpp:523
-#, fuzzy
 msgid "Static"
-msgstr "Состояние: "
+msgstr "Статический"
 
 #: ../src/generic/prntdlgg.cpp:204
 msgid "Status:"
 msgstr "Состояние: "
 
 #: ../src/common/stockitem.cpp:198
-#, fuzzy
 msgid "Stop"
-msgstr "&Остановить"
+msgstr "Остановить"
 
 #: ../src/common/stockitem.cpp:199
-#, fuzzy
 msgid "Strikethrough"
-msgstr "И перечеркивания"
+msgstr "Перечеркивание"
 
 #: ../src/common/colourcmn.cpp:45
 #, c-format
@@ -6362,9 +6284,8 @@ msgid "Symbol &font:"
 msgstr "Шрифт &символов:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
-msgstr "Символ"
+msgstr "Символы"
 
 #: ../src/common/accelcmn.cpp:63
 msgid "TAB"
@@ -6396,9 +6317,8 @@ msgid "TIFF: Image size is abnormally big."
 msgstr "TIFF: размер Изображения слишком большой."
 
 #: ../src/richtext/richtextbuffer.cpp:11262
-#, fuzzy
 msgid "Table Properties"
-msgstr "&Свойства"
+msgstr "Свойства таблицы"
 
 #: ../src/common/paper.cpp:146
 msgid "Tabloid Extra 11.69 x 18 in"
@@ -6450,9 +6370,8 @@ msgstr "Доступные стили."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:139
 #: ../src/richtext/richtextbackgroundpage.cpp:141
-#, fuzzy
 msgid "The background colour."
-msgstr "Цвет фона"
+msgstr "Цвет фона."
 
 #: ../src/richtext/richtextborderspage.cpp:269
 #: ../src/richtext/richtextborderspage.cpp:271
@@ -6470,21 +6389,18 @@ msgstr "Цвет фона"
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "Стиль шрифта."
+msgstr "Стиль границы."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
-#, fuzzy
 msgid "The bottom margin size."
-msgstr "Размер шрифта:"
+msgstr "Размер нижнего поля."
 
 #: ../src/richtext/richtextmarginspage.cpp:381
 #: ../src/richtext/richtextmarginspage.cpp:383
-#, fuzzy
 msgid "The bottom padding size."
-msgstr "Размер шрифта:"
+msgstr "Размер отступа снизу:"
 
 #: ../src/richtext/richtextsizepage.cpp:639
 #: ../src/richtext/richtextsizepage.cpp:641
@@ -6958,9 +6874,8 @@ msgstr "Слишком много цветов в PNG, изображение м
 
 #: ../src/richtext/richtextsizepage.cpp:286
 #: ../src/richtext/richtextsizepage.cpp:290 ../src/common/stockitem.cpp:200
-#, fuzzy
 msgid "Top"
-msgstr "&Верх"
+msgstr "Верх"
 
 #: ../src/generic/prntdlgg.cpp:881
 msgid "Top margin (mm):"
@@ -7142,9 +7057,8 @@ msgid "Undelete"
 msgstr "Отмена удаления"
 
 #: ../src/common/stockitem.cpp:202
-#, fuzzy
 msgid "Underline"
-msgstr "&Подчеркивание"
+msgstr "Подчеркивание"
 
 #: ../src/richtext/richtextfontpage.cpp:357 ../src/osx/carbon/fontdlg.cpp:540
 #: ../src/propgrid/advprops.cpp:656
@@ -7221,9 +7135,8 @@ msgid "Unicode 8 bit (UTF-8)"
 msgstr "8-битный юникод (UTF-8)"
 
 #: ../src/common/stockitem.cpp:204
-#, fuzzy
 msgid "Unindent"
-msgstr "Убрать &отступ"
+msgstr "Убрать отступ"
 
 #: ../src/richtext/richtextborderspage.cpp:362
 #: ../src/richtext/richtextborderspage.cpp:364
@@ -7588,24 +7501,20 @@ msgid "Win32s on Windows 3.1"
 msgstr "Win32s на Windows 3.1"
 
 #: ../src/msw/utils.cpp:1270
-#, fuzzy
 msgid "Windows 2000"
-msgstr "Windows 95"
+msgstr "Windows 2000"
 
 #: ../src/msw/utils.cpp:1302
-#, fuzzy
 msgid "Windows 7"
-msgstr "Windows 95"
+msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7646,14 +7555,12 @@ msgid "Windows Central European (CP 1250)"
 msgstr "Центрально-европейский Windows (CP 1250)"
 
 #: ../src/common/fmapbase.cpp:168
-#, fuzzy
 msgid "Windows Chinese Simplified (CP 936) or GB-2312"
-msgstr "Китайский Упрощенный Windows (CP 936)"
+msgstr "Китайский упрощенный Windows (CP 936) или GB-2312"
 
 #: ../src/common/fmapbase.cpp:170
-#, fuzzy
 msgid "Windows Chinese Traditional (CP 950) or Big-5"
-msgstr "Китайский Традиционный Windows (CP 950)"
+msgstr "Китайский традиционный Windows (CP 950) или Big-5"
 
 #: ../src/common/fmapbase.cpp:172
 msgid "Windows Cyrillic (CP 1251)"
@@ -7668,14 +7575,12 @@ msgid "Windows Hebrew (CP 1255)"
 msgstr "Иврит Windows (CP 1255)"
 
 #: ../src/common/fmapbase.cpp:167
-#, fuzzy
 msgid "Windows Japanese (CP 932) or Shift-JIS"
-msgstr "Японский Windows (CP 932)"
+msgstr "Японский Windows (CP 932) или Shift-JIS"
 
 #: ../src/common/fmapbase.cpp:180
-#, fuzzy
 msgid "Windows Johab (CP 1361)"
-msgstr "Арабский Windows (CP 1256)"
+msgstr ""
 
 #: ../src/common/fmapbase.cpp:169
 msgid "Windows Korean (CP 949)"
@@ -7686,34 +7591,29 @@ msgid "Windows ME"
 msgstr "Windows ME"
 
 #: ../src/msw/utils.cpp:1322
-#, fuzzy, c-format
+#, c-format
 msgid "Windows NT %lu.%lu"
-msgstr "Windows NT %lu.%lu (сборка %lu"
+msgstr "Windows NT %lu.%lu"
 
 #: ../src/msw/utils.cpp:1279
-#, fuzzy
 msgid "Windows Server 2003"
-msgstr "Windows Server 2003 (сборка %lu"
+msgstr "Windows Server 2003"
 
 #: ../src/msw/utils.cpp:1295
-#, fuzzy
 msgid "Windows Server 2008"
-msgstr "Windows Server 2003 (сборка %lu"
+msgstr "Windows Server 2008"
 
 #: ../src/msw/utils.cpp:1301
-#, fuzzy
 msgid "Windows Server 2008 R2"
-msgstr "Windows Server 2003 (сборка %lu"
+msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003 (сборка %lu"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2003 (сборка %lu"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
@@ -7724,32 +7624,28 @@ msgid "Windows Turkish (CP 1254)"
 msgstr "Турецкий Windows (CP 1254)"
 
 #: ../src/common/fmapbase.cpp:179
-#, fuzzy
 msgid "Windows Vietnamese (CP 1258)"
-msgstr "Греческий Windows (CP 1253)"
+msgstr "Вьетнамский Windows (CP 1258)"
 
 #: ../src/msw/utils.cpp:1296
-#, fuzzy
 msgid "Windows Vista"
-msgstr "Windows Vista (сборка %lu"
+msgstr "Windows Vista"
 
 #: ../src/common/fmapbase.cpp:173
 msgid "Windows Western European (CP 1252)"
 msgstr "Западно-европейский Windows (CP 1252)"
 
 #: ../src/msw/utils.cpp:1285
-#, fuzzy
 msgid "Windows XP"
-msgstr "Windows 95"
+msgstr "Windows XP"
 
 #: ../src/common/fmapbase.cpp:181
 msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
 #: ../src/common/fmapbase.cpp:165
-#, fuzzy
 msgid "Windows/DOS OEM Cyrillic (CP 866)"
-msgstr "Кириллица Windows (CP 1251)"
+msgstr "Кириллица Windows/DOS OEM (CP 866)"
 
 #: ../src/common/ffile.cpp:148
 #, c-format
@@ -7818,23 +7714,20 @@ msgid "Zoom &Out"
 msgstr "У&меньшить"
 
 #: ../src/common/stockitem.cpp:209 ../src/common/prntbase.cpp:1564
-#, fuzzy
 msgid "Zoom In"
-msgstr "&Увеличить"
+msgstr "Увеличить"
 
 #: ../src/common/stockitem.cpp:210 ../src/common/prntbase.cpp:1550
-#, fuzzy
 msgid "Zoom Out"
-msgstr "У&меньшить"
+msgstr "Уменьшить"
 
 #: ../src/common/stockitem.cpp:208
 msgid "Zoom to &Fit"
 msgstr "&Растянуть"
 
 #: ../src/common/stockitem.cpp:208
-#, fuzzy
 msgid "Zoom to Fit"
-msgstr "&Растянуть"
+msgstr "Растянуть"
 
 #: ../src/msw/dde.cpp:1144
 msgid "a DDEML application has created a prolonged race condition."
@@ -7966,9 +7859,9 @@ msgid "buffer is too small for Windows directory."
 msgstr "буфер слишком мал для каталога Windows."
 
 #: ../src/msw/utils.cpp:1328
-#, fuzzy, c-format
+#, c-format
 msgid "build %lu"
-msgstr "Windows XP (сборка %lu"
+msgstr "сборка %lu"
 
 #: ../src/common/ffile.cpp:79
 #, c-format
@@ -8382,7 +8275,7 @@ msgstr "описание контекста процесса"
 #: ../src/richtext/richtextborderspage.cpp:528
 #: ../src/richtext/richtextborderspage.cpp:596
 msgid "pt"
-msgstr ""
+msgstr "pt"
 
 #: ../src/richtext/richtextfontpage.cpp:178
 #: ../src/richtext/richtextborderspage.cpp:255
@@ -8467,12 +8360,11 @@ msgstr ""
 #: ../src/richtext/richtextsizepage.cpp:662
 #: ../src/richtext/richtextsizepage.cpp:663
 msgid "px"
-msgstr ""
+msgstr "px"
 
 #: ../src/common/accelcmn.cpp:188
-#, fuzzy
 msgid "rawctrl"
-msgstr "ctrl"
+msgstr "rawctrl"
 
 #: ../src/html/chm.cpp:333
 msgid "read error"
@@ -8526,7 +8418,7 @@ msgstr "шестой"
 
 #: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
-msgstr "укажите режим экрана для использования (например, 640x480-16)"
+msgstr "укажите используемый режим экрана (например, 640x480-16)"
 
 #: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
@@ -8537,9 +8429,8 @@ msgid "standard/circle"
 msgstr "стандартный/круг"
 
 #: ../src/richtext/richtextbuffer.cpp:9134
-#, fuzzy
 msgid "standard/circle-outline"
-msgstr "стандартный/круг"
+msgstr "стандартный/circle-outline"
 
 #: ../src/richtext/richtextbuffer.cpp:9136
 msgid "standard/diamond"
@@ -8562,9 +8453,8 @@ msgid "str"
 msgstr "str"
 
 #: ../src/common/fontcmn.cpp:794 ../src/common/fontcmn.cpp:969
-#, fuzzy
 msgid "strikethrough"
-msgstr "И перечеркивания"
+msgstr "перечеркивание"
 
 #: ../src/common/tarstrm.cpp:1003 ../src/common/tarstrm.cpp:1025
 #: ../src/common/tarstrm.cpp:1507 ../src/common/tarstrm.cpp:1529
