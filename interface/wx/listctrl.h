@@ -1192,8 +1192,8 @@ public:
         second one and positive value if the first one is greater than the second one
         (the same convention as used by @c qsort(3)).
 
-        The parameter @e item1 is the client data associated with the first item (NOT the index).
-        The parameter @e item2 is the client data associated with the second item (NOT the index).
+        The parameter @e item1 is the client data associated with the first item (@b NOT the index).
+        The parameter @e item2 is the client data associated with the second item (@b NOT the index).
         The parameter @e data is the value passed to SortItems() itself.
 
         Notice that the control may only be sorted on client data associated with
