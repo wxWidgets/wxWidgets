@@ -114,7 +114,7 @@ private:
     void DrawStdCheckMark(WXHDC hdc, const tagRECT* rc, wxODStatus stat);
 
     // helper function to determine if the item must be owner-drawn
-    bool MustUseOwnerDrawn();
+    bool MSWMustUseOwnerDrawn();
 
     // helper function to get a handle of bitmap associated with item
     WXHBITMAP GetHBitmapForMenu(bool checked = true);
@@ -145,7 +145,7 @@ private:
              m_bmpDisabled;
 #endif // wxUSE_OWNER_DRAWN
 
-    // Give wxMenu access to our MustUseOwnerDrawn() and GetHBitmapForMenu().
+    // Give wxMenu access to our MSWMustUseOwnerDrawn() and GetHBitmapForMenu().
     friend class wxMenu;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuItem)

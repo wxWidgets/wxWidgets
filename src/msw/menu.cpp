@@ -511,7 +511,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         {
             // use InsertMenuItem() if possible as it's guaranteed to look
             // correct while our owner-drawn code is not
-            if ( !pItem->MustUseOwnerDrawn() )
+            if ( !pItem->MSWMustUseOwnerDrawn() )
             {
                 WinStruct<MENUITEMINFO> mii;
                 mii.fMask = MIIM_STRING | MIIM_DATA;

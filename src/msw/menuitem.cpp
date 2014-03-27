@@ -765,7 +765,7 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
     // support instead of making the item owner-drawn
     SetOwnerDrawn(true);
 
-    if ( MustUseOwnerDrawn() )
+    if ( MSWMustUseOwnerDrawn() )
         return;
 
     // the item can be not attached to any menu yet and SetBitmap() is still
@@ -1326,7 +1326,7 @@ void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& co
     }
 }
 
-bool wxMenuItem::MustUseOwnerDrawn()
+bool wxMenuItem::MSWMustUseOwnerDrawn()
 {
     // MIIM_BITMAP only works under WinME/2000+ so we always use owner
     // drawn item under the previous versions and we also have to use
