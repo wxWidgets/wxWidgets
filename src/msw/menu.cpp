@@ -62,9 +62,7 @@
 // other standard headers
 #include <string.h>
 
-#if wxUSE_OWNER_DRAWN
-    #include "wx/dynlib.h"
-#endif
+#include "wx/dynlib.h"
 
 #ifndef MNS_CHECKORBMP
     #define MNS_CHECKORBMP 0x04000000
@@ -413,6 +411,13 @@ bool wxMenu::MSWGetRadioGroupRange(int pos, int *start, int *end) const
     return m_radioData && m_radioData->GetGroupRange(pos, start, end);
 }
 
+// DMC at march 2007 didn't have e.g. MENUITEMINFO. Is it still valid?
+#if defined(__DMC__) || defined(__WXWINCE__)
+#define wxUSE_MENUITEMINFO 0
+#else
+#define wxUSE_MENUITEMINFO 1
+#endif
+
 // append a new item or submenu to the menu
 bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 {
@@ -498,21 +503,18 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // other items already are.
     if ( m_ownerDrawn )
         pItem->SetOwnerDrawn(true);
-#endif // wxUSE_OWNER_DRAWN
 
     // check if we have something more than a simple text item
-#if wxUSE_OWNER_DRAWN
     bool makeItemOwnerDrawn = false;
-    if ( pItem->IsOwnerDrawn() )
-    {
-#ifndef __DMC__
+#endif // wxUSE_OWNER_DRAWN
 
-        if ( !m_ownerDrawn && !pItem->IsSeparator() )
-        {
-            // use InsertMenuItem() if possible as it's guaranteed to look
-            // correct while our owner-drawn code is not
-            if ( !pItem->MSWMustUseOwnerDrawn() )
+    if (
+#if wxUSE_OWNER_DRAWN
+            !pItem->IsOwnerDrawn() &&
+#endif
+        !pItem->IsSeparator() )
             {
+#if wxUSE_MENUITEMINFO
                 WinStruct<MENUITEMINFO> mii;
                 mii.fMask = MIIM_STRING | MIIM_DATA;
 
@@ -556,6 +558,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 if ( !ok )
                 {
                     wxLogLastError(wxT("InsertMenuItem()"));
+#if wxUSE_OWNER_DRAWN
+            // In case of failure switch new item to the owner-drawn mode.
+            makeItemOwnerDrawn = true;
+#endif
                 }
                 else // InsertMenuItem() ok
                 {
@@ -580,16 +586,28 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                             wxLogLastError(wxT("SetMenuInfo(MNS_NOCHECK)"));
                         }
                     }
-
-                    // tell the item that it's not really owner-drawn but only
-                    // needs to draw its bitmap, the rest is done by Windows
-                    pItem->SetOwnerDrawn(false);
                 }
-            }
+#else
+        if ( pItem->GetBitmap().IsOk() )
+        {
+            flags |= MF_BITMAP;
+            pData = reinterpret_cast<LPCTSTR>(pItem->GetHBitmapForMenu());
         }
-#endif // __DMC__
+        else
+        {
+            flags |= MF_STRING;
+#ifdef __WXWINCE__
+            itemText = wxMenuItem::GetLabelText(itemText);
+            pData = itemText.t_str();
+#else
+            pData = wxMSW_CONV_LPTSTR(itemText);
+#endif
+            }
+#endif // wxUSE_MENUITEMINFO / !wxUSE_MENUITEMINFO
+        }
 
-        if ( !ok )
+#if wxUSE_OWNER_DRAWN
+    if ( pItem->IsOwnerDrawn() || makeItemOwnerDrawn )
         {
             // item draws itself, pass pointer to it in data parameter
             flags |= MF_OWNERDRAW;
@@ -641,9 +659,6 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 // set menu as ownerdrawn
                 m_ownerDrawn = true;
 
-                // also ensure that the new item itself is made owner drawn
-                makeItemOwnerDrawn = true;
-
                 ResetMaxAccelWidth();
             }
             // only update our margin for equals alignment to other item
@@ -652,19 +667,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 pItem->SetMarginWidth(m_maxBitmapWidth);
             }
         }
-    }
-    else
 #endif // wxUSE_OWNER_DRAWN
-    {
-        // item is just a normal string (passed in data parameter)
-        flags |= MF_STRING;
-
-#ifdef __WXWINCE__
-        itemText = wxMenuItem::GetLabelText(itemText);
-#endif
-
-        pData = itemText.t_str();
-    }
 
     // item might have already been inserted by InsertMenuItem() above
     if ( !ok )
@@ -679,6 +682,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 #if wxUSE_OWNER_DRAWN
         if ( makeItemOwnerDrawn )
         {
+            pItem->SetOwnerDrawn(true);
             SetOwnerDrawnMenuItem(GetHmenu(), pos,
                                   reinterpret_cast<ULONG_PTR>(pItem), TRUE);
         }

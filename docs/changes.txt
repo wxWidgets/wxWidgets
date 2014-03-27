@@ -60,6 +60,7 @@ wxMSW:
 - Add font colour support to wxFontPickerCtrl (Pana Alexandru).
 - Add wxEnhMetaFile::Detach() (Luca Bacci).
 - Add support for saving 256*256 32bpp ICOs in PNG format (Artur Wieczorek).
+- Keep menu item icon after removing and adding it back (Artur Wieczorek).
 
 wxOSX/Cocoa:
 

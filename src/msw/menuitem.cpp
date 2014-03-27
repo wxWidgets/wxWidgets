@@ -738,8 +738,6 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     }
 }
 
-#if wxUSE_OWNER_DRAWN
-
 void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
 {
     if ( bChecked )
@@ -757,16 +755,30 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
         m_bmpUnchecked = bmp;
     }
 
+#if wxUSE_OWNER_DRAWN
     // already marked as owner-drawn, cannot be reverted
     if ( IsOwnerDrawn() )
         return;
 
-    // assume owner-drawn state, will be reset if we can use Windows bitmap
-    // support instead of making the item owner-drawn
-    SetOwnerDrawn(true);
-
     if ( MSWMustUseOwnerDrawn() )
+    {
+        SetOwnerDrawn(true);
+
+        // Parent menu has to be rearranged/recalculated in this case
+        // (all other menu items have to be also set to owner-drawn mode).
+        if ( m_parentMenu )
+        {
+            wxMenu *menu = m_parentMenu;
+            size_t pos;
+            wxMenuItem *item = menu->FindChildItem(GetMSWId(), &pos);
+            wxCHECK_RET( item == this, wxS("Non unique menu item ID?") );
+
+            menu->Remove(this);
+            menu->Insert(pos, this);
+        }
         return;
+    }
+#endif // wxUSE_OWNER_DRAWN
 
     // the item can be not attached to any menu yet and SetBitmap() is still
     // valid to call in this case and should do nothing else
@@ -802,13 +814,10 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
     if ( !::SetMenuItemInfo(hMenu, id, FALSE, &mii) )
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
-        return;
     }
-
-    // No need to really make the item owner drawn, Windows will draw its
-    // bitmap(s) for us.
-    SetOwnerDrawn(false);
 }
+
+#if wxUSE_OWNER_DRAWN
 
 int wxMenuItem::MeasureAccelWidth() const
 {
@@ -1358,6 +1367,8 @@ bool wxMenuItem::MSWMustUseOwnerDrawn()
     return mustUseOwnerDrawn;
 }
 
+#endif // wxUSE_OWNER_DRAWN
+
 // returns the HBITMAP to use in MENUITEMINFO
 HBITMAP wxMenuItem::GetHBitmapForMenu(bool checked)
 {
@@ -1377,7 +1388,6 @@ HBITMAP wxMenuItem::GetHBitmapForMenu(bool checked)
 #if wxUSE_IMAGE
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
-#if wxUSE_OWNER_DRAWN
         wxBitmap bmp = GetBitmap(checked);
         if ( bmp.IsOk() )
         {
@@ -1391,17 +1401,13 @@ HBITMAP wxMenuItem::GetHBitmapForMenu(bool checked)
 
             return GetHbitmapOf(GetBitmap(checked));
         }
-#endif // wxUSE_OWNER_DRAWN
         //else: bitmap is not set
-
         return NULL;
     }
 #endif // wxUSE_IMAGE
 
     return HBMMENU_CALLBACK;
 }
-
-#endif // wxUSE_OWNER_DRAWN
 
 // ----------------------------------------------------------------------------
 // wxMenuItemBase
