@@ -6722,7 +6722,7 @@ public:
     virtual bool GetDataHere(const wxDataFormat&, void *buf) const { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) { return SetData(len, buf); }
 
-private:
+protected:
     wxDataFormat            m_formatRichTextBuffer;     // our custom format
     wxRichTextBuffer*       m_richTextBuffer;           // our data
     static const wxChar*    ms_richTextBufferFormatId;  // our format id
