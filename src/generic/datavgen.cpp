@@ -2114,11 +2114,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 dataitem = wxDataViewItem( wxUIntToPtr(item+1) );
             }
 
-            cell->PrepareForItem(model, dataitem, col->GetModelColumn());
-
             // update cell_rect
             cell_rect.y = GetLineStart( item );
             cell_rect.height = GetLineHeight( item );
+
+            cell->PrepareForItem(model, dataitem, col->GetModelColumn());
 
             // draw the background
             bool selected = m_selection.Index( item ) != wxNOT_FOUND;
