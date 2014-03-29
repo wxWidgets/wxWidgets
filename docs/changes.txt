@@ -652,6 +652,7 @@ wxMSW:
 - Fix wxExecute() keeping open too many thread handles for too long (dannchr).
 - Fix clicking on togglable columns in wxDataViewCtrl (Laurent Poujoulat).
 - Fix expander in non left-most position in wxDataViewCtrl (Laurent Poujoulat).
+- Don't fail when using large paper sizes in print preview.
 
 wxOSX:
 
