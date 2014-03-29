@@ -457,7 +457,7 @@ void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
     // for sandboxed app we cannot access the outer structures
     // this leads to problems with extra controls, so as a temporary
     // workaround for crashes we don't support those yet
-    if ( [panel contentView] == nil )
+    if ( [panel contentView] == nil || getenv("APP_SANDBOX_CONTAINER_ID") != NULL )
         return;
     
     wxNonOwnedWindow::Create( GetParent(), nativeWindow );
