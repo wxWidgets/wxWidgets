@@ -257,10 +257,9 @@ void PixelToHIMETRIC(LONG *x, LONG *y, HDC hdcRef)
         iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
         iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
 
-    *x *= (iWidthMM * 100);
-    *x /= iWidthPels;
-    *y *= (iHeightMM * 100);
-    *y /= iHeightPels;
+    // Take care to use MulDiv() here to avoid overflow.
+    *x = ::MulDiv(*x, iWidthMM * 100, iWidthPels);
+    *y = ::MulDiv(*y, iHeightMM * 100, iHeightPels);
 }
 
 void HIMETRICToPixel(LONG *x, LONG *y, HDC hdcRef)
@@ -270,10 +269,8 @@ void HIMETRICToPixel(LONG *x, LONG *y, HDC hdcRef)
         iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
         iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
 
-    *x *= iWidthPels;
-    *x /= (iWidthMM * 100);
-    *y *= iHeightPels;
-    *y /= (iHeightMM * 100);
+    *x = ::MulDiv(*x, iWidthPels, iWidthMM * 100);
+    *y = ::MulDiv(*y, iHeightPels, iHeightMM * 100);
 }
 
 void HIMETRICToPixel(LONG *x, LONG *y)
