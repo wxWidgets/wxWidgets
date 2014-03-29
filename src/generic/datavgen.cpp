@@ -4272,7 +4272,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             // we make the rectangle we are looking in a bit bigger than the actual
             // visual expander so the user can hit that little thing reliably
-            wxRect rect(itemOffset,
+            wxRect rect(xpos + itemOffset,
                         GetLineStart( current ) + (GetLineHeight(current) - m_lineHeight)/2,
                         m_lineHeight, m_lineHeight);
 
