@@ -4493,12 +4493,16 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         if ( IsCellEditableInMode(item, col, wxDATAVIEW_CELL_ACTIVATABLE) )
         {
             // notify cell about click
-            cell->PrepareForItem(model, item, col->GetModelColumn());
 
             wxRect cell_rect( xpos + itemOffset,
                               GetLineStart( current ),
                               col->GetWidth() - itemOffset,
                               GetLineHeight( current ) );
+
+            // Note that PrepareForItem() should be called after GetLineStart()
+            // call in cell_rect initialization above as GetLineStart() calls
+            // PrepareForItem() for other items from inside it.
+            cell->PrepareForItem(model, item, col->GetModelColumn());
 
             // Report position relative to the cell's custom area, i.e.
             // not the entire space as given by the control but the one
