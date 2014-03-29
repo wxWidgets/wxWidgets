@@ -2520,6 +2520,11 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
 
 bool wxTextCtrl::SetFont(const wxFont& font)
 {
+    // Native text control sends EN_CHANGE when the font changes, producing
+    // a wxEVT_TEXT event as if the user changed the value. This is not
+    // the case, so supress the event.
+    wxEventBlocker block(this, wxEVT_TEXT);
+
     if ( !wxTextCtrlBase::SetFont(font) )
         return false;
 
