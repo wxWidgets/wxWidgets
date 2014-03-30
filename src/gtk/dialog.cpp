@@ -169,12 +169,19 @@ int wxDialog::ShowModal()
 
     wxOpenModalDialogLocker modalLock;
 
+    // Prevent the widget from being destroyed if the user closes the window.
+    // Needed for derived classes which bypass wxTLW::Create(), and therefore
+    // the wxTLW "delete-event" handler is not connected
+    gulong handler_id = g_signal_connect(
+        m_widget, "delete-event", G_CALLBACK(gtk_true), this);
+
     // Run modal dialog event loop.
     {
         wxGUIEventLoopTiedPtr modal(&m_modalLoop, new wxGUIEventLoop());
         m_modalLoop->Run();
     }
 
+    g_signal_handler_disconnect(m_widget, handler_id);
 #if GTK_CHECK_VERSION(2,10,0)
     if (sigId)
         g_signal_remove_emission_hook(sigId, hookId);
