@@ -10,7 +10,7 @@
 #define _WX_QT_TEXTCTRL_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QTextEdit>
+#include <QtWidgets/QTextEdit>
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {

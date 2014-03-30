@@ -11,7 +11,7 @@
 
 #include "wx/menuitem.h"
 #include "wx/qt/winevent_qt.h"
-#include <QtGui/QAction>
+#include <QtWidgets/QAction>
 #include "wx/qt/pointer_qt.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;

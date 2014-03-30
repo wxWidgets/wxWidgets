@@ -13,7 +13,7 @@
 #define _WX_QT_ACCEL_H_
 
 #include <QtCore/QList>
-#include <QtGui/QShortcut>
+#include <QtWidgets/QShortcut>
 
 /* wxQt accelerators implementation:
  *

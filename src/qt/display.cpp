@@ -11,8 +11,8 @@
 
 #include "wx/display.h"
 #include "wx/display_impl.h"
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
 #include "wx/qt/converter.h"
 
 class wxDisplayImplQt : public wxDisplayImpl

@@ -19,8 +19,8 @@
 
 #include <QtGui/QPicture>
 #include <QtGui/QPainter>
-#include <QtGui/QGridLayout>
-#include <QtGui/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QApplication>
 
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0
@@ -54,7 +54,7 @@ static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
 /* static */ wxWindow *wxWindow::QtRetrieveWindowPointer( const QWidget *widget )
 {
     QVariant variant = widget->property( WINDOW_POINTER_PROPERTY_NAME );
-    return const_cast< wxWindow * >( qVariantValue< const wxWindow * >( variant ));
+    return const_cast< wxWindow * >( ( variant.value< const wxWindow * >() ));
 }
 
 
@@ -981,7 +981,7 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event
         // Translated key code (including control + letter -> 1-26)
         int translated = 0;
         if ( !event->text().isEmpty() )
-            translated = event->text().at( 0 ).toAscii();
+            translated = event->text().at( 0 ).toLatin1();
         if ( translated )
             e.m_keyCode = translated;
         

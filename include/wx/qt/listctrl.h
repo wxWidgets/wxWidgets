@@ -11,7 +11,7 @@
 
 #include "wx/textctrl.h"
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QListWidget>
+#include <QtWidgets/QListWidget>
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 

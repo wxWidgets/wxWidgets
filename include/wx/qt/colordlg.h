@@ -11,7 +11,7 @@
 
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
-#include <QtGui/QColorDialog>
+#include <QtWidgets/QColorDialog>
 
 class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 {

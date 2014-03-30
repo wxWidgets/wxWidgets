@@ -12,7 +12,7 @@
 #include "wx/msgdlg.h"
 #include "wx/qt/utils.h"
 
-#include <QtGui/qmessagebox.h>
+#include <QtWidgets/qmessagebox.h>
 
 wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         const wxString& caption, long style, const wxPoint& pos )

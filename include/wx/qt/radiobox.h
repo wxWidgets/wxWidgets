@@ -11,7 +11,7 @@
 
 #include "wx/qt/pointer_qt.h"
 #include "wx/qt/groupbox_qt.h"
-#include <QtGui/QButtonGroup>
+#include <QtWidgets/QButtonGroup>
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {

@@ -10,7 +10,7 @@
 #define _WX_QT_RADIOBUT_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QRadioButton>
 
 class WXDLLIMPEXP_CORE wxRadioButton : public wxControl
 {

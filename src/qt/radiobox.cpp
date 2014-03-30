@@ -12,8 +12,8 @@
 #include "wx/radiobox.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
-#include <QtGui/QCheckBox>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QRadioButton>
 
 IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
 

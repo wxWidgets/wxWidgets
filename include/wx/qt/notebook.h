@@ -10,7 +10,7 @@
 #define _WX_QT_NOTEBOOK_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QTabWidget>
+#include <QtWidgets/QTabWidget>
 
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
 {

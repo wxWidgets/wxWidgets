@@ -11,7 +11,7 @@
 
 #include "wx/dialog.h"
 #include "wx/qt/winevent_qt.h"
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 class WXDLLIMPEXP_CORE wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
 {

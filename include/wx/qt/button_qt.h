@@ -11,7 +11,7 @@
 
 #include "wx/control.h"
 #include "wx/qt/winevent_qt.h"
-#include <QtGui/QPushButton>
+#include <QtWidgets/QPushButton>
 
 class WXDLLIMPEXP_CORE wxQtPushButton : public wxQtEventSignalHandler< QPushButton, wxControl >
 {

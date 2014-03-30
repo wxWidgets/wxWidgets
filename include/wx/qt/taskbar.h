@@ -9,7 +9,7 @@
 #ifndef _WX_QT_TASKBAR_H_
 #define _WX_QT_TASKBAR_H_
 
-#include <QtGui/QSystemTrayIcon>
+#include <QtWidgets/QSystemTrayIcon>
 
 class WXDLLIMPEXP_CORE wxTaskBarIcon : public wxTaskBarIconBase
 {

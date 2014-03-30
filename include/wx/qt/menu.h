@@ -9,8 +9,8 @@
 #ifndef _WX_QT_MENU_H_
 #define _WX_QT_MENU_H_
 
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
 
 class WXDLLIMPEXP_CORE wxMenu : public wxMenuBase
 {

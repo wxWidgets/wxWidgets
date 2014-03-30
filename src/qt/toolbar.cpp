@@ -11,6 +11,8 @@
 
 #include "wx/toolbar.h"
 
+#if wxUSE_TOOLBAR
+
 wxToolBar::wxToolBar()
 {
 }
@@ -78,4 +80,6 @@ wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control,
 {
     return NULL;
 }
+
+#endif // wxUSE_TOOLBAR
 

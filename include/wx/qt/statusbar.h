@@ -12,8 +12,8 @@
 #include "wx/statusbr.h"
 #include "wx/qt/winevent_qt.h"
 
-#include <QtGui/QLabel>
-#include <QtGui/QStatusBar>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QStatusBar>
 
 class WXDLLIMPEXP_FWD_CORE wxQtStatusBar;
 

@@ -10,7 +10,7 @@
 #define _WX_QT_LISTBOX_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QListWidget>
+#include <QtWidgets/QListWidget>
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {

@@ -9,7 +9,7 @@
 #ifndef _WX_QT_FONTDLG_H_
 #define _WX_QT_FONTDLG_H_
 
-#include <QtGui/QFontDialog>
+#include <QtWidgets/QFontDialog>
 
 class WXDLLIMPEXP_CORE wxFontDialog : public wxFontDialogBase
 {

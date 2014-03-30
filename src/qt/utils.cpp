@@ -16,8 +16,8 @@
 #include "wx/qt/converter.h"
 
 #include <QtGui/QCursor>
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
 #include <QtGui/QDesktopServices>
 #include <QtCore/QUrl>
 
