@@ -156,7 +156,7 @@ public:
     void SetFindString(const wxString& str) { SetString(str); }
     void SetReplaceString(const wxString& str) { m_strReplace = str; }
 
-    virtual wxEvent *Clone() const { return new wxFindDialogEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxFindDialogEvent(*this); }
 
 private:
     wxString m_strReplace;

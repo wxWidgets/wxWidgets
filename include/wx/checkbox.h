@@ -97,10 +97,10 @@ public:
         return HasFlag(wxCHK_ALLOW_3RD_STATE_FOR_USER);
     }
 
-    virtual bool HasTransparentBackground() { return true; }
+    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
 
     // wxCheckBox-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event)
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE
     {
         wxControl::DoUpdateWindowUI(event);
 
@@ -110,7 +110,7 @@ public:
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) { wxFAIL; }
 

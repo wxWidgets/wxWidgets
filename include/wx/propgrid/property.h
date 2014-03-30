@@ -313,10 +313,10 @@ public:
     }
 
 private:
-    virtual wxObjectRefData *CreateRefData() const
+    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE
         { return new wxPGCellData(); }
 
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------

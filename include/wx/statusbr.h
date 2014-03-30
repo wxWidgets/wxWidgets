@@ -181,10 +181,10 @@ public:
     // wxWindow overrides:
 
     // don't want status bars to accept the focus at all
-    virtual bool AcceptsFocus() const { return false; }
+    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
 
     // the client size of a toplevel window doesn't include the status bar
-    virtual bool CanBeOutsideClientArea() const { return true; }
+    virtual bool CanBeOutsideClientArea() const wxOVERRIDE { return true; }
 
 protected:
     // called after the status bar pane text changed and should update its
@@ -195,14 +195,14 @@ protected:
     // wxWindow overrides:
 
 #if wxUSE_TOOLTIPS
-   virtual void DoSetToolTip( wxToolTip *tip )
+   virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE
         {
             wxASSERT_MSG(!HasFlag(wxSTB_SHOW_TIPS),
                          "Do not set tooltip(s) manually when using wxSTB_SHOW_TIPS!");
             wxWindow::DoSetToolTip(tip);
         }
 #endif // wxUSE_TOOLTIPS
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
 
     // internal helpers & data:

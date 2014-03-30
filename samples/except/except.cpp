@@ -78,19 +78,19 @@ public:
     // ----------------------------
 
     // program startup
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     // 2nd-level exception handling: we get all the exceptions occurring in any
     // event handler here
-    virtual bool OnExceptionInMainLoop();
+    virtual bool OnExceptionInMainLoop() wxOVERRIDE;
 
     // 3rd, and final, level exception handling: whenever an unhandled
     // exception is caught, this function is called
-    virtual void OnUnhandledException();
+    virtual void OnUnhandledException() wxOVERRIDE;
 
     // and now for something different: this function is called in case of a
     // crash (e.g. dereferencing null pointer, division by 0, ...)
-    virtual void OnFatalException();
+    virtual void OnFatalException() wxOVERRIDE;
 
     // you can override this function to do something different (e.g. log the
     // assert to file) whenever an assertion fails
@@ -98,7 +98,7 @@ public:
                                  int line,
                                  const wxChar *func,
                                  const wxChar *cond,
-                                 const wxChar *msg);
+                                 const wxChar *msg) wxOVERRIDE;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -128,7 +128,7 @@ protected:
 
     // 1st-level exception handling: we overload ProcessEvent() to be able to
     // catch exceptions which occur in MyFrame methods here
-    virtual bool ProcessEvent(wxEvent& event);
+    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
 
     // provoke assert in main or worker thread
     //
@@ -485,7 +485,7 @@ void MyFrame::OnShowAssertInThread(wxCommandEvent& WXUNUSED(event))
         }
 
     protected:
-        virtual void *Entry()
+        virtual void *Entry() wxOVERRIDE
         {
             wxFAIL_MSG("Test assert in another thread.");
 

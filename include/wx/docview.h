@@ -284,7 +284,7 @@ public:
 
 protected:
     // hook the document into event handlers chain here
-    virtual bool TryBefore(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE;
 
     wxDocument*       m_viewDocument;
     wxString          m_viewTypeName;
@@ -548,7 +548,7 @@ protected:
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
     // hook the currently active view into event handlers chain here
-    virtual bool TryBefore(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE;
 
     // return the command processor for the current document, if any
     wxCommandProcessor *GetCurrentCommandProcessor() const;
@@ -983,11 +983,11 @@ public:
     wxDocPrintout(wxView *view = NULL, const wxString& title = wxString());
 
     // implement wxPrintout methods
-    virtual bool OnPrintPage(int page);
-    virtual bool HasPage(int page);
-    virtual bool OnBeginDocument(int startPage, int endPage);
+    virtual bool OnPrintPage(int page) wxOVERRIDE;
+    virtual bool HasPage(int page) wxOVERRIDE;
+    virtual bool OnBeginDocument(int startPage, int endPage) wxOVERRIDE;
     virtual void GetPageInfo(int *minPage, int *maxPage,
-                             int *selPageFrom, int *selPageTo);
+                             int *selPageFrom, int *selPageTo) wxOVERRIDE;
 
     virtual wxView *GetView() { return m_printoutView; }
 

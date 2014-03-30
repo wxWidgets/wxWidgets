@@ -133,7 +133,7 @@ public:
     virtual int GetItemId(wxRibbonButtonBarButtonBase *button) const;
 
 
-    virtual bool Realize();
+    virtual bool Realize() wxOVERRIDE;
     virtual void ClearButtons();
     virtual bool DeleteButton(int button_id);
     virtual void EnableButton(int button_id, bool enable = true);
@@ -142,18 +142,18 @@ public:
     virtual wxRibbonButtonBarButtonBase *GetActiveItem() const;
     virtual wxRibbonButtonBarButtonBase *GetHoveredItem() const;
 
-    virtual void SetArtProvider(wxRibbonArtProvider* art);
-    virtual bool IsSizingContinuous() const;
+    virtual void SetArtProvider(wxRibbonArtProvider* art) wxOVERRIDE;
+    virtual bool IsSizingContinuous() const wxOVERRIDE;
 
-    virtual wxSize GetMinSize() const;
+    virtual wxSize GetMinSize() const wxOVERRIDE;
 
     void SetShowToolTipsForDisabled(bool show);
     bool GetShowToolTipsForDisabled() const;
 
 protected:
     friend class wxRibbonButtonBarEvent;
-    virtual wxSize DoGetBestSize() const;
-    wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
@@ -165,9 +165,9 @@ protected:
     void OnMouseUp(wxMouseEvent& evt);
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                      wxSize relative_to) const;
+                                      wxSize relative_to) const wxOVERRIDE;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                     wxSize relative_to) const;
+                                     wxSize relative_to) const wxOVERRIDE;
 
     void CommonInit(long style);
     void MakeLayouts();
@@ -176,7 +176,7 @@ protected:
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         wxRibbonButtonBarButtonState size, wxDC& dc);
-    virtual void UpdateWindowUI(long flags);
+    virtual void UpdateWindowUI(long flags) wxOVERRIDE;
 
     wxArrayRibbonButtonBarLayout m_layouts;
     wxArrayRibbonButtonBarButtonBase m_buttons;
@@ -215,7 +215,7 @@ public:
         m_button = e.m_button;
     }
 #endif
-    wxEvent *Clone() const { return new wxRibbonButtonBarEvent(*this); }
+    wxEvent *Clone() const wxOVERRIDE { return new wxRibbonButtonBarEvent(*this); }
 
     wxRibbonButtonBar* GetBar() {return m_bar;}
     wxRibbonButtonBarButtonBase *GetButton() { return m_button; }

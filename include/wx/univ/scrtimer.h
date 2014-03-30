@@ -34,7 +34,7 @@ public:
     void StartAutoScroll();
 
     // the base class method
-    virtual void Notify();
+    virtual void Notify() wxOVERRIDE;
 
 protected:
     // to implement in derived classes: perform the scroll action and return

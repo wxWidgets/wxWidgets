@@ -241,7 +241,7 @@ protected:
     // m_curr to it and m_currBucket to its bucket
     void GetNextNode( size_t bucketStart );
 private:
-    virtual void DoDeleteContents( wxHashTableBase_Node* node );
+    virtual void DoDeleteContents( wxHashTableBase_Node* node ) wxOVERRIDE;
 
     // current node
     Node* m_curr;

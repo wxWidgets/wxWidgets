@@ -24,7 +24,7 @@ class MyApp : public wxApp
 public:
     MyApp() { m_showImages = true; m_showStates = true; m_showButtons = false; }
 
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 
     void SetShowImages(bool show) { m_showImages = show; }
     bool ShowImages() const { return m_showImages; }
@@ -128,7 +128,7 @@ public:
     }
 
 protected:
-    virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
+    virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2) wxOVERRIDE;
 
     // is this the test item which we use in several event handlers?
     bool IsTestItem(const wxTreeItemId& item)

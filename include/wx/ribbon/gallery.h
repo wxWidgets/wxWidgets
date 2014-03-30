@@ -63,16 +63,16 @@ public:
     wxRibbonGalleryButtonState GetExtensionButtonState() const;
 
     bool IsHovered() const;
-    virtual bool IsSizingContinuous() const;
-    virtual bool Realize();
-    virtual bool Layout();
+    virtual bool IsSizingContinuous() const wxOVERRIDE;
+    virtual bool Realize() wxOVERRIDE;
+    virtual bool Layout() wxOVERRIDE;
 
-    virtual bool ScrollLines(int lines);
+    virtual bool ScrollLines(int lines) wxOVERRIDE;
     bool ScrollPixels(int pixels);
     void EnsureVisible(const wxRibbonGalleryItem* item);
 
 protected:
-    wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
     void CommonInit(long style);
     void CalculateMinSize();
     bool TestButtonHover(const wxRect& rect, wxPoint pos,
@@ -89,11 +89,11 @@ protected:
     void OnSize(wxSizeEvent& evt);
     int GetScrollLineSize() const;
 
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                        wxSize relative_to) const;
+                                        wxSize relative_to) const wxOVERRIDE;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                       wxSize relative_to) const;
+                                       wxSize relative_to) const wxOVERRIDE;
 
     wxArrayRibbonGalleryItem m_items;
     wxRibbonGalleryItem* m_selected_item;
@@ -140,7 +140,7 @@ public:
         m_item = e.m_item;
     }
 #endif
-    wxEvent *Clone() const { return new wxRibbonGalleryEvent(*this); }
+    wxEvent *Clone() const wxOVERRIDE { return new wxRibbonGalleryEvent(*this); }
 
     wxRibbonGallery* GetGallery() {return m_gallery;}
     wxRibbonGalleryItem* GetGalleryItem() {return m_item;}

@@ -125,7 +125,7 @@ public:
 
 
     // implement some base class functions
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const wxOVERRIDE;
 
     // On platforms that support it, get the theme page background colour, else invalid colour
     virtual wxColour GetThemeBackgroundColour() const { return wxNullColour; }
@@ -142,7 +142,7 @@ public:
 
     // wxBookCtrlBase overrides this method to return false but we do need
     // focus because we have tabs
-    virtual bool AcceptsFocus() const { return wxControl::AcceptsFocus(); }
+    virtual bool AcceptsFocus() const wxOVERRIDE { return wxControl::AcceptsFocus(); }
 
 #if wxUSE_EXTENDED_RTTI    
     // XTI accessors

@@ -246,7 +246,7 @@ public:
     const wxString& GetURL() const { return m_url; }
     const wxString& GetTarget() const { return m_target; }
 
-    virtual wxEvent* Clone() const { return new wxWebViewEvent(*this); }
+    virtual wxEvent* Clone() const wxOVERRIDE { return new wxWebViewEvent(*this); }
 private:
     wxString m_url;
     wxString m_target;

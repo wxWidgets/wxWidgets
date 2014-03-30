@@ -113,7 +113,7 @@ public:
     int GetPosition() const { return m_commandInt; }
     void SetPosition(int pos) { m_commandInt = pos; }
 
-    virtual wxEvent *Clone() const { return new wxSpinEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSpinEvent(*this); }
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSpinEvent)

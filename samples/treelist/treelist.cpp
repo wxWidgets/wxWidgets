@@ -95,7 +95,7 @@ public:
     Compare(wxTreeListCtrl* treelist,
             unsigned column,
             wxTreeListItem item1,
-            wxTreeListItem item2)
+            wxTreeListItem item2) wxOVERRIDE
     {
         wxString text1 = treelist->GetItemText(item1, column),
                  text2 = treelist->GetItemText(item2, column);
@@ -162,7 +162,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // ----------------------------------------------------------------------------

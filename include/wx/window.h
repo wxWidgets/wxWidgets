@@ -875,8 +875,8 @@ public:
     bool HandleWindowEvent(wxEvent& event) const;
 
         // disable wxEvtHandler double-linked list mechanism:
-    virtual void SetNextHandler(wxEvtHandler *handler);
-    virtual void SetPreviousHandler(wxEvtHandler *handler);
+    virtual void SetNextHandler(wxEvtHandler *handler) wxOVERRIDE;
+    virtual void SetPreviousHandler(wxEvtHandler *handler) wxOVERRIDE;
 
 
     // Watcom doesn't allow reducing access with using access declaration, see
@@ -1524,8 +1524,8 @@ protected:
                     const wxString& name);
 
     // event handling specific to wxWindow
-    virtual bool TryBefore(wxEvent& event);
-    virtual bool TryAfter(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE;
+    virtual bool TryAfter(wxEvent& event) wxOVERRIDE;
 
     enum WindowOrder
     {

@@ -44,7 +44,7 @@ public:
     virtual void Position(const wxPoint& ptOrigin,
                           const wxSize& size);
 
-    virtual bool IsTopLevel() const { return true; }
+    virtual bool IsTopLevel() const wxOVERRIDE { return true; }
 
     wxDECLARE_NO_COPY_CLASS(wxPopupWindowBase);
 };
@@ -107,10 +107,10 @@ public:
     virtual bool ProcessLeftDown(wxMouseEvent& event);
 
     // Overridden to grab the input on some plaforms
-    virtual bool Show( bool show = true );
+    virtual bool Show( bool show = true ) wxOVERRIDE;
 
     // Override to implement delayed destruction of this window.
-    virtual bool Destroy();
+    virtual bool Destroy() wxOVERRIDE;
 
 protected:
     // common part of all ctors

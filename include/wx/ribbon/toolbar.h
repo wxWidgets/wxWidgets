@@ -141,7 +141,7 @@ public:
     virtual int GetToolPos(int tool_id)const;
     virtual bool GetToolState(int tool_id)const;
 
-    virtual bool Realize();
+    virtual bool Realize() wxOVERRIDE;
     virtual void SetRows(int nMin, int nMax = -1);
 
     virtual void SetToolClientData(int tool_id, wxObject* clientData);
@@ -149,18 +149,18 @@ public:
     virtual void SetToolHelpString(int tool_id, const wxString& helpString);
     virtual void SetToolNormalBitmap(int tool_id, const wxBitmap &bitmap);
 
-    virtual bool IsSizingContinuous() const;
+    virtual bool IsSizingContinuous() const wxOVERRIDE;
 
     virtual void EnableTool(int tool_id, bool enable = true);
     virtual void ToggleTool(int tool_id, bool checked);
 
     // Finds the best width and height given the parent's width and height
-    virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const;
+    virtual wxSize GetBestSizeForParentSize(const wxSize& parentSize) const wxOVERRIDE;
 
 protected:
     friend class wxRibbonToolBarEvent;
-    virtual wxSize DoGetBestSize() const;
-    wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMouseDown(wxMouseEvent& evt);
@@ -172,14 +172,14 @@ protected:
     void OnSize(wxSizeEvent& evt);
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
-                                      wxSize relative_to) const;
+                                      wxSize relative_to) const wxOVERRIDE;
     virtual wxSize DoGetNextLargerSize(wxOrientation direction,
-                                     wxSize relative_to) const;
+                                     wxSize relative_to) const wxOVERRIDE;
 
     void CommonInit(long style);
     void AppendGroup();
     wxRibbonToolBarToolGroup* InsertGroup(size_t pos);
-    virtual void UpdateWindowUI(long flags);
+    virtual void UpdateWindowUI(long flags) wxOVERRIDE;
 
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
 
@@ -213,7 +213,7 @@ public:
         m_bar = e.m_bar;
     }
 #endif
-    wxEvent *Clone() const { return new wxRibbonToolBarEvent(*this); }
+    wxEvent *Clone() const wxOVERRIDE { return new wxRibbonToolBarEvent(*this); }
 
     wxRibbonToolBar* GetBar() {return m_bar;}
     void SetBar(wxRibbonToolBar* bar) {m_bar = bar;}

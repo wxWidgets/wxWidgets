@@ -383,8 +383,8 @@ public:
 
 // Attributes
 protected:
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE;
 
     wxString        m_name;
 
@@ -430,7 +430,7 @@ public:
     {
     }
 
-    virtual wxAnyValueType* GetAssociatedType()
+    virtual wxAnyValueType* GetAssociatedType() wxOVERRIDE
     {
         return wxAnyValueTypeImpl<T>::GetInstance();
     }

@@ -834,7 +834,7 @@ public:
 
     /** Deletes all properties.
     */
-    virtual void Clear();
+    virtual void Clear() wxOVERRIDE;
 
     /** Clears action triggers for given action.
         @param action
@@ -1090,7 +1090,7 @@ public:
 
     /** Redraws given property.
     */
-    virtual void RefreshProperty( wxPGProperty* p );
+    virtual void RefreshProperty( wxPGProperty* p ) wxOVERRIDE;
 
     /** Registers a new editor class.
         @return
@@ -1700,7 +1700,7 @@ public:
     */
     bool UnfocusEditor();
 
-    virtual void SetWindowStyleFlag( long style );
+    virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
 
     void DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 );
 
@@ -1763,20 +1763,20 @@ public:
     bool DoSelectProperty( wxPGProperty* p, unsigned int flags = 0 );
 
     // Overridden functions.
-    virtual bool Destroy();
+    virtual bool Destroy() wxOVERRIDE;
     // Returns property at given y coordinate (relative to grid's top left).
     wxPGProperty* GetItemAtY( int y ) const { return DoGetItemAtY(y); }
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL );
-    virtual bool SetFont( const wxFont& font );
-    virtual void SetExtraStyle( long exStyle );
-    virtual bool Reparent( wxWindowBase *newParent );
+                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
+    virtual bool SetFont( const wxFont& font ) wxOVERRIDE;
+    virtual void SetExtraStyle( long exStyle ) wxOVERRIDE;
+    virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
 
 protected:
-    virtual void DoThaw();
+    virtual void DoThaw() wxOVERRIDE;
 
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 #ifndef wxPG_ICON_WIDTH
     wxBitmap            *m_expandbmp, *m_collbmp;
@@ -2392,7 +2392,7 @@ public:
     ~wxPropertyGridEvent();
 
     /** Copyer. */
-    virtual wxEvent* Clone() const;
+    virtual wxEvent* Clone() const wxOVERRIDE;
 
     /**
         Returns the column index associated with this event.

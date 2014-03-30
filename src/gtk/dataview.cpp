@@ -1563,14 +1563,14 @@ public:
     wxGtkDataViewModelNotifier( wxDataViewModel *wx_model, wxDataViewCtrlInternal *internal );
     ~wxGtkDataViewModelNotifier();
 
-    virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
-    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item );
-    virtual bool ItemChanged( const wxDataViewItem &item );
-    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int model_column );
-    virtual bool Cleared();
-    virtual void Resort();
-    virtual bool BeforeReset();
-    virtual bool AfterReset();
+    virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item ) wxOVERRIDE;
+    virtual bool ItemDeleted( const wxDataViewItem &parent, const wxDataViewItem &item ) wxOVERRIDE;
+    virtual bool ItemChanged( const wxDataViewItem &item ) wxOVERRIDE;
+    virtual bool ValueChanged( const wxDataViewItem &item, unsigned int model_column ) wxOVERRIDE;
+    virtual bool Cleared() wxOVERRIDE;
+    virtual void Resort() wxOVERRIDE;
+    virtual bool BeforeReset() wxOVERRIDE;
+    virtual bool AfterReset() wxOVERRIDE;
 
     void UpdateLastCount();
 

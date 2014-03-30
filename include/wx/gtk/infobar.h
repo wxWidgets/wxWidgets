@@ -38,14 +38,14 @@ public:
     // ----------------------------
 
     virtual void ShowMessage(const wxString& msg,
-                             int flags = wxICON_INFORMATION);
+                             int flags = wxICON_INFORMATION) wxOVERRIDE;
 
-    virtual void Dismiss();
+    virtual void Dismiss() wxOVERRIDE;
 
     virtual void AddButton(wxWindowID btnid,
-                           const wxString& label = wxString());
+                           const wxString& label = wxString()) wxOVERRIDE;
 
-    virtual void RemoveButton(wxWindowID btnid);
+    virtual void RemoveButton(wxWindowID btnid) wxOVERRIDE;
 
     // implementation only
     // -------------------
@@ -53,7 +53,7 @@ public:
     void GTKResponse(int btnid);
 
 protected:
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
 
 private:
     void Init() { m_impl = NULL; }

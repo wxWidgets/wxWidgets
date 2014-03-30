@@ -22,7 +22,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
 private:
     wxDECLARE_NO_COPY_CLASS(MyApp);
@@ -82,9 +82,9 @@ private:
     void LogEvent(const wxListEvent& event, const wxChar *eventName);
     void LogColEvent(const wxListEvent& event, const wxChar *eventName);
 
-    virtual wxString OnGetItemText(long item, long column) const;
-    virtual int OnGetItemColumnImage(long item, long column) const;
-    virtual wxListItemAttr *OnGetItemAttr(long item) const;
+    virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
+    virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
+    virtual wxListItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
 
     long m_updated;
 

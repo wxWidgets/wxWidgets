@@ -167,7 +167,7 @@ public:
     void SetWeekDay(const wxDateTime::WeekDay wd) { m_wday = wd; }
     wxDateTime::WeekDay GetWeekDay() const { return m_wday; }
 
-    virtual wxEvent *Clone() const { return new wxCalendarEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxCalendarEvent(*this); }
 
 private:
     wxDateTime::WeekDay m_wday;

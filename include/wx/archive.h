@@ -99,7 +99,7 @@ public:
 
     wxArchiveEntry *GetNextEntry()  { return DoGetNextEntry(); }
 
-    virtual char Peek()             { return wxInputStream::Peek(); }
+    virtual char Peek() wxOVERRIDE  { return wxInputStream::Peek(); }
 
 protected:
     wxArchiveInputStream(wxInputStream& stream, wxMBConv& conv);

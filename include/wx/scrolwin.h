@@ -214,7 +214,7 @@ public:
     void SetTargetRect(const wxRect& rect) { m_rectToScroll = rect; }
     wxRect GetTargetRect() const { return m_rectToScroll; }
 
-    virtual void DoPrepareDC(wxDC& dc);
+    virtual void DoPrepareDC(wxDC& dc) wxOVERRIDE;
 
     // are we generating the autoscroll events?
     bool IsAutoScrolling() const { return m_timerAutoScroll != NULL; }

@@ -87,7 +87,7 @@ public:
     void SetAlignment(wxLayoutAlignment align) { m_alignment = align; }
     wxLayoutAlignment GetAlignment() const { return m_alignment; }
 
-    virtual wxEvent *Clone() const { return new wxQueryLayoutInfoEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxQueryLayoutInfoEvent(*this); }
 
 protected:
     int                     m_flags;
@@ -130,7 +130,7 @@ public:
     void SetRect(const wxRect& rect) { m_rect = rect; }
     wxRect GetRect() const { return m_rect; }
 
-    virtual wxEvent *Clone() const { return new wxCalculateLayoutEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxCalculateLayoutEvent(*this); }
 
 protected:
     int                     m_flags;

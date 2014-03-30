@@ -28,11 +28,11 @@ public:
     virtual ~wxMenuItem();
 
     // override base class virtuals to update the item appearance on screen
-    virtual void SetItemLabel(const wxString& text);
-    virtual void SetCheckable(bool checkable);
+    virtual void SetItemLabel(const wxString& text) wxOVERRIDE;
+    virtual void SetCheckable(bool checkable) wxOVERRIDE;
 
-    virtual void Enable(bool enable = true);
-    virtual void Check(bool check = true);
+    virtual void Enable(bool enable = true) wxOVERRIDE;
+    virtual void Check(bool check = true) wxOVERRIDE;
 
     // we add some extra functions which are also available under MSW from
     // wxOwnerDrawn class - they will be moved to wxMenuItemBase later

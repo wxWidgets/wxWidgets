@@ -1584,10 +1584,10 @@ private:
 class WXDLLIMPEXP_BASE wxDateTimeWorkDays : public wxDateTimeHolidayAuthority
 {
 protected:
-    virtual bool DoIsHoliday(const wxDateTime& dt) const;
+    virtual bool DoIsHoliday(const wxDateTime& dt) const wxOVERRIDE;
     virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
                                         const wxDateTime& dtEnd,
-                                        wxDateTimeArray& holidays) const;
+                                        wxDateTimeArray& holidays) const wxOVERRIDE;
 };
 
 // ============================================================================

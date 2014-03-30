@@ -38,17 +38,17 @@ public:
 
 #if wxUSE_STREAMS
     virtual bool LoadFile(wxImage *image, wxInputStream& stream,
-                          bool verbose = true, int index = -1);
+                          bool verbose = true, int index = -1) wxOVERRIDE;
     virtual bool SaveFile(wxImage *image, wxOutputStream& stream,
-                          bool verbose=true);
+                          bool verbose=true) wxOVERRIDE;
 
     // Save animated gif
     bool SaveAnimation(const wxImageArray& images, wxOutputStream *stream,
         bool verbose = true, int delayMilliSecs = 1000);
 
 protected:
-    virtual int DoGetImageCount(wxInputStream& stream);
-    virtual bool DoCanRead(wxInputStream& stream);
+    virtual int DoGetImageCount(wxInputStream& stream) wxOVERRIDE;
+    virtual bool DoCanRead(wxInputStream& stream) wxOVERRIDE;
 
     bool DoSaveFile(const wxImage&, wxOutputStream *, bool verbose,
         bool first, int delayMilliSecs, bool loop,

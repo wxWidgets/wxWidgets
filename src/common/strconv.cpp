@@ -2138,7 +2138,7 @@ public:
     virtual size_t GetMBNulLen() const wxOVERRIDE;
 
 #if wxUSE_UNICODE_UTF8
-    virtual bool IsUTF8() const;
+    virtual bool IsUTF8() const wxOVERRIDE;
 #endif
 
     virtual wxMBConv *Clone() const wxOVERRIDE

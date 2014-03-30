@@ -55,8 +55,8 @@ public:
     void Dismiss();
 
     // override the base class methods to connect/disconnect event handlers
-    virtual void Attach(wxMenuBarBase *menubar);
-    virtual void Detach();
+    virtual void Attach(wxMenuBarBase *menubar) wxOVERRIDE;
+    virtual void Detach() wxOVERRIDE;
 
     // implementation only from here
 
@@ -74,9 +74,9 @@ public:
 
 protected:
     // implement base class virtuals
-    virtual wxMenuItem* DoAppend(wxMenuItem *item);
-    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
-    virtual wxMenuItem* DoRemove(wxMenuItem *item);
+    virtual wxMenuItem* DoAppend(wxMenuItem *item) wxOVERRIDE;
+    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item) wxOVERRIDE;
+    virtual wxMenuItem* DoRemove(wxMenuItem *item) wxOVERRIDE;
 
     // common part of DoAppend and DoInsert
     void OnItemAdded(wxMenuItem *item);
@@ -146,19 +146,19 @@ public:
     virtual ~wxMenuBar();
 
     // implement base class virtuals
-    virtual bool Append( wxMenu *menu, const wxString &title );
-    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
-    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
-    virtual wxMenu *Remove(size_t pos);
+    virtual bool Append( wxMenu *menu, const wxString &title ) wxOVERRIDE;
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
+    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title) wxOVERRIDE;
+    virtual wxMenu *Remove(size_t pos) wxOVERRIDE;
 
-    virtual void EnableTop(size_t pos, bool enable);
-    virtual bool IsEnabledTop(size_t pos) const;
+    virtual void EnableTop(size_t pos, bool enable) wxOVERRIDE;
+    virtual bool IsEnabledTop(size_t pos) const wxOVERRIDE;
 
-    virtual void SetMenuLabel(size_t pos, const wxString& label);
-    virtual wxString GetMenuLabel(size_t pos) const;
+    virtual void SetMenuLabel(size_t pos, const wxString& label) wxOVERRIDE;
+    virtual wxString GetMenuLabel(size_t pos) const wxOVERRIDE;
 
-    virtual void Attach(wxFrame *frame);
-    virtual void Detach();
+    virtual void Attach(wxFrame *frame) wxOVERRIDE;
+    virtual void Detach() wxOVERRIDE;
 
     // get the next item for the givan accel letter (used by wxFrame), return
     // -1 if none
@@ -202,10 +202,10 @@ protected:
     void OnDismiss();
 
     // draw the menubar
-    virtual void DoDraw(wxControlRenderer *renderer);
+    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
     // menubar geometry
-    virtual wxSize DoGetBestClientSize() const;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     // has the menubar been created already?
     bool IsCreated() const { return m_frameLast != NULL; }

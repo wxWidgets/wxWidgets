@@ -208,9 +208,9 @@ public:
     static void AddCatalogLookupPathPrefix(const wxString& prefix);
 
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
-                                      const wxString& lang);
+                                      const wxString& lang) wxOVERRIDE;
 
-    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const;
+    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const wxOVERRIDE;
 };
 
 

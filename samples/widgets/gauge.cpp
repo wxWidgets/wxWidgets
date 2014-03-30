@@ -75,11 +75,11 @@ public:
     GaugeWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~GaugeWidgetsPage();
 
-    virtual wxControl *GetWidget() const { return m_gauge; }
-    virtual void RecreateWidget() { CreateGauge(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_gauge; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateGauge(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers

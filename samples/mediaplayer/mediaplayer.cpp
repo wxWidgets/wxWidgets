@@ -147,14 +147,14 @@ public:
 #endif
 
 #if wxUSE_CMDLINE_PARSER
-    virtual void OnInitCmdLine(wxCmdLineParser& parser);
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
 
     // Files specified on the command line, if any.
     wxVector<wxString> m_params;
 #endif // wxUSE_CMDLINE_PARSER
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
 protected:
     class wxMediaPlayerFrame* m_frame;
@@ -287,7 +287,7 @@ public:
     wxMediaPlayerTimer(wxMediaPlayerFrame* frame) {m_frame = frame;}
 
     // Called each time the timer's timeout expires
-    void Notify();
+    void Notify() wxOVERRIDE;
 
     wxMediaPlayerFrame* m_frame;       // The wxMediaPlayerFrame
 };
@@ -353,7 +353,7 @@ public:
     wxPlayListDropTarget(wxMediaPlayerListCtrl& list) : m_list(list) {}
     ~wxPlayListDropTarget(){}
         virtual bool OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                         const wxArrayString& files)
+                         const wxArrayString& files) wxOVERRIDE
     {
         for (size_t i = 0; i < files.GetCount(); ++i)
         {

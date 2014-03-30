@@ -36,7 +36,7 @@ public:
     virtual void SetValue(bool state) = 0;
     virtual bool GetValue() const = 0;
 
-    void UpdateWindowUI(long flags)
+    void UpdateWindowUI(long flags) wxOVERRIDE
     {
         wxControl::UpdateWindowUI(flags);
 

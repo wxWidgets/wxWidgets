@@ -82,7 +82,7 @@ public:
     double GetValue() const       { return m_value; }
     void   SetValue(double value) { m_value = value; }
 
-    virtual wxEvent *Clone() const { return new wxSpinDoubleEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSpinDoubleEvent(*this); }
 
 protected:
     double m_value;

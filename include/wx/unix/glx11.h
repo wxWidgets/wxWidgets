@@ -22,7 +22,7 @@ public:
     wxGLContext(wxGLCanvas *win, const wxGLContext *other = NULL);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const;
+    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
 
 private:
     // attach context to the drawable or unset it (if NULL)
@@ -56,7 +56,7 @@ public:
     // implement wxGLCanvasBase methods
     // --------------------------------
 
-    virtual bool SwapBuffers();
+    virtual bool SwapBuffers() wxOVERRIDE;
 
 
     // X11-specific methods
@@ -77,7 +77,7 @@ public:
 
     // return true only if the window is realized: OpenGL context can't be
     // created until we are
-    virtual bool IsShownOnScreen() const;
+    virtual bool IsShownOnScreen() const wxOVERRIDE;
 
 
     // implementation only from now on
@@ -137,19 +137,19 @@ public:
     wxGLApp() : wxGLAppBase() { }
 
     // implement wxGLAppBase method
-    virtual bool InitGLVisual(const int *attribList)
+    virtual bool InitGLVisual(const int *attribList) wxOVERRIDE
     {
         return wxGLCanvasX11::InitDefaultVisualInfo(attribList);
     }
 
     // and implement this wxGTK::wxApp method too
-    virtual void *GetXVisualInfo()
+    virtual void *GetXVisualInfo() wxOVERRIDE
     {
         return wxGLCanvasX11::GetDefaultXVisualInfo();
     }
 
     // and override this wxApp method to clean up
-    virtual int OnExit()
+    virtual int OnExit() wxOVERRIDE
     {
         wxGLCanvasX11::FreeDefaultVisualInfo();
 

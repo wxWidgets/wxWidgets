@@ -60,7 +60,7 @@ public:
         }
     }
 
-    virtual void OnObjectDestroy()
+    virtual void OnObjectDestroy() wxOVERRIDE
     {
         // Tracked object itself removes us from list of trackers
         wxASSERT(m_pobj != NULL);
@@ -123,7 +123,7 @@ struct wxWeakRefImpl<T, false> : public wxTrackerNode
         }
     }
 
-    virtual void OnObjectDestroy()
+    virtual void OnObjectDestroy() wxOVERRIDE
     {
         // Tracked object itself removes us from list of trackers
         wxASSERT(m_pobj != NULL);
@@ -300,7 +300,7 @@ public:
         }
     }
 
-    virtual void OnObjectDestroy()
+    virtual void OnObjectDestroy() wxOVERRIDE
     {
         wxASSERT_MSG(m_pobj, "tracked object should have removed us itself");
 

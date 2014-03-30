@@ -40,22 +40,22 @@ public:
                  const wxString& name = wxFileDialogNameStr);
     virtual ~wxFileDialog();
 
-    virtual wxString GetPath() const;
-    virtual void GetPaths(wxArrayString& paths) const;
-    virtual wxString GetFilename() const;
-    virtual void GetFilenames(wxArrayString& files) const;
-    virtual int GetFilterIndex() const;
+    virtual wxString GetPath() const wxOVERRIDE;
+    virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE;
+    virtual wxString GetFilename() const wxOVERRIDE;
+    virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE;
+    virtual int GetFilterIndex() const wxOVERRIDE;
 
-    virtual void SetMessage(const wxString& message);
-    virtual void SetPath(const wxString& path);
-    virtual void SetDirectory(const wxString& dir);
-    virtual void SetFilename(const wxString& name);
-    virtual void SetWildcard(const wxString& wildCard);
-    virtual void SetFilterIndex(int filterIndex);
+    virtual void SetMessage(const wxString& message) wxOVERRIDE;
+    virtual void SetPath(const wxString& path) wxOVERRIDE;
+    virtual void SetDirectory(const wxString& dir) wxOVERRIDE;
+    virtual void SetFilename(const wxString& name) wxOVERRIDE;
+    virtual void SetWildcard(const wxString& wildCard) wxOVERRIDE;
+    virtual void SetFilterIndex(int filterIndex) wxOVERRIDE;
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
-    virtual bool SupportsExtraControl() const { return true; }
+    virtual bool SupportsExtraControl() const wxOVERRIDE { return true; }
 
     // Implementation only.
     void GTKSelectionChanged(const wxString& filename);
@@ -66,13 +66,13 @@ protected:
     // form doesn't have any m_wxwindow
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
 
 
 private:
     void OnFakeOk( wxCommandEvent &event );
     void OnSize(wxSizeEvent&);
-    virtual void AddChildGTK(wxWindowGTK* child);
+    virtual void AddChildGTK(wxWindowGTK* child) wxOVERRIDE;
 
     wxGtkFileChooser    m_fc;
 

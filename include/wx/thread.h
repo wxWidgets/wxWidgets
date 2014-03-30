@@ -659,7 +659,7 @@ public:
 
 protected:
     // entry point for the thread -- calls Entry() in owner.
-    virtual void *Entry();
+    virtual void *Entry() wxOVERRIDE;
 
 private:
     // the owner of the thread

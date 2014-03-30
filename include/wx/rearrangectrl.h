@@ -97,7 +97,7 @@ public:
 
 
     // Override this to keep our m_order array in sync with the real item state.
-    virtual void Check(unsigned int item, bool check = true);
+    virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
 
 private:
     // swap two items at the given positions in the listbox

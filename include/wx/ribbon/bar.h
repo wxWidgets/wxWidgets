@@ -65,7 +65,7 @@ public:
         m_page = c.m_page;
     }
 #endif
-    wxEvent *Clone() const { return new wxRibbonBarEvent(*this); }
+    wxEvent *Clone() const wxOVERRIDE { return new wxRibbonBarEvent(*this); }
 
     wxRibbonPage* GetPage() {return m_page;}
     void SetPage(wxRibbonPage* page) {m_page = page;}
@@ -119,7 +119,7 @@ public:
 
     void SetTabCtrlMargins(int left, int right);
 
-    void SetArtProvider(wxRibbonArtProvider* art);
+    void SetArtProvider(wxRibbonArtProvider* art) wxOVERRIDE;
 
     bool SetActivePage(size_t page);
     bool SetActivePage(wxRibbonPage* page);
@@ -144,11 +144,11 @@ public:
     void HidePanels() { ShowPanels(false); }
     bool ArePanelsShown() const { return m_arePanelsShown; }
 
-    virtual bool HasMultiplePages() const { return true; }
+    virtual bool HasMultiplePages() const wxOVERRIDE { return true; }
 
-    void SetWindowStyleFlag(long style);
-    long GetWindowStyleFlag() const;
-    virtual bool Realize();
+    void SetWindowStyleFlag(long style) wxOVERRIDE;
+    long GetWindowStyleFlag() const wxOVERRIDE;
+    virtual bool Realize() wxOVERRIDE;
 
     // Implementation only.
     bool IsToggleButtonHovered() const { return m_toggle_button_hovered; }
@@ -159,8 +159,8 @@ public:
 protected:
     friend class wxRibbonPage;
 
-    virtual wxSize DoGetBestSize() const;
-    wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
     wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = NULL);
     void HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hover_flag);
 

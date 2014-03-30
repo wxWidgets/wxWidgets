@@ -71,7 +71,7 @@ public:
 
     // get the origin of the client area (which may be different from (0, 0)
     // if the frame has a toolbar) in client coordinates
-    virtual wxPoint GetClientAreaOrigin() const;
+    virtual wxPoint GetClientAreaOrigin() const wxOVERRIDE;
 
 
     // menu bar functions
@@ -164,19 +164,19 @@ public:
 #endif // wxUSE_MENUS
 
     // do the UI update processing for this window
-    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE) wxOVERRIDE;
 
     // Implement internal behaviour (menu updating on some platforms)
-    virtual void OnInternalIdle();
+    virtual void OnInternalIdle() wxOVERRIDE;
 
 #if wxUSE_MENUS || wxUSE_TOOLBAR
     // show help text for the currently selected menu or toolbar item
     // (typically in the status bar) or hide it and restore the status bar text
     // originally shown before the menu was opened if show == false
-    virtual void DoGiveHelp(const wxString& text, bool show);
+    virtual void DoGiveHelp(const wxString& text, bool show) wxOVERRIDE;
 #endif
 
-    virtual bool IsClientAreaChild(const wxWindow *child) const
+    virtual bool IsClientAreaChild(const wxWindow *child) const wxOVERRIDE
     {
         return !IsOneOfBars(child) && wxTopLevelWindow::IsClientAreaChild(child);
     }
@@ -190,7 +190,7 @@ protected:
     void DeleteAllBars();
 
     // test whether this window makes part of the frame
-    virtual bool IsOneOfBars(const wxWindow *win) const;
+    virtual bool IsOneOfBars(const wxWindow *win) const wxOVERRIDE;
 
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes

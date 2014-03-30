@@ -40,14 +40,14 @@ public:
     }
 
     // overridden base class virtuals
-    virtual bool AcceptsFocus() const { return false; }
-    virtual bool HasTransparentBackground() { return true; }
+    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
+    virtual bool HasTransparentBackground() wxOVERRIDE { return true; }
 
 protected:
     // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(wxStaticBitmapBase);
 };

@@ -52,7 +52,7 @@ public:
     void setFailed() { m_isFailed = true; }
     bool isFailed() const { return m_isFailed; }
 
-    virtual wxEvent* Clone() const
+    virtual wxEvent* Clone() const wxOVERRIDE
     {
         return new WorkerEvent(*this);
     }
@@ -94,11 +94,11 @@ private:
     wxString m_host;
     long m_stressWorkers;
 
-    virtual bool OnInit();
-    virtual int OnRun();
-    virtual int OnExit();
-    void OnInitCmdLine(wxCmdLineParser& pParser);
-    bool OnCmdLineParsed(wxCmdLineParser& pParser);
+    virtual bool OnInit() wxOVERRIDE;
+    virtual int OnRun() wxOVERRIDE;
+    virtual int OnExit() wxOVERRIDE;
+    void OnInitCmdLine(wxCmdLineParser& pParser) wxOVERRIDE;
+    bool OnCmdLineParsed(wxCmdLineParser& pParser) wxOVERRIDE;
     void OnWorkerEvent(WorkerEvent& pEvent);
     void OnTimerEvent(wxTimerEvent& pEvent);
 
@@ -127,7 +127,7 @@ class ThreadWorker : public wxThread
 {
 public:
     ThreadWorker(const wxString& p_host, char* p_buf, int p_size);
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() wxOVERRIDE;
 private:
     wxString m_host;
     wxSocketClient* m_clientSocket;

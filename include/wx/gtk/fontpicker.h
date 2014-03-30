@@ -45,16 +45,16 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxFontPickerWidgetNameStr);
 
-    virtual wxColour GetSelectedColour() const
+    virtual wxColour GetSelectedColour() const wxOVERRIDE
         { return m_selectedColour; }
 
-    void SetSelectedColour(const wxColour &colour)
+    void SetSelectedColour(const wxColour &colour) wxOVERRIDE
         { m_selectedColour = colour; }
 
     virtual ~wxFontButton();
 
 protected:
-    void UpdateFont();
+    void UpdateFont() wxOVERRIDE;
 
 
 public:     // used by the GTK callback only

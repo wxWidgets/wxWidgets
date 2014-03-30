@@ -48,7 +48,7 @@ public:
 
     // multiple selection logic
     virtual bool IsSelected(int n) const = 0;
-    virtual void SetSelection(int n);
+    virtual void SetSelection(int n) wxOVERRIDE;
     void SetSelection(int n, bool select) { DoSetSelection(n, select); }
     void Deselect(int n) { DoSetSelection(n, false); }
     void DeselectAll(int itemToLeaveSelected = -1);
@@ -84,11 +84,11 @@ public:
     }
 
     // override wxItemContainer::IsSorted
-    virtual bool IsSorted() const { return HasFlag( wxLB_SORT ); }
+    virtual bool IsSorted() const wxOVERRIDE { return HasFlag( wxLB_SORT ); }
 
     // emulate selecting or deselecting the item event.GetInt() (depending on
     // event.GetExtraLong())
-    void Command(wxCommandEvent& event);
+    void Command(wxCommandEvent& event) wxOVERRIDE;
 
     // return the index of the item at this position or wxNOT_FOUND
     int HitTest(const wxPoint& point) const { return DoListHitTest(point); }

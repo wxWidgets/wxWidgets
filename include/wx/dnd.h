@@ -239,7 +239,7 @@ public:
 
     virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& text) = 0;
 
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTextDropTarget);
@@ -255,7 +255,7 @@ public:
     virtual bool OnDropFiles(wxCoord x, wxCoord y,
                              const wxArrayString& filenames) = 0;
 
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxFileDropTarget);

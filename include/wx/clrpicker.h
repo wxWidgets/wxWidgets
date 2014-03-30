@@ -134,16 +134,16 @@ public:         // public API
 public:        // internal functions
 
     // update the button colour to match the text control contents
-    void UpdatePickerFromTextCtrl();
+    void UpdatePickerFromTextCtrl() wxOVERRIDE;
 
     // update the text control to match the button's colour
-    void UpdateTextCtrlFromPicker();
+    void UpdateTextCtrlFromPicker() wxOVERRIDE;
 
     // event handler for our picker
     void OnColourChange(wxColourPickerEvent &);
 
 protected:
-    virtual long GetPickerStyle(long style) const
+    virtual long GetPickerStyle(long style) const wxOVERRIDE
         { return (style & wxCLRP_SHOW_LABEL); }
 
 private:
@@ -173,7 +173,7 @@ public:
 
 
     // default copy ctor, assignment operator and dtor are ok
-    virtual wxEvent *Clone() const { return new wxColourPickerEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxColourPickerEvent(*this); }
 
 private:
     wxColour m_colour;

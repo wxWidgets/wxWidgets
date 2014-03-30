@@ -160,11 +160,11 @@ public:
             // between text and header and/or footer
 
     // wxPrintout stuff:
-    bool OnPrintPage(int page);
-    bool HasPage(int page);
-    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
-    bool OnBeginDocument(int startPage, int endPage);
-    void OnPreparePrinting();
+    bool OnPrintPage(int page) wxOVERRIDE;
+    bool HasPage(int page) wxOVERRIDE;
+    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
+    bool OnBeginDocument(int startPage, int endPage) wxOVERRIDE;
+    void OnPreparePrinting() wxOVERRIDE;
 
     // Adds input filter
     static void AddFilter(wxHtmlFilter *filter);

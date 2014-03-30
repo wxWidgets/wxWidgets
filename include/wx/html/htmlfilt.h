@@ -55,8 +55,8 @@ class WXDLLIMPEXP_HTML wxHtmlFilterPlainText : public wxHtmlFilter
     DECLARE_DYNAMIC_CLASS(wxHtmlFilterPlainText)
 
 public:
-    virtual bool CanRead(const wxFSFile& file) const;
-    virtual wxString ReadFile(const wxFSFile& file) const;
+    virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
+    virtual wxString ReadFile(const wxFSFile& file) const wxOVERRIDE;
 };
 
 //--------------------------------------------------------------------------------
@@ -69,8 +69,8 @@ class wxHtmlFilterHTML : public wxHtmlFilter
     DECLARE_DYNAMIC_CLASS(wxHtmlFilterHTML)
 
     public:
-        virtual bool CanRead(const wxFSFile& file) const;
-        virtual wxString ReadFile(const wxFSFile& file) const;
+        virtual bool CanRead(const wxFSFile& file) const wxOVERRIDE;
+        virtual wxString ReadFile(const wxFSFile& file) const wxOVERRIDE;
 };
 
 

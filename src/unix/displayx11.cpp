@@ -143,8 +143,8 @@ public:
     {
     }
 
-    virtual wxRect GetGeometry() const { return m_rect; }
-    virtual wxRect GetClientArea() const
+    virtual wxRect GetGeometry() const wxOVERRIDE { return m_rect; }
+    virtual wxRect GetClientArea() const wxOVERRIDE
     {
         // we intentionally don't cache the result here because the client
         // display area may change (e.g. the user resized or hid a panel) and
@@ -152,11 +152,11 @@ public:
         return IsPrimary() ? wxGetClientDisplayRect() : m_rect;
     }
 
-    virtual wxString GetName() const { return wxString(); }
+    virtual wxString GetName() const wxOVERRIDE { return wxString(); }
 
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
-    virtual wxVideoMode GetCurrentMode() const;
-    virtual bool ChangeMode(const wxVideoMode& mode);
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
+    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
+    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
 
 private:
     wxRect m_rect;
@@ -170,9 +170,9 @@ class wxDisplayFactoryX11 : public wxDisplayFactory
 public:
     wxDisplayFactoryX11() { }
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n);
-    virtual unsigned GetCount();
-    virtual int GetFromPoint(const wxPoint& pt);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual unsigned GetCount() wxOVERRIDE;
+    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
 
 protected:
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryX11);

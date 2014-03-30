@@ -72,7 +72,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };
@@ -143,7 +143,7 @@ public:
     MyCanvas(wxWindow* parent, bool mirror);
     virtual ~MyCanvas(){};
 
-    virtual void OnDraw(wxDC& dc);
+    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
 
 private:
     bool m_mirror;

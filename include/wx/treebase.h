@@ -232,7 +232,7 @@ public:
                 const wxTreeItemId &item = wxTreeItemId());
     wxTreeEvent(const wxTreeEvent& event);
 
-    virtual wxEvent *Clone() const { return new wxTreeEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxTreeEvent(*this); }
 
     // accessors
         // get the item on which the operation was performed or the newly

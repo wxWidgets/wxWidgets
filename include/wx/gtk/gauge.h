@@ -60,7 +60,7 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    virtual wxVisualAttributes GetDefaultAttributes() const;
+    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE;
 
     // implementation
     // -------------
@@ -73,7 +73,7 @@ protected:
     // set the gauge value to the value of m_gaugePos
     void DoSetGauge();
 
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 private:
     void Init() { m_rangeMax = m_gaugePos = 0; }

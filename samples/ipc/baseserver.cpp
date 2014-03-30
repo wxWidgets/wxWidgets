@@ -45,28 +45,28 @@
 class MyConnection : public MyConnectionBase, public wxTimer
 {
 public:
-    virtual bool Disconnect() { return wxConnection::Disconnect(); }
+    virtual bool Disconnect() wxOVERRIDE { return wxConnection::Disconnect(); }
     virtual bool OnExecute(const wxString& topic,
                            const void *data,
                            size_t size,
-                           wxIPCFormat format);
+                           wxIPCFormat format) wxOVERRIDE;
     virtual const void *OnRequest(const wxString& topic,
                                   const wxString& item,
                                   size_t *size,
-                                  wxIPCFormat format);
+                                  wxIPCFormat format) wxOVERRIDE;
     virtual bool OnPoke(const wxString& topic,
                         const wxString& item,
                         const void *data,
                         size_t size,
-                        wxIPCFormat format);
-    virtual bool OnStartAdvise(const wxString& topic, const wxString& item);
-    virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
+                        wxIPCFormat format) wxOVERRIDE;
+    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
+    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
     virtual bool DoAdvise(const wxString& item,
                           const void *data,
                           size_t size,
-                          wxIPCFormat format);
-    virtual bool OnDisconnect();
-    virtual void Notify();
+                          wxIPCFormat format) wxOVERRIDE;
+    virtual bool OnDisconnect() wxOVERRIDE;
+    virtual void Notify() wxOVERRIDE;
 
 private:
     wxString        m_sAdvise;
@@ -86,9 +86,9 @@ public:
                         const wxString& item,
                         const void *data,
                         size_t size,
-                        wxIPCFormat format);
-    virtual bool OnStartAdvise(const wxString& topic, const wxString& item);
-    virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
+                        wxIPCFormat format) wxOVERRIDE;
+    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
+    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
 
 private:
     // return true if this is the supported topic+item combination, log an
@@ -115,7 +115,7 @@ public:
     void Disconnect();
     bool IsConnected() { return m_connection != NULL; };
 
-    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
+    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) wxOVERRIDE;
 
 private:
     wxConnection *m_connection;
@@ -125,7 +125,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
 protected:
     MyServer m_server;

@@ -238,12 +238,12 @@ public:
 
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
-    virtual void ScheduleExit(int rc = 0);
+    virtual void ScheduleExit(int rc = 0) wxOVERRIDE;
 
 protected:
     // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
     // terminating when Exit() is called
-    virtual int DoRun();
+    virtual int DoRun() wxOVERRIDE;
 
     // may be overridden to perform some action at the start of each new event
     // loop iteration
@@ -377,7 +377,7 @@ public:
     }
 
 protected:
-    virtual void OnExit()
+    virtual void OnExit() wxOVERRIDE
     {
         delete m_windowDisabler;
         m_windowDisabler = NULL;

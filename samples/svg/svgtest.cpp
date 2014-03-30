@@ -51,7 +51,7 @@ class MyCanvas;
 class MyApp : public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 class MyFrame : public wxMDIParentFrame
@@ -104,7 +104,7 @@ class MyCanvas : public wxScrolledWindow
 {
 public:
     MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size);
-    virtual void OnDraw(wxDC& dc);
+    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
 
 private:
     int m_index;

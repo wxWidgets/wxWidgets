@@ -79,10 +79,10 @@ public:
     virtual int GetBezelFace() const;
 
     // overridden base class virtuals
-    virtual bool AcceptsFocus() const { return false; }
+    virtual bool AcceptsFocus() const wxOVERRIDE { return false; }
 
 protected:
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     // the max position
     int m_rangeMax;

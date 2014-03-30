@@ -25,7 +25,7 @@ class MyFrame;
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
     MyFrame *GetFrame() { return m_frame; }
 
 protected:
@@ -65,13 +65,13 @@ protected:
 class MyConnection : public MyConnectionBase
 {
 public:
-    virtual bool OnExecute(const wxString& topic, const void *data, size_t size, wxIPCFormat format);
-    virtual const void *OnRequest(const wxString& topic, const wxString& item, size_t *size, wxIPCFormat format);
-    virtual bool OnPoke(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format);
-    virtual bool OnStartAdvise(const wxString& topic, const wxString& item);
-    virtual bool OnStopAdvise(const wxString& topic, const wxString& item);
-    virtual bool DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format);
-    virtual bool OnDisconnect();
+    virtual bool OnExecute(const wxString& topic, const void *data, size_t size, wxIPCFormat format) wxOVERRIDE;
+    virtual const void *OnRequest(const wxString& topic, const wxString& item, size_t *size, wxIPCFormat format) wxOVERRIDE;
+    virtual bool OnPoke(const wxString& topic, const wxString& item, const void *data, size_t size, wxIPCFormat format) wxOVERRIDE;
+    virtual bool OnStartAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
+    virtual bool OnStopAdvise(const wxString& topic, const wxString& item) wxOVERRIDE;
+    virtual bool DoAdvise(const wxString& item, const void *data, size_t size, wxIPCFormat format) wxOVERRIDE;
+    virtual bool OnDisconnect() wxOVERRIDE;
 
     // topic for which we advise the client or empty if none
     wxString m_advise;
@@ -95,7 +95,7 @@ public:
     void Advise();
     bool CanAdvise() { return m_connection && !m_connection->m_advise.empty(); }
 
-    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
+    virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) wxOVERRIDE;
 
 protected:
     MyConnection *m_connection;

@@ -42,8 +42,8 @@ class MyVFS : public wxFileSystemHandler
 public:
     MyVFS() : wxFileSystemHandler() {}
 
-    wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
-    bool CanOpen(const wxString& location);
+    wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) wxOVERRIDE;
+    bool CanOpen(const wxString& location) wxOVERRIDE;
 };
 
 bool MyVFS::CanOpen(const wxString& location)
@@ -94,7 +94,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type: this is going to be our main frame

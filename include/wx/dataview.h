@@ -313,13 +313,13 @@ public:
 
     // implement some base class pure virtual directly
     virtual wxDataViewItem
-    GetParent( const wxDataViewItem & WXUNUSED(item) ) const
+    GetParent( const wxDataViewItem & WXUNUSED(item) ) const wxOVERRIDE
     {
         // items never have valid parent in this model
         return wxDataViewItem();
     }
 
-    virtual bool IsContainer( const wxDataViewItem &item ) const
+    virtual bool IsContainer( const wxDataViewItem &item ) const wxOVERRIDE
     {
         // only the invisible (and invalid) root item has children
         return !item.IsOk();
@@ -327,30 +327,30 @@ public:
 
     // and implement some others by forwarding them to our own ones
     virtual void GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const
+                           const wxDataViewItem &item, unsigned int col ) const wxOVERRIDE
     {
         GetValueByRow(variant, GetRow(item), col);
     }
 
     virtual bool SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col )
+                           const wxDataViewItem &item, unsigned int col ) wxOVERRIDE
     {
         return SetValueByRow( variant, GetRow(item), col );
     }
 
     virtual bool GetAttr(const wxDataViewItem &item, unsigned int col,
-                         wxDataViewItemAttr &attr) const
+                         wxDataViewItemAttr &attr) const wxOVERRIDE
     {
         return GetAttrByRow( GetRow(item), col, attr );
     }
 
-    virtual bool IsEnabled(const wxDataViewItem &item, unsigned int col) const
+    virtual bool IsEnabled(const wxDataViewItem &item, unsigned int col) const wxOVERRIDE
     {
         return IsEnabledByRow( GetRow(item), col );
     }
 
 
-    virtual bool IsListModel() const { return true; }
+    virtual bool IsListModel() const wxOVERRIDE { return true; }
 };
 
 // ---------------------------------------------------------
@@ -373,13 +373,13 @@ public:
 
     // convert to/from row/wxDataViewItem
 
-    virtual unsigned GetRow( const wxDataViewItem &item ) const;
+    virtual unsigned GetRow( const wxDataViewItem &item ) const wxOVERRIDE;
     wxDataViewItem GetItem( unsigned int row ) const;
 
     // implement base methods
-    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const wxOVERRIDE;
 
-    unsigned int GetCount() const { return m_hash.GetCount(); }
+    unsigned int GetCount() const wxOVERRIDE { return m_hash.GetCount(); }
 
 private:
     wxDataViewItemArray m_hash;
@@ -412,22 +412,22 @@ public:
 
     // convert to/from row/wxDataViewItem
 
-    virtual unsigned GetRow( const wxDataViewItem &item ) const;
+    virtual unsigned GetRow( const wxDataViewItem &item ) const wxOVERRIDE;
     wxDataViewItem GetItem( unsigned int row ) const;
 
     // compare based on index
 
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending ) const;
-    virtual bool HasDefaultCompare() const;
+                         unsigned int column, bool ascending ) const wxOVERRIDE;
+    virtual bool HasDefaultCompare() const wxOVERRIDE;
 
     // implement base methods
-    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const wxOVERRIDE;
 
-    unsigned int GetCount() const { return m_size; }
+    unsigned int GetCount() const wxOVERRIDE { return m_size; }
 
     // internal
-    virtual bool IsVirtualListModel() const { return true; }
+    virtual bool IsVirtualListModel() const wxOVERRIDE { return true; }
 
 private:
     unsigned int m_size;
@@ -485,8 +485,8 @@ public:
 
     // implement some of base class pure virtuals (the rest is port-dependent
     // and done differently in generic and native versions)
-    virtual void SetBitmap( const wxBitmap& bitmap ) { m_bitmap = bitmap; }
-    virtual wxBitmap GetBitmap() const { return m_bitmap; }
+    virtual void SetBitmap( const wxBitmap& bitmap ) wxOVERRIDE { m_bitmap = bitmap; }
+    virtual wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
 
 protected:
     wxDataViewRenderer      *m_renderer;
@@ -728,7 +728,7 @@ public:
     // define control visual attributes
     // --------------------------------
 
-    virtual wxVisualAttributes GetDefaultAttributes() const
+    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -854,7 +854,7 @@ public:
     wxDragResult GetDropEffect() const { return m_dropEffect; }
 #endif // wxUSE_DRAG_AND_DROP
 
-    virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxDataViewEvent(*this); }
 
 protected:
     wxDataViewItem      m_item;
@@ -1000,15 +1000,15 @@ public:
 
     // override base virtuals
 
-    virtual unsigned int GetColumnCount() const;
+    virtual unsigned int GetColumnCount() const wxOVERRIDE;
 
-    virtual wxString GetColumnType( unsigned int col ) const;
+    virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE;
 
     virtual void GetValueByRow( wxVariant &value,
-                           unsigned int row, unsigned int col ) const;
+                           unsigned int row, unsigned int col ) const wxOVERRIDE;
 
     virtual bool SetValueByRow( const wxVariant &value,
-                           unsigned int row, unsigned int col );
+                           unsigned int row, unsigned int col ) wxOVERRIDE;
 
 
 public:
@@ -1057,10 +1057,10 @@ public:
     bool InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
 
     // overridden from base class
-    virtual bool PrependColumn( wxDataViewColumn *col );
-    virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
-    virtual bool AppendColumn( wxDataViewColumn *col );
-    virtual bool ClearColumns();
+    virtual bool PrependColumn( wxDataViewColumn *col ) wxOVERRIDE;
+    virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col ) wxOVERRIDE;
+    virtual bool AppendColumn( wxDataViewColumn *col ) wxOVERRIDE;
+    virtual bool ClearColumns() wxOVERRIDE;
 
     wxDataViewColumn *AppendTextColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
@@ -1185,7 +1185,7 @@ public:
     bool IsExpanded() const
         { return m_isExpanded; }
 
-    virtual bool IsContainer()
+    virtual bool IsContainer() wxOVERRIDE
         { return true; }
 
 private:
@@ -1238,21 +1238,21 @@ public:
     // implement base methods
 
     virtual void GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const;
+                           const wxDataViewItem &item, unsigned int col ) const wxOVERRIDE;
     virtual bool SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col );
-    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
-    virtual bool IsContainer( const wxDataViewItem &item ) const;
-    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
+                           const wxDataViewItem &item, unsigned int col ) wxOVERRIDE;
+    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const wxOVERRIDE;
+    virtual bool IsContainer( const wxDataViewItem &item ) const wxOVERRIDE;
+    virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const wxOVERRIDE;
 
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending ) const;
+                         unsigned int column, bool ascending ) const wxOVERRIDE;
 
-    virtual bool HasDefaultCompare() const
+    virtual bool HasDefaultCompare() const wxOVERRIDE
         { return true; }
-    virtual unsigned int GetColumnCount() const
+    virtual unsigned int GetColumnCount() const wxOVERRIDE
         { return 1; }
-    virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const
+    virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const wxOVERRIDE
         { return wxT("wxDataViewIconText"); }
 
     wxDataViewTreeStoreNode *FindNode( const wxDataViewItem &item ) const;

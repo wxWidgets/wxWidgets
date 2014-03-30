@@ -467,7 +467,7 @@ protected:
     virtual long DoInsertColumn(long col, const wxListItem& info) = 0;
 
     // Overridden methods of the base class.
-    virtual wxSize DoGetBestClientSize() const;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
 private:
     // user defined color to draw row lines, may be invalid
@@ -522,7 +522,7 @@ public:
     bool IsEditCancelled() const { return m_editCancelled; }
     void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
-    virtual wxEvent *Clone() const { return new wxListEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxListEvent(*this); }
 
 //protected: -- not for backwards compatibility
     int           m_code;

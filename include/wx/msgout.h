@@ -86,10 +86,10 @@ public:
 
 protected:
 #if !wxUSE_UTF8_LOCALE_ONLY
-    virtual void DoPrintfWchar(const wxChar *format, ...);
+    virtual void DoPrintfWchar(const wxChar *format, ...) wxOVERRIDE;
 #endif
 #if wxUSE_UNICODE_UTF8
-    virtual void DoPrintfUtf8(const char *format, ...);
+    virtual void DoPrintfUtf8(const char *format, ...) wxOVERRIDE;
 #endif
 
 private:
@@ -109,7 +109,7 @@ class WXDLLIMPEXP_BASE wxMessageOutputStderr : public wxMessageOutput
 public:
     wxMessageOutputStderr(FILE *fp = stderr) : m_fp(fp) { }
 
-    virtual void Output(const wxString& str);
+    virtual void Output(const wxString& str) wxOVERRIDE;
 
 protected:
     // return the string with "\n" appended if it doesn't already terminate
@@ -136,7 +136,7 @@ public:
     wxMessageOutputBest(wxMessageOutputFlags flags = wxMSGOUT_PREFER_STDERR)
         : m_flags(flags) { }
 
-    virtual void Output(const wxString& str);
+    virtual void Output(const wxString& str) wxOVERRIDE;
 
 private:
     wxMessageOutputFlags m_flags;
@@ -153,7 +153,7 @@ class WXDLLIMPEXP_CORE wxMessageOutputMessageBox : public wxMessageOutput
 public:
     wxMessageOutputMessageBox() { }
 
-    virtual void Output(const wxString& str);
+    virtual void Output(const wxString& str) wxOVERRIDE;
 };
 
 #endif // wxUSE_GUI && wxUSE_MSGDLG
@@ -167,7 +167,7 @@ class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutputStderr
 public:
     wxMessageOutputDebug() { }
 
-    virtual void Output(const wxString& str);
+    virtual void Output(const wxString& str) wxOVERRIDE;
 };
 
 // ----------------------------------------------------------------------------
@@ -179,7 +179,7 @@ class WXDLLIMPEXP_BASE wxMessageOutputLog : public wxMessageOutput
 public:
     wxMessageOutputLog() { }
 
-    virtual void Output(const wxString& str);
+    virtual void Output(const wxString& str) wxOVERRIDE;
 };
 
 #endif // _WX_MSGOUT_H_

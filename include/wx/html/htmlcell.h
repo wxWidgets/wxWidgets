@@ -114,8 +114,8 @@ public:
 class WXDLLIMPEXP_HTML wxDefaultHtmlRenderingStyle : public wxHtmlRenderingStyle
 {
 public:
-    virtual wxColour GetSelectedTextColour(const wxColour& clr);
-    virtual wxColour GetSelectedTextBgColour(const wxColour& clr);
+    virtual wxColour GetSelectedTextColour(const wxColour& clr) wxOVERRIDE;
+    virtual wxColour GetSelectedTextBgColour(const wxColour& clr) wxOVERRIDE;
 };
 
 
@@ -378,10 +378,10 @@ class WXDLLIMPEXP_HTML wxHtmlWordCell : public wxHtmlCell
 public:
     wxHtmlWordCell(const wxString& word, const wxDC& dc);
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-              wxHtmlRenderingInfo& info);
-    virtual wxCursor GetMouseCursor(wxHtmlWindowInterface *window) const;
-    virtual wxString ConvertToText(wxHtmlSelection *sel) const;
-    bool IsLinebreakAllowed() const { return m_allowLinebreak; }
+              wxHtmlRenderingInfo& info) wxOVERRIDE;
+    virtual wxCursor GetMouseCursor(wxHtmlWindowInterface *window) const wxOVERRIDE;
+    virtual wxString ConvertToText(wxHtmlSelection *sel) const wxOVERRIDE;
+    bool IsLinebreakAllowed() const wxOVERRIDE { return m_allowLinebreak; }
 
     void SetPreviousWord(wxHtmlWordCell *cell);
 
@@ -420,8 +420,8 @@ public:
     {}
 
 protected:
-    virtual wxString GetAllAsText() const;
-    virtual wxString GetPartAsText(int begin, int end) const;
+    virtual wxString GetAllAsText() const wxOVERRIDE;
+    virtual wxString GetPartAsText(int begin, int end) const wxOVERRIDE;
 
     wxString m_wordOrig;
     size_t   m_linepos;
@@ -436,15 +436,15 @@ public:
     wxHtmlContainerCell(wxHtmlContainerCell *parent);
     virtual ~wxHtmlContainerCell();
 
-    virtual void Layout(int w);
+    virtual void Layout(int w) wxOVERRIDE;
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                      wxHtmlRenderingInfo& info);
+                      wxHtmlRenderingInfo& info) wxOVERRIDE;
     virtual void DrawInvisible(wxDC& dc, int x, int y,
-                               wxHtmlRenderingInfo& info);
+                               wxHtmlRenderingInfo& info) wxOVERRIDE;
 
     virtual bool AdjustPagebreak(int *pagebreak,
                                  const wxArrayInt& known_pagebreaks,
-                                 int pageHeight) const;
+                                 int pageHeight) const wxOVERRIDE;
 
     // insert cell at the end of m_Cells list
     void InsertCell(wxHtmlCell *cell);
@@ -478,26 +478,26 @@ public:
     // adapt to it:
     wxColour GetBackgroundColour();
     void SetBorder(const wxColour& clr1, const wxColour& clr2, int border = 1) {m_Border = border; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
-    virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
-    virtual const wxHtmlCell* Find(int condition, const void* param) const;
+    virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const wxOVERRIDE;
+    virtual const wxHtmlCell* Find(int condition, const void* param) const wxOVERRIDE;
 
     virtual bool ProcessMouseClick(wxHtmlWindowInterface *window,
                                    const wxPoint& pos,
-                                   const wxMouseEvent& event);
+                                   const wxMouseEvent& event) wxOVERRIDE;
 
-    virtual wxHtmlCell* GetFirstChild() const { return m_Cells; }
+    virtual wxHtmlCell* GetFirstChild() const wxOVERRIDE { return m_Cells; }
 
     // returns last child cell:
     wxHtmlCell* GetLastChild() const { return m_LastCell; }
 
     // see comment in wxHtmlCell about this method
-    virtual bool IsTerminalCell() const { return false; }
+    virtual bool IsTerminalCell() const wxOVERRIDE { return false; }
 
     virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
-                                  unsigned flags = wxHTML_FIND_EXACT) const;
+                                  unsigned flags = wxHTML_FIND_EXACT) const wxOVERRIDE;
 
-    virtual wxHtmlCell *GetFirstTerminal() const;
-    virtual wxHtmlCell *GetLastTerminal() const;
+    virtual wxHtmlCell *GetFirstTerminal() const wxOVERRIDE;
+    virtual wxHtmlCell *GetLastTerminal() const wxOVERRIDE;
 
 
     // Removes indentation on top or bottom of the container (i.e. above or
@@ -506,7 +506,7 @@ public:
 
     // Returns the maximum possible length of the container.
     // Call Layout at least once before using GetMaxTotalWidth()
-    virtual int GetMaxTotalWidth() const { return m_MaxTotalWidth; }
+    virtual int GetMaxTotalWidth() const wxOVERRIDE { return m_MaxTotalWidth; }
 
 protected:
     void UpdateRenderingStatePre(wxHtmlRenderingInfo& info,
@@ -557,9 +557,9 @@ class WXDLLIMPEXP_HTML wxHtmlColourCell : public wxHtmlCell
 public:
     wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND) : wxHtmlCell() {m_Colour = clr; m_Flags = flags;}
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                      wxHtmlRenderingInfo& info);
+                      wxHtmlRenderingInfo& info) wxOVERRIDE;
     virtual void DrawInvisible(wxDC& dc, int x, int y,
-                               wxHtmlRenderingInfo& info);
+                               wxHtmlRenderingInfo& info) wxOVERRIDE;
 
 protected:
     wxColour m_Colour;
@@ -582,9 +582,9 @@ class WXDLLIMPEXP_HTML wxHtmlFontCell : public wxHtmlCell
 public:
     wxHtmlFontCell(wxFont *font) : wxHtmlCell() { m_Font = (*font); }
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                      wxHtmlRenderingInfo& info);
+                      wxHtmlRenderingInfo& info) wxOVERRIDE;
     virtual void DrawInvisible(wxDC& dc, int x, int y,
-                               wxHtmlRenderingInfo& info);
+                               wxHtmlRenderingInfo& info) wxOVERRIDE;
 
 protected:
     wxFont m_Font;
@@ -615,10 +615,10 @@ public:
     wxHtmlWidgetCell(wxWindow *wnd, int w = 0);
     virtual ~wxHtmlWidgetCell() { m_Wnd->Destroy(); }
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                      wxHtmlRenderingInfo& info);
+                      wxHtmlRenderingInfo& info) wxOVERRIDE;
     virtual void DrawInvisible(wxDC& dc, int x, int y,
-                               wxHtmlRenderingInfo& info);
-    virtual void Layout(int w);
+                               wxHtmlRenderingInfo& info) wxOVERRIDE;
+    virtual void Layout(int w) wxOVERRIDE;
 
 protected:
     wxWindow* m_Wnd;

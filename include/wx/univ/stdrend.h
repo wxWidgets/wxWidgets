@@ -30,14 +30,14 @@ public:
                                 const wxColour& col,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxWindow *window = NULL);
+                                wxWindow *window = NULL) wxOVERRIDE;
     virtual void DrawButtonSurface(wxDC& dc,
                                    const wxColour& col,
                                    const wxRect& rect,
-                                   int flags);
+                                   int flags) wxOVERRIDE;
 
 
-    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
+    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) wxOVERRIDE;
 
     virtual void DrawLabel(wxDC& dc,
                            const wxString& label,
@@ -45,7 +45,7 @@ public:
                            int flags = 0,
                            int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                            int indexAccel = -1,
-                           wxRect *rectBounds = NULL);
+                           wxRect *rectBounds = NULL) wxOVERRIDE;
     virtual void DrawButtonLabel(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& image,
@@ -53,41 +53,41 @@ public:
                                  int flags = 0,
                                  int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                                  int indexAccel = -1,
-                                 wxRect *rectBounds = NULL);
+                                 wxRect *rectBounds = NULL) wxOVERRIDE;
 
 
     virtual void DrawBorder(wxDC& dc,
                             wxBorder border,
                             const wxRect& rect,
                             int flags = 0,
-                            wxRect *rectIn = NULL);
+                            wxRect *rectIn = NULL) wxOVERRIDE;
     virtual void DrawTextBorder(wxDC& dc,
                                 wxBorder border,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxRect *rectIn = NULL);
+                                wxRect *rectIn = NULL) wxOVERRIDE;
 
     virtual void DrawHorizontalLine(wxDC& dc,
-                                    wxCoord y, wxCoord x1, wxCoord x2);
+                                    wxCoord y, wxCoord x1, wxCoord x2) wxOVERRIDE;
     virtual void DrawVerticalLine(wxDC& dc,
-                                  wxCoord x, wxCoord y1, wxCoord y2);
+                                  wxCoord x, wxCoord y1, wxCoord y2) wxOVERRIDE;
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,
                            const wxRect& rect,
                            int flags = 0,
                            int alignment = wxALIGN_LEFT,
-                           int indexAccel = -1);
+                           int indexAccel = -1) wxOVERRIDE;
 
 
     virtual void DrawItem(wxDC& dc,
                           const wxString& label,
                           const wxRect& rect,
-                          int flags = 0);
+                          int flags = 0) wxOVERRIDE;
     virtual void DrawCheckItem(wxDC& dc,
                                const wxString& label,
                                const wxBitmap& bitmap,
                                const wxRect& rect,
-                               int flags = 0);
+                               int flags = 0) wxOVERRIDE;
 
     virtual void DrawCheckButton(wxDC& dc,
                                  const wxString& label,
@@ -95,21 +95,21 @@ public:
                                  const wxRect& rect,
                                  int flags = 0,
                                  wxAlignment align = wxALIGN_LEFT,
-                                 int indexAccel = -1);
+                                 int indexAccel = -1) wxOVERRIDE;
     virtual void DrawRadioButton(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& bitmap,
                                  const wxRect& rect,
                                  int flags = 0,
                                  wxAlignment align = wxALIGN_LEFT,
-                                 int indexAccel = -1);
+                                 int indexAccel = -1) wxOVERRIDE;
 
     virtual void DrawScrollbarArrow(wxDC& dc,
                                     wxDirection dir,
                                     const wxRect& rect,
-                                    int flags = 0);
+                                    int flags = 0) wxOVERRIDE;
     virtual void DrawScrollCorner(wxDC& dc,
-                                  const wxRect& rect);
+                                  const wxRect& rect) wxOVERRIDE;
 
 #if wxUSE_TEXTCTRL
     virtual void DrawTextLine(wxDC& dc,
@@ -117,39 +117,39 @@ public:
                               const wxRect& rect,
                               int selStart = -1,
                               int selEnd = -1,
-                              int flags = 0);
+                              int flags = 0) wxOVERRIDE;
 
-    virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
+    virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect) wxOVERRIDE;
 
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
-                                    const wxRect& rect) const;
+                                    const wxRect& rect) const wxOVERRIDE;
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect,
-                                     wxCoord *extraSpaceBeyond) const;
+                                     wxCoord *extraSpaceBeyond) const wxOVERRIDE;
 #endif // wxUSE_TEXTCTRL
 
-    virtual wxRect GetBorderDimensions(wxBorder border) const;
+    virtual wxRect GetBorderDimensions(wxBorder border) const wxOVERRIDE;
 
-    virtual bool AreScrollbarsInsideBorder() const;
+    virtual bool AreScrollbarsInsideBorder() const wxOVERRIDE;
 
-    virtual void AdjustSize(wxSize *size, const wxWindow *window);
+    virtual void AdjustSize(wxSize *size, const wxWindow *window) wxOVERRIDE;
 
-    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight);
+    virtual wxCoord GetListboxItemHeight(wxCoord fontHeight) wxOVERRIDE;
 
 #if wxUSE_STATUSBAR
     virtual void DrawStatusField(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
-                                 int flags = 0, int style = 0);
+                                 int flags = 0, int style = 0) wxOVERRIDE;
 
-    virtual wxSize GetStatusBarBorders() const;
+    virtual wxSize GetStatusBarBorders() const wxOVERRIDE;
 
-    virtual wxCoord GetStatusBarBorderBetweenFields() const;
+    virtual wxCoord GetStatusBarBorderBetweenFields() const wxOVERRIDE;
 
-    virtual wxSize GetStatusBarFieldMargins() const;
+    virtual wxSize GetStatusBarFieldMargins() const wxOVERRIDE;
 #endif // wxUSE_STATUSBAR
 
-    virtual wxCoord GetCheckItemMargin() const { return 0; }
+    virtual wxCoord GetCheckItemMargin() const wxOVERRIDE { return 0; }
 
 
     virtual void DrawFrameTitleBar(wxDC& dc,
@@ -158,37 +158,37 @@ public:
                                    const wxIcon& icon,
                                    int flags,
                                    int specialButton = 0,
-                                   int specialButtonFlag = 0);
+                                   int specialButtonFlag = 0) wxOVERRIDE;
     virtual void DrawFrameBorder(wxDC& dc,
                                  const wxRect& rect,
-                                 int flags);
+                                 int flags) wxOVERRIDE;
     virtual void DrawFrameBackground(wxDC& dc,
                                      const wxRect& rect,
-                                     int flags);
+                                     int flags) wxOVERRIDE;
     virtual void DrawFrameTitle(wxDC& dc,
                                 const wxRect& rect,
                                 const wxString& title,
-                                int flags);
+                                int flags) wxOVERRIDE;
     virtual void DrawFrameIcon(wxDC& dc,
                                const wxRect& rect,
                                const wxIcon& icon,
-                               int flags);
+                               int flags) wxOVERRIDE;
     virtual void DrawFrameButton(wxDC& dc,
                                  wxCoord x, wxCoord y,
                                  int button,
-                                 int flags = 0);
+                                 int flags = 0) wxOVERRIDE;
 
-    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const;
+    virtual wxRect GetFrameClientArea(const wxRect& rect, int flags) const wxOVERRIDE;
 
-    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const;
+    virtual wxSize GetFrameTotalSize(const wxSize& clientSize, int flags) const wxOVERRIDE;
 
-    virtual wxSize GetFrameMinSize(int flags) const;
+    virtual wxSize GetFrameMinSize(int flags) const wxOVERRIDE;
 
-    virtual wxSize GetFrameIconSize() const;
+    virtual wxSize GetFrameIconSize() const wxOVERRIDE;
 
     virtual int HitTestFrame(const wxRect& rect,
                              const wxPoint& pt,
-                             int flags = 0) const;
+                             int flags = 0) const wxOVERRIDE;
 protected:
     // various constants
     enum ArrowDirection

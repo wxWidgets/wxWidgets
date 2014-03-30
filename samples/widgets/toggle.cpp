@@ -89,11 +89,11 @@ public:
     ToggleWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~ToggleWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_toggle; }
-    virtual void RecreateWidget() { CreateToggle(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_toggle; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateToggle(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers

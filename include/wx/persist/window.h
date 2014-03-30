@@ -33,7 +33,7 @@ public:
                                wxPersistentWindowBase::HandleDestroy, this);
     }
 
-    virtual wxString GetName() const
+    virtual wxString GetName() const wxOVERRIDE
     {
         const wxString name = GetWindow()->GetName();
         wxASSERT_MSG( !name.empty(), "persistent windows should be named!" );

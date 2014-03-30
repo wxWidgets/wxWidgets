@@ -19,10 +19,10 @@ class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
 #if wxUSE_CONSOLE_EVENTLOOP
-    virtual wxEventLoopBase *CreateEventLoop();
+    virtual wxEventLoopBase *CreateEventLoop() wxOVERRIDE;
 #endif // wxUSE_CONSOLE_EVENTLOOP
 #if wxUSE_TIMER
-    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) wxOVERRIDE;
 #endif
 };
 
@@ -48,10 +48,10 @@ public:
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual wxEventLoopBase *CreateEventLoop();
-    virtual int WaitForChild(wxExecuteData& execData);
+    virtual wxEventLoopBase *CreateEventLoop() wxOVERRIDE;
+    virtual int WaitForChild(wxExecuteData& execData) wxOVERRIDE;
 #if wxUSE_TIMER
-    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) wxOVERRIDE;
 #endif
 #if wxUSE_THREADS && defined(__WXGTK20__)
     virtual void MutexGuiEnter();
@@ -61,7 +61,7 @@ public:
 #if (defined(__WXMAC__) || defined(__WXCOCOA__)) && wxUSE_STDPATHS
     virtual wxStandardPaths& GetStandardPaths();
 #endif
-    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const;
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL, int *minVer = NULL) const wxOVERRIDE;
 
 #ifdef __WXGTK20__
     virtual wxString GetDesktopEnvironment() const;
@@ -85,7 +85,7 @@ public:
 
 #endif // wxUSE_SOCKETS
 
-    virtual wxEventLoopSourcesManagerBase* GetEventLoopSourcesManager();
+    virtual wxEventLoopSourcesManagerBase* GetEventLoopSourcesManager() wxOVERRIDE;
 };
 
 #endif // wxUSE_GUI

@@ -73,12 +73,12 @@ protected:
     // replace base class functions using wxObjectRefData with our own which
     // use wxGDIRefData to ensure that we always work with data objects of the
     // correct type (i.e. derived from wxGDIRefData)
-    virtual wxObjectRefData *CreateRefData() const
+    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE
     {
         return CreateGDIRefData();
     }
 
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE
     {
         return CloneGDIRefData(static_cast<const wxGDIRefData *>(data));
     }

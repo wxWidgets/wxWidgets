@@ -62,13 +62,13 @@ public:
     // ------------------------------
 
     virtual void AdjustForParentClientOrigin(int& WXUNUSED(x), int& WXUNUSED(y),
-                                             int WXUNUSED(sizeFlags) = 0) const
+                                             int WXUNUSED(sizeFlags) = 0) const wxOVERRIDE
     {
         // Non owned windows positions don't need to be adjusted for parent
         // client area origin so simply do nothing here.
     }
 
-    virtual void InheritAttributes()
+    virtual void InheritAttributes() wxOVERRIDE
     {
         // Non owned windows don't inherit attributes from their parent window
         // (if the parent frame is red, it doesn't mean that all dialogs shown

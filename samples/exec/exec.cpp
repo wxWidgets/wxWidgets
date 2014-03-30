@@ -83,7 +83,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define an array of process pointers used by MyFrame
@@ -263,7 +263,7 @@ public:
     // instead of overriding this virtual function we might as well process the
     // event from it in the frame class - this might be more convenient in some
     // cases
-    virtual void OnTerminate(int pid, int status);
+    virtual void OnTerminate(int pid, int status) wxOVERRIDE;
 
 protected:
     MyFrame *m_parent;
@@ -280,7 +280,7 @@ public:
             Redirect();
         }
 
-    virtual void OnTerminate(int pid, int status);
+    virtual void OnTerminate(int pid, int status) wxOVERRIDE;
 
     virtual bool HasInput();
 };
@@ -295,7 +295,7 @@ public:
         {
         }
 
-    virtual bool HasInput();
+    virtual bool HasInput() wxOVERRIDE;
 
 private:
     wxString m_input;

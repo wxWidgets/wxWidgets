@@ -91,11 +91,11 @@ public:
     ButtonWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~ButtonWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_button; }
-    virtual void RecreateWidget() { CreateButton(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_button; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateButton(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers

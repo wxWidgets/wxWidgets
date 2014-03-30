@@ -24,7 +24,7 @@ public:
     wxCustomBackgroundWindow() { }
 
 protected:
-    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp)
+    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp) wxOVERRIDE
     {
         // We have support for background bitmap even at the base class level.
         BaseWindowClass::SetBackground(bmp, wxALIGN_NOT, wxTILE);

@@ -74,11 +74,11 @@ public:
     FilePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~FilePickerWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_filePicker; }
-    virtual void RecreateWidget() { RecreatePicker(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_filePicker; }
+    virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
 

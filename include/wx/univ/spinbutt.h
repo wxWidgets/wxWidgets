@@ -41,36 +41,36 @@ public:
                 const wxString& name = wxSPIN_BUTTON_NAME);
 
     // implement wxSpinButtonBase methods
-    virtual int GetValue() const;
-    virtual void SetValue(int val);
-    virtual void SetRange(int minVal, int maxVal);
+    virtual int GetValue() const wxOVERRIDE;
+    virtual void SetValue(int val) wxOVERRIDE;
+    virtual void SetRange(int minVal, int maxVal) wxOVERRIDE;
 
     // implement wxControlWithArrows methods
-    virtual wxRenderer *GetRenderer() const { return m_renderer; }
-    virtual wxWindow *GetWindow() { return this; }
-    virtual bool IsVertical() const { return wxSpinButtonBase::IsVertical(); }
-    virtual int GetArrowState(wxScrollArrows::Arrow arrow) const;
-    virtual void SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set);
-    virtual bool OnArrow(wxScrollArrows::Arrow arrow);
-    virtual wxScrollArrows::Arrow HitTestArrow(const wxPoint& pt) const;
+    virtual wxRenderer *GetRenderer() const wxOVERRIDE { return m_renderer; }
+    virtual wxWindow *GetWindow() wxOVERRIDE { return this; }
+    virtual bool IsVertical() const wxOVERRIDE { return wxSpinButtonBase::IsVertical(); }
+    virtual int GetArrowState(wxScrollArrows::Arrow arrow) const wxOVERRIDE;
+    virtual void SetArrowFlag(wxScrollArrows::Arrow arrow, int flag, bool set) wxOVERRIDE;
+    virtual bool OnArrow(wxScrollArrows::Arrow arrow) wxOVERRIDE;
+    virtual wxScrollArrows::Arrow HitTestArrow(const wxPoint& pt) const wxOVERRIDE;
 
     // for wxStdSpinButtonInputHandler
     const wxScrollArrows& GetArrows() { return m_arrows; }
 
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0,
-                               const wxString& strArg = wxEmptyString);
+                               const wxString& strArg = wxEmptyString) wxOVERRIDE;
 
     static wxInputHandler *GetStdInputHandler(wxInputHandler *handlerDef);
-    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef)
+    virtual wxInputHandler *DoGetStdInputHandler(wxInputHandler *handlerDef) wxOVERRIDE
     {
         return GetStdInputHandler(handlerDef);
     }
 
 protected:
-    virtual wxSize DoGetBestClientSize() const;
-    virtual void DoDraw(wxControlRenderer *renderer);
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     // the common part of all ctors
     void Init();
@@ -110,11 +110,11 @@ public:
 
     virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
-                           bool pressed);
+                           bool pressed) wxOVERRIDE;
     virtual bool HandleMouse(wxInputConsumer *consumer,
-                             const wxMouseEvent& event);
+                             const wxMouseEvent& event) wxOVERRIDE;
     virtual bool HandleMouseMove(wxInputConsumer *consumer,
-                                 const wxMouseEvent& event);
+                                 const wxMouseEvent& event) wxOVERRIDE;
 };
 
 #endif // _WX_UNIV_SPINBUTT_H_

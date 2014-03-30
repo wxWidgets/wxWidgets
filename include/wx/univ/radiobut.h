@@ -47,16 +47,16 @@ public:
                 const wxString& name = wxRadioButtonNameStr);
 
     // override some base class methods
-    virtual void ChangeValue(bool value);
+    virtual void ChangeValue(bool value) wxOVERRIDE;
 
 protected:
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxBORDER_NONE; }
 
     // implement our own drawing
-    virtual void DoDraw(wxControlRenderer *renderer);
+    virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
     // we use the radio button bitmaps for size calculation
-    virtual wxSize GetBitmapSize() const;
+    virtual wxSize GetBitmapSize() const wxOVERRIDE;
 
     // the radio button can only be cleared using this method, not
     // ChangeValue() above - and it is protected as it can only be called by
@@ -65,10 +65,10 @@ protected:
 
     // called when the radio button becomes checked: we clear all the buttons
     // in the same group with us here
-    virtual void OnCheck();
+    virtual void OnCheck() wxOVERRIDE;
 
     // send event about radio button selection
-    virtual void SendEvent();
+    virtual void SendEvent() wxOVERRIDE;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioButton)

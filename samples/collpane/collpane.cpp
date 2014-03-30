@@ -75,7 +75,7 @@ class MyApp: public wxApp
 public:
     MyApp() { }
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };

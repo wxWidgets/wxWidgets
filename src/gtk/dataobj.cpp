@@ -432,7 +432,7 @@ public:
     void SetURL(const wxString& url) { m_url = url; }
 
 
-    virtual size_t GetDataSize() const
+    virtual size_t GetDataSize() const wxOVERRIDE
     {
         // It is not totally clear whether we should include "\r\n" at the end
         // of the string if there is only one URL or not, but not doing it
@@ -440,7 +440,7 @@ public:
         return strlen(m_url.utf8_str()) + 1;
     }
 
-    virtual bool GetDataHere(void *buf) const
+    virtual bool GetDataHere(void *buf) const wxOVERRIDE
     {
         char* const dst = static_cast<char*>(buf);
 
@@ -449,7 +449,7 @@ public:
         return true;
     }
 
-    virtual bool SetData(size_t len, const void *buf)
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE
     {
         const char* const src = static_cast<const char*>(buf);
 
@@ -469,15 +469,15 @@ public:
     }
 
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const
+    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
     {
         return SetData(len, buf);
     }

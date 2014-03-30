@@ -57,9 +57,9 @@ public:
     bool WasSkipped() const;
 
     // Must provide overload to avoid hiding it (and warnings about it)
-    virtual void Update() { wxDialog::Update(); }
+    virtual void Update() wxOVERRIDE { wxDialog::Update(); }
 
-    virtual bool Show( bool show = true );
+    virtual bool Show( bool show = true ) wxOVERRIDE;
 
     // This enum is an implementation detail and should not be used
     // by user code.

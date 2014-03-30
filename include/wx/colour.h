@@ -182,14 +182,14 @@ protected:
     // wxColour doesn't use reference counted data (at least not in all ports)
     // so provide stubs for the functions which need to be defined if we do use
     // them
-    virtual wxGDIRefData *CreateGDIRefData() const
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE
     {
         wxFAIL_MSG( "must be overridden if used" );
 
         return NULL;
     }
 
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const wxOVERRIDE
     {
         wxFAIL_MSG( "must be overridden if used" );
 

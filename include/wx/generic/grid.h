@@ -355,7 +355,7 @@ class WXDLLIMPEXP_ADV wxGridRowHeaderRendererDefault
 public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
-                            wxRect& rect) const;
+                            wxRect& rect) const wxOVERRIDE;
 };
 
 // Column header cells renderers
@@ -365,7 +365,7 @@ class WXDLLIMPEXP_ADV wxGridColumnHeaderRendererDefault
 public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
-                            wxRect& rect) const;
+                            wxRect& rect) const wxOVERRIDE;
 };
 
 // Header corner renderer
@@ -375,7 +375,7 @@ class WXDLLIMPEXP_ADV wxGridCornerHeaderRendererDefault
 public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
-                            wxRect& rect) const;
+                            wxRect& rect) const wxOVERRIDE;
 };
 
 
@@ -826,25 +826,25 @@ public:
 
     // these are pure virtual in wxGridTableBase
     //
-    virtual int GetNumberRows() { return static_cast<int>(m_data.size()); }
-    virtual int GetNumberCols() { return m_numCols; }
-    virtual wxString GetValue( int row, int col );
-    virtual void SetValue( int row, int col, const wxString& s );
+    virtual int GetNumberRows() wxOVERRIDE { return static_cast<int>(m_data.size()); }
+    virtual int GetNumberCols() wxOVERRIDE { return m_numCols; }
+    virtual wxString GetValue( int row, int col ) wxOVERRIDE;
+    virtual void SetValue( int row, int col, const wxString& s ) wxOVERRIDE;
 
     // overridden functions from wxGridTableBase
     //
-    void Clear();
-    bool InsertRows( size_t pos = 0, size_t numRows = 1 );
-    bool AppendRows( size_t numRows = 1 );
-    bool DeleteRows( size_t pos = 0, size_t numRows = 1 );
-    bool InsertCols( size_t pos = 0, size_t numCols = 1 );
-    bool AppendCols( size_t numCols = 1 );
-    bool DeleteCols( size_t pos = 0, size_t numCols = 1 );
+    void Clear() wxOVERRIDE;
+    bool InsertRows( size_t pos = 0, size_t numRows = 1 ) wxOVERRIDE;
+    bool AppendRows( size_t numRows = 1 ) wxOVERRIDE;
+    bool DeleteRows( size_t pos = 0, size_t numRows = 1 ) wxOVERRIDE;
+    bool InsertCols( size_t pos = 0, size_t numCols = 1 ) wxOVERRIDE;
+    bool AppendCols( size_t numCols = 1 ) wxOVERRIDE;
+    bool DeleteCols( size_t pos = 0, size_t numCols = 1 ) wxOVERRIDE;
 
-    void SetRowLabelValue( int row, const wxString& );
-    void SetColLabelValue( int col, const wxString& );
-    wxString GetRowLabelValue( int row );
-    wxString GetColLabelValue( int col );
+    void SetRowLabelValue( int row, const wxString& ) wxOVERRIDE;
+    void SetColLabelValue( int col, const wxString& ) wxOVERRIDE;
+    wxString GetRowLabelValue( int row ) wxOVERRIDE;
+    wxString GetColLabelValue( int col ) wxOVERRIDE;
 
 private:
     wxGridStringArray m_data;
@@ -1083,7 +1083,7 @@ public:
 
     int      GetBatchCount() { return m_batchCount; }
 
-    virtual void Refresh(bool eraseb = true, const wxRect* rect = NULL);
+    virtual void Refresh(bool eraseb = true, const wxRect* rect = NULL) wxOVERRIDE;
 
     // Use this, rather than wxWindow::Refresh(), to force an
     // immediate repainting of the grid. Has no effect if you are
@@ -1642,7 +1642,7 @@ public:
 
     // ------- drag and drop
 #if wxUSE_DRAG_AND_DROP
-    virtual void SetDropTarget(wxDropTarget *dropTarget);
+    virtual void SetDropTarget(wxDropTarget *dropTarget) wxOVERRIDE;
 #endif // wxUSE_DRAG_AND_DROP
 
 
@@ -1838,16 +1838,16 @@ public:
 
 
     // override some base class functions
-    virtual bool Enable(bool enable = true);
-    virtual wxWindow *GetMainWindowOfCompositeControl()
+    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE
         { return (wxWindow*)m_gridWin; }
-    virtual void Fit();
+    virtual void Fit() wxOVERRIDE;
 
     // implementation only
     void CancelMouseCapture();
 
 protected:
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
     bool m_created;
 
@@ -2166,7 +2166,7 @@ protected:
 private:
 
     // implement wxScrolledWindow method to return m_gridWin size
-    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) wxOVERRIDE;
 
     // redraw the grid lines, should be called after changing their attributes
     void RedrawGridLines();
@@ -2420,7 +2420,7 @@ public:
     wxPoint     GetPosition() { return wxPoint( m_x, m_y ); }
     bool        Selecting() { return m_selecting; }
 
-    virtual wxEvent *Clone() const { return new wxGridEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridEvent(*this); }
 
 protected:
     int         m_row;
@@ -2480,7 +2480,7 @@ public:
     int         GetRowOrCol() { return m_rowOrCol; }
     wxPoint     GetPosition() { return wxPoint( m_x, m_y ); }
 
-    virtual wxEvent *Clone() const { return new wxGridSizeEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridSizeEvent(*this); }
 
 protected:
     int         m_rowOrCol;
@@ -2544,7 +2544,7 @@ public:
     int         GetRightCol()  { return m_bottomRight.GetCol(); }
     bool        Selecting() { return m_selecting; }
 
-    virtual wxEvent *Clone() const { return new wxGridRangeSelectEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridRangeSelectEvent(*this); }
 
 protected:
     void Init(const wxGridCellCoords& topLeft,
@@ -2585,7 +2585,7 @@ public:
     void SetCol(int col)                { m_col = col; }
     void SetControl(wxControl* ctrl)    { m_ctrl = ctrl; }
 
-    virtual wxEvent *Clone() const { return new wxGridEditorCreatedEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridEditorCreatedEvent(*this); }
 
 private:
     int m_row;

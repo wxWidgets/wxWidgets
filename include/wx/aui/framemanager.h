@@ -696,7 +696,7 @@ public:
         dc = c.dc;
     }
 #endif
-    wxEvent *Clone() const { return new wxAuiManagerEvent(*this); }
+    wxEvent *Clone() const wxOVERRIDE { return new wxAuiManagerEvent(*this); }
 
     void SetManager(wxAuiManager* mgr) { manager = mgr; }
     void SetPane(wxAuiPaneInfo* p) { pane = p; }

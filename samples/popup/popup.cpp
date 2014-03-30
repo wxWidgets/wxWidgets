@@ -69,10 +69,10 @@ public:
     virtual ~SimpleTransientPopup();
 
     // wxPopupTransientWindow virtual methods are all overridden to log them
-    virtual void Popup(wxWindow *focus = NULL);
-    virtual void OnDismiss();
-    virtual bool ProcessLeftDown(wxMouseEvent& event);
-    virtual bool Show( bool show = true );
+    virtual void Popup(wxWindow *focus = NULL) wxOVERRIDE;
+    virtual void OnDismiss() wxOVERRIDE;
+    virtual bool ProcessLeftDown(wxMouseEvent& event) wxOVERRIDE;
+    virtual bool Show( bool show = true ) wxOVERRIDE;
 
 private:
     wxScrolledWindow *m_panel;
@@ -294,7 +294,7 @@ private:
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     MyFrame *m_frame;
 };
