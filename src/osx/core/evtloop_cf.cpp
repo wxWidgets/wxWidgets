@@ -272,6 +272,8 @@ void wxCFEventLoop::OSXDoRun()
 {
     for ( ;; )
     {
+        OnNextIteration();
+
         // generate and process idle events for as long as we don't
         // have anything else to do
         DoProcessEvents();
