@@ -103,14 +103,6 @@ bool wxDirDialog::Create(wxWindow* parent,
     }
 #endif
 
-    // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
-    // the dialog when the user press ESC on the dialog: in that case a second call to
-    // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
-    g_signal_connect (m_widget,
-                    "delete_event",
-                    G_CALLBACK (gtk_widget_hide_on_delete),
-                    (gpointer)this);
-
     // local-only property could be set to false to allow non-local files to be loaded.
     // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
     // and the GtkFileChooserDialog should probably also be created with a backend,
