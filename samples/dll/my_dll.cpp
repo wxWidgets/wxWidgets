@@ -51,7 +51,7 @@ public:
 
     void OnAbout(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -77,9 +77,9 @@ private:
 // MyDllFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyDllFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyDllFrame, wxFrame)
     EVT_BUTTON(wxID_ABOUT, MyDllFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyDllFrame::MyDllFrame(wxWindow *parent, const wxString& label)
     : wxFrame(parent, wxID_ANY, label)

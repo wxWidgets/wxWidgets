@@ -221,7 +221,7 @@ wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
 // MyFrame
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     // File menu
     EVT_MENU_RANGE(ID_BOOK_NOTEBOOK, ID_BOOK_MAX, MyFrame::OnType)
     EVT_MENU_RANGE(ID_ORIENT_DEFAULT, ID_ORIENT_MAX, MyFrame::OnOrient)
@@ -279,7 +279,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     // Update title in idle time
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, wxString(wxT("wxWidgets book controls sample")))

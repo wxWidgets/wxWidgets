@@ -66,11 +66,11 @@ IMPLEMENT_APP(MyApp)
 // MyFrame
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_OPEN, MyFrame::OnMenuFileOpen)
     EVT_MENU(wxID_EXIT, MyFrame::OnMenuFileExit)
     EVT_MENU(wxID_HELP, MyFrame::OnMenuHelpAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // MyFrame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
@@ -133,12 +133,12 @@ void MyFrame::OnMenuHelpAbout( wxCommandEvent& WXUNUSED(event) )
 // TestGLCanvas
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
+wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
     EVT_PAINT(TestGLCanvas::OnPaint)
     EVT_ERASE_BACKGROUND(TestGLCanvas::OnEraseBackground)
     EVT_MOUSE_EVENTS(TestGLCanvas::OnMouse)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent,
                            wxWindowID id,

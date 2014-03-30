@@ -71,7 +71,7 @@ static const int NUM_LEVELS = 2;
 
 #define MENU_LINK(name) EVT_MENU(TreeTest_##name, MyFrame::On##name)
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_IDLE(MyFrame::OnIdle)
     EVT_SIZE(MyFrame::OnSize)
 
@@ -147,12 +147,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(SelectLast)
 #undef MENU_LINK
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if USE_GENERIC_TREECTRL
-BEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
+wxBEGIN_EVENT_TABLE(MyTreeCtrl, wxGenericTreeCtrl)
 #else
-BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
+wxBEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
 #endif
     EVT_TREE_BEGIN_DRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginDrag)
     EVT_TREE_BEGIN_RDRAG(TreeTest_Ctrl, MyTreeCtrl::OnBeginRDrag)
@@ -186,7 +186,7 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_RIGHT_DOWN(MyTreeCtrl::OnRMouseDown)
     EVT_RIGHT_UP(MyTreeCtrl::OnRMouseUp)
     EVT_RIGHT_DCLICK(MyTreeCtrl::OnRMouseDClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 

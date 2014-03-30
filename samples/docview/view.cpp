@@ -34,9 +34,9 @@
 
 IMPLEMENT_DYNAMIC_CLASS(DrawingView, wxView)
 
-BEGIN_EVENT_TABLE(DrawingView, wxView)
+wxBEGIN_EVENT_TABLE(DrawingView, wxView)
     EVT_MENU(wxID_CUT, DrawingView::OnCut)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // What to do when a view is created. Creates actual
 // windows for displaying the view.
@@ -146,11 +146,11 @@ void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
 
-BEGIN_EVENT_TABLE(TextEditView, wxView)
+wxBEGIN_EVENT_TABLE(TextEditView, wxView)
     EVT_MENU(wxID_COPY, TextEditView::OnCopy)
     EVT_MENU(wxID_PASTE, TextEditView::OnPaste)
     EVT_MENU(wxID_SELECTALL, TextEditView::OnSelectAll)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 bool TextEditView::OnCreate(wxDocument *doc, long flags)
 {
@@ -198,9 +198,9 @@ bool TextEditView::OnClose(bool deleteWindow)
 // MyCanvas implementation
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(MyCanvas::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxView *view, wxWindow *parent)

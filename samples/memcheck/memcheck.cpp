@@ -120,9 +120,9 @@ bool MyApp::OnInit(void)
   return true;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *parent):

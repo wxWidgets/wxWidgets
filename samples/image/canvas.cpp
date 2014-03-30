@@ -43,9 +43,9 @@
 // MyCanvas
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )

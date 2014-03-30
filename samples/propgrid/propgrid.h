@@ -260,7 +260,7 @@ public:
     bool RunTests( bool fullTest, bool interactive = false );
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // -----------------------------------------------------------------------

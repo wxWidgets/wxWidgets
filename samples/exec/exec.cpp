@@ -189,7 +189,7 @@ private:
     wxTimer m_timerBg;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -243,7 +243,7 @@ private:
                *m_textIn,
                *m_textErr;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -351,7 +351,7 @@ static const wxChar *DIALOG_TITLE = wxT("Exec sample");
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_Quit,  MyFrame::OnQuit)
     EVT_MENU(Exec_Kill,  MyFrame::OnKill)
     EVT_MENU(Exec_ClearLog,  MyFrame::OnClear)
@@ -382,9 +382,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_TIMER(Exec_TimerIdle, MyFrame::OnIdleTimer)
     EVT_TIMER(Exec_TimerBg, MyFrame::OnBgTimer)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
     EVT_BUTTON(Exec_Btn_Send, MyPipeFrame::OnBtnSend)
     EVT_BUTTON(Exec_Btn_SendFile, MyPipeFrame::OnBtnSendFile)
     EVT_BUTTON(Exec_Btn_Get, MyPipeFrame::OnBtnGet)
@@ -395,7 +395,7 @@ BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
     EVT_CLOSE(MyPipeFrame::OnClose)
 
     EVT_END_PROCESS(wxID_ANY, MyPipeFrame::OnProcessTerm)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -732,13 +732,13 @@ private:
     wxCheckBox* m_useCWD;
     wxCheckBox* m_useEnv;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(ExecQueryDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(ExecQueryDialog, wxDialog)
     EVT_UPDATE_UI(TEXT_CWD, ExecQueryDialog::OnUpdateWorkingDirectoryUI)
     EVT_UPDATE_UI(TEXT_ENVIRONMENT, ExecQueryDialog::OnUpdateEnvironmentUI)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 ExecQueryDialog::ExecQueryDialog(const wxString& cmd)
     : wxDialog(NULL, wxID_ANY, DIALOG_TITLE,

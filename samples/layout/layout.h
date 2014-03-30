@@ -34,7 +34,7 @@ public:
     void OnQuit(wxCommandEvent& event);
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // a frame showing the box sizer proportions
@@ -93,7 +93,7 @@ private:
     wxButton*           m_moveBtn2;
     wxGBPosition        m_lastPos;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -109,7 +109,7 @@ public:
 private:
     wxTextCtrl  *m_target;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -142,7 +142,7 @@ private:
     wxWindow* m_checkboxParent;
     wxSizer* m_wrapSizer;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // controls and menu constants

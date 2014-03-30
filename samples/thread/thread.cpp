@@ -172,7 +172,7 @@ private:
     bool m_cancelled;
     wxCriticalSection m_csCancelled;        // protects m_cancelled
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -284,7 +284,7 @@ private:
     MyGUIThread m_thread;
     int m_nCurrentProgress;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ============================================================================
@@ -323,7 +323,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(THREAD_QUIT, MyFrame::OnQuit)
     EVT_MENU(THREAD_CLEAR, MyFrame::OnClear)
     EVT_MENU(THREAD_START_THREAD, MyFrame::OnStartThread)
@@ -342,7 +342,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(THREAD_START_WORKER, MyFrame::OnUpdateWorker)
     EVT_THREAD(WORKER_EVENT, MyFrame::OnWorkerEvent)
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title)
@@ -817,10 +817,10 @@ void MyFrame::OnStartGUIThread(wxCommandEvent& WXUNUSED(event))
 // MyImageDialog
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyImageDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyImageDialog, wxDialog)
     EVT_THREAD(GUITHREAD_EVENT, MyImageDialog::OnGUIThreadEvent)
     EVT_PAINT(MyImageDialog::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyImageDialog::MyImageDialog(wxFrame *parent)
     : wxDialog(parent, wxID_ANY, "Image created by a secondary thread",

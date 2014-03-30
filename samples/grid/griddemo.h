@@ -217,7 +217,7 @@ public:
 
     wxBitmap m_gridBitmap;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyGridCellRenderer : public wxGridCellStringRenderer

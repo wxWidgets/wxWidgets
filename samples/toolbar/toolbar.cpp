@@ -176,7 +176,7 @@ private:
     // the search tool, initially NULL
     wxToolBarToolBase *m_searchTool;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -231,7 +231,7 @@ enum
 // Notice that wxID_HELP will be processed for the 'About' menu and the toolbar
 // help button.
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
@@ -278,7 +278,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
                         MyFrame::OnUpdateToggleRadioBtn)
     EVT_UPDATE_UI(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
                   MyFrame::OnUpdateToggleHorzText)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

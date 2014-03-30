@@ -321,7 +321,7 @@ protected:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
     MyRichTextCtrl*         m_richTextCtrl;
 };
@@ -404,7 +404,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Quit,  MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
 
@@ -488,7 +488,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(ID_SET_FONT_SCALE, MyFrame::OnSetFontScale)
     EVT_MENU(ID_SET_DIMENSION_SCALE, MyFrame::OnSetDimensionScale)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a

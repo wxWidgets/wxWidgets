@@ -108,7 +108,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 
     EVT_MENU(LIST_QUIT, MyFrame::OnQuit)
@@ -161,7 +161,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
     EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateToggleHeader)
     EVT_UPDATE_UI(LIST_ROW_LINES, MyFrame::OnUpdateRowLines)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxChar *title)
@@ -923,7 +923,7 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 // MyListCtrl
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
+wxBEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_LIST_BEGIN_DRAG(LIST_CTRL, MyListCtrl::OnBeginDrag)
     EVT_LIST_BEGIN_RDRAG(LIST_CTRL, MyListCtrl::OnBeginRDrag)
     EVT_LIST_BEGIN_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnBeginLabelEdit)
@@ -950,7 +950,7 @@ BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
     EVT_CHAR(MyListCtrl::OnChar)
 
     EVT_RIGHT_DOWN(MyListCtrl::OnRightClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void MyListCtrl::OnCacheHint(wxListEvent& event)
 {

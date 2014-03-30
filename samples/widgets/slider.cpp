@@ -181,7 +181,7 @@ protected:
                *m_textThumbLen;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(SliderWidgetsPage)
 };
 
@@ -189,7 +189,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
     EVT_BUTTON(SliderPage_Reset, SliderWidgetsPage::OnButtonReset)
     EVT_BUTTON(SliderPage_SetValue, SliderWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(SliderPage_SetMinAndMax, SliderWidgetsPage::OnButtonSetMinAndMax)
@@ -215,7 +215,7 @@ BEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

@@ -123,7 +123,7 @@ protected:
     wxTextCtrl *m_textLabel;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(CheckBoxWidgetsPage)
 };
 
@@ -131,7 +131,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(CheckBoxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(CheckBoxWidgetsPage, WidgetsPage)
     EVT_CHECKBOX(CheckboxPage_Checkbox, CheckBoxWidgetsPage::OnCheckBox)
 
     EVT_BUTTON(CheckboxPage_Reset, CheckBoxWidgetsPage::OnButtonReset)
@@ -144,7 +144,7 @@ BEGIN_EVENT_TABLE(CheckBoxWidgetsPage, WidgetsPage)
 
     EVT_RADIOBOX(wxID_ANY, CheckBoxWidgetsPage::OnStyleChange)
     EVT_CHECKBOX(CheckboxPage_ChkRight, CheckBoxWidgetsPage::OnStyleChange)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

@@ -95,7 +95,7 @@ public:
 #endif
 
     wxDECLARE_NO_COPY_CLASS(MyHtmlListBox);
-    DECLARE_DYNAMIC_CLASS(MyHtmlListBox)
+    wxDECLARE_DYNAMIC_CLASS(MyHtmlListBox);
 };
 
 
@@ -146,7 +146,7 @@ private:
     wxHtmlListBox *m_hlbox;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyApp : public wxApp
@@ -190,7 +190,7 @@ enum
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HtmlLbox_CustomBox,  MyFrame::OnSimpleOrCustomBox)
     EVT_MENU(HtmlLbox_SimpleBox,  MyFrame::OnSimpleOrCustomBox)
     EVT_MENU(HtmlLbox_Quit,  MyFrame::OnQuit)
@@ -222,7 +222,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_HTML_CELL_HOVER(wxID_ANY, MyFrame::OnHtmlCellHover)
     EVT_HTML_CELL_CLICKED(wxID_ANY, MyFrame::OnHtmlCellClicked)
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 

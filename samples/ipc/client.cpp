@@ -44,7 +44,7 @@
 
 IMPLEMENT_APP(MyApp)
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_CLOSE( MyFrame::OnClose )
     EVT_BUTTON( ID_START,       MyFrame::OnStart )
@@ -57,7 +57,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_POKE,        MyFrame::OnPoke )
     EVT_BUTTON( ID_EXECUTE,     MyFrame::OnExecute )
     EVT_BUTTON( ID_REQUEST,     MyFrame::OnRequest )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // globals

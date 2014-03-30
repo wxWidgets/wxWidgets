@@ -51,7 +51,7 @@ private:
     void OnOK( wxCommandEvent &event );
 
     // Any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 };
 

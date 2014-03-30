@@ -121,7 +121,7 @@ private:
     bool m_usingGeneric;
 
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -181,7 +181,7 @@ private:
     wxTextCtrl *m_logWindow;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #if wxUSE_DATEPICKCTRL
@@ -202,7 +202,7 @@ private:
     wxStaticText *m_dateText;
 
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxUSE_DATEPICKCTRL
@@ -278,7 +278,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Calendar_File_About, MyFrame::OnAbout)
     EVT_MENU(Calendar_File_ClearLog, MyFrame::OnClearLog)
     EVT_MENU(Calendar_File_Quit,  MyFrame::OnQuit)
@@ -324,15 +324,15 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif
     EVT_UPDATE_UI(Calendar_Cal_Special, MyFrame::OnUpdateUIGenericOnly)
     EVT_UPDATE_UI(Calendar_Cal_SurroundWeeks, MyFrame::OnUpdateUIGenericOnly)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyPanel, wxPanel)
+wxBEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_CALENDAR(Calendar_CalCtrl, MyPanel::OnCalendar)
     EVT_CALENDAR_PAGE_CHANGED(Calendar_CalCtrl, MyPanel::OnCalMonthChange)
     EVT_CALENDAR_SEL_CHANGED(Calendar_CalCtrl, MyPanel::OnCalendarChange)
     EVT_CALENDAR_WEEKDAY_CLICKED(Calendar_CalCtrl, MyPanel::OnCalendarWeekDayClick)
     EVT_CALENDAR_WEEK_CLICKED(Calendar_CalCtrl,  MyPanel::OnCalendarWeekClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -892,9 +892,9 @@ void MyPanel::LimitDateRange(bool on)
 
 #if wxUSE_DATEPICKCTRL
 
-BEGIN_EVENT_TABLE(MyDateDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyDateDialog, wxDialog)
     EVT_DATE_CHANGED(wxID_ANY, MyDateDialog::OnDateChange)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyDateDialog::MyDateDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
         : wxDialog(parent, wxID_ANY, wxString(wxT("Calendar: Choose a date")))
@@ -950,9 +950,9 @@ void MyDateDialog::OnDateChange(wxDateEvent& event)
 
 #if wxUSE_TIMEPICKCTRL
 
-BEGIN_EVENT_TABLE(MyTimeDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyTimeDialog, wxDialog)
     EVT_TIME_CHANGED(wxID_ANY, MyTimeDialog::OnTimeChange)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyTimeDialog::MyTimeDialog(wxWindow *parent)
         : wxDialog(parent, wxID_ANY, wxString(wxT("Calendar: Choose time")))

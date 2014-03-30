@@ -62,7 +62,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_ABOUT, MyFrame::OnAbout)
   EVT_MENU(LAYOUT_QUIT, MyFrame::OnQuit)
 
@@ -73,7 +73,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_TEST_SET_MINIMAL, MyFrame::TestSetMinimal)
   EVT_MENU(LAYOUT_TEST_NESTED, MyFrame::TestNested)
   EVT_MENU(LAYOUT_TEST_WRAP, MyFrame::TestWrap)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame()
@@ -465,12 +465,12 @@ enum {
 };
 
 
-BEGIN_EVENT_TABLE(MyGridBagSizerFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyGridBagSizerFrame, wxFrame)
     EVT_BUTTON( GBS_HIDE_BTN,  MyGridBagSizerFrame::OnHideBtn)
     EVT_BUTTON( GBS_SHOW_BTN,  MyGridBagSizerFrame::OnShowBtn)
     EVT_BUTTON( GBS_MOVE_BTN1, MyGridBagSizerFrame::OnMoveBtn)
     EVT_BUTTON( GBS_MOVE_BTN2, MyGridBagSizerFrame::OnMoveBtn)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 MyGridBagSizerFrame::MyGridBagSizerFrame(wxFrame* parent)
@@ -582,10 +582,10 @@ enum {
     ID_SET_BIG
 };
 
-BEGIN_EVENT_TABLE(MySimpleSizerFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MySimpleSizerFrame, wxFrame)
     EVT_MENU( ID_SET_SMALL, MySimpleSizerFrame::OnSetSmallSize)
     EVT_MENU( ID_SET_BIG, MySimpleSizerFrame::OnSetBigSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MySimpleSizerFrame::MySimpleSizerFrame(wxFrame* parent)
     : wxFrame(parent, wxID_ANY, "Simple Sizer Test Frame")
@@ -674,10 +674,10 @@ MyNestedSizerFrame::MyNestedSizerFrame(wxFrame* parent)
 // MyWrapSizerFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyWrapSizerFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyWrapSizerFrame, wxFrame)
     EVT_MENU(wxID_ADD, MyWrapSizerFrame::OnAddCheckbox)
     EVT_MENU(wxID_REMOVE, MyWrapSizerFrame::OnRemoveCheckbox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyWrapSizerFrame::MyWrapSizerFrame(wxFrame* parent)
     : wxFrame(parent, wxID_ANY, "Wrap Sizer Test Frame",

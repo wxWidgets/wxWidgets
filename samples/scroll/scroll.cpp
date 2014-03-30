@@ -106,7 +106,7 @@ private:
 
     wxButton *m_button;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyCanvasFrame : public wxFrame
@@ -588,7 +588,7 @@ private:
     wxFont m_font;
 
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyAutoFrame : public wxFrame
@@ -629,7 +629,7 @@ private:
     MyScrolledWindowBase *m_win1,
                          *m_win2;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -659,7 +659,7 @@ const wxWindowIDRef ID_QUERYPOS    = wxWindow::NewControlId();
 
 const wxWindowIDRef ID_NEWBUTTON   = wxWindow::NewControlId();
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolled<wxPanel>)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolled<wxPanel>)
     EVT_PAINT(                  MyCanvas::OnPaint)
     EVT_RIGHT_DOWN(             MyCanvas::OnMouseRightDown)
     EVT_MOUSEWHEEL(             MyCanvas::OnMouseWheel)
@@ -668,7 +668,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolled<wxPanel>)
     EVT_BUTTON( ID_DELBUTTON,   MyCanvas::OnDeleteButton)
     EVT_BUTTON( ID_MOVEBUTTON,  MyCanvas::OnMoveButton)
     EVT_BUTTON( ID_SCROLLWIN,   MyCanvas::OnScrollWin)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxWindow *parent)
     : wxScrolled<wxPanel>(parent, wxID_ANY,
@@ -840,7 +840,7 @@ const wxWindowID Scroll_Test_Auto   = wxWindow::NewControlId();
 const wxWindowID Scroll_TglBtn_Sync = wxWindow::NewControlId();
 const wxWindowID Scroll_Radio_ShowScrollbar = wxWindow::NewControlId();
 
-BEGIN_EVENT_TABLE(MyFrame,wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_EXIT,  MyFrame::OnQuit)
 
@@ -852,7 +852,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 
     EVT_TOGGLEBUTTON(Scroll_TglBtn_Sync, MyFrame::OnToggleSync)
     EVT_RADIOBOX(Scroll_Radio_ShowScrollbar, MyFrame::OnScrollbarVisibility)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxWidgets scroll sample")
@@ -1045,13 +1045,13 @@ void MyScrolledWindowSmart::OnDraw(wxDC& dc)
 // MyAutoScrollingWindow
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyAutoScrollingWindow, wxScrolled<wxWindow>)
+wxBEGIN_EVENT_TABLE(MyAutoScrollingWindow, wxScrolled<wxWindow>)
     EVT_LEFT_DOWN(MyAutoScrollingWindow::OnMouseLeftDown)
     EVT_LEFT_UP(MyAutoScrollingWindow::OnMouseLeftUp)
     EVT_MOTION(MyAutoScrollingWindow::OnMouseMove)
     EVT_MOUSE_CAPTURE_LOST(MyAutoScrollingWindow::OnMouseCaptureLost)
     EVT_SCROLLWIN(MyAutoScrollingWindow::OnScroll)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyAutoScrollingWindow::MyAutoScrollingWindow(wxWindow* parent)
     : wxScrolled<wxWindow>(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,

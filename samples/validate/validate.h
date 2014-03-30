@@ -37,7 +37,7 @@ private:
     wxListBox *m_listbox;
     bool m_silent;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyDialog : public wxDialog

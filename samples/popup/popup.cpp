@@ -89,8 +89,8 @@ private:
     void OnSpinCtrl( wxSpinEvent& event );
 
 private:
-    DECLARE_CLASS(SimpleTransientPopup)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_ABSTRACT_CLASS(SimpleTransientPopup);
+    wxDECLARE_EVENT_TABLE();
 };
 
 //----------------------------------------------------------------------------
@@ -98,14 +98,14 @@ private:
 //----------------------------------------------------------------------------
 IMPLEMENT_CLASS(SimpleTransientPopup,wxPopupTransientWindow)
 
-BEGIN_EVENT_TABLE(SimpleTransientPopup,wxPopupTransientWindow)
+wxBEGIN_EVENT_TABLE(SimpleTransientPopup,wxPopupTransientWindow)
     EVT_MOUSE_EVENTS( SimpleTransientPopup::OnMouse )
     EVT_SIZE( SimpleTransientPopup::OnSize )
     EVT_SET_FOCUS( SimpleTransientPopup::OnSetFocus )
     EVT_KILL_FOCUS( SimpleTransientPopup::OnKillFocus )
     EVT_BUTTON( Minimal_PopupButton, SimpleTransientPopup::OnButton )
     EVT_SPINCTRL( Minimal_PopupSpinctrl, SimpleTransientPopup::OnSpinCtrl )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
                      :wxPopupTransientWindow( parent )
@@ -267,7 +267,7 @@ public:
 private:
     SimpleTransientPopup *m_simplePopup;
     SimpleTransientPopup *m_scrolledPopup;
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyFrame : public wxFrame
@@ -288,7 +288,7 @@ private:
     SimpleTransientPopup *m_scrolledPopup;
     wxTextCtrl *m_logWin;
     wxLog *m_logOld;
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyApp : public wxApp
@@ -329,14 +329,14 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
     EVT_MENU(Minimal_TestDialog, MyFrame::OnTestDialog)
     EVT_ACTIVATE(MyFrame::OnActivate)
     EVT_BUTTON(Minimal_StartSimplePopup, MyFrame::OnStartSimplePopup)
     EVT_BUTTON(Minimal_StartScrolledPopup, MyFrame::OnStartScrolledPopup)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(const wxString& title)
 : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(500,300))
@@ -454,10 +454,10 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 // test dialog
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(Minimal_StartSimplePopup, MyDialog::OnStartSimplePopup)
     EVT_BUTTON(Minimal_StartScrolledPopup, MyDialog::OnStartScrolledPopup)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyDialog::MyDialog(const wxString& title)
          :wxDialog(NULL, wxID_ANY, title, wxPoint(50,50), wxSize(400,300))

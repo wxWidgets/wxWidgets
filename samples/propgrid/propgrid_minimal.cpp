@@ -23,14 +23,14 @@ public:
 
 private:
     wxPropertyGrid* m_pg;
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_HIGHEST+1, MyFrame::OnAction)
     EVT_PG_CHANGED( -1, MyFrame::OnPropertyGridChange )
     EVT_PG_CHANGING( -1, MyFrame::OnPropertyGridChanging )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxWindow* parent)
     : wxFrame(parent, wxID_ANY, wxT("PropertyGrid Test"))

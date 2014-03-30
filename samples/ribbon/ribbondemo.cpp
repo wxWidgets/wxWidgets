@@ -169,7 +169,7 @@ protected:
     bool m_bChecked;
     wxString m_new_text;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // -- implementations --
@@ -185,7 +185,7 @@ bool MyApp::OnInit()
     return true;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_ENABLE, MyFrame::OnEnable)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_DISABLE, MyFrame::OnDisable)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_DISABLED, MyFrame::OnDisabled)
@@ -244,7 +244,7 @@ EVT_RIBBONBUTTONBAR_CLICKED(ID_SHOW_PAGES, MyFrame::OnShowPages)
 EVT_RIBBONBAR_TOGGLED(wxID_ANY, MyFrame::OnRibbonBarToggled)
 EVT_RIBBONBAR_HELP_CLICK(wxID_ANY, MyFrame::OnRibbonBarHelpClicked)
 EVT_SIZE(MyFrame::OnSizeEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #include "align_center.xpm"
 #include "align_left.xpm"

@@ -270,7 +270,7 @@ void MyApp::Draw(wxDC&dc)
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_PRINT, MyFrame::OnPrint)
     EVT_MENU(wxID_PREVIEW, MyFrame::OnPrintPreview)
@@ -290,7 +290,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(WXPRINT_FRAME_MODAL_APP,
                    WXPRINT_FRAME_MODAL_NON,
                    MyFrame::OnPreviewFrameModalityKind)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const wxSize&size)
         : wxFrame(frame, wxID_ANY, title, pos, size)
@@ -502,9 +502,9 @@ void MyFrame::OnPreviewFrameModalityKind(wxCommandEvent& event)
 // MyCanvas
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   //  EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxFrame *frame, const wxPoint&pos, const wxSize&size, long style)
     : wxScrolledWindow(frame, wxID_ANY, pos, size, style)

@@ -87,7 +87,7 @@ public:
     wxTextCtrl* urlText;
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -97,7 +97,7 @@ private:
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(ID_BACK, MyFrame::OnBackButton)
     EVT_BUTTON(ID_NEXT, MyFrame::OnNextButton)
     EVT_BUTTON(ID_STOP, MyFrame::OnStopButton)
@@ -108,7 +108,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_WEBKIT_STATE_CHANGED(MyFrame::OnStateChanged)
     //EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     //EVT_MENU(Minimal_About, MyFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a

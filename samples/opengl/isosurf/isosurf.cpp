@@ -87,9 +87,9 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
 // MyFrame
 //---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
                  const wxSize& size, long style)
@@ -161,12 +161,12 @@ void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
 // TestGLCanvas
 //---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
+wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
     EVT_PAINT(TestGLCanvas::OnPaint)
     EVT_CHAR(TestGLCanvas::OnChar)
     EVT_MOUSE_EVENTS(TestGLCanvas::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent,
                            wxWindowID id,

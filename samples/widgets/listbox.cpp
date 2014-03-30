@@ -172,7 +172,7 @@ protected:
                *m_textDelete;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ListboxWidgetsPage)
 };
 
@@ -180,7 +180,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ListboxPage_Reset, ListboxWidgetsPage::OnButtonReset)
     EVT_BUTTON(ListboxPage_Change, ListboxWidgetsPage::OnButtonChange)
     EVT_BUTTON(ListboxPage_Delete, ListboxWidgetsPage::OnButtonDelete)
@@ -212,7 +212,7 @@ BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, ListboxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ListboxWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

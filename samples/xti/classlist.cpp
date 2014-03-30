@@ -31,14 +31,14 @@
 #endif
 
 // IMPLEMENT_DYNAMIC_CLASS( ClassListDialog, wxDialog )  -- see the header
-BEGIN_EVENT_TABLE( ClassListDialog, wxDialog )
+wxBEGIN_EVENT_TABLE( ClassListDialog, wxDialog )
     EVT_LISTBOX( ID_LISTBOX, ClassListDialog::OnListboxSelected )
     EVT_TREE_SEL_CHANGED( ID_TREECTRL, ClassListDialog::OnTreectrlSelChanged )
     EVT_CHOICEBOOK_PAGE_CHANGED( ID_LISTMODE, ClassListDialog::OnChoiceBookPageChange )
 
     EVT_CHECKBOX( ID_SHOW_ONLY_XTI, ClassListDialog::OnShowOnlyXTICheckbox )
     EVT_CHECKBOX( ID_SHOW_PROPERTIES_RECURSIVELY, ClassListDialog::OnShowRecursiveInfoCheckbox )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // defined later
 wxString DumpClassInfo(const wxClassInfo*, bool recursive);

@@ -168,7 +168,7 @@ protected:
                *m_textCur;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ComboboxWidgetsPage)
 };
 
@@ -176,7 +176,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ComboPage_Reset, ComboboxWidgetsPage::OnButtonReset)
     EVT_BUTTON(ComboPage_Popup, ComboboxWidgetsPage::OnButtonPopup)
     EVT_BUTTON(ComboPage_Dismiss, ComboboxWidgetsPage::OnButtonDismiss)
@@ -219,7 +219,7 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, ComboboxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ComboboxWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

@@ -110,7 +110,7 @@ protected:
     wxBoxSizer *m_sizer;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(DirPickerWidgetsPage)
 };
 
@@ -118,14 +118,14 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(DirPickerWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(DirPickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(PickerPage_Reset, DirPickerWidgetsPage::OnButtonReset)
     EVT_BUTTON(PickerPage_SetDir, DirPickerWidgetsPage::OnButtonSetDir)
 
     EVT_DIRPICKER_CHANGED(PickerPage_Dir, DirPickerWidgetsPage::OnDirChange)
 
     EVT_CHECKBOX(wxID_ANY, DirPickerWidgetsPage::OnCheckBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

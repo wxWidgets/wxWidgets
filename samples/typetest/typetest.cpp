@@ -50,7 +50,7 @@ IMPLEMENT_APP    (MyApp)
 
 IMPLEMENT_DYNAMIC_CLASS    (MyApp, wxApp)
 
-BEGIN_EVENT_TABLE(MyApp, wxApp)
+wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
     EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
 #if wxUSE_UNICODE
@@ -64,7 +64,7 @@ BEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_STREAM6, MyApp::DoStreamDemo6)
     EVT_MENU(TYPES_STREAM7, MyApp::DoStreamDemo7)
     EVT_MENU(TYPES_MIME, MyApp::DoMIMEDemo)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxString file_name = wxT("test_wx.dat");
 wxString file_name2 = wxString(wxT("test_wx2.dat"));
@@ -1057,10 +1057,10 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TYPES_QUIT, MyFrame::OnQuit)
     EVT_MENU(TYPES_ABOUT, MyFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *parent, const wxString& title,
