@@ -113,7 +113,7 @@ protected:
     wxCheckBox *m_fltr[3];
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE( FileCtrlWidgetsPage )
 };
 
@@ -121,7 +121,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
+wxBEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
     EVT_BUTTON( FileCtrlPage_Reset, FileCtrlWidgetsPage::OnButtonReset )
     EVT_BUTTON( FileCtrlPage_SetDirectory, FileCtrlWidgetsPage::OnButtonSetDirectory )
     EVT_BUTTON( FileCtrlPage_SetPath, FileCtrlWidgetsPage::OnButtonSetPath )
@@ -133,7 +133,7 @@ BEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
     EVT_FILECTRL_FOLDERCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_SELECTIONCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_FILEACTIVATED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

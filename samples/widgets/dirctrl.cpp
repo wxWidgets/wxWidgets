@@ -143,7 +143,7 @@ protected:
     wxCheckBox *m_fltr[3];
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(DirCtrlWidgetsPage)
 };
 
@@ -151,14 +151,14 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(DirCtrlWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(DirCtrlWidgetsPage, WidgetsPage)
     EVT_BUTTON(DirCtrlPage_Reset, DirCtrlWidgetsPage::OnButtonReset)
     EVT_BUTTON(DirCtrlPage_SetPath, DirCtrlWidgetsPage::OnButtonSetPath)
     EVT_CHECKBOX(wxID_ANY, DirCtrlWidgetsPage::OnCheckBox)
     EVT_RADIOBOX(wxID_ANY, DirCtrlWidgetsPage::OnRadioBox)
     EVT_DIRCTRL_SELECTIONCHANGED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnSelChanged)
     EVT_DIRCTRL_FILEACTIVATED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnFileActivated)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

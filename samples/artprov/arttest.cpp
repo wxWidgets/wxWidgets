@@ -52,7 +52,7 @@ private:
     void OnBrowser(wxCommandEvent& event);
     void OnPlugProvider(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ enum
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Quit,         MyFrame::OnQuit)
 #if wxUSE_LOG
     EVT_MENU(ID_Logs,         MyFrame::OnLogs)
@@ -80,7 +80,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_ABOUT,      MyFrame::OnAbout)
     EVT_MENU(ID_Browser,      MyFrame::OnBrowser)
     EVT_MENU(ID_PlugProvider, MyFrame::OnPlugProvider)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 

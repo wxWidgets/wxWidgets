@@ -134,7 +134,7 @@ private:
     int m_FoldingMargin;
     int m_DividerID;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 //----------------------------------------------------------------------------

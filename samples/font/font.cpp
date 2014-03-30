@@ -79,7 +79,7 @@ private:
     wxColour m_colour;
     wxFont   m_font;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -153,7 +153,7 @@ protected:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -220,7 +220,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Quit,  MyFrame::OnQuit)
     EVT_MENU(Font_TestTextValue, MyFrame::OnTestTextValue)
     EVT_MENU(Font_ViewMsg, MyFrame::OnViewMsg)
@@ -262,7 +262,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_EnumFamilies, MyFrame::OnEnumerateFamilies)
     EVT_MENU(Font_EnumFixedFamilies, MyFrame::OnEnumerateFixedFamilies)
     EVT_MENU(Font_EnumEncodings, MyFrame::OnEnumerateEncodings)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -1007,9 +1007,9 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 // MyCanvas
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxWindow)
     EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent )
         : wxWindow( parent, wxID_ANY ),

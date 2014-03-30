@@ -66,7 +66,7 @@ private:
     MyCanvas* m_canvas;
     wxPreviewFrameModalityKind m_previewModality;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new white canvas
@@ -79,7 +79,7 @@ public:
     virtual void OnDraw(wxDC& dc) wxOVERRIDE;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Defines a new printout class to print our document

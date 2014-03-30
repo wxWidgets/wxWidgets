@@ -92,7 +92,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -238,7 +238,7 @@ public:
 private:
     wxRadioBox *m_radio;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // This shows how to dynamically (i.e. during run-time) arrange the page order.
@@ -339,7 +339,7 @@ private:
 // event tables and such
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Wizard_Quit,         MyFrame::OnQuit)
     EVT_MENU(Wizard_About,        MyFrame::OnAbout)
     EVT_MENU(Wizard_RunModal,     MyFrame::OnRunWizard)
@@ -348,12 +348,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_WIZARD_CANCEL(wxID_ANY,   MyFrame::OnWizardCancel)
     EVT_WIZARD_FINISHED(wxID_ANY, MyFrame::OnWizardFinished)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(wxRadioboxPage, wxWizardPageSimple)
+wxBEGIN_EVENT_TABLE(wxRadioboxPage, wxWizardPageSimple)
     EVT_WIZARD_PAGE_CHANGING(wxID_ANY, wxRadioboxPage::OnWizardPageChanging)
     EVT_WIZARD_CANCEL(wxID_ANY, wxRadioboxPage::OnWizardCancel)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 

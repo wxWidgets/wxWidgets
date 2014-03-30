@@ -74,7 +74,7 @@ public:
 private:
     unsigned int m_nWinCreated;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyChild: public wxMDIChildFrame
@@ -97,7 +97,7 @@ private:
     MyCanvas *m_canvas;
     MyFrame  *m_frame;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyCanvas : public wxScrolledWindow
@@ -110,7 +110,7 @@ private:
     int m_index;
     MyChild* m_child;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ---------------------------------------------------------------------------
@@ -132,14 +132,14 @@ enum
 // event tables
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(MDI_ABOUT, MyFrame::OnAbout)
     EVT_MENU(MDI_NEW_WINDOW, MyFrame::OnNewWindow)
     EVT_MENU(MDI_QUIT, MyFrame::OnQuit)
     EVT_MENU (MDI_SAVE, MyFrame::FileSavePicture)
 
     EVT_SIZE(MyFrame::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // implementation
@@ -312,8 +312,8 @@ void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
 // MyCanvas
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size)
@@ -616,9 +616,9 @@ void MyCanvas::OnDraw(wxDC& dc)
 // Note that MDI_NEW_WINDOW and MDI_ABOUT commands get passed
 // to the parent window for processing, so no need to
 // duplicate event handlers here.
-BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
+wxBEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title,
                  const wxPoint& pos, const wxSize& size,

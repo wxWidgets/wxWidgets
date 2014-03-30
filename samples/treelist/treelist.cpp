@@ -258,7 +258,7 @@ bool MyApp::OnInit()
 // Main window class
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Id_MultiSelect, MyFrame::OnMultiSelect)
     EVT_MENU(Id_FlatList, MyFrame::OnFlatList)
     EVT_MENU_RANGE(Id_Checkboxes_Start, Id_Checkboxes_End,
@@ -278,7 +278,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TREELIST_ITEM_CHECKED(wxID_ANY, MyFrame::OnItemChecked)
     EVT_TREELIST_ITEM_ACTIVATED(wxID_ANY, MyFrame::OnItemActivated)
     EVT_TREELIST_ITEM_CONTEXT_MENU(wxID_ANY, MyFrame::OnItemContextMenu)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxWidgets tree/list control sample",

@@ -365,7 +365,7 @@ protected:
     virtual void ArraySwap( size_t first, size_t second ) wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxArrayDoubleEditorDialog)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxArrayDoubleEditorDialog);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxArrayDoubleEditorDialog, wxPGArrayEditorDialog)

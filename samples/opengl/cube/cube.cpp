@@ -306,11 +306,11 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo)
 // TestGLCanvas
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
+wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_PAINT(TestGLCanvas::OnPaint)
     EVT_KEY_DOWN(TestGLCanvas::OnKeyDown)
     EVT_TIMER(SpinTimer, TestGLCanvas::OnSpinTimer)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
     // With perspective OpenGL graphics, the wxFULL_REPAINT_ON_RESIZE style
@@ -452,11 +452,11 @@ wxString glGetwxString(GLenum name)
 // MyFrame: main application window
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
     EVT_MENU(NEW_STEREO_WINDOW, MyFrame::OnNewStereoWindow)
     EVT_MENU(wxID_CLOSE, MyFrame::OnClose)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame( bool stereoWindow )
        : wxFrame(NULL, wxID_ANY, wxT("wxWidgets OpenGL Cube Sample"))

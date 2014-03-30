@@ -102,7 +102,7 @@ private:
     wxCollapsiblePane *m_collPane;
     wxBoxSizer *m_paneSizer;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
@@ -118,7 +118,7 @@ private:
     wxCollapsiblePane *m_collPane;
     wxGridSizer *m_paneSizer;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyDialog);
 };
 
@@ -151,7 +151,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(PANE_COLLAPSE, MyFrame::OnCollapse)
     EVT_MENU(PANE_EXPAND, MyFrame::OnExpand)
     EVT_MENU(PANE_SETLABEL, MyFrame::OnSetLabel)
@@ -161,7 +161,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(PANE_COLLAPSE, MyFrame::OnCollapseUpdateUI)
     EVT_UPDATE_UI(PANE_EXPAND, MyFrame::OnExpandUpdateUI)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
@@ -278,11 +278,11 @@ enum
     PANEDLG_TOGGLESTATUS_BTN = wxID_HIGHEST
 };
 
-BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(PANEDLG_TOGGLESTATUS_BTN, MyDialog::OnToggleStatus)
     EVT_COLLAPSIBLEPANE_CHANGED(wxID_ANY, MyDialog::OnPaneChanged)
     EVT_BUTTON(PANE_BUTTON, MyDialog::OnAlignButton)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyDialog::MyDialog(wxFrame *parent)
                 : wxDialog(parent, wxID_ANY, wxT("Test dialog"),

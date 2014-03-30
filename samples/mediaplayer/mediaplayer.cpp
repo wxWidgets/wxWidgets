@@ -589,9 +589,9 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
     //  class you want to use for events, such as wxMediaPlayerFrame.
     //
     //  Then after your class declaration you put
-    //  BEGIN_EVENT_TABLE(wxMediaPlayerFrame, wxFrame)
+    //  wxBEGIN_EVENT_TABLE(wxMediaPlayerFrame, wxFrame)
     //  EVT_XXX(XXX)...
-    //  END_EVENT_TABLE()
+    //  wxEND_EVENT_TABLE()
     //
     //  Where wxMediaPlayerFrame is the class with the DECLARE_MESSAGE_MAP
     //  in it.  EVT_XXX(XXX) are each of your handlers, such

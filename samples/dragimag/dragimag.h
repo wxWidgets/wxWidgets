@@ -34,8 +34,8 @@ public:
 private:
     MyCanvas*       m_canvas;
 
-    DECLARE_DYNAMIC_CLASS(MyFrame)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(MyFrame);
+    wxDECLARE_EVENT_TABLE();
 };
 
 // MyApp
@@ -105,8 +105,8 @@ private:
     wxPoint         m_dragStartPos;
     wxDragImage*    m_dragImage;
 
-    DECLARE_CLASS(MyCanvas)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_ABSTRACT_CLASS(MyCanvas);
+    wxDECLARE_EVENT_TABLE();
 };
 
 

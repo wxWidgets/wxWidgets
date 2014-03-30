@@ -107,7 +107,7 @@ private:
     wxTextCtrl* m_textCtrl;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -136,11 +136,11 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(AccessTest_Quit,  MyFrame::OnQuit)
     EVT_MENU(AccessTest_Query,  MyFrame::OnQuery)
     EVT_MENU(AccessTest_About, MyFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // wxUSE_ACCESSIBILITY
 

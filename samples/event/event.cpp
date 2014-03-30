@@ -78,7 +78,7 @@ public:
     virtual int FilterEvent(wxEvent& event) wxOVERRIDE;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a custom button used to highlight the events handling order
@@ -112,7 +112,7 @@ private:
         event.Skip();
     }
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 long MyEvtTestButton::BUTTON_ID = wxNewId();
@@ -182,7 +182,7 @@ private:
 
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a custom event handler
@@ -203,7 +203,7 @@ public:
 private:
     unsigned m_level;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -231,19 +231,19 @@ enum
 
 // The event tables connect the wxWidgets events with the functions (event
 // handlers) which process them.
-BEGIN_EVENT_TABLE(MyApp, wxApp)
+wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     // Add a static handler for button Click event in the app
     EVT_BUTTON(MyEvtTestButton::BUTTON_ID, MyApp::OnClickStaticHandlerApp)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyEvtTestButton, wxButton)
+wxBEGIN_EVENT_TABLE(MyEvtTestButton, wxButton)
     // Add a static handler to this button itself for its own event
     EVT_BUTTON(BUTTON_ID, MyEvtTestButton::OnClickStaticHandler)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // This can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Quit,  MyFrame::OnQuit)
     EVT_MENU(Event_About, MyFrame::OnAbout)
 
@@ -267,11 +267,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     // Add a static handler in the parent frame for button event
     EVT_BUTTON(MyEvtTestButton::BUTTON_ID, MyFrame::OnClickStaticHandlerFrame)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
     EVT_MENU(Event_Test, MyEvtHandler::OnTest)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a

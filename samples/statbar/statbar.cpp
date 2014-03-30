@@ -125,7 +125,7 @@ private:
 #endif
     wxStaticBitmap *m_statbmp;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -180,7 +180,7 @@ private:
     int m_field;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Our about dialog ith its status bar
@@ -237,9 +237,9 @@ static const int BITMAP_SIZE_Y = 15;
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 #ifdef USE_MDI_PARENT_FRAME
-BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
 #else
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif
     EVT_MENU(StatusBar_Quit,  MyFrame::OnQuit)
     EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
@@ -272,9 +272,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
                         MyFrame::OnUpdateSetPaneStyle)
     EVT_UPDATE_UI_RANGE(StatusBar_SetStyleSizeGrip, StatusBar_SetStyleShowTips,
                         MyFrame::OnUpdateSetStyle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
+wxBEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
     EVT_SIZE(MyStatusBar::OnSize)
 #if wxUSE_CHECKBOX
     EVT_CHECKBOX(StatusBar_Checkbox, MyStatusBar::OnToggleClock)
@@ -283,7 +283,7 @@ BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
     EVT_TIMER(wxID_ANY, MyStatusBar::OnTimer)
 #endif
     EVT_IDLE(MyStatusBar::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a

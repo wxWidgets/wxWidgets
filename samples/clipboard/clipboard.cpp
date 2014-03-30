@@ -63,7 +63,7 @@ private:
     bool               m_clipboardSupportsText;
 #endif
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 enum
@@ -74,7 +74,7 @@ enum
     ID_Text   = 101
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Quit,  MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
     EVT_BUTTON(ID_Write, MyFrame::OnWriteClipboardContents)
@@ -82,7 +82,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     EVT_CLIPBOARD_CHANGED(MyFrame::OnClipboardChange)
 #endif
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 

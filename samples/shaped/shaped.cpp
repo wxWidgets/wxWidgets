@@ -93,7 +93,7 @@ private:
     void OnShowEffect(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to the frame showing the
@@ -128,7 +128,7 @@ private:
     wxPoint  m_delta;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to the frame showing the
@@ -156,7 +156,7 @@ private:
     State m_currentState;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class EffectFrame : public wxFrame
@@ -250,12 +250,12 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MainFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(Show_Shaped, MainFrame::OnShowShaped)
     EVT_MENU(Show_Transparent, MainFrame::OnShowTransparent)
     EVT_MENU_RANGE(Show_Effect_First, Show_Effect_Last, MainFrame::OnShowEffect)
     EVT_MENU(wxID_EXIT, MainFrame::OnExit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MainFrame::MainFrame()
          : wxFrame(NULL, wxID_ANY, "wxWidgets Shaped Sample",
@@ -370,14 +370,14 @@ void MainFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 // shaped frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ShapedFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(ShapedFrame, wxFrame)
     EVT_LEFT_DCLICK(ShapedFrame::OnDoubleClick)
     EVT_LEFT_DOWN(ShapedFrame::OnLeftDown)
     EVT_LEFT_UP(ShapedFrame::OnLeftUp)
     EVT_MOTION(ShapedFrame::OnMouseMove)
     EVT_RIGHT_UP(ShapedFrame::OnExit)
     EVT_PAINT(ShapedFrame::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // frame constructor
@@ -476,10 +476,10 @@ void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 // see-through frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
     EVT_LEFT_DCLICK(SeeThroughFrame::OnDoubleClick)
     EVT_PAINT(SeeThroughFrame::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 SeeThroughFrame::SeeThroughFrame()
        : wxFrame(NULL, wxID_ANY, "Transparency test: double click here",

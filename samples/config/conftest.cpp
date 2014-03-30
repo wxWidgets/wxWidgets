@@ -59,18 +59,18 @@ private:
     wxTextCtrl *m_text;
     wxCheckBox *m_check;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
   EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
   EVT_MENU(wxID_DELETE, MyFrame::OnDelete)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

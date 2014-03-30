@@ -44,10 +44,10 @@
 class ClassListDialog: public wxDialog
 {    
     // we explicitly don't want to use the following macro:
-    //     DECLARE_DYNAMIC_CLASS( ClassListDialog )
+    //     wxDECLARE_DYNAMIC_CLASS( ClassListDialog );
     // as otherwise the ClassListDialog class would appear in the list
     // shown by this dialog!
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 public:
     // Constructors

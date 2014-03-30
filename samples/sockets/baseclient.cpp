@@ -71,7 +71,7 @@ WX_DECLARE_LIST(ThreadWorker, TList);
 WX_DECLARE_LIST(EventWorker, EList);
 
 class Client : public wxApp {
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 public:
     void RemoveEventWorker(EventWorker* p_worker);
 private:
@@ -140,7 +140,7 @@ private:
 
 class EventWorker : public wxEvtHandler
 {
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 public:
     EventWorker(const wxString& p_host, char* p_buf, int p_size);
     void Run();
@@ -504,10 +504,10 @@ Client::OnTimerEvent(wxTimerEvent&) {
     dumpStatistics();
 }
 
-BEGIN_EVENT_TABLE(Client,wxEvtHandler)
+wxBEGIN_EVENT_TABLE(Client,wxEvtHandler)
     EVT_WORKER(Client::OnWorkerEvent)
     EVT_TIMER(wxID_ANY,Client::OnTimerEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 
@@ -646,9 +646,9 @@ EventWorker::~EventWorker() {
     delete [] m_inbuf;
 }
 
-BEGIN_EVENT_TABLE(EventWorker,wxEvtHandler)
+wxBEGIN_EVENT_TABLE(EventWorker,wxEvtHandler)
     EVT_SOCKET(wxID_ANY,EventWorker::OnSocketEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 ThreadWorker::ThreadWorker(const wxString& p_host, char* p_buf, int p_size)

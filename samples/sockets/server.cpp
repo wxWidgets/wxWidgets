@@ -90,7 +90,7 @@ private:
   int             m_numClients;
 
   // any class wishing to process wxWidgets events must use this macro
-  DECLARE_EVENT_TABLE()
+  wxDECLARE_EVENT_TABLE();
 };
 
 // simple helper class to log start and end of each test
@@ -133,14 +133,14 @@ enum
 // event tables and other macros for wxWidgets
 // --------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(SERVER_QUIT,  MyFrame::OnQuit)
   EVT_MENU(SERVER_ABOUT, MyFrame::OnAbout)
   EVT_MENU(SERVER_UDPTEST, MyFrame::OnUDPTest)
   EVT_MENU(SERVER_WAITFORACCEPT, MyFrame::OnWaitForAccept)
   EVT_SOCKET(SERVER_ID,  MyFrame::OnServerEvent)
   EVT_SOCKET(SOCKET_ID,  MyFrame::OnSocketEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 

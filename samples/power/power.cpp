@@ -167,10 +167,10 @@ private:
 
     wxLog *m_logOld;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_IDLE(MyFrame::OnIdle)
 
 #ifdef wxHAS_POWER_EVENTS
@@ -179,7 +179,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_POWER_SUSPEND_CANCEL(MyFrame::OnSuspendCancel)
     EVT_POWER_RESUME(MyFrame::OnResume)
 #endif // wxHAS_POWER_EVENTS
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // main application class

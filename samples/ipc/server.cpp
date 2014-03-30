@@ -45,14 +45,14 @@
 
 IMPLEMENT_APP(MyApp)
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_CLOSE( MyFrame::OnClose )
 
     EVT_BUTTON( ID_START,          MyFrame::OnStart )
     EVT_CHOICE( ID_SERVERNAME,     MyFrame::OnServerName )
     EVT_BUTTON( ID_DISCONNECT,     MyFrame::OnDisconnect )
     EVT_BUTTON( ID_ADVISE,         MyFrame::OnAdvise )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // ============================================================================

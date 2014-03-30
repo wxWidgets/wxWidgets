@@ -51,7 +51,7 @@ public:
     void OnListboxDblClick  (wxCommandEvent& event);
     bool OnClose            ()                        { return true; }
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 private:
     void InitMenu();
@@ -74,7 +74,7 @@ enum
     Control_Listbox, Control_Listbox2
 };
 
-BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
     EVT_MENU(Menu_Toggle, OwnerDrawnFrame::OnMenuToggle)
     EVT_MENU(Menu_About, OwnerDrawnFrame::OnAbout)
     EVT_MENU(Menu_Quit, OwnerDrawnFrame::OnQuit)
@@ -82,7 +82,7 @@ BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
     EVT_CHECKLISTBOX(Control_Listbox, OwnerDrawnFrame::OnCheckboxToggle)
     EVT_COMMAND(Control_Listbox, wxEVT_LISTBOX_DCLICK,
                 OwnerDrawnFrame::OnListboxDblClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(OwnerDrawnApp)
 

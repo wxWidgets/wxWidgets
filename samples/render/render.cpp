@@ -149,7 +149,7 @@ private:
     class MyPanel *m_panel;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // a very simple class just to have something to draw on
@@ -274,12 +274,12 @@ private:
     bool m_useIcon,
          m_useBitmap;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MyPanel, wxPanel)
+wxBEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_PAINT(MyPanel::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // constants
@@ -324,7 +324,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_DrawDisabled, MyFrame::OnDrawDisabled)
     EVT_MENU(Render_DrawFocused, MyFrame::OnDrawFocused)
     EVT_MENU(Render_DrawPressed, MyFrame::OnDrawPressed)
@@ -345,7 +345,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Render_Quit,  MyFrame::OnQuit)
 
     EVT_MENU(Render_About, MyFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a

@@ -174,7 +174,7 @@ public:
     void AddStdKeys();
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // #if DO_REGTEST
@@ -210,7 +210,7 @@ public:
 
     void OnViewChange (wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 private:
 
@@ -251,7 +251,7 @@ enum
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(RegFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(RegFrame, wxFrame)
     EVT_MENU(Menu_Test,        RegFrame::OnTest)
     EVT_MENU(Menu_About,       RegFrame::OnAbout)
     EVT_MENU(Menu_Quit,        RegFrame::OnQuit)
@@ -268,11 +268,11 @@ BEGIN_EVENT_TABLE(RegFrame, wxFrame)
     EVT_MENU(Menu_ViewDefault, RegFrame::OnViewChange)
     EVT_MENU(Menu_View32,      RegFrame::OnViewChange)
     EVT_MENU(Menu_View64,      RegFrame::OnViewChange)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if DO_REGTEST
 
-BEGIN_EVENT_TABLE(RegTreeCtrl, wxTreeCtrl)
+wxBEGIN_EVENT_TABLE(RegTreeCtrl, wxTreeCtrl)
     EVT_TREE_DELETE_ITEM    (Ctrl_RegTree, RegTreeCtrl::OnDeleteItem)
     EVT_TREE_ITEM_EXPANDING (Ctrl_RegTree, RegTreeCtrl::OnItemExpanding)
     EVT_TREE_ITEM_COLLAPSING(Ctrl_RegTree, RegTreeCtrl::OnItemExpanding)
@@ -288,7 +288,7 @@ BEGIN_EVENT_TABLE(RegTreeCtrl, wxTreeCtrl)
     EVT_CHAR      (RegTreeCtrl::OnChar)
     EVT_RIGHT_DOWN(RegTreeCtrl::OnRightClick)
     EVT_IDLE      (RegTreeCtrl::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif
 

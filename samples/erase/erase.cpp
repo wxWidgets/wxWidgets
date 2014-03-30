@@ -108,7 +108,7 @@ private:
     bool m_eraseBgInPaint;
 
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyFrame : public wxFrame
@@ -137,7 +137,7 @@ private:
 
     MyCanvas *m_canvas;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class ControlWithTransparency : public wxWindow
@@ -233,7 +233,7 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Erase_Menu_UseBuffer, MyFrame::OnUseBuffer)
     EVT_MENU(Erase_Menu_UseBgBitmap, MyFrame::OnUseBgBitmap)
     EVT_MENU(Erase_Menu_EraseBgInPaint, MyFrame::OnEraseBgInPaint)
@@ -246,7 +246,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(Erase_Menu_UseBuffer, MyFrame::OnUpdateUIUseBuffer)
     EVT_UPDATE_UI_RANGE(Erase_Menu_BgStyleErase, Erase_Menu_BgStylePaint,
                         MyFrame::OnUpdateUIChangeBgStyle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // frame constructor
 MyFrame::MyFrame()
@@ -329,10 +329,10 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 }
 
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_PAINT(MyCanvas::OnPaint)
     EVT_ERASE_BACKGROUND(MyCanvas::OnEraseBackground)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxFrame *parent)
 {

@@ -99,7 +99,7 @@ private:
 
     DoodleSegments m_doodleSegments;
 
-    DECLARE_DYNAMIC_CLASS(DrawingDocument)
+    wxDECLARE_DYNAMIC_CLASS(DrawingDocument);
 };
 
 
@@ -179,7 +179,7 @@ protected:
     void OnTextChange(wxCommandEvent& event);
 
     wxDECLARE_NO_COPY_CLASS(wxTextDocument);
-    DECLARE_CLASS(wxTextDocument)
+    wxDECLARE_ABSTRACT_CLASS(wxTextDocument);
 };
 
 // ----------------------------------------------------------------------------
@@ -193,7 +193,7 @@ public:
     virtual wxTextCtrl* GetTextCtrl() const wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(TextEditDocument);
-    DECLARE_DYNAMIC_CLASS(TextEditDocument)
+    wxDECLARE_DYNAMIC_CLASS(TextEditDocument);
 };
 
 // ----------------------------------------------------------------------------
@@ -219,7 +219,7 @@ private:
     wxImage m_image;
 
     wxDECLARE_NO_COPY_CLASS(ImageDocument);
-    DECLARE_DYNAMIC_CLASS(ImageDocument)
+    wxDECLARE_DYNAMIC_CLASS(ImageDocument);
 };
 
 // This is a child document of ImageDocument: this document doesn't

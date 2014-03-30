@@ -123,10 +123,10 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
 
 #include "null.xpm"
 
-BEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
     EVT_LIST_ITEM_SELECTED(wxID_ANY, wxArtBrowserDialog::OnSelectItem)
     EVT_CHOICE(wxID_ANY, wxArtBrowserDialog::OnChooseClient)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     : wxDialog(parent, wxID_ANY, wxT("Art resources browser"),

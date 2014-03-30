@@ -62,7 +62,7 @@ IMPLEMENT_APP(MyApp)
 // event tables
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
     EVT_MENU(MDI_FULLSCREEN, MyFrame::OnFullScreen)
@@ -71,12 +71,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(wxID_CLOSE_ALL, MyFrame::OnCloseAll)
 
     EVT_CLOSE(MyFrame::OnClose)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Note that wxID_NEW and wxID_ABOUT commands get passed
 // to the parent window for processing, so no need to
 // duplicate event handlers here.
-BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
+wxBEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MENU(wxID_CLOSE, MyChild::OnClose)
     EVT_MENU(MDI_REFRESH, MyChild::OnRefresh)
     EVT_MENU(MDI_CHANGE_TITLE, MyChild::OnChangeTitle)
@@ -92,15 +92,15 @@ BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MOVE(MyChild::OnMove)
 
     EVT_CLOSE(MyChild::OnCloseWindow)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(MyCanvas::OnEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyChild::EventHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(MyChild::EventHandler, wxEvtHandler)
     EVT_MENU(MDI_REFRESH, MyChild::EventHandler::OnRefresh)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // implementation

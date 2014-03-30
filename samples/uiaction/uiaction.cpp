@@ -84,15 +84,15 @@ private:
     wxButton* m_button;
     wxTextCtrl* m_text;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(wxID_ANY, MyFrame::OnButtonPressed)
     EVT_MENU(RunSimulation, MyFrame::OnRunSimulation)
     EVT_MENU(SimulateText, MyFrame::OnSimulateText)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // wxUSE_UIACTIONSIMULATOR
 

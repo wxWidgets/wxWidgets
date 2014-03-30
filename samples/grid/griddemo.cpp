@@ -147,7 +147,7 @@ bool GridApp::OnInit()
 // GridFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE( GridFrame, wxFrame )
+wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWLABELS,  GridFrame::ToggleRowLabels )
     EVT_MENU( ID_TOGGLECOLLABELS,  GridFrame::ToggleColLabels )
     EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
@@ -234,7 +234,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
 
     EVT_GRID_EDITOR_SHOWN( GridFrame::OnEditorShown )
     EVT_GRID_EDITOR_HIDDEN( GridFrame::OnEditorHidden )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 GridFrame::GridFrame()
@@ -2068,10 +2068,10 @@ private:
     bool m_shouldUpdateOrder;
 
     wxDECLARE_NO_COPY_CLASS(TabularGridFrame);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
     EVT_CHECKBOX(Id_Check_UseNativeHeader,
                  TabularGridFrame::OnToggleUseNativeHeader)
     EVT_CHECKBOX(Id_Check_DrawNativeLabels,
@@ -2094,7 +2094,7 @@ BEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
     EVT_GRID_COL_SIZE(TabularGridFrame::OnGridColSize)
 
     EVT_IDLE(TabularGridFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 TabularGridFrame::TabularGridFrame()
                 : wxFrame(NULL, wxID_ANY, "Tabular table")

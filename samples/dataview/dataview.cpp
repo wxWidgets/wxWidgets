@@ -159,7 +159,7 @@ private:
     wxLog *m_logOld;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -301,7 +301,7 @@ enum
     ID_ADD_TREE_CONTAINER_ITEM = 403
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE( ID_MULTIPLE, ID_VERT_RULES, MyFrame::OnStyleChange )
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
@@ -364,7 +364,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnAttrHeaderClick)
 
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))

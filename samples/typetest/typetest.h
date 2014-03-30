@@ -40,8 +40,8 @@ private:
     wxTextCtrl* m_textCtrl;
     wxMimeTypesManager *m_mimeDatabase;
 
-    DECLARE_DYNAMIC_CLASS(MyApp)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(MyApp);
+    wxDECLARE_EVENT_TABLE();
 };
 
 DECLARE_APP(MyApp)
@@ -57,7 +57,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ID for the menu commands

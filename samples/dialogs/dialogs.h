@@ -148,7 +148,7 @@ public:
     void OnClose(wxCloseEvent& event);
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // A custom modal dialog
@@ -164,7 +164,7 @@ private:
              *m_btnModeless,
              *m_btnDelete;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // USE_MODAL_PRESENTATION
@@ -195,7 +195,7 @@ private:
 
     wxSizer *m_buttonsSizer;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Test harness for wxMessageDialog.
@@ -264,7 +264,7 @@ private:
     wxCheckBox *m_chkNoDefault,
                *m_chkCentre;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
 };
 
@@ -286,7 +286,7 @@ private:
     wxCheckBox *m_initialValueCheckBox;
     wxTextCtrl *m_textDetailed;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 #endif // wxUSE_RICHMSGDLG
 
@@ -305,7 +305,7 @@ private:
     bool   m_catchListBoxDClick;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -510,7 +510,7 @@ private:
               *m_infoBarAdvanced;
 #endif // wxUSE_INFOBAR
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyCanvas: public wxScrolledWindow
@@ -526,7 +526,7 @@ public:
 private:
     void OnPaint(wxPaintEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 

@@ -110,7 +110,7 @@ private:
 
     wxPanel *m_panel;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // and the panel taking up MyFrame client area
@@ -183,7 +183,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TabOrder_Quit,   MyFrame::OnQuit)
     EVT_MENU(TabOrder_About,  MyFrame::OnAbout)
 
@@ -191,7 +191,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TabOrder_TabBackward, MyFrame::OnTabBackward)
 
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, wxT("TabOrder wxWidgets Sample"),

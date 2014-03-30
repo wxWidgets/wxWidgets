@@ -218,7 +218,7 @@ private:
 #endif // wxUSE_MENUS
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #if USE_LOG
@@ -278,7 +278,7 @@ IMPLEMENT_APP(WidgetsApp)
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 #if USE_LOG
     EVT_BUTTON(Widgets_ClearLog, WidgetsFrame::OnButtonClearLog)
 #endif // USE_LOG
@@ -320,7 +320,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 
     EVT_MENU(wxID_EXIT, WidgetsFrame::OnExit)
 #endif // wxUSE_MENUS
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

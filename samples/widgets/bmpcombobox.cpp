@@ -185,7 +185,7 @@ protected:
                *m_textDelete;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(BitmapComboBoxWidgetsPage)
 };
 
@@ -193,7 +193,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
     EVT_BUTTON(BitmapComboBoxPage_Reset, BitmapComboBoxWidgetsPage::OnButtonReset)
     EVT_BUTTON(BitmapComboBoxPage_Change, BitmapComboBoxWidgetsPage::OnButtonChange)
     EVT_BUTTON(BitmapComboBoxPage_Delete, BitmapComboBoxWidgetsPage::OnButtonDelete)
@@ -230,7 +230,7 @@ BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, BitmapComboBoxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, BitmapComboBoxWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

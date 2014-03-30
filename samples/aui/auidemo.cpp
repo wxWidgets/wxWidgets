@@ -173,7 +173,7 @@ private:
     long m_notebook_style;
     long m_notebook_theme;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -250,14 +250,14 @@ private:
 
     wxAuiManager* m_mgr;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxSizeReportCtrl, wxControl)
+wxBEGIN_EVENT_TABLE(wxSizeReportCtrl, wxControl)
     EVT_PAINT(wxSizeReportCtrl::OnPaint)
     EVT_SIZE(wxSizeReportCtrl::OnSize)
     EVT_ERASE_BACKGROUND(wxSizeReportCtrl::OnEraseBackground)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 class SettingsPanel : public wxPanel
@@ -539,10 +539,10 @@ private:
     wxBitmapButton* m_border_color;
     wxBitmapButton* m_gripper_color;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(SettingsPanel, wxPanel)
+wxBEGIN_EVENT_TABLE(SettingsPanel, wxPanel)
     EVT_SPINCTRL(ID_PaneBorderSize, SettingsPanel::OnPaneBorderSize)
     EVT_SPINCTRL(ID_SashSize, SettingsPanel::OnSashSize)
     EVT_SPINCTRL(ID_CaptionSize, SettingsPanel::OnCaptionSize)
@@ -556,7 +556,7 @@ BEGIN_EVENT_TABLE(SettingsPanel, wxPanel)
     EVT_BUTTON(ID_ActiveCaptionTextColor, SettingsPanel::OnSetColor)
     EVT_BUTTON(ID_BorderColor, SettingsPanel::OnSetColor)
     EVT_BUTTON(ID_GripperColor, SettingsPanel::OnSetColor)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 bool MyApp::OnInit()
@@ -574,7 +574,7 @@ bool MyApp::OnInit()
     return true;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_ERASE_BACKGROUND(MyFrame::OnEraseBackground)
     EVT_SIZE(MyFrame::OnSize)
     EVT_MENU(MyFrame::ID_CreateTree, MyFrame::OnCreateTree)
@@ -653,7 +653,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
     EVT_AUINOTEBOOK_PAGE_CLOSED(wxID_ANY, MyFrame::OnNotebookPageClosed)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 MyFrame::MyFrame(wxWindow* parent,

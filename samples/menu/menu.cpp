@@ -182,7 +182,7 @@ private:
     // the previous log target
     wxLog *m_logOld;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyDialog : public wxDialog
@@ -227,7 +227,7 @@ private:
     wxTextCtrl *m_textctrl;
 #endif
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // A small helper class which intercepts all menu events and logs them
@@ -246,7 +246,7 @@ public:
 private:
     MyFrame *m_frame;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -323,7 +323,7 @@ enum
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_File_Quit,     MyFrame::OnQuit)
 #if USE_LOG_WINDOW
     EVT_MENU(Menu_File_ClearLog, MyFrame::OnClearLog)
@@ -387,9 +387,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_HIGHLIGHT_ALL(MyFrame::OnMenuHighlight)
 
     EVT_SIZE(MyFrame::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
 #if USE_CONTEXT_MENU
     EVT_CONTEXT_MENU(MyDialog::OnContextMenu)
 #else
@@ -398,11 +398,11 @@ BEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_MENU_OPEN(MyDialog::OnMenuOpen)
     EVT_MENU_CLOSE(MyDialog::OnMenuClose)
     EVT_MENU_HIGHLIGHT_ALL(MyDialog::OnMenuHighlight)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
+wxBEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
     EVT_MENU(wxID_ANY, MyEvtHandler::OnMenuEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

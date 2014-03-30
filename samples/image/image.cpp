@@ -104,8 +104,8 @@ private:
     static wxString LoadUserImage(wxImage& image);
 
 
-    DECLARE_DYNAMIC_CLASS(MyFrame)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(MyFrame);
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -437,7 +437,7 @@ private:
     wxBitmap m_bitmap;
     double m_zoom;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #ifdef wxHAVE_RAW_BITMAP
@@ -574,7 +574,7 @@ private:
     wxBitmap m_bitmap;
     wxBitmap m_alphaBitmap;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // wxHAVE_RAW_BITMAP
@@ -588,7 +588,7 @@ private:
 // MyImageFrame
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_ERASE_BACKGROUND(MyImageFrame::OnEraseBackground)
     EVT_PAINT(MyImageFrame::OnPaint)
 
@@ -599,7 +599,7 @@ BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_MENU(wxID_ZOOM_IN, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_OUT, MyImageFrame::OnZoom)
     EVT_MENU(wxID_ZOOM_100, MyImageFrame::OnZoom)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
 // MyRawBitmapFrame
@@ -607,9 +607,9 @@ END_EVENT_TABLE()
 
 #ifdef wxHAVE_RAW_BITMAP
 
-BEGIN_EVENT_TABLE(MyRawBitmapFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyRawBitmapFrame, wxFrame)
     EVT_PAINT(MyRawBitmapFrame::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // wxHAVE_RAW_BITMAP
 
@@ -629,7 +629,7 @@ enum
 };
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
     EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
     EVT_MENU    (ID_NEW,   MyFrame::OnNewFrame)
@@ -645,7 +645,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_COPY, MyFrame::OnCopy)
     EVT_MENU(wxID_PASTE, MyFrame::OnPaste)
 #endif // wxUSE_CLIPBOARD
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
     : wxFrame( (wxFrame *)NULL, wxID_ANY, wxT("wxImage sample"),

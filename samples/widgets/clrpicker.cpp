@@ -102,7 +102,7 @@ protected:
     wxBoxSizer *m_sizer;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ColourPickerWidgetsPage)
 };
 
@@ -110,13 +110,13 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ColourPickerWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(ColourPickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(PickerPage_Reset, ColourPickerWidgetsPage::OnButtonReset)
 
     EVT_COLOURPICKER_CHANGED(PickerPage_Colour, ColourPickerWidgetsPage::OnColourChange)
 
     EVT_CHECKBOX(wxID_ANY, ColourPickerWidgetsPage::OnCheckBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

@@ -69,10 +69,10 @@ bool MyApp::OnInit(void)
   return true;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(RESOURCE_QUIT, MyFrame::OnQuit)
     EVT_MENU(RESOURCE_TEST1, MyFrame::OnTest1)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size):
@@ -101,10 +101,10 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 #endif
 }
 
-BEGIN_EVENT_TABLE(MyDialog, wxDialog)
+wxBEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(wxID_OK, MyDialog::OnOk)
     EVT_BUTTON(wxID_CANCEL, MyDialog::OnCancel)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 void MyDialog::OnOk(wxCommandEvent& WXUNUSED(event))

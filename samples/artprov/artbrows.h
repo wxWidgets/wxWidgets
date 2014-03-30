@@ -35,7 +35,7 @@ private:
     wxStaticText *m_text;
     wxString m_client;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // __ARTBROWS_H__

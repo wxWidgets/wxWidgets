@@ -111,14 +111,14 @@ enum
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Persist, MyFrame::OnPersist)
     EVT_MENU(Minimal_Depersist, MyFrame::OnDepersist)
     EVT_MENU(Minimal_GenerateCode, MyFrame::OnGenerateCode)
     EVT_MENU(Minimal_DumpClasses, MyFrame::OnDumpClasses)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_APP(MyApp);
 
@@ -240,8 +240,8 @@ MyFrame::MyFrame(const wxString& title)
 //  protected:
 //      wxButton* m_button;
 //
-//      DECLARE_EVENT_TABLE()
-//      DECLARE_DYNAMIC_CLASS_NO_COPY(MyXTIFrame)
+//      wxDECLARE_EVENT_TABLE();
+//      wxDECLARE_DYNAMIC_CLASS_NO_COPY(MyXTIFrame);
 //  };
 //
 //  IMPLEMENT_DYNAMIC_CLASS_XTI(MyXTIFrame, MyXTIFrame, "x.h")
@@ -257,8 +257,8 @@ MyFrame::MyFrame(const wxString& title)
 //  WX_CONSTRUCTOR_5( MyXTIFrame, wxWindow*, Parent, wxWindowID, Id,
 //                    wxString, Title, wxPoint, Position, wxSize, Size )
 //
-//  BEGIN_EVENT_TABLE(MyXTIFrame, wxFrame)
-//  END_EVENT_TABLE()
+//  wxBEGIN_EVENT_TABLE(MyXTIFrame, wxFrame)
+//  wxEND_EVENT_TABLE()
 
 // the following class "persists" (i.e. saves) a wxFrame into a wxObjectWriter
 

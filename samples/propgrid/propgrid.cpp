@@ -80,7 +80,7 @@
 
 class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
 {
-    DECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor)
+    wxDECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor);
 public:
     wxSampleMultiButtonEditor() {}
     virtual ~wxSampleMultiButtonEditor() {}
@@ -441,7 +441,7 @@ enum
 // Event table
 // -----------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(FormMain, wxFrame)
+wxBEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_IDLE(FormMain::OnIdle)
     EVT_MOVE(FormMain::OnMove)
     EVT_SIZE(FormMain::OnResize)
@@ -557,7 +557,7 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
 
     EVT_CONTEXT_MENU( FormMain::OnContextMenu )
     EVT_BUTTON(ID_SHOWPOPUP, FormMain::OnShowPopup)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // -----------------------------------------------------------------------
 
@@ -1762,16 +1762,16 @@ protected:
     void OnPageChange( wxPropertyGridEvent& event );
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
-BEGIN_EVENT_TABLE(wxMyPropertyGridPage, wxPropertyGridPage)
+wxBEGIN_EVENT_TABLE(wxMyPropertyGridPage, wxPropertyGridPage)
     EVT_PG_SELECTED( wxID_ANY, wxMyPropertyGridPage::OnPropertySelect )
     EVT_PG_CHANGING( wxID_ANY, wxMyPropertyGridPage::OnPropertyChanging )
     EVT_PG_CHANGED( wxID_ANY, wxMyPropertyGridPage::OnPropertyChange )
     EVT_PG_PAGE_CHANGED( wxID_ANY, wxMyPropertyGridPage::OnPageChange )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 void wxMyPropertyGridPage::OnPropertySelect( wxPropertyGridEvent& WXUNUSED(event) )
@@ -1811,12 +1811,12 @@ public:
         event.Skip();
     }
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(wxPGKeyHandler,wxEvtHandler)
+wxBEGIN_EVENT_TABLE(wxPGKeyHandler,wxEvtHandler)
     EVT_KEY_DOWN( wxPGKeyHandler::OnKeyEvent )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // -----------------------------------------------------------------------
@@ -3257,15 +3257,15 @@ struct PropertyGridPopup : wxPopupWindow
         SetSize(pos.x, pos.y, size.x, size.y);
     }
 
-    DECLARE_CLASS(PropertyGridPopup)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_ABSTRACT_CLASS(PropertyGridPopup);
+    wxDECLARE_EVENT_TABLE();
 };
 
 IMPLEMENT_CLASS(PropertyGridPopup, wxPopupWindow)
-BEGIN_EVENT_TABLE(PropertyGridPopup, wxPopupWindow)
+wxBEGIN_EVENT_TABLE(PropertyGridPopup, wxPopupWindow)
     EVT_PG_ITEM_COLLAPSED(ID_POPUPGRID, PropertyGridPopup::OnCollapse)
     EVT_PG_ITEM_EXPANDED(ID_POPUPGRID, PropertyGridPopup::OnExpand)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 void FormMain::OnShowPopup(wxCommandEvent& WXUNUSED(event))

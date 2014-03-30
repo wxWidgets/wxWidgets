@@ -171,7 +171,7 @@ protected:
 #endif // wxUSE_MARKUP
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(StaticWidgetsPage)
 };
 
@@ -179,7 +179,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(StaticWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(StaticWidgetsPage, WidgetsPage)
     EVT_BUTTON(StaticPage_Reset, StaticWidgetsPage::OnButtonReset)
     EVT_BUTTON(StaticPage_LabelText, StaticWidgetsPage::OnButtonLabelText)
 #if wxUSE_MARKUP
@@ -189,7 +189,7 @@ BEGIN_EVENT_TABLE(StaticWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, StaticWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, StaticWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

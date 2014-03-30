@@ -94,7 +94,7 @@ protected:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -122,7 +122,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TEXT(wxID_ANY,MyFrame::OnComboBoxUpdate)
     EVT_TEXT_ENTER(wxID_ANY,MyFrame::OnComboBoxUpdate)
     EVT_COMBOBOX(wxID_ANY,MyFrame::OnComboBoxUpdate)
@@ -132,7 +132,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ComboCtrl_About,    MyFrame::OnAbout)
 
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -351,16 +351,16 @@ protected:
     int             m_itemHere; // hot item in popup
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(ListViewComboPopup, wxListView)
+wxBEGIN_EVENT_TABLE(ListViewComboPopup, wxListView)
     EVT_MOTION(ListViewComboPopup::OnMouseMove)
     // NOTE: Left down event is used instead of left up right now
     //       since MSW wxListCtrl doesn't seem to emit left ups
     //       consistently.
     EVT_LEFT_DOWN(ListViewComboPopup::OnMouseClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // ----------------------------------------------------------------------------
@@ -489,16 +489,16 @@ protected:
     wxTreeItemId        m_itemHere; // hot item in popup
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
+wxBEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
     EVT_MOTION(TreeCtrlComboPopup::OnMouseMove)
     // NOTE: Left down event is used instead of left up right now
     //       since MSW wxTreeCtrl doesn't seem to emit left ups
     //       consistently.
     EVT_LEFT_DOWN(TreeCtrlComboPopup::OnMouseClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // wxComboCtrl with custom popup animation, using wxWindow::ShowWithEffect().

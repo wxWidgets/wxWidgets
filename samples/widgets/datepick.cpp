@@ -109,7 +109,7 @@ protected:
     wxTextCtrl *m_textLabel;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(DatePickerWidgetsPage)
 };
 
@@ -117,13 +117,13 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(DatePickerWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(DatePickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(DatePickerPage_Reset, DatePickerWidgetsPage::OnButtonReset)
     EVT_BUTTON(DatePickerPage_Set, DatePickerWidgetsPage::OnButtonSet)
     EVT_BUTTON(DatePickerPage_SetRange, DatePickerWidgetsPage::OnButtonSetRange)
 
     EVT_DATE_CHANGED(wxID_ANY, DatePickerWidgetsPage::OnDateChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

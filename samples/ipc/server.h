@@ -59,7 +59,7 @@ protected:
     void OnDisconnect( wxCommandEvent &event );
     void OnAdvise( wxCommandEvent &event );
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyConnection : public MyConnectionBase

@@ -176,7 +176,7 @@ protected:
                *m_textDelete;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ODComboboxWidgetsPage)
 };
 
@@ -184,7 +184,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ODComboboxWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(ODComboboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ODComboPage_Reset, ODComboboxWidgetsPage::OnButtonReset)
     EVT_BUTTON(ODComboPage_Change, ODComboboxWidgetsPage::OnButtonChange)
     EVT_BUTTON(ODComboPage_Delete, ODComboboxWidgetsPage::OnButtonDelete)
@@ -227,7 +227,7 @@ BEGIN_EVENT_TABLE(ODComboboxWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, ODComboboxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ODComboboxWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

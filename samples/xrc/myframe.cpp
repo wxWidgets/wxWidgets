@@ -77,7 +77,7 @@
 // to fire the same kind of event (an EVT_MENU) and thus I give them the same
 // ID name to help new users emphasize this point which is often overlooked
 // when starting out with wxWidgets.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("unload_resource_menuitem"), MyFrame::OnUnloadResourceMenuCommand)
     EVT_MENU(XRCID("reload_resource_menuitem"), MyFrame::OnReloadResourceMenuCommand)
     EVT_MENU(wxID_EXIT,  MyFrame::OnExitToolOrMenuCommand)
@@ -93,7 +93,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("variable_expansion_tool_or_menuitem"), MyFrame::OnVariableExpansionToolOrMenuCommand)
     EVT_MENU(XRCID("recursive_load"), MyFrame::OnRecursiveLoad)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAboutToolOrMenuCommand)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
 // Public methods

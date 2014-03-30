@@ -81,14 +81,14 @@ bool MyApp::OnInit(void)
   return true;
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(SASHTEST_ABOUT, MyFrame::OnAbout)
     EVT_MENU(SASHTEST_NEW_WINDOW, MyFrame::OnNewWindow)
     EVT_SIZE(MyFrame::OnSize)
     EVT_MENU(SASHTEST_QUIT, MyFrame::OnQuit)
     EVT_MENU(SASHTEST_TOGGLE_WINDOW, MyFrame::OnToggleWindow)
     EVT_SASH_DRAGGED_RANGE(ID_WINDOW_TOP, ID_WINDOW_BOTTOM, MyFrame::OnSashDrag)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // Define my frame constructor
@@ -276,9 +276,9 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
       subframe->Show(true);
 }
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(MyCanvas::OnEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
@@ -346,9 +346,9 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 // to the parent window for processing, so no need to
 // duplicate event handlers here.
 
-BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
+wxBEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
   EVT_MENU(SASHTEST_CHILD_QUIT, MyChild::OnQuit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size,
 const long style):

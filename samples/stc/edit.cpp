@@ -60,7 +60,7 @@ const int ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
 // Edit
 //----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
+wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     // common
     EVT_SIZE (                         Edit::OnSize)
     // edit
@@ -114,7 +114,7 @@ BEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_STC_KEY( wxID_ANY , Edit::OnKey )
 
     EVT_KEY_DOWN( Edit::OnKeyDown )
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 Edit::Edit (wxWindow *parent, wxWindowID id,
             const wxPoint &pos,

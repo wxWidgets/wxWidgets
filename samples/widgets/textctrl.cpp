@@ -239,7 +239,7 @@ protected:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(TextWidgetsPage)
 };
 
@@ -297,14 +297,14 @@ protected:
     }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
     EVT_IDLE(TextWidgetsPage::OnIdle)
 
     EVT_BUTTON(TextPage_Reset, TextWidgetsPage::OnButtonReset)
@@ -330,11 +330,11 @@ BEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(WidgetsTextCtrl, wxTextCtrl)
+wxBEGIN_EVENT_TABLE(WidgetsTextCtrl, wxTextCtrl)
     EVT_RIGHT_UP(WidgetsTextCtrl::OnRightClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

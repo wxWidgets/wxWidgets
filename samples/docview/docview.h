@@ -76,7 +76,7 @@ private:
     MyCanvas *m_canvas;
     wxMenu *m_menuEdit;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
