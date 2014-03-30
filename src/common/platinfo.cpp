@@ -85,7 +85,8 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxCocoa"),
     wxT("wxWinCE"),
     wxT("wxPalmOS"),
-    wxT("wxDFB")
+    wxT("wxDFB"),
+    wxT("wxQT")
 };
 
 static const wxChar* const wxArchitectureNames[] =

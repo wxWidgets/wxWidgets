@@ -85,7 +85,8 @@ enum wxPortId
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
     wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
     wxPORT_PALMOS   = 1 << 10,      // wxPalmOS, toolkit is PalmOS API
-    wxPORT_DFB      = 1 << 11       // wxDFB, using wxUniversal
+    wxPORT_DFB      = 1 << 11,      // wxDFB, using wxUniversal
+    wxPORT_QT       = 1 << 12       // wxQT, using QT4
 };
 
 // architecture of the operating system
@@ -373,6 +374,7 @@ protected:
     #define wxMac                   wxPORT_MAC
     #define wxMotif                 wxPORT_MOTIF
     #define wxGTK                   wxPORT_GTK
+    #define wxQT                    wxPORT_QT
 #endif // WXWIN_COMPATIBILITY_2_6
 
 #endif // _WX_PLATINFO_H_
