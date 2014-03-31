@@ -11,8 +11,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && (defined(__WXOSX_COCOA__) \
-                                          ||  defined(__WXOSX_CARBON__))
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
 
 #include "wx/osx/core/objcid.h"
 
