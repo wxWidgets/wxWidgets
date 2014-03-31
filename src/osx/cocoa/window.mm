@@ -192,7 +192,7 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     const UCKeyboardLayout *keyboardLayout = (const UCKeyboardLayout*)CFDataGetBytePtr(uchr);
     if (keyboardLayout) {
         UInt32 deadKeyState = 0;
-        UniCharCount maxStringLength = 255;
+        const UniCharCount maxStringLength = 255;
         UniCharCount actualStringLength = 0;
         UniChar unicodeString[maxStringLength];
         
