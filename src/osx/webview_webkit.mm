@@ -309,7 +309,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
     wxWebViewWebKit* webKitWindow;
 }
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow;
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow;
 
 @end
 
@@ -318,7 +318,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
     wxWebViewWebKit* webKitWindow;
 }
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow;
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow;
 
 @end
 
@@ -327,7 +327,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
     wxWebViewWebKit* webKitWindow;
 }
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow;
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow;
 
 @end
 
@@ -1033,7 +1033,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 
 @implementation WebViewLoadDelegate
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
@@ -1223,7 +1223,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 @implementation WebViewPolicyDelegate
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
@@ -1363,7 +1363,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 @implementation WebViewUIDelegate
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
