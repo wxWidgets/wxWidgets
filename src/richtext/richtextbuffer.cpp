@@ -8613,6 +8613,11 @@ bool wxRichTextBuffer::PasteFromClipboard(long position)
                     container->InsertParagraphsWithUndo(this, position+1, *richTextBuffer, GetRichTextCtrl(), 0);
                     if (GetRichTextCtrl())
                         GetRichTextCtrl()->ShowPosition(position + richTextBuffer->GetOwnRange().GetEnd());
+                    if (richTextBuffer->GetStyleSheet())
+                    {
+                        delete richTextBuffer->GetStyleSheet();
+                        richTextBuffer->SetStyleSheet(NULL);                        
+                    }
                     delete richTextBuffer;
                 }
             }
@@ -12826,6 +12831,7 @@ size_t wxRichTextBufferDataObject::GetDataSize() const
 
     {
         wxStringOutputStream stream(& bufXML);
+        m_richTextBuffer->SetHandlerFlags(wxRICHTEXT_HANDLER_INCLUDE_STYLESHEET);
         if (!m_richTextBuffer->SaveFile(stream, wxRICHTEXT_TYPE_XML))
         {
             wxLogError(wxT("Could not write the buffer to an XML stream.\nYou may have forgotten to add the XML file handler."));
@@ -12850,6 +12856,7 @@ bool wxRichTextBufferDataObject::GetDataHere(void *pBuf) const
 
     {
         wxStringOutputStream stream(& bufXML);
+        m_richTextBuffer->SetHandlerFlags(wxRICHTEXT_HANDLER_INCLUDE_STYLESHEET);
         if (!m_richTextBuffer->SaveFile(stream, wxRICHTEXT_TYPE_XML))
         {
             wxLogError(wxT("Could not write the buffer to an XML stream.\nYou may have forgotten to add the XML file handler."));
@@ -12880,6 +12887,7 @@ bool wxRichTextBufferDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     m_richTextBuffer = new wxRichTextBuffer;
 
     wxStringInputStream stream(bufXML);
+    m_richTextBuffer->SetHandlerFlags(wxRICHTEXT_HANDLER_INCLUDE_STYLESHEET);
     if (!m_richTextBuffer->LoadFile(stream, wxRICHTEXT_TYPE_XML))
     {
         wxLogError(wxT("Could not read the buffer from an XML stream.\nYou may have forgotten to add the XML file handler."));
