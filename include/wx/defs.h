@@ -299,6 +299,18 @@ typedef short int WXTYPE;
     #define wxOVERRIDE
 #endif /*  HAVE_OVERRIDE/!HAVE_EXPLICIT */
 
+/* wxFALLTHROUGH is used to notate explicit fallthroughs in switch statements */
+
+#if __cplusplus >= 201103L && defined(__has_warning)
+    #if WX_HAS_CLANG_FEATURE(cxx_attributes)
+        #define wxFALLTHROUGH [[clang::fallthrough]]
+    #endif
+#endif
+
+#ifndef wxFALLTHROUGH
+    #define wxFALLTHROUGH ((void)0)
+#endif
+
 /* these macros are obsolete, use the standard C++ casts directly now */
 #define wx_static_cast(t, x) static_cast<t>(x)
 #define wx_const_cast(t, x) const_cast<t>(x)
