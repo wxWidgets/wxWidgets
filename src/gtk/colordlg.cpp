@@ -18,7 +18,6 @@
 #if wxUSE_COLOURDLG
 
 #include "wx/colordlg.h"
-#include "wx/modalhook.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
@@ -38,6 +37,13 @@ extern "C" {
     #include <hildon/hildon.h>
 }
 #endif // wxUSE_LIBHILDON2
+
+extern "C" {
+static void response(GtkDialog*, int response_id, wxColourDialog* win)
+{
+    win->EndModal(response_id == GTK_RESPONSE_OK ? wxID_OK : wxID_CANCEL);
+}
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 
@@ -83,30 +89,16 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 
 int wxColourDialog::ShowModal()
 {
-    WX_HOOK_MODAL_DIALOG();
-
     ColourDataToDialog();
 
-    wxOpenModalDialogLocker modalLocker;
+    gulong id = g_signal_connect(m_widget, "response", G_CALLBACK(response), this);
+    int rc = wxDialog::ShowModal();
+    g_signal_handler_disconnect(m_widget, id);
 
-    gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
-    gtk_widget_hide(m_widget);
+    if (rc == wxID_OK)
+        DialogToColourData();
 
-    switch (result)
-    {
-        default:
-            wxFAIL_MSG(wxT("unexpected GtkColorSelectionDialog return code"));
-            // fall through
-
-        case GTK_RESPONSE_CANCEL:
-        case GTK_RESPONSE_DELETE_EVENT:
-        case GTK_RESPONSE_CLOSE:
-            return wxID_CANCEL;
-
-        case GTK_RESPONSE_OK:
-            DialogToColourData();
-            return wxID_OK;
-    }
+    return rc;
 }
 
 void wxColourDialog::ColourDataToDialog()
