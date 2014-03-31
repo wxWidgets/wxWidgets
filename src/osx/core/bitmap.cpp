@@ -1822,7 +1822,7 @@ class WXDLLEXPORT wxBundleResourceHandler: public wxBitmapHandler
 public:
     inline wxBundleResourceHandler()
     {
-    };
+    }
     
     virtual bool LoadFile(wxBitmap *bitmap,
                           const wxString& name,
@@ -1843,7 +1843,7 @@ public:
         SetName(wxT("PNG resource"));
         SetExtension("PNG");
         SetType(wxBITMAP_TYPE_PNG_RESOURCE);
-    };
+    }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxPNGResourceHandler, wxBundleResourceHandler)
@@ -1858,7 +1858,7 @@ public:
         SetName(wxT("JPEG resource"));
         SetExtension("JPEG");
         SetType(wxBITMAP_TYPE_JPEG_RESOURCE);
-    };
+    }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxJPEGResourceHandler, wxBundleResourceHandler)
