@@ -34,10 +34,10 @@
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
-#import <CoreFoundation/CoreFoundation.h>
-#import <ApplicationServices/ApplicationServices.h>
-#import <OpenGL/OpenGL.h>
-#import <OpenGL/gl.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <ApplicationServices/ApplicationServices.h>
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl.h>
 
 #include "wx/osx/core/private.h"
 #include "wx/osx/private/glgrab.h"
