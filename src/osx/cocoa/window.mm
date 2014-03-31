@@ -796,7 +796,7 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     [_lastToolTipOwner mouseEntered:fakeEvent];
 }
 
-- (void)setToolTip:(NSString *)string;
+- (void)setToolTip:(NSString *)string
 {
     if (string)
     {
