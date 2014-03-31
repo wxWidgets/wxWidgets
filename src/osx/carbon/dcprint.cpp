@@ -189,7 +189,7 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
                  native->GetPageFormat(),
                  NULL);
 
-    CGContextRef pageContext;
+    CGContextRef pageContext = NULL ;
 
     if ( m_err == noErr )
     {
