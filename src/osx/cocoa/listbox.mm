@@ -26,8 +26,6 @@
 
 #include "wx/osx/private.h"
 
-#include <vector>
-
 // forward decls
 
 class wxListWidgetCocoaImpl;
