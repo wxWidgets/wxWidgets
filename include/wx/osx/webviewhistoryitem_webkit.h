@@ -9,7 +9,7 @@
 #ifndef _WX_OSX_WEBVIEWHISTORYITEM_H_
 #define _WX_OSX_WEBVIEWHISTORYITEM_H_
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
 
