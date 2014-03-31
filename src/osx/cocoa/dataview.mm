@@ -1751,7 +1751,7 @@ outlineView:(NSOutlineView*)outlineView
     return NO;
 }
 
--(void) outlineView:(wxCocoaOutlineView*)outlineView
+-(void) outlineView:(NSOutlineView*)outlineView
     willDisplayCell:(id)cell
     forTableColumn:(NSTableColumn*)tableColumn
     item:(id)item
