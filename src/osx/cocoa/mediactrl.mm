@@ -152,7 +152,7 @@ private:
 	[super dealloc];    
 }
 
--(wxQTMediaBackend*) backend;
+-(wxQTMediaBackend*) backend
 {
     return m_backend;
 }
