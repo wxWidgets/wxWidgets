@@ -768,13 +768,16 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
         // (all other menu items have to be also set to owner-drawn mode).
         if ( m_parentMenu )
         {
-            wxMenu *menu = m_parentMenu;
             size_t pos;
-            wxMenuItem *item = menu->FindChildItem(GetMSWId(), &pos);
-            wxCHECK_RET( item == this, wxS("Non unique menu item ID?") );
+            wxMenuItem *item = m_parentMenu->FindChildItem(GetMSWId(), &pos);
+            if ( item )
+            {
+                wxCHECK_RET( item == this, wxS("Non unique menu item ID?") );
 
-            menu->Remove(this);
-            menu->Insert(pos, this);
+                m_parentMenu->Remove(this);
+                m_parentMenu->Insert(pos, this);
+            }
+            //else: the item hasn't been inserted into the parent menu yet
         }
         return;
     }
