@@ -59,7 +59,7 @@ wxString wxQtConvertString( const QString &str )
 
 QString  wxQtConvertString( const wxString &str )
 {
-    return QString( str.c_str() );
+    return QString( str.utf8_str() );
 }
 
 
