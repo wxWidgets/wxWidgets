@@ -1044,8 +1044,8 @@ void wxGtkPrinter::DrawPage(wxPrintout *printout,
     switch (gtk_print_settings_get_print_pages(settings))
     {
         case GTK_PRINT_PAGES_CURRENT:
-            g_object_get_property((GObject*) operation, (const gchar *) "current-page", (GValue*) &startPage);
-            g_object_get_property((GObject*) operation, (const gchar *) "current-page", (GValue*) &endPage);
+            g_object_get(G_OBJECT(operation), "current-page", &startPage, NULL);
+            endPage = startPage;
             break;
         case GTK_PRINT_PAGES_RANGES:
             {gint num_ranges = 0;
