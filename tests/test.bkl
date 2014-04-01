@@ -126,7 +126,8 @@
       be ran in such configuration and doesn't require an X server connection.
       -->
     <exe id="test_drawing" template="wx_sample_console,wx_test"
-                 template_append="wx_append_base">
+                 template_append="wx_append_base"
+         cond="USE_GUI=='1'">
         <sources>
             test.cpp
             drawing/drawing.cpp
@@ -147,7 +148,8 @@
       wxGraphicsContext interface, building the appropriate DrawingTestGCFactory
       -->
     <module id="test_drawingplugin" template="wx"
-                 template_append="wx_append_base">
+                 template_append="wx_append_base"
+            cond="USE_GUI=='1'">
         <define>$(DLLFLAG)</define>
         <sources>
             drawing/pluginsample.cpp

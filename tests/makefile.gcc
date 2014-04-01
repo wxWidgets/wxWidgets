@@ -277,8 +277,14 @@ endif
 ifeq ($(MONOLITHIC),1)
 __LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
 endif
+ifeq ($(USE_GUI),1)
+__test_drawing___depname = $(OBJS)\test_drawing.exe
+endif
 ifeq ($(MONOLITHIC),1)
 __LIB_PNG_IF_MONO_p_1 = $(__LIB_PNG_p)
+endif
+ifeq ($(USE_GUI),1)
+__test_drawingplugin___depname = $(OBJS)\test_drawingplugin.dll
 endif
 ifeq ($(MONOLITHIC),1)
 __LIB_PNG_IF_MONO_p_2 = $(__LIB_PNG_p)
@@ -471,7 +477,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(OBJS)\test_drawing.exe $(OBJS)\test_drawingplugin.dll $(__test_gui___depname) data data-images fr
+all: $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -484,11 +490,15 @@ clean:
 $(OBJS)\test.exe: $(TEST_OBJECTS)
 	$(CXX) -o $@ $(TEST_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(CPPUNIT_LIBS) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\test_drawing.exe: $(TEST_DRAWING_OBJECTS)
 	$(CXX) -o $@ $(TEST_DRAWING_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(CPPUNIT_LIBS) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_1) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+endif
 
+ifeq ($(USE_GUI),1)
 $(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
 	$(CXX) $(LINK_MODULE_FLAGS) -fPIC -o $@ $(TEST_DRAWINGPLUGIN_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_2) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample_rc.o

@@ -76,9 +76,17 @@ __LIB_PNG_IF_MONO_p =
 !ifeq MONOLITHIC 1
 __LIB_PNG_IF_MONO_p = $(__LIB_PNG_p)
 !endif
+__test_drawing___depname =
+!ifeq USE_GUI 1
+__test_drawing___depname = $(OBJS)\test_drawing.exe
+!endif
 __LIB_PNG_IF_MONO_p_1 =
 !ifeq MONOLITHIC 1
 __LIB_PNG_IF_MONO_p_1 = $(__LIB_PNG_p)
+!endif
+__test_drawingplugin___depname =
+!ifeq USE_GUI 1
+__test_drawingplugin___depname = $(OBJS)\test_drawingplugin.dll
 !endif
 __LIB_PNG_IF_MONO_p_2 =
 !ifeq MONOLITHIC 1
@@ -171,11 +179,11 @@ __DEBUGINFO_3 = debug all
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_3 =
+__DEBUGINFO_3 = 
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_3 =
+__DEBUGINFO_3 = 
 !endif
 !ifeq DEBUG_INFO 1
 __DEBUGINFO_3 = debug all
@@ -514,7 +522,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\test.exe $(OBJS)\test_drawing.exe $(OBJS)\test_drawingplugin.dll $(__test_gui___depname) data data-images fr
+all : .SYMBOLIC $(OBJS)\test.exe $(__test_drawing___depname) $(__test_drawingplugin___depname) $(__test_gui___depname) data data-images fr
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -539,6 +547,7 @@ $(OBJS)\test.exe :  $(TEST_OBJECTS)
 	@for %i in () do @%append $(OBJS)\test.lbc option stack=%i
 	wlink @$(OBJS)\test.lbc
 
+!ifeq USE_GUI 1
 $(OBJS)\test_drawing.exe :  $(TEST_DRAWING_OBJECTS)
 	@%create $(OBJS)\test_drawing.lbc
 	@%append $(OBJS)\test_drawing.lbc option quiet
@@ -550,7 +559,9 @@ $(OBJS)\test_drawing.exe :  $(TEST_DRAWING_OBJECTS)
 	@%append $(OBJS)\test_drawing.lbc
 	@for %i in () do @%append $(OBJS)\test_drawing.lbc option stack=%i
 	wlink @$(OBJS)\test_drawing.lbc
+!endif
 
+!ifeq USE_GUI 1
 $(OBJS)\test_drawingplugin.dll :  $(TEST_DRAWINGPLUGIN_OBJECTS)
 	@%create $(OBJS)\test_drawingplugin.lbc
 	@%append $(OBJS)\test_drawingplugin.lbc option quiet
@@ -562,6 +573,7 @@ $(OBJS)\test_drawingplugin.dll :  $(TEST_DRAWINGPLUGIN_OBJECTS)
 	@%append $(OBJS)\test_drawingplugin.lbc
 	@%append $(OBJS)\test_drawingplugin.lbc system nt_dll
 	wlink @$(OBJS)\test_drawingplugin.lbc
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
