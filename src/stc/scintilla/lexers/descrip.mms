@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 24 August 2012                                                      *
+# Date : 1 April 2014                                                        *
 #                                                                            *
 #*****************************************************************************
 
@@ -72,7 +72,7 @@ OBJECTS1=LexMMIXAL.obj,LexModula.obj,LexMPT.obj,LexMSSQL.obj,LexMySQL.obj,\
 	LexScriptol.obj,LexSmalltalk.obj,LexSML.obj,LexSorcus.obj,LexSpecman.obj,\
 	LexSpice.obj,LexSQL.obj,LexSTTXT.obj,LexTACL.obj,LexTADS3.obj,LexTAL.obj,\
 	LexTCL.obj,LexTCMD.obj,LexTeX.obj,LexTxt2tags.obj,LexVB.obj,\
-	LexVerilog.obj,LexVHDL.obj,LexVisualProlog.obj,LexYAML.obj
+	LexVerilog.obj,LexVHDL.obj,LexVisualProlog.obj,LexYAML.obj,LexDMAP.obj
 
 SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexAsn1.cxx,LexASY.cxx,LexAU3.cxx,LexAVE.cxx,LexAVS.cxx,LexBaan.cxx,\
@@ -92,7 +92,7 @@ SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexScriptol.cxx,LexSmalltalk.cxx,LexSML.cxx,LexSorcus.cxx,LexSpecman.cxx,\
 	LexSpice.cxx,LexSQL.cxx,LexSTTXT.cxx,LexTACL.cxx,LexTADS3.cxx,LexTAL.cxx,\
 	LexTCL.cxx,LexTCMD.cxx,LexTeX.cxx,LexTxt2tags.cxx,LexVB.cxx,\
-	LexVerilog.cxx,LexVHDL.cxx,LexVisualProlog.cxx,LexYAML.cxx
+	LexVerilog.cxx,LexVHDL.cxx,LexVisualProlog.cxx,LexYAML.cxx,LexDMAP.cxx
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -217,3 +217,4 @@ LexVerilog.obj : LexVerilog.cxx
 LexVHDL.obj : LexVHDL.cxx
 LexVisualProlog.obj : LexVisualProlog.cxx
 LexYAML.obj : LexYAML.cxx
+LexDMAP.obj : LexDMAP.cxx
