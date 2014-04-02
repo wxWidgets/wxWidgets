@@ -3018,7 +3018,7 @@ bool TestMessageBoxDialog::Create()
     m_textExtMsg = new wxTextCtrl(this, wxID_ANY, "",
                                   wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE);
-    sizerMsgs->Add(m_textExtMsg, wxSizerFlags(1).Expand());
+    sizerMsgs->Add(m_textExtMsg, wxSizerFlags().Expand());
 
     sizerTop->Add(sizerMsgs, wxSizerFlags(1).Expand().Border());
 
@@ -3041,7 +3041,7 @@ bool TestMessageBoxDialog::Create()
         sizerBtns->Add(m_buttons[n], wxSizerFlags().Centre().Left());
 
         m_labels[n] = new wxTextCtrl(this, wxID_ANY);
-        sizerBtns->Add(m_labels[n], wxSizerFlags(1).Centre().Expand());
+        sizerBtns->Add(m_labels[n], wxSizerFlags().Centre().Expand());
 
         m_labels[n]->Connect(wxEVT_UPDATE_UI,
                              wxUpdateUIEventHandler(
@@ -3050,7 +3050,7 @@ bool TestMessageBoxDialog::Create()
                              this);
     }
 
-    sizerBtnsBox->Add(sizerBtns, wxSizerFlags(1).Expand());
+    sizerBtnsBox->Add(sizerBtns, wxSizerFlags().Expand());
     sizerTop->Add(sizerBtnsBox, wxSizerFlags().Expand().Border());
 
 
@@ -3087,10 +3087,10 @@ bool TestMessageBoxDialog::Create()
                                 TestMessageBoxDialog::OnUpdateNoDefaultUI),
                             NULL,
                             this);
-    sizerFlags->Add(m_chkNoDefault, wxSizerFlags(1).Border());
+    sizerFlags->Add(m_chkNoDefault, wxSizerFlags().Border());
 
     m_chkCentre = new wxCheckBox(this, wxID_ANY, "Centre on &parent");
-    sizerFlags->Add(m_chkCentre, wxSizerFlags(1).Border());
+    sizerFlags->Add(m_chkCentre, wxSizerFlags().Border());
 
     // add any additional flag from subclasses
     AddAdditionalFlags(sizerFlags);
@@ -3104,6 +3104,8 @@ bool TestMessageBoxDialog::Create()
     SetSizerAndFit(sizerTop);
 
     m_buttons[Btn_Ok]->SetValue(true);
+
+    CentreOnScreen();
 
     return true;
 }
@@ -3281,21 +3283,21 @@ void TestRichMessageDialog::AddAdditionalTextOptions(wxSizer *sizer)
                                                      "&Additional Elements");
 
     // add a option to show a check box.
-    wxFlexGridSizer * const sizerCheckBox = new wxFlexGridSizer(2, 5, 5);
-    sizerCheckBox->AddGrowableCol(1);
-    sizerCheckBox->Add(new wxStaticText(this, wxID_ANY, "&Check box:"));
+    wxSizer * const sizerCheckBox = new wxBoxSizer(wxHORIZONTAL);
+    sizerCheckBox->Add(new wxStaticText(this, wxID_ANY, "&Check box:"),
+                       wxSizerFlags().Centre().Border(wxRIGHT));
     m_textCheckBox = new wxTextCtrl(this, wxID_ANY);
-    sizerCheckBox->Add(m_textCheckBox, wxSizerFlags(1).Expand().Border(wxBOTTOM));
-    sizerMsgs->Add(sizerCheckBox, wxSizerFlags(1).Expand());
+    sizerCheckBox->Add(m_textCheckBox, wxSizerFlags(1).Centre());
+    sizerMsgs->Add(sizerCheckBox, wxSizerFlags().Expand().Border(wxBOTTOM));
 
     // add option to show a detailed text.
     sizerMsgs->Add(new wxStaticText(this, wxID_ANY, "&Detailed message:"));
     m_textDetailed = new wxTextCtrl(this, wxID_ANY, "",
                                     wxDefaultPosition, wxDefaultSize,
                                     wxTE_MULTILINE);
-    sizerMsgs->Add(m_textDetailed, wxSizerFlags(1).Expand());
+    sizerMsgs->Add(m_textDetailed, wxSizerFlags().Expand());
 
-    sizer->Add(sizerMsgs, wxSizerFlags(1).Expand().Border());
+    sizer->Add(sizerMsgs, wxSizerFlags().Expand().Border());
 }
 
 void TestRichMessageDialog::AddAdditionalFlags(wxSizer *sizer)
@@ -3304,7 +3306,7 @@ void TestRichMessageDialog::AddAdditionalFlags(wxSizer *sizer)
     // in the dialog.
     m_initialValueCheckBox =
         new wxCheckBox(this, wxID_ANY, "Checkbox initially checked");
-    sizer->Add(m_initialValueCheckBox, wxSizerFlags(1).Border());
+    sizer->Add(m_initialValueCheckBox, wxSizerFlags().Border());
 }
 
 void TestRichMessageDialog::OnApply(wxCommandEvent& WXUNUSED(event))
