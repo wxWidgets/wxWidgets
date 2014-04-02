@@ -71,10 +71,16 @@ fi
 #$REPOS/hooks/ciabot_svn.py "$REPOS" $REV &
 
 
-# Check for keywords that Trac can use
-export PYTHONPATH=/home/wxsite/domains/trac.wxwidgets.org/htdocs/lib/python
-export PYTHON_EGG_CACHE=/tmp/.python-eggs
-/usr/bin/python2.5 $REPOS/hooks/trac-post-commit-hook \
-       -p /home/wxsite/domains/trac.wxwidgets.org/htdocs/wxtrac -r $REV &
+# Trigger Trac syncronization
+TRACBASE=/home/wxsite/domains/trac.wxwidgets.org
+source $TRACBASE/.setenv
+$TRACBASE/python/bin/trac-admin $TRAC_ENV changeset added "$1" "$2" &
+
+
+## Check for keywords that Trac can use
+#export PYTHONPATH=/home/wxsite/domains/trac.wxwidgets.org/htdocs/lib/python
+#export PYTHON_EGG_CACHE=/tmp/.python-eggs
+#/usr/bin/python2.5 $REPOS/hooks/trac-post-commit-hook \
+#       -p /home/wxsite/domains/trac.wxwidgets.org/htdocs/wxtrac -r $REV &
 
 
