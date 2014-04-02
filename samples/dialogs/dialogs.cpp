@@ -3097,6 +3097,13 @@ bool TestMessageBoxDialog::Create()
 
     sizerTop->Add(sizerFlags, wxSizerFlags().Expand().Border());
 
+    // add the currently unused zone for displaying the dialog result
+    m_labelResult = new wxStaticText(this, wxID_ANY, "",
+                                     wxDefaultPosition, wxDefaultSize,
+                                     wxST_NO_AUTORESIZE | wxALIGN_CENTRE);
+    m_labelResult->SetForegroundColour(*wxBLUE);
+    sizerTop->Add(m_labelResult, wxSizerFlags().Expand().DoubleBorder());
+
     // finally buttons to show the resulting message box and close this dialog
     sizerTop->Add(CreateStdDialogButtonSizer(wxAPPLY | wxCLOSE),
                   wxSizerFlags().Right().Border());
@@ -3226,16 +3233,21 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
     wxMessageDialog dlg(this, GetMessage(), GetBoxTitle(), GetStyle());
     PrepareMessageDialog(dlg);
 
+    ShowResult(dlg.ShowModal());
+}
+
+void TestMessageBoxDialog::ShowResult(int res)
+{
     wxString btnName;
-    switch ( dlg.ShowModal() )
+    switch ( res )
     {
         case wxID_OK:
             btnName = "OK";
             break;
 
         case wxID_CANCEL:
-            // Avoid the extra message box if the dialog was cancelled.
-            return;
+            btnName = "Cancel";
+            break;
 
         case wxID_YES:
             btnName = "Yes";
@@ -3253,7 +3265,9 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
             btnName = "Unknown";
     }
 
-    wxLogMessage("Dialog was closed with the \"%s\" button.", btnName);
+    m_labelResult->SetLabel(
+        wxString::Format("Dialog was closed with the \"%s\" button.", btnName)
+    );
 }
 
 void TestMessageBoxDialog::OnClose(wxCommandEvent& WXUNUSED(event))
@@ -3318,7 +3332,7 @@ void TestRichMessageDialog::OnApply(wxCommandEvent& WXUNUSED(event))
                      m_initialValueCheckBox->GetValue());
     dlg.ShowDetailedText(m_textDetailed->GetValue());
 
-    dlg.ShowModal();
+    ShowResult(dlg.ShowModal());
 }
 
 #endif // wxUSE_RICHMSGDLG

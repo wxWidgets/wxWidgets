@@ -216,6 +216,8 @@ protected:
     virtual void AddAdditionalTextOptions(wxSizer *WXUNUSED(sizer)) { }
     virtual void AddAdditionalFlags(wxSizer *WXUNUSED(sizer)) { }
 
+    void ShowResult(int res);
+
     void OnApply(wxCommandEvent& event);
     void OnClose(wxCommandEvent& event);
     void OnUpdateLabelUI(wxUpdateUIEvent& event);
@@ -263,6 +265,8 @@ private:
 
     wxCheckBox *m_chkNoDefault,
                *m_chkCentre;
+
+    wxStaticText *m_labelResult;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
