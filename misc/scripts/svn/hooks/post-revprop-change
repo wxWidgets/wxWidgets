@@ -53,7 +53,6 @@ USER="$3"
 PROPNAME="$4"
 ACTION="$5"
 
-# Trigger Trac syncronization
-TRACBASE=/home/wxsite/domains/trac.wxwidgets.org
-source $TRACBASE/.setenv
-$TRACBASE/python/bin/trac-admin $TRAC_ENV changeset modified "$1" "$2" &
+# Trigger Trac syncronization, must run as Trac's user
+sudo -u wxsite $REPOS/hooks/trac-post-revprop-change.sh "$REPOS" "$REV"
+
