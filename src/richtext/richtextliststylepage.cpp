@@ -567,8 +567,6 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
     m_previewCtrl->WriteText(s_para3);
     m_previewCtrl->EndStyle();
 
-    m_previewCtrl->NumberList(wxRichTextRange(listStart, listEnd), def);
-
     m_previewCtrl->Thaw();
 }
 
