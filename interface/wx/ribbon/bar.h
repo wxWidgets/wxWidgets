@@ -5,6 +5,36 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    The possible display modes of the panel area of a wxRibbonBar widget.
+
+    @see wxRibbonBar::ShowPanels()
+    @see wxRibbonBar::GetDisplayMode()
+
+    @since 2.9.5
+*/
+enum wxRibbonDisplayMode
+{
+    /**
+        The panel area is visible and pinned: it remains visible when the
+        ribbon bar loses the focus.
+     */
+    wxRIBBON_BAR_PINNED,
+
+    /**
+        The panel area is hidden: only the pages tabs remain visible.
+     */
+    wxRIBBON_BAR_MINIMIZED,
+
+    /**
+        The panel area is visible, but not pinned: it minimizes as soon as the
+        focus is lost.
+     */
+    wxRIBBON_BAR_EXPANDED
+};
+
+
 /**
     @class wxRibbonBarEvent
 
