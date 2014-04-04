@@ -976,7 +976,7 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
         if (sm_lastError != wxPRINTER_CANCELLED)
         {
             sm_lastError = wxPRINTER_ERROR;
-            wxFAIL_MSG(_("The wxGtkPrinterDC cannot be used."));
+            wxFAIL_MSG("The wxGtkPrinterDC cannot be used.");
         }
         return;
     }
@@ -1004,7 +1004,7 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
     if (maxPage == 0)
     {
         sm_lastError = wxPRINTER_ERROR;
-        wxFAIL_MSG(_("wxPrintout::GetPageInfo gives a null maxPage."));
+        wxFAIL_MSG("wxPrintout::GetPageInfo gives a null maxPage.");
         return;
     }
 
@@ -1239,7 +1239,7 @@ bool wxGtkPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
 {
     // We can't access the given coord as a Cairo context is scalable, ie a
     // coord doesn't mean anything in this context.
-    wxFAIL_MSG(_("not implemented"));
+    wxFAIL_MSG("not implemented");
     return false;
 }
 
@@ -1344,7 +1344,7 @@ bool wxGtkPrinterDCImpl::DoGetPixel(wxCoord WXUNUSED(x1),
                               wxCoord WXUNUSED(y1),
                               wxColour * WXUNUSED(col)) const
 {
-    wxFAIL_MSG(_("not implemented"));
+    wxFAIL_MSG("not implemented");
     return false;
 }
 
@@ -2031,7 +2031,7 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
                 cairo_line_to(cr, 5, 10);
                 break;
             default:
-                wxFAIL_MSG(_("Couldn't get hatch style from wxBrush."));
+                wxFAIL_MSG("Couldn't get hatch style from wxBrush.");
         }
 
         cairo_set_source_rgba(cr, redPS, greenPS, bluePS, alphaPS);
