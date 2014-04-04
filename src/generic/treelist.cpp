@@ -427,12 +427,6 @@ public:
     {
     }
 
-    bool IsSameAs(const wxDataViewCheckIconText& other) const
-    {
-        return wxDataViewIconText::IsSameAs(other) &&
-                m_checkedState == other.m_checkedState;
-    }
-
     // There is no encapsulation anyhow, so just expose this field directly.
     wxCheckBoxState m_checkedState;
 
