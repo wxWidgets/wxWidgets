@@ -1611,7 +1611,9 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 // wxCursorProperty
 // -----------------------------------------------------------------------
 
+#if wxPG_CAN_DRAW_CURSOR
 #define wxPG_CURSOR_IMAGE_WIDTH     32
+#endif
 
 #define NUM_CURSORS 28
 

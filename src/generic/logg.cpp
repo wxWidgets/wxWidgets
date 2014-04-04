@@ -70,8 +70,10 @@
 
 #include "wx/time.h"
 
+#ifdef __SMARTPHONE__
 // the suffix we add to the button to show that the dialog can be expanded
 #define EXPAND_SUFFIX wxT(" >>")
+#endif
 
 #define CAN_SAVE_FILES (wxUSE_FILE && wxUSE_FILEDLG)
 

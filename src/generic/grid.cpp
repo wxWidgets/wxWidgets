@@ -56,18 +56,6 @@
 
 const char wxGridNameStr[] = "grid";
 
-#if defined(__WXMOTIF__)
-    #define WXUNUSED_MOTIF(identifier)  WXUNUSED(identifier)
-#else
-    #define WXUNUSED_MOTIF(identifier)  identifier
-#endif
-
-#if defined(__WXGTK__)
-    #define WXUNUSED_GTK(identifier)    WXUNUSED(identifier)
-#else
-    #define WXUNUSED_GTK(identifier)    identifier
-#endif
-
 // Required for wxIs... functions
 #include <ctype.h>
 

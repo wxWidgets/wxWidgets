@@ -48,17 +48,15 @@
     #include <sstream>
 #endif
 
+#ifndef HAVE_STD_STRING_COMPARE
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
-    #define wxStringMemcpy   memcpy
     #define wxStringMemcmp   memcmp
-    #define wxStringMemchr   memchr
     #define wxStringStrlen   strlen
 #else
-    #define wxStringMemcpy   wxTmemcpy
     #define wxStringMemcmp   wxTmemcmp
-    #define wxStringMemchr   wxTmemchr
     #define wxStringStrlen   wxStrlen
+#endif
 #endif
 
 // define a function declared in wx/buffer.h here as we don't have buffer.cpp

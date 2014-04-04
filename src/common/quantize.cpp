@@ -61,7 +61,6 @@
 #define RGB_GREEN     1
 #define RGB_BLUE      2
 #endif
-#define RGB_PIXELSIZE 3
 
 #define MAXJSAMPLE        255
 #define CENTERJSAMPLE     128

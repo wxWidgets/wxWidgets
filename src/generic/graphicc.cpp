@@ -59,6 +59,8 @@ using namespace std;
 // wxGraphicsPath implementation
 //-----------------------------------------------------------------------------
 
+#include <cairo.h>
+#ifdef __WXMSW__
 // TODO remove this dependency (gdiplus needs the macros)
 
 #ifndef max
@@ -69,8 +71,6 @@ using namespace std;
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#include <cairo.h>
-#ifdef __WXMSW__
 #include <cairo-win32.h>
 // Notice that the order is important: cairo-win32.h includes windows.h which
 // pollutes the global name space with macros so include our own header which

@@ -194,8 +194,12 @@ wxLayoutDirection wxAppBase::GetLayoutDirection() const
 // GUI-specific command line options handling
 // ----------------------------------------------------------------------------
 
+#ifdef __WXUNIVERSAL__
 #define OPTION_THEME   "theme"
+#endif
+#if defined(__WXDFB__)
 #define OPTION_MODE    "mode"
+#endif
 
 void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
 {

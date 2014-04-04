@@ -241,7 +241,6 @@ bool wxIFFDecoder::CanRead()
 // Permission for use in wxWidgets has been gratefully given.
 
 typedef unsigned char byte;
-#define IFFDEBUG 0
 
 /*************************************************************************
 void decomprle(source, destination, source length, buffer size)
