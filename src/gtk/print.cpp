@@ -210,7 +210,7 @@ static GtkPaperSize* wxGetGtkPaperSize(wxPaperSize paperId, const wxSize& size)
         g_list_free(list);
 
         if (paperSize)
-            return paperSize
+            return paperSize;
     }
 #endif // GTK >= 2.12
 
