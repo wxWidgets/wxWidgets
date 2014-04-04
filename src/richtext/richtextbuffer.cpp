@@ -312,7 +312,7 @@ int wxRichTextFloatCollector::GetFitPosition(int direction, int start, int heigh
         return GetFitPosition(m_right, start, height);
     else
     {
-        wxASSERT("Never should be here");
+        wxFAIL_MSG("Never should be here");
         return start;
     }
 }
@@ -342,7 +342,7 @@ void wxRichTextFloatCollector::CollectFloat(wxRichTextParagraph* para, wxRichTex
             break;
         default:
             delete map;
-            wxASSERT("Unrecognised float attribute.");
+            wxFAIL_MSG("Unrecognised float attribute.");
     }
 
     m_para = para;
