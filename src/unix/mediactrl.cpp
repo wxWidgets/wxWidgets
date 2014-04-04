@@ -337,13 +337,12 @@ static gint gtk_window_realize_callback(GtkWidget* widget,
     gst_x_overlay_set_xwindow_id( GST_X_OVERLAY(be->m_xoverlay),
                                 GDK_WINDOW_XID(window)
                                 );
-    g_signal_connect (be->GetControl()->m_wxwindow,
+    GtkWidget* w = be->GetControl()->m_wxwindow;
 #ifdef __WXGTK3__
-        "draw", G_CALLBACK(draw),
+    g_signal_connect(w, "draw", G_CALLBACK(draw), be);
 #else
-        "expose_event", G_CALLBACK(expose_event),
+    g_signal_connect(w, "expose_event", G_CALLBACK(expose_event), be);
 #endif
-        be);
     return 0;
 }
 }
@@ -748,13 +747,12 @@ void wxGStreamerMediaBackend::SetupXOverlay()
 #endif
                                   );
 #ifdef __WXGTK__
-        g_signal_connect(m_ctrl->m_wxwindow,
+        GtkWidget* w = m_ctrl->m_wxwindow;
 #ifdef __WXGTK3__
-            "draw", G_CALLBACK(draw),
+        g_signal_connect(w, "draw", G_CALLBACK(draw), this);
 #else
-            "expose_event", G_CALLBACK(expose_event),
+        g_signal_connect(w, "expose_event", G_CALLBACK(expose_event), this);
 #endif
-            this);
     } // end if GtkPizza realized
 #endif
 }
