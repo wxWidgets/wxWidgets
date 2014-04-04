@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2013-10-04 19:58+0200\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
+"PO-Revision-Date: 2014-04-04 18:13+0200\n"
+"Last-Translator: Hakki Dogusan <hakki@dogusan.net>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "wxwidgets_unofficial/language/tr_TR/)\n"
 "Language: tr_TR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -103,7 +103,7 @@ msgstr "#9 Zarf, 3 7/8 x 8 7/8 inç"
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -684,7 +684,7 @@ msgstr "&Simge:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "Değerleri eşleştir"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -758,14 +758,14 @@ msgid "&Yes"
 msgstr "&Evet"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' yalnız alfabetik karakterler içermeli."
+msgstr "'%s' geçersiz karakterler içeriyor"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' yalnız alfabetik karakterler içermeli."
+msgstr "'%s' geçersiz karakterler içeriyor"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -783,14 +783,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' geçerli bir ileti kataloğu değil."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' geçerli bir ileti kataloğu değil."
+msgstr "'%s' geçerli dizgelerden biri değil"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' geçersiz"
+msgstr "'%s' geçersiz dizgelerden biridir"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
@@ -1172,9 +1172,8 @@ msgid "About %s"
 msgstr "%s Hakkında "
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Hakkında"
+msgstr "Hakkında..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1285,7 +1284,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Yuvarlak köşeler için opsiyonel köşe çapı."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1957,7 +1956,7 @@ msgstr "Sağa bir parantez eklemek için işaretleyin."
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Tüm kenarlıkları aynı anda düzenlemek için tıklayın."
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -1968,9 +1967,8 @@ msgstr "Madde imini parantez içine almak için işaretleyin."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "Metin rengini değiştirmek için tıklayın."
+msgstr "Sağdan-sola yazı düzeni için tıklayın."
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -2017,7 +2015,7 @@ msgstr "Metni üst yazıya dönüştürmek için işaretleyin."
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "Sözcük kesmeyi durdurmak için tıklayın."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2299,11 +2297,11 @@ msgstr "Seçimi kopyalayın"
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Köşe"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "Köşe çapı:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -5820,7 +5818,7 @@ msgstr "Sırt"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "Sağdan-sola"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -6004,7 +6002,7 @@ msgstr "'%s' seçeneğinden sonra ayraç bekleniyor."
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Hizmetler"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6226,7 +6224,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Sözcük kesmeyi durdur"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6348,9 +6346,8 @@ msgstr "Artalan rengi."
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "Yazı tipi stili."
+msgstr "Kenarlık stili."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6690,7 +6687,7 @@ msgstr "'%s' seçeneği için değer belirtilmelidir."
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Köşe çap değeri."
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -7102,9 +7099,8 @@ msgstr "Alt konumun birimleri."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Üst yastıklamanın birimleri."
+msgstr "Köşe çap birimleri."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7438,14 +7434,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7539,14 +7533,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
