@@ -949,7 +949,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     if (ret == wxID_NO)
     {
         sm_lastError = wxPRINTER_ERROR;
-        wxFAIL_MSG(_("The print dialog returned an error."));
     }
 
     return (sm_lastError == wxPRINTER_NO_ERROR);
@@ -1137,7 +1136,6 @@ wxDC* wxGtkPrinter::PrintDialog( wxWindow *parent )
     if (ret == wxID_NO)
     {
         sm_lastError = wxPRINTER_ERROR;
-        wxFAIL_MSG(_("The print dialog returned an error."));
         return NULL;
     }
 
