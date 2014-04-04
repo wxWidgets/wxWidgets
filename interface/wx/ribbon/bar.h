@@ -349,11 +349,23 @@ public:
     void RemovePageHighlight(size_t page);
 
     /**
+        Shows or hide the panel area of the ribbon bar according to the
+        given display mode.
+
+        @since 3.1.0
+    */
+    void ShowPanels(wxRibbonDisplayMode mode);
+
+    /**
         Shows or hides the panel area of the ribbon bar.
 
         If the panel area is hidden, then only the tab of the ribbon bar will
         be shown. This is useful for giving the user more screen space to work
         with when he/she doesn't need to see the ribbon's options.
+
+        If the panel is currently shown, this method pins it, use the other
+        overload of this method to specify the exact panel display mode to
+        avoid it.
 
         @since 2.9.2
     */
@@ -362,7 +374,7 @@ public:
     /**
         Hides the panel area of the ribbon bar.
 
-        This method simply calls ShowPanels() with @false argument.
+        This method behaves like ShowPanels() with @false argument.
 
         @since 2.9.2
     */
@@ -377,6 +389,16 @@ public:
     */
     bool ArePanelsShown() const;
     
+    /**
+        Returns the current display mode of the panel area.
+
+        @see ShowPanels()
+
+        @since 3.1.0
+    */
+    wxRibbonDisplayMode GetDisplayMode() const;
+
+
     /**
         Perform initial layout and size calculations of the bar and its
         children. This must be called after all of the bar's children have been

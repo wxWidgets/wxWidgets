@@ -140,9 +140,11 @@ public:
     void AddPageHighlight(size_t page, bool highlight = true);
     void RemovePageHighlight(size_t page) { AddPageHighlight(page, false); }
 
+    void ShowPanels(wxRibbonDisplayMode mode);
     void ShowPanels(bool show = true);
-    void HidePanels() { ShowPanels(false); }
+    void HidePanels() { ShowPanels(wxRIBBON_BAR_MINIMIZED); }
     bool ArePanelsShown() const { return m_arePanelsShown; }
+    wxRibbonDisplayMode GetDisplayMode() const { return m_ribbon_state; }
 
     virtual bool HasMultiplePages() const wxOVERRIDE { return true; }
 
