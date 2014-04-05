@@ -404,12 +404,12 @@ public:
         Returns the floating-pointing value of the dimension in mm.
 
     */
-    float GetValueMM() const { return float(m_value) / 10.0; }
+    float GetValueMM() const { return m_value / 10.0f; }
 
     /**
         Sets the value of the dimension in mm.
     */
-    void SetValueMM(float value) { m_value = (int) ((value * 10.0) + 0.5); m_flags |= wxTEXT_ATTR_VALUE_VALID; }
+    void SetValueMM(float value) { m_value = (int) ((value * 10.0f) + 0.5f); m_flags |= wxTEXT_ATTR_VALUE_VALID; }
 
     /**
         Sets the integer value of the dimension.

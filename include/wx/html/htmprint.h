@@ -154,7 +154,7 @@ public:
                           const wxString& normal_face = wxEmptyString,
                           const wxString& fixed_face = wxEmptyString);
 
-    void SetMargins(float top = 25.2, float bottom = 25.2, float left = 25.2, float right = 25.2,
+    void SetMargins(float top = 25.2f, float bottom = 25.2f, float left = 25.2f, float right = 25.2f,
                     float spaces = 5);
             // sets margins in milimeters. Defaults to 1 inch for margins and 0.5cm for space
             // between text and header and/or footer
