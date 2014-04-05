@@ -1636,10 +1636,10 @@ void wxHtmlHelpWindow::DoIndexFind()
 
         m_IndexList->Clear();
         const wxHtmlHelpMergedIndex& index = *m_mergedIndex;
-        size_t cnt = index.size();
+        const unsigned cnt = index.size();
 
         int displ = 0;
-        for (size_t i = 0; i < cnt; i++)
+        for (unsigned i = 0; i < cnt; i++)
         {
             if (index[i].name.Lower().find(sr) != wxString::npos)
             {
@@ -1689,7 +1689,7 @@ void wxHtmlHelpWindow::DoIndexFind()
         }
 
         wxString cnttext;
-        cnttext.Printf(_("%i of %i"), displ, cnt);
+        cnttext.Printf(_("%i of %u"), displ, cnt);
         m_IndexCountInfo->SetLabel(cnttext);
 
         m_IndexText->SetSelection(0, sr.length());
@@ -1708,10 +1708,10 @@ void wxHtmlHelpWindow::DoIndexAll()
 
     m_IndexList->Clear();
     const wxHtmlHelpMergedIndex& index = *m_mergedIndex;
-    size_t cnt = index.size();
+    const unsigned cnt = index.size();
     bool first = true;
 
-    for (size_t i = 0; i < cnt; i++)
+    for (unsigned i = 0; i < cnt; i++)
     {
         m_IndexList->Append(index[i].name, (char*)(&index[i]));
         if (first)
@@ -1727,7 +1727,7 @@ void wxHtmlHelpWindow::DoIndexAll()
     }
 
     wxString cnttext;
-    cnttext.Printf(_("%i of %i"), cnt, cnt);
+    cnttext.Printf(_("%u of %u"), cnt, cnt);
     m_IndexCountInfo->SetLabel(cnttext);
 }
 
