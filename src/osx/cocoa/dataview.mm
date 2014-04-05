@@ -179,7 +179,8 @@ inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
     // not just some arbitrary object, so we serialize the pointer into the
     // string. Notice the use of NSInteger which is big enough to store a
     // pointer in both 32 and 64 bit builds.
-    return [NSString stringWithFormat:@"%lu", reinterpret_cast<NSUInteger>(column)];
+    return [NSString stringWithFormat:@"%lu",
+                (unsigned long)reinterpret_cast<NSUInteger>(column)];
 }
 
 -(id) initWithColumnPointer:(const wxDataViewColumn*)column
