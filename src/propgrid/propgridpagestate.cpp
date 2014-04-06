@@ -1081,8 +1081,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             //
             // TODO: Adapt this to generic recenter code.
             //
-            float centerX = (float)(pg->m_width/2);
-            float splitterX;
+            double centerX = pg->m_width / 2.0;
+            double splitterX;
 
             if ( m_fSplitterX < 0.0 )
             {
@@ -1093,8 +1093,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
                 //float centerX = float(pg->GetSize().x) * 0.5;
 
                 // Recenter?
-                splitterX = m_fSplitterX + (float(widthChange) * 0.5);
-                float deviation = fabs(centerX - splitterX);
+                splitterX = m_fSplitterX + (widthChange * 0.5);
+                double deviation = fabs(centerX - splitterX);
 
                 // If deviating from center, adjust towards it
                 if ( deviation > 20.0 )
@@ -1109,7 +1109,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             {
                 // No width change, just keep sure we keep splitter position intact
                 splitterX = m_fSplitterX;
-                float deviation = fabs(centerX - splitterX);
+                double deviation = fabs(centerX - splitterX);
                 if ( deviation > 50.0 )
                 {
                     splitterX = centerX;

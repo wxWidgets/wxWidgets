@@ -121,12 +121,12 @@ wxBitmap wxRibbonLoadPixmap(const char* const* bits, wxColour fore)
 
 wxRibbonHSLColour::wxRibbonHSLColour(const wxColour& col)
 {
-    float red = float(col.Red()) / 255.0;
-    float green = float(col.Green()) / 255.0;
-    float blue = float(col.Blue()) / 255.0;
+    float red = col.Red() / 255.0f;
+    float green = col.Green() / 255.0f;
+    float blue = col.Blue() / 255.0f;
     float Min = wxMin(red, wxMin(green, blue));
     float Max = wxMax(red, wxMax(green, blue));
-    luminance = 0.5 * (Max + Min);
+    luminance = 0.5f * (Max + Min);
     if (Min == Max)
     {
         // colour is a shade of grey
@@ -138,30 +138,30 @@ wxRibbonHSLColour::wxRibbonHSLColour(const wxColour& col)
         if(luminance <= 0.5)
             saturation = (Max - Min) / (Max + Min);
         else
-            saturation = (Max - Min) / (2.0 - (Max + Min));
+            saturation = (Max - Min) / (2.0f - (Max + Min));
 
         if(Max == red)
         {
-            hue = 60.0 * (green - blue) / (Max - Min);
+            hue = 60.0f * (green - blue) / (Max - Min);
             if(hue < 0.0)
-                hue += 360.0;
+                hue += 360.0f;
         }
         else if(Max == green)
         {
-            hue = 60.0 * (blue - red) / (Max - Min);
-            hue += 120.0;
+            hue = 60.0f * (blue - red) / (Max - Min);
+            hue += 120.0f;
         }
         else // Max == blue
         {
-            hue = 60.0 * (red - green) / (Max - Min);
-            hue += 240.0;
+            hue = 60.0f * (red - green) / (Max - Min);
+            hue += 240.0f;
         }
     }
 }
 
 wxColour wxRibbonHSLColour::ToRGB() const
 {
-    float _hue = (hue - floor(hue / 360.0f) * 360.0f);
+    float _hue = (hue - float(floor(hue / 360.0f)) * 360.0f);
     float _saturation = saturation;
     float _luminance = luminance;
     if(_saturation > 1.0) _saturation = 1.0;
@@ -177,51 +177,51 @@ wxColour wxRibbonHSLColour::ToRGB() const
     }
     else
     {
-        double tmp2 = (_luminance < 0.5)
-           ? _luminance * (1.0 + _saturation)
+        float tmp2 = (_luminance < 0.5)
+           ? _luminance * (1.0f + _saturation)
            : (_luminance + _saturation) - (_luminance * _saturation);
-        double tmp1 = 2.0 * _luminance - tmp2;
+        float tmp1 = 2.0f * _luminance - tmp2;
 
-        double tmp3R = _hue + 120.0;
+        float tmp3R = _hue + 120.0f;
         if(tmp3R > 360.0)
-            tmp3R -= 360.0;
+            tmp3R -= 360.0f;
         if(tmp3R < 60.0)
-            red = tmp1 + (tmp2 - tmp1) * tmp3R / 60.0;
+            red = tmp1 + (tmp2 - tmp1) * tmp3R / 60.0f;
         else if(tmp3R < 180.0)
             red = tmp2;
         else if(tmp3R < 240.0)
-            red = tmp1 + (tmp2 - tmp1) * (240.0 - tmp3R) / 60.0;
+            red = tmp1 + (tmp2 - tmp1) * (240.0f - tmp3R) / 60.0f;
         else
             red = tmp1;
 
-        double tmp3G = _hue;
+        float tmp3G = _hue;
         if(tmp3G > 360.0)
-            tmp3G -= 360.0;
+            tmp3G -= 360.0f;
         if(tmp3G < 60.0)
-            green = tmp1 + (tmp2 - tmp1) * tmp3G / 60.0;
+            green = tmp1 + (tmp2 - tmp1) * tmp3G / 60.0f;
         else if(tmp3G < 180.0)
             green = tmp2;
         else if(tmp3G < 240.0)
-            green = tmp1 + (tmp2 - tmp1) * (240.0 - tmp3G) / 60.0;
+            green = tmp1 + (tmp2 - tmp1) * (240.0f - tmp3G) / 60.0f;
         else
             green = tmp1;
 
-        double tmp3B = _hue + 240.0;
+        float tmp3B = _hue + 240.0f;
         if(tmp3B > 360.0)
-            tmp3B -= 360.0;
+            tmp3B -= 360.0f;
         if(tmp3B < 60.0)
-            blue = tmp1 + (tmp2 - tmp1) * tmp3B / 60.0;
+            blue = tmp1 + (tmp2 - tmp1) * tmp3B / 60.0f;
         else if(tmp3B < 180.0)
             blue = tmp2;
         else if(tmp3B < 240.0)
-            blue = tmp1 + (tmp2 - tmp1) * (240.0 - tmp3B) / 60.0;
+            blue = tmp1 + (tmp2 - tmp1) * (240.0f - tmp3B) / 60.0f;
         else
             blue = tmp1;
     }
     return wxColour(
-        (unsigned char)(red * 255.0),
-        (unsigned char)(green * 255.0),
-        (unsigned char)(blue * 255.0));
+        (unsigned char)(red * 255.0f),
+        (unsigned char)(green * 255.0f),
+        (unsigned char)(blue * 255.0f));
 }
 
 wxRibbonHSLColour wxRibbonHSLColour::Darker(float delta) const

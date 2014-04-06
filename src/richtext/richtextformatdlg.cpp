@@ -637,7 +637,7 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_TENTHS_MM)
         {
             unitsIdx = 1; // By default, the 2nd in the list.
-            float value = float(dim.GetValue()) / 100.0;
+            float value = dim.GetValue() / 100.0f;
             valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
         }
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_PERCENTAGE)
@@ -648,7 +648,7 @@ void wxRichTextFormattingDialog::SetDimensionValue(wxTextAttrDimension& dim, wxT
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_HUNDREDTHS_POINT)
         {
             unitsIdx = 3; // By default, the 4th in the list.
-            float value = float(dim.GetValue()) / 100.0;
+            float value = dim.GetValue() / 100.0f;
             valueCtrl->SetValue(wxString::Format(wxT("%.2f"), value));
         }
         else if (dim.GetUnits() == wxTEXT_ATTR_UNITS_POINTS)

@@ -338,12 +338,12 @@ void wxRibbonMSWArtProvider::SetColourScheme(
         primary_is_gray = true;
     else
     {
-        primary_hsl.saturation = cos(primary_hsl.saturation * M_PI)
-            * -0.25 + 0.5;
+        primary_hsl.saturation = float(cos(primary_hsl.saturation * M_PI)
+            * -0.25 + 0.5);
     }
 
     // Map primary luminance from [0, 1] to [.23, .83]
-    primary_hsl.luminance = cos(primary_hsl.luminance * M_PI) * -0.3 + 0.53;
+    primary_hsl.luminance = float(cos(primary_hsl.luminance * M_PI) * -0.3 + 0.53);
 
     // Map secondary saturation from [0, 1] to [0.16, 0.84]
     bool secondary_is_gray = false;
@@ -351,12 +351,12 @@ void wxRibbonMSWArtProvider::SetColourScheme(
         secondary_is_gray = true;
     else
     {
-        secondary_hsl.saturation = cos(secondary_hsl.saturation * M_PI)
-            * -0.34 + 0.5;
+        secondary_hsl.saturation = float(cos(secondary_hsl.saturation * M_PI)
+            * -0.34 + 0.5);
     }
 
     // Map secondary luminance from [0, 1] to [0.1, 0.9]
-    secondary_hsl.luminance = cos(secondary_hsl.luminance * M_PI) * -0.4 + 0.5;
+    secondary_hsl.luminance = float(cos(secondary_hsl.luminance * M_PI) * -0.4 + 0.5);
 
 #define LikePrimary(h, s, l) \
     primary_hsl.ShiftHue(h ## f).Saturated(primary_is_gray ? 0 : s ## f) \

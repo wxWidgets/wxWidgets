@@ -55,7 +55,7 @@ wxString Col2SVG(wxColour c, float *opacity)
 {
     if ( c.Alpha() != wxALPHA_OPAQUE )
     {
-        *opacity = c.Alpha()/255.;
+        *opacity = c.Alpha() / 255.0f;
 
         // Remove the alpha before using GetAsString(wxC2S_HTML_SYNTAX) as it
         // doesn't support colours with alpha channel.
