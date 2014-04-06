@@ -1183,7 +1183,7 @@ wxString wxString::FromAscii(const char *ascii, size_t len)
             wxASSERT_MSG( c < 0x80,
                           wxT("Non-ASCII value passed to FromAscii().") );
 
-            *dest++ = (wchar_t)c;
+            *dest++ = static_cast<wxStringCharType>(c);
         }
     }
 
