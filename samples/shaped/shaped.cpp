@@ -137,23 +137,12 @@ private:
 class SeeThroughFrame : public wxFrame
 {
 public:
-    // ctor(s)
-    SeeThroughFrame();
+    void Create();
 
+private:
     // event handlers (these functions should _not_ be virtual)
     void OnDoubleClick(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
-
-private:
-    enum State
-    {
-        STATE_SEETHROUGH,
-        STATE_TRANSPARENT,
-        STATE_OPAQUE,
-        STATE_MAX
-    };
-
-    State m_currentState;
 
     // any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
@@ -289,8 +278,14 @@ void MainFrame::OnShowShaped(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
 {
-    SeeThroughFrame *seeThroughFrame = new SeeThroughFrame();
-    seeThroughFrame->Show(true);
+    if (IsTransparentBackgroundSupported())
+    {
+        SeeThroughFrame *seeThroughFrame = new SeeThroughFrame;
+        seeThroughFrame->Create();
+        seeThroughFrame->Show(true);
+    }
+    else
+        wxMessageBox(wxS("transparent window requires a composited screen"));
 }
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)
@@ -481,16 +476,15 @@ wxBEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
     EVT_PAINT(SeeThroughFrame::OnPaint)
 wxEND_EVENT_TABLE()
 
-SeeThroughFrame::SeeThroughFrame()
-       : wxFrame(NULL, wxID_ANY, "Transparency test: double click here",
-                  wxPoint(100, 30), wxSize(300, 300),
-                  wxDEFAULT_FRAME_STYLE |
-                  wxFULL_REPAINT_ON_RESIZE |
-                  wxSTAY_ON_TOP),
-         m_currentState(STATE_SEETHROUGH)
+void SeeThroughFrame::Create()
 {
-    SetBackgroundColour(*wxWHITE);
     SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+    wxFrame::Create(NULL, wxID_ANY, "Transparency test: double click here",
+           wxPoint(100, 30), wxSize(300, 300),
+           wxDEFAULT_FRAME_STYLE |
+           wxFULL_REPAINT_ON_RESIZE |
+           wxSTAY_ON_TOP);
+    SetBackgroundColour(*wxWHITE);
 }
 
 // Paints a grid of varying hue and alpha
@@ -524,34 +518,11 @@ void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
     }
 }
 
-// Switches between colour and transparent background on doubleclick
 void SeeThroughFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
 {
-    m_currentState = (State)((m_currentState + 1) % STATE_MAX);
-
-    switch ( m_currentState )
-    {
-        case STATE_OPAQUE:
-            SetBackgroundStyle(wxBG_STYLE_COLOUR);
-            SetTransparent(255);
-            SetTitle("Opaque");
-            break;
-
-        case STATE_SEETHROUGH:
-            SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
-            SetTransparent(255);
-            SetTitle("See through");
-            break;
-
-        case STATE_TRANSPARENT:
-            SetBackgroundStyle(wxBG_STYLE_COLOUR);
-            SetTransparent(128);
-            SetTitle("Semi-transparent");
-            break;
-
-        case STATE_MAX:
-            wxFAIL_MSG( "unreachable" );
-    }
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
+    SetTransparent(255);
+    SetTitle("Opaque");
 
     Refresh();
 }
