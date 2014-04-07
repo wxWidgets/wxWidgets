@@ -1551,21 +1551,26 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
     if (m_antialias == antialias)
         return true;
 
-    m_antialias = antialias;
-
-    SmoothingMode antialiasMode;
+    SmoothingMode antialiasMode = SmoothingModeInvalid;
     switch (antialias)
     {
         case wxANTIALIAS_DEFAULT:
             antialiasMode = SmoothingModeHighQuality;
             break;
+
         case wxANTIALIAS_NONE:
             antialiasMode = SmoothingModeNone;
             break;
-        default:
-            return false;
     }
-    m_context->SetSmoothingMode(antialiasMode);
+
+    wxCHECK_MSG( antialiasMode != SmoothingModeInvalid, false,
+                 wxS("Unknown antialias mode") );
+
+    if ( m_context->SetSmoothingMode(antialiasMode) != Gdiplus::Ok )
+        return false;
+
+    m_antialias = antialias;
+
     return true;
 }
 
@@ -1574,7 +1579,7 @@ bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality interpolat
     if (m_interpolation == interpolation)
         return true;
 
-    InterpolationMode interpolationMode = InterpolationModeDefault;
+    InterpolationMode interpolationMode = InterpolationModeInvalid;
     switch (interpolation)
     {
         case wxINTERPOLATION_DEFAULT:
@@ -1596,10 +1601,10 @@ bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality interpolat
         case wxINTERPOLATION_BEST:
             interpolationMode = InterpolationModeHighQualityBicubic;
             break;
-
-        default:
-            return false;
     }
+
+    wxCHECK_MSG( interpolationMode != InterpolationModeInvalid, false,
+                 wxS("Unknown interpolation mode") );
 
     if ( m_context->SetInterpolationMode(interpolationMode) != Gdiplus::Ok )
         return false;
