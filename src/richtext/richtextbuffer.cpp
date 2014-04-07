@@ -5155,7 +5155,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, wxRichTextDrawingContext& context, co
         {
             // We can move it to the correct position at this point
             // TODO: probably need to add margin
-            child->Move(GetPosition() + wxPoint(currentWidth + (wxMax(leftIndent, leftIndent + leftSubIndent)), currentPosition.y));
+            child->Move(GetPosition() + wxPoint(currentWidth + startOffset, currentPosition.y));
         }
 
         // Cases:
