@@ -1422,8 +1422,6 @@ void wxGDIPlusContext::Init(Graphics* graphics, int width, int height)
     m_context->SetPixelOffsetMode(PixelOffsetModeHalf);
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
 
-    SetInterpolationQuality(wxINTERPOLATION_GOOD);
-
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
 }
