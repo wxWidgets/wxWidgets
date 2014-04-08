@@ -810,6 +810,14 @@ public:
         Sets the interpolation quality, returns true if it is supported.
 
         Not implemented in Cairo backend currently.
+
+        Notice that in wxWidgets 3.0 the default interpolation quality for
+        GDI+-based implementation is ::wxINTERPOLATION_GOOD and @e not
+        ::wxINTERPOLATION_DEFAULT (unlike under OS X with CoreGraphics-based
+        implementation). This will be changed in wxWidgets 3.1 and later
+        version, call this method explicitly instead of relying on the default
+        value to ensure consistent behaviour across different platforms and
+        versions.
      */
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
 
