@@ -3,10 +3,10 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2012-11-13 10:25+0545\n"
-"Last-Translator: हिम प्रसाद गौतम \n"
+"PO-Revision-Date: 2014-04-08 16:30+0545\n"
+"Last-Translator: Him Prasad Gautam <drishtibachak@gmail.com>\n"
 "Language-Team: Him Prasad Gautam <himjee@yahoo.com>\n"
-"Language: Nepali\n"
+"Language: ne\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,7 +18,8 @@ msgstr ""
 "पुनरावलोकन मिति: २०६९ साल श्रावण १६ गते\n"
 "भाषा टोली: हिम प्रसाद गौतम <drishtivachak@gmail.com> मात्रै\n"
 "plural-forms: nplurals=2; plural=n > 1\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.6.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -34,14 +35,13 @@ msgid " "
 msgstr " "
 
 #: ../src/generic/dbgrptg.cpp:326
-#, fuzzy
 msgid "              Thank you and we're sorry for the inconvenience!\n"
-msgstr "धन्यवाद, असुविधाको लागि क्षमा प्रार्थी छौं । !\n"
+msgstr "धन्यवाद र असुविधाका लागि क्षमा प्रार्थी छौं ।!\n"
 
 #: ../src/common/prntbase.cpp:546
 #, c-format
 msgid " (copy %d of %d)"
-msgstr "%2$d मध्ये %1$d को प्रतिलिपी"
+msgstr "%d बट्टा %d को नक्कल"
 
 #: ../src/common/log.cpp:425
 #, c-format
@@ -67,7 +67,7 @@ msgstr "मोटो"
 
 #: ../src/common/fontcmn.cpp:827
 msgid " italic"
-msgstr "कोल्टे"
+msgstr "डल्केको"
 
 #: ../src/common/fontcmn.cpp:807
 msgid " light"
@@ -104,7 +104,7 @@ msgstr "#9 खाम, 3 7/8 x 8 7/8 इन्च"
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -114,7 +114,7 @@ msgstr "%d को %lu"
 #: ../src/html/helpwnd.cpp:1692 ../src/html/helpwnd.cpp:1730
 #, c-format
 msgid "%i of %i"
-msgstr "%2$i मध्ये %1$i"
+msgstr "%i बट्टा %i"
 
 #: ../src/generic/filectrlg.cpp:315
 #, c-format
@@ -144,9 +144,9 @@ msgid "%s Information"
 msgstr "%s सूचना"
 
 #: ../src/generic/preferencesg.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid "%s Preferences"
-msgstr "प्राथमिकताहरू"
+msgstr " %s प्राथमिकताहरू "
 
 #: ../src/generic/logg.cpp:234
 #, c-format
@@ -251,7 +251,7 @@ msgstr "&रद्द"
 
 #: ../src/msw/mdi.cpp:171
 msgid "&Cascade"
-msgstr "&खप्टिएको"
+msgstr "&Cascade"
 
 #: ../include/wx/richtext/richtextbuffer.h:5717
 msgid "&Cell"
@@ -426,7 +426,7 @@ msgstr "&जानकारी"
 
 #: ../src/common/stockitem.cpp:168
 msgid "&Italic"
-msgstr "&कोल्टे"
+msgstr "&डल्केको"
 
 #: ../src/common/stockitem.cpp:169
 msgid "&Jump to"
@@ -686,7 +686,7 @@ msgstr "&चिन्ह:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&संयोजित मानहरू"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -760,14 +760,14 @@ msgid "&Yes"
 msgstr "&हो"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' मा वर्णहरू मात्रै हुन सक्छ ।"
+msgstr "'%s' मा अवैध वर्णहरू छन् ।"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' मा वर्णहरू मात्रै हुन सक्छ ।"
+msgstr "'%s' मा केवल वैध मानहरू मात्रै छैनन् ।"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -785,19 +785,19 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' सहि सन्देश सूची होइन"
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' सहि सन्देश सूची होइन"
+msgstr "'%s' कुनै वैध पदावली होइन ।"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' गल्ती छ"
+msgstr "अवैध पदावलीहरू मद्धे '%s'  एउटा हो ।"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
 msgid "'%s' is probably a binary buffer."
-msgstr "'%s' सम्भवतः binary buffer हो ।"
+msgstr "'%s' सम्भवता binary buffer हो ।"
 
 #: ../src/common/valtext.cpp:252
 #, c-format
@@ -812,7 +812,7 @@ msgstr "'%s' मा ASCII वर्णहरू मात्रै हुन स
 #: ../src/common/valtext.cpp:246
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
-msgstr "'%s' मा वर्णहरू मात्रै हुन सक्छ ।"
+msgstr "'%s' मा वर्णहरू मात्रै हु सक्छ ।"
 
 #: ../src/common/valtext.cpp:248
 #, c-format
@@ -1032,11 +1032,11 @@ msgstr "<LINK>"
 
 #: ../src/html/helpwnd.cpp:1280
 msgid "<b><i>Bold italic face.</i></b><br>"
-msgstr "<b><i>मोटो कोल्टे </i></b><br>"
+msgstr "<b><i>मोटो डल्केको </i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1284
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
-msgstr "<b><i> मोटो कोल्टे <u> अधोरेखाङ्कित </u></i></b><br>"
+msgstr "<b><i> मोटो डल्केको <u> अधोरेखाङ्कित </u></i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1279
 msgid "<b>Bold face.</b> "
@@ -1044,7 +1044,7 @@ msgstr "<b>मोटो .</b> "
 
 #: ../src/html/helpwnd.cpp:1278
 msgid "<i>Italic face.</i> "
-msgstr "<i>कोल्टे .</i> "
+msgstr "<i>डल्केको .</i> "
 
 #: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:286
@@ -1174,7 +1174,6 @@ msgid "About %s"
 msgstr "%s को बारेमा"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
 msgstr "बारेमा"
 
@@ -1192,11 +1191,11 @@ msgstr "थप"
 
 #: ../src/richtext/richtextbuffer.cpp:11219
 msgid "Add Column"
-msgstr ""
+msgstr "महल थप"
 
 #: ../src/richtext/richtextbuffer.cpp:11156
 msgid "Add Row"
-msgstr ""
+msgstr "हरफ थप"
 
 #: ../src/html/helpwnd.cpp:440
 msgid "Add current page to bookmarks"
@@ -1229,7 +1228,7 @@ msgstr "flavor utxt थप्न सकिएन"
 
 #: ../src/common/preferencescmn.cpp:41
 msgid "Advanced"
-msgstr ""
+msgstr "समृद्ध"
 
 #: ../src/richtext/richtextliststylepage.cpp:435
 msgid "After a paragraph:"
@@ -1287,7 +1286,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "गोलो कोण थप्ने वैकल्पित कोणिय अर्ध व्यास ।"
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1594,7 +1593,7 @@ msgstr "registry कुञ्जी '%s' सिर्जना गर्न स�
 
 #: ../src/msw/thread.cpp:696 ../src/os2/thread.cpp:494
 msgid "Can't create thread"
-msgstr "धागो सिर्जना गर्न सकिँदैन ।"
+msgstr "thread सिर्जना गर्न सकिँदैन ।"
 
 #: ../src/msw/window.cpp:3787
 #, c-format
@@ -1690,7 +1689,7 @@ msgstr "लग पुस्तिकाका सामाग्रीहरू�
 
 #: ../src/msw/thread.cpp:652 ../src/os2/thread.cpp:477
 msgid "Can't set thread priority"
-msgstr "धागोको प्राथमिकता तय गर्न सकिँदैन ।"
+msgstr "thread प्राथमिकता सेट गर्न सकिँदैन ।"
 
 #: ../src/msw/registry.cpp:895 ../src/msw/registry.cpp:939
 #: ../src/msw/registry.cpp:1065
@@ -1827,16 +1826,16 @@ msgstr "'%s' बाट typename पढ्न सकिँदैन ।"
 #: ../src/os2/thread.cpp:527
 #, c-format
 msgid "Cannot resume thread %lu"
-msgstr "धागो %lu फेरि सुरु गर्न सकिँदैन ।"
+msgstr "thread %lu फेरि सुरु गर्न सकिँदैन ।"
 
 #: ../src/msw/thread.cpp:918
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot resume thread %lx"
-msgstr "धागो %x फेरि सुरु गर्न सकिँदैन ।"
+msgstr "%lx धागो सुभारम्भ गर्न सकिएन।"
 
 #: ../src/unix/threadpsx.cpp:1016
 msgid "Cannot retrieve thread scheduling policy."
-msgstr "धागो कार्य सुची नीति प्राप्त गर्न सकिँदैन ।"
+msgstr "thread कार्य सुची नीति प्राप्त गर्न सकिँदैन ।"
 
 #: ../src/common/intl.cpp:542
 #, c-format
@@ -1845,21 +1844,21 @@ msgstr "भाषा \"%s\" लाइ स्थानीयतामा से�
 
 #: ../src/unix/threadpsx.cpp:831 ../src/msw/thread.cpp:569
 msgid "Cannot start thread: error writing TLS."
-msgstr "धागो सुरु गर्न सकिँदैन: TLS लेखाइमा गल्ती भयो ।"
+msgstr "thread सुरु गर्न सकिँदैन: TLS लेखाइमा गल्ती भयो ।"
 
 #: ../src/os2/thread.cpp:513
 #, c-format
 msgid "Cannot suspend thread %lu"
-msgstr "धागो %lu लाइ निलम्बन गर्न सकिँदैन ।"
+msgstr "thread %lu लाइ निलम्बन गर्न सकिँदैन ।"
 
 #: ../src/msw/thread.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot suspend thread %lx"
-msgstr "धागो %x लाइ निलम्बन गर्न सकिँदैन ।"
+msgstr "%lx धागो निलम्बन गर्न सकिएन ।"
 
 #: ../src/msw/thread.cpp:825
 msgid "Cannot wait for thread termination"
-msgstr "धागो को समाप्ति पर्खन सकिँदैन ।"
+msgstr "thread को समाप्ति पर्खन सकिँदैन ।"
 
 #: ../src/html/helpwnd.cpp:547
 msgid "Case sensitive"
@@ -1957,7 +1956,7 @@ msgstr "दाहिने कोष्ठ थप्ने हो भने ट�
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "एकै साथ सबै सिमानाको सम्पादन गर्न टिक लगाउ "
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -1968,9 +1967,8 @@ msgstr "गोलीलाई कोष्ठ भित्र राख्ने
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "पाठको रङ्ग फेर्न किटिक्क पार्नु होस्"
+msgstr "दाँया देखि वाँया पाठ रुपरेखा जनाउन  टिक लगाउ"
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -1978,7 +1976,7 @@ msgstr "वरणाकृति मोटो बनाउने हो भन�
 
 #: ../src/osx/carbon/fontdlg.cpp:533 ../src/osx/carbon/fontdlg.cpp:535
 msgid "Check to make the font italic."
-msgstr "वरणाकृति कोल्टे बनाउने हो भने टिक लगाउ"
+msgstr "वरणाकृति डल्केको बनाउने हो भने टिक लगाउ"
 
 #: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
 msgid "Check to make the font underlined."
@@ -2001,9 +1999,8 @@ msgstr "पाठलाई capitals मा देखाउने हो भन�
 
 #: ../src/richtext/richtextfontpage.cpp:291
 #: ../src/richtext/richtextfontpage.cpp:293
-#, fuzzy
 msgid "Check to show the text in small capitals."
-msgstr "पाठलाई capitals मा देखाउने हो भने टिक लगाउ"
+msgstr "सानो ठूलो वर्णमा पाठ देखाउन टिक लगाउ"
 
 #: ../src/richtext/richtextfontpage.cpp:305
 #: ../src/richtext/richtextfontpage.cpp:307
@@ -2018,7 +2015,7 @@ msgstr "टाउकोमा पाठ देखाउने हो भने �
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "हाइफरनेसन दबाउन टिक लगाउनु होला ।."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2300,11 +2297,11 @@ msgstr "चयनको नक्कल उतार "
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "कोण"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "कोण र अर्धव्यास:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2445,7 +2442,7 @@ msgstr "wxBrush बाट hatch शैली पाउन सकिएन "
 
 #: ../src/msw/thread.cpp:945
 msgid "Couldn't get the current thread pointer"
-msgstr "चालू धागो बर्धक पाउन सकिएन"
+msgstr "चालू thread Adder पाउन सकिएन"
 
 #: ../src/osx/carbon/overlay.cpp:129
 msgid "Couldn't init the context on the overlay window"
@@ -2494,7 +2491,7 @@ msgstr "PNG तस्विर बचत गर्न सकिएन"
 
 #: ../src/msw/thread.cpp:715
 msgid "Couldn't terminate thread"
-msgstr "धागो बन्द गर्न सकिएन"
+msgstr "thread बन्द गर्न सकिएन"
 
 #: ../src/common/xtistrm.cpp:170
 #, c-format
@@ -2645,14 +2642,12 @@ msgid "Delete A&ll"
 msgstr "&सबै मेटाइ देउ "
 
 #: ../src/richtext/richtextbuffer.cpp:11105
-#, fuzzy
 msgid "Delete Column"
-msgstr "चयन मेटाइ देउ "
+msgstr "महल हटाउ"
 
 #: ../src/richtext/richtextbuffer.cpp:11055
-#, fuzzy
 msgid "Delete Row"
-msgstr "मेटाइ देउ"
+msgstr "हरफ हटाउ"
 
 #: ../src/richtext/richtextstyledlg.cpp:782
 msgid "Delete Style"
@@ -2749,7 +2744,7 @@ msgid ""
 "Display all index items that contain given substring. Search is case "
 "insensitive."
 msgstr ""
-"प्रदान गरिएको शब्द खण्ड भएका सबै अनुसूची लाई देखाउ । खोजी ठूलो वा सानो वर्णको वास्ता "
+"प्रदान गरिएको शब्द भएका सबै अनुसूची लाई देखाउ । खोज तलासले ठूलो वा सानो वर्णको वास्ता "
 "गर्दैन । "
 
 #: ../src/html/helpwnd.cpp:693
@@ -2868,7 +2863,7 @@ msgstr "सम्पादन सामाग्री"
 
 #: ../include/wx/generic/progdlgg.h:84
 msgid "Elapsed time:"
-msgstr ""
+msgstr "गुज्रिएको समय:"
 
 #: ../src/richtext/richtextsizepage.cpp:353
 #: ../src/richtext/richtextsizepage.cpp:355
@@ -2998,7 +2993,7 @@ msgstr "Esperanto (ISO-8859-3)"
 
 #: ../include/wx/generic/progdlgg.h:85
 msgid "Estimated time:"
-msgstr ""
+msgstr "अनुमानित समय:"
 
 #: ../src/generic/dbgrptg.cpp:234
 msgid "Executable files (*.exe)|*.exe|"
@@ -3093,7 +3088,7 @@ msgstr "क्लिप पाटी बन्द गर्न सकिएन �
 #: ../src/x11/utils.cpp:204
 #, c-format
 msgid "Failed to close the display \"%s\""
-msgstr "पटल \"%s\" बन्द गर्न सकिएन ।"
+msgstr "दृश्य \"%s\" बन्द गर्न सकिएन ।"
 
 #: ../src/msw/dialup.cpp:818
 msgid "Failed to connect: missing username/password."
@@ -3134,7 +3129,7 @@ msgstr "registry उप-कुञ्जी '%s' को नक्कल '%s' म�
 
 #: ../src/msw/dde.cpp:1073
 msgid "Failed to create DDE string"
-msgstr "DDE पदावलीको सिर्जना गर्न सकिएन ।"
+msgstr "DDE string को सिर्जना गर्न सकिएन ।"
 
 #: ../src/msw/mdi.cpp:594
 msgid "Failed to create MDI parent frame."
@@ -3197,7 +3192,7 @@ msgstr "event loop ले प्रयोग गर्ने Wake Up Pipe सि
 #: ../src/html/winpars.cpp:730
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
-msgstr "%s अनुसंहितामा html कागजात प्रदर्शन गर्न सकिएन ।"
+msgstr "%s अनुसंहितामा html कागजात सिर्जना गर्न सकिएन ।"
 
 #: ../src/msw/clipbrd.cpp:127
 msgid "Failed to empty the clipboard."
@@ -3243,7 +3238,7 @@ msgstr "ISP नामहरू %s पाउन सकिएन ।"
 #: ../src/msw/ole/automtn.cpp:577
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
-msgstr "\"%s\" का लागि पुराना स्वचालित परिदृष्य पाउन सकिएन ।"
+msgstr "\"%s\" का लागि पुराना स्वचालित interface पाउन सकिएन ।"
 
 #: ../src/msw/clipbrd.cpp:747
 msgid "Failed to get data from the clipboard"
@@ -3291,7 +3286,7 @@ msgstr "सङ्केत चालक स्थापित गर्न स�
 msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
-msgstr "धागो जोड्न सकिएन, भण्डार चुहावट प्रबल छ- कृपया कार्यक्रम फेरी सुरु गर्नु होला"
+msgstr "Thread जोड्न सकिएन, भण्डार चुहावट प्रबल छ- कृपया कार्यक्रम फेरी सुरु गर्नु होला"
 
 #: ../src/msw/utils.cpp:745
 #, c-format
@@ -3394,7 +3389,7 @@ msgstr "अनुगमनका लागि घर्रा \"%s\" खोल�
 #: ../src/x11/utils.cpp:223
 #, c-format
 msgid "Failed to open display \"%s\"."
-msgstr "पटल \"%s\" खोल्न सकिएन ।"
+msgstr "दृश्य \"%s\" खोल्न सकिएन ।"
 
 #: ../src/common/filename.cpp:1121
 msgid "Failed to open temporary file."
@@ -3535,9 +3530,8 @@ msgid "Failed to set permissions on lock file '%s'"
 msgstr "चाबी फाइलमा '%s' अनुमति राख्न सकिएन ।"
 
 #: ../src/unix/utilsunx.cpp:674
-#, fuzzy
 msgid "Failed to set process priority"
-msgstr "धागो प्राथमिकता %d कायम गर्न सकिएन ।"
+msgstr "प्रक्रिया प्राथमिकता क्रम तोक्न सकिएन ।"
 
 #: ../src/common/file.cpp:576
 msgid "Failed to set temporary file permissions"
@@ -3550,12 +3544,12 @@ msgstr "पाठ नियन्त्रक मा पाठ राख्न �
 #: ../src/unix/threadpsx.cpp:1298
 #, c-format
 msgid "Failed to set thread concurrency level to %lu"
-msgstr "धागो स्वीकृति तहलाई %lu मा तय गर्न सकिएन ।"
+msgstr "thread स्वीकृति तहलाई %lu मा तय गर्न सकिएन ।"
 
 #: ../src/unix/threadpsx.cpp:1382 ../src/unix/threadpsx.cpp:1392
 #, c-format
 msgid "Failed to set thread priority %d."
-msgstr "धागो प्राथमिकता %d कायम गर्न सकिएन ।"
+msgstr "thread प्राथमिकता %d कायम गर्न सकिएन ।"
 
 #: ../src/unix/utilsunx.cpp:801
 msgid "Failed to set up non-blocking pipe, the program might hang."
@@ -3576,7 +3570,7 @@ msgstr "wake Up pipe लाई न टालिएको मुद्राम�
 
 #: ../src/unix/threadpsx.cpp:1574
 msgid "Failed to terminate a thread."
-msgstr "धागो लाई बन्द गर्न सकिएन ।"
+msgstr "thread लाई बन्द गर्न सकिएन ।"
 
 #: ../src/msw/dde.cpp:746
 msgid "Failed to terminate the advise loop with DDE server"
@@ -3718,7 +3712,7 @@ msgstr "निश्चित वरणाकृति:"
 
 #: ../src/html/helpwnd.cpp:1283
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
-msgstr "निश्चित आकार face.<br> <b>मोटो</b> <i>कोल्टे</i> "
+msgstr "निश्चित आकार face.<br> <b>मोटो</b> <i>डल्केको</i> "
 
 #: ../src/richtext/richtextsizepage.cpp:229
 msgid "Floating"
@@ -3813,7 +3807,7 @@ msgstr "GTK+ theme"
 
 #: ../src/common/preferencescmn.cpp:39
 msgid "General"
-msgstr ""
+msgstr "&सामान्य"
 
 #: ../src/common/prntbase.cpp:243
 msgid "Generic PostScript"
@@ -4198,9 +4192,9 @@ msgid "Invalid data view item"
 msgstr "नमिल्दो तथ्याङ्क दृश्य सामाग्री"
 
 #: ../src/common/appcmn.cpp:266
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid display mode specification '%s'."
-msgstr "नमिल्दो ज्यामिति मानक '%s'"
+msgstr "नमिल्दो दृश्य मुद्रा मानक '%s'"
 
 #: ../src/x11/app.cpp:121
 #, c-format
@@ -4210,7 +4204,7 @@ msgstr "नमिल्दो ज्यामिति मानक '%s'"
 #: ../src/unix/fswatcher_inotify.cpp:311
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr ""
+msgstr "\"%s\" का लागि  सूचीत अवैध  घटना ।"
 
 #: ../src/unix/snglinst.cpp:312
 #, c-format
@@ -4242,7 +4236,7 @@ msgstr "मान %ld नमिल्दो छ (अभियोजन फाइ
 #: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:349
 #: ../src/osx/carbon/fontdlg.cpp:531 ../src/common/stockitem.cpp:168
 msgid "Italic"
-msgstr "कोल्टे"
+msgstr "डल्केको"
 
 #: ../src/common/paper.cpp:131
 msgid "Italy Envelope, 110 x 230 mm"
@@ -4988,7 +4982,7 @@ msgid ""
 "Do you want to use this encoding (otherwise you will have to choose another "
 "one)?"
 msgstr ""
-"अनुसंहिता '%s' मा पाठहरूलाई देखाउन कुनै पनि वर्णाकृति पाइएन । \n"
+"encoding '%s' मा पाठहरूलाई देखाउन कुनै पनि वर्णाकृति पाइएन । \n"
 "तर वैकल्पिक अनुसंहिता '%s' भने उपलब्ध छ । \n"
 "के तपाइ यो अनुसंहिता लाई प्रयोग गर्न चाहनु हुन्छ (अन्यथा तपाइले अर्कै छान्नु पर्छ)?"
 
@@ -5178,9 +5172,8 @@ msgid "Orientation"
 msgstr "झुकाव"
 
 #: ../src/common/windowid.cpp:259
-#, fuzzy
 msgid "Out of window IDs.  Recommend shutting down application."
-msgstr "विन्डो IDs भन्दा बाहिर. अनुप्रयोग लाई बन्द गर्न सिफारिस गरिन्छ ।"
+msgstr "विन्डोज IDs भन्दा बाहिर । अनुप्रयोग बन्द गर्न सुझावित ।"
 
 #: ../src/richtext/richtextborderspage.cpp:401
 #: ../src/richtext/richtextborderspage.cpp:559
@@ -5440,7 +5433,7 @@ msgstr "भण्डारमा भएको फाइल छान्नु �
 
 #: ../src/html/helpwnd.cpp:814
 msgid "Please choose the page to display:"
-msgstr "कृपया प्रदर्शन गर्नु पर्ने पृष्ट छान्नु होस् ।"
+msgstr "कृपया देखाइने पृष्ट छान्नु होस् ।"
 
 #: ../src/msw/dialup.cpp:785
 msgid "Please choose which ISP do you want to connect to"
@@ -5750,7 +5743,7 @@ msgstr "सन्दर्भित प्रविष्टि:"
 
 #: ../include/wx/generic/progdlgg.h:86
 msgid "Remaining time:"
-msgstr ""
+msgstr "बांकि समय:"
 
 #: ../src/common/stockitem.cpp:187
 msgid "Remove"
@@ -5816,7 +5809,7 @@ msgstr "धुरी"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "&दायाँ -देखि वायाँ"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -5961,7 +5954,7 @@ msgstr "सबै चयन गर"
 
 #: ../src/common/docview.cpp:1884
 msgid "Select a document template"
-msgstr "एउटा कागजात लेखोट चयन गर ।"
+msgstr "एउटा कागजात  लेखोट चयन गर ।"
 
 #: ../src/common/docview.cpp:1958
 msgid "Select a document view"
@@ -5975,7 +5968,7 @@ msgstr "नियमित अथवा मोटो कुनै लाई च�
 #: ../src/richtext/richtextfontpage.cpp:213
 #: ../src/richtext/richtextfontpage.cpp:215
 msgid "Select regular or italic style."
-msgstr "नियमित अथवा कोल्टे शैली कुनै एकलाई चयन गर"
+msgstr "नियमित अथवा डल्केको शैली कुनै एकलाई चयन गर"
 
 #: ../src/richtext/richtextfontpage.cpp:239
 #: ../src/richtext/richtextfontpage.cpp:241
@@ -5998,7 +5991,7 @@ msgstr "विकल्प '%s' पछि विभाजक अपेक्ष�
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "सेवा"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6114,9 +6107,8 @@ msgid "Slant"
 msgstr "छड्के"
 
 #: ../src/richtext/richtextfontpage.cpp:289
-#, fuzzy
 msgid "Small C&apitals"
-msgstr "Ca&pitals"
+msgstr "सानो &ठूलो वर्ण"
 
 #: ../src/richtext/richtextborderspage.cpp:614
 msgid "Solid"
@@ -6188,7 +6180,7 @@ msgstr "Strikethrough"
 #: ../src/common/colourcmn.cpp:45
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
-msgstr "पदावलीको रङ्ग : गलत रङ्ग specification : %s"
+msgstr "String को रङ्ग : गलत रङ्ग specification : %s"
 
 #: ../src/richtext/richtextformatdlg.cpp:339 ../src/propgrid/advprops.cpp:648
 msgid "Style"
@@ -6220,7 +6212,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "हाइपरनेशनलाई &दबाउ"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6237,7 +6229,6 @@ msgid "Symbol &font:"
 msgstr "चिन्ह &वरणाकृति:"
 
 #: ../include/wx/richtext/richtextsymboldlg.h:47
-#, fuzzy
 msgid "Symbols"
 msgstr "चिन्ह"
 
@@ -6343,9 +6334,8 @@ msgstr "पृष्ठभूमिको रङ्ग"
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "वरणाकृतिको शैली"
+msgstr "सिमाना रेखा शैली"
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6567,7 +6557,7 @@ msgstr[1] "अघिल्लो सन्देश %lu पटक दोहो�
 
 #: ../src/common/log.cpp:274
 msgid "The previous message repeated once."
-msgstr " पछिल्लो सन्देश फेरी  दोहोरियो ।"
+msgstr " पछिल्लो सन्देश एक पटक दोहोरियो ।"
 
 #: ../src/gtk/print.cpp:931 ../src/gtk/print.cpp:1114
 msgid "The print dialog returned an error."
@@ -6686,7 +6676,7 @@ msgstr "विकल्प '%s' को मान तोक्न पर्छ �
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "कोणीय अर्धव्यासको मान "
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -6744,21 +6734,21 @@ msgstr ""
 msgid ""
 "Thread module initialization failed: cannot store value in thread local "
 "storage"
-msgstr "धागो module सुरु हुन सकेन: स्थानीय धागो भण्डारमा कुनै मान राख्न सकिँदैन ।"
+msgstr "Thread module सुरु हुन सकेन: स्थानीय Thread भण्डारमा कुनै मान राख्न सकिँदैन ।"
 
 #: ../src/unix/threadpsx.cpp:1763
 msgid "Thread module initialization failed: failed to create thread key"
-msgstr "धागो module को सुरुवात असफल भयो : धागो कुञ्जी सिर्जना गर्न असफल भयो ।"
+msgstr "Thread module को सुरुवात असफल भयो : thread कुञ्जी सिर्जना गर्न असफल भयो ।"
 
 #: ../src/msw/thread.cpp:1283
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
-msgstr "धागो module सुरु हुन सकेन: स्थानीय धागो भण्डारमा सुची राख्न सम्भव छैन ।"
+msgstr "Thread module सुरु हुन सकेन: स्थानीय thread भण्डारमा सुची राख्न सम्भव छैन ।"
 
 #: ../src/unix/threadpsx.cpp:1043
 msgid "Thread priority setting is ignored."
-msgstr "धागो प्राथमिकता कायम लाइ बेवास्ता गरियो"
+msgstr "Thread प्राथमिकता कायम लाइ बेवास्ता गरियो"
 
 #: ../src/msw/mdi.cpp:172
 msgid "Tile &Horizontally"
@@ -6911,7 +6901,7 @@ msgstr "I/O completion port लाई सिर्जना गर्न सक�
 
 #: ../src/msw/fswatcher.cpp:84
 msgid "Unable to create IOCP worker thread"
-msgstr "IOCP श्रमिक धागो सिर्जना गर्न सकिएन ।"
+msgstr "IOCP worker सिर्जना गर्न सकिएन ।"
 
 #: ../src/unix/fswatcher_inotify.cpp:74
 msgid "Unable to create inotify instance"
@@ -6935,7 +6925,7 @@ msgstr "स्थानीय घिसार्दै राखिने तथ
 
 #: ../src/gtk/app.cpp:439
 msgid "Unable to initialize GTK+, is DISPLAY set properly?"
-msgstr "GTK+ लाई सुरुवात गर्न सकिएन, के पटल त राम्ररी मिलाएको छ ?"
+msgstr "GTK+ लाई सुरुवात गर्न सकिएन, के दृश्यक त राम्ररी मिलाएको छ ?"
 
 #: ../src/gtk/app.cpp:276
 msgid "Unable to initialize Hildon program"
@@ -6978,7 +6968,7 @@ msgstr "घडी '%s' लाई कायम गर्न सकिएन ।"
 
 #: ../src/msw/fswatcher.cpp:91
 msgid "Unable to start IOCP worker thread"
-msgstr "IOCP श्रमिक धागो लाई सुरुवात गर्न सकिएन ।"
+msgstr "IOCP worker thread लाई सुरुवात गर्न सकिएन ।"
 
 #: ../src/common/stockitem.cpp:201
 msgid "Undelete"
@@ -7009,7 +6999,7 @@ msgstr "विकल्पहरू '%s' मा नसोचेका वर्�
 #: ../src/unix/fswatcher_inotify.cpp:262
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
-msgstr ""
+msgstr "अनुमान नगरेको घटना \"%s\": कुनै मिल्दो घडि व्याख्याकार छैन ।"
 
 #: ../src/common/cmdline.cpp:1189
 #, c-format
@@ -7022,7 +7012,7 @@ msgstr "अचानक नया I/O completion port को सिर्जन�
 
 #: ../src/msw/fswatcher.cpp:70
 msgid "Ungraceful worker thread termination"
-msgstr "Ungraceful श्रमिक धागोको समाप्ति"
+msgstr "Ungraceful worker thread termination"
 
 #: ../src/richtext/richtextsymboldlg.cpp:459
 #: ../src/richtext/richtextsymboldlg.cpp:460
@@ -7093,9 +7083,8 @@ msgstr "पुछार स्थानको एकाइ"
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "सिरान ख्रेस्राको एकाइ"
+msgstr "कोणीय अर्धव्यासको एकाइ "
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7429,14 +7418,12 @@ msgid "Windows 7"
 msgstr "विन्डोज 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "विन्डोज 98"
+msgstr "विन्डोज ८"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "विन्डोज 98"
+msgstr "विन्डोज ८.१"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7530,14 +7517,12 @@ msgid "Windows Server 2008 R2"
 msgstr "विन्डोज सर्बर 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "विन्डोज सर्बर 2003"
+msgstr "विन्डोज सर्वर २०१२"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "विन्डोज सर्बर 2008 R2"
+msgstr "विन्डोज सर्वर २०१२ R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
@@ -8098,7 +8083,7 @@ msgstr "tar मा अपूरो header हिस्सा"
 
 #: ../src/common/xtixml.cpp:489
 msgid "incorrect event handler string, missing dot"
-msgstr "अशुद्ध घटना सञ्चालक पदावली, थोप्लो छुटेको छ ।"
+msgstr "अशुद्ध घटना सञ्चालक , थोप्लो छुटेको छ ।"
 
 #: ../src/common/tarstrm.cpp:1381
 msgid "incorrect size given for tar entry"
@@ -8118,7 +8103,7 @@ msgstr "अवैध zip फाइल"
 
 #: ../src/common/fontcmn.cpp:983
 msgid "italic"
-msgstr "कोल्टे"
+msgstr "डल्केको"
 
 #: ../src/common/fontcmn.cpp:973
 msgid "light"
@@ -8341,7 +8326,7 @@ msgstr "छैठौँ"
 
 #: ../src/common/appcmn.cpp:227
 msgid "specify display mode to use (e.g. 640x480-16)"
-msgstr "प्रयोगका लागि पटल मुद्रा तोक्नु होला (जस्तै 640x480-16)"
+msgstr "प्रयोगका लागि दृश्यक मुद्रा तोक्नु होला (e.g. 640x480-16)"
 
 #: ../src/common/appcmn.cpp:213
 msgid "specify the theme to use"
@@ -8507,11 +8492,11 @@ msgstr "wxWidget's नियन्त्रक सुरुवात गरि�
 #: ../src/motif/app.cpp:245
 #, c-format
 msgid "wxWidgets could not open display for '%s': exiting."
-msgstr "wxWidgets ले पटल '%s' लाइ खोल्न सकेन: बहिर्गमन गरिदैं छ ।"
+msgstr "wxWidgets ले दृश्यक '%s' लाइ खोल्न सकेन: बहिर्गमन गरिदैं छ ।"
 
 #: ../src/x11/app.cpp:164
 msgid "wxWidgets could not open display. Exiting."
-msgstr "wxWidgets ले पटल खोल्न सकेन: बहिर्गमन गरिदैं छ ।"
+msgstr "wxWidgets ले दृश्यक खोल्न सकेन: बहिर्गमन गरिदैं छ ।"
 
 #: ../src/richtext/richtextsymboldlg.cpp:434
 msgid "xxxx"
@@ -8530,66 +8515,3 @@ msgstr "zlib गल्ती %d"
 #: ../src/richtext/richtextbulletspage.cpp:288
 msgid "~"
 msgstr "~"
-
-#~ msgid "Event queue overflowed"
-#~ msgstr "Event queue overflowed"
-
-#~ msgid "percent"
-#~ msgstr "प्रतिशत"
-
-#~ msgid "Print preview"
-#~ msgstr "छापिने चेहरा"
-
-#~ msgid "'"
-#~ msgstr "'"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "10"
-#~ msgstr "10"
-
-#~ msgid "3"
-#~ msgstr "3"
-
-#~ msgid "4"
-#~ msgstr "4"
-
-#~ msgid "5"
-#~ msgstr "5"
-
-#~ msgid "6"
-#~ msgstr "6"
-
-#~ msgid "7"
-#~ msgstr "7"
-
-#~ msgid "8"
-#~ msgstr "8"
-
-#~ msgid "9"
-#~ msgstr "9"
-
-#~ msgid "Can't monitor non-existent path \"%s\" for changes."
-#~ msgstr "परिवर्तनको लागी भनेर हुँदै नभएको Path \"%s\" लाइ अनुगमन गर्न सकिँदैन ।"
-
-#~ msgid "File system containing watched object was unmounted"
-#~ msgstr "हेरिसकेको वस्तु भएको फाइल प्रणाली ओरालियो ।"
-
-#~ msgid "&Preview..."
-#~ msgstr "&चेहरा.."
-
-#~ msgid "Enable vertical offset."
-#~ msgstr "ठाडो offset लाइ योग्य बनाउ"
-
-#~ msgid "Preview..."
-#~ msgstr "चेहरा.."
-
-#~ msgid "The vertical offset relative to the paragraph."
-#~ msgstr "अनुच्छेदको सापेक्षतामा ठाडो हाँगो ।"
-
-#~ msgid "Units for the object offset."
-#~ msgstr "वस्तु हाँगाको एकाइ"
-
-#~ msgid "Vertical &Offset:"
-#~ msgstr "ठाडो &हातो"
