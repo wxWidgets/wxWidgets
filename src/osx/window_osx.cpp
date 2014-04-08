@@ -1438,6 +1438,7 @@ void wxWindowMac::WarpPointer(int x_pos, int y_pos)
     DoClientToScreen(&x, &y);
     CGPoint cgpoint = CGPointMake( x, y );
     CGWarpMouseCursorPosition( cgpoint );
+    CGAssociateMouseAndMouseCursorPosition(true);
 
     // At least GTK sends a mouse moved event after WarpMouse
     wxMouseEvent event(wxEVT_MOTION);
