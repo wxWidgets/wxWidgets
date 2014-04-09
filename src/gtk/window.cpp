@@ -4310,13 +4310,37 @@ void wxWindowGTK::GTKApplyStyle(GtkWidget* widget, GtkRcStyle* WXUNUSED_IN_GTK3(
     if (m_font.IsOk())
         pfd = m_font.GetNativeFontInfo()->description;
     gtk_widget_override_font(widget, pfd);
-    gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, m_foregroundColour);
-    gtk_widget_override_background_color(widget, GTK_STATE_FLAG_NORMAL, m_backgroundColour);
+
+    const GdkRGBA* fg = m_foregroundColour;
+    const GdkRGBA* bg = m_backgroundColour;
+    GtkStyleContext* context = gtk_widget_get_style_context(widget);
+    // Preserve selection colors for GtkEntry, otherwise the
+    // GTK_STATE_FLAG_NORMAL override will be used, and the selection is invisible
+    if (GTK_IS_ENTRY(widget))
+    {
+        const GtkStateFlags selectedFocused =
+            GtkStateFlags(GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
+        // remove any previous override
+        gtk_widget_override_color(widget, selectedFocused, NULL);
+        gtk_widget_override_background_color(widget, selectedFocused, NULL);
+        GdkRGBA c;
+        if (fg)
+        {
+            gtk_style_context_get_color(context, selectedFocused, &c);
+            gtk_widget_override_color(widget, selectedFocused, &c);
+        }
+        if (bg)
+        {
+            gtk_style_context_get_background_color(context, selectedFocused, &c);
+            gtk_widget_override_background_color(widget, selectedFocused, &c);
+        }
+    }
+    gtk_widget_override_color(widget, GTK_STATE_FLAG_NORMAL, fg);
+    gtk_widget_override_background_color(widget, GTK_STATE_FLAG_NORMAL, bg);
 
     // setting background color has no effect with some themes when the widget style
     // has a "background-image" property, so we need to override that as well
 
-    GtkStyleContext* context = gtk_widget_get_style_context(widget);
     if (m_styleProvider)
         gtk_style_context_remove_provider(context, m_styleProvider);
     cairo_pattern_t* pattern = NULL;
