@@ -127,11 +127,13 @@ void wxButtonCocoaImpl::SetPressedBitmap( const wxBitmap& bitmap )
 {
     NSButton* button = GetNSButton();
     [button setAlternateImage: bitmap.GetNSImage()];
+#if wxUSE_TOGGLEBTN
     if ( GetWXPeer()->IsKindOf(wxCLASSINFO(wxToggleButton)) )
     {
         [button setButtonType:NSToggleButton];
     }
     else
+#endif
     {
         [button setButtonType:NSMomentaryChangeButton];
     }
