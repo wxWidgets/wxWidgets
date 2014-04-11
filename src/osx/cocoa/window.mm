@@ -1135,6 +1135,7 @@ void wxOSX_controlDoubleAction(NSView* self, SEL _cmd, id sender)
     impl->controlDoubleAction(self, _cmd, sender);
 }
 
+#if wxUSE_DRAG_AND_DROP
 unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 {
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
@@ -1278,6 +1279,7 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
 
     return result != wxDragNone;
 }
+#endif // wxUSE_DRAG_AND_DROP
 
 void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
@@ -2337,6 +2339,7 @@ bool wxWidgetCocoaImpl::SetFocus()
     return true;
 }
 
+#if wxUSE_DRAG_AND_DROP
 void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
 {
     [m_osxView unregisterDraggedTypes];
@@ -2358,6 +2361,7 @@ void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
         CFRelease(typesarray);
     }
 }
+#endif // wxUSE_DRAG_AND_DROP
 
 void wxWidgetCocoaImpl::RemoveFromParent()
 {
