@@ -201,7 +201,11 @@ int wxConsoleEventLoop::DispatchTimeout(unsigned long timeout)
 
 void wxConsoleEventLoop::WakeUp()
 {
+#if wxUSE_THREADS
     m_wakeupPipe->WakeUp();
+#else
+    m_wakeupPipe->WakeUpNoLock();
+#endif
 }
 
 void wxConsoleEventLoop::OnNextIteration()
