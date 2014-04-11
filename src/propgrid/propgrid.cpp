@@ -45,6 +45,7 @@
     #include "wx/statusbr.h"
     #include "wx/intl.h"
     #include "wx/frame.h"
+    #include "wx/textctrl.h"
 #endif
 
 
