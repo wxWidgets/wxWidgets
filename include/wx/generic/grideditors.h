@@ -76,7 +76,9 @@ public:
 
     // parameters string format is "max_width"
     virtual void SetParameters(const wxString& params);
+#if wxUSE_VALIDATORS
     virtual void SetValidator(const wxValidator& validator);
+#endif
 
     virtual wxGridCellEditor *Clone() const;
 
@@ -94,7 +96,9 @@ protected:
 
 private:
     size_t                   m_maxChars;        // max number of chars allowed
+#if wxUSE_VALIDATORS
     wxScopedPtr<wxValidator> m_validator;
+#endif
     wxString                 m_value;
 
     wxDECLARE_NO_COPY_CLASS(wxGridCellTextEditor);

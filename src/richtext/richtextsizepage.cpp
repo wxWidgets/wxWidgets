@@ -684,8 +684,10 @@ void wxRichTextSizePage::CreateControls()
         itemButton96->SetToolTip(_("Moves the object to the next paragraph."));
     m_moveObjectSizer->Add(itemButton96, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM, 5);
 
+#if wxUSE_VALIDATORS
     // Set validators
     m_positionModeCtrl->SetValidator( wxGenericValidator(& m_positionMode) );
+#endif
 ////@end wxRichTextSizePage content construction
 
     if (!sm_enablePositionAndSizeCheckboxes)
