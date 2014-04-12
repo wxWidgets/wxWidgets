@@ -83,6 +83,9 @@ wxWeakRef<ForwardDeclaredClass> g_incompleteWeakRef;
 
 struct ForwardDeclaredClass : wxEvtHandler { };
 
+// A incomplete class that would be defined in other compilation units
+struct IncompleteClass;
+
 void WeakRefTestCase::DeclareTest()
 {
     {
@@ -128,6 +131,21 @@ void WeakRefTestCase::DeclareTest()
 
     CPPUNIT_ASSERT( !g_incompleteWeakRef );
 #endif // RTTI enabled
+
+    {
+        // Construction of a wxWeakRef to an incomplete class should be fine
+        wxWeakRef<IncompleteClass> p;
+
+        // Copying should be also OK
+        p = p;
+
+        // Assigning a raw pointer should cause compile error
+#ifdef TEST_INVALID_INCOMPLETE_WEAKREF
+        p = static_cast<IncompleteClass*>(0);
+#endif
+
+        // Releasing should be OK
+    }
 }
 
 void WeakRefTestCase::AssignTest()

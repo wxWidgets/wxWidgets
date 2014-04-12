@@ -333,7 +333,7 @@
 # warnings don't matter when we expect compilation to fail anyhow so we can
 # use this variable to enable the compilation of code which is supposed to
 # fail
-failtest: failtest_combobox failtest_evthandler
+failtest: failtest_combobox failtest_evthandler failtest_weakref
 
 failtest_combobox:
 	@$(RM) test_gui_comboboxtest.o
@@ -351,6 +351,14 @@ failtest_evthandler:
 	        exit 1; \
 	    fi; \
 	done; \
+	exit 0
+
+failtest_weakref:
+	@$(RM) test_weakref.o
+	if $(MAKE) CXXWARNINGS=-DTEST_INVALID_INCOMPLETE_WEAKREF test_weakref.o 2>/dev/null; then \
+	    echo "*** Compilation with TEST_INVALID_INCOMPLETE_WEAKREF unexpectedly succeeded.">&amp;2; \
+	    exit 1; \
+	fi; \
 	exit 0
 
 .PHONY: failtest
