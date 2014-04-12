@@ -1549,7 +1549,12 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
     if (m_antialias == antialias)
         return true;
 
-    SmoothingMode antialiasMode = SmoothingModeInvalid;
+    // MinGW currently doesn't provide InterpolationModeInvalid in its headers,
+    // so use our own definition.
+    static const SmoothingMode
+        wxSmoothingModeInvalid = static_cast<SmoothingMode>(-1);
+
+    SmoothingMode antialiasMode = wxSmoothingModeInvalid;
     switch (antialias)
     {
         case wxANTIALIAS_DEFAULT:
@@ -1561,7 +1566,7 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
             break;
     }
 
-    wxCHECK_MSG( antialiasMode != SmoothingModeInvalid, false,
+    wxCHECK_MSG( antialiasMode != wxSmoothingModeInvalid, false,
                  wxS("Unknown antialias mode") );
 
     if ( m_context->SetSmoothingMode(antialiasMode) != Gdiplus::Ok )
@@ -1577,7 +1582,12 @@ bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality interpolat
     if (m_interpolation == interpolation)
         return true;
 
-    InterpolationMode interpolationMode = InterpolationModeInvalid;
+    // MinGW currently doesn't provide InterpolationModeInvalid in its headers,
+    // so use our own definition.
+    static const InterpolationMode
+        wxInterpolationModeInvalid = static_cast<InterpolationMode>(-1);
+
+    InterpolationMode interpolationMode = wxInterpolationModeInvalid;
     switch (interpolation)
     {
         case wxINTERPOLATION_DEFAULT:
@@ -1601,7 +1611,7 @@ bool wxGDIPlusContext::SetInterpolationQuality(wxInterpolationQuality interpolat
             break;
     }
 
-    wxCHECK_MSG( interpolationMode != InterpolationModeInvalid, false,
+    wxCHECK_MSG( interpolationMode != wxInterpolationModeInvalid, false,
                  wxS("Unknown interpolation mode") );
 
     if ( m_context->SetInterpolationMode(interpolationMode) != Gdiplus::Ok )
