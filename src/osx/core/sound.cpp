@@ -47,12 +47,14 @@ protected:
 
     SystemSoundID m_soundID;
     wxString m_sndname; //file path
+    bool m_playing;
 };
 
 wxOSXAudioToolboxSoundData::wxOSXAudioToolboxSoundData(const wxString& fileName) :
     m_soundID(NULL)
 {
     m_sndname = fileName;
+    m_playing = false;
 }
 
 wxOSXAudioToolboxSoundData::~wxOSXAudioToolboxSoundData()
@@ -91,10 +93,10 @@ void wxOSXAudioToolboxSoundData::SoundCompleted()
 
 void wxOSXAudioToolboxSoundData::DoStop()
 {
-    if (m_soundID)
+    if ( m_playing )
     {
+        m_playing = false;
         AudioServicesDisposeSystemSoundID (m_soundID);
-        m_soundID = NULL;
 
         wxSound::SoundStopped(this);
     }
@@ -115,11 +117,13 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
 
     bool sync = !(flags & wxSOUND_ASYNC);
 
+    m_playing = true;
+
     AudioServicesPlaySystemSound(m_soundID);
 
     if ( sync )
     {
-        while( m_soundID )
+        while ( m_playing )
         {
             CFRunLoopRun();
         }
