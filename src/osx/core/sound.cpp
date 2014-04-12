@@ -112,7 +112,13 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
     wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
 
-    AudioServicesCreateSystemSoundID(url, &m_soundID);
+    OSStatus err = AudioServicesCreateSystemSoundID(url, &m_soundID);
+    if ( err != 0 )
+    {
+        wxLogError(_("Failed to load sound from \"%s\" (error %d)."), m_sndname, err);
+        return false;
+    }
+
     AudioServicesAddSystemSoundCompletion( m_soundID, CFRunLoopGetCurrent(), NULL, wxOSXAudioToolboxSoundData::CompletionCallback, (void *) this );
 
     bool sync = !(flags & wxSOUND_ASYNC);
