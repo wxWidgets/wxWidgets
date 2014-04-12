@@ -141,6 +141,7 @@ All (GUI):
 - Fix a crash when using animated GIFs in wxHtmlListBox.
 - Use platform-specific stock icons for wxEditableListBox buttons.
 - Add support for the events from multimedia keys (Jens Göpfert).
+- Improve wxAUI appearance in high contrast themes (Zane U. Ji).
 
 wxGTK:
 
