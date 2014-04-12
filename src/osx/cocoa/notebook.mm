@@ -194,7 +194,8 @@ public:
         // avoid 'changed' events when setting the tab programmatically
         wxTabViewController* controller = [slf delegate];
         [slf setDelegate:nil];
-        [slf selectTabViewItemAtIndex:(value-1)];
+        if ( value > 0 )
+            [slf selectTabViewItemAtIndex:(value-1)];
         [slf setDelegate:controller];
     }
 
