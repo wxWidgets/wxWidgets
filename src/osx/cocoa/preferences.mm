@@ -62,6 +62,12 @@ public:
           m_toolbarRealized(false),
           m_visiblePage(NULL)
     {
+        // For consistency with the generic version, transfer data recursively:
+        // this ensures that all controls, even deep inside our pages, get
+        // correct values from their validators initially and transfer them
+        // back at the end.
+        SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
+
         m_toolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                   wxTB_FLAT | wxTB_TEXT);
         m_toolbar->SetToolBitmapSize(wxSize(32,32));
