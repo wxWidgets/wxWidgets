@@ -54,7 +54,7 @@ public:
 
     virtual void SetAlignment  (wxAlignment align);
     virtual void SetBitmap     (wxBitmap const& bitmap);
-    virtual void SetFlags      (int flags) { SetIndividualFlags(flags); }
+    virtual void SetFlags      (int flags) { m_flags = flags; /*SetIndividualFlags(flags); */ }
     virtual void SetHidden     (bool hidden);
     virtual void SetMaxWidth   (int maxWidth);
     virtual void SetMinWidth   (int minWidth);
