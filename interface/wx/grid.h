@@ -4480,6 +4480,10 @@ public:
                             int verticalAlignment = wxALIGN_TOP,
                             int textOrientation = wxHORIZONTAL ) const;
 
+    wxColour GetCellHighlightColour() const;
+    int      GetCellHighlightPenWidth() const;
+    int      GetCellHighlightROPenWidth() const;
+
     void SetCellHighlightColour( const wxColour& );
     void SetCellHighlightPenWidth(int width);
     void SetCellHighlightROPenWidth(int width);   
