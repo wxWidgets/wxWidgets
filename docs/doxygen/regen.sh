@@ -163,29 +163,34 @@ if [[ "$1" = "qch" ]]; then
 fi
 
 if [[ "$1" = "docset" ]]; then
-    DOCSETNAME="org.wxwidgets.doxygen.wx29.docset"
-    ATOM="org.wxwidgets.doxygen.docset.wx29.atom"
+    BASENAME="wxWidgets-3.1"    # was org.wxwidgets.doxygen.docset.wx30
+    DOCSETNAME="$BASENAME.docset"
+    ATOM="$BASENAME.atom"
     ATOMDIR="http://docs.wxwidgets.org/docsets"
-    XAR="org.wxwidgets.doxygen.docset.wx29.xar"
+    XAR="$BASENAME.xar"
     XARDIR="http://docs.wxwidgets.org/docsets"
-    XCODE_INSTALL=`sh xcode-select -print-path`
+    XCODE_INSTALL=`xcode-select -print-path`
     
     cd out/html
-    DESTINATIONDIR=`pwd`
+    DESTINATIONDIR=`pwd`/../docset
     
+    mkdir -p $DESTINATIONDIR
     rm -rf $DESTINATIONDIR/$DOCSETNAME
     rm -f $DESTINATIONDIR/$XAR
     
-    make 
+    make DOCSET_NAME=$DESTINATIONDIR/$DOCSETNAME
     
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleVersion 1.3
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleShortVersionString 1.3
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 2.9 Library"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 3.1"
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL http://docs.wxwidgets.org
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 2.9"
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2012 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
-    
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2014 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info dashIndexFilePath index.html
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetPlatformFamily wx
+
     $XCODE_INSTALL/usr/bin/docsetutil package -atom $DESTINATIONDIR/$ATOM -download-url $XARDIR/$XAR -output $DESTINATIONDIR/$XAR $DESTINATIONDIR/$DOCSETNAME
 
     cd ../..

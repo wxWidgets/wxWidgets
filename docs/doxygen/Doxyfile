@@ -365,7 +365,7 @@ SERVER_BASED_SEARCH    = $(SERVER_BASED_SEARCH)
 
 GENERATE_DOCSET        = $(GENERATE_DOCSET)
 DOCSET_FEEDNAME        = "wxWidgets 3.1"
-DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx29
+DOCSET_BUNDLE_ID       = org.wxwidgets.doxygen.wx31
 DOCSET_PUBLISHER_ID    = org.wxwidgets.doxygen
 DOCSET_PUBLISHER_NAME  = wxWidgets Team
 
