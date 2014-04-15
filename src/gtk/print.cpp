@@ -428,7 +428,7 @@ bool wxGtkPrintNativeData::TransferTo( wxPrintData &data )
 
     data.SetNoCopies(gtk_print_settings_get_n_copies(m_config));
 
-    data.SetColour(gtk_print_settings_get_use_color(m_config));
+    data.SetColour(gtk_print_settings_get_use_color(m_config) != 0);
 
     switch (gtk_print_settings_get_duplex(m_config))
     {
@@ -465,7 +465,7 @@ bool wxGtkPrintNativeData::TransferTo( wxPrintData &data )
         data.SetOrientationReversed(true);
     }
 
-    data.SetCollate(gtk_print_settings_get_collate (m_config));
+    data.SetCollate(gtk_print_settings_get_collate(m_config) != 0);
 
     wxPaperSize paperId = wxPAPER_NONE;
     GtkPaperSize *paper_size = gtk_print_settings_get_paper_size (m_config);
@@ -872,6 +872,7 @@ wxGtkPrinter::wxGtkPrinter( wxPrintDialogData *data ) :
     wxPrinterBase( data )
 {
     m_gpc = NULL;
+    m_dc = NULL;
 
     if (data)
         m_printDialogData = *data;
@@ -1206,6 +1207,7 @@ wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& da
     m_currentRed = 0;
     m_currentBlue = 0;
     m_currentGreen = 0;
+    m_currentAlpha = 0;
 
     m_signX = 1;  // default x-axis left to right.
     m_signY = 1;  // default y-axis bottom up -> top down.
