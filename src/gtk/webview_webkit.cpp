@@ -774,7 +774,7 @@ wxWebViewZoom wxWebViewWebKit::GetZoom() const
     }
 
     // to shut up compilers, this can never be reached logically
-    wxASSERT(false);
+    wxFAIL;
     return wxWEBVIEW_ZOOM_MEDIUM;
 }
 
@@ -805,7 +805,7 @@ void wxWebViewWebKit::SetZoom(wxWebViewZoom zoom)
             break;
 
         default:
-            wxASSERT(false);
+            wxFAIL;
     }
 }
 
