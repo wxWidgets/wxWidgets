@@ -381,6 +381,9 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 #endif /* wxUSE_DISPLAY */
 
 #include "wx/utils.h"
+#ifdef __WXGTK20__
+    #include <gdk/gdk.h>  // for GDK_WINDOWING_X11
+#endif
 
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2 || !defined(GDK_WINDOWING_X11)
 
