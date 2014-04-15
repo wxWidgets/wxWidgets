@@ -59,7 +59,7 @@ typedef guint KeySym;
 
 // gdk_window_set_composited() is only supported since 2.12
 #define wxGTK_VERSION_REQUIRED_FOR_COMPOSITING 2,12,0
-#define wxGTK_HAS_COMPOSITING_SUPPORT GTK_CHECK_VERSION(2,12,0)
+#define wxGTK_HAS_COMPOSITING_SUPPORT (GTK_CHECK_VERSION(2,12,0) && wxUSE_CAIRO)
 
 //-----------------------------------------------------------------------------
 // documentation on internals
