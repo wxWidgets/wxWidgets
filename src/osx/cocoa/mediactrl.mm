@@ -115,7 +115,7 @@ private:
 
     wxMediaCtrlPlayerControls m_interfaceflags; // Saved interface flags
 
-    DECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
+    wxDECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
 };
 
 // --------------------------------------------------------------------------
@@ -152,7 +152,7 @@ private:
 	[super dealloc];    
 }
 
--(wxQTMediaBackend*) backend;
+-(wxQTMediaBackend*) backend
 {
     return m_backend;
 }

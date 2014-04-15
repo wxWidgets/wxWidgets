@@ -329,13 +329,13 @@ public:
     {
         wxASSERT(m_pPropGrid);
         return m_pPropGrid;
-    };
+    }
 
     const wxPropertyGrid* GetGrid() const
     {
         wxASSERT(m_pPropGrid);
         return (const wxPropertyGrid*)m_pPropGrid;
-    };
+    }
 
     /** Returns iterator class instance.
         @remarks
