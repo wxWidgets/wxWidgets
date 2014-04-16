@@ -191,6 +191,8 @@ void wxFileDialog::Init()
     m_filterIndex = -1;
     m_delegate = nil;
     m_sheetDelegate = nil;
+    m_filterPanel = NULL;
+    m_filterChoice = NULL;
 }
 
 void wxFileDialog::Create(
