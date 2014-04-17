@@ -417,7 +417,7 @@ private:
     wxEventLoopBase *m_evtLoopOld;
 };
 
-#if wxUSE_CONSOLE_EVENTLOOP
+#if wxUSE_GUI || wxUSE_CONSOLE_EVENTLOOP
 
 class wxEventLoopGuarantor
 {
@@ -445,6 +445,6 @@ private:
     wxEventLoop *m_evtLoopNew;
 };
 
-#endif // wxUSE_CONSOLE_EVENTLOOP
+#endif // wxUSE_GUI || wxUSE_CONSOLE_EVENTLOOP
 
 #endif // _WX_EVTLOOP_H_
