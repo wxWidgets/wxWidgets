@@ -225,11 +225,11 @@ static gboolean gtk_listbox_searchequal_callback(GtkTreeModel * WXUNUSED(model),
                                                  wxListBox* listbox)
 {
     wxTreeEntry* entry = GetEntry(listbox->m_liststore, iter, listbox);
-    wxCHECK_MSG(entry, 0, wxT("Could not get entry"));
+    wxCHECK_MSG(entry, true, "could not get entry");
 
-    wxGtkString keycollatekey(g_utf8_collate_key(key, -1));
+    wxGtkString keyc(g_utf8_collate_key(key, -1));
 
-    return strcmp(keycollatekey, wx_tree_entry_get_collate_key(entry)) != 0;
+    return strncmp(keyc, wx_tree_entry_get_collate_key(entry), strlen(keyc));
 }
 }
 
