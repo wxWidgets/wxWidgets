@@ -271,11 +271,11 @@ enum wxLanguage
     wxLANGUAGE_ZHUANG,
     wxLANGUAGE_ZULU,
 
-    /// Obsolete synonym.
-    wxLANGUAGE_CAMBODIAN = wxLANGUAGE_KHMER,
-
     /// For custom, user-defined languages.
-    wxLANGUAGE_USER_DEFINED
+    wxLANGUAGE_USER_DEFINED,
+
+    /// Obsolete synonym.
+    wxLANGUAGE_CAMBODIAN = wxLANGUAGE_KHMER
 };
 
 // --- --- --- generated code ends here --- --- ---
