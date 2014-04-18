@@ -18,6 +18,7 @@
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
 #endif
+#include "wx/gtk/private/gtk2-compat.h"
 
 GtkWidget* wxGetRootWindow();
 
