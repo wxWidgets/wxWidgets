@@ -94,9 +94,9 @@ void wxClientDisplayRect(int* x, int* y, int* width, int* height)
 class wxDisplayFactoryGTK: public wxDisplayFactory
 {
 public:
-    virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
-    virtual unsigned GetCount() wxOVERRIDE;
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual wxDisplayImpl* CreateDisplay(unsigned n);
+    virtual unsigned GetCount();
+    virtual int GetFromPoint(const wxPoint& pt);
 };
 
 class wxDisplayImplGTK: public wxDisplayImpl
@@ -104,13 +104,13 @@ class wxDisplayImplGTK: public wxDisplayImpl
     typedef wxDisplayImpl base_type;
 public:
     wxDisplayImplGTK(unsigned i);
-    virtual wxRect GetGeometry() const wxOVERRIDE;
-    virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual wxString GetName() const wxOVERRIDE;
-    virtual bool IsPrimary() const wxOVERRIDE;
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
-    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+    virtual wxRect GetGeometry() const;
+    virtual wxRect GetClientArea() const;
+    virtual wxString GetName() const;
+    virtual bool IsPrimary() const;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
+    virtual wxVideoMode GetCurrentMode() const;
+    virtual bool ChangeMode(const wxVideoMode& mode);
 
     GdkScreen* const m_screen;
 };
