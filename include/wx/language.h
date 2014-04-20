@@ -274,6 +274,7 @@ enum wxLanguage
     /// For custom, user-defined languages.
     wxLANGUAGE_USER_DEFINED,
 
+
     /// Obsolete synonym.
     wxLANGUAGE_CAMBODIAN = wxLANGUAGE_KHMER
 };
