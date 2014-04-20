@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2014-01-03 18:41+0100\n"
+"PO-Revision-Date: 2014-04-13 17:41+0100\n"
 "Last-Translator: Jorge Pérez Pérez <jorgtum@gmail.com>\n"
 "Language-Team: softaragonés\n"
 "Language: an\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.6.4\n"
 "X-Poedit-Bookmarks: -1,752,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: ../src/common/debugrpt.cpp:591
@@ -102,7 +102,7 @@ msgstr "Sobre #9, 3 7/8 x 8 7/8 in"
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -684,7 +684,7 @@ msgstr "&Simbolo:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Sincronizar as valors"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -758,14 +758,14 @@ msgid "&Yes"
 msgstr "&Sí"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' debe contener nomás caracters alfabeticos."
+msgstr "'%s' contién caracters no validos"
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' debe contener nomás caracters alfabeticos."
+msgstr "'%s' no consiste nomás de caracters validos"
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -783,14 +783,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' no ye un catalogo de mensaches valiu."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' no ye un catalogo de mensaches valiu."
+msgstr "'%s' no ye una d'as cadenas validas"
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' ye invaliu"
+msgstr "'%s' ye una d'as cadenas invalidas"
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
@@ -1172,9 +1172,8 @@ msgid "About %s"
 msgstr "Arredol de %s"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Arredol de"
+msgstr "Arredol de..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1285,7 +1284,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Un radio de cantonada opcional ta adhibir cantonadas redondiadas."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1968,7 +1967,7 @@ msgstr "Marcar ta adhibir un parentesi dreito."
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Mirar d'editar totz os cantos simultaniament."
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -1979,9 +1978,8 @@ msgstr "Marcar ta enzarrar a vinyeta entre parentesi."
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "Fe clic ta cambiar a color d'o texto."
+msgstr "Mirar d'indicar a distribución d'o texto de dreita ta cucha."
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
@@ -2028,7 +2026,7 @@ msgstr "Prebar a amostrar o texto en superindiz."
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "Mirar d'eliminar as deseparacions de guions."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2312,11 +2310,11 @@ msgstr "Copiar a selección"
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Cantonada"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "&Radio d'a cantonada"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -3217,8 +3215,8 @@ msgstr ""
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr ""
-"S'ha produciu una error en creyar o dialogo estandar de mirar u substituir"
-"(codigo d'error %d)"
+"S'ha produciu una error en creyar o dialogo estandar de mirar u "
+"substituir(codigo d'error %d)"
 
 #: ../src/unix/wakeuppipe.cpp:52
 msgid "Failed to create wake up pipe used by event loop."
@@ -5890,7 +5888,7 @@ msgstr "Cresta"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "De dreita ta cuc&ha"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -6075,7 +6073,7 @@ msgstr "S'asperaba un separador dimpués d'opción '%s'."
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Servicios"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6299,7 +6297,7 @@ msgstr "SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Eliminar as deseparacions de guio&ns"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6421,9 +6419,8 @@ msgstr "A color de fondo."
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "O estilo de fuent."
+msgstr "O estilo d'a linia d'o canto"
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6765,7 +6762,7 @@ msgstr "Cal especificar a valor ta lo parametro '%s'."
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "A valor d'o radio de cantonada"
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -7193,9 +7190,8 @@ msgstr "Unidatz ta laposición inferior."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Unidatz ta lo repleno superior."
+msgstr "Unidatz ta lo radio de cantonada"
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7530,14 +7526,12 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
-msgstr "Windows 98"
+msgstr "Windows 8"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
-msgstr "Windows 98"
+msgstr "Windows 8.1"
 
 #: ../src/msw/utils.cpp:1234
 msgid "Windows 95"
@@ -7631,14 +7625,12 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
-msgstr "Windows Server 2003"
+msgstr "Windows Server 2012"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
-msgstr "Windows Server 2008 R2"
+msgstr "Windows Server 2012 R2"
 
 #: ../src/common/fmapbase.cpp:166
 msgid "Windows Thai (CP 874)"
