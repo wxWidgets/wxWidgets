@@ -2654,6 +2654,10 @@ public :
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) wxOVERRIDE ;
+
+    virtual wxString GetName() const wxOVERRIDE;
+    virtual void GetVersion(int *major, int *minor, int *micro) const wxOVERRIDE;
+
 private :
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsRenderer)
 } ;
@@ -2873,6 +2877,21 @@ wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateSubBitmap( const wxGraphicsBit
     }
     else
         return wxNullGraphicsBitmap;
+}
+
+wxString wxMacCoreGraphicsRenderer::GetName() const
+{
+    return "cg";
+}
+
+void wxMacCoreGraphicsRenderer::GetVersion(int *major, int *minor, int *micro) const
+{
+    if ( major )
+        *major = wxPlatformInfo::Get().GetOSMajorVersion();
+    if ( minor )
+        *minor = wxPlatformInfo::Get().GetOSMinorVersion();
+    if ( micro )
+        *micro = 0;
 }
 
 wxGraphicsBrush

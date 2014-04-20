@@ -870,6 +870,10 @@ public:
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) = 0;
 
+    virtual wxString GetName() const = 0;
+    virtual void
+    GetVersion(int* major, int* minor = NULL, int* micro = NULL) const = 0;
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxGraphicsRenderer);
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)

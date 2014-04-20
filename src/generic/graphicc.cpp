@@ -2398,6 +2398,9 @@ public :
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
 
+    virtual wxString GetName() const wxOVERRIDE;
+    virtual void GetVersion(int *major, int *minor, int *micro) const wxOVERRIDE;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxCairoRenderer)
 } ;
 
@@ -2649,6 +2652,20 @@ wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& WXUNUSED(bitmap),
     wxGraphicsBitmap p;
     wxFAIL_MSG("wxCairoRenderer::CreateSubBitmap is not implemented.");
     return p;
+}
+
+wxString wxCairoRenderer::GetName() const
+{
+    return "cairo";
+}
+
+void wxCairoRenderer::GetVersion(int *major, int *minor, int *micro) const
+{
+    int dummy;
+    sscanf(cairo_version_string(), "%d.%d.%d",
+           major ? major : &dummy,
+           minor ? minor : &dummy,
+           micro ? micro : &dummy);
 }
 
 wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()

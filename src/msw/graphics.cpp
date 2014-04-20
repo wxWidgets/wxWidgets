@@ -587,6 +587,9 @@ public :
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
 
+    virtual wxString GetName() const wxOVERRIDE;
+    virtual void GetVersion(int *major, int *minor, int *micro) const wxOVERRIDE;
+
 protected :
     bool EnsureIsLoaded();
     void Load();
@@ -2293,6 +2296,21 @@ wxGraphicsBitmap wxGDIPlusRenderer::CreateSubBitmap( const wxGraphicsBitmap &bit
     }
     else
         return wxNullGraphicsBitmap;
+}
+
+wxString wxGDIPlusRenderer::GetName() const
+{
+    return "gdiplus";
+}
+
+void wxGDIPlusRenderer::GetVersion(int *major, int *minor, int *micro) const
+{
+    if ( major )
+        *major = wxPlatformInfo::Get().GetOSMajorVersion();
+    if ( minor )
+        *minor = wxPlatformInfo::Get().GetOSMinorVersion();
+    if ( micro )
+        *micro = 0;
 }
 
 // Shutdown GDI+ at app exit, before possible dll unload

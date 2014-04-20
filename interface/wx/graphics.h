@@ -1212,6 +1212,34 @@ public:
                                              wxDouble w, wxDouble h) = 0;
 
     /**
+        Returns the name of the technology used by the renderer.
+
+        Currently this function returns "gdiplus" for Windows GDI+ implementation,
+        "cairo" for Cairo implementation and "cg" for OS X CoreGraphics
+        implementation.
+
+        Note: the string returned by this method is not user-readable and is
+        expected to be used internally by the program only.
+
+        @since 3.1.0
+     */
+    virtual wxString GetName() const = 0;
+
+    /**
+        Returns the version major, minor and micro/build of the technology used
+        by the renderer.
+
+        Currently this function returns the OS major and minor versions in
+        the parameters with the matching names and sets @a micro to 0 for
+        the GDI+ and CoreGraphics engines which are considered to be parts of
+        their respective OS.
+
+        For Cairo, this is the major,minor,micro version of the Cairo library
+        which is returned.
+     */
+    virtual void GetVersion(int* major, int* minor = NULL, int* micro=NULL) const = 0;
+
+    /**
         Returns the default renderer on this platform. On OS X this is the Core
         Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and
         on GTK we currently default to the cairo renderer.
