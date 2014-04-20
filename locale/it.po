@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-21 17:22+0100\n"
-"PO-Revision-Date: 2013-10-15 08:40+0100\n"
-"Last-Translator: bovirus <bovirus@gmail.com>\n"
+"PO-Revision-Date: 2014-04-15 15:07+0100\n"
+"Last-Translator: bovirus <bovirus@libero.it>\n"
 "Language-Team: wxWidgets translators <wx-translators@lists.wxwidgets.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: ../src/common/debugrpt.cpp:591
 msgid ""
@@ -95,9 +95,8 @@ msgstr "Busta #9, 3 7/8 x 8 7/8 pollici"
 #: ../src/richtext/richtextsizepage.cpp:591
 #: ../src/richtext/richtextsizepage.cpp:626
 #: ../src/richtext/richtextsizepage.cpp:661
-#, fuzzy
 msgid "%"
-msgstr "%s"
+msgstr "%"
 
 #: ../src/html/helpwnd.cpp:1045
 #, c-format
@@ -679,7 +678,7 @@ msgstr "&Simbolo:"
 #: ../src/richtext/richtextborderspage.cpp:383
 #: ../src/richtext/richtextborderspage.cpp:552
 msgid "&Synchronize values"
-msgstr ""
+msgstr "&Sincronizza valori"
 
 #: ../include/wx/richtext/richtextbuffer.h:5823
 msgid "&Table"
@@ -753,14 +752,14 @@ msgid "&Yes"
 msgstr "&Si"
 
 #: ../src/common/valtext.cpp:256
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' deve contenere unicamente caratteri alfabetici."
+msgstr "'%s' contiene caratteri non validi."
 
 #: ../src/common/valtext.cpp:254
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' deve contenere unicamente caratteri alfabetici."
+msgstr "'%s' non consiste solo in caratteri validi."
 
 #: ../src/common/config.cpp:523 ../src/msw/regconf.cpp:258
 #, c-format
@@ -778,14 +777,14 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' non è un catalogo di messaggi valido."
 
 #: ../src/common/valtext.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' non è un catalogo di messaggi valido."
+msgstr "'%s' non è una delle stringhe non valide."
 
 #: ../src/common/valtext.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' non è valido"
+msgstr "'%s' è uan delle stringhe non valide."
 
 #: ../src/common/textbuf.cpp:239
 #, c-format
@@ -1050,7 +1049,7 @@ msgstr "Una segnalazione di errore è stata generata nella cartella\n"
 
 #: ../src/common/debugrpt.cpp:578
 msgid "A debug report has been generated. It can be found in"
-msgstr "E' stata generato un rapporto di debug  nella cartella"
+msgstr "È stata generato un rapporto di debug  nella cartella"
 
 #: ../src/common/xtixml.cpp:418
 msgid "A non empty collection must consist of 'element' nodes"
@@ -1167,9 +1166,8 @@ msgid "About %s"
 msgstr "Informazioni su %s"
 
 #: ../src/osx/menu_osx.cpp:605
-#, fuzzy
 msgid "About..."
-msgstr "Informazioni su"
+msgstr "Informazioni su..."
 
 #: ../src/richtext/richtextsizepage.cpp:520
 msgid "Absolute"
@@ -1280,7 +1278,7 @@ msgstr "Alt+"
 #: ../src/richtext/richtextborderspage.cpp:580
 #: ../src/richtext/richtextborderspage.cpp:582
 msgid "An optional corner radius for adding rounded corners."
-msgstr ""
+msgstr "Un raggio angolo opzionale per aggiungere angoli arrotondati."
 
 #: ../src/common/debugrpt.cpp:581
 msgid "And includes the following files:\n"
@@ -1959,7 +1957,7 @@ msgstr "Spunta per aggiungere una parentesi chiusa a destra."
 #: ../src/richtext/richtextborderspage.cpp:554
 #: ../src/richtext/richtextborderspage.cpp:556
 msgid "Check to edit all borders simultaneously."
-msgstr ""
+msgstr "Seleziona per modificare simultaneamente tutti i bordi."
 
 #: ../src/richtext/richtextliststylepage.cpp:231
 #: ../src/richtext/richtextliststylepage.cpp:233
@@ -1970,21 +1968,20 @@ msgstr "Spunta pe racchiudere la puntatura in una coppia di parentesi"
 
 #: ../src/richtext/richtextfontpage.cpp:315
 #: ../src/richtext/richtextfontpage.cpp:317
-#, fuzzy
 msgid "Check to indicate right-to-left text layout."
-msgstr "Click per modificare il colore del testo."
+msgstr "Seleziona per indicare layout testo destra-a-sinistra."
 
 #: ../src/osx/carbon/fontdlg.cpp:526 ../src/osx/carbon/fontdlg.cpp:528
 msgid "Check to make the font bold."
-msgstr "Click per rendere il font grassetto"
+msgstr "Clic per rendere il font grassetto"
 
 #: ../src/osx/carbon/fontdlg.cpp:533 ../src/osx/carbon/fontdlg.cpp:535
 msgid "Check to make the font italic."
-msgstr "Click per rendere il font corsivo"
+msgstr "Seleziona per rendere il font corsivo"
 
 #: ../src/osx/carbon/fontdlg.cpp:542 ../src/osx/carbon/fontdlg.cpp:544
 msgid "Check to make the font underlined."
-msgstr "Click per rendere il font sottolineato"
+msgstr "Seleziona per rendere il font sottolineato"
 
 #: ../src/richtext/richtextstyledlg.cpp:289
 #: ../src/richtext/richtextstyledlg.cpp:291
@@ -2019,7 +2016,7 @@ msgstr "Spunta pe visualizzare il testo ome apice."
 #: ../src/richtext/richtextfontpage.cpp:322
 #: ../src/richtext/richtextfontpage.cpp:324
 msgid "Check to suppress hyphenation."
-msgstr ""
+msgstr "Seleziona per disabliltare la sillabazione."
 
 #: ../src/msw/dialup.cpp:784
 msgid "Choose ISP to dial"
@@ -2067,26 +2064,26 @@ msgstr "Eliminare il contenuto del registro"
 #: ../src/richtext/richtextstyledlg.cpp:252
 #: ../src/richtext/richtextstyledlg.cpp:254
 msgid "Click to apply the selected style."
-msgstr "Click per applicare lo stile corrente."
+msgstr "Seleziona per applicare lo stile corrente."
 
 #: ../src/richtext/richtextliststylepage.cpp:281
 #: ../src/richtext/richtextliststylepage.cpp:283
 #: ../src/richtext/richtextbulletspage.cpp:220
 #: ../src/richtext/richtextbulletspage.cpp:222
 msgid "Click to browse for a symbol."
-msgstr "Click per selezionare un simbolo."
+msgstr "Seleziona per selezionare un simbolo."
 
 #: ../src/osx/carbon/fontdlg.cpp:573 ../src/osx/carbon/fontdlg.cpp:575
 msgid "Click to cancel changes to the font."
-msgstr "Click per annullare le modifiche al font"
+msgstr "Seleziona per annullare le modifiche al font"
 
 #: ../src/generic/fontdlgg.cpp:472 ../src/generic/fontdlgg.cpp:491
 msgid "Click to cancel the font selection."
-msgstr "Click per annullare la selezione del font"
+msgstr "Seleziona per annullare la selezione del font"
 
 #: ../src/osx/carbon/fontdlg.cpp:554 ../src/osx/carbon/fontdlg.cpp:556
 msgid "Click to change the font colour."
-msgstr "Click per modificare il colore del font"
+msgstr "Seleziona per modificare il colore del font"
 
 #: ../src/richtext/richtextfontpage.cpp:267
 #: ../src/richtext/richtextfontpage.cpp:269
@@ -2096,36 +2093,36 @@ msgstr "Clic per modificare il colore di sfondo del testo."
 #: ../src/richtext/richtextfontpage.cpp:254
 #: ../src/richtext/richtextfontpage.cpp:256
 msgid "Click to change the text colour."
-msgstr "Click per modificare il colore del testo."
+msgstr "Seleziona per modificare il colore del testo."
 
 #: ../src/richtext/richtextliststylepage.cpp:195
 #: ../src/richtext/richtextliststylepage.cpp:197
 msgid "Click to choose the font for this level."
-msgstr "Click per selezionare il font per il livello corrente"
+msgstr "Seleziona per selezionare il font per il livello corrente"
 
 #: ../src/richtext/richtextstyledlg.cpp:279
 #: ../src/richtext/richtextstyledlg.cpp:281
 msgid "Click to close this window."
-msgstr "Click per chiudere questa finestra."
+msgstr "Seleziona per chiudere questa finestra."
 
 #: ../src/osx/carbon/fontdlg.cpp:580 ../src/osx/carbon/fontdlg.cpp:582
 msgid "Click to confirm changes to the font."
-msgstr "Click per confermare le modifiche al font"
+msgstr "Seleziona per confermare le modifiche al font"
 
 #: ../src/generic/fontdlgg.cpp:477 ../src/generic/fontdlgg.cpp:479
 #: ../src/generic/fontdlgg.cpp:484 ../src/generic/fontdlgg.cpp:486
 msgid "Click to confirm the font selection."
-msgstr "Click per confermare la selezione del font"
+msgstr "Seleziona per confermare la selezione del font"
 
 #: ../src/richtext/richtextstyledlg.cpp:244
 #: ../src/richtext/richtextstyledlg.cpp:246
 msgid "Click to create a new box style."
-msgstr "Clic per creare un nuovo stile riquadro."
+msgstr "Seleziona per creare un nuovo stile riquadro."
 
 #: ../src/richtext/richtextstyledlg.cpp:226
 #: ../src/richtext/richtextstyledlg.cpp:228
 msgid "Click to create a new character style."
-msgstr "Click per creare un nuovo stile di carattere"
+msgstr "Seleziona per creare un nuovo stile di carattere"
 
 #: ../src/richtext/richtextstyledlg.cpp:238
 #: ../src/richtext/richtextstyledlg.cpp:240
@@ -2198,7 +2195,7 @@ msgstr "Colore"
 #: ../src/msw/colordlg.cpp:156
 #, c-format
 msgid "Colour selection dialog failed with error %0lx."
-msgstr "Finestra seelzione colre fallita con errore %0lx."
+msgstr "Finestra selezione colore fallita con errore %0lx."
 
 #: ../src/osx/carbon/fontdlg.cpp:550
 msgid "Colour:"
@@ -2304,11 +2301,11 @@ msgstr "Copia selezione"
 #: ../src/richtext/richtextborderspage.cpp:569
 #: ../src/richtext/richtextborderspage.cpp:604
 msgid "Corner"
-msgstr ""
+msgstr "Angolo"
 
 #: ../src/richtext/richtextborderspage.cpp:578
 msgid "Corner &radius:"
-msgstr ""
+msgstr "&Raggio angolo:"
 
 #: ../src/html/chm.cpp:718
 #, c-format
@@ -2983,7 +2980,7 @@ msgstr "Errore durante la lettura dell'immagine DIB."
 #: ../src/propgrid/propgrid.cpp:6550
 #, c-format
 msgid "Error in resource: %s"
-msgstr "Errore nelal risorsa: %s"
+msgstr "Errore nella risorsa: %s"
 
 #: ../src/common/fileconf.cpp:453
 msgid "Error reading config options."
@@ -5496,7 +5493,7 @@ msgstr ""
 
 #: ../src/common/headerctrlcmn.cpp:59
 msgid "Please select the columns to show and define their order:"
-msgstr "Seelzionare le colonne da visualizzare e il loro ordine:"
+msgstr "Selezionare le colonne da visualizzare e il loro ordine:"
 
 #: ../src/common/prntbase.cpp:521
 msgid "Please wait while printing..."
@@ -5861,7 +5858,7 @@ msgstr "Crinale"
 
 #: ../src/richtext/richtextfontpage.cpp:313
 msgid "Rig&ht-to-left"
-msgstr ""
+msgstr "&Destra-a-sinistra"
 
 #: ../src/richtext/richtextliststylepage.cpp:251
 #: ../src/richtext/richtextbulletspage.cpp:188
@@ -6047,7 +6044,7 @@ msgstr "Atteso separatore dopo l'opzione '%s'."
 
 #: ../src/osx/menu_osx.cpp:618
 msgid "Services"
-msgstr ""
+msgstr "Servizi"
 
 #: ../src/richtext/richtextbuffer.cpp:10981
 msgid "Set Cell Style"
@@ -6271,7 +6268,7 @@ msgstr "Foglio SuperB/SuperB/A3 305 x 487 mm"
 
 #: ../src/richtext/richtextfontpage.cpp:320
 msgid "Suppress hyphe&nation"
-msgstr ""
+msgstr "Disabilita sillabazio&ne"
 
 #: ../src/generic/fontdlgg.cpp:326
 msgid "Swiss"
@@ -6393,9 +6390,8 @@ msgstr "Colore di sfondo"
 #: ../src/richtext/richtextborderspage.cpp:508
 #: ../src/richtext/richtextborderspage.cpp:540
 #: ../src/richtext/richtextborderspage.cpp:542
-#, fuzzy
 msgid "The border line style."
-msgstr "Lo stile del carattere"
+msgstr "Lo stile del bordo."
 
 #: ../src/richtext/richtextmarginspage.cpp:267
 #: ../src/richtext/richtextmarginspage.cpp:269
@@ -6480,7 +6476,7 @@ msgid ""
 "It has been removed from the most recently used files list."
 msgstr ""
 "Il file file '%s' non esiste e non può essere aperto.\n"
-"E' stato rimosso dall'elenco dei file recentemente usati."
+"È stato rimosso dall'elenco dei file recentemente usati."
 
 #: ../src/richtext/richtextindentspage.cpp:208
 #: ../src/richtext/richtextindentspage.cpp:210
@@ -6738,7 +6734,7 @@ msgstr "L'opzione '%s' richiede un parametro."
 #: ../src/richtext/richtextborderspage.cpp:588
 #: ../src/richtext/richtextborderspage.cpp:590
 msgid "The value of the corner radius."
-msgstr ""
+msgstr "Il valore del raggio angolo."
 
 #: ../src/msw/dialup.cpp:452
 #, c-format
@@ -7162,9 +7158,8 @@ msgstr "Unità per la posizione bassa."
 
 #: ../src/richtext/richtextborderspage.cpp:599
 #: ../src/richtext/richtextborderspage.cpp:601
-#, fuzzy
 msgid "Units for the corner radius."
-msgstr "Unità per riempimento superiore."
+msgstr "Unità per raggio angolo."
 
 #: ../src/richtext/richtextborderspage.cpp:260
 #: ../src/richtext/richtextborderspage.cpp:262
@@ -7498,12 +7493,10 @@ msgid "Windows 7"
 msgstr "Windows 7"
 
 #: ../src/msw/utils.cpp:1308
-#, fuzzy
 msgid "Windows 8"
 msgstr "Windows 98"
 
 #: ../src/msw/utils.cpp:1314
-#, fuzzy
 msgid "Windows 8.1"
 msgstr "Windows 98"
 
@@ -7599,12 +7592,10 @@ msgid "Windows Server 2008 R2"
 msgstr "Windows Server 2008 R2"
 
 #: ../src/msw/utils.cpp:1307
-#, fuzzy
 msgid "Windows Server 2012"
 msgstr "Windows Server 2003"
 
 #: ../src/msw/utils.cpp:1313
-#, fuzzy
 msgid "Windows Server 2012 R2"
 msgstr "Windows Server 2008 R2"
 
@@ -7697,7 +7688,7 @@ msgstr "Impossibile aggiungere una nuova cartella a questa sezione."
 #: ../src/propgrid/propgrid.cpp:3245
 msgid "You have entered invalid value. Press ESC to cancel editing."
 msgstr ""
-"E' stato inserito un valore non valido. premi ESC per annullare la modifica."
+"È stato inserito un valore non valido. Premi 'ESC' per annullare la modifica."
 
 #: ../src/common/stockitem.cpp:209
 msgid "Zoom &In"
