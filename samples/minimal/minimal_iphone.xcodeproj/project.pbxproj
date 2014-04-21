@@ -203,7 +203,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BEE0510EC7BF20080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = "-lz";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = minimal_iphone;
 			};
 			name = Debug;
