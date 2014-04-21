@@ -187,10 +187,7 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				INSTALL_PATH = "@executable_path/../Frameworks/";
-				OTHER_LDFLAGS = (
-					"$(OTHER_LDFLAGS)",
-					"-lz",
-				);
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 			};
 			name = Debug;
 		};
@@ -200,10 +197,7 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				INSTALL_PATH = "@executable_path/../Frameworks/";
-				OTHER_LDFLAGS = (
-					"$(OTHER_LDFLAGS)",
-					"-lz",
-				);
+				OTHER_LDFLAGS = "$(OTHER_LDFLAGS)";
 			};
 			name = Release;
 		};
