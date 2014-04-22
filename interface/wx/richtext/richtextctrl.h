@@ -1375,6 +1375,11 @@ public:
     virtual bool LayoutContent(bool onlyVisibleRect = false);
 
     /**
+        Implements layout. An application may override this to perform operations before or after layout.
+    */
+    virtual void DoLayoutBuffer(wxRichTextBuffer& buffer, wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int flags);
+
+    /**
         Move the caret to the given character position.
 
         Please note that this does not update the current editing style
