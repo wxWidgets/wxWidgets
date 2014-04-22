@@ -239,7 +239,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
                 break;
 
             case wxBORDER_SIMPLE:
-                bezel = NSShadowlessSquareBezelStyle;
+                bezel = NSSmallSquareBezelStyle;
                 break;
 
             case wxBORDER_SUNKEN:
@@ -256,7 +256,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
             case wxBORDER_RAISED:
             case wxBORDER_THEME:
                 bezel = isSimpleText ? NSRoundedBezelStyle
-                                     : NSRegularSquareBezelStyle;
+                                     : NSSmallSquareBezelStyle;
                 break;
         }
 
