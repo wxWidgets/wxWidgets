@@ -60,7 +60,10 @@ void wxBell()
     
     [appleEventManager setEventHandler:self andSelector:@selector(handleOpenAppEvent:withReplyEvent:)
                          forEventClass:kCoreEventClass andEventID:kAEOpenApplication];
-    
+
+    [appleEventManager setEventHandler:self andSelector:@selector(handleQuitAppEvent:withReplyEvent:)
+                         forEventClass:kCoreEventClass andEventID:kAEQuitApplication];
+
     wxTheApp->OSXOnWillFinishLaunching();
 }
 
@@ -132,6 +135,16 @@ void wxBell()
         wxTheApp->MacOpenURL(cf.AsString()) ;
     else
         wxTheApp->OSXStoreOpenURL(cf.AsString());
+}
+
+- (void)handleQuitAppEvent:(NSAppleEventDescriptor *)event
+            withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+    if ( wxTheApp->OSXOnShouldTerminate() )
+    {
+        wxTheApp->OSXOnWillTerminate();
+        wxTheApp->ExitMainLoop();
+    }
 }
 
 - (void)handleOpenAppEvent:(NSAppleEventDescriptor *)event
