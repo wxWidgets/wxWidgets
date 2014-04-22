@@ -1488,8 +1488,11 @@ wxFileOffset wxBufferedOutputStream::TellO() const
 
 void wxBufferedOutputStream::Sync()
 {
-    m_o_streambuf->FlushBuffer();
-    m_parent_o_stream->Sync();
+    if (m_o_streambuf)
+    {
+        m_o_streambuf->FlushBuffer();
+        m_parent_o_stream->Sync();
+    }
 }
 
 size_t wxBufferedOutputStream::OnSysWrite(const void *buffer, size_t bufsize)
