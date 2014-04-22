@@ -9219,9 +9219,11 @@ bool wxRichTextField::Draw(wxDC& dc, wxRichTextDrawingContext& context, const wx
     if (fieldType && fieldType->Draw(this, dc, context, range, selection, rect, descent, style))
         return true;
 
-    // Fallback; but don't draw guidelines.
-    style &= ~wxRICHTEXT_DRAW_GUIDELINES;
-    return wxRichTextParagraphLayoutBox::Draw(dc, context, range, selection, rect, descent, style);
+    // Fallback so unknown fields don't become invisible.
+    wxString fieldTypeStr(GetFieldType());
+    wxRichTextFieldTypeStandard defaultFieldType;
+    defaultFieldType.SetLabel(wxString::Format(wxT("unknown field %s"), fieldTypeStr.c_str()));
+    return defaultFieldType.Draw(this, dc, context, range, selection, rect, descent, style);
 }
 
 bool wxRichTextField::Layout(wxDC& dc, wxRichTextDrawingContext& context, const wxRect& rect, const wxRect& parentRect, int style)
@@ -9230,8 +9232,11 @@ bool wxRichTextField::Layout(wxDC& dc, wxRichTextDrawingContext& context, const 
     if (fieldType && fieldType->Layout(this, dc, context, rect, parentRect, style))
         return true;
 
-    // Fallback
-    return wxRichTextParagraphLayoutBox::Layout(dc, context, rect, parentRect, style);
+    // Fallback so unknown fields don't become invisible.
+    wxString fieldTypeStr(GetFieldType());
+    wxRichTextFieldTypeStandard defaultFieldType;
+    defaultFieldType.SetLabel(wxString::Format(wxT("unknown field %s"), fieldTypeStr.c_str()));
+    return defaultFieldType.Layout(this, dc, context, rect, parentRect, style);
 }
 
 bool wxRichTextField::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, wxRichTextDrawingContext& context, int flags, const wxPoint& position, const wxSize& parentSize, wxArrayInt* partialExtents) const
@@ -9240,7 +9245,11 @@ bool wxRichTextField::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
     if (fieldType)
         return fieldType->GetRangeSize((wxRichTextField*) this, range, size, descent, dc, context, flags, position, parentSize, partialExtents);
 
-    return wxRichTextParagraphLayoutBox::GetRangeSize(range, size, descent, dc, context, flags, position, parentSize, partialExtents);
+    // Fallback so unknown fields don't become invisible.
+    wxString fieldTypeStr(GetFieldType());
+    wxRichTextFieldTypeStandard defaultFieldType;
+    defaultFieldType.SetLabel(wxString::Format(wxT("unknown field %s"), fieldTypeStr.c_str()));
+    return defaultFieldType.GetRangeSize((wxRichTextField*) this, range, size, descent, dc, context, flags, position, parentSize, partialExtents);
 }
 
 /// Calculate range
