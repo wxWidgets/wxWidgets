@@ -70,6 +70,7 @@ public:
     void SetFontSizeMapping(const wxArrayInt& fontSizeMapping) { m_fontSizeMapping = fontSizeMapping; }
     wxArrayInt GetFontSizeMapping() const { return m_fontSizeMapping; }
 
+	bool OutputTable(wxRichTextBuffer* buffer, wxRichTextTable& table1, wxTextOutputStream& outstr);
 protected:
 
 // Implementation
