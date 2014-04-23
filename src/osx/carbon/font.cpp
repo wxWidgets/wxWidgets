@@ -200,6 +200,7 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data) : wxGDIRefData()
 // ============================================================================
 
 wxStringToStringHashMap gs_FontFamilyToPSName;
+static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, CTFontSymbolicTraits iTraits );
 
 // ----------------------------------------------------------------------------
 // wxFontRefData
@@ -468,16 +469,20 @@ void wxFontRefData::MacFindFont()
         m_ctFont = fontcache[ std::wstring(lookupnameWithSize.wc_str()) ];
         if ( !m_ctFont )
         {
-            wxCFStringRef fontname(m_info.m_faceName);
             
             wxStringToStringHashMap::const_iterator it = gs_FontFamilyToPSName.find(m_info.m_faceName);
             
             if ( it != gs_FontFamilyToPSName.end() )
-                fontname = it->second;
+            {
+                 m_ctFont.reset(CTFontCreateWithName( wxCFStringRef(it->second), m_info.m_pointSize , NULL ));
+            }
             else
-                fontname = m_info.m_faceName;
+            {
+                wxCFRef<CTFontDescriptorRef> desc(wxMacCreateCTFontDescriptor(wxCFStringRef(m_info.m_faceName),0));
+                m_ctFont.reset(CTFontCreateWithFontDescriptor(desc, m_info.m_pointSize , NULL ));
+                m_info.UpdateNamesMap(m_info.m_faceName, m_ctFont);
+           }
             
-            m_ctFont.reset(CTFontCreateWithName( fontname, m_info.m_pointSize , NULL ));
             if ( m_ctFont.get() == NULL )
             {
                 // TODO try fallbacks according to font type
@@ -485,10 +490,6 @@ void wxFontRefData::MacFindFont()
             }
             else
             {
-                if ( it == gs_FontFamilyToPSName.end() )
-                {
-                    m_info.UpdateNamesMap(m_info.m_faceName, m_ctFont);
-                }
                 if ( traits != 0 )
                 {
                     // attempt native font variant, if not available, fallback to italic emulation mode and remove bold
@@ -516,7 +517,7 @@ void wxFontRefData::MacFindFont()
 
                         if ( fontWithTraits == NULL )
                         {
-                            fontWithTraits = CTFontCreateWithName( fontname, m_info.m_pointSize, remainingTransform );
+                            fontWithTraits = CTFontCreateCopyWithAttributes( m_ctFont, m_info.m_pointSize, remainingTransform, NULL );
                         }
 
                     }
@@ -929,8 +930,6 @@ const wxNativeFontInfo * wxFont::GetNativeFontInfo() const
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
 
-#if 0 // wxOSX_USE_CORE_TEXT
-
 /* from Core Text Manual Common Operations */
 
 static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, CTFontSymbolicTraits iTraits )
@@ -985,7 +984,6 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
     return descriptor ;
 }
 
-#endif
 
 void wxNativeFontInfo::Init()
 {
