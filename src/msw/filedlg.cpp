@@ -173,7 +173,7 @@ wxFileDialogHookFunction(HWND      hDlg,
         case WM_NOTIFY:
             {
                 NMHDR* const pNM = reinterpret_cast<NMHDR*>(lParam);
-                if ( pNM->code >= CDN_FIRST && pNM->code < CDN_LAST )
+                if ( pNM->code > CDN_LAST && pNM->code <= CDN_FIRST )
                 {
                     OFNOTIFY* const
                         pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
