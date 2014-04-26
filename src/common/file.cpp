@@ -147,7 +147,7 @@ bool wxFile::Access(const wxString& name, OpenMode mode)
     {
         default:
             wxFAIL_MSG(wxT("bad wxFile::Access mode parameter."));
-            // fall through
+            wxFALLTHROUGH;
 
         case read:
             how = R_OK;
@@ -232,6 +232,7 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
             }
             //else: fall through as write_append is the same as write if the
             //      file doesn't exist
+            wxFALLTHROUGH;
 
         case write:
             flags |= O_WRONLY | O_CREAT | O_TRUNC;
@@ -406,7 +407,7 @@ wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
     switch ( mode ) {
         default:
             wxFAIL_MSG(wxT("unknown seek origin"));
-
+            wxFALLTHROUGH;
         case wxFromStart:
             origin = SEEK_SET;
             break;

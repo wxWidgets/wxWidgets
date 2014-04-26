@@ -1560,7 +1560,7 @@ wxString wxXmlResourceHandlerImpl::GetText(const wxString& param, bool translate
                         str2 << wxT('\\');
                         break;
                     }
-                    // else fall-through to default: branch below
+                    wxFALLTHROUGH;// else fall-through to default: branch below
 
                 default:
                     str2 << wxT('\\') << *dt;

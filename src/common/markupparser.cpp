@@ -386,7 +386,7 @@ bool wxMarkupParser::Parse(const wxString& text)
 
                     if ( n < WXSIZEOF(xmlEntities) )
                         break;
-                    //else: fall through, '&' is not special
+                    wxFALLTHROUGH;//else: fall through, '&' is not special
                 }
 
             default:

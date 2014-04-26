@@ -173,28 +173,28 @@ void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry*
 
                 case WXK_NUMPAD_LEFT :
                     modifiers |= NSNumericPadKeyMask;
-                    // pass through
+                    wxFALLTHROUGH;
                 case WXK_LEFT :
                     shortcut = NSLeftArrowFunctionKey ;
                     break ;
 
                 case WXK_NUMPAD_UP :
                     modifiers |= NSNumericPadKeyMask;
-                    // pass through
+                    wxFALLTHROUGH;
                 case WXK_UP :
                     shortcut = NSUpArrowFunctionKey ;
                     break ;
 
                 case WXK_NUMPAD_RIGHT :
                     modifiers |= NSNumericPadKeyMask;
-                    // pass through
+                    wxFALLTHROUGH;
                 case WXK_RIGHT :
                     shortcut = NSRightArrowFunctionKey ;
                     break ;
 
                 case WXK_NUMPAD_DOWN :
                     modifiers |= NSNumericPadKeyMask;
-                    // pass through
+                    wxFALLTHROUGH;
                 case WXK_DOWN :
                     shortcut = NSDownArrowFunctionKey ;
                     break ;

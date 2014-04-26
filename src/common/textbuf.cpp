@@ -52,7 +52,7 @@ const wxChar *wxTextBuffer::GetEOL(wxTextFileType type)
     switch ( type ) {
         default:
             wxFAIL_MSG(wxT("bad buffer type in wxTextBuffer::GetEOL."));
-            // fall through nevertheless - we must return something...
+            wxFALLTHROUGH; // fall through nevertheless - we must return something...
 
         case wxTextFileType_None: return wxEmptyString;
         case wxTextFileType_Unix: return wxT("\n");

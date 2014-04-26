@@ -249,7 +249,7 @@ SetBezelStyleFromBorderFlags(NSButton *v,
 
             default:
                 wxFAIL_MSG( "Unknown border style" );
-                // fall through
+                wxFALLTHROUGH;
 
             case 0:
             case wxBORDER_STATIC:

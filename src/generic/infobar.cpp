@@ -154,7 +154,7 @@ wxShowEffect wxInfoBarGeneric::GetShowEffect() const
 
         default:
             wxFAIL_MSG( "unknown info bar placement" );
-            // fall through
+            wxFALLTHROUGH;
 
         case BarPlacement_Unknown:
             return wxSHOW_EFFECT_NONE;
@@ -176,7 +176,7 @@ wxShowEffect wxInfoBarGeneric::GetHideEffect() const
 
         default:
             wxFAIL_MSG( "unknown info bar placement" );
-            // fall through
+            wxFALLTHROUGH;
 
         case BarPlacement_Unknown:
             return wxSHOW_EFFECT_NONE;

@@ -57,7 +57,7 @@ static wxString LINKAGEMODE HtmlizeLinebreaks(const wxString& str)
                     if ( j != end && *j == '\n' )
                         i = j;
                 }
-                // fall through
+                wxFALLTHROUGH;
             case '\n':
                 out << "<br>";
                 break;

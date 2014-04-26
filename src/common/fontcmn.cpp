@@ -808,7 +808,7 @@ wxString wxNativeFontInfo::ToUserString() const
     {
         default:
             wxFAIL_MSG( wxT("unknown font weight") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxFONTWEIGHT_NORMAL:
             break;
@@ -826,7 +826,7 @@ wxString wxNativeFontInfo::ToUserString() const
     {
         default:
             wxFAIL_MSG( wxT("unknown font style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxFONTSTYLE_NORMAL:
             break;

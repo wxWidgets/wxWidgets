@@ -4958,7 +4958,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                             MoveCursorRight(false);
                             break;
                         }
-                        //else: fall through
+                        wxFALLTHROUGH;
 
                     default:
                         event.Skip();
@@ -5173,7 +5173,7 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
         {
             default:
                 wxFAIL_MSG( "unknown selection mode" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxGridSelectCells:
                 // arbitrary blocks selection allowed so just use the cell

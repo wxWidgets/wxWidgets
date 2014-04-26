@@ -92,7 +92,7 @@ wxChar wxTextInputStream::NextChar()
                 // loop iteration we shouldn't be able to decode 2 or more of
                 // them with an extra single byte, something fishy is going on
                 wxFAIL_MSG("unexpected decoding result");
-                // fall through nevertheless and return at least something
+                wxFALLTHROUGH;// fall through nevertheless and return at least something
 
             case 1:
                 // we finally decoded a character
@@ -457,7 +457,7 @@ void wxTextOutputStream::WriteString(const wxString& string)
 
                 default:
                     wxFAIL_MSG( wxT("unknown EOL mode in wxTextOutputStream") );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxEOL_UNIX:
                     // don't treat '\n' specially

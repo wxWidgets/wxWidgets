@@ -601,7 +601,7 @@ bool wxMouseEvent::ButtonDClick(int but) const
     {
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonDClick"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxMOUSE_BTN_ANY:
             return (LeftDClick() || MiddleDClick() || RightDClick() ||
@@ -631,7 +631,7 @@ bool wxMouseEvent::ButtonDown(int but) const
     {
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonDown"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxMOUSE_BTN_ANY:
             return (LeftDown() || MiddleDown() || RightDown() ||
@@ -661,7 +661,7 @@ bool wxMouseEvent::ButtonUp(int but) const
     {
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonUp"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxMOUSE_BTN_ANY:
             return (LeftUp() || MiddleUp() || RightUp() ||
@@ -691,7 +691,7 @@ bool wxMouseEvent::Button(int but) const
     {
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::Button"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxMOUSE_BTN_ANY:
             return ButtonUp(wxMOUSE_BTN_ANY) ||

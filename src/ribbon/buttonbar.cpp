@@ -95,12 +95,14 @@ public:
                     *size = wxRIBBON_BUTTONBAR_BUTTON_MEDIUM;
                     break;
                 }
+                wxFALLTHROUGH;
             case wxRIBBON_BUTTONBAR_BUTTON_MEDIUM:
                 if(sizes[wxRIBBON_BUTTONBAR_BUTTON_SMALL].is_supported)
                 {
                     *size = wxRIBBON_BUTTONBAR_BUTTON_SMALL;
                     break;
                 }
+                wxFALLTHROUGH;
             case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
             default:
                 return false;

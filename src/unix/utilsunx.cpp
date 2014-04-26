@@ -305,14 +305,14 @@ bool wxPipeInputStream::CanRead() const
     {
         case -1:
             wxLogSysError(_("Impossible to get child process input"));
-            // fall through
+            wxFALLTHROUGH;
 
         case 0:
             return false;
 
         default:
             wxFAIL_MSG(wxT("unexpected select() return value"));
-            // still fall through
+            wxFALLTHROUGH;
 
         case 1:
             // input available -- or maybe not, as select() returns 1 when a
@@ -346,7 +346,7 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t size)
 #endif
            // do not treat it as an error
            m_file->ClearLastError();
-           // fall through
+           wxFALLTHROUGH;
 
        // no error
        case 0:

@@ -3122,7 +3122,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                 ExpandAllChildren(m_current);
                 break;
             }
-            //else: fall through to Collapse() it
+            wxFALLTHROUGH;//else: fall through to Collapse() it
 
         case '-':
         case WXK_SUBTRACT:
@@ -3236,7 +3236,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             //else: don't try to expand hidden root item (which can be the
             //      current one when the tree is empty)
 
-            // fall through
+            wxFALLTHROUGH;
 
         case WXK_DOWN:
             {

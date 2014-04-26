@@ -1378,7 +1378,7 @@ void wxGenericCalendarCtrl::OnClick(wxMouseEvent& event)
 
         default:
             wxFAIL_MSG(wxT("unknown hittest code"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxCAL_HITTEST_NOWHERE:
             event.Skip();

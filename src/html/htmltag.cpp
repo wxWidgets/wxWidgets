@@ -276,7 +276,7 @@ void wxHtmlTagsCache::QueryTag(const wxString::const_iterator& at,
 
         case wxHtmlCacheItem::Type_EndingTag:
             wxFAIL_MSG("QueryTag called for ending tag - can't be");
-            // but if it does happen, fall through, better than crashing
+            wxFALLTHROUGH;// but if it does happen, fall through, better than crashing
 
         case wxHtmlCacheItem::Type_NoMatchingEndingTag:
             // If input HTML is invalid and there's no closing tag for this

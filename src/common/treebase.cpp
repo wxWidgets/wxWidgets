@@ -359,7 +359,7 @@ void wxTreeCtrlBase::OnCharHook(wxKeyEvent& event)
         {
             case WXK_ESCAPE:
                 discardChanges = true;
-                // fall through
+                wxFALLTHROUGH;
 
             case WXK_RETURN:
                 EndEditLabel(GetFocusedItem(), discardChanges);

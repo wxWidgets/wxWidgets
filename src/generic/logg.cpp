@@ -238,7 +238,7 @@ wxString wxLogGui::GetTitle() const
 
         default:
             wxFAIL_MSG( "unexpected icon severity" );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxICON_INFORMATION:
             titleFormat = _("%s Information");
@@ -396,7 +396,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
 #endif // wxUSE_LOG_DIALOG
                 m_bErrors = true;
             }
-            // fall through
+            wxFALLTHROUGH;
 
         case wxLOG_Warning:
             if ( !m_bErrors ) {

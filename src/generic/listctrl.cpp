@@ -1110,7 +1110,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             default:
                 wxFAIL_MSG( wxT("unknown list item format") );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxLIST_FORMAT_LEFT:
                 xAligned = x;

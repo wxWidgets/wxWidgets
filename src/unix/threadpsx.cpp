@@ -237,7 +237,7 @@ wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
 
         default:
             wxFAIL_MSG( wxT("unknown mutex type") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxMUTEX_DEFAULT:
             err = pthread_mutex_init(&m_mutex, NULL);
@@ -1543,7 +1543,7 @@ wxThreadError wxThread::Delete(ExitCode *rc, wxThreadWait WXUNUSED(waitMode))
             // PthreadStart()
             m_internal->SignalRun();
 
-            // fall through
+            wxFALLTHROUGH;
 
         case STATE_EXITED:
             // nothing to do
@@ -1553,7 +1553,7 @@ wxThreadError wxThread::Delete(ExitCode *rc, wxThreadWait WXUNUSED(waitMode))
             // resume the thread first
             m_internal->Resume();
 
-            // fall through
+            wxFALLTHROUGH;
 
         default:
             if ( !isDetached )
@@ -1595,7 +1595,7 @@ wxThreadError wxThread::Kill()
             // resume the thread first
             Resume();
 
-            // fall through
+            wxFALLTHROUGH;
 
         default:
 #ifdef HAVE_PTHREAD_CANCEL

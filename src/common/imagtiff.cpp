@@ -531,7 +531,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
             default:
                 wxLogWarning(_("Unknown TIFF resolution unit %d ignored"),
                     tiffRes);
-                // fall through
+                wxFALLTHROUGH;
 
             case RESUNIT_NONE:
                 resUnit = wxIMAGE_RESOLUTION_NONE;
@@ -628,7 +628,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     {
         default:
             wxFAIL_MSG( wxT("unknown image resolution units") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxIMAGE_RESOLUTION_NONE:
             tiffRes = RESUNIT_NONE;
