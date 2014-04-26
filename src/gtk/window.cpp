@@ -2056,14 +2056,20 @@ void wxWindowGTK::GTKHandleRealized()
 
     GdkWindow* const window = GTKGetDrawingWindow();
 
-    if (m_imContext)
+    if (m_wxwindow)
     {
-        gtk_im_context_set_client_window
-        (
-            m_imContext,
-            window ? window
-                       : gtk_widget_get_window(m_widget)
-        );
+        if (m_imContext == NULL)
+        {
+            // Create input method handler
+            m_imContext = gtk_im_multicontext_new();
+
+            // Cannot handle drawing preedited text yet
+            gtk_im_context_set_use_preedit(m_imContext, false);
+
+            g_signal_connect(m_imContext,
+                "commit", G_CALLBACK(gtk_wxwindow_commit_cb), this);
+        }
+        gtk_im_context_set_client_window(m_imContext, window);
     }
 
     // Use composited window if background is transparent, if supported.
@@ -2578,15 +2584,6 @@ void wxWindowGTK::PostCreation()
             if (GetLayoutDirection() == wxLayout_LeftToRight)
                 gtk_widget_set_redraw_on_allocate(m_wxwindow, HasFlag(wxFULL_REPAINT_ON_RESIZE));
         }
-
-        // Create input method handler
-        m_imContext = gtk_im_multicontext_new();
-
-        // Cannot handle drawing preedited text yet
-        gtk_im_context_set_use_preedit( m_imContext, FALSE );
-
-        g_signal_connect (m_imContext, "commit",
-                          G_CALLBACK (gtk_wxwindow_commit_cb), this);
     }
 
     // focus handling
