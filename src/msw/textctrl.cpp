@@ -2139,13 +2139,23 @@ bool wxTextCtrl::AdjustSpaceLimit()
     unsigned int len = ::GetWindowTextLength(GetHwnd());
     if ( len >= limit )
     {
+        unsigned long increaseBy;
+
         // We need to increase the size of the buffer and to avoid increasing
         // it too many times make sure that we make it at least big enough to
-        // fit all the text we are currently inserting into the control.
-        unsigned long increaseBy = gs_lenOfInsertedText.top();
+        // fit all the text we are currently inserting into the control, if
+        // we're inserting any, i.e. if we're called from DoWriteText().
+        if ( !gs_lenOfInsertedText.empty() )
+        {
+            increaseBy = gs_lenOfInsertedText.top();
 
-        // Indicate to the caller that we increased the limit.
-        gs_lenOfInsertedText.top() = -1;
+            // Indicate to the caller that we increased the limit.
+            gs_lenOfInsertedText.top() = -1;
+        }
+        else // Not inserting text, must be text actually typed by user.
+        {
+            increaseBy = 0;
+        }
 
         // But also increase it by at least 32KB chunks -- again, to avoid
         // doing it too often -- and round it up to 32KB in any case.

@@ -265,11 +265,11 @@ private:
 
     void OnKeyDown(wxKeyEvent& event);
 
-    // call this to increase the size limit (will do nothing if the current
-    // limit is big enough)
+    // Used by EN_MAXTEXT handler to increase the size limit (will do nothing
+    // if the current limit is big enough). Should never be called directly.
     //
-    // returns true if we increased the limit to allow entering more text,
-    // false if we hit the limit set by SetMaxLength() and so didn't change it
+    // Returns true if we increased the limit to allow entering more text,
+    // false if we hit the limit set by SetMaxLength() and so didn't change it.
     bool AdjustSpaceLimit();
 
     DECLARE_EVENT_TABLE()
