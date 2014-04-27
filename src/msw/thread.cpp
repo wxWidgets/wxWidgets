@@ -1226,6 +1226,13 @@ unsigned long wxThread::GetId() const
     return (unsigned long)m_internal->GetId();
 }
 
+WXHANDLE wxThread::MSWGetHandle() const
+{
+    wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));
+
+    return m_internal->GetHandle();
+}
+
 bool wxThread::IsRunning() const
 {
     wxCriticalSectionLocker lock(const_cast<wxCriticalSection &>(m_critsect));

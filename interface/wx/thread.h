@@ -1108,6 +1108,15 @@ public:
     wxThreadIdType GetId() const;
 
     /**
+        Gets the native thread handle.
+
+        This method only exists in wxMSW, use GetId() in portable code.
+
+        @since 3.1.0
+    */
+    WXHANDLE MSWGetHandle() const;
+
+    /**
         Returns the thread kind as it was given in the ctor.
 
         @since 2.9.0

@@ -583,6 +583,11 @@ public:
     // identifies a thread inside a process
     wxThreadIdType GetId() const;
 
+#ifdef __WINDOWS__
+    // Get the internal OS handle
+    WXHANDLE MSWGetHandle() const;
+#endif // __WINDOWS__
+
     wxThreadKind GetKind() const
         { return m_isDetached ? wxTHREAD_DETACHED : wxTHREAD_JOINABLE; }
 
