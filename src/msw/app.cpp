@@ -262,19 +262,9 @@ DWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 {
-    OSVERSIONINFO info;
-    wxZeroMemory(info);
-
     // on Windows, the toolkit version is the same of the OS version
     // as Windows integrates the OS kernel with the GUI toolkit.
-    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    if ( ::GetVersionEx(&info) )
-    {
-        if ( majVer )
-            *majVer = info.dwMajorVersion;
-        if ( minVer )
-            *minVer = info.dwMinorVersion;
-    }
+    wxGetOsVersion(majVer, minVer);
 
 #if defined(__WXHANDHELD__) || defined(__WXWINCE__)
     return wxPORT_WINCE;
