@@ -672,6 +672,31 @@ wxBitmap wxAnyButton::DoGetBitmap(State which) const
 
 void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
+    if ( !bitmap.IsOk() )
+    {
+        if ( m_imageData  )
+        {
+            // Normal image is special: setting it enables images for the
+            // button and resetting it to nothing disables all of them.
+            if ( which == State_Normal )
+            {
+                delete m_imageData;
+                m_imageData = NULL;
+            }
+            else
+            {
+                // Replace the removed bitmap with the normal one.
+                wxBitmap bmpNormal = m_imageData->GetBitmap(State_Normal);
+                m_imageData->SetBitmap(which == State_Disabled
+                                            ? bmpNormal.ConvertToDisabled()
+                                            : bmpNormal,
+                                       which);
+            }
+        }
+
+        return;
+    }
+
 #if wxUSE_UXTHEME
     wxXPButtonImageData *oldData = NULL;
 #endif // wxUSE_UXTHEME
@@ -758,9 +783,8 @@ void wxAnyButton::DoSetBitmapMargins(wxCoord x, wxCoord y)
 
 void wxAnyButton::DoSetBitmapPosition(wxDirection dir)
 {
-    wxCHECK_RET( m_imageData, "SetBitmap() must be called first" );
-
-    m_imageData->SetBitmapPosition(dir);
+    if ( m_imageData )
+        m_imageData->SetBitmapPosition(dir);
     InvalidateBestSize();
 }
 
