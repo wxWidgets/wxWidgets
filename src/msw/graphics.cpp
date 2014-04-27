@@ -1489,11 +1489,11 @@ void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
    if ( !m_pen.IsNull() )
    {
        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
-       Point *cpoints = new Point[n];
+       PointF *cpoints = new PointF[n];
        for (size_t i = 0; i < n; i++)
        {
-           cpoints[i].X = (int)(points[i].m_x );
-           cpoints[i].Y = (int)(points[i].m_y );
+           cpoints[i].X = static_cast<REAL>(points[i].m_x);
+           cpoints[i].Y = static_cast<REAL>(points[i].m_y);
 
        } // for (size_t i = 0; i < n; i++)
        m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
@@ -1507,11 +1507,11 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
         return;
 
     wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
-    Point *cpoints = new Point[n];
+    PointF *cpoints = new PointF[n];
     for (size_t i = 0; i < n; i++)
     {
-        cpoints[i].X = (int)(points[i].m_x );
-        cpoints[i].Y = (int)(points[i].m_y );
+        cpoints[i].X = static_cast<REAL>(points[i].m_x);
+        cpoints[i].Y = static_cast<REAL>(points[i].m_y);
 
     } // for (int i = 0; i < n; i++)
     if ( !m_brush.IsNull() )
