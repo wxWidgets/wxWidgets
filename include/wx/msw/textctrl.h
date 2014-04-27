@@ -184,8 +184,6 @@ protected:
     // common part of all ctors
     void Init();
 
-    virtual bool DoLoadFile(const wxString& file, int fileType);
-
     // creates the control of appropriate class (plain or rich edit) with the
     // styles corresponding to m_windowStyle
     //
@@ -202,13 +200,6 @@ protected:
     // return true if this control has a user-set limit on amount of text (i.e.
     // the limit is due to a previous call to SetMaxLength() and not built in)
     bool HasSpaceLimit(unsigned int *len) const;
-
-    // call this to increase the size limit (will do nothing if the current
-    // limit is big enough)
-    //
-    // returns true if we increased the limit to allow entering more text,
-    // false if we hit the limit set by SetMaxLength() and so didn't change it
-    bool AdjustSpaceLimit();
 
 #if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
     // replace the selection or the entire control contents with the given text
@@ -273,6 +264,13 @@ private:
     virtual WXHWND GetEditHWND() const { return m_hWnd; }
 
     void OnKeyDown(wxKeyEvent& event);
+
+    // call this to increase the size limit (will do nothing if the current
+    // limit is big enough)
+    //
+    // returns true if we increased the limit to allow entering more text,
+    // false if we hit the limit set by SetMaxLength() and so didn't change it
+    bool AdjustSpaceLimit();
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl)
