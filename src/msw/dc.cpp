@@ -2755,11 +2755,11 @@ static bool AlphaBlt(wxMSWDCImpl* dcDst,
                     if ( data )
                     {
                         wxAlphaPixelData::Iterator p(data);
-                        for ( int y = 0; y < bmpOld.GetHeight(); y++ )
+                        for ( int y = 0; y < data.GetHeight(); y++ )
                         {
                             wxAlphaPixelData::Iterator rowStart = p;
 
-                            for ( int x = 0; x < bmpOld.GetWidth(); x++ )
+                            for ( int x = 0; x < data.GetWidth(); x++ )
                             {
                                 // We choose to use wxALPHA_TRANSPARENT instead
                                 // of perhaps more logical wxALPHA_OPAQUE here
