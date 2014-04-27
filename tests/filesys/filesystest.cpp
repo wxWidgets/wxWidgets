@@ -98,28 +98,90 @@ void FileSystemTestCase::UrlParsing()
                 wxT("zip"), wxT("file:myzipfile.zip"), wxT("index.htm"), wxT("")},
         // changes to ':' parsing often break things:
         { wxT("file:a#b:foo"),
-                wxT("b"), wxT("file:a"), wxT("foo"), wxT("")}
+                wxT("b"), wxT("file:a"), wxT("foo"), wxT("")},
+        { wxT("\\\\host\\C$\\path to\\foo.txt"),
+                wxT("file"), wxT(""), wxT("\\\\host\\C$\\path to\\foo.txt"), wxT("")},
+        { wxT("C:\\path to\\foo.txt"),
+                wxT("file"), wxT(""), wxT("C:\\path to\\foo.txt"), wxT("")},
+        { wxT("file:///etc/fsconf"),
+                wxT("file"), wxT(""), wxT("/etc/fsconf"), wxT("")},
+        { wxT("file://etc/fsconf"),
+                wxT("file"), wxT(""), wxT("//etc/fsconf"), wxT("")},
+        { wxT("file:/etc/fsconf"),
+                wxT("file"), wxT(""), wxT("/etc/fsconf"), wxT("")},
+        { wxT("file:///dir/archive.tar.gz#tar:/foo.txt#anchor"),
+                wxT("tar"), wxT("file:///dir/archive.tar.gz"),
+                wxT("/foo.txt"), wxT("anchor")},
+        { wxT("file://dir/archive.tar.gz#tar:/foo.txt#anchor"),
+                wxT("tar"), wxT("file://dir/archive.tar.gz"),
+                wxT("/foo.txt"), wxT("anchor")},
+        { wxT("file:/dir/archive.tar.gz#tar:/foo.txt#anchor"),
+                wxT("tar"), wxT("file:/dir/archive.tar.gz"),
+                wxT("/foo.txt"), wxT("anchor")},
+        { wxT("file:dir/archive.tar.gz#tar:/foo.txt#anchor"),
+                wxT("tar"), wxT("file:dir/archive.tar.gz"),
+                wxT("/foo.txt"), wxT("anchor")},
+        { wxT("file:///dir/archive.tar.gz#tar:/foo.txt"),
+                wxT("tar"), wxT("file:///dir/archive.tar.gz"),
+                wxT("/foo.txt"), wxT("")},
+        { wxT("file://dir/archive.tar.gz#tar:/foo.txt"),
+                wxT("tar"), wxT("file://dir/archive.tar.gz"),
+                wxT("/foo.txt"), wxT("")},
+        { wxT("file:/dir/archive.tar.gz#tar:/foo.txt"),
+                wxT("tar"), wxT("file:/dir/archive.tar.gz"),
+                wxT("/foo.txt"), wxT("")},
+        { wxT("file:dir/archive.tar.gz#tar:/foo.txt"),
+                wxT("tar"), wxT("file:dir/archive.tar.gz"),
+                wxT("/foo.txt"), wxT("")},
+        { wxT("file://host/C:/path%20to/file.txt"),
+                wxT("file"), wxT(""), wxT("//host/C:/path%20to/file.txt"), wxT("")},
+        { wxT("file:///C:/path%20to/file.txt"),
+                wxT("file"), wxT(""), wxT("C:/path%20to/file.txt"), wxT("")},
+        { wxT("file:///C"),
+                wxT("file"), wxT(""), wxT("/C"), wxT("")},
+        { wxT("file://C"),
+                wxT("file"), wxT(""), wxT("//C"), wxT("")},
+        { wxT("file:/C"),
+                wxT("file"), wxT(""), wxT("/C"), wxT("")},
+        { wxT("file:C"),
+                wxT("file"), wxT(""), wxT("C"), wxT("")}
     };
 
     UrlTester tst;
     for ( size_t n = 0; n < WXSIZEOF(data); n++ )
     {
         const Data& d = data[n];
-        CPPUNIT_ASSERT( tst.Protocol(d.url) == d.protocol );
-        CPPUNIT_ASSERT( tst.LeftLocation(d.url) == d.left );
-        CPPUNIT_ASSERT( tst.RightLocation(d.url) == d.right );
-        CPPUNIT_ASSERT( tst.Anchor(d.url) == d.anchor );
+        CPPUNIT_ASSERT_EQUAL( d.protocol, tst.Protocol(d.url) );
+        CPPUNIT_ASSERT_EQUAL( d.left, tst.LeftLocation(d.url) );
+        CPPUNIT_ASSERT_EQUAL( d.right, tst.RightLocation(d.url) );
+        CPPUNIT_ASSERT_EQUAL( d.anchor, tst.Anchor(d.url) );
     }
 }
 
 void FileSystemTestCase::FileNameToUrlConversion()
 {
+    const static struct Data {
+        const wxChar *input, *expected;
+    } data[] =
+    {
 #ifdef __WINDOWS__
-    wxFileName fn1(wxT("\\\\server\\share\\path\\to\\file"));
-    wxString url1 = wxFileSystem::FileNameToURL(fn1);
-
-    CPPUNIT_ASSERT( fn1.SameAs(wxFileSystem::URLToFileName(url1)) );
+        { wxT("\\\\host\\C$\\path to\\file.txt"),
+                wxT("file://host/C$/path%20to/file.txt")},
+        { wxT("C:\\path to\\file.txt"), wxT("file:///C:/path%20to/file.txt")}
+#else
+        { wxT("/path to/file.txt"), wxT("file:///path%20to/file.txt")}
 #endif
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(data); n++ )
+    {
+        const Data& d = data[n];
+        wxFileName fn1(d.input);
+        wxString url1 = wxFileSystem::FileNameToURL(fn1);
+
+        CPPUNIT_ASSERT_EQUAL( d.expected, url1 );
+        CPPUNIT_ASSERT( fn1.SameAs(wxFileSystem::URLToFileName(url1)) );
+    }
 }
 
 void FileSystemTestCase::UnicodeFileNameToUrlConversion()

@@ -29,6 +29,7 @@
 #include "wx/tokenzr.h"
 #include "wx/uri.h"
 #include "wx/private/fileback.h"
+#include "wx/utils.h"
 
 // ----------------------------------------------------------------------------
 // wxFSFile
@@ -181,18 +182,53 @@ wxString wxFileSystemHandler::GetLeftLocation(const wxString& location)
 /* static */
 wxString wxFileSystemHandler::GetRightLocation(const wxString& location)
 {
-    int i, l = location.length();
-    int l2 = l + 1;
-
-    for (i = l-1;
-         (i >= 0) &&
-         ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':')));
-         i--)
+    int i, len = location.length();
+    for (i = len-1; i >= 0; i--)
     {
-        if (location[i] == wxT('#')) l2 = i + 1;
+        if (location[i] == wxT('#'))
+            len = i;
+        if (location[i] != wxT(':'))
+            continue;
+
+        // C: on Windows
+        if (i == 1)
+            continue;
+        if (i >= 2 && wxIsalpha(location[i-1]) && location[i-2] == wxT('/'))
+            continue;
+
+        // Could be the protocol
+        break;
     }
     if (i == 0) return wxEmptyString;
-    else return location.Mid(i + 1, l2 - i - 2);
+
+    const static wxString protocol(wxT("file:"));
+    if (i < (int)protocol.length() - 1 || location.compare(0, i + 1, protocol))
+        return location.Mid(i + 1, len - i - 1);
+
+    int s = ++i; // Start position
+    // Check if there are three '/'s after "file:"
+    int end = wxMin(len, s + 3);
+    while (i < end && location[i] == wxT('/'))
+        i++;
+    if (i == s + 2) // Host is specified, e.g. "file://host/path"
+        return location.Mid(s, len - s);
+    if (i > s)
+    {
+        // Remove the last '/' if it is preceding "C:/...".
+        // Otherwise, keep it.
+        if (i + 1 >= len || location[i + 1] != wxT(':'))
+            i--;
+        else if (i + 4 < len)
+        {
+            // Check if ':' was encoded
+            const static wxString colonLower(wxT("%3a"));
+            const static wxString colonUpper(wxT("%3A"));
+            wxString sub =location.Mid(i + 1, 3);
+            if (sub == colonLower || sub == colonUpper)
+                i--;
+        }
+    }
+    return location.Mid(i, len - i);
 }
 
 /* static */
@@ -664,21 +700,11 @@ static wxString EscapeFileNameCharsInURL(const char *in)
     {
         const unsigned char c = *p;
 
-        // notice that all colons *must* be encoded in the paths used by
-        // wxFileSystem even though this makes URLs produced by this method
-        // unusable with IE under Windows as it requires "file:///c:/foo.bar"
-        // and doesn't accept "file:///c%3a/foo.bar" -- but then we never made
-        // any guarantees about general suitability of the strings returned by
-        // this method, they must work with wxFileSystem only and not encoding
-        // the colon breaks handling of
-        // "http://wherever/whatever.zip#zip:filename.ext" URLs so we really
-        // can't do this without heavy changes to the parsing code here, in
-        // particular in GetRightLocation()
-
-        if ( c == '/' || c == '-' || c == '.' || c == '_' || c == '~' ||
-             (c >= '0' && c <= '9') ||
+        // https://tools.ietf.org/html/rfc1738#section-5
+        if ( (c >= '0' && c <= '9') ||
              (c >= 'a' && c <= 'z') ||
-             (c >= 'A' && c <= 'Z') )
+             (c >= 'A' && c <= 'Z') ||
+             strchr("/:$-_.+!*'(),", c) ) // Plus '/' and ':'
         {
             s << c;
         }
@@ -702,15 +728,11 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
     // unc notation, wxMSW
     if ( url.Find(wxT("\\\\")) == 0 )
     {
-        url = wxT("//") + url.Mid(2);
+        url = url.Mid(2);
     }
     else
     {
         url = wxT("/") + url;
-#ifdef __WXMAC__
-        url = wxT("/") + url;
-#endif
-
     }
 #endif
 
@@ -718,7 +740,7 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 
     // Do wxURI- and common practice-compatible escaping: encode the string
     // into UTF-8, then escape anything non-ASCII:
-    return wxT("file:") + EscapeFileNameCharsInURL(url.utf8_str());
+    return wxT("file://") + EscapeFileNameCharsInURL(url.utf8_str());
 }
 
 
