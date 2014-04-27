@@ -3483,7 +3483,13 @@ public:
 
 
 
-    
+    /**
+        Returns the item affected by the event.
+
+        Notice that for @c wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE and @c
+        wxEVT_DATAVIEW_ITEM_DROP event handlers, the item may be invalid,
+        indicating that the drop is about to happen outside of the item area.
+     */
     wxDataViewItem GetItem() const;
     void SetItem( const wxDataViewItem &item );
     void SetEditCanceled(bool editCancelled);

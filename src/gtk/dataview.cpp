@@ -3562,8 +3562,6 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
                                            GtkSelectionData *selection_data)
 {
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
-    if ( !item )
-        return FALSE;
 
     wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP, m_owner->GetId() );
     event.SetEventObject( m_owner );
@@ -3587,8 +3585,6 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
                                           GtkSelectionData *selection_data)
 {
     wxDataViewItem item(GetOwner()->GTKPathToItem(path));
-    if ( !item )
-        return FALSE;
 
     wxDataViewEvent event( wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );

@@ -36,6 +36,7 @@ All (GUI):
 - Add wxFD_NO_FOLLOW style for wxFileDialog (Luca Bacci).
 - Add support for embedding bitmaps in generated SVG in wxSVGFileDC (iwbnwif).
 - Add support for sorting wxDataViewCtrl by multiple columns (Trigve).
+- Allow dropping data on wxDataViewCtrl background (Laurent Poujoulat).
 - Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
 - Send events when toggling wxPropertyGrid nodes from keyboard (Armel Asselin).
