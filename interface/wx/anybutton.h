@@ -102,9 +102,8 @@ public:
         states.
 
         @param bitmap
-            The bitmap to display in the button. Under wxGTK the bitmap can be
-            invalid to remove the currently displayed bitmap, however this is
-            not supported in wxMSW currently.
+            The bitmap to display in the button. If the bitmap is invalid, any
+            currently shown bitmaps are removed from the button.
         @param dir
             The position of the bitmap inside the button. By default it is
             positioned to the left of the text, near to the left button border.
@@ -119,6 +118,9 @@ public:
     /**
         Sets the bitmap to be shown when the mouse is over the button.
 
+        If @a bitmap is invalid, the normal bitmap will be used in the current
+        state.
+
         @see GetBitmapCurrent()
 
         @since 2.9.1 (available as wxBitmapButton::SetBitmapHover() in previous
@@ -128,6 +130,12 @@ public:
 
     /**
         Sets the bitmap for the disabled button appearance.
+
+        If @a bitmap is invalid, the disabled bitmap is set to the
+        automatically generated greyed out version of the normal bitmap, i.e.
+        the same bitmap as is used by default if this method is not called at
+        all. Use SetBitmap() with an invalid bitmap to remove the bitmap
+        completely (for all states).
 
         @see GetBitmapDisabled(), SetBitmapLabel(),
              SetBitmapPressed(), SetBitmapFocus()
@@ -139,6 +147,9 @@ public:
     /**
         Sets the bitmap for the button appearance when it has the keyboard
         focus.
+
+        If @a bitmap is invalid, the normal bitmap will be used in the focused
+        state.
 
         @see GetBitmapFocus(), SetBitmapLabel(),
              SetBitmapPressed(), SetBitmapDisabled()
