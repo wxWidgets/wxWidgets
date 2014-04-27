@@ -1162,33 +1162,56 @@ wxLoadUserResource(const wxString& resourceName,
 // OS version
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
+// Helper function wrapping Windows GetVersionEx() which is deprecated since
+// Windows 8. For now, all we do in this wrapper is to avoid the deprecation
+// warnings but this is not enough as the function now actually doesn't return
+// the correct value any more and we need to use VerifyVersionInfo() to perform
+// binary search to find the real Windows version.
+OSVERSIONINFOEX wxGetWindowsVersionInfo()
+{
+    OSVERSIONINFOEX info;
+    wxZeroMemory(info);
+
+#ifdef __VISUALC__
+    #pragma warning(push)
+    #pragma warning(disable:4996) // 'xxx': was declared deprecated
+#endif
+
+    info.dwOSVersionInfoSize = sizeof(info);
+    if ( !::GetVersionEx(reinterpret_cast<OSVERSIONINFO *>(&info)) )
+    {
+        // This really shouldn't ever happen.
+        wxFAIL_MSG( "GetVersionEx() unexpectedly failed" );
+    }
+
+#ifdef __VISUALC__
+    #pragma warning(pop)
+#endif
+
+    return info;
+}
+
 // check if we're running under a server or workstation Windows system: it
 // returns true or false with obvious meaning as well as -1 if the system type
 // couldn't be determined
 //
 // this function is currently private but we may want to expose it later if
 // it's really useful
-namespace
-{
 
 int wxIsWindowsServer()
 {
 #ifdef VER_NT_WORKSTATION
-    OSVERSIONINFOEX info;
-    wxZeroMemory(info);
-
-    info.dwOSVersionInfoSize = sizeof(info);
-    if ( ::GetVersionEx(reinterpret_cast<OSVERSIONINFO *>(&info)) )
+    switch ( wxGetWindowsVersionInfo().wProductType )
     {
-        switch ( info.wProductType )
-        {
-            case VER_NT_WORKSTATION:
-                return false;
+        case VER_NT_WORKSTATION:
+            return false;
 
-            case VER_NT_SERVER:
-            case VER_NT_DOMAIN_CONTROLLER:
-                return true;
-        }
+        case VER_NT_SERVER:
+        case VER_NT_DOMAIN_CONTROLLER:
+            return true;
     }
 #endif // VER_NT_WORKSTATION
 
@@ -1201,145 +1224,135 @@ wxString wxGetOsDescription()
 {
     wxString str;
 
-    OSVERSIONINFO info;
-    wxZeroMemory(info);
-
-    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    if ( ::GetVersionEx(&info) )
+    const OSVERSIONINFOEX info = wxGetWindowsVersionInfo();
+    switch ( info.dwPlatformId )
     {
-        switch ( info.dwPlatformId )
-        {
 #ifdef VER_PLATFORM_WIN32_CE
-            case VER_PLATFORM_WIN32_CE:
-                str.Printf(_("Windows CE (%d.%d)"),
-                           info.dwMajorVersion,
-                           info.dwMinorVersion);
-                break;
+        case VER_PLATFORM_WIN32_CE:
+            str.Printf(_("Windows CE (%d.%d)"),
+                       info.dwMajorVersion,
+                       info.dwMinorVersion);
+            break;
 #endif
-            case VER_PLATFORM_WIN32s:
-                str = _("Win32s on Windows 3.1");
-                break;
+        case VER_PLATFORM_WIN32s:
+            str = _("Win32s on Windows 3.1");
+            break;
 
-            case VER_PLATFORM_WIN32_WINDOWS:
-                switch (info.dwMinorVersion)
-                {
-                    case 0:
-                        if ( info.szCSDVersion[1] == 'B' ||
-                             info.szCSDVersion[1] == 'C' )
-                        {
-                            str = _("Windows 95 OSR2");
-                        }
-                        else
-                        {
-                            str = _("Windows 95");
-                        }
-                        break;
-                    case 10:
-                        if ( info.szCSDVersion[1] == 'B' ||
-                             info.szCSDVersion[1] == 'C' )
-                        {
-                            str = _("Windows 98 SE");
-                        }
-                        else
-                        {
-                            str = _("Windows 98");
-                        }
-                        break;
-                    case 90:
-                        str = _("Windows ME");
-                        break;
-                    default:
-                        str.Printf(_("Windows 9x (%d.%d)"),
-                                   info.dwMajorVersion,
-                                   info.dwMinorVersion);
-                        break;
-                }
-                if ( !wxIsEmpty(info.szCSDVersion) )
-                {
-                    str << wxT(" (") << info.szCSDVersion << wxT(')');
-                }
-                break;
-
-            case VER_PLATFORM_WIN32_NT:
-                switch ( info.dwMajorVersion )
-                {
-                    case 5:
-                        switch ( info.dwMinorVersion )
-                        {
-                            case 0:
-                                str = _("Windows 2000");
-                                break;
-
-                            case 2:
-                                // we can't distinguish between XP 64 and 2003
-                                // as they both are 5.2, so examine the product
-                                // type to resolve this ambiguity
-                                if ( wxIsWindowsServer() == 1 )
-                                {
-                                    str = _("Windows Server 2003");
-                                    break;
-                                }
-                                //else: must be XP, fall through
-
-                            case 1:
-                                str = _("Windows XP");
-                                break;
-                        }
-                        break;
-
-                    case 6:
-                        switch ( info.dwMinorVersion )
-                        {
-                            case 0:
-                                str = wxIsWindowsServer() == 1
-                                        ? _("Windows Server 2008")
-                                        : _("Windows Vista");
-                                break;
-
-                            case 1:
-                                str = wxIsWindowsServer() == 1
-                                        ? _("Windows Server 2008 R2")
-                                        : _("Windows 7");
-                                break;
-
-                            case 2:
-                                str = wxIsWindowsServer() == 1
-                                        ? _("Windows Server 2012")
-                                        : _("Windows 8");
-                                break;
-
-                            case 3:
-                                str = wxIsWindowsServer() == 1
-                                        ? _("Windows Server 2012 R2")
-                                        : _("Windows 8.1");
-                                break;
-                        }
-                        break;
-                }
-
-                if ( str.empty() )
-                {
-                    str.Printf(_("Windows NT %lu.%lu"),
+        case VER_PLATFORM_WIN32_WINDOWS:
+            switch (info.dwMinorVersion)
+            {
+                case 0:
+                    if ( info.szCSDVersion[1] == 'B' ||
+                         info.szCSDVersion[1] == 'C' )
+                    {
+                        str = _("Windows 95 OSR2");
+                    }
+                    else
+                    {
+                        str = _("Windows 95");
+                    }
+                    break;
+                case 10:
+                    if ( info.szCSDVersion[1] == 'B' ||
+                         info.szCSDVersion[1] == 'C' )
+                    {
+                        str = _("Windows 98 SE");
+                    }
+                    else
+                    {
+                        str = _("Windows 98");
+                    }
+                    break;
+                case 90:
+                    str = _("Windows ME");
+                    break;
+                default:
+                    str.Printf(_("Windows 9x (%d.%d)"),
                                info.dwMajorVersion,
                                info.dwMinorVersion);
-                }
+                    break;
+            }
+            if ( !wxIsEmpty(info.szCSDVersion) )
+            {
+                str << wxT(" (") << info.szCSDVersion << wxT(')');
+            }
+            break;
 
-                str << wxT(" (")
-                    << wxString::Format(_("build %lu"), info.dwBuildNumber);
-                if ( !wxIsEmpty(info.szCSDVersion) )
-                {
-                    str << wxT(", ") << info.szCSDVersion;
-                }
-                str << wxT(')');
+        case VER_PLATFORM_WIN32_NT:
+            switch ( info.dwMajorVersion )
+            {
+                case 5:
+                    switch ( info.dwMinorVersion )
+                    {
+                        case 0:
+                            str = _("Windows 2000");
+                            break;
 
-                if ( wxIsPlatform64Bit() )
-                    str << _(", 64-bit edition");
-                break;
-        }
-    }
-    else
-    {
-        wxFAIL_MSG( wxT("GetVersionEx() failed") ); // should never happen
+                        case 2:
+                            // we can't distinguish between XP 64 and 2003
+                            // as they both are 5.2, so examine the product
+                            // type to resolve this ambiguity
+                            if ( wxIsWindowsServer() == 1 )
+                            {
+                                str = _("Windows Server 2003");
+                                break;
+                            }
+                            //else: must be XP, fall through
+
+                        case 1:
+                            str = _("Windows XP");
+                            break;
+                    }
+                    break;
+
+                case 6:
+                    switch ( info.dwMinorVersion )
+                    {
+                        case 0:
+                            str = wxIsWindowsServer() == 1
+                                    ? _("Windows Server 2008")
+                                    : _("Windows Vista");
+                            break;
+
+                        case 1:
+                            str = wxIsWindowsServer() == 1
+                                    ? _("Windows Server 2008 R2")
+                                    : _("Windows 7");
+                            break;
+
+                        case 2:
+                            str = wxIsWindowsServer() == 1
+                                    ? _("Windows Server 2012")
+                                    : _("Windows 8");
+                            break;
+
+                        case 3:
+                            str = wxIsWindowsServer() == 1
+                                    ? _("Windows Server 2012 R2")
+                                    : _("Windows 8.1");
+                            break;
+                    }
+                    break;
+            }
+
+            if ( str.empty() )
+            {
+                str.Printf(_("Windows NT %lu.%lu"),
+                           info.dwMajorVersion,
+                           info.dwMinorVersion);
+            }
+
+            str << wxT(" (")
+                << wxString::Format(_("build %lu"), info.dwBuildNumber);
+            if ( !wxIsEmpty(info.szCSDVersion) )
+            {
+                str << wxT(", ") << info.szCSDVersion;
+            }
+            str << wxT(')');
+
+            if ( wxIsPlatform64Bit() )
+                str << _(", 64-bit edition");
+            break;
     }
 
     return str;
@@ -1374,8 +1387,7 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
     static struct
     {
-        // this may be false, true or -1 if we tried to initialize but failed
-        int initialized;
+        bool initialized;
 
         wxOperatingSystemId os;
 
@@ -1386,49 +1398,36 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     // query the OS info only once as it's not supposed to change
     if ( !s_version.initialized )
     {
-        OSVERSIONINFO info;
-        wxZeroMemory(info);
-        info.dwOSVersionInfoSize = sizeof(info);
-        if ( ::GetVersionEx(&info) )
-        {
-            s_version.initialized = true;
+        const OSVERSIONINFOEX info = wxGetWindowsVersionInfo();
+
+        s_version.initialized = true;
 
 #if defined(__WXWINCE__)
-            s_version.os = wxOS_WINDOWS_CE;
+        s_version.os = wxOS_WINDOWS_CE;
 #elif defined(__WXMICROWIN__)
-            s_version.os = wxOS_WINDOWS_MICRO;
+        s_version.os = wxOS_WINDOWS_MICRO;
 #else // "normal" desktop Windows system, use run-time detection
-            switch ( info.dwPlatformId )
-            {
-                case VER_PLATFORM_WIN32_NT:
-                    s_version.os = wxOS_WINDOWS_NT;
-                    break;
+        switch ( info.dwPlatformId )
+        {
+            case VER_PLATFORM_WIN32_NT:
+                s_version.os = wxOS_WINDOWS_NT;
+                break;
 
-                case VER_PLATFORM_WIN32_WINDOWS:
-                    s_version.os = wxOS_WINDOWS_9X;
-                    break;
-            }
+            case VER_PLATFORM_WIN32_WINDOWS:
+                s_version.os = wxOS_WINDOWS_9X;
+                break;
+        }
 #endif // Windows versions
 
-            s_version.verMaj = info.dwMajorVersion;
-            s_version.verMin = info.dwMinorVersion;
-        }
-        else // GetVersionEx() failed
-        {
-            s_version.initialized = -1;
-        }
+        s_version.verMaj = info.dwMajorVersion;
+        s_version.verMin = info.dwMinorVersion;
     }
 
-    if ( s_version.initialized == 1 )
-    {
-        if ( verMaj )
-            *verMaj = s_version.verMaj;
-        if ( verMin )
-            *verMin = s_version.verMin;
-    }
+    if ( verMaj )
+        *verMaj = s_version.verMaj;
+    if ( verMin )
+        *verMin = s_version.verMin;
 
-    // this works even if we were not initialized successfully as the initial
-    // values of this field is 0 which is wxOS_UNKNOWN and exactly what we need
     return s_version.os;
 }
 
