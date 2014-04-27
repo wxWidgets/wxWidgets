@@ -655,6 +655,7 @@ wxMSW:
 - Fix expander in non left-most position in wxDataViewCtrl (Laurent Poujoulat).
 - Don't fail when using large paper sizes in print preview.
 - Fix wxRichMessageDialog return value for dialog with only "OK" button.
+- Fix precision loss in wxGraphicsContext::{Draw,Stroke}Lines() (tibo_).
 
 wxOSX:
 
