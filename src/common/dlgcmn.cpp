@@ -370,6 +370,8 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
         SetAffirmativeId(wxID_OK);
     else if (flags & wxYES)
         SetAffirmativeId(wxID_YES);
+    else if (flags & wxCLOSE)
+        SetAffirmativeId(wxID_CLOSE);
 
     sizer->Realize();
 
