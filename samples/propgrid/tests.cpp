@@ -1229,7 +1229,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr1[i];
                 page->HideProperty(p, true);
 
-                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1245,7 +1245,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr2[i];
                 page->HideProperty(p, false);
 
-                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1263,7 +1263,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr1[i];
                 page->HideProperty(p, true);
 
-                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1279,7 +1279,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr2[i];
                 page->HideProperty(p, false);
 
-                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1298,7 +1298,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr1[i];
                 page->HideProperty(p, true);
 
-                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("HideProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1314,7 +1314,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                 wxPGProperty* p = arr2[i];
                 page->HideProperty(p, false);
 
-                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), i, p->GetLabel().c_str());
+                wxString s = wxString::Format(wxT("ShowProperty(%i, %s)"), (int)i, p->GetLabel().c_str());
                 RT_VALIDATE_VIRTUAL_HEIGHT(page, s)
                 if ( _failed_ )
                     break;
@@ -1334,7 +1334,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // FIXME: Does not display changes.
         for ( i=3; i<12; i+=2 )
         {
-            RT_MSG(wxString::Format(wxT("%i columns"),i));
+            RT_MSG(wxString::Format(wxT("%i columns"),(int)i));
             CreateGrid( -1, -1 );
             pgman = m_pPropGridManager;
             pgman->SetColumnCount(i);
