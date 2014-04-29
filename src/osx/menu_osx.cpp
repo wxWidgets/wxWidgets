@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/scopedptr.h"
 
 // other standard headers
 // ----------------------
@@ -584,7 +585,7 @@ bool     wxMenuBar::s_macAutoWindowMenu = true ;
 WXHMENU  wxMenuBar::s_macWindowMenuHandle = NULL ;
 
 
-wxMenu* emptyMenuBar = NULL;
+wxScopedPtr<wxMenu> gs_emptyMenuBar;
 
 const int firstMenuPos = 1; // to account for the 0th application menu on mac
 
@@ -637,10 +638,10 @@ static wxMenu *CreateAppleMenu()
 
 void wxMenuBar::Init()
 {
-    if ( emptyMenuBar == NULL )
+    if ( !gs_emptyMenuBar )
     {
-        emptyMenuBar = new wxMenu();
-        emptyMenuBar->AppendSubMenu(CreateAppleMenu(), "\x14") ;
+        gs_emptyMenuBar.reset( new wxMenu() );
+        gs_emptyMenuBar->AppendSubMenu(CreateAppleMenu(), "\x14") ;
     }
     
     m_eventHandler = this;
@@ -682,7 +683,7 @@ wxMenuBar::~wxMenuBar()
 
     if (s_macInstalledMenuBar == this)
     {
-        emptyMenuBar->GetPeer()->MakeRoot();
+        gs_emptyMenuBar->GetPeer()->MakeRoot();
         s_macInstalledMenuBar = NULL;
     }
     wxDELETE( m_rootMenu );
