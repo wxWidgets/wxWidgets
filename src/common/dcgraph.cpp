@@ -966,20 +966,62 @@ bool wxGCDCImpl::DoStretchBlit(
     return retval;
 }
 
-void wxGCDCImpl::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
+void wxGCDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
                                double angle)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawRotatedText - invalid DC") );
 
-    if ( str.empty() )
+    if ( text.empty() )
         return;
     if ( !m_logicalFunctionSupported )
         return;
 
-    if ( m_backgroundMode == wxTRANSPARENT )
-        m_graphicContext->DrawText( str, x ,y , DegToRad(angle ));
-    else
-        m_graphicContext->DrawText( str, x ,y , DegToRad(angle ), m_graphicContext->CreateBrush(m_textBackgroundColour) );
+    // we test that we have some font because otherwise we should still use the
+    // "else" part below to avoid that DrawRotatedText(angle = 180) and
+    // DrawRotatedText(angle = 0) use different fonts (we can't use the default
+    // font for drawing rotated fonts unfortunately)
+    if ( (angle == 0.0) && m_font.IsOk() )
+    {
+        DoDrawText(text, x, y);
+        
+        // Bounding box already updated by DoDrawText(), no need to do it again.
+        return;
+    }
+            
+    // Get extent of whole text.
+    wxCoord w, h, heightLine;
+    GetOwner()->GetMultiLineTextExtent(text, &w, &h, &heightLine);
+    
+    // Compute the shift for the origin of the next line.
+    const double rad = DegToRad(angle);
+    const double dx = heightLine * sin(rad);
+    const double dy = heightLine * cos(rad);
+    
+    // Draw all text line by line
+    const wxArrayString lines = wxSplit(text, '\n', '\0');
+    for ( size_t lineNum = 0; lineNum < lines.size(); lineNum++ )
+    {
+        // Calculate origin for each line to avoid accumulation of
+        // rounding errors.
+        if ( m_backgroundMode == wxTRANSPARENT )
+            m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), DegToRad(angle ));
+        else
+            m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), DegToRad(angle ), m_graphicContext->CreateBrush(m_textBackgroundColour) );
+   }
+            
+    // call the bounding box by adding all four vertices of the rectangle
+    // containing the text to it (simpler and probably not slower than
+    // determining which of them is really topmost/leftmost/...)
+    
+    // "upper left" and "upper right"
+    CalcBoundingBox(x, y);
+    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
+    
+    // "bottom left" and "bottom right"
+    x += (wxCoord)(h*sin(rad));
+    y += (wxCoord)(h*cos(rad));
+    CalcBoundingBox(x, y);
+    CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
 }
 
 void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
