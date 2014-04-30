@@ -56,11 +56,12 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
         if (GDK_IS_X11_SCREEN(screen))
 #endif
         {
-            GdkRectangle rect;
+            GdkRectangle rect = { 0 };
             wxGetWorkAreaX11(GDK_SCREEN_XSCREEN(screen),
                 rect.x, rect.y, rect.width, rect.height);
             // in case _NET_WORKAREA result is too large
-            gdk_rectangle_intersect(dest, &rect, dest);
+            if (rect.width && rect.height)
+                gdk_rectangle_intersect(dest, &rect, dest);
         }
 #endif // GDK_WINDOWING_X11
     }
