@@ -840,10 +840,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
 
     if ( cgImageRef )
     {
-        m_bitmap.Create( CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
-        CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
-        // since our context is upside down we dont use CGContextDrawImage
-        wxMacDrawCGImage( (CGContextRef) m_bitmap.GetHBITMAP() , &r, cgImageRef ) ;
+        m_bitmap.Create( cgImageRef );
         CGImageRelease(cgImageRef);
         cgImageRef = NULL;
     }
