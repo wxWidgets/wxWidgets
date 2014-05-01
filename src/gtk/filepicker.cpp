@@ -163,22 +163,12 @@ void wxFileButton::SetInitialDirectory(const wxString& dir)
 #endif
 
 //-----------------------------------------------------------------------------
-// "current-folder-changed"
+// "file-set"
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_dirbutton_currentfolderchanged_callback(GtkFileChooserButton *widget,
-                                                        wxDirButton *p)
+static void file_set(GtkFileChooser* widget, wxDirButton* p)
 {
-    // update the m_path member of the wxDirButtonGTK
-    // unless the path was changed by wxDirButton::SetPath()
-    if (p->m_bIgnoreNextChange)
-    {
-        p->m_bIgnoreNextChange=false;
-        return;
-    }
-    wxASSERT(p);
-
     // NB: it's important to use gtk_file_chooser_get_filename instead of
     //     gtk_file_chooser_get_current_folder (see GTK docs) !
     wxGtkString filename(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget)));
@@ -198,6 +188,23 @@ static void gtk_dirbutton_currentfolderchanged_callback(GtkFileChooserButton *wi
 }
 }
 
+//-----------------------------------------------------------------------------
+// "selection-changed"
+//-----------------------------------------------------------------------------
+
+extern "C" {
+static void selection_changed(GtkFileChooser* chooser, wxDirButton* win)
+{
+    char* filename = gtk_file_chooser_get_filename(chooser);
+
+    if (wxString::FromUTF8(filename) == win->GetPath())
+        win->m_bIgnoreNextChange = false;
+    else if (!win->m_bIgnoreNextChange)
+        file_set(chooser, win);
+
+    g_free(filename);
+}
+}
 
 //-----------------------------------------------------------------------------
 // wxDirButtonGTK
@@ -231,7 +238,6 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         m_wildcard = wildcard;
         if ((m_dialog = CreateDialog()) == NULL)
             return false;
-        SetPath(path);
 
         // little trick used to avoid problems when there are other GTK windows 'grabbed':
         // GtkFileChooserDialog won't be responsive to user events if there is another
@@ -250,10 +256,19 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         //       use as label the currently selected file
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
         g_object_ref(m_widget);
+        SetPath(path);
 
-        // GtkFileChooserButton signals
-        g_signal_connect(m_widget, "current-folder-changed",
-                         G_CALLBACK(gtk_dirbutton_currentfolderchanged_callback), this);
+#ifdef __WXGTK3__
+        if (gtk_check_version(3,8,0) == NULL)
+            g_signal_connect(m_widget, "file_set", G_CALLBACK(file_set), this);
+        else
+#endif
+        {
+            // prior to GTK+ 3.8 neither "file-set" nor "current-folder-changed" will be
+            // emitted when the user selects one of the special folders from the combobox
+            g_signal_connect(m_widget, "selection_changed",
+                G_CALLBACK(selection_changed), this);
+        }
 
         m_parent->DoAddChild( this );
 
@@ -283,21 +298,15 @@ void wxDirButton::GTKUpdatePath(const char *gtkpath)
 void wxDirButton::SetPath(const wxString& str)
 {
     if ( m_path == str )
-    {
-        // don't do anything and especially don't set m_bIgnoreNextChange
         return;
-    }
 
     m_path = str;
 
-    // wxDirButton uses the "current-folder-changed" signal which is triggered also
-    // when we set the path on the dialog associated with this button; thus we need
-    // to set the following flag to avoid sending a wxFileDirPickerEvent from this
-    // function (which would be inconsistent with wxFileButton's behaviour and in
-    // general with all wxWidgets control-manipulation functions which do not send events).
     m_bIgnoreNextChange = true;
 
-    if (m_dialog)
+    if (GTK_IS_FILE_CHOOSER(m_widget))
+        gtk_file_chooser_set_filename((GtkFileChooser*)m_widget, str.utf8_str());
+    else if (m_dialog)
         UpdateDialogPath(m_dialog);
 }
 
