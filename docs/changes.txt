@@ -617,6 +617,8 @@ wxGTK:
 - Fix handling of the accelerators for sub menu items (Chaobin Zhang).
 - Fix disappearing mouse clicks when using wxTreeCtrl.
 - Fix calls to Move{Before,After}InTabOrder() after parent window creation.
+- Fix wxDirPickerCtrl to send wxEVT_DIRPICKER_CHANGED when user selects a
+  special folder from combobox
 
 wxMSW:
 
