@@ -91,8 +91,8 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
-    <Import Project="wx_vc11_wx_setup.props" />
-    <Import Project="wx_vc11_local.props" Condition="Exists('wx_vc11_local.props')" />
+    <Import Project="wx_vc12_wx_setup.props" />
+    <Import Project="wx_vc12_local.props" Condition="Exists('wx_vc12_local.props')" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
