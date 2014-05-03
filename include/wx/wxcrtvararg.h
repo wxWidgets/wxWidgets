@@ -205,7 +205,7 @@
 #if wxUSE_UNICODE && !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_WPRINTF)
     #define wxNEED_WPRINTF
 #endif
-#if wxUSE_UNICODE && !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_VSWSCANF)
+#if !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_VSWSCANF)
     #define wxNEED_VSWSCANF
 #endif
 
