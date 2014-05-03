@@ -1978,6 +1978,16 @@ public:
     virtual bool ExtendSelection(long oldPosition, long newPosition, int flags);
 
     /**
+        Extends a table selection in the given direction.
+    */
+    virtual bool ExtendCellSelection(wxRichTextTable* table, int noRowSteps, int noColSteps);
+
+    /**
+        Starts selecting table cells.
+    */
+    virtual bool StartCellSelection(wxRichTextTable* table, wxRichTextParagraphLayoutBox* newCell);
+
+    /**
         Scrolls @a position into view. This function takes a caret position.
     */
     virtual bool ScrollIntoView(long position, int keyCode);

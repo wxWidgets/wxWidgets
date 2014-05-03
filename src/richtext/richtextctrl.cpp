@@ -2069,9 +2069,95 @@ void wxRichTextCtrl::MoveCaretBack(long oldPosition)
 /// Move right
 bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
 {
+    // Test for continuing table selection
+    if (flags && wxRICHTEXT_SHIFT_DOWN)
+    {
+        if (m_selection.GetContainer() && m_selection.GetContainer()->IsKindOf(CLASSINFO(wxRichTextTable)))
+        {
+            wxRichTextTable* table = wxDynamicCast(m_selection.GetContainer(), wxRichTextTable);
+            if (GetFocusObject() && GetFocusObject()->GetParent() == m_selection.GetContainer())
+            {
+                ExtendCellSelection(table, 0, noPositions);
+                return true;
+            }
+        }
+    }
+
+    long startPos = -1;
     long endPos = GetFocusObject()->GetOwnRange().GetEnd();
 
-    if (m_caretPosition + noPositions < endPos)
+    bool beyondBottom = (noPositions > 0 && (m_caretPosition + noPositions >= endPos));
+    bool beyondTop = (noPositions < 0 && (m_caretPosition <= startPos + noPositions + 1));
+
+    if (beyondBottom || beyondTop)
+    {
+        wxPoint pt = GetLogicalPoint(GetCaret()->GetPosition());
+
+        int hitTestFlags = wxRICHTEXT_HITTEST_NO_FLOATING_OBJECTS|wxRICHTEXT_HITTEST_HONOUR_ATOMIC;
+
+        if (beyondBottom)
+            pt.x = GetFocusObject()->GetPosition().x + GetFocusObject()->GetCachedSize().x + 2;
+        else
+            pt.x = GetFocusObject()->GetPosition().x - 2;
+
+        pt.y += 2;
+
+        long newPos = 0;
+        wxClientDC dc(this);
+        PrepareDC(dc);
+        dc.SetFont(GetFont());
+
+        wxRichTextObject* hitObj = NULL;
+        wxRichTextObject* contextObj = NULL;
+        wxRichTextDrawingContext context(& GetBuffer());
+        int hitTest = GetBuffer().HitTest(dc, context, pt, newPos, & hitObj, & contextObj, hitTestFlags);
+
+        if (hitObj &&
+            ((hitTest & wxRICHTEXT_HITTEST_NONE) == 0) &&
+            (! (hitObj == (& m_buffer) && ((hitTest & wxRICHTEXT_HITTEST_OUTSIDE) != 0))) // outside the buffer counts as 'do nothing'
+            )
+        {
+            wxRichTextParagraphLayoutBox* actualContainer = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
+            if (actualContainer && actualContainer != GetFocusObject() && actualContainer->AcceptsFocus() && actualContainer->IsShown())
+            {
+                if ((flags && wxRICHTEXT_SHIFT_DOWN) &&
+                    GetFocusObject()->IsKindOf(CLASSINFO(wxRichTextCell)) &&
+                    actualContainer->IsKindOf(CLASSINFO(wxRichTextCell)) &&
+                    GetFocusObject()->GetParent() == actualContainer->GetParent())
+                {
+                    // Start selecting cells in a table
+                    wxRichTextTable* table = wxDynamicCast(actualContainer->GetParent(), wxRichTextTable);
+                    if (table)
+                    {
+                        StartCellSelection(table, actualContainer);
+                        return true;
+                    }
+                }
+
+                // If the new container is a cell, go to the top or bottom of it.
+                if (actualContainer->IsKindOf(CLASSINFO(wxRichTextCell)))
+                {
+                    if (beyondBottom)
+                        newPos = 0;
+                    else
+                        newPos = actualContainer->GetOwnRange().GetEnd()-1;
+                }
+
+                SetFocusObject(actualContainer, false /* don't set caret position yet */);
+                bool caretLineStart = true;
+                long caretPosition = FindCaretPositionForCharacterPosition(newPos, hitTest, actualContainer, caretLineStart);
+ 
+                SelectNone();
+
+                SetCaretPosition(caretPosition, caretLineStart);
+                PositionCaret();
+                SetDefaultStyleToCursorStyle();
+
+                return true;
+            }
+        }
+    }
+    else if (!beyondTop && !beyondBottom)
     {
         long oldPos = m_caretPosition;
         long newPos = m_caretPosition + noPositions;
@@ -2087,32 +2173,7 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
         // line.
         if (noPositions == 1)
             MoveCaretForward(oldPos);
-        else
-            SetCaretPosition(newPos);
-
-        PositionCaret();
-        SetDefaultStyleToCursorStyle();
-
-        return true;
-    }
-    else
-        return false;
-}
-
-/// Move left
-bool wxRichTextCtrl::MoveLeft(int noPositions, int flags)
-{
-    long startPos = -1;
-
-    if (m_caretPosition > startPos - noPositions + 1)
-    {
-        long oldPos = m_caretPosition;
-        long newPos = m_caretPosition - noPositions;
-        bool extendSel = ExtendSelection(m_caretPosition, newPos, flags);
-        if (!extendSel)
-            SelectNone();
-
-        if (noPositions == 1)
+        else if (noPositions == -1)
             MoveCaretBack(oldPos);
         else
             SetCaretPosition(newPos);
@@ -2122,8 +2183,13 @@ bool wxRichTextCtrl::MoveLeft(int noPositions, int flags)
 
         return true;
     }
-    else
-        return false;
+    return false;
+}
+
+/// Move left
+bool wxRichTextCtrl::MoveLeft(int noPositions, int flags)
+{
+    return MoveRight(-noPositions, flags);
 }
 
 // Find the caret position for the combination of hit-test flags and character position.
@@ -2161,19 +2227,27 @@ long wxRichTextCtrl::FindCaretPositionForCharacterPosition(long position, int hi
 }
 
 /// Move up
-bool wxRichTextCtrl::MoveUp(int noLines, int flags)
-{
-    return MoveDown(- noLines, flags);
-}
-
-/// Move up
 bool wxRichTextCtrl::MoveDown(int noLines, int flags)
 {
     if (!GetCaret())
         return false;
 
+    // Test for continuing table selection
+    if (flags && wxRICHTEXT_SHIFT_DOWN)
+    {
+        if (m_selection.GetContainer() && m_selection.GetContainer()->IsKindOf(CLASSINFO(wxRichTextTable)))
+        {
+            wxRichTextTable* table = wxDynamicCast(m_selection.GetContainer(), wxRichTextTable);
+            if (GetFocusObject() && GetFocusObject()->GetParent() == m_selection.GetContainer())
+            {
+                ExtendCellSelection(table, noLines, 0);
+                return true;
+            }
+        }
+    }
+
     long lineNumber = GetFocusObject()->GetVisibleLineNumber(m_caretPosition, true, m_caretAtLineStart);
-    wxPoint pt = GetCaret()->GetPosition();
+    wxPoint pt = GetLogicalPoint(GetCaret()->GetPosition());
     long newLine = lineNumber + noLines;
     bool notInThisObject = false;
 
@@ -2245,6 +2319,20 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
             wxRichTextParagraphLayoutBox* actualContainer = wxDynamicCast(contextObj, wxRichTextParagraphLayoutBox);
             if (actualContainer && actualContainer != GetFocusObject() && actualContainer->AcceptsFocus())
             {
+                if ((flags && wxRICHTEXT_SHIFT_DOWN) &&
+                    GetFocusObject()->IsKindOf(CLASSINFO(wxRichTextCell)) &&
+                    actualContainer->IsKindOf(CLASSINFO(wxRichTextCell)) &&
+                    GetFocusObject()->GetParent() == actualContainer->GetParent())
+                {
+                    // Start selecting cells in a table
+                    wxRichTextTable* table = wxDynamicCast(actualContainer->GetParent(), wxRichTextTable);
+                    if (table)
+                    {
+                        StartCellSelection(table, actualContainer);
+                        return true;
+                    }
+                }
+
                 SetFocusObject(actualContainer, false /* don't set caret position yet */);
 
                 container = actualContainer;
@@ -2281,6 +2369,122 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
     }
 
     return false;
+}
+
+/// Extend a table selection in the given direction
+bool wxRichTextCtrl::ExtendCellSelection(wxRichTextTable* table, int noRowSteps, int noColSteps)
+{
+    int thisRow = -1;
+    int thisCol = -1;
+    int r, c;
+    for (r = 0; r < table->GetRowCount(); r ++)
+    {
+        for (c = 0; c < table->GetColumnCount(); c++)
+        {
+            wxRichTextCell* cell = table->GetCell(r, c);
+            if (cell == GetFocusObject())
+            {
+                thisRow = r;
+                thisCol = c;
+            }
+        }
+    }
+    if (thisRow != -1)
+    {
+        int newRow = wxMax(0, wxMin((thisRow + noRowSteps), table->GetRowCount()-1));
+        int newCol = wxMax(0, wxMin((thisCol + noColSteps), table->GetColumnCount()-1));
+
+        if (newRow != thisRow || newCol != thisCol)
+        {
+            // Make sure we're on a visible row or column
+            r = newRow;
+            c = newCol;
+            int rowInc = noRowSteps > 0 ? 1 : -1;
+            int colInc = noColSteps > 0 ? 1 : -1;
+            bool visibleRow = false;
+            bool visibleCol = false;
+            if (noRowSteps != 0)
+            {
+                while (r >= 0 && r < table->GetRowCount())
+                {
+                    wxRichTextCell* cell = table->GetCell(r, newCol);
+                    if (cell->IsShown())
+                    {
+                        newRow = r;
+                        visibleRow = true;
+                        break;
+                    }
+                    else
+                    {
+                        r += rowInc;
+                    }
+                }
+                // No change if the cell would not be visible
+                if (!visibleRow)
+                    return true;
+            }
+
+            if (noColSteps != 0)
+            {
+                while (c >= 0 && c < table->GetColumnCount())
+                {
+                    wxRichTextCell* cell = table->GetCell(newRow, c);
+                    if (cell->IsShown())
+                    {
+                        newCol = c;
+                        visibleCol = true;
+                        break;
+                    }
+                    else
+                    {
+                        c += colInc;
+                    }
+                }
+                // No change if the cell would not be visible
+                if (!visibleCol)
+                    return true;
+            }
+
+            wxRichTextCell* newCell = table->GetCell(newRow, newCol);
+            if (newCell)
+            {
+                m_selection = table->GetSelection(m_selectionAnchor, newCell->GetRange().GetStart());
+                Refresh();
+                if (newCell->AcceptsFocus())
+                    SetFocusObject(newCell, false);
+                MoveCaret(-1, false);
+                SetDefaultStyleToCursorStyle();
+            }
+        }
+    }
+    return true;
+}
+
+/// Start selecting cells
+bool wxRichTextCtrl::StartCellSelection(wxRichTextTable* table, wxRichTextParagraphLayoutBox* newCell)
+{
+    // Start selecting cells in a table
+    m_selectionState = wxRichTextCtrlSelectionState_CommonAncestor;
+    m_selectionAnchorObject = GetFocusObject();
+    m_selectionAnchor = GetFocusObject()->GetRange().GetStart();
+
+    // The common ancestor, such as a table, returns the cell selection
+    // between the anchor and current position.
+    m_selection = table->GetSelection(m_selectionAnchor, newCell->GetRange().GetStart());
+    Refresh();
+
+    if (newCell->AcceptsFocus())
+        SetFocusObject(newCell, false /* don't set caret and clear selection */);
+    MoveCaret(-1, false);
+    SetDefaultStyleToCursorStyle();
+    
+    return true;
+}
+
+/// Move up
+bool wxRichTextCtrl::MoveUp(int noLines, int flags)
+{
+    return MoveDown(- noLines, flags);
 }
 
 /// Move to the end of the paragraph
