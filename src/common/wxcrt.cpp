@@ -299,13 +299,13 @@ static int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
     // of the function. This doesn't work with %c and %s because of difference
     // in size of char and wchar_t, though.
 
-    wxCHECK_MSG( wxStrstr(format, wxT("%s")) == NULL, -1,
+    wxCHECK_MSG( wxStrstr(format, L"%s") == NULL, -1,
                  wxT("incomplete vswscanf implementation doesn't allow %s") );
-    wxCHECK_MSG( wxStrstr(format, wxT("%c")) == NULL, -1,
+    wxCHECK_MSG( wxStrstr(format, L"%c") == NULL, -1,
                  wxT("incomplete vswscanf implementation doesn't allow %c") );
 
-    return vsscanf(static_cast<const char*>(wxConvLibc.cWX2MB(ws)),
-        wxConvLibc.cWX2MB(format), argptr);
+    return wxCRT_VsscanfA(static_cast<const char*>(wxConvLibc.cWC2MB(ws)),
+        wxConvLibc.cWC2MB(format), argptr);
 }
 #endif
 
