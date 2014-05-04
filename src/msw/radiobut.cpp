@@ -193,9 +193,12 @@ void wxRadioButton::SetValue(bool value)
 
 bool wxRadioButton::GetValue() const
 {
-    wxASSERT_MSG( m_isChecked ==
-                    (::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0L) != 0),
-                  wxT("wxRadioButton::m_isChecked is out of sync?") );
+    if ( !IsOwnerDrawn() )
+    {
+        wxASSERT_MSG( m_isChecked ==
+                        (::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0L) != 0),
+                      wxT("wxRadioButton::m_isChecked is out of sync?") );
+    }
 
     return m_isChecked;
 }
@@ -308,6 +311,13 @@ WXDWORD wxRadioButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 int wxRadioButton::MSWGetButtonStyle() const
 {
     return BS_RADIOBUTTON;
+}
+
+void wxRadioButton::MSWOnButtonResetOwnerDrawn()
+{
+    // ensure that controls state is consistent with internal state
+    ::SendMessage(GetHwnd(), BM_SETCHECK,
+                  m_isChecked ? BST_CHECKED : BST_UNCHECKED, 0);
 }
 
 int wxRadioButton::MSWGetButtonCheckedFlag() const
