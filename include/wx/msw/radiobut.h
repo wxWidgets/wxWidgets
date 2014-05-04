@@ -11,7 +11,9 @@
 #ifndef _WX_RADIOBUT_H_
 #define _WX_RADIOBUT_H_
 
-class WXDLLIMPEXP_CORE wxRadioButton: public wxControl
+#include "wx/msw/ownerdrawnbutton.h"
+
+class WXDLLIMPEXP_CORE wxRadioButton : public wxMSWOwnerDrawnButton<wxControl>
 {
 public:
     // ctors and creation functions
@@ -47,36 +49,26 @@ public:
     // implementation only from now on
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
-    virtual bool SetForegroundColour(const wxColour& colour);
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 
     virtual bool HasTransparentBackground() { return true; }
-
-    // make the radiobutton owner drawn or reset it to normal style
-    void MSWMakeOwnerDrawn(bool ownerDrawn);
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const;
-    virtual void MSWDrawButtonBitmap(wxWindow *win, wxDC& dc,
-                                     const wxRect& rect, int flags);
 
-    // return true if this checkbox is owner drawn
-    bool IsOwnerDrawn() const;
+    // Implement wxMSWOwnerDrawnButtonBase methods.
+    virtual int MSWGetButtonStyle() const wxOVERRIDE;
+    virtual int MSWGetButtonCheckedFlag() const wxOVERRIDE;
+    virtual void
+        MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags) wxOVERRIDE;
+
 
 private:
     // common part of all ctors
     void Init();
 
-    // event handlers used by owner-drawn radiobutton
-    void OnMouseEnterOrLeave(wxMouseEvent& event);
-    void OnMouseLeft(wxMouseEvent& event);
-    void OnFocus(wxFocusEvent& event);
-
-    // true if the radio button is currently pressed
-    bool m_isPressed;
 
     // we need to store the state internally as the result of GetValue()
     // sometimes gets out of sync in WM_COMMAND handler

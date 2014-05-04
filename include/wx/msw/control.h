@@ -124,10 +124,6 @@ protected:
     // Look in our GetSubcontrols() for the windows with the given ID.
     virtual wxWindow *MSWFindItem(long id, WXHWND hWnd) const;
 
-    // For ownerdraw buttons
-    virtual bool MSWOwnerDrawnButton(const DRAWITEMSTRUCT *dis, int flags, bool isFocused);
-    virtual void MSWDrawButtonBitmap(wxWindow *WXUNUSED(win), wxDC& WXUNUSED(dc),
-                                     const wxRect& WXUNUSED(rect), int WXUNUSED(flags)) {}
 
     // for controls like radiobuttons which are really composite this array
     // holds the ids (not HWNDs!) of the sub controls

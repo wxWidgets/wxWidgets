@@ -45,6 +45,7 @@
     #include "wx/treectrl.h"
 #endif // wxUSE_TREECTRL
 
+#include "wx/renderer.h"
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
@@ -452,17 +453,139 @@ wxWindow* wxControl::MSWFindItem(long id, WXHWND hWnd) const
     return wxControlBase::MSWFindItem(id, hWnd);
 }
 
-bool wxControl::MSWOwnerDrawnButton(const DRAWITEMSTRUCT *dis, int flags, bool isFocused)
+// ----------------------------------------------------------------------------
+// Owner drawn buttons support.
+// ----------------------------------------------------------------------------
+
+void
+wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawnIfNecessary(const wxColour& colFg)
 {
+    // The only way to change the checkbox foreground colour when using
+    // themes is to owner draw it.
+    if ( wxUxThemeEngine::GetIfActive() )
+        MSWMakeOwnerDrawn(colFg.IsOk());
+}
+
+bool wxMSWOwnerDrawnButtonBase::MSWIsOwnerDrawn() const
+{
+    return
+        (::GetWindowLong(GetHwndOf(m_win), GWL_STYLE) & BS_OWNERDRAW) == BS_OWNERDRAW;
+}
+
+void wxMSWOwnerDrawnButtonBase::MSWMakeOwnerDrawn(bool ownerDrawn)
+{
+    long style = ::GetWindowLong(GetHwndOf(m_win), GWL_STYLE);
+
+    // note that BS_CHECKBOX & BS_OWNERDRAW != 0 so we can't operate on
+    // them as on independent style bits
+    if ( ownerDrawn )
+    {
+        style &= ~BS_TYPEMASK;
+        style |= BS_OWNERDRAW;
+
+        m_win->Bind(wxEVT_ENTER_WINDOW,
+                    &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
+        m_win->Bind(wxEVT_LEAVE_WINDOW,
+                    &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
+
+        m_win->Bind(wxEVT_LEFT_DOWN,
+                    &wxMSWOwnerDrawnButtonBase::OnMouseLeft, this);
+        m_win->Bind(wxEVT_LEFT_UP,
+                    &wxMSWOwnerDrawnButtonBase::OnMouseLeft, this);
+
+        m_win->Bind(wxEVT_SET_FOCUS,
+                    &wxMSWOwnerDrawnButtonBase::OnFocus, this);
+
+        m_win->Bind(wxEVT_KILL_FOCUS,
+                    &wxMSWOwnerDrawnButtonBase::OnFocus, this);
+    }
+    else // reset to default colour
+    {
+        style &= ~BS_OWNERDRAW;
+        style |= MSWGetButtonStyle();
+
+        m_win->Unbind(wxEVT_ENTER_WINDOW,
+                      &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
+        m_win->Unbind(wxEVT_LEAVE_WINDOW,
+                      &wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave, this);
+
+        m_win->Unbind(wxEVT_LEFT_DOWN,
+                      &wxMSWOwnerDrawnButtonBase::OnMouseLeft, this);
+        m_win->Unbind(wxEVT_LEFT_UP,
+                      &wxMSWOwnerDrawnButtonBase::OnMouseLeft, this);
+
+        m_win->Unbind(wxEVT_SET_FOCUS,
+                      &wxMSWOwnerDrawnButtonBase::OnFocus, this);
+        m_win->Unbind(wxEVT_KILL_FOCUS,
+                      &wxMSWOwnerDrawnButtonBase::OnFocus, this);
+    }
+
+    ::SetWindowLong(GetHwndOf(m_win), GWL_STYLE, style);
+
+    if ( !ownerDrawn )
+        MSWOnButtonResetOwnerDrawn();
+}
+
+void wxMSWOwnerDrawnButtonBase::OnMouseEnterOrLeave(wxMouseEvent& event)
+{
+    if ( event.GetEventType() == wxEVT_LEAVE_WINDOW )
+        m_isPressed = false;
+
+    m_win->Refresh();
+
+    event.Skip();
+}
+
+void wxMSWOwnerDrawnButtonBase::OnMouseLeft(wxMouseEvent& event)
+{
+    // TODO: we should capture the mouse here to be notified about left up
+    //       event but this interferes with BN_CLICKED generation so if we
+    //       want to do this we'd need to generate them ourselves
+    m_isPressed = event.GetEventType() == wxEVT_LEFT_DOWN;
+    m_win->Refresh();
+
+    event.Skip();
+}
+
+void wxMSWOwnerDrawnButtonBase::OnFocus(wxFocusEvent& event)
+{
+    m_win->Refresh();
+
+    event.Skip();
+}
+
+bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
+{
+    DRAWITEMSTRUCT *dis = (DRAWITEMSTRUCT *)item;
+
+    if ( !MSWIsOwnerDrawn() || dis->CtlType != ODT_BUTTON )
+        return false;
+
+    // shall we draw a focus rect?
+    const bool isFocused = m_isPressed || m_win->HasFocus();
+
+    int flags = MSWGetButtonCheckedFlag();
+
+    if ( !m_win->IsEnabled() )
+        flags |= wxCONTROL_DISABLED;
+
+    if ( m_isPressed )
+        flags |= wxCONTROL_PRESSED;
+
+    if ( wxFindWindowAtPoint(wxGetMousePosition()) == m_win )
+        flags |= wxCONTROL_CURRENT;
+
+
     // calculate the rectangles for the button itself and the label
     HDC hdc = dis->hDC;
     const RECT& rect = dis->rcItem;
 
     // calculate the rectangles for the button itself and the label
+    const wxSize bestSize = m_win->GetBestSize();
     RECT rectButton,
          rectLabel;
-    rectLabel.top = rect.top + (rect.bottom - rect.top - GetBestSize().y) / 2;
-    rectLabel.bottom = rectLabel.top + GetBestSize().y;
+    rectLabel.top = rect.top + (rect.bottom - rect.top - bestSize.y) / 2;
+    rectLabel.bottom = rectLabel.top + bestSize.y;
 
     // choose the values consistent with those used for native, non
     // owner-drawn, buttons
@@ -475,11 +598,11 @@ bool wxControl::MSWOwnerDrawnButton(const DRAWITEMSTRUCT *dis, int flags, bool i
 
     // The space between the button and the label
     // is included in the button bitmap.
-    const int buttonSize = wxMin(CXMENUCHECK - MARGIN, GetSize().y);
+    const int buttonSize = wxMin(CXMENUCHECK - MARGIN, m_win->GetSize().y);
     rectButton.top = rect.top + (rect.bottom - rect.top - buttonSize) / 2;
     rectButton.bottom = rectButton.top + buttonSize;
 
-    const bool isRightAligned = HasFlag(wxALIGN_RIGHT);
+    const bool isRightAligned = m_win->HasFlag(wxALIGN_RIGHT);
     if ( isRightAligned )
     {
         rectLabel.right = rect.right - CXMENUCHECK;
@@ -500,10 +623,10 @@ bool wxControl::MSWOwnerDrawnButton(const DRAWITEMSTRUCT *dis, int flags, bool i
     // draw the button itself
     wxDCTemp dc(hdc);
 
-    MSWDrawButtonBitmap(this, dc, wxRectFromRECT(rectButton), flags);
+    MSWDrawButtonBitmap(dc, wxRectFromRECT(rectButton), flags);
 
     // draw the text
-    const wxString& label = GetLabel();
+    const wxString& label = m_win->GetLabel();
 
     // first we need to measure it
     UINT fmt = DT_NOCLIP;
@@ -537,7 +660,7 @@ bool wxControl::MSWOwnerDrawnButton(const DRAWITEMSTRUCT *dis, int flags, bool i
         }
     }
 
-    if ( !IsEnabled() )
+    if ( flags & wxCONTROL_DISABLED )
     {
         ::SetTextColor(hdc, ::GetSysColor(COLOR_GRAYTEXT));
     }
