@@ -463,8 +463,16 @@ bool wxControl::MSWOwnerDrawnButton(const DRAWITEMSTRUCT *dis, int flags, bool i
          rectLabel;
     rectLabel.top = rect.top + (rect.bottom - rect.top - GetBestSize().y) / 2;
     rectLabel.bottom = rectLabel.top + GetBestSize().y;
-    const int MARGIN = 3;
-    const int CXMENUCHECK = ::GetSystemMetrics(SM_CXMENUCHECK);
+
+    // choose the values consistent with those used for native, non
+    // owner-drawn, buttons
+    static const int MARGIN = 3;
+    int CXMENUCHECK = ::GetSystemMetrics(SM_CXMENUCHECK) + 1;
+
+    // the buttons were even bigger under Windows XP
+    if ( wxGetWinVersion() < wxWinVersion_6 )
+        CXMENUCHECK += 2;
+
     // The space between the button and the label
     // is included in the button bitmap.
     const int buttonSize = wxMin(CXMENUCHECK - MARGIN, GetSize().y);
