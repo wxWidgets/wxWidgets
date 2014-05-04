@@ -34,6 +34,8 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/renderer.h"
+#include "wx/msw/uxtheme.h"
 
 // ============================================================================
 // wxRadioButton implementation
@@ -46,6 +48,7 @@
 void wxRadioButton::Init()
 {
     m_isChecked = false;
+    m_isPressed = false;
 }
 
 bool wxRadioButton::Create(wxWindow *parent,
@@ -82,10 +85,13 @@ bool wxRadioButton::Create(wxWindow *parent,
 
 void wxRadioButton::SetValue(bool value)
 {
-    ::SendMessage(GetHwnd(), BM_SETCHECK,
-                  value ? BST_CHECKED : BST_UNCHECKED, 0);
-
     m_isChecked = value;
+
+    if ( !IsOwnerDrawn() )
+        ::SendMessage(GetHwnd(), BM_SETCHECK,
+                      value ? BST_CHECKED : BST_UNCHECKED, 0);
+    else // owner drawn buttons don't react to this message
+        Refresh();
 
     if ( !value )
         return;
@@ -294,6 +300,128 @@ WXDWORD wxRadioButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 
     return msStyle;
+}
+
+// ----------------------------------------------------------------------------
+// owner drawn radio button stuff
+// ----------------------------------------------------------------------------
+
+bool wxRadioButton::SetForegroundColour(const wxColour& colour)
+{
+    if ( !wxControl::SetForegroundColour(colour) )
+        return false;
+
+    // the only way to change the radiobox foreground colour if themes are enablad
+    // is to owner draw it
+    if ( wxUxThemeEngine::GetIfActive() )
+        MSWMakeOwnerDrawn(colour.IsOk());
+
+    return true;
+}
+
+bool wxRadioButton::IsOwnerDrawn() const
+{
+    return
+        (::GetWindowLong(GetHwnd(), GWL_STYLE) & BS_OWNERDRAW) == BS_OWNERDRAW;
+}
+
+void wxRadioButton::MSWMakeOwnerDrawn(bool ownerDrawn)
+{
+    long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+
+    // note that BS_RADIOBUTTON & BS_OWNERDRAW != 0 so we can't operate on
+    // them as on independent style bits
+
+    if ( ownerDrawn )
+    {
+        style &= ~BS_RADIOBUTTON;
+        style |= BS_OWNERDRAW;
+
+        Connect(wxEVT_ENTER_WINDOW,
+                wxMouseEventHandler(wxRadioButton::OnMouseEnterOrLeave));
+        Connect(wxEVT_LEAVE_WINDOW,
+                wxMouseEventHandler(wxRadioButton::OnMouseEnterOrLeave));
+        Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(wxRadioButton::OnMouseLeft));
+        Connect(wxEVT_LEFT_UP, wxMouseEventHandler(wxRadioButton::OnMouseLeft));
+        Connect(wxEVT_SET_FOCUS, wxFocusEventHandler(wxRadioButton::OnFocus));
+        Connect(wxEVT_KILL_FOCUS, wxFocusEventHandler(wxRadioButton::OnFocus));
+    }
+    else // reset to default colour
+    {
+        style &= ~BS_OWNERDRAW;
+        style |= BS_RADIOBUTTON;
+
+        Disconnect(wxEVT_ENTER_WINDOW,
+                   wxMouseEventHandler(wxRadioButton::OnMouseEnterOrLeave));
+        Disconnect(wxEVT_LEAVE_WINDOW,
+                   wxMouseEventHandler(wxRadioButton::OnMouseEnterOrLeave));
+        Disconnect(wxEVT_LEFT_DOWN, wxMouseEventHandler(wxRadioButton::OnMouseLeft));
+        Disconnect(wxEVT_LEFT_UP, wxMouseEventHandler(wxRadioButton::OnMouseLeft));
+        Disconnect(wxEVT_SET_FOCUS, wxFocusEventHandler(wxRadioButton::OnFocus));
+        Disconnect(wxEVT_KILL_FOCUS, wxFocusEventHandler(wxRadioButton::OnFocus));
+    }
+
+    ::SetWindowLong(GetHwnd(), GWL_STYLE, style);
+}
+
+void wxRadioButton::OnMouseEnterOrLeave(wxMouseEvent& event)
+{
+    const bool isHot = event.GetEventType() == wxEVT_ENTER_WINDOW;
+    if ( !isHot )
+        m_isPressed = false;
+
+    Refresh();
+
+    event.Skip();
+}
+
+void wxRadioButton::OnMouseLeft(wxMouseEvent& event)
+{
+    // TODO: we should capture the mouse here to be notified about left up
+    //       event but this interferes with BN_CLICKED generation so if we
+    //       want to do this we'd need to generate them ourselves
+    m_isPressed = event.GetEventType() == wxEVT_LEFT_DOWN;
+    Refresh();
+
+    event.Skip();
+}
+
+void wxRadioButton::OnFocus(wxFocusEvent& event)
+{
+    Refresh();
+
+    event.Skip();
+}
+
+bool wxRadioButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
+{
+    DRAWITEMSTRUCT *dis = (DRAWITEMSTRUCT *)item;
+
+    if ( !IsOwnerDrawn() || dis->CtlType != ODT_BUTTON )
+        return wxControl::MSWOnDraw(item);
+
+    // shall we draw a focus rect?
+    const bool isFocused = m_isPressed || FindFocus() == this;
+
+    int flags = 0;
+    if ( !IsEnabled() )
+        flags |= wxCONTROL_DISABLED;
+
+    if ( m_isChecked )
+        flags |= wxCONTROL_CHECKED;
+
+    if ( m_isPressed )
+        flags |= wxCONTROL_PRESSED;
+
+    if ( wxFindWindowAtPoint(wxGetMousePosition()) == this )
+        flags |= wxCONTROL_CURRENT;
+
+    return MSWOwnerDrawnButton(dis, flags, isFocused);
+}
+
+void wxRadioButton::MSWDrawButtonBitmap(wxWindow *win, wxDC& dc, const wxRect& rect, int flags)
+{
+    wxRendererNative::Get().DrawRadioBitmap(win, dc, rect, flags);
 }
 
 #endif // wxUSE_RADIOBTN

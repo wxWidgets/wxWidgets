@@ -47,17 +47,36 @@ public:
     // implementation only from now on
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
+    virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
+
     virtual bool HasTransparentBackground() { return true; }
+
+    // make the radiobutton owner drawn or reset it to normal style
+    void MSWMakeOwnerDrawn(bool ownerDrawn);
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const;
+    virtual void MSWDrawButtonBitmap(wxWindow *win, wxDC& dc,
+                                     const wxRect& rect, int flags);
+
+    // return true if this checkbox is owner drawn
+    bool IsOwnerDrawn() const;
 
 private:
     // common part of all ctors
     void Init();
+
+    // event handlers used by owner-drawn radiobutton
+    void OnMouseEnterOrLeave(wxMouseEvent& event);
+    void OnMouseLeft(wxMouseEvent& event);
+    void OnFocus(wxFocusEvent& event);
+
+    // true if the radio button is currently pressed
+    bool m_isPressed;
 
     // we need to store the state internally as the result of GetValue()
     // sometimes gets out of sync in WM_COMMAND handler
