@@ -396,6 +396,9 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
             break;
     }
 
+    if ( m_isPressed )
+        flags |= wxCONTROL_PRESSED;
+
     if ( wxFindWindowAtPoint(wxGetMousePosition()) == this )
         flags |= wxCONTROL_CURRENT;
 
