@@ -48,9 +48,39 @@ public:
 
     /**
         Get the preferred size of the cell for its contents.
+
+        This method must be overridden in the derived classes to return the
+        minimal fitting size for displaying the content of the given grid cell.
+
+        @see GetBestHeight(), GetBestWidth()
     */
     virtual wxSize GetBestSize(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
                                int row, int col) = 0;
+
+    /**
+        Get the preferred height of the cell at the given width.
+
+        Some renderers may not have a well-defined best size, but only be able
+        to provide the best height at the given width, e.g. this is the case of
+        the standard wxGridCellAutoWrapStringRenderer. In this case, they
+        should override this method, in addition to GetBestSize().
+
+        @see GetBestWidth()
+
+        @since 3.1.0
+    */
+    virtual wxSize GetBestHeight(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                               int row, int col, int width);
+
+    /**
+        Get the preferred width of the cell at the given height.
+
+        See GetBestHeight(), this method is symmetric to it.
+
+        @since 3.1.0
+    */
+    virtual wxSize GetBestWidth(wxGrid& grid, wxGridCellAttr& attr, wxDC& dc,
+                               int row, int col, int height);
 
 protected:
     /**

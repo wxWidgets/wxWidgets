@@ -8407,8 +8407,11 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         wxGridCellRenderer *renderer = attr->GetRenderer(this, row, col);
         if ( renderer )
         {
-            wxSize size = renderer->GetBestSize(*this, *attr, dc, row, col);
-            extent = column ? size.x : size.y;
+            extent = column
+                        ? renderer->GetBestWidth(*this, *attr, dc, row, col,
+                                                 GetRowHeight(row))
+                        : renderer->GetBestHeight(*this, *attr, dc, row, col,
+                                                  GetColWidth(col));
 
             if ( span != CellSpan_None )
             {

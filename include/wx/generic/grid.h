@@ -174,6 +174,30 @@ public:
                                wxDC& dc,
                                int row, int col) = 0;
 
+    // Get the preferred height for a given width. Override this method if the
+    // renderer computes height as function of its width, as is the case of the
+    // standard wxGridCellAutoWrapStringRenderer, for example.
+    // and vice versa
+    virtual int GetBestHeight(wxGrid& grid,
+                              wxGridCellAttr& attr,
+                              wxDC& dc,
+                              int row, int col,
+                              int WXUNUSED(width))
+    {
+        return GetBestSize(grid, attr, dc, row, col).GetHeight();
+    }
+
+    // Get the preferred width for a given height, this is the symmetric
+    // version of GetBestHeight().
+    virtual int GetBestWidth(wxGrid& grid,
+                             wxGridCellAttr& attr,
+                             wxDC& dc,
+                             int row, int col,
+                             int WXUNUSED(height))
+    {
+        return GetBestSize(grid, attr, dc, row, col).GetWidth();
+    }
+
     // create a new object which is the copy of this one
     virtual wxGridCellRenderer *Clone() const = 0;
 };

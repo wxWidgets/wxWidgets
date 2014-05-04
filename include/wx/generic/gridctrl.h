@@ -238,6 +238,18 @@ public:
                                wxDC& dc,
                                int row, int col) wxOVERRIDE;
 
+    virtual int GetBestHeight(wxGrid& grid,
+                              wxGridCellAttr& attr,
+                              wxDC& dc,
+                              int row, int col,
+                              int width) wxOVERRIDE;
+
+    virtual int GetBestWidth(wxGrid& grid,
+                              wxGridCellAttr& attr,
+                              wxDC& dc,
+                              int row, int col,
+                              int height) wxOVERRIDE;
+
     virtual wxGridCellRenderer *Clone() const wxOVERRIDE
         { return new wxGridCellAutoWrapStringRenderer; }
 
