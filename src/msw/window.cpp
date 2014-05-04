@@ -34,6 +34,7 @@
     #include "wx/dc.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/dialog.h"
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/layout.h"
@@ -4198,7 +4199,20 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
     //  3. if still no cursor but we're in a TLW, set the global cursor
 
     HCURSOR hcursor = 0;
+
+    // Check for "business" is complicated by the fact that modal dialogs shown
+    // while busy cursor is in effect shouldn't show it as they are active and
+    // accept input from the user, unlike all the other windows.
+    bool isBusy = false;
     if ( wxIsBusy() )
+    {
+        wxDialog* const
+            dlg = wxDynamicCast(wxGetTopLevelParent(this), wxDialog);
+        if ( !dlg || !dlg->IsModal() )
+            isBusy = true;
+    }
+
+    if ( isBusy )
     {
         hcursor = wxGetCurrentBusyCursor();
     }

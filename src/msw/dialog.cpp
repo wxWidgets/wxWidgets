@@ -430,34 +430,6 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
                 ::InvalidateRect(GetHwnd(), NULL, false /* erase bg */);
             }
             break;
-
-#ifndef __WXMICROWIN__
-        case WM_SETCURSOR:
-            // we want to override the busy cursor for modal dialogs:
-            // typically, wxBeginBusyCursor() is called and then a modal dialog
-            // is shown, but the modal dialog shouldn't have hourglass cursor
-            if ( IsModal() && wxIsBusy() )
-            {
-                // set our cursor for all windows (but see below)
-                wxCursor cursor = m_cursor;
-                if ( !cursor.IsOk() )
-                    cursor = wxCURSOR_ARROW;
-
-                ::SetCursor(GetHcursorOf(cursor));
-
-                // in any case, stop here and don't let wxWindow process this
-                // message (it would set the busy cursor)
-                processed = true;
-
-                // but return false to tell the child window (if the event
-                // comes from one of them and not from ourselves) that it can
-                // set its own cursor if it has one: thus, standard controls
-                // (e.g. text ctrl) still have correct cursors in a dialog
-                // invoked while wxIsBusy()
-                rc = false;
-            }
-            break;
-#endif // __WXMICROWIN__
     }
 
     if ( !processed )
