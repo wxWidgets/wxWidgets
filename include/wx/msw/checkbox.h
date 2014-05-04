@@ -62,6 +62,8 @@ protected:
 
     virtual void DoSet3StateValue(wxCheckBoxState value);
     virtual wxCheckBoxState DoGet3StateValue() const;
+    virtual void MSWDrawButtonBitmap(wxWindow *win, wxDC& dc,
+                                     const wxRect& rect, int flags);
 
     // return true if this checkbox is owner drawn
     bool IsOwnerDrawn() const;

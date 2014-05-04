@@ -47,6 +47,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
+#include "wx/msw/dc.h"          // for wxDCTemp
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -449,6 +450,107 @@ wxWindow* wxControl::MSWFindItem(long id, WXHWND hWnd) const
         return const_cast<wxControl *>(this);
 
     return wxControlBase::MSWFindItem(id, hWnd);
+}
+
+bool wxControl::MSWOwnerDrawnButton(const DRAWITEMSTRUCT *dis, int flags, bool isFocused)
+{
+    // calculate the rectangles for the button itself and the label
+    HDC hdc = dis->hDC;
+    const RECT& rect = dis->rcItem;
+
+    // calculate the rectangles for the button itself and the label
+    RECT rectButton,
+         rectLabel;
+    rectLabel.top = rect.top + (rect.bottom - rect.top - GetBestSize().y) / 2;
+    rectLabel.bottom = rectLabel.top + GetBestSize().y;
+    const int MARGIN = 3;
+    const int CXMENUCHECK = ::GetSystemMetrics(SM_CXMENUCHECK);
+    // The space between the button and the label
+    // is included in the button bitmap.
+    const int buttonSize = wxMin(CXMENUCHECK - MARGIN, GetSize().y);
+    rectButton.top = rect.top + (rect.bottom - rect.top - buttonSize) / 2;
+    rectButton.bottom = rectButton.top + buttonSize;
+
+    const bool isRightAligned = HasFlag(wxALIGN_RIGHT);
+    if ( isRightAligned )
+    {
+        rectLabel.right = rect.right - CXMENUCHECK;
+        rectLabel.left = rect.left;
+
+        rectButton.left = rectLabel.right + ( CXMENUCHECK + MARGIN - buttonSize ) / 2;
+        rectButton.right = rectButton.left + buttonSize;
+    }
+    else // normal, left-aligned button
+    {
+        rectButton.left = rect.left + ( CXMENUCHECK - MARGIN - buttonSize ) / 2;
+        rectButton.right = rectButton.left + buttonSize;
+
+        rectLabel.left = rect.left + CXMENUCHECK;
+        rectLabel.right = rect.right;
+    }
+
+    // draw the button itself
+    wxDCTemp dc(hdc);
+
+    MSWDrawButtonBitmap(this, dc, wxRectFromRECT(rectButton), flags);
+
+    // draw the text
+    const wxString& label = GetLabel();
+
+    // first we need to measure it
+    UINT fmt = DT_NOCLIP;
+
+    // drawing underlying doesn't look well with focus rect (and the native
+    // control doesn't do it)
+    if ( isFocused )
+        fmt |= DT_HIDEPREFIX;
+    if ( isRightAligned )
+        fmt |= DT_RIGHT;
+    // TODO: also use DT_HIDEPREFIX if the system is configured so
+
+    // we need to get the label real size first if we have to draw a focus rect
+    // around it
+    if ( isFocused )
+    {
+        RECT oldLabelRect = rectLabel; // needed if right aligned
+
+        if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel,
+                         fmt | DT_CALCRECT) )
+        {
+            wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
+        }
+
+        if ( isRightAligned )
+        {
+            // move the label rect to the right
+            const int labelWidth = rectLabel.right - rectLabel.left;
+            rectLabel.right = oldLabelRect.right;
+            rectLabel.left = rectLabel.right - labelWidth;
+        }
+    }
+
+    if ( !IsEnabled() )
+    {
+        ::SetTextColor(hdc, ::GetSysColor(COLOR_GRAYTEXT));
+    }
+
+    if ( !::DrawText(hdc, label.t_str(), label.length(), &rectLabel, fmt) )
+    {
+        wxLogLastError(wxT("DrawText()"));
+    }
+
+    // finally draw the focus
+    if ( isFocused )
+    {
+        rectLabel.left--;
+        rectLabel.right++;
+        if ( !::DrawFocusRect(hdc, &rectLabel) )
+        {
+            wxLogLastError(wxT("DrawFocusRect()"));
+        }
+    }
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
