@@ -601,6 +601,7 @@ All (GUI):
 - Prevent wxGrid rows/columns from becoming too small on double click.
 - Fix wxGraphicsBitmap::ConvertToImage() when using Cairo.
 - Support loading ICO files with data in PNG format (Artur Wieczorek).
+- Fix dragging columns in wxGrid when some of them are hidden (Artur Wieczorek).
 
 wxGTK:
 

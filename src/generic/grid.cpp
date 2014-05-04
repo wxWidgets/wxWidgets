@@ -4467,7 +4467,11 @@ void wxGrid::RefreshAfterColPosChange()
         {
             int colID = GetColAt( colPos );
 
-            colRight += m_colWidths[colID];
+            // Ignore the currently hidden columns.
+            const int width = m_colWidths[colID];
+            if ( width > 0 )
+                colRight += width;
+
             m_colRights[colID] = colRight;
         }
     }
