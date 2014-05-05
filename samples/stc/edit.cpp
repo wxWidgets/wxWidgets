@@ -103,11 +103,14 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU (myID_ANNOTATION_STYLE_STANDARD, Edit::OnAnnotationStyle)
     EVT_MENU (myID_ANNOTATION_STYLE_BOXED,    Edit::OnAnnotationStyle)
     // extra
-    EVT_MENU (myID_CHANGELOWER,        Edit::OnChangeCase)
-    EVT_MENU (myID_CHANGEUPPER,        Edit::OnChangeCase)
-    EVT_MENU (myID_CONVERTCR,          Edit::OnConvertEOL)
-    EVT_MENU (myID_CONVERTCRLF,        Edit::OnConvertEOL)
-    EVT_MENU (myID_CONVERTLF,          Edit::OnConvertEOL)
+    EVT_MENU (myID_CHANGELOWER,                 Edit::OnChangeCase)
+    EVT_MENU (myID_CHANGEUPPER,                 Edit::OnChangeCase)
+    EVT_MENU (myID_CONVERTCR,                   Edit::OnConvertEOL)
+    EVT_MENU (myID_CONVERTCRLF,                 Edit::OnConvertEOL)
+    EVT_MENU (myID_CONVERTLF,                   Edit::OnConvertEOL)
+    EVT_MENU(myID_MULTIPLE_SELECTIONS,          Edit::OnMultipleSelections)
+    EVT_MENU(myID_MULTI_PASTE,                  Edit::OnMultiPaste)
+    EVT_MENU(myID_MULTIPLE_SELECTIONS_TYPING,   Edit::OnMultipleSelectionsTyping)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
@@ -437,6 +440,26 @@ void Edit::OnConvertEOL (wxCommandEvent &event) {
     }
     ConvertEOLs (eolMode);
     SetEOLMode (eolMode);
+}
+
+void Edit::OnMultipleSelections(wxCommandEvent& WXUNUSED(event)) {
+    bool isSet = GetMultipleSelection();
+    SetMultipleSelection(!isSet);
+}
+
+void Edit::OnMultiPaste(wxCommandEvent& WXUNUSED(event)) {
+    int pasteMode = GetMultiPaste();
+    if (wxSTC_MULTIPASTE_EACH == pasteMode) {
+        SetMultiPaste(wxSTC_MULTIPASTE_ONCE);
+    }
+    else {
+        SetMultiPaste(wxSTC_MULTIPASTE_EACH);
+    }
+}
+
+void Edit::OnMultipleSelectionsTyping(wxCommandEvent& WXUNUSED(event)) {
+    bool isSet = GetAdditionalSelectionTyping();
+    SetAdditionalSelectionTyping(!isSet);
 }
 
 //! misc
