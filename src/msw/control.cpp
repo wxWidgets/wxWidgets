@@ -566,6 +566,9 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
 
     int flags = MSWGetButtonCheckedFlag();
 
+    if ( dis->itemState & ODS_SELECTED )
+        flags |= wxCONTROL_SELECTED | wxCONTROL_PRESSED;
+
     if ( !m_win->IsEnabled() )
         flags |= wxCONTROL_DISABLED;
 
@@ -619,6 +622,9 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
         rectLabel.left = rect.left + CXMENUCHECK;
         rectLabel.right = rect.right;
     }
+
+    // Erase the background.
+    ::FillRect(hdc, &rect, m_win->MSWGetBgBrush(hdc));
 
     // draw the button itself
     wxDCTemp dc(hdc);
