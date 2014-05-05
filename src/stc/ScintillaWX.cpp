@@ -251,6 +251,17 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     sysCaretWidth = 0;
     sysCaretHeight = 0;
 #endif
+
+#ifdef wxHAVE_STC_RECT_FORMAT
+#if defined(__WXMSW__)
+    m_clipRectTextFormat = wxDataFormat(wxT("MSDEVColumnSelect"));
+#elif defined(__WXGTK__)
+    m_clipRectTextFormat = wxDataFormat(wxT("SECONDARY"));
+#else
+    #error "Must define rectangular text selection clipboard format."
+#endif
+#endif // wxHAVE_STC_RECT_FORMAT
+
 }
 
 
@@ -487,7 +498,8 @@ void ScintillaWX::Copy() {
 
 void ScintillaWX::Paste() {
     pdoc->BeginUndoAction();
-    ClearSelection();
+    ClearSelection(multiPasteMode == SC_MULTIPASTE_EACH);
+    bool isRectangularClipboard = false;
 
 #if wxUSE_DATAOBJ
     wxTextDataObject data;
@@ -495,6 +507,9 @@ void ScintillaWX::Paste() {
 
     wxTheClipboard->UsePrimarySelection(false);
     if (wxTheClipboard->Open()) {
+#ifdef wxHAVE_STC_RECT_FORMAT
+        isRectangularClipboard = wxTheClipboard->IsSupported(m_clipRectTextFormat);
+#endif
         gotData = wxTheClipboard->GetData(data);
         wxTheClipboard->Close();
     }
@@ -509,9 +524,21 @@ void ScintillaWX::Paste() {
         text = wxEmptyString;
 #endif
         int len = strlen(buf);
-        int caretMain = sel.MainCaret();
-        pdoc->InsertString(caretMain, buf, len);
-        SetEmptySelection(caretMain + len);
+        SelectionPosition selStart = sel.IsRectangular() ?
+            sel.Rectangular().Start() :
+            sel.Range(sel.Main()).Start();
+
+        // call the appropriate scintilla paste method if the
+        // depending on whether the text was copied FROM a rectangular selection
+        // or not.
+        if (isRectangularClipboard)
+        {
+            PasteRectangular(selStart, buf, len);
+        }
+        else
+        {
+            InsertPaste(selStart, buf, len);
+        }
     }
 #endif // wxUSE_DATAOBJ
 
@@ -529,7 +556,21 @@ void ScintillaWX::CopyToClipboard(const SelectionText& st) {
     wxTheClipboard->UsePrimarySelection(false);
     if (wxTheClipboard->Open()) {
         wxString text = wxTextBuffer::Translate(stc2wx(st.Data(), st.Length()));
-        wxTheClipboard->SetData(new wxTextDataObject(text));
+
+#ifdef wxHAVE_STC_RECT_FORMAT
+        if (st.rectangular)
+        {
+            // when copying the text to the clipboard, add extra meta-data that
+            // tells the Paste() method that the user copied a rectangular
+            // block of text, as opposed to a stream of text.
+            wxDataObjectComposite* composite = new wxDataObjectComposite();
+            composite->Add(new wxTextDataObject(text), true);
+            composite->Add(new wxCustomDataObject(m_clipRectTextFormat));
+            wxTheClipboard->SetData(composite);
+        }
+        else
+#endif // wxHAVE_STC_RECT_FORMAT
+            wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
 #else
