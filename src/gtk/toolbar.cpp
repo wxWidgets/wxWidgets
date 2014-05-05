@@ -696,7 +696,7 @@ wxSize wxToolBar::DoGetBestSize() const
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
                                                   wxCoord WXUNUSED(y)) const
 {
-    // VZ: GTK+ doesn't seem to have such thing
+    // TODO: implement this using gtk_toolbar_get_drop_index()
     wxFAIL_MSG( wxT("wxToolBar::FindToolForPosition() not implemented") );
 
     return NULL;
