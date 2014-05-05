@@ -55,11 +55,7 @@
 
 #include "wx/gtk/private/gtk2-compat.h"
 
-//-----------------------------------------------------------------------------
-// data
-//-----------------------------------------------------------------------------
-
-extern GtkWidget *wxGetRootWindow();
+GdkWindow* wxGetTopLevelGDK();
 
 //----------------------------------------------------------------------------
 // misc.
@@ -77,7 +73,7 @@ void wxBell()
 #ifdef GDK_WINDOWING_X11
 void *wxGetDisplay()
 {
-    return GDK_DISPLAY_XDISPLAY(gtk_widget_get_display(wxGetRootWindow()));
+    return GDK_DISPLAY_XDISPLAY(gdk_window_get_display(wxGetTopLevelGDK()));
 }
 #endif
 
@@ -100,7 +96,7 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
-    return gdk_visual_get_depth(gtk_widget_get_visual(wxGetRootWindow()));
+    return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

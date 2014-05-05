@@ -20,7 +20,7 @@
 #endif
 #include "wx/gtk/private/gtk2-compat.h"
 
-GtkWidget* wxGetRootWindow();
+GdkWindow* wxGetTopLevelGDK();
 
 //-----------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ void wxClientDisplayRect(int* x, int* y, int* width, int* height)
     GdkRectangle rect = { 0, 0, 672, 396 };
 #else
     GdkRectangle rect;
-    GdkWindow* window = gtk_widget_get_window(wxGetRootWindow());
+    GdkWindow* window = wxGetTopLevelGDK();
     GdkScreen* screen = gdk_window_get_screen(window);
     int monitor = gdk_screen_get_monitor_at_window(screen, window);
     gdk_screen_get_monitor_workarea(screen, monitor, &rect);
@@ -119,7 +119,7 @@ public:
 
 static inline GdkScreen* GetScreen()
 {
-    return gtk_widget_get_screen(wxGetRootWindow());
+    return gdk_window_get_screen(wxGetTopLevelGDK());
 }
 //-----------------------------------------------------------------------------
 

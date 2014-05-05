@@ -22,6 +22,8 @@
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/gtk2-compat.h"
 
+GdkWindow* wxGetTopLevelGDK();
+
 //-----------------------------------------------------------------------------
 // wxCursorRefData
 //-----------------------------------------------------------------------------
@@ -66,9 +68,6 @@ wxCursorRefData::~wxCursorRefData()
 #define M_CURSORDATA static_cast<wxCursorRefData*>(m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
-
-// used in the following two ctors
-extern GtkWidget *wxGetRootWindow();
 
 wxCursor::wxCursor()
 {
@@ -143,7 +142,8 @@ wxCursor::wxCursor(const char bits[], int width, int height,
             }
         }
     }
-    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf(gtk_widget_get_display(wxGetRootWindow()), pixbuf, hotSpotX, hotSpotY);
+    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf(
+        gdk_window_get_display(wxGetTopLevelGDK()), pixbuf, hotSpotX, hotSpotY);
 #else
     if (!maskBits)
         maskBits = bits;
@@ -153,9 +153,9 @@ wxCursor::wxCursor(const char bits[], int width, int height,
         bg = wxWHITE;
 
     GdkBitmap* data = gdk_bitmap_create_from_data(
-        gtk_widget_get_window(wxGetRootWindow()), const_cast<char*>(bits), width, height);
+        wxGetTopLevelGDK(), const_cast<char*>(bits), width, height);
     GdkBitmap* mask = gdk_bitmap_create_from_data(
-        gtk_widget_get_window(wxGetRootWindow()), const_cast<char*>(maskBits), width, height);
+        wxGetTopLevelGDK(), const_cast<char*>(maskBits), width, height);
 
     M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(
                  data, mask, fg->GetColor(), bg->GetColor(),
@@ -275,7 +275,8 @@ void wxCursor::InitFromImage( const wxImage & image )
         }
     }
     m_refData = new wxCursorRefData;
-    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf(gtk_widget_get_display(wxGetRootWindow()), pixbuf, hotSpotX, hotSpotY);
+    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixbuf(
+        gdk_window_get_display(wxGetTopLevelGDK()), pixbuf, hotSpotX, hotSpotY);
     g_object_unref(pixbuf);
 }
 

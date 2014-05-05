@@ -242,6 +242,55 @@ const char* wxDumpGtkWidget(GtkWidget* w)
 }
 
 //-----------------------------------------------------------------------------
+// global top level GtkWidget/GdkWindow
+//-----------------------------------------------------------------------------
+
+static bool wxGetTopLevel(GtkWidget** widget, GdkWindow** window)
+{
+    wxWindowList::const_iterator i = wxTopLevelWindows.begin();
+    for (; i != wxTopLevelWindows.end(); ++i)
+    {
+        const wxWindow* win = *i;
+        if (win->m_widget)
+        {
+            GdkWindow* gdkwin = gtk_widget_get_window(win->m_widget);
+            if (gdkwin)
+            {
+                if (widget)
+                    *widget = win->m_widget;
+                if (window)
+                    *window = gdkwin;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+GdkWindow* wxGetTopLevelGDK()
+{
+    GdkWindow* window;
+    if (!wxGetTopLevel(NULL, &window))
+        window = gdk_get_default_root_window();
+    return window;
+}
+
+PangoContext* wxGetPangoContext()
+{
+    PangoContext* context;
+    GtkWidget* widget;
+    if (wxGetTopLevel(&widget, NULL))
+    {
+        context = gtk_widget_get_pango_context(widget);
+        g_object_ref(context);
+    }
+    else
+        context = gdk_pango_context_get_for_screen(gdk_screen_get_default());
+
+    return context;
+}
+
+//-----------------------------------------------------------------------------
 // "expose_event"/"draw" from m_wxwindow
 //-----------------------------------------------------------------------------
 
@@ -2208,19 +2257,6 @@ bool wxGetKeyState(wxKeyCode WXUNUSED(key))
 }
 #endif // __WINDOWS__
 
-static GdkDisplay* GetDisplay()
-{
-    wxWindow* tlw = NULL;
-    if (!wxTopLevelWindows.empty())
-        tlw = wxTopLevelWindows.front();
-    GdkDisplay* display;
-    if (tlw && tlw->m_widget)
-        display = gtk_widget_get_display(tlw->m_widget);
-    else
-        display = gdk_display_get_default();
-    return display;
-}
-
 wxMouseState wxGetMouseState()
 {
     wxMouseState ms;
@@ -2229,7 +2265,7 @@ wxMouseState wxGetMouseState()
     gint y;
     GdkModifierType mask;
 
-    GdkDisplay* display = GetDisplay();
+    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
 #ifdef __WXGTK3__
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);
@@ -4891,7 +4927,7 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 // Get the current mouse position.
 void wxGetMousePosition(int* x, int* y)
 {
-    GdkDisplay* display = GetDisplay();
+    GdkDisplay* display = gdk_window_get_display(wxGetTopLevelGDK());
 #ifdef __WXGTK3__
     GdkDeviceManager* manager = gdk_display_get_device_manager(display);
     GdkDevice* device = gdk_device_manager_get_client_pointer(manager);

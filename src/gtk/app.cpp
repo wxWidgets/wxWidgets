@@ -165,22 +165,6 @@ bool wxApp::DoIdle()
 }
 
 //-----------------------------------------------------------------------------
-// Access to the root window global
-//-----------------------------------------------------------------------------
-
-GtkWidget* wxGetRootWindow()
-{
-    static GtkWidget *s_RootWindow = NULL;
-
-    if (s_RootWindow == NULL)
-    {
-        s_RootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-        gtk_widget_realize( s_RootWindow );
-    }
-    return s_RootWindow;
-}
-
-//-----------------------------------------------------------------------------
 // wxApp
 //-----------------------------------------------------------------------------
 

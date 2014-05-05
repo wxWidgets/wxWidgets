@@ -40,11 +40,12 @@
 
 #if wxUSE_PANGO
 
-#include "pango/pango.h"
+#include <pango/pango.h>
+
+PangoContext* wxGetPangoContext();
 
 #ifdef __WXGTK20__
     #include "wx/gtk/private.h"
-    extern GtkWidget *wxGetRootWindow();
 
     #define wxPANGO_CONV wxGTK_CONV_SYS
     #define wxPANGO_CONV_BACK wxGTK_CONV_BACK_SYS
@@ -178,13 +179,8 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         PangoFontFamily **families;
         PangoFontFamily  *family = NULL;
         int n_families;
-        pango_context_list_families(
-#ifdef __WXGTK20__
-                gtk_widget_get_pango_context( wxGetRootWindow() ),
-#else
-                wxTheApp->GetPangoContext(),
-#endif
-                &families, &n_families);
+        PangoContext* context = wxGetPangoContext();
+        pango_context_list_families(context, &families, &n_families);
 
         for (int i = 0; i < n_families; ++i)
         {
@@ -197,6 +193,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         }
 
         g_free(families);
+        g_object_unref(context);
 
         // Some gtk+ systems might query for a non-existing font from
         // wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) on initialization,
