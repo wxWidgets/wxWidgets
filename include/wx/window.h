@@ -57,6 +57,13 @@
 #if defined(__WXMSW__) || defined(__WXPM__)
     // must do everything ourselves
     #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
+#elif defined(__WXOSX__)
+    #if wxOSX_USE_CARBON
+        #define wxHAS_NATIVE_ENABLED_MANAGEMENT
+    #else
+        // must do everything ourselves
+        #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
+    #endif
 #else
     #define wxHAS_NATIVE_ENABLED_MANAGEMENT
 #endif
