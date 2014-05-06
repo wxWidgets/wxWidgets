@@ -4270,8 +4270,6 @@ if test "$ac_cv_func_vsscanf" = "yes"; then
 fi
 AC_LANG_POP()
 
-if test "$wxUSE_UNICODE" = yes; then
-
     dnl also look if we have wide char IO functions, notice that [f]putws are
     dnl declared in special widec.h under Solaris
     wchar_headers="#include <stdio.h>
@@ -4297,7 +4295,6 @@ if test "$wxUSE_UNICODE" = yes; then
                    [AC_MSG_RESULT([yes])
                     AC_DEFINE(HAVE__VSNWPRINTF)],
                    [AC_MSG_RESULT([no])]);
-fi
 
 if test "$wxUSE_FILE" = "yes"; then
     WX_CHECK_FUNCS(fsync)
