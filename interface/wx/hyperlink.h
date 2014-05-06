@@ -148,7 +148,7 @@ public:
 
     /**
         Returns the colour used to print the label when the link has never been clicked
-        before (i.e. the link has not been @e visited) and the mouse is not over the control.
+        before (i.e.\ the link has not been @e visited) and the mouse is not over the control.
     */
     virtual wxColour GetNormalColour() const;
 
@@ -165,7 +165,7 @@ public:
 
     /**
         Returns the colour used to print the label when the mouse is not over the
-        control and the link has already been clicked before (i.e. the link has
+        control and the link has already been clicked before (i.e.\ the link has
         been @e visited).
     */
     virtual wxColour GetVisitedColour() const;
@@ -178,7 +178,7 @@ public:
 
     /**
         Sets the colour used to print the label when the link has never been clicked before
-        (i.e. the link has not been @e visited) and the mouse is not over the control.
+        (i.e.\ the link has not been @e visited) and the mouse is not over the control.
     */
     virtual void SetNormalColour(const wxColour& colour);
 
@@ -194,7 +194,7 @@ public:
 
     /**
         Sets the colour used to print the label when the mouse is not over the control
-        and the link has already been clicked before (i.e. the link has been @e visited).
+        and the link has already been clicked before (i.e.\ the link has been @e visited).
     */
     virtual void SetVisitedColour(const wxColour& colour);
 };
