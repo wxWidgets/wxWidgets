@@ -50,6 +50,11 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
 
+// Missing from MinGW 4.8 SDK headers.
+#ifndef BS_TYPEMASK
+#define BS_TYPEMASK 0xf
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
