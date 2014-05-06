@@ -4273,34 +4273,31 @@ if test "$ac_cv_func_vsscanf" = "yes"; then
 fi
 AC_LANG_POP()
 
-if test "$wxUSE_UNICODE" = yes; then
-
-    dnl also look if we have wide char IO functions, notice that [f]putws are
-    dnl declared in special widec.h under Solaris
-    wchar_headers="#include <stdio.h>
+dnl also look if we have wide char IO functions, notice that [f]putws are
+dnl declared in special widec.h under Solaris
+wchar_headers="#include <stdio.h>
 #include <wchar.h>"
-    case "${host}" in
-        *-*-solaris2* )
-            AC_CHECK_HEADERS(widec.h,,, [AC_INCLUDES_DEFAULT()])
-            if test "$ac_cv_header_widec_h" = "yes"; then
-                wchar_headers="$wchar_headers
+case "${host}" in
+    *-*-solaris2* )
+        AC_CHECK_HEADERS(widec.h,,, [AC_INCLUDES_DEFAULT()])
+        if test "$ac_cv_header_widec_h" = "yes"; then
+            wchar_headers="$wchar_headers
 #include <widec.h>"
-            fi
-    esac
+        fi
+esac
 
-    WX_CHECK_FUNCS(putws fputws wprintf vswprintf vswscanf,,,
-                   [$wchar_headers])
+WX_CHECK_FUNCS(putws fputws wprintf vswprintf vswscanf,,,
+               [$wchar_headers])
 
-    dnl MinGW has a vswprintf with a different prototype, and
-    dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
-    dnl finds it even if it is not declared in some versions...
-    AC_MSG_CHECKING([for _vsnwprintf])
-    AC_TRY_COMPILE([#include <wchar.h>],
-                   [&_vsnwprintf;],
-                   [AC_MSG_RESULT([yes])
-                    AC_DEFINE(HAVE__VSNWPRINTF)],
-                   [AC_MSG_RESULT([no])]);
-fi
+dnl MinGW has a vswprintf with a different prototype, and
+dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
+dnl finds it even if it is not declared in some versions...
+AC_MSG_CHECKING([for _vsnwprintf])
+AC_TRY_COMPILE([#include <wchar.h>],
+               [&_vsnwprintf;],
+               [AC_MSG_RESULT([yes])
+                AC_DEFINE(HAVE__VSNWPRINTF)],
+               [AC_MSG_RESULT([no])]);
 
 if test "$wxUSE_FILE" = "yes"; then
     WX_CHECK_FUNCS(fsync)

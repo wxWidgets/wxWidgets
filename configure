@@ -30050,13 +30050,11 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-if test "$wxUSE_UNICODE" = yes; then
-
-            wchar_headers="#include <stdio.h>
+wchar_headers="#include <stdio.h>
 #include <wchar.h>"
-    case "${host}" in
-        *-*-solaris2* )
-            for ac_header in widec.h
+case "${host}" in
+    *-*-solaris2* )
+        for ac_header in widec.h
 do :
   ac_fn_c_check_header_compile "$LINENO" "widec.h" "ac_cv_header_widec_h" "$ac_includes_default
 "
@@ -30069,11 +30067,11 @@ fi
 
 done
 
-            if test "$ac_cv_header_widec_h" = "yes"; then
-                wchar_headers="$wchar_headers
+        if test "$ac_cv_header_widec_h" = "yes"; then
+            wchar_headers="$wchar_headers
 #include <widec.h>"
-            fi
-    esac
+        fi
+esac
 
 
   for wx_func in putws fputws wprintf vswprintf vswscanf
@@ -30132,9 +30130,9 @@ _ACEOF
   done
 
 
-                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for _vsnwprintf" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for _vsnwprintf" >&5
 $as_echo_n "checking for _vsnwprintf... " >&6; }
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <wchar.h>
 int
@@ -30148,14 +30146,13 @@ _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-                    $as_echo "#define HAVE__VSNWPRINTF 1" >>confdefs.h
+                $as_echo "#define HAVE__VSNWPRINTF 1" >>confdefs.h
 
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext;
-fi
 
 if test "$wxUSE_FILE" = "yes"; then
 
