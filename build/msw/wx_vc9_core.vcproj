@@ -2003,6 +2003,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\ownerdrawnbutton.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\ownerdrw.h"
 				>
 			</File>

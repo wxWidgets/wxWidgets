@@ -3202,6 +3202,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/ole/oleutils.h \
 	wx/msw/ole/safearray.h \
 	wx/msw/ownerdrw.h \
+	wx/msw/ownerdrawnbutton.h \
 	wx/msw/palette.h \
 	wx/msw/panel.h \
 	wx/msw/pen.h \
@@ -3719,6 +3720,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/ole/oleutils.h \
 	wx/msw/ole/safearray.h \
 	wx/msw/ownerdrw.h \
+	wx/msw/ownerdrawnbutton.h \
 	wx/msw/palette.h \
 	wx/msw/panel.h \
 	wx/msw/pen.h \

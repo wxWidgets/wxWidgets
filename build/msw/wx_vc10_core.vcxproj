@@ -1221,6 +1221,7 @@
     <ClInclude Include="..\..\include\wx\msw\notifmsg.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\oleutils.h" />
     <ClInclude Include="..\..\include\wx\msw\ownerdrw.h" />
+    <ClInclude Include="..\..\include\wx\msw\ownerdrawnbutton.h" />
     <ClInclude Include="..\..\include\wx\msw\palette.h" />
     <ClInclude Include="..\..\include\wx\msw\panel.h" />
     <ClInclude Include="..\..\include\wx\msw\pen.h" />
@@ -1497,6 +1498,7 @@
     <ClInclude Include="..\..\include\wx\odcombo.h" />
     <ClInclude Include="..\..\include\wx\overlay.h" />
     <ClInclude Include="..\..\include\wx\ownerdrw.h" />
+    <ClInclude Include="..\..\include\wx\ownerdrawnbutton.h" />
     <ClInclude Include="..\..\include\wx\ribbon\page.h" />
     <ClInclude Include="..\..\include\wx\palette.h" />
     <ClInclude Include="..\..\include\wx\panel.h" />

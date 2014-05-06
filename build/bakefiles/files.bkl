@@ -1887,6 +1887,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/oleutils.h
     wx/msw/ole/safearray.h
     wx/msw/ownerdrw.h
+    wx/msw/ownerdrawnbutton.h
     wx/msw/palette.h
     wx/msw/panel.h
     wx/msw/pen.h

@@ -1144,6 +1144,9 @@
     <ClInclude Include="..\..\include\wx\msw\ownerdrw.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\ownerdrawnbutton.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\palette.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1970,6 +1973,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\ownerdrw.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\ownerdrawnbutton.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\ribbon\page.h">

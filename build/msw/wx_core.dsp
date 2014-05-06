@@ -1752,6 +1752,10 @@ SOURCE=..\..\include\wx\msw\ole\oleutils.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\ownerdrawnbutton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\ownerdrw.h
 # End Source File
 # Begin Source File
