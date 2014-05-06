@@ -38,6 +38,7 @@
     #include "wx/settings.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/sizer.h"
     #include "wx/toolbar.h"
 #endif
 
@@ -467,12 +468,17 @@ WXHMENU wxMDIParentFrame::MSWGetActiveMenu() const
 
 void wxMDIParentFrame::UpdateClientSize()
 {
-    if ( GetClientWindow() )
-    {
-        int width, height;
-        GetClientSize(&width, &height);
+    int width, height;
+    GetClientSize(&width, &height);
 
-        GetClientWindow()->SetSize(0, 0, width, height);
+    if ( wxSizer* sizer = GetSizer() )
+    {
+        sizer->SetDimension(0, 0, width, height);
+    }
+    else
+    {
+        if ( GetClientWindow() )
+            GetClientWindow()->SetSize(0, 0, width, height);
     }
 }
 
