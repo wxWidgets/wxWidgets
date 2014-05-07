@@ -894,14 +894,20 @@
     <ClCompile Include="..\..\src\msw\ole\safearray.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\common\textmeasurecmn.cpp" />
-    <ClCompile Include="..\..\src\msw\textmeasure.cpp" />
-    <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp" />
     <ClCompile Include="..\..\src\common\preferencescmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\preferencesg.cpp">
       <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\textmeasure.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\textmeasurecmn.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xrc\xmlreshandler.cpp">
+      <Filter>Common Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
