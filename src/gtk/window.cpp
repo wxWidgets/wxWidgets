@@ -285,7 +285,26 @@ PangoContext* wxGetPangoContext()
         g_object_ref(context);
     }
     else
-        context = gdk_pango_context_get_for_screen(gdk_screen_get_default());
+    {
+        if ( GdkScreen *screen = gdk_screen_get_default() )
+        {
+            context = gdk_pango_context_get_for_screen(screen);
+        }
+#if PANGO_VERSION_CHECK(1,22,0)
+        else // No default screen.
+        {
+            // This may happen in console applications which didn't open the
+            // display, use the default font map for them -- it's better than
+            // nothing.
+            if (wx_pango_version_check(1,22,0) == 0)
+            {
+                context = pango_font_map_create_context(
+                                pango_cairo_font_map_get_default ());
+            }
+            //else: pango_font_map_create_context() not available
+        }
+#endif // Pango 1.22+
+    }
 
     return context;
 }
