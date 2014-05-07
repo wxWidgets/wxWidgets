@@ -1981,9 +1981,6 @@
     <ClInclude Include="..\..\include\wx\ownerdrw.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\ownerdrawnbutton.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\ribbon\page.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
