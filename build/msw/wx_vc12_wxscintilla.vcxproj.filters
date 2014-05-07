@@ -278,6 +278,9 @@
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexRuby.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\stc\scintilla\lexers\LexRust.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\stc\scintilla\lexers\LexSML.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
