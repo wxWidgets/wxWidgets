@@ -322,7 +322,7 @@ void wxRadioButton::MSWOnButtonResetOwnerDrawn()
 
 int wxRadioButton::MSWGetButtonCheckedFlag() const
 {
-    return m_isChecked ? wxCONTROL_CHECKED : 0;
+    return m_isChecked ? wxCONTROL_CHECKED : wxCONTROL_NONE;
 }
 
 void wxRadioButton::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
