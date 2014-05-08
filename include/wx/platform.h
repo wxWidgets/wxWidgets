@@ -321,10 +321,8 @@
 
 #    define __UNIX_LIKE__
 
-    /* Helps SGI compilation, apparently */
 #    ifdef __SGI__
 #        ifdef __GNUG__
-#            define __need_wchar_t
 #        else /* !gcc */
             /*
                Note I use the term __SGI_CC__ for both cc and CC, its not a good
