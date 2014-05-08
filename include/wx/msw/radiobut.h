@@ -13,13 +13,6 @@
 
 #include "wx/msw/ownerdrawnbutton.h"
 
-#ifdef __VISUALC__
-    // Disable the warning about non DLL-exported wxMSWOwnerDrawnButton class
-    // used as base for DLL-exported class: it's harmless in this case.
-    #pragma warning(push)
-    #pragma warning(disable:4275)
-#endif
-
 class WXDLLIMPEXP_CORE wxRadioButton : public wxMSWOwnerDrawnButton<wxControl>
 {
 public:
@@ -84,9 +77,5 @@ private:
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxRadioButton)
 };
-
-#ifdef __VISUALC__
-    #pragma warning(pop)
-#endif
 
 #endif // _WX_RADIOBUT_H_

@@ -17,11 +17,11 @@
 // This class contains the type-independent part of wxMSWOwnerDrawnButton and
 // is implemented in src/msw/control.cpp.
 //
-// Notice that it is intentionally not DLL-exported, it is internal
-// implementation detail only. However MSVS generates a warning C4275 when
-// deriving from the non-exported classes, so it needs to be explicitly
-// disabled when deriving from this one.
-class wxMSWOwnerDrawnButtonBase
+// Notice that this class is internal implementation detail only and is
+// intentionally not documented. Ideally it wouldn't be even exported from the
+// DLL but this somehow breaks building of applications using wxWidgets with
+// Intel compiler using LTCG, so we do export it.
+class WXDLLIMPEXP_CORE wxMSWOwnerDrawnButtonBase
 {
 protected:
     // Ctor takes the back pointer to the real window, must be non-NULL.
@@ -91,8 +91,9 @@ private:
 // This class uses a weak version of CRTP, i.e. it's a template class taking
 // the base class that the class deriving from it would normally derive from.
 template <class T>
-class wxMSWOwnerDrawnButton : public T,
-                              private wxMSWOwnerDrawnButtonBase
+class WXDLLIMPEXP_CORE wxMSWOwnerDrawnButton
+    : public T,
+      private wxMSWOwnerDrawnButtonBase
 {
 private:
     typedef T Base;
