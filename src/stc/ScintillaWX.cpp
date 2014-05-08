@@ -299,12 +299,12 @@ void ScintillaWX::StartDrag() {
     // Send an event to allow the drag text to be changed
     wxStyledTextEvent evt(wxEVT_STC_START_DRAG, stc->GetId());
     evt.SetEventObject(stc);
-    evt.SetDragText(dragText);
+    evt.SetString(dragText);
     evt.SetDragFlags(wxDrag_DefaultMove);
     evt.SetPosition(wxMin(stc->GetSelectionStart(),
                           stc->GetSelectionEnd()));
     stc->GetEventHandler()->ProcessEvent(evt);
-    dragText = evt.GetDragText();
+    dragText = evt.GetString();
 
     if ( !dragText.empty() ) {
         wxDropSource        source(stc);
@@ -1124,13 +1124,13 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
     evt.SetX(x);
     evt.SetY(y);
     evt.SetPosition(PositionFromLocation(Point(x,y)));
-    evt.SetDragText(text);
+    evt.SetString(text);
     stc->GetEventHandler()->ProcessEvent(evt);
 
     dragResult = evt.GetDragResult();
     if (dragResult == wxDragMove || dragResult == wxDragCopy) {
         DropAt(SelectionPosition(evt.GetPosition()),
-               wx2stc(evt.GetDragText()),
+               wx2stc(evt.GetString()),
                dragResult == wxDragMove,
                false); // TODO: rectangular?
         return true;

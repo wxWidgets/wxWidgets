@@ -5082,7 +5082,7 @@ static void SetEventText(wxStyledTextEvent& evt, const char* text,
                          size_t length) {
     if(!text) return;
 
-    evt.SetText(stc2wx(text, length));
+    evt.SetString(stc2wx(text, length));
 }
 
 
@@ -5284,7 +5284,6 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
     m_key =           event.m_key;
     m_modifiers =     event.m_modifiers;
     m_modificationType = event.m_modificationType;
-    m_text =          event.m_text;
     m_length =        event.m_length;
     m_linesAdded =    event.m_linesAdded;
     m_line =          event.m_line;
@@ -5306,7 +5305,6 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
     m_updated =      event.m_updated;
 
 #if wxUSE_DRAG_AND_DROP
-    m_dragText =     event.m_dragText;
     m_dragFlags =    event.m_dragFlags;
     m_dragResult =   event.m_dragResult;
 #endif
