@@ -516,7 +516,15 @@ void ScintillaWX::Paste() {
     if (gotData) {
         wxString   text = wxTextBuffer::Translate(data.GetText(),
                                                   wxConvertEOLMode(pdoc->eolMode));
-        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
+
+        // Send an event to allow the pasted text to be changed
+        wxStyledTextEvent evt(wxEVT_STC_CLIPBOARD_PASTE, stc->GetId());
+        evt.SetEventObject(stc);
+        evt.SetPosition(sel.MainCaret());
+        evt.SetString(text);
+        stc->GetEventHandler()->ProcessEvent(evt);
+
+        wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(evt.GetString());
 
 #if wxUSE_UNICODE
         // free up the old character buffer in case the text is real big
@@ -553,9 +561,15 @@ void ScintillaWX::CopyToClipboard(const SelectionText& st) {
     if ( !st.LengthWithTerminator() )
         return;
 
+    // Send an event to allow the copied text to be changed
+    wxStyledTextEvent evt(wxEVT_STC_CLIPBOARD_COPY, stc->GetId());
+    evt.SetEventObject(stc);
+    evt.SetString(wxTextBuffer::Translate(stc2wx(st.Data(), st.Length())));
+    stc->GetEventHandler()->ProcessEvent(evt);
+
     wxTheClipboard->UsePrimarySelection(false);
     if (wxTheClipboard->Open()) {
-        wxString text = wxTextBuffer::Translate(stc2wx(st.Data(), st.Length()));
+        wxString text = evt.GetString();
 
 #ifdef wxHAVE_STC_RECT_FORMAT
         if (st.rectangular)

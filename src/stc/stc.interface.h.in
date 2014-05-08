@@ -83,11 +83,11 @@
     @event{EVT_STC_DWELLEND(id, fn)}
         TOWRITE
     @event{EVT_STC_START_DRAG(id, fn)}
-        TOWRITE
+        Process a @c wxEVT_STC_START_DRAG event, generated when text is being dragged from the control. Details of the drag may be altered by changing the respective fields of the event; in particular, set an empty string to prohibit the drag entirely. Valid event functions: @link wxStyledTextEvent::GetDragFlags GetDragFlags@endlink, @link wxStyledTextEvent::SetDragFlags SetDragFlags@endlink, @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink.
     @event{EVT_STC_DRAG_OVER(id, fn)}
         TOWRITE
     @event{EVT_STC_DO_DROP(id, fn)}
-        TOWRITE
+        Process a @c wxEVT_STC_DO_DROP event, generated when text is being dropped into the control. Details of the drag may be altered by changing the respective fields of the event. Valid event functions: @link wxStyledTextEvent::GetDragResult GetDragResult@endlink, @link wxStyledTextEvent::SetDragResult SetDragResult@endlink, @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::SetPosition SetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink, @link wxStyledTextEvent::GetX GetX@endlink, @link wxStyledTextEvent::GetY GetY@endlink.
     @event{EVT_STC_ZOOM(id, fn)}
         TOWRITE
     @event{EVT_STC_HOTSPOT_CLICK(id, fn)}
@@ -108,6 +108,14 @@
         TOWRITE
     @event{EVT_STC_HOTSPOT_RELEASE_CLICK(id, fn)}
         TOWRITE
+    @event{EVT_STC_CLIPBOARD_COPY(id, fn)}
+        Process a @c wxEVT_STC_CLIPBOARD_COPY event, generated when text is being cut or copied to the clipboard. Use wxStyledTextEvent::SetString() to modify the text that will be placed on the clipboard. Valid event functions: @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink.
+        @since 3.1.0
+
+    @event{EVT_STC_CLIPBOARD_PASTE(id, fn)}
+        Process a @c wxEVT_STC_CLIPBOARD_PASTE event, generated when text is being pasted from the clipboard. Use wxStyledTextEvent::SetString() to modify the text that will be inserted into the control. Valid event functions: @link wxStyledTextEvent::GetPosition GetPosition@endlink, @link wxStyledTextEvent::GetString GetString@endlink, @link wxStyledTextEvent::SetString SetString@endlink.
+        @since 3.1.0
+
     @endEventTable
 
     @library{wxstc}
@@ -515,3 +523,5 @@ const wxEventType wxEVT_STC_INDICATOR_RELEASE;
 const wxEventType wxEVT_STC_AUTOCOMP_CANCELLED;
 const wxEventType wxEVT_STC_AUTOCOMP_CHAR_DELETED;
 const wxEventType wxEVT_STC_HOTSPOT_RELEASE_CLICK;
+const wxEventType wxEVT_STC_CLIPBOARD_COPY;
+const wxEventType wxEVT_STC_CLIPBOARD_PASTE;
