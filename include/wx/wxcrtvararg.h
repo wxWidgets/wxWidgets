@@ -205,7 +205,7 @@
 #if !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_WPRINTF)
     #define wxNEED_WPRINTF
 #endif
-#if !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_VSWSCANF)
+#if !defined(wxHAVE_TCHAR_SUPPORT) && !defined(HAVE_VSWSCANF) && defined(HAVE_VSSCANF)
     #define wxNEED_VSWSCANF
 #endif
 
