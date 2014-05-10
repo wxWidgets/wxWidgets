@@ -4797,9 +4797,12 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
         m_notifier = new wxGenericDataViewModelNotifier( m_clientArea );
         model->AddNotifier( m_notifier );
     }
-    else if (m_notifier)
+    else
     {
-        m_notifier->Cleared();
+        // Our previous notifier has either been already deleted when the
+        // previous model was DecRef()'d in the base class AssociateModel() or
+        // is not associated with us any more because if the model is still
+        // alive, it's not used by this control.
         m_notifier = NULL;
     }
 
