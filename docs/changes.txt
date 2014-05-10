@@ -46,6 +46,7 @@ All (GUI):
 - Add wxFont::GetBaseFont() (Melroy Tellis).
 - Update included Scintilla to version 3.3.9 (Christian Walther).
 - Add wxStyledTextCtrl copy/paste text events (Christian Walther).
+- Improve RTL support in wxStyledTextCtrl (Zane U. Ji).
 - Add support for loading old V1 BMP files to wxImage (Artur Wieczorek).
 - Improve auto sizing of wrapped cells in wxGrid (iwbnwif).
 - Fix handling of rectangular selections in wxStyledTextCtrl (roberto).
