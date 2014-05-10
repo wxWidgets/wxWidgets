@@ -91,7 +91,7 @@ private:
 // This class uses a weak version of CRTP, i.e. it's a template class taking
 // the base class that the class deriving from it would normally derive from.
 template <class T>
-class WXDLLIMPEXP_CORE wxMSWOwnerDrawnButton
+class wxMSWOwnerDrawnButton
     : public T,
       private wxMSWOwnerDrawnButtonBase
 {
