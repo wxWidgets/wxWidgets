@@ -191,6 +191,7 @@
          cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
         <sources>$(WEBVIEW_SRC)</sources>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
+        <include>$(CEF_INCLUDE_DIR)</include>
     </lib>
 
     <wxshortcut id="wxwebview" cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'"/>

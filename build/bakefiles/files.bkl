@@ -3405,6 +3405,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                                wxWEBVIEW                               -->
 <!-- ====================================================================== -->
 
+<!--Add CEF directory here-->
+<set var="CEF_INCLUDE_DIR">
+</set>
+
 <set var="WEBVIEW_SRC_PLATFORM">
     <if cond="TOOLKIT=='MSW'">src/msw/webview_ie.cpp</if>
     <if cond="TOOLKIT=='GTK'">src/gtk/webview_webkit.cpp</if>
@@ -3414,6 +3418,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
+    src/common/webview_chromium3.cpp
 </set>
 <set var="WEBVIEW_SRC" hints="files">
     $(WEBVIEW_SRC_PLATFORM)
@@ -3439,6 +3444,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/webview.h
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
+    wx/webview_chromium.h
+    wx/webview_chromium3.h
 </set>
 <set var="WEBVIEW_HDR" hints="files">
     $(WEBVIEW_HDR_PLATFORM)
