@@ -205,7 +205,7 @@ public:
     virtual wxString GetTitle() const = 0;
 
     // enable/disable close button [x]
-    virtual bool EnableCloseButton(bool WXUNUSED(enable) ) { return false; }
+    virtual bool EnableCloseButton(bool WXUNUSED(enable) = true) { return false; }
 
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)
