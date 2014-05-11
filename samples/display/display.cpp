@@ -219,6 +219,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     menuBar->Append(menuDisplay, _("&Display"));
     menuBar->Append(helpMenu, _("&Help"));
 
+    EnableFullScreenView();
+
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS

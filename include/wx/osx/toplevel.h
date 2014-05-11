@@ -64,6 +64,7 @@ public:
     virtual bool IsActive();
 
     virtual void ShowWithoutActivating();
+    bool EnableFullScreenView(bool enable = true) wxOVERRIDE;
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) ;
     virtual bool IsFullScreen() const ;
 

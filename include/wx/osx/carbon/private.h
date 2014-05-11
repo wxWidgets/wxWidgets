@@ -1008,6 +1008,8 @@ public :
 
     virtual bool IsFullScreen() const;
 
+    bool EnableFullScreenView(bool enable) wxOVERRIDE;
+
     virtual bool ShowFullScreen(bool show, long style);
 
     virtual void ShowWithoutActivating();

@@ -182,6 +182,11 @@ public:
     // set the frame icons
     virtual void SetIcons(const wxIconBundle& icons) { m_icons = icons; }
 
+    virtual bool EnableFullScreenView(bool WXUNUSED(enable) = true)
+    {
+        return false;
+    }
+
     // maximize the window to cover entire screen
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) = 0;
 

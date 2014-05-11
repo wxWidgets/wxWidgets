@@ -534,7 +534,35 @@ public:
         focus.
      */
     virtual void ShowWithoutActivating();
-    
+
+    /**
+        Adds or removes a full screen button to the right upper corner of a
+        window's title bar under OS X 10.7 and later.
+
+        Currently only available for wxOSX/Cocoa.
+
+        @param enable
+            If @true (default) adds the full screen button in the title bar;
+            if @false the button is removed.
+
+        @return @true if the button was added or removed, @false if running
+        under a pre-OS X 10.7 system or another OS.
+
+        @note Having the button is also required to let ShowFullScreen()
+        make use of the full screen API available since OS X 10.7: a full
+        screen window gets its own space and entering and exiting the mode
+        is animated.
+        If the button is not present the old way of switching to full screen
+        is used.
+
+        @onlyfor{wxosx}
+
+        @see ShowFullScreen()
+
+        @since 3.1.0
+    */
+    virtual bool EnableFullScreenView(bool enable = true);
+
     /**
         Depending on the value of @a show parameter the window is either shown
         full screen or restored to its normal state. @a style is a bit list
@@ -553,7 +581,7 @@ public:
         @note Showing a window full screen also actually @ref wxWindow::Show()
               "Show()"s the window if it isn't shown.
 
-        @see IsFullScreen()
+        @see EnableFullScreenView(), IsFullScreen()
     */
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
 
