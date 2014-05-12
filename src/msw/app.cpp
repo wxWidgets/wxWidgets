@@ -233,7 +233,7 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
     return evtLoop->Dispatch();
 }
 
-DWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
+WXDWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread, int flags)
 {
     // We only ever dispatch messages from the main thread and, additionally,
     // even from the main thread we shouldn't wait for the message if we don't
