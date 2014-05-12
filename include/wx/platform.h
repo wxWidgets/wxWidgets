@@ -350,12 +350,6 @@
 #        define __HPUX__
 #    endif /* HP-UX */
 
-#    if defined(__CYGWIN__) || defined(__WINE__)
-#        if !defined(wxSIZE_T_IS_UINT)
-#            define wxSIZE_T_IS_UINT
-#        endif
-#    endif
-
     /*  All of these should already be defined by including configure-
         generated setup.h but we wish to support Xcode compilation without
         requiring the user to define these himself.
