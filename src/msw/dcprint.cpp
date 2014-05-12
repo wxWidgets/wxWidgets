@@ -251,16 +251,8 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     LPTSTR      lpszPortName;
 
     PRINTDLG    pd;
-
-    // Cygwin has trouble believing PRINTDLG is 66 bytes - thinks it is 68
-#ifdef __GNUWIN32__
-    memset(&pd, 0, 66);
-    pd.lStructSize    = 66; // sizeof(PRINTDLG);
-#else
     memset(&pd, 0, sizeof(PRINTDLG));
     pd.lStructSize    = sizeof(PRINTDLG);
-#endif
-
     pd.hwndOwner      = (HWND)NULL;
     pd.hDevMode       = NULL; // Will be created by PrintDlg
     pd.hDevNames      = NULL; // Ditto
