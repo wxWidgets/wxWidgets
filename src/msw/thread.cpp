@@ -1196,7 +1196,7 @@ void wxThread::Exit(ExitCode status)
 #ifdef wxUSE_BEGIN_THREAD
     _endthreadex(wxPtrToUInt(status));
 #else // !VC++
-    ::ExitThread((DWORD)status);
+    ::ExitThread(wxPtrToUInt(status));
 #endif // VC++/!VC++
 
     wxFAIL_MSG(wxT("Couldn't return from ExitThread()!"));
