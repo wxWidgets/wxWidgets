@@ -3250,9 +3250,9 @@ typedef WXHWND          WXWidget;
 #endif
 
 #ifdef __WIN64__
-typedef unsigned __int64   WXWPARAM;
-typedef __int64            WXLPARAM;
-typedef __int64            WXLRESULT;
+typedef wxUint64           WXWPARAM;
+typedef wxInt64            WXLPARAM;
+typedef wxInt64            WXLRESULT;
 #else
 typedef wxW64 unsigned int WXWPARAM;
 typedef wxW64 long         WXLPARAM;

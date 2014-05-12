@@ -57,21 +57,6 @@
 #    endif /* !__WINDOWS__ */
 #endif /* Any standard symbol indicating Windows */
 
-#if defined(_WIN64)
-#    ifndef _WIN32
-        /*
-            a lot of code (mistakenly) uses #ifdef _WIN32 to either test for
-            Windows or to test for !__WIN16__, so we must define _WIN32 for
-            Win64 as well to ensure that the existing code continues to work.
-         */
-#       define _WIN32
-#   endif /* !_WIN32 */
-
-#   ifndef __WIN64__
-#       define __WIN64__
-#   endif /* !__WIN64__ */
-#endif /* _WIN64 */
-
 #if defined(__WINDOWS__)
     /* Select wxMSW under Windows if no other port is specified. */
 #   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
@@ -93,6 +78,15 @@
 #   ifndef __WIN32__
 #        define __WIN32__
 #   endif
+
+    /* MSVC predefines _WIN64 for 64 bit builds, for gcc we use generic
+       architecture definitions. */
+#   if defined(_WIN64) || defined(__x86_64__)
+#       ifndef __WIN64__
+#           define __WIN64__
+#       endif /* !__WIN64__ */
+#   endif /* _WIN64 */
+
 #endif /* __WINDOWS__ */
 
 /*
