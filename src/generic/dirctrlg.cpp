@@ -59,15 +59,13 @@
 #include "wx/msw/winundef.h"
 #include "wx/volume.h"
 
-// FIXME - Mingw32 1.0 has both _getdrive() and _chdrive(). For now, let's assume
-//         older releases don't, but it should be verified and the checks modified
-//         accordingly.
-#if !defined(__GNUWIN32__) || (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
-#if !defined(__WXWINCE__)
-    #include <direct.h>
+// MinGW has _getdrive() and _chdrive(), Cygwin doesn't.
+#if defined(__GNUWIN32__) && !defined(__CYGWIN__)
+    #define wxHAS_DRIVE_FUNCTIONS
 #endif
-    #include <stdlib.h>
-    #include <ctype.h>
+
+#ifdef wxHAS_DRIVE_FUNCTIONS
+    #include <direct.h>
 #endif
 
 #endif // __WINDOWS__
@@ -300,8 +298,7 @@ int setdrive(int WXUNUSED_IN_WINCE(drive))
 {
 #ifdef __WXWINCE__
     return 0;
-#elif defined(__GNUWIN32__) && \
-    (defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
+#elif defined(wxHAS_DRIVE_FUNCTIONS)
     return _chdrive(drive);
 #else
     wxChar  newdrive[4];
@@ -343,7 +340,7 @@ bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
     if (dirName.length() == 3 && dirName[(size_t)1] == wxT(':'))
     {
         wxString dirNameLower(dirName.Lower());
-#if defined(__GNUWIN32__) && !(defined(__MINGW32_MAJOR_VERSION) && __MINGW32_MAJOR_VERSION >= 1)
+#ifndef wxHAS_DRIVE_FUNCTIONS
         success = wxDirExists(dirNameLower);
 #else
         #if defined(__OS2__)
