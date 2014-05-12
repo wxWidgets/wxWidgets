@@ -1360,7 +1360,7 @@ wxString wxGetOsDescription()
 
 bool wxIsPlatform64Bit()
 {
-#if defined(_WIN64)
+#if defined(__WIN64__)
     return true;  // 64-bit programs run only on Win64
 #elif wxUSE_DYNLIB_CLASS // Win32
     // 32-bit programs run on both 32-bit and 64-bit Windows so check
