@@ -236,7 +236,7 @@ public:
     // This function can block forever in it's wait for completion status.
     // Use PostEmptyStatus() to wake it up (and end the worker thread)
     Status
-    GetStatus(unsigned long* count, wxFSWatchEntryMSW** watch,
+    GetStatus(DWORD* count, wxFSWatchEntryMSW** watch,
               OVERLAPPED** overlapped)
     {
         wxCHECK_MSG( m_iocp != INVALID_HANDLE_VALUE, Status_Error,

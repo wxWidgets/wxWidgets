@@ -221,7 +221,7 @@ wxThread::ExitCode wxIOCPThread::Entry()
 //         true otherwise
 bool wxIOCPThread::ReadEvents()
 {
-    unsigned long count = 0;
+    DWORD count = 0;
     wxFSWatchEntryMSW* watch = NULL;
     OVERLAPPED* overlapped = NULL;
     switch ( m_iocp->GetStatus(&count, &watch, &overlapped) )
