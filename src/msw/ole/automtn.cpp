@@ -600,12 +600,12 @@ bool wxAutomationObject::CreateInstance(const wxString& progId) const
     return m_dispatchPtr != NULL;
 }
 
-LCID wxAutomationObject::GetLCID() const
+WXLCID wxAutomationObject::GetLCID() const
 {
     return m_lcid;
 }
 
-void wxAutomationObject::SetLCID(LCID lcid)
+void wxAutomationObject::SetLCID(WXLCID lcid)
 {
     m_lcid = lcid;
 }
