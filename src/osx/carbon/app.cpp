@@ -420,6 +420,10 @@ void wxApp::OSXOnWillFinishLaunching()
 
 void wxApp::OSXOnDidFinishLaunching()
 {
+    // on cocoa we cannot do this, as it would arrive "AFTER" an OpenFiles event
+#if wxOSX_USE_IPHONE
+    wxTheApp->OnInit();
+#endif
 }
 
 void wxApp::OSXOnWillTerminate()
