@@ -1185,22 +1185,29 @@ wxMemorySize wxGetFreeMemory()
             // /proc/meminfo changed its format in kernel 2.6
             if ( wxPlatformInfo().CheckOSVersion(2, 6) )
             {
-                unsigned long cached, buffers;
-                sscanf(buf, "MemFree: %ld", &memFree);
+                if ( sscanf(buf, "MemFree: %ld", &memFree) == 1 )
+                {
+                    // We consider memory used by the IO buffers and cache as
+                    // being "free" too as Linux aggressively uses free memory
+                    // for caching and the amount of memory reported as really
+                    // free is far too low for lightly loaded system.
+                    if ( fgets(buf, WXSIZEOF(buf), fp) )
+                    {
+                        unsigned long buffers;
+                        if ( sscanf(buf, "Buffers: %lu", &buffers) == 1 )
+                            memFree += buffers;
+                    }
 
-                fgets(buf, WXSIZEOF(buf), fp);
-                sscanf(buf, "Buffers: %lu", &buffers);
+                    if ( fgets(buf, WXSIZEOF(buf), fp) )
+                    {
+                        unsigned long cached;
+                        if ( sscanf(buf, "Cached: %lu", &cached) == 1 )
+                            memFree += cached;
+                    }
 
-                fgets(buf, WXSIZEOF(buf), fp);
-                sscanf(buf, "Cached: %lu", &cached);
-
-                // add to "MemFree" also the "Buffers" and "Cached" values as
-                // free(1) does as otherwise the value never makes sense: for
-                // kernel 2.6 it's always almost 0
-                memFree += buffers + cached;
-
-                // values here are always expressed in kB and we want bytes
-                memFree *= 1024;
+                    // values here are always expressed in kB and we want bytes
+                    memFree *= 1024;
+                }
             }
             else // Linux 2.4 (or < 2.6, anyhow)
             {
