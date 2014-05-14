@@ -1177,7 +1177,7 @@ wxMemorySize wxGetFreeMemory()
     FILE *fp = fopen("/proc/meminfo", "r");
     if ( fp )
     {
-        long memFree = -1;
+        wxMemorySize memFreeBytes = (wxMemorySize)-1;
 
         char buf[1024];
         if ( fgets(buf, WXSIZEOF(buf), fp) && fgets(buf, WXSIZEOF(buf), fp) )
@@ -1185,7 +1185,8 @@ wxMemorySize wxGetFreeMemory()
             // /proc/meminfo changed its format in kernel 2.6
             if ( wxPlatformInfo().CheckOSVersion(2, 6) )
             {
-                if ( sscanf(buf, "MemFree: %ld", &memFree) == 1 )
+                unsigned long memFree;
+                if ( sscanf(buf, "MemFree: %lu", &memFree) == 1 )
                 {
                     // We consider memory used by the IO buffers and cache as
                     // being "free" too as Linux aggressively uses free memory
@@ -1206,19 +1207,24 @@ wxMemorySize wxGetFreeMemory()
                     }
 
                     // values here are always expressed in kB and we want bytes
-                    memFree *= 1024;
+                    memFreeBytes = memFree;
+                    memFreeBytes *= 1024;
                 }
             }
             else // Linux 2.4 (or < 2.6, anyhow)
             {
-                long memTotal, memUsed;
-                sscanf(buf, "Mem: %ld %ld %ld", &memTotal, &memUsed, &memFree);
+                long memTotal, memUsed, memFree;
+                if ( sscanf(buf, "Mem: %ld %ld %ld",
+                            &memTotal, &memUsed, &memFree) == 3 )
+                {
+                    memFreeBytes = memFree;
+                }
             }
         }
 
         fclose(fp);
 
-        return (wxMemorySize)memFree;
+        return memFreeBytes;
     }
 #elif defined(__SGI__)
     struct rminfo realmem;
