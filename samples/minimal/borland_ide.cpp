@@ -15,7 +15,7 @@
 // directory in your PATH.
 
 // To use this to debug other samples, copy the borland_ide.cpp
-// and borland.bdsproj files, then replace all occurences of
+// and borland.bdsproj files, then replace all occurrences of
 // "minimal" with the name of the new project files
 **************************************************/
 
