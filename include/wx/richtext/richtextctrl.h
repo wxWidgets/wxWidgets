@@ -2551,7 +2551,7 @@ public:
         { }
 
     /**
-        Returns the buffer position at which the event occured.
+        Returns the buffer position at which the event occurred.
     */
     long GetPosition() const { return m_position; }
 
