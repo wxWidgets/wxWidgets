@@ -180,9 +180,6 @@ private:
     #include "wx/osx/checkbox.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/checkbox.h"
-#elif defined(__WXPM__)
-    #undef wxHAS_3STATE_CHECKBOX
-    #include "wx/os2/checkbox.h"
 #endif
 
 #endif // wxUSE_CHECKBOX

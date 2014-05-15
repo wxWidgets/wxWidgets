@@ -141,8 +141,6 @@ private:
     #include "wx/osx/slider.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/slider.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/slider.h"
 #endif
 
 #endif // wxUSE_SLIDER

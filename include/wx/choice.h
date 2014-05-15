@@ -88,8 +88,6 @@ private:
     #include "wx/osx/choice.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/choice.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/choice.h"
 #endif
 
 #endif // wxUSE_CHOICE

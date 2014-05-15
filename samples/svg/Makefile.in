@@ -49,7 +49,6 @@ SVGTEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 SVGTEST_OBJECTS =  \
 	$(__svgtest___win32rc) \
-	$(__svgtest_os2_lib_res) \
 	svgtest_svgtest.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___svgtest___os2_emxbindcmd = $(NM) svgtest$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__svgtest___win32rc = svgtest_sample_rc.o
-@COND_PLATFORM_OS2_1@__svgtest_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__svgtest_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= svgtest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__svgtest_bundle___depname = svgtest_bundle

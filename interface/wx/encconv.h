@@ -112,7 +112,6 @@ public:
         Supported platforms:
         @li wxPLATFORM_UNIX
         @li wxPLATFORM_WINDOWS
-        @li wxPLATFORM_OS2
         @li wxPLATFORM_MAC
         @li wxPLATFORM_CURRENT
 

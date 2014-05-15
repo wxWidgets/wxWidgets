@@ -43,8 +43,6 @@ $toolkit must currently be one of the following:
 	gtk
 	base
 	mac
-	os2
-	pm
 	motif
 
 --------------------------------------------------------------------

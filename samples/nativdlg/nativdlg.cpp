@@ -90,7 +90,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-#if ( defined(__WXPM__) || defined(__WXMSW__) ) && !defined(__WXUNIVERSAL__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     MyDialog dialog;
     if (dialog.LoadNativeDialog(this, wxT("dialog1")))
     {

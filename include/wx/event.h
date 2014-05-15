@@ -2101,10 +2101,10 @@ private:
  wxEVT_NC_PAINT
  */
 
-#if wxDEBUG_LEVEL && (defined(__WXMSW__) || defined(__WXPM__))
+#if wxDEBUG_LEVEL && defined(__WXMSW__)
     #define wxHAS_PAINT_DEBUG
 
-    // see comments in src/msw|os2/dcclient.cpp where g_isPainting is defined
+    // see comments in src/msw/dcclient.cpp where g_isPainting is defined
     extern WXDLLIMPEXP_CORE int g_isPainting;
 #endif // debug
 

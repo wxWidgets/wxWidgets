@@ -61,7 +61,6 @@ WX_EXE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  \
 	$(__wx_exe___win32rc) \
-	$(__wx_exe_os2_lib_res) \
 	wx_exe_wx_exe.o
 SDK_EXE_CXXFLAGS =          $(CPPFLAGS) $(CXXFLAGS)
 SDK_EXE_OBJECTS =  \
@@ -103,8 +102,6 @@ COND_PLATFORM_OS2_1___wx_exe___os2_emxbindcmd = $(NM) wx_exe$(EXEEXT) | if grep 
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__wx_exe___win32rc = wx_exe_sample_rc.o
-@COND_PLATFORM_OS2_1@__wx_exe_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@__wx_exe_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	= \
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@	wx_exe.app/Contents/PkgInfo

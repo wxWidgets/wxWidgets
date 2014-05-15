@@ -50,7 +50,6 @@ ABOUT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 ABOUT_OBJECTS =  \
 	$(__about___win32rc) \
-	$(__about_os2_lib_res) \
 	about_about.o
 
 ### Conditionally set variables: ###
@@ -89,8 +88,6 @@ COND_PLATFORM_OS2_1___about___os2_emxbindcmd = $(NM) about$(EXEEXT) | if grep -q
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__about___win32rc = about_sample_rc.o
-@COND_PLATFORM_OS2_1@__about_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__about_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= about.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__about_bundle___depname = about_bundle

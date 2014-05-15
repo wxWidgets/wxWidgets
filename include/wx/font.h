@@ -532,8 +532,6 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     #include "wx/osx/font.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/font.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/font.h"
 #endif
 
 class WXDLLIMPEXP_CORE wxFontList: public wxGDIObjListBase

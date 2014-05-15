@@ -244,23 +244,8 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     m_text->SetFont(wxFont(12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
 #endif
 
-//#if defined(__WXPM__)
-    //
-    // The only way to get icons into an OS/2 static bitmap control
-    //
-//    wxBitmap                        vBitmap;
-
-//    vBitmap.SetId(wxICON_TIP); // OS/2 specific bitmap method--OS/2 wxBitmaps all have an ID.
-//                               // and for StatBmp's under OS/2 it MUST be a valid resource ID.
-//
-//    wxStaticBitmap*                 bmp = new wxStaticBitmap(this, wxID_ANY, vBitmap);
-//
-//#else
-
     wxIcon icon = wxArtProvider::GetIcon(wxART_TIP, wxART_CMN_DIALOG);
     wxStaticBitmap *bmp = new wxStaticBitmap(this, wxID_ANY, icon);
-
-//#endif
 
     m_checkbox = new wxCheckBox(this, wxID_ANY, _("&Show tips at startup"));
     m_checkbox->SetValue(showAtStartup);

@@ -88,8 +88,6 @@ protected:
     #include "wx/osx/spinbutt.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/spinbutt.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/spinbutt.h"
 #endif
 
 // ----------------------------------------------------------------------------

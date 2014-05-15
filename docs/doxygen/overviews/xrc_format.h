@@ -2415,7 +2415,6 @@ Possible elemental values are:
 @itemdef{ @c win, Windows }
 @itemdef{ @c mac, Mac OS X (or Mac Classic in wxWidgets version supporting it) }
 @itemdef{ @c unix, Any Unix platform @em except OS X }
-@itemdef{ @c os2, OS/2 }
 @endDefList
 
 Examples:

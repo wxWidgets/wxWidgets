@@ -277,7 +277,7 @@ private:
 
         wxCritSectBuffer m_buffer;
     };
-#endif // Unix&OS2/Win32
+#endif // Unix/Win32
 
     wxDECLARE_NO_COPY_CLASS(wxCriticalSection);
 };
@@ -849,7 +849,7 @@ public:
 
 #if wxUSE_THREADS
 
-#if defined(__WINDOWS__) || defined(__OS2__) || defined(__EMX__) || defined(__DARWIN__)
+#if defined(__WINDOWS__) || defined(__DARWIN__)
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
     // thread

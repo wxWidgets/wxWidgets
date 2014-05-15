@@ -77,8 +77,6 @@ protected:
     #include "wx/gtk/fontdlg.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/fontdlg.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/fontdlg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/fontdlg.h"
 #endif

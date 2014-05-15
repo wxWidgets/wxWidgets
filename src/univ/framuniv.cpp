@@ -107,12 +107,7 @@ void wxFrame::PositionMenuBar()
 #endif // wxUSE_TOOLBAR
 
         m_frameMenuBar->SetSize(0,
-#ifdef __WXPM__   // FIXME -- remove this, make wxOS2/Univ behave as
-                 //          the rest of the world!!!
-                                GetClientSize().y - heightMbar - heightTbar,
-#else
                                 - (heightMbar + heightTbar),
-#endif
                                 GetClientSize().x, heightMbar);
     }
 }
@@ -193,7 +188,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
 {
     wxPoint pt = wxFrameBase::GetClientAreaOrigin();
 
-#if wxUSE_MENUS && !defined(__WXPM__)
+#if wxUSE_MENUS
     if ( m_frameMenuBar )
     {
         pt.y += m_frameMenuBar->GetSize().y;

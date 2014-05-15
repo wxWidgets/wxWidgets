@@ -48,7 +48,6 @@ NATIVDLG_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 NATIVDLG_OBJECTS =  \
-	$(__nativdlg_os2_lib_res) \
 	nativdlg_nativdlg.o \
 	$(__nativdlg___win32rc)
 
@@ -87,8 +86,6 @@ COND_PLATFORM_OS2_1___nativdlg___os2_emxbindcmd = $(NM) nativdlg$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__nativdlg___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___nativdlg___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_PLATFORM_OS2_1@__nativdlg_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__nativdlg_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= nativdlg.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__nativdlg_bundle___depname = nativdlg_bundle

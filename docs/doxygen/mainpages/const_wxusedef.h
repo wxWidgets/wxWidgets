@@ -312,18 +312,6 @@ library:
 @endDefList
 
 
-@section page_wxusedef_os2 OS2 Symbols
-
-@beginDefList
-@itemdef{wxUSE_CONSOLEDEBUG, See src/os2/app.cpp file.}
-@itemdef{wxUSE_DDE, See src/os2/mimetype.cpp file.}
-@itemdef{wxUSE_IMAGE_LOADING_IN_MSW, See src/os2/clipbrd.cpp file.}
-@itemdef{wxUSE_IMAGE_LOADING_IN_OS2, See src/os2/gdiimage.cpp file.}
-@itemdef{wxUSE_NET_API, Use NetBios32GetInfo API call.}
-@itemdef{wxUSE_RESOURCE_LOADING_IN_OS2, See src/os2/gdiimage.cpp file.}
-@endDefList
-
-
 @section page_wxusedef_msw wxMSW Symbols
 
 @beginDefList

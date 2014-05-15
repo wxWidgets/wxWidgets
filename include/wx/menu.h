@@ -591,8 +591,6 @@ protected:
     #include "wx/osx/menu.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/menu.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/menu.h"
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
 

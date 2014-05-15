@@ -54,7 +54,7 @@
 // Otherwise wx itself must ensure that when the parent is disabled its
 // children are disabled too, and their initial state is restored when the
 // parent is enabled back.
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__)
     // must do everything ourselves
     #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
 #elif defined(__WXOSX__)
@@ -1926,13 +1926,6 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowCocoa wxWindow
     #endif // wxUniv
     #include "wx/cocoa/window.h"
-#elif defined(__WXPM__)
-    #ifdef __WXUNIVERSAL__
-        #define wxWindowNative wxWindowOS2
-    #else // !wxUniv
-        #define wxWindowOS2 wxWindow
-    #endif // wxUniv/!wxUniv
-    #include "wx/os2/window.h"
 #endif
 
 // for wxUniversal, we now derive the real wxWindow from wxWindow<platform>,

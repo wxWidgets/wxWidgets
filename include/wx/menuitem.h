@@ -206,8 +206,6 @@ inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); 
     #include "wx/osx/menuitem.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/menuitem.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/menuitem.h"
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
 

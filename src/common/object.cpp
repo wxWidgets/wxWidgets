@@ -25,15 +25,6 @@
 
 #include <string.h>
 
-#if wxUSE_DEBUG_CONTEXT
-    #if defined(__VISAGECPP__)
-        #define DEBUG_PRINTF(NAME) { static int raz=0; \
-            printf( #NAME " %i\n",raz); fflush(stdout); raz++; }
-    #else
-        #define DEBUG_PRINTF(NAME)
-    #endif
-#endif // wxUSE_DEBUG_CONTEXT
-
 // we must disable optimizations for VC.NET because otherwise its too eager
 // linker discards wxClassInfo objects in release build thus breaking many,
 // many things
@@ -288,10 +279,6 @@ void wxClassInfo::Unregister()
 
 wxObject *wxCreateDynamicObject(const wxString& name)
 {
-#if wxUSE_DEBUG_CONTEXT
-    DEBUG_PRINTF(wxObject *wxCreateDynamicObject)
-#endif
-
     if ( wxClassInfo::sm_classTable )
     {
         wxClassInfo *info = (wxClassInfo *)wxClassInfo::sm_classTable->Get(name);
@@ -362,10 +349,6 @@ void wxRefCounter::DecRef()
 
 void wxObject::Ref(const wxObject& clone)
 {
-#if wxUSE_DEBUG_CONTEXT
-    DEBUG_PRINTF(wxObject::Ref)
-#endif
-
     // nothing to be done
     if (m_refData == clone.m_refData)
         return;

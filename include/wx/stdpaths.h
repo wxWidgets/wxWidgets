@@ -178,9 +178,6 @@ protected:
     #elif defined(__WXMAC__) || defined(__DARWIN__)
         #include "wx/osx/core/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS
-    #elif defined(__OS2__)
-        #include "wx/os2/stdpaths.h"
-        #define wxHAS_NATIVE_STDPATHS
     #elif defined(__UNIX__)
         #include "wx/unix/stdpaths.h"
         #define wxHAS_NATIVE_STDPATHS

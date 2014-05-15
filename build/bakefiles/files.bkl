@@ -242,38 +242,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
-<!--                               OS/2                                     -->
-<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
-
-<set var="BASE_OS2_SRC" hints="files">
-    src/common/fdiodispatcher.cpp
-    src/common/selectdispatcher.cpp
-    src/unix/appunix.cpp
-    src/unix/evtloopunix.cpp
-    src/unix/timerunx.cpp
-    src/os2/dir.cpp
-    src/os2/mimetype.cpp
-    src/os2/snglinst.cpp
-    src/os2/stdpaths.cpp
-    src/os2/thread.cpp
-    src/os2/utils.cpp
-    src/os2/utilsexc.cpp
-</set>
-<set var="BASE_AND_GUI_OS2_SRC" hints="files">
-</set>
-<set var="BASE_OS2_HDR" hints="files">
-    wx/unix/app.h
-    wx/os2/apptbase.h
-    wx/os2/apptrait.h
-    wx/unix/evtloop.h
-    wx/os2/mimetype.h
-    wx/os2/private.h
-    wx/os2/stdpaths.h
-    wx/os2/chkconf.h
-    wx/os2/wxrsc.h
-</set>
-
-<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <!--                               MSDOS                                    -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 
@@ -579,10 +547,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="NET_WINCE_HDR" hints="files">
     <if cond="TOOLKIT=='WINCE'">wx/msw/wince/net.h</if>
-</set>
-
-<set var="NET_OS2_SRC" hints="files">
-    src/unix/sockunix.cpp
 </set>
 
 <set var="NET_CMN_SRC" hints="files">
@@ -2061,183 +2025,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 <!-- ====================================================================== -->
-<!--                               wxOS/2                                   -->
-<!-- ====================================================================== -->
-
-<set var="OS2_LOWLEVEL_SRC" hints="files">
-    <!-- wxUniv builds not supported under OS/2 -->
-</set>
-<set var="OS2_LOWLEVEL_HDR" hints="files">
-</set>
-<set var="OS2_SRC" hints="files">
-    <!-- Generic implementations used by wxOS2: -->
-    src/generic/caret.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/collpaneg.cpp
-    src/generic/colrdlgg.cpp
-    src/generic/dirdlgg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/imaglist.cpp
-    src/generic/listctrl.cpp
-    src/generic/mdig.cpp
-    src/generic/prntdlgg.cpp
-    src/generic/statusbr.cpp
-    src/generic/textmeasure.cpp
-    <!-- OS/2 specific files: -->
-    src/os2/accel.cpp
-    src/os2/app.cpp
-    src/os2/bitmap.cpp
-    src/os2/bmpbuttn.cpp
-    src/os2/brush.cpp
-    src/os2/button.cpp
-    src/os2/checkbox.cpp
-    src/os2/checklst.cpp
-    src/os2/choice.cpp
-    src/os2/clipbrd.cpp
-    src/os2/colour.cpp
-    src/os2/combobox.cpp
-    src/os2/control.cpp
-    src/os2/cursor.cpp
-    src/os2/data.cpp
-    src/os2/dataobj.cpp
-    src/os2/dc.cpp
-    src/os2/dcclient.cpp
-    src/os2/dcmemory.cpp
-    src/os2/dcprint.cpp
-    src/os2/dcscreen.cpp
-    src/os2/dialog.cpp
-    src/os2/dnd.cpp
-    src/os2/evtloop.cpp
-    src/os2/filedlg.cpp
-    src/os2/font.cpp
-    src/os2/fontdlg.cpp
-    src/os2/fontenum.cpp
-    src/os2/fontutil.cpp
-    src/os2/frame.cpp
-    src/os2/gauge.cpp
-    src/os2/gdiimage.cpp
-    src/os2/sockpm.cpp
-    src/os2/helpwin.cpp
-    src/os2/icon.cpp
-    src/os2/iniconf.cpp
-    src/os2/listbox.cpp
-    src/os2/main.cpp
-    src/os2/menu.cpp
-    src/os2/menuitem.cpp
-    src/os2/metafile.cpp
-    src/os2/minifram.cpp
-    src/os2/msgdlg.cpp
-    src/os2/nativdlg.cpp
-    src/os2/notebook.cpp
-    src/os2/ownerdrw.cpp
-    src/os2/palette.cpp
-    src/os2/pen.cpp
-    src/os2/popupwin.cpp
-    src/os2/print.cpp
-    src/os2/radiobox.cpp
-    src/os2/radiobut.cpp
-    src/os2/region.cpp
-    src/os2/scrolbar.cpp
-    src/os2/settings.cpp
-    src/os2/slider.cpp
-    src/os2/spinbutt.cpp
-    src/os2/spinctrl.cpp
-    src/os2/statbmp.cpp
-    src/os2/statbox.cpp
-    src/os2/statline.cpp
-    src/os2/stattext.cpp
-    src/os2/textctrl.cpp
-    src/os2/textentry.cpp
-    src/os2/tglbtn.cpp
-    src/os2/timer.cpp
-    src/os2/toolbar.cpp
-    src/os2/tooltip.cpp
-    src/os2/toplevel.cpp
-    src/os2/utilsgui.cpp
-    src/os2/window.cpp
-</set>
-<set var="OS2_HDR" hints="files">
-    wx/generic/caret.h
-    wx/generic/clrpickerg.h
-    wx/generic/collpaneg.h
-    wx/generic/colrdlgg.h
-    wx/generic/dirdlgg.h
-    wx/generic/fdrepdlg.h
-    wx/generic/listctrl.h
-    wx/generic/mdig.h
-    wx/generic/statusbr.h
-    wx/os2/accel.h
-    wx/os2/app.h
-    wx/os2/bitmap.h
-    wx/os2/bmpbuttn.h
-    wx/os2/brush.h
-    wx/os2/button.h
-    wx/os2/checkbox.h
-    wx/os2/checklst.h
-    wx/os2/choice.h
-    wx/os2/clipbrd.h
-    wx/os2/colour.h
-    wx/os2/combobox.h
-    wx/os2/control.h
-    wx/os2/cursor.h
-    wx/os2/dataform.h
-    wx/os2/dataobj.h
-    wx/os2/dataobj2.h
-    wx/os2/dc.h
-    wx/os2/dcclient.h
-    wx/os2/dcmemory.h
-    wx/os2/dcprint.h
-    wx/os2/dcscreen.h
-    wx/os2/dialog.h
-    wx/os2/dnd.h
-    wx/os2/filedlg.h
-    wx/os2/font.h
-    wx/os2/fontdlg.h
-    wx/os2/frame.h
-    wx/os2/gauge.h
-    wx/os2/gdiimage.h
-    wx/os2/helpwin.h
-    wx/os2/icon.h
-    wx/os2/iniconf.h
-    wx/os2/listbox.h
-    wx/os2/menu.h
-    wx/os2/menuitem.h
-    wx/os2/metafile.h
-    wx/os2/minifram.h
-    wx/os2/msgdlg.h
-    wx/os2/notebook.h
-    wx/os2/ownerdrw.h
-    wx/os2/palette.h
-    wx/os2/pen.h
-    wx/os2/pnghand.h
-    wx/os2/pngread.h
-    wx/os2/print.h
-    wx/os2/radiobox.h
-    wx/os2/radiobut.h
-    wx/os2/region.h
-    wx/os2/scrolbar.h
-    wx/os2/settings.h
-    wx/os2/slider.h
-    wx/os2/spinbutt.h
-    wx/os2/spinctrl.h
-    wx/os2/statbmp.h
-    wx/os2/statbox.h
-    wx/os2/statline.h
-    wx/os2/stattext.h
-    wx/os2/textctrl.h
-    wx/os2/textentry.h
-    wx/os2/tglbtn.h
-    wx/os2/toolbar.h
-    wx/os2/tooltip.h
-    wx/os2/toplevel.h
-    wx/os2/window.h
-</set>
-
-
-
-<!-- ====================================================================== -->
 <!--                                wxOSX Common                            -->
 <!-- ====================================================================== -->
 
@@ -3152,17 +2939,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/joystick.h
 </set>
 
-<set var="ADVANCED_OS2_SRC" hints="files">
-    src/generic/animateg.cpp
-    src/os2/joystick.cpp
-    src/os2/sound.cpp
-</set>
-<set var="ADVANCED_OS2_HDR" hints="files">
-    wx/generic/animate.h
-    wx/os2/joystick.h
-    wx/os2/sound.h
-</set>
-
 <set var="ADVANCED_UNIX_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/unix/joystick.cpp
@@ -3319,11 +3095,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/mediactrl.mm
 </set>
 <set var="MEDIA_COCOA_HDR" hints="files">
-</set>
-
-<set var="MEDIA_OS2_SRC" hints="files">
-</set>
-<set var="MEDIA_OS2_HDR" hints="files">
 </set>
 
 <set var="MEDIA_UNIX_SRC" hints="files">
@@ -3626,7 +3397,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='WINCE'">src/msw/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MOTIF'">src/x11/glcanvas.cpp src/unix/glx11.cpp</if>
     <if cond="TOOLKIT=='X11'">src/x11/glcanvas.cpp src/unix/glx11.cpp</if>
-    <if cond="TOOLKIT=='PM'">src/os2/glcanvas.cpp</if>
 </set>
 
 <set var="OPENGL_SRC" hints="files">
@@ -3850,7 +3620,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC) $(BASE_WINCE_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_OSX_SHARED_SRC)</if>
-        <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
@@ -3884,7 +3653,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_OSX_HDR)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_HDR)</if>
-        <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_HDR)</if>
     </set>
 
     <set var="BASE_SRC" hints="files">
@@ -3901,7 +3669,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC) $(NET_WINCE_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC) $(NET_OSX_SRC)</if>
-        <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
@@ -3925,7 +3692,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='PM'">$(OS2_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
     </set>
@@ -3940,7 +3706,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_HDR)</if>
-        <if cond="TOOLKIT=='PM'">$(OS2_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_HDR)</if>
     </set>
@@ -3961,7 +3726,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_IPHONE_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_SRC)</if>
-        <if cond="TOOLKIT=='PM'">$(OS2_SRC)</if>
     </set>
     <set var="GUI_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK2_HDR)</if>
@@ -3974,7 +3738,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='OSX_IPHONE'">$(OSX_SHARED_HDR) $(OSX_IPHONE_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_HDR)</if>
-        <if cond="TOOLKIT=='PM'">$(OS2_HDR)</if>
     </set>
 
     <set var="CORE_SRC" hints="files">
@@ -3999,7 +3762,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
-        <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_DESKTOP_HDR)</if>
@@ -4013,7 +3775,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
-        <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>
 
     <!-- wxAdv files not used by wxUniv -->
@@ -4050,7 +3811,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(MEDIA_UNIX_SRC)</if>
         <if cond="TOOLKIT=='GTK'">$(MEDIA_UNIX_SRC) $(MEDIA_GTK_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(MEDIA_UNIX_SRC)</if>
-        <if cond="TOOLKIT=='PM'">$(MEDIA_OS2_SRC)</if>
     </set>
     <set var="MEDIA_PLATFORM_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(MEDIA_MSW_HDR) $(MEDIA_MSW_DESKTOP_HDR)</if>
@@ -4062,7 +3822,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(MEDIA_UNIX_HDR)</if>
         <if cond="TOOLKIT=='GTK'">$(MEDIA_UNIX_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(MEDIA_UNIX_HDR)</if>
-        <if cond="TOOLKIT=='PM'">$(MEDIA_OS2_HDR)</if>
     </set>
     <set var="MEDIA_SRC">$(MEDIA_CMN_SRC) $(MEDIA_PLATFORM_SRC)</set>
     <set var="MEDIA_HDR">$(MEDIA_CMN_HDR) $(MEDIA_PLATFORM_HDR)</set>
@@ -4111,7 +3870,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(BASE_CMN_SRC)
         $(BASE_UNIX_SRC) $(BASE_WIN32_SRC) $(BASE_WINCE_SRC)
         $(BASE_OSX_SRC)
-        $(BASE_OS2_SRC)
         $(BASE_MSDOS_SRC)
         $(BASE_AND_GUI_CMN_SRC)
         $(BASE_AND_GUI_OSX_CARBON_SRC)

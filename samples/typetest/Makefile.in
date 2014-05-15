@@ -49,7 +49,6 @@ TYPETEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 TYPETEST_OBJECTS =  \
 	$(__typetest___win32rc) \
-	$(__typetest_os2_lib_res) \
 	typetest_typetest.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___typetest___os2_emxbindcmd = $(NM) typetest$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__typetest___win32rc = typetest_sample_rc.o
-@COND_PLATFORM_OS2_1@__typetest_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__typetest_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= typetest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__typetest_bundle___depname = typetest_bundle

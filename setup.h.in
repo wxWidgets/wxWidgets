@@ -142,9 +142,6 @@
 #undef WINVER
 #endif
 
-/* OS/2 with EMX */
-#undef __OS2__
-
 /* --- start common options --- */
 
 #ifndef wxUSE_GUI

@@ -188,8 +188,6 @@ protected:
     #include "wx/osx/anybutton.h"
 //#elif defined(__WXCOCOA__)
 //    #include "wx/cocoa/anybutton.h"
-//#elif defined(__WXPM__)
-//    #include "wx/os2/anybutton.h"
 #else
     typedef wxAnyButtonBase wxAnyButton;
 #endif

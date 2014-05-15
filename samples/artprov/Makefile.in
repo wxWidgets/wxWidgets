@@ -49,7 +49,6 @@ ARTTEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 ARTTEST_OBJECTS =  \
 	$(__arttest___win32rc) \
-	$(__arttest_os2_lib_res) \
 	arttest_arttest.o \
 	arttest_artbrows.o
 
@@ -89,8 +88,6 @@ COND_PLATFORM_OS2_1___arttest___os2_emxbindcmd = $(NM) arttest$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__arttest___win32rc = arttest_sample_rc.o
-@COND_PLATFORM_OS2_1@__arttest_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__arttest_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= arttest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__arttest_bundle___depname = arttest_bundle

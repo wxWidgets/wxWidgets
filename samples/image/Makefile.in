@@ -48,7 +48,6 @@ IMAGE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
 IMAGE_OBJECTS =  \
-	$(__image_os2_lib_res) \
 	image_image.o \
 	image_canvas.o \
 	$(__image___win32rc)
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___image___os2_emxbindcmd = $(NM) image$(EXEEXT) | if grep -q
 @COND_PLATFORM_OS2_1@__image___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___image___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_PLATFORM_OS2_1@__image_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__image_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= image.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__image_bundle___depname = image_bundle

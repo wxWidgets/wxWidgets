@@ -166,8 +166,6 @@ private:
     #include "wx/osx/accel.h"
 #elif defined(__WXCOCOA__)
     #include "wx/generic/accel.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/accel.h"
 #endif
 
 extern WXDLLIMPEXP_DATA_CORE(wxAcceleratorTable) wxNullAcceleratorTable;

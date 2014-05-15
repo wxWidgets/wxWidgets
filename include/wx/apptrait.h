@@ -172,10 +172,8 @@ private:
 // ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port
 #if defined(__WIN32__)
     #include "wx/msw/apptbase.h"
-#elif defined(__UNIX__) && !defined(__EMX__)
+#elif defined(__UNIX__)
     #include "wx/unix/apptbase.h"
-#elif defined(__OS2__)
-    #include "wx/os2/apptbase.h"
 #else // no platform-specific methods to add to wxAppTraits
     // wxAppTraits must be a class because it was forward declared as class
     class WXDLLIMPEXP_BASE wxAppTraits : public wxAppTraitsBase
@@ -267,8 +265,6 @@ public:
 // ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port
 #if defined(__WIN32__)
     #include "wx/msw/apptrait.h"
-#elif defined(__OS2__)
-    #include "wx/os2/apptrait.h"
 #elif defined(__UNIX__)
     #include "wx/unix/apptrait.h"
 #elif defined(__DOS__)

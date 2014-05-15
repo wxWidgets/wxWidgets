@@ -62,7 +62,6 @@ BENCH_GUI_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_GUI_OBJECTS =  \
 	$(__bench_gui___win32rc) \
-	$(__bench_gui_os2_lib_res) \
 	bench_gui_bench.o \
 	bench_gui_image.o
 
@@ -101,8 +100,6 @@ COND_MONOLITHIC_0___WXLIB_NET_p = \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__bench_gui___win32rc = bench_gui_sample_rc.o
-@COND_PLATFORM_OS2_1@__bench_gui_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__bench_gui_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= bench_gui.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__bench_gui_bundle___depname \

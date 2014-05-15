@@ -125,8 +125,6 @@ protected:
     #include "wx/osx/bmpbuttn.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/bmpbuttn.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/bmpbuttn.h"
 #endif
 
 #endif // wxUSE_BMPBUTTON

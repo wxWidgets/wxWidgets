@@ -40,7 +40,7 @@
 
 #if defined(__WXWINCE__)
 #define IsTopMostDir(dir) (dir == wxT("\\") || dir == wxT("/"))
-#elif (defined(__DOS__) || defined(__WINDOWS__) || defined (__OS2__))
+#elif defined(__DOS__) || defined(__WINDOWS__)
 #define IsTopMostDir(dir)   (dir.empty())
 #else
 #define IsTopMostDir(dir)   (dir == wxT("/"))
@@ -175,7 +175,7 @@ void wxFileData::ReadData()
         return;
     }
 
-#if defined(__DOS__) || (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__OS2__)
+#if defined(__DOS__) || (defined(__WINDOWS__) && !defined(__WXWINCE__))
     // c:\.. is a drive don't stat it
     if ((m_fileName == wxT("..")) && (m_filePath.length() <= 5))
     {
@@ -221,7 +221,7 @@ void wxFileData::ReadData()
 
     wxStructStat buff;
 
-#if defined(__UNIX__) && (!defined( __OS2__ ) && !defined(__VMS))
+#if defined(__UNIX__) && !defined(__VMS)
     const bool hasStat = lstat( m_filePath.fn_str(), &buff ) == 0;
     if ( hasStat )
         m_type |= S_ISLNK(buff.st_mode) ? is_link : 0;
@@ -534,7 +534,7 @@ void wxFileListCtrl::UpdateFiles()
     item.m_itemId = 0;
     item.m_col = 0;
 
-#if (defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__) || defined(__OS2__)) && !defined(__WXWINCE__)
+#if (defined(__WINDOWS__) || defined(__DOS__) || defined(__WXMAC__)) && !defined(__WXWINCE__)
     if ( IsTopMostDir(m_dirName) )
     {
         wxArrayString names, paths;
@@ -569,7 +569,7 @@ void wxFileListCtrl::UpdateFiles()
         if ( !IsTopMostDir(m_dirName) && !m_dirName.empty() )
         {
             wxString p(wxPathOnly(m_dirName));
-#if (defined(__UNIX__) || defined(__WXWINCE__)) && !defined(__OS2__)
+#if (defined(__UNIX__) || defined(__WXWINCE__))
             if (p.empty()) p = wxT("/");
 #endif // __UNIX__
             wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
@@ -580,10 +580,10 @@ void wxFileListCtrl::UpdateFiles()
         }
 
         wxString dirname(m_dirName);
-#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+#if defined(__DOS__) || defined(__WINDOWS__)
         if (dirname.length() == 2 && dirname[1u] == wxT(':'))
             dirname << wxT('\\');
-#endif // defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+#endif // defined(__DOS__) || defined(__WINDOWS__)
 
         if (dirname.empty())
             dirname = wxFILE_SEP_PATH;
@@ -705,7 +705,7 @@ void wxFileListCtrl::GoToParentDir()
             m_dirName.Remove( len-1, 1 );
         wxString fname( wxFileNameFromPath(m_dirName) );
         m_dirName = wxPathOnly( m_dirName );
-#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
+#if defined(__DOS__) || defined(__WINDOWS__)
         if (!m_dirName.empty())
         {
             if (m_dirName.Last() == wxT('.'))

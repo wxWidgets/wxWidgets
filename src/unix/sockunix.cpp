@@ -30,10 +30,6 @@
 #   include <sys/select.h>
 #endif
 
-#ifdef __EMX__
-    #include <sys/select.h>
-#endif
-
 #ifndef WX_SOCKLEN_T
 
 #ifdef VMS

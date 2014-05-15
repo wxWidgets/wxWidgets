@@ -49,7 +49,6 @@ MEMCHECK_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 MEMCHECK_OBJECTS =  \
 	$(__memcheck___win32rc) \
-	$(__memcheck_os2_lib_res) \
 	memcheck_memcheck.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___memcheck___os2_emxbindcmd = $(NM) memcheck$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__memcheck___win32rc = memcheck_sample_rc.o
-@COND_PLATFORM_OS2_1@__memcheck_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__memcheck_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= memcheck.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__memcheck_bundle___depname = memcheck_bundle

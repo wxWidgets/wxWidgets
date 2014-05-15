@@ -1039,7 +1039,7 @@ const wxSize wxDefaultSize;
 
 /**
     This macro loads a bitmap from either application resources (on the
-    platforms for which they exist, i.e. Windows and OS2) or from an XPM file.
+    platforms for which they exist, i.e.\ Windows) or from an XPM file.
     This can help to avoid using @ifdef_ when creating bitmaps.
 
     @see @ref overview_bitmap, wxICON()
@@ -1117,7 +1117,7 @@ const wxSize wxDefaultSize;
 
 /**
     This macro loads an icon from either application resources (on the
-    platforms for which they exist, i.e. Windows and OS2) or from an XPM file.
+    platforms for which they exist, i.e.\ Windows) or from an XPM file.
     This can help to avoid using @ifdef_ when creating icons.
 
     @see @ref overview_bitmap, wxBITMAP()

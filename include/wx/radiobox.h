@@ -165,8 +165,6 @@ private:
     #include "wx/osx/radiobox.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/radiobox.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/radiobox.h"
 #endif
 
 #endif // wxUSE_RADIOBOX

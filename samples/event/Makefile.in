@@ -49,7 +49,6 @@ EVENT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 EVENT_OBJECTS =  \
 	$(__event___win32rc) \
-	$(__event_os2_lib_res) \
 	event_event.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___event___os2_emxbindcmd = $(NM) event$(EXEEXT) | if grep -q
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__event___win32rc = event_sample_rc.o
-@COND_PLATFORM_OS2_1@__event_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__event_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= event.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__event_bundle___depname = event_bundle

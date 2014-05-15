@@ -61,9 +61,6 @@ public:
 #elif defined(__WXCOCOA__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_MACCURSOR_RESOURCE
     #include "wx/cocoa/cursor.h"
-#elif defined(__WXPM__)
-    #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
-    #include "wx/os2/cursor.h"
 #endif
 
 #include "wx/utils.h"

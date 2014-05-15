@@ -101,16 +101,6 @@ docs for it are available in @c docs/cocoa in the distribution.
 
 
 
-@section page_port_wxos2 wxOS2
-
-wxOS2 is a port of wxWidgets for the IBM OS/2 Warp3 and Warp4 platforms.
-This port is currently under construction and in beta phase.
-
-For further information, please see the files in @c docs/os2
-in the distribution.
-
-
-
 @section page_port_wxx11 wxX11
 
 wxX11 is a port of wxWidgets using X11 (The X Window System) as the underlying

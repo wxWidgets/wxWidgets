@@ -49,7 +49,6 @@ FONT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 FONT_OBJECTS =  \
 	$(__font___win32rc) \
-	$(__font_os2_lib_res) \
 	font_font.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___font___os2_emxbindcmd = $(NM) font$(EXEEXT) | if grep -q \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__font___win32rc = font_sample_rc.o
-@COND_PLATFORM_OS2_1@__font_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__font_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= font.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__font_bundle___depname = font_bundle

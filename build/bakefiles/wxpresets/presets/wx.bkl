@@ -414,7 +414,7 @@
                     <command cond="TOOLSET=='unix'">
                         @mkdir -p $(_DIRNAME)
                     </command>
-                    <command cond="TOOLSET in ['win32','os2','dos']">
+                    <command cond="TOOLSET in ['win32','dos']">
                         if not exist $(nativePaths(_DIRNAME)) mkdir $(nativePaths(_DIRNAME))
                     </command>
                 </modify-target>

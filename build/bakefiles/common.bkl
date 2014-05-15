@@ -558,13 +558,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
 
         <ldlibs>$(EXTRALIBS_FOR_BASE)</ldlibs>
 
-        <!-- system libraries on os2: -->
-        <if cond="FORMAT!='autoconf' and PLATFORM_OS2=='1'">
-            <if cond="FORMAT=='watcom'">
-                <sys-lib>upm32</sys-lib>
-            </if>
-        </if>
-
         <!-- system libraries on windows: -->
         <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             <sys-lib>$(UNICOWS_LIB)</sys-lib>

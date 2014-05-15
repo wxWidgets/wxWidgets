@@ -49,7 +49,6 @@ NETTEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 NETTEST_OBJECTS =  \
 	$(__nettest___win32rc) \
-	$(__nettest_os2_lib_res) \
 	nettest_nettest.o
 
 ### Conditionally set variables: ###
@@ -89,8 +88,6 @@ COND_PLATFORM_OS2_1___nettest___os2_emxbindcmd = $(NM) nettest$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__nettest___win32rc = nettest_sample_rc.o
-@COND_PLATFORM_OS2_1@__nettest_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@__nettest_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	= nettest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@__nettest_bundle___depname \

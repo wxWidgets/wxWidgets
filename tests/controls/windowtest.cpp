@@ -95,7 +95,7 @@ void WindowTestCase::tearDown()
 
 void WindowTestCase::ShowHideEvent()
 {
-#if defined(__WXMSW__) || defined (__WXPM__)
+#if defined(__WXMSW__)
     EventCounter show(m_window, wxEVT_SHOW);
 
     CPPUNIT_ASSERT(m_window->IsShown());
@@ -109,7 +109,7 @@ void WindowTestCase::ShowHideEvent()
     CPPUNIT_ASSERT(m_window->IsShown());
 
     CPPUNIT_ASSERT_EQUAL(2, show.GetCount());
-#endif
+#endif // __WXMSW__
 }
 
 void WindowTestCase::KeyEvent()

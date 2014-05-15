@@ -111,8 +111,6 @@ public:
     #include "wx/osx/pen.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/pen.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/pen.h"
 #endif
 
 class WXDLLIMPEXP_CORE wxPenList: public wxGDIObjListBase

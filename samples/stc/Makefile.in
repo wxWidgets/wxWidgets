@@ -49,7 +49,6 @@ STCTEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 STCTEST_OBJECTS =  \
 	$(__stctest___win32rc) \
-	$(__stctest_os2_lib_res) \
 	stctest_stctest.o \
 	stctest_edit.o \
 	stctest_prefs.o
@@ -90,8 +89,6 @@ COND_PLATFORM_OS2_1___stctest___os2_emxbindcmd = $(NM) stctest$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__stctest___win32rc = stctest_sample_rc.o
-@COND_PLATFORM_OS2_1@__stctest_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__stctest_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= stctest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__stctest_bundle___depname = stctest_bundle

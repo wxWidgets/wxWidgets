@@ -62,7 +62,6 @@ dnl ------------------------------------------------------------------------
 
 dnl OS (assume Unix)
 USE_UNIX=1
-USE_OS2=0
 USE_WIN32=0
 USE_DOS=0
 USE_BEOS=0
@@ -100,7 +99,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW PM X11 DFB"
+ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 DFB"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -112,7 +111,6 @@ DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
-DEFAULT_wxUSE_PM=0
 DEFAULT_wxUSE_X11=0
 DEFAULT_wxUSE_DFB=0
 
@@ -127,7 +125,6 @@ DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
-DEFAULT_DEFAULT_wxUSE_PM=0
 DEFAULT_DEFAULT_wxUSE_X11=0
 DEFAULT_DEFAULT_wxUSE_DFB=0
 
@@ -281,40 +278,6 @@ case "${host}" in
     USE_DOS=1
     AC_DEFINE(__DOS__)
     PROGRAM_EXT=".exe"
-  ;;
-
-  *-pc-os2_emx | *-pc-os2-emx )
-    AC_DEFINE(__EMX__)
-    USE_OS2=1
-    AC_DEFINE(__OS2__)
-    PROGRAM_EXT=".exe"
-    DEFAULT_DEFAULT_wxUSE_PM=1
-    dnl "c++" wrapper is not always available, so always use plain gcc.
-    CXX=gcc
-    LDFLAGS="$LDFLAGS -Zcrtdll"
-    dnl
-    dnl Some special code that's automatically added by autoconf-2.57 for OS/2
-    dnl and hopefully also by autoconf-2.58 and newer on all other platforms.
-    dnl For now however, we still need it to make sure the configure script
-    dnl works on OS/2 no matter what platform it is generated on.
-    ac_executable_extensions=".exe"
-    export ac_executable_extensions
-    dnl This strange code is necessary to deal with handling of
-    dnl backslashes by ksh and pdksh's sh variant.
-    ac_save_IFS="$IFS"
-    IFS='\\'
-    ac_TEMP_PATH=
-    for ac_dir in $PATH; do
-      IFS=$ac_save_IFS
-      if test -z "$ac_TEMP_PATH"; then
-        ac_TEMP_PATH="$ac_dir"
-      else
-        ac_TEMP_PATH="$ac_TEMP_PATH/$ac_dir"
-      fi
-    done
-    export PATH="$ac_TEMP_PATH"
-    unset ac_TEMP_PATH
-    DEFAULT_STD_FLAG=no
   ;;
 
   arm-apple-darwin*)
@@ -476,7 +439,6 @@ AC_ARG_WITH(mac,           [  --with-mac              same as --with-osx], [wxUS
 AC_ARG_WITH(old_cocoa,     [  --with-old_cocoa        use old, deprecated, Cocoa port], [wxUSE_OLD_COCOA="$withval" CACHE_OLD_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(pm,            [  --with-pm               use OS/2 Presentation Manager], [wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
@@ -535,12 +497,6 @@ if test "$wxUSE_GUI" = "yes"; then
     NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
-
-    dnl Allow wxUSE_PM only for OS/2 with EMX.
-    case "${host}" in
-      *-pc-os2_emx | *-pc-os2-emx )
-        NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
-    esac
 
     case "$NUM_TOOLKITS" in
       1)
@@ -698,10 +654,6 @@ WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
 WX_ARG_ENABLE(utf8only,      [  --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
 WX_ARG_ENABLE(extended_rtti, [  --enable-extended_rtti  use extended RTTI (XTI)], wxUSE_EXTENDED_RTTI)
-if test "$USE_OS2" = 1; then
-    DEFAULT_wxUSE_OMF=no
-    WX_ARG_ENABLE(omf,     [  --enable-omf            use OMF object format], wxUSE_OMF)
-fi
 
 WX_ARG_DISABLE(optimise,   [  --disable-optimise      compile without optimisations], wxUSE_OPTIMISE)
 
@@ -1446,77 +1398,6 @@ if test "$USE_UNIX" = 1 ; then
     AC_DEFINE(__UNIX__)
 fi
 
-dnl This case is for OS/2 vs. everything else
-case "${host}" in
-  *-pc-os2_emx | *-pc-os2-emx )
-      dnl ---------------------------------------------------------------------
-      dnl When we are using gcc on OS/2, we want to be either using resources
-      dnl (PM) or a more complete POSIX emulation for Motif/GTK+/X11.
-      dnl Moreover we need to link explicitly against either stdcpp.a or
-      dnl stdcxx.a (depending on compiler version), since we are using "gcc",
-      dnl not "g++/c++".
-      dnl ---------------------------------------------------------------------
-      dnl (OS/2-only piece)
-      if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
-          dnl More complete Unix emulation for unix-like ports
-          dnl by linking in POSIX/2's cExt (if available).
-          AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
-      fi
-      dnl Check for the gcc version (and thereby for the C runtime library).
-      dnl wx_cv_gccversion = EMX2 -> Standard EMX environment
-      dnl wx_cv_gccversion = EMX3 -> EMX with gcc-3.0.3 or gcc-3.2.1
-      dnl wx_cv_gccversion = Innotek5 -> gcc-3.2.2 with Innotek libc5
-      dnl wx_cv_gccversion = Innotek6 -> gcc-3.3.5 with Innotek libc6.
-      AC_CACHE_CHECK([for gcc/libc version], wx_cv_gccversion,[
-          AC_TRY_RUN(
-              dnl Check the gcc version macro.
-              [
-                  #include <stdio.h>
-
-                  int main()
-                  {
-                      FILE *f=fopen("conftestval", "w");
-                      if (!f) exit(1);
-                      fprintf(f,
-                  #if (__GNUC__ < 3)
-                              "EMX2"
-                  #elif (__GNUC__==3) && ((__GNUC_MINOR__ < 2) || ((__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__<2)))
-                              "EMX3"
-                  #elif (__GNUC__==3) && (__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__==2)
-                              "Innotek5"
-                  #else
-                              "Innotek6"
-                  #endif
-                      );
-                      exit(0);
-                  }
-              ],
-              wx_cv_gccversion=`cat conftestval`,
-              wx_cv_gccversion="EMX2",
-              dnl Compilation error: Assuming standard EMX environment
-              wx_cv_gccversion="EMX2"
-          )
-      ])
-      if test "$wx_cv_gccversion" = "EMX2"; then
-          LIBS="$LIBS -lstdcpp"
-          LDFLAGS="$LDFLAGS -Zsysv-signals"
-      else
-          if test "$wx_cv_gccversion" = "EMX3"; then
-              LIBS="$LIBS -lstdcxx -lgcc"
-              LDFLAGS="$LDFLAGS -Zsysv-signals"
-          else
-              LIBS="$LIBS -lstdc++"
-          fi
-      fi
-      if test "$wxUSE_SHARED" = "yes" -a "$wxUSE_OMF" = "no"; then
-        AC_MSG_WARN([Building DLLs requires OMF mode, enabled])
-        wxUSE_OMF=yes
-        enable_omf=yes
-      fi
-      dnl (end of OS/2-only piece)
-  ;;
-esac
-
 dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
@@ -1529,19 +1410,6 @@ dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
 if test "$ac_cv_header_wchar_h" != "yes"; then
     AC_CHECK_HEADERS([wcstr.h],,, [AC_INCLUDES_DEFAULT()])
 fi
-
-case "${host}" in
-  *-pc-os2_emx | *-pc-os2-emx )
-      dnl Explicitly link -lintl if langinfo.h is available
-      dnl and intl not yet included in libc
-      if test $ac_cv_header_langinfo_h = "yes" \
-                -a \(   "$wx_cv_gccversion" = "EMX2" \
-                     -o "$wx_cv_gccversion" = "EMX3" \
-                     -o "$wx_cv_gccversion" = "Innotek5" \); then
-          LIBS="$LIBS -lintl"
-      fi
-  ;;
-esac
 
 if test "$USE_UNIX" = 1 ; then
     dnl POSIX needs this for select(), but old systems don't have it
@@ -3440,37 +3308,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         GUIDIST=COCOA_DIST
     fi
 
-    if test "$wxUSE_PM" = 1; then
-        TOOLKIT=PM
-        GUIDIST=PM_DIST
-        AC_CACHE_CHECK([for type SPBCDATA],
-            wx_cv_spbcdata,
-            [
-                AC_TRY_COMPILE(
-                    [
-                        #define INCL_PM
-                        #include <os2.h>
-                    ],
-                    [
-                        SPBCDATA test;
-                    ],
-                    wx_cv_spbcdata=yes,
-                    wx_cv_spbcdata=no
-                )
-            ]
-        )
-
-        if test $wx_cv_spbcdata = "yes"; then
-            AC_DEFINE(HAVE_SPBCDATA)
-        fi
-    fi
-
     dnl the name of the directory where the files for this toolkit live
-    if test "$TOOLKIT" = "PM" ; then
-        TOOLKIT_DIR="os2"
-    else
-        TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[[A-Z]]' '[[a-z]]'`
-    fi
+    TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[[A-Z]]' '[[a-z]]'`
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
@@ -3506,7 +3345,7 @@ dnl ---------------------------------------------------------------------------
 
 dnl do this after test for X11 above so that we have a chance of finding Xlib.h
 if test "$wxUSE_GUI" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
+    if test "$wxUSE_UNIX" = "yes"; then
         dnl defines HAVE_X11_XKBLIB_H
         AC_CHECK_HEADERS([X11/Xlib.h],,, [ ])
         AC_CHECK_HEADERS([X11/XKBlib.h],,,
@@ -3861,11 +3700,7 @@ if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OLD_COCOA" 
 else
     WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 fi
-if test "${TOOLKIT_DIR}" = "os2"; then
-    WX_LIBRARY_BASENAME_GUI="wx_pm${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
-else
-    WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
-fi
+WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 
 
 
@@ -4679,7 +4514,7 @@ dnl                          the next matching "else")
 dnl ---------------------------------------------------------------------------
 
 dnl under MSW (except mingw32) we always have thread support
-if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
+if test "$TOOLKIT" != "MSW"; then
 
     dnl the code below:
     dnl
@@ -5144,10 +4979,6 @@ else
                 CFLAGS="$CFLAGS_OLD"
             fi
         ;;
-        *-pc-os2*emx )
-            WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -Zmt -D__ST_MT_ERRNO__"
-            LDFLAGS="$LDFLAGS -Zmt"
-        ;;
       esac
     fi
 fi
@@ -5326,19 +5157,10 @@ else
         fi
     else
         if test "$GCC" = yes ; then
-            case "${host}" in
-                *-pc-os2_emx | *-pc-os2-emx )
-                    dnl Not all of the supported gcc versions understand
-                    dnl -fstrict-aliasing and none actually needs it (yet).
-                    OPTIMISE_CFLAGS="-O2"
-                ;;
-                *)
-                    dnl Switch on optimisation but keep strict-aliasing off for
-                    dnl now (see -fstrict-aliasing in the gcc manual). When it is
-                    dnl switched back on consider using -Wstrict-aliasing=2.
-                    OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
-                ;;
-            esac
+            dnl Switch on optimisation but keep strict-aliasing off for
+            dnl now (see -fstrict-aliasing in the gcc manual). When it is
+            dnl switched back on consider using -Wstrict-aliasing=2.
+            OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
         else
             OPTIMISE_CFLAGS="-O"
         fi
@@ -5392,7 +5214,7 @@ dnl DLL support
 dnl ------------------------------------------------------------------------
 
 dnl under MSW we always have LoadLibrary/GetProcAddress
-if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
+if test "$TOOLKIT" != "MSW"; then
 
     HAVE_DL_FUNCS=0
     HAVE_SHL_FUNCS=0
@@ -6489,12 +6311,12 @@ dnl wxMetafile
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_METAFILE" = "yes"; then
-    if test "$wxUSE_MSW" != 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_PM" != 1; then
+    if test "$wxUSE_MSW" != 1 -a "$wxUSE_MAC" != 1; then
         AC_MSG_WARN([wxMetafile is not available on this system... disabled])
         wxUSE_METAFILE=no
     fi
 elif test "$wxUSE_METAFILE" = "auto"; then
-    if test "$wxUSE_MSW" = 1 -o "$wxUSE_MAC" = 1 -o "$wxUSE_PM" = 1; then
+    if test "$wxUSE_MSW" = 1 -o "$wxUSE_MAC" = 1; then
         wxUSE_METAFILE=yes
     fi
 fi
@@ -7011,14 +6833,10 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
     if test "$wxUSE_OLD_COCOA" = 1 ; then
         AC_MSG_WARN([Popup window not yet supported under Mac OS X... disabled])
     else
-        if test "$wxUSE_PM" = 1; then
-            AC_MSG_WARN([wxPopupWindow not yet supported under PM... disabled])
-        else
-            AC_DEFINE(wxUSE_POPUPWIN)
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
+        AC_DEFINE(wxUSE_POPUPWIN)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
 
-            USES_CONTROLS=1
-        fi
+        USES_CONTROLS=1
     fi
 fi
 
@@ -7037,11 +6855,7 @@ if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
 fi
 
 if test "$wxUSE_TIPWINDOW" = "yes"; then
-    if test "$wxUSE_PM" = 1; then
-        AC_MSG_WARN([wxTipWindow not yet supported under PM... disabled])
-    else
-        AC_DEFINE(wxUSE_TIPWINDOW)
-    fi
+    AC_DEFINE(wxUSE_TIPWINDOW)
 fi
 
 if test "$USES_CONTROLS" = 1; then
@@ -7400,7 +7214,7 @@ dnl ---------------------------------------------------------------------------
 dnl options used under wxMSW and wxPM
 dnl ---------------------------------------------------------------------------
 
-if test "$wxUSE_MSW" = 1 -o "$wxUSE_PM" = 1; then
+if test "$wxUSE_MSW" = 1; then
     if test "$wxUSE_OWNER_DRAWN" = "yes"; then
         AC_DEFINE(wxUSE_OWNER_DRAWN)
     fi
@@ -7775,9 +7589,6 @@ if test "$wxUSE_GUI" = "yes"; then
             SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ownerdrw nativdlg dll"
         fi
     fi
-    if test "$TOOLKIT" = "PM" -a "$wxUSE_UNIVERSAL" != "yes"; then
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ownerdrw"
-    fi
 else
     SAMPLES_SUBDIRS="console"
     if test "$wxUSE_SOCKETS" = "yes" ; then
@@ -8145,16 +7956,7 @@ if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
 else
     dnl default value is to (silently) do nothing in the makefile
     MACSETFILE="@true"
-
-    if test "$wxUSE_PM" = 1; then
-        RESCOMP="emxbind"
-        WXCONFIG_RESFLAGS="-ep"
-
-        dnl Is this one really used anywhere for pm?
-        POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS"
-    else
-        POSTLINK_COMMAND="@true"
-    fi
+    POSTLINK_COMMAND="@true"
 fi
 
 fi
@@ -8193,29 +7995,6 @@ if test "$DEPS_TRACKING" = 1 -a "$wxUSE_MAC" = 1 ; then
             chmod +x bk-deps
         fi
     fi
-fi
-
-if test "$wxUSE_SHARED" = "yes"; then
-    dnl Need addtional flag on OS/2, so override bakefiles value
-    dnl (there currently is no suitable variable to which the
-    dnl  missing flags could be added, AFAICS. SN, 18.12.2004. )
-    case "${host}" in
-      *-pc-os2_emx | *-pc-os2-emx )
-        SHARED_LD_CC="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        SHARED_LD_CXX="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        cp -p ${srcdir}/src/os2/dllnames.sh .
-        cp -p ${srcdir}/src/os2/dllar.sh .
-      ;;
-    esac
-fi
-if test "$wxUSE_OMF" = "yes"; then
-    case "${host}" in
-      *-pc-os2_emx | *-pc-os2-emx )
-        LDFLAGS="$LDFLAGS -Zlinker /EXEPACK"
-        LDFLAGS_GUI="-Zlinker /PMTYPE:PM"
-        WXCONFIG_LDFLAGS_GUI="-Zlinker /PMTYPE:PM"
-      ;;
-    esac
 fi
 
 dnl TOOLCHAIN_DEFS should be used for both wx and client code

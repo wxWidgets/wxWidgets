@@ -238,8 +238,6 @@ protected:
     #include "wx/osx/control.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/control.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/control.h"
 #endif
 
 #endif // wxUSE_CONTROLS

@@ -167,7 +167,7 @@ public:
         @note This function is only available under Unix platforms (but not limited
         to wxGTK mentioned below).
 
-        @onlyfor{wxos2,wxgtk}
+        @onlyfor{wxgtk}
     */
     wxString GetInstallPrefix() const;
 
@@ -340,7 +340,7 @@ public:
         @note This function is only available under Unix platforms (but not limited
         to wxGTK mentioned below).
 
-        @onlyfor{wxos2,wxgtk}
+        @onlyfor{wxgtk}
     */
     void SetInstallPrefix(const wxString& prefix);
 

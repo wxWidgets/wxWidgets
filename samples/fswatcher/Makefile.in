@@ -49,7 +49,6 @@ FSWATCHER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 FSWATCHER_OBJECTS =  \
 	$(__fswatcher___win32rc) \
-	$(__fswatcher_os2_lib_res) \
 	fswatcher_fswatcher.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___fswatcher___os2_emxbindcmd = $(NM) fswatcher$(EXEEXT) | \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__fswatcher___win32rc = fswatcher_sample_rc.o
-@COND_PLATFORM_OS2_1@__fswatcher_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__fswatcher_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= fswatcher.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__fswatcher_bundle___depname = fswatcher_bundle

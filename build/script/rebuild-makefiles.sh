@@ -63,8 +63,6 @@ package_makefiles()
     do_package zip msvc6prj  '*.dsp' '*.dsw'
     do_package zip msvc7-8prj  '*.vcproj' '*.sln'    
     do_package zip evcprj    '*.vcp' '*.vcw'
-  (cd ${WORKDIR}/wxWidgets/build/bakefiles && nice python -O /usr/local/bin/bakefile_gen -f watcom -d ../os2/Bakefiles.os2.bkgen)
-  do_package zip watcom_os2    makefile.wat config.wat
 }
 
 copy_files ()

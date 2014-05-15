@@ -73,7 +73,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
     PLATFORM_MAC=0
     PLATFORM_MACOS=0
     PLATFORM_MACOSX=0
-    PLATFORM_OS2=0
     PLATFORM_BEOS=0
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
@@ -83,9 +82,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
             ;;
             *-pc-msdosdjgpp )
                 PLATFORM_MSDOS=1
-            ;;
-            *-pc-os2_emx | *-pc-os2-emx )
-                PLATFORM_OS2=1
             ;;
             *-*-darwin* )
                 PLATFORM_MAC=1
@@ -110,9 +106,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
             msdos )
                 PLATFORM_MSDOS=1
             ;;
-            os2 )
-                PLATFORM_OS2=1
-            ;;
             darwin )
                 PLATFORM_MAC=1
                 PLATFORM_MACOSX=1
@@ -135,7 +128,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
     AC_SUBST(PLATFORM_MAC)
     AC_SUBST(PLATFORM_MACOS)
     AC_SUBST(PLATFORM_MACOSX)
-    AC_SUBST(PLATFORM_OS2)
     AC_SUBST(PLATFORM_BEOS)
 ])
 
@@ -148,10 +140,6 @@ dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([AC_BAKEFILE_PLATFORM_SPECIFICS],
 [
-    AC_ARG_ENABLE([omf], AS_HELP_STRING([--enable-omf],
-                                        [use OMF object format (OS/2)]),
-                  [bk_os2_use_omf="$enableval"])
-
     case "${BAKEFILE_HOST}" in
       *-*-darwin* )
         dnl For Unix to MacOS X porting instructions, see:
@@ -163,19 +151,6 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM_SPECIFICS],
         if test "x$XLCC" = "xyes"; then
             CFLAGS="$CFLAGS -qnocommon"
             CXXFLAGS="$CXXFLAGS -qnocommon"
-        fi
-        ;;
-
-      *-pc-os2_emx | *-pc-os2-emx )
-        if test "x$bk_os2_use_omf" = "xyes" ; then
-            AR=emxomfar
-            RANLIB=:
-            LDFLAGS="-Zomf $LDFLAGS"
-            CFLAGS="-Zomf $CFLAGS"
-            CXXFLAGS="-Zomf $CXXFLAGS"
-            OS2_LIBEXT="lib"
-        else
-            OS2_LIBEXT="a"
         fi
         ;;
 
@@ -241,16 +216,6 @@ AC_DEFUN([AC_BAKEFILE_SUFFIXES],
         *-pc-msdosdjgpp )
             EXEEXT=".exe"
             DLLPREFIX=""
-            dlldir="$bindir"
-        ;;
-        *-pc-os2_emx | *-pc-os2-emx )
-            SO_SUFFIX="dll"
-            SO_SUFFIX_MODULE="dll"
-            DLLIMP_SUFFIX=$OS2_LIBEXT
-            EXEEXT=".exe"
-            DLLPREFIX=""
-            LIBPREFIX=""
-            LIBEXT=".$OS2_LIBEXT"
             dlldir="$bindir"
         ;;
         *-*-darwin* )
@@ -430,14 +395,6 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
         SHARED_LD_CC="\$(CC) -shared -o"
         SHARED_LD_CXX="\$(CXX) -shared -o"
         WINDOWS_IMPLIB=1
-      ;;
-
-      *-pc-os2_emx | *-pc-os2-emx )
-        SHARED_LD_CC="`pwd`/dllar.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        SHARED_LD_CXX="`pwd`/dllar.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        PIC_FLAG=""
-        AC_BAKEFILE_CREATE_FILE_DLLAR_SH
-        chmod +x dllar.sh
       ;;
 
       powerpc-apple-macos* | \

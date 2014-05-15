@@ -462,10 +462,7 @@ public:
     wxDateTime() { m_time = wxLongLong(wxINT32_MIN, 0); }
 
         // from time_t: seconds since the Epoch 00:00:00 UTC, Jan 1, 1970)
-#if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
-// VA C++ confuses this with wxDateTime(double jdn) thinking it is a duplicate declaration
     inline wxDateTime(time_t timet);
-#endif
         // from broken down time/date (only for standard Unix range)
     inline wxDateTime(const struct tm& tm);
         // from broken down time/date (any range)
@@ -506,11 +503,8 @@ public:
         // set to the current time
     inline wxDateTime& SetToCurrent();
 
-#if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
-// VA C++ confuses this with wxDateTime(double jdn) thinking it is a duplicate declaration
         // set to given time_t value
     inline wxDateTime& Set(time_t timet);
-#endif
 
         // set to given broken down time/date
     wxDateTime& Set(const struct tm& tm);
@@ -1636,7 +1630,6 @@ inline wxDateTime wxDateTime::Today()
     return dt;
 }
 
-#if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
 inline wxDateTime& wxDateTime::Set(time_t timet)
 {
     if ( timet == (time_t)-1 )
@@ -1652,7 +1645,6 @@ inline wxDateTime& wxDateTime::Set(time_t timet)
 
     return *this;
 }
-#endif
 
 inline wxDateTime& wxDateTime::SetToCurrent()
 {
@@ -1660,12 +1652,10 @@ inline wxDateTime& wxDateTime::SetToCurrent()
     return *this;
 }
 
-#if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
 inline wxDateTime::wxDateTime(time_t timet)
 {
     Set(timet);
 }
-#endif
 
 inline wxDateTime::wxDateTime(const struct tm& tm)
 {

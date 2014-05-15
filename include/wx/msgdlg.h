@@ -302,8 +302,6 @@ private:
     #include "wx/gtk/msgdlg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/msgdlg.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/msgdlg.h"
 #endif
 
 // ----------------------------------------------------------------------------

@@ -220,8 +220,6 @@ wxSaveFileSelector(const wxString& what,
     #include "wx/osx/filedlg.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/filedlg.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/filedlg.h"
 #endif
 
 #endif // wxUSE_FILEDLG

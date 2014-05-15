@@ -63,12 +63,6 @@
     #include "wx/osx/dcscreen.h"
 #endif
 
-#ifdef __WXPM__
-    #include "wx/os2/dcclient.h"
-    #include "wx/os2/dcmemory.h"
-    #include "wx/os2/dcscreen.h"
-#endif
-
 #ifdef __WXCOCOA__
     #include "wx/cocoa/dcclient.h"
     #include "wx/cocoa/dcmemory.h"

@@ -270,7 +270,7 @@ bool wxGenericProgressDialog::Create( const wxString& title,
 
     // Windows dialogs usually have buttons in the lower right corner
     const int sizerFlags =
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXOSX__)
+#if defined(__WXMSW__) || defined(__WXOSX__)
                            wxALIGN_RIGHT | wxALL
 #else // !MSW
                            wxALIGN_CENTER_HORIZONTAL | wxBOTTOM | wxTOP
@@ -403,7 +403,7 @@ wxGenericProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
     // value and time to the left in two rows
     sizer->Add(label, 1, wxALIGN_LEFT);
     sizer->Add(value, 1, wxALIGN_LEFT);
-#elif defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__) || defined(__WXGTK20__)
+#elif defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
     // value and time centered in one row
     sizer->Add(label, 1, wxLARGESMALL(wxALIGN_RIGHT,wxALIGN_LEFT) | wxTOP | wxRIGHT, LAYOUT_MARGIN);
     sizer->Add(value, 1, wxALIGN_LEFT | wxTOP, LAYOUT_MARGIN);
@@ -620,7 +620,7 @@ void wxGenericProgressDialog::SetMaximum(int maximum)
 {
     m_maximum = maximum;
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__)
     // we can't have values > 65,536 in the progress control under Windows, so
     // scale everything down
     m_factor = m_maximum / 65536 + 1;

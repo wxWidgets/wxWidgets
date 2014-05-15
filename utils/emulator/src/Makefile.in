@@ -47,7 +47,6 @@ WXEMULATOR_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../../samples $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 WXEMULATOR_OBJECTS =  \
 	$(__wxemulator___win32rc) \
-	$(__wxemulator_os2_lib_res) \
 	wxemulator_emulator.o
 
 ### Conditionally set variables: ###
@@ -86,8 +85,6 @@ COND_PLATFORM_OS2_1___wxemulator___os2_emxbindcmd = $(NM) wxemulator$(EXEEXT) \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__wxemulator___win32rc = wxemulator_sample_rc.o
-@COND_PLATFORM_OS2_1@__wxemulator_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)

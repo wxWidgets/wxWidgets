@@ -51,7 +51,6 @@ AUIDEMO_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 AUIDEMO_OBJECTS =  \
 	$(__auidemo___win32rc) \
-	$(__auidemo_os2_lib_res) \
 	auidemo_auidemo.o
 
 ### Conditionally set variables: ###
@@ -91,8 +90,6 @@ COND_PLATFORM_OS2_1___auidemo___os2_emxbindcmd = $(NM) auidemo$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__auidemo___win32rc = auidemo_sample_rc.o
-@COND_PLATFORM_OS2_1@__auidemo_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__auidemo_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= auidemo.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__auidemo_bundle___depname = auidemo_bundle

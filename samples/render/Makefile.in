@@ -60,7 +60,6 @@ RENDER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 RENDER_OBJECTS =  \
 	$(__render___win32rc) \
-	$(__render_os2_lib_res) \
 	render_render.o
 RENDDLL_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -109,8 +108,6 @@ COND_PLATFORM_OS2_1___render___os2_emxbindcmd = $(NM) render$(EXEEXT) | if grep 
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__render___win32rc = render_sample_rc.o
-@COND_PLATFORM_OS2_1@__render_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__render_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= render.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__render_bundle___depname = render_bundle

@@ -54,7 +54,7 @@ wxIcon icon(wxICON(sample));
 
 There is also a corresponding wxBITMAP() macro which allows to create the
 bitmaps in much the same way as wxICON() creates icons. It assumes that bitmaps
-live in resources under Windows or OS2 and XPM files under all other platforms
+live in resources under Windows and XPM files under all other platforms
 (for XPMs, the corresponding file must be included before this macro is used,
 of course, and the name of the bitmap should be the same as the resource name
 under Windows with @c _xpm suffix). For example:
@@ -64,7 +64,7 @@ under Windows with @c _xpm suffix). For example:
 wxBitmap bmp(wxBITMAP(bmpname));
 
 // which is roughly equivalent to the following
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__)
     wxBitmap bmp("bmpname", wxBITMAP_TYPE_BMP_RESOURCE);
 #else // Unix
     wxBitmap bmp(bmpname_xpm, wxBITMAP_TYPE_XPM);

@@ -41,21 +41,6 @@
 #       define WXEXPORT __attribute__((dllexport))
 #       define WXIMPORT __attribute__((dllimport))
 #    endif
-#elif defined(__WXPM__)
-#    if defined (__WATCOMC__)
-#        define WXEXPORT __declspec(dllexport)
-        /*
-           __declspec(dllimport) prepends __imp to imported symbols. We do NOT
-           want that!
-         */
-#        define WXIMPORT
-#    elif defined(__EMX__)
-#        define WXEXPORT
-#        define WXIMPORT
-#    elif (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
-#        define WXEXPORT _Export
-#        define WXIMPORT _Export
-#    endif
 #elif defined(__CYGWIN__)
 #    define WXEXPORT __declspec(dllexport)
 #    define WXIMPORT __declspec(dllimport)

@@ -49,7 +49,6 @@ WRAPSIZER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 WRAPSIZER_OBJECTS =  \
 	$(__wrapsizer___win32rc) \
-	$(__wrapsizer_os2_lib_res) \
 	wrapsizer_wrapsizer.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___wrapsizer___os2_emxbindcmd = $(NM) wrapsizer$(EXEEXT) | \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__wrapsizer___win32rc = wrapsizer_sample_rc.o
-@COND_PLATFORM_OS2_1@__wrapsizer_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__wrapsizer_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= wrapsizer.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__wrapsizer_bundle___depname = wrapsizer_bundle

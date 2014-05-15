@@ -20,10 +20,6 @@
 #include "typeinfo.h"
 #endif
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-#  undef __BSEXCPT__
-#endif
-
 #include <stdlib.h>
 
 class WXDLLIMPEXP_FWD_BASE wxString;

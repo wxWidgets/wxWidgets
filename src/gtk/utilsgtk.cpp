@@ -338,7 +338,7 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 
 #endif // __UNIX__
 
-#if defined(__UNIX__) || defined(__OS2__)
+#if defined(__UNIX__)
 
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
@@ -358,7 +358,7 @@ wxString wxGUIAppTraits::GetDesktopEnvironment() const
     return de;
 }
 
-#endif // __UNIX__ || __OS2__
+#endif // __UNIX__
 
 #ifdef __UNIX__
 

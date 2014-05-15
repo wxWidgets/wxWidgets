@@ -83,8 +83,6 @@ public:
     #include "wx/osx/combobox.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/combobox.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/combobox.h"
 #endif
 
 #endif // wxUSE_COMBOBOX

@@ -324,12 +324,10 @@ void wxMenuItemBase::SetHelp(const wxString& str)
     }
 }
 
-#ifndef __WXPM__
 wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
     return wxStripMenuCodes(text);
 }
-#endif
 
 #if WXWIN_COMPATIBILITY_2_8
 wxString wxMenuItemBase::GetLabelFromText(const wxString& text)

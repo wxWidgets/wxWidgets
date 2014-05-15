@@ -2247,7 +2247,7 @@ public:
     not sent when the window is restored to its original size after it had been
     maximized, only a normal wxSizeEvent is generated in this case.
 
-    Currently this event is only generated in wxMSW, wxGTK, wxOSX/Cocoa and wxOS2
+    Currently this event is only generated in wxMSW, wxGTK and wxOSX/Cocoa
     ports so portable programs should only rely on receiving @c wxEVT_SIZE and
     not necessarily this event when the window is maximized.
 
@@ -4172,7 +4172,7 @@ public:
     Notice that the event is not triggered when the application is iconized
     (minimized) or restored under wxMSW.
 
-    @onlyfor{wxmsw,wxgtk,wxos2}
+    @onlyfor{wxmsw,wxgtk}
 
     @beginEventTable{wxShowEvent}
     @event{EVT_SHOW(func)}

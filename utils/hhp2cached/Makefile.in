@@ -51,7 +51,6 @@ HHP2CACHED_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 HHP2CACHED_OBJECTS =  \
-	$(__hhp2cached_os2_lib_res) \
 	hhp2cached_hhp2cached.o \
 	$(__hhp2cached___win32rc)
 
@@ -90,8 +89,6 @@ COND_PLATFORM_OS2_1___hhp2cached___os2_emxbindcmd = $(NM) hhp2cached$(EXEEXT) \
 @COND_PLATFORM_OS2_1@__hhp2cached___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___hhp2cached___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_PLATFORM_OS2_1@__hhp2cached_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_WIN32_1@__hhp2cached___win32rc = hhp2cached_hhp2cached_rc.o
 COND_MONOLITHIC_0___WXLIB_HTML_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html-$(WX_RELEASE)$(HOST_SUFFIX)

@@ -27,10 +27,6 @@
     #include "wx/math.h"
 #endif
 
-#ifdef __OS2__
-#include <types.h>
-#endif
-
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif

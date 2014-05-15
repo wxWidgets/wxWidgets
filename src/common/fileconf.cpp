@@ -48,10 +48,6 @@
 #if defined(__WINDOWS__)
     #include "wx/msw/private.h"
 #endif  //windows.h
-#if defined(__WXPM__)
-    #define INCL_DOS
-    #include <os2.h>
-#endif
 
 #include  <stdlib.h>
 #include  <ctype.h>

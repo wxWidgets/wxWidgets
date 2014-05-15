@@ -64,12 +64,6 @@ of MSW, MAC and OS2
     #define USE_WXGTK 0
 #endif
 
-#ifdef __WXPM__
-    #define USE_WXPM 1
-#else
-    #define USE_WXPM 0
-#endif
-
 #define USE_GENERIC_DIALOGS (!USE_WXUNIVERSAL && !USE_DLL)
 
 #define USE_COLOURDLG_GENERIC \
@@ -77,10 +71,10 @@ of MSW, MAC and OS2
 #define USE_DIRDLG_GENERIC \
     ((USE_WXMSW || USE_WXMAC) && USE_GENERIC_DIALOGS && wxUSE_DIRDLG)
 #define USE_FILEDLG_GENERIC \
-    ((((USE_WXMSW || USE_WXMAC || USE_WXPM || USE_WXGTK) \
+    ((((USE_WXMSW || USE_WXMAC || USE_WXGTK) \
                     && USE_GENERIC_DIALOGS) || USE_WXWINCE) && wxUSE_FILEDLG)
 #define USE_FONTDLG_GENERIC \
-    ((USE_WXMSW || USE_WXMACFONTDLG || USE_WXPM) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
+    ((USE_WXMSW || USE_WXMACFONTDLG) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
 
 // Turn USE_MODAL_PRESENTATION to 0 if there is any reason for not presenting difference
 // between modal and modeless dialogs (ie. not implemented it in your port yet)

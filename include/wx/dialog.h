@@ -362,8 +362,6 @@ public:
         #include "wx/osx/dialog.h"
     #elif defined(__WXCOCOA__)
         #include "wx/cocoa/dialog.h"
-    #elif defined(__WXPM__)
-        #include "wx/os2/dialog.h"
     #endif
 #endif
 

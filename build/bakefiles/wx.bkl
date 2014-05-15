@@ -176,7 +176,7 @@
     </if>
 
 
-    <!-- copy setup.h on DOS/OS2/Windows if the format supports it: -->
+    <!-- copy setup.h on DOS/Windows if the format supports it: -->
     <if cond="FORMAT!='autoconf' and IS_MSVC_PRJ=='0'">
         <mkdir id="libdir">
             <dir>$(LIBDIRNAME)</dir>
@@ -193,8 +193,7 @@
 
         <set var="SETUP_H_SUBDIR">
             <if cond="WXUNIV=='1'">univ</if>
-            <if cond="WXUNIV=='0' and PLATFORM_OS2!='1'">$(TOOLKIT_LOWERCASE)</if>
-            <if cond="WXUNIV=='0' and PLATFORM_OS2=='1'">os2</if>
+            <if cond="WXUNIV=='0'">$(TOOLKIT_LOWERCASE)</if>
         </set>
 
         <copy-file-to-file-if-not-exist id="master_setup.h">

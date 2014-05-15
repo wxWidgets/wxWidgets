@@ -83,11 +83,11 @@ int (wxCALLBACK *wxListCtrlCompare)(wxIntPtr item1, wxIntPtr item2, wxIntPtr sor
 #define wxLIST_STATE_FOCUSED        0x0002
 #define wxLIST_STATE_SELECTED       0x0004
 #define wxLIST_STATE_CUT            0x0008      // MSW only
-#define wxLIST_STATE_DISABLED       0x0010      // OS2 only
-#define wxLIST_STATE_FILTERED       0x0020      // OS2 only
-#define wxLIST_STATE_INUSE          0x0040      // OS2 only
-#define wxLIST_STATE_PICKED         0x0080      // OS2 only
-#define wxLIST_STATE_SOURCE         0x0100      // OS2 only
+#define wxLIST_STATE_DISABLED       0x0010      // Not used
+#define wxLIST_STATE_FILTERED       0x0020      // Not used
+#define wxLIST_STATE_INUSE          0x0040      // Not used
+#define wxLIST_STATE_PICKED         0x0080      // Not used
+#define wxLIST_STATE_SOURCE         0x0100      // Not used
 
 // Hit test flags, used in HitTest
 #define wxLIST_HITTEST_ABOVE            0x0001  // Above the client area.
@@ -338,10 +338,6 @@ public:
     // For columns only
     int             m_format;   // left, right, centre
     int             m_width;    // width of column
-
-#ifdef __WXPM__
-    int             m_miniImage; // handle to the mini image for OS/2
-#endif
 
 protected:
     // creates m_attr if we don't have it yet

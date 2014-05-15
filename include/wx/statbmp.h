@@ -66,8 +66,6 @@ protected:
     #include "wx/osx/statbmp.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/statbmp.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/statbmp.h"
 #endif
 
 #endif // wxUSE_STATBMP

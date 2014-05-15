@@ -48,8 +48,6 @@
 
 #elif defined(__WINDOWS__) && defined(__WXWINCE__)
     #include  "wx/msw/missing.h"
-#elif (defined(__OS2__))
-    #include <io.h>
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
     #include  <unistd.h>
     #include  <time.h>
@@ -575,9 +573,7 @@ bool wxTempFile::Open(const wxString& strName)
 
     if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
     {
-#ifndef __OS2__
         wxLogSysError(_("Failed to set temporary file permissions"));
-#endif
     }
 #endif // Unix
 

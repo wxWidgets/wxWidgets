@@ -77,11 +77,6 @@ const wxCoord CONTENT_TREE_INDEX_MIN_WIDTH = 150;
 class wxHtmlHelpTreeItemData : public wxTreeItemData
 {
     public:
-#if defined(__VISAGECPP__)
-//  VA needs a default ctor for some reason....
-        wxHtmlHelpTreeItemData() : wxTreeItemData()
-            { m_Id = 0; }
-#endif
         wxHtmlHelpTreeItemData(int id) : wxTreeItemData()
             { m_Id = id;}
 

@@ -70,18 +70,6 @@
 
 #endif // __WINDOWS__
 
-#if defined(__OS2__) || defined(__DOS__)
-    #ifdef __OS2__
-        #define INCL_BASE
-        #include <os2.h>
-        #ifndef __EMX__
-            #include <direct.h>
-        #endif
-        #include <stdlib.h>
-        #include <ctype.h>
-    #endif
-#endif // __OS2__
-
 #if defined(__WXMAC__)
 //    #include "MoreFilesX.h"
 #endif
@@ -107,7 +95,7 @@ wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
 
 // ----------------------------------------------------------------------------
-// wxGetAvailableDrives, for WINDOWS, DOS, OS2, MAC, UNIX (returns "/")
+// wxGetAvailableDrives, for WINDOWS, DOS, MAC, UNIX (returns "/")
 // ----------------------------------------------------------------------------
 
 size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)
@@ -156,56 +144,7 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
         names.Add(vol.GetDisplayName());
         icon_ids.Add(imageId);
     }
-#elif defined(__OS2__)
-    APIRET rc;
-    ULONG ulDriveNum = 0;
-    ULONG ulDriveMap = 0;
-    rc = ::DosQueryCurrentDisk(&ulDriveNum, &ulDriveMap);
-    if ( rc == 0)
-    {
-        size_t i = 0;
-        while (i < 26)
-        {
-            if (ulDriveMap & ( 1 << i ))
-            {
-                const wxString path = wxFileName::GetVolumeString(
-                                        'A' + i, wxPATH_GET_SEPARATOR);
-                const wxString name = wxFileName::GetVolumeString(
-                                        'A' + i, wxPATH_NO_SEPARATOR);
-
-                // Note: If _filesys is unsupported by some compilers,
-                //       we can always replace it by DosQueryFSAttach
-                char filesysname[20];
-#ifdef __WATCOMC__
-                ULONG cbBuffer = sizeof(filesysname);
-                PFSQBUFFER2 pfsqBuffer = (PFSQBUFFER2)filesysname;
-                APIRET rc = ::DosQueryFSAttach(name.fn_str(),0,FSAIL_QUERYNAME,pfsqBuffer,&cbBuffer);
-                if (rc != NO_ERROR)
-                {
-                    filesysname[0] = '\0';
-                }
-#else
-                _filesys(name.fn_str(), filesysname, sizeof(filesysname));
-#endif
-                /* FAT, LAN, HPFS, CDFS, NFS */
-                int imageId;
-                if (path == wxT("A:\\") || path == wxT("B:\\"))
-                    imageId = wxFileIconsTable::floppy;
-                else if (!strcmp(filesysname, "CDFS"))
-                    imageId = wxFileIconsTable::cdrom;
-                else if (!strcmp(filesysname, "LAN") ||
-                         !strcmp(filesysname, "NFS"))
-                    imageId = wxFileIconsTable::drive;
-                else
-                    imageId = wxFileIconsTable::drive;
-                paths.Add(path);
-                names.Add(name);
-                icon_ids.Add(imageId);
-            }
-            i ++;
-        }
-    }
-#else // !__WIN32__, !__OS2__
+#else // !__WIN32__
     /* If we can switch to the drive, it exists. */
     for ( char drive = 'A'; drive <= 'Z'; drive++ )
     {
@@ -292,7 +231,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
         return true;
 }
 
-#elif defined(__WINDOWS__) || defined(__OS2__)
+#elif defined(__WINDOWS__)
 
 int setdrive(int WXUNUSED_IN_WINCE(drive))
 {
@@ -307,12 +246,7 @@ int setdrive(int WXUNUSED_IN_WINCE(drive))
         return -1;
     newdrive[0] = (wxChar)(wxT('A') + drive - 1);
     newdrive[1] = wxT(':');
-#ifdef __OS2__
-    newdrive[2] = wxT('\\');
-    newdrive[3] = wxT('\0');
-#else
     newdrive[2] = wxT('\0');
-#endif
 #if defined(__WINDOWS__)
     if (::SetCurrentDirectory(newdrive))
 #else
@@ -343,11 +277,6 @@ bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
 #ifndef wxHAS_DRIVE_FUNCTIONS
         success = wxDirExists(dirNameLower);
 #else
-        #if defined(__OS2__)
-        // Avoid changing to drive since no media may be inserted.
-        if (dirNameLower[(size_t)0] == 'a' || dirNameLower[(size_t)0] == 'b')
-            return success;
-        #endif
         int currentDrive = _getdrive();
         int thisDrive = (int) (dirNameLower[(size_t)0] - 'a' + 1) ;
         int err = setdrive( thisDrive ) ;
@@ -366,7 +295,7 @@ bool wxIsDriveAvailable(const wxString& WXUNUSED_IN_WINCE(dirName))
     return success;
 #endif
 }
-#endif // __WINDOWS__ || __OS2__
+#endif // __WINDOWS__
 
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG
 
@@ -537,7 +466,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     wxString rootName;
 
-#if defined(__WINDOWS__) || defined(__OS2__) || defined(__DOS__)
+#if defined(__WINDOWS__) || defined(__DOS__)
     rootName = _("Computer");
 #else
     rootName = _("Sections");
@@ -795,7 +724,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
     wxString dirName(data->m_path);
 
-#if (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__DOS__) || defined(__OS2__)
+#if (defined(__WINDOWS__) && !defined(__WXWINCE__)) || defined(__DOS__)
     // Check if this is a root directory and if so,
     // whether the drive is available.
     if (!wxIsDriveAvailable(dirName))
@@ -809,7 +738,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     // This may take a longish time. Go to busy cursor
     wxBusyCursor busy;
 
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
+#if defined(__WINDOWS__) || defined(__DOS__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
@@ -958,8 +887,8 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     // Append a separator to foil bogus substring matching
     path2 += wxString(wxFILE_SEP_PATH);
 
-    // In MSW or PM, case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
+    // In MSW case is not significant
+#if defined(__WINDOWS__) || defined(__DOS__)
     path2.MakeLower();
 #endif
 
@@ -975,8 +904,8 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
             if (!wxEndsWithPathSeparator(childPath))
                 childPath += wxString(wxFILE_SEP_PATH);
 
-            // In MSW and PM, case is not significant
-#if defined(__WINDOWS__) || defined(__DOS__) || defined(__OS2__)
+            // In MSW case is not significant
+#if defined(__WINDOWS__) || defined(__DOS__)
             childPath.MakeLower();
 #endif
 
@@ -1224,7 +1153,7 @@ void wxGenericDirCtrl::FindChildFiles(wxTreeItemId treeid, int dirFlags, wxArray
 
     wxString dirName(data->m_path);
 
-#if defined(__WINDOWS__) || defined(__OS2__)
+#if defined(__WINDOWS__)
     if (dirName.Last() == ':')
         dirName += wxString(wxFILE_SEP_PATH);
 #endif

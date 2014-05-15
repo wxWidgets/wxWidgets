@@ -33,9 +33,6 @@
         <define cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             COMPILED_FROM_DSP
         </define>
-        <define cond="FORMAT=='watcom' and PLATFORM_OS2=='1'">
-            OS2_32
-        </define>
         <define cond="FORMAT=='watcom' and PLATFORM_MSDOS=='1'">
             __MSDOS__
         </define>

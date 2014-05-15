@@ -99,8 +99,6 @@ private:
     #include "wx/osx/stattext.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/stattext.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/stattext.h"
 #endif
 
 #endif // !wxNO_PORT_STATTEXT_INCLUDE

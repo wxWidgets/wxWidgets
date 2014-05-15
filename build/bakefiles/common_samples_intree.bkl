@@ -31,9 +31,6 @@
         </if>
 
         <win32-res>$(WXTOPDIR)samples/sample.rc</win32-res>
-        <if cond="FORMAT=='autoconf'">
-            <wx-os2-lib-resource/>
-        </if>
 
         <!-- FIXME: temporary, until bakefile can reuse existing pch files -->
         <if cond="FORMAT!='autoconf'">
@@ -104,20 +101,6 @@
 
     <if cond="FORMAT=='autoconf'">
         <include file="mac_bundles.bkl"/>
-
-        <!--
-        A hack to include precompiled OS/2 resource file in apps instead of
-        compiling it from .rc file (gcc on OS/2 doesn't ship with resource
-        compiler):
-        -->
-        <define-tag name="wx-os2-lib-resource" rules="exe">
-            <set var="os2_lib_res">
-                <if cond="PLATFORM_OS2=='1'">
-                    $(TOP_SRCDIR)include/wx/os2/wx.res
-                </if>
-            </set>
-            <set var="__objects" append="1">$(os2_lib_res)</set>
-        </define-tag>
     </if>
 
 </makefile>

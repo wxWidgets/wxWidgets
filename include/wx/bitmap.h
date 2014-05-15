@@ -100,8 +100,8 @@ public:
 };
 
 
-// All ports except wxMSW and wxOS2 use wxBitmapHandler and wxBitmapBase as
-// base class for wxBitmapHandler; wxMSW and wxOS2 use wxGDIImageHandler as
+// All ports except wxMSW use wxBitmapHandler and wxBitmapBase as
+// base class for wxBitmapHandler; wxMSW uses wxGDIImageHandler as
 // base class since it allows some code reuse there.
 #if wxUSE_BITMAP_BASE
 
@@ -290,9 +290,6 @@ protected:
 #elif defined(__WXCOCOA__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/cocoa/bitmap.h"
-#elif defined(__WXPM__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
-    #include "wx/os2/bitmap.h"
 #endif
 
 #if wxUSE_IMAGE

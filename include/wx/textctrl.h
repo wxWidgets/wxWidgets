@@ -787,8 +787,6 @@ protected:
     #include "wx/osx/textctrl.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/textctrl.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/textctrl.h"
 #endif
 
 // ----------------------------------------------------------------------------

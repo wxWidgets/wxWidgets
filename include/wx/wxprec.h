@@ -15,7 +15,6 @@
 // explicitly disabled by defining NOPCH
 #if defined(__VISUALC__)   || \
     defined(__DMC__)       || \
-    defined(__VISAGECPP__) || \
     defined(__WATCOMC__)   || \
     defined(__BORLANDC__)
 
@@ -47,11 +46,6 @@
     #include "wx/msw/wrapcctl.h"
     #include "wx/msw/wrapcdlg.h"
     #include "wx/msw/missing.h"
-#endif
-
-// include <os2.h>
-#ifdef __OS2__
-#   include "wx/os2/private.h"
 #endif
 
 // include the most common wx headers

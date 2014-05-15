@@ -47,7 +47,7 @@ while @c __WINDOWS__ should be used for the platform tests.}
 @itemdef{__WXOSX_MAC__, Mac OS X (Carbon or Cocoa)}
 @itemdef{__WXOSX_OR_COCOA__, Any Mac OS X port (wxOSX-Carbon, wxOSX-Cocoa or 
                         wxCocoa)}
-@itemdef{__WXPM__, OS/2 native Presentation Manager}
+@itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
 @itemdef{__WXX11__, wxX11 (__WXUNIVERSAL__ will be also defined)}
@@ -157,7 +157,7 @@ compiler used.
 @itemdef{__MINGW64_TOOLCHAIN__, MinGW-w64 in either 32 or 64 bit builds}
 @itemdef{__SUNCC__, Sun CC, see also wxCHECK_SUNCC_VERSION}
 @itemdef{__SYMANTECC__, Symantec C++}
-@itemdef{__VISAGECPP__, IBM Visual Age (OS/2)}
+@itemdef{__VISAGECPP__, IBM Visual Age (OS/2) (not used any more).}
 @itemdef{__VISUALC__, Microsoft Visual C++, see also ::wxCHECK_VISUALC_VERSION.
                     The value of this macro corresponds to the compiler version:
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for

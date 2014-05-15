@@ -49,7 +49,6 @@ UIACTION_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 UIACTION_OBJECTS =  \
 	$(__uiaction___win32rc) \
-	$(__uiaction_os2_lib_res) \
 	uiaction_uiaction.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___uiaction___os2_emxbindcmd = $(NM) uiaction$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__uiaction___win32rc = uiaction_sample_rc.o
-@COND_PLATFORM_OS2_1@__uiaction_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__uiaction_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= uiaction.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__uiaction_bundle___depname = uiaction_bundle

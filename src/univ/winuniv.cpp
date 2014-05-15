@@ -97,8 +97,6 @@ public:
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowDFB)
 #elif defined(__WXX11__)
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowX11)
-#elif defined(__WXPM__)
-    IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowOS2)
 #endif
 
 BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)

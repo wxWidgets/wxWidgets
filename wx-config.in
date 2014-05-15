@@ -1374,8 +1374,8 @@ if [ -n "$output_option_rescomp" ]; then
         fi
         ;;
 
-      # neither rez not emxbind have any specific needs from
-      # us, so just output what was determined by configure.
+      # rez doesn't have any specific needs so just output what was
+      # determined by configure.
       *)
         echo @RESCOMP@ @WXCONFIG_RESFLAGS@
         ;;

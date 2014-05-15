@@ -34,7 +34,7 @@
 #include <ctype.h>
 #include <sys/stat.h>
 
-#if !defined(__WINDOWS__) && !defined(__OS2__)
+#if !defined(__WINDOWS__)
     #include   <unistd.h>
 #endif
 

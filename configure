@@ -709,9 +709,6 @@ COND_TOOLKIT_WINCE_WXUNIV_0
 COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_WINCE_USE_GUI_1
 COND_TOOLKIT_WINCE
-COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0
-COND_TOOLKIT_PM_USE_GUI_1
-COND_TOOLKIT_PM
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1
 COND_TOOLKIT_OSX_IPHONE
@@ -889,7 +886,6 @@ DLLIMP_SUFFIX
 SO_SUFFIX_MODULE
 SO_SUFFIX
 PLATFORM_BEOS
-PLATFORM_OS2
 PLATFORM_MACOSX
 PLATFORM_MACOS
 PLATFORM_MAC
@@ -1088,7 +1084,6 @@ with_mac
 with_old_cocoa
 with_wine
 with_msw
-with_pm
 with_directfb
 with_microwin
 with_x11
@@ -1131,7 +1126,6 @@ enable_mslu
 enable_utf8
 enable_utf8only
 enable_extended_rtti
-enable_omf
 enable_optimise
 enable_profile
 enable_no_rtti
@@ -2062,7 +2056,6 @@ Optional Features:
   --enable-utf8           use UTF-8 representation for strings (Unix only)
   --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)
   --enable-extended_rtti  use extended RTTI (XTI)
-  --enable-omf            use OMF object format
   --disable-optimise      compile without optimisations
   --enable-profile        create code with profiling information
   --enable-no_rtti        create code without RTTI information
@@ -2291,7 +2284,6 @@ Optional Features:
   --disable-gtktest       do not try to compile and run a test GTK+ program
   --disable-gtktest       Do not try to compile and run a test GTK program
   --disable-sdltest       Do not try to compile and run a test SDL program
-  --enable-omf            use OMF object format (OS/2)
   --disable-dependency-tracking
                           don't use dependency tracking even if the compiler
                           can
@@ -2317,7 +2309,6 @@ Optional Packages:
   --with-old_cocoa        use old, deprecated, Cocoa port
   --with-wine             use Wine
   --with-msw              use MS-Windows
-  --with-pm               use OS/2 Presentation Manager
   --with-directfb         use DirectFB
   --with-microwin         use MicroWindows
   --with-x11              use X11
@@ -2706,6 +2697,37 @@ fi
 
 } # ac_fn_cxx_try_link
 
+# ac_fn_c_check_header_compile LINENO HEADER VAR INCLUDES
+# -------------------------------------------------------
+# Tests whether HEADER exists and can be compiled using the include files in
+# INCLUDES, setting the cache variable VAR accordingly.
+ac_fn_c_check_header_compile ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+$4
+#include <$2>
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  eval "$3=yes"
+else
+  eval "$3=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+
+} # ac_fn_c_check_header_compile
+
 # ac_fn_c_try_run LINENO
 # ----------------------
 # Try to link conftest.$ac_ext, and return whether this succeeded. Assumes
@@ -2747,37 +2769,6 @@ fi
   as_fn_set_status $ac_retval
 
 } # ac_fn_c_try_run
-
-# ac_fn_c_check_header_compile LINENO HEADER VAR INCLUDES
-# -------------------------------------------------------
-# Tests whether HEADER exists and can be compiled using the include files in
-# INCLUDES, setting the cache variable VAR accordingly.
-ac_fn_c_check_header_compile ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval \${$3+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-$4
-#include <$2>
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  eval "$3=yes"
-else
-  eval "$3=no"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-
-} # ac_fn_c_check_header_compile
 
 # ac_fn_cxx_check_header_compile LINENO HEADER VAR INCLUDES
 # ---------------------------------------------------------
@@ -3820,7 +3811,6 @@ wx_top_builddir="`pwd`"
 
 
 USE_UNIX=1
-USE_OS2=0
 USE_WIN32=0
 USE_DOS=0
 USE_BEOS=0
@@ -3841,7 +3831,7 @@ USE_ALPHA=
 
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
-ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW PM X11 DFB"
+ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 DFB"
 
 DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_wxUSE_GTK=0
@@ -3851,7 +3841,6 @@ DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
 DEFAULT_wxUSE_MSW=0
-DEFAULT_wxUSE_PM=0
 DEFAULT_wxUSE_X11=0
 DEFAULT_wxUSE_DFB=0
 
@@ -3863,7 +3852,6 @@ DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
-DEFAULT_DEFAULT_wxUSE_PM=0
 DEFAULT_DEFAULT_wxUSE_X11=0
 DEFAULT_DEFAULT_wxUSE_DFB=0
 
@@ -4036,34 +4024,6 @@ case "${host}" in
     $as_echo "#define __DOS__ 1" >>confdefs.h
 
     PROGRAM_EXT=".exe"
-  ;;
-
-  *-pc-os2_emx | *-pc-os2-emx )
-    $as_echo "#define __EMX__ 1" >>confdefs.h
-
-    USE_OS2=1
-    $as_echo "#define __OS2__ 1" >>confdefs.h
-
-    PROGRAM_EXT=".exe"
-    DEFAULT_DEFAULT_wxUSE_PM=1
-        CXX=gcc
-    LDFLAGS="$LDFLAGS -Zcrtdll"
-                        ac_executable_extensions=".exe"
-    export ac_executable_extensions
-            ac_save_IFS="$IFS"
-    IFS='\\'
-    ac_TEMP_PATH=
-    for ac_dir in $PATH; do
-      IFS=$ac_save_IFS
-      if test -z "$ac_TEMP_PATH"; then
-        ac_TEMP_PATH="$ac_dir"
-      else
-        ac_TEMP_PATH="$ac_TEMP_PATH/$ac_dir"
-      fi
-    done
-    export PATH="$ac_TEMP_PATH"
-    unset ac_TEMP_PATH
-    DEFAULT_STD_FLAG=no
   ;;
 
   arm-apple-darwin*)
@@ -4562,12 +4522,6 @@ if test "${with_msw+set}" = set; then :
 fi
 
 
-# Check whether --with-pm was given.
-if test "${with_pm+set}" = set; then :
-  withval=$with_pm; wxUSE_PM="$withval" CACHE_PM=1 TOOLKIT_GIVEN=1
-fi
-
-
 # Check whether --with-directfb was given.
 if test "${with_directfb+set}" = set; then :
   withval=$with_directfb; wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1
@@ -4721,11 +4675,6 @@ if test "$wxUSE_GUI" = "yes"; then
             NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
-
-        case "${host}" in
-      *-pc-os2_emx | *-pc-os2-emx )
-        NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
-    esac
 
     case "$NUM_TOOLKITS" in
       1)
@@ -6322,53 +6271,6 @@ fi
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
 $as_echo "$result" >&6; }
 
-if test "$USE_OS2" = 1; then
-    DEFAULT_wxUSE_OMF=no
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-omf" >&5
-$as_echo_n "checking for --${enablestring:-enable}-omf... " >&6; }
-          # Check whether --enable-omf was given.
-if test "${enable_omf+set}" = set; then :
-  enableval=$enable_omf;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_omf='wxUSE_OMF=yes'
-                          else
-                            wx_cv_use_omf='wxUSE_OMF=no'
-                          fi
-
-else
-
-                          wx_cv_use_omf='wxUSE_OMF=${'DEFAULT_wxUSE_OMF":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_omf"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_OMF = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_OMF
-          fi
-
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
-$as_echo "$result" >&6; }
-
-fi
 
 
           enablestring=disable
@@ -19763,117 +19665,6 @@ if test "$USE_UNIX" = 1 ; then
 
 fi
 
-case "${host}" in
-  *-pc-os2_emx | *-pc-os2-emx )
-                                                      if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
-                              { $as_echo "$as_me:${as_lineno-$LINENO}: checking for drand48 in -lcExt" >&5
-$as_echo_n "checking for drand48 in -lcExt... " >&6; }
-if ${ac_cv_lib_cExt_drand48+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lcExt  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char drand48 ();
-int
-main ()
-{
-return drand48 ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_cExt_drand48=yes
-else
-  ac_cv_lib_cExt_drand48=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_cExt_drand48" >&5
-$as_echo "$ac_cv_lib_cExt_drand48" >&6; }
-if test "x$ac_cv_lib_cExt_drand48" = xyes; then :
-  LIBS="$LIBS -lcExt"
-fi
-
-      fi
-                                    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gcc/libc version" >&5
-$as_echo_n "checking for gcc/libc version... " >&6; }
-if ${wx_cv_gccversion+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-          if test "$cross_compiling" = yes; then :
-                wx_cv_gccversion="EMX2"
-
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-                  #include <stdio.h>
-
-                  int main()
-                  {
-                      FILE *f=fopen("conftestval", "w");
-                      if (!f) exit(1);
-                      fprintf(f,
-                  #if (__GNUC__ < 3)
-                              "EMX2"
-                  #elif (__GNUC__==3) && ((__GNUC_MINOR__ < 2) || ((__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__<2)))
-                              "EMX3"
-                  #elif (__GNUC__==3) && (__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__==2)
-                              "Innotek5"
-                  #else
-                              "Innotek6"
-                  #endif
-                      );
-                      exit(0);
-                  }
-
-_ACEOF
-if ac_fn_c_try_run "$LINENO"; then :
-  wx_cv_gccversion=`cat conftestval`
-else
-  wx_cv_gccversion="EMX2"
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_gccversion" >&5
-$as_echo "$wx_cv_gccversion" >&6; }
-      if test "$wx_cv_gccversion" = "EMX2"; then
-          LIBS="$LIBS -lstdcpp"
-          LDFLAGS="$LDFLAGS -Zsysv-signals"
-      else
-          if test "$wx_cv_gccversion" = "EMX3"; then
-              LIBS="$LIBS -lstdcxx -lgcc"
-              LDFLAGS="$LDFLAGS -Zsysv-signals"
-          else
-              LIBS="$LIBS -lstdc++"
-          fi
-      fi
-      if test "$wxUSE_SHARED" = "yes" -a "$wxUSE_OMF" = "no"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Building DLLs requires OMF mode, enabled" >&5
-$as_echo "$as_me: WARNING: Building DLLs requires OMF mode, enabled" >&2;}
-        wxUSE_OMF=yes
-        enable_omf=yes
-      fi
-        ;;
-esac
-
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
 $as_echo_n "checking for ANSI C header files... " >&6; }
@@ -20034,17 +19825,6 @@ fi
 done
 
 fi
-
-case "${host}" in
-  *-pc-os2_emx | *-pc-os2-emx )
-                  if test $ac_cv_header_langinfo_h = "yes" \
-                -a \(   "$wx_cv_gccversion" = "EMX2" \
-                     -o "$wx_cv_gccversion" = "EMX3" \
-                     -o "$wx_cv_gccversion" = "Innotek5" \); then
-          LIBS="$LIBS -lintl"
-      fi
-  ;;
-esac
 
 if test "$USE_UNIX" = 1 ; then
         for ac_header in sys/select.h
@@ -26382,55 +26162,7 @@ $as_echo "none" >&6; }
         GUIDIST=COCOA_DIST
     fi
 
-    if test "$wxUSE_PM" = 1; then
-        TOOLKIT=PM
-        GUIDIST=PM_DIST
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for type SPBCDATA" >&5
-$as_echo_n "checking for type SPBCDATA... " >&6; }
-if ${wx_cv_spbcdata+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-                cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-                        #define INCL_PM
-                        #include <os2.h>
-
-int
-main ()
-{
-
-                        SPBCDATA test;
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  wx_cv_spbcdata=yes
-else
-  wx_cv_spbcdata=no
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_spbcdata" >&5
-$as_echo "$wx_cv_spbcdata" >&6; }
-
-        if test $wx_cv_spbcdata = "yes"; then
-            $as_echo "#define HAVE_SPBCDATA 1" >>confdefs.h
-
-        fi
-    fi
-
-        if test "$TOOLKIT" = "PM" ; then
-        TOOLKIT_DIR="os2"
-    else
         TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[A-Z]' '[a-z]'`
-    fi
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
@@ -26455,7 +26187,7 @@ fi
 
 
 if test "$wxUSE_GUI" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
+    if test "$wxUSE_UNIX" = "yes"; then
                 for ac_header in X11/Xlib.h
 do :
   ac_fn_c_check_header_compile "$LINENO" "X11/Xlib.h" "ac_cv_header_X11_Xlib_h" "
@@ -29252,11 +28984,7 @@ if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OLD_COCOA" 
 else
     WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 fi
-if test "${TOOLKIT_DIR}" = "os2"; then
-    WX_LIBRARY_BASENAME_GUI="wx_pm${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
-else
-    WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
-fi
+WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 
 
 
@@ -31823,7 +31551,7 @@ fi
 rm -f confcache
 
 
-if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
+if test "$TOOLKIT" != "MSW"; then
 
 
     THREADS_LINK=
@@ -32624,10 +32352,6 @@ $as_echo "$wx_cv_cflags_mthread" >&6; }
                                 CFLAGS="$CFLAGS_OLD"
             fi
         ;;
-        *-pc-os2*emx )
-            WXCONFIG_CFLAGS="$WXCONFIG_CFLAGS -Zmt -D__ST_MT_ERRNO__"
-            LDFLAGS="$LDFLAGS -Zmt"
-        ;;
       esac
     fi
 fi
@@ -33113,14 +32837,7 @@ else
         fi
     else
         if test "$GCC" = yes ; then
-            case "${host}" in
-                *-pc-os2_emx | *-pc-os2-emx )
-                                                            OPTIMISE_CFLAGS="-O2"
-                ;;
-                *)
-                                                                                OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
-                ;;
-            esac
+                                                OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
         else
             OPTIMISE_CFLAGS="-O"
         fi
@@ -33154,7 +32871,7 @@ if test "$wxUSE_UNIX" = "yes"; then
 fi
 
 
-if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
+if test "$TOOLKIT" != "MSW"; then
 
     HAVE_DL_FUNCS=0
     HAVE_SHL_FUNCS=0
@@ -35786,13 +35503,13 @@ fi
 
 
 if test "$wxUSE_METAFILE" = "yes"; then
-    if test "$wxUSE_MSW" != 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_PM" != 1; then
+    if test "$wxUSE_MSW" != 1 -a "$wxUSE_MAC" != 1; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxMetafile is not available on this system... disabled" >&5
 $as_echo "$as_me: WARNING: wxMetafile is not available on this system... disabled" >&2;}
         wxUSE_METAFILE=no
     fi
 elif test "$wxUSE_METAFILE" = "auto"; then
-    if test "$wxUSE_MSW" = 1 -o "$wxUSE_MAC" = 1 -o "$wxUSE_PM" = 1; then
+    if test "$wxUSE_MSW" = 1 -o "$wxUSE_MAC" = 1; then
         wxUSE_METAFILE=yes
     fi
 fi
@@ -36414,16 +36131,11 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Popup window not yet supported under Mac OS X... disabled" >&5
 $as_echo "$as_me: WARNING: Popup window not yet supported under Mac OS X... disabled" >&2;}
     else
-        if test "$wxUSE_PM" = 1; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxPopupWindow not yet supported under PM... disabled" >&5
-$as_echo "$as_me: WARNING: wxPopupWindow not yet supported under PM... disabled" >&2;}
-        else
-            $as_echo "#define wxUSE_POPUPWIN 1" >>confdefs.h
+        $as_echo "#define wxUSE_POPUPWIN 1" >>confdefs.h
 
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
 
-            USES_CONTROLS=1
-        fi
+        USES_CONTROLS=1
     fi
 fi
 
@@ -36445,13 +36157,8 @@ $as_echo "$as_me: WARNING: Dialup manager not supported on this platform... disa
 fi
 
 if test "$wxUSE_TIPWINDOW" = "yes"; then
-    if test "$wxUSE_PM" = 1; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTipWindow not yet supported under PM... disabled" >&5
-$as_echo "$as_me: WARNING: wxTipWindow not yet supported under PM... disabled" >&2;}
-    else
-        $as_echo "#define wxUSE_TIPWINDOW 1" >>confdefs.h
+    $as_echo "#define wxUSE_TIPWINDOW 1" >>confdefs.h
 
-    fi
 fi
 
 if test "$USES_CONTROLS" = 1; then
@@ -36958,7 +36665,7 @@ if test "$wxUSE_WIZARDDLG" = "yes"; then
 fi
 
 
-if test "$wxUSE_MSW" = 1 -o "$wxUSE_PM" = 1; then
+if test "$wxUSE_MSW" = 1; then
     if test "$wxUSE_OWNER_DRAWN" = "yes"; then
         $as_echo "#define wxUSE_OWNER_DRAWN 1" >>confdefs.h
 
@@ -37547,9 +37254,6 @@ if test "$wxUSE_GUI" = "yes"; then
         if test "$wxUSE_UNIVERSAL" != "yes"; then
             SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ownerdrw nativdlg dll"
         fi
-    fi
-    if test "$TOOLKIT" = "PM" -a "$wxUSE_UNIVERSAL" != "yes"; then
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ownerdrw"
     fi
 else
     SAMPLES_SUBDIRS="console"
@@ -38464,7 +38168,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
     PLATFORM_MAC=0
     PLATFORM_MACOS=0
     PLATFORM_MACOSX=0
-    PLATFORM_OS2=0
     PLATFORM_BEOS=0
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
@@ -38474,9 +38177,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             ;;
             *-pc-msdosdjgpp )
                 PLATFORM_MSDOS=1
-            ;;
-            *-pc-os2_emx | *-pc-os2-emx )
-                PLATFORM_OS2=1
             ;;
             *-*-darwin* )
                 PLATFORM_MAC=1
@@ -38500,9 +38200,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             ;;
             msdos )
                 PLATFORM_MSDOS=1
-            ;;
-            os2 )
-                PLATFORM_OS2=1
             ;;
             darwin )
                 PLATFORM_MAC=1
@@ -38529,13 +38226,6 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
 
 
 
-
-    # Check whether --enable-omf was given.
-if test "${enable_omf+set}" = set; then :
-  enableval=$enable_omf; bk_os2_use_omf="$enableval"
-fi
-
-
     case "${BAKEFILE_HOST}" in
       *-*-darwin* )
                         if test "x$GCC" = "xyes"; then
@@ -38545,19 +38235,6 @@ fi
         if test "x$XLCC" = "xyes"; then
             CFLAGS="$CFLAGS -qnocommon"
             CXXFLAGS="$CXXFLAGS -qnocommon"
-        fi
-        ;;
-
-      *-pc-os2_emx | *-pc-os2-emx )
-        if test "x$bk_os2_use_omf" = "xyes" ; then
-            AR=emxomfar
-            RANLIB=:
-            LDFLAGS="-Zomf $LDFLAGS"
-            CFLAGS="-Zomf $CFLAGS"
-            CXXFLAGS="-Zomf $CXXFLAGS"
-            OS2_LIBEXT="lib"
-        else
-            OS2_LIBEXT="a"
         fi
         ;;
 
@@ -38607,16 +38284,6 @@ fi
         *-pc-msdosdjgpp )
             EXEEXT=".exe"
             DLLPREFIX=""
-            dlldir="$bindir"
-        ;;
-        *-pc-os2_emx | *-pc-os2-emx )
-            SO_SUFFIX="dll"
-            SO_SUFFIX_MODULE="dll"
-            DLLIMP_SUFFIX=$OS2_LIBEXT
-            EXEEXT=".exe"
-            DLLPREFIX=""
-            LIBPREFIX=""
-            LIBEXT=".$OS2_LIBEXT"
             dlldir="$bindir"
         ;;
         *-*-darwin* )
@@ -38915,491 +38582,6 @@ fi
         SHARED_LD_CC="\$(CC) -shared -o"
         SHARED_LD_CXX="\$(CXX) -shared -o"
         WINDOWS_IMPLIB=1
-      ;;
-
-      *-pc-os2_emx | *-pc-os2-emx )
-        SHARED_LD_CC="`pwd`/dllar.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        SHARED_LD_CXX="`pwd`/dllar.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        PIC_FLAG=""
-
-D='$'
-cat <<EOF >dllar.sh
-#!/bin/sh
-#
-# dllar - a tool to build both a .dll and an .a file
-# from a set of object (.o) files for EMX/OS2.
-#
-#  Written by Andrew Zabolotny, bit@freya.etu.ru
-#  Ported to Unix like shell by Stefan Neis, Stefan.Neis@t-online.de
-#
-#  This script will accept a set of files on the command line.
-#  All the public symbols from the .o files will be exported into
-#  a .DEF file, then linker will be run (through gcc) against them to
-#  build a shared library consisting of all given .o files. All libraries
-#  (.a) will be first decompressed into component .o files then act as
-#  described above. You can optionally give a description (-d "description")
-#  which will be put into .DLL. To see the list of accepted options (as well
-#  as command-line format) simply run this program without options. The .DLL
-#  is built to be imported by name (there is no guarantee that new versions
-#  of the library you build will have same ordinals for same symbols).
-#
-#  dllar is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2, or (at your option)
-#  any later version.
-#
-#  dllar is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with dllar; see the file COPYING.  If not, write to the Free
-#  Software Foundation, 59 Temple Place - Suite 330, Boston, MA
-#  02111-1307, USA.
-
-# To successfuly run this program you will need:
-#  - Current drive should have LFN support (HPFS, ext2, network, etc)
-#    (Sometimes dllar generates filenames which won't fit 8.3 scheme)
-#  - gcc
-#    (used to build the .dll)
-#  - emxexp
-#    (used to create .def file from .o files)
-#  - emximp
-#    (used to create .a file from .def file)
-#  - GNU text utilites (cat, sort, uniq)
-#    used to process emxexp output
-#  - GNU file utilities (mv, rm)
-#  - GNU sed
-#  - lxlite (optional, see flag below)
-#    (used for general .dll cleanup)
-#
-
-flag_USE_LXLITE=1;
-
-#
-# helper functions
-# basnam, variant of basename, which does _not_ remove the path, _iff_
-#                              second argument (suffix to remove) is given
-basnam(){
-    case ${D}# in
-    1)
-        echo ${D}1 | sed 's/.*\\///' | sed 's/.*\\\\//'
-        ;;
-    2)
-        echo ${D}1 | sed 's/'${D}2'${D}//'
-        ;;
-    *)
-        echo "error in basnam ${D}*"
-        exit 8
-        ;;
-    esac
-}
-
-# Cleanup temporary files and output
-CleanUp() {
-    cd ${D}curDir
-    for i in ${D}inputFiles ; do
-        case ${D}i in
-        *!)
-            rm -rf \`basnam ${D}i !\`
-            ;;
-        *)
-            ;;
-        esac
-    done
-
-    # Kill result in case of failure as there is just to many stupid make/nmake
-    # things out there which doesn't do this.
-    if [ ${D}# -eq 0 ]; then
-        rm -f ${D}arcFile ${D}arcFile2 ${D}defFile ${D}dllFile
-    fi
-}
-
-# Print usage and exit script with rc=1.
-PrintHelp() {
- echo 'Usage: dllar.sh [-o[utput] output_file] [-i[mport] importlib_name]'
- echo '       [-name-mangler-script script.sh]'
- echo '       [-d[escription] "dll descrption"] [-cc "CC"] [-f[lags] "CFLAGS"]'
- echo '       [-ord[inals]] -ex[clude] "symbol(s)"'
- echo '       [-libf[lags] "{INIT|TERM}{GLOBAL|INSTANCE}"] [-nocrt[dll]] [-nolxl[ite]]'
- echo '       [*.o] [*.a]'
- echo '*> "output_file" should have no extension.'
- echo '   If it has the .o, .a or .dll extension, it is automatically removed.'
- echo '   The import library name is derived from this and is set to "name".a,'
- echo '   unless overridden by -import'
- echo '*> "importlib_name" should have no extension.'
- echo '   If it has the .o, or .a extension, it is automatically removed.'
- echo '   This name is used as the import library name and may be longer and'
- echo '   more descriptive than the DLL name which has to follow the old '
- echo '   8.3 convention of FAT.'
- echo '*> "script.sh may be given to override the output_file name by a'
- echo '   different name. It is mainly useful if the regular make process'
- echo '   of some package does not take into account OS/2 restriction of'
- echo '   DLL name lengths. It takes the importlib name as input and is'
- echo '   supposed to procude a shorter name as output. The script should'
- echo '   expect to get importlib_name without extension and should produce'
- echo '   a (max.) 8 letter name without extension.'
- echo '*> "cc" is used to use another GCC executable.   (default: gcc.exe)'
- echo '*> "flags" should be any set of valid GCC flags. (default: -s -Zcrtdll)'
- echo '   These flags will be put at the start of GCC command line.'
- echo '*> -ord[inals] tells dllar to export entries by ordinals. Be careful.'
- echo '*> -ex[clude] defines symbols which will not be exported. You can define'
- echo '   multiple symbols, for example -ex "myfunc yourfunc _GLOBAL*".'
- echo '   If the last character of a symbol is "*", all symbols beginning'
- echo '   with the prefix before "*" will be exclude, (see _GLOBAL* above).'
- echo '*> -libf[lags] can be used to add INITGLOBAL/INITINSTANCE and/or'
- echo '   TERMGLOBAL/TERMINSTANCE flags to the dynamically-linked library.'
- echo '*> -nocrt[dll] switch will disable linking the library against emx''s'
- echo '   C runtime DLLs.'
- echo '*> -nolxl[ite] switch will disable running lxlite on the resulting DLL.'
- echo '*> All other switches (for example -L./ or -lmylib) will be passed'
- echo '   unchanged to GCC at the end of command line.'
- echo '*> If you create a DLL from a library and you do not specify -o,'
- echo '   the basename for DLL and import library will be set to library name,'
- echo '   the initial library will be renamed to 'name'_s.a (_s for static)'
- echo '   i.e. "dllar gcc.a" will create gcc.dll and gcc.a, and the initial'
- echo '   library will be renamed into gcc_s.a.'
- echo '--------'
- echo 'Example:'
- echo '   dllar -o gcc290.dll libgcc.a -d "GNU C runtime library" -ord'
- echo '    -ex "__main __ctordtor*" -libf "INITINSTANCE TERMINSTANCE"'
- CleanUp
- exit 1
-}
-
-# Execute a command.
-# If exit code of the commnad <> 0 CleanUp() is called and we'll exit the script.
-# @Uses    Whatever CleanUp() uses.
-doCommand() {
-    echo "${D}*"
-    eval ${D}*
-    rcCmd=${D}?
-
-    if [ ${D}rcCmd -ne 0 ]; then
-        echo "command failed, exit code="${D}rcCmd
-        CleanUp
-        exit ${D}rcCmd
-    fi
-}
-
-# main routine
-# setup globals
-cmdLine=${D}*
-outFile=""
-outimpFile=""
-inputFiles=""
-renameScript=""
-description=""
-CC=gcc.exe
-CFLAGS="-s -Zcrtdll"
-EXTRA_CFLAGS=""
-EXPORT_BY_ORDINALS=0
-exclude_symbols=""
-library_flags=""
-curDir=\`pwd\`
-curDirS=curDir
-case ${D}curDirS in
-*/)
-  ;;
-*)
-  curDirS=${D}{curDirS}"/"
-  ;;
-esac
-# Parse commandline
-libsToLink=0
-omfLinking=0
-while [ ${D}1 ]; do
-    case ${D}1 in
-    -ord*)
-        EXPORT_BY_ORDINALS=1;
-        ;;
-    -o*)
-	shift
-        outFile=${D}1
-	;;
-    -i*)
-        shift
-        outimpFile=${D}1
-        ;;
-    -name-mangler-script)
-        shift
-        renameScript=${D}1
-        ;;
-    -d*)
-        shift
-        description=${D}1
-        ;;
-    -f*)
-        shift
-        CFLAGS=${D}1
-        ;;
-    -c*)
-        shift
-        CC=${D}1
-        ;;
-    -h*)
-        PrintHelp
-        ;;
-    -ex*)
-        shift
-        exclude_symbols=${D}{exclude_symbols}${D}1" "
-        ;;
-    -libf*)
-        shift
-        library_flags=${D}{library_flags}${D}1" "
-        ;;
-    -nocrt*)
-        CFLAGS="-s"
-        ;;
-    -nolxl*)
-        flag_USE_LXLITE=0
-        ;;
-    -* | /*)
-        case ${D}1 in
-        -L* | -l*)
-            libsToLink=1
-            ;;
-        -Zomf)
-            omfLinking=1
-            ;;
-        *)
-            ;;
-        esac
-        EXTRA_CFLAGS=${D}{EXTRA_CFLAGS}" "${D}1
-        ;;
-    *.dll)
-        EXTRA_CFLAGS="${D}{EXTRA_CFLAGS} \`basnam ${D}1 .dll\`"
-        if [ ${D}omfLinking -eq 1 ]; then
-            EXTRA_CFLAGS="${D}{EXTRA_CFLAGS}.lib"
-	else
-            EXTRA_CFLAGS="${D}{EXTRA_CFLAGS}.a"
-        fi
-        ;;
-    *)
-        found=0;
-        if [ ${D}libsToLink -ne 0 ]; then
-            EXTRA_CFLAGS=${D}{EXTRA_CFLAGS}" "${D}1
-        else
-            for file in ${D}1 ; do
-                if [ -f ${D}file ]; then
-                    inputFiles="${D}{inputFiles} ${D}file"
-                    found=1
-                fi
-            done
-            if [ ${D}found -eq 0 ]; then
-                echo "ERROR: No file(s) found: "${D}1
-                exit 8
-            fi
-        fi
-      ;;
-    esac
-    shift
-done # iterate cmdline words
-
-#
-if [ -z "${D}inputFiles" ]; then
-    echo "dllar: no input files"
-    PrintHelp
-fi
-
-# Now extract all .o files from .a files
-newInputFiles=""
-for file in ${D}inputFiles ; do
-    case ${D}file in
-    *.a | *.lib)
-        case ${D}file in
-        *.a)
-            suffix=".a"
-            AR="ar"
-            ;;
-        *.lib)
-            suffix=".lib"
-            AR="emxomfar"
-            EXTRA_CFLAGS="${D}EXTRA_CFLAGS -Zomf"
-            ;;
-        *)
-            ;;
-        esac
-        dirname=\`basnam ${D}file ${D}suffix\`"_%"
-        mkdir ${D}dirname
-        if [ ${D}? -ne 0 ]; then
-            echo "Failed to create subdirectory ./${D}dirname"
-            CleanUp
-            exit 8;
-        fi
-        # Append '!' to indicate archive
-        newInputFiles="${D}newInputFiles ${D}{dirname}!"
-        doCommand "cd ${D}dirname; ${D}AR x ../${D}file"
-        cd ${D}curDir
-        found=0;
-        for subfile in ${D}dirname/*.o* ; do
-            if [ -f ${D}subfile ]; then
-                found=1
-                if [ -s ${D}subfile ]; then
-	            # FIXME: This should be: is file size > 32 byte, _not_ > 0!
-                    newInputFiles="${D}newInputFiles ${D}subfile"
-                fi
-            fi
-        done
-        if [ ${D}found -eq 0 ]; then
-            echo "WARNING: there are no files in archive \\'${D}file\\'"
-        fi
-        ;;
-    *)
-        newInputFiles="${D}{newInputFiles} ${D}file"
-        ;;
-    esac
-done
-inputFiles="${D}newInputFiles"
-
-# Output filename(s).
-do_backup=0;
-if [ -z ${D}outFile ]; then
-    do_backup=1;
-    set outFile ${D}inputFiles; outFile=${D}2
-fi
-
-# If it is an archive, remove the '!' and the '_%' suffixes
-case ${D}outFile in
-*_%!)
-    outFile=\`basnam ${D}outFile _%!\`
-    ;;
-*)
-    ;;
-esac
-case ${D}outFile in
-*.dll)
-    outFile=\`basnam ${D}outFile .dll\`
-    ;;
-*.DLL)
-    outFile=\`basnam ${D}outFile .DLL\`
-    ;;
-*.o)
-    outFile=\`basnam ${D}outFile .o\`
-    ;;
-*.obj)
-    outFile=\`basnam ${D}outFile .obj\`
-    ;;
-*.a)
-    outFile=\`basnam ${D}outFile .a\`
-    ;;
-*.lib)
-    outFile=\`basnam ${D}outFile .lib\`
-    ;;
-*)
-    ;;
-esac
-case ${D}outimpFile in
-*.a)
-    outimpFile=\`basnam ${D}outimpFile .a\`
-    ;;
-*.lib)
-    outimpFile=\`basnam ${D}outimpFile .lib\`
-    ;;
-*)
-    ;;
-esac
-if [ -z ${D}outimpFile ]; then
-    outimpFile=${D}outFile
-fi
-defFile="${D}{outFile}.def"
-arcFile="${D}{outimpFile}.a"
-arcFile2="${D}{outimpFile}.lib"
-
-#create ${D}dllFile as something matching 8.3 restrictions,
-if [ -z ${D}renameScript ] ; then
-    dllFile="${D}outFile"
-else
-    dllFile=\`${D}renameScript ${D}outimpFile\`
-fi
-
-if [ ${D}do_backup -ne 0 ] ; then
-    if [ -f ${D}arcFile ] ; then
-        doCommand "mv ${D}arcFile ${D}{outFile}_s.a"
-    fi
-    if [ -f ${D}arcFile2 ] ; then
-        doCommand "mv ${D}arcFile2 ${D}{outFile}_s.lib"
-    fi
-fi
-
-# Extract public symbols from all the object files.
-tmpdefFile=${D}{defFile}_%
-rm -f ${D}tmpdefFile
-for file in ${D}inputFiles ; do
-    case ${D}file in
-    *!)
-        ;;
-    *)
-        doCommand "emxexp -u ${D}file >> ${D}tmpdefFile"
-        ;;
-    esac
-done
-
-# Create the def file.
-rm -f ${D}defFile
-echo "LIBRARY \`basnam ${D}dllFile\` ${D}library_flags" >> ${D}defFile
-dllFile="${D}{dllFile}.dll"
-if [ ! -z ${D}description ]; then
-    echo "DESCRIPTION  \\"${D}{description}\\"" >> ${D}defFile
-fi
-echo "EXPORTS" >> ${D}defFile
-
-doCommand "cat ${D}tmpdefFile | sort.exe | uniq.exe > ${D}{tmpdefFile}%"
-grep -v "^ *;" < ${D}{tmpdefFile}% | grep -v "^ *${D}" >${D}tmpdefFile
-
-# Checks if the export is ok or not.
-for word in ${D}exclude_symbols; do
-    grep -v ${D}word < ${D}tmpdefFile >${D}{tmpdefFile}%
-    mv ${D}{tmpdefFile}% ${D}tmpdefFile
-done
-
-
-if [ ${D}EXPORT_BY_ORDINALS -ne 0 ]; then
-    sed "=" < ${D}tmpdefFile | \\
-    sed '
-      N
-      : loop
-      s/^\\([0-9]\\+\\)\\([^;]*\\)\\(;.*\\)\\?/\\2 @\\1 NONAME/
-      t loop
-    ' > ${D}{tmpdefFile}%
-    grep -v "^ *${D}" < ${D}{tmpdefFile}% > ${D}tmpdefFile
-else
-    rm -f ${D}{tmpdefFile}%
-fi
-cat ${D}tmpdefFile >> ${D}defFile
-rm -f ${D}tmpdefFile
-
-# Do linking, create implib, and apply lxlite.
-gccCmdl="";
-for file in ${D}inputFiles ; do
-    case ${D}file in
-    *!)
-        ;;
-    *)
-        gccCmdl="${D}gccCmdl ${D}file"
-        ;;
-    esac
-done
-doCommand "${D}CC ${D}CFLAGS -Zdll -o ${D}dllFile ${D}defFile ${D}gccCmdl ${D}EXTRA_CFLAGS"
-touch "${D}{outFile}.dll"
-
-doCommand "emximp -o ${D}arcFile ${D}defFile"
-if [ ${D}flag_USE_LXLITE -ne 0 ]; then
-    add_flags="";
-    if [ ${D}EXPORT_BY_ORDINALS -ne 0 ]; then
-        add_flags="-ynd"
-    fi
-    doCommand "lxlite -cs -t: -mrn -mln ${D}add_flags ${D}dllFile"
-fi
-doCommand "emxomf -s -l ${D}arcFile"
-
-# Successful exit.
-CleanUp 1
-exit 0
-EOF
-
-        chmod +x dllar.sh
       ;;
 
       powerpc-apple-macos* | \
@@ -40733,21 +39915,6 @@ EOF
         COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0=""
     fi
 
-    COND_TOOLKIT_PM="#"
-    if test "x$TOOLKIT" = "xPM" ; then
-        COND_TOOLKIT_PM=""
-    fi
-
-    COND_TOOLKIT_PM_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xPM" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_PM_USE_GUI_1=""
-    fi
-
-    COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xPM" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0=""
-    fi
-
     COND_TOOLKIT_WINCE="#"
     if test "x$TOOLKIT" = "xWINCE" ; then
         COND_TOOLKIT_WINCE=""
@@ -41062,15 +40229,7 @@ fi
 
 else
         MACSETFILE="@true"
-
-    if test "$wxUSE_PM" = 1; then
-        RESCOMP="emxbind"
-        WXCONFIG_RESFLAGS="-ep"
-
-                POSTLINK_COMMAND="$RESCOMP $WXCONFIG_RESFLAGS"
-    else
-        POSTLINK_COMMAND="@true"
-    fi
+    POSTLINK_COMMAND="@true"
 fi
 
 fi
@@ -41103,26 +40262,6 @@ if test "$DEPS_TRACKING" = 1 -a "$wxUSE_MAC" = 1 ; then
             chmod +x bk-deps
         fi
     fi
-fi
-
-if test "$wxUSE_SHARED" = "yes"; then
-                case "${host}" in
-      *-pc-os2_emx | *-pc-os2-emx )
-        SHARED_LD_CC="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        SHARED_LD_CXX="`pwd`/dllar.sh -name-mangler-script ./dllnames.sh -libf INITINSTANCE -libf TERMINSTANCE -o"
-        cp -p ${srcdir}/src/os2/dllnames.sh .
-        cp -p ${srcdir}/src/os2/dllar.sh .
-      ;;
-    esac
-fi
-if test "$wxUSE_OMF" = "yes"; then
-    case "${host}" in
-      *-pc-os2_emx | *-pc-os2-emx )
-        LDFLAGS="$LDFLAGS -Zlinker /EXEPACK"
-        LDFLAGS_GUI="-Zlinker /PMTYPE:PM"
-        WXCONFIG_LDFLAGS_GUI="-Zlinker /PMTYPE:PM"
-      ;;
-    esac
 fi
 
 WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $TOOLCHAIN_DEFS"

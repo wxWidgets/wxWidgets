@@ -49,7 +49,6 @@ CLIPBOARD_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 CLIPBOARD_OBJECTS =  \
 	$(__clipboard___win32rc) \
-	$(__clipboard_os2_lib_res) \
 	clipboard_clipboard.o
 
 ### Conditionally set variables: ###
@@ -88,8 +87,6 @@ COND_PLATFORM_OS2_1___clipboard___os2_emxbindcmd = $(NM) clipboard$(EXEEXT) | \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__clipboard___win32rc = clipboard_sample_rc.o
-@COND_PLATFORM_OS2_1@__clipboard_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__clipboard_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= clipboard.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__clipboard_bundle___depname = clipboard_bundle

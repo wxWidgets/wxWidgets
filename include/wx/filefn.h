@@ -26,19 +26,7 @@
     #include <sys/stat.h>
 #endif
 
-#ifdef __OS2__
-// need to check for __OS2__ first since currently both
-// __OS2__ and __UNIX__ are defined.
-    #include <process.h>
-    #include "wx/os2/private.h"
-    #ifdef __WATCOMC__
-        #include <direct.h>
-    #endif
-    #include <io.h>
-    #ifdef __EMX__
-        #include <unistd.h>
-    #endif
-#elif defined(__UNIX__)
+#if defined(__UNIX__)
     #include <unistd.h>
     #include <dirent.h>
 #endif
@@ -185,7 +173,7 @@ enum wxPosixPermissions
     #define   wxCRT_RmDir      _wrmdir
     #define   wxCRT_Stat       _wstat
     #define   wxStructStat struct _stat
-#elif (defined(__WINDOWS__) || defined(__OS2__)) && \
+#elif defined(__WINDOWS__) && \
       ( \
         defined(__VISUALC__) || \
         defined(__MINGW64__) || \
@@ -343,12 +331,7 @@ enum wxPosixPermissions
             #define   wxCRT_StatA       wxPOSIX_IDENT(stati64)
         #endif
     #else
-        // Unfortunately Watcom is not consistent
-        #if defined(__OS2__) && defined(__WATCOMC__)
-            #define   wxCRT_StatA       _stat
-        #else
-            #define   wxCRT_StatA       wxPOSIX_IDENT(stat)
-        #endif
+        #define   wxCRT_StatA       wxPOSIX_IDENT(stat)
     #endif
 
     // then wide char ones
@@ -522,8 +505,7 @@ inline int wxLstat(const wxString& path, wxStructStat *buf)
     { return wxCRT_Lstat(path.fn_str(), buf); }
 inline int wxRmDir(const wxString& path)
     { return wxCRT_RmDir(path.fn_str()); }
-#if (defined(__WINDOWS__) && !defined(__CYGWIN__)) \
-        || (defined(__OS2__) && defined(__WATCOMC__))
+#if (defined(__WINDOWS__) && !defined(__CYGWIN__))
 inline int wxMkDir(const wxString& path, mode_t WXUNUSED(mode) = 0)
     { return wxCRT_MkDir(path.fn_str()); }
 #else
@@ -538,15 +520,7 @@ inline int wxMkDir(const wxString& path, mode_t mode)
     #define wxO_BINARY 0
 #endif
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-//
-// VisualAge C++ V4.0 cannot have any external linkage const decs
-// in headers included by more than one primary source
-//
-extern const int wxInvalidOffset;
-#else
 const int wxInvalidOffset = -1;
-#endif
 
 // ----------------------------------------------------------------------------
 // functions
@@ -686,7 +660,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 #define wxPATH_SEP_MAC        wxT(";")
 
 // platform independent versions
-#if defined(__UNIX__) && !defined(__OS2__)
+#if defined(__UNIX__)
   // CYGWIN also uses UNIX settings
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
@@ -700,7 +674,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 
 // this is useful for wxString::IsSameAs(): to compare two file names use
 // filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
-#if defined(__UNIX__) && !defined(__DARWIN__) && !defined(__OS2__)
+#if defined(__UNIX__) && !defined(__DARWIN__)
   #define wxARE_FILENAMES_CASE_SENSITIVE  true
 #else   // Windows, Mac OS and OS/2
   #define wxARE_FILENAMES_CASE_SENSITIVE  false
@@ -710,7 +684,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 inline bool wxIsPathSeparator(wxChar c)
 {
     // under DOS/Windows we should understand both Unix and DOS file separators
-#if ( defined(__UNIX__) && !defined(__OS2__) )|| defined(__MAC__)
+#if defined(__UNIX__) || defined(__MAC__)
     return c == wxFILE_SEP_PATH;
 #else
     return c == wxFILE_SEP_PATH_DOS || c == wxFILE_SEP_PATH_UNIX;

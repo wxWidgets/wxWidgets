@@ -85,8 +85,6 @@ public:
     #include "wx/osx/dataform.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/dataform.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/dataform.h"
 #endif
 
 // the value for default argument to some functions (corresponds to
@@ -173,8 +171,6 @@ public:
     #include "wx/osx/dataobj.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/dataobj.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/dataobj.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -566,8 +562,6 @@ private:
         #include "wx/osx/dataobj2.h"
     #elif defined(__WXCOCOA__)
         #include "wx/cocoa/dataobj2.h"
-    #elif defined(__WXPM__)
-        #include "wx/os2/dataobj2.h"
     #endif
 
     // wxURLDataObject is simply wxTextDataObject with a different name

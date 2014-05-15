@@ -23,24 +23,15 @@
 
 #include "wx/defs.h"        // everybody should include this
 
-#if defined(__WXMAC__) || defined(__VISAGECPP__)
+#if defined(__WXMAC__)
     #include <ctype.h>
 #endif
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-   // problem in VACPP V4 with including stdlib.h multiple times
-   // strconv includes it anyway
-#  include <stdio.h>
-#  include <string.h>
-#  include <stdarg.h>
-#  include <limits.h>
-#else
-#  include <string.h>
-#  include <stdio.h>
-#  include <stdarg.h>
-#  include <limits.h>
-#  include <stdlib.h>
-#endif
+#include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <limits.h>
+#include <stdlib.h>
 
 #include "wx/wxcrtbase.h"   // for wxChar, wxStrlen() etc.
 #include "wx/strvararg.h"

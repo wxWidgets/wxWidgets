@@ -50,7 +50,6 @@ CALENDAR_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 CALENDAR_OBJECTS =  \
 	$(__calendar___win32rc) \
-	$(__calendar_os2_lib_res) \
 	calendar_calendar.o
 
 ### Conditionally set variables: ###
@@ -90,8 +89,6 @@ COND_PLATFORM_OS2_1___calendar___os2_emxbindcmd = $(NM) calendar$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__calendar___win32rc = calendar_sample_rc.o
-@COND_PLATFORM_OS2_1@__calendar_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__calendar_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= calendar.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__calendar_bundle___depname = calendar_bundle

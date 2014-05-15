@@ -30,7 +30,7 @@
 extern WXDLLEXPORT_DATA(const char) wxFileDialogNameStr[] = "filedlg";
 extern WXDLLEXPORT_DATA(const char) wxFileSelectorPromptStr[] = "Select a file";
 extern WXDLLEXPORT_DATA(const char) wxFileSelectorDefaultWildcardStr[] =
-#if defined(__WXMSW__) || defined(__OS2__)
+#if defined(__WXMSW__)
     "*.*"
 #else // Unix/Mac
     "*"

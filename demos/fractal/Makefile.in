@@ -48,7 +48,6 @@ FRACTAL_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
 FRACTAL_OBJECTS =  \
-	$(__fractal_os2_lib_res) \
 	fractal_fractal.o \
 	$(__fractal___win32rc)
 
@@ -87,8 +86,6 @@ COND_PLATFORM_OS2_1___fractal___os2_emxbindcmd = $(NM) fractal$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__fractal___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___fractal___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_PLATFORM_OS2_1@__fractal_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__fractal_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= fractal.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__fractal_bundle___depname = fractal_bundle

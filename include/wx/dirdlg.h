@@ -108,8 +108,7 @@ protected:
     #include "wx/cocoa/dirdlg.h"    // Native Cocoa
 #elif defined(__WXMOTIF__) || \
       defined(__WXX11__)   || \
-      defined(__WXCOCOA__) || \
-      defined(__WXPM__)
+      defined(__WXCOCOA__)
     #include "wx/generic/dirdlgg.h"     // Other ports use generic implementation
     #define wxDirDialog wxGenericDirDialog
 #endif

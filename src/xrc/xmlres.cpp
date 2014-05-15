@@ -597,9 +597,6 @@ static void ProcessPlatformProperty(wxXmlNode *node)
 #elif defined(__UNIX__)
                 if (s == wxT("unix")) isok = true;
 #endif
-#ifdef __OS2__
-                if (s == wxT("os2")) isok = true;
-#endif
 
                 if (isok)
                     break;

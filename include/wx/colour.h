@@ -65,7 +65,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLIMPEXP_CORE)
     not need the wxGDIObject machinery to handle colors, please add it to the
     list of ports which do not need it.
  */
-#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXPM__ ) || defined( __WXCOCOA__ )
+#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXCOCOA__ )
 #define wxCOLOUR_IS_GDIOBJECT 0
 #else
 #define wxCOLOUR_IS_GDIOBJECT 1
@@ -221,8 +221,6 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
     #include "wx/osx/colour.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/colour.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/colour.h"
 #endif
 
 #define wxColor wxColour

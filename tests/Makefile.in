@@ -166,7 +166,6 @@ TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(__test_gui___win32rc) \
-	$(__test_gui_os2_lib_res) \
 	test_gui_asserthelper.o \
 	test_gui_test.o \
 	test_gui_testableframe.o \
@@ -308,8 +307,6 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__test_gui___win32rc = test_gui_sample_rc.o
-@COND_PLATFORM_OS2_1@__test_gui_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_gui_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	= test_gui.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@__test_gui_bundle___depname \

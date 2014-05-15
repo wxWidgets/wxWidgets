@@ -708,8 +708,6 @@ protected:
     #include "wx/osx/app.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/app.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/app.h"
 #endif
 
 #else // !GUI

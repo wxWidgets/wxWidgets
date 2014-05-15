@@ -50,7 +50,6 @@ CUBE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 CUBE_OBJECTS =  \
 	$(__cube___win32rc) \
-	$(__cube_os2_lib_res) \
 	cube_cube.o
 
 ### Conditionally set variables: ###
@@ -90,8 +89,6 @@ COND_PLATFORM_OS2_1___cube___os2_emxbindcmd = $(NM) cube$(EXEEXT) | if grep -q \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__cube___win32rc = cube_sample_rc.o
-@COND_PLATFORM_OS2_1@__cube_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@__cube_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	= cube.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@__cube_bundle___depname = cube_bundle

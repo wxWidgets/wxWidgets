@@ -90,8 +90,6 @@ protected:
     #include "wx/gtk/statline.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk1/statline.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/statline.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/statline.h"
 #elif defined(__WXCOCOA__)

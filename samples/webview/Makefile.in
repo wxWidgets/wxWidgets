@@ -49,7 +49,6 @@ WEBVIEW_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
 WEBVIEW_OBJECTS =  \
-	$(__webview_os2_lib_res) \
 	webview_webview.o \
 	$(__webview___win32rc)
 
@@ -89,8 +88,6 @@ COND_PLATFORM_OS2_1___webview___os2_emxbindcmd = $(NM) webview$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__webview___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___webview___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_PLATFORM_OS2_1@__webview_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__webview_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= webview.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__webview_bundle___depname = webview_bundle

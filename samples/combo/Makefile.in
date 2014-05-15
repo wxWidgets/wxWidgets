@@ -50,7 +50,6 @@ COMBO_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 COMBO_OBJECTS =  \
 	$(__combo___win32rc) \
-	$(__combo_os2_lib_res) \
 	combo_combo.o
 
 ### Conditionally set variables: ###
@@ -90,8 +89,6 @@ COND_PLATFORM_OS2_1___combo___os2_emxbindcmd = $(NM) combo$(EXEEXT) | if grep -q
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__combo___win32rc = combo_sample_rc.o
-@COND_PLATFORM_OS2_1@__combo_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__combo_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= combo.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__combo_bundle___depname = combo_bundle

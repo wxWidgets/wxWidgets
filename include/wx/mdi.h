@@ -350,7 +350,6 @@ public:
     // probably not functional?)
     #if defined(__WXCOCOA__) || \
         defined(__WXMOTIF__) || \
-        defined(__WXPM__) || \
         defined(__WXUNIVERSAL__)
         #define wxUSE_GENERIC_MDI_AS_NATIVE   1
     #else
