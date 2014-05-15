@@ -256,7 +256,7 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
     // If possible, we prefer to define it as a macro rather than as a function
     // to open the debugger at the position where we trapped and not inside the
     // trap function itself which is not very useful.
-    #if wxCHECK_VISUALC_VERSION(7)
+    #ifdef __VISUALC__
         #define wxTrap() __debugbreak()
     #else
         extern WXDLLIMPEXP_BASE void wxTrap();

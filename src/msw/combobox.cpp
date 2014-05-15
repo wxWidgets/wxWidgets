@@ -389,13 +389,9 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 
 WXHWND wxComboBox::GetEditHWNDIfAvailable() const
 {
-    // FIXME-VC6: Only VC6 needs this guard, see WINVER definition in
-    //            include/wx/msw/wrapwin.h
-#if defined(WINVER) && WINVER >= 0x0500
     WinStruct<COMBOBOXINFO> info;
     if ( MSWGetComboBoxInfo(&info) )
         return info.hwndItem;
-#endif // WINVER >= 0x0500
 
     if (HasFlag(wxCB_SIMPLE))
     {

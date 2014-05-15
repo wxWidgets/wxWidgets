@@ -150,16 +150,6 @@
 #endif
 
 /*
- * See WINVER definition in wx/msw/wrapwin.h for the explanation of this test
- * logic.
- */
-#if (defined(__VISUALC__) && (__VISUALC__ < 1300)) && \
-        (!defined(WINVER) || WINVER < 0x0500)
-#   undef wxUSE_TASKBARICON_BALLOONS
-#   define wxUSE_TASKBARICON_BALLOONS 0
-#endif
-
-/*
  * All of the settings below require SEH support (__try/__catch) and can't work
  * without it.
  */

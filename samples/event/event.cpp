@@ -127,9 +127,7 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-#ifdef wxHAS_EVENT_BIND
     void OnBind(wxCommandEvent& event);
-#endif // wxHAS_EVENT_BIND
     void OnConnect(wxCommandEvent& event);
     void OnDynamic(wxCommandEvent& event);
     void OnPushEventHandler(wxCommandEvent& event);
@@ -247,9 +245,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Quit,  MyFrame::OnQuit)
     EVT_MENU(Event_About, MyFrame::OnAbout)
 
-#ifdef wxHAS_EVENT_BIND
     EVT_MENU(Event_Bind, MyFrame::OnBind)
-#endif // wxHAS_EVENT_BIND
     EVT_MENU(Event_Connect, MyFrame::OnConnect)
 
     EVT_MENU(Event_Custom, MyFrame::OnFireCustom)
@@ -369,10 +365,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Event_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     wxMenu *menuEvent = new wxMenu;
-#ifdef wxHAS_EVENT_BIND
     menuEvent->AppendCheckItem(Event_Bind, "&Bind\tCtrl-B",
                                "Bind or unbind a dynamic event handler");
-#endif // wxHAS_EVENT_BIND
     menuEvent->AppendCheckItem(Event_Connect, wxT("&Connect\tCtrl-C"),
                      wxT("Connect or disconnect the dynamic event handler"));
     menuEvent->Append(Event_Dynamic, wxT("&Dynamic event\tCtrl-D"),
@@ -511,8 +505,6 @@ void MyFrame::OnDynamic(wxCommandEvent& event)
     );
 }
 
-#ifdef wxHAS_EVENT_BIND
-
 void MyFrame::OnBind(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
@@ -537,8 +529,6 @@ void MyFrame::OnBind(wxCommandEvent& event)
 
     UpdateDynamicStatus(event.IsChecked());
 }
-
-#endif // wxHAS_EVENT_BIND
 
 void MyFrame::OnConnect(wxCommandEvent& event)
 {

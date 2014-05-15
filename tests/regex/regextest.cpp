@@ -133,8 +133,7 @@ RegExTestCase::RegExTestCase(
     m_advanced(false)
 {
     bool badconv = m_pattern == convError() || m_data == convError();
-    //RN:  Removing the std:: here will break MSVC6 compilation
-    std::vector<const char *>::const_iterator it;
+    vector<const char *>::const_iterator it;
 
     for (it = expected.begin(); it != expected.end(); ++it) {
         m_expected.push_back(Conv(*it));

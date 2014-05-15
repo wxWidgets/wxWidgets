@@ -24,15 +24,17 @@
 // something you can printf() to
 // ----------------------------------------------------------------------------
 
-// NB: VC6 has a bug that causes linker errors if you have template methods
-//     in a class using __declspec(dllimport). The solution is to split such
-//     class into two classes, one that contains the template methods and does
-//     *not* use WXDLLIMPEXP_BASE and another class that contains the rest
-//     (with DLL linkage).
-class wxMessageOutputBase
+class WXDLLIMPEXP_BASE wxMessageOutput
 {
 public:
-    virtual ~wxMessageOutputBase() { }
+    virtual ~wxMessageOutput() { }
+
+    // gets the current wxMessageOutput object (may be NULL during
+    // initialization or shutdown)
+    static wxMessageOutput* Get();
+
+    // sets the global wxMessageOutput instance; returns the previous one
+    static wxMessageOutput* Set(wxMessageOutput* msgout);
 
     // show a message to the user
     // void Printf(const wxString& format, ...) = 0;
@@ -55,50 +57,16 @@ public:
     virtual void Output(const wxString& str) = 0;
 
 protected:
-    // NB: this is pure virtual so that it can be implemented in dllexported
-    //     wxMessagOutput class
 #if !wxUSE_UTF8_LOCALE_ONLY
-    virtual void DoPrintfWchar(const wxChar *format, ...) = 0;
+    void DoPrintfWchar(const wxChar *format, ...);
 #endif
 #if wxUSE_UNICODE_UTF8
-    virtual void DoPrintfUtf8(const char *format, ...) = 0;
-#endif
-};
-
-#ifdef __VISUALC__
-    // "non dll-interface class 'wxStringPrintfMixin' used as base interface
-    // for dll-interface class 'wxString'" -- this is OK in our case
-    #pragma warning (push)
-    #pragma warning (disable:4275)
-#endif
-
-class WXDLLIMPEXP_BASE wxMessageOutput : public wxMessageOutputBase
-{
-public:
-    virtual ~wxMessageOutput() { }
-
-    // gets the current wxMessageOutput object (may be NULL during
-    // initialization or shutdown)
-    static wxMessageOutput* Get();
-
-    // sets the global wxMessageOutput instance; returns the previous one
-    static wxMessageOutput* Set(wxMessageOutput* msgout);
-
-protected:
-#if !wxUSE_UTF8_LOCALE_ONLY
-    virtual void DoPrintfWchar(const wxChar *format, ...) wxOVERRIDE;
-#endif
-#if wxUSE_UNICODE_UTF8
-    virtual void DoPrintfUtf8(const char *format, ...) wxOVERRIDE;
+    void DoPrintfUtf8(const char *format, ...);
 #endif
 
 private:
     static wxMessageOutput* ms_msgOut;
 };
-
-#ifdef __VISUALC__
-    #pragma warning (pop)
-#endif
 
 // ----------------------------------------------------------------------------
 // implementation which sends output to stderr or specified file

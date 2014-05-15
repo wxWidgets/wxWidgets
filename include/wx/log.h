@@ -1335,21 +1335,6 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 //
 //       See also #11829 for the problems with other simpler approaches,
 //       notably the need for two macros due to buggy __LINE__ in MSVC.
-//
-// Note 2: Unfortunately we can't use the same solution for all compilers
-//         because the loop-based one results in problems with MSVC6 due to its
-//         wrong (pre-C++98) rules for the scope of the variables declared
-//         inside the loop, as this prevents us from using wxLogXXX() in switch
-//         statement clauses ("initialization of loopvar skipped by case"). So
-//         for now, i.e. while we still support VC6, use the previous solution
-//         for it (FIXME-VC6).
-#ifdef __VISUALC6__
-#define wxDO_LOG_IF_ENABLED(level)                                            \
-    if ( !wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT) )             \
-    {}                                                                        \
-    else                                                                      \
-        wxDO_LOG(level)
-#else
 #define wxDO_LOG_IF_ENABLED_HELPER(level, loopvar)                            \
     for ( bool loopvar = false;                                               \
           !loopvar && wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT);  \
@@ -1358,7 +1343,6 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 #define wxDO_LOG_IF_ENABLED(level)                                            \
     wxDO_LOG_IF_ENABLED_HELPER(level, wxMAKE_UNIQUE_NAME(wxlogcheck))
-#endif
 
 // wxLogFatalError() is special as it can't be disabled
 #define wxLogFatalError wxDO_LOG(FatalError)

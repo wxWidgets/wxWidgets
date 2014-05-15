@@ -38,7 +38,7 @@ file:
         <set var="_wxrc_options">-c -n InitXMLResource_$(_xrc_base)</set>
 
         <sources>$(_xrc_cpp)</sources>
-        <if cond="FORMAT not in ['msvc6prj','msvs2003prj','msvs2005prj']">
+        <if cond="FORMAT not in ['msvs2003prj','msvs2005prj']">
             <clean-files>$(_xrc_cpp)</clean-files>
             <add-target target="$(_xrc_cpp)" type="action"/>
             <modify-target target="$(_xrc_cpp)">
@@ -49,7 +49,7 @@ file:
                 </command>
             </modify-target>
         </if>
-        <if cond="FORMAT in ['msvc6prj','msvs2003prj','msvs2005prj']">
+        <if cond="FORMAT in ['msvs2003prj','msvs2005prj']">
             <sources>$(_xrc_file)</sources>
             <!--
                 A hack to add XRC compilation step to MSVC projects.

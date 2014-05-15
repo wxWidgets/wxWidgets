@@ -138,11 +138,7 @@ public:
     bool Hostname(unsigned long addr);
 
     // make base class methods hidden by our overload visible
-    //
-    // FIXME-VC6: replace this with "using IPAddress::Hostname" (not supported
-    //            by VC6) when support for it is dropped
-    wxString Hostname() const { return wxIPaddress::Hostname(); }
-    bool Hostname(const wxString& name) { return wxIPaddress::Hostname(name); }
+    using wxIPaddress::Hostname;
 
     bool BroadcastAddress();
 

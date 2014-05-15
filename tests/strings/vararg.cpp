@@ -124,12 +124,10 @@ void VarArgTestCase::CharPrintf()
 
     // test char used as integer:
     #ifdef _MSC_VER
-        #pragma warning(disable:4305) // truncation of constant value in VC6
         #pragma warning(disable:4309) // truncation of constant value
     #endif
     c = 240;
     #ifdef _MSC_VER
-        #pragma warning(default:4305) // truncation of constant value in VC6
         #pragma warning(default:4309)
     #endif
     s.Printf("value is %i (int)", c);
@@ -241,13 +239,7 @@ void VarArgTestCase::ArgsValidation()
     // but these are not:
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%i", "foo") );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", (void*)this) );
-
-    // for some reason assert is not generated with VC6, don't know what's
-    // going there so disable it for now to make the test suite pass when using
-    // this compiler until someone has time to debug this (FIXME-VC6)
-#ifndef __VISUALC6__
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%d", ptr) );
-#endif
 
     // we don't check wxNO_PRINTF_PERCENT_N here as these expressions should
     // result in an assert in our code before the CRT functions are even called

@@ -202,30 +202,30 @@ void wxAnyTestCase::Equality()
     CPPUNIT_ASSERT(m_anyStringString1 != L"ABC");
     CPPUNIT_ASSERT(m_anyBool1 == true);
     CPPUNIT_ASSERT(m_anyBool1 != false);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(wxANY_AS(m_anyFloatDouble1, double),
-                                 wxANY_AS(m_anyDoubleDouble1, double),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble1.As<double>(),
+                                 m_anyDoubleDouble1.As<double>(),
                                  FEQ_DELTA);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(wxANY_AS(m_anyFloatDouble1, double),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble1.As<double>(),
                                  TEST_FLOAT_CONST,
                                  FEQ_DELTA);
-    CPPUNIT_ASSERT(wxANY_AS(m_anyWxObjectPtr1, wxObject*)
+    CPPUNIT_ASSERT(m_anyWxObjectPtr1.As<wxObject*>()
                         == dummyWxObjectPointer);
-    CPPUNIT_ASSERT(wxANY_AS(m_anyVoidPtr1, void*) == dummyVoidPointer);
+    CPPUNIT_ASSERT(m_anyVoidPtr1.As<void*>() == dummyVoidPointer);
 
     CPPUNIT_ASSERT(m_anySignedLong2 == 15);
     CPPUNIT_ASSERT(m_anyStringString2 == wxString("abc"));
     CPPUNIT_ASSERT(m_anyStringString2 == "abc");
     CPPUNIT_ASSERT(m_anyStringString2 == L"abc");
     CPPUNIT_ASSERT(m_anyBool2 == true);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(wxANY_AS(m_anyFloatDouble2, double),
-                                 wxANY_AS(m_anyDoubleDouble2, double),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble2.As<double>(),
+                                 m_anyDoubleDouble2.As<double>(),
                                  FEQ_DELTA);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(wxANY_AS(m_anyFloatDouble2, double),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(m_anyFloatDouble2.As<double>(),
                                  TEST_FLOAT_CONST,
                                  FEQ_DELTA);
-    CPPUNIT_ASSERT(wxANY_AS(m_anyWxObjectPtr2, wxObject*)
+    CPPUNIT_ASSERT(m_anyWxObjectPtr2.As<wxObject*>()
                         == dummyWxObjectPointer);
-    CPPUNIT_ASSERT(wxANY_AS(m_anyVoidPtr2, void*) == dummyVoidPointer);
+    CPPUNIT_ASSERT(m_anyVoidPtr2.As<void*>() == dummyVoidPointer);
 
     // Test sub-type system type compatibility
     CPPUNIT_ASSERT(m_anySignedShort1.GetType()->
@@ -238,58 +238,58 @@ void wxAnyTestCase::As()
 {
     //
     // Test getting C++ data from wxAny without dynamic conversion
-    signed char a = wxANY_AS(m_anySignedChar1, signed char);
+    signed char a = m_anySignedChar1.As<signed char>();
     CPPUNIT_ASSERT(a == (signed int)15);
-    signed short b = wxANY_AS(m_anySignedShort1, signed short);
+    signed short b = m_anySignedShort1.As<signed short>();
     CPPUNIT_ASSERT(b == (signed int)15);
-    signed int c = wxANY_AS(m_anySignedInt1, signed int);
+    signed int c = m_anySignedInt1.As<signed int>();
     CPPUNIT_ASSERT(c == (signed int)15);
-    signed long d = wxANY_AS(m_anySignedLong1, signed long);
+    signed long d = m_anySignedLong1.As<signed long>();
     CPPUNIT_ASSERT(d == (signed int)15);
 #ifdef wxLongLong_t
-    wxLongLong_t e = wxANY_AS(m_anySignedLongLong1, wxLongLong_t);
+    wxLongLong_t e = m_anySignedLongLong1.As<wxLongLong_t>();
     CPPUNIT_ASSERT(e == (signed int)15);
 #endif
-    unsigned char f = wxANY_AS(m_anyUnsignedChar1, unsigned char);
+    unsigned char f = m_anyUnsignedChar1.As<unsigned char>();
     CPPUNIT_ASSERT(f == (unsigned int)15);
-    unsigned short g = wxANY_AS(m_anyUnsignedShort1, unsigned short);
+    unsigned short g = m_anyUnsignedShort1.As<unsigned short>();
     CPPUNIT_ASSERT(g == (unsigned int)15);
-    unsigned int h = wxANY_AS(m_anyUnsignedInt1, unsigned int);
+    unsigned int h = m_anyUnsignedInt1.As<unsigned int>();
     CPPUNIT_ASSERT(h == (unsigned int)15);
-    unsigned long i = wxANY_AS(m_anyUnsignedLong1, unsigned long);
+    unsigned long i = m_anyUnsignedLong1.As<unsigned long>();
     CPPUNIT_ASSERT(i == (unsigned int)15);
 #ifdef wxLongLong_t
-    wxULongLong_t j = wxANY_AS(m_anyUnsignedLongLong1, wxULongLong_t);
+    wxULongLong_t j = m_anyUnsignedLongLong1.As<wxULongLong_t>();
     CPPUNIT_ASSERT(j == (unsigned int)15);
 #endif
-    wxString k = wxANY_AS(m_anyStringString1, wxString);
+    wxString k = m_anyStringString1.As<wxString>();
     CPPUNIT_ASSERT(k == "abc");
-    wxString l = wxANY_AS(m_anyCharString1, wxString);
-    const char* cptr = wxANY_AS(m_anyCharString1, const char*);
+    wxString l = m_anyCharString1.As<wxString>();
+    const char* cptr = m_anyCharString1.As<const char*>();
     CPPUNIT_ASSERT(l == "abc");
     CPPUNIT_ASSERT(cptr);
-    wxString m = wxANY_AS(m_anyWcharString1, wxString);
-    const wchar_t* wcptr = wxANY_AS(m_anyWcharString1, const wchar_t*);
+    wxString m = m_anyWcharString1.As<wxString>();
+    const wchar_t* wcptr = m_anyWcharString1.As<const wchar_t*>();
     CPPUNIT_ASSERT(wcptr);
     CPPUNIT_ASSERT(m == "abc");
-    bool n = wxANY_AS(m_anyBool1, bool);
+    bool n = m_anyBool1.As<bool>();
     CPPUNIT_ASSERT(n);
 
     // Make sure the stored float that comes back is -identical-.
     // So do not use delta comparison here.
-    float o = wxANY_AS(m_anyFloatDouble1, float);
+    float o = m_anyFloatDouble1.As<float>();
     CPPUNIT_ASSERT_EQUAL(o, TEST_FLOAT_CONST);
 
-    double p = wxANY_AS(m_anyDoubleDouble1, double);
+    double p = m_anyDoubleDouble1.As<double>();
     CPPUNIT_ASSERT_EQUAL(p, TEST_DOUBLE_CONST);
 
-    wxUniChar chr = wxANY_AS(m_anyUniChar1, wxUniChar);
+    wxUniChar chr = m_anyUniChar1.As<wxUniChar>();
     CPPUNIT_ASSERT(chr == 'A');
-    wxDateTime q = wxANY_AS(m_anyDateTime1, wxDateTime);
+    wxDateTime q = m_anyDateTime1.As<wxDateTime>();
     CPPUNIT_ASSERT(q == m_testDateTime);
-    wxObject* r = wxANY_AS(m_anyWxObjectPtr1, wxObject*);
+    wxObject* r = m_anyWxObjectPtr1.As<wxObject*>();
     CPPUNIT_ASSERT(r == dummyWxObjectPointer);
-    void* s = wxANY_AS(m_anyVoidPtr1, void*);
+    void* s = m_anyVoidPtr1.As<void*>();
     CPPUNIT_ASSERT(s == dummyVoidPointer);
 }
 
@@ -567,7 +567,7 @@ void wxAnyTestCase::wxVariantConversions()
 #endif
 
     any = vDouble;
-    double d = wxANY_AS(any, double);
+    double d = any.As<double>();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(d, TEST_FLOAT_CONST, FEQ_DELTA);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
@@ -576,13 +576,13 @@ void wxAnyTestCase::wxVariantConversions()
                                  FEQ_DELTA);
 
     any = vBool;
-    CPPUNIT_ASSERT(wxANY_AS(any, bool) == true);
+    CPPUNIT_ASSERT(any.As<bool>() == true);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetBool() == true);
 
     any = wxAny(vChar);
-    //CPPUNIT_ASSERT(wxANY_AS(any, wxUniChar) == 'A');
+    //CPPUNIT_ASSERT(any.As<wxUniChar>() == 'A');
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetChar() == 'A');
@@ -620,9 +620,9 @@ void wxAnyTestCase::wxVariantConversions()
     CPPUNIT_ASSERT(arrstr2 == arrstr);
 
     any = m_testDateTime;
-    CPPUNIT_ASSERT(wxANY_AS(any, wxDateTime) == m_testDateTime);
+    CPPUNIT_ASSERT(any.As<wxDateTime>() == m_testDateTime);
     any = wxAny(vDateTime);
-    CPPUNIT_ASSERT(wxANY_AS(any, wxDateTime) == m_testDateTime);
+    CPPUNIT_ASSERT(any.As<wxDateTime>() == m_testDateTime);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant == m_testDateTime);
@@ -634,10 +634,10 @@ void wxAnyTestCase::wxVariantConversions()
 
     any = wxAny(vList);
     CPPUNIT_ASSERT(wxANY_CHECK_TYPE(any, wxAnyList));
-    wxAnyList anyList = wxANY_AS(any, wxAnyList);
+    wxAnyList anyList = any.As<wxAnyList>();
     CPPUNIT_ASSERT(anyList.GetCount() == 2);
-    CPPUNIT_ASSERT(wxANY_AS((*anyList[0]), int) == 15);
-    CPPUNIT_ASSERT(wxANY_AS((*anyList[1]), wxString) == "abc");
+    CPPUNIT_ASSERT((*anyList[0]).As<int>() == 15);
+    CPPUNIT_ASSERT((*anyList[1]).As<wxString>() == "abc");
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetType() == "list");
@@ -695,7 +695,7 @@ void wxAnyTestCase::CustomTemplateSpecialization()
     wxAny any = myObject;
 
     CPPUNIT_ASSERT( wxANY_CHECK_TYPE(any, MyClass) );
-    MyClass myObject2 = wxANY_AS(any, MyClass);
+    MyClass myObject2 = any.As<MyClass>();
     wxUnusedVar(myObject2);
 
     wxString str;
@@ -730,7 +730,7 @@ void wxAnyTestCase::Misc()
         }
 
         wxAny any2 = any;
-        CPPUNIT_ASSERT( wxANY_AS(any2, MyClass).GetValue() == 15 );
+        CPPUNIT_ASSERT( any2.As<MyClass>().GetValue() == 15 );
     }
 
     // Make sure allocations and deallocations match

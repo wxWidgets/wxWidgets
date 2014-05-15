@@ -22,7 +22,7 @@
 #if wxCHECK_GCC_VERSION(3, 3)
     #define HAVE_COMPILER_THREAD
     #define wxTHREAD_SPECIFIC __thread
-#elif wxCHECK_VISUALC_VERSION(7)
+#elif defined(__VISUALC__)
     #define HAVE_COMPILER_THREAD
     #define wxTHREAD_SPECIFIC __declspec(thread)
 #endif

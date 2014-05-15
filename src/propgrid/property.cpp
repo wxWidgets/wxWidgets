@@ -508,13 +508,10 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         wxPGCell& cell = m_cells[i];
         if ( cell.IsInvalid() )
         {
-            const wxPGCell& propDefCell = propgrid->GetPropertyDefaultCell();
-            const wxPGCell& catDefCell = propgrid->GetCategoryDefaultCell();
-
             if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                cell = propDefCell;
+                cell = propgrid->GetPropertyDefaultCell();
             else
-                cell = catDefCell;
+                cell = propgrid->GetCategoryDefaultCell();
         }
     }
 
@@ -1567,14 +1564,10 @@ void wxPGProperty::EnsureCells( unsigned int column )
 
         if ( pg )
         {
-            // Work around possible VC6 bug by using intermediate variables
-            const wxPGCell& propDefCell = pg->GetPropertyDefaultCell();
-            const wxPGCell& catDefCell = pg->GetCategoryDefaultCell();
-
             if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                defaultCell = propDefCell;
+                defaultCell = pg->GetPropertyDefaultCell();
             else
-                defaultCell = catDefCell;
+                defaultCell = pg->GetCategoryDefaultCell();
         }
 
         // TODO: Replace with resize() call

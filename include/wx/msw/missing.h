@@ -10,24 +10,6 @@
 #ifndef _WX_MISSING_H_
 #define _WX_MISSING_H_
 
-/*
- * The following are required for VC++ 6.
- */
-
-// Needed by cursor.cpp
-#ifndef IDC_HAND
-    #define IDC_HAND MAKEINTRESOURCE(32649)
-#endif
-
-// Needed by strconv.cpp
-#ifndef WC_NO_BEST_FIT_CHARS
-    #define WC_NO_BEST_FIT_CHARS 0x400
-#endif
-
-#ifndef WM_CONTEXTMENU
-    #define WM_CONTEXTMENU      0x007B
-#endif
-
 #ifndef WM_CHANGEUISTATE
     #define WM_CHANGEUISTATE    0x0127
 #endif
@@ -526,8 +508,7 @@ typedef struct
 
 #endif
 
-//Various defines that will be needed by mingw and possibly VC++6
-//Used by the webview library
+// Various defines used by the webview library that are needed by mingw 
 
 #ifndef DISPID_COMMANDSTATECHANGE
 #define DISPID_COMMANDSTATECHANGE 105

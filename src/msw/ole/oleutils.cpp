@@ -146,7 +146,7 @@ bool wxVariantDataCurrency::GetAsAny(wxAny* any) const
 
 wxVariantData* wxVariantDataCurrency::VariantDataFactory(const wxAny& any)
 {
-    return new wxVariantDataCurrency(wxANY_AS(any, CURRENCY));
+    return new wxVariantDataCurrency(any.As<CURRENCY>());
 }
 
 REGISTER_WXANY_CONVERSION(CURRENCY, wxVariantDataCurrency)
@@ -199,7 +199,7 @@ bool wxVariantDataErrorCode::GetAsAny(wxAny* any) const
 
 wxVariantData* wxVariantDataErrorCode::VariantDataFactory(const wxAny& any)
 {
-    return new wxVariantDataErrorCode(wxANY_AS(any, SCODE));
+    return new wxVariantDataErrorCode(any.As<SCODE>());
 }
 
 REGISTER_WXANY_CONVERSION(SCODE, wxVariantDataErrorCode)
@@ -247,7 +247,7 @@ bool wxVariantDataSafeArray::GetAsAny(wxAny* any) const
 
 wxVariantData* wxVariantDataSafeArray::VariantDataFactory(const wxAny& any)
 {
-    return new wxVariantDataSafeArray(wxANY_AS(any, SAFEARRAY*));
+    return new wxVariantDataSafeArray(any.As<SAFEARRAY*>());
 }
 
 REGISTER_WXANY_CONVERSION(SAFEARRAY*, wxVariantDataSafeArray)
@@ -331,13 +331,7 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
         oleVariant.vt = VT_I4;
         oleVariant.lVal = variant.GetLong() ;
     }
-    // Original VC6 came with SDK too old to contain VARIANT::llVal declaration
-    // and there doesn't seem to be any way to test for it as Microsoft simply
-    // added it to the later version of oaidl.h without changing anything else.
-    // So assume it's not present for VC6, even though it might be if an
-    // updated SDK is used. In this case the user would need to disable this
-    // check himself.
-#if wxUSE_LONGLONG && !defined(__VISUALC6__)
+#if wxUSE_LONGLONG
     else if (type == wxT("longlong"))
     {
         oleVariant.vt = VT_I8;
@@ -513,8 +507,7 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long fla
 #endif // wxUSE_DATETIME
                 break;
 
-                // See the comment before the __VISUALC6__ test above.
-#if wxUSE_LONGLONG && !defined(__VISUALC6__)
+#if wxUSE_LONGLONG
             case VT_I8:
                 variant = wxLongLong(oleVariant.llVal);
                 break;

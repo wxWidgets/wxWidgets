@@ -332,9 +332,6 @@ wxPersistentObject *wxCreatePersistentObject(T *obj);
     wxPersistenceManager::Get() internally. As an additional convenience, this
     function can also set the window name.
 
-    For the implementation reasons, this function @em must be used instead of
-    the template method when using Microsoft Visual C++ 6 compiler.
-
     @param obj wxWindow-derived object to register with persistence manager and
         to try to restore the settings for.
     @param name If not empty, @a obj name is changed to the provided value

@@ -57,18 +57,6 @@
         </steps>
     </build>
     <build>
-        <name>XPSP2 VC6 wxMSW trunk release</name>
-        <builddir>XPSP2_VC6_wxMSW_trunk_release</builddir>
-        <scheduler>trunk_quick</scheduler>
-        <sandbox>VC6</sandbox>
-        <make>nmake /nologo /f makefile.vc BUILD=release SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunit.lib</make>
-        <steps>
-            <checkout/>
-            <compile-all tests="true"/>
-            <run-tests/>
-        </steps>
-    </build>
-    <build>
         <name>XPSP2 VC6 wxMSW stable release</name>
         <builddir>XPSP2_VC6_wxMSW_stable_release</builddir>
         <scheduler>stable_quick</scheduler>
@@ -77,18 +65,6 @@
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
             <compile-all contrib="false" tests="true"/>
-            <run-tests/>
-        </steps>
-    </build>
-    <build>
-        <name>XPSP2 VC6 wxMSW trunk debug</name>
-        <builddir>XPSP2_VC6_wxMSW_trunk_debug</builddir>
-        <scheduler>daily_0600</scheduler>
-        <sandbox>VC6</sandbox>
-        <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunitd.lib</make>
-        <steps>
-            <checkout/>
-            <compile-all tests="true"/>
             <run-tests/>
         </steps>
     </build>

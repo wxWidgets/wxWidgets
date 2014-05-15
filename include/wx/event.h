@@ -28,12 +28,10 @@
 #include "wx/typeinfo.h"
 #include "wx/any.h"
 
-#ifdef wxHAS_EVENT_BIND
-    #include "wx/meta/convertible.h"
-#endif
+#include "wx/meta/convertible.h"
 
-// Currently VC6 and VC7 are known to not be able to compile CallAfter() code,
-// so disable it for them.
+// Currently VC7 is known to not be able to compile CallAfter() code, so
+// disable it for it (FIXME-VC7).
 #if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(8)
     #include "wx/meta/removeref.h"
 
@@ -96,59 +94,38 @@ typedef int wxEventType;
 // generate a new unique event type
 extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
-// define macros to create new event types:
-#ifdef wxHAS_EVENT_BIND
-    // events are represented by an instance of wxEventTypeTag and the
-    // corresponding type must be specified for type-safety checks
+// events are represented by an instance of wxEventTypeTag and the
+// corresponding type must be specified for type-safety checks
 
-    // define a new custom event type, can be used alone or after event
-    // declaration in the header using one of the macros below
-    #define wxDEFINE_EVENT( name, type ) \
-        const wxEventTypeTag< type > name( wxNewEventType() )
+// define a new custom event type, can be used alone or after event
+// declaration in the header using one of the macros below
+#define wxDEFINE_EVENT( name, type ) \
+    const wxEventTypeTag< type > name( wxNewEventType() )
 
-    // the general version allowing exporting the event type from DLL, used by
-    // wxWidgets itself
-    #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
-        extern const expdecl wxEventTypeTag< type > name
+// the general version allowing exporting the event type from DLL, used by
+// wxWidgets itself
+#define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
+    extern const expdecl wxEventTypeTag< type > name
 
-    // this is the version which will normally be used in the user code
-    #define wxDECLARE_EVENT( name, type ) \
-        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
+// this is the version which will normally be used in the user code
+#define wxDECLARE_EVENT( name, type ) \
+    wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
 
 
-    // these macros are only used internally for backwards compatibility and
-    // allow to define an alias for an existing event type (this is used by
-    // wxEVT_SPIN_XXX)
-    #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
-        const wxEventTypeTag< type > name( value )
+// these macros are only used internally for backwards compatibility and
+// allow to define an alias for an existing event type (this is used by
+// wxEVT_SPIN_XXX)
+#define wxDEFINE_EVENT_ALIAS( name, type, value ) \
+    const wxEventTypeTag< type > name( value )
 
-    #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
-        extern const expdecl wxEventTypeTag< type > name
-#else // !wxHAS_EVENT_BIND
-    // the macros are the same ones as above but defined differently as we only
-    // use the integer event type values to identify events in this case
-
-    #define wxDEFINE_EVENT( name, type ) \
-        const wxEventType name( wxNewEventType() )
-
-    #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
-        extern const expdecl wxEventType name
-    #define wxDECLARE_EVENT( name, type ) \
-        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
-
-    #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
-        const wxEventType name = value
-    #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
-        extern const expdecl wxEventType name
-#endif // wxHAS_EVENT_BIND/!wxHAS_EVENT_BIND
+#define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
+    extern const expdecl wxEventTypeTag< type > name
 
 // Try to cast the given event handler to the correct handler type:
 
 #define wxEVENT_HANDLER_CAST( functype, func ) \
     ( wxObjectEventFunction )( wxEventFunction )wxStaticCastEvent( functype, &func )
 
-
-#ifdef wxHAS_EVENT_BIND
 
 // The tag is a type associated to the event type (which is an integer itself,
 // in spite of its name) value. It exists in order to be used as a template
@@ -171,8 +148,6 @@ public:
 private:
     wxEventType m_type;
 };
-
-#endif // wxHAS_EVENT_BIND
 
 // These are needed for the functor definitions
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
@@ -232,14 +207,8 @@ public:
             const wxObjectEventFunctor &other =
                 static_cast< const wxObjectEventFunctor & >( functor );
 
-            // FIXME-VC6: amazing but true: replacing "m_method == 0" here
-            // with "!m_method" makes VC6 crash with an ICE in DLL build (only!)
-            // Also notice that using "NULL" instead of "0" results in warnings
-            // about "using NULL in arithmetics" from arm-linux-androideabi-g++
-            // 4.4.3 used for wxAndroid build.
-
-            return ( m_method == other.m_method || other.m_method == 0 ) &&
-                   ( m_handler == other.m_handler || other.m_handler == NULL );
+            return ( m_method == other.m_method || !other.m_method ) &&
+                   ( m_handler == other.m_handler || !other.m_handler );
         }
         else
             return false;
@@ -285,8 +254,6 @@ wxMakeEventFunctor(const wxEventType& WXUNUSED(evtType),
 {
     return wxObjectEventFunctor(method, handler);
 }
-
-#ifdef wxHAS_EVENT_BIND
 
 namespace wxPrivate
 {
@@ -614,8 +581,6 @@ wxNewEventTableFunctor(const EventTag&, void (Class::*method)(EventArg&))
     return new wxEventFunctorMethod<EventTag, Class, EventArg, Class>(
                     method, NULL);
 }
-
-#endif // wxHAS_EVENT_BIND
 
 
 // many, but not all, standard event types
@@ -1206,7 +1171,7 @@ class WXDLLIMPEXP_BASE wxEventAnyPayloadMixin : public wxEventBasicPayloadMixin
 public:
     wxEventAnyPayloadMixin() : wxEventBasicPayloadMixin() {}
 
-#if wxUSE_ANY && (!defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7))
+#if wxUSE_ANY
     template<typename T>
     void SetPayload(const T& payload)
     {
@@ -1221,7 +1186,7 @@ public:
 
 protected:
     wxAny m_payload;
-#endif // wxUSE_ANY && (!defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7))
+#endif // wxUSE_ANY
 
     wxDECLARE_NO_ASSIGN_CLASS(wxEventBasicPayloadMixin);
 };
@@ -3518,7 +3483,6 @@ public:
                     wxEvtHandler *eventSink = NULL)
         { return Disconnect(wxID_ANY, eventType, func, userData, eventSink); }
 
-#ifdef wxHAS_EVENT_BIND
     // Bind functions to an event:
     template <typename EventTag, typename EventArg>
     void Bind(const EventTag& eventType,
@@ -3600,7 +3564,6 @@ public:
                             wxMakeEventFunctor(eventType, method, handler),
                             userData);
     }
-#endif // wxHAS_EVENT_BIND
 
     wxList* GetDynamicEventTable() const { return m_dynamicEvents ; }
 
@@ -4385,41 +4348,6 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 // ----------------------------------------------------------------------------
 // Helper functions
 // ----------------------------------------------------------------------------
-
-// This is an ugly hack to allow the use of Bind() instead of Connect() inside
-// the library code if the library was built with support for it, here is how
-// it is used:
-//
-// class SomeEventHandlingClass : wxBIND_OR_CONNECT_HACK_BASE_CLASS
-//                                public SomeBaseClass
-// {
-// public:
-//     SomeEventHandlingClass(wxWindow *win)
-//     {
-//         // connect to the event for the given window
-//         wxBIND_OR_CONNECT_HACK(win, wxEVT_SOMETHING, wxSomeEventHandler,
-//                                SomeEventHandlingClass::OnSomeEvent, this);
-//     }
-//
-// private:
-//     void OnSomeEvent(wxSomeEvent&) { ... }
-// };
-//
-// This is *not* meant to be used by library users, it is only defined here
-// (and not in a private header) because the base class must be visible from
-// other public headers, please do NOT use this in your code, it will be
-// removed from future wx versions without warning.
-#ifdef wxHAS_EVENT_BIND
-    #define wxBIND_OR_CONNECT_HACK_BASE_CLASS
-    #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
-    #define wxBIND_OR_CONNECT_HACK(win, evt, handler, func, obj) \
-        win->Bind(evt, &func, obj)
-#else // wxHAS_EVENT_BIND
-    #define wxBIND_OR_CONNECT_HACK_BASE_CLASS public wxEvtHandler,
-    #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS : public wxEvtHandler
-    #define wxBIND_OR_CONNECT_HACK(win, evt, handler, func, obj) \
-        win->Connect(evt, handler(func), NULL, obj)
-#endif // wxHAS_EVENT_BIND
 
 #if wxUSE_GUI
 

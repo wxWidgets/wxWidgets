@@ -135,17 +135,11 @@ public:
 
     typedef typename BaseValidator::LongestValueType LongestValueType;
 
-    // FIXME-VC6: This compiler fails to compile the assert below with a
-    // nonsensical error C2248: "'LongestValueType' : cannot access protected
-    // typedef declared in class 'wxIntegerValidatorBase'" so just disable the
-    // check for it.
-#ifndef __VISUALC6__
     wxCOMPILE_TIME_ASSERT
     (
         sizeof(ValueType) <= sizeof(LongestValueType),
         UnsupportedType
     );
-#endif // __VISUALC6__
 
     void SetMin(ValueType min)
     {

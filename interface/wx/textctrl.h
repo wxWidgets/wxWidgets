@@ -1081,7 +1081,7 @@ public:
     stream.flush();
     @endcode
 
-    Note that even if your compiler doesn't support this (the symbol
+    Note that even if your build of wxWidgets doesn't support this (the symbol
     @c wxHAS_TEXT_WINDOW_STREAM has value of 0 then) you can still use
     wxTextCtrl itself in a stream-like manner:
 

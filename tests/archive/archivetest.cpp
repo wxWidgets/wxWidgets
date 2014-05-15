@@ -18,12 +18,6 @@
 
 #if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
 
-// VC++ 6 warns that the list iterator's '->' operator will not work whenever
-// std::list is used with a non-pointer, so switch it off.
-#if defined _MSC_VER && _MSC_VER < 1300
-#pragma warning (disable:4284)
-#endif
-
 #include "archivetest.h"
 #include "wx/dir.h"
 #include <string>

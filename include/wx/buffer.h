@@ -354,9 +354,6 @@ public:
     }
 };
 
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxScopedCharTypeBuffer<char> )
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<char> )
-
 class wxCharBuffer : public wxCharTypeBuffer<char>
 {
 public:
@@ -373,9 +370,6 @@ public:
 
     wxCharBuffer(const wxCStrData& cstr);
 };
-
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxScopedCharTypeBuffer<wchar_t> )
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<wchar_t> )
 
 class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {

@@ -13,7 +13,7 @@ I. CppUnit Installation
    (latest version as of the time of this writing is 1.10.2)
 
 2. Build the library:
- a) Under Windows using VC++ (versions 6, 7, 8 & 9 work):
+ a) Under Windows using VC++:
     - build everything in CppUnitLibraries.dsw work space
     - add include and lib subdirectories of the directory
       where you installed cppunit to the compiler search path

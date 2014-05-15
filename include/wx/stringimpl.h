@@ -87,13 +87,6 @@ extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
     #undef wxUSE_STD_STRING
     #define wxUSE_STD_STRING 1
 
-    // the versions of std::string included with gcc 2.95 and VC6 (for which
-    // _MSC_VER == 1200) and eVC4 (_MSC_VER == 1201) lack clear() method
-    #if (defined(__GNUG__) && (__GNUG__ < 3)) || \
-        !wxCHECK_VISUALC_VERSION(7) || defined(__EVC4__)
-        #define wxSTRING_BASE_HASNT_CLEAR
-    #endif
-
     typedef wxStdString wxStringImpl;
 #else // if !wxUSE_STL_BASED_WXSTRING
 

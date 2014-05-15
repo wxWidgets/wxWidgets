@@ -152,16 +152,14 @@ name##PluginSentinel  m_pluginsentinel
 #define wxDynamicCastThis(className) \
      (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
 
-// FIXME-VC6: dummy argument needed because VC6 doesn't support explicitly
-//            choosing the template function to call
 template <class T>
-inline T *wxCheckCast(const void *ptr, T * = NULL)
+inline T *wxCheckCast(const void *ptr)
 {
     wxASSERT_MSG( wxDynamicCast(ptr, T), "wxStaticCast() used incorrectly" );
     return const_cast<T *>(static_cast<const T *>(ptr));
 }
 
-#define wxStaticCast(obj, className) wxCheckCast((obj), (className *)NULL)
+#define wxStaticCast(obj, className) wxCheckCast<className>(obj)
 
 // ----------------------------------------------------------------------------
 // set up memory debugging macros
@@ -194,8 +192,7 @@ inline T *wxCheckCast(const void *ptr, T * = NULL)
     #define _WX_WANT_DELETE_VOID_CONSTCHAR_SIZET
 #endif
 
-// Only VC++ 6 gets overloaded delete that matches new
-#if (defined(__VISUALC__) && (__VISUALC__ >= 1200))
+#if defined(__VISUALC__)
     #define _WX_WANT_DELETE_VOID_WXCHAR_INT
 #endif
 

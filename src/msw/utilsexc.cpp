@@ -80,15 +80,6 @@
 
 #include "wx/msw/private/hiddenwin.h"
 
-// FIXME-VC6: These are not defined in VC6 SDK headers.
-#ifndef BELOW_NORMAL_PRIORITY_CLASS
-    #define BELOW_NORMAL_PRIORITY_CLASS 0x4000
-#endif
-
-#ifndef ABOVE_NORMAL_PRIORITY_CLASS
-    #define ABOVE_NORMAL_PRIORITY_CLASS 0x8000
-#endif
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------

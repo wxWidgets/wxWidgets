@@ -690,7 +690,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
     if (m_movie)
         Cleanup();
 
-    short movieResFile = 0; //= 0 because of annoying VC6 warning
+    short movieResFile wxDUMMY_INITIALIZE(0);
     FSSpec sfFile;
 
     OSErr err = m_lib.NativePathNameToFSSpec(
@@ -838,7 +838,7 @@ void wxQTMediaBackend::FinishLoad()
 
     // get the real size of the movie
     Rect outRect;
-    memset(&outRect, 0, sizeof(Rect)); // suppress annoying VC6 warning
+    memset(&outRect, 0, sizeof(Rect));
     m_lib.GetMovieNaturalBoundsRect (m_movie, &outRect);
     wxASSERT(m_lib.GetMoviesError() == noErr);
 

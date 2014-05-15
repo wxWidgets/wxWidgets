@@ -96,11 +96,11 @@ Microsoft Visual C++ Compilation
 
 * From the IDE using the provided project files:
 
-Ready to use project files are provided for VC++ versions 6, 7, 8, 9,
-10, 11 and 12 (also known as MSVS 6, 2003, 2005, 2008, 2010, 2012 and 2013
+Ready to use project files are provided for VC++ versions 7, 8, 9,
+10, 11 and 12 (also known as MSVS 2003, 2005, 2008, 2010, 2012 and 2013
 respectively).
 
-Simply open wx_vcN.sln (for N=7, 8, 9, 10, 11 or 12) or wx.dsw (for VC6) file,
+Simply open wx_vcN.sln (for N=7, 8, 9, 10, 11 or 12) file,
 select the appropriate configuration (Debug or Release, static or DLL)
 and build the solution. Notice that when building a DLL configuration,
 you may need to perform the build several times because the projects
@@ -495,7 +495,7 @@ following to use wxWidgets:
   - _UNICODE unless you want to use deprecated ANSI build of wxWidgets.
   - NDEBUG if you want to build in release mode, i.e. disable asserts.
   - WXUSINGDLL if you are using DLL build of wxWidgets.
-* If using MSVC 6 or 7 only (i.e. not for later versions), also define
+* If using MSVC 7 only (i.e. not for later versions), also define
   wxUSE_RC_MANIFEST=1 and WX_CPU_X86.
 * Add $WXWIN/lib/prefix_lib-or-dll to the libraries path. The prefix depends
   on the compiler, by default it is "vc" for MSVC, "gcc" for g++ and so on.

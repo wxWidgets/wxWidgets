@@ -20,7 +20,7 @@
 template<typename T>
 struct wxIsMovable
 {
-    wxDEFINE_TEMPLATE_BOOL_VALUE(wxIsPod<T>::value);
+    static const bool value = wxIsPod<T>::value;
 };
 
 // Macro to add wxIsMovable<T> specialization for given type that marks it

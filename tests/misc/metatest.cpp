@@ -59,9 +59,7 @@ void MetaProgrammingTestCase::IsPod()
     CPPUNIT_ASSERT(wxIsPod<bool>::value);
     CPPUNIT_ASSERT(wxIsPod<signed int>::value);
     CPPUNIT_ASSERT(wxIsPod<double>::value);
-#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
     CPPUNIT_ASSERT(wxIsPod<wxObject*>::value);
-#endif
     CPPUNIT_ASSERT(!wxIsPod<wxObject>::value);
 }
 
@@ -70,9 +68,7 @@ void MetaProgrammingTestCase::IsMovable()
     CPPUNIT_ASSERT(wxIsMovable<bool>::value);
     CPPUNIT_ASSERT(wxIsMovable<signed int>::value);
     CPPUNIT_ASSERT(wxIsMovable<double>::value);
-#if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
     CPPUNIT_ASSERT(wxIsMovable<wxObject*>::value);
-#endif
     CPPUNIT_ASSERT(!wxIsMovable<wxObject>::value);
 }
 

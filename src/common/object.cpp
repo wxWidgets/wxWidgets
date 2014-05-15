@@ -37,14 +37,14 @@
 // we must disable optimizations for VC.NET because otherwise its too eager
 // linker discards wxClassInfo objects in release build thus breaking many,
 // many things
-#if defined __VISUALC__ && __VISUALC__ >= 1300
+#if defined __VISUALC__
     #pragma optimize("", off)
 #endif
 
 #if wxUSE_EXTENDED_RTTI
 const wxClassInfo* wxObject::ms_classParents[] = { NULL } ;
 wxObject* wxVariantOfPtrToObjectConverterwxObject ( const wxAny &data )
-{ return wxANY_AS(data, wxObject*); }
+{ return data.As<wxObject*>(); }
  wxAny wxObjectToVariantConverterwxObject ( wxObject *data )
  { return wxAny( dynamic_cast<wxObject*> (data)  ) ; }
 
@@ -66,7 +66,7 @@ wxClassInfo wxObject::ms_classInfo( wxT("wxObject"), 0, 0,
 #endif
 
 // restore optimizations
-#if defined __VISUALC__ && __VISUALC__ >= 1300
+#if defined __VISUALC__
     #pragma optimize("", on)
 #endif
 

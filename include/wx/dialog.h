@@ -80,10 +80,8 @@ public:
     virtual void ShowWindowModal () ;
     virtual void SendWindowModalDialogEvent ( wxEventType type );
 
-#ifdef wxHAS_EVENT_BIND
     template<typename Functor>
     void ShowWindowModalThenDo(const Functor& onEndModal);
-#endif // wxHAS_EVENT_BIND
 
     // Modal dialogs have a return code - usually the id of the last
     // pressed button
@@ -397,7 +395,6 @@ typedef void (wxEvtHandler::*wxWindowModalDialogEventFunction)(wxWindowModalDial
 #define EVT_WINDOW_MODAL_DIALOG_CLOSED(winid, func) \
     wx__DECLARE_EVT1(wxEVT_WINDOW_MODAL_DIALOG_CLOSED, winid, wxWindowModalDialogEventHandler(func))
 
-#ifdef wxHAS_EVENT_BIND
 template<typename Functor>
 class wxWindowModalDialogEventFunctor
 {
@@ -435,7 +432,6 @@ void wxDialogBase::ShowWindowModalThenDo(const Functor& onEndModal)
          wxWindowModalDialogEventFunctor<Functor>(onEndModal));
     ShowWindowModal();
 }
-#endif // wxHAS_EVENT_BIND
 
 #endif
     // _WX_DIALOG_H_BASE_

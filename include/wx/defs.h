@@ -105,21 +105,6 @@
 #   endif
 
     /*
-       VC6 insists on complaining about
-
-        return type for 'wxVector<T>::reverse_iterator::operator ->' is 'T **'
-        (ie; not a UDT or reference to a UDT.  Will produce errors if applied
-        using infix notation)
-
-       which is perfectly fine because template classes do routinely define
-       operators which don't make sense for all template parameter values
-       (besides this warning was removed in subsequent versions).
-     */
-    #ifdef __VISUALC6__
-        #pragma warning(disable: 4284)
-    #endif /* VC6 */
-
-    /*
        When compiling with VC++ 7 /Wp64 option we get thousands of warnings for
        conversion from size_t to int or long. Some precious few of them might
        be worth looking into but unfortunately it seems infeasible to fix all
@@ -248,8 +233,7 @@ typedef short int WXTYPE;
 
 /*  check for explicit keyword support */
 #ifndef HAVE_EXPLICIT
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        /*  VC++ 6.0 and 5.0 have explicit (what about earlier versions?) */
+    #if defined(__VISUALC__)
         #define HAVE_EXPLICIT
     #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
           && wxCHECK_GCC_VERSION(2, 95)
@@ -364,8 +348,7 @@ typedef short int WXTYPE;
 #define wxConstCast(obj, className) wx_const_cast(className *, obj)
 
 #ifndef HAVE_STD_WSTRING
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        /*  VC++ 6.0 and 5.0 have std::wstring (what about earlier versions?) */
+    #if defined(__VISUALC__)
         #define HAVE_STD_WSTRING
     #elif defined(__MINGW32__) && wxCHECK_GCC_VERSION(3, 3)
         /*  GCC 3.1 has std::wstring; 3.0 never was in MinGW, 2.95 hasn't it */
@@ -374,9 +357,7 @@ typedef short int WXTYPE;
 #endif
 
 #ifndef HAVE_STD_STRING_COMPARE
-    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        /*  VC++ 6.0 and 5.0 have std::string::compare */
-        /*  (what about earlier versions?) */
+    #if defined(__VISUALC__)
         #define HAVE_STD_STRING_COMPARE
     #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
           && wxCHECK_GCC_VERSION(3, 1)
@@ -591,7 +572,7 @@ typedef short int WXTYPE;
 #       define WX_ATTRIBUTE_NORETURN __attribute__((analyzer_noreturn))
 #   elif defined( __GNUC__ )
 #       define WX_ATTRIBUTE_NORETURN __attribute__ ((noreturn))
-#   elif wxCHECK_VISUALC_VERSION(7)
+#   elif defined(__VISUALC__)
 #       define WX_ATTRIBUTE_NORETURN __declspec(noreturn)
 #   else
 #       define WX_ATTRIBUTE_NORETURN
@@ -618,7 +599,7 @@ typedef short int WXTYPE;
     #define wxDEPRECATED_DECL __attribute__((deprecated))
 #elif wxCHECK_GCC_VERSION(3, 1)
     #define wxDEPRECATED_DECL __attribute__((deprecated))
-#elif defined(__VISUALC__) && (__VISUALC__ >= 1300)
+#elif defined(__VISUALC__)
     #define wxDEPRECATED_DECL __declspec(deprecated)
 #else
     #define wxDEPRECATED_DECL
@@ -1272,7 +1253,7 @@ typedef wxUint32 wxDword;
     each time we cast it to a pointer or a handle (which results in hundreds
     of warnings as Win32 API often passes pointers in them)
  */
-#if wxCHECK_VISUALC_VERSION(7)
+#ifdef __VISUALC__
     #define wxW64 __w64
 #else
     #define wxW64
@@ -1602,45 +1583,6 @@ typedef double wxDouble;
         #define wxINT64_SWAP_ON_LE(val)  wxINT64_SWAP_ALWAYS(val)
         #define wxINT64_SWAP_ON_BE(val)  (val)
     #endif
-#endif
-
-/*  ---------------------------------------------------------------------------- */
-/*  template workarounds for buggy compilers */
-/*  ---------------------------------------------------------------------------- */
-
-#if defined(__GNUC__) && !wxCHECK_GCC_VERSION( 3, 4 )
-    /* GCC <= 3.4 has buggy template support */
-#  define wxUSE_MEMBER_TEMPLATES 0
-#endif
-
-#if defined(_MSC_VER) && _MSC_VER <= 1200
-    /* MSVC <= 6.0 has buggy template support */
-#  define wxUSE_MEMBER_TEMPLATES 0
-#  define wxUSE_FUNC_TEMPLATE_POINTER 0
-#endif
-
-#ifndef wxUSE_MEMBER_TEMPLATES
-#  define wxUSE_MEMBER_TEMPLATES 1
-#endif
-
-#ifndef wxUSE_FUNC_TEMPLATE_POINTER
-#  define wxUSE_FUNC_TEMPLATE_POINTER 1
-#endif
-
-#if wxUSE_MEMBER_TEMPLATES
-#  define wxTEMPLATED_MEMBER_CALL( method, type ) method<type>()
-#  define wxTEMPLATED_MEMBER_FIX( type )
-#else
-#  define wxTEMPLATED_MEMBER_CALL( method, type ) method((type*)NULL)
-#  define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
-#endif
-
-#if defined(_MSC_VER) && _MSC_VER <= 1200
-#  define wxTEMPLATED_FUNCTION_FIX( type ), wxTEMPLATED_MEMBER_FIX(type)
-#  define wxINFUNC_CLASS_TYPE_FIX( type ) typedef type type;
-#else
-#  define wxTEMPLATED_FUNCTION_FIX( type )
-#  define wxINFUNC_CLASS_TYPE_FIX( type )
 #endif
 
 /*  ---------------------------------------------------------------------------- */

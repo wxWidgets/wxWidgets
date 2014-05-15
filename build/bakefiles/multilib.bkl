@@ -305,7 +305,7 @@
     <wxshortcut id="wxaui" cond="MONOLITHIC=='0' and USE_AUI=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">aui=auilib+auidll</set>
-    
+
     <!-- ================================================================ -->
     <!--                            RIBBON                                -->
     <!-- ================================================================ -->

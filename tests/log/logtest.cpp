@@ -32,7 +32,7 @@
 #if WXWIN_COMPATIBILITY_2_8
     // we override deprecated DoLog() and DoLogString() in this test, suppress
     // warnings about it
-    #if wxCHECK_VISUALC_VERSION(7)
+    #ifdef __VISUALC__
         #pragma warning(disable: 4996)
     #endif // VC++ 7+
 #endif // WXWIN_COMPATIBILITY_2_8

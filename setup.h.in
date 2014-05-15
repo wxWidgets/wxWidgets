@@ -210,8 +210,7 @@
 
 #define wxUSE_STL 0
 
-#if defined(__DMC__) || defined(__WATCOMC__) \
-        || (defined(_MSC_VER) && _MSC_VER < 1200)
+#if defined(__DMC__) || defined(__WATCOMC__)
     #define wxUSE_STD_DEFAULT  0
 #else
     #define wxUSE_STD_DEFAULT  0
@@ -348,15 +347,7 @@
 
 
 #ifdef _MSC_VER
-#   if _MSC_VER >= 1310
-
-
 #define wxUSE_GRAPHICS_CONTEXT 0
-#   else
-
-
-#       define wxUSE_GRAPHICS_CONTEXT 0
-#   endif
 #else
 
 

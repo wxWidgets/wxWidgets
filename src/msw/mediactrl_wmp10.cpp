@@ -82,12 +82,6 @@
 // Other defines
 //---------------------------------------------------------------------------
 
-// disable "cast truncates constant value" for VARIANT_BOOL values
-// passed as parameters in VC6
-#ifdef _MSC_VER
-#pragma warning (disable:4310)
-#endif
-
 // error logger for HRESULTS (nothing really now)
 #define wxWMP10LOG(x)
 

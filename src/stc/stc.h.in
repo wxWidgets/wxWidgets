@@ -442,10 +442,7 @@ public:
 
     virtual void ShowPosition(long pos) { GotoPos((int)pos); }
 
-    // FIXME-VC6: can't use wxWindow here because of "error C2603: illegal
-    //            access declaration: 'wxWindow' is not a direct base of
-    //            'wxStyledTextCtrl'" with VC6
-    using wxControl::HitTest;
+    using wxWindow::HitTest;
 
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const
     {

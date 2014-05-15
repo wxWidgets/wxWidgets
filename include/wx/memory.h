@@ -109,8 +109,7 @@ void operator delete[] (void * buf);
 #endif // wxUSE_ARRAY_MEMORY_OPERATORS
 #endif // defined(__WINDOWS__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE))
 
-// VC++ 6.0
-#if ( defined(__VISUALC__) && (__VISUALC__ >= 1200) )
+#if defined(__VISUALC__)
 inline void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
     wxDebugFree(pData, false);
@@ -119,7 +118,7 @@ inline void operator delete[](void* pData, wxChar* /* fileName */, int /* lineNu
 {
     wxDebugFree(pData, true);
 }
-#endif // __VISUALC__>=1200
+#endif // __VISUALC__
 #endif // wxUSE_GLOBAL_MEMORY_OPERATORS
 
 //**********************************************************************************

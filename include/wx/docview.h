@@ -148,9 +148,7 @@ public:
     virtual bool AddView(wxView *view);
     virtual bool RemoveView(wxView *view);
 
-#ifndef __VISUALC6__
     wxViewVector GetViewsVector() const;
-#endif // !__VISUALC6__
 
     wxList& GetViews() { return m_documentViews; }
     const wxList& GetViews() const { return m_documentViews; }
@@ -480,10 +478,8 @@ public:
     wxView *GetAnyUsableView() const;
 
 
-#ifndef __VISUALC6__
     wxDocVector GetDocumentsVector() const;
     wxDocTemplateVector GetTemplatesVector() const;
-#endif // !__VISUALC6__
 
     wxList& GetDocuments() { return m_docs; }
     wxList& GetTemplates() { return m_templates; }
@@ -761,15 +757,6 @@ private:
 // otherwise we could simply typedef it
 // ----------------------------------------------------------------------------
 
-#ifdef __VISUALC6__
-    // "non dll-interface class 'wxDocChildFrameAny<>' used as base interface
-    // for dll-interface class 'wxDocChildFrame'" -- this is bogus as the
-    // template will be DLL-exported but only once it is used as base class
-    // here!
-    #pragma warning (push)
-    #pragma warning (disable:4275)
-#endif
-
 typedef wxDocChildFrameAny<wxFrame, wxFrame> wxDocChildFrameBase;
 
 class WXDLLIMPEXP_CORE wxDocChildFrame : public wxDocChildFrameBase
@@ -967,11 +954,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDocParentFrame);
 };
 
-#ifdef __VISUALC6__
-    // reenable warning 4275
-    #pragma warning (pop)
-#endif
-
 // ----------------------------------------------------------------------------
 // Provide simple default printing facilities
 // ----------------------------------------------------------------------------
@@ -1026,7 +1008,6 @@ enum
 };
 #endif // WXWIN_COMPATIBILITY_2_8
 
-#ifndef __VISUALC6__
 inline wxViewVector wxDocument::GetViewsVector() const
 {
     return m_documentViews.AsVector<wxView*>();
@@ -1041,7 +1022,6 @@ inline wxDocTemplateVector wxDocManager::GetTemplatesVector() const
 {
     return m_templates.AsVector<wxDocTemplate*>();
 }
-#endif // !__VISUALC6__
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 

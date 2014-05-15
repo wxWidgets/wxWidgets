@@ -49,12 +49,6 @@
     #pragma hdrstop
 #endif
 
-// disable "cast truncates constant value" for VARIANT_BOOL values
-// passed as parameters in VC6
-#ifdef _MSC_VER
-#pragma warning (disable:4310)
-#endif
-
 #if wxUSE_MEDIACTRL && wxUSE_ACTIVEX
 
 #include "wx/mediactrl.h"
@@ -92,11 +86,10 @@
 //  ($Microsoft Visual Studio$/Common/Tools/OLEVIEW.EXE), open
 //  "type libraries", open a specific type library (for quartz for example its
 //  "ActiveMovie control type library (V1.0)"), save it as an .idl, compile the
-//  idl using the midl compiler that comes with visual studio
-//  ($Microsoft Visual Studio$/VC98/bin/midl.exe on VC6) with the /h argument
-//  to make it generate stubs (a .h & .c file), then clean up the generated
-//  interfaces I want with the STDMETHOD wrappers and then put them into
-//  mediactrl.cpp.
+//  idl using the midl compiler that comes with visual studio with the /h
+//  argument to make it generate stubs (a .h & .c file), then clean up the
+//  generated interfaces I want with the STDMETHOD wrappers and then put them
+//  into mediactrl.cpp.
 //
 //  According to the MSDN docs, IMediaPlayer requires Windows 98 SE
 //  or greater.  NetShow is available on Windows 3.1 and I'm guessing

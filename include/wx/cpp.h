@@ -58,7 +58,7 @@
    should avoid doing it or provide unique prefixes then) but we have to do it
    differently for VC++
   */
-#if defined(__VISUALC__) && (__VISUALC__ >= 1300)
+#if defined(__VISUALC__)
     /*
        __LINE__ handling is completely broken in VC++ when using "Edit and
        Continue" (/ZI option) and results in preprocessor errors if we use it
@@ -115,7 +115,7 @@
         */
         #define __WXFUNCTION__ (NULL)
     #elif defined(__GNUC__) || \
-          (defined(_MSC_VER) && _MSC_VER >= 1300) || \
+          defined(__VISUALC__) || \
           defined(__FUNCTION__)
         #define __WXFUNCTION__ __FUNCTION__
     #else

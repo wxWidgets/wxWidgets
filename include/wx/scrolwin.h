@@ -452,19 +452,8 @@ protected:
     }
 
 private:
-    // VC++ 6 gives warning for the declaration of template member function
-    // without definition
-#ifndef __VISUALC6__
     wxDECLARE_NO_COPY_CLASS(wxScrolled);
-#endif
 };
-
-#ifdef __VISUALC6__
-    // disable the warning about non dll-interface class used as base for
-    // dll-interface class: it's harmless in this case
-    #pragma warning(push)
-    #pragma warning(disable:4275)
-#endif
 
 // for compatibility with existing code, we provide wxScrolledWindow
 // "typedef" for wxScrolled<wxPanel>. It's not a real typedef because we
@@ -486,9 +475,5 @@ public:
 };
 
 typedef wxScrolled<wxWindow> wxScrolledCanvas;
-
-#ifdef __VISUALC6__
-    #pragma warning(pop)
-#endif
 
 #endif // _WX_SCROLWIN_H_BASE_

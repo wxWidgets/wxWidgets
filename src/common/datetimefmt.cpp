@@ -282,10 +282,7 @@ wxDateTime
 ParseFormatAt(wxString::const_iterator& p,
               const wxString::const_iterator& end,
               const wxString& fmt,
-              // FIXME-VC6: using wxString() instead of wxEmptyString in the
-              //            line below results in error C2062: type 'class
-              //            wxString (__cdecl *)(void)' unexpected
-              const wxString& fmtAlt = wxEmptyString)
+              const wxString& fmtAlt = wxString())
 {
     const wxString str(p, end);
     wxString::const_iterator endParse;

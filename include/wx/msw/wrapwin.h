@@ -27,15 +27,7 @@
 // before including windows.h, define version macros at (currently) maximal
 // values because we do all our checks at run-time anyhow
 #ifndef WINVER
-    // the only exception to the above is MSVC 6 which has a time bomb in its
-    // headers: they warn against using them with WINVER >= 0x0500 as they
-    // contain only part of the declarations and they're not always correct, so
-    // don't define WINVER for it at all as this allows everything to work as
-    // expected both with standard VC6 headers (which define WINVER as 0x0400
-    // by default) and headers from a newer SDK (which may define it as 0x0500)
-    #if !defined(__VISUALC__) || (__VISUALC__ >= 1300)
-        #define WINVER 0x0600
-    #endif
+    #define WINVER 0x0600
 #endif
 
 // define _WIN32_WINNT and _WIN32_IE to the highest possible values because we
@@ -70,20 +62,6 @@
 
 // #undef the macros defined in winsows.h which conflict with code elsewhere
 #include "wx/msw/winundef.h"
-
-// Types DWORD_PTR, ULONG_PTR and so on are used for 64-bit compatibility
-// in the WINAPI SDK (they are an integral type that is the size of a
-// pointer) on MSVC 7 and later. However, they are not available in older
-// Platform SDKs, and since they are typedefs and not #defines we simply
-// overwrite them if there is a chance that they're not defined
-#if (!defined(_MSC_VER) || (_MSC_VER < 1300)) && !defined(__WIN64__)
-    #define UINT_PTR unsigned int
-    #define INT_PTR int
-    #define HANDLE_PTR unsigned long
-    #define LONG_PTR long
-    #define ULONG_PTR unsigned long
-    #define DWORD_PTR unsigned long
-#endif // !defined(_MSC_VER) || _MSC_VER < 1300
 
 // ----------------------------------------------------------------------------
 // Fix the functions wrongly implemented in unicows.dll

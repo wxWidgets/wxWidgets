@@ -640,9 +640,6 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
     // and its child part. I.e. arrow, separators, etc.
     wxSize tsize(xlen, 0);
 
-    // FIXME-VC6: Only VC6 needs this guard, see WINVER definition in
-    //            include/wx/msw/wrapwin.h
-#if defined(WINVER) && WINVER >= 0x0500
     WinStruct<COMBOBOXINFO> info;
     if ( MSWGetComboBoxInfo(&info) )
     {
@@ -650,7 +647,6 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
                     + info.rcItem.left + 3; // right and extra margins
     }
     else // Just use some rough approximation.
-#endif // WINVER >= 0x0500
     {
         tsize.x += 4*cHeight;
     }

@@ -202,12 +202,10 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrtoulW   wcstoul
 
 #ifdef __VISUALC__
-    #if __VISUALC__ >= 1300 && !defined(__WXWINCE__)
-        #define wxCRT_StrtollA   _strtoi64
-        #define wxCRT_StrtoullA  _strtoui64
-        #define wxCRT_StrtollW   _wcstoi64
-        #define wxCRT_StrtoullW  _wcstoui64
-    #endif /* VC++ 7+ */
+    #define wxCRT_StrtollA   _strtoi64
+    #define wxCRT_StrtoullA  _strtoui64
+    #define wxCRT_StrtollW   _wcstoi64
+    #define wxCRT_StrtoullW  _wcstoui64
 #else
     #ifdef HAVE_STRTOULL
         #define wxCRT_StrtollA   strtoll
@@ -643,7 +641,7 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
         #define wxCRT_ToupperW   towupper
     #endif
 #else /* !__GLIBC__ */
-    /* There is a bug in VC6 C RTL: toxxx() functions dosn't do anything
+    /* There is a bug in MSVC RTL: toxxx() functions dosn't do anything
        with signed chars < 0, so "fix" it here. */
     #define wxCRT_TolowerW(c)   towlower((wxUChar)(wxChar)(c))
     #define wxCRT_ToupperW(c)   towupper((wxUChar)(wxChar)(c))

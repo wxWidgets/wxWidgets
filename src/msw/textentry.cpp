@@ -45,8 +45,7 @@
 // Classes used by auto-completion implementation.
 // ----------------------------------------------------------------------------
 
-// standard VC6 SDK (WINVER == 0x0400) does not know about IAutoComplete
-#if wxUSE_OLE && (WINVER >= 0x0500)
+#if wxUSE_OLE
     #define HAS_AUTOCOMPLETE
 #endif
 
@@ -357,7 +356,7 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIEnumString)
 
 // This class gathers the all auto-complete-related stuff we use. It is
 // allocated on demand by wxTextEntry when AutoComplete() is called.
-class wxTextAutoCompleteData wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
+class wxTextAutoCompleteData
 {
 public:
     // The constructor associates us with the given text entry.
@@ -438,9 +437,7 @@ public:
             pAutoComplete2->Release();
         }
 
-        wxBIND_OR_CONNECT_HACK(m_win, wxEVT_CHAR_HOOK, wxKeyEventHandler,
-                               wxTextAutoCompleteData::OnCharHook,
-                               this);
+        m_win->Bind(wxEVT_CHAR_HOOK, &wxTextAutoCompleteData::OnCharHook, this);
     }
 
     ~wxTextAutoCompleteData()
@@ -506,10 +503,8 @@ public:
                 // neither as, due to our use of ACO_AUTOAPPEND, we get
                 // EN_CHANGE notifications from the control every time
                 // IAutoComplete auto-appends something to it.
-                wxBIND_OR_CONNECT_HACK(m_win, wxEVT_AFTER_CHAR,
-                                        wxKeyEventHandler,
-                                        wxTextAutoCompleteData::OnAfterChar,
-                                        this);
+                m_win->Bind(wxEVT_AFTER_CHAR,
+                            &wxTextAutoCompleteData::OnAfterChar, this);
             }
 
             UpdateStringsFromCustomCompleter();

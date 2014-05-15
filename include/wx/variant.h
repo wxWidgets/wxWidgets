@@ -457,7 +457,7 @@ bool CLASSNAME::GetAsAny(wxAny* any) const \
 } \
 wxVariantData* CLASSNAME::VariantDataFactory(const wxAny& any) \
 { \
-    return new CLASSNAME(wxANY_AS(any, T)); \
+    return new CLASSNAME(any.As<T>()); \
 } \
 REGISTER_WXANY_CONVERSION(T, CLASSNAME)
 

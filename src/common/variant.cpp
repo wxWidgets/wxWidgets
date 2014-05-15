@@ -879,12 +879,12 @@ IMPLEMENT_TRIVIAL_WXANY_CONVERSION(wxString, wxVariantDataString)
 // This allows converting string literal wxAnys to string variants
 wxVariantData* wxVariantDataFromConstCharPAny(const wxAny& any)
 {
-    return new wxVariantDataString(wxANY_AS(any, const char*));
+    return new wxVariantDataString(any.As<const char*>());
 }
 
 wxVariantData* wxVariantDataFromConstWchar_tPAny(const wxAny& any)
 {
-    return new wxVariantDataString(wxANY_AS(any, const wchar_t*));
+    return new wxVariantDataString(any.As<const wchar_t*>());
 }
 
 _REGISTER_WXANY_CONVERSION(const char*,
@@ -1586,7 +1586,7 @@ bool wxVariantDataLongLong::GetAsAny(wxAny* any) const
 
 wxVariantData* wxVariantDataLongLong::VariantDataFactory(const wxAny& any)
 {
-    return new wxVariantDataLongLong(wxANY_AS(any, wxLongLong_t));
+    return new wxVariantDataLongLong(any.As<wxLongLong_t>());
 }
 
 REGISTER_WXANY_CONVERSION(wxLongLong_t, wxVariantDataLongLong)
@@ -1601,7 +1601,7 @@ bool wxVariantDataLongLong::GetAsAny(wxAny* any) const
 
 wxVariantData* wxVariantDataLongLong::VariantDataFactory(const wxAny& any)
 {
-    return new wxVariantDataLongLong(wxANY_AS(any, wxLongLong));
+    return new wxVariantDataLongLong(any.As<wxLongLong>());
 }
 
 REGISTER_WXANY_CONVERSION(wxLongLong, wxVariantDataLongLong)
@@ -1785,7 +1785,7 @@ bool wxVariantDataULongLong::GetAsAny(wxAny* any) const
 
 wxVariantData* wxVariantDataULongLong::VariantDataFactory(const wxAny& any)
 {
-    return new wxVariantDataULongLong(wxANY_AS(any, wxULongLong_t));
+    return new wxVariantDataULongLong(any.As<wxULongLong_t>());
 }
 
 REGISTER_WXANY_CONVERSION(wxULongLong_t, wxVariantDataULongLong)
@@ -1800,7 +1800,7 @@ bool wxVariantDataULongLong::GetAsAny(wxAny* any) const
 
 wxVariantData* wxVariantDataULongLong::VariantDataFactory(const wxAny& any)
 {
-    return new wxVariantDataULongLong(wxANY_AS(any, wxULongLong));
+    return new wxVariantDataULongLong(any.As<wxULongLong>());
 }
 
 REGISTER_WXANY_CONVERSION(wxULongLong, wxVariantDataULongLong)
@@ -1988,7 +1988,7 @@ bool wxVariantDataList::GetAsAny(wxAny* any) const
 
 wxVariantData* wxVariantDataList::VariantDataFactory(const wxAny& any)
 {
-    wxAnyList src = wxANY_AS(any, wxAnyList);
+    wxAnyList src = any.As<wxAnyList>();
     wxVariantList dst;
     wxAnyList::compatibility_iterator node = src.GetFirst();
     while (node)

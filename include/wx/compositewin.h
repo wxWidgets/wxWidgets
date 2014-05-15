@@ -44,16 +44,6 @@ public:
 
     }
 
-#ifndef __VISUALC6__
-    // FIXME-VC6: This compiler can't compile DoSetForAllParts() template function,
-    // it can't determine whether the deduced type should be "T" or "const T&". And
-    // without this function wxCompositeWindow is pretty useless so simply disable
-    // this code for it, this does mean that setting colours/fonts/... for
-    // composite controls won't work in the library compiled with it but so far
-    // this only affects the generic wxDatePickerCtrl which is not used by default
-    // under MSW anyhow so it doesn't seem to be worth it to spend time and uglify
-    // the code to fix it.
-
     // Override all wxWindow methods which must be forwarded to the composite
     // window parts.
 
@@ -112,8 +102,6 @@ public:
         SetForAllParts(&wxWindowBase::CopyToolTip, tip);
     }
 #endif // wxUSE_TOOLTIPS
-
-#endif // !__VISUALC6__
 
     virtual void SetFocus()
     {
@@ -190,7 +178,6 @@ private:
             event.Skip();
     }
 
-#ifndef __VISUALC6__
     template <class T>
     void SetForAllParts(bool (wxWindowBase::*func)(const T&), const T& arg)
     {
@@ -221,7 +208,6 @@ private:
                 (child->*func)(arg);
         }
     }
-#endif // !__VISUALC6__
 
     wxDECLARE_NO_COPY_TEMPLATE_CLASS(wxCompositeWindow, W);
 };

@@ -97,13 +97,9 @@ public:
         no type conversion is performed, so if the type is incorrect an
         assertion failure will occur.
 
-        @remarks For conveniency, conversion is done when T is wxString. This
+        @remarks For convenience, conversion is done when T is wxString. This
                  is useful when a string literal (which are treated as
                  const char* and const wchar_t*) has been assigned to wxAny.
-
-                 This template function may not work properly with Visual C++
-                 6. For full compiler compatibility, please use
-                 wxANY_AS(any, T) macro instead.
     */
     template<typename T>
     T As() const;
@@ -111,10 +107,6 @@ public:
     /**
         Use this template function for checking if this wxAny holds
         a specific C++ data type.
-
-        @remarks This template function may not work properly with Visual C++
-                6. For full compiler compatibility, please use
-                wxANY_CHECK_TYPE(any, T) macro instead.
 
         @see wxAnyValueType::CheckType()
     */
@@ -233,19 +225,6 @@ public:
     bool operator!=(const wxString& value) const;
     //@}
 };
-
-/**
-    This is value getter macro that is more compatible with older
-    compilers, such as Visual C++ 6.0.
-*/
-#define wxANY_AS(any, T)
-
-
-/**
-    This is type checking macro that is more compatible with older
-    compilers, such as Visual C++ 6.0.
-*/
-#define wxANY_CHECK_TYPE(any, T)
 
 
 /**
@@ -398,11 +377,6 @@ public:
         Use this template function for checking if wxAnyValueType represents
         a specific C++ data type.
 
-        @remarks This template function does not work on some older compilers
-                (such as Visual C++ 6.0). For full compiler compatibility
-                please use wxANY_VALUE_TYPE_CHECK_TYPE(valueTypePtr, T) macro
-                instead.
-
         @see wxAny::CheckType()
     */
     template <typename T>
@@ -440,9 +414,3 @@ public:
     */
     virtual bool IsSameType(const wxAnyValueType* otherType) const = 0;
 };
-
-/**
-    This is type checking macro that is more compatible with older
-    compilers, such as Visual C++ 6.0.
-*/
-#define wxANY_VALUE_TYPE_CHECK_TYPE(valueTypePtr, T)

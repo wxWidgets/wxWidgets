@@ -385,13 +385,8 @@ void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
             wxFAIL_MSG( "unknown mode ");
     }
 
-#ifdef __VISUALC6__
-    const int docsCount =
-        wxDocManager::GetDocumentManager()->GetDocuments().GetCount();
-#else
     const int docsCount =
         wxDocManager::GetDocumentManager()->GetDocumentsVector().size();
-#endif
 
     wxLogMessage
     (

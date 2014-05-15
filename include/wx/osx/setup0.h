@@ -306,11 +306,7 @@
 // Currently the Digital Mars and Watcom compilers come without standard C++
 // library headers by default, wxUSE_STD_STRING can be set to 1 if you do have
 // them (e.g. from STLPort).
-//
-// VC++ 5.0 does include standard C++ library headers, however they produce
-// many warnings that can't be turned off when compiled at warning level 4.
-#if defined(__DMC__) || defined(__WATCOMC__) \
-        || (defined(_MSC_VER) && _MSC_VER < 1200)
+#if defined(__DMC__) || defined(__WATCOMC__)
     #define wxUSE_STD_DEFAULT  0
 #else
     #define wxUSE_STD_DEFAULT  1
@@ -322,11 +318,7 @@
 // dependency on the C++ run-time library.
 //
 // Notice that the compilers mentioned in wxUSE_STD_DEFAULT comment above don't
-// support using standard containers and that VC6 needs non-default options for
-// such build to avoid getting "fatal error C1076: compiler limit : internal
-// heap limit reached; use /Zm to specify a higher limit" in its own standard
-// headers, so you need to ensure you do increase the heap size before enabling
-// this option for this compiler.
+// support using standard containers.
 //
 // Default is 0 for compatibility reasons.
 //
@@ -771,15 +763,7 @@
 // notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
 // included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
 #ifdef _MSC_VER
-#   if _MSC_VER >= 1310
-        // MSVC7.1+ comes with new enough Platform SDK, enable
-        // wxGraphicsContext support for it
-#       define wxUSE_GRAPHICS_CONTEXT 1
-#   else
-        // MSVC 6 didn't include GDI+ headers so disable by default, enable it
-        // here if you use MSVC 6 with a newer SDK
-#       define wxUSE_GRAPHICS_CONTEXT 0
-#   endif
+#   define wxUSE_GRAPHICS_CONTEXT 1
 #else
     // Disable support for other Windows compilers, enable it if your compiler
     // comes with new enough SDK or you installed the headers manually.

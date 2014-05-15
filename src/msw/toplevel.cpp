@@ -62,12 +62,6 @@
     #define ICON_SMALL 0
 #endif
 
-// FIXME-VC6: Only VC6 doesn't have this in its standard headers so this
-//            could be removed once support for it is dropped.
-#ifndef WM_UNINITMENUPOPUP
-    #define WM_UNINITMENUPOPUP 0x0125
-#endif
-
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -1257,12 +1251,7 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 
 void wxTopLevelWindowMSW::RequestUserAttention(int flags)
 {
-    // check if we can use FlashWindowEx(): unfortunately a simple test for
-    // FLASHW_STOP doesn't work because MSVC6 headers do #define it but don't
-    // provide FlashWindowEx() declaration, so try to detect whether we have
-    // real headers for WINVER 0x0500 by checking for existence of a symbol not
-    // declated in MSVC6 header
-#if defined(FLASHW_STOP) && defined(VK_XBUTTON1) && wxUSE_DYNLIB_CLASS
+#if defined(FLASHW_STOP) && wxUSE_DYNLIB_CLASS
     // available in the headers, check if it is supported by the system
     typedef BOOL (WINAPI *FlashWindowEx_t)(FLASHWINFO *pfwi);
     static FlashWindowEx_t s_pfnFlashWindowEx = NULL;

@@ -302,7 +302,7 @@
         </if>
 
         <!-- Libs common to both borland and MSVC               -->
-        <if cond="FORMAT=='msvc' or FORMAT=='msvc6prj' or FORMAT=='borland'">
+        <if cond="FORMAT=='msvc' or FORMAT=='borland'">
             <sys-lib>oleacc</sys-lib>
         </if>
     </define-tag>

@@ -117,7 +117,6 @@ would like to build, separated by commas. Valid values are:
     mingw         MinGW makefiles (mingw32-make)
     msevc4prj     MS eMbedded Visual C++ 4 project files
     msvc          MS Visual C++ nmake makefiles
-    msvc6prj      MS Visual C++ 6.0 project files
     watcom        OpenWatcom makefiles
 
 TIP: autoconf Project Type
