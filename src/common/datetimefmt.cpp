@@ -2095,8 +2095,7 @@ wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
         const wxString timeString = wxGetTranslation(stdTimes[n].name);
         if ( timeString.CmpNoCase(wxString(time, timeString.length())) == 0 )
         {
-            // casts required by DigitalMars
-            Set(stdTimes[n].hour, wxDateTime_t(0), wxDateTime_t(0));
+            Set(stdTimes[n].hour, 0, 0);
 
             if ( end )
                 *end = time.begin() + timeString.length();

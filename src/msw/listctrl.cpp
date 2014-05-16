@@ -57,7 +57,7 @@
 //
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(NMLVFINDITEM)
     #define HAVE_NMLVFINDITEM 1
-#elif defined(__DMC__) || defined(NM_FINDITEM)
+#elif defined(NM_FINDITEM)
     #define HAVE_NMLVFINDITEM 1
     #define NMLVFINDITEM NM_FINDITEM
 #endif

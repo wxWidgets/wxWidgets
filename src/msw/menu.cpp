@@ -411,8 +411,7 @@ bool wxMenu::MSWGetRadioGroupRange(int pos, int *start, int *end) const
     return m_radioData && m_radioData->GetGroupRange(pos, start, end);
 }
 
-// DMC at march 2007 didn't have e.g. MENUITEMINFO. Is it still valid?
-#if defined(__DMC__) || defined(__WXWINCE__)
+#if defined(__WXWINCE__)
 #define wxUSE_MENUITEMINFO 0
 #else
 #define wxUSE_MENUITEMINFO 1

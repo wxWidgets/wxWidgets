@@ -468,7 +468,7 @@ wxString wxFTP::Pwd()
         }
         else
         {
-            for ( ++p; (bool)*p; ++p ) // FIXME-DMARS
+            for ( ++p; *p; ++p )
             {
                 if ( *p == wxT('"') )
                 {

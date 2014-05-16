@@ -192,19 +192,6 @@ char* wxSetlocale(int category, const char *locale)
     int wxCRT_VfprintfW( FILE *stream, const wchar_t *format, va_list argptr );
 #endif
 
-#if defined(__DMC__)
-/* Digital Mars adds count to _stprintf (C99) so convert */
-int wxCRT_SprintfW (wchar_t * __RESTRICT s, const wchar_t * __RESTRICT format, ... )
-{
-    va_list arglist;
-
-    va_start( arglist, format );
-    int iLen = swprintf ( s, -1, format, arglist );
-    va_end( arglist );
-    return iLen ;
-}
-#endif //__DMC__
-
 // ----------------------------------------------------------------------------
 // implement the standard IO functions for wide char if libc doesn't have them
 // ----------------------------------------------------------------------------
@@ -648,20 +635,7 @@ int wxVsprintf(char *str, const wxString& format, va_list argptr)
 int wxVsprintf(wchar_t *str, const wxString& format, va_list argptr)
 {
 #if wxUSE_UNICODE_WCHAR
-#ifdef __DMC__
-/*
-This fails with a bug similar to
-http://www.digitalmars.com/pnews/read.php?server=news.digitalmars.com&group=c++.beta&artnum=680
-in DMC 8.49 and 8.50
-I don't see it being used in the wxWidgets sources at present (oct 2007) CE
-*/
-#pragma message ( "warning ::::: wxVsprintf(wchar_t *str, const wxString& format, va_list argptr) not yet implemented" )
-    wxFAIL_MSG( wxT("TODO") );
-
-    return -1;
-#else
     return wxCRT_VsprintfW(str, format.wc_str(), argptr);
-#endif //DMC
 #else // wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
     if ( !wxLocaleIsUtf8 )
@@ -1276,7 +1250,7 @@ wchar_t *wxFgets(wchar_t *s, int size, FILE *stream)
 // wxScanf() and friends
 // ----------------------------------------------------------------------------
 
-#ifdef HAVE_VSSCANF // __VISUALC__ and __DMC__ see wx/crt.h
+#ifdef HAVE_VSSCANF // __VISUALC__, see wx/crt.h
 int wxVsscanf(const char *str, const char *format, va_list ap)
     { return wxCRT_VsscanfA(str, format, ap); }
 int wxVsscanf(const wchar_t *str, const wchar_t *format, va_list ap)

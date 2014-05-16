@@ -234,19 +234,6 @@
 
 #endif /* __BORLANDC__ */
 
-/* DMC++ doesn't have definitions for date picker control, so use generic control
- */
-#ifdef __DMC__
-#   if wxUSE_DATEPICKCTRL
-#       undef wxUSE_DATEPICKCTRL_GENERIC
-#       undef wxUSE_DATEPICKCTRL
-#   endif
-#   define wxUSE_DATEPICKCTRL 0
-#   define wxUSE_DATEPICKCTRL_GENERIC 1
-#endif
-
-
-
 /*
    un/redefine the options which we can't compile (after checking that they're
    defined

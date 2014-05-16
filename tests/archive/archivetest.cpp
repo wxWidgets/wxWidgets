@@ -41,9 +41,6 @@ using std::auto_ptr;
 #if defined __BORLANDC__ && __BORLANDC__ >= 0x530
 #   define WXARC_MEMBER_TEMPLATES
 #endif
-#if defined __DMC__ && __DMC__ >= 0x832
-#   define WXARC_MEMBER_TEMPLATES
-#endif
 #if defined __HP_aCC && __HP_aCC > 33300
 #   define WXARC_MEMBER_TEMPLATES
 #endif

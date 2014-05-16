@@ -597,10 +597,8 @@ public:
     // deprecated methods, don't use any more
     // --------------------------------------
 
-#ifndef __DIGITALMARS__
     wxString GetPath( bool withSep, wxPathFormat format = wxPATH_NATIVE ) const
         { return GetPath(withSep ? wxPATH_GET_SEPARATOR : 0, format); }
-#endif
     wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE ) const
         { return GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR, format); }
 

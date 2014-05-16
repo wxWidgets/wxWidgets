@@ -55,18 +55,10 @@
 
 #elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
 #   define __BORLANDC__
-#elif defined(__SC__)
-#   define __SYMANTECC__
 #elif defined(__SUNPRO_CC)
 #   ifndef __SUNCC__
 #       define __SUNCC__ __SUNPRO_CC
 #   endif /* Sun CC */
-#elif defined(__SC__)
-#    ifdef __DMC__
-#         define __DIGITALMARS__
-#    else
-#         define __SYMANTEC__
-#    endif
 #endif  /* compiler */
 
 /*

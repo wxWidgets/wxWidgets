@@ -1488,8 +1488,7 @@ wxSize wxToolBar::GetToolSize() const
 {
     // TB_GETBUTTONSIZE is supported from version 4.70
 #if defined(_WIN32_IE) && (_WIN32_IE >= 0x300 ) \
-    && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) ) \
-    && !defined (__DIGITALMARS__)
+    && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
     if ( wxApp::GetComCtl32Version() >= 470 )
     {
         DWORD dw = ::SendMessage(GetHwnd(), TB_GETBUTTONSIZE, 0, 0);

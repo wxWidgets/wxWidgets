@@ -60,7 +60,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-#if defined(__VISUALC__) || defined(__DIGITALMARS__)
+#if defined(__VISUALC__)
     typedef int mode_t;
 #endif
 
@@ -174,7 +174,6 @@ enum wxPosixPermissions
         defined(__MINGW64__) || \
         (defined(__MINGW32__) && !defined(__WINE__) && \
                                 wxCHECK_W32API_VERSION(0, 5)) || \
-        defined(__DMC__) || \
         defined(__BORLANDC__) \
       )
 
@@ -251,7 +250,7 @@ enum wxPosixPermissions
     // to avoid using them as they're not present in earlier versions and
     // always using the native functions spelling is easier than testing for
     // the versions
-    #if defined(__BORLANDC__) || defined(__DMC__) || defined(__MINGW64__)
+    #if defined(__BORLANDC__) || defined(__MINGW64__)
         #define wxPOSIX_IDENT(func)    ::func
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func

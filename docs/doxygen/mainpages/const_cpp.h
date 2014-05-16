@@ -146,7 +146,7 @@ compiler used.
 @itemdef{__BORLANDC__, Borland C++. The value of the macro corresponds
                         to the compiler version: 500 is 5.0.}
 @itemdef{__DJGPP__, DJGPP}
-@itemdef{__DIGITALMARS__, Digital Mars}
+@itemdef{__DIGITALMARS__, Digital Mars (not used any more).}
 @itemdef{__EVC4__, Embedded Visual C++ 4 (can be only used for building wxWinCE)}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
@@ -156,7 +156,7 @@ compiler used.
 @itemdef{__MINGW64__, MinGW-w64 in 64 bit builds}
 @itemdef{__MINGW64_TOOLCHAIN__, MinGW-w64 in either 32 or 64 bit builds}
 @itemdef{__SUNCC__, Sun CC, see also wxCHECK_SUNCC_VERSION}
-@itemdef{__SYMANTECC__, Symantec C++}
+@itemdef{__SYMANTECC__, Symantec C++ (not used any more).}
 @itemdef{__VISAGECPP__, IBM Visual Age (OS/2) (not used any more).}
 @itemdef{__VISUALC__, Microsoft Visual C++, see also ::wxCHECK_VISUALC_VERSION.
                     The value of this macro corresponds to the compiler version:

@@ -241,8 +241,6 @@ typedef short int WXTYPE;
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
         /*  BC++ 4.52 doesn't support explicit, CBuilder 1 does */
         #define HAVE_EXPLICIT
-    #elif defined(__DIGITALMARS__)
-        #define HAVE_EXPLICIT
     #endif
 #endif /*  !HAVE_EXPLICIT */
 
@@ -1115,10 +1113,6 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec "L"
-#elif defined(__DIGITALMARS__)
-      #define wxLongLong_t __int64
-      #define wxLongLongSuffix LL
-      #define wxLongLongFmtSpec "ll"
 #elif defined(__MINGW32__)
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll

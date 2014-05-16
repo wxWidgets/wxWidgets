@@ -1292,8 +1292,7 @@
 // list of libraries used to link your application (although this is done
 // implicitly for Microsoft Visual C++ users).
 //
-// Default is 1 unless the compiler is known to ship without the necessary
-// headers (Digital Mars) or the platform doesn't support OpenGL (Windows CE).
+// Default is 1.
 //
 // Recommended setting: 1 if you intend to use OpenGL, can be safely set to 0
 // otherwise.

@@ -159,13 +159,6 @@
     <!--    comments for more info.                                 -->
 
 
-    <!-- Presets for limited dmars make.exe format: -->
-    <if cond="FORMAT=='dmars'">
-        <set var="WX_UNICODE">1</set>
-        <set var="WX_DEBUG">1</set>
-        <set var="WX_SHARED">0</set>
-    </if>
-
     <!-- 'gnu' format needs to redefine the following options later in wx_unix.bkl -->
     <if cond="FORMAT=='gnu'">
         <set var="WX_UNICODE"/>

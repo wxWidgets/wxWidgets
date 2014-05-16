@@ -382,11 +382,6 @@
    #define lfind _lfind
 #endif
 
-#ifdef __DMC__
-#define HAVE_INT32
-typedef	long int32;
-#endif
-
 #ifdef _WIN32_WCE
 #   undef HAVE_FCNTL_H
 #   undef HAVE_SYS_TYPES_H

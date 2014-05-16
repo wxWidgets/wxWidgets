@@ -302,8 +302,6 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     compilerPrefix = "gcc";
 #elif defined(__BORLANDC__)
     compilerPrefix = "bcc";
-#elif defined(__DIGITALMARS__)
-    compilerPrefix = "dmc";
 #else
     return;
 #endif

@@ -660,11 +660,6 @@ void wxAppConsoleBase::OnUnhandledException()
 bool wxAppConsoleBase::OnExceptionInMainLoop()
 {
     throw;
-
-    // some compilers are too stupid to know that we never return after throw
-#if defined(__DMC__) || (defined(_MSC_VER) && _MSC_VER < 1200)
-    return false;
-#endif
 }
 
 #endif // wxUSE_EXCEPTIONS
