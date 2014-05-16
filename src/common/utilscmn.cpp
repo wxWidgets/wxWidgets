@@ -61,12 +61,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#if !wxONLY_WATCOM_EARLIER_THAN(1,4)
-    #if !(defined(_MSC_VER) && (_MSC_VER > 800))
-        #include <errno.h>
-    #endif
-#endif
+#include <errno.h>
 
 #if wxUSE_GUI
     #include "wx/notebook.h"

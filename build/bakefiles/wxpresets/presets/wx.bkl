@@ -137,16 +137,6 @@
         1
     </set>
 
-    <!-- this is a temporary variable until there is non general    -->
-    <!-- function in bakefiles for returning native markup for      -->
-    <!-- reading envrionment variables                              -->
-    <set var="ENV_VAR">
-        <if cond="FORMAT=='watcom'">%</if>
-        <if cond="FORMAT!='watcom'"></if>
-    </set>
-
-
-
     <!--                        OPTIONS                             -->
     <!--                                                            -->
     <!--    These are essentially the configurations you            -->
@@ -250,7 +240,7 @@
 
     <!-- The directory where wxWidgets is installed: -->
     <if cond="not isdefined('WX_DIR')">
-        <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
+        <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)(WXWIN)</set>
         <option name="WX_DIR" category="path" never_empty="1">
             <default-value>$(WX_DIR_DEFAULT)</default-value>
             <description>

@@ -44,7 +44,7 @@ The file @c "wx/wxprec.h" includes @c "wx/wx.h". Although this incantation may
 seem quirky, it is in fact the end result of a lot of experimentation, and
 several Windows compilers to use precompilation which is largely automatic for
 compilers with necessary support. Currently it is used for Visual C++
-(including embedded Visual C++), Borland C++, Open Watcom C++, Digital Mars C++
+(including embedded Visual C++), Borland C++, Digital Mars C++
 and newer versions of GCC. Some compilers might need extra work from the
 application developer to set the build environment up as necessary for the
 support.
@@ -111,9 +111,9 @@ and this must not be changed.
 On Microsoft Windows, wxWidgets has a different set of makefiles for each
 compiler, because each compiler's @c 'make' tool is slightly different. Popular
 Windows compilers that we cater for, and the corresponding makefile extensions,
-include: Microsoft Visual C++ (.vc), Borland C++ (.bcc), OpenWatcom C++ (.wat)
-and MinGW/Cygwin (.gcc). Makefiles are provided for the wxWidgets library
-itself, samples, demos, and utilities.
+include: Microsoft Visual C++ (.vc), Borland C++ (.bcc) and MinGW/Cygwin
+(.gcc). Makefiles are provided for the wxWidgets library itself, samples,
+demos, and utilities.
 
 On Linux, Mac and OS/2, you use the @c 'configure' command to generate the
 necessary makefiles. You should also use this method when building with

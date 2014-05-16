@@ -513,8 +513,6 @@ public:
 
         // create a new thread and optionally set the stack size on
         // platforms that support that - call Run() to start it
-        // (special cased for watcom which won't accept 0 default)
-
     wxThreadError Create(unsigned int stackSize = 0);
 
         // starts execution of the thread - from the moment Run() is called
@@ -800,9 +798,7 @@ inline void wxMutexGuiLeave() { }
 
 // macros for entering/leaving critical sections which may be used without
 // having to take them inside "#if wxUSE_THREADS"
-// (the implementation uses dummy structs to force semicolon after the macro;
-// also notice that Watcom doesn't like declaring a struct as a member so we
-// need to actually define it in wxCRIT_SECT_DECLARE_MEMBER)
+// (the implementation uses dummy structs to force semicolon after the macro)
 #define wxENTER_CRIT_SECT(cs)            do {} while (0)
 #define wxLEAVE_CRIT_SECT(cs)            do {} while (0)
 #define wxCRIT_SECT_DECLARE(cs)          struct wxDummyCS##cs

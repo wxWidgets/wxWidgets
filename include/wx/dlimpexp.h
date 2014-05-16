@@ -20,10 +20,9 @@
 #    define WXIMPORT __attribute__ ((visibility("default")))
 #elif defined(__WINDOWS__)
     /*
-       __declspec works in BC++ 5 and later, Watcom C++ 11.0 and later as well
-       as VC++.
+       __declspec works in BC++ 5 and later as well as VC++.
      */
-#    if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
+#    if defined(__VISUALC__) || defined(__BORLANDC__)
 #        define WXEXPORT __declspec(dllexport)
 #        define WXIMPORT __declspec(dllimport)
     /*

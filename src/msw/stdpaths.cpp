@@ -304,8 +304,6 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     compilerPrefix = "bcc";
 #elif defined(__DIGITALMARS__)
     compilerPrefix = "dmc";
-#elif defined(__WATCOMC__)
-    compilerPrefix = "wat";
 #else
     return;
 #endif

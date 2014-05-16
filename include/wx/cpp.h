@@ -83,7 +83,7 @@
 /*
     Helpers for defining macros that expand into a single statement.
 
-    The standatd solution is to use "do { ... } while (0)" statement but MSVC
+    The standard solution is to use "do { ... } while (0)" statement but MSVC
     generates a C4127 "condition expression is constant" warning for it so we
     use something which is just complicated enough to not be recognized as a
     constant but still simple enough to be optimized away.
@@ -93,14 +93,8 @@
     Notice that wxASSERT_ARG_TYPE in wx/strvargarg.h relies on these macros
     creating some kind of a loop because it uses "break".
  */
-#ifdef __WATCOMC__
-    #define wxFOR_ONCE(name) for(int name=0; name<1; name++)
-    #define wxSTATEMENT_MACRO_BEGIN wxFOR_ONCE(wxMAKE_UNIQUE_NAME(wxmacro)) {
-    #define wxSTATEMENT_MACRO_END }
-#else
-    #define wxSTATEMENT_MACRO_BEGIN  do {
-    #define wxSTATEMENT_MACRO_END } while ( (void)0, 0 )
-#endif
+#define wxSTATEMENT_MACRO_BEGIN  do {
+#define wxSTATEMENT_MACRO_END } while ( (void)0, 0 )
 
 /*
     Define __WXFUNCTION__ which is like standard __FUNCTION__ but defined as
@@ -134,8 +128,6 @@
     #elif wxCHECK_GCC_VERSION(3,0)
         #define HAVE_VARIADIC_MACROS 1
     #elif wxCHECK_VISUALC_VERSION(8)
-        #define HAVE_VARIADIC_MACROS 1
-    #elif wxCHECK_WATCOM_VERSION(1,2)
         #define HAVE_VARIADIC_MACROS 1
     #endif
 #endif /* !HAVE_VARIADIC_MACROS */

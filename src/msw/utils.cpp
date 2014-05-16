@@ -96,11 +96,7 @@
     #endif
 #endif
 
-#ifndef __WATCOMC__
-    #if !(defined(_MSC_VER) && (_MSC_VER > 800))
-        #include <errno.h>
-    #endif
-#endif
+#include <errno.h>
 
 // For wxKillAllChildren
 #include <tlhelp32.h>

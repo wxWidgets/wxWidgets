@@ -179,7 +179,6 @@ extern LONG APIENTRY _EXPORT
 #elif defined(__VISUALC__) \
    || defined(__BORLANDC__) \
    || defined(__DMC__) \
-   || defined(__WATCOMC__) \
    || defined(__MINGW32__)
     #define wxGetOSFHandle(fd) ((HANDLE)_get_osfhandle(fd))
     #define wxOpenOSFHandle(h, flags) (_open_osfhandle(wxPtrToUInt(h), flags))

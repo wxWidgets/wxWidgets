@@ -120,12 +120,6 @@
 #include <unistd.h>
 #endif
 
-#ifdef __WATCOMC__
-#include <io.h>
-#include <sys/utime.h>
-#include <sys/stat.h>
-#endif
-
 #ifndef S_ISREG
     #define S_ISREG(mode) ((mode) & S_IFREG)
 #endif
@@ -313,7 +307,7 @@ static bool IsUNCPath(const wxString& path, wxPathFormat format)
 // the appropriate file with an extra twist that it also works when there is no
 // wxFileName object at all, as is the case in static methods.
 
-#if defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
+#if defined(__UNIX_LIKE__) || defined(__WXMAC__)
     #define wxHAVE_LSTAT
 #endif
 
@@ -2621,7 +2615,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
             return true;
         }
     }
-#elif defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
+#elif defined(__UNIX_LIKE__)
     wxUnusedVar(dtCreate);
 
     if ( !dtAccess && !dtMod )

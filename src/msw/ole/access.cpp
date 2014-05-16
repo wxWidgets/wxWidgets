@@ -34,7 +34,7 @@
 #endif
 
 // for some compilers, the entire ole2.h must be included, not only oleauto.h
-#if wxUSE_NORLANDER_HEADERS || defined(__WATCOMC__)
+#if wxUSE_NORLANDER_HEADERS
     #include <ole2.h>
 #endif
 

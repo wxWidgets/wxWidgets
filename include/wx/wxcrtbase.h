@@ -241,7 +241,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
 /* define wxCRT_StricmpA/W and wxCRT_StrnicmpA/W for various compilers */
 
-#if defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__DJGPP__)
+#if defined(__BORLANDC__) || defined(__DJGPP__)
     #define wxCRT_StricmpA stricmp
     #define wxCRT_StrnicmpA strnicmp
 #elif defined(__SYMANTEC__) || (defined(__VISUALC__) && !defined(__WXWINCE__))
@@ -596,23 +596,17 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
                                 ctype.h
    ------------------------------------------------------------------------- */
 
-#ifdef __WATCOMC__
-  #define WXWCHAR_T_CAST(c) (wint_t)(c)
-#else
-  #define WXWCHAR_T_CAST(c) c
-#endif
-
-#define wxCRT_IsalnumW(c)   iswalnum(WXWCHAR_T_CAST(c))
-#define wxCRT_IsalphaW(c)   iswalpha(WXWCHAR_T_CAST(c))
-#define wxCRT_IscntrlW(c)   iswcntrl(WXWCHAR_T_CAST(c))
-#define wxCRT_IsdigitW(c)   iswdigit(WXWCHAR_T_CAST(c))
-#define wxCRT_IsgraphW(c)   iswgraph(WXWCHAR_T_CAST(c))
-#define wxCRT_IslowerW(c)   iswlower(WXWCHAR_T_CAST(c))
-#define wxCRT_IsprintW(c)   iswprint(WXWCHAR_T_CAST(c))
-#define wxCRT_IspunctW(c)   iswpunct(WXWCHAR_T_CAST(c))
-#define wxCRT_IsspaceW(c)   iswspace(WXWCHAR_T_CAST(c))
-#define wxCRT_IsupperW(c)   iswupper(WXWCHAR_T_CAST(c))
-#define wxCRT_IsxdigitW(c)  iswxdigit(WXWCHAR_T_CAST(c))
+#define wxCRT_IsalnumW(c)   iswalnum(c)
+#define wxCRT_IsalphaW(c)   iswalpha(c)
+#define wxCRT_IscntrlW(c)   iswcntrl(c)
+#define wxCRT_IsdigitW(c)   iswdigit(c)
+#define wxCRT_IsgraphW(c)   iswgraph(c)
+#define wxCRT_IslowerW(c)   iswlower(c)
+#define wxCRT_IsprintW(c)   iswprint(c)
+#define wxCRT_IspunctW(c)   iswpunct(c)
+#define wxCRT_IsspaceW(c)   iswspace(c)
+#define wxCRT_IsupperW(c)   iswupper(c)
+#define wxCRT_IsxdigitW(c)  iswxdigit(c)
 
 #ifdef __GLIBC__
     #if defined(__GLIBC__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)

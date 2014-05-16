@@ -20,10 +20,6 @@
 
 #include <errno.h>
 
-#if defined(__WATCOMC__)
-    #include <nerrno.h>
-#endif
-
 #include <sys/types.h>
 
 #ifdef HAVE_SYS_SELECT_H

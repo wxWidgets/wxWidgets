@@ -243,8 +243,6 @@ typedef short int WXTYPE;
         #define HAVE_EXPLICIT
     #elif defined(__DIGITALMARS__)
         #define HAVE_EXPLICIT
-    #elif defined(__WATCOMC__)
-        #define HAVE_EXPLICIT
     #endif
 #endif /*  !HAVE_EXPLICIT */
 
@@ -420,13 +418,6 @@ typedef short int WXTYPE;
            type, but it may not be used under Windows, so deal with a few
            special cases.
          */
-
-        #ifdef __WATCOMC__
-            /* Watcom uses array type for va_list except for PPC and Alpha */
-            #if !defined(__PPC__) && !defined(__AXP__)
-                #define VA_LIST_IS_ARRAY
-            #endif
-        #endif /* __WATCOMC__ */
 
         #if defined(__PPC__) && (defined(_CALL_SYSV) || defined (_WIN32))
             /*
@@ -882,10 +873,6 @@ typedef short int WXTYPE;
 /*  compiler specific settings */
 /*  ---------------------------------------------------------------------------- */
 
-#if wxONLY_WATCOM_EARLIER_THAN(1,4)
-    typedef short mode_t;
-#endif
-
 /*  where should i put this? we need to make sure of this as it breaks */
 /*  the <iostream> code. */
 #if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
@@ -1128,10 +1115,6 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec "L"
-#elif (defined(__WATCOMC__) && (defined(__WIN32__) || defined(__DOS__)))
-      #define wxLongLong_t __int64
-      #define wxLongLongSuffix i64
-      #define wxLongLongFmtSpec "L"
 #elif defined(__DIGITALMARS__)
       #define wxLongLong_t __int64
       #define wxLongLongSuffix LL
@@ -1218,8 +1201,6 @@ typedef wxUint32 wxDword;
     #if defined(_SSIZE_T_) || defined(_SSIZE_T_DEFINED)
         #define HAVE_SSIZE_T
     #endif
-#elif wxCHECK_WATCOM_VERSION(1,4)
-    #define HAVE_SSIZE_T
 #endif
 #endif /* !HAVE_SSIZE_T */
 

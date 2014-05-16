@@ -40,11 +40,6 @@
 #endif // native Win compiler
 
 #if defined(__DOS__)
-    #ifdef __WATCOMC__
-        #include <direct.h>
-        #include <dos.h>
-        #include <io.h>
-    #endif
     #ifdef __DJGPP__
         #include <io.h>
         #include <unistd.h>
@@ -180,7 +175,6 @@ enum wxPosixPermissions
         (defined(__MINGW32__) && !defined(__WINE__) && \
                                 wxCHECK_W32API_VERSION(0, 5)) || \
         defined(__DMC__) || \
-        defined(__WATCOMC__) || \
         defined(__BORLANDC__) \
       )
 
@@ -208,8 +202,8 @@ enum wxPosixPermissions
         #define wxFtell ftello64
     #endif
 
-    // other Windows compilers (DMC, Watcom, and Borland) don't have huge file
-    // support (or at least not all functions needed for it by wx) currently
+    // other Windows compilers (Borland) don't have huge file support (or at
+    // least not all functions needed for it by wx) currently
 
     // types
 
@@ -228,12 +222,8 @@ enum wxPosixPermissions
         #define wxPOSIX_STRUCT(s)    struct wxPOSIX_IDENT(s)
     #endif
 
-    // Notice that Watcom is the only compiler to have a wide char
-    // version of struct stat as well as a wide char stat function variant.
-    // This was dropped since OW 1.4 "for consistency across platforms".
-    //
-    // Borland is also special in that it uses _stat with Unicode functions
-    // (for MSVC compatibility?) but stat with ANSI ones
+    // Borland is special in that it uses _stat with Unicode functions (for
+    // MSVC compatibility?) but stat with ANSI ones
     #ifdef __BORLANDC__
         #if wxHAS_HUGE_FILES
             #define wxStructStat struct stati64
@@ -246,17 +236,9 @@ enum wxPosixPermissions
         #endif
     #else // !__BORLANDC__
         #ifdef wxHAS_HUGE_FILES
-            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
-                #define wxStructStat struct _wstati64
-            #else
-                #define wxStructStat struct _stati64
-            #endif
+            #define wxStructStat struct _stati64
         #else
-            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
-                #define wxStructStat struct _wstat
-            #else
-                #define wxStructStat struct _stat
-            #endif
+            #define wxStructStat struct _stat
         #endif
     #endif // __BORLANDC__/!__BORLANDC__
 
@@ -269,7 +251,7 @@ enum wxPosixPermissions
     // to avoid using them as they're not present in earlier versions and
     // always using the native functions spelling is easier than testing for
     // the versions
-    #if defined(__BORLANDC__) || defined(__DMC__) || defined(__WATCOMC__) || defined(__MINGW64__)
+    #if defined(__BORLANDC__) || defined(__DMC__) || defined(__MINGW64__)
         #define wxPOSIX_IDENT(func)    ::func
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func
@@ -300,17 +282,15 @@ enum wxPosixPermissions
         #define   wxTell       wxPOSIX_IDENT(tell)
     #endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
 
-    #ifndef __WATCOMC__
-         #if !defined(__BORLANDC__) || (__BORLANDC__ > 0x540)
-             // NB: this one is not POSIX and always has the underscore
-             #define   wxFsync      _commit
+     #if !defined(__BORLANDC__) || (__BORLANDC__ > 0x540)
+         // NB: this one is not POSIX and always has the underscore
+         #define   wxFsync      _commit
 
-             // could be already defined by configure (Cygwin)
-             #ifndef HAVE_FSYNC
-                 #define HAVE_FSYNC
-             #endif
-        #endif // BORLANDC
-    #endif
+         // could be already defined by configure (Cygwin)
+         #ifndef HAVE_FSYNC
+             #define HAVE_FSYNC
+         #endif
+    #endif // BORLANDC
 
     #define   wxEof        wxPOSIX_IDENT(eof)
 

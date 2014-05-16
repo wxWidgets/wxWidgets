@@ -292,12 +292,8 @@
 #    ifndef __DOS__
 #        define __DOS__
 #    endif
-    /* size_t is the same as unsigned int for Watcom 11 compiler, */
-    /* so define it if it hadn't been done by configure yet */
+    /* define it if it hadn't been done by configure yet */
 #    if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
-#        ifdef __WATCOMC__
-#            define wxSIZE_T_IS_UINT
-#        endif
 #        ifdef __DJGPP__
 #            define wxSIZE_T_IS_ULONG
 #        endif
@@ -421,8 +417,7 @@
     _UNICODE macros as it includes _mingw.h which relies on them being set.
  */
 #if ( defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
-    ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) || \
-      wxCHECK_WATCOM_VERSION(1,0) ) && \
+    ( defined( __CYGWIN__ ) && defined( __WINDOWS__ ) ) ) && \
     !defined(__DOS__) && \
     !defined(__WXMOTIF__) && \
     !defined(__WXX11__)
@@ -576,7 +571,7 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1310)
 #    undef wxUSE_IOSTREAMH
 #    define wxUSE_IOSTREAMH 0
-#elif defined(__DMC__) || defined(__WATCOMC__)
+#elif defined(__DMC__)
 #    undef wxUSE_IOSTREAMH
 #    define wxUSE_IOSTREAMH 1
 #elif defined(__MINGW32__)

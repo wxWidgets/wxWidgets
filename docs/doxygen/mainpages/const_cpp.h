@@ -167,7 +167,8 @@ compiler used.
                     for compiler version being precisely 7.}
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
-                    the compiler version, @c 1100 is @c 11.0 and @c 1200 is OpenWatcom.}
+                    the compiler version, @c 1100 is @c 11.0 and @c 1200 is OpenWatcom
+                    (not used any more).}
 @endDefList
 
 

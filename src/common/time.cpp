@@ -324,7 +324,7 @@ wxLongLong wxGetUTCTimeMillis()
     // do NOT just shut off these warnings, drop me a line instead at
     // <guille@iies.es>
 
-    #if defined(__VISUALC__) || defined (__WATCOMC__)
+    #if defined(__VISUALC__)
         #pragma message("wxStopWatch will be up to second resolution!")
     #elif defined(__BORLANDC__)
         #pragma message "wxStopWatch will be up to second resolution!"

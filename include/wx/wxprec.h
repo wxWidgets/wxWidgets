@@ -15,7 +15,6 @@
 // explicitly disabled by defining NOPCH
 #if defined(__VISUALC__)   || \
     defined(__DMC__)       || \
-    defined(__WATCOMC__)   || \
     defined(__BORLANDC__)
 
 
@@ -24,11 +23,6 @@
     #if !defined(NOPCH) && !defined(__WX_SETUP_H__)
         #define WX_PRECOMP
     #endif
-#endif
-
-// For some reason, this must be defined for common dialogs to work.
-#ifdef __WATCOMC__
-    #define INCLUDE_COMMDLG_H  1
 #endif
 
 #ifdef WX_PRECOMP

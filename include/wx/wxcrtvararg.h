@@ -92,10 +92,6 @@
     #endif
 #endif /* __MINGW32__ */
 
-#if defined(__WATCOMC__)
-    #define HAVE_VSWPRINTF 1
-#endif
-
 #if wxUSE_PRINTF_POS_PARAMS
     /*
         The systems where vsnprintf() supports positional parameters should
@@ -145,12 +141,9 @@
             #define wxCRT_VsnprintfW    _vsnwprintf
         #elif defined(HAVE_VSWPRINTF)
             #define wxCRT_VsnprintfW     vswprintf
-        #elif defined(__WATCOMC__)
-            #define wxCRT_VsnprintfW    _vsnwprintf
         #endif
 
-        #if defined(HAVE_VSNPRINTF) \
-            || defined(__WATCOMC__)
+        #if defined(HAVE_VSNPRINTF)
             #ifdef HAVE_BROKEN_VSNPRINTF_DECL
                 #define wxCRT_VsnprintfA    wx_fixed_vsnprintf
             #else
@@ -269,14 +262,6 @@
 // user-friendly wrappers to CRT functions
 // ----------------------------------------------------------------------------
 
-#ifdef __WATCOMC__
-    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    #define wxPrintf    wxPrintf_Impl
-    #define wxFprintf   wxFprintf_Impl
-    #define wxSprintf   wxSprintf_Impl
-    #define wxSnprintf  wxSnprintf_Impl
-#endif
-
     // FIXME-UTF8: remove this
 #if wxUSE_UNICODE
     #define wxCRT_PrintfNative wxCRT_PrintfW
@@ -392,27 +377,6 @@ int WXDLLIMPEXP_BASE
 wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr);
 
 #endif // wxUSE_UNICODE
-
-#ifdef __WATCOMC__
-    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    //
-    // fortunately, OpenWatcom implements __VA_ARGS__, so we can provide macros
-    // that cast the format argument to wxString:
-    #undef wxPrintf
-    #undef wxFprintf
-    #undef wxSprintf
-    #undef wxSnprintf
-
-    #define wxPrintf(fmt, ...) \
-            wxPrintf_Impl(wxFormatString(fmt), __VA_ARGS__)
-    #define wxFprintf(f, fmt, ...) \
-            wxFprintf_Impl(f, wxFormatString(fmt), __VA_ARGS__)
-    #define wxSprintf(s, fmt, ...) \
-            wxSprintf_Impl(s, wxFormatString(fmt), __VA_ARGS__)
-    #define wxSnprintf(s, n, fmt, ...) \
-            wxSnprintf_Impl(s, n, wxFormatString(fmt), __VA_ARGS__)
-#endif // __WATCOMC__
-
 
 // We can't use wxArgNormalizer<T> for variadic arguments to wxScanf() etc.
 // because they are writable, so instead of providing friendly template

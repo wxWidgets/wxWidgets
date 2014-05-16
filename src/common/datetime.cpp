@@ -1408,7 +1408,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         else
         {
             time += (time_t)tz.GetOffset();
-#if defined(__VMS__) || defined(__WATCOMC__) // time is unsigned so avoid warning
+#if defined(__VMS__) // time is unsigned so avoid warning
             int time2 = (int) time;
             if ( time2 >= 0 )
 #else

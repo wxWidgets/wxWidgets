@@ -45,7 +45,7 @@
 wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );
 wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 
-// Doesn't yet compile under VC++ 4, BC++, Watcom C++,
+// Doesn't yet compile under VC++ 4, BC++
 // Wine: no wininet.h
 #if (!defined(__BORLANDC__) || (__BORLANDC__>=0x550)) && \
     (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION(0, 5)) && \

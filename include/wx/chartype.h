@@ -26,8 +26,6 @@
         #endif
     #elif defined(__GNUWIN32__) && !defined(__MINGW32__)
         #define wxUSE_WCHAR_T 0
-    #elif defined(__WATCOMC__)
-        #define wxUSE_WCHAR_T 0
     #else
         /* add additional compiler checks if this fails */
         #define wxUSE_WCHAR_T 1
@@ -45,7 +43,7 @@
 
    Actually MinGW has tchar.h, but it does not include wchar.h
  */
-#if defined(__MINGW32__) || defined(__WATCOMC__)
+#if defined(__MINGW32__)
     #ifndef HAVE_WCHAR_H
         #define HAVE_WCHAR_H
     #endif
@@ -93,8 +91,6 @@
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
     #define wxHAVE_TCHAR_SUPPORT
     #include <ctype.h>
-#elif defined(__WATCOMC__)
-    #define wxHAVE_TCHAR_SUPPORT
 #elif defined(__DMC__)
     #define wxHAVE_TCHAR_SUPPORT
 #elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 )

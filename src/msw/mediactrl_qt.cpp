@@ -101,7 +101,7 @@ typedef struct ComponentInstanceRecord * ComponentInstance;
 #define MovieController ComponentInstance
 
 #ifndef URLDataHandlerSubType
-#if defined(__WATCOMC__) || defined(__MINGW32__)
+#if defined(__MINGW32__)
 // use magic numbers for compilers which complain about multicharacter integers
 const OSType URLDataHandlerSubType     = 1970433056;
 const OSType VisualMediaCharacteristic = 1702454643;

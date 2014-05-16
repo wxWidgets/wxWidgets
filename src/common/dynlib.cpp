@@ -223,8 +223,6 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
         suffix << wxT("_gcc");
     #elif defined(__VISUALC__)
         suffix << wxT("_vc");
-    #elif defined(__WATCOMC__)
-        suffix << wxT("_wat");
     #elif defined(__BORLANDC__)
         suffix << wxT("_bcc");
     #endif

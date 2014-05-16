@@ -481,13 +481,6 @@ typedef struct _OSVERSIONINFOEX {
     // DMC++
 
  /*
-  * The following are specifically required for OpenWatcom C++ (none at present)
-  */
-
-#if defined(__WATCOMC__)
-#endif
-
- /*
   * The following are specifically required for MinGW (none at present)
   */
 

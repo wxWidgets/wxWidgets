@@ -46,7 +46,7 @@
                  "integers, using emulation class instead.\n" \
                  "Please report your compiler version to " \
                  "wx-dev@lists.wxwidgets.org!"
-    #elif !defined(__WATCOMC__)
+    #else
         #pragma warning "Your compiler does not appear to support 64 bit "\
                         "integers, using emulation class instead.\n" \
                         "Please report your compiler version to " \

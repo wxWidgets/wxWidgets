@@ -52,16 +52,11 @@
     #endif
 #endif
 
-#if wxCHECK_WATCOM_VERSION(1,0)
-    #define HAVE_W32API_H
-#endif
-
 /* check for MinGW/Cygwin w32api version ( releases >= 0.5, only ) */
 #if defined( HAVE_W32API_H )
 #include <w32api.h>
 #endif
 
-/* Watcom can't handle defined(xxx) here: */
 #if defined(__W32API_MAJOR_VERSION) && defined(__W32API_MINOR_VERSION)
     #define wxCHECK_W32API_VERSION( major, minor ) \
  ( ( ( __W32API_MAJOR_VERSION > (major) ) \

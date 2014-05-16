@@ -68,8 +68,6 @@
     #define __WX_BO_COMPILER ",Borland C++"
 #elif defined(__DIGITALMARS__)
     #define __WX_BO_COMPILER ",DigitalMars"
-#elif defined(__WATCOMC__)
-    #define __WX_BO_COMPILER ",Watcom C++"
 #else
     #define __WX_BO_COMPILER
 #endif

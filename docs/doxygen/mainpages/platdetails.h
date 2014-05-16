@@ -135,8 +135,8 @@ distribution.
 wxMSW is a port of wxWidgets for the Windows platforms (Windows XP and later
 are supported). wxMSW provides native look and feel for each Windows version.
 This port can be compiled with several compilers including Microsoft Studio
-VC++ 2003 or later, Borland 5.5, MinGW32, Cygwin and Watcom as well as
-cross-compilation with a Linux-hosted MinGW32 tool chain.
+VC++ 2003 or later, Borland 5.5, MinGW32, Cygwin as well as cross-compilation
+with a Linux-hosted MinGW32 tool chain.
 
 For further information, please see the files in docs/msw in the distribution.
 

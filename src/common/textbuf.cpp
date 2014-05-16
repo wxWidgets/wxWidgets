@@ -242,7 +242,6 @@ wxTextFileType wxTextBuffer::GuessType() const
                                                     ? wxTextFileType_##t1   \
                                                     : wxTextFileType_##t2
 
-#if !defined(__WATCOMC__) || wxCHECK_WATCOM_VERSION(1,4)
         if ( nDos > nUnix )
             return GREATER_OF(Dos, Mac);
         else if ( nDos < nUnix )
@@ -251,7 +250,6 @@ wxTextFileType wxTextBuffer::GuessType() const
             // nDos == nUnix
             return nMac > nDos ? wxTextFileType_Mac : typeDefault;
         }
-#endif // __WATCOMC__
 
         #undef    GREATER_OF
     }

@@ -1620,9 +1620,6 @@ void wxMSWDCImpl::InitializePalette()
 
 #endif // wxUSE_PALETTE
 
-// SetFont/Pen/Brush() really ask to be implemented as a single template
-// function... but doing it is not worth breaking OpenWatcom build <sigh>
-
 void wxMSWDCImpl::SetFont(const wxFont& font)
 {
     WXMICROWIN_CHECK_HDC

@@ -404,14 +404,7 @@ extern void WXDLLIMPEXP_BASE wxAbort();
 
  It may be used both within a function and in the global scope.
 */
-#if defined(__WATCOMC__)
-    /* avoid "unused symbol" warning */
-    #define wxCOMPILE_TIME_ASSERT(expr, msg) \
-        class wxMAKE_UNIQUE_ASSERT_NAME { \
-          unsigned int msg: expr; \
-          wxMAKE_UNIQUE_ASSERT_NAME() { wxUnusedVar(msg); } \
-        }
-#elif defined( __VMS )
+#if defined( __VMS )
 namespace wxdebug{
 
 // HP aCC cannot deal with missing names for template value parameters

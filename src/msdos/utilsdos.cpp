@@ -53,8 +53,6 @@ void wxMilliSleep(unsigned long milliseconds)
 {
 #if HAVE_USLEEP || defined __DJGPP__
     usleep(milliseconds * 1000);
-#elif defined __WATCOMC__
-    delay(milliseconds);
 #else
     clock_t start = clock();
     while ((clock() - start) * 1000 / CLOCKS_PER_SEC < (clock_t)milliseconds)

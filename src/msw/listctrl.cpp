@@ -52,7 +52,7 @@
   #endif
 #endif
 
-// Currently gcc and watcom don't define NMLVFINDITEM, and DMC only defines
+// Currently gcc doesn't define NMLVFINDITEM, and DMC only defines
 // it by its old name NM_FINDTIEM.
 //
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(NMLVFINDITEM)

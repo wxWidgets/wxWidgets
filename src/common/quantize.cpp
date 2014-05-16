@@ -65,7 +65,7 @@
 
 typedef unsigned short UINT16;
 typedef signed short INT16;
-#if !(defined(__WATCOMC__) && (defined(__WXMSW__) || defined(__WXMOTIF__)))
+#if !defined(__WXMOTIF__)
 typedef signed int INT32;
 #endif
 

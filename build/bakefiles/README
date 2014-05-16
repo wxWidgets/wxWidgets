@@ -10,8 +10,8 @@ that are not up to date.
 Use "bakefile_gen -c" to clean generated files.
 
 You can generate or clean only subset of files by specifying -f or -b flags
-when invoking bakefile_gen. For example, "bakefile_gen -fborland,watcom" will
-only regenerate Borland C++ and OpenWatcom makefiles. -b flag limits
+when invoking bakefile_gen. For example, "bakefile_gen -fborland,msvc" will
+only regenerate Borland C++ and MSVC makefiles. -b flag limits
 regeneration only to specified bakefiles. For example,
 "bakefile_gen -b wx.bkl" will only regenerate main library makefiles.
 "bakefile_gen -b "../../samples/html/*/*.bkl" will regenerate makefiles for

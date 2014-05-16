@@ -37,9 +37,7 @@ class WXDLLIMPEXP_FWD_BASE wxArrayInt;
 // needed for wxOperatingSystemId, wxLinuxDistributionInfo
 #include "wx/platinfo.h"
 
-#ifdef __WATCOMC__
-    #include <direct.h>
-#elif defined(__X__)
+#if defined(__X__)
     #include <dirent.h>
     #include <unistd.h>
 #endif

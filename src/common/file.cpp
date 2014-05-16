@@ -56,9 +56,7 @@
         #include "wx/msw/wrapwin.h"
     #endif
 #elif defined(__DOS__)
-    #if defined(__WATCOMC__)
-       #include <io.h>
-    #elif defined(__DJGPP__)
+    #if defined(__DJGPP__)
        #include <io.h>
        #include <unistd.h>
        #include <stdio.h>

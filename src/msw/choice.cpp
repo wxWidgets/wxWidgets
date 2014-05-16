@@ -300,19 +300,6 @@ unsigned int wxChoice::GetCount() const
 
 int wxChoice::FindString(const wxString& s, bool bCase) const
 {
-#if defined(__WATCOMC__) && defined(__WIN386__)
-    // For some reason, Watcom in WIN386 mode crashes in the CB_FINDSTRINGEXACT message.
-    // wxChoice::Do it the long way instead.
-    unsigned int count = GetCount();
-    for ( unsigned int i = 0; i < count; i++ )
-    {
-        // as CB_FINDSTRINGEXACT is case insensitive, be case insensitive too
-        if (GetString(i).IsSameAs(s, bCase))
-            return i;
-    }
-
-    return wxNOT_FOUND;
-#else // !Watcom
    //TODO:  Evidently some MSW versions (all?) don't like empty strings
    //passed to SendMessage, so we have to do it ourselves in that case
    if ( s.empty() )
@@ -338,7 +325,6 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
 
        return pos == LB_ERR ? wxNOT_FOUND : pos;
    }
-#endif // Watcom/!Watcom
 }
 
 void wxChoice::SetString(unsigned int n, const wxString& s)

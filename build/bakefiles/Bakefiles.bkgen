@@ -16,10 +16,10 @@
 
     dmars, dmars_smake, msevc4prj - These are generated at release time and
                 we don't want to clutter the source tree with these files.
-    msvc6prj - wxWidgets doesn't build with MSVC 6 any longer.
+    msvc6prj,watcom - wxWidgets doesn't build with these compilers any longer.
     -->
 
-    <disable-formats>dmars,dmars_smake,msevc4prj,msvc6prj</disable-formats>
+    <disable-formats>dmars,dmars_smake,msevc4prj,msvc6prj,watcom</disable-formats>
 
 
     <!-- These wildcards match all .bkl files in wxWidgets tree: -->
