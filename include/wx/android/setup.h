@@ -265,6 +265,24 @@
 // Recommended setting: 1 if you want to support multiple languages
 #define wxUSE_PRINTF_POS_PARAMS      1
 
+// Enable the use of compiler-specific thread local storage keyword, if any.
+// This is used for wxTLS_XXX() macros implementation and normally should use
+// the compiler-provided support as it's simpler and more efficient, but is
+// disabled under Windows in wx/msw/chkconf.h as it can't be used if wxWidgets
+// is used in a dynamically loaded Win32 DLL (i.e. using LoadLibrary()) under
+// XP as this triggers a bug in compiler TLS support that results in crashes
+// when any TLS variables are used.
+//
+// If you're absolutely sure that your build of wxWidgets is never going to be
+// used in such situation, either because it's not going to be linked from any
+// kind of plugin or because you only target Vista or later systems, you can
+// set this to 2 to force the use of compiler TLS even under MSW.
+//
+// Default is 1 meaning that compiler TLS is used only if it's 100% safe.
+//
+// Recommended setting: 2 if you want to have maximal performance and don't
+// care about the scenario described above.
+#define wxUSE_COMPILER_TLS 1
 
 // ----------------------------------------------------------------------------
 // Interoperability with the standard library.
@@ -296,6 +314,9 @@
 // and wxHashXXX<> classes. If disabled, wxWidgets own (mostly compatible but
 // usually more limited) implementations are used which allows to avoid the
 // dependency on the C++ run-time library.
+//
+// Notice that the compilers mentioned in wxUSE_STD_DEFAULT comment above don't
+// support using standard containers.
 //
 // Default is 0 for compatibility reasons.
 //
@@ -736,6 +757,9 @@
 // yourself. If you do, change the setting below manually.
 //
 // Recommended setting: 1 if supported by the compilation environment
+
+// notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
+// included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
 #ifdef _MSC_VER
 #   define wxUSE_GRAPHICS_CONTEXT 1
 #else
@@ -1063,6 +1087,16 @@
 // Recommended setting: 1
 #define wxUSE_NOTIFICATION_MESSAGE 1
 
+// wxPreferencesEditor provides a common API for different ways of presenting
+// the standard "Preferences" or "Properties" dialog under different platforms
+// (e.g. some use modal dialogs, some use modeless ones; some apply the changes
+// immediately while others require an explicit "Apply" button).
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be safely disabled if you don't use it)
+#define wxUSE_PREFERENCES_EDITOR 1
+
 // wxRichToolTip is a customizable tooltip class which has more functionality
 // than the stock (but native, unlike this class) wxToolTip.
 //
@@ -1334,7 +1368,7 @@
 
 #define wxUSE_IPC         1
                                 // 0 for no interprocess comms
-#define wxUSE_HELP        0
+#define wxUSE_HELP        1
                                 // 0 for no help facility
 
 // Should we use MS HTML help for wxHelpController? If disabled, neither

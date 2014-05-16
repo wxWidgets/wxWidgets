@@ -95,6 +95,7 @@ if [ ! -f wxwin.m4 ]; then
     exit 1
 fi
 
+update_common_setup_h include/wx/android/setup.h
 update_common_setup_h include/wx/motif/setup0.h
 update_common_setup_h include/wx/msw/setup0.h
 update_common_setup_h include/wx/msw/wince/setup.h
