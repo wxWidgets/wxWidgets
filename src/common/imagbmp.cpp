@@ -1101,6 +1101,12 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         Resolution()
         {
             m_valid = false;
+
+            // Still initialize them as some compilers are smart enough to
+            // give "use of possibly uninitialized variable" for them (but not
+            // smart enough to see that this is not really the case).
+            m_x =
+            m_y = 0;
         }
 
         void Init(int x, int y)
