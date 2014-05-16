@@ -49,7 +49,7 @@
 #include  "wx/msw/ole/oleutils.h"
 #include "wx/msw/ole/safearray.h"
 
-#if defined(__VISUALC__) && (__VISUALC__ > 1000)
+#if defined(__VISUALC__)
     #include  <docobj.h>
 #endif
 
@@ -561,7 +561,7 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant, long fla
 
 #if wxUSE_DATAOBJ
 
-#if wxDEBUG_LEVEL && (( defined(__VISUALC__) && (__VISUALC__ > 1000) ))
+#if wxDEBUG_LEVEL && defined(__VISUALC__)
 static wxString GetIidName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID

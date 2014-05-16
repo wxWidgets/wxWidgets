@@ -51,8 +51,7 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
 // not all compilers can deal with template Read/Write() methods, define this
 // symbol if the template functions are available
-#if (!defined(__VISUALC__) || __VISUALC__ > 1200) && \
-    !defined( __VMS ) && \
+#if !defined( __VMS ) && \
     !(defined(__HP_aCC) && defined(__hppa))
     #define wxHAS_CONFIG_TEMPLATE_RW
 #endif

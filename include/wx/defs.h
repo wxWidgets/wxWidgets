@@ -1267,9 +1267,7 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
        doing here. Same thing with icc with -Wall.
      */
 #ifdef __VISUALC__
-    #if __VISUALC__ >= 1200
-        #pragma warning(push)
-    #endif
+    #pragma warning(push)
     /* pointer truncation from '' to '' */
     #pragma warning(disable: 4311)
 #elif defined(__INTELC__)
@@ -1280,7 +1278,7 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
 
     return wx_reinterpret_cast(wxUIntPtr, p);
 
-#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
+#if defined(__VISUALC__) || defined(__INTELC__)
     #pragma warning(pop)
 #endif
 }
@@ -1288,9 +1286,7 @@ inline wxUIntPtr wxPtrToUInt(const void *p)
 inline void *wxUIntToPtr(wxUIntPtr p)
 {
 #ifdef __VISUALC__
-    #if __VISUALC__ >= 1200
-        #pragma warning(push)
-    #endif
+    #pragma warning(push)
     /* conversion to type of greater size */
     #pragma warning(disable: 4312)
 #elif defined(__INTELC__)
@@ -1301,7 +1297,7 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 
     return wx_reinterpret_cast(void *, p);
 
-#if (defined(__VISUALC__) && __VISUALC__ >= 1200) || defined(__INTELC__)
+#if defined(__VISUALC__) || defined(__INTELC__)
     #pragma warning(pop)
 #endif
 }

@@ -33,9 +33,6 @@ class WXDLLIMPEXP_CORE wxWindowMSW : public wxWindowBase
     friend class wxSpinCtrl;
     friend class wxSlider;
     friend class wxRadioBox;
-#if defined __VISUALC__ && __VISUALC__ <= 1200
-    friend class wxWindowMSW;
-#endif
 public:
     wxWindowMSW() { Init(); }
 
