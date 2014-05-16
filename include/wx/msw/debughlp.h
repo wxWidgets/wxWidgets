@@ -22,7 +22,12 @@
 // wxUSE_DBGHELP can be predefined as 0 to avoid the use of dbghelp.dll if this
 // is undesirable for some reason.
 #ifndef wxUSE_DBGHELP
-    #define wxUSE_DBGHELP 1
+    // The only compiler which is known to have the necessary headers is MSVC.
+    #ifdef __VISUALC__
+        #define wxUSE_DBGHELP 1
+    #else
+        #define wxUSE_DBGHELP 0
+    #endif
 #endif
 
 #if wxUSE_DBGHELP
