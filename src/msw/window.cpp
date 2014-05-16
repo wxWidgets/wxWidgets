@@ -106,7 +106,7 @@
 
 #include <string.h>
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__) /* && !defined(__WXWINCE__) */ ) || defined(__CYGWIN10__)
+#if !defined(__WXMICROWIN__)
     #include <shellapi.h>
     #include <mmsystem.h>
 #endif

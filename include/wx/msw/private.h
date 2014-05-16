@@ -72,7 +72,7 @@ WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
-#if defined(__WXWINCE__) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
+#if defined(__WXWINCE__)
 #ifndef ZeroMemory
     inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
 #endif

@@ -19,7 +19,7 @@
     #include "wx/msw/wrapwin.h"
 #endif
 
-#if wxCHECK_GCC_VERSION(3, 3)
+#ifdef __GNUC__
     #define HAVE_COMPILER_THREAD
     #define wxTHREAD_SPECIFIC __thread
 #elif defined(__VISUALC__)

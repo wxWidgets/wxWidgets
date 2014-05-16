@@ -25,7 +25,7 @@
 
 #if wxUSE_DIRDLG
 
-#if wxUSE_OLE && !defined(__GNUWIN32_OLD__) && (!defined(__WXWINCE__) || \
+#if wxUSE_OLE && (!defined(__WXWINCE__) || \
     (defined(__HANDHELDPC__) && (_WIN32_WCE >= 500)))
 
 #include "wx/dirdlg.h"

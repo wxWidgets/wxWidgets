@@ -372,14 +372,7 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
 
   #define REG_PARAM(name) &dw##name
 #else // Win32
-  // Old gcc headers incorrectly prototype RegQueryInfoKey() as taking
-  // size_t but normally we need a cast, even when sizeof(size_t) is the same
-  // as sizeof(DWORD).
-  #if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)
-    #define REG_PARAM(name) pn##name
-  #else
-    #define REG_PARAM(name)   (LPDWORD)(pn##name)
-  #endif
+  #define REG_PARAM(name)   (LPDWORD)(pn##name)
 #endif
 
 

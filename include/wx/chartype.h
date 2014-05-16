@@ -123,37 +123,9 @@
     /*     signed/unsigned version of it which (a) makes sense to me (unlike */
     /*     char wchar_t is always unsigned) and (b) was how the previous     */
     /*     definitions worked so keep it like this                           */
-
-    /* Sun's SunPro compiler supports the wchar_t type and wide character    */
-    /* functions, but does not define __WCHAR_TYPE__. Define it here to      */
-    /* allow unicode enabled builds.                                         */
-    #if (defined(__SUNPRO_CC) || defined(__SUNPRO_C)) && !defined(__WCHAR_TYPE__)
-        #define __WCHAR_TYPE__ wxchar_t
-    #endif
-
-    /* GNU libc has __WCHAR_TYPE__ which requires special treatment, see */
-    /* comment below */
-    #if !defined(__WCHAR_TYPE__) || \
-        (!defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 96))
-        /* standard case */
-        typedef wchar_t wxChar;
-        typedef wchar_t wxSChar;
-        typedef wchar_t wxUChar;
-    #else /* __WCHAR_TYPE__ and gcc < 2.96 */
-        /* VS: wxWidgets used to define wxChar as __WCHAR_TYPE__ here.       */
-        /*     However, this doesn't work with new GCC 3.x compilers because */
-        /*     wchar_t is C++'s builtin type in the new standard. OTOH, old  */
-        /*     compilers (GCC 2.x) won't accept new definition of            */
-        /*     wx{S,U}CharType, so we have to define wxChar                  */
-        /*     conditionally depending on detected compiler & compiler       */
-        /*     version.                                                      */
-
-        /*     with old definition of wxChar. */
-        #define wchar_t __WCHAR_TYPE__
-        typedef __WCHAR_TYPE__ wxChar;
-        typedef __WCHAR_TYPE__ wxSChar;
-        typedef __WCHAR_TYPE__ wxUChar;
-    #endif /* __WCHAR_TYPE__ */
+    typedef wchar_t wxChar;
+    typedef wchar_t wxSChar;
+    typedef wchar_t wxUChar;
 #endif /* ASCII/Unicode */
 
 /* ------------------------------------------------------------------------- */

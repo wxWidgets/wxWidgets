@@ -32,7 +32,7 @@
 
 #include "wx/dataobj.h"
 
-#if wxUSE_OLE && defined(__WIN32__) && !defined(__GNUWIN32_OLD__)
+#if wxUSE_OLE
 
 #include "wx/scopedarray.h"
 #include "wx/vector.h"
@@ -40,11 +40,6 @@
 
 #ifdef __WXWINCE__
 #include <winreg.h>
-#endif
-
-// for some compilers, the entire ole2.h must be included, not only oleauto.h
-#if wxUSE_NORLANDER_HEADERS || defined(__WXWINCE__)
-  #include <ole2.h>
 #endif
 
 #include <oleauto.h>

@@ -119,15 +119,6 @@
  * disable the settings which don't work for some compilers
  */
 
-#ifndef wxUSE_NORLANDER_HEADERS
-#   if ( defined(__WINE__) ) || \
-       ((defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95))))
-#       define wxUSE_NORLANDER_HEADERS 1
-#   else
-#       define wxUSE_NORLANDER_HEADERS 0
-#   endif
-#endif
-
 /*
  * All of the settings below require SEH support (__try/__catch) and can't work
  * without it.
@@ -179,12 +170,6 @@
 #   undef  wxUSE_DEBUG_NEW_ALWAYS
 #   define wxUSE_DEBUG_NEW_ALWAYS          0
 #endif /* wxUSE_MFC */
-
-#if (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
-    /* GnuWin32 doesn't have appropriate headers for e.g. IUnknown. */
-#   undef wxUSE_DRAG_AND_DROP
-#   define wxUSE_DRAG_AND_DROP 0
-#endif
 
 #if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
 #   undef wxUSE_CHECKLISTBOX

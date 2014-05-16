@@ -50,7 +50,7 @@
 #endif
 
 // Doesn't work with Cygwin at present
-#if wxUSE_SOCKETS && (defined(__GNUWIN32_OLD__) || defined(__WXWINCE__) || defined(__CYGWIN32__))
+#if wxUSE_SOCKETS && (defined(__WXWINCE__) || defined(__CYGWIN32__))
     // apparently we need to include winsock.h to get WSADATA and other stuff
     // used in wxGetFullHostName() with the old mingw32 versions
     #include <winsock.h>

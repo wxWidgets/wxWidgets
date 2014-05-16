@@ -62,13 +62,7 @@
 #endif
 
 #if wxUSE_RICHEDIT
-
-// old mingw32 has richedit stuff directly in windows.h and doesn't have
-// richedit.h at all
-#if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
     #include <richedit.h>
-#endif
-
 #endif // wxUSE_RICHEDIT
 
 #include "wx/msw/missing.h"

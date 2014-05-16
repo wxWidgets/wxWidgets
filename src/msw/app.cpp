@@ -61,14 +61,6 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
-// OLE is used for drag-and-drop, clipboard, OLE Automation..., but some
-// compilers don't support it (missing headers, libs, ...)
-#if defined(__GNUWIN32_OLD__) || defined(__SYMANTEC__)
-    #undef wxUSE_OLE
-
-    #define  wxUSE_OLE 0
-#endif // broken compilers
-
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
     #include <ole2.h>
     #include <aygshell.h>

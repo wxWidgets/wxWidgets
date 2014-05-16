@@ -37,13 +37,7 @@
     #include <ole2.h>
 #endif
 
-#ifdef __WIN32__
-    #if !defined(__GNUWIN32__) || wxUSE_NORLANDER_HEADERS
-        #include <shlobj.h>            // for DROPFILES structure
-    #endif
-#else
-    #include <shellapi.h>
-#endif
+#include <shlobj.h>            // for DROPFILES structure
 
 #include "wx/dnd.h"
 

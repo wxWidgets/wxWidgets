@@ -234,9 +234,7 @@ typedef short int WXTYPE;
 #ifndef HAVE_EXPLICIT
     #if defined(__VISUALC__)
         #define HAVE_EXPLICIT
-    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
-          && wxCHECK_GCC_VERSION(2, 95)
-        /*  GCC 2.95 has explicit, what about earlier versions? */
+    #elif defined(__GNUC__)
         #define HAVE_EXPLICIT
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
         /*  BC++ 4.52 doesn't support explicit, CBuilder 1 does */
@@ -345,8 +343,7 @@ typedef short int WXTYPE;
 #ifndef HAVE_STD_WSTRING
     #if defined(__VISUALC__)
         #define HAVE_STD_WSTRING
-    #elif defined(__MINGW32__) && wxCHECK_GCC_VERSION(3, 3)
-        /*  GCC 3.1 has std::wstring; 3.0 never was in MinGW, 2.95 hasn't it */
+    #elif defined(__MINGW32__)
         #define HAVE_STD_WSTRING
     #endif
 #endif
@@ -354,10 +351,7 @@ typedef short int WXTYPE;
 #ifndef HAVE_STD_STRING_COMPARE
     #if defined(__VISUALC__)
         #define HAVE_STD_STRING_COMPARE
-    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
-          && wxCHECK_GCC_VERSION(3, 1)
-        /*  GCC 3.1 has std::string::compare; */
-        /*  3.0 never was in MinGW, 2.95 hasn't it */
+    #elif defined(__MINGW32__) || defined(__CYGWIN32__)
         #define HAVE_STD_STRING_COMPARE
     #endif
 #endif
@@ -583,7 +577,7 @@ typedef short int WXTYPE;
 /* The basic compiler-specific construct to generate a deprecation warning. */
 #ifdef __clang__
     #define wxDEPRECATED_DECL __attribute__((deprecated))
-#elif wxCHECK_GCC_VERSION(3, 1)
+#elif defined(__GNUC__)
     #define wxDEPRECATED_DECL __attribute__((deprecated))
 #elif defined(__VISUALC__)
     #define wxDEPRECATED_DECL __declspec(deprecated)

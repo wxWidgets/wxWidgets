@@ -330,7 +330,6 @@ library:
 @itemdef{wxUSE_MS_HTML_HELP, Use wxCHMHelpController class.}
 @itemdef{wxUSE_NO_MANIFEST, Can be predefined to disable inclusion of the
 manifest from wxWidgets RC file. See also wxUSE_RC_MANIFEST.}
-@itemdef{wxUSE_NORLANDER_HEADERS, Using headers whose author is Anders Norlander.}
 @itemdef{wxUSE_OLE, Enables OLE helper routines.}
 @itemdef{wxUSE_OLE_AUTOMATION, Enable OLE automation utilities.}
 @itemdef{wxUSE_OLE_CLIPBOARD, Use OLE clipboard.}

@@ -118,7 +118,7 @@
     #if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || \
         (defined(__cplusplus) && __cplusplus >= 201103L)
         #define HAVE_VARIADIC_MACROS 1
-    #elif wxCHECK_GCC_VERSION(3,0)
+    #elif defined(__GNUC__)
         #define HAVE_VARIADIC_MACROS 1
     #elif wxCHECK_VISUALC_VERSION(8)
         #define HAVE_VARIADIC_MACROS 1
