@@ -9,6 +9,7 @@ compiler: gcc
 branches:
     only:
         - master
+        - WX_3_0_BRANCH
 
 notifications:
     email:
