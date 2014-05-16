@@ -26,7 +26,7 @@ public:
 
     virtual bool Connect(const wxString& host, unsigned short port);
     virtual bool Connect(const wxString& host) wxOVERRIDE { return Connect(host, 0); }
-    virtual bool Connect(const wxSockAddress& addr, bool wait) wxOVERRIDE;
+    virtual bool Connect(const wxSockAddress& addr, bool wait = true) wxOVERRIDE;
     bool Abort() wxOVERRIDE;
 
     wxInputStream *GetInputStream(const wxString& path) wxOVERRIDE;
