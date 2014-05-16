@@ -36,7 +36,6 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/dynlib.h"
 #include "wx/msw/private.h"
 
 #include "wx/imaglist.h"
@@ -3435,9 +3434,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             return false;
 
-        // NB: MSLU is broken and sends TVN_SELCHANGEDA instead of
-        //     TVN_SELCHANGEDW in Unicode mode under Win98. Therefore
-        //     we have to handle both messages:
         case TVN_SELCHANGEDA:
         case TVN_SELCHANGEDW:
             if ( !m_changingSelection )
@@ -3506,31 +3502,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         // delete it (in POSTPAINT notify)
                         if (m_imageListState && m_imageListState->GetImageCount() > 0)
                         {
-                            typedef BOOL (wxSTDCALL *ImageList_Copy_t)
-                                (HIMAGELIST, int, HIMAGELIST, int, UINT);
-                            static ImageList_Copy_t s_pfnImageList_Copy = NULL;
-                            static bool loaded = false;
-
-                            if ( !loaded )
-                            {
-                                wxLoadedDLL dllComCtl32(wxT("comctl32.dll"));
-                                if ( dllComCtl32.IsLoaded() )
-                                {
-                                    wxDL_INIT_FUNC(s_pfn, ImageList_Copy, dllComCtl32);
-                                    loaded = true;
-                                }
-                            }
-
-                            if ( !s_pfnImageList_Copy )
-                            {
-                                // this code is broken with ImageList_Copy()
-                                // but I don't care enough about Win95 support
-                                // to write it now -- if anybody does, please
-                                // do it
-                                wxFAIL_MSG("TODO: implement this for Win95");
-                                break;
-                            }
-
                             const HIMAGELIST
                                 hImageList = GetHimagelistOf(m_imageListState);
 
@@ -3547,9 +3518,9 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                                 // move images to right
                                 for ( int i = index; i > 0; i-- )
                                 {
-                                    (*s_pfnImageList_Copy)(hImageList, i,
-                                                           hImageList, i-1,
-                                                           ILCF_MOVE);
+                                    ImageList_Copy(hImageList, i,
+                                                   hImageList, i-1,
+                                                   ILCF_MOVE);
                                 }
 
                                 // we must remove the image in POSTPAINT notify

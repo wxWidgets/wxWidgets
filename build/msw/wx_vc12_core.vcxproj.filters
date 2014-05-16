@@ -615,9 +615,6 @@
     <ClCompile Include="..\..\src\msw\msgdlg.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\msw\mslu.cpp">
-      <Filter>MSW Sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\msw\nativdlg.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>

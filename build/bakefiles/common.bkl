@@ -292,18 +292,12 @@
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
         <if cond="FORMAT!='autoconf' and UNICODE=='0'">wxUSE_UNICODE=0</if>
     </set>
-    <set var="MSLU_DEFINE">
-        <if cond="FORMAT!='autoconf' and MSLU=='1'">wxUSE_UNICODE_MSLU=1</if>
-    </set>
 
     <!-- fill for the specific case of the format/compiler -->
     <set var="WIN32_WINNT">
         <if cond="FORMAT=='dmars' or FORMAT=='dmars_smake'">_WIN32_WINNT=0x0400</if>
     </set>
 
-    <set var="UNICOWS_LIB">
-        <if cond="MSLU=='1'">unicows</if>
-    </set>
     <set var="CAIRO_LIB">
         <if cond="USE_CAIRO=='1'">cairo</if>
     </set>
@@ -529,7 +523,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <define>$(RTTI_DEFINE)</define>
         <define>$(THREAD_DEFINE)</define>
         <define>$(UNICODE_DEFINE)</define>
-        <define>$(MSLU_DEFINE)</define>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
         <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>
@@ -560,7 +553,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
 
         <!-- system libraries on windows: -->
         <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
-            <sys-lib>$(UNICOWS_LIB)</sys-lib>
             <sys-lib>$(CAIRO_LIB)</sys-lib>
             <lib-path>$(CAIRO_LIBDIR)</lib-path>
             <if cond="FORMAT=='borland'">

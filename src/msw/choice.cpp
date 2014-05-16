@@ -199,28 +199,6 @@ wxChoice::~wxChoice()
     Clear();
 }
 
-bool wxChoice::MSWGetComboBoxInfo(tagCOMBOBOXINFO* info) const
-{
-    // TODO-Win9x: Get rid of this once we officially drop support for Win9x
-    //             and just call the function directly.
-#if wxUSE_DYNLIB_CLASS
-    typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, tagCOMBOBOXINFO*);
-    static GetComboBoxInfo_t s_pfnGetComboBoxInfo = NULL;
-    static bool s_triedToLoad = false;
-    if ( !s_triedToLoad )
-    {
-        s_triedToLoad = true;
-        wxLoadedDLL dllUser32("user32.dll");
-        wxDL_INIT_FUNC(s_pfn, GetComboBoxInfo, dllUser32);
-    }
-
-    if ( s_pfnGetComboBoxInfo )
-        return (*s_pfnGetComboBoxInfo)(GetHwnd(), info) != 0;
-#endif // wxUSE_DYNLIB_CLASS
-
-    return false;
-}
-
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
 // ----------------------------------------------------------------------------
@@ -641,7 +619,7 @@ wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
     wxSize tsize(xlen, 0);
 
     WinStruct<COMBOBOXINFO> info;
-    if ( MSWGetComboBoxInfo(&info) )
+    if ( ::GetComboBoxInfo(GetHwnd(), &info) )
     {
         tsize.x += info.rcItem.left + info.rcButton.right - info.rcItem.right
                     + info.rcItem.left + 3; // right and extra margins

@@ -1327,20 +1327,7 @@ size_t wxFileDataObject::GetDataSize() const
     if ( m_filenames.empty() )
         return 0;
 
-#if wxUSE_UNICODE_MSLU
-    size_t sizeOfChar;
-    if ( wxGetOsVersion() == wxOS_WINDOWS_9X )
-    {
-        // Win9x always uses ANSI file names and MSLU doesn't help with this
-        sizeOfChar = 1;
-    }
-    else
-    {
-        sizeOfChar = sizeof(wxChar);
-    }
-#else // !wxUSE_UNICODE_MSLU
     static const size_t sizeOfChar = sizeof(wxChar);
-#endif // wxUSE_UNICODE_MSLU/!wxUSE_UNICODE_MSLU
 
     // initial size of DROPFILES struct + null byte
     size_t sz = sizeof(DROPFILES) + sizeOfChar;
@@ -1349,13 +1336,7 @@ size_t wxFileDataObject::GetDataSize() const
     for ( size_t i = 0; i < count; i++ )
     {
         // add filename length plus null byte
-        size_t len;
-#if wxUSE_UNICODE_MSLU
-        if ( sizeOfChar == 1 )
-            len = strlen(m_filenames[i].mb_str(*wxConvFileName));
-        else
-#endif // wxUSE_UNICODE_MSLU
-            len = m_filenames[i].length();
+        size_t len = m_filenames[i].length();
 
         sz += (len + 1) * sizeOfChar;
     }
@@ -1382,11 +1363,7 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
     // initialize DROPFILES struct
     pDrop->pFiles = sizeof(DROPFILES);
     pDrop->fNC = FALSE;                 // not non-client coords
-#if wxUSE_UNICODE_MSLU
-    pDrop->fWide = wxGetOsVersion() != wxOS_WINDOWS_9X ? TRUE : FALSE;
-#else
     pDrop->fWide = wxUSE_UNICODE;
-#endif
 
     const size_t sizeOfChar = pDrop->fWide ? sizeof(wchar_t) : 1;
 
@@ -1397,20 +1374,8 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
     for ( size_t i = 0; i < count; i++ )
     {
         // copy filename to pbuf and add null terminator
-        size_t len;
-#if wxUSE_UNICODE_MSLU
-        if ( sizeOfChar == 1 )
-        {
-            wxCharBuffer buf(m_filenames[i].mb_str(*wxConvFileName));
-            len = strlen(buf);
-            memcpy(pbuf, buf, len*sizeOfChar);
-        }
-        else
-#endif // wxUSE_UNICODE_MSLU
-        {
-            len = m_filenames[i].length();
-            memcpy(pbuf, m_filenames[i].t_str(), len*sizeOfChar);
-        }
+        size_t len = m_filenames[i].length();
+        memcpy(pbuf, m_filenames[i].t_str(), len*sizeOfChar);
 
         pbuf += len*sizeOfChar;
 

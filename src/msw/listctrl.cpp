@@ -269,7 +269,7 @@ bool wxListCtrl::Create(wxWindow *parent,
         return false;
 
     // explicitly say that we want to use Unicode because otherwise we get ANSI
-    // versions of _some_ messages (notably LVN_GETDISPINFOA) in MSLU build
+    // versions of _some_ messages (notably LVN_GETDISPINFOA)
     wxSetCCUnicodeFormat(GetHwnd());
 
     // We must set the default text colour to the system/theme color, otherwise

@@ -692,16 +692,13 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     // surprisingly, calling SetMenuItemInfo() with just MIIM_STRING doesn't
     // work as it resets the menu bitmap, so we need to first get the old item
     // state and then modify it
-    const bool isLaterThanWin95 = wxGetWinVersion() > wxWinVersion_95;
     info.fMask = MIIM_STATE |
                  MIIM_ID |
                  MIIM_SUBMENU |
                  MIIM_CHECKMARKS |
-                 MIIM_DATA;
-    if ( isLaterThanWin95 )
-        info.fMask |= MIIM_BITMAP | MIIM_FTYPE;
-    else
-        info.fMask |= MIIM_TYPE;
+                 MIIM_DATA |
+                 MIIM_BITMAP |
+                 MIIM_FTYPE;
     if ( !::GetMenuItemInfo(hMenu, id, FALSE, &info) )
     {
         wxLogLastError(wxT("GetMenuItemInfo"));
@@ -725,9 +722,7 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     if ( !(state & MF_OWNERDRAW) )
 #endif // wxUSE_OWNER_DRAWN
     {
-        if ( isLaterThanWin95 )
-            info.fMask |= MIIM_STRING;
-        //else: MIIM_TYPE already specified
+        info.fMask |= MIIM_STRING;
         info.dwTypeData = wxMSW_CONV_LPTSTR(m_text);
         info.cch = m_text.length();
     }

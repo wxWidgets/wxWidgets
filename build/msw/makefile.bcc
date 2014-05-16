@@ -24,14 +24,14 @@ BCCDIR = $(MAKEDIR)\..
 MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 	-DCXXFLAGS="$(CXXFLAGS)" -DCPPFLAGS="$(CPPFLAGS)" -DLDFLAGS="$(LDFLAGS)" \
 	-DCPP="$(CPP)" -DSHARED="$(SHARED)" -DTOOLKIT_VERSION="$(TOOLKIT_VERSION)" \
-	-DWXUNIV="$(WXUNIV)" -DUNICODE="$(UNICODE)" -DMSLU="$(MSLU)" \
-	-DBUILD="$(BUILD)" -DDEBUG_INFO="$(DEBUG_INFO)" \
-	-DDEBUG_FLAG="$(DEBUG_FLAG)" -DMONOLITHIC="$(MONOLITHIC)" \
-	-DUSE_GUI="$(USE_GUI)" -DUSE_HTML="$(USE_HTML)" \
-	-DUSE_WEBVIEW="$(USE_WEBVIEW)" -DUSE_MEDIA="$(USE_MEDIA)" \
-	-DUSE_XRC="$(USE_XRC)" -DUSE_AUI="$(USE_AUI)" -DUSE_RIBBON="$(USE_RIBBON)" \
-	-DUSE_PROPGRID="$(USE_PROPGRID)" -DUSE_RICHTEXT="$(USE_RICHTEXT)" \
-	-DUSE_STC="$(USE_STC)" -DUSE_OPENGL="$(USE_OPENGL)" -DUSE_QA="$(USE_QA)" \
+	-DWXUNIV="$(WXUNIV)" -DUNICODE="$(UNICODE)" -DBUILD="$(BUILD)" \
+	-DDEBUG_INFO="$(DEBUG_INFO)" -DDEBUG_FLAG="$(DEBUG_FLAG)" \
+	-DMONOLITHIC="$(MONOLITHIC)" -DUSE_GUI="$(USE_GUI)" \
+	-DUSE_HTML="$(USE_HTML)" -DUSE_WEBVIEW="$(USE_WEBVIEW)" \
+	-DUSE_MEDIA="$(USE_MEDIA)" -DUSE_XRC="$(USE_XRC)" -DUSE_AUI="$(USE_AUI)" \
+	-DUSE_RIBBON="$(USE_RIBBON)" -DUSE_PROPGRID="$(USE_PROPGRID)" \
+	-DUSE_RICHTEXT="$(USE_RICHTEXT)" -DUSE_STC="$(USE_STC)" \
+	-DUSE_OPENGL="$(USE_OPENGL)" -DUSE_QA="$(USE_QA)" \
 	-DUSE_EXCEPTIONS="$(USE_EXCEPTIONS)" -DUSE_RTTI="$(USE_RTTI)" \
 	-DUSE_THREADS="$(USE_THREADS)" -DUSE_CAIRO="$(USE_CAIRO)" \
 	-DOFFICIAL_BUILD="$(OFFICIAL_BUILD)" -DVENDOR="$(VENDOR)" \
@@ -336,24 +336,23 @@ MONODLL_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -w-8027 -DwxUSE_BASE=1 -DWXMAKINGDLL $(CPPFLAGS) \
-	$(CFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -w-8027 \
+	-DwxUSE_BASE=1 -DWXMAKINGDLL $(CPPFLAGS) $(CFLAGS)
 MONODLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -w-8027 -DwxUSE_BASE=1 -DWXMAKINGDLL -Hu \
-	-H=$(OBJS)\wxprec_monodll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -w-8027 \
+	-DwxUSE_BASE=1 -DWXMAKINGDLL -Hu -H=$(OBJS)\wxprec_monodll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.obj \
 	$(OBJS)\monodll_any.obj \
@@ -467,7 +466,6 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_msgout.obj \
 	$(OBJS)\monodll_utilscmn.obj \
 	$(OBJS)\monodll_main.obj \
-	$(OBJS)\monodll_mslu.obj \
 	$(OBJS)\monodll_volume.obj \
 	$(OBJS)\monodll_fs_inet.obj \
 	$(OBJS)\monodll_ftp.obj \
@@ -488,23 +486,22 @@ MONOLIB_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -w-8027 -DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -w-8027 \
+	-DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 MONOLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -w-8027 -DwxUSE_BASE=1 -Hu \
-	-H=$(OBJS)\wxprec_monolib.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -w-8027 \
+	-DwxUSE_BASE=1 -Hu -H=$(OBJS)\wxprec_monolib.csm $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
 	$(OBJS)\monolib_any.obj \
@@ -618,7 +615,6 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_msgout.obj \
 	$(OBJS)\monolib_utilscmn.obj \
 	$(OBJS)\monolib_main.obj \
-	$(OBJS)\monolib_mslu.obj \
 	$(OBJS)\monolib_volume.obj \
 	$(OBJS)\monolib_fs_inet.obj \
 	$(OBJS)\monolib_ftp.obj \
@@ -639,20 +635,19 @@ BASEDLL_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXMAKINGDLL_BASE -DwxUSE_BASE=1 \
-	$(CPPFLAGS) $(CFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+	-DWXMAKINGDLL_BASE -DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 BASEDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXMAKINGDLL_BASE -DwxUSE_BASE=1 -Hu \
-	-H=$(OBJS)\wxprec_basedll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+	-DWXMAKINGDLL_BASE -DwxUSE_BASE=1 -Hu -H=$(OBJS)\wxprec_basedll.csm \
+	$(CPPFLAGS) $(CXXFLAGS)
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.obj \
 	$(OBJS)\basedll_any.obj \
@@ -766,25 +761,23 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_msgout.obj \
 	$(OBJS)\basedll_utilscmn.obj \
 	$(OBJS)\basedll_main.obj \
-	$(OBJS)\basedll_mslu.obj \
 	$(OBJS)\basedll_volume.obj
 BASELIB_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+	-DwxUSE_BASE=1 $(CPPFLAGS) $(CFLAGS)
 BASELIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DwxUSE_BASE=1 -Hu \
-	-H=$(OBJS)\wxprec_baselib.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+	-DwxUSE_BASE=1 -Hu -H=$(OBJS)\wxprec_baselib.csm $(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.obj \
 	$(OBJS)\baselib_any.obj \
@@ -898,17 +891,16 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_msgout.obj \
 	$(OBJS)\baselib_utilscmn.obj \
 	$(OBJS)\baselib_main.obj \
-	$(OBJS)\baselib_mslu.obj \
 	$(OBJS)\baselib_volume.obj
 NETDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_NET -Hu \
-	-H=$(OBJS)\wxprec_netdll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+	-DWXUSINGDLL -DWXMAKINGDLL_NET -Hu -H=$(OBJS)\wxprec_netdll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_dummy.obj \
 	$(OBJS)\netdll_fs_inet.obj \
@@ -927,11 +919,10 @@ NETLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -Hu -H=$(OBJS)\wxprec_netlib.csm \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 -Hu \
+	-H=$(OBJS)\wxprec_netlib.csm $(CPPFLAGS) $(CXXFLAGS)
 NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_dummy.obj \
 	$(OBJS)\netlib_fs_inet.obj \
@@ -950,11 +941,11 @@ COREDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_CORE -DwxUSE_BASE=0 -Hu \
-	-H=$(OBJS)\wxprec_coredll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_CORE -DwxUSE_BASE=0 -Hu -H=$(OBJS)\wxprec_coredll.csm \
+	$(CPPFLAGS) $(CXXFLAGS)
 COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_dummy.obj \
 	$(OBJS)\coredll_event.obj \
@@ -962,18 +953,16 @@ COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_msgout.obj \
 	$(OBJS)\coredll_utilscmn.obj \
 	$(OBJS)\coredll_main.obj \
-	$(OBJS)\coredll_mslu.obj \
 	$(OBJS)\coredll_volume.obj \
 	$(____CORE_SRC_FILENAMES_2_OBJECTS)
 CORELIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_BASE=0 -Hu -H=$(OBJS)\wxprec_corelib.csm \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_BASE=0 -Hu \
+	-H=$(OBJS)\wxprec_corelib.csm $(CPPFLAGS) $(CXXFLAGS)
 CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_dummy.obj \
 	$(OBJS)\corelib_event.obj \
@@ -981,18 +970,16 @@ CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_msgout.obj \
 	$(OBJS)\corelib_utilscmn.obj \
 	$(OBJS)\corelib_main.obj \
-	$(OBJS)\corelib_mslu.obj \
 	$(OBJS)\corelib_volume.obj \
 	$(____CORE_SRC_FILENAMES_3_OBJECTS)
 ADVDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_ADV -Hu \
-	-H=$(OBJS)\wxprec_advdll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_ADV -Hu -H=$(OBJS)\wxprec_advdll.csm $(CPPFLAGS) $(CXXFLAGS)
 ADVDLL_OBJECTS =  \
 	$(OBJS)\advdll_dummy.obj \
 	$(____ADVANCED_SRC_FILENAMES_2_OBJECTS)
@@ -1000,11 +987,10 @@ ADVLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_advlib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_advlib.csm $(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  \
 	$(OBJS)\advlib_dummy.obj \
 	$(____ADVANCED_SRC_FILENAMES_3_OBJECTS)
@@ -1012,11 +998,11 @@ MEDIADLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_MEDIA -Hu \
-	-H=$(OBJS)\wxprec_mediadll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_MEDIA -Hu -H=$(OBJS)\wxprec_mediadll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 MEDIADLL_OBJECTS =  \
 	$(OBJS)\mediadll_dummy.obj \
 	$(OBJS)\mediadll_mediactrlcmn.obj \
@@ -1027,11 +1013,10 @@ MEDIALIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_medialib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_medialib.csm $(CPPFLAGS) $(CXXFLAGS)
 MEDIALIB_OBJECTS =  \
 	$(OBJS)\medialib_dummy.obj \
 	$(OBJS)\medialib_mediactrlcmn.obj \
@@ -1042,11 +1027,10 @@ HTMLDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_HTML -Hu \
-	-H=$(OBJS)\wxprec_htmldll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_HTML -Hu -H=$(OBJS)\wxprec_htmldll.csm $(CPPFLAGS) $(CXXFLAGS)
 HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_dummy.obj \
 	$(OBJS)\htmldll_helpbest.obj \
@@ -1079,11 +1063,10 @@ HTMLLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_htmllib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_htmllib.csm $(CPPFLAGS) $(CXXFLAGS)
 HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_dummy.obj \
 	$(OBJS)\htmllib_helpbest.obj \
@@ -1116,11 +1099,11 @@ WEBVIEWDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_WEBVIEW -Hu \
-	-H=$(OBJS)\wxprec_webviewdll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_WEBVIEW -Hu -H=$(OBJS)\wxprec_webviewdll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 WEBVIEWDLL_OBJECTS =  \
 	$(OBJS)\webviewdll_dummy.obj \
 	$(OBJS)\webviewdll_webview_ie.obj \
@@ -1131,11 +1114,10 @@ WEBVIEWLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_webviewlib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_webviewlib.csm $(CPPFLAGS) $(CXXFLAGS)
 WEBVIEWLIB_OBJECTS =  \
 	$(OBJS)\webviewlib_dummy.obj \
 	$(OBJS)\webviewlib_webview_ie.obj \
@@ -1146,11 +1128,10 @@ QADLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_QA -Hu \
-	-H=$(OBJS)\wxprec_qadll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_QA -Hu -H=$(OBJS)\wxprec_qadll.csm $(CPPFLAGS) $(CXXFLAGS)
 QADLL_OBJECTS =  \
 	$(OBJS)\qadll_dummy.obj \
 	$(OBJS)\qadll_debugrpt.obj \
@@ -1159,11 +1140,10 @@ QALIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_qalib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_qalib.csm $(CPPFLAGS) $(CXXFLAGS)
 QALIB_OBJECTS =  \
 	$(OBJS)\qalib_dummy.obj \
 	$(OBJS)\qalib_debugrpt.obj \
@@ -1172,11 +1152,11 @@ XMLDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -DWXUSINGDLL -DWXMAKINGDLL_XML -Hu \
-	-H=$(OBJS)\wxprec_xmldll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 \
+	-DWXUSINGDLL -DWXMAKINGDLL_XML -Hu -H=$(OBJS)\wxprec_xmldll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 XMLDLL_OBJECTS =  \
 	$(OBJS)\xmldll_dummy.obj \
 	$(OBJS)\xmldll_xml.obj \
@@ -1185,11 +1165,10 @@ XMLLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DwxUSE_GUI=0 -Hu -H=$(OBJS)\wxprec_xmllib.csm \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DwxUSE_GUI=0 -Hu \
+	-H=$(OBJS)\wxprec_xmllib.csm $(CPPFLAGS) $(CXXFLAGS)
 XMLLIB_OBJECTS =  \
 	$(OBJS)\xmllib_dummy.obj \
 	$(OBJS)\xmllib_xml.obj \
@@ -1198,11 +1177,10 @@ XRCDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_XRC -Hu \
-	-H=$(OBJS)\wxprec_xrcdll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_XRC -Hu -H=$(OBJS)\wxprec_xrcdll.csm $(CPPFLAGS) $(CXXFLAGS)
 XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.obj \
 	$(OBJS)\xrcdll_xh_animatctrl.obj \
@@ -1274,11 +1252,10 @@ XRCLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_xrclib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_xrclib.csm $(CPPFLAGS) $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_dummy.obj \
 	$(OBJS)\xrclib_xh_animatctrl.obj \
@@ -1350,11 +1327,10 @@ AUIDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_AUI -Hu \
-	-H=$(OBJS)\wxprec_auidll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_AUI -Hu -H=$(OBJS)\wxprec_auidll.csm $(CPPFLAGS) $(CXXFLAGS)
 AUIDLL_OBJECTS =  \
 	$(OBJS)\auidll_dummy.obj \
 	$(OBJS)\auidll_framemanager.obj \
@@ -1370,11 +1346,10 @@ AUILIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_auilib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_auilib.csm $(CPPFLAGS) $(CXXFLAGS)
 AUILIB_OBJECTS =  \
 	$(OBJS)\auilib_dummy.obj \
 	$(OBJS)\auilib_framemanager.obj \
@@ -1390,11 +1365,11 @@ RIBBONDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_RIBBON -Hu \
-	-H=$(OBJS)\wxprec_ribbondll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_RIBBON -Hu -H=$(OBJS)\wxprec_ribbondll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_dummy.obj \
 	$(OBJS)\ribbondll_art_internal.obj \
@@ -1412,11 +1387,10 @@ RIBBONLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_ribbonlib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_ribbonlib.csm $(CPPFLAGS) $(CXXFLAGS)
 RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_dummy.obj \
 	$(OBJS)\ribbonlib_art_internal.obj \
@@ -1434,11 +1408,11 @@ PROPGRIDDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_PROPGRID -Hu \
-	-H=$(OBJS)\wxprec_propgriddll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_PROPGRID -Hu -H=$(OBJS)\wxprec_propgriddll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 PROPGRIDDLL_OBJECTS =  \
 	$(OBJS)\propgriddll_dummy.obj \
 	$(OBJS)\propgriddll_advprops.obj \
@@ -1453,11 +1427,10 @@ PROPGRIDLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_propgridlib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_propgridlib.csm $(CPPFLAGS) $(CXXFLAGS)
 PROPGRIDLIB_OBJECTS =  \
 	$(OBJS)\propgridlib_dummy.obj \
 	$(OBJS)\propgridlib_advprops.obj \
@@ -1472,11 +1445,11 @@ RICHTEXTDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_RICHTEXT -Hu \
-	-H=$(OBJS)\wxprec_richtextdll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_RICHTEXT -Hu -H=$(OBJS)\wxprec_richtextdll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 RICHTEXTDLL_OBJECTS =  \
 	$(OBJS)\richtextdll_dummy.obj \
 	$(OBJS)\richtextdll_richtextbuffer.obj \
@@ -1494,11 +1467,10 @@ RICHTEXTLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_richtextlib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_richtextlib.csm $(CPPFLAGS) $(CXXFLAGS)
 RICHTEXTLIB_OBJECTS =  \
 	$(OBJS)\richtextlib_dummy.obj \
 	$(OBJS)\richtextlib_richtextbuffer.obj \
@@ -1516,13 +1488,13 @@ STCDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -w-8027 -DWXUSINGDLL -DWXMAKINGDLL_STC -Hu \
-	-H=$(OBJS)\wxprec_stcdll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -w-8027 \
+	-DWXUSINGDLL -DWXMAKINGDLL_STC -Hu -H=$(OBJS)\wxprec_stcdll.csm $(CPPFLAGS) \
+	$(CXXFLAGS)
 STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_dummy.obj \
 	$(OBJS)\stcdll_stc.obj \
@@ -1532,13 +1504,12 @@ STCLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\lexlib -I..\..\src\stc\scintilla\src -D__WX__ \
-	-DSCI_LEXER -DLINK_LEXERS -w-8027 -Hu -H=$(OBJS)\wxprec_stclib.csm \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib \
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\lexlib \
+	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS -w-8027 -Hu \
+	-H=$(OBJS)\wxprec_stclib.csm $(CPPFLAGS) $(CXXFLAGS)
 STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_dummy.obj \
 	$(OBJS)\stclib_stc.obj \
@@ -1548,11 +1519,10 @@ GLDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -DWXUSINGDLL -DWXMAKINGDLL_GL -Hu \
-	-H=$(OBJS)\wxprec_gldll.csm $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -DWXUSINGDLL \
+	-DWXMAKINGDLL_GL -Hu -H=$(OBJS)\wxprec_gldll.csm $(CPPFLAGS) $(CXXFLAGS)
 GLDLL_OBJECTS =  \
 	$(OBJS)\gldll_dummy.obj \
 	$(OBJS)\gldll_glcmn.obj \
@@ -1561,11 +1531,10 @@ GLLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -DWXBUILDING -I..\..\src\tiff\libtiff \
-	-I..\..\src\jpeg -I..\..\src\png -I..\..\src\zlib -I..\..\src\regex \
-	-I..\..\src\expat\lib -Hu -H=$(OBJS)\wxprec_gllib.csm $(CPPFLAGS) \
-	$(CXXFLAGS)
+	-I$(SETUPHDIR) -I..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) \
+	-DWXBUILDING -I..\..\src\tiff\libtiff -I..\..\src\jpeg -I..\..\src\png \
+	-I..\..\src\zlib -I..\..\src\regex -I..\..\src\expat\lib -Hu \
+	-H=$(OBJS)\wxprec_gllib.csm $(CPPFLAGS) $(CXXFLAGS)
 GLLIB_OBJECTS =  \
 	$(OBJS)\gllib_dummy.obj \
 	$(OBJS)\gllib_glcmn.obj \
@@ -4828,9 +4797,6 @@ __UNICODE_DEFINE_p_67 = -dwxUSE_UNICODE=0
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_67 = -d_UNICODE
 !endif
-!if "$(MSLU)" == "1"
-__MSLU_DEFINE_p_65 = -dwxUSE_UNICODE_MSLU=1
-!endif
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES_4 = -i$(CAIRO_ROOT)\include\cairo
 !endif
@@ -4842,9 +4808,6 @@ __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
-!endif
-!if "$(MSLU)" == "1"
-__UNICOWS_LIB_p = unicows.lib
 !endif
 !if "$(USE_CAIRO)" == "1"
 __CAIRO_LIB_p = cairo.lib
@@ -4905,9 +4868,6 @@ __UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
-!endif
-!if "$(MSLU)" == "1"
-__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 !endif
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
@@ -5135,7 +5095,7 @@ $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib: $(WXSCINTILLA_OBJECTS)
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\monodll_dummy.obj  $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\monodll_version.res $(__wxscintilla_library_link_DEP)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(MONODLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib     $(__wxscintilla) import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\monodll_version.res
+	c0d32.obj $(MONODLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib     $(__wxscintilla) import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\monodll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR) $@
 !endif
@@ -5151,7 +5111,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\basedll_dummy.obj  $(BASEDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\basedll_version.res
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(BASEDLL_OBJECTS),$@,, wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\basedll_version.res
+	c0d32.obj $(BASEDLL_OBJECTS),$@,, wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\basedll_version.res
 |
 	implib -f $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR) $@
 !endif
@@ -5171,7 +5131,7 @@ wxbase: $(____wxbase_namedll_DEP) $(____wxbase_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\netdll_dummy.obj  $(NETDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\netdll_version.res $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(NETDLL_OBJECTS),$@,, wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\netdll_version.res
+	c0d32.obj $(NETDLL_OBJECTS),$@,, wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\netdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net $@
 !endif
@@ -5191,7 +5151,7 @@ wxnet: $(____wxnet_namedll_DEP) $(____wxnet_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\coredll_dummy.obj  $(COREDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\coredll_version.res $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(COREDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\coredll_version.res
+	c0d32.obj $(COREDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\coredll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core $@
 !endif
@@ -5211,7 +5171,7 @@ wxcore: $(____wxcore_namedll_DEP) $(____wxcore_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\advdll_dummy.obj  $(ADVDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\advdll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(ADVDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\advdll_version.res
+	c0d32.obj $(ADVDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\advdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv $@
 !endif
@@ -5231,7 +5191,7 @@ wxadv: $(____wxadv_namedll_DEP) $(____wxadv_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\mediadll_dummy.obj  $(MEDIADLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\mediadll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(MEDIADLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\mediadll_version.res
+	c0d32.obj $(MEDIADLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\mediadll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media $@
 !endif
@@ -5251,7 +5211,7 @@ wxmedia: $(____wxmedia_namedll_DEP) $(____wxmedia_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\htmldll_dummy.obj  $(HTMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\htmldll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(HTMLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\htmldll_version.res
+	c0d32.obj $(HTMLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\htmldll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html $@
 !endif
@@ -5271,7 +5231,7 @@ wxhtml: $(____wxhtml_namedll_DEP) $(____wxhtml_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_WEBVIEW)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\webviewdll_dummy.obj  $(WEBVIEWDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\webviewdll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(WEBVIEWDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\webviewdll_version.res
+	c0d32.obj $(WEBVIEWDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\webviewdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview $@
 !endif
@@ -5291,7 +5251,7 @@ wxwebview: $(____wxwebview_namedll_DEP) $(____wxwebview_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_QA)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\qadll_dummy.obj  $(QADLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\qadll_version.res $(__coredll___depname) $(__basedll___depname) $(__xmldll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(QADLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\qadll_version.res
+	c0d32.obj $(QADLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\qadll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa $@
 !endif
@@ -5311,7 +5271,7 @@ wxqa: $(____wxqa_namedll_DEP) $(____wxqa_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\xmldll_dummy.obj  $(XMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\xmldll_version.res $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(XMLDLL_OBJECTS),$@,, wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\xmldll_version.res
+	c0d32.obj $(XMLDLL_OBJECTS),$@,, wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\xmldll_version.res
 |
 	implib -f $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml $@
 !endif
@@ -5331,7 +5291,7 @@ wxxml: $(____wxxml_namedll_DEP) $(____wxxml_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.obj  $(XRCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\xrcdll_version.res $(__htmldll_library_link_DEP) $(__advdll___depname) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(XRCDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\xrcdll_version.res
+	c0d32.obj $(XRCDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\xrcdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc $@
 !endif
@@ -5351,7 +5311,7 @@ wxxrc: $(____wxxrc_namedll_DEP) $(____wxxrc_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_AUI)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\auidll_dummy.obj  $(AUIDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\auidll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(AUIDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\auidll_version.res
+	c0d32.obj $(AUIDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\auidll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui $@
 !endif
@@ -5371,7 +5331,7 @@ wxaui: $(____wxaui_namedll_DEP) $(____wxaui_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RIBBON)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\ribbondll_dummy.obj  $(RIBBONDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\ribbondll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(RIBBONDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\ribbondll_version.res
+	c0d32.obj $(RIBBONDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\ribbondll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon $@
 !endif
@@ -5391,7 +5351,7 @@ wxribbon: $(____wxribbon_namedll_DEP) $(____wxribbon_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_PROPGRID)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\propgriddll_dummy.obj  $(PROPGRIDDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\propgriddll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(PROPGRIDDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\propgriddll_version.res
+	c0d32.obj $(PROPGRIDDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\propgriddll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid $@
 !endif
@@ -5411,7 +5371,7 @@ wxpropgrid: $(____wxpropgrid_namedll_DEP) $(____wxpropgrid_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RICHTEXT)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\richtextdll_dummy.obj  $(RICHTEXTDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\richtextdll_version.res $(__advdll___depname) $(__htmldll_library_link_DEP) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(RICHTEXTDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\richtextdll_version.res
+	c0d32.obj $(RICHTEXTDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\richtextdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext $@
 !endif
@@ -5431,7 +5391,7 @@ wxrichtext: $(____wxrichtext_namedll_DEP) $(____wxrichtext_namelib_DEP)
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_STC)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\stcdll_dummy.obj  $(STCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(__wxscintilla)  $(OBJS)\stcdll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(STCDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\stcdll_version.res
+	c0d32.obj $(STCDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\stcdll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc $@
 !endif
@@ -5451,7 +5411,7 @@ wxstc: $(____wxstc_namedll_DEP) $(____wxstc_namelib_DEP)
 !if "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_OPENGL)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\gldll_dummy.obj  $(GLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\gldll_version.res $(__basedll___depname) $(__coredll___depname) $(__monodll___depname)
 	ilink32 -Tpd -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0d32.obj $(GLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p)  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\gldll_version.res
+	c0d32.obj $(GLDLL_OBJECTS),$@,, $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p)  import32.lib cw32$(__THREADSFLAG_14)$(__RUNTIME_LIBS_5).lib,, $(OBJS)\gldll_version.res
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl $@
 !endif
@@ -5512,7 +5472,6 @@ build_cfg_file: $(SETUPHDIR)
 	@echo DEBUG_FLAG=$(DEBUG_FLAG) >>$(BUILD_CFG_FILE)
 	@echo DEBUG_INFO=$(DEBUG_INFO) >>$(BUILD_CFG_FILE)
 	@echo RUNTIME_LIBS=$(RUNTIME_LIBS) >>$(BUILD_CFG_FILE)
-	@echo MSLU=$(MSLU) >>$(BUILD_CFG_FILE)
 	@echo USE_EXCEPTIONS=$(USE_EXCEPTIONS) >>$(BUILD_CFG_FILE)
 	@echo USE_RTTI=$(USE_RTTI) >>$(BUILD_CFG_FILE)
 	@echo USE_THREADS=$(USE_THREADS) >>$(BUILD_CFG_FILE)
@@ -6622,9 +6581,6 @@ $(OBJS)\monodll_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 
 $(OBJS)\monodll_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\main.cpp
-
-$(OBJS)\monodll_mslu.obj: ..\..\src\msw\mslu.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\mslu.cpp
 
 $(OBJS)\monodll_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\volume.cpp
@@ -8756,7 +8712,7 @@ $(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
 !endif
 
 $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -i..\..\src\stc\scintilla\include -i..\..\src\stc\scintilla\lexlib -i..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS -dwxUSE_BASE=1 -dWXMAKINGDLL ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -i..\..\src\stc\scintilla\include -i..\..\src\stc\scintilla\lexlib -i..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS -dwxUSE_BASE=1 -dWXMAKINGDLL ..\..\src\msw\version.rc
 
 $(OBJS)\monolib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
@@ -9093,9 +9049,6 @@ $(OBJS)\monolib_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 
 $(OBJS)\monolib_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\main.cpp
-
-$(OBJS)\monolib_mslu.obj: ..\..\src\msw\mslu.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\mslu.cpp
 
 $(OBJS)\monolib_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\volume.cpp
@@ -11230,7 +11183,7 @@ $(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\basedll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dwxUSE_GUI=0 -dWXMAKINGDLL_BASE -dwxUSE_BASE=1 ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dwxUSE_GUI=0 -dWXMAKINGDLL_BASE -dwxUSE_BASE=1 ..\..\src\msw\version.rc
 
 $(OBJS)\basedll_any.obj: ..\..\src\common\any.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\any.cpp
@@ -11564,9 +11517,6 @@ $(OBJS)\basedll_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 
 $(OBJS)\basedll_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\main.cpp
-
-$(OBJS)\basedll_mslu.obj: ..\..\src\msw\mslu.cpp
-	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\mslu.cpp
 
 $(OBJS)\basedll_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\msw\volume.cpp
@@ -11907,9 +11857,6 @@ $(OBJS)\baselib_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 $(OBJS)\baselib_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\main.cpp
 
-$(OBJS)\baselib_mslu.obj: ..\..\src\msw\mslu.cpp
-	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\mslu.cpp
-
 $(OBJS)\baselib_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\msw\volume.cpp
 
@@ -11917,7 +11864,7 @@ $(OBJS)\netdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\netdll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_NET ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_NET ..\..\src\msw\version.rc
 
 $(OBJS)\netdll_fs_inet.obj: ..\..\src\common\fs_inet.cpp
 	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) ..\..\src\common\fs_inet.cpp
@@ -11998,7 +11945,7 @@ $(OBJS)\coredll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\coredll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_CORE -dwxUSE_BASE=0 ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_CORE -dwxUSE_BASE=0 ..\..\src\msw\version.rc
 
 $(OBJS)\coredll_event.obj: ..\..\src\common\event.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\event.cpp
@@ -12014,9 +11961,6 @@ $(OBJS)\coredll_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 
 $(OBJS)\coredll_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\main.cpp
-
-$(OBJS)\coredll_mslu.obj: ..\..\src\msw\mslu.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\mslu.cpp
 
 $(OBJS)\coredll_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\volume.cpp
@@ -13465,9 +13409,6 @@ $(OBJS)\corelib_utilscmn.obj: ..\..\src\common\utilscmn.cpp
 $(OBJS)\corelib_main.obj: ..\..\src\msw\main.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\main.cpp
 
-$(OBJS)\corelib_mslu.obj: ..\..\src\msw\mslu.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\mslu.cpp
-
 $(OBJS)\corelib_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\volume.cpp
 
@@ -14901,7 +14842,7 @@ $(OBJS)\advdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\advdll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_ADV ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_ADV ..\..\src\msw\version.rc
 
 $(OBJS)\advdll_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
@@ -15204,7 +15145,7 @@ $(OBJS)\mediadll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MEDIADLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\mediadll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_MEDIA ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_MEDIA ..\..\src\msw\version.rc
 
 $(OBJS)\mediadll_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MEDIADLL_CXXFLAGS) ..\..\src\common\mediactrlcmn.cpp
@@ -15237,7 +15178,7 @@ $(OBJS)\htmldll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(HTMLDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\htmldll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_HTML ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_HTML ..\..\src\msw\version.rc
 
 $(OBJS)\htmldll_helpbest.obj: ..\..\src\msw\helpbest.cpp
 	$(CXX) -q -c -P -o$@ $(HTMLDLL_CXXFLAGS) ..\..\src\msw\helpbest.cpp
@@ -15402,7 +15343,7 @@ $(OBJS)\webviewdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\webviewdll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_WEBVIEW ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_WEBVIEW ..\..\src\msw\version.rc
 
 $(OBJS)\webviewdll_webview_ie.obj: ..\..\src\msw\webview_ie.cpp
 	$(CXX) -q -c -P -o$@ $(WEBVIEWDLL_CXXFLAGS) ..\..\src\msw\webview_ie.cpp
@@ -15435,7 +15376,7 @@ $(OBJS)\qadll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(QADLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\qadll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_QA ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_QA ..\..\src\msw\version.rc
 
 $(OBJS)\qadll_debugrpt.obj: ..\..\src\common\debugrpt.cpp
 	$(CXX) -q -c -P -o$@ $(QADLL_CXXFLAGS) ..\..\src\common\debugrpt.cpp
@@ -15456,7 +15397,7 @@ $(OBJS)\xmldll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(XMLDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\xmldll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_XML ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_XML ..\..\src\msw\version.rc
 
 $(OBJS)\xmldll_xml.obj: ..\..\src\xml\xml.cpp
 	$(CXX) -q -c -P -o$@ $(XMLDLL_CXXFLAGS) ..\..\src\xml\xml.cpp
@@ -15477,7 +15418,7 @@ $(OBJS)\xrcdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\xrcdll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_XRC ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_XRC ..\..\src\msw\version.rc
 
 $(OBJS)\xrcdll_xh_animatctrl.obj: ..\..\src\xrc\xh_animatctrl.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_animatctrl.cpp
@@ -15876,7 +15817,7 @@ $(OBJS)\auidll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(AUIDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\auidll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_AUI ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_AUI ..\..\src\msw\version.rc
 
 $(OBJS)\auidll_framemanager.obj: ..\..\src\aui\framemanager.cpp
 	$(CXX) -q -c -P -o$@ $(AUIDLL_CXXFLAGS) ..\..\src\aui\framemanager.cpp
@@ -15939,7 +15880,7 @@ $(OBJS)\ribbondll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\ribbondll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_RIBBON ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_RIBBON ..\..\src\msw\version.rc
 
 $(OBJS)\ribbondll_art_internal.obj: ..\..\src\ribbon\art_internal.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art_internal.cpp
@@ -16014,7 +15955,7 @@ $(OBJS)\propgriddll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(PROPGRIDDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\propgriddll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_PROPGRID ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_PROPGRID ..\..\src\msw\version.rc
 
 $(OBJS)\propgriddll_advprops.obj: ..\..\src\propgrid\advprops.cpp
 	$(CXX) -q -c -P -o$@ $(PROPGRIDDLL_CXXFLAGS) ..\..\src\propgrid\advprops.cpp
@@ -16071,7 +16012,7 @@ $(OBJS)\richtextdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(RICHTEXTDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\richtextdll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_RICHTEXT ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_RICHTEXT ..\..\src\msw\version.rc
 
 $(OBJS)\richtextdll_richtextbuffer.obj: ..\..\src\richtext\richtextbuffer.cpp
 	$(CXX) -q -c -P -o$@ $(RICHTEXTDLL_CXXFLAGS) ..\..\src\richtext\richtextbuffer.cpp
@@ -16146,7 +16087,7 @@ $(OBJS)\stcdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(STCDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\stcdll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -i..\..\src\stc\scintilla\include -i..\..\src\stc\scintilla\lexlib -i..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS -dWXUSINGDLL -dWXMAKINGDLL_STC ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -i..\..\src\stc\scintilla\include -i..\..\src\stc\scintilla\lexlib -i..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS -dWXUSINGDLL -dWXMAKINGDLL_STC ..\..\src\msw\version.rc
 
 $(OBJS)\stcdll_stc.obj: ..\..\src\stc\stc.cpp
 	$(CXX) -q -c -P -o$@ $(STCDLL_CXXFLAGS) ..\..\src\stc\stc.cpp
@@ -16173,7 +16114,7 @@ $(OBJS)\gldll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(GLDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
 $(OBJS)\gldll_version.res: ..\..\src\msw\version.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) $(__MSLU_DEFINE_p_65) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_GL ..\..\src\msw\version.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_GL ..\..\src\msw\version.rc
 
 $(OBJS)\gldll_glcmn.obj: ..\..\src\common\glcmn.cpp
 	$(CXX) -q -c -P -o$@ $(GLDLL_CXXFLAGS) ..\..\src\common\glcmn.cpp

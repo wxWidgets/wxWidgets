@@ -65,11 +65,6 @@ WXUNIV = 0
 UNICODE = 1
 !endif
 
-# Use MSLU library when building Unicode version. [0,1]
-!ifndef MSLU
-MSLU = 0
-!endif
-
 # Type of compiled binaries [debug,release]
 !ifndef BUILD
 BUILD = debug

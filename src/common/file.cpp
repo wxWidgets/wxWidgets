@@ -116,10 +116,6 @@
     #define   O_BINARY    (0)
 #endif  //__UNIX__
 
-#ifdef __WINDOWS__
-    #include "wx/msw/mslu.h"
-#endif
-
 #ifdef __WXWINCE__
     #include "wx/msw/private.h"
 #endif

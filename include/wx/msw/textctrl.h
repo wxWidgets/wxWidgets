@@ -201,7 +201,7 @@ protected:
     // the limit is due to a previous call to SetMaxLength() and not built in)
     bool HasSpaceLimit(unsigned int *len) const;
 
-#if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
+#if wxUSE_RICHEDIT && !wxUSE_UNICODE
     // replace the selection or the entire control contents with the given text
     // in the specified encoding
     bool StreamIn(const wxString& value, wxFontEncoding encoding, bool selOnly);

@@ -177,7 +177,7 @@ text$(EXEEXT): $(TEXT_OBJECTS) $(__text___win32rc)
 @COND_PLATFORM_MACOSX_1@text_bundle: $(____text_BUNDLE_TGT_REF_DEP)
 
 text_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 text_text.o: $(srcdir)/text.cpp
 	$(CXXC) -c -o $@ $(TEXT_CXXFLAGS) $(srcdir)/text.cpp

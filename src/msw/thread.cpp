@@ -39,8 +39,6 @@
 
 #include "wx/except.h"
 
-#include "wx/dynlib.h"
-
 // must have this symbol defined to get _beginthread/_endthread declarations
 #ifndef _MT
     #define _MT
@@ -166,21 +164,7 @@ void wxCriticalSection::Enter()
 
 bool wxCriticalSection::TryEnter()
 {
-#if wxUSE_DYNLIB_CLASS
-    typedef BOOL
-      (WINAPI *TryEnterCriticalSection_t)(LPCRITICAL_SECTION lpCriticalSection);
-
-    static TryEnterCriticalSection_t
-        pfnTryEnterCriticalSection = (TryEnterCriticalSection_t)
-            wxDynamicLibrary(wxT("kernel32.dll")).
-                GetSymbol(wxT("TryEnterCriticalSection"));
-
-    return pfnTryEnterCriticalSection
-            ? (*pfnTryEnterCriticalSection)((CRITICAL_SECTION *)m_buffer) != 0
-            : false;
-#else
-    return false;
-#endif
+    return ::TryEnterCriticalSection((CRITICAL_SECTION *)m_buffer) != 0;
 }
 
 void wxCriticalSection::Leave()
@@ -1030,35 +1014,7 @@ bool wxThread::SetConcurrency(size_t WXUNUSED_IN_WINCE(level))
         return false;
     }
 
-    // set it: we can't link to SetProcessAffinityMask() because it doesn't
-    // exist in Win9x, use RT binding instead
-
-    typedef BOOL (WINAPI *SETPROCESSAFFINITYMASK)(HANDLE, DWORD_PTR);
-
-    // can use static var because we're always in the main thread here
-    static SETPROCESSAFFINITYMASK pfnSetProcessAffinityMask = NULL;
-
-    if ( !pfnSetProcessAffinityMask )
-    {
-        HMODULE hModKernel = ::LoadLibrary(wxT("kernel32"));
-        if ( hModKernel )
-        {
-            pfnSetProcessAffinityMask = (SETPROCESSAFFINITYMASK)
-                ::GetProcAddress(hModKernel, "SetProcessAffinityMask");
-        }
-
-        // we've discovered a MT version of Win9x!
-        wxASSERT_MSG( pfnSetProcessAffinityMask,
-                      wxT("this system has several CPUs but no SetProcessAffinityMask function?") );
-    }
-
-    if ( !pfnSetProcessAffinityMask )
-    {
-        // msg given above - do it only once
-        return false;
-    }
-
-    if ( pfnSetProcessAffinityMask(hProcess, dwProcMask) == 0 )
+    if ( ::SetProcessAffinityMask(hProcess, dwProcMask) == 0 )
     {
         wxLogLastError(wxT("SetProcessAffinityMask"));
 

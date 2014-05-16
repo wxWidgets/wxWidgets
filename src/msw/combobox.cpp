@@ -390,7 +390,7 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 WXHWND wxComboBox::GetEditHWNDIfAvailable() const
 {
     WinStruct<COMBOBOXINFO> info;
-    if ( MSWGetComboBoxInfo(&info) )
+    if ( ::GetComboBoxInfo(GetHwnd(), &info) )
         return info.hwndItem;
 
     if (HasFlag(wxCB_SIMPLE))

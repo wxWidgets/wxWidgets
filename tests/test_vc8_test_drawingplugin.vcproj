@@ -80,7 +80,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswud\test_drawingplugin.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -167,7 +167,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswu\test_drawingplugin.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -259,7 +259,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw31ud_core.lib  wxbase31ud.lib    wxzlibd.lib wxregexud.lib wxexpatd.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswuddll\test_drawingplugin.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -346,7 +346,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				AdditionalDependencies="wxmsw31u_core.lib  wxbase31u.lib    wxzlib.lib wxregexu.lib wxexpat.lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
 				OutputFile="vc_mswudll\test_drawingplugin.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

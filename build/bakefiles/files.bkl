@@ -147,7 +147,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
     src/msw/main.cpp
-    src/msw/mslu.cpp
     src/msw/volume.cpp
 </set>
 <set var="BASE_WINCE_SRC" hints="files">
@@ -164,7 +163,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/gccpriv.h
     wx/msw/libraries.h
     wx/msw/mimetype.h
-    wx/msw/mslu.h
     wx/msw/private.h
     wx/msw/regconf.h
     wx/msw/registry.h

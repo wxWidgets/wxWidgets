@@ -1122,7 +1122,6 @@ enable_std_iostreams
 enable_std_string
 enable_std_string_conv_in_wxstring
 enable_unicode
-enable_mslu
 enable_utf8
 enable_utf8only
 enable_extended_rtti
@@ -2052,7 +2051,6 @@ Optional Features:
   --enable-std_string     use standard C++ string classes
  --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString
   --disable-unicode       compile without Unicode support
-  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)
   --enable-utf8           use UTF-8 representation for strings (Unix only)
   --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)
   --enable-extended_rtti  use extended RTTI (XTI)
@@ -6113,50 +6111,6 @@ fi
             fi
           else
             result=$wxUSE_UNICODE
-          fi
-
-          { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
-$as_echo "$result" >&6; }
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-mslu" >&5
-$as_echo_n "checking for --${enablestring:-enable}-mslu... " >&6; }
-          # Check whether --enable-mslu was given.
-if test "${enable_mslu+set}" = set; then :
-  enableval=$enable_mslu;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_mslu='wxUSE_UNICODE_MSLU=yes'
-                          else
-                            wx_cv_use_mslu='wxUSE_UNICODE_MSLU=no'
-                          fi
-
-else
-
-                          wx_cv_use_mslu='wxUSE_UNICODE_MSLU=${'DEFAULT_wxUSE_UNICODE_MSLU":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_mslu"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_UNICODE_MSLU = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_UNICODE_MSLU
           fi
 
           { $as_echo "$as_me:${as_lineno-$LINENO}: result: $result" >&5
@@ -35370,58 +35324,6 @@ fi
 if test "$wxUSE_UNICODE" = "yes" ; then
   $as_echo "#define wxUSE_UNICODE 1" >>confdefs.h
 
-
-  if test "$USE_WIN32" != 1; then
-      wxUSE_UNICODE_MSLU=no
-  fi
-
-  if test "$USE_WIN32" = 1 -a "$wxUSE_UNICODE_MSLU" = "yes"; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lunicows" >&5
-$as_echo_n "checking for main in -lunicows... " >&6; }
-if ${ac_cv_lib_unicows_main+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lunicows  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-return main ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_unicows_main=yes
-else
-  ac_cv_lib_unicows_main=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_unicows_main" >&5
-$as_echo "$ac_cv_lib_unicows_main" >&6; }
-if test "x$ac_cv_lib_unicows_main" = xyes; then :
-
-                $as_echo "#define wxUSE_UNICODE_MSLU 1" >>confdefs.h
-
-
-else
-
-                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Compiler doesn't support MSLU (libunicows.a), disabled.
-                             Applications will only run on Windows NT/2000/XP!" >&5
-$as_echo "$as_me: WARNING: Compiler doesn't support MSLU (libunicows.a), disabled.
-                             Applications will only run on Windows NT/2000/XP!" >&2;}
-                wxUSE_UNICODE_MSLU=no
-
-fi
-
-    fi
 fi
 
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "yes"; then
@@ -36391,10 +36293,6 @@ $as_echo "$as_me: WARNING: wxPalette not yet supported under DFB... disabled" >&
         $as_echo "#define wxUSE_PALETTE 1" >>confdefs.h
 
     fi
-fi
-
-if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_MSLU" = "yes" ; then
-    LIBS=" -lunicows $LIBS"
 fi
 
 USE_RICHTEXT=0

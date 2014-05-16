@@ -701,10 +701,6 @@ typedef pid_t GPid;
 
 /* --- start MSW options --- */
 
-#ifndef wxUSE_UNICODE_MSLU
-    #define wxUSE_UNICODE_MSLU 0
-#endif
-
 #define wxUSE_MFC           0
 
 #define wxUSE_OLE           0

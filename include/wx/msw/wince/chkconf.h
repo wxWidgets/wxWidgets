@@ -117,9 +117,6 @@
     #define wxUSE_TOOLTIPS 0
 #endif
 
-#undef wxUSE_UNICODE_MSLU
-#define wxUSE_UNICODE_MSLU 0
-
 #undef wxUSE_UXTHEME
 #define wxUSE_UXTHEME 0
 

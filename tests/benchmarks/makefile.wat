@@ -299,7 +299,7 @@ $(OBJS)\bench.exe :  $(BENCH_OBJECTS)
 	@%append $(OBJS)\bench.lbc option caseexact
 	@%append $(OBJS)\bench.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
 	@for %i in ($(BENCH_OBJECTS)) do @%append $(OBJS)\bench.lbc file %i
-	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\bench.lbc library %i
+	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\bench.lbc library %i
 	@%append $(OBJS)\bench.lbc
 	@for %i in () do @%append $(OBJS)\bench.lbc option stack=%i
 	wlink @$(OBJS)\bench.lbc
@@ -316,7 +316,7 @@ $(OBJS)\bench_gui.exe :  $(BENCH_GUI_OBJECTS) $(OBJS)\bench_gui_sample.res
 	@%append $(OBJS)\bench_gui.lbc option caseexact
 	@%append $(OBJS)\bench_gui.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
 	@for %i in ($(BENCH_GUI_OBJECTS)) do @%append $(OBJS)\bench_gui.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\bench_gui.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\bench_gui.lbc library %i
 	@%append $(OBJS)\bench_gui.lbc option resource=$(OBJS)\bench_gui_sample.res
 	@for %i in () do @%append $(OBJS)\bench_gui.lbc option stack=%i
 	wlink @$(OBJS)\bench_gui.lbc
@@ -357,7 +357,7 @@ $(OBJS)\bench_printfbench.obj :  .AUTODEPEND .\printfbench.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_CXXFLAGS) $<
 
 $(OBJS)\bench_gui_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
 $(OBJS)\bench_gui_bench.obj :  .AUTODEPEND .\bench.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BENCH_GUI_CXXFLAGS) $<

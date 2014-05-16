@@ -53,7 +53,6 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/winundef.h"
-#include "wx/msw/mslu.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -897,7 +896,7 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
     }
 }
 
-#if wxUSE_RICHEDIT && (!wxUSE_UNICODE || wxUSE_UNICODE_MSLU)
+#if wxUSE_RICHEDIT && !wxUSE_UNICODE
 
 // TODO: using memcpy() would improve performance a lot for big amounts of text
 
@@ -959,20 +958,11 @@ wxRichEditStreamOut(DWORD_PTR dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 }
 
 
-#if wxUSE_UNICODE_MSLU
-    #define UNUSED_IF_MSLU(param)
-#else
-    #define UNUSED_IF_MSLU(param) param
-#endif
-
 bool
 wxTextCtrl::StreamIn(const wxString& value,
-                     wxFontEncoding UNUSED_IF_MSLU(encoding),
+                     wxFontEncoding encoding,
                      bool selectionOnly)
 {
-#if wxUSE_UNICODE_MSLU
-    const wchar_t *wpc = value.c_str();
-#else // !wxUSE_UNICODE_MSLU
     wxCSConv conv(encoding);
 
     const size_t len = conv.MB2WC(NULL, value.mb_str(), value.length());
@@ -984,7 +974,6 @@ wxTextCtrl::StreamIn(const wxString& value,
     wchar_t *wpc = wchBuf.data();
 
     conv.MB2WC(wpc, value.mb_str(), len + 1);
-#endif // wxUSE_UNICODE_MSLU
 
     // finally, stream it in the control
     EDITSTREAM eds;
@@ -1014,8 +1003,6 @@ wxTextCtrl::StreamIn(const wxString& value,
 
     return true;
 }
-
-#if !wxUSE_UNICODE_MSLU
 
 wxString
 wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
@@ -1068,8 +1055,6 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
     return out;
 }
 
-#endif // !wxUSE_UNICODE_MSLU
-
 #endif // wxUSE_RICHEDIT
 
 void wxTextCtrl::WriteText(const wxString& value)
@@ -1098,15 +1083,6 @@ void wxTextCtrl::DoWriteText(const wxString& value, int flags)
             GetSelection(&start, &end);
             SetStyle(start, end, m_defaultStyle);
         }
-
-#if wxUSE_UNICODE_MSLU
-        // RichEdit doesn't have Unicode version of EM_REPLACESEL on Win9x,
-        // but EM_STREAMIN works
-        if ( wxUsingUnicowsDll() && GetRichVersion() > 1 )
-        {
-           done = StreamIn(valueDos, wxFONTENCODING_SYSTEM, selectionOnly);
-        }
-#endif // wxUSE_UNICODE_MSLU
 
 #if !wxUSE_UNICODE
         // next check if the text we're inserting must be shown in a non

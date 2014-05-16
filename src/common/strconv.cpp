@@ -2620,28 +2620,20 @@ public:
     virtual size_t WC2MB(char *buf, const wchar_t *pwz, size_t n) const
     {
         /*
-            we have a problem here: by default, WideCharToMultiByte() may
-            replace characters unrepresentable in the target code page with bad
-            quality approximations such as turning "1/2" symbol (U+00BD) into
-            "1" for the code pages which don't have it and we, obviously, want
-            to avoid this at any price
+            We need to WC_NO_BEST_FIT_CHARS to prevent WideCharToMultiByte()
+            from replacing characters unrepresentable in the target code page
+            with bad quality approximations such as turning "1/2" symbol
+            (U+00BD) into "1" for the code pages which don't have the fraction
+            symbol.
 
-            the trouble is that this function does it _silently_, i.e. it won't
-            even tell us whether it did or not... Win98/2000 and higher provide
-            WC_NO_BEST_FIT_CHARS but it doesn't work for the older systems and
-            we have to resort to a round trip, i.e. check that converting back
-            results in the same string -- this is, of course, expensive but
-            otherwise we simply can't be sure to not garble the data.
+            Unfortunately this flag can't be used with CJK encodings nor
+            UTF-7/8 and so if the code page is one of those, we need to resort
+            to a round trip to verify that no replacements have been done.
          */
-
-        // determine if we can rely on WC_NO_BEST_FIT_CHARS: according to MSDN
-        // it doesn't work with CJK encodings (which we test for rather roughly
-        // here...) nor with UTF-7/8 nor, of course, with Windows versions not
-        // supporting it
         BOOL usedDef wxDUMMY_INITIALIZE(false);
         BOOL *pUsedDef;
         int flags;
-        if ( CanUseNoBestFit() && m_CodePage < 50000 )
+        if ( m_CodePage < 50000 )
         {
             // it's our lucky day
             flags = WC_NO_BEST_FIT_CHARS;
@@ -2754,36 +2746,6 @@ public:
     bool IsOk() const { return m_CodePage != -1; }
 
 private:
-    static bool CanUseNoBestFit()
-    {
-        static int s_isWin98Or2k = -1;
-
-        if ( s_isWin98Or2k == -1 )
-        {
-            int verMaj, verMin;
-            switch ( wxGetOsVersion(&verMaj, &verMin) )
-            {
-                case wxOS_WINDOWS_9X:
-                    s_isWin98Or2k = verMaj >= 4 && verMin >= 10;
-                    break;
-
-                case wxOS_WINDOWS_NT:
-                    s_isWin98Or2k = verMaj >= 5;
-                    break;
-
-                default:
-                    // unknown: be conservative by default
-                    s_isWin98Or2k = 0;
-                    break;
-            }
-
-            wxASSERT_MSG( s_isWin98Or2k != -1, wxT("should be set above") );
-        }
-
-        return s_isWin98Or2k == 1;
-    }
-
-
     // the code page we're working with
     long m_CodePage;
 

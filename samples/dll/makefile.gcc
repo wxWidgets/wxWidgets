@@ -24,19 +24,19 @@ SETUPHDIR = \
 MY_DLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
-	$(__DLLFLAG_p) -DMY_DLL_BUILDING -I. $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall $(__DLLFLAG_p) -DMY_DLL_BUILDING \
+	-I. $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+	$(CXXFLAGS)
 MY_DLL_OBJECTS =  \
 	$(OBJS)\my_dll_my_dll.o
 WX_EXE_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
-	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  \
 	$(OBJS)\wx_exe_sample_rc.o \
 	$(OBJS)\wx_exe_wx_exe.o
@@ -111,9 +111,6 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_3 = --define _UNICODE
 endif
-ifeq ($(MSLU),1)
-__MSLU_DEFINE_p_3 = --define wxUSE_UNICODE_MSLU=1
-endif
 ifeq ($(USE_CAIRO),1)
 __CAIRO_INCLUDEDIR_p_1 = --include-dir $(CAIRO_ROOT)/include/cairo
 endif
@@ -143,9 +140,6 @@ __UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -D_UNICODE
-endif
-ifeq ($(MSLU),1)
-__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
 endif
 ifeq ($(USE_CAIRO),1)
 ____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
@@ -178,9 +172,6 @@ __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
 endif
 ifeq ($(USE_GUI),1)
 __LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
-endif
-ifeq ($(MSLU),1)
-__UNICOWS_LIB_p = -lunicows
 endif
 ifeq ($(USE_CAIRO),1)
 __CAIRO_LIB_p = -lcairo
@@ -247,11 +238,11 @@ clean:
 	-if exist $(OBJS)\sdk_exe.exe del $(OBJS)\sdk_exe.exe
 
 $(OBJS)\my_dll.dll: $(MY_DLL_OBJECTS)
-	$(CXX) $(LINK_DLL_FLAGS) -fPIC -o $@ $(MY_DLL_OBJECTS)  -Wl,--out-implib=$(OBJS)\libmy_dll.a $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+	$(CXX) $(LINK_DLL_FLAGS) -fPIC -o $@ $(MY_DLL_OBJECTS)  -Wl,--out-implib=$(OBJS)\libmy_dll.a $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
 ifeq ($(SHARED),0)
 $(OBJS)\wx_exe.exe: $(WX_EXE_OBJECTS) $(OBJS)\wx_exe_sample_rc.o $(OBJS)\my_dll.dll
-	$(CXX) -o $@ $(WX_EXE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(OBJS)\libmy_dll.a $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+	$(CXX) -o $@ $(WX_EXE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(OBJS)\libmy_dll.a $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 endif
 
 $(OBJS)\sdk_exe.exe: $(SDK_EXE_OBJECTS) $(OBJS)\my_dll.dll
@@ -261,7 +252,7 @@ $(OBJS)\my_dll_my_dll.o: ./my_dll.cpp
 	$(CXX) -c -o $@ $(MY_DLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wx_exe_sample_rc.o: ./../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../../samples --define NOPCH
+	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\wx_exe_wx_exe.o: ./wx_exe.cpp
 	$(CXX) -c -o $@ $(WX_EXE_CXXFLAGS) $(CPPDEPS) $<

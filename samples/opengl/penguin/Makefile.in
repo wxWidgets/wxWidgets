@@ -202,7 +202,7 @@ data:
 	done
 
 penguin_sample_rc.o: $(srcdir)/../../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 penguin_penguin.o: $(srcdir)/penguin.cpp
 	$(CXXC) -c -o $@ $(PENGUIN_CXXFLAGS) $(srcdir)/penguin.cpp

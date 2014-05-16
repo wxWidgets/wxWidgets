@@ -650,7 +650,6 @@ WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream 
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
 WX_ARG_ENABLE(std_string_conv_in_wxstring, [ --enable-std_string_conv_in_wxstring     provide implicit conversion to std::string in wxString], wxUSE_STD_STRING_CONV_IN_WXSTRING)
 WX_ARG_DISABLE(unicode,      [  --disable-unicode       compile without Unicode support], wxUSE_UNICODE)
-WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
 WX_ARG_ENABLE_PARAM(utf8,    [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
 WX_ARG_ENABLE(utf8only,      [  --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
 WX_ARG_ENABLE(extended_rtti, [  --enable-extended_rtti  use extended RTTI (XTI)], wxUSE_EXTENDED_RTTI)
@@ -6222,22 +6221,6 @@ fi
 
 if test "$wxUSE_UNICODE" = "yes" ; then
   AC_DEFINE(wxUSE_UNICODE)
-
-  if test "$USE_WIN32" != 1; then
-      wxUSE_UNICODE_MSLU=no
-  fi
-
-  if test "$USE_WIN32" = 1 -a "$wxUSE_UNICODE_MSLU" = "yes"; then
-        AC_CHECK_LIB(unicows,main,
-            [
-                AC_DEFINE(wxUSE_UNICODE_MSLU)
-            ],
-            [
-                AC_MSG_WARN([Compiler doesn't support MSLU (libunicows.a), disabled.
-                             Applications will only run on Windows NT/2000/XP!])
-                wxUSE_UNICODE_MSLU=no
-            ])
-    fi
 fi
 
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "yes"; then
@@ -7029,11 +7012,6 @@ if test "$wxUSE_PALETTE" = "yes" ; then
     else
         AC_DEFINE(wxUSE_PALETTE)
     fi
-fi
-
-if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_MSLU" = "yes" ; then
-  dnl Must be done this late because -lunicows must be before all the other libs
-  LIBS=" -lunicows $LIBS"
 fi
 
 USE_RICHTEXT=0

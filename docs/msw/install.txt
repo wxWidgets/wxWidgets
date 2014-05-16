@@ -361,8 +361,7 @@ SHARED=1
 
 UNICODE=0
   To completely disable Unicode support (default is UNICODE=1). It should not
-  be necessary to do this unless, perhaps, you still wish to target Win9x
-  systems and can't use MSLU (which requires MSLU=1) for some reason.
+  be necessary to do this.
 
   This option affect name of the library ('u' is appended in the default
   Unicode build) and the directory where the library and setup.h are stored
@@ -395,16 +394,6 @@ RUNTIME_LIBS=static
   that the program does not depend on DLLs provided with the compiler (e.g.
   Visual C++'s msvcrt.dll or Borland's cc3250mt.dll).
   Caution: Do not use static runtime libraries when building DLL (SHARED=1)!
-
-MSLU=1
-  Enables MSLU (Microsoft Layer for Unicode). This setting makes sense only if
-  used together with UNICODE=1. If you want to be able to use Unicode version
-  on Windows9x, you will need MSLU (Microsoft Layer for Unicode) runtime DLL
-  and import lib.  The former can be downloaded from Microsoft, the latter is
-  part of the latest Platform SDK from Microsoft (see msdn.microsoft.com for
-  details). An alternative implementation of import library can be downloaded
-  from http://libunicows.sourceforge.net - unlike the official one, this one
-  works with other compilers and does not require 300+ MB Platform SDK update.
 
 DEBUG_FLAG=0
 DEBUG_FLAG=1

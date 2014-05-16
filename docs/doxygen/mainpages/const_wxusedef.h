@@ -346,7 +346,6 @@ compilers. See also wxUSE_NO_MANIFEST.}
 @itemdef{wxUSE_RICHEDIT, Enable use of riched32.dll in wxTextCtrl}
 @itemdef{wxUSE_RICHEDIT2, Enable use of riched20.dll in wxTextCtrl}
 @itemdef{wxUSE_VC_CRTDBG, See wx/msw/msvcrt.h file.}
-@itemdef{wxUSE_UNICODE_MSLU, Use MSLU for Unicode support under Windows 9x systems.}
 @itemdef{wxUSE_UXTHEME, Enable support for XP themes.}
 @itemdef{wxUSE_WIN_METAFILES_ALWAYS, Use wxMetaFile even when wxUSE_ENH_METAFILE=1.}
 @itemdef{wxUSE_WXDIB, Use wxDIB class.}

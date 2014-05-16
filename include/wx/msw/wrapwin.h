@@ -63,32 +63,4 @@
 // #undef the macros defined in winsows.h which conflict with code elsewhere
 #include "wx/msw/winundef.h"
 
-// ----------------------------------------------------------------------------
-// Fix the functions wrongly implemented in unicows.dll
-// ----------------------------------------------------------------------------
-
-#if wxUSE_UNICODE_MSLU
-
-#if wxUSE_GUI
-
-WXDLLIMPEXP_CORE int wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
-                                  WXLPARAM lData, WXWPARAM wData,
-                                  int x, int y, int cx, int cy,
-                                  unsigned int flags);
-#define DrawStateW(dc, br, func, ld, wd, x, y, cx, cy, flags) \
-    wxMSLU_DrawStateW((WXHDC)dc,(WXHBRUSH)br,(WXFARPROC)func, \
-                      ld, wd, x, y, cx, cy, flags)
-
-WXDLLIMPEXP_CORE int wxMSLU_GetOpenFileNameW(void *ofn);
-#define GetOpenFileNameW(ofn) wxMSLU_GetOpenFileNameW((void*)ofn)
-
-WXDLLIMPEXP_CORE int wxMSLU_GetSaveFileNameW(void *ofn);
-#define GetSaveFileNameW(ofn) wxMSLU_GetSaveFileNameW((void*)ofn)
-
-#endif // wxUSE_GUI
-
-#endif // wxUSE_UNICODE_MSLU
-
 #endif // _WX_WRAPWIN_H_
-
-

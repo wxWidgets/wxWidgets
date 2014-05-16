@@ -154,27 +154,12 @@ bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
     if ( !m_hdc )
         return wxTextMeasureBase::DoGetPartialTextExtents(text, widths, scaleX);
 
-    static int maxLenText = -1;
-    static int maxWidth = -1;
-
-    if (maxLenText == -1)
-    {
-        // Win9x and WinNT+ have different limits
-        int version = wxGetOsVersion();
-        maxLenText = version == wxOS_WINDOWS_NT ? 65535 : 8192;
-        maxWidth =   version == wxOS_WINDOWS_NT ? INT_MAX : 32767;
-    }
-
-    int len = text.length();
-    if ( len > maxLenText )
-        len = maxLenText;
-
     int fit = 0;
     SIZE sz = {0,0};
     if ( !::GetTextExtentExPoint(m_hdc,
                                  text.t_str(), // string to check
-                                 len,
-                                 maxWidth,
+                                 text.length(),
+                                 INT_MAX,      // max allowable width
                                  &fit,         // [out] count of chars
                                                // that will fit
                                  &widths[0],   // array to fill

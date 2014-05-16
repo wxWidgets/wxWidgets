@@ -62,7 +62,6 @@
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
     #include "wx/msw/missing.h"
-    #include "wx/msw/mslu.h"
 
     // sys/cygwin.h is needed for cygwin_conv_to_full_win32_path()
     // and for cygwin_conv_path()
@@ -1347,16 +1346,12 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
 #else // wxUSE_UNICODE
     bool needsANSI = true;
 
-    #if !defined(HAVE_WGETCWD) || wxUSE_UNICODE_MSLU
+    #if !defined(HAVE_WGETCWD)
         char cbuf[_MAXPATHLEN];
     #endif
 
     #ifdef HAVE_WGETCWD
-        #if wxUSE_UNICODE_MSLU
-            if ( wxGetOsVersion() != wxOS_WINDOWS_9X )
-        #else
             char *cbuf = NULL; // never really used because needsANSI will always be false
-        #endif
             {
                 ok = _wgetcwd(buf, sz) != NULL;
                 needsANSI = false;

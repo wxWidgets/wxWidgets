@@ -34,7 +34,6 @@
                 @echo DEBUG_FLAG=$(DEBUG_FLAG) >>$(BUILD_CFG_FILE)
                 @echo DEBUG_INFO=$(DEBUG_INFO) >>$(BUILD_CFG_FILE)
                 @echo RUNTIME_LIBS=$(RUNTIME_LIBS) >>$(BUILD_CFG_FILE)
-                @echo MSLU=$(MSLU) >>$(BUILD_CFG_FILE)
                 @echo USE_EXCEPTIONS=$(USE_EXCEPTIONS) >>$(BUILD_CFG_FILE)
                 @echo USE_RTTI=$(USE_RTTI) >>$(BUILD_CFG_FILE)
                 @echo USE_THREADS=$(USE_THREADS) >>$(BUILD_CFG_FILE)

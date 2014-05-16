@@ -86,14 +86,6 @@
 #   endif
 #endif /* wxUSE_TASKBARICON_BALLOONS */
 
-#ifndef wxUSE_UNICODE_MSLU
-#    ifdef wxABORT_ON_CONFIG_ERROR
-#        error "wxUSE_UNICODE_MSLU must be defined."
-#    else
-#        define wxUSE_UNICODE_MSLU 0
-#    endif
-#endif  /* wxUSE_UNICODE_MSLU */
-
 #ifndef wxUSE_UXTHEME
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_UXTHEME must be defined."
@@ -101,19 +93,6 @@
 #        define wxUSE_UXTHEME 0
 #    endif
 #endif  /* wxUSE_UXTHEME */
-
-/*
- * We don't want to give an error if wxUSE_UNICODE_MSLU is enabled but
- * wxUSE_UNICODE is not as this would make it impossible to simply set the
- * former in wx/setup.h as then the library wouldn't compile in non-Unicode
- * configurations, so instead simply unset it silently when it doesn't make
- * sense.
- */
-#if wxUSE_UNICODE_MSLU && !wxUSE_UNICODE
-#   undef wxUSE_UNICODE_MSLU
-#   define wxUSE_UNICODE_MSLU 0
-#endif
-
 
 /*
  * Unfortunately we can't use compiler TLS support if the library can be used
@@ -277,11 +256,6 @@
 #       undef wxUSE_ACTIVEX
 #       define wxUSE_ACTIVEX 0
 #   endif /* wxUSE_ACTIVEX */
-
-#   if wxUSE_UNICODE_MSLU
-#       undef wxUSE_UNICODE_MSLU
-#       define wxUSE_UNICODE_MSLU 0
-#   endif /* wxUSE_UNICODE_MSLU */
 #endif /* __WINE__ */
 
 

@@ -596,7 +596,6 @@
     <ClCompile Include="..\..\src\msw\fswatcher.cpp" />
     <ClCompile Include="..\..\src\msw\main.cpp" />
     <ClCompile Include="..\..\src\msw\mimetype.cpp" />
-    <ClCompile Include="..\..\src\msw\mslu.cpp" />
     <ClCompile Include="..\..\src\msw\power.cpp" />
     <ClCompile Include="..\..\src\msw\regconf.cpp" />
     <ClCompile Include="..\..\src\msw\registry.cpp" />
@@ -650,7 +649,6 @@
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\msw\libraries.h" />
     <ClInclude Include="..\..\include\wx\msw\mimetype.h" />
-    <ClInclude Include="..\..\include\wx\msw\mslu.h" />
     <ClInclude Include="..\..\include\wx\msw\private.h" />
     <ClInclude Include="..\..\include\wx\msw\regconf.h" />
     <ClInclude Include="..\..\include\wx\msw\registry.h" />

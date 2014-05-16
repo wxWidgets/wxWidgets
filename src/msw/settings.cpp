@@ -103,30 +103,6 @@ void wxSystemSettingsModule::OnExit()
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    // we use 0 as the default value just to avoid compiler warnings, as there
-    // is no invalid colour value we use hasCol as the real indicator of
-    // whether colSys was initialized or not
-    COLORREF colSys = 0;
-    bool hasCol = false;
-
-    // the default colours for the entries after BTNHIGHLIGHT
-    static const COLORREF s_defaultSysColors[] =
-    {
-        0x000000,   // 3DDKSHADOW
-        0xdfdfdf,   // 3DLIGHT
-        0x000000,   // INFOTEXT
-        0xe1ffff,   // INFOBK
-
-        0,          // filler - no std colour with this index
-
-        // TODO: please fill in the standard values of those, I don't have them
-        0,          // HOTLIGHT
-        0,          // GRADIENTACTIVECAPTION
-        0,          // GRADIENTINACTIVECAPTION
-        0,          // MENU
-        0,          // MENUBAR (unused)
-    };
-
     if ( index == wxSYS_COLOUR_LISTBOXTEXT)
     {
         // there is no standard colour with this index, map to another one
@@ -144,74 +120,23 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     }
     else if ( index > wxSYS_COLOUR_BTNHIGHLIGHT )
     {
-        // the indices before BTNHIGHLIGHT are understood by GetSysColor() in
-        // all Windows version, for the other ones we have to check
-        bool useDefault;
-
-        int verMaj, verMin;
-        wxGetOsVersion(&verMaj, &verMin);
-        if ( verMaj < 4 )
+        // Determine if we are using flat menus, only then allow wxSYS_COLOUR_MENUBAR
+        if ( index == wxSYS_COLOUR_MENUBAR )
         {
-            // NT 3.5
-            useDefault = true;
-        }
-        else if ( verMaj == 4 )
-        {
-            // Win95/NT 4.0
-            useDefault = index > wxSYS_COLOUR_INFOBK;
-        }
-        else if ( verMaj == 5 && verMin == 0 )
-        {
-            // Win98/Win2K
-            useDefault = index > wxSYS_COLOUR_GRADIENTINACTIVECAPTION;
-        }
-        else // >= 5.1
-        {
-            // 5.1 is Windows XP
-            useDefault = false;
-            // Determine if we are using flat menus, only then allow wxSYS_COLOUR_MENUBAR
-            if ( index == wxSYS_COLOUR_MENUBAR )
+            BOOL isFlat ;
+            if ( SystemParametersInfo( SPI_GETFLATMENU , 0 ,&isFlat, 0 ) )
             {
-                BOOL isFlat ;
-                if ( SystemParametersInfo( SPI_GETFLATMENU , 0 ,&isFlat, 0 ) )
-                {
-                    if ( !isFlat )
-                        index = wxSYS_COLOUR_MENU ;
-                }
-            }
-        }
-
-        if ( useDefault )
-        {
-            // special handling for MENUBAR colour: we use this in wxToolBar
-            // and wxStatusBar to have correct bg colour under Windows XP
-            // (which uses COLOR_MENUBAR for them) but they should still look
-            // correctly under previous Windows versions as well
-            if ( index == wxSYS_COLOUR_MENUBAR )
-            {
-                index = wxSYS_COLOUR_3DFACE;
-            }
-            else // replace with default colour
-            {
-                unsigned int n = index - wxSYS_COLOUR_BTNHIGHLIGHT;
-
-                wxASSERT_MSG( n < WXSIZEOF(s_defaultSysColors),
-                              wxT("forgot tp update the default colours array") );
-
-                colSys = s_defaultSysColors[n];
-                hasCol = true;
+                if ( !isFlat )
+                    index = wxSYS_COLOUR_MENU ;
             }
         }
     }
 
-    if ( !hasCol )
-    {
 #ifdef __WXWINCE__
-        colSys = ::GetSysColor(index|SYS_COLOR_INDEX_FLAG);
-#else
-        colSys = ::GetSysColor(index);
+    index |= SYS_COLOR_INDEX_FLAG;
 #endif
-    }
+
+    COLORREF colSys = ::GetSysColor(index);
 
     wxColour ret = wxRGBToColour(colSys);
     wxASSERT(ret.IsOk());
@@ -468,45 +393,23 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 extern wxFont wxGetCCDefaultFont()
 {
 #ifndef __WXWINCE__
-    // under the systems enumerated below (anything released after Win98), the
-    // default font used for the common controls seems to be the desktop font
-    // which is also used for the icon titles and not the stock default GUI
-    // font
-    bool useIconFont;
-    int verMaj, verMin;
-    switch ( wxGetOsVersion(&verMaj, &verMin) )
+    // the default font used for the common controls seems to be the desktop
+    // font which is also used for the icon titles and not the stock default
+    // GUI font
+    LOGFONT lf;
+    if ( ::SystemParametersInfo
+           (
+                SPI_GETICONTITLELOGFONT,
+                sizeof(lf),
+                &lf,
+                0
+           ) )
     {
-        case wxOS_WINDOWS_9X:
-            // 4.10 is Win98
-            useIconFont = verMaj == 4 && verMin >= 10;
-            break;
-
-        case wxOS_WINDOWS_NT:
-            // 5.0 is Win2k
-            useIconFont = verMaj >= 5;
-            break;
-
-        default:
-            useIconFont = false;
+        return wxFont(wxCreateFontFromLogFont(&lf));
     }
-
-    if ( useIconFont )
+    else
     {
-        LOGFONT lf;
-        if ( ::SystemParametersInfo
-               (
-                    SPI_GETICONTITLELOGFONT,
-                    sizeof(lf),
-                    &lf,
-                    0
-               ) )
-        {
-            return wxFont(wxCreateFontFromLogFont(&lf));
-        }
-        else
-        {
-            wxLogLastError(wxT("SystemParametersInfo(SPI_GETICONTITLELOGFONT"));
-        }
+        wxLogLastError(wxT("SystemParametersInfo(SPI_GETICONTITLELOGFONT"));
     }
 #endif // __WXWINCE__
 

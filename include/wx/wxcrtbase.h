@@ -439,30 +439,17 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
     #define wxCRT_Rename  rename
 
 #else /* Unicode filenames */
-    /* special case: these functions are missing under Win9x with Unicows so we
-       have to implement them ourselves */
-    #if wxUSE_UNICODE_MSLU || defined(__WX_STRICT_ANSI_GCC__)
-            WXDLLIMPEXP_BASE FILE* wxMSLU__wfopen(const wchar_t *name, const wchar_t *mode);
-            WXDLLIMPEXP_BASE FILE* wxMSLU__wfreopen(const wchar_t *name, const wchar_t *mode, FILE *stream);
-            WXDLLIMPEXP_BASE int wxMSLU__wrename(const wchar_t *oldname, const wchar_t *newname);
-            WXDLLIMPEXP_BASE int wxMSLU__wremove(const wchar_t *name);
-            #define wxCRT_Fopen     wxMSLU__wfopen
-            #define wxCRT_Freopen   wxMSLU__wfreopen
-            #define wxCRT_Remove    wxMSLU__wremove
-            #define wxCRT_Rename    wxMSLU__wrename
+    /* WinCE CRT doesn't provide these functions so use our own */
+    #ifdef __WXWINCE__
+        WXDLLIMPEXP_BASE int wxCRT_Rename(const wchar_t *src,
+                                          const wchar_t *dst);
+        WXDLLIMPEXP_BASE int wxCRT_Remove(const wchar_t *path);
     #else
-        /* WinCE CRT doesn't provide these functions so use our own */
-        #ifdef __WXWINCE__
-            WXDLLIMPEXP_BASE int wxCRT_Rename(const wchar_t *src,
-                                              const wchar_t *dst);
-            WXDLLIMPEXP_BASE int wxCRT_Remove(const wchar_t *path);
-        #else
-            #define wxCRT_Rename   _wrename
-            #define wxCRT_Remove _wremove
-        #endif
-        #define wxCRT_Fopen    _wfopen
-        #define wxCRT_Freopen  _wfreopen
+        #define wxCRT_Rename   _wrename
+        #define wxCRT_Remove _wremove
     #endif
+    #define wxCRT_Fopen    _wfopen
+    #define wxCRT_Freopen  _wfreopen
 
 #endif /* wxMBFILES/!wxMBFILES */
 

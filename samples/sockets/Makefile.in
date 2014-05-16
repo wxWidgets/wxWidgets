@@ -271,13 +271,13 @@ baseserver$(EXEEXT): $(BASESERVER_OBJECTS)
 	$(__baseserver___mac_setfilecmd)
 
 client_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 client_client.o: $(srcdir)/client.cpp
 	$(CXXC) -c -o $@ $(CLIENT_CXXFLAGS) $(srcdir)/client.cpp
 
 server_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)  --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 server_server.o: $(srcdir)/server.cpp
 	$(CXXC) -c -o $@ $(SERVER_CXXFLAGS) $(srcdir)/server.cpp

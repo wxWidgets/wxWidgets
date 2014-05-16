@@ -300,7 +300,7 @@ $(OBJS)\xrcdemo.exe :  $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_sample.res
 	@%append $(OBJS)\xrcdemo.lbc option caseexact
 	@%append $(OBJS)\xrcdemo.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
 	@for %i in ($(XRCDEMO_OBJECTS)) do @%append $(OBJS)\xrcdemo.lbc file %i
-	@for %i in ( $(__WXLIB_AUI_p)  $(__WXLIB_RIBBON_p)  $(__WXLIB_XRC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\xrcdemo.lbc library %i
+	@for %i in ( $(__WXLIB_AUI_p)  $(__WXLIB_RIBBON_p)  $(__WXLIB_XRC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\xrcdemo.lbc library %i
 	@%append $(OBJS)\xrcdemo.lbc option resource=$(OBJS)\xrcdemo_sample.res
 	@for %i in () do @%append $(OBJS)\xrcdemo.lbc option stack=%i
 	wlink @$(OBJS)\xrcdemo.lbc
@@ -310,7 +310,7 @@ data : .SYMBOLIC
 	for %f in (aui.xpm aui.xrc artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm objref.xrc objrefdlg.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm wxbanner.gif) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
 
 $(OBJS)\xrcdemo_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
 $(OBJS)\xrcdemo_xrcdemo.obj :  .AUTODEPEND .\xrcdemo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDEMO_CXXFLAGS) $<

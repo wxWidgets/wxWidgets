@@ -375,8 +375,6 @@ def main(scriptName, args):
         print("creating wx/msw/setup.h from setup0.h")
         if options.unicode:
             flags["wxUSE_UNICODE"] = "1"
-            if VERSION < (2,9):
-                flags["wxUSE_UNICODE_MSLU"] = "1"
     
         if options.cairo:
             if not os.environ.get("CAIRO_ROOT"):
@@ -424,8 +422,6 @@ def main(scriptName, args):
             args.append("-f makefile.vc")
             if options.unicode:
                 args.append("UNICODE=1")
-                if VERSION < (2,9):
-                    args.append("MSLU=1")
     
             if options.wxpython:
                 args.append("OFFICIAL_BUILD=1")

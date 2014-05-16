@@ -33,36 +33,32 @@ CLIENT_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -I. $(__DLLFLAG_p) -I.\..\..\samples \
-	-DNOPCH $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -I. \
+	$(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 CLIENT_OBJECTS =  \
 	$(OBJS)\client_client.obj
 SERVER_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -I. $(__DLLFLAG_p) -I.\..\..\samples \
-	-DNOPCH $(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -I. \
+	$(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 SERVER_OBJECTS =  \
 	$(OBJS)\server_server.obj
 BASECLIENT_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -I. \
+	$(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 BASECLIENT_OBJECTS =  \
 	$(OBJS)\baseclient_baseclient.obj
 BASESERVER_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(__MSLU_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
-	$(____CAIRO_INCLUDEDIR_FILENAMES) -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	$(CPPFLAGS) $(CXXFLAGS)
+	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -I. \
+	$(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPFLAGS) $(CXXFLAGS)
 BASESERVER_OBJECTS =  \
 	$(OBJS)\baseserver_baseserver.obj
 
@@ -137,9 +133,6 @@ __UNICODE_DEFINE_p_0 = -dwxUSE_UNICODE=0
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_0 = -d_UNICODE
 !endif
-!if "$(MSLU)" == "1"
-__MSLU_DEFINE_p_0 = -dwxUSE_UNICODE_MSLU=1
-!endif
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES_0 = -i$(CAIRO_ROOT)\include\cairo
 !endif
@@ -213,9 +206,6 @@ __UNICODE_DEFINE_p = -DwxUSE_UNICODE=0
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -D_UNICODE
 !endif
-!if "$(MSLU)" == "1"
-__MSLU_DEFINE_p = -DwxUSE_UNICODE_MSLU=1
-!endif
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
 !endif
@@ -236,9 +226,6 @@ __WXLIB_MONO_p = \
 !endif
 !if "$(USE_GUI)" == "1"
 __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
-!endif
-!if "$(MSLU)" == "1"
-__UNICOWS_LIB_p = unicows.lib
 !endif
 !if "$(USE_CAIRO)" == "1"
 __CAIRO_LIB_p = cairo.lib
@@ -300,35 +287,35 @@ clean:
 !if "$(USE_GUI)" == "1"
 $(OBJS)\client.exe: $(CLIENT_OBJECTS)  $(OBJS)\client_sample.res
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0w32.obj $(CLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\client_sample.res
+	c0w32.obj $(CLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\client_sample.res
 |
 !endif
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\server.exe: $(SERVER_OBJECTS)  $(OBJS)\server_sample.res
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0w32.obj $(SERVER_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\server_sample.res
+	c0w32.obj $(SERVER_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\server_sample.res
 |
 !endif
 
 $(OBJS)\baseclient.exe: $(BASECLIENT_OBJECTS)
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(BASECLIENT_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
+	c0x32.obj $(BASECLIENT_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
 |
 
 $(OBJS)\baseserver.exe: $(BASESERVER_OBJECTS)
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(BASESERVER_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_1) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
+	c0x32.obj $(BASESERVER_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_PNG_IF_MONO_p_1) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,,
 |
 
 $(OBJS)\client_sample.res: .\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH .\..\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH .\..\..\samples\sample.rc
 
 $(OBJS)\client_client.obj: .\client.cpp
 	$(CXX) -q -c -P -o$@ $(CLIENT_CXXFLAGS) .\client.cpp
 
 $(OBJS)\server_sample.res: .\..\..\samples\sample.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH .\..\..\samples\sample.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_0) -i. $(__DLLFLAG_p_0) -i.\..\..\samples -dNOPCH .\..\..\samples\sample.rc
 
 $(OBJS)\server_server.obj: .\server.cpp
 	$(CXX) -q -c -P -o$@ $(SERVER_CXXFLAGS) .\server.cpp

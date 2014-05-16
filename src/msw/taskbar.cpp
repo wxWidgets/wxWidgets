@@ -31,7 +31,6 @@
 #include <string.h>
 #include "wx/taskbar.h"
 #include "wx/msw/private.h"
-#include "wx/dynlib.h"
 
 #ifndef NIN_BALLOONTIMEOUT
     #define NIN_BALLOONTIMEOUT      0x0404
@@ -72,38 +71,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 // ============================================================================
 // implementation
 // ============================================================================
-
-// wrapper around Shell_NotifyIcon(): this function is not present in Win95
-// shell32.dll so load it dynamically to allow programs using wxTaskBarIcon to
-// start under this OS
-static BOOL wxShellNotifyIcon(DWORD dwMessage, NOTIFYICONDATA *pData)
-{
-#if wxUSE_DYNLIB_CLASS
-    typedef BOOL (WINAPI *Shell_NotifyIcon_t)(DWORD, NOTIFYICONDATA *);
-
-    static Shell_NotifyIcon_t s_pfnShell_NotifyIcon = NULL;
-    static bool s_initialized = false;
-    if ( !s_initialized )
-    {
-        s_initialized = true;
-
-        wxLogNull noLog;
-        wxDynamicLibrary dllShell("shell32.dll");
-        if ( dllShell.IsLoaded() )
-        {
-            wxDL_INIT_FUNC_AW(s_pfn, Shell_NotifyIcon, dllShell);
-        }
-
-        // NB: it's ok to destroy dllShell here, we link to shell32.dll
-        //     implicitly so it won't be unloaded
-    }
-
-    return s_pfnShell_NotifyIcon ? (*s_pfnShell_NotifyIcon)(dwMessage, pData)
-                                 : FALSE;
-#else // !wxUSE_DYNLIB_CLASS
-    return Shell_NotifyIcon(dwMessage, pData);
-#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
-}
 
 // ----------------------------------------------------------------------------
 // wxTaskBarIconWindow: helper window
@@ -228,12 +195,12 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
         wxStrlcpy(notifyData.szTip, tooltip.t_str(), WXSIZEOF(notifyData.szTip));
     }
 
-    bool ok = wxShellNotifyIcon(m_iconAdded ? NIM_MODIFY
+    bool ok = Shell_NotifyIcon(m_iconAdded ? NIM_MODIFY
                                             : NIM_ADD, &notifyData) != 0;
 
     if ( !ok )
     {
-        wxLogLastError(wxT("wxShellNotifyIcon(NIM_MODIFY/ADD)"));
+        wxLogLastError(wxT("Shell_NotifyIcon(NIM_MODIFY/ADD)"));
     }
 
     if ( !m_iconAdded && ok )
@@ -261,9 +228,9 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     notifyData.uFlags = 0;
     notifyData.uVersion = 3 /* NOTIFYICON_VERSION for Windows 2000/XP */;
 
-    if ( !wxShellNotifyIcon(NIM_SETVERSION, &notifyData) )
+    if ( !Shell_NotifyIcon(NIM_SETVERSION, &notifyData) )
     {
-        wxLogLastError(wxT("wxShellNotifyIcon(NIM_SETVERSION)"));
+        wxLogLastError(wxT("Shell_NotifyIcon(NIM_SETVERSION)"));
     }
 
     // do show the balloon now
@@ -281,10 +248,10 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     else if ( flags & wxICON_ERROR )
         notifyData.dwInfoFlags |= NIIF_ERROR;
 
-    bool ok = wxShellNotifyIcon(NIM_MODIFY, &notifyData) != 0;
+    bool ok = Shell_NotifyIcon(NIM_MODIFY, &notifyData) != 0;
     if ( !ok )
     {
-        wxLogLastError(wxT("wxShellNotifyIcon(NIM_MODIFY)"));
+        wxLogLastError(wxT("Shell_NotifyIcon(NIM_MODIFY)"));
     }
 
     return ok;
@@ -301,10 +268,10 @@ bool wxTaskBarIcon::RemoveIcon()
 
     NotifyIconData notifyData(GetHwndOf(m_win));
 
-    bool ok = wxShellNotifyIcon(NIM_DELETE, &notifyData) != 0;
+    bool ok = Shell_NotifyIcon(NIM_DELETE, &notifyData) != 0;
     if ( !ok )
     {
-        wxLogLastError(wxT("wxShellNotifyIcon(NIM_DELETE)"));
+        wxLogLastError(wxT("Shell_NotifyIcon(NIM_DELETE)"));
     }
 
     return ok;

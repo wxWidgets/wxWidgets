@@ -256,7 +256,7 @@ bench_printfbench.o: $(srcdir)/printfbench.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/printfbench.cpp
 
 bench_gui_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5) $(__DEBUG_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5) $(__DEBUG_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)  --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 bench_gui_bench.o: $(srcdir)/bench.cpp
 	$(CXXC) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(srcdir)/bench.cpp

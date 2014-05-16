@@ -1659,7 +1659,6 @@ void FormMain::PopulateWithLibraryConfig ()
 
     ADD_WX_LIB_CONF_GROUP(wxT("Unicode Support"))
     ADD_WX_LIB_CONF( wxUSE_UNICODE )
-    ADD_WX_LIB_CONF( wxUSE_UNICODE_MSLU )
 
     ADD_WX_LIB_CONF_GROUP(wxT("Global Features"))
     ADD_WX_LIB_CONF( wxUSE_EXCEPTIONS )

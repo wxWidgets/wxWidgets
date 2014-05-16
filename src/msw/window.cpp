@@ -2237,18 +2237,10 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 #if defined(__WXWINCE__)
     static const UINT flags = 0;
 #else // !__WXWINCE__
-    UINT flags = TPM_RIGHTBUTTON;
-    // NT4 doesn't support TPM_RECURSE and simply doesn't show the menu at all
-    // when it's use, I'm not sure about Win95/98 but prefer to err on the safe
-    // side and not to use it there neither -- modify the test if it does work
-    // on these systems
-    if ( wxGetWinVersion() >= wxWinVersion_5 )
-    {
-        // using TPM_RECURSE allows us to show a popup menu while another menu
-        // is opened which can be useful and is supported by the other
-        // platforms, so allow it under Windows too
-        flags |= TPM_RECURSE;
-    }
+    // using TPM_RECURSE allows us to show a popup menu while another menu
+    // is opened which can be useful and is supported by the other
+    // platforms, so allow it under Windows too
+    UINT flags = TPM_RIGHTBUTTON | TPM_RECURSE;
 #endif // __WXWINCE__/!__WXWINCE__
 
     ::TrackPopupMenu(GetHmenuOf(menu), flags, pt.x, pt.y, 0, GetHwnd(), NULL);
@@ -3053,19 +3045,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_NOTIFY:
             processed = HandleNotify((int)wParam, lParam, &rc.result);
             break;
-
-        // we only need to reply to WM_NOTIFYFORMAT manually when using MSLU,
-        // otherwise DefWindowProc() does it perfectly fine for us, but MSLU
-        // apparently doesn't always behave properly and needs some help
-#if wxUSE_UNICODE_MSLU && defined(NF_QUERY)
-        case WM_NOTIFYFORMAT:
-            if ( lParam == NF_QUERY )
-            {
-                processed = true;
-                rc.result = NFR_UNICODE;
-            }
-            break;
-#endif // wxUSE_UNICODE_MSLU
 
             // for these messages we must return true if process the message
 #ifdef WM_DRAWITEM

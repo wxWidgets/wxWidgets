@@ -803,7 +803,6 @@
     <ClCompile Include="..\..\src\msw\metafile.cpp" />
     <ClCompile Include="..\..\src\msw\minifram.cpp" />
     <ClCompile Include="..\..\src\msw\msgdlg.cpp" />
-    <ClCompile Include="..\..\src\msw\mslu.cpp" />
     <ClCompile Include="..\..\src\msw\nativdlg.cpp" />
     <ClCompile Include="..\..\src\msw\nativewin.cpp" />
     <ClCompile Include="..\..\src\msw\nonownedwnd.cpp" />
