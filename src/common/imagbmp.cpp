@@ -1113,7 +1113,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         {
             m_x = x;
             m_y = y;
-            m_valid = false;
+            m_valid = true;
         }
 
         bool IsValid() const { return m_valid; }
