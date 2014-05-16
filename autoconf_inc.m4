@@ -644,6 +644,12 @@ dnl ### begin block 20_COND_SHARED_1[../../demos/bombs/bombs.bkl,../../demos/for
         COND_SHARED_1=""
     fi
     AC_SUBST(COND_SHARED_1)
+dnl ### begin block 20_COND_SHARED_1_USE_GUI_1[../../tests/test.bkl] ###
+    COND_SHARED_1_USE_GUI_1="#"
+    if test "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" ; then
+        COND_SHARED_1_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_SHARED_1_USE_GUI_1)
 dnl ### begin block 20_COND_SHARED_1_USE_GUI_1_USE_OPENGL_1[wx.bkl] ###
     COND_SHARED_1_USE_GUI_1_USE_OPENGL_1="#"
     if test "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_OPENGL" = "x1" ; then

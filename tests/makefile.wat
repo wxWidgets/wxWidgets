@@ -81,8 +81,10 @@ __test_drawing___depname =
 __test_drawing___depname = $(OBJS)\test_drawing.exe
 !endif
 __test_drawingplugin___depname =
+!ifeq SHARED 1
 !ifeq USE_GUI 1
 __test_drawingplugin___depname = $(OBJS)\test_drawingplugin.dll
+!endif
 !endif
 __test_gui___depname =
 !ifeq USE_GUI 1
@@ -553,6 +555,7 @@ $(OBJS)\test_drawing.exe :  $(TEST_DRAWING_OBJECTS)
 	wlink @$(OBJS)\test_drawing.lbc
 !endif
 
+!ifeq SHARED 1
 !ifeq USE_GUI 1
 $(OBJS)\test_drawingplugin.dll :  $(TEST_DRAWINGPLUGIN_OBJECTS)
 	@%create $(OBJS)\test_drawingplugin.lbc
@@ -565,6 +568,7 @@ $(OBJS)\test_drawingplugin.dll :  $(TEST_DRAWINGPLUGIN_OBJECTS)
 	@%append $(OBJS)\test_drawingplugin.lbc
 	@%append $(OBJS)\test_drawingplugin.lbc system nt_dll
 	wlink @$(OBJS)\test_drawingplugin.lbc
+!endif
 !endif
 
 !ifeq USE_GUI 1

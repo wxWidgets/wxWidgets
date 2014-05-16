@@ -149,7 +149,7 @@
       -->
     <module id="test_drawingplugin" template="wx"
                                     template_append="wx_append"
-            cond="USE_GUI=='1'">
+            cond="USE_GUI=='1' and SHARED=='1'">
         <define>$(DLLFLAG)</define>
         <sources>
             drawing/pluginsample.cpp
