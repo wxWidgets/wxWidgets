@@ -1351,7 +1351,7 @@ public:
     @library{wxrichtext}
     @category{richtext}
 
-    @see wxRichTextAttr, wxTextBoxAttr, wxRichTextCtrl
+    @see wxTextAttr, wxTextBoxAttr, wxRichTextCtrl
 */
 
 class wxRichTextAttr: public wxTextAttr
