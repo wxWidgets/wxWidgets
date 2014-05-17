@@ -39,7 +39,7 @@ class ClientHandler : public CefClient,
                       public CefLoadHandler
 {
 public:
-    ClientHandler() {};
+    ClientHandler():m_loadErrorCode(-1) {};
     virtual ~ClientHandler() {};
 
     virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() { return this; }
@@ -108,7 +108,9 @@ private:
     CefRefPtr<CefBrowser> m_browser;
     wxWebViewChromium *m_webview;
     int m_browserId;
-
+    // Record the load error code: enum wxWebViewNavigationError
+    // -1 means no error.
+    int m_loadErrorCode;
     IMPLEMENT_REFCOUNTING(ClientHandler);
 };
 
