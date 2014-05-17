@@ -202,15 +202,15 @@ inline wxPoint2DInt& wxPoint2DInt::operator-=(const wxPoint2DInt& pt)
 
 inline wxPoint2DInt& wxPoint2DInt::operator*=(const wxPoint2DInt& pt)
 {
-    m_x = m_x + pt.m_x;
-    m_y = m_y + pt.m_y;
+    m_x = m_x * pt.m_x;
+    m_y = m_y * pt.m_y;
     return *this;
 }
 
 inline wxPoint2DInt& wxPoint2DInt::operator/=(const wxPoint2DInt& pt)
 {
-    m_x = m_x - pt.m_x;
-    m_y = m_y - pt.m_y;
+    m_x = m_x / pt.m_x;
+    m_y = m_y / pt.m_y;
     return *this;
 }
 
