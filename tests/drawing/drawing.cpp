@@ -198,7 +198,17 @@ wxString GraphicsContextDrawingTestCase::GetTestsReferenceDirectory() const
 
 wxString GraphicsContextDrawingTestCase::GetPlatformTag() const
 {
-    return wxPlatformInfo::Get().GetOperatingSystemFamilyName().Lower();
+    // We consider that the platform tag is the kind of default renderer plus
+    // its major/minor versions.
+    // The reason why including major/minor version is important, is that the
+    // rendering engine typically evolves somewhat between two version
+    // (i.e. font rendering is not the same in Windows XP and Windows 8)
+    int major, minor;
+    const wxGraphicsRenderer *defaultRenderer = wxGraphicsRenderer::GetDefaultRenderer();
+    wxString rendererName = defaultRenderer->GetName();
+    defaultRenderer->GetVersion (&major, &minor);
+
+    return wxString::Format("%s-%d.%d", rendererName, major, minor);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
