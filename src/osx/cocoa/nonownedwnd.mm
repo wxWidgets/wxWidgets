@@ -145,6 +145,7 @@ bool shouldHandleSelector(SEL selector)
 //
 
 static NSResponder* s_nextFirstResponder = NULL;
+static NSResponder* s_formerFirstResponder = NULL;
 
 @interface wxNSWindow : NSWindow
 {
@@ -210,9 +211,13 @@ static NSResponder* s_nextFirstResponder = NULL;
 
 - (BOOL)makeFirstResponder:(NSResponder *)aResponder
 {
+    NSResponder* tempFormer = s_formerFirstResponder;
+    NSResponder* tempNext = s_nextFirstResponder;
     s_nextFirstResponder = aResponder;
+    s_formerFirstResponder = [[NSApp keyWindow] firstResponder];
     BOOL retval = [super makeFirstResponder:aResponder];
-    s_nextFirstResponder = nil;
+    s_nextFirstResponder = tempNext;
+    s_formerFirstResponder = tempFormer;
     return retval;
 }
 
@@ -1066,6 +1071,10 @@ WX_NSResponder wxNonOwnedWindowCocoaImpl::GetNextFirstResponder()
     return s_nextFirstResponder;
 }
 
+WX_NSResponder wxNonOwnedWindowCocoaImpl::GetFormerFirstResponder()
+{
+    return s_formerFirstResponder;
+}
 
 //
 //
