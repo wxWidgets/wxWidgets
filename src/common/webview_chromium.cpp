@@ -3,15 +3,10 @@
 // Copyright: (c) 2013 Steven Lamerton
 // Licence: wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
 #include "wx/wxprec.h"
-
-#include "wx/webview_chromium.h"
-
-#if CEF_API == 3
-
-#include "wx/webview_chromium.h"
-
 #include <wx/webview.h>
+#include <wx/webview_chromium.h>
 #include <wx/filesys.h>
 #include <wx/msw/private.h>
 #include <wx/rtti.h>
@@ -25,6 +20,7 @@
 #include <include/cef_app.h>
 #include <include/cef_browser.h>
 #include <include/cef_string_visitor.h>
+#include <include/cef_version.h>
 
 #ifdef __VISUALC__
 #pragma warning(pop)
@@ -673,5 +669,3 @@ void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
 
     m_webview->HandleWindowEvent(event);
 }
-
-#endif
