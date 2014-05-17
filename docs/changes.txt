@@ -602,6 +602,7 @@ All (GUI):
 - Fix wxGraphicsBitmap::ConvertToImage() when using Cairo.
 - Support loading ICO files with data in PNG format (Artur Wieczorek).
 - Fix dragging columns in wxGrid when some of them are hidden (Artur Wieczorek).
+- Fix selecting elements from wxPropertyGrid enum properties (Artur Wieczorek).
 
 wxGTK:
 
