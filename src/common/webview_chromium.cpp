@@ -554,9 +554,17 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser,
     wxString url = frame->GetURL().ToString();
     wxString target = frame->GetName().ToString();
 
+    // Send webview_error event in case of loading error.
+    if (m_loadErrorCode != -1)
+    {
+        m_loadErrorCode = -1;
+        wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR, m_webview->GetId(), url, target);
+        event.SetEventObject(m_webview);
+        m_webview->HandleWindowEvent(event);
+    }
+
     wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_NAVIGATED, m_webview->GetId(), url, target);
     event.SetEventObject(m_webview);
-
     m_webview->HandleWindowEvent(event);
 
     if(frame->IsMain())
@@ -659,13 +667,5 @@ void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
         ERROR_TYPE_CASE(ERR_CACHE_MISS, wxWEBVIEW_NAV_ERR_OTHER);
         ERROR_TYPE_CASE(ERR_INSECURE_RESPONSE, wxWEBVIEW_NAV_ERR_SECURITY);
     }
-
-    wxString url = failedUrl.ToString();
-    wxString target = frame->GetName().ToString();
-    wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR, m_webview->GetId(), url, target);
-    event.SetEventObject(m_webview);
-    event.SetInt(type);
-    event.SetString(errorText.ToString());
-
-    m_webview->HandleWindowEvent(event);
+    m_loadErrorCode = type;
 }
