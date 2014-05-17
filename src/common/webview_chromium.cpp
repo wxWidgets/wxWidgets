@@ -103,7 +103,8 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 wxWebViewChromium::~wxWebViewChromium()
 {
     CefRefPtr<CefBrowser> browser = m_clientHandler->GetBrowser();
-    if(browser.get()) {
+    if ( browser.get() )
+    {
         // Let the browser window know we are about to destroy it.
         browser->GetHost()->ParentWindowWillClose();
     }
@@ -114,11 +115,11 @@ void wxWebViewChromium::OnSize(wxSizeEvent& event)
     wxSize size = GetClientSize();
 
 #ifdef __WXMSW__
-    if(m_clientHandler && m_clientHandler->GetBrowser() && m_clientHandler->GetBrowser()->GetHost())
+    if ( m_clientHandler && m_clientHandler->GetBrowser() && m_clientHandler->GetBrowser()->GetHost() )
     {
         HWND handle = m_clientHandler->GetBrowser()->GetHost()->GetWindowHandle();
 
-        if(handle)
+        if ( handle )
         {
             HDWP hdwp = BeginDeferWindowPos(1);
             hdwp = DeferWindowPos(hdwp, handle, NULL, 0, 0,
@@ -148,7 +149,7 @@ void* wxWebViewChromium::GetNativeBackend() const
 
 bool wxWebViewChromium::CanGoForward() const
 { 
-    if(m_historyEnabled)
+    if ( m_historyEnabled )
         return m_historyPosition != static_cast<int>(m_historyList.size()) - 1;
     else
         return false;
@@ -156,7 +157,7 @@ bool wxWebViewChromium::CanGoForward() const
 
 bool wxWebViewChromium::CanGoBack() const
 { 
-    if(m_historyEnabled)
+    if ( m_historyEnabled )
         return m_historyPosition > 0;
     else
         return false;
@@ -165,7 +166,7 @@ bool wxWebViewChromium::CanGoBack() const
 void wxWebViewChromium::LoadHistoryItem(wxSharedPtr<wxWebViewHistoryItem> item)
 {
     int pos = -1;
-    for(unsigned int i = 0; i < m_historyList.size(); i++)
+    for ( unsigned int i = 0; i < m_historyList.size(); i++ )
     {
         //We compare the actual pointers to find the correct item
         if(m_historyList[i].get() == item.get())
@@ -183,7 +184,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewChromium::GetBackwardHisto
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > backhist;
     //As we don't have std::copy or an iterator constructor in the wxwidgets
     //native vector we construct it by hand
-    for(int i = 0; i < m_historyPosition; i++)
+    for ( int i = 0; i < m_historyPosition; i++ )
     {
         backhist.push_back(m_historyList[i]);
     }
@@ -195,7 +196,7 @@ wxVector<wxSharedPtr<wxWebViewHistoryItem> > wxWebViewChromium::GetForwardHistor
     wxVector<wxSharedPtr<wxWebViewHistoryItem> > forwardhist;
     //As we don't have std::copy or an iterator constructor in the wxwidgets
     //native vector we construct it by hand
-    for(int i = m_historyPosition + 1; i < static_cast<int>(m_historyList.size()); i++)
+    for ( int i = m_historyPosition + 1; i < static_cast<int>(m_historyList.size()); i++ )
     {
         forwardhist.push_back(m_historyList[i]);
     }
@@ -235,7 +236,7 @@ void wxWebViewChromium::Stop()
 
 void wxWebViewChromium::Reload(wxWebViewReloadFlags flags)
 {
-    if(flags == wxWEBVIEW_RELOAD_NO_CACHE)
+    if ( flags == wxWEBVIEW_RELOAD_NO_CACHE )
     {
         m_clientHandler->GetBrowser()->ReloadIgnoreCache();
     }
@@ -247,7 +248,6 @@ void wxWebViewChromium::Reload(wxWebViewReloadFlags flags)
 
 wxString wxWebViewChromium::GetPageSource() const
 {
-  //m_clientHandler->GetBrowser()->GetHost()->Find
     return m_pageSource;
 }
 
@@ -353,7 +353,7 @@ void wxWebViewChromium::SetZoom(wxWebViewZoom zoom)
 
     double mapzoom;
     // arbitrary way to map our common zoom enum to float zoom
-    switch (zoom)
+    switch ( zoom )
     {
         case wxWEBVIEW_ZOOM_TINY:
             mapzoom = -1.0;
@@ -408,10 +408,10 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path)
     CefMainArgs args(wxGetInstance()); 
 
     // If there is no subprocess then we need to execute on this process
-    if(path == "")
+    if ( path == "" )
     {
         code = CefExecuteProcess(args, NULL);
-        if(code >= 0)
+        if ( code >= 0 )
             return false;
     }
 
@@ -463,7 +463,7 @@ bool ClientHandler::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefStr
     return false;
 }
 
-    // CefContextMenuHandler methods
+// CefContextMenuHandler methods
 void ClientHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> browser,
                                         CefRefPtr<CefFrame> frame,
                                         CefRefPtr<CefContextMenuParams> params,
@@ -510,7 +510,7 @@ bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser,
 
 void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 {
-    if(!m_browser.get())
+    if ( !m_browser.get() )
     {
         m_browser = browser;
         m_browserId = browser->GetIdentifier();
@@ -523,7 +523,7 @@ bool ClientHandler::DoClose(CefRefPtr<CefBrowser> browser)
 
 void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 {
-    if(browser->GetIdentifier() == m_browserId)
+    if ( browser->GetIdentifier() == m_browserId )
     {
         m_browser = NULL;
     }
@@ -541,7 +541,7 @@ void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> browser,
 
     m_webview->HandleWindowEvent(event);
 
-    if (!event.IsAllowed())
+    if ( !event.IsAllowed() )
     {
         // We do not yet have support for vetoing pages
     }
@@ -555,7 +555,7 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser,
     wxString target = frame->GetName().ToString();
 
     // Send webview_error event in case of loading error.
-    if (m_loadErrorCode != -1)
+    if ( m_loadErrorCode != -1 )
     {
         m_loadErrorCode = -1;
         wxWebViewEvent event(wxEVT_COMMAND_WEBVIEW_ERROR, m_webview->GetId(), url, target);
@@ -567,7 +567,7 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser,
     event.SetEventObject(m_webview);
     m_webview->HandleWindowEvent(event);
 
-    if(frame->IsMain())
+    if ( frame->IsMain() )
     {
         //Get source code when main frame loads ended.
         CefRefPtr<CefStringVisitor> source_visitor = new wxStringVisitor(
@@ -581,11 +581,11 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser,
 
         //As we are complete we also add to the history list, but not if the
         //page is not the main page, ie it is a subframe
-        if(m_webview->m_historyEnabled && !m_webview->m_historyLoadingFromList)
+        if ( m_webview->m_historyEnabled && !m_webview->m_historyLoadingFromList )
         {
             //If we are not at the end of the list, then erase everything
             //between us and the end before adding the new page
-            if(m_webview->m_historyPosition != static_cast<int>(m_webview->m_historyList.size()) - 1)
+            if ( m_webview->m_historyPosition != static_cast<int>(m_webview->m_historyList.size()) - 1 )
             {
                 m_webview->m_historyList.erase(m_webview->m_historyList.begin() + m_webview->m_historyPosition + 1,
                                                m_webview->m_historyList.end());
@@ -616,7 +616,7 @@ void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
     break
 
     wxWebViewNavigationError type = wxWEBVIEW_NAV_ERR_OTHER;
-    switch (errorCode)
+    switch ( errorCode )
     {
         ERROR_TYPE_CASE(ERR_FAILED, wxWEBVIEW_NAV_ERR_OTHER);
         ERROR_TYPE_CASE(ERR_ABORTED, wxWEBVIEW_NAV_ERR_USER_CANCELLED);
