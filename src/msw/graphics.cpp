@@ -28,6 +28,7 @@
     #include "wx/bitmap.h"
     #include "wx/log.h"
     #include "wx/icon.h"
+    #include "wx/math.h"
     #include "wx/module.h"
     // include all dc types that are used as a param
     #include "wx/dc.h"
@@ -56,20 +57,11 @@ namespace
 {
 
 //-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-const double RAD2DEG = 180.0 / M_PI;
-
-//-----------------------------------------------------------------------------
 // Local functions
 //-----------------------------------------------------------------------------
 
 inline double dmin(double a, double b) { return a < b ? a : b; }
 inline double dmax(double a, double b) { return a > b ? a : b; }
-
-inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
-inline double RadToDeg(double deg) { return (deg * 180.0) / M_PI; }
 
 // translate a wxColour to a Color
 inline Color wxColourToColor(const wxColour& col)
@@ -1195,7 +1187,7 @@ void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double start
 
         }
    }
-   m_path->AddArc((REAL) (x-r),(REAL) (y-r),(REAL) (2*r),(REAL) (2*r),RadToDeg(startAngle),RadToDeg(sweepAngle));
+   m_path->AddArc((REAL) (x-r),(REAL) (y-r),(REAL) (2*r),(REAL) (2*r),wxRadToDeg(startAngle),wxRadToDeg(sweepAngle));
 }
 
 void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -1319,7 +1311,7 @@ void wxGDIPlusMatrixData::Scale( wxDouble xScale , wxDouble yScale )
 // add the rotation to this matrix (radians)
 void wxGDIPlusMatrixData::Rotate( wxDouble angle )
 {
-    m_matrix->Rotate( RadToDeg(angle) );
+    m_matrix->Rotate( wxRadToDeg(angle) );
 }
 
 //
@@ -1664,7 +1656,7 @@ void wxGDIPlusContext::EndLayer()
 
 void wxGDIPlusContext::Rotate( wxDouble angle )
 {
-    m_context->RotateTransform( RadToDeg(angle) );
+    m_context->RotateTransform( wxRadToDeg(angle) );
 }
 
 void wxGDIPlusContext::Translate( wxDouble dx , wxDouble dy )

@@ -247,9 +247,6 @@ wxPostScriptDC::wxPostScriptDC(const wxPrintData& printData)
 {
 }
 
-// conversion
-static const double RAD2DEG  = 180.0 / M_PI;
-
 // we don't want to use only 72 dpi from PS print
 static const int DPI = 600;
 static const double PS2DEV = 600.0 / 72.0;
@@ -468,10 +465,10 @@ void wxPostScriptDCImpl::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord 
     {
         alpha1 = (x1 - xc == 0) ?
             (y1 - yc < 0) ? 90.0 : -90.0 :
-                -atan2(double(y1-yc), double(x1-xc)) * RAD2DEG;
+                wxRadToDeg(-atan2(double(y1-yc), double(x1-xc)));
         alpha2 = (x2 - xc == 0) ?
             (y2 - yc < 0) ? 90.0 : -90.0 :
-                -atan2(double(y2-yc), double(x2-xc)) * RAD2DEG;
+                wxRadToDeg(-atan2(double(y2-yc), double(x2-xc)));
     }
     while (alpha1 <= 0)   alpha1 += 360;
     while (alpha2 <= 0)   alpha2 += 360; // adjust angles to be between

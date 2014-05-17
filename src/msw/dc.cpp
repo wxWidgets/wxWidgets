@@ -118,9 +118,6 @@ static const int VIEWPORT_EXTENT = 134217727;
 // private functions
 // ---------------------------------------------------------------------------
 
-// convert degrees to radians
-static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
-
 // call AlphaBlend() to blit contents of hdcSrc to dcDst using alpha
 //
 // NB: bmpSrc is the bitmap selected in hdcSrc, it is not really needed
@@ -1224,8 +1221,8 @@ void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
     int rx2 = rx1;
     int ry2 = ry1;
 
-    sa = DegToRad(sa);
-    ea = DegToRad(ea);
+    sa = wxDegToRad(sa);
+    ea = wxDegToRad(ea);
 
     rx1 += (int)(100.0 * abs(w) * cos(sa));
     ry1 -= (int)(100.0 * abs(h) * m_signY * sin(sa));
@@ -1527,7 +1524,7 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     wxBkModeChanger bkMode(GetHdc(), m_backgroundMode);
 
     // Compute the shift for the origin of the next line.
-    const double rad = DegToRad(angle);
+    const double rad = wxDegToRad(angle);
     const double dx = heightLine * sin(rad);
     const double dy = heightLine * cos(rad);
 

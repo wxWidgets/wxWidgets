@@ -12,6 +12,7 @@
 
 #ifndef WX_PRECOMP
 #include "wx/object.h"
+#include "wx/math.h"
 #endif
 
 #if wxOSX_USE_COCOA_OR_CARBON
@@ -191,8 +192,7 @@ WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
     return nsfont;
 }
 
-static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
-static const NSAffineTransformStruct kSlantNSTransformStruct = { 1, 0, static_cast<CGFloat>(tan(DegToRad(11))), 1, 0, 0  };
+static const NSAffineTransformStruct kSlantNSTransformStruct = { 1, 0, static_cast<CGFloat>(tan(wxDegToRad(11))), 1, 0, 0  };
 
 WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
 {

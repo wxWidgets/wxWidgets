@@ -24,6 +24,7 @@
     #include "wx/icon.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/math.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -35,11 +36,6 @@ static const double RAD2DEG = 180.0 / M_PI;
 //-----------------------------------------------------------------------------
 // Local functions
 //-----------------------------------------------------------------------------
-
-static inline double DegToRad(double deg)
-{
-    return (deg * M_PI) / 180.0;
-}
 
 static wxCompositionMode TranslateRasterOp(wxRasterOperationMode function)
 {
@@ -613,7 +609,7 @@ void wxGCDCImpl::DoDrawArc( wxCoord x1, wxCoord y1,
         path.MoveToPoint( xc, yc );
     // since these angles (ea,sa) are measured counter-clockwise, we invert them to
     // get clockwise angles
-    path.AddArc( xc, yc , rad , DegToRad(-sa) , DegToRad(-ea), false );
+    path.AddArc( xc, yc , rad, wxDegToRad(-sa), wxDegToRad(-ea), false );
     if ( fill && ((x1!=x2)||(y1!=y2)) )
         path.AddLineToPoint( xc, yc );
     m_graphicContext->DrawPath(path);
@@ -638,18 +634,18 @@ void wxGCDCImpl::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     {
         wxGraphicsPath path = m_graphicContext->CreatePath();
         path.MoveToPoint( 0, 0 );
-        path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
+        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), sa > ea );
         path.AddLineToPoint( 0, 0 );
         m_graphicContext->FillPath( path );
 
         path = m_graphicContext->CreatePath();
-        path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
+        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), sa > ea );
         m_graphicContext->StrokePath( path );
     }
     else
     {
         wxGraphicsPath path = m_graphicContext->CreatePath();
-        path.AddArc( 0, 0, h/2.0 , DegToRad(-sa) , DegToRad(-ea), sa > ea );
+        path.AddArc( 0, 0, h/2.0, wxDegToRad(-sa), wxDegToRad(-ea), sa > ea );
         m_graphicContext->DrawPath( path );
     }
 
@@ -993,7 +989,7 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     GetOwner()->GetMultiLineTextExtent(text, &w, &h, &heightLine);
     
     // Compute the shift for the origin of the next line.
-    const double rad = DegToRad(angle);
+    const double rad = wxDegToRad(angle);
     const double dx = heightLine * sin(rad);
     const double dy = heightLine * cos(rad);
     
@@ -1004,9 +1000,9 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
         // Calculate origin for each line to avoid accumulation of
         // rounding errors.
         if ( m_backgroundMode == wxTRANSPARENT )
-            m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), DegToRad(angle ));
+            m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), wxDegToRad(angle ));
         else
-            m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), DegToRad(angle ), m_graphicContext->CreateBrush(m_textBackgroundColour) );
+            m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), wxDegToRad(angle ), m_graphicContext->CreateBrush(m_textBackgroundColour) );
    }
             
     // call the bounding box by adding all four vertices of the rectangle

@@ -18,6 +18,7 @@
     #include "wx/intl.h"
     #include "wx/gdicmn.h"
     #include "wx/log.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -442,8 +443,7 @@ void wxFontRefData::CreateATSUFont()
 }
 #endif
 
-static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
-static const CGAffineTransform kSlantTransform = CGAffineTransformMake( 1, 0, tan(DegToRad(11)), 1, 0, 0 );
+static const CGAffineTransform kSlantTransform = CGAffineTransformMake( 1, 0, tan(wxDegToRad(11)), 1, 0, 0 );
 
 void wxFontRefData::MacFindFont()
 {

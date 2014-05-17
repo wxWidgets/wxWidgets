@@ -980,8 +980,6 @@ const int BASE  = 80.0;
 const int BASE2 = BASE/2;
 const int BASE4 = BASE/4;
 
-static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
-
 
 // modeled along Robin Dunn's GraphicsContext.py sample
 
@@ -1075,11 +1073,11 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
         gc->SetPen(wxPen(wxColour(val.red, val.green, val.blue, 128)));
 
         // use translate to artfully reposition each drawn path
-        gc->Translate(1.5 * BASE2 * cos(DegToRad(angle)),
-                     1.5 * BASE2 * sin(DegToRad(angle)));
+        gc->Translate(1.5 * BASE2 * cos(wxDegToRad(angle)),
+                     1.5 * BASE2 * sin(wxDegToRad(angle)));
 
         // use Rotate to rotate the path
-        gc->Rotate(DegToRad(angle));
+        gc->Rotate(wxDegToRad(angle));
 
         // now draw it
         gc->DrawPath(path);

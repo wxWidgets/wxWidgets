@@ -43,6 +43,30 @@ wxFloat64 wxConvertFromIeeeExtended(const wxInt8 *bytes);
 void wxConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes);
 
 /**
+    Convert degrees to radians.
+
+    This function simply returns its argument multiplied by @c M_PI/180 but is
+    more readable than writing this expression directly.
+
+    @see wxRadToDeg()
+
+    @since 3.1.0
+ */
+double wxDegToRad(double deg);
+
+/**
+    Convert radians to degrees.
+
+    This function simply returns its argument multiplied by @c 180/M_PI but is
+    more readable than writing this expression directly.
+
+    @see wxDegToRad()
+
+    @since 3.1.0
+ */
+double wxRadToDeg(double rad);
+
+/**
     Small wrapper around round().
 */
 int wxRound(double x);

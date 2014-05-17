@@ -21,6 +21,7 @@
     #include "wx/dcscreen.h"
     #include "wx/icon.h"
     #include "wx/image.h"
+    #include "wx/math.h"
 #endif
 
 #include "wx/base64.h"
@@ -37,8 +38,6 @@
 
 namespace
 {
-
-inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 // This function returns a string representation of a floating point number in
 // C locale (i.e. always using "." for the decimal separator) and with the
@@ -352,7 +351,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     wxCoord w, h, desc;
     DoGetTextExtent(sText, &w, &h, &desc);
 
-    double rad = DegToRad(angle);
+    double rad = wxDegToRad(angle);
 
     // wxT("upper left") and wxT("upper right")
     CalcBoundingBox(x, y);
@@ -548,10 +547,10 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,
     double yc = y + ry;
 
     double xs, ys, xe, ye;
-    xs = xc + rx * cos (DegToRad(sa));
-    xe = xc + rx * cos (DegToRad(ea));
-    ys = yc - ry * sin (DegToRad(sa));
-    ye = yc - ry * sin (DegToRad(ea));
+    xs = xc + rx * cos (wxDegToRad(sa));
+    xe = xc + rx * cos (wxDegToRad(ea));
+    ys = yc - ry * sin (wxDegToRad(sa));
+    ye = yc - ry * sin (wxDegToRad(ea));
 
     ///now same as circle arc...
 
