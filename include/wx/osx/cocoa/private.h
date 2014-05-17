@@ -264,6 +264,7 @@ public :
     void            RestoreWindowLevel();
     
     static WX_NSResponder GetNextFirstResponder() ;
+    static WX_NSResponder GetFormerFirstResponder() ;
 protected :
     CGWindowLevel   m_macWindowLevel;
     WXWindow        m_macWindow;
