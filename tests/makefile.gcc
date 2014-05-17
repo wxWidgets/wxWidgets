@@ -126,7 +126,8 @@ TEST_DRAWING_OBJECTS =  \
 	$(OBJS)\test_drawing_test.o \
 	$(OBJS)\test_drawing_drawing.o \
 	$(OBJS)\test_drawing_plugindriver.o \
-	$(OBJS)\test_drawing_basictest.o
+	$(OBJS)\test_drawing_basictest.o \
+	$(OBJS)\test_drawing_fonttest.o
 TEST_DRAWINGPLUGIN_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) \
 	$(__THREADSFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
@@ -772,6 +773,9 @@ $(OBJS)\test_drawing_plugindriver.o: ./drawing/plugindriver.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_drawing_basictest.o: ./drawing/basictest.cpp
+	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_drawing_fonttest.o: ./drawing/fonttest.cpp
 	$(CXX) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_drawingplugin_pluginsample.o: ./drawing/pluginsample.cpp

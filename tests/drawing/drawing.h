@@ -13,6 +13,8 @@
 
 #if wxUSE_TEST_GC_DRAWING
 
+#include "wx/math.h"
+
 #if wxUSE_SVG
 #include "wx/dcsvg.h"
 #endif
@@ -43,6 +45,17 @@ private:
 //        CPPUNIT_TEST( DrawToSVG_Basics );
 #endif
         CPPUNIT_TEST( DrawToPlugins_Basics );
+
+        // FIXME: Reference data files are currently not found when using Unix
+        // build system, so these tests are failing there, fix this and remove
+        // this ifdef.
+#ifdef __WINDOWS__
+        CPPUNIT_TEST( DrawToImage_Fonts );
+#if wxUSE_SVG
+//        CPPUNIT_TEST( DrawToSVG_Fonts );
+#endif
+        CPPUNIT_TEST( DrawToPlugins_Fonts );
+#endif // __WINDOWS__
    CPPUNIT_TEST_SUITE_END();
 
     class ImageGraphicsContextLifeCycle: public DrawingTestGCFactory
@@ -99,9 +112,11 @@ private:
 
     // test cases
     static const DrawingTestCase ms_drawingBasicTc;
+    static const DrawingTestCase ms_drawingFontTc;
 
     // cases functions
     void DoBasicDrawings (wxGraphicsContext *gc);
+    void DoFontDrawings (wxGraphicsContext *gc);
 
     void RunIndividualDrawingCase (
         DrawingTestGCFactory& gcFactory,
@@ -126,6 +141,17 @@ private:
 #endif
     void DrawToPlugins_Basics() {
         RunPluginsDrawingCase (ms_drawingBasicTc);
+    }
+    void DrawToImage_Fonts() {
+        RunIndividualDrawingCase (ms_imageLifeCycle, ms_drawingFontTc);
+    }
+#if wxUSE_SVG
+    void DrawToSVG_Fonts() {
+        RunIndividualDrawingCase (ms_svgLifeCycle, ms_drawingFontTc);
+    }
+#endif
+    void DrawToPlugins_Fonts() {
+        RunPluginsDrawingCase (ms_drawingFontTc);
     }
 
     bool GetBuildReference() const;

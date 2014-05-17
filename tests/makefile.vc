@@ -132,7 +132,8 @@ TEST_DRAWING_OBJECTS =  \
 	$(OBJS)\test_drawing_test.obj \
 	$(OBJS)\test_drawing_drawing.obj \
 	$(OBJS)\test_drawing_plugindriver.obj \
-	$(OBJS)\test_drawing_basictest.obj
+	$(OBJS)\test_drawing_basictest.obj \
+	$(OBJS)\test_drawing_fonttest.obj
 TEST_DRAWINGPLUGIN_CXXFLAGS = /M$(__RUNTIME_LIBS_45)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_drawingplugin.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) /D_CRT_SECURE_NO_DEPRECATE=1 \
@@ -974,6 +975,9 @@ $(OBJS)\test_drawing_plugindriver.obj: .\drawing\plugindriver.cpp
 
 $(OBJS)\test_drawing_basictest.obj: .\drawing\basictest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_DRAWING_CXXFLAGS) .\drawing\basictest.cpp
+
+$(OBJS)\test_drawing_fonttest.obj: .\drawing\fonttest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_DRAWING_CXXFLAGS) .\drawing\fonttest.cpp
 
 $(OBJS)\test_drawingplugin_pluginsample.obj: .\drawing\pluginsample.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) .\drawing\pluginsample.cpp

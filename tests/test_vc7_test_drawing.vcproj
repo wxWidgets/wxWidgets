@@ -329,6 +329,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\drawing\fonttest.cpp">
+			</File>
+			<File
 				RelativePath=".\drawing\plugindriver.cpp">
 			</File>
 			<File

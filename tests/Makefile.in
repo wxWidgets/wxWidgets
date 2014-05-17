@@ -150,7 +150,8 @@ TEST_DRAWING_OBJECTS =  \
 	test_drawing_test.o \
 	test_drawing_drawing.o \
 	test_drawing_plugindriver.o \
-	test_drawing_basictest.o
+	test_drawing_basictest.o \
+	test_drawing_fonttest.o
 TEST_DRAWING_ODEP = \
 	$(_____pch_testprec_test_drawing_testprec_h_gch___depname)
 TEST_DRAWINGPLUGIN_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -754,6 +755,9 @@ test_drawing_plugindriver.o: $(srcdir)/drawing/plugindriver.cpp $(TEST_DRAWING_O
 
 test_drawing_basictest.o: $(srcdir)/drawing/basictest.cpp $(TEST_DRAWING_ODEP)
 	$(CXXC) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(srcdir)/drawing/basictest.cpp
+
+test_drawing_fonttest.o: $(srcdir)/drawing/fonttest.cpp $(TEST_DRAWING_ODEP)
+	$(CXXC) -c -o $@ $(TEST_DRAWING_CXXFLAGS) $(srcdir)/drawing/fonttest.cpp
 
 test_drawingplugin_pluginsample.o: $(srcdir)/drawing/pluginsample.cpp
 	$(CXXC) -c -o $@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) $(srcdir)/drawing/pluginsample.cpp

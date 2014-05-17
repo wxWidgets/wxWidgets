@@ -134,7 +134,8 @@ TEST_DRAWING_OBJECTS =  \
 	$(OBJS)\test_drawing_test.obj \
 	$(OBJS)\test_drawing_drawing.obj \
 	$(OBJS)\test_drawing_plugindriver.obj \
-	$(OBJS)\test_drawing_basictest.obj
+	$(OBJS)\test_drawing_basictest.obj \
+	$(OBJS)\test_drawing_fonttest.obj
 TEST_DRAWINGPLUGIN_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
 	$(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG_2) -D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) \
@@ -797,6 +798,9 @@ $(OBJS)\test_drawing_plugindriver.obj: .\drawing\plugindriver.cpp
 
 $(OBJS)\test_drawing_basictest.obj: .\drawing\basictest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_DRAWING_CXXFLAGS) .\drawing\basictest.cpp
+
+$(OBJS)\test_drawing_fonttest.obj: .\drawing\fonttest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_DRAWING_CXXFLAGS) .\drawing\fonttest.cpp
 
 $(OBJS)\test_drawingplugin_pluginsample.obj: .\drawing\pluginsample.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_DRAWINGPLUGIN_CXXFLAGS) .\drawing\pluginsample.cpp
