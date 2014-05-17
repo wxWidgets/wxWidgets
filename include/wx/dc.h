@@ -40,6 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxScreenDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 class WXDLLIMPEXP_FWD_CORE wxPrinterDC;
 class WXDLLIMPEXP_FWD_CORE wxPrintData;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 #if wxUSE_GRAPHICS_CONTEXT
 class WXDLLIMPEXP_FWD_CORE wxGraphicsContext;
