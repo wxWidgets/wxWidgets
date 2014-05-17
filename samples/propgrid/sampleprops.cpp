@@ -22,6 +22,7 @@
 #endif
 
 #include "wx/fontdlg.h"
+#include "wx/numformatter.h"
 
 // -----------------------------------------------------------------------
 
@@ -343,16 +344,11 @@ public:
     void SetPrecision ( int precision )
     {
         m_precision = precision;
-        m_dtoaTemplate.Empty();
     }
 
 protected:
     // Mandatory array of type
     wxArrayDouble   m_array;
-
-    // Use this to avoid extra wxString creation+Printf
-    // on double-to-wxString conversion.
-    wxString        m_dtoaTemplate;
 
     int             m_precision;
 
@@ -376,9 +372,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxArrayDoubleEditorDialog, wxPGArrayEditorDialog)
 
 wxString wxArrayDoubleEditorDialog::ArrayGet( size_t index )
 {
-    wxString str;
-    wxPropertyGrid::DoubleToString(str,m_array[index],m_precision,true,&m_dtoaTemplate);
-    return str;
+    return wxNumberFormatter::ToString(
+        m_array[index], m_precision, wxNumberFormatter::Style_NoTrailingZeroes);
 }
 
 size_t wxArrayDoubleEditorDialog::ArrayGetCount()
@@ -551,8 +546,6 @@ wxString wxArrayDoubleProperty::ValueToString( wxVariant& value,
 
 void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, bool removeZeroes ) const
 {
-    wxString s;
-    wxString template_str;
     wxChar between[3] = wxT(", ");
     size_t i;
 
@@ -561,13 +554,13 @@ void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, b
     target.Empty();
 
     const wxArrayDouble& value = wxArrayDoubleRefFromVariant(m_value);
+    wxNumberFormatter::Style style = wxNumberFormatter::Style_None;
+    if (removeZeroes)
+        style = wxNumberFormatter::Style_NoTrailingZeroes;
 
     for ( i=0; i<value.GetCount(); i++ )
     {
-
-        wxPropertyGrid::DoubleToString(s,value[i],prec,removeZeroes,&template_str);
-
-        target += s;
+        target += wxNumberFormatter::ToString(value[i], prec, style);
 
         if ( i<(value.GetCount()-1) )
             target += between;

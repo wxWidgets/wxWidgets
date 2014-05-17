@@ -891,6 +891,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
     }
 
+#if WXWIN_COMPATIBILITY_3_0
     {
         RT_START_TEST(DoubleToString)
 
@@ -911,6 +912,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         if ( wxPropertyGrid::DoubleToString(s, -0.000123, 3, true) != "0" )
             RT_FAILURE();
     }
+#endif
 
     {
         wxPropertyGridPage* page1;
