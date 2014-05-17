@@ -840,33 +840,33 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 #include "wx/colordlg.h"
 
 //#define wx_cp_es_syscolours_len 25
-static const wxChar* const gs_cp_es_syscolour_labels[] = {
-    _("AppWorkspace"),
-    _("ActiveBorder"),
-    _("ActiveCaption"),
-    _("ButtonFace"),
-    _("ButtonHighlight"),
-    _("ButtonShadow"),
-    _("ButtonText"),
-    _("CaptionText"),
-    _("ControlDark"),
-    _("ControlLight"),
-    _("Desktop"),
-    _("GrayText"),
-    _("Highlight"),
-    _("HighlightText"),
-    _("InactiveBorder"),
-    _("InactiveCaption"),
-    _("InactiveCaptionText"),
-    _("Menu"),
-    _("Scrollbar"),
-    _("Tooltip"),
-    _("TooltipText"),
-    _("Window"),
-    _("WindowFrame"),
-    _("WindowText"),
-    _("Custom"),
-    (const wxChar*) NULL
+static const char* const gs_cp_es_syscolour_labels[] = {
+    wxTRANSLATE("AppWorkspace"),
+    wxTRANSLATE("ActiveBorder"),
+    wxTRANSLATE("ActiveCaption"),
+    wxTRANSLATE("ButtonFace"),
+    wxTRANSLATE("ButtonHighlight"),
+    wxTRANSLATE("ButtonShadow"),
+    wxTRANSLATE("ButtonText"),
+    wxTRANSLATE("CaptionText"),
+    wxTRANSLATE("ControlDark"),
+    wxTRANSLATE("ControlLight"),
+    wxTRANSLATE("Desktop"),
+    wxTRANSLATE("GrayText"),
+    wxTRANSLATE("Highlight"),
+    wxTRANSLATE("HighlightText"),
+    wxTRANSLATE("InactiveBorder"),
+    wxTRANSLATE("InactiveCaption"),
+    wxTRANSLATE("InactiveCaptionText"),
+    wxTRANSLATE("Menu"),
+    wxTRANSLATE("Scrollbar"),
+    wxTRANSLATE("Tooltip"),
+    wxTRANSLATE("TooltipText"),
+    wxTRANSLATE("Window"),
+    wxTRANSLATE("WindowFrame"),
+    wxTRANSLATE("WindowText"),
+    wxTRANSLATE("Custom"),
+    NULL
 };
 
 static const long gs_cp_es_syscolour_values[] = {
@@ -943,7 +943,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
 
 
 wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxString& name,
-    const wxChar* const* labels, const long* values, wxPGChoices* choicesCache,
+    const char* const* labels, const long* values, wxPGChoices* choicesCache,
     const wxColourPropertyValue& value )
     : wxEnumProperty( label, name, labels, values, choicesCache )
 {
@@ -955,7 +955,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
 
 
 wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxString& name,
-    const wxChar* const* labels, const long* values, wxPGChoices* choicesCache,
+    const char* const* labels, const long* values, wxPGChoices* choicesCache,
     const wxColour& value )
     : wxEnumProperty( label, name, labels, values, choicesCache )
 {
@@ -1522,18 +1522,18 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
 // wxColourProperty
 // -----------------------------------------------------------------------
 
-static const wxChar* const gs_cp_es_normcolour_labels[] = {
-    _("Black"),
-    _("Red"),
-    _("Green"),
-    _("Blue"),
-    _("Cyan"),
-    _("Magenta"),
-    _("Yellow"),
-    _("White"),
-    _("Grey"),
-    _("Custom"),
-    (const wxChar*) NULL
+static const char* const gs_cp_es_normcolour_labels[] = {
+    wxTRANSLATE("Black"),
+    wxTRANSLATE("Red"),
+    wxTRANSLATE("Green"),
+    wxTRANSLATE("Blue"),
+    wxTRANSLATE("Cyan"),
+    wxTRANSLATE("Magenta"),
+    wxTRANSLATE("Yellow"),
+    wxTRANSLATE("White"),
+    wxTRANSLATE("Grey"),
+    wxTRANSLATE("Custom"),
+    NULL
 };
 
 static const unsigned long gs_cp_es_normcolour_colours[] = {
@@ -1618,36 +1618,36 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 #define NUM_CURSORS 28
 
 //#define wx_cp_es_syscursors_len 28
-static const wxChar* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
-    _("Default"),
-    _("Arrow"),
-    _("Right Arrow"),
-    _("Blank"),
-    _("Bullseye"),
-    _("Character"),
-    _("Cross"),
-    _("Hand"),
-    _("I-Beam"),
-    _("Left Button"),
-    _("Magnifier"),
-    _("Middle Button"),
-    _("No Entry"),
-    _("Paint Brush"),
-    _("Pencil"),
-    _("Point Left"),
-    _("Point Right"),
-    _("Question Arrow"),
-    _("Right Button"),
-    _("Sizing NE-SW"),
-    _("Sizing N-S"),
-    _("Sizing NW-SE"),
-    _("Sizing W-E"),
-    _("Sizing"),
-    _("Spraycan"),
-    _("Wait"),
-    _("Watch"),
-    _("Wait Arrow"),
-    (const wxChar*) NULL
+static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
+    wxTRANSLATE("Default"),
+    wxTRANSLATE("Arrow"),
+    wxTRANSLATE("Right Arrow"),
+    wxTRANSLATE("Blank"),
+    wxTRANSLATE("Bullseye"),
+    wxTRANSLATE("Character"),
+    wxTRANSLATE("Cross"),
+    wxTRANSLATE("Hand"),
+    wxTRANSLATE("I-Beam"),
+    wxTRANSLATE("Left Button"),
+    wxTRANSLATE("Magnifier"),
+    wxTRANSLATE("Middle Button"),
+    wxTRANSLATE("No Entry"),
+    wxTRANSLATE("Paint Brush"),
+    wxTRANSLATE("Pencil"),
+    wxTRANSLATE("Point Left"),
+    wxTRANSLATE("Point Right"),
+    wxTRANSLATE("Question Arrow"),
+    wxTRANSLATE("Right Button"),
+    wxTRANSLATE("Sizing NE-SW"),
+    wxTRANSLATE("Sizing N-S"),
+    wxTRANSLATE("Sizing NW-SE"),
+    wxTRANSLATE("Sizing W-E"),
+    wxTRANSLATE("Sizing"),
+    wxTRANSLATE("Spraycan"),
+    wxTRANSLATE("Wait"),
+    wxTRANSLATE("Watch"),
+    wxTRANSLATE("Wait Arrow"),
+    NULL
 };
 
 static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
@@ -1689,6 +1689,7 @@ wxCursorProperty::wxCursorProperty( const wxString& label, const wxString& name,
                       name,
                       gs_cp_es_syscursors_labels,
                       gs_cp_es_syscursors_values,
+                      NULL,
                       value )
 {
     m_flags |= wxPG_PROP_STATIC_CHOICES; // Cursor selection cannot be changed.

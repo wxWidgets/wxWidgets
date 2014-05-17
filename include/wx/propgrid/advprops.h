@@ -235,10 +235,10 @@ protected:
 
     // Special constructors to be used by derived classes.
     wxSystemColourProperty( const wxString& label, const wxString& name,
-        const wxChar* const* labels, const long* values, wxPGChoices* choicesCache,
+        const char* const* labels, const long* values, wxPGChoices* choicesCache,
         const wxColourPropertyValue& value );
     wxSystemColourProperty( const wxString& label, const wxString& name,
-        const wxChar* const* labels, const long* values, wxPGChoices* choicesCache,
+        const char* const* labels, const long* values, wxPGChoices* choicesCache,
         const wxColour& value );
 
     void Init( int type, const wxColour& colour );
