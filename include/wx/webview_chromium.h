@@ -7,7 +7,6 @@
 #ifndef _WX_WEBVIEWCHROMIUM_H_
 #define _WX_WEBVIEWCHROMIUM_H_
 
-
 #include <wx/wxprec.h>
 #include <wx/control.h>
 #include <wx/webview.h>
@@ -39,8 +38,8 @@ class ClientHandler : public CefClient,
                       public CefLoadHandler
 {
 public:
-    ClientHandler():m_loadErrorCode(-1) {};
-    virtual ~ClientHandler() {};
+    ClientHandler():m_loadErrorCode(-1) {}
+    virtual ~ClientHandler() {}
 
     virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() { return this; }
     virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() { return this; }
