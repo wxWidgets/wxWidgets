@@ -1305,22 +1305,27 @@ bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argFlags
 {
     // If wxPG_FULL_VALUE is *not* in argFlags, then intVal is index from combo box.
     //
-    ms_nextIndex = -2;
+    int setAsNextIndex = -2;
 
     if ( argFlags & wxPG_FULL_VALUE )
     {
-        ms_nextIndex = GetIndexForValue( intVal );
+        setAsNextIndex = GetIndexForValue( intVal );
     }
     else
     {
         if ( intVal != GetIndex() )
         {
-            ms_nextIndex = intVal;
+           setAsNextIndex = intVal;
         }
     }
 
-    if ( ms_nextIndex != -2 )
+    if ( setAsNextIndex != -2 )
     {
+        // If wxPG_PROPERTY_SPECIFIC is set, then this is done for
+        // validation or fetching a data purposes only, and index must not be changed.
+        if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
+            ms_nextIndex = setAsNextIndex;
+
         if ( !(argFlags & wxPG_FULL_VALUE) )
             intVal = m_choices.GetValue(intVal);
 
