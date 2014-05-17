@@ -599,7 +599,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour()
 wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
 {
     Init();
-    if ( brush.GetStyle() == wxSOLID )
+    if ( brush.GetStyle() == wxBRUSHSTYLE_SOLID )
     {
         m_color.reset( wxMacCreateCGColor( brush.GetColour() ));
     }
@@ -2796,7 +2796,7 @@ wxGraphicsMatrix wxMacCoreGraphicsRenderer::CreateMatrix( wxDouble a, wxDouble b
 
 wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 {
-    if ( !pen.IsOk() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.IsOk() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -2808,7 +2808,7 @@ wxGraphicsPen wxMacCoreGraphicsRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateBrush(const wxBrush& brush )
 {
-    if ( !brush.IsOk() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.IsOk() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {

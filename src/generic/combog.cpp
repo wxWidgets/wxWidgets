@@ -252,7 +252,7 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 #ifdef __WXMAC__
         wxPen pen1( wxColour(133,133,133),
                     customBorder,
-                    wxSOLID );
+                    wxPENSTYLE_SOLID );
 #else
         wxPen pen1( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT),
                     customBorder,
