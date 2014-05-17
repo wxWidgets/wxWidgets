@@ -143,8 +143,11 @@ void GraphicsContextDrawingTestCase::RunIndividualDrawingCase (
 
     if (GetBuildReference())
     {
-        CPPUNIT_ASSERT(wxCopyFile (fileName.GetFullPath(),
-                                   refFileName.GetFullPath(), true));
+         WX_ASSERT_MESSAGE(
+             ("Cannot copy file \"%s\" to \"%s\".",
+            fileName.GetFullPath(), refFileName.GetFullPath()),
+            wxCopyFile (fileName.GetFullPath(),
+                        refFileName.GetFullPath(), true));
     }
     else if (gcFactory.UseImageComparison())
     {
