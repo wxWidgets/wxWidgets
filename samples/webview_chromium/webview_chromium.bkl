@@ -7,10 +7,13 @@
     <set var="CEF_INCLUDE_DIR">
     </set>
 
+    <set var="CONFIGURE" cond="BUILD=='debug'">Debug</set>
+    <set var="CONFIGURE" cond="BUILD=='release'">Release</set>
+
     <!--specify CEF lib dir-->
     <set var="CEF_LIB_DIR">
       <if cond="PLATFORM_WIN32=='1'">
-         $(CEF_INCLUDE_DIR)/Debug/,$(CEF_INCLUDE_DIR)/out/Debug/lib/
+         $(CEF_INCLUDE_DIR)/$(CONFIGURE)/,$(CEF_INCLUDE_DIR)/out/$(CONFIGURE)/lib/
       </if>
       <if cond="PLATFORM_MACOSX=='1'">
         <!--TODO -->
