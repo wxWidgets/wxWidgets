@@ -1683,13 +1683,15 @@ static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursorProperty, wxEnumProperty)
 
+static wxPGChoices gs_wxCursorProperty_choicesCache;
+
 wxCursorProperty::wxCursorProperty( const wxString& label, const wxString& name,
     int value )
     : wxEnumProperty( label,
                       name,
                       gs_cp_es_syscursors_labels,
                       gs_cp_es_syscursors_values,
-                      NULL,
+                      &gs_wxCursorProperty_choicesCache,
                       value )
 {
     m_flags |= wxPG_PROP_STATIC_CHOICES; // Cursor selection cannot be changed.
