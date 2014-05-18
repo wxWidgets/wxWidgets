@@ -296,9 +296,13 @@ static NSResponder* s_formerFirstResponder = NULL;
 
 - (BOOL)makeFirstResponder:(NSResponder *)aResponder
 {
+    NSResponder* tempFormer = s_formerFirstResponder;
+    NSResponder* tempNext = s_nextFirstResponder;
     s_nextFirstResponder = aResponder;
+    s_formerFirstResponder = [[NSApp keyWindow] firstResponder];
     BOOL retval = [super makeFirstResponder:aResponder];
-    s_nextFirstResponder = nil;
+    s_nextFirstResponder = tempNext;
+    s_formerFirstResponder = tempFormer;
     return retval;
 }
 
