@@ -1479,15 +1479,9 @@ bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
 bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-    // get the current focus before running becomeFirstResponder
-    NSView* otherView = FindFocus();
-
-    wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     BOOL r = superimpl(slf, (SEL)_cmd);
     if ( r )
-    {
-        DoNotifyFocusEvent( true, otherWindow );
-    }
+        DoNotifyFocusSet();
 
     return r;
 }
@@ -1496,23 +1490,13 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
- 
-    NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
-    NSView* otherView = wxOSXGetViewFromResponder(responder);
-
-    wxWidgetImpl* otherWindow = FindBestFromWXWidget(otherView);
     
-    // It doesn't make sense to notify about the loss of focus if it's the same
-    // control in the end, and just a different subview
-    if ( otherWindow == this )
-        return r;
-    
-    // NSTextViews have an editor as true responder, therefore the might get the
-    // resign notification if their editor takes over, don't trigger any event then
+    // wxNSTextFields and wxNSComboBoxes have an editor as real responder, therefore they get
+    // a resign notification when their editor takes over, don't trigger  event here, the control
+    // gets a controlTextDidEndEditing notification which will send a focus kill.
     if ( r && !m_hasEditor)
-    {
-        DoNotifyFocusEvent( false, otherWindow );
-    }
+        DoNotifyFocusLost();
+
     return r;
 }
 
@@ -2783,6 +2767,30 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     (void)SetupCursor(event);
 
     return result;
+}
+
+void wxWidgetCocoaImpl::DoNotifyFocusSet()
+{
+    NSResponder* responder = wxNonOwnedWindowCocoaImpl::GetFormerFirstResponder();
+    NSView* otherView = wxOSXGetViewFromResponder(responder);
+    wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
+    
+    // It doesn't make sense to notify about the focus set if it's the same
+    // control in the end, and just a different subview
+    if ( otherWindow != this )
+        DoNotifyFocusEvent(true, otherWindow);
+}
+
+void wxWidgetCocoaImpl::DoNotifyFocusLost()
+{
+    NSResponder * responder = wxNonOwnedWindowCocoaImpl::GetNextFirstResponder();
+    NSView* otherView = wxOSXGetViewFromResponder(responder);
+    wxWidgetImpl* otherWindow = FindBestFromWXWidget(otherView);
+    
+    // It doesn't make sense to notify about the loss of focus if it's the same
+    // control in the end, and just a different subview
+    if ( otherWindow != this )
+        DoNotifyFocusEvent( false, otherWindow );
 }
 
 void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow)

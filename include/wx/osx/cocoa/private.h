@@ -131,6 +131,8 @@ public :
     virtual bool        DoHandleMouseEvent(NSEvent *event);
     virtual bool        DoHandleKeyEvent(NSEvent *event);
     virtual bool        DoHandleCharEvent(NSEvent *event, NSString *text);
+    virtual void        DoNotifyFocusSet();
+    virtual void        DoNotifyFocusLost();
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
 
     virtual void        SetupKeyEvent(wxKeyEvent &wxevent, NSEvent * nsEvent, NSString* charString = NULL);
