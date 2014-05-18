@@ -298,6 +298,29 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     [super insertText:str];
 }
 
+- (BOOL) resignFirstResponder
+{
+    return [super resignFirstResponder];
+}
+
+- (BOOL) becomeFirstResponder
+{
+    // we need the stored text field, as at this point the delegate is not yet set
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) textField );
+
+    BOOL r = [super becomeFirstResponder];
+    if ( impl != NULL && r )
+        impl->DoNotifyFocusSet();
+    
+    return r;
+}
+
+- (void) setTextField:(NSTextField*) field
+{
+    textField = field;
+}
+
+
 @end
 
 @implementation wxNSTextView

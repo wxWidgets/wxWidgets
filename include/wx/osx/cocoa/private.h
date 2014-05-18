@@ -328,8 +328,10 @@ public:
     @interface wxNSTextFieldEditor : NSTextView
     {
         NSEvent* lastKeyDownEvent;
+        NSTextField* textField;
     }
 
+    - (void) setTextField:(NSTextField*) field;
     @end
 
     @interface wxNSTextField : NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>)
