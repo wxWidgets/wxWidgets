@@ -1302,8 +1302,12 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
             superimpl(slf, (SEL)_cmd, event);
             
             // super of built-ins keeps the mouse up, as wx expects this event, we have to synthesize it
-            // only trigger if at this moment the mouse is already up
-            if ( [ event type]  == NSLeftMouseDown && !wxGetMouseState().LeftIsDown() )
+            // only trigger if at this moment the mouse is already up, and the control is still existing after the event has
+            // been handled (we do this by looking up the native NSView's peer from the hash map, that way we are sure the info
+            // is current - even when the instance memory of ourselves may have been freed ...
+            
+            wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( slf );
+            if ( [ event type]  == NSLeftMouseDown && !wxGetMouseState().LeftIsDown() && impl != NULL )
             {
                 wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
                 SetupMouseEvent(wxevent , event) ;
