@@ -761,8 +761,8 @@ Thanks,
 #define SWAP(a, b, size)                                                      \
   do                                                                          \
     {                                                                         \
-      register size_t __size = (size);                                        \
-      register char *__a = (a), *__b = (b);                                   \
+      size_t __size = (size);                                                 \
+      char *__a = (a), *__b = (b);                                            \
       do                                                                      \
         {                                                                     \
           char __tmp = *__a;                                                  \
@@ -815,7 +815,7 @@ typedef struct
 void wxQsort(void* pbase, size_t total_elems,
              size_t size, wxSortCallback cmp, const void* user_data)
 {
-  register char *base_ptr = (char *) pbase;
+  char *base_ptr = (char *) pbase;
   const size_t max_thresh = MAX_THRESH * size;
 
   if (total_elems == 0)
@@ -929,7 +929,7 @@ void wxQsort(void* pbase, size_t total_elems,
     char *thresh = base_ptr + max_thresh;
     if ( thresh > end_ptr )
         thresh = end_ptr;
-    register char *run_ptr;
+    char *run_ptr;
 
     /* Find smallest element in first threshold and place it at the
        array's beginning.  This is the smallest array element,

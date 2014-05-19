@@ -698,8 +698,8 @@ static wxPointList wx_spline_point_list;
 void wx_quadratic_spline(double a1, double b1, double a2, double b2, double a3, double b3, double a4,
                  double b4)
 {
-    register double  xmid, ymid;
-    double           x1, y1, x2, y2, x3, y3, x4, y4;
+    double xmid, ymid;
+    double x1, y1, x2, y2, x3, y3, x4, y4;
 
     wx_clear_stack();
     wx_spline_push(a1, b1, a2, b2, a3, b3, a4, b4);

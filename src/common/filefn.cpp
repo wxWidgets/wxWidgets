@@ -468,7 +468,7 @@ wxChar *wxCopyAbsolutePath(const wxString& filename)
 template<typename CharType>
 static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
 {
-    register CharType *d, *s, *nm;
+    CharType *d, *s, *nm;
     CharType        lnm[_MAXPATHLEN];
     int             q;
 
@@ -527,9 +527,9 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
         if (*s++ == wxT('$'))
 #endif
         {
-            register CharType  *start = d;
-            register int     braces = (*s == wxT('{') || *s == wxT('('));
-            register CharType  *value;
+            CharType  *start = d;
+            int     braces = (*s == wxT('{') || *s == wxT('('));
+            CharType  *value;
             while ((*d++ = *s) != 0)
                 if (braces ? (*s == wxT('}') || *s == wxT(')')) : !(wxIsalnum(*s) || *s == wxT('_')) )
                     break;
@@ -568,7 +568,7 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
             }
         } else
         {                /* ~user/filename */
-            register CharType  *nnm;
+            CharType  *nnm;
             for (s = nm; *s && *s != SEP; s++)
             {
                 // Empty

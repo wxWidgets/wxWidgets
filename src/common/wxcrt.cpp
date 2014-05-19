@@ -768,7 +768,7 @@ wxChar32* wxStrdup(const wxChar32* s)
 #ifndef wxCRT_StricmpA
 WXDLLIMPEXP_BASE int wxCRT_StricmpA(const char *psz1, const char *psz2)
 {
-  register char c1, c2;
+  char c1, c2;
   do {
     c1 = wxTolower(*psz1++);
     c2 = wxTolower(*psz2++);
@@ -780,7 +780,7 @@ WXDLLIMPEXP_BASE int wxCRT_StricmpA(const char *psz1, const char *psz2)
 #ifndef wxCRT_StricmpW
 WXDLLIMPEXP_BASE int wxCRT_StricmpW(const wchar_t *psz1, const wchar_t *psz2)
 {
-  register wchar_t c1, c2;
+  wchar_t c1, c2;
   do {
     c1 = wxTolower(*psz1++);
     c2 = wxTolower(*psz2++);
@@ -793,7 +793,7 @@ WXDLLIMPEXP_BASE int wxCRT_StricmpW(const wchar_t *psz1, const wchar_t *psz2)
 WXDLLIMPEXP_BASE int wxCRT_StrnicmpA(const char *s1, const char *s2, size_t n)
 {
   // initialize the variables just to suppress stupid gcc warning
-  register char c1 = 0, c2 = 0;
+  char c1 = 0, c2 = 0;
   while (n && ((c1 = wxTolower(*s1)) == (c2 = wxTolower(*s2)) ) && c1) n--, s1++, s2++;
   if (n) {
     if (c1 < c2) return -1;
@@ -807,7 +807,7 @@ WXDLLIMPEXP_BASE int wxCRT_StrnicmpA(const char *s1, const char *s2, size_t n)
 WXDLLIMPEXP_BASE int wxCRT_StrnicmpW(const wchar_t *s1, const wchar_t *s2, size_t n)
 {
   // initialize the variables just to suppress stupid gcc warning
-  register wchar_t c1 = 0, c2 = 0;
+  wchar_t c1 = 0, c2 = 0;
   while (n && ((c1 = wxTolower(*s1)) == (c2 = wxTolower(*s2)) ) && c1) n--, s1++, s2++;
   if (n) {
     if (c1 < c2) return -1;
