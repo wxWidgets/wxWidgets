@@ -634,7 +634,7 @@ wxChar* wxRichTextHTMLHandler::b64enc( unsigned char* input, size_t in_len )
 
     while( in_len-- > 0 )
     {
-        register wxChar a, b;
+        wxChar a, b;
 
         a = *input++;
 

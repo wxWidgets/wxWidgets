@@ -1321,7 +1321,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
             UseAlpha() ;
 
         unsigned char* destinationstart = (unsigned char*) BeginRawAccess() ;
-        register unsigned char* data = image.GetData();
+        unsigned char* data = image.GetData();
         if ( destinationstart != NULL && data != NULL )
         {
             const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;

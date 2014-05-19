@@ -206,9 +206,9 @@ void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
 
 static inline void wx_cmyk_to_rgb(unsigned char* rgb, const unsigned char* cmyk)
 {
-    register int k = 255 - cmyk[3];
-    register int k2 = cmyk[3];
-    register int c;
+    int k = 255 - cmyk[3];
+    int k2 = cmyk[3];
+    int c;
 
     c = k + k2 * (255 - cmyk[0]) / 255;
     rgb[0] = (unsigned char)((c > 255) ? 0 : (255 - c));
