@@ -108,8 +108,6 @@ extern "C"
 const double M_PI = 3.14159265358979;
 #endif
 
-static const double RAD2DEG = 180.0 / M_PI;
-
 //
 // Pen, Brushes and Fonts
 //
