@@ -38,7 +38,7 @@ class ClientHandler : public CefClient,
                       public CefLoadHandler
 {
 public:
-    ClientHandler():m_loadErrorCode(-1) {}
+    ClientHandler() : m_loadErrorCode(-1) {}
     virtual ~ClientHandler() {}
 
     virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() { return this; }
