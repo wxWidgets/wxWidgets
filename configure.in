@@ -139,6 +139,7 @@ DEFAULT_DEFAULT_wxUSE_DFB=0
 DEFAULT_DEFAULT_wxUSE_QT=0
 
 PROGRAM_EXT=
+SAMPLES_CXXFLAGS=
 SAMPLES_RPATH_FLAG=
 DYLIB_RPATH_INSTALL=
 DYLIB_RPATH_POSTLINK=
@@ -3673,6 +3674,11 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --cflags` -DQT_WIDGETS_LIB"
         LIBS="$LIBS `pkg-config Qt5Gui Qt5Test --libs`"
         GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --libs`"
+        if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
+            dnl build with position independent code if Qt needs it
+            SAMPLES_CXXFLAGS="$SAMPLES_CXXFLAGS -fPIC"
+            WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fPIC"
+        fi
     fi
 
     dnl the name of the directory where the files for this toolkit live
@@ -8038,6 +8044,7 @@ AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(DYLIB_RPATH_INSTALL)
 AC_SUBST(DYLIB_RPATH_POSTLINK)
 AC_SUBST(SAMPLES_RPATH_FLAG)
+AC_SUBST(SAMPLES_CXXFLAGS)
 AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
 AC_SUBST(CPPUNIT_CFLAGS)
