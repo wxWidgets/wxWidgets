@@ -64,6 +64,14 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( StopWatchTestCase, "StopWatchTestCase" );
 
 void StopWatchTestCase::Misc()
 {
+    // Buildbot machines are quite slow and sleep doesn't work reliably there,
+    // i.e. it can sleep for much longer than requested. This is not really an
+    // error, so just don't run this test there -- and if you get failures in
+    // this test when running it interactively, this might also be normal if
+    // the machine is under heavy load.
+    if ( IsAutomaticTest() )
+        return;
+
     wxStopWatch sw;
     long t;
     wxLongLong usec;
