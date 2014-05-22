@@ -603,6 +603,7 @@ All (GUI):
 - Support loading ICO files with data in PNG format (Artur Wieczorek).
 - Fix dragging columns in wxGrid when some of them are hidden (Artur Wieczorek).
 - Fix selecting elements from wxPropertyGrid enum properties (Artur Wieczorek).
+- Don't show the dialog twice for colours in wxPropertyGrid (Artur Wieczorek).
 
 wxGTK:
 
