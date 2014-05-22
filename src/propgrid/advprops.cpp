@@ -1262,14 +1262,20 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 }
 
 
-bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argFlags) ) const
+bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, int argFlags ) const
 {
     int index = number;
     int type = m_choices.GetValue(index);
 
     if ( type == wxPG_COLOUR_CUSTOM )
     {
-        QueryColourFromUser(variant);
+         if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
+            return QueryColourFromUser(variant);
+
+         // Call from event handler.
+         // User will be asked for custom color later on in OnEvent().
+         wxColourPropertyValue val = GetVal();
+         variant = DoTranslateVal(val);
     }
     else
     {
@@ -1448,7 +1454,18 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
             return false;
         }
 
-        QueryColourFromUser(value);
+        if ( (argFlags & wxPG_PROPERTY_SPECIFIC) )
+        {
+            // Query for value from the event handler.
+            // User will be asked for custom color later on in OnEvent().
+            ResetNextIndex();
+            return false;
+        }
+        if ( !QueryColourFromUser(value) )
+        {
+            ResetNextIndex();
+            return false;
+        }
     }
     else
     {

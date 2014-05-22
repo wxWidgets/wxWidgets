@@ -1277,7 +1277,7 @@ bool wxPGComboBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
         return true;
     }
 
-    bool res = property->StringToValue(variant, textVal, wxPG_EDITABLE_VALUE);
+    bool res = property->StringToValue(variant, textVal, wxPG_EDITABLE_VALUE|wxPG_PROPERTY_SPECIFIC);
 
     // Changing unspecified always causes event (returning
     // true here should be enough to trigger it).
