@@ -661,6 +661,7 @@ wxMSW:
 - Don't fail when using large paper sizes in print preview.
 - Fix wxRichMessageDialog return value for dialog with only "OK" button.
 - Fix precision loss in wxGraphicsContext::{Draw,Stroke}Lines() (tibo_).
+- Fix destroying the font from wxFont::GetFaceName() in some cases (aebailey82).
 
 wxOSX:
 
