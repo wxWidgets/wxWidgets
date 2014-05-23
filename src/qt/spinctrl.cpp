@@ -126,6 +126,7 @@ template class wxQtSpinCtrlBase< int, wxQtSpinBox >;
 
 wxSpinCtrl::wxSpinCtrl()
 {
+    Init(); 
 }
 
 wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,
@@ -136,6 +137,7 @@ wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,
 : wxQtSpinCtrlBase< int, wxQtSpinBox >( parent, id, value, pos, size, style,
      min, max, initial, 1, name )
 {
+    Init();
 }
 
 bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
@@ -147,6 +149,20 @@ bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         pos, size, style, min, max, initial, 1, name );
 }
 
+
+bool wxSpinCtrl::SetBase(int base)
+{
+    // Currently we only support base 10.
+    if ( base != 10 )
+        return false;
+
+    if ( base == m_base )
+        return true;
+
+    m_base = base;
+
+    return true;
+}
 
 //##############################################################################
 

@@ -103,8 +103,16 @@ public:
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = wxT("wxSpinCtrl"));
+    virtual int GetBase() const wxOVERRIDE { return m_base; }
+    virtual bool SetBase(int base) wxOVERRIDE;
 
 private:
+    // Common part of all ctors.
+    void Init()
+    {
+        m_base = 10;
+    }
+    int m_base;
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrl )
 };
 
@@ -134,6 +142,9 @@ public:
 
     void SetDigits(unsigned digits);
     unsigned GetDigits() const;
+
+    virtual int GetBase() const wxOVERRIDE { return 10; }
+    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrlDouble );
