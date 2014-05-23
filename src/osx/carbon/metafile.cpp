@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -54,7 +53,7 @@ public:
 
     virtual ~wxMetafileRefData();
 
-    virtual bool IsOk() const { return m_data != NULL; }
+    virtual bool IsOk() const wxOVERRIDE { return m_data != NULL; }
 
     void Init();
 
@@ -223,26 +222,6 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 
     m_refData = new wxMetafileRefData((CFDataRef)mf);
 }
-
-#if wxOSX_USE_COCOA_OR_CARBON && !defined( __LP64__ )
-void wxMetafile::SetPICT(void* pictHandle)
-{
-    UnRef();
-
-    Handle picHandle = (Handle) pictHandle;
-    HLock(picHandle);
-    CFDataRef data = CFDataCreateWithBytesNoCopy( kCFAllocatorDefault, (const UInt8*) *picHandle, GetHandleSize(picHandle), kCFAllocatorNull);
-    wxCFRef<CGDataProviderRef> provider(wxMacCGDataProviderCreateWithCFData(data));
-    QDPictRef pictRef = QDPictCreateWithProvider(provider);
-    CGRect rect = QDPictGetBounds(pictRef);
-    m_refData = new wxMetafileRefData(static_cast<int>(rect.size.width),
-                                      static_cast<int>(rect.size.height));
-    QDPictDrawToCGContext( ((wxMetafileRefData*) m_refData)->GetContext(), rect, pictRef );
-    CFRelease( data );
-    QDPictRelease( pictRef );
-    ((wxMetafileRefData*) m_refData)->Close();
-}
-#endif
 
 bool wxMetaFile::Play(wxDC *dc)
 {

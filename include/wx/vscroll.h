@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Brad Anderson, Bryan Petty
 // Created:     30.05.03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,6 +13,7 @@
 
 #include "wx/panel.h"
 #include "wx/position.h"
+#include "wx/scrolwin.h"
 
 class WXDLLIMPEXP_FWD_CORE wxVarScrollHelperEvtHandler;
 
@@ -24,6 +24,11 @@ class WXDLLIMPEXP_FWD_CORE wxVarScrollHelperEvtHandler;
 // scrolwin.h) for the purpose of reducing code duplication     |
 // through the use of mix-in classes.                           |
 //                                                              |
+//                   wxAnyScrollHelperBase                      |
+//                            |                                 |
+//                            |                                 |
+//                            |                                 |
+//                            V                                 |
 //                  wxVarScrollHelperBase                       |
 //                   /                 \                        |
 //                  /                   \                       |
@@ -59,7 +64,7 @@ class WXDLLIMPEXP_FWD_CORE wxVarScrollHelperEvtHandler;
 // required virtual functions that need to be implemented for any orientation
 // specific work.
 
-class WXDLLIMPEXP_CORE wxVarScrollHelperBase
+class WXDLLIMPEXP_CORE wxVarScrollHelperBase : public wxAnyScrollHelperBase
 {
 public:
     // constructors and such
@@ -115,15 +120,11 @@ public:
     // child of it in order to scroll only a portion the area between the
     // scrollbars (spreadsheet: only cell area will move).
     virtual void SetTargetWindow(wxWindow *target);
-    virtual wxWindow *GetTargetWindow() const { return m_targetWindow; }
-
-    // Override this function to draw the graphic (or just process EVT_PAINT)
-    //virtual void OnDraw(wxDC& WXUNUSED(dc)) { }
 
     // change the DC origin according to the scroll position. To properly
     // forward calls to wxWindow::Layout use WX_FORWARD_TO_SCROLL_HELPER()
     // derived class
-    virtual void DoPrepareDC(wxDC& dc);
+    virtual void DoPrepareDC(wxDC& dc) wxOVERRIDE;
 
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
@@ -236,7 +237,7 @@ protected:
 
 #ifdef __WXMAC__
     // queue mac window update after handling scroll event
-    virtual void UpdateMacScrollWindow() = 0;
+    virtual void UpdateMacScrollWindow() { }
 #endif // __WXMAC__
 
     // change the target window
@@ -257,12 +258,6 @@ protected:
     void IncOrient(wxCoord& x, wxCoord& y, wxCoord inc);
 
 private:
-
-    // the window that receives the scroll events and the window to actually
-    // scroll, respectively
-    wxWindow    *m_win,
-                *m_targetWindow;
-
     // the total number of (logical) units
     size_t m_unitMax;
 
@@ -331,23 +326,23 @@ public:
     size_t GetVisibleRowsEnd() const            { return GetVisibleEnd(); }
     bool IsRowVisible(size_t row) const         { return IsVisible(row); }
 
-    virtual int GetOrientationTargetSize() const
+    virtual int GetOrientationTargetSize() const wxOVERRIDE
         { return GetTargetWindow()->GetClientSize().y; }
-    virtual int GetNonOrientationTargetSize() const
+    virtual int GetNonOrientationTargetSize() const wxOVERRIDE
         { return GetTargetWindow()->GetClientSize().x; }
-    virtual wxOrientation GetOrientation() const { return wxVERTICAL; }
+    virtual wxOrientation GetOrientation() const wxOVERRIDE { return wxVERTICAL; }
 
 protected:
     // this function must be overridden in the derived class and it should
     // return the size of the given row in pixels
     virtual wxCoord OnGetRowHeight(size_t n) const = 0;
-    wxCoord OnGetUnitSize(size_t n) const       { return OnGetRowHeight(n); }
+    wxCoord OnGetUnitSize(size_t n) const wxOVERRIDE       { return OnGetRowHeight(n); }
 
     virtual void OnGetRowsHeightHint(size_t WXUNUSED(rowMin),
                                      size_t WXUNUSED(rowMax)) const { }
 
     // forward calls to OnGetRowsHeightHint()
-    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const
+    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const wxOVERRIDE
         { OnGetRowsHeightHint(unitMin, unitMax); }
 
     // again, if not overridden, it will fall back on default method
@@ -355,7 +350,7 @@ protected:
         { return DoEstimateTotalSize(); }
 
     // forward calls to EstimateTotalHeight()
-    virtual wxCoord EstimateTotalSize() const { return EstimateTotalHeight(); }
+    virtual wxCoord EstimateTotalSize() const wxOVERRIDE { return EstimateTotalHeight(); }
 
     wxCoord GetRowsHeight(size_t rowMin, size_t rowMax) const
         { return GetUnitsSize(rowMin, rowMax); }
@@ -411,31 +406,31 @@ public:
         { return IsVisible(column); }
 
 
-    virtual int GetOrientationTargetSize() const
+    virtual int GetOrientationTargetSize() const wxOVERRIDE
         { return GetTargetWindow()->GetClientSize().x; }
-    virtual int GetNonOrientationTargetSize() const
+    virtual int GetNonOrientationTargetSize() const wxOVERRIDE
         { return GetTargetWindow()->GetClientSize().y; }
-    virtual wxOrientation GetOrientation() const   { return wxHORIZONTAL; }
+    virtual wxOrientation GetOrientation() const wxOVERRIDE   { return wxHORIZONTAL; }
 
 protected:
     // this function must be overridden in the derived class and it should
     // return the size of the given column in pixels
     virtual wxCoord OnGetColumnWidth(size_t n) const = 0;
-    wxCoord OnGetUnitSize(size_t n) const { return OnGetColumnWidth(n); }
+    wxCoord OnGetUnitSize(size_t n) const wxOVERRIDE { return OnGetColumnWidth(n); }
 
     virtual void OnGetColumnsWidthHint(size_t WXUNUSED(columnMin),
                                         size_t WXUNUSED(columnMax)) const
         { }
 
     // forward calls to OnGetColumnsWidthHint()
-    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const
+    virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const wxOVERRIDE
         { OnGetColumnsWidthHint(unitMin, unitMax); }
 
     // again, if not overridden, it will fall back on default method
     virtual wxCoord EstimateTotalWidth() const { return DoEstimateTotalSize(); }
 
     // forward calls to EstimateTotalWidth()
-    virtual wxCoord EstimateTotalSize() const { return EstimateTotalWidth(); }
+    virtual wxCoord EstimateTotalSize() const wxOVERRIDE { return EstimateTotalWidth(); }
 
     wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const
         { return GetUnitsSize(columnMin, columnMax); }
@@ -518,7 +513,7 @@ public:
     // forward calls to wxWindow::Layout use WX_FORWARD_TO_SCROLL_HELPER()
     // derived class. We use this version to call both base classes'
     // DoPrepareDC()
-    virtual void DoPrepareDC(wxDC& dc);
+    virtual void DoPrepareDC(wxDC& dc) wxOVERRIDE;
 
     // replacement implementation of wxWindow::Layout virtual method.  To
     // properly forward calls to wxWindow::Layout use

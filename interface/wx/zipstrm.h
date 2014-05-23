@@ -2,7 +2,6 @@
 // Name:        zipstrm.h
 // Purpose:     interface of wxZipNotifier
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -384,16 +383,6 @@ public:
     wxZipInputStream(wxInputStream* stream,
                      wxMBConv& conv = wxConvLocal);
     //@}
-
-    /**
-        @deprecated
-        Compatibility constructor (requires WXWIN_COMPATIBILITY_2_6).
-        When this constructor is used, an emulation of seeking is
-        switched on for compatibility with previous versions. Note however,
-        that it is deprecated.
-    */
-    wxZipInputStream(const wxString& archive,
-                     const wxString& file);
 
     /**
         Closes the current entry.

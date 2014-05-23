@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Francesco Montorsi
 // Created:     1995
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,10 +24,6 @@
     #error "You must set wxUSE_PRINTING_ARCHITECTURE to 1 in setup.h, and recompile the library."
 #endif
 
-// Set this to 1 if you want to test PostScript printing under MSW.
-// However, you'll also need to edit src/msw/makefile.nt.
-#define wxTEST_POSTSCRIPT_IN_MSW 0
-
 #include <ctype.h>
 #include "wx/metafile.h"
 #include "wx/print.h"
@@ -36,7 +31,7 @@
 #include "wx/image.h"
 #include "wx/accel.h"
 
-#if wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
     #include "wx/generic/printps.h"
     #include "wx/generic/prntdlgg.h"
 #endif
@@ -51,7 +46,7 @@
 
 #include "printing.h"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -161,7 +156,7 @@ void MyApp::Draw(wxDC&dc)
 
     dc.DrawText( wxT("Rectangle 200 by 80"), 40, 40);
 
-    dc.SetPen( wxPen(*wxBLACK,0,wxDOT_DASH) );
+    dc.SetPen( wxPen(*wxBLACK, 0, wxPENSTYLE_DOT_DASH) );
     dc.DrawEllipse(50, 140, 100, 50);
     dc.SetPen(*wxRED_PEN);
 
@@ -187,6 +182,12 @@ void MyApp::Draw(wxDC&dc)
     dc.DrawPolygon( 5, points, 20, 250, wxODDEVEN_RULE );
     dc.DrawPolygon( 5, points, 50, 250, wxWINDING_RULE );
 
+    dc.DrawArc( 20, 330, 40, 300, 20, 300 );
+    {
+        wxDCBrushChanger changeBrush(dc, *wxTRANSPARENT_BRUSH);
+        dc.DrawArc( 60, 330, 80, 300, 60, 300 );
+    }
+
     dc.DrawEllipticArc( 80, 250, 60, 30, 0.0, 270.0 );
 
     points[0].x = 150;
@@ -198,8 +199,6 @@ void MyApp::Draw(wxDC&dc)
     points[3].x = 200;
     points[3].y = 220;
     dc.DrawSpline( 4, points );
-
-    dc.DrawArc( 20,10, 10,10, 25,40 );
 
     wxString str;
     int i = 0;
@@ -271,13 +270,13 @@ void MyApp::Draw(wxDC&dc)
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_PRINT, MyFrame::OnPrint)
     EVT_MENU(wxID_PREVIEW, MyFrame::OnPrintPreview)
     EVT_MENU(WXPRINT_PAGE_SETUP, MyFrame::OnPageSetup)
     EVT_MENU(wxID_ABOUT, MyFrame::OnPrintAbout)
-#if defined(__WXMSW__) &&wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
     EVT_MENU(WXPRINT_PRINT_PS, MyFrame::OnPrintPS)
     EVT_MENU(WXPRINT_PREVIEW_PS, MyFrame::OnPrintPreviewPS)
     EVT_MENU(WXPRINT_PAGE_SETUP_PS, MyFrame::OnPageSetupPS)
@@ -291,7 +290,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(WXPRINT_FRAME_MODAL_APP,
                    WXPRINT_FRAME_MODAL_NON,
                    MyFrame::OnPreviewFrameModalityKind)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const wxSize&size)
         : wxFrame(frame, wxID_ANY, title, pos, size)
@@ -331,7 +330,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const 
     SetAcceleratorTable(accel);
 #endif
 
-#if defined(__WXMSW__) &&wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
     file_menu->AppendSeparator();
     file_menu->Append(WXPRINT_PRINT_PS, wxT("Print PostScript..."),           wxT("Print (PostScript)"));
     file_menu->Append(WXPRINT_PAGE_SETUP_PS, wxT("Page Setup PostScript..."), wxT("Page setup (PostScript)"));
@@ -410,7 +409,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     wxPreviewFrame *frame =
         new wxPreviewFrame(preview, this, wxT("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
-    frame->Initialize(m_previewModality);
+    frame->InitializeWithModality(m_previewModality);
     frame->Show();
 }
 
@@ -425,21 +424,23 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
     (*g_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
-#if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
+#if wxUSE_POSTSCRIPT
 void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 {
-    wxPostScriptPrinter printer(g_printData);
-    MyPrintout printout(wxT("My printout"));
+    wxPrintDialogData printDialogData(* g_printData);
+
+    wxPostScriptPrinter printer(&printDialogData);
+    MyPrintout printout(this, wxT("My printout"));
     printer.Print(this, &printout, true/*prompt*/);
 
-    (*g_printData) = printer.GetPrintData();
+    (*g_printData) = printer.GetPrintDialogData().GetPrintData();
 }
 
 void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
 {
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(* g_printData);
-    wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout, &printDialogData);
+    wxPrintPreview *preview = new wxPrintPreview(new MyPrintout(this), new MyPrintout(this), &printDialogData);
     wxPreviewFrame *frame =
         new wxPreviewFrame(preview, this, wxT("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
@@ -501,9 +502,9 @@ void MyFrame::OnPreviewFrameModalityKind(wxCommandEvent& event)
 // MyCanvas
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   //  EVT_PAINT(MyCanvas::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxFrame *frame, const wxPoint&pos, const wxSize&size, long style)
     : wxScrolledWindow(frame, wxID_ANY, pos, size, style)
@@ -697,9 +698,8 @@ void MyPrintout::DrawPageTwo()
                              wxT("testing "), wxT("string. "), wxT("Enjoy "), wxT("it!") };
         wxCoord w, h;
         long x = 200, y= 250;
-        wxFont fnt(15, wxSWISS, wxNORMAL, wxNORMAL);
 
-        dc->SetFont(fnt);
+        dc->SetFont(wxFontInfo(15).Family(wxFONTFAMILY_SWISS));
 
         for (int i = 0; i < 7; i++)
         {
@@ -745,15 +745,6 @@ void MyPrintout::DrawPageTwo()
 // Writes a header on a page. Margin units are in millimetres.
 bool MyPrintout::WritePageHeader(wxPrintout *printout, wxDC *dc, const wxString&text, float mmToLogical)
 {
-#if 0
-    static wxFont *headerFont = (wxFont *) NULL;
-    if (!headerFont)
-    {
-        headerFont = wxTheFontList->FindOrCreateFont(16, wxSWISS, wxNORMAL, wxBOLD);
-    }
-    dc->SetFont(headerFont);
-#endif
-
     int pageWidthMM, pageHeightMM;
 
     printout->GetPageSizeMM(&pageWidthMM, &pageHeightMM);

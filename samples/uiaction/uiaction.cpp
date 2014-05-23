@@ -4,7 +4,6 @@
 // Author:      Kevin Ollivier
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Kevin Ollivier, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,7 +39,7 @@
 
 // the application icon (under Windows and OS/2 it is in resources and even
 // though we could still include the XPM here it would be unused)
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -52,7 +51,8 @@
 enum
 {
     // menu items
-    RunSimulation = 1
+    RunSimulation = 1,
+    SimulateText
 };
 
 // ----------------------------------------------------------------------------
@@ -63,7 +63,7 @@ enum
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 #if wxUSE_UIACTIONSIMULATOR
@@ -77,20 +77,22 @@ public:
 
     void OnButtonPressed(wxCommandEvent& event);
     void OnRunSimulation(wxCommandEvent& event);
+    void OnSimulateText(wxCommandEvent& event);
     void OnExit(wxCommandEvent& WXUNUSED(event)) { Close(); }
 
 private:
     wxButton* m_button;
     wxTextCtrl* m_text;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(wxID_ANY, MyFrame::OnButtonPressed)
     EVT_MENU(RunSimulation, MyFrame::OnRunSimulation)
+    EVT_MENU(SimulateText, MyFrame::OnSimulateText)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #endif // wxUSE_UIACTIONSIMULATOR
 
@@ -137,7 +139,11 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *fileMenu = new wxMenu;
 
     fileMenu->Append(wxID_NEW, "&New File...", "Open a new file");
-    fileMenu->Append(RunSimulation, "&Run Simulation...", "Run the UI action simulation");
+    fileMenu->Append(RunSimulation, "&Run Simulation",
+                     "Run predefined UI action simulation");
+    fileMenu->Append(SimulateText, "Simulate &text input...",
+                     "Enter text to simulate");
+    fileMenu->AppendSeparator();
 
     fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit this program");
 
@@ -184,6 +190,29 @@ void MyFrame::OnRunSimulation(wxCommandEvent& WXUNUSED(event))
     sim.Char(WXK_RETURN);
     sim.Text("aAbBcC");
     sim.Char(WXK_RETURN);
+    sim.Text("1 234.57e-8");
+    sim.Char(WXK_RETURN);
+
+}
+
+void MyFrame::OnSimulateText(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_text;
+    const wxString text = wxGetTextFromUser
+                          (
+                            "Enter text to simulate: ",
+                            "wxUIActionSimulator wxWidgets Sample",
+                            s_text,
+                            this
+                          );
+    if ( text.empty() )
+        return;
+
+    s_text = text;
+
+    wxUIActionSimulator sim;
+    m_text->SetFocus();
+    sim.Text(s_text.c_str());
 }
 
 void MyFrame::OnButtonPressed(wxCommandEvent& WXUNUSED(event))

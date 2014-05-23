@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Brad Anderson
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,7 +39,7 @@
 // ----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -59,7 +58,7 @@ class VarScrollApp : public wxApp
 {
 public:
     // create our main window
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -95,7 +94,7 @@ private:
     wxPanel *m_scrollWindow;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class VScrollWindow : public wxVScrolledWindow
@@ -171,7 +170,7 @@ public:
         event.Skip();
     }
 
-    virtual wxCoord OnGetRowHeight(size_t n) const
+    virtual wxCoord OnGetRowHeight(size_t n) const wxOVERRIDE
     {
         wxASSERT( n < GetRowCount() );
 
@@ -185,15 +184,15 @@ private:
 
     bool m_changed;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(VScrollWindow, wxVScrolledWindow)
+wxBEGIN_EVENT_TABLE(VScrollWindow, wxVScrolledWindow)
     EVT_IDLE(VScrollWindow::OnIdle)
     EVT_PAINT(VScrollWindow::OnPaint)
     EVT_SCROLLWIN(VScrollWindow::OnScroll)
     EVT_MOUSE_EVENTS(VScrollWindow::OnMouse)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 class HScrollWindow : public wxHScrolledWindow
 {
@@ -268,7 +267,7 @@ public:
         event.Skip();
     }
 
-    virtual wxCoord OnGetColumnWidth(size_t n) const
+    virtual wxCoord OnGetColumnWidth(size_t n) const wxOVERRIDE
     {
         wxASSERT( n < GetColumnCount() );
 
@@ -282,15 +281,15 @@ private:
 
     bool m_changed;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(HScrollWindow, wxHScrolledWindow)
+wxBEGIN_EVENT_TABLE(HScrollWindow, wxHScrolledWindow)
     EVT_IDLE(HScrollWindow::OnIdle)
     EVT_PAINT(HScrollWindow::OnPaint)
     EVT_SCROLLWIN(HScrollWindow::OnScroll)
     EVT_MOUSE_EVENTS(HScrollWindow::OnMouse)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 class HVScrollWindow : public wxHVScrolledWindow
 {
@@ -389,14 +388,14 @@ public:
         event.Skip();
     }
 
-    virtual wxCoord OnGetRowHeight(size_t n) const
+    virtual wxCoord OnGetRowHeight(size_t n) const wxOVERRIDE
     {
         wxASSERT( n < GetRowCount() );
 
         return m_heights[n];
     }
 
-    virtual wxCoord OnGetColumnWidth(size_t n) const
+    virtual wxCoord OnGetColumnWidth(size_t n) const wxOVERRIDE
     {
         wxASSERT( n < GetColumnCount() );
 
@@ -411,15 +410,15 @@ private:
 
     bool m_changed;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(HVScrollWindow, wxHVScrolledWindow)
+wxBEGIN_EVENT_TABLE(HVScrollWindow, wxHVScrolledWindow)
     EVT_IDLE(HVScrollWindow::OnIdle)
     EVT_PAINT(HVScrollWindow::OnPaint)
     EVT_SCROLLWIN(HVScrollWindow::OnScroll)
     EVT_MOUSE_EVENTS(HVScrollWindow::OnMouse)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // constants
@@ -448,14 +447,14 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(VarScrollFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(VarScrollFrame, wxFrame)
     EVT_MENU(VScroll_Quit,  VarScrollFrame::OnQuit)
     EVT_MENU(VScroll_VScrollMode, VarScrollFrame::OnModeVScroll)
     EVT_MENU(VScroll_HScrollMode, VarScrollFrame::OnModeHScroll)
     EVT_MENU(VScroll_HVScrollMode, VarScrollFrame::OnModeHVScroll)
     EVT_MENU(VScroll_About, VarScrollFrame::OnAbout)
     EVT_SIZE(VarScrollFrame::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -513,7 +512,7 @@ VarScrollFrame::VarScrollFrame()
 
     // the "About" item should be in the help menu
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(VScroll_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    menuHelp->Append(VScroll_About, wxT("&About\tF1"), wxT("Show about dialog"));
 
 #ifdef wxHAS_RADIO_MENU_ITEMS
     menuMode->AppendRadioItem(VScroll_VScrollMode, wxT("&Vertical\tAlt-V"),

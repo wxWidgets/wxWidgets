@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,6 +34,8 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/renderer.h"
+#include "wx/msw/uxtheme.h"
 
 // ============================================================================
 // wxRadioButton implementation
@@ -61,25 +62,10 @@ bool wxRadioButton::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
 
-    long msStyle = WS_TABSTOP;
-    if ( HasFlag(wxRB_GROUP) )
-        msStyle |= WS_GROUP;
+    WXDWORD exstyle = 0;
+    WXDWORD msStyle = MSWGetStyle(style, &exstyle);
 
-    // we use BS_RADIOBUTTON and not BS_AUTORADIOBUTTON because the use of the
-    // latter can easily result in the application entering an infinite loop
-    // inside IsDialogMessage()
-    //
-    // we used to use BS_RADIOBUTTON only for wxRB_SINGLE buttons but there
-    // doesn't seem to be any harm to always use it and it prevents some hangs,
-    // see #9786
-    msStyle |= BS_RADIOBUTTON;
-
-    if ( HasFlag(wxCLIP_SIBLINGS) )
-        msStyle |= WS_CLIPSIBLINGS;
-    if ( HasFlag(wxALIGN_RIGHT) )
-        msStyle |= BS_LEFTTEXT | BS_RIGHT;
-
-    if ( !MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, 0) )
+    if ( !MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, exstyle) )
         return false;
 
     // for compatibility with wxGTK, the first radio button in a group is
@@ -98,10 +84,13 @@ bool wxRadioButton::Create(wxWindow *parent,
 
 void wxRadioButton::SetValue(bool value)
 {
-    ::SendMessage(GetHwnd(), BM_SETCHECK,
-                  value ? BST_CHECKED : BST_UNCHECKED, 0);
-
     m_isChecked = value;
+
+    if ( !IsOwnerDrawn() )
+        ::SendMessage(GetHwnd(), BM_SETCHECK,
+                      value ? BST_CHECKED : BST_UNCHECKED, 0);
+    else // owner drawn buttons don't react to this message
+        Refresh();
 
     if ( !value )
         return;
@@ -204,9 +193,12 @@ void wxRadioButton::SetValue(bool value)
 
 bool wxRadioButton::GetValue() const
 {
-    wxASSERT_MSG( m_isChecked ==
-                    (::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0L) != 0),
-                  wxT("wxRadioButton::m_isChecked is out of sync?") );
+    if ( !IsOwnerDrawn() )
+    {
+        wxASSERT_MSG( m_isChecked ==
+                        (::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0L) != 0),
+                      wxT("wxRadioButton::m_isChecked is out of sync?") );
+    }
 
     return m_isChecked;
 }
@@ -232,7 +224,7 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         // and not BS_AUTORADIOBUTTON
         SetValue(true);
 
-        wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
+        wxCommandEvent event(wxEVT_RADIOBUTTON, GetId());
         event.SetEventObject( this );
         event.SetInt(true); // always checked
 
@@ -289,12 +281,53 @@ wxSize wxRadioButton::DoGetBestSize() const
 
 WXDWORD wxRadioButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
-    WXDWORD styleMSW = wxControl::MSWGetStyle(style, exstyle);
+    WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-    if ( style & wxRB_GROUP )
-        styleMSW |= WS_GROUP;
+    if ( HasFlag(wxRB_GROUP) )
+        msStyle |= WS_GROUP;
 
-    return styleMSW;
+    // we use BS_RADIOBUTTON and not BS_AUTORADIOBUTTON because the use of the
+    // latter can easily result in the application entering an infinite loop
+    // inside IsDialogMessage()
+    //
+    // we used to use BS_RADIOBUTTON only for wxRB_SINGLE buttons but there
+    // doesn't seem to be any harm to always use it and it prevents some hangs,
+    // see #9786
+    msStyle |= BS_RADIOBUTTON;
+
+    if ( style & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+    if ( style & wxALIGN_RIGHT )
+        msStyle |= BS_LEFTTEXT | BS_RIGHT;
+
+
+    return msStyle;
+}
+
+// ----------------------------------------------------------------------------
+// owner drawn radio button stuff
+// ----------------------------------------------------------------------------
+
+int wxRadioButton::MSWGetButtonStyle() const
+{
+    return BS_RADIOBUTTON;
+}
+
+void wxRadioButton::MSWOnButtonResetOwnerDrawn()
+{
+    // ensure that controls state is consistent with internal state
+    ::SendMessage(GetHwnd(), BM_SETCHECK,
+                  m_isChecked ? BST_CHECKED : BST_UNCHECKED, 0);
+}
+
+int wxRadioButton::MSWGetButtonCheckedFlag() const
+{
+    return m_isChecked ? wxCONTROL_CHECKED : wxCONTROL_NONE;
+}
+
+void wxRadioButton::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
+{
+    wxRendererNative::Get().DrawRadioBitmap(this, dc, rect, flags);
 }
 
 #endif // wxUSE_RADIOBTN

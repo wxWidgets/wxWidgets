@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for dialogs
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -45,14 +44,6 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxMINIMIZE_BOX);
     XRC_ADD_STYLE(wxFRAME_SHAPED);
     XRC_ADD_STYLE(wxDIALOG_EX_CONTEXTHELP);
-
-#if WXWIN_COMPATIBILITY_2_6
-    XRC_ADD_STYLE(wxDIALOG_MODAL);
-    XRC_ADD_STYLE(wxTHICK_FRAME);
-    XRC_ADD_STYLE(wxRESIZE_BOX);
-    XRC_ADD_STYLE(wxDIALOG_MODELESS);
-    XRC_ADD_STYLE(wxNO_3D);
-#endif // WXWIN_COMPATIBILITY_2_6
 
     AddWindowStyles();
 }

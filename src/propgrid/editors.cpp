@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2007-04-14
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -81,8 +80,6 @@
 
 #if defined(__WXMSW__)
     // tested
-    #define wxPG_NAT_BUTTON_BORDER_ANY          1
-    #define wxPG_NAT_BUTTON_BORDER_X            1
     #define wxPG_NAT_BUTTON_BORDER_Y            1
 
     #define wxPG_CHECKMARK_XADJ                 1
@@ -95,28 +92,24 @@
 
 #elif defined(__WXGTK__)
     // tested
-    #define wxPG_CHECKMARK_XADJ                 0
-    #define wxPG_CHECKMARK_YADJ                 0
-    #define wxPG_CHECKMARK_WADJ                 (-1)
-    #define wxPG_CHECKMARK_HADJ                 (-1)
+    #define wxPG_CHECKMARK_XADJ                 1
+    #define wxPG_CHECKMARK_YADJ                 1
+    #define wxPG_CHECKMARK_WADJ                 (-2)
+    #define wxPG_CHECKMARK_HADJ                 (-2)
     #define wxPG_CHECKMARK_DEFLATE              3
 
-    #define wxPG_NAT_BUTTON_BORDER_ANY      1
-    #define wxPG_NAT_BUTTON_BORDER_X        1
     #define wxPG_NAT_BUTTON_BORDER_Y        1
 
     #define wxPG_TEXTCTRLYADJUST            0
 
 #elif defined(__WXMAC__)
     // *not* tested
-    #define wxPG_CHECKMARK_XADJ                 0
-    #define wxPG_CHECKMARK_YADJ                 0
-    #define wxPG_CHECKMARK_WADJ                 0
-    #define wxPG_CHECKMARK_HADJ                 0
+    #define wxPG_CHECKMARK_XADJ                 4
+    #define wxPG_CHECKMARK_YADJ                 4
+    #define wxPG_CHECKMARK_WADJ                 -6
+    #define wxPG_CHECKMARK_HADJ                 -6
     #define wxPG_CHECKMARK_DEFLATE              0
 
-    #define wxPG_NAT_BUTTON_BORDER_ANY      0
-    #define wxPG_NAT_BUTTON_BORDER_X        0
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
     #define wxPG_TEXTCTRLYADJUST            0
@@ -129,8 +122,6 @@
     #define wxPG_CHECKMARK_HADJ                 0
     #define wxPG_CHECKMARK_DEFLATE              0
 
-    #define wxPG_NAT_BUTTON_BORDER_ANY      0
-    #define wxPG_NAT_BUTTON_BORDER_X        0
     #define wxPG_NAT_BUTTON_BORDER_Y        0
 
     #define wxPG_TEXTCTRLYADJUST            0
@@ -217,13 +208,13 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
     // Get old editor appearance
     wxTextCtrl* tc = NULL;
     wxComboCtrl* cb = NULL;
-    if ( ctrl->IsKindOf(CLASSINFO(wxTextCtrl)) )
+    if ( wxDynamicCast(ctrl, wxTextCtrl) )
     {
         tc = (wxTextCtrl*) ctrl;
     }
     else
     {
-        if ( ctrl->IsKindOf(CLASSINFO(wxComboCtrl)) )
+        if ( wxDynamicCast(ctrl, wxComboCtrl) )
         {
             cb = (wxComboCtrl*) ctrl;
             tc = cb->GetTextCtrl();
@@ -343,7 +334,7 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
 
     int flags = 0;
     if ( (property->GetFlags() & wxPG_PROP_PASSWORD) &&
-         property->IsKindOf(CLASSINFO(wxStringProperty)) )
+         wxDynamicCast(property, wxStringProperty) )
         flags |= wxTE_PASSWORD;
 
     wxWindow* wnd = propGrid->GenerateEditorTextCtrl(pos,sz,text,NULL,flags,
@@ -406,14 +397,14 @@ bool wxPGTextCtrlEditor::OnTextCtrlEvent( wxPropertyGrid* propGrid,
     if ( !ctrl )
         return false;
 
-    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+    if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {
         if ( propGrid->IsEditorsValueModified() )
         {
             return true;
         }
     }
-    else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
+    else if ( event.GetEventType() == wxEVT_TEXT )
     {
         //
         // Pass this event outside wxPropertyGrid so that,
@@ -497,7 +488,7 @@ void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
         tc->SetValue(correctText);
     }
 
-    tc->SetSelection(-1,-1);
+    tc->SelectAll();
 }
 
 void wxPGTextCtrlEditor::OnFocus( wxPGProperty* property,
@@ -547,7 +538,7 @@ protected:
         int evtType = event.GetEventType();
 
         if ( m_property->HasFlag(wxPG_PROP_USE_DCC) &&
-             m_property->IsKindOf(CLASSINFO(wxBoolProperty)) &&
+             wxDynamicCast(m_property, wxBoolProperty) &&
              !m_combo->IsPopupShown() )
         {
             // Just check that it is in the text area
@@ -662,7 +653,7 @@ public:
     virtual void OnDrawItem( wxDC& dc,
                              const wxRect& rect,
                              int item,
-                             int flags ) const
+                             int flags ) const wxOVERRIDE
     {
         wxPropertyGrid* pg = GetGrid();
 
@@ -678,7 +669,7 @@ public:
         }
     }
 
-    virtual wxCoord OnMeasureItem( size_t item ) const
+    virtual wxCoord OnMeasureItem( size_t item ) const wxOVERRIDE
     {
         wxPropertyGrid* pg = GetGrid();
         wxRect rect;
@@ -696,7 +687,7 @@ public:
         return pg;
     }
 
-    virtual wxCoord OnMeasureItemWidth( size_t item ) const
+    virtual wxCoord OnMeasureItemWidth( size_t item ) const wxOVERRIDE
     {
         wxPropertyGrid* pg = GetGrid();
         wxRect rect;
@@ -707,7 +698,7 @@ public:
     }
 
     virtual void PositionTextCtrl( int textCtrlXAdjust,
-                                   int WXUNUSED(textCtrlYAdjust) )
+                                   int WXUNUSED(textCtrlYAdjust) ) wxOVERRIDE
     {
         wxPropertyGrid* pg = GetGrid();
     #ifdef wxPG_TEXTCTRLXADJUST
@@ -732,9 +723,6 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                                        wxRect& rect,
                                        int flags )
 {
-    // Sanity check
-    wxASSERT( IsKindOf(CLASSINFO(wxPropertyGrid)) );
-
     wxPGProperty* p = GetSelection();
     wxString text;
 
@@ -885,7 +873,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
             if ( comValIndex >= 0 )
             {
                 const wxPGCommonValue* cv = GetCommonValue(comValIndex);
-                wxPGCellRenderer* renderer = cv->GetRenderer();
+                renderer = cv->GetRenderer();
                 r.width = rect.width;
                 renderer->Render( dc, r, this, p, m_selColumn, comValIndex, renderFlags );
                 return;
@@ -1024,7 +1012,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     int odcbFlags = extraStyle | wxBORDER_NONE | wxTE_PROCESS_ENTER;
 
     if ( (property->GetFlags() & wxPG_PROP_USE_DCC) &&
-         (property->IsKindOf(CLASSINFO(wxBoolProperty)) ) )
+         wxDynamicCast(property, wxBoolProperty) )
         odcbFlags |= wxODCB_DCLICK_CYCLES;
 
     //
@@ -1095,7 +1083,7 @@ void wxPGChoiceEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl ) c
 {
     wxASSERT( ctrl );
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( cb->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)));
+    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
     int ind = property->GetChoiceSelection();
     cb->SetSelection(ind);
 }
@@ -1111,7 +1099,7 @@ int wxPGChoiceEditor::InsertItem( wxWindow* ctrl, const wxString& label, int ind
 {
     wxASSERT( ctrl );
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( cb->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)));
+    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
 
     if (index < 0)
         index = cb->GetCount();
@@ -1124,7 +1112,7 @@ void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
 {
     wxASSERT( ctrl );
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    wxASSERT( cb->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)));
+    wxASSERT( wxDynamicCast(cb, wxOwnerDrawnComboBox));
 
     cb->Delete(index);
 }
@@ -1132,7 +1120,7 @@ void wxPGChoiceEditor::DeleteItem( wxWindow* ctrl, int index ) const
 bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* property,
     wxWindow* ctrl, wxEvent& event ) const
 {
-    if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    if ( event.GetEventType() == wxEVT_COMBOBOX )
     {
         wxPGComboBox* cb = (wxPGComboBox*)ctrl;
         int index = cb->GetSelection();
@@ -1180,7 +1168,7 @@ bool wxPGChoiceEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* pr
          property->IsValueUnspecified()
        )
     {
-        return property->IntToValue( variant, index, 0 );
+        return property->IntToValue(variant, index, wxPG_PROPERTY_SPECIFIC);
     }
     return false;
 }
@@ -1458,7 +1446,7 @@ static void DrawSimpleCheckBox( wxDC& dc, const wxRect& rect, int box_hei,
     else
     {
         // Pen for bold rectangle.
-        wxPen linepen(useCol,2,wxSOLID);
+        wxPen linepen(useCol,2,wxPENSTYLE_SOLID);
         linepen.SetJoin(wxJOIN_MITER); // This prevents round edges.
         dc.SetPen(linepen);
         r.x++;
@@ -1552,7 +1540,7 @@ void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     int state = m_state;
     if ( !(state & wxSCB_STATE_UNSPECIFIED) &&
-         GetFont().GetWeight() == wxBOLD )
+         GetFont().GetWeight() == wxFONTWEIGHT_BOLD )
         state |= wxSCB_STATE_BOLD;
 
     DrawSimpleCheckBox(dc, rect, m_boxHeight, state);
@@ -1590,10 +1578,10 @@ void wxSimpleCheckBox::SetValue( int value )
     }
     Refresh();
 
-    wxCommandEvent evt(wxEVT_COMMAND_CHECKBOX_CLICKED,GetParent()->GetId());
+    wxCommandEvent evt(wxEVT_CHECKBOX,GetParent()->GetId());
 
     wxPropertyGrid* propGrid = (wxPropertyGrid*) GetParent();
-    wxASSERT( propGrid->IsKindOf(CLASSINFO(wxPropertyGrid)) );
+    wxASSERT( wxDynamicCast(propGrid, wxPropertyGrid) );
     propGrid->HandleCustomEditorEvent(evt);
 }
 
@@ -1622,8 +1610,8 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
         // If mouse cursor was on the item, toggle the value now.
         if ( propGrid->GetInternalFlags() & wxPG_FL_ACTIVATION_BY_CLICK )
         {
-            wxPoint pt = cb->ScreenToClient(::wxGetMousePosition());
-            if ( pt.x <= (wxPG_XBEFORETEXT-2+cb->m_boxHeight) )
+            wxPoint point = cb->ScreenToClient(::wxGetMousePosition());
+            if ( point.x <= (wxPG_XBEFORETEXT-2+cb->m_boxHeight) )
             {
                 if ( cb->m_state & wxSCB_STATE_CHECKED )
                     cb->m_state &= ~wxSCB_STATE_CHECKED;
@@ -1652,7 +1640,7 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect,
     if ( !property->IsValueUnspecified() )
     {
         state = property->GetChoiceSelection();
-        if ( dc.GetFont().GetWeight() == wxBOLD )
+        if ( dc.GetFont().GetWeight() == wxFONTWEIGHT_BOLD )
             state |= wxSCB_STATE_BOLD;
     }
     else
@@ -1683,7 +1671,7 @@ void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
 bool wxPGCheckBoxEditor::OnEvent( wxPropertyGrid* WXUNUSED(propGrid), wxPGProperty* WXUNUSED(property),
     wxWindow* WXUNUSED(ctrl), wxEvent& event ) const
 {
-    if ( event.GetEventType() == wxEVT_COMMAND_CHECKBOX_CLICKED )
+    if ( event.GetEventType() == wxEVT_CHECKBOX )
     {
         return true;
     }
@@ -1703,7 +1691,7 @@ bool wxPGCheckBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
          property->IsValueUnspecified()
        )
     {
-        return property->IntToValue(variant, index, 0);
+        return property->IntToValue(variant, index, wxPG_PROPERTY_SPECIFIC);
     }
     return false;
 }
@@ -1766,7 +1754,7 @@ void wxPropertyGrid::CorrectEditorWidgetSizeX()
 #ifdef __WXMAC__
         if ( m_wndEditor )
 #else
-        if ( m_wndEditor && m_wndEditor->IsKindOf(CLASSINFO(wxTextCtrl)) )
+        if ( wxDynamicCast(m_wndEditor, wxTextCtrl) )
 #endif
             secWid += wxPG_TEXTCTRL_AND_BUTTON_SPACING;
     }
@@ -2096,10 +2084,10 @@ wxTextCtrl* wxPropertyGrid::GetEditorTextCtrl() const
     if ( !wnd )
         return NULL;
 
-    if ( wnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+    if ( wxDynamicCast(wnd, wxTextCtrl) )
         return wxStaticCast(wnd, wxTextCtrl);
 
-    if ( wnd->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
+    if ( wxDynamicCast(wnd, wxOwnerDrawnComboBox) )
     {
         wxOwnerDrawnComboBox* cb = wxStaticCast(wnd, wxOwnerDrawnComboBox);
         return cb->GetTextCtrl();

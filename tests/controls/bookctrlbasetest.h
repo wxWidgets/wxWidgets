@@ -3,7 +3,6 @@
 // Purpose:     wxBookCtrlBase unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -47,6 +46,9 @@ protected:
     //Call this from the setUp function of a specific test to add panels to
     //the ctrl.
     void AddPanels();
+
+    // Override this to call Realize() on the toolbar in the wxToolbook test.
+    virtual void Realize() { }
 
     wxPanel* m_panel1;
     wxPanel* m_panel2;

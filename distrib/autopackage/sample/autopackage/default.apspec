@@ -1,6 +1,5 @@
 # -*-shell-script-*-
 
-# RCS-ID:  $Id$
 # Author:  Francesco Montorsi <frm@users.sourceforge.net>
 # Purpose: A minimal Autopackage SPEC file which can be used as template
 #          for creating autopackages of wxWidgets-based applications.

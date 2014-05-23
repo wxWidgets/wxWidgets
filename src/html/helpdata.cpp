@@ -4,7 +4,6 @@
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -122,10 +121,10 @@ public:
         GetEntitiesParser()->SetEncoding(wxFONTENCODING_ISO8859_1);
     }
 
-    wxObject* GetProduct() { return NULL; }
+    wxObject* GetProduct() wxOVERRIDE { return NULL; }
 
 protected:
-    virtual void AddText(const wxString& WXUNUSED(txt)) {}
+    virtual void AddText(const wxString& WXUNUSED(txt)) wxOVERRIDE {}
 
     wxDECLARE_NO_COPY_CLASS(HP_Parser);
 };
@@ -159,8 +158,8 @@ class HP_TagHandler : public wxHtmlTagHandler
             m_count = 0;
             m_parentItem = NULL;
         }
-        wxString GetSupportedTags() { return wxT("UL,OBJECT,PARAM"); }
-        bool HandleTag(const wxHtmlTag& tag);
+        wxString GetSupportedTags() wxOVERRIDE { return wxT("UL,OBJECT,PARAM"); }
+        bool HandleTag(const wxHtmlTag& tag) wxOVERRIDE;
 
         void Reset(wxHtmlHelpDataItems& data)
         {
@@ -245,7 +244,7 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
 
 wxString wxHtmlBookRecord::GetFullPath(const wxString &page) const
 {
-    if (wxIsAbsolutePath(page))
+    if (wxIsAbsolutePath(page) || page.Find(wxT("file:")) == 0)
         return page;
     else
         return m_BasePath + page;
@@ -475,7 +474,8 @@ void wxHtmlHelpData::SetTempDir(const wxString& path)
         m_tempPath = path;
     else
     {
-        wxFileName fn(path);
+        wxFileName fn;
+        fn.AssignDir(path);
         fn.MakeAbsolute();
 
         m_tempPath = fn.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
@@ -500,6 +500,18 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
                                   const wxString& indexfile, const wxString& deftopic,
                                   const wxString& path)
 {
+#if wxUSE_WCHAR_T
+        #if wxUSE_UNICODE
+            #define CORRECT_STR(str, conv) \
+                str = wxString((str).mb_str(wxConvISO8859_1), conv)
+        #else
+            #define CORRECT_STR(str, conv) \
+                str = wxString((str).wc_str(conv), wxConvLocal)
+        #endif
+#else
+    #define CORRECT_STR(str, conv)
+#endif
+
     wxFileSystem fsys;
     wxFSFile *fi;
     wxHtmlBookRecord *bookr;
@@ -517,7 +529,16 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
             return true; // book is (was) loaded
     }
 
-    bookr = new wxHtmlBookRecord(bookfile.GetLocation(), fsys.GetPath(), title, deftopic);
+    wxString title1 = title;
+    if (encoding != wxFONTENCODING_SYSTEM)
+    {
+        wxCSConv conv(encoding);
+        CORRECT_STR(title1, conv);
+        if (title1.IsEmpty() && !title.IsEmpty())
+            title1 = title;
+    }
+
+    bookr = new wxHtmlBookRecord(bookfile.GetLocation(), fsys.GetPath(), title1, deftopic);
 
     wxHtmlHelpDataItem *bookitem = new wxHtmlHelpDataItem;
     bookitem->level = 0;
@@ -574,13 +595,6 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
     // differences here and also convert to wxConvLocal in ANSI build
     if (encoding != wxFONTENCODING_SYSTEM)
     {
-        #if wxUSE_UNICODE
-            #define CORRECT_STR(str, conv) \
-                str = wxString((str).mb_str(wxConvISO8859_1), conv)
-        #else
-            #define CORRECT_STR(str, conv) \
-                str = wxString((str).wc_str(conv), wxConvLocal)
-        #endif
         wxCSConv conv(encoding);
         size_t IndexCnt = m_index.size();
         size_t ContentsCnt = m_contents.size();

@@ -4,7 +4,6 @@
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,6 +42,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxHelpControllerBase)
 wxHtmlHelpController::wxHtmlHelpController(int style, wxWindow* parentWindow):
     wxHelpControllerBase(parentWindow)
 {
+    Init(style);
+}
+
+wxHtmlHelpController::wxHtmlHelpController(wxWindow* parentWindow, int style):
+    wxHelpControllerBase(parentWindow)
+{
+    Init(style);
+}
+
+void wxHtmlHelpController::Init(int style)
+{
     m_helpWindow = NULL;
     m_helpFrame = NULL;
     m_helpDialog = NULL;
@@ -54,6 +64,7 @@ wxHtmlHelpController::wxHtmlHelpController(int style, wxWindow* parentWindow):
     m_FrameStyle = style;
     m_shouldPreventAppExit = false;
 }
+
 
 wxHtmlHelpController::~wxHtmlHelpController()
 {
@@ -165,12 +176,12 @@ wxHtmlHelpFrame* wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData *data)
 {
     wxHtmlHelpFrame* frame = new wxHtmlHelpFrame(data);
     frame->SetController(this);
+    frame->SetTitleFormat(m_titleFormat);
     frame->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle
 #if wxUSE_CONFIG
         , m_Config, m_ConfigRoot
 #endif // wxUSE_CONFIG
         );
-    frame->SetTitleFormat(m_titleFormat);
     frame->SetShouldPreventAppExit(m_shouldPreventAppExit);
     m_helpFrame = frame;
     return frame;
@@ -329,12 +340,12 @@ void wxHtmlHelpController::SetHelpWindow(wxHtmlHelpWindow* helpWindow)
         helpWindow->SetController(this);
 }
 
-void wxHtmlHelpController::SetFrameParameters(const wxString& title,
+void wxHtmlHelpController::SetFrameParameters(const wxString& titleFormat,
                                    const wxSize& size,
                                    const wxPoint& pos,
                                    bool WXUNUSED(newFrameEachTime))
 {
-    SetTitleFormat(title);
+    SetTitleFormat(titleFormat);
     wxHtmlHelpFrame* frame = wxDynamicCast(FindTopLevelWindow(), wxHtmlHelpFrame);
     wxHtmlHelpDialog* dialog = wxDynamicCast(FindTopLevelWindow(), wxHtmlHelpDialog);
     if (frame)

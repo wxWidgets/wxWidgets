@@ -1,5 +1,5 @@
 <!-- Creator     : groff version 1.18.1 -->
-<!-- CreationDate: Mon Mar 13 18:03:13 2006 -->
+<!-- CreationDate: Sat Feb 24 18:37:19 2007 -->
 <html>
 <head>
 <meta name="generator" content="groff -Thtml, see www.gnu.org">
@@ -36,7 +36,7 @@ RGBA color space</p>
 <tr valign="top" align="left">
 <td width="8%"></td>
 <td width="91%">
-<p><b>tiff2rgba</b> [ options ] <i>input.tif
+<p><b>tiff2rgba</b> [ <i>options</i> ] <i>input.tif
 output.tif</i></p>
 </td>
 </table>
@@ -63,11 +63,11 @@ combinations of BitsPerSample, photometric interpretation,
 block organization and planar configuration.</p>
 <!-- INDENTATION -->
 <p>The generated images are stripped images with four
-samples per pixel (red, green, blue and alpha) or if the -n
-flag is used, three samples per pixel (red, green, and
-blue). The resulting images are always planar configuration
-contiguous. For this reason, this program is a useful
-utility for transform exotic TIFF files into a form
+samples per pixel (red, green, blue and alpha) or if the
+<b>&minus;n</b> flag is used, three samples per pixel (red,
+green, and blue). The resulting images are always planar
+configuration contiguous. For this reason, this program is a
+useful utility for transform exotic TIFF files into a form
 ingestible by almost any TIFF supporting software.</p>
 </td>
 </table>
@@ -87,10 +87,11 @@ ingestible by almost any TIFF supporting software.</p>
 
 <p>Specify a compression scheme to use when writing image
 data: <b>&minus;c none</b> for no compression (the default),
-<b>-c packbits</b> for the PackBits compression algorithm,
-<b>-c zip</b> for the Deflate compression algorithm, <b>-c
-jpeg</b> for the JPEG compression algorithm, and <b>&minus;c
-lzw</b> for Lempel-Ziv &amp; Welch.</p>
+<b>&minus;c packbits</b> for the PackBits compression
+algorithm, <b>&minus;c zip</b> for the Deflate compression
+algorithm, <b>&minus;c jpeg</b> for the JPEG compression
+algorithm, and <b>&minus;c lzw</b> for Lempel-Ziv &amp;
+Welch.</p>
 </td>
 <td width="0%">
 </td>
@@ -135,8 +136,8 @@ limited RAM.</p>
 <td width="80%">
 
 <p>Drop the alpha component from the output file, producing
-a pure RGB file. Currently this does not work if the -b flag
-is also in effect.</p>
+a pure RGB file. Currently this does not work if the
+<b>&minus;b</b> flag is also in effect.</p>
 </td>
 <td width="0%">
 </td>

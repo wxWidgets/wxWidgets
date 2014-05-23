@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
 // Created:     27/07/03
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
 //              (c) 2003 Stefan Csomor
 // Licence:     wxWindows licence
@@ -147,7 +146,7 @@ void wxSetFromString(const wxString &s, wxBitset<e> &data )
     {
         flag = array[i];
         int ivalue;
-        if ( edata->HasEnumMemberValue( flag, &ivalue ) )
+        if ( edata->HasEnumMemberValue( flag.c_str(), &ivalue ) )
         {
             data.set( (e) ivalue );
         }
@@ -236,7 +235,7 @@ void wxFlagsToString( wxString &s, const e& data )
 #define wxBEGIN_FLAGS( e ) \
     wxEnumMemberData s_enumDataMembers##e[] = {
 
-#define wxFLAGS_MEMBER( v ) { wxT(#v), v },
+#define wxFLAGS_MEMBER( v ) { wxT(#v), static_cast<int>(v) },
 
 #define wxEND_FLAGS( e )                                                \
         { NULL, 0 } };                                                 \
@@ -355,7 +354,7 @@ public:
         if ( m_toString ) 
             (*m_toString)( data, result ); 
         else 
-            wxLogError( wxGetTranslation(_T("String conversions not supported")) ); 
+            wxLogError( wxGetTranslation(wxT("String conversions not supported")) ); 
     }
 
     // convert a string into a wxAny holding the corresponding data in this type
@@ -364,7 +363,7 @@ public:
         if( m_fromString ) 
             (*m_fromString)( data, result ); 
         else 
-            wxLogError( wxGetTranslation(_T("String conversions not supported")) ); 
+            wxLogError( wxGetTranslation(wxT("String conversions not supported")) ); 
     }
 
     // statics:
@@ -428,7 +427,7 @@ public:
         if( m_toLong ) 
             (*m_toLong)( data, result ); 
         else 
-            wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ); 
+            wxLogError( wxGetTranslation(wxT("Long Conversions not supported")) ); 
     }
 
     // convert a long into a wxAny holding the corresponding data in this type
@@ -437,7 +436,7 @@ public:
         if( m_fromLong ) 
             (*m_fromLong)( data, result ); 
         else 
-            wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ); 
+            wxLogError( wxGetTranslation(wxT("Long Conversions not supported")) ); 
     }
 
 private:

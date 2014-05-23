@@ -5,7 +5,6 @@
 // Modified by:
 // Created:     14/4/2006
 // Copyright:   (c) Francesco Montorsi
-// RCS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -35,6 +34,12 @@ public:
     {
         Create(parent, id, initial, pos, size, style, validator, name);
     }
+
+    virtual wxColour GetSelectedColour() const
+        { return m_data.GetColour(); }
+
+    virtual void SetSelectedColour(const wxColour &colour)
+        { m_data.SetColour(colour); UpdateFont(); }
 
     virtual ~wxGenericFontButton() {}
 

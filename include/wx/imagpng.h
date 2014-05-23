@@ -2,7 +2,6 @@
 // Name:        wx/imagpng.h
 // Purpose:     wxImage PNG handler
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -51,10 +50,10 @@ public:
     static wxVersionInfo GetLibraryVersionInfo();
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );
-    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true );
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 ) wxOVERRIDE;
+    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true ) wxOVERRIDE;
 protected:
-    virtual bool DoCanRead( wxInputStream& stream );
+    virtual bool DoCanRead( wxInputStream& stream ) wxOVERRIDE;
 #endif
 
 private:

@@ -2,7 +2,6 @@
 // Name:        cpp.h
 // Purpose:     interface of global functions
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

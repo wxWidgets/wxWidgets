@@ -2,7 +2,6 @@
 // Name:        src/gtk/brush.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -61,12 +60,10 @@ wxBrush::wxBrush( const wxColour &colour, wxBrushStyle style )
     m_refData = new wxBrushRefData(colour, style);
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData(col, (wxBrushStyle)style);
 }
-#endif
 
 wxBrush::wxBrush( const wxBitmap &stippleBitmap )
 {

@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- $Id$ -->
 
 <!--
     Presets for building wxWidgets applications.
@@ -89,6 +88,7 @@
  NOTE: as a reference here is a list of all wxWidgets libraries satisfying
        the dependency constraints mentioned in <wx-lib> description:
 
+        <wx-lib>webview</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>aui</wx-lib>
         <wx-lib>ribbon</wx-lib>
@@ -124,7 +124,7 @@
                          tag definitions.
     -->
     <set var="WX_LIB_LIST">
-        base core net xml xrc html adv media gl qa aui ribbon propgrid richtext stc
+        base core net xml xrc html adv media gl qa aui ribbon propgrid richtext stc webview
     </set>
 
     <!-- if you define this variable to 0 before including wx presets, the
@@ -136,16 +136,6 @@
     <set var="WX_TEST_FOR_SELECTED_WXBUILD" overwrite="0">
         1
     </set>
-
-    <!-- this is a temporary variable until there is non general    -->
-    <!-- function in bakefiles for returning native markup for      -->
-    <!-- reading envrionment variables                              -->
-    <set var="ENV_VAR">
-        <if cond="FORMAT=='watcom'">%</if>
-        <if cond="FORMAT!='watcom'"></if>
-    </set>
-
-
 
     <!--                        OPTIONS                             -->
     <!--                                                            -->
@@ -168,13 +158,6 @@
     <!--    option values for wx-based projects. See wxpresets.m4   -->
     <!--    comments for more info.                                 -->
 
-
-    <!-- Presets for limited dmars make.exe format: -->
-    <if cond="FORMAT=='dmars'">
-        <set var="WX_UNICODE">1</set>
-        <set var="WX_DEBUG">1</set>
-        <set var="WX_SHARED">0</set>
-    </if>
 
     <!-- 'gnu' format needs to redefine the following options later in wx_unix.bkl -->
     <if cond="FORMAT=='gnu'">
@@ -227,7 +210,7 @@
     </if>
 
     <if cond="not isdefined('WX_VERSION')">
-        <set var="WX_VERSION_DEFAULT" overwrite="0">29</set>
+        <set var="WX_VERSION_DEFAULT" overwrite="0">31</set>
         <option name="WX_VERSION">
             <default-value>$(WX_VERSION_DEFAULT)</default-value>
             <description>
@@ -250,7 +233,7 @@
 
     <!-- The directory where wxWidgets is installed: -->
     <if cond="not isdefined('WX_DIR')">
-        <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)($(ENV_VAR)WXWIN)</set>
+        <set var="WX_DIR_DEFAULT" overwrite="0">$(DOLLAR)(WXWIN)</set>
         <option name="WX_DIR" category="path" never_empty="1">
             <default-value>$(WX_DIR_DEFAULT)</default-value>
             <description>
@@ -414,7 +397,7 @@
                     <command cond="TOOLSET=='unix'">
                         @mkdir -p $(_DIRNAME)
                     </command>
-                    <command cond="TOOLSET in ['win32','os2','dos']">
+                    <command cond="TOOLSET in ['win32','dos']">
                         if not exist $(nativePaths(_DIRNAME)) mkdir $(nativePaths(_DIRNAME))
                     </command>
                 </modify-target>

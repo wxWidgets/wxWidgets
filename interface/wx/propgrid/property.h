@@ -2,7 +2,6 @@
 // Name:        property.h
 // Purpose:     interface of wxPGProperty
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -124,6 +123,13 @@
     Sets a specific title for the dir dialog.
 */
 #define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
+
+/** Specific to wxFileProperty and derivatives, long, default is 0.
+    Sets a specific wxFileDialog style for the file dialog, e.g. ::wxFD_SAVE.
+
+    @since 2.9.4
+*/
+#define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
 
 /** Specific to wxDirProperty, wxString, default is empty.
     Sets a specific message for the dir dialog.
@@ -424,13 +430,8 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     @subsection wxBoolProperty
 
     Represents a boolean value. wxChoice is used as editor control, by the
-<<<<<<< .mine
     default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true in order to
     use check box instead.
-=======
-    default. wxPG_BOOL_USE_CHECKBOX attribute can be set to true in order to use
-    check box instead.
->>>>>>> .r67279
 
     @subsection wxLongStringProperty
 
@@ -510,7 +511,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     wxDateTime property. Default editor is DatePickerCtrl, although TextCtrl
     should work as well. wxPG_DATE_FORMAT attribute can be used to change
     string wxDateTime::Format uses (although default is recommended as it is
-    locale-dependant), and wxPG_DATE_PICKER_STYLE allows changing window
+    locale-dependent), and wxPG_DATE_PICKER_STYLE allows changing window
     style given to DatePickerCtrl (default is wxDP_DEFAULT|wxDP_SHOWCENTURY).
     Using wxDP_ALLOWNONE will enable better unspecified value support.
 
@@ -835,13 +836,8 @@ public:
     bool SetValueFromString( const wxString& text, int flags = 0 );
 
     /**
-<<<<<<< .mine
         Converts integer to a value, and if successful, calls SetValue() on it.
         Default behaviour is to do nothing.
-=======
-        Converts integer to a value, and if successful, calls SetValue() on it.
-        Default behavior is to do nothing.
->>>>>>> .r67279
 
         @param value
             Int to get the value from.
@@ -872,7 +868,7 @@ public:
         usually processes most events. Some, such as button press events of
         TextCtrlAndButton class, can be handled here. Also, if custom handling
         for regular events is desired, then that can also be done (for example,
-        wxSystemColourProperty custom handles @c wxEVT_COMMAND_CHOICE_SELECTED
+        wxSystemColourProperty custom handles @c wxEVT_CHOICE
         to display colour picker dialog when 'custom' selection is made).
 
         If the event causes value to be changed, SetValueInEvent() should be called
@@ -1190,9 +1186,6 @@ public:
         If selected item is deleted, then the value is set to unspecified.
     */
     void DeleteChoice( int index );
-
-    /** Deletes all child properties. */
-    void Empty();
 
     /**
         Enables or disables the property. Disabled property usually appears
@@ -1751,6 +1744,10 @@ public:
         Returns @true if containing grid uses wxPG_EX_AUTO_UNSPECIFIED_VALUES.
     */
     bool UsesAutoUnspecified() const;
+
+protected:
+    /** Deletes all child properties. */
+    void Empty();
 };
 
 
@@ -1872,9 +1869,6 @@ public:
     */
     void Add( const wxChar** labels, const ValArrItem* values = NULL );
 
-    /** Version that works with wxArrayString. */
-    void Add( const wxArrayString& arr, const ValArrItem* values = NULL );
-
     /** Version that works with wxArrayString and wxArrayInt. */
     void Add( const wxArrayString& arr, const wxArrayInt& arrint );
 
@@ -1939,15 +1933,6 @@ public:
     */
     wxArrayInt GetIndicesForStrings( const wxArrayString& strings,
                                      wxArrayString* unmatched = NULL ) const;
-
-    /** Returns property at given virtual y coordinate.
-    */
-    wxPGProperty* GetItemAtY( unsigned int y ) const;
-
-    /**
-        Returns @true if item at given index has a valid value;
-    */
-    bool HasValue( unsigned int i ) const;
 
     /**
         Returns index of item with given label.

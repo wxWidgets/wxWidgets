@@ -2,7 +2,6 @@
 // Name:        choice.h
 // Purpose:     interface of wxChoice
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,17 +19,18 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_CHOICE(id, func)}
-           Process a @c wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the
+           Process a @c wxEVT_CHOICE event, when an item on the
            list is selected.
     @endEventTable
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{choice.png}
+    @appearance{choice}
 
     @see wxListBox, wxComboBox, wxCommandEvent
 */
-class wxChoice : public wxControlWithItems
+class wxChoice : public wxControl,
+                 public wxItemContainer
 {
 public:
     /**
@@ -66,13 +66,6 @@ public:
 
         @see Create(), wxValidator
 
-        @beginWxPythonOnly
-
-        The wxChoice constructor in wxPython reduces the @a n and @a choices
-        arguments to a single argument, which is a list of strings.
-
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
@@ -107,13 +100,6 @@ public:
             Window name.
 
         @see Create(), wxValidator
-
-        @beginWxPythonOnly
-
-        The wxChoice constructor in wxPython reduces the @a n and @a choices
-        arguments to a single argument, which is a list of strings.
-
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Use an array reference for the @a choices parameter.
@@ -162,8 +148,8 @@ public:
 
     /**
         Unlike wxControlWithItems::GetSelection() which only returns the
-        accepted selection value, i.e. the selection in the control once the
-        user closes the dropdown list, this function returns the current
+        accepted selection value (the selection in the control once the
+        user closes the dropdown list), this function returns the current
         selection. That is, while the dropdown list is shown, it returns the
         currently selected item in it. When it is not shown, its result is the
         same as for the other function.
@@ -184,5 +170,15 @@ public:
                  anything under other platforms.
     */
     virtual void SetColumns(int n = 1);
+
+    virtual bool IsSorted() const;
+    
+    virtual unsigned int GetCount() const ;
+    virtual int GetSelection() const ;
+    virtual void SetSelection(int n);
+
+    virtual int FindString(const wxString& s, bool bCase = false) const;
+    virtual wxString GetString(unsigned int n) const ;
+    virtual void SetString(unsigned int pos, const wxString& s);
 };
 

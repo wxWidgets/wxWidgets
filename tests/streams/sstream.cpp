@@ -2,7 +2,6 @@
 // Name:        tests/streams/sstream.cpp
 // Purpose:     Test wxStringInputStream/wxStringOutputStream
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

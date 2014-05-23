@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
  * Apply median cut on an image.
@@ -48,6 +47,10 @@
 
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
+#endif
+
+#ifdef NEED_LIBPORT
+# include "libport.h"
 #endif
 
 #include "tiffio.h"
@@ -893,3 +896,10 @@ bad:
 	_TIFFfree(nextline);
 	_TIFFfree(outline);
 }
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

@@ -2,7 +2,6 @@
 // Name:        validate.h
 // Purpose:     interface of wxValidator
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -25,12 +24,6 @@
     To specify a default, "null" validator, use ::wxDefaultValidator.
 
     For more information, please see @ref overview_validator.
-
-    @beginWxPythonOnly
-    If you wish to create a validator class in wxPython you should derive the
-    class from @c wxPyValidator in order to get Python-aware capabilities for
-    the various virtual methods.
-    @endWxPythonOnly
 
     @library{wxcore}
     @category{validator}
@@ -84,6 +77,11 @@ public:
     */
     static void SuppressBellOnError(bool suppress = true);
 
+    /**
+       Returns if the error sound is currently disabled.
+    */
+    static bool IsSilent();
+    
     /**
         Associates a window with the validator.
 

@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 // Modified by: Stefan Csomor
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -188,7 +187,7 @@ class wxOSXQuickTimeSoundData : public wxSoundData
 {
 public:
     wxOSXQuickTimeSoundData(const wxString& fileName);
-    wxOSXQuickTimeSoundData(int size, const wxByte* data);
+    wxOSXQuickTimeSoundData(size_t size, const void* data);
     ~wxOSXQuickTimeSoundData();
 
     virtual bool Play(unsigned flags);
@@ -208,7 +207,7 @@ wxOSXQuickTimeSoundData::wxOSXQuickTimeSoundData(const wxString& fileName) :
     m_sndname = fileName;
 }
 
-wxOSXQuickTimeSoundData::wxOSXQuickTimeSoundData(int size, const wxByte* data) :
+wxOSXQuickTimeSoundData::wxOSXQuickTimeSoundData(size_t size, const void* data) :
     m_movie(NULL)
 {
     m_soundHandle = NewHandleClear((Size)size);
@@ -354,7 +353,7 @@ void wxOSXQuickTimeSoundData::SoundTask()
         MoviesTask(m_movie, MOVIE_DELAY); //Give QT time to play movie
 }
 
-bool wxSound::Create(int size, const wxByte* data)
+bool wxSound::Create(size_t size, const void* data)
 {
     m_data = new wxOSXQuickTimeSoundData(size,data);
     return true;

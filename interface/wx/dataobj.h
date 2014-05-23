@@ -2,7 +2,6 @@
 // Name:        dataobj.h
 // Purpose:     interface of wx*DataObject
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -34,9 +33,7 @@
     @itemdef{wxDF_FILENAME,
              A list of filenames.}
     @itemdef{wxDF_HTML,
-             An HTML string. This is only valid when passed to
-             wxSetClipboardData when compiled with Visual C++ in non-Unicode
-             mode.}
+             An HTML string. This is currently only valid on Mac and MSW.}
     @endDefList
 
     As mentioned above, these standard formats may be passed to any function
@@ -56,7 +53,7 @@
     necessary initialisations and so an attempt to do clipboard format
     registration at this time will usually lead to a crash!
 
-    @library{wxbase}
+    @library{wxcore}
     @category{dnd}
 
     @see @ref overview_dnd, @ref page_samples_dnd, wxDataObject
@@ -109,7 +106,17 @@ public:
     /**
         Returns @true if the formats are different.
     */
+    bool operator !=(const wxDataFormat& format) const;
+
+    /**
+        Returns @true if the formats are different.
+    */
     bool operator !=(wxDataFormatId format) const;
+
+    /**
+        Returns @true if the formats are equal.
+    */
+    bool operator ==(const wxDataFormat& format) const;
 
     /**
         Returns @true if the formats are equal.
@@ -117,6 +124,8 @@ public:
     bool operator ==(wxDataFormatId format) const;
 };
 
+
+const wxDataFormat wxFormatInvalid;
 
 
 /**
@@ -204,11 +213,6 @@ public:
     objects which only render their data or only set it (i.e. work in only one
     direction), should return 0 from GetFormatCount().
 
-    @beginWxPythonOnly
-    At this time this class is not directly usable from wxPython. Derive a
-    class from wxPyDataObjectSimple() instead.
-    @endWxPythonOnly
-
     @beginWxPerlOnly
     This class is not currently usable from wxPerl; you may use
     Wx::PlDataObjectSimple instead.
@@ -265,8 +269,10 @@ public:
                                Direction dir = Get) const = 0;
 
     /**
-        The method will write the data of the format @a format in the buffer
-        @a buf and return @true on success, @false on failure.
+        The method will write the data of the format @a format to the buffer
+        @a buf.  In other words, copy the data from this object in the given
+        format to the supplied buffer. Returns @true on success, @false on
+        failure.
     */
     virtual bool GetDataHere(const wxDataFormat& format, void* buf) const = 0;
 
@@ -290,7 +296,8 @@ public:
 
     /**
         Set the data in the format @a format of the length @a len provided in
-        the buffer @a buf.
+        the buffer @a buf.  In other words, copy length bytes of data from the
+        buffer to this data object.
 
         @param format
             The format for which to set the data.
@@ -378,22 +385,12 @@ public:
 
     /**
         Set the data. The data object will make an internal copy.
-
-        @beginWxPythonOnly
-        This method expects a string in wxPython. You can pass nearly any
-        object by pickling it first.
-        @endWxPythonOnly
     */
     virtual bool SetData(size_t size, const void* data);
 
     /**
         Like SetData(), but doesn't copy the data - instead the object takes
         ownership of the pointer.
-
-        @beginWxPythonOnly
-        This method expects a string in wxPython. You can pass nearly any
-        object by pickling it first.
-        @endWxPythonOnly
     */
     void TakeData(size_t size, void* data);
 };
@@ -506,7 +503,7 @@ public:
         @since 2.9.1
     */
     wxDataObjectSimple *GetObject(const wxDataFormat& format,
-                                  wxDataObjectBase::Direction dir = Get) const;
+                                  wxDataObject::Direction dir = wxDataObject::Get) const;
 };
 
 
@@ -524,12 +521,6 @@ public:
     must override GetDataSize() and GetDataHere() while the objects which may
     be set must override SetData(). Of course, the objects supporting both
     operations must override all three methods.
-
-    @beginWxPythonOnly
-    If you wish to create a derived wxDataObjectSimple class in wxPython you
-    should derive the class from wxPyDataObjectSimple in order to get
-    Python-aware capabilities for the various virtual methods.
-    @endWxPythonOnly
 
     @beginWxPerlOnly
     In wxPerl, you need to derive your data object class from
@@ -555,11 +546,6 @@ public:
         Copy the data to the buffer, return @true on success.
         Must be implemented in the derived class if the object supports rendering
         its data.
-
-        @beginWxPythonOnly
-        When implementing this method in wxPython, no additional parameters are
-        required and the data should be returned from the method as a string.
-        @endWxPythonOnly
     */
     virtual bool GetDataHere(void* buf) const;
 
@@ -579,11 +565,6 @@ public:
         Copy the data from the buffer, return @true on success.
         Must be implemented in the derived class if the object supports setting
         its data.
-
-        @beginWxPythonOnly
-        When implementing this method in wxPython, the data comes as a single
-        string parameter rather than the two shown here.
-        @endWxPythonOnly
     */
     virtual bool SetData(size_t len, const void* buf);
 
@@ -606,12 +587,6 @@ public:
 
     This class may be used as is, but GetBitmap() may be overridden to increase
     efficiency.
-
-    @beginWxPythonOnly
-    If you wish to create a derived wxBitmapDataObject class in wxPython you
-    should derive the class from wxPyBitmapDataObject in order to get
-    Python-aware capabilities for the various virtual methods.
-    @endWxPythonOnly
 
     @library{wxcore}
     @category{dnd}
@@ -702,12 +677,6 @@ public:
     wxStrings is already a very efficient operation (data is not actually
     copied because wxStrings are reference counted).
 
-    @beginWxPythonOnly
-    If you wish to create a derived wxTextDataObject class in wxPython you
-    should derive the class from wxPyTextDataObject in order to get
-    Python-aware capabilities for the various virtual methods.
-    @endWxPythonOnly
-
     @library{wxcore}
     @category{dnd}
 
@@ -747,7 +716,7 @@ public:
         Returns 1 under other platforms (e.g. wxMSW) or when building in ANSI mode
         (@c wxUSE_UNICODE==0).
     */
-    virtual size_t GetFormatCount(Direction dir = Get);
+    virtual size_t GetFormatCount(wxDataObject::Direction dir = wxDataObject::Get) const;
 
     /**
         Returns the preferred format supported by this object.
@@ -764,7 +733,7 @@ public:
         under other ports returns only one of the two, depending on the build mode.
     */
     virtual void GetAllFormats(wxDataFormat* formats,
-                               Direction dir = Get) const = 0;
+                               wxDataObject::Direction dir = wxDataObject::Get) const;
 
     /**
         Sets the text associated with the data object. This method is called
@@ -817,4 +786,31 @@ public:
     const wxArrayString& GetFilenames() const;
 };
 
+/**
+    @class wxHTMLDataObject
 
+    wxHTMLDataObject is used for working with HTML-formatted text.
+    
+    @library{wxcore}
+    @category{dnd}
+
+    @see wxDataObject, wxDataObjectSimple
+*/
+class wxHTMLDataObject : public wxDataObjectSimple
+{
+public:
+    /**
+        Constructor.
+    */
+    wxHTMLDataObject(const wxString& html = wxEmptyString);
+
+    /**
+        Returns the HTML string.
+    */
+    virtual wxString GetHTML() const;
+    
+    /**
+        Sets the HTML string.
+    */
+    virtual void SetHTML(const wxString& html);
+};

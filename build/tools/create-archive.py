@@ -18,7 +18,7 @@ scriptDir = os.path.join(sys.path[0])
 rootDir = os.path.abspath(os.path.join(scriptDir, "..", ".."))
 contribDir = os.path.join("contrib", "src")
 
-dirsToCopy = ["art", "build", "debian", "demos", "distrib/mac", "docs", "include", "interface", "lib",
+dirsToCopy = ["art", "build", "demos", "distrib/mac", "docs", "include", "interface", "lib",
                 "locale", "samples", "src", "tests", "utils"]
 
 dirsToIgnore = [".svn", "CVS"]
@@ -173,6 +173,10 @@ for afile in fileList:
 # copy include/wx/msw/setup0.h -> include/wx/msw/setup.h
 mswSetup0 = os.path.join(wxCopyDir, "include","wx","msw","setup0.h") 
 shutil.copy(mswSetup0, mswSetup0.replace("setup0.h", "setup.h")), 
+
+# compile gettext catalogs
+print "Compiling gettext catalogs..."
+os.system("make -C %s/locale allmo" % wxCopyDir)
     
 all = options.compression == "all"
     

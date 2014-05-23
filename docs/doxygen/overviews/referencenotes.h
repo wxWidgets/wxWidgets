@@ -2,13 +2,14 @@
 // Name:        referencenotes.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
 @page overview_referencenotes Notes on Using this Reference Manual
+
+@tableofcontents
 
 In the descriptions of the wxWidgets classes and their member functions, note
 that descriptions of inherited member functions are not duplicated in derived
@@ -20,4 +21,3 @@ value of ::wxDefaultSize and ::wxDefaultPosition, in which case wxWidgets will
 choose suitable values.
 
 */
-

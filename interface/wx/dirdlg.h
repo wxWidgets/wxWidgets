@@ -2,9 +2,29 @@
 // Name:        dirdlg.h
 // Purpose:     interface of wxDirDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+#define wxDD_CHANGE_DIR         0x0100
+#define wxDD_DIR_MUST_EXIST     0x0200
+#define wxDD_NEW_DIR_BUTTON     0 // deprecated, on by default now,
+
+#define wxDD_DEFAULT_STYLE      (wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
+
+/**
+    Initial folder for generic directory dialog.
+*/
+const char wxDirDialogDefaultFolderStr[] = "/";
+
+/**
+    Default message for directory selector dialog.
+*/
+const char wxDirSelectorPromptStr[] = "Select a directory";
+
+/**
+    Default name for directory selector dialog.
+*/
+const char wxDirDialogNameStr[] = "wxDirCtrl";
 
 /**
     @class wxDirDialog

@@ -8,7 +8,6 @@
 //              3) Fixed ShowPage() bug on displaying bitmaps
 //              Robert Vazan (sizers)
 // Created:     15.08.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -54,10 +53,10 @@ class wxWizardSizer : public wxSizer
 public:
     wxWizardSizer(wxWizard *owner);
 
-    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item);
+    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item) wxOVERRIDE;
 
-    virtual void RecalcSizes();
-    virtual wxSize CalcMin();
+    virtual void RecalcSizes() wxOVERRIDE;
+    virtual wxSize CalcMin() wxOVERRIDE;
 
     // get the max size of all wizard pages
     wxSize GetMaxChildSize();
@@ -83,6 +82,7 @@ private:
 
 wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGED, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGING, wxWizardEvent );
+wxDEFINE_EVENT( wxEVT_WIZARD_BEFORE_PAGE_CHANGED, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_CANCEL, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_FINISHED, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_HELP, wxWizardEvent );
@@ -396,7 +396,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
     // to activate the 'next' button first (create the next button before the back button).
     // The reason is: The user will repeatedly enter information in the wizard pages and then wants to
     // press 'next'. If a user uses mostly the keyboard, he would have to skip the 'back' button
-    // everytime. This is annoying. There is a second reason: RETURN acts as TAB. If the 'next'
+    // every time. This is annoying. There is a second reason: RETURN acts as TAB. If the 'next'
     // button comes first in the TAB order, the user can enter information very fast using the RETURN
     // key to TAB to the next entry field and page. This would not be possible, if the 'back' button
     // was created before the 'next' button.
@@ -782,7 +782,7 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
     wxCHECK_RET( m_page, wxT("should have a valid current page") );
 
     // ask the current page first: notice that we do it before calling
-    // GetNext/Prev() because the data transfered from the controls of the page
+    // GetNext/Prev() because the data transferred from the controls of the page
     // may change the value returned by these methods
     if ( !m_page->Validate() || !m_page->TransferDataFromWindow() )
     {
@@ -791,6 +791,13 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
     }
 
     bool forward = event.GetEventObject() == m_btnNext;
+
+    // Give the application a chance to set state which may influence GetNext()/GetPrev()
+    wxWizardEvent eventPreChanged(wxEVT_WIZARD_BEFORE_PAGE_CHANGED, GetId(), forward, m_page);
+    (void)m_page->GetEventHandler()->ProcessEvent(eventPreChanged);
+
+    if (!eventPreChanged.IsAllowed())
+        return;
 
     wxWizardPage *page;
     if ( forward )

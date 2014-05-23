@@ -3,7 +3,6 @@
 // Purpose:     wxAtomic??? unit test
 // Author:      Armel Asselin
 // Created:     2006-12-14
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Armel Asselin
 ///////////////////////////////////////////////////////////////////////////////
 

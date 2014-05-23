@@ -2,7 +2,6 @@
 // Name:        valgen.h
 // Purpose:     interface of wxGenericValidator
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -96,6 +95,42 @@ public:
             window).
     */
     wxGenericValidator(wxDateTime* valPtr);
+    /**
+        Constructor taking a wxFileName pointer. This will be used for
+        wxTextCtrl.
+
+        @param valPtr
+            A pointer to a variable that contains the value. This variable
+            should have a lifetime equal to or longer than the validator
+            lifetime (which is usually determined by the lifetime of the
+            window).
+        @since 2.9.3
+    */
+    wxGenericValidator(wxFileName* valPtr);
+    /**
+        Constructor taking a float pointer. This will be used for
+        wxTextCtrl.
+
+        @param valPtr
+            A pointer to a variable that contains the value. This variable
+            should have a lifetime equal to or longer than the validator
+            lifetime (which is usually determined by the lifetime of the
+            window).
+        @since 2.9.3
+    */
+    wxGenericValidator(float* valPtr);
+    /**
+        Constructor taking a double pointer. This will be used for
+        wxTextCtrl.
+
+        @param valPtr
+            A pointer to a variable that contains the value. This variable
+            should have a lifetime equal to or longer than the validator
+            lifetime (which is usually determined by the lifetime of the
+            window).
+        @since 2.9.3
+    */
+    wxGenericValidator(double* valPtr);
 
     /**
         Destructor.

@@ -3,7 +3,6 @@
 // Purpose:     html printing classes
 // Author:      Vaclav Slavik
 // Created:     25/09/99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -155,17 +154,17 @@ public:
                           const wxString& normal_face = wxEmptyString,
                           const wxString& fixed_face = wxEmptyString);
 
-    void SetMargins(float top = 25.2, float bottom = 25.2, float left = 25.2, float right = 25.2,
+    void SetMargins(float top = 25.2f, float bottom = 25.2f, float left = 25.2f, float right = 25.2f,
                     float spaces = 5);
             // sets margins in milimeters. Defaults to 1 inch for margins and 0.5cm for space
             // between text and header and/or footer
 
     // wxPrintout stuff:
-    bool OnPrintPage(int page);
-    bool HasPage(int page);
-    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
-    bool OnBeginDocument(int startPage, int endPage);
-    void OnPreparePrinting();
+    bool OnPrintPage(int page) wxOVERRIDE;
+    bool HasPage(int page) wxOVERRIDE;
+    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
+    bool OnBeginDocument(int startPage, int endPage) wxOVERRIDE;
+    void OnPreparePrinting() wxOVERRIDE;
 
     // Adds input filter
     static void AddFilter(wxHtmlFilter *filter);

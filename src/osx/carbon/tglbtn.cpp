@@ -5,7 +5,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     08.02.01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by:
 // Created:     17/8/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,11 +38,12 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
 
     // implement wxGLCanvasX11 methods
     // --------------------------------
 
-    virtual Window GetXWindow() const;
+    virtual Window GetXWindow() const wxOVERRIDE;
 
 
     // deprecated methods
@@ -90,9 +90,12 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_8
 
     // implementation from now on
-    void OnInternalIdle();
+    void OnInternalIdle() wxOVERRIDE;
 
     bool              m_exposed;
+#ifdef __WXGTK3__
+    cairo_t* m_cairoPaintContext;
+#endif
 
 #if WXWIN_COMPATIBILITY_2_8
     wxGLContext      *m_sharedContext;

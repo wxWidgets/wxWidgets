@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/08/17
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -100,7 +99,7 @@ void wxToolBarTool::Init()
 void wxToolBar::CocoaToolClickEnded()
 {
     wxASSERT(m_mouseDownTool);
-    wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, m_mouseDownTool->GetId());
+    wxCommandEvent event(wxEVT_MENU, m_mouseDownTool->GetId());
     InitCommandEvent(event);
     Command(event);
 }

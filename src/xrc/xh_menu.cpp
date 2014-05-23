@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for menus and menubars
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -104,7 +103,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             wxMenuItem *mitem = new wxMenuItem(p_menu, id, fullLabel,
                                                GetText(wxT("help")), kind);
 
-#if (!defined(__WXMSW__) && !defined(__WXPM__)) || wxUSE_OWNER_DRAWN
+#if !defined(__WXMSW__) || wxUSE_OWNER_DRAWN
             if (HasParam(wxT("bitmap")))
             {
                 // currently only wxMSW has support for using different checked

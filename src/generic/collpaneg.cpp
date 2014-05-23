@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi
 // Modified By:
 // Created:     8/10/2006
-// Id:          $Id$
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -50,23 +49,17 @@ const char wxCollapsiblePaneNameStr[] = "collapsiblePane";
 // wxGenericCollapsiblePane
 //-----------------------------------------------------------------------------
 
-wxDEFINE_EVENT( wxEVT_COMMAND_COLLPANE_CHANGED, wxCollapsiblePaneEvent );
+wxDEFINE_EVENT( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEvent );
 IMPLEMENT_DYNAMIC_CLASS(wxGenericCollapsiblePane, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent)
 
 BEGIN_EVENT_TABLE(wxGenericCollapsiblePane, wxControl)
     EVT_BUTTON(wxID_ANY, wxGenericCollapsiblePane::OnButton)
     EVT_SIZE(wxGenericCollapsiblePane::OnSize)
-
-    WX_EVENT_TABLE_CONTROL_CONTAINER(wxGenericCollapsiblePane)
 END_EVENT_TABLE()
-
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxGenericCollapsiblePane, wxControl)
 
 void wxGenericCollapsiblePane::Init()
 {
-    WX_INIT_CONTROL_CONTAINER();
-
     m_pButton = NULL;
     m_pPane = NULL;
     m_pStaticLine = NULL;
@@ -195,6 +188,8 @@ void wxGenericCollapsiblePane::Collapse(bool collapse)
     // optimization
     if ( IsCollapsed() == collapse )
         return;
+
+    InvalidateBestSize();
 
     // update our state
     m_pPane->Show(!collapse);

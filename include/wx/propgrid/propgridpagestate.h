@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2008-08-24
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -584,6 +583,8 @@ public:
                           wxPGProperty* pwc,
                           unsigned int col,
                           bool subProps) const;
+
+    int GetColumnFullWidth(wxClientDC &dc, wxPGProperty *p, unsigned int col);
 
     /**
         Returns information about arbitrary position in the grid.

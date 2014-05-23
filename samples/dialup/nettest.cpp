@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     07.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,7 @@
 
 #include "wx/dialup.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -54,10 +53,10 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     // called before the application termination
-    virtual int OnExit();
+    virtual int OnExit() wxOVERRIDE;
 
     // event handlers
     void OnConnected(wxDialUpEvent& event);
@@ -68,7 +67,7 @@ public:
 private:
     wxDialUpManager *m_dial;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -91,7 +90,7 @@ public:
 
 private:
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -115,15 +114,15 @@ enum
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyApp, wxApp)
+wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_DIALUP_CONNECTED(MyApp::OnConnected)
     EVT_DIALUP_DISCONNECTED(MyApp::OnConnected)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(NetTest_Quit,  MyFrame::OnQuit)
     EVT_MENU(NetTest_About, MyFrame::OnAbout)
     EVT_MENU(NetTest_HangUp, MyFrame::OnHangUp)
@@ -134,7 +133,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(NetTest_Dial, MyFrame::OnUpdateUI)
 
     EVT_IDLE(MyFrame::OnIdle)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -234,7 +233,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(NetTest_EnumISP, wxT("&Enumerate ISPs...\tCtrl-E"));
     menuFile->Append(NetTest_Check, wxT("&Check connection status...\tCtrl-C"));
     menuFile->AppendSeparator();
-    menuFile->Append(NetTest_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(NetTest_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
     menuFile->Append(NetTest_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 

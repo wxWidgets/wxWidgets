@@ -2,7 +2,6 @@
 // Name:        stream.h
 // Purpose:     interface of wxStreamBase and its derived classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -81,6 +80,18 @@ public:
     virtual bool IsSeekable() const;
 
     /**
+        Resets the stream state.
+
+        By default, resets the stream to good state, i.e. clears any errors.
+        Since wxWidgets 2.9.3 can be also used to explicitly set the state to
+        the specified error (the @a error argument didn't exist in the previous
+        versions).
+
+        @see GetLastError()
+     */
+    void Reset(wxStreamError error = wxSTREAM_NO_ERROR);
+
+    /**
         Returns the opposite of IsOk().
         You can use this function to test the validity of the stream as if
         it was a pointer:
@@ -138,6 +149,13 @@ protected:
 class wxStreamBuffer
 {
 public:
+    /** BufMode flags */
+    enum BufMode
+    {
+        read,
+        write,
+        read_write
+    };
 
     /**
         Constructor, creates a new stream buffer using @a stream as a parent stream
@@ -229,7 +247,7 @@ public:
         Destructor.
         It finalizes all IO calls and frees all internal buffers if necessary.
     */
-    wxStreamBuffer();
+    ~wxStreamBuffer();
 
     /**
         Fill the IO buffer.
@@ -518,6 +536,20 @@ public:
     */
     wxOutputStream& Write(wxInputStream& stream_in);
 
+    /**
+        Writes exactly the specified number of bytes from the buffer.
+
+        Returns @true if exactly @a size bytes were written. Otherwise, returns
+        @false and LastWrite() should be used to retrieve the exact amount of
+        the data written if necessary.
+
+        This method uses repeated calls to Write() (which may return writing
+        only part of the data) if necessary.
+
+        @since 2.9.5
+    */
+    bool WriteAll(const void* buffer, size_t size);
+
 protected:
     /**
         Internal function. It is called when the stream wants to write data of the
@@ -611,6 +643,23 @@ public:
     wxInputStream& Read(wxOutputStream& stream_out);
 
     /**
+        Reads exactly the specified number of bytes into the buffer.
+
+        Returns @true only if the entire amount of data was read, otherwise
+        @false is returned and the number of bytes really read can be retrieved
+        using LastRead(), as with Read().
+
+        This method uses repeated calls to Read() (which may return after
+        reading less than the requested number of bytes) if necessary.
+
+        @warning
+        The buffer absolutely needs to have at least the specified size.
+
+        @since 2.9.5
+    */
+    bool ReadAll(void* buffer, size_t size);
+
+    /**
         Changes the stream current position.
 
         This operation in general is possible only for seekable streams 
@@ -668,7 +717,7 @@ protected:
         reached or an error occurred (in this last case the internal @c m_lasterror
         variable should be set accordingly as well).
     */
-    size_t OnSysRead(void* buffer, size_t bufsize);
+    size_t OnSysRead(void* buffer, size_t bufsize) = 0;
 };
 
 
@@ -703,9 +752,11 @@ public:
     virtual ~wxCountingOutputStream();
 
     /**
-        Returns the current size of the stream.
+        Returns the current length of the stream.
+
+        This is the amount of data written to the stream so far, in bytes.
     */
-    size_t GetSize() const;
+    virtual wxFileOffset GetLength() const;
 };
 
 
@@ -1047,3 +1098,57 @@ public:
 };
 
 
+/**
+    @class wxWrapperInputStream
+
+    A wrapper input stream is a kind of filter stream which forwards all the
+    operations to its base stream. This is useful to build utility classes such
+    as wxFSInputStream.
+
+    @note
+    The interface of this class is the same as that of wxInputStream.
+    Only a constructor differs and it is documented below.
+
+    @library{wxbase}
+    @category{streams}
+
+    @see wxFSInputStream, wxFilterInputStream
+    @since 2.9.4
+*/
+class wxWrapperInputStream : public wxFilterInputStream
+{
+public:
+    //@{
+    /**
+        Initializes a wrapper stream.
+
+        If the parent stream is passed as a pointer then the new wrapper stream
+        takes ownership of it. If it is passed by reference then it does not.
+    */
+    wxWrapperInputStream(wxInputStream& stream);
+    wxWrapperInputStream(wxInputStream* stream);
+    //@}
+
+protected:
+    /**
+        Default constructor, use InitParentStream() to finish initialization.
+
+        This constructor can be used by the derived classes from their own
+        constructors when the parent stream can't be specified immediately.
+        The derived class must call InitParentStream() later to do it.
+     */
+    wxWrapperInputStream();
+
+    //@{
+    /**
+        Set up the wrapped stream for an object initialized using the default
+        constructor.
+
+        The ownership logic is the same as for the non-default constructor,
+        i.e. this object takes ownership of the stream if it's passed by
+        pointer but not if it's passed by reference.
+     */
+    void InitParentStream(wxInputStream& stream);
+    void InitParentStream(wxInputStream* stream);
+    //@}
+};

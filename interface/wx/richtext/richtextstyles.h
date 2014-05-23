@@ -2,7 +2,6 @@
 // Name:        richtext/richtextstyles.h
 // Purpose:     interface of wxRichTextStyleListCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -150,15 +149,15 @@ public:
     /**
         Returns the attributes associated with this style.
     */
-    wxTextAttr GetStyle() const;
-    const wxTextAttr GetStyle() const;
+    wxRichTextAttr GetStyle() const;
+    const wxRichTextAttr GetStyle() const;
     //@}
 
     /**
         Returns the style attributes combined with the attributes of the specified base
         style, if any. This function works recursively.
     */
-    virtual wxTextAttr GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const;
+    virtual wxRichTextAttr GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const;
 
     /**
         Sets the name of the style that this style is based on.
@@ -178,7 +177,22 @@ public:
     /**
         Sets the attributes for this style.
     */
-    void SetStyle(const wxTextAttr& style);
+    void SetStyle(const wxRichTextAttr& style);
+
+    /**
+        Returns the definition's properties.
+    */
+    wxRichTextProperties& GetProperties();
+
+    /**
+        Returns the definition's properties.
+    */
+    const wxRichTextProperties& GetProperties() const;
+
+    /**
+        Sets the definition's properties.
+    */
+    void SetProperties(const wxRichTextProperties& props);
 };
 
 
@@ -234,6 +248,17 @@ public:
 class wxRichTextStyleListBox : public wxHtmlListBox
 {
 public:
+
+    /// Which type of style definition is currently showing?
+    enum wxRichTextStyleType
+    {
+        wxRICHTEXT_STYLE_ALL,
+        wxRICHTEXT_STYLE_PARAGRAPH,
+        wxRICHTEXT_STYLE_CHARACTER,
+        wxRICHTEXT_STYLE_LIST,
+        wxRICHTEXT_STYLE_BOX
+    };
+
     /**
         Constructor.
     */
@@ -294,11 +319,6 @@ public:
         wxRichTextCtrl.
     */
     void OnLeftDown(wxMouseEvent& event);
-
-    /**
-        Reacts to selection.
-    */
-    void OnSelect(wxCommandEvent& event);
 
     /**
         If @a applyOnSelection is @true, clicking on a style name in the list will
@@ -464,8 +484,8 @@ public:
         If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
-    wxTextAttr CombineWithParagraphStyle(int indent,
-                                         const wxTextAttr& paraStyle,
+    wxRichTextAttr CombineWithParagraphStyle(int indent,
+                                         const wxRichTextAttr& paraStyle,
                                          wxRichTextStyleSheet* styleSheet = NULL);
 
     /**
@@ -481,7 +501,7 @@ public:
         If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
-    wxTextAttr GetCombinedStyle(int indent,
+    wxRichTextAttr GetCombinedStyle(int indent,
                                 wxRichTextStyleSheet* styleSheet = NULL);
 
     /**
@@ -491,13 +511,14 @@ public:
         If @a styleSheet is specified, the base style for this definition will also be
         included in the result.
     */
-    wxTextAttr GetCombinedStyleLevel(int level,
-                                     wxRichTextStyleSheet* styleSheet = NULL) const;
+
+    wxRichTextAttr GetCombinedStyleForLevel(int level,
+                                     wxRichTextStyleSheet* styleSheet = NULL);
 
     /**
         Returns the style for the given level. @a level is a number between 0 and 9.
     */
-    const wxTextAttr* GetLevelAttributes(int level) const;
+    const wxRichTextAttr* GetLevelAttributes(int level) const;
 
     /**
         Returns the number of levels. This is hard-wired to 10.
@@ -515,7 +536,7 @@ public:
         The first and most flexible form uses a wxTextAttr object, while the second
         form is for convenient setting of the most commonly-used attributes.
     */
-    void SetLevelAttributes(int level, const wxTextAttr& attr);
+    void SetLevelAttributes(int level, const wxRichTextAttr& attr);
 };
 
 
@@ -666,5 +687,20 @@ public:
         Sets the style sheet's name.
     */
     void SetName(const wxString& name);
+
+    /**
+        Returns the sheet's properties.
+    */
+    wxRichTextProperties& GetProperties();
+
+    /**
+        Returns the sheet's properties.
+    */
+    const wxRichTextProperties& GetProperties() const;
+
+    /**
+        Sets the sheet's properties.
+    */
+    void SetProperties(const wxRichTextProperties& props);
 };
 

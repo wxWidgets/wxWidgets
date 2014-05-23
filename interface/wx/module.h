@@ -2,7 +2,6 @@
 // Name:        module.h
 // Purpose:     interface of wxModule
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

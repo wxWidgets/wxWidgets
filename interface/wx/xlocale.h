@@ -2,7 +2,6 @@
 // Name:        xlocale.h
 // Purpose:     interface of wxXLocale
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -21,13 +20,6 @@
     standard @c foo() except that instead of using the global program locale
     they use the provided wxXLocale object.
 
-    For example, if the user runs the program in French locale, the standard
-    @c printf() function will output floating point numbers using decimal comma
-    instead of decimal period. If the program needs to format a floating-point
-    number in a standard format it can use:
-    @code wxPrintf_l(wxXLocale::GetCLocale(), "%g", number) @endcode
-    to do it.
-    
     See @ref group_funcmacro_locale for a list of wxXLocale-enabled functions.
 
     Conversely, if a program wanted to output the number in French locale, even if
@@ -89,7 +81,7 @@ public:
     static wxXLocale& GetCLocale();
 
     /**
-        Returns @true if this object is initialized, i.e. represents a valid locale
+        Returns @true if this object is initialized, i.e.\ represents a valid locale
         or @false otherwise.
     */
     bool IsOk() const;

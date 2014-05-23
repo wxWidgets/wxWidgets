@@ -18,8 +18,8 @@ msgid "International wxWindows App"
 msgstr "საერთაშორისო wxWindows პროგბრამა"
 
 #: ../internat.cpp:128
-msgid "&About..."
-msgstr "შეს&ახებ..."
+msgid "&About"
+msgstr "შეს&ახებ"
 
 #: ../internat.cpp:130
 msgid "E&xit"

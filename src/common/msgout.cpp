@@ -4,7 +4,6 @@
 // Author:      Mattia Barbon
 // Modified by:
 // Created:     17.07.02
-// RCS-ID:      $Id$
 // Copyright:   (c) the wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -126,6 +125,8 @@ void wxMessageOutputBest::Output(const wxString& str)
 
     ::MessageBox(NULL, str.t_str(), title.t_str(), MB_ICONINFORMATION | MB_OK);
 #else // !__WINDOWS__
+    wxUnusedVar(m_flags);
+
     // TODO: use the native message box for the other ports too
     wxMessageOutputStderr::Output(str);
 #endif // __WINDOWS__/!__WINDOWS__
@@ -163,7 +164,7 @@ void wxMessageOutputStderr::Output(const wxString& str)
 
 void wxMessageOutputDebug::Output(const wxString& str)
 {
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     wxString out(AppendLineFeedIfNeeded(str));
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
@@ -202,7 +203,7 @@ void wxMessageOutputMessageBox::Output(const wxString& str)
     wxString out(str);
 
     // the native MSW msg box understands the TABs, others don't
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
     out.Replace(wxT("\t"), wxT("        "));
 #endif
 

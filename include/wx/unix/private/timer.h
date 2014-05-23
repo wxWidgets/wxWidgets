@@ -3,7 +3,6 @@
 // Purpose:     wxTimer for wxBase (unix)
 // Author:      Lukasz Michalski
 // Created:     15/01/2005
-// RCS-ID:      $Id$
 // Copyright:   (c) Lukasz Michalski
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -133,12 +132,6 @@ private:
 
     static wxTimerScheduler *ms_instance;
 };
-
-// this helper function currently only exists for Unix platforms but could be
-// moved to wx/stopwatch.h if it turns out to be useful elsewhere
-//
-// returns the number of microseconds since the Epoch
-extern wxUsecClock_t wxGetLocalTimeUsec();
 
 #endif // wxUSE_TIMER
 

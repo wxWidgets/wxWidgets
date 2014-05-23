@@ -2,7 +2,6 @@
 // Name:        dir.h
 // Purpose:     interface of wxDir and wxDirTraverser
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -94,8 +93,8 @@ public:
 
 
 /**
-    These flags define what kind of filenames are included in the list of files
-    enumerated by wxDir::GetFirst() and wxDir::GetNext().
+    These flags affect the behaviour of GetFirst/GetNext() and Traverse(),
+    determining what types are included in the list of items they produce.
 */
 enum wxDirFlags
 {
@@ -104,8 +103,28 @@ enum wxDirFlags
     wxDIR_HIDDEN    = 0x0004,   ///< Includes hidden files.
     wxDIR_DOTDOT    = 0x0008,   ///< Includes "." and "..".
 
-    //! Combination of the @c wxDIR_FILES, @c wxDIR_DIRS, @c wxDIR_HIDDEN flags
-    //! defined above.
+    /**
+        Don't follow symbolic links during the directory traversal.
+
+        This flag is ignored under systems not supporting symbolic links (i.e.
+        non-Unix ones).
+
+        Notice that this flag is @e not included in wxDIR_DEFAULT and so the
+        default behaviour of wxDir::Traverse() is to follow symbolic links,
+        even if they lead outside of the directory being traversed.
+
+        @since 2.9.5
+     */
+    wxDIR_NO_FOLLOW = 0x0010,
+
+    /**
+        Default directory traversal flags include both files and directories,
+        even hidden.
+
+        Notice that by default wxDIR_NO_FOLLOW is @e not included, meaning that
+        symbolic links are followed by default. If this is not desired, you
+        must pass that flag explicitly.
+     */
     wxDIR_DEFAULT   = wxDIR_FILES | wxDIR_DIRS | wxDIR_HIDDEN
 };
 
@@ -160,10 +179,22 @@ public:
     wxDir(const wxString& dir);
 
     /**
-        Destructor cleans up the associated resources. It is not virtual and so
-        this class is not meant to be used polymorphically.
+        Destructor cleans up the associated resources by calling Close().
+
+        It is not virtual and so this class is not meant to be used
+        polymorphically.
     */
     ~wxDir();
+
+    /**
+        Close the directory.
+
+        The object can't be used after closing it, but Open() may be called
+        again to reopen it later.
+
+        @since 2.9.5
+    */
+    void Close();
 
     /**
         Test for existence of a directory with the given name.
@@ -218,10 +249,30 @@ public:
                   int flags = wxDIR_DEFAULT) const;
 
     /**
-        Returns the name of the directory itself. The returned string does not
-        have the trailing path separator (slash or backslash).
+        Returns the name of the directory itself.
+
+        The returned string does not have the trailing path separator (slash or
+        backslash).
+
+        Notice that in spite of this the last character of the returned string
+        can still be the path separator if this directory is the root one.
+        Because of this, don't append @c wxFILE_SEP_PATH to the returned value
+        if you do need a slash-terminated directory name but use
+        GetNameWithSep() instead to avoid having duplicate consecutive slashes.
     */
     wxString GetName() const;
+
+    /**
+        Returns the name of the directory with the path separator appended.
+
+        The last character of the returned string is always @c wxFILE_SEP_PATH
+        unless the string is empty, indicating that this directory is invalid.
+
+        @see GetName()
+
+        @since 2.9.4
+     */
+    wxString GetNameWithSep() const;
 
     /**
         Continue enumerating files which satisfy the criteria specified by the
@@ -290,23 +341,27 @@ public:
     static bool Remove(const wxString &dir, int flags = 0);
     
     /**
-        Enumerate all files and directories under the given directory
-        recursively calling the element of the provided wxDirTraverser object
-        for each of them.
+        Enumerate all files and directories under the given directory.
 
-        More precisely, the function will really recurse into subdirectories if
-        @a flags contains ::wxDIR_DIRS flag. It will ignore the files (but
-        still possibly recurse into subdirectories) if ::wxDIR_FILES flag is
-        given.
-        See ::wxDirFlags for the list of the possible flags.
+        If @a flags contains ::wxDIR_DIRS this enumeration is recursive, i.e.
+        all the subdirectories of the given one and the files inside them will
+        be traversed. Otherwise only the files in this directory itself are.
+
+        If @a flags doesn't contain ::wxDIR_FILES then only subdirectories are
+        examined but not normal files. It doesn't make sense to not specify
+        either ::wxDIR_DIRS or ::wxDIR_FILES and usually both of them should be
+        specified, as is the case by default.
 
         For each directory found, @ref wxDirTraverser::OnDir() "sink.OnDir()"
         is called and @ref wxDirTraverser::OnFile() "sink.OnFile()" is called
         for every file. Depending on the return value, the enumeration may
-        continue or stop.
+        continue or stop. If entering a subdirectory fails, @ref
+        wxDirTraverser::OnOpenError() "sink.OnOpenError()" is called.
 
         The function returns the total number of files found or @c "(size_t)-1"
         on error.
+
+        See ::wxDirFlags for the full list of the possible flags.
 
         @see GetAllFiles()
     */

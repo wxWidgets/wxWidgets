@@ -15,8 +15,8 @@ msgstr ""
 "X-Poedit-SourceCharset: iso-8859-1\n"
 
 #: ../internat.cpp:214
-msgid "&About..."
-msgstr "このアプリケーションについて(&A)…"
+msgid "&About"
+msgstr "このアプリケーションについて(&A)"
 
 #: ../internat.cpp:216
 msgid "E&xit"

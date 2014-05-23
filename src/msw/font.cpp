@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -63,7 +62,7 @@ public:
     wxFontRefData()
     {
         Init(-1, wxSize(0,0), false, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
-             wxFONTWEIGHT_NORMAL, false, wxEmptyString,
+             wxFONTWEIGHT_NORMAL, false, false, wxEmptyString,
              wxFONTENCODING_DEFAULT);
     }
 
@@ -74,11 +73,12 @@ public:
                   wxFontStyle style,
                   wxFontWeight weight,
                   bool underlined,
+                  bool strikethrough,
                   const wxString& faceName,
                   wxFontEncoding encoding)
     {
         Init(size, pixelSize, sizeUsingPixels, family, style, weight,
-             underlined, faceName, encoding);
+             underlined, strikethrough, faceName, encoding);
     }
 
     wxFontRefData(const wxNativeFontInfo& info, WXHFONT hFont = 0)
@@ -132,6 +132,11 @@ public:
     bool GetUnderlined() const
     {
         return m_nativeFontInfo.GetUnderlined();
+    }
+
+    bool GetStrikethrough() const
+    {
+        return m_nativeFontInfo.GetStrikethrough();
     }
 
     wxString GetFaceName() const
@@ -225,6 +230,13 @@ public:
         m_nativeFontInfo.SetUnderlined(underlined);
     }
 
+    void SetStrikethrough(bool strikethrough)
+    {
+        Free();
+
+        m_nativeFontInfo.SetStrikethrough(strikethrough);
+    }
+
     void SetEncoding(wxFontEncoding encoding)
     {
         Free();
@@ -262,6 +274,7 @@ protected:
               wxFontStyle style,
               wxFontWeight weight,
               bool underlined,
+              bool strikethrough,
               const wxString& faceName,
               wxFontEncoding encoding);
 
@@ -279,7 +292,7 @@ protected:
     wxString GetMSWFaceName() const
     {
         ScreenHDC hdc;
-        SelectInHDC selectFont(hdc, m_hFont);
+        SelectInHDC selectFont(hdc, (HFONT)GetHFONT());
 
         UINT otmSize = GetOutlineTextMetrics(hdc, 0, NULL);
         if ( !otmSize )
@@ -336,6 +349,7 @@ void wxFontRefData::Init(int pointSize,
                          wxFontStyle style,
                          wxFontWeight weight,
                          bool underlined,
+                         bool strikethrough,
                          const wxString& faceName,
                          wxFontEncoding encoding)
 {
@@ -350,6 +364,7 @@ void wxFontRefData::Init(int pointSize,
     SetStyle(style);
     SetWeight(weight);
     SetUnderlined(underlined);
+    SetStrikethrough(strikethrough);
 
     // set the family/facename
     SetFamily(family);
@@ -461,6 +476,11 @@ wxFontWeight wxNativeFontInfo::GetWeight() const
 bool wxNativeFontInfo::GetUnderlined() const
 {
     return lf.lfUnderline != 0;
+}
+
+bool wxNativeFontInfo::GetStrikethrough() const
+{
+    return lf.lfStrikeOut != 0;
 }
 
 wxString wxNativeFontInfo::GetFaceName() const
@@ -581,6 +601,11 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 void wxNativeFontInfo::SetUnderlined(bool underlined)
 {
     lf.lfUnderline = underlined;
+}
+
+void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
+{
+    lf.lfStrikeOut = strikethrough;
 }
 
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
@@ -778,6 +803,20 @@ wxFont::wxFont(const wxString& fontdesc)
         (void)Create(info);
 }
 
+wxFont::wxFont(const wxFontInfo& info)
+{
+    m_refData = new wxFontRefData(info.GetPointSize(),
+                                  info.GetPixelSize(),
+                                  info.IsUsingSizeInPixels(),
+                                  info.GetFamily(),
+                                  info.GetStyle(),
+                                  info.GetWeight(),
+                                  info.IsUnderlined(),
+                                  info.IsStrikethrough(),
+                                  info.GetFaceName(),
+                                  info.GetEncoding());
+}
+
 bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
 {
     UnRef();
@@ -801,14 +840,14 @@ bool wxFont::DoCreate(int pointSize,
 
     // wxDEFAULT is a valid value for the font size too so we must treat it
     // specially here (otherwise the size would be 70 == wxDEFAULT value)
-    if ( pointSize == wxDEFAULT )
+    if ( pointSize == wxDEFAULT || pointSize == -1 )
     {
         pointSize = wxNORMAL_FONT->GetPointSize();
     }
 
     m_refData = new wxFontRefData(pointSize, pixelSize, sizeUsingPixels,
                                   family, style, weight,
-                                  underlined, faceName, encoding);
+                                  underlined, false, faceName, encoding);
 
     return RealizeResource();
 }
@@ -930,6 +969,13 @@ void wxFont::SetUnderlined(bool underlined)
     M_FONTDATA->SetUnderlined(underlined);
 }
 
+void wxFont::SetStrikethrough(bool strikethrough)
+{
+    AllocExclusive();
+
+    M_FONTDATA->SetStrikethrough(strikethrough);
+}
+
 void wxFont::SetEncoding(wxFontEncoding encoding)
 {
     AllocExclusive();
@@ -993,6 +1039,13 @@ bool wxFont::GetUnderlined() const
     wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
     return M_FONTDATA->GetUnderlined();
+}
+
+bool wxFont::GetStrikethrough() const
+{
+    wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
+
+    return M_FONTDATA->GetStrikethrough();
 }
 
 wxString wxFont::GetFaceName() const

@@ -3,7 +3,6 @@
 // Purpose:     wxRadioButton unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -69,12 +68,9 @@ void RadioButtonTestCase::tearDown()
 
 void RadioButtonTestCase::Click()
 {
-    // GTK does not support selecting a single radio button
-#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_radio, wxEVT_COMMAND_RADIOBUTTON_SELECTED);
+    // GTK and OS X do not support selecting a single radio button
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__) && !defined(__WXOSX__)
+    EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
 
     wxUIActionSimulator sim;
 
@@ -83,17 +79,14 @@ void RadioButtonTestCase::Click()
 
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL( 1, frame->GetEventCount() );
+    CPPUNIT_ASSERT_EQUAL( 1, selected.GetCount() );
 #endif
 }
 
 void RadioButtonTestCase::Value()
 {
 #ifndef __WXGTK__
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_radio, wxEVT_COMMAND_RADIOBUTTON_SELECTED);
+    EventCounter selected(m_radio, wxEVT_RADIOBUTTON);
 
     m_radio->SetValue(true);
 
@@ -103,7 +96,7 @@ void RadioButtonTestCase::Value()
 
     CPPUNIT_ASSERT(!m_radio->GetValue());
 
-    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(0, selected.GetCount());
 #endif
 }
 

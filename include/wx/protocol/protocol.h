@@ -4,7 +4,6 @@
 // Author:      Guilhem Lavaux
 // Modified by:
 // Created:     10/07/1997
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -62,7 +61,7 @@ public:
 #if wxUSE_SOCKETS
     bool Reconnect();
     virtual bool Connect( const wxString& WXUNUSED(host) ) { return false; }
-    virtual bool Connect( const wxSockAddress& addr, bool WXUNUSED(wait) = true)
+    virtual bool Connect( const wxSockAddress& addr, bool WXUNUSED(wait) = true) wxOVERRIDE
         { return wxSocketClient::Connect(addr); }
 
     // read a '\r\n' terminated line from the given socket and put it in
@@ -88,7 +87,7 @@ public:
 
     // override wxSocketBase::SetTimeout function to avoid that the internal
     // m_uiDefaultTimeout goes out-of-sync:
-    virtual void SetTimeout(long seconds)
+    virtual void SetTimeout(long seconds) wxOVERRIDE
         { SetDefaultTimeout(seconds); }
 
 

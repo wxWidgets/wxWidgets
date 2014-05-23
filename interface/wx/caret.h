@@ -2,7 +2,6 @@
 // Name:        caret.h
 // Purpose:     interface of wxCaret
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +37,7 @@ public:
         the @a window.
     */
     wxCaret(wxWindow* window, int width, int height);
-    wxCaret(wxWindowBase* window, const wxSize& size);
+    wxCaret(wxWindow* window, const wxSize& size);
     //@}
 
     //@{
@@ -46,8 +45,8 @@ public:
         Creates a caret with the given size (in pixels) and associates it with
         the @a window (same as the equivalent constructors).
     */
-    bool Create(wxWindowBase* window, int width, int height);
-    bool Create(wxWindowBase* window, const wxSize& size);
+    bool Create(wxWindow* window, int width, int height);
+    bool Create(wxWindow* window, const wxSize& size);
     //@}
 
     /**

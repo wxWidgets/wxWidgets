@@ -2,9 +2,148 @@
 // Name:        toolbar.h
 // Purpose:     interface of wxToolBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+enum wxToolBarToolStyle
+{
+    wxTOOL_STYLE_BUTTON    = 1,
+    wxTOOL_STYLE_SEPARATOR = 2,
+    wxTOOL_STYLE_CONTROL
+};
+
+
+/** wxToolBar style flags */
+enum
+{
+    /** lay out the toolbar horizontally */
+    wxTB_HORIZONTAL  = wxHORIZONTAL,
+    wxTB_TOP         = wxTB_HORIZONTAL,
+
+    /** lay out the toolbar vertically */
+    wxTB_VERTICAL    = wxVERTICAL,
+    wxTB_LEFT        = wxTB_VERTICAL,
+
+    /** show 3D buttons (wxToolBarSimple only) */
+    wxTB_3DBUTTONS,
+
+    /** "flat" buttons (Win32/GTK only) */
+    wxTB_FLAT,
+
+    /** dockable toolbar (GTK only) */
+    wxTB_DOCKABLE,
+
+    /** don't show the icons (they're shown by default) */
+    wxTB_NOICONS,
+
+    /** show the text (not shown by default) */
+    wxTB_TEXT,
+
+    /** don't show the divider between toolbar and the window (Win32 only) */
+    wxTB_NODIVIDER,
+
+    /** no automatic alignment (Win32 only, useless) */
+    wxTB_NOALIGN,
+
+    /** show the text and the icons alongside, not vertically stacked (Win32/GTK) */
+    wxTB_HORZ_LAYOUT,
+    wxTB_HORZ_TEXT   = wxTB_HORZ_LAYOUT | wxTB_TEXT,
+
+    /** don't show the toolbar short help tooltips */
+    wxTB_NO_TOOLTIPS,
+
+    /** lay out toolbar at the bottom of the window */
+    wxTB_BOTTOM,
+
+    /** lay out toolbar at the right edge of the window */
+    wxTB_RIGHT,
+
+    /** flags that are closest to the native look*/
+    wxTB_DEFAULT_STYLE = wxTB_HORIZONTAL | wxTB_FLAT
+};
+
+
+
+/**
+    @class wxToolBarToolBase
+
+    A toolbar tool represents one item on the toolbar.
+
+    It has a unique id (except for the separators), the style (telling whether
+    it is a normal button, separator or a control), the state (toggled or not,
+    enabled or not) and short and long help strings. The default
+    implementations use the short help string for the tooltip text which is
+    popped up when the mouse pointer enters the tool and the long help string
+    for the applications status bar.
+*/
+class wxToolBarToolBase : public wxObject
+{
+public:
+    wxToolBarToolBase(wxToolBarBase *tbar = NULL,
+                      int toolid = wxID_SEPARATOR,
+                      const wxString& label = wxEmptyString,
+                      const wxBitmap& bmpNormal = wxNullBitmap,
+                      const wxBitmap& bmpDisabled = wxNullBitmap,
+                      wxItemKind kind = wxITEM_NORMAL,
+                      wxObject *clientData = NULL,
+                      const wxString& shortHelpString = wxEmptyString,
+                      const wxString& longHelpString = wxEmptyString);
+
+    wxToolBarToolBase(wxToolBarBase *tbar,
+                      wxControl *control,
+                      const wxString& label);
+
+    virtual ~wxToolBarToolBase();
+
+    int GetId() const;
+
+    wxControl *GetControl() const;
+    wxToolBarBase *GetToolBar() const;
+
+    bool IsStretchable() const;
+    bool IsButton() const;
+    bool IsControl() const;
+    bool IsSeparator() const;
+    bool IsStretchableSpace() const;
+    int GetStyle() const;
+    wxItemKind GetKind() const;
+    void MakeStretchable();
+
+    bool IsEnabled() const;
+    bool IsToggled() const;
+    bool CanBeToggled() const;
+
+    const wxBitmap& GetNormalBitmap() const;
+    const wxBitmap& GetDisabledBitmap() const;
+
+    const wxBitmap& GetBitmap() const;
+    const wxString& GetLabel() const;
+
+    const wxString& GetShortHelp() const;
+    const wxString& GetLongHelp() const;
+
+    wxObject *GetClientData() const;
+
+    virtual bool Enable(bool enable);
+    virtual bool Toggle(bool toggle);
+    virtual bool SetToggle(bool toggle);
+    virtual bool SetShortHelp(const wxString& help);
+    virtual bool SetLongHelp(const wxString& help);
+    void Toggle();
+    virtual void SetNormalBitmap(const wxBitmap& bmp);
+    virtual void SetDisabledBitmap(const wxBitmap& bmp);
+    virtual void SetLabel(const wxString& label);
+    void SetClientData(wxObject *clientData);
+    
+    virtual void Detach();
+    virtual void Attach(wxToolBarBase *tbar);
+
+    virtual void SetDropdownMenu(wxMenu *menu);
+    wxMenu *GetDropdownMenu() const;
+};
+
+
+
 
 /**
     @class wxToolBar
@@ -79,6 +218,9 @@
         Align the toolbar at the bottom of parent window.
     @style{wxTB_RIGHT}
         Align the toolbar at the right side of parent window.
+    @style{wxTB_DEFAULT_STYLE}
+        Combination of @c wxTB_HORIZONTAL and @c wxTB_FLAT. This style is new
+        since wxWidgets 2.9.5.
     @endStyleTable
 
     See also @ref overview_windowstyles. Note that the wxMSW native toolbar
@@ -87,27 +229,27 @@
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOOL(id, func)}
-        Process a @c wxEVT_COMMAND_TOOL_CLICKED event (a synonym for @c
-        wxEVT_COMMAND_MENU_SELECTED). Pass the id of the tool.
+        Process a @c wxEVT_TOOL event (a synonym for @c
+        wxEVT_MENU). Pass the id of the tool.
     @event{EVT_MENU(id, func)}
         The same as EVT_TOOL().
     @event{EVT_TOOL_RANGE(id1, id2, func)}
-        Process a @c wxEVT_COMMAND_TOOL_CLICKED event for a range of
+        Process a @c wxEVT_TOOL event for a range of
         identifiers. Pass the ids of the tools.
     @event{EVT_MENU_RANGE(id1, id2, func)}
         The same as EVT_TOOL_RANGE().
     @event{EVT_TOOL_RCLICKED(id, func)}
-        Process a @c wxEVT_COMMAND_TOOL_RCLICKED event. Pass the id of the
+        Process a @c wxEVT_TOOL_RCLICKED event. Pass the id of the
         tool.  (Not available on wxOSX.)
     @event{EVT_TOOL_RCLICKED_RANGE(id1, id2, func)}
-        Process a @c wxEVT_COMMAND_TOOL_RCLICKED event for a range of ids. Pass
+        Process a @c wxEVT_TOOL_RCLICKED event for a range of ids. Pass
         the ids of the tools.  (Not available on wxOSX.)
     @event{EVT_TOOL_ENTER(id, func)}
-        Process a @c wxEVT_COMMAND_TOOL_ENTER event. Pass the id of the toolbar
+        Process a @c wxEVT_TOOL_ENTER event. Pass the id of the toolbar
         itself. The value of wxCommandEvent::GetSelection() is the tool id, or
         -1 if the mouse cursor has moved off a tool.  (Not available on wxOSX.)
     @event{EVT_TOOL_DROPDOWN(id, func)}
-        Process a @c wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED event. If unhandled,
+        Process a @c wxEVT_TOOL_DROPDOWN event. If unhandled,
         displays the default dropdown menu set using
         wxToolBar::SetDropdownMenu().
     @endEventTable
@@ -182,7 +324,7 @@ public:
                                     wxObject* clientData = NULL);
 
     /**
-        Adds any control to the toolbar, typically e.g. a wxComboBox.
+        Adds any control to the toolbar, typically e.g.\ a wxComboBox.
 
         @param control
             The control to be added.
@@ -337,7 +479,7 @@ public:
     */
     wxToolBarToolBase* AddTool(int toolId, const wxString& label,
                                const wxBitmap& bitmap,
-                               const wxBitmap& bmpDisabled = wxNullBitmap,
+                               const wxBitmap& bmpDisabled,
                                wxItemKind kind = wxITEM_NORMAL,
                                const wxString& shortHelpString = wxEmptyString,
                                const wxString& longHelpString = wxEmptyString,
@@ -580,13 +722,16 @@ public:
             the overload taking @a tool parameter the caller is responsible for
             deleting the tool in the latter case.
     */
-    wxToolBarToolBase* InsertTool(size_t pos, int toolId,
-                                  const wxBitmap& bitmap1,
-                                  const wxBitmap& bitmap2 = wxNullBitmap,
-                                  bool isToggle = false,
-                                  wxObject* clientData = NULL,
-                                  const wxString& shortHelpString = wxEmptyString,
-                                  const wxString& longHelpString = wxEmptyString);
+    wxToolBarToolBase* InsertTool(  size_t pos,
+                                    int toolId,
+                                    const wxString& label,
+                                    const wxBitmap& bitmap,
+                                    const wxBitmap& bmpDisabled = wxNullBitmap,
+                                    wxItemKind kind = wxITEM_NORMAL,
+                                    const wxString& shortHelp = wxEmptyString,
+                                    const wxString& longHelp = wxEmptyString,
+                                    wxObject *clientData = NULL);
+
     wxToolBarToolBase* InsertTool(size_t pos,
                                   wxToolBarToolBase* tool);
     //@}
@@ -669,7 +814,11 @@ public:
 
     /**
         Sets the bitmap resource identifier for specifying tool bitmaps as
-        indices into a custom bitmap. Windows CE only.
+        indices into a custom bitmap.
+
+        This is a Windows CE-specific method not available in the other ports.
+
+        @onlyfor{wxmsw_wince}
     */
     void SetBitmapResource(int resourceId);
 
@@ -734,6 +883,8 @@ public:
 
         @param id
             ID of the tool in question, as passed to AddTool().
+        @param clientData
+            The client data to use.
     */
     virtual void SetToolClientData(int id, wxObject* clientData);
 
@@ -744,6 +895,8 @@ public:
 
         @param id
             ID of the tool in question, as passed to AddTool().
+        @param bitmap
+            Bitmap to use for disabled tools.
 
         @note The native toolbar classes on the main platforms all synthesize
             the disabled bitmap from the normal bitmap, so this function will
@@ -773,6 +926,8 @@ public:
 
         @param id
             ID of the tool in question, as passed to AddTool().
+        @param bitmap
+            Bitmap to use for normals tools.
     */
     virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
 
@@ -828,5 +983,28 @@ public:
             tool.
     */
     virtual void ToggleTool(int toolId, bool toggle);
+
+
+    /**
+       Factory function to create a new toolbar tool.
+    */
+    virtual wxToolBarToolBase *CreateTool(int toolId,
+                                          const wxString& label,
+                                          const wxBitmap& bmpNormal,
+                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          wxItemKind kind = wxITEM_NORMAL,
+                                          wxObject *clientData = NULL,
+                                          const wxString& shortHelp = wxEmptyString,
+                                          const wxString& longHelp = wxEmptyString);
+    /**
+       Factory function to create a new control toolbar tool.
+    */
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label);
+
+    /**
+       Factory function to create a new separator toolbar tool.
+    */
+    wxToolBarToolBase *CreateSeparator()
 };
 

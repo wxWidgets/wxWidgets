@@ -2,7 +2,6 @@
 // Name:        src/gtk1/bmpbuttn.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -48,7 +47,7 @@ static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitma
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
+    wxCommandEvent event(wxEVT_BUTTON, button->GetId());
     event.SetEventObject(button);
     button->HandleWindowEvent(event);
 }

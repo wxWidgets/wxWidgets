@@ -2,7 +2,6 @@
 // Name:        myframe.h
 // Purpose:     XML resources sample: A derived frame, called MyFrame
 // Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert O'Connor and Vaclav Slavik
 // Licence:     wxWindows licence
 //-----------------------------------------------------------------------------
@@ -44,6 +43,7 @@ private:
     void OnDerivedDialogToolOrMenuCommand(wxCommandEvent& event);
     void OnControlsToolOrMenuCommand(wxCommandEvent& event);
     void OnUncenteredToolOrMenuCommand(wxCommandEvent& event);
+    void OnAuiDemoToolOrMenuCommand(wxCommandEvent& event);
     void OnObjRefToolOrMenuCommand(wxCommandEvent& event);
     void OnCustomClassToolOrMenuCommand(wxCommandEvent& event);
     void OnPlatformPropertyToolOrMenuCommand(wxCommandEvent& event);
@@ -53,7 +53,7 @@ private:
     void OnAnimationCtrlPlay(wxCommandEvent& event);
 
     // Any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 };
 

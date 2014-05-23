@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wx*PickerCtrl
 // Author:      Francesco Montorsi
 // Created:     20/6/2006
-// Id:          $Id$
 // Copyright:   (c) 2006 Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -31,6 +30,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/artprov.h"
@@ -58,7 +58,9 @@ enum
 enum
 {
     PickerPage_Reset = wxID_HIGHEST,
-    PickerPage_File
+    PickerPage_File,
+    PickerPage_SetDir,
+    PickerPage_CurrentPath
 };
 
 
@@ -72,11 +74,11 @@ public:
     FilePickerWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~FilePickerWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_filePicker; }
-    virtual void RecreateWidget() { RecreatePicker(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_filePicker; }
+    virtual void RecreateWidget() wxOVERRIDE { RecreatePicker(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
 
@@ -99,6 +101,8 @@ protected:
     void OnFileChange(wxFileDirPickerEvent &ev);
     void OnCheckBox(wxCommandEvent &ev);
     void OnButtonReset(wxCommandEvent &ev);
+    void OnButtonSetDir(wxCommandEvent &ev);
+    void OnUpdatePath(wxUpdateUIEvent &ev);
 
 
     // the picker
@@ -111,13 +115,16 @@ protected:
     wxCheckBox *m_chkFileTextCtrl,
                *m_chkFileOverwritePrompt,
                *m_chkFileMustExist,
-               *m_chkFileChangeDir;
+               *m_chkFileChangeDir,
+               *m_chkSmall;
     wxRadioBox *m_radioFilePickerMode;
+    wxStaticText *m_labelPath;
+    wxTextCtrl *m_textInitialDir;
 
     wxBoxSizer *m_sizer;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(FilePickerWidgetsPage)
 };
 
@@ -125,14 +132,17 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(FilePickerWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(FilePickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(PickerPage_Reset, FilePickerWidgetsPage::OnButtonReset)
+    EVT_BUTTON(PickerPage_SetDir, FilePickerWidgetsPage::OnButtonSetDir)
 
     EVT_FILEPICKER_CHANGED(PickerPage_File, FilePickerWidgetsPage::OnFileChange)
 
     EVT_CHECKBOX(wxID_ANY, FilePickerWidgetsPage::OnCheckBox)
     EVT_RADIOBOX(wxID_ANY, FilePickerWidgetsPage::OnCheckBox)
-END_EVENT_TABLE()
+
+    EVT_UPDATE_UI(PickerPage_CurrentPath, FilePickerWidgetsPage::OnUpdatePath)
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -165,26 +175,42 @@ void FilePickerWidgetsPage::CreateContent()
     boxleft->Add(m_radioFilePickerMode, 0, wxALL|wxGROW, 5);
 
     wxStaticBoxSizer *filebox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&FilePicker style"));
-    m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(filebox, wxT("With textctrl"), false);
-    m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(filebox, wxT("Overwrite prompt"), false);
-    m_chkFileMustExist = CreateCheckBoxAndAddToSizer(filebox, wxT("File must exist"), false);
-    m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(filebox, wxT("Change working dir"), false);
+    m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(filebox, wxT("With textctrl"));
+    m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(filebox, wxT("Overwrite prompt"));
+    m_chkFileMustExist = CreateCheckBoxAndAddToSizer(filebox, wxT("File must exist"));
+    m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(filebox, wxT("Change working dir"));
+    m_chkSmall = CreateCheckBoxAndAddToSizer(filebox, "&Small version");
+
     boxleft->Add(filebox, 0, wxALL|wxGROW, 5);
+
+    boxleft->Add(CreateSizerWithTextAndButton
+                 (
+                    PickerPage_SetDir,
+                    "&Initial directory",
+                    wxID_ANY,
+                    &m_textInitialDir
+                 ), wxSizerFlags().Expand().Border());
+
+    boxleft->AddSpacer(10);
 
     boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     Reset();    // set checkboxes state
 
-    // create pickers
+    // create the picker and the static text displaying its current value
+    m_labelPath = new wxStaticText(this, PickerPage_CurrentPath, "");
+
     m_filePicker = NULL;
     CreatePicker();
 
     // right pane
     m_sizer = new wxBoxSizer(wxVERTICAL);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
-    m_sizer->Add(m_filePicker, 0, wxALIGN_CENTER|wxALL, 5);
-    m_sizer->Add(1, 1, 1, wxGROW | wxALL, 5); // spacer
+    m_sizer->AddStretchSpacer();
+    m_sizer->Add(m_filePicker, wxSizerFlags().Expand().Border());
+    m_sizer->AddStretchSpacer();
+    m_sizer->Add(m_labelPath, wxSizerFlags().Expand().Border());
+    m_sizer->AddStretchSpacer();
 
     // global pane
     wxSizer *sz = new wxBoxSizer(wxHORIZONTAL);
@@ -222,6 +248,9 @@ long FilePickerWidgetsPage::GetPickerStyle()
     if ( m_chkFileChangeDir->GetValue() )
         style |= wxFLP_CHANGE_DIR;
 
+    if ( m_chkSmall->GetValue() )
+        style |= wxFLP_SMALL;
+
     if (m_radioFilePickerMode->GetSelection() == FilePickerMode_Open)
         style |= wxFLP_OPEN;
     else
@@ -234,7 +263,7 @@ void FilePickerWidgetsPage::RecreatePicker()
 {
     m_sizer->Remove(1);
     CreatePicker();
-    m_sizer->Insert(1, m_filePicker, 0, wxALIGN_CENTER||wxALL, 5);
+    m_sizer->Insert(1, m_filePicker, 0, wxEXPAND|wxALL, 5);
 
     m_sizer->Layout();
 }
@@ -247,6 +276,7 @@ void FilePickerWidgetsPage::Reset()
     m_chkFileOverwritePrompt->SetValue((wxFLP_DEFAULT_STYLE & wxFLP_OVERWRITE_PROMPT) != 0);
     m_chkFileMustExist->SetValue((wxFLP_DEFAULT_STYLE & wxFLP_FILE_MUST_EXIST) != 0);
     m_chkFileChangeDir->SetValue((wxFLP_DEFAULT_STYLE & wxFLP_CHANGE_DIR) != 0);
+    m_chkSmall->SetValue((wxFLP_DEFAULT_STYLE & wxFLP_SMALL) != 0);
 
     UpdateFilePickerMode();
 }
@@ -273,6 +303,13 @@ void FilePickerWidgetsPage::UpdateFilePickerMode()
 // event handlers
 // ----------------------------------------------------------------------------
 
+void FilePickerWidgetsPage::OnButtonSetDir(wxCommandEvent& WXUNUSED(event))
+{
+    const wxString& dir = m_textInitialDir->GetValue();
+    m_filePicker->SetInitialDirectory(dir);
+    wxLogMessage("Initial directory set to \"%s\"", dir);
+}
+
 void FilePickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 {
     Reset();
@@ -291,7 +328,8 @@ void FilePickerWidgetsPage::OnCheckBox(wxCommandEvent &event)
     if (event.GetEventObject() == m_chkFileTextCtrl ||
         event.GetEventObject() == m_chkFileOverwritePrompt ||
         event.GetEventObject() == m_chkFileMustExist ||
-        event.GetEventObject() == m_chkFileChangeDir)
+        event.GetEventObject() == m_chkFileChangeDir ||
+        event.GetEventObject() == m_chkSmall)
         RecreatePicker();
 
     if (event.GetEventObject() == m_radioFilePickerMode)
@@ -299,6 +337,11 @@ void FilePickerWidgetsPage::OnCheckBox(wxCommandEvent &event)
         UpdateFilePickerMode();
         RecreatePicker();
     }
+}
+
+void FilePickerWidgetsPage::OnUpdatePath(wxUpdateUIEvent& ev)
+{
+    ev.SetText( "Current path: " + m_filePicker->GetPath() );
 }
 
 #endif  // wxUSE_FILEPICKERCTRL

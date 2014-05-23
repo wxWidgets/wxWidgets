@@ -2,50 +2,18 @@
 // Name:        dnd.h
 // Purpose:     interface of wxDropSource and wx*DropTarget
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxTextDropTarget
-
-    A predefined drop target for dealing with text data.
-
-    @library{wxcore}
-    @category{dnd}
-
-    @see @ref overview_dnd, wxDropSource, wxDropTarget, wxFileDropTarget
-*/
-class wxTextDropTarget : public wxDropTarget
+    Possible flags for drag and drop operations.
+ */
+enum
 {
-public:
-    /**
-        Constructor.
-    */
-    wxTextDropTarget();
-
-    /**
-        See wxDropTarget::OnDrop(). This function is implemented appropriately
-        for text, and calls OnDropText().
-    */
-    virtual bool OnDrop(wxCoord x, wxCoord y);
-
-    /**
-        Override this function to receive dropped text.
-
-        @param x
-            The x coordinate of the mouse.
-        @param y
-            The y coordinate of the mouse.
-        @param data
-            The data being dropped: a wxString.
-
-        Return @true to accept the data, or @false to veto the operation.
-    */
-    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& data) = 0;
+    wxDrag_CopyOnly    = 0, ///< Allow only copying.
+    wxDrag_AllowMove   = 1, ///< Allow moving too (copying is always allowed).
+    wxDrag_DefaultMove = 3  ///< Allow moving and make it default operation.
 };
-
-
 
 /**
     Result returned from a wxDropSource::DoDragDrop() call.
@@ -59,6 +27,8 @@ enum wxDragResult
     wxDragLink,     ///< Operation is a drag-link.
     wxDragCancel    ///< The operation was cancelled by user (not an error).
 };
+
+
 
 /**
     @class wxDropTarget
@@ -103,19 +73,19 @@ public:
 
     /**
         Called after OnDrop() returns @true. By default this will usually
-        GetData() and will return the suggested default value @a def.
+        GetData() and will return the suggested default value @a defResult.
     */
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult defResult) = 0;
 
     /**
         Called when the mouse is being dragged over the drop target. By
-        default, this calls functions return the suggested return value @a def.
+        default, this calls functions return the suggested return value @a defResult.
 
         @param x
             The x coordinate of the mouse.
         @param y
             The y coordinate of the mouse.
-        @param def
+        @param defResult
             Suggested value for return value. Determined by SHIFT or CONTROL
             key states.
 
@@ -123,7 +93,7 @@ public:
                  feedback from the side of the drop source, typically in form
                  of changing the icon.
     */
-    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult defResult);
 
     /**
         Called when the user drops a data object on the target. Return @false
@@ -146,7 +116,7 @@ public:
             The x coordinate of the mouse.
         @param y
             The y coordinate of the mouse.
-        @param def
+        @param defResult
             Suggested default for return value. Determined by SHIFT or CONTROL
             key states.
 
@@ -154,7 +124,7 @@ public:
                  feedback from the side of the drop source, typically in form
                  of changing the icon.
     */
-    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def);
+    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult defResult);
 
     /**
         Called when the mouse leaves the drop target.
@@ -162,10 +132,31 @@ public:
     virtual void OnLeave();
 
     /**
+        Returns the data wxDataObject associated with the drop target
+    */
+    wxDataObject *GetDataObject() const;
+
+    /**
         Sets the data wxDataObject associated with the drop target and deletes
         any previously associated data object.
     */
     void SetDataObject(wxDataObject* data);
+
+
+    /**
+       Sets the default action for drag and drop.  Use wxDragMove or
+       wxDragCopy to set default action to move or copy and use wxDragNone
+       (default) to set default action specified by initialization of draging
+       (see wxDropSource::DoDragDrop())
+    */
+    void SetDefaultAction(wxDragResult action);
+
+    /**
+       Returns default action for drag and drop or wxDragNone if this not
+       specified.
+    */
+    wxDragResult GetDefaultAction();
+
 };
 
 
@@ -188,8 +179,8 @@ public:
         This constructor requires that you must call SetData() later.
 
         Note that the type of @a iconCopy and subsequent parameters
-        differs between different ports: these are cursors under Windows but
-        icons for GTK. You should use the macro wxDROP_ICON() in portable
+        differs between different ports: these are cursors under Windows and OS
+        X but icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
 
         @onlyfor{wxmsw,wxosx}
@@ -204,16 +195,16 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = NULL,
-                 const wxIcon& iconCopy = wxNullIcon,
-                 const wxIcon& iconMove = wxNullIcon,
-                 const wxIcon& iconNone = wxNullIcon);
+                 const wxCursor& iconCopy = wxNullCursor,
+                 const wxCursor& iconMove = wxNullCursor,
+                 const wxCursor& iconNone = wxNullCursor);
 
     /**
-        The constructor for wxDataObject.
+        The constructor taking a wxDataObject.
 
         Note that the type of @a iconCopy and subsequent parameters
-        differs between different ports: these are cursors under Windows but
-        icons for GTK. You should use the macro wxDROP_ICON() in portable
+        differs between different ports: these are cursors under Windows and OS
+        X but icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
 
         @onlyfor{wxmsw,wxosx}
@@ -230,17 +221,15 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxDataObject& data, wxWindow* win = NULL,
-                 const wxIcon& iconCopy = wxNullIcon,
-                 const wxIcon& iconMove = wxNullIcon,
-                 const wxIcon& iconNone = wxNullIcon);
+                 const wxCursor& iconCopy = wxNullCursor,
+                 const wxCursor& iconMove = wxNullCursor,
+                 const wxCursor& iconNone = wxNullCursor);
 
     /**
         This constructor requires that you must call SetData() later.
 
-        Note that the type of @a iconCopy and subsequent parameters
-        differs between different ports: these are cursors under Windows but
-        icons for GTK. You should use the macro wxDROP_ICON() in portable
-        programs instead of directly using either of these types.
+        This is the wxGTK-specific version of the constructor taking wxIcon
+        instead of wxCursor as the other ports.
 
         @onlyfor{wxgtk}
 
@@ -254,17 +243,15 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxWindow* win = NULL,
-                 const wxCursor& iconCopy = wxNullCursor,
-                 const wxCursor& iconMove = wxNullCursor,
-                 const wxCursor& iconNone = wxNullCursor);
+                 const wxIcon& iconCopy = wxNullIcon,
+                 const wxIcon& iconMove = wxNullIcon,
+                 const wxIcon& iconNone = wxNullIcon);
 
     /**
-        The constructor for wxDataObject.
+        The constructor taking a wxDataObject.
 
-        Note that the type of @a iconCopy and subsequent parameters
-        differs between different ports: these are cursors under Windows but
-        icons for GTK. You should use the macro wxDROP_ICON() in portable
-        programs instead of directly using either of these types.
+        This is the wxGTK-specific version of the constructor taking wxIcon
+        instead of wxCursor as the other ports.
 
         @onlyfor{wxgtk}
 
@@ -280,14 +267,9 @@ public:
             The icon or cursor used for feedback when operation can't be done.
     */
     wxDropSource(wxDataObject& data, wxWindow* win = NULL,
-                 const wxCursor& iconCopy = wxNullCursor,
-                 const wxCursor& iconMove = wxNullCursor,
-                 const wxCursor& iconNone = wxNullCursor);
-
-    /**
-        Default constructor.
-    */
-    virtual ~wxDropSource();
+                 const wxIcon& iconCopy = wxNullIcon,
+                 const wxIcon& iconMove = wxNullIcon,
+                 const wxIcon& iconNone = wxNullIcon);
 
     /**
         Starts the drag-and-drop operation which will terminate when the user
@@ -295,10 +277,11 @@ public:
         example.
 
         @param flags
-            If wxDrag_AllowMove is included in the flags, data may be moved and
-            not only copied (default). If wxDrag_DefaultMove is specified
-            (which includes the previous flag), this is even the default
-            operation.
+            If ::wxDrag_AllowMove is included in the flags, data may be moved
+            and not only copied as is the case for the default
+            ::wxDrag_CopyOnly. If ::wxDrag_DefaultMove is specified
+            (which includes the previous flag), moving is not only possible but
+            becomes the default operation.
 
         @return The operation requested by the user, may be ::wxDragCopy,
                  ::wxDragMove, ::wxDragLink, ::wxDragCancel or ::wxDragNone if
@@ -331,9 +314,23 @@ public:
         @param res
             The drag result to set the icon for.
         @param cursor
-            The ion to show when this drag result occurs.
+            The icon to show when this drag result occurs.
+
+        @onlyfor{wxmsw,wxosx}
     */
     void SetCursor(wxDragResult res, const wxCursor& cursor);
+
+    /**
+        Set the icon to use for a certain drag result.
+
+        @param res
+            The drag result to set the icon for.
+        @param icon
+            The icon to show when this drag result occurs.
+
+        @onlyfor{wxgtk}
+    */
+    void SetIcon(wxDragResult res, const wxIcon& icon);
 
     /**
         Sets the data wxDataObject associated with the drop source. This will
@@ -342,6 +339,46 @@ public:
     void SetData(wxDataObject& data);
 };
 
+
+
+/**
+    @class wxTextDropTarget
+
+    A predefined drop target for dealing with text data.
+
+    @library{wxcore}
+    @category{dnd}
+
+    @see @ref overview_dnd, wxDropSource, wxDropTarget, wxFileDropTarget
+*/
+class wxTextDropTarget : public wxDropTarget
+{
+public:
+    /**
+        Constructor.
+    */
+    wxTextDropTarget();
+
+    /**
+        See wxDropTarget::OnDrop(). This function is implemented appropriately
+        for text, and calls OnDropText().
+    */
+    virtual bool OnDrop(wxCoord x, wxCoord y);
+
+    /**
+        Override this function to receive dropped text.
+
+        @param x
+            The x coordinate of the mouse.
+        @param y
+            The y coordinate of the mouse.
+        @param data
+            The data being dropped: a wxString.
+
+        Return @true to accept the data, or @false to veto the operation.
+    */
+    virtual bool OnDropText(wxCoord x, wxCoord y, const wxString& data) = 0;
+};
 
 
 /**
@@ -407,6 +444,12 @@ public:
     @header{wx/dnd.h}
 */
 #define wxDROP_ICON(name)
+
+/**
+   Returns true if res indicates that something was done during a DnD operation,
+   i.e. is neither error nor none nor cancel.
+*/
+bool wxIsDragResultOk(wxDragResult res);
 
 //@}
 

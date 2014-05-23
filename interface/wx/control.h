@@ -2,7 +2,6 @@
 // Name:        control.h
 // Purpose:     interface of wxControl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -86,6 +85,46 @@ enum wxEllipsizeMode
 class wxControl : public wxWindow
 {
 public:
+
+    /**
+        Constructs a control.
+
+        @param parent
+            Pointer to a parent window.
+        @param id
+            Control identifier. If wxID_ANY, will automatically create an identifier.
+        @param pos
+            Control position. wxDefaultPosition indicates that wxWidgets
+            should generate a default position for the control.
+        @param size
+            Control size. wxDefaultSize indicates that wxWidgets should generate
+            a default size for the window. If no suitable size can  be found, the
+            window will be sized to 20x20 pixels so that the window is visible but
+            obviously not correctly sized.
+        @param style
+            Control style. For generic window styles, please see wxWindow.
+        @param validator
+            Control validator. 
+        @param name
+            Control name.
+    */
+   wxControl(wxWindow *parent, wxWindowID id,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize, long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxControlNameStr);
+
+    /**
+       Default constructor to allow 2-phase creation.
+    */
+    wxControl();
+    
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxControlNameStr);
+
     /**
         Simulates the effect of the user issuing a command to the item.
 
@@ -113,6 +152,47 @@ public:
         was passed to SetLabelText().
     */
     wxString GetLabelText() const;
+
+    /**
+        Determine the size needed by the control to leave the given area for
+        its text.
+
+        This function is mostly useful with control displaying short amounts of
+        text that can be edited by the user, e.g. wxTextCtrl, wxComboBox,
+        wxSearchCtrl etc. Typically it is used to size these controls for the
+        maximal amount of input they are supposed to contain, for example:
+        @code
+            // Create a control for post code entry.
+            wxTextCtrl* postcode = new wxTextCtrl(this, ...);
+
+            // And set its initial and minimal size to be big enough for
+            // entering 5 digits.
+            postcode->SetInitialSize(
+                postcode->GetSizeFromTextSize(
+                    postcode->GetTextExtent("99999")));
+        @endcode
+
+        Currently this method is only implemented for wxTextCtrl, wxComboBox
+        and wxChoice in wxMSW and wxGTK.
+
+        @param xlen The horizontal extent of the area to leave for text, in
+            pixels.
+        @param ylen The vertical extent of the area to leave for text, in
+            pixels. By default -1 meaning that the vertical component of the
+            returned size should be the default height of this control.
+        @return The size that the control should have to leave the area of the
+            specified size for its text. May return wxDefaultSize if this
+            method is not implemented for this particular control under the
+            current platform.
+
+        @since 2.9.5
+     */
+    wxSize GetSizeFromTextSize(int xlen, int ylen = -1) const;
+
+    /**
+        @overload
+    */
+    wxSize GetSizeFromTextSize(const wxSize& tsize) const;
 
     /**
         Sets the control's label.

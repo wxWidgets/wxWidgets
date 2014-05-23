@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2008-08-23
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,6 +23,7 @@
     #include "wx/hash.h"
     #include "wx/string.h"
     #include "wx/log.h"
+    #include "wx/math.h"
     #include "wx/event.h"
     #include "wx/window.h"
     #include "wx/panel.h"
@@ -47,7 +47,7 @@
 
 #if wxPG_COMPATIBILITY_1_4
 
-// Used to establish backwards compatiblity
+// Used to establish backwards compatibility
 const char* g_invalidStringContent = "@__TOTALLY_INVALID_STRING__@";
 
 #endif
@@ -62,7 +62,7 @@ static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
     //   Also, it seems that this code may not work in future wx versions.
     dc.SetLogicalFunction(wxINVERT);
 
-    wxPen pen(*wxBLACK,1,wxDOT);
+    wxPen pen(*wxBLACK,1,wxPENSTYLE_DOT);
     pen.SetCap(wxCAP_BUTT);
     dc.SetPen(pen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
@@ -73,7 +73,7 @@ static void wxPGDrawFocusRect( wxDC& dc, const wxRect& rect )
 #else
     dc.SetLogicalFunction(wxINVERT);
 
-    dc.SetPen(wxPen(*wxBLACK,1,wxDOT));
+    dc.SetPen(wxPen(*wxBLACK,1,wxPENSTYLE_DOT));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.DrawRectangle(rect);
@@ -244,7 +244,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                                  wxPG_CUSTOM_IMAGE_WIDTH,
                                  rect.height-(wxPG_CUSTOM_IMAGE_SPACINGY*2));
 
-                dc.SetPen( wxPen(propertyGrid->GetCellTextColour(), 1, wxSOLID) );
+                dc.SetPen( wxPen(propertyGrid->GetCellTextColour(), 1, wxPENSTYLE_SOLID) );
 
                 paintdata.m_drawnWidth = imageSize.x;
                 paintdata.m_drawnHeight = imageSize.y;
@@ -499,7 +499,7 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     // (so propgrid can be NULL, too).
 
     wxPGProperty* parent = m_parent;
-    bool parentIsRoot = parent->IsKindOf(CLASSINFO(wxPGRootProperty));
+    bool parentIsRoot = parent->IsKindOf(wxCLASSINFO(wxPGRootProperty));
 
     //
     // Convert invalid cells to default ones in this grid
@@ -508,13 +508,10 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
         wxPGCell& cell = m_cells[i];
         if ( cell.IsInvalid() )
         {
-            const wxPGCell& propDefCell = propgrid->GetPropertyDefaultCell();
-            const wxPGCell& catDefCell = propgrid->GetCategoryDefaultCell();
-
             if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                cell = propDefCell;
+                cell = propgrid->GetPropertyDefaultCell();
             else
-                cell = catDefCell;
+                cell = propgrid->GetCategoryDefaultCell();
         }
     }
 
@@ -1034,7 +1031,7 @@ bool wxPGProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(argF
 }
 
 // Convert semicolon delimited tokens into child values.
-bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
+bool wxPGProperty::StringToValue( wxVariant& v, const wxString& text, int argFlags ) const
 {
     if ( !GetChildCount() )
         return false;
@@ -1239,7 +1236,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
     }
 
     if ( changed )
-        variant = list;
+        v = list;
 
     return changed;
 }
@@ -1567,14 +1564,10 @@ void wxPGProperty::EnsureCells( unsigned int column )
 
         if ( pg )
         {
-            // Work around possible VC6 bug by using intermediate variables
-            const wxPGCell& propDefCell = pg->GetPropertyDefaultCell();
-            const wxPGCell& catDefCell = pg->GetCategoryDefaultCell();
-
             if ( !HasFlag(wxPG_PROP_CATEGORY) )
-                defaultCell = propDefCell;
+                defaultCell = pg->GetPropertyDefaultCell();
             else
-                defaultCell = catDefCell;
+                defaultCell = pg->GetCategoryDefaultCell();
         }
 
         // TODO: Replace with resize() call
@@ -1770,6 +1763,10 @@ wxVariant wxPGProperty::DoGetAttribute( const wxString& WXUNUSED(name) ) const
 
 wxVariant wxPGProperty::GetAttribute( const wxString& name ) const
 {
+    wxVariant value = DoGetAttribute(name);
+    if ( !value.IsNull() )
+        return value;
+
     return m_attributes.FindValue(name);
 }
 
@@ -2020,11 +2017,11 @@ const wxPGEditor* wxPGProperty::GetEditorClass() const
     if ( GetDisplayedCommonValueCount() )
     {
         // TextCtrlAndButton -> ComboBoxAndButton
-        if ( editor->IsKindOf(CLASSINFO(wxPGTextCtrlAndButtonEditor)) )
+        if ( wxDynamicCast(editor, wxPGTextCtrlAndButtonEditor) )
             editor = wxPGEditor_ChoiceAndButton;
 
         // TextCtrl -> ComboBox
-        else if ( editor->IsKindOf(CLASSINFO(wxPGTextCtrlEditor)) )
+        else if ( wxDynamicCast(editor, wxPGTextCtrlEditor) )
             editor = wxPGEditor_ComboBox;
     }
 
@@ -2103,8 +2100,8 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
             // Here we use high-quality wxImage scaling functions available
             wxImage img = bmp.ConvertToImage();
             double scaleY = (double)maxSz.y / (double)imSz.y;
-            img.Rescale(((double)bmp.GetWidth())*scaleY,
-                        ((double)bmp.GetHeight())*scaleY,
+            img.Rescale(wxRound(bmp.GetWidth()*scaleY),
+                        wxRound(bmp.GetHeight()*scaleY),
                         wxIMAGE_QUALITY_HIGH);
             wxBitmap* bmpNew = new wxBitmap(img, 32);
         #else
@@ -2198,7 +2195,7 @@ int wxPGProperty::GetY2( int lh ) const
     for ( parent = GetParent(); parent != NULL; parent = child->GetParent() )
     {
         if ( !parent->IsExpanded() )
-            return -1;
+            return parent->GetY2(lh);
         y += parent->GetChildrenHeight(lh, child->GetIndexInParent());
         y += lh;
         child = parent;
@@ -2548,7 +2545,7 @@ void wxPGProperty::Empty()
 
 wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y ) const
 {
-    unsigned int nextItem;
+    unsigned int nextItem = 0;
     return GetItemAtY( y, GetGrid()->GetRowHeight(), &nextItem);
 }
 

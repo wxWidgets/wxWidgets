@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     02.07.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -37,8 +36,8 @@
 
 extern WXDLLEXPORT_DATA(const char) wxNotebookNameStr[] = "notebook";
 
-wxDEFINE_EVENT( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxBookCtrlEvent );
-wxDEFINE_EVENT( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_NOTEBOOK_PAGE_CHANGED, wxBookCtrlEvent );
+wxDEFINE_EVENT( wxEVT_NOTEBOOK_PAGE_CHANGING, wxBookCtrlEvent );
 
 // ----------------------------------------------------------------------------
 // XTI
@@ -84,7 +83,7 @@ wxFLAGS_MEMBER(wxNB_NOPAGETHEME)
 wxFLAGS_MEMBER(wxNB_FLAT)
 wxEND_FLAGS( wxNotebookStyle )
 
-#if wxUSE_EXTENDED_RTTI  
+#if wxUSE_EXTENDED_RTTI
 
 WX_DEFINE_LIST( wxNotebookPageInfoList )
 
@@ -119,7 +118,7 @@ wxCONSTRUCTOR_4( wxNotebookPageInfo, wxNotebookPage*, Page, \
 
 void wxNotebookBase::AddPageInfo( wxNotebookPageInfo* info )
 {
-    AddPage( info->GetPage(), info->GetText(), info->GetSelected(), info->GetImageId() ); 
+    AddPage( info->GetPage(), info->GetText(), info->GetSelected(), info->GetImageId() );
 }
 
 const wxNotebookPageInfoList& wxNotebookBase::GetPageInfos() const
@@ -138,10 +137,10 @@ const wxNotebookPageInfoList& wxNotebookBase::GetPageInfos() const
 
 #endif
 
-wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxControl, "wx/notebook.h")
+wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxNotebook, wxBookCtrlBase, "wx/notebook.h")
 wxBEGIN_PROPERTIES_TABLE(wxNotebook)
-wxEVENT_PROPERTY( PageChanging, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEvent )
-wxEVENT_PROPERTY( PageChanged, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEvent )
+wxEVENT_PROPERTY( PageChanging, wxEVT_NOTEBOOK_PAGE_CHANGING, wxNotebookEvent )
+wxEVENT_PROPERTY( PageChanged, wxEVT_NOTEBOOK_PAGE_CHANGED, wxNotebookEvent )
 
 wxPROPERTY_COLLECTION( PageInfos, wxNotebookPageInfoList, wxNotebookPageInfo*, \
                       AddPageInfo, GetPageInfos, 0 /*flags*/, wxT("Helpstring"), \
@@ -186,7 +185,7 @@ wxSize wxNotebookBase::CalcSizeFromPage(const wxSize& sizePage) const
 
 bool wxNotebookBase::SendPageChangingEvent(int nPage)
 {
-    wxBookCtrlEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, GetId());
+    wxBookCtrlEvent event(wxEVT_NOTEBOOK_PAGE_CHANGING, GetId());
     event.SetSelection(nPage);
     event.SetOldSelection(GetSelection());
     event.SetEventObject(this);
@@ -195,7 +194,7 @@ bool wxNotebookBase::SendPageChangingEvent(int nPage)
 
 void wxNotebookBase::SendPageChangedEvent(int nPageOld, int nPageNew)
 {
-    wxBookCtrlEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, GetId());
+    wxBookCtrlEvent event(wxEVT_NOTEBOOK_PAGE_CHANGED, GetId());
     event.SetSelection(nPageNew == -1 ? GetSelection() : nPageNew);
     event.SetOldSelection(nPageOld);
     event.SetEventObject(this);

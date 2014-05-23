@@ -3,7 +3,6 @@
 // Purpose:     wxConvAuto unit test
 // Author:      Vadim Zeitlin
 // Created:     2006-04-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Vadim Zeitlin
 ///////////////////////////////////////////////////////////////////////////////
 

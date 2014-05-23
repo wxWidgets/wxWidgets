@@ -3,7 +3,6 @@
 // Purpose:     wxLocale::InitLanguagesDB()
 // Author:      Vadim Zeitlin, Vaclav Slavik
 // Created:     2010-04-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -151,6 +150,9 @@
 #endif
 #ifndef LANG_JAPANESE
 #define LANG_JAPANESE (0)
+#endif
+#ifndef LANG_KABYLE
+#define LANG_KABYLE (0)
 #endif
 #ifndef LANG_KANNADA
 #define LANG_KANNADA (0)
@@ -593,7 +595,6 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_BRETON,                     "br"   , 0              , 0                                 , wxLayout_LeftToRight, "Breton")
    LNG(wxLANGUAGE_BULGARIAN,                  "bg_BG", LANG_BULGARIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Bulgarian")
    LNG(wxLANGUAGE_BURMESE,                    "my"   , 0              , 0                                 , wxLayout_LeftToRight, "Burmese")
-   LNG(wxLANGUAGE_CAMBODIAN,                  "km"   , 0              , 0                                 , wxLayout_LeftToRight, "Cambodian")
    LNG(wxLANGUAGE_CATALAN,                    "ca_ES", LANG_CATALAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Catalan")
    LNG(wxLANGUAGE_CHINESE,                    "zh_TW", LANG_CHINESE   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Chinese")
    LNG(wxLANGUAGE_CHINESE_SIMPLIFIED,         "zh_CN", LANG_CHINESE   , SUBLANG_CHINESE_SIMPLIFIED        , wxLayout_LeftToRight, "Chinese (Simplified)")
@@ -664,11 +665,13 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_ITALIAN_SWISS,              "it_CH", LANG_ITALIAN   , SUBLANG_ITALIAN_SWISS             , wxLayout_LeftToRight, "Italian (Swiss)")
    LNG(wxLANGUAGE_JAPANESE,                   "ja_JP", LANG_JAPANESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Japanese")
    LNG(wxLANGUAGE_JAVANESE,                   "jv"   , 0              , 0                                 , wxLayout_LeftToRight, "Javanese")
+   LNG(wxLANGUAGE_KABYLE,                     "kab"  , LANG_KABYLE    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kabyle")
    LNG(wxLANGUAGE_KANNADA,                    "kn"   , LANG_KANNADA   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kannada")
    LNG(wxLANGUAGE_KASHMIRI,                   "ks"   , LANG_KASHMIRI  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kashmiri")
    LNG(wxLANGUAGE_KASHMIRI_INDIA,             "ks_IN", LANG_KASHMIRI  , SUBLANG_KASHMIRI_INDIA            , wxLayout_LeftToRight, "Kashmiri (India)")
    LNG(wxLANGUAGE_KAZAKH,                     "kk"   , LANG_KAZAK     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kazakh")
    LNG(wxLANGUAGE_KERNEWEK,                   "kw_GB", 0              , 0                                 , wxLayout_LeftToRight, "Kernewek")
+   LNG(wxLANGUAGE_KHMER,                      "km"   , 0              , 0                                 , wxLayout_LeftToRight, "Khmer")
    LNG(wxLANGUAGE_KINYARWANDA,                "rw"   , 0              , 0                                 , wxLayout_LeftToRight, "Kinyarwanda")
    LNG(wxLANGUAGE_KIRGHIZ,                    "ky"   , 0              , 0                                 , wxLayout_LeftToRight, "Kirghiz")
    LNG(wxLANGUAGE_KIRUNDI,                    "rn"   , 0              , 0                                 , wxLayout_LeftToRight, "Kirundi")

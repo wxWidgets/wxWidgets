@@ -2,7 +2,6 @@
 // Name:        dynlib.h
 // Purpose:     interface of wxDynamicLibrary and wxDynamicLibraryDetails
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -37,19 +36,19 @@ public:
     bool GetAddress(void* addr, size_t* len) const;
 
     /**
-        Returns the base name of this module, e.g. @c "kernel32.dll" or
+        Returns the base name of this module, e.g.\ @c "kernel32.dll" or
         @c "libc-2.3.2.so".
     */
     wxString GetName() const;
 
     /**
-        Returns the full path of this module if available, e.g.
-        @c "c:\windows\system32\kernel32.dll" or @c "/lib/libc-2.3.2.so".
+        Returns the full path of this module if available, e.g.\ @c "c:\windows\system32\kernel32.dll"
+        or @c "/lib/libc-2.3.2.so".
     */
     wxString GetPath() const;
 
     /**
-        Returns the version of this module, e.g. @c "5.2.3790.0" or @c "2.3.2".
+        Returns the version of this module, e.g.\ @c "5.2.3790.0" or @c "2.3.2".
         The returned string is empty if the version information is not
         available.
     */
@@ -138,7 +137,7 @@ public:
                                            wxPluginCategory cat = wxDL_PLUGIN_GUI);
 
     /**
-        Detaches this object from its library handle, i.e. the object will not
+        Detaches this object from its library handle, i.e.\ the object will not
         unload the library any longer in its destructor but it is now the
         callers responsibility to do this using Unload().
     */
@@ -195,6 +194,21 @@ public:
         useful mostly for diagnostics purposes.
     */
     static wxDynamicLibraryDetailsArray ListLoaded();
+
+    /**
+        Returns the load address of the module containing the specified address
+        or @NULL if not found.
+
+        If the second argument @a path is not @NULL, it is filled with the full
+        path to the file the module was loaded from upon a successful return.
+
+        This method is implemented under MSW and Unix platforms providing
+        `dladdr()` call (which include Linux and various BSD systems) and
+        always returns @NULL elsewhere.
+
+        @since 3.1.0
+    */
+    static void* GetModuleFromAddress(const void* addr, wxString* path = NULL);
 
     /**
         Loads DLL with the given @a name into memory. The @a flags argument can

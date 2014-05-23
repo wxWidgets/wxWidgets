@@ -101,7 +101,7 @@ public:
 
         Calling this is equivalent to calling both SetMin() and SetMax().
      */
-    void SetRange(ValueType min, ValueType max)
+    void SetRange(ValueType min, ValueType max);
 
 
     /**
@@ -155,6 +155,12 @@ public:
     <code>0..USHRT_MAX</code> for <code>unsigned short</code>. This range can
     be restricted further by calling SetMin() and SetMax() or SetRange()
     methods inherited from the base class.
+
+    When the validator displays integers with thousands separators, the
+    character used for the separators (usually "." or ",") depends on the locale
+    set with wxLocale (note that you shouldn't change locale with setlocale()
+    as this can result in a mismatch between the thousands separator used by
+    wxLocale and the one used by the run-time library).
 
     A simple example of using this class:
     @code
@@ -252,6 +258,12 @@ wxMakeIntegerValidator(T *value, int style = wxNUM_VAL_DEFAULT);
     implementation. As with the range, the precision can be restricted after
     the validator creation if necessary.
 
+    When the validator displays numbers with decimal or thousands separators,
+    the characters used for the separators (usually "." or ",") depend on the
+    locale set with wxLocale (note that you shouldn't change locale with
+    setlocale() as this can result in a mismatch between the separators used by
+    wxLocale and the one used by the run-time library).
+
     A simple example of using this class:
     @code
         class MyDialog : public wxDialog
@@ -293,7 +305,21 @@ public:
     typedef T ValueType;
 
     /**
-        Validator constructor.
+        Constructor for validator using the default precision.
+
+        @param value
+            A pointer to the variable associated with the validator. If non
+            @NULL, this variable should have a lifetime equal to or longer than
+            the validator lifetime (which is usually determined by the lifetime
+            of the window).
+        @param style
+            A combination of wxNumValidatorStyle enum values.
+    */
+    wxFloatingPointValidator(ValueType *value = NULL,
+                             int style = wxNUM_VAL_DEFAULT);
+
+    /**
+        Constructor for validator specifying the precision.
 
         @param value
             A pointer to the variable associated with the validator. If non
@@ -306,13 +332,9 @@ public:
             The number of decimal digits after the decimal separator to show
             and accept.
     */
-    //@{
-    wxFloatingPointValidator(ValueType *value = NULL,
-                             int style = wxNUM_VAL_DEFAULT);
     wxFloatingPointValidator(int precision,
                              ValueType *value = NULL,
                              int style = wxNUM_VAL_DEFAULT);
-    //@}
 
 
     /**

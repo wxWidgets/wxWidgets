@@ -2,7 +2,6 @@
 // Name:        regex.h
 // Purpose:     interface of wxRegEx
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -163,7 +162,7 @@ public:
     wxString  GetMatch(const wxString& text, size_t index = 0) const;
 
     /**
-        Returns the size of the array of matches, i.e. the number of bracketed
+        Returns the size of the array of matches, i.e.\ the number of bracketed
         subexpressions plus one for the expression itself, or 0 on error.
 
         May only be called after successful call to Compile().

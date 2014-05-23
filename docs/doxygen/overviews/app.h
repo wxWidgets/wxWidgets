@@ -2,7 +2,6 @@
 // Name:        app.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,16 +9,7 @@
 
 @page overview_app wxApp Overview
 
-Classes: wxApp
-
-@li @ref overview_app_intro
-@li @ref overview_app_shutdown
-
-
-<hr>
-
-
-@section overview_app_intro Introduction
+@tableofcontents
 
 A wxWidgets application does not have a @e main procedure; the equivalent is
 the wxApp::OnInit member defined for a class derived from wxApp.
@@ -73,6 +63,7 @@ application object construction time.
 You can also use DECLARE_APP(appClass) in a header file to declare the wxGetApp
 function which returns a reference to the application object. Otherwise you can
 only use the global @c wxTheApp pointer which is of type @c wxApp*.
+
 
 
 @section overview_app_shutdown Application Shutdown
@@ -133,4 +124,3 @@ int MyApp::OnExit()
 @endcode
 
 */
-

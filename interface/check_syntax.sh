@@ -2,7 +2,6 @@
 
 # check_syntax.sh - a small script to search for interface headers with
 #                   missing semicolons (they give troubles to Doxygen).
-# RCS-ID: $Id$
 # Author: Francesco Montorsi
 
 

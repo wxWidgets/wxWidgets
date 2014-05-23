@@ -4,8 +4,6 @@ dnl Macros for configure.in for wxWindows by Robert Roebling, Phil Blecker,
 dnl Vadim Zeitlin and Ron Lee
 dnl
 dnl This script is under the wxWindows licence.
-dnl
-dnl Version: $Id$
 dnl ---------------------------------------------------------------------------
 
 
@@ -43,16 +41,17 @@ for ac_dir in $1 /usr/include
 ])
 
 dnl ---------------------------------------------------------------------------
-dnl call WX_PATH_FIND_LIBRARIES(search path, lib name), sets ac_find_libraries
-dnl to the full name of the file that was found or leaves it empty if not found
+dnl call WX_PATH_FIND_LIBRARIES(lib name, [optional extra search paths])
+dnl sets ac_find_libraries to the full name of the file that was found
+dnl or leaves it empty if not found
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 [
   ac_find_libraries=
-  for ac_dir in $1
+  for ac_dir in $2 $SEARCH_LIB
   do
     for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/lib$2.$ac_extension"; then
+      if test -f "$ac_dir/lib$1.$ac_extension"; then
         ac_find_libraries=$ac_dir
         break 2
       fi
@@ -95,7 +94,7 @@ AC_DEFUN([WX_INCLUDE_PATH_EXIST],
 dnl ---------------------------------------------------------------------------
 dnl Usage: WX_LINK_PATH_EXIST(path, libpath)
 dnl
-dnl Set ac_path_to_link to nothing if path is already in libpath of to -Lpath
+dnl Set ac_path_to_link to nothing if path is already in libpath, or to -Lpath
 dnl if it is not, so that libpath can be set to "$libpath$ac_path_to_link"
 dnl after calling this function
 dnl ---------------------------------------------------------------------------
@@ -115,6 +114,72 @@ AC_DEFUN([WX_LINK_PATH_EXIST],
   fi
 ])
 
+dnl ---------------------------------------------------------------------------
+dnl Usage: WX_FIND_LIB(lib-name, [lib-function to test], [extra search paths])
+dnl
+dnl Tests in a variety of ways for the presence of lib-name
+dnl
+dnl On success, returns any novel path found in ac_find_libraries; else "std"
+dnl             and any cflags in ac_find_cflags
+dnl On failure, ac_find_libraries will be empty
+dnl ---------------------------------------------------------------------------
+AC_DEFUN([WX_FIND_LIB],
+[
+  ac_find_libraries=
+
+  dnl Try with pkg-config first. It requires its lib-name parameter lowercase
+  fl_pkgname=`echo "$1" | tr [[:upper:]] [[:lower:]]`
+  dnl suppress PKG_PROG_PKG_CONFIG output; we don't want to keep seeing it
+  PKG_PROG_PKG_CONFIG() AS_MESSAGE_FD> /dev/null
+  PKG_CHECK_MODULES([$1], [$fl_pkgname],
+    [
+      dnl Start by assuming there are no novel lib paths
+      ac_find_libraries="std"
+
+      dnl A simple copy of the internal vars $1_CFLAGS $1_LIBS doesn't work
+      dnl inside the macro
+      dnl
+      dnl TODO: When we stop being autoconf 2.61 compatible, the next 2 lines
+      dnl should become:
+      dnl AS_VAR_COPY([ac_find_cflags], [$1_CFLAGS])
+      dnl AS_VAR_COPY([fl_libs], [$1_LIBS])
+      eval ac_find_cflags=\$$1_CFLAGS
+      eval fl_libs=\$$1_LIBS
+
+      dnl fl_libs may now contain -Lfoopath -lfoo (only non-standard paths are
+      dnl added) We only want the path bit, not the lib names
+      for fl_path in $fl_libs
+      do
+        if test `echo "$fl_path" | cut -c 1-2` = "-L"; then
+          dnl there shouldn't be >1 novel path
+          dnl return it without the -L, ready for WX_LINK_PATH_EXIST
+          ac_find_libraries=`echo "$fl_path" | cut -c 3-`
+        fi
+      done
+    ],
+    [
+      if test "x$ac_find_libraries" = "x"; then
+        dnl Next with AC_CHECK_LIB, if a test function was provided
+        if test "x$2" != "x"; then
+          AC_CHECK_LIB([$1], [$2], [ac_find_libraries="std"])
+        fi
+      fi
+
+      if test "x$ac_find_libraries" = "x"; then
+        dnl Finally try the search path
+        dnl Output a message again, as AC_CHECK_LIB will just have said "no"
+        AC_MSG_CHECKING([elsewhere])
+        dnl $3 will occasionally hold extra path(s) to search
+        WX_PATH_FIND_LIBRARIES([$1], [$3])
+        if test "x$ac_find_libraries" != "x"; then
+          AC_MSG_RESULT([yes])
+        else
+          AC_MSG_RESULT([no])
+        fi
+      fi
+    ])
+])
+
 dnl ===========================================================================
 dnl C++ features test
 dnl ===========================================================================
@@ -124,7 +189,7 @@ dnl WX_CPP_NEW_HEADERS checks whether the compiler has "new" <iostream> header
 dnl or only the old <iostream.h> one - it may be generally assumed that if
 dnl <iostream> exists, the other "new" headers (without .h) exist too.
 dnl
-dnl call WX_CPP_NEW_HEADERS(actiof-if-true, action-if-false)
+dnl call WX_CPP_NEW_HEADERS(action-if-true, action-if-false)
 dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([WX_CPP_NEW_HEADERS],

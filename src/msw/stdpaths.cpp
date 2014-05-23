@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-10-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -303,10 +302,6 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     compilerPrefix = "gcc";
 #elif defined(__BORLANDC__)
     compilerPrefix = "bcc";
-#elif defined(__DIGITALMARS__)
-    compilerPrefix = "dmc";
-#elif defined(__WATCOMC__)
-    compilerPrefix = "wat";
 #else
     return;
 #endif

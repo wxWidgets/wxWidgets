@@ -3,7 +3,6 @@
 // Purpose:     XML resource handler for wxAnimationCtrl
 // Author:      Francesco Montorsi
 // Created:     2006-10-15
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -19,6 +18,7 @@
 
 #include "wx/xrc/xh_animatctrl.h"
 #include "wx/animate.h"
+#include "wx/scopedptr.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxAnimationCtrlXmlHandler, wxXmlResourceHandler)
 
@@ -33,9 +33,11 @@ wxObject *wxAnimationCtrlXmlHandler::DoCreateResource()
 {
     XRC_MAKE_INSTANCE(ctrl, wxAnimationCtrl)
 
+    wxScopedPtr<wxAnimation> animation(GetAnimation(wxT("animation")));
+
     ctrl->Create(m_parentAsWindow,
                   GetID(),
-                  GetAnimation(wxT("animation")),
+                  animation ? *animation : wxNullAnimation,
                   GetPosition(), GetSize(),
                   GetStyle(wxT("style"), wxAC_DEFAULT_STYLE),
                   GetName());

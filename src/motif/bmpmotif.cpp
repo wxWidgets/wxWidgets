@@ -4,7 +4,6 @@
 // Author:      Julian Smart, originally in bitmap.cpp
 // Modified by:
 // Created:     25/03/2003
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

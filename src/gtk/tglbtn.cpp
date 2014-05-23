@@ -5,7 +5,6 @@
 // Author:      John Norris, minor changes by Axel Schlueter
 // Modified by:
 // Created:     08.02.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Johnny C. Norris II
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,25 +20,27 @@
     #include "wx/button.h"
 #endif
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/list.h"
 
 extern bool      g_blockEventsOnDrag;
 
 extern "C" {
 static void gtk_togglebutton_clicked_callback(GtkWidget *WXUNUSED(widget), wxToggleButton *cb)
 {
-    if (!cb->m_hasVMT || g_blockEventsOnDrag)
+    if (g_blockEventsOnDrag)
         return;
 
     // Generate a wx event.
-    wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, cb->GetId());
+    wxCommandEvent event(wxEVT_TOGGLEBUTTON, cb->GetId());
     event.SetInt(cb->GetValue());
     event.SetEventObject(cb);
     cb->HandleWindowEvent(event);
 }
 }
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
 // ------------------------------------------------------------------------
 // wxBitmapToggleButton
@@ -166,6 +167,14 @@ void wxToggleButton::SetLabel(const wxString& label)
 
     wxAnyButton::SetLabel(label);
 
+    if ( HasFlag(wxBU_NOTEXT) )
+    {
+        // Don't try to update the label for a button not showing it, this is
+        // unnecessary and can also actually replace the image we show with the
+        // label entirely breaking the button code, see #13693.
+        return;
+    }
+
     const wxString labelGTK = GTKConvertMnemonics(label);
 
     gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
@@ -184,10 +193,13 @@ bool wxToggleButton::DoSetLabelMarkup(const wxString& markup)
 
     wxControl::SetLabel(stripped);
 
-    GtkLabel * const label = GTKGetLabel();
-    wxCHECK_MSG( label, false, "no label in this toggle button?" );
+    if ( !HasFlag(wxBU_NOTEXT) )
+    {
+        GtkLabel * const label = GTKGetLabel();
+        wxCHECK_MSG( label, false, "no label in this toggle button?" );
 
-    GTKSetLabelWithMarkupForLabel(label, markup);
+        GTKSetLabelWithMarkupForLabel(label, markup);
+    }
 
     return true;
 }
@@ -201,8 +213,24 @@ GtkLabel *wxToggleButton::GTKGetLabel() const
 
 void wxToggleButton::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_widget, style);
-    gtk_widget_modify_style(gtk_bin_get_child(GTK_BIN(m_widget)), style);
+    GTKApplyStyle(m_widget, style);
+    GtkWidget* child = gtk_bin_get_child(GTK_BIN(m_widget));
+    GTKApplyStyle(child, style);
+
+    // for buttons with images, the path to the label is (at least in 2.12)
+    // GtkButton -> GtkAlignment -> GtkHBox -> GtkLabel
+    if ( GTK_IS_ALIGNMENT(child) )
+    {
+        GtkWidget* box = gtk_bin_get_child(GTK_BIN(child));
+        if ( GTK_IS_BOX(box) )
+        {
+            wxGtkList list(gtk_container_get_children(GTK_CONTAINER(box)));
+            for (GList* item = list; item; item = item->next)
+            {
+                GTKApplyStyle(GTK_WIDGET(item->data), style);
+            }
+        }
+    }
 }
 
 // Get the "best" size for this control.
@@ -223,7 +251,7 @@ wxSize wxToggleButton::DoGetBestSize() const
 wxVisualAttributes
 wxToggleButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_toggle_button_new);
+    return GetDefaultAttributesFromGTKWidget(gtk_toggle_button_new());
 }
 
 #endif // wxUSE_TOGGLEBTN

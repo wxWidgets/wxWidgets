@@ -2,7 +2,6 @@
 // Name:        dc.h
 // Purpose:     interface of wxDC
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -73,7 +72,7 @@ enum wxMappingMode
     wxMM_TWIPS,
 
     /**
-        Each logical unit is a @e "printer point" i.e. 1/72 of an inch.
+        Each logical unit is a @e "printer point" i.e.\ 1/72 of an inch.
         Equivalent to about 353 micrometers.
     */
     wxMM_POINTS
@@ -259,13 +258,23 @@ public:
     void Clear();
 
     /**
-        Draws an arc of a circle, centred on (@a xc, @a yc), with starting
-        point (@a xStart, @a yStart) and ending at (@a xEnd, @a yEnd). 
-        The current pen is used for the outline and the current brush for 
-        filling the shape.
+        Draws an arc from the given start to the given end point.
 
-        The arc is drawn in a counter-clockwise direction from the start point
-        to the end point.
+        @note DrawEllipticArc() has more clear semantics and it is recommended
+        to use it instead of this function.
+
+        The arc drawn is an arc of the circle centered at (@a xc, @a yc). Its
+        start point is (@a xStart, @a yStart) whereas its end point is the
+        point of intersection of the line passing by (@a xc, @a yc) and (@a
+        xEnd, @a yEnd) with the circle passing by (@a xStart, @a yStart).
+
+        The arc is drawn in a counter-clockwise direction between the start and
+        the end points.
+
+        The current pen is used for the outline and the current brush for
+        filling the shape. Notice that unless the brush is transparent, the
+        lines connecting the centre of the circle to the end points of the arc
+        are drawn as well.
     */
     void DrawArc(wxCoord xStart, wxCoord yStart, wxCoord xEnd, wxCoord yEnd,
                  wxCoord xc, wxCoord yc);
@@ -349,9 +358,13 @@ public:
 
         @a start and @a end specify the start and end of the arc relative to
         the three-o'clock position from the center of the rectangle. Angles are
-        specified in degrees (360 is a complete circle). Positive values mean
+        specified in degrees with 0 degree angle corresponding to the positive
+        horizontal axis (3 o'clock) direction. Positive values mean
         counter-clockwise motion. If @a start is equal to @e end, a complete
         ellipse will be drawn.
+
+        Notice that unlike DrawArc(), this function does not draw the lines to
+        the arc ends, even when using non-transparent brush.
     */
     void DrawEllipticArc(wxCoord x, wxCoord y, wxCoord width, wxCoord height,
                           double start, double end);
@@ -380,7 +393,7 @@ public:
         character with the given index if it is != -1 and return the bounding
         rectangle if required.
     */
-    void DrawLabel(const wxString& text, const wxBitmap& image,
+    void DrawLabel(const wxString& text, const wxBitmap& bitmap,
                    const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                    int indexAccel = -1, wxRect* rectBounding = NULL);
@@ -409,26 +422,16 @@ public:
         Draws lines using an array of points of size @a n adding the optional
         offset coordinate. The current pen is used for drawing the lines.
 
-        @beginWxPythonOnly
-        The wxPython version of this method accepts a Python list of wxPoint
-        objects.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
     */
-    void DrawLines(int n, wxPoint points[], wxCoord xoffset = 0,
+    void DrawLines(int n, const wxPoint points[], wxCoord xoffset = 0,
                    wxCoord yoffset = 0);
     /**
         This method uses a list of wxPoints, adding the optional offset
         coordinate. The programmer is responsible for deleting the list of
         points.
-
-        @beginWxPythonOnly
-        The wxPython version of this method accepts a Python list of wxPoint
-        objects.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         The wxPerl version of this method accepts
@@ -465,7 +468,7 @@ public:
         Not supported by wxPerl.
         @endWxPerlOnly
     */
-    void DrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0,
+    void DrawPolygon(int n, const wxPoint points[], wxCoord xoffset = 0,
                      wxCoord yoffset = 0,
                      wxPolygonFillMode fill_style = wxODDEVEN_RULE);
     /**
@@ -480,11 +483,6 @@ public:
         for filling the shape. Using a transparent brush suppresses filling.
 
         The programmer is responsible for deleting the list of points.
-
-        @beginWxPythonOnly
-        The wxPython version of this method accepts a Python list of wxPoint
-        objects.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         The wxPerl version of this method accepts
@@ -518,12 +516,8 @@ public:
         call to DrawPolyPolygon() must be closed. Unlike polygons created by
         the DrawPolygon() member function, the polygons created by this
         method are not closed automatically.
-
-        @beginWxPythonOnly
-        Not implemented yet.
-        @endWxPythonOnly
     */
-    void DrawPolyPolygon(int n, int count[], wxPoint points[],
+    void DrawPolyPolygon(int n, const int count[], const wxPoint points[],
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
                          wxPolygonFillMode fill_style = wxODDEVEN_RULE);
 
@@ -548,6 +542,9 @@ public:
         Draws the text rotated by @a angle degrees 
         (positive angles are counterclockwise; the full angle is 360 degrees).
 
+        Notice that, as with DrawText(), the @a text can contain multiple lines
+        separated by the new line (@c '\\n') characters.
+
         @note Under Win9x only TrueType fonts can be drawn by this function. In
               particular, a font different from @c wxNORMAL_FONT should be used
               as the latter is not a TrueType font. @c wxSWISS_FONT is an
@@ -561,7 +558,7 @@ public:
     /**
         @overload
     */
-    void DrawRotatedText(const wxString& text, const wxPoint&,
+    void DrawRotatedText(const wxString& text, const wxPoint& point,
                          double angle);
 
     /**
@@ -594,16 +591,11 @@ public:
     /**
         Draws a spline between all given points using the current pen.
 
-        @beginWxPythonOnly
-        The wxPython version of this method accepts a Python list of wxPoint
-        objects.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         Not supported by wxPerl.
         @endWxPerlOnly
     */
-    void DrawSpline(int n, wxPoint points[]);
+    void DrawSpline(int n, const wxPoint points[]);
 
     /**
         @overload
@@ -702,11 +694,21 @@ public:
         - wxFLOOD_BORDER: The area to be flooded is bounded by the given
           colour.
 
+        Currently this method is not implemented in wxOSX and does nothing
+        there.
+
         @return @false if the operation failed.
 
         @note The present implementation for non-Windows platforms may fail to
               find colour borders if the pixels do not match the colour
               exactly. However the function will still return @true.
+
+        @note This method shouldn't be used with wxPaintDC under non-Windows
+              platforms as it uses GetPixel() internally and this may give
+              wrong results, notably in wxGTK. If you need to flood fill
+              wxPaintDC, create a temporary wxMemoryDC, flood fill it and then
+              blit it to, or draw as a bitmap on, wxPaintDC. See the example of
+              doing this in the drawing sample and wxBufferedPaintDC class.
     */
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
                    wxFloodFillStyle style = wxFLOOD_SURFACE);
@@ -715,7 +717,7 @@ public:
         @overload
     */
     bool FloodFill(const wxPoint& pt, const wxColour& col,
-                   int style = wxFLOOD_SURFACE);
+                   wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     /**
         Displays a cross hair using the current pen. This is a vertical and
@@ -746,11 +748,6 @@ public:
 
     /**
         Gets the rectangle surrounding the current clipping region.
-
-        @beginWxPythonOnly
-        No arguments are required and the four values defining the rectangle
-        are returned as a tuple.
-        @endWxPythonOnly
     */
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
 
@@ -876,11 +873,6 @@ public:
         function that is faster or more accurate than the generic
         implementation then it should be used instead.
 
-        @beginWxPythonOnly
-        This method only takes the @a text parameter and returns a Python list
-        of integers.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method only takes the @a text parameter and
         returns the widths as a list of integers.
@@ -906,13 +898,6 @@ public:
         font is.
 
         @note This function only works with single-line strings.
-
-        @beginWxPythonOnly
-        The following methods are implemented in wxPython:
-        - GetTextExtent(string) - Returns a 2-tuple, (width, height).
-        - GetFullTextExtent(string, font=NULL) -
-            Returns a 4-tuple, (width, height, descent, externalLeading).
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method is implemented as GetTextExtent(string,
@@ -947,7 +932,7 @@ public:
     //@{
 
     /**
-        Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
+        Returns the current background mode: @c wxPENSTYLE_SOLID or @c wxPENSTYLE_TRANSPARENT.
 
         @see SetBackgroundMode()
     */
@@ -987,7 +972,7 @@ public:
     const wxColour& GetTextForeground() const;
 
     /**
-        @a mode may be one of @c wxSOLID and @c wxTRANSPARENT. 
+        @a mode may be one of @c wxPENSTYLE_SOLID and @c wxPENSTYLE_TRANSPARENT.
         
         This setting determines whether text will be drawn with a background 
         colour or not.
@@ -1111,10 +1096,17 @@ public:
     //@{
 
     /**
-        Copy from a source DC to this DC, specifying the destination
-        coordinates, size of area to copy, source DC, source coordinates,
-        logical function, whether to use a bitmap mask, and mask source
-        position.
+        Copy from a source DC to this DC.
+
+        With this method you can specify the destination coordinates and the
+        size of area to copy which will be the same for both the source and
+        target DCs. If you need to apply scaling while copying, use
+        StretchBlit().
+
+        Notice that source DC coordinates @a xsrc and @a ysrc are interpreted
+        using the current source DC coordinate system, i.e. the scale, origin
+        position and axis directions are taken into account when transforming
+        them to physical (pixel) coordinates.
 
         @param xdest
             Destination device context x position.
@@ -1178,10 +1170,18 @@ public:
               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     /**
-        Copy from a source DC to this DC, specifying the destination
-        coordinates, destination size, source DC, source coordinates, size of
-        source area to copy, logical function, whether to use a bitmap mask,
-        and mask source position.
+        Copy from a source DC to this DC possibly changing the scale.
+
+        Unlike Blit(), this method allows to specify different source and
+        destination region sizes, meaning that it can stretch or shrink it
+        while copying. The same can be achieved by changing the scale of the
+        source or target DC but calling this method is simpler and can also be
+        more efficient if the platform provides a native implementation of it.
+
+        The meaning of its other parameters is the same as with Blit(), in
+        particular all source coordinates are interpreted using the source DC
+        coordinate system, i.e. are affected by its scale, origin translation
+        and axis direction.
 
         @param xdest
             Destination device context x position.
@@ -1240,8 +1240,6 @@ public:
             source position. Currently only implemented on Windows.
 
         There is partial support for Blit() in wxPostScriptDC, under X.
-
-        StretchBlit() is only implemented under wxMAC and wxMSW.
 
         See wxMemoryDC for typical usage.
 
@@ -1366,9 +1364,8 @@ public:
 
         @note Setting a pixel can be done using DrawPoint().
 
-        @beginWxPythonOnly
-        The wxColour value is returned and is not required as a parameter.
-        @endWxPythonOnly
+        @note This method shouldn't be used with wxPaintDC as accessing the DC
+        while drawing can result in unexpected results, notably in wxGTK.
     */
     bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
 
@@ -1392,13 +1389,6 @@ public:
         double scaleY = (double)(maxY / h);
         dc.SetUserScale(min(scaleX, scaleY),min(scaleX, scaleY));
         @endcode
-
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the
-        following methods:
-        - GetSize() - Returns a wxSize.
-        - GetSizeWH() - Returns a 2-tuple (width, height).
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl there are two methods instead of a single overloaded
@@ -1442,7 +1432,7 @@ public:
     bool IsOk() const;
 
     /**
-        Sets the x and y axis orientation (i.e., the direction from lowest to
+        Sets the x and y axis orientation (i.e.\ the direction from lowest to
         highest values on the axis). The default orientation is x axis from
         left to right and y axis from top down.
 
@@ -1456,7 +1446,7 @@ public:
     void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
     /**
-        Sets the device origin (i.e., the origin in pixels after scaling has
+        Sets the device origin (i.e.\ the origin in pixels after scaling has
         been applied). This function may be useful in Windows printing
         operations for placing a graphic on a page.
     */
@@ -1562,6 +1552,53 @@ public:
     void ResetTransformMatrix();
 
     //@}
+
+    
+    /**
+        @name query capabilities
+    */
+    //@{
+
+    /**
+       Does the DC support drawing bitmaps?
+    */
+    bool CanDrawBitmap() const;
+
+    /**
+       Does the DC support calculating the size required to draw text?
+    */
+    bool CanGetTextExtent() const;
+    
+    //@}
+
+    /**
+       Returns a value that can be used as a handle to the native drawing
+       context, if this wxDC has something that could be thought of in that
+       way.  (Not all of them do.)
+
+       For example, on Windows the return value is an HDC, on OSX it is a
+       CGContextRef and on wxGTK it will be a GdkDrawable.  If the DC is a
+       wxGCDC then the return value will be the value returned from
+       wxGraphicsContext::GetNativeContext.  A value of NULL is returned if
+       the DC does not have anything that fits the handle concept.
+       
+       @since 2.9.5
+     */
+    void* GetHandle() const;
+
+    
+    /**
+       If supported by the platform and the type of DC, fetch the contents of the DC, or a subset of it, as a bitmap.
+    */
+    wxBitmap GetAsBitmap(const wxRect *subrect = NULL) const;
+
+
+    void SetLogicalScale(double x, double y);
+    void GetLogicalScale(double *x, double *y) const;
+    void SetLogicalOrigin(wxCoord x, wxCoord y);
+    void GetLogicalOrigin(wxCoord *x, wxCoord *y) const;
+    wxPoint GetLogicalOrigin() const;
+    
 };
 
 
@@ -1569,10 +1606,12 @@ public:
 /**
     @class wxDCClipper
 
-    wxDCClipper is a small helper class for setting a clipping region on a wxDC
-    and unsetting it automatically. An object of wxDCClipper class is typically
-    created on the stack so that it is automatically destroyed when the object
-    goes out of scope. A typical usage example:
+    wxDCClipper is a helper class for setting a clipping region on a wxDC
+    during its lifetime.
+
+    An object of wxDCClipper class is typically created on the stack so that it
+    is automatically destroyed when the object goes out of scope. A typical
+    usage example:
 
     @code
     void MyFunction(wxDC& dc)
@@ -1589,6 +1628,12 @@ public:
     }
     @endcode
 
+    @note Unlike other similar classes such as wxDCFontChanger, wxDCClipper
+        currently doesn't restore the previously active clipping region when it
+        is destroyed but simply resets clipping on the associated wxDC. This
+        may be changed in the future wxWidgets versions but has to be taken
+        into account explicitly in the current one.
+
     @library{wxcore}
     @category{gdi}
 
@@ -1604,7 +1649,7 @@ public:
 
         The clipping region is automatically unset when this object is destroyed.
     */
-    wxDCClipper(wxDC& dc, const wxRegion& r);
+    wxDCClipper(wxDC& dc, const wxRegion& region);
     wxDCClipper(wxDC& dc, const wxRect& rect);
     wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h);
     //@}

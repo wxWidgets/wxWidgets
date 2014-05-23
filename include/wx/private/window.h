@@ -3,7 +3,6 @@
 // Purpose:     misc wxWindow helpers
 // Author:      Vaclav Slavik
 // Created:     2010-01-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

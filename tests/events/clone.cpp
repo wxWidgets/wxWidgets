@@ -3,7 +3,6 @@
 // Purpose:     Test wxEvent::Clone() implementation by all event classes
 // Author:      Vadim Zeitlin, based on the code by Francesco Montorsi
 // Created:     2009-03-22
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

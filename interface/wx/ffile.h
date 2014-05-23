@@ -2,34 +2,8 @@
 // Name:        ffile.h
 // Purpose:     interface of wxFFile
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
-
-
-/**
-    Values used for both wxFile and wxFFile.
-
-    @todo make the value names uppercase
-*/
-enum wxSeekMode
-{
-  wxFromStart,
-  wxFromCurrent,
-  wxFromEnd
-};
-
-/**
-    See wxFFile::GetKind().
-*/
-enum wxFileKind
-{
-  wxFILE_KIND_UNKNOWN,
-  wxFILE_KIND_DISK,     /**< A file supporting seeking to arbitrary offsets. */
-  wxFILE_KIND_TERMINAL, /**< A terminal. */
-  wxFILE_KIND_PIPE      /**< A pipe. */
-};
 
 
 /**
@@ -102,8 +76,11 @@ public:
         closing the file if this descriptor is opened.
 
         IsOpened() will return @false after call to Detach().
+
+        @return The FILE pointer (this is new since wxWidgets 3.0.0, in the
+        previous versions this method didn't return anything).
     */
-    void Detach();
+    FILE* Detach();
 
     /**
         Returns @true if an attempt has been made to read @e past
@@ -145,6 +122,15 @@ public:
         @see wxFileKind
     */
     wxFileKind GetKind() const;
+
+    /**
+        Returns the file name.
+
+        This is the name that was specified when the object was constructed or
+        to the last call to Open(). Notice that it may be empty if Attach() was
+        called without specifying the name.
+     */
+    const wxString& GetName() const;
 
     /**
         Returns @true if the file is opened.

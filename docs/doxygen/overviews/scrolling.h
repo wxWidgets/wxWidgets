@@ -2,7 +2,6 @@
 // Name:        scrolling.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,13 +9,7 @@
 
 @page overview_scrolling Scrolled Windows
 
-Classes: wxWindow, wxScrolledWindow, wxScrollBar
-
-@li @ref overview_scrolling_model
-@li @ref overview_scrolling_example
-
-<hr>
-
+@tableofcontents
 
 Scrollbars come in various guises in wxWidgets. All windows have the potential
 to show a vertical scrollbar and/or a horizontal scrollbar: it is a basic
@@ -41,6 +34,8 @@ the amount scrolled may vary according to the size of text on a given line. For
 this, you would derive from wxWindow and implement scrolling yourself. wxGrid
 is an example of a class that implements its own scrolling, largely because
 columns and rows can vary in size.
+
+@see wxScrollBar
 
 
 @section overview_scrolling_model The Scrollbar Model
@@ -98,4 +93,3 @@ AdjustScrollbars, which can be called initially and also from your wxSizeEvent
 handler function.
 
 */
-

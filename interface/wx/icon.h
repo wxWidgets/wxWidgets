@@ -2,7 +2,6 @@
 // Name:        icon.h
 // Purpose:     interface of wxIcon
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +49,7 @@
     @see @ref overview_bitmap, @ref overview_bitmap_supportedformats,
          wxDC::DrawIcon, wxCursor
 */
-class wxIcon : public wxBitmap
+class wxIcon : public wxGDIObject
 {
 public:
     /**
@@ -180,7 +179,30 @@ public:
     virtual ~wxIcon();
 
     /**
-        Returns disabled (dimmed) version of the icon. MSW only.
+        Attach a Windows icon handle.
+
+        This wxMSW-specific method allows to assign a native Windows @c HICON
+        (which must be castes to @c WXHICON opaque handle type) to wxIcon.
+        Notice that this means that the @c HICON will be destroyed by wxIcon
+        when it is destroyed.
+
+        @return @true if successful.
+
+        @onlyfor{wxmsw}
+
+        @since 2.9.5
+    */
+    bool CreateFromHICON(WXHICON icon);
+
+    /**
+        Returns disabled (dimmed) version of the icon.
+
+        This method is available in wxIcon only under wxMSW, other ports only
+        have it in wxBitmap. You can always use wxImage::ConvertToDisabled()
+        and create the icon from wxImage manually however.
+
+        @onlyfor{wxmsw}
+
         @since 2.9.0
     */
     wxIcon ConvertToDisabled(unsigned char brightness = 255) const;

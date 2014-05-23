@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Francesco Montorsi
 // Created:     02/07/2001
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,7 +27,7 @@
     #include "wx/wx.h"
 #endif
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -63,7 +62,7 @@ enum
     ID_SET_BGCOLOR
 };
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_PLAY, MyFrame::OnPlay)
     EVT_MENU(ID_SET_NULL_ANIMATION, MyFrame::OnSetNullAnimation)
     EVT_MENU(ID_SET_INACTIVE_BITMAP, MyFrame::OnSetInactiveBitmap)
@@ -79,7 +78,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_SIZE(MyFrame::OnSize)
     EVT_UPDATE_UI(wxID_ANY, MyFrame::OnUpdateUI)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // implementation

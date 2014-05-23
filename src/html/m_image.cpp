@@ -2,7 +2,6 @@
 // Name:        src/html/m_image.cpp
 // Purpose:     wxHtml module for displaying images
 // Author:      Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vaclav Slavik, Joel Lucsy
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -62,11 +61,11 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
         int radius;
     public:
         wxHtmlImageMapAreaCell( celltype t, wxString &coords, double pixel_scale = 1.0);
-        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const;
+        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const wxOVERRIDE;
         void Draw(wxDC& WXUNUSED(dc),
                   int WXUNUSED(x), int WXUNUSED(y),
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                  wxHtmlRenderingInfo& WXUNUSED(info)) {}
+                  wxHtmlRenderingInfo& WXUNUSED(info)) wxOVERRIDE {}
 
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageMapAreaCell);
@@ -95,6 +94,7 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
     switch (type)
     {
         case RECT:
+            if ( coords.GetCount() == 4 )
             {
                 int l, t, r, b;
 
@@ -106,9 +106,10 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
                 {
                     return m_Link;
                 }
-                break;
             }
+            break;
         case CIRCLE:
+            if ( coords.GetCount() == 3 )
             {
                 int l, t, r;
                 double  d;
@@ -124,88 +125,86 @@ wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
             }
             break;
         case POLY:
-            {
-                if (coords.GetCount() >= 6)
-                {
-                    int intersects = 0;
-                    int wherex = x;
-                    int wherey = y;
-                    int totalv = coords.GetCount() / 2;
-                    int totalc = totalv * 2;
-                    int xval = coords[totalc - 2];
-                    int yval = coords[totalc - 1];
-                    int end = totalc;
-                    int pointer = 1;
+             if (coords.GetCount() >= 6)
+             {
+                 int intersects = 0;
+                 int wherex = x;
+                 int wherey = y;
+                 int totalv = coords.GetCount() / 2;
+                 int totalc = totalv * 2;
+                 int xval = coords[totalc - 2];
+                 int yval = coords[totalc - 1];
+                 int end = totalc;
+                 int pointer = 1;
 
-                    if ((yval >= wherey) != (coords[pointer] >= wherey))
-                    {
-                        if ((xval >= wherex) == (coords[0] >= wherex))
-                        {
-                            intersects += (xval >= wherex) ? 1 : 0;
-                        }
-                        else
-                        {
-                            intersects += ((xval - (yval - wherey) *
-                                            (coords[0] - xval) /
-                                            (coords[pointer] - yval)) >= wherex) ? 1 : 0;
-                        }
-                    }
+                 if ((yval >= wherey) != (coords[pointer] >= wherey))
+                 {
+                     if ((xval >= wherex) == (coords[0] >= wherex))
+                     {
+                         intersects += (xval >= wherex) ? 1 : 0;
+                     }
+                     else
+                     {
+                         intersects += ((xval - (yval - wherey) *
+                                         (coords[0] - xval) /
+                                         (coords[pointer] - yval)) >= wherex) ? 1 : 0;
+                     }
+                 }
 
-                    while (pointer < end)
-                    {
-                        yval = coords[pointer];
-                        pointer += 2;
-                        if (yval >= wherey)
-                        {
-                            while ((pointer < end) && (coords[pointer] >= wherey))
-                            {
-                                pointer += 2;
-                            }
-                            if (pointer >= end)
-                            {
-                                break;
-                            }
-                            if ((coords[pointer - 3] >= wherex) ==
-                                    (coords[pointer - 1] >= wherex)) {
-                                intersects += (coords[pointer - 3] >= wherex) ? 1 : 0;
-                            }
-                            else
-                            {
-                                intersects +=
-                                    ((coords[pointer - 3] - (coords[pointer - 2] - wherey) *
-                                      (coords[pointer - 1] - coords[pointer - 3]) /
-                                      (coords[pointer] - coords[pointer - 2])) >= wherex) ? 1 : 0;
-                            }
-                        }
-                        else
-                        {
-                            while ((pointer < end) && (coords[pointer] < wherey))
-                            {
-                                pointer += 2;
-                            }
-                            if (pointer >= end)
-                            {
-                                break;
-                            }
-                            if ((coords[pointer - 3] >= wherex) ==
-                                    (coords[pointer - 1] >= wherex))
-                            {
-                                intersects += (coords[pointer - 3] >= wherex) ? 1 : 0;
-                            }
-                            else
-                            {
-                                intersects +=
-                                    ((coords[pointer - 3] - (coords[pointer - 2] - wherey) *
-                                      (coords[pointer - 1] - coords[pointer - 3]) /
-                                      (coords[pointer] - coords[pointer - 2])) >= wherex) ? 1 : 0;
-                            }
-                        }
-                    }
-                    if ((intersects & 1) != 0)
-                    {
-                        return m_Link;
-                    }
-                }
+                 while (pointer < end)
+                 {
+                     yval = coords[pointer];
+                     pointer += 2;
+                     if (yval >= wherey)
+                     {
+                         while ((pointer < end) && (coords[pointer] >= wherey))
+                         {
+                             pointer += 2;
+                         }
+                         if (pointer >= end)
+                         {
+                             break;
+                         }
+                         if ((coords[pointer - 3] >= wherex) ==
+                                 (coords[pointer - 1] >= wherex)) {
+                             intersects += (coords[pointer - 3] >= wherex) ? 1 : 0;
+                         }
+                         else
+                         {
+                             intersects +=
+                                 ((coords[pointer - 3] - (coords[pointer - 2] - wherey) *
+                                   (coords[pointer - 1] - coords[pointer - 3]) /
+                                   (coords[pointer] - coords[pointer - 2])) >= wherex) ? 1 : 0;
+                         }
+                     }
+                     else
+                     {
+                         while ((pointer < end) && (coords[pointer] < wherey))
+                         {
+                             pointer += 2;
+                         }
+                         if (pointer >= end)
+                         {
+                             break;
+                         }
+                         if ((coords[pointer - 3] >= wherex) ==
+                                 (coords[pointer - 1] >= wherex))
+                         {
+                             intersects += (coords[pointer - 3] >= wherex) ? 1 : 0;
+                         }
+                         else
+                         {
+                             intersects +=
+                                 ((coords[pointer - 3] - (coords[pointer - 2] - wherey) *
+                                   (coords[pointer - 1] - coords[pointer - 3]) /
+                                   (coords[pointer] - coords[pointer - 2])) >= wherex) ? 1 : 0;
+                         }
+                     }
+                 }
+                 if ((intersects & 1) != 0)
+                 {
+                     return m_Link;
+                 }
             }
             break;
     }
@@ -240,12 +239,12 @@ class wxHtmlImageMapCell : public wxHtmlCell
     protected:
         wxString m_Name;
     public:
-        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const;
-        virtual const wxHtmlCell *Find( int cond, const void *param ) const;
+        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const wxOVERRIDE;
+        virtual const wxHtmlCell *Find( int cond, const void *param ) const wxOVERRIDE;
         void Draw(wxDC& WXUNUSED(dc),
                   int WXUNUSED(x), int WXUNUSED(y),
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                  wxHtmlRenderingInfo& WXUNUSED(info)) {}
+                  wxHtmlRenderingInfo& WXUNUSED(info)) wxOVERRIDE {}
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageMapCell);
 };
@@ -294,13 +293,18 @@ public:
                     const wxString& mapname = wxEmptyString);
     virtual ~wxHtmlImageCell();
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-              wxHtmlRenderingInfo& info);
-    virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const;
+              wxHtmlRenderingInfo& info) wxOVERRIDE;
+    virtual wxHtmlLinkInfo *GetLink(int x = 0, int y = 0) const wxOVERRIDE;
 
     void SetImage(const wxImage& img);
+
+    // If "alt" text is set, it will be used when converting this cell to text.
+    void SetAlt(const wxString& alt);
+    virtual wxString ConvertToText(wxHtmlSelection *sel) const wxOVERRIDE;
+
 #if wxUSE_GIF && wxUSE_TIMER
     void AdvanceAnimation(wxTimer *timer);
-    virtual void Layout(int w);
+    virtual void Layout(int w) wxOVERRIDE;
 #endif
 
 private:
@@ -320,6 +324,7 @@ private:
     double              m_scale;
     wxHtmlImageMapCell *m_imageMap;
     wxString            m_mapName;
+    wxString            m_alt;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlImageCell);
 };
@@ -329,7 +334,7 @@ class wxGIFTimer : public wxTimer
 {
     public:
         wxGIFTimer(wxHtmlImageCell *cell) : m_cell(cell) {}
-        virtual void Notify()
+        virtual void Notify() wxOVERRIDE
         {
             m_cell->AdvanceAnimation(this);
         }
@@ -472,6 +477,16 @@ void wxHtmlImageCell::SetImage(const wxImage& img)
             m_bitmap = new wxBitmap(img);
     }
 #endif
+}
+
+void wxHtmlImageCell::SetAlt(const wxString& alt)
+{
+    m_alt = alt;
+}
+
+wxString wxHtmlImageCell::ConvertToText(wxHtmlSelection* WXUNUSED(sel)) const
+{
+    return m_alt;
 }
 
 #if wxUSE_GIF && wxUSE_TIMER
@@ -646,51 +661,46 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
     {
         if (tag.GetName() == wxT("IMG"))
         {
-            if (tag.HasParam(wxT("SRC")))
+            wxString tmp;
+            if (tag.GetParamAsString(wxT("SRC"), &tmp))
             {
                 int w = wxDefaultCoord, h = wxDefaultCoord;
                 bool wpercent = false;
                 bool hpresent = false;
                 int al;
                 wxFSFile *str;
-                wxString tmp = tag.GetParam(wxT("SRC"));
-                wxString mn = wxEmptyString;
+                wxString mn;
 
                 str = m_WParser->OpenURL(wxHTML_URL_IMAGE, tmp);
 
-                if (tag.HasParam(wxT("WIDTH")))
+                if (tag.GetParamAsIntOrPercent(wxT("WIDTH"), &w, wpercent))
                 {
-                    wxString param = tag.GetParam(wxT("WIDTH"));
-                    wxSscanf(param.c_str(), wxT("%i"), &w);
-                    if (param.EndsWith(wxT("%"))) {
+                    if (wpercent)
+                    {
                         if (w < 0)
                             w = 0;
                         else if (w > 100)
                             w = 100;
-                        wpercent = true;
                     }
-
                 }
 
-                if (tag.HasParam(wxT("HEIGHT")))
+                if (tag.GetParamAsInt(wxT("HEIGHT"), &h))
                 {
-                    tag.GetParamAsInt(wxT("HEIGHT"), &h);
                     hpresent = true;
                 }
 
                 al = wxHTML_ALIGN_BOTTOM;
-                if (tag.HasParam(wxT("ALIGN")))
+                wxString alstr;
+                if (tag.GetParamAsString(wxT("ALIGN"), &alstr))
                 {
-                    wxString alstr = tag.GetParam(wxT("ALIGN"));
                     alstr.MakeUpper();  // for the case alignment was in ".."
                     if (alstr == wxT("TEXTTOP"))
                         al = wxHTML_ALIGN_TOP;
                     else if ((alstr == wxT("CENTER")) || (alstr == wxT("ABSCENTER")))
                         al = wxHTML_ALIGN_CENTER;
                 }
-                if (tag.HasParam(wxT("USEMAP")))
+                if (tag.GetParamAsString(wxT("USEMAP"), &mn))
                 {
-                    mn = tag.GetParam( wxT("USEMAP") );
                     if ( !mn.empty() && *mn.begin() == '#' )
                     {
                         mn = mn.Mid( 1 );
@@ -702,7 +712,9 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                                           m_WParser->GetPixelScale(),
                                           al, mn);
                 m_WParser->ApplyStateToCell(cel);
+                m_WParser->StopCollapsingSpaces();
                 cel->SetId(tag.GetParam(wxT("id"))); // may be empty
+                cel->SetAlt(tag.GetParam(wxT("alt")));
                 m_WParser->GetContainer()->InsertCell(cel);
                 if (str)
                     delete str;
@@ -712,9 +724,9 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
         {
             m_WParser->CloseContainer();
             m_WParser->OpenContainer();
-            if (tag.HasParam(wxT("NAME")))
+            wxString tmp;
+            if (tag.GetParamAsString(wxT("NAME"), &tmp))
             {
-                wxString tmp = tag.GetParam(wxT("NAME"));
                 wxHtmlImageMapCell *cel = new wxHtmlImageMapCell( tmp );
                 m_WParser->GetContainer()->InsertCell( cel );
             }
@@ -724,16 +736,12 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
         }
         if (tag.GetName() == wxT("AREA"))
         {
-            if (tag.HasParam(wxT("SHAPE")))
+            wxString tmp;
+            if (tag.GetParamAsString(wxT("SHAPE"), &tmp))
             {
-                wxString tmp = tag.GetParam(wxT("SHAPE"));
-                wxString coords = wxEmptyString;
+                wxString coords = tag.GetParam(wxT("COORDS"));
                 tmp.MakeUpper();
                 wxHtmlImageMapAreaCell *cel = NULL;
-                if (tag.HasParam(wxT("COORDS")))
-                {
-                    coords = tag.GetParam(wxT("COORDS"));
-                }
                 if (tmp == wxT("POLY"))
                 {
                     cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::POLY, coords, m_WParser->GetPixelScale() );
@@ -746,13 +754,9 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 {
                     cel = new wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::RECT, coords, m_WParser->GetPixelScale() );
                 }
-                if (cel != NULL && tag.HasParam(wxT("HREF")))
-                {
-                    wxString target;
-                    if (tag.HasParam(wxT("TARGET")))
-                        target = tag.GetParam(wxT("TARGET"));
-                    cel->SetLink(wxHtmlLinkInfo(tag.GetParam(wxT("HREF")), target));
-                }
+                wxString href;
+                if (cel != NULL && tag.GetParamAsString(wxT("HREF"), &href))
+                    cel->SetLink(wxHtmlLinkInfo(href, tag.GetParam(wxT("TARGET"))));
                 if (cel != NULL)
                     m_WParser->GetContainer()->InsertCell( cel );
             }

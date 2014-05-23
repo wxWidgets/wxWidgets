@@ -25,13 +25,14 @@
 
 docdir = $(LIBTIFF_DOCDIR)
 
-AUTOMAKE_OPTIONS = dist-zip foreign
-ACLOCAL_AMFLAGS = -I ./m4
+AUTOMAKE_OPTIONS = 1.12 dist-zip foreign
+ACLOCAL_AMFLAGS = -I m4
 
 docfiles = \
 	COPYRIGHT \
 	ChangeLog \
 	README \
+	README.vms \
 	RELEASE-DATE \
 	TODO \
 	VERSION
@@ -41,14 +42,18 @@ EXTRA_DIST = \
 	Makefile.vc \
 	SConstruct \
 	autogen.sh \
-	nmake.opt
+	configure.com \
+	nmake.opt \
+	libtiff-4.pc.in
 
 dist_doc_DATA = $(docfiles)
 
-SUBDIRS = port libtiff tools contrib test man html
+SUBDIRS = port libtiff tools build contrib test man html
 
 release:
-	(rm -f RELEASE-DATE && echo $(LIBTIFF_RELEASE_DATE) > RELEASE-DATE)
-	(rm -f VERSION && echo $(LIBTIFF_VERSION) > VERSION)
-	(rm -f ./libtiff/tiffvers.h && sed 's,LIBTIFF_VERSION,$(LIBTIFF_VERSION),;s,LIBTIFF_RELEASE_DATE,$(LIBTIFF_RELEASE_DATE),' ./libtiff/tiffvers.h.in > ./libtiff/tiffvers.h)
+	(rm -f $(top_srcdir)/RELEASE-DATE && echo $(LIBTIFF_RELEASE_DATE) > $(top_srcdir)/RELEASE-DATE)
+	(rm -f $(top_srcdir)/VERSION && echo $(LIBTIFF_VERSION) > $(top_srcdir)/VERSION)
+	(rm -f $(top_srcdir)/libtiff/tiffvers.h && sed 's,LIBTIFF_VERSION,$(LIBTIFF_VERSION),;s,LIBTIFF_RELEASE_DATE,$(LIBTIFF_RELEASE_DATE),' $(top_srcdir)/libtiff/tiffvers.h.in > $(top_srcdir)/libtiff/tiffvers.h)
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libtiff-4.pc

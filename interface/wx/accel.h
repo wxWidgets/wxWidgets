@@ -2,7 +2,6 @@
 // Name:        accel.h
 // Purpose:     interface of wxAccelerator* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,13 +15,16 @@ enum wxAcceleratorEntryFlags
     /** hold Alt key down */
     wxACCEL_ALT,
 
-    /** hold Ctrl key down */
+    /** hold Ctrl key down, corresponds to Command key on OS X */
     wxACCEL_CTRL,
 
     /** hold Shift key down */
     wxACCEL_SHIFT,
 
-    /** Command key on OS X; identic to wxACCEL_CTRL on other platforms. */
+    /** corresponds to real Ctrl key on OS X, identic to @c wxACCEL_CTRL on other platforms */
+    wxACCEL_RAW_CTRL,
+
+    /** deprecated, identic to @c wxACCEL_CTRL on all platforms. */
     wxACCEL_CMD
 };
 
@@ -105,11 +107,25 @@ public:
     /**
         Returns a textual representation of this accelerator.
 
-        The returned string is of the form <code>[Alt+][Ctrl+][Shift+]Key</code>
+        The returned string is of the form <code>[Alt+][Ctrl+][RawCtrl+][Shift+]Key</code>
         where the modifier keys are present only if the corresponding flag is
         set.
     */
     wxString ToString() const;
+
+    /**
+        Returns a textual representation of this accelerator which is
+        appropriate for saving in configuration files.
+
+        Unlike the string returned by ToString(), this one is never translated
+        so, while it's not suitable for showing to the user, it can be used to
+        uniquely identify the accelerator independently of the user language.
+
+        The returned string can still be parsed by FromString().
+
+        @since 2.9.4
+    */
+    wxString ToRawString() const;
 
     /**
         Parses the given string and sets the accelerator accordingly.

@@ -2,7 +2,6 @@
 // Name:        wx/richmsgdlg.h
 // Purpose:     interface of wxRichMessageDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -67,8 +66,7 @@ public:
     wxRichMessageDialog(wxWindow* parent,
                         const wxString& message,
                         const wxString& caption = wxMessageBoxCaptionStr,
-                        long style = wxOK | wxCENTRE,
-                        const wxPoint& pos = wxDefaultPosition);
+                        long style = wxOK | wxCENTRE);
 
     /**
         Shows a checkbox with a given label or hides it.

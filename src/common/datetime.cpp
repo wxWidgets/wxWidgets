@@ -5,7 +5,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     11.05.99
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 //              parts of code taken from sndcal library by Scott E. Lee:
 //
@@ -63,7 +62,7 @@
 #if !defined(wxUSE_DATETIME) || wxUSE_DATETIME
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
+    #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h"
     #endif
     #include "wx/string.h"
@@ -75,6 +74,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/thread.h"
+#include "wx/time.h"
 #include "wx/tokenzr.h"
 
 #include <ctype.h>
@@ -108,98 +108,6 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
 
 #endif // wxUSE_EXTENDED_RTTI
 
-
-// ----------------------------------------------------------------------------
-// conditional compilation
-// ----------------------------------------------------------------------------
-
-#if defined(__MWERKS__) && wxUSE_UNICODE
-    #include <wtime.h>
-#endif
-
-#if defined(__DJGPP__) || defined(__WINE__)
-    #include <sys/timeb.h>
-    #include <values.h>
-#endif
-
-#ifndef WX_GMTOFF_IN_TM
-    // Define it for some systems which don't (always) use configure but are
-    // known to have tm_gmtoff field.
-    #if defined(__WXPALMOS__) || defined(__DARWIN__)
-        #define WX_GMTOFF_IN_TM
-    #endif
-#endif
-
-// NB: VC8 safe time functions could/should be used for wxMSW as well probably
-#if defined(__WXWINCE__) && defined(__VISUALC8__)
-
-struct tm *wxLocaltime_r(const time_t *t, struct tm* tm)
-{
-    __time64_t t64 = *t;
-    return _localtime64_s(tm, &t64) == 0 ? tm : NULL;
-}
-
-struct tm *wxGmtime_r(const time_t* t, struct tm* tm)
-{
-    __time64_t t64 = *t;
-    return _gmtime64_s(tm, &t64) == 0 ? tm : NULL;
-}
-
-#else // !wxWinCE with VC8
-
-#if (!defined(HAVE_LOCALTIME_R) || !defined(HAVE_GMTIME_R)) && wxUSE_THREADS && !defined(__WINDOWS__)
-static wxMutex timeLock;
-#endif
-
-#ifndef HAVE_LOCALTIME_R
-struct tm *wxLocaltime_r(const time_t* ticks, struct tm* temp)
-{
-#if wxUSE_THREADS && !defined(__WINDOWS__)
-  // No need to waste time with a mutex on windows since it's using
-  // thread local storage for localtime anyway.
-  wxMutexLocker locker(timeLock);
-#endif
-
-  // Borland CRT crashes when passed 0 ticks for some reason, see SF bug 1704438
-#ifdef __BORLANDC__
-  if ( !*ticks )
-      return NULL;
-#endif
-
-  const tm * const t = localtime(ticks);
-  if ( !t )
-      return NULL;
-
-  memcpy(temp, t, sizeof(struct tm));
-  return temp;
-}
-#endif // !HAVE_LOCALTIME_R
-
-#ifndef HAVE_GMTIME_R
-struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
-{
-#if wxUSE_THREADS && !defined(__WINDOWS__)
-  // No need to waste time with a mutex on windows since it's
-  // using thread local storage for gmtime anyway.
-  wxMutexLocker locker(timeLock);
-#endif
-
-#ifdef __BORLANDC__
-  if ( !*ticks )
-      return NULL;
-#endif
-
-  const tm * const t = gmtime(ticks);
-  if ( !t )
-      return NULL;
-
-  memcpy(temp, gmtime(ticks), sizeof(struct tm));
-  return temp;
-}
-#endif // !HAVE_GMTIME_R
-
-#endif // wxWinCE with VC8/other platforms
-
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -215,14 +123,14 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
 class wxDateTimeHolidaysModule : public wxModule
 {
 public:
-    virtual bool OnInit()
+    virtual bool OnInit() wxOVERRIDE
     {
         wxDateTimeHolidayAuthority::AddAuthority(new wxDateTimeWorkDays);
 
         return true;
     }
 
-    virtual void OnExit()
+    virtual void OnExit() wxOVERRIDE
     {
         wxDateTimeHolidayAuthority::ClearAllAuthorities();
         wxDateTimeHolidayAuthority::ms_authorities.clear();
@@ -327,63 +235,6 @@ wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
     return daysInMonth[wxDateTime::IsLeapYear(year)][month];
 }
 
-// returns the time zone in the C sense, i.e. the difference UTC - local
-// (in seconds)
-// NOTE: not static because used by datetimefmt.cpp
-int GetTimeZone()
-{
-#ifdef WX_GMTOFF_IN_TM
-    // set to true when the timezone is set
-    static bool s_timezoneSet = false;
-    static long gmtoffset = LONG_MAX; // invalid timezone
-
-    // ensure that the timezone variable is set by calling wxLocaltime_r
-    if ( !s_timezoneSet )
-    {
-        // just call wxLocaltime_r() instead of figuring out whether this
-        // system supports tzset(), _tzset() or something else
-        time_t t = 0;
-        struct tm tm;
-
-        wxLocaltime_r(&t, &tm);
-        s_timezoneSet = true;
-
-        // note that GMT offset is the opposite of time zone and so to return
-        // consistent results in both WX_GMTOFF_IN_TM and !WX_GMTOFF_IN_TM
-        // cases we have to negate it
-        gmtoffset = -tm.tm_gmtoff;
-    }
-    return (int)gmtoffset;
-#elif defined(__DJGPP__) || defined(__WINE__)
-    struct timeb tb;
-    ftime(&tb);
-    return tb.timezone*60;
-#elif defined(__VISUALC__)
-    // We must initialize the time zone information before using it (this will
-    // be done only once internally).
-    _tzset();
-
-    // Starting with VC++ 8 timezone variable is deprecated and is not even
-    // available in some standard library version so use the new function for
-    // accessing it instead.
-    #if wxCHECK_VISUALC_VERSION(8)
-        long t;
-        _get_timezone(&t);
-        return t;
-    #else // VC++ < 8
-        return timezone;
-    #endif
-#elif defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
-    return WX_TIMEZONE;
-#elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
-    return _timezone;
-#elif defined(__MWERKS__)
-    return 28800;
-#else // unknown platform -- assume it has timezone
-    return timezone;
-#endif // WX_GMTOFF_IN_TM/!WX_GMTOFF_IN_TM
-}
-
 // return the integral part of the JDN for the midnight of the given date (to
 // get the real JDN you need to add 0.5, this is, in fact, JDN of the
 // noon of the previous day)
@@ -437,8 +288,15 @@ wxString CallStrftime(const wxString& format, const tm* tm)
 
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, tm) )
     {
-        // if the format is valid, buffer must be too small?
-        wxFAIL_MSG(wxT("strftime() failed"));
+        // There is one special case in which strftime() can return 0 without
+        // indicating an error: "%p" may give empty string depending on the
+        // locale, so check for it explicitly. Apparently it's really the only
+        // exception.
+        if ( format != wxS("%p") )
+        {
+            // if the format is valid, buffer must be too small?
+            wxFAIL_MSG(wxT("strftime() failed"));
+        }
 
         buf[0] = '\0';
     }
@@ -602,7 +460,7 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
         case wxDateTime::Local:
             // get the offset from C RTL: it returns the difference GMT-local
             // while we want to have the offset _from_ GMT, hence the '-'
-            m_offset = -GetTimeZone();
+            m_offset = -wxGetTimeZone();
             break;
 
         case wxDateTime::GMT_12:
@@ -1243,7 +1101,7 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
 // return the current time with ms precision
 /* static */ wxDateTime wxDateTime::UNow()
 {
-    return wxDateTime(wxGetLocalTimeMillis());
+    return wxDateTime(wxGetUTCTimeMillis());
 }
 
 // the values in the tm structure contain the local time
@@ -1259,7 +1117,7 @@ wxDateTime& wxDateTime::Set(const struct tm& tm)
         if ( tm2.tm_year == 70 && tm2.tm_mon == 0 && tm2.tm_mday == 1 )
         {
             return Set((time_t)(
-                       GetTimeZone() +
+                       wxGetTimeZone() +
                        tm2.tm_hour * MIN_PER_HOUR * SEC_PER_MIN +
                        tm2.tm_min * SEC_PER_MIN +
                        tm2.tm_sec));
@@ -1271,10 +1129,37 @@ wxDateTime& wxDateTime::Set(const struct tm& tm)
 
         return *this;
     }
-    else
+
+    // mktime() only adjusts tm_wday, tm_yday and tm_isdst fields normally, if
+    // it changed anything else, it must have performed the DST adjustment. But
+    // the trouble with this is that different implementations do it
+    // differently, e.g. GNU libc moves the time forward if the specified time
+    // is invalid in the local time zone, while MSVC CRT moves it backwards
+    // which is especially pernicious as it can change the date if the DST
+    // starts at midnight, as it does in some time zones (see #15419), and this
+    // is completely unexpected for the code working with dates only.
+    //
+    // So standardize on moving the time forwards to have consistent behaviour
+    // under all platforms and to avoid the problem above.
+    if ( tm2.tm_hour != tm.tm_hour )
     {
-        return Set(timet);
+        tm2 = tm;
+        tm2.tm_hour++;
+        if ( tm2.tm_hour == 24 )
+        {
+            // This shouldn't normally happen as the DST never starts at 23:00
+            // but if it does, we have a problem as we need to adjust the day
+            // as well. However we stop here, i.e. we don't adjust the month
+            // (or the year) because mktime() is supposed to take care of this
+            // for us.
+            tm2.tm_hour = 0;
+            tm2.tm_mday++;
+        }
+
+        timet = mktime(&tm2);
     }
+
+    return Set(timet);
 }
 
 wxDateTime& wxDateTime::Set(wxDateTime_t hour,
@@ -1373,7 +1258,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
         m_time *= SECONDS_PER_DAY * TIME_T_FACTOR;
 
         // JDN corresponds to GMT, we take localtime
-        Add(wxTimeSpan(hour, minute, second + GetTimeZone(), millisec));
+        Add(wxTimeSpan(hour, minute, second + wxGetTimeZone(), millisec));
     }
 
     return *this;
@@ -1512,7 +1397,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         // use C RTL functions
         struct tm tmstruct;
         tm *tm;
-        if ( tz.GetOffset() == -GetTimeZone() )
+        if ( tz.GetOffset() == -wxGetTimeZone() )
         {
             // we are working with local time
             tm = wxLocaltime_r(&time, &tmstruct);
@@ -1523,7 +1408,7 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         else
         {
             time += (time_t)tz.GetOffset();
-#if defined(__VMS__) || defined(__WATCOMC__) // time is unsigned so avoid warning
+#if defined(__VMS__) // time is unsigned so avoid warning
             int time2 = (int) time;
             if ( time2 >= 0 )
 #else
@@ -1743,6 +1628,56 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
     return *this;
 }
 
+wxDateSpan wxDateTime::DiffAsDateSpan(const wxDateTime& dt) const
+{
+    wxASSERT_MSG( IsValid() && dt.IsValid(), wxT("invalid wxDateTime"));
+
+    // If dt is larger than this, calculations below needs to be inverted.
+    int inv = 1;
+    if ( dt > *this )
+        inv = -1;
+
+    int y = GetYear() - dt.GetYear();
+    int m = GetMonth() - dt.GetMonth();
+    int d = GetDay() - dt.GetDay();
+
+    // If month diff is negative, dt is the year before, so decrease year
+    // and set month diff to its inverse, e.g. January - December should be 1,
+    // not -11.
+    if ( m * inv < 0 || (m == 0 && d * inv < 0))
+    {
+        m += inv * MONTHS_IN_YEAR;
+        y -= inv;
+    }
+
+    // Same logic for days as for months above.
+    if ( d * inv < 0 )
+    {
+        // Use number of days in month from the month which end date we're
+        // crossing. That is month before this for positive diff, and this
+        // month for negative diff.
+        // If we're on january and using previous month, we get december
+        // previous year, but don't care, december has same amount of days
+        // every year.
+        wxDateTime::Month monthfordays = GetMonth();
+        if (inv > 0 && monthfordays == wxDateTime::Jan)
+            monthfordays = wxDateTime::Dec;
+        else if (inv > 0)
+            monthfordays = static_cast<wxDateTime::Month>(monthfordays - 1);
+
+        d += inv * wxDateTime::GetNumberOfDays(monthfordays, GetYear());
+        m -= inv;
+    }
+
+    int w =  d / DAYS_PER_WEEK;
+
+    // Remove weeks from d, since wxDateSpan only keep days as the ones
+    // not in complete weeks
+    d -= w * DAYS_PER_WEEK;
+
+    return wxDateSpan(y, m, w, d);
+}
+
 // ----------------------------------------------------------------------------
 // Weekday and monthday stuff
 // ----------------------------------------------------------------------------
@@ -1767,46 +1702,6 @@ wxDateTime::SetToWeekOfYear(int year, wxDateTime_t numWeek, WeekDay wd)
 
     return dt;
 }
-
-#if WXWIN_COMPATIBILITY_2_6
-// use a separate function to avoid warnings about using deprecated
-// SetToTheWeek in GetWeek below
-static wxDateTime
-SetToTheWeek(int year,
-             wxDateTime::wxDateTime_t numWeek,
-             wxDateTime::WeekDay weekday,
-             wxDateTime::WeekFlags flags)
-{
-    // Jan 4 always lies in the 1st week of the year
-    wxDateTime dt(4, wxDateTime::Jan, year);
-    dt.SetToWeekDayInSameWeek(weekday, flags);
-    dt += wxDateSpan::Weeks(numWeek - 1);
-
-    return dt;
-}
-
-bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek,
-                              WeekDay weekday,
-                              WeekFlags flags)
-{
-    int year = GetYear();
-    *this = ::SetToTheWeek(year, numWeek, weekday, flags);
-    if ( GetYear() != year )
-    {
-        // oops... numWeek was too big
-        return false;
-    }
-
-    return true;
-}
-
-wxDateTime wxDateTime::GetWeek(wxDateTime_t numWeek,
-                               WeekDay weekday,
-                               WeekFlags flags) const
-{
-    return ::SetToTheWeek(GetYear(), numWeek, weekday, flags);
-}
-#endif // WXWIN_COMPATIBILITY_2_6
 
 wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
                                           int year)
@@ -2012,7 +1907,6 @@ wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
     {
         // adjust the weekdays to non-US style.
         wdYearStart = ConvertWeekDayToMondayBase(wdYearStart);
-        wdTarget = ConvertWeekDayToMondayBase(wdTarget);
 
         // quoting from http://www.cl.cam.ac.uk/~mgk25/iso-time.html:
         //
@@ -2028,22 +1922,24 @@ wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
         //
 
         // if Jan 1 is Thursday or less, it is in the first week of this year
-        if ( wdYearStart < 4 )
-        {
-            // count the number of entire weeks between Jan 1 and this date
-            week = (nDayInYear + wdYearStart + 6 - wdTarget)/7;
+        int dayCountFix = wdYearStart < 4 ? 6 : -1;
 
-            // be careful to check for overflow in the next year
-            if ( week == 53 && tm.mday - wdTarget > 28 )
-                    week = 1;
-        }
-        else // Jan 1 is in the last week of the previous year
+        // count the number of week
+        week = (nDayInYear + wdYearStart + dayCountFix) / DAYS_PER_WEEK;
+
+        // check if we happen to be at the last week of previous year:
+        if ( week == 0 )
         {
-            // check if we happen to be at the last week of previous year:
-            if ( tm.mon == Jan && tm.mday < 8 - wdYearStart )
-                week = wxDateTime(31, Dec, GetYear()-1).GetWeekOfYear();
-            else
-                week = (nDayInYear + wdYearStart - 1 - wdTarget)/7;
+            week = wxDateTime(31, Dec, GetYear() - 1).GetWeekOfYear();
+        }
+        else if ( week == 53 )
+        {
+            int wdYearEnd = (wdYearStart + 364 + IsLeapYear(GetYear()))
+                                % DAYS_PER_WEEK;
+
+            // Week 53 only if last day of year is Thursday or later.
+            if ( wdYearEnd < 3 )
+                week = 1;
         }
     }
 
@@ -2146,7 +2042,7 @@ int wxDateTime::IsDST(wxDateTime::Country country) const
 
 wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
 {
-    long secDiff = GetTimeZone() + tz.GetOffset();
+    long secDiff = wxGetTimeZone() + tz.GetOffset();
 
     // we need to know whether DST is or not in effect for this date unless
     // the test disabled by the caller
@@ -2161,7 +2057,7 @@ wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
 
 wxDateTime& wxDateTime::MakeFromTimezone(const TimeZone& tz, bool noDST)
 {
-    long secDiff = GetTimeZone() + tz.GetOffset();
+    long secDiff = wxGetTimeZone() + tz.GetOffset();
 
     // we need to know whether DST is or not in effect for this date unless
     // the test disabled by the caller
@@ -2339,7 +2235,7 @@ WXDLLIMPEXP_BASE void wxPrevWDay(wxDateTime::WeekDay& wd)
                                : (wxDateTime::WeekDay)(wd - 1);
 }
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 
 wxDateTime& wxDateTime::SetFromMSWSysTime(const SYSTEMTIME& st)
 {
@@ -2387,6 +2283,6 @@ void wxDateTime::GetAsMSWSysDate(SYSTEMTIME* st) const
     st->wMilliseconds = 0;
 }
 
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
 #endif // wxUSE_DATETIME

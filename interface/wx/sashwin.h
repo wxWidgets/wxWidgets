@@ -2,9 +2,17 @@
 // Name:        sashwin.h
 // Purpose:     interface of wxSashWindow
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+   wxSashWindow flags
+*/
+#define wxSW_NOBORDER         0x0000
+#define wxSW_BORDER           0x0020
+#define wxSW_3DSASH           0x0040
+#define wxSW_3DBORDER         0x0080
+#define wxSW_3D (wxSW_3DSASH | wxSW_3DBORDER)
 
 
 /**
@@ -135,17 +143,6 @@ public:
     bool GetSashVisible(wxSashEdgePosition edge) const;
 
     /**
-        Returns @true if the sash has a border, @false otherwise.
-        This function is obsolete since the sash border property is unused.
-
-        @param edge
-            Edge. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
-
-        @see SetSashBorder()
-    */
-    bool HasBorder(wxSashEdgePosition edge) const;
-
-    /**
         Sets the maximum window size in the x direction.
     */
     virtual void SetMaximumSizeX(int min);
@@ -166,17 +163,6 @@ public:
     virtual void SetMinimumSizeY(int min);
 
     /**
-        Call this function to give the sash a border, or remove the border.
-        This function is obsolete since the sash border property is unused.
-
-        @param edge
-            Edge to change. One of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
-        @param hasBorder
-            @true to give the sash a border visible, @false to remove it.
-    */
-    void SetSashBorder(wxSashEdgePosition edge, bool hasBorder);
-
-    /**
         Call this function to make a sash visible or invisible on a particular edge.
 
         @param edge
@@ -187,6 +173,42 @@ public:
         @see GetSashVisible()
     */
     void SetSashVisible(wxSashEdgePosition edge, bool visible);
+
+
+    /**
+       Get border size
+    */
+    int GetEdgeMargin(wxSashEdgePosition edge) const;
+
+    /**
+       Sets the default sash border size
+    */
+    void SetDefaultBorderSize(int width);
+
+    /**
+       Gets the default sash border size
+    */
+    int GetDefaultBorderSize() const;
+
+    /**
+       Sets the additional border size between child and sash window
+    */
+    void SetExtraBorderSize(int width);
+
+    /**
+       Gets the addition border size between child and sash window
+    */
+    int GetExtraBorderSize() const;
+
+    /**
+       Tests for x, y over sash
+    */
+    wxSashEdgePosition SashHitTest(int x, int y, int tolerance = 2);
+
+    /**
+       Resizes subwindows
+    */
+    void SizeWindows();
 };
 
 
@@ -252,5 +274,11 @@ public:
         The return value is one of wxSASH_TOP, wxSASH_RIGHT, wxSASH_BOTTOM, wxSASH_LEFT.
     */
     wxSashEdgePosition GetEdge() const;
+
+    
+    void SetEdge(wxSashEdgePosition edge);
+    void SetDragRect(const wxRect& rect);
+    void SetDragStatus(wxSashDragStatus status);
 };
 
+wxEventType wxEVT_SASH_DRAGGED;

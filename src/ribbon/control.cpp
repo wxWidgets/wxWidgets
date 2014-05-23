@@ -4,7 +4,6 @@
 // Author:      Peter Cawley
 // Modified by:
 // Created:     2009-06-05
-// RCS-ID:      $Id$
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -18,6 +17,7 @@
 #if wxUSE_RIBBON
 
 #include "wx/ribbon/control.h"
+#include "wx/ribbon/bar.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -107,6 +107,18 @@ wxSize wxRibbonControl::GetNextLargerSize(wxOrientation direction) const
 bool wxRibbonControl::Realize()
 {
     return true;
+}
+
+wxRibbonBar* wxRibbonControl::GetAncestorRibbonBar()const
+{
+    for ( wxWindow* win = GetParent(); win; win = win->GetParent() )
+    {
+        wxRibbonBar* bar = wxDynamicCast(win, wxRibbonBar);
+        if ( bar )
+            return bar;
+    }
+
+    return NULL;
 }
 
 #endif // wxUSE_RIBBON

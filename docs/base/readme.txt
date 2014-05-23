@@ -68,20 +68,7 @@ c) Borland
    Please refer to the docs/msw/install.txt. The console sample compiles and
    runs but does not pass all tests.
 
-d) Watcom
-
-   The compilation has been tested only with OpenWatcom but should also work
-   with Watcom 11.0 but probably not the earlier versions.
-
-   To build wxBase itself (only static library build is supported), enter the
-   directory src\msw and type "wmake -f makebase.wat". See also Watcom notes in
-   docs/msw/install.txt.
-
-   There is makefile.wat in samples\console which can be used to build the
-   console sample with Watcom and also shows how can you write your own
-   makefiles for wxBase and Watcom compiler.
-
-e) Other compilers
+d) Other compilers
 
    Unfortunately we don't have the makefiles for any other compilers yet.
 Please contact us if you would like to help us with creating one for the

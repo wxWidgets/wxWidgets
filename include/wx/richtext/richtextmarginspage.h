@@ -1,17 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextmarginspage.h
-// Purpose:     
+// Purpose:     Declares the rich text formatting dialog margins page.
 // Author:      Julian Smart
 // Modified by: 
 // Created:     20/10/2010 10:27:34
-// RCS-ID:      
 // Copyright:   (c) Julian Smart
-// Licence:     
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _RICHTEXTMARGINSPAGE_H_
 #define _RICHTEXTMARGINSPAGE_H_
-
 
 /*!
  * Includes

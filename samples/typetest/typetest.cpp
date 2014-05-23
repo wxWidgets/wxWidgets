@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,7 +24,7 @@
 
 #include "typetest.h"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -51,7 +50,7 @@ IMPLEMENT_APP    (MyApp)
 
 IMPLEMENT_DYNAMIC_CLASS    (MyApp, wxApp)
 
-BEGIN_EVENT_TABLE(MyApp, wxApp)
+wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
     EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
 #if wxUSE_UNICODE
@@ -65,7 +64,7 @@ BEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TYPES_STREAM6, MyApp::DoStreamDemo6)
     EVT_MENU(TYPES_STREAM7, MyApp::DoStreamDemo7)
     EVT_MENU(TYPES_MIME, MyApp::DoMIMEDemo)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 wxString file_name = wxT("test_wx.dat");
 wxString file_name2 = wxString(wxT("test_wx2.dat"));
@@ -892,10 +891,10 @@ void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
 
     printf( "\n\nConversion with wxConvLocal:\n" );
     wxConvCurrent = &wxConvLocal;
-    printf( (const char*) str.mbc_str() );
+    puts( str.mbc_str() );
     printf( "\n\nConversion with wxConvLibc:\n" );
     wxConvCurrent = &wxConvLibc;
-    printf( (const char*) str.mbc_str() );
+    puts( str.mbc_str() );
 
 }
 #endif
@@ -1058,10 +1057,10 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TYPES_QUIT, MyFrame::OnQuit)
     EVT_MENU(TYPES_ABOUT, MyFrame::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(wxFrame *parent, const wxString& title,

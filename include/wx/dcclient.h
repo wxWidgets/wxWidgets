@@ -3,7 +3,6 @@
 // Purpose:     wxClientDC base header
 // Author:      Julian Smart
 // Copyright:   (c) Julian Smart
-// RCS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     wxHtml testing example
 // Author:      Vaclav Slavik
 // Created:     1999-07-07
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -42,7 +41,7 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define a new html window type: this is a wrapper for handling wxHtmlWindow events
@@ -57,7 +56,7 @@ public:
 
     virtual wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType WXUNUSED(type),
                                              const wxString& WXUNUSED(url),
-                                             wxString *WXUNUSED(redirect)) const;
+                                             wxString *WXUNUSED(redirect)) const wxOVERRIDE;
 
     // toggle drawing of custom background
     void DrawCustomBg(bool draw)
@@ -74,7 +73,7 @@ private:
 
     bool m_drawCustomBg;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyHtmlWindow);
 };
 
@@ -104,14 +103,14 @@ private:
     wxHtmlProcessor *m_Processor;
 
     // Any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
 class BoldProcessor : public wxHtmlProcessor
 {
 public:
-    virtual wxString Process(const wxString& s) const
+    virtual wxString Process(const wxString& s) const wxOVERRIDE
     {
         wxString r(s);
         r.Replace(wxT("<b>"), wxEmptyString);
@@ -144,7 +143,7 @@ enum
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT,  MyFrame::OnQuit)
     EVT_MENU(ID_PageOpen, MyFrame::OnPageOpen)
     EVT_MENU(ID_DefaultLocalBrowser, MyFrame::OnDefaultLocalBrowser)
@@ -157,7 +156,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_HTML_LINK_CLICKED(wxID_ANY, MyFrame::OnHtmlLinkClicked)
     EVT_HTML_CELL_HOVER(wxID_ANY, MyFrame::OnHtmlCellHover)
     EVT_HTML_CELL_CLICKED(wxID_ANY, MyFrame::OnHtmlCellClicked)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
 
@@ -378,12 +377,12 @@ wxHtmlOpeningStatus MyHtmlWindow::OnOpeningURL(wxHtmlURLType WXUNUSED(type),
     return wxHTML_OPEN;
 }
 
-BEGIN_EVENT_TABLE(MyHtmlWindow, wxHtmlWindow)
+wxBEGIN_EVENT_TABLE(MyHtmlWindow, wxHtmlWindow)
 #if wxUSE_CLIPBOARD
     EVT_TEXT_COPY(wxID_ANY, MyHtmlWindow::OnClipboardEvent)
 #endif // wxUSE_CLIPBOARD
     EVT_ERASE_BACKGROUND(MyHtmlWindow::OnEraseBgEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if wxUSE_CLIPBOARD
 void MyHtmlWindow::OnClipboardEvent(wxClipboardTextEvent& WXUNUSED(event))

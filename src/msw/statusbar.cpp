@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04.04.98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -153,11 +152,13 @@ wxStatusBar::~wxStatusBar()
     // occupy
     PostSizeEventToParent();
 
+#if wxUSE_TOOLTIPS
     // delete existing tooltips
     for (size_t i=0; i<m_tooltips.size(); i++)
     {
         wxDELETE(m_tooltips[i]);
     }
+#endif // wxUSE_TOOLTIPS
 
     wxDELETE(m_pDC);
 }
@@ -176,12 +177,9 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
     // this is a Windows limitation
     wxASSERT_MSG( (nFields > 0) && (nFields < 255), "too many fields" );
 
-    wxStatusBarBase::SetFieldsCount(nFields, widths);
-
-    MSWUpdateFieldsWidths();
-
     // keep in synch also our m_tooltips array
 
+#if wxUSE_TOOLTIPS
     // reset all current tooltips
     for (size_t i=0; i<m_tooltips.size(); i++)
     {
@@ -189,7 +187,12 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
     }
 
     // shrink/expand the array:
-    m_tooltips.resize(m_panes.GetCount(), NULL);
+    m_tooltips.resize(nFields, NULL);
+#endif // wxUSE_TOOLTIPS
+
+    wxStatusBarBase::SetFieldsCount(nFields, widths);
+
+    MSWUpdateFieldsWidths();
 }
 
 void wxStatusBar::SetStatusWidths(int n, const int widths[])
@@ -229,7 +232,8 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     int *pWidths = new int[count];
 
     int nCurPos = 0;
-    for ( int i = 0; i < count; i++ )
+    int i;
+    for ( i = 0; i < count; i++ )
     {
         nCurPos += widthsAbs[i] + extraWidth;
         pWidths[i] = nCurPos;
@@ -245,10 +249,13 @@ void wxStatusBar::MSWUpdateFieldsWidths()
         wxLogLastError("StatusBar_SetParts");
     }
 
+    // Now that all parts have been created, set their text.
+    for ( i = 0; i < count; i++ )
+    {
+        DoUpdateStatusText(i);
+    }
+
     delete [] pWidths;
-
-
-    // FIXME: we may want to call DoUpdateStatusText() here since we may need to (de)ellipsize status texts
 }
 
 void wxStatusBar::DoUpdateStatusText(int nField)
@@ -267,6 +274,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
         style = SBT_NOBORDERS;
         break;
 
+    case wxSB_SUNKEN:
     case wxSB_NORMAL:
     default:
         style = 0;
@@ -309,11 +317,12 @@ void wxStatusBar::DoUpdateStatusText(int nField)
 
     // Set the status text in the native control passing both field number and style.
     // NOTE: MSDN library doesn't mention that nField and style have to be 'ORed'
-    if ( !StatusBar_SetText(GetHwnd(), nField | style, text.wx_str()) )
+    if ( !StatusBar_SetText(GetHwnd(), nField | style, text.t_str()) )
     {
         wxLogLastError("StatusBar_SetText");
     }
 
+#if wxUSE_TOOLTIPS
     if (HasFlag(wxSTB_SHOW_TIPS))
     {
         wxASSERT(m_tooltips.size() == m_panes.GetCount());
@@ -342,6 +351,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
             //else: leave m_tooltips[nField]==NULL
         }
     }
+#endif // wxUSE_TOOLTIPS
 }
 
 wxStatusBar::MSWBorders wxStatusBar::MSWGetBorders() const
@@ -374,7 +384,7 @@ int wxStatusBar::MSWGetBorderWidth() const
 /* static */
 const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
 {
-    static MSWMetrics s_metrics = { 0 };
+    static MSWMetrics s_metrics = { 0, 0 };
     if ( !s_metrics.textMargin )
     {
         // Grip size should be self explanatory (the only problem with it is
@@ -384,12 +394,14 @@ const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
         // into account to make sure the text drawn by user fits inside the
         // pane. Notice that it's not the value returned by SB_GETBORDERS
         // which, at least on this Windows 2003 system, returns {0, 2, 2}
+#if wxUSE_UXTHEME
         if ( wxUxThemeEngine::GetIfActive() )
         {
             s_metrics.gripWidth = 20;
             s_metrics.textMargin = 8;
         }
         else // classic/unthemed look
+#endif // wxUSE_UXTHEME
         {
             s_metrics.gripWidth = 18;
             s_metrics.textMargin = 4;
@@ -401,7 +413,18 @@ const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
 
 void wxStatusBar::SetMinHeight(int height)
 {
-    SendMessage(GetHwnd(), SB_SETMINHEIGHT, height + 2*GetBorderY(), 0);
+    // It looks like we need to count the border twice to really make the
+    // controls taking exactly height pixels fully fit in the status bar:
+    // at least under Windows 7 the checkbox in the custom status bar of the
+    // statbar sample gets truncated otherwise.
+    height += 4*GetBorderY();
+
+    // We need to set the size and not the size to reflect the height because
+    // wxFrame uses our size and not the minimal size as it assumes that the
+    // size of a status bar never changes anyhow.
+    SetSize(-1, height);
+
+    SendMessage(GetHwnd(), SB_SETMINHEIGHT, height, 0);
 
     // we have to send a (dummy) WM_SIZE to redraw it now
     SendMessage(GetHwnd(), WM_SIZE, 0, 0);
@@ -471,11 +494,10 @@ wxSize wxStatusBar::DoGetBestSize() const
         width = 2*DEFAULT_FIELD_WIDTH;
     }
 
-    // calculate height
-    int height;
-    wxGetCharSize(GetHWND(), NULL, &height, GetFont());
-    height = EDIT_HEIGHT_FROM_CHAR_HEIGHT(height);
-    height += borders.vert;
+    // calculate height: by default it should be just big enough to show text
+    // (see SetMinHeight() for the explanation of 4 factor)
+    int height = GetCharHeight();
+    height += 4*borders.vert;
 
     wxSize best(width, height);
     CacheBestSize(best);
@@ -531,6 +553,7 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
         case wxSB_FLAT:
             style = SBT_NOBORDERS;
             break;
+        case wxSB_SUNKEN:
         case wxSB_NORMAL:
         default:
             style = 0;
@@ -541,7 +564,7 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
         // the fields' styles.
         // NOTE: MSDN library doesn't mention that nField and style have to be 'ORed'
         wxString text = GetStatusText(i);
-        if (!StatusBar_SetText(GetHwnd(), style | i, text.wx_str()))
+        if (!StatusBar_SetText(GetHwnd(), style | i, text.t_str()))
         {
             wxLogLastError("StatusBar_SetText");
         }

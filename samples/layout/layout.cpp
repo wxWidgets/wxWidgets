@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Robin Dunn, Vadim Zeitlin
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //                  2005 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -35,7 +34,7 @@
 
 #include "layout.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -63,7 +62,7 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_ABOUT, MyFrame::OnAbout)
   EVT_MENU(LAYOUT_QUIT, MyFrame::OnQuit)
 
@@ -74,7 +73,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(LAYOUT_TEST_SET_MINIMAL, MyFrame::TestSetMinimal)
   EVT_MENU(LAYOUT_TEST_NESTED, MyFrame::TestNested)
   EVT_MENU(LAYOUT_TEST_WRAP, MyFrame::TestWrap)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame()
@@ -203,8 +202,7 @@ void MyFrame::TestProportions(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::TestFlexSizers(wxCommandEvent& WXUNUSED(event) )
 {
-    MyFlexSizerFrame *newFrame = new MyFlexSizerFrame(wxT("Flex Sizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MyFlexSizerFrame(this))->Show();
 }
 
 void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
@@ -216,20 +214,17 @@ void MyFrame::TestNotebookSizers(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestSetMinimal(wxCommandEvent& WXUNUSED(event) )
 {
-    MySimpleSizerFrame *newFrame = new MySimpleSizerFrame(wxT("Simple Sizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MySimpleSizerFrame(this))->Show();
 }
 
 void MyFrame::TestNested(wxCommandEvent& WXUNUSED(event) )
 {
-    MyNestedSizerFrame *newFrame = new MyNestedSizerFrame(wxT("Nested Sizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MyNestedSizerFrame(this))->Show();
 }
 
 void MyFrame::TestWrap(wxCommandEvent& WXUNUSED(event) )
 {
-    MyWrapSizerFrame *newFrame = new MyWrapSizerFrame(wxT("Wrap Sizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MyWrapSizerFrame(this))->Show();
 }
 
 
@@ -241,9 +236,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::TestGridBagSizer(wxCommandEvent& WXUNUSED(event) )
 {
-    MyGridBagSizerFrame *newFrame = new
-        MyGridBagSizerFrame(wxT("wxGridBagSizer Test Frame"), 50, 50);
-    newFrame->Show(true);
+    (new MyGridBagSizerFrame(this))->Show();
 }
 
 // ----------------------------------------------------------------------------
@@ -277,9 +270,9 @@ MyProportionsFrame::MyProportionsFrame(wxFrame *parent)
     SetSizerAndFit(sizerTop);
 
     // and connect the events
-    Connect(wxEVT_COMMAND_TEXT_UPDATED,
+    Connect(wxEVT_TEXT,
                 wxCommandEventHandler(MyProportionsFrame::OnProportionUpdated));
-    Connect(wxEVT_COMMAND_SPINCTRL_UPDATED,
+    Connect(wxEVT_SPINCTRL,
             wxSpinEventHandler(MyProportionsFrame::OnProportionChanged));
 }
 
@@ -327,8 +320,8 @@ void MyFlexSizerFrame::InitFlexSizer(wxFlexGridSizer *sizer, wxWindow* parent)
     }
 }
 
-MyFlexSizerFrame::MyFlexSizerFrame(const wxString &title, int x, int y )
-            : wxFrame(NULL, wxID_ANY, title, wxPoint(x, y) )
+MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
+            : wxFrame(parent, wxID_ANY, "Flex Sizer Test Frame")
 {
     wxFlexGridSizer *sizerFlex;
     wxPanel* p = new wxPanel(this, wxID_ANY);
@@ -472,16 +465,16 @@ enum {
 };
 
 
-BEGIN_EVENT_TABLE(MyGridBagSizerFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyGridBagSizerFrame, wxFrame)
     EVT_BUTTON( GBS_HIDE_BTN,  MyGridBagSizerFrame::OnHideBtn)
     EVT_BUTTON( GBS_SHOW_BTN,  MyGridBagSizerFrame::OnShowBtn)
     EVT_BUTTON( GBS_MOVE_BTN1, MyGridBagSizerFrame::OnMoveBtn)
     EVT_BUTTON( GBS_MOVE_BTN2, MyGridBagSizerFrame::OnMoveBtn)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
-MyGridBagSizerFrame::MyGridBagSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
+MyGridBagSizerFrame::MyGridBagSizerFrame(wxFrame* parent)
+    : wxFrame(parent, wxID_ANY, "wxGridBagSizer Test Frame")
 {
     wxPanel* p = new wxPanel(this, wxID_ANY);
     m_panel = p;
@@ -589,13 +582,13 @@ enum {
     ID_SET_BIG
 };
 
-BEGIN_EVENT_TABLE(MySimpleSizerFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MySimpleSizerFrame, wxFrame)
     EVT_MENU( ID_SET_SMALL, MySimpleSizerFrame::OnSetSmallSize)
     EVT_MENU( ID_SET_BIG, MySimpleSizerFrame::OnSetBigSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-MySimpleSizerFrame::MySimpleSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
+MySimpleSizerFrame::MySimpleSizerFrame(wxFrame* parent)
+    : wxFrame(parent, wxID_ANY, "Simple Sizer Test Frame")
 {
     wxMenu *menu = new wxMenu;
 
@@ -640,8 +633,8 @@ void MySimpleSizerFrame::OnSetBigSize( wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 
 
-MyNestedSizerFrame::MyNestedSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
+MyNestedSizerFrame::MyNestedSizerFrame(wxFrame* parent)
+    : wxFrame(parent, wxID_ANY, "Nested Sizer Test Frame")
 {
     wxMenu *menu = new wxMenu;
 
@@ -681,54 +674,81 @@ MyNestedSizerFrame::MyNestedSizerFrame(const wxString &title, int x, int y )
 // MyWrapSizerFrame
 // ----------------------------------------------------------------------------
 
+wxBEGIN_EVENT_TABLE(MyWrapSizerFrame, wxFrame)
+    EVT_MENU(wxID_ADD, MyWrapSizerFrame::OnAddCheckbox)
+    EVT_MENU(wxID_REMOVE, MyWrapSizerFrame::OnRemoveCheckbox)
+wxEND_EVENT_TABLE()
 
-MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y), wxSize(200,-1) )
+MyWrapSizerFrame::MyWrapSizerFrame(wxFrame* parent)
+    : wxFrame(parent, wxID_ANY, "Wrap Sizer Test Frame",
+              wxDefaultPosition, wxSize(200,-1))
 {
     wxMenu *menu = new wxMenu;
 
-    menu->Append(wxID_ABOUT, "Do nothing");
+    menu->Append(wxID_ADD, "&Add a checkbox\tCtrl-+");
+    menu->Append(wxID_REMOVE, "&Remove a checkbox\tCtrl--");
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(menu, "&File");
+    menu_bar->Append(menu, "&Wrap sizer");
 
     SetMenuBar( menu_bar );
 
     wxBoxSizer *root = new wxBoxSizer( wxVERTICAL );
 
-#if 0
-    wxSizer *row = new wxWrapSizer;
-    int i;
-    for (i = 0; i < 4; i++)
-       row->Add( new wxButton( this, -1, "Hello" ), 0, wxALL, 10 );
-    root->Add( row, 0, wxGROW );
+    wxStaticBoxSizer *topSizer = new wxStaticBoxSizer( wxVERTICAL, this, "Wrapping check-boxes" );
+    m_checkboxParent = topSizer->GetStaticBox();
+    m_wrapSizer = new wxWrapSizer(wxHORIZONTAL);
 
-    row = new wxWrapSizer;
-    for (i = 0; i < 4; i++)
-       row->Add( new wxButton( this, -1, "Hello" ) );
-    root->Add( row, 0, wxGROW );
-
-#else
     // A number of checkboxes inside a wrap sizer
-    wxSizer *ps_mid = new wxStaticBoxSizer( wxVERTICAL, this, "Wrapping check-boxes" );
-    wxSizer *ps_mid_wrap = new wxWrapSizer(wxHORIZONTAL);
-    ps_mid->Add( ps_mid_wrap, 100, wxEXPAND );
-    for( int ix=0; ix<6; ix++ )
-            ps_mid_wrap->Add( new wxCheckBox(this,wxID_ANY,wxString::Format("Option %d",ix+1)), 0, wxALIGN_CENTRE|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-    root->Add( ps_mid, 0, wxEXPAND | wxALL, 5 );
+    for( int i = 0; i < 6; i++ )
+        DoAddCheckbox();
+
+    topSizer->Add( m_wrapSizer, wxSizerFlags(1).Expand());
+    root->Add( topSizer, wxSizerFlags().Expand().Border());
 
     // A shaped item inside a box sizer
-    wxSizer *ps_bottom = new wxStaticBoxSizer( wxVERTICAL, this, "With wxSHAPED item" );
-    wxSizer *ps_bottom_box = new wxBoxSizer(wxHORIZONTAL);
-    ps_bottom->Add( ps_bottom_box, 100, wxEXPAND );
-    ps_bottom_box->Add( new wxListBox(this,wxID_ANY,wxPoint(0,0),wxSize(70,70)), 0, wxEXPAND|wxSHAPED );
-    ps_bottom_box->Add( 10,10 );
-    ps_bottom_box->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
+    wxSizer *bottomSizer = new wxStaticBoxSizer( wxVERTICAL, this, "With wxSHAPED item" );
+    wxSizer *horzBoxSizer = new wxBoxSizer(wxHORIZONTAL);
+    bottomSizer->Add( horzBoxSizer, 100, wxEXPAND );
+    horzBoxSizer->Add( new wxListBox(this,wxID_ANY,wxPoint(0,0),wxSize(70,70)), 0, wxEXPAND|wxSHAPED );
+    horzBoxSizer->Add( 10,10 );
+    horzBoxSizer->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
 
-    root->Add( ps_bottom, 1, wxEXPAND | wxALL, 5 );
-#endif
+    root->Add( bottomSizer, 1, wxEXPAND | wxALL, 5 );
 
     // Set sizer for window
     SetSizerAndFit( root );
 }
 
+void MyWrapSizerFrame::DoAddCheckbox()
+{
+    m_wrapSizer->Add(new wxCheckBox
+                         (
+                            m_checkboxParent,
+                            wxID_ANY,
+                            wxString::Format
+                            (
+                                "Option %d",
+                                (int)m_wrapSizer->GetItemCount() + 1
+                            )
+                         ),
+                     wxSizerFlags().Centre().Border());
+}
+
+void MyWrapSizerFrame::OnAddCheckbox(wxCommandEvent& WXUNUSED(event))
+{
+    DoAddCheckbox();
+    Layout();
+}
+
+void MyWrapSizerFrame::OnRemoveCheckbox(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_wrapSizer->IsEmpty() )
+    {
+        wxLogStatus(this, "No more checkboxes to remove.");
+        return;
+    }
+
+    delete m_wrapSizer->GetItem(m_wrapSizer->GetItemCount() - 1)->GetWindow();
+    Layout();
+}

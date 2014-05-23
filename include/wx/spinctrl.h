@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     22.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -21,8 +20,8 @@
 // Events
 class WXDLLIMPEXP_FWD_CORE wxSpinDoubleEvent;
 
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxSpinDoubleEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SPINCTRL, wxSpinEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SPINCTRLDOUBLE, wxSpinDoubleEvent);
 
 // ----------------------------------------------------------------------------
 // A spin ctrl is a text control with a spin button which is usually used to
@@ -51,6 +50,9 @@ public:
     virtual void SetSnapToTicks(bool snap_to_ticks) = 0;
     // void SetDigits(unsigned digits)              - wxSpinCtrlDouble only
 
+    // The base for numbers display, e.g. 10 or 16.
+    virtual int GetBase() const = 0;
+    virtual bool SetBase(int base) = 0;
     // Select text in the textctrl
     virtual void SetSelection(long from, long to) = 0;
 
@@ -79,7 +81,7 @@ public:
     double GetValue() const       { return m_value; }
     void   SetValue(double value) { m_value = value; }
 
-    virtual wxEvent *Clone() const { return new wxSpinDoubleEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxSpinDoubleEvent(*this); }
 
 protected:
     double m_value;
@@ -100,10 +102,10 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 // macros for handling spinctrl events
 
 #define EVT_SPINCTRL(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SPINCTRL_UPDATED, id, wxSpinEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_SPINCTRL, id, wxSpinEventHandler(fn))
 
 #define EVT_SPINCTRLDOUBLE(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, id, wxSpinDoubleEventHandler(fn))
+    wx__DECLARE_EVT1(wxEVT_SPINCTRLDOUBLE, id, wxSpinDoubleEventHandler(fn))
 
 // ----------------------------------------------------------------------------
 // include the platform-dependent class implementation
@@ -113,16 +115,11 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 // wxSpinCtrlDouble implementations or neither, define the appropriate symbols
 // and include the generic version if necessary to provide the missing class(es)
 
-#if defined(__WXUNIVERSAL__) || \
-    defined(__WXMOTIF__) || \
-    defined(__WXCOCOA__)
+#if defined(__WXUNIVERSAL__)
     // nothing, use generic controls
 #elif defined(__WXMSW__)
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/msw/spinctrl.h"
-#elif defined(__WXPM__)
-    #define wxHAS_NATIVE_SPINCTRL
-    #include "wx/os2/spinctrl.h"
 #elif defined(__WXGTK20__)
     #define wxHAS_NATIVE_SPINCTRL
     #define wxHAS_NATIVE_SPINCTRLDOUBLE
@@ -130,9 +127,6 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #elif defined(__WXGTK__)
     #define wxHAS_NATIVE_SPINCTRL
     #include "wx/gtk1/spinctrl.h"
-#elif defined(__WXMAC__)
-    #define wxHAS_NATIVE_SPINCTRL
-    #include "wx/osx/spinctrl.h"
 #elif defined(__WXQT__)
     #define wxHAS_NATIVE_SPINCTRL
     #define wxHAS_NATIVE_SPINCTRLDOUBLE
@@ -142,6 +136,18 @@ typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 #if !defined(wxHAS_NATIVE_SPINCTRL) || !defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
     #include "wx/generic/spinctlg.h"
 #endif
+namespace wxPrivate
+{
+
+// This is an internal helper function currently used by all ports: return the
+// string containing hexadecimal representation of the given number.
+extern wxString wxSpinCtrlFormatAsHex(long val, long maxVal);
+
+} // namespace wxPrivate
+
+// old wxEVT_COMMAND_* constants
+#define wxEVT_COMMAND_SPINCTRL_UPDATED         wxEVT_SPINCTRL
+#define wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED   wxEVT_SPINCTRLDOUBLE
 
 #endif // wxUSE_SPINCTRL
 

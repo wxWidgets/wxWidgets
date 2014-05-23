@@ -2,7 +2,6 @@
 // Name:        wx/infobar.h
 // Purpose:     interface of wxInfoBar
 // Author:      Vadim Zeitlin
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,7 @@
 
     void MyFrame::SomeMethod()
     {
-        m_infoBar->ShowMessage("Something happend", wxICON_INFORMATION);
+        m_infoBar->ShowMessage("Something happened", wxICON_INFORMATION);
     }
     @endcode
 
@@ -150,7 +149,7 @@ public:
         This method hides the window and lays out the parent window to account
         for its disappearance (unlike a simple Hide()).
      */
-    void Dismiss();
+    virtual void Dismiss();
 
     /**
         Remove a button previously added by AddButton().

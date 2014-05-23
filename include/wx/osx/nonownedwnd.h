@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     2008-03-24
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -13,6 +12,8 @@
 #define _WX_MAC_NONOWNEDWND_H_
 
 #include "wx/window.h"
+
+#include "wx/graphics.h"
 
 #if wxUSE_SYSTEM_OPTIONS
     #define wxMAC_WINDOW_PLAIN_TRANSITION wxT("mac.window-plain-transition")
@@ -30,7 +31,7 @@
 
 class wxNonOwnedWindowImpl;
 
-class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxWindow
+class WXDLLIMPEXP_CORE wxNonOwnedWindow : public wxNonOwnedWindowBase
 {
 public:
     // constructors and such
@@ -63,7 +64,7 @@ public:
     virtual void UnsubclassWin();
 
     virtual wxPoint GetClientAreaOrigin() const;
-
+    
     // implement base class pure virtuals
 
     virtual bool SetTransparent(wxByte alpha);
@@ -79,8 +80,11 @@ public:
     // implementation from now on
     // --------------------------
 
-    virtual bool DoSetShape(const wxRegion& region);
+    // These accessors are Mac-specific and don't exist in other ports.
     const wxRegion& GetShape() const { return m_shape; }
+#if wxUSE_GRAPHICS_CONTEXT
+    const wxGraphicsPath& GetShapePath() { return m_shapePath; }
+#endif // wxUSE_GRAPHICS_CONTEXT
 
     // activation hooks only necessary for MDI Implementation
     static void MacDelayedDeactivation(long timestamp);
@@ -100,7 +104,7 @@ public:
 
 #if wxOSX_USE_COCOA_OR_IPHONE
     // override the base class method to return an NSWindow instead of NSView
-    virtual void *OSXGetViewOrWindow() const { return GetWXWindow(); }
+    virtual void *OSXGetViewOrWindow() const;
 #endif // Cocoa
 
     // osx specific event handling common for all osx-ports
@@ -109,6 +113,8 @@ public:
     virtual void HandleResized( double timestampsec );
     virtual void HandleMoved( double timestampsec );
     virtual void HandleResizing( double timestampsec, wxRect* rect );
+    
+    void WindowWasPainted();
 
     virtual bool Destroy();
 
@@ -125,6 +131,12 @@ protected:
                                    wxShowEffect effect,
                                    unsigned timeout);
 
+    virtual bool DoClearShape();
+    virtual bool DoSetRegionShape(const wxRegion& region);
+#if wxUSE_GRAPHICS_CONTEXT
+    virtual bool DoSetPathShape(const wxGraphicsPath& path);
+#endif // wxUSE_GRAPHICS_CONTEXT
+
     virtual void WillBeDestroyed();
 
     wxNonOwnedWindowImpl* m_nowpeer ;
@@ -134,7 +146,12 @@ protected:
     static wxNonOwnedWindow *s_macDeactivateWindow;
 
 private :
+    static clock_t s_lastFlush;
+    
     wxRegion m_shape;
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGraphicsPath m_shapePath;
+#endif // wxUSE_GRAPHICS_CONTEXT
 };
 
 // list of all frames and modeless dialogs

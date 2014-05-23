@@ -3,7 +3,6 @@
 // Purpose:     TDI-based MDI implementation for wxGTK
 // Author:      Robert Roebling
 // Modified by: 2008-10-31 Vadim Zeitlin: derive from the base classes
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -50,13 +49,13 @@ public:
 
     // we don't store the active child in m_currentChild unlike the base class
     // version so override this method to find it dynamically
-    virtual wxMDIChildFrame *GetActiveChild() const;
+    virtual wxMDIChildFrame *GetActiveChild() const wxOVERRIDE;
 
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual void ActivateNext();
-    virtual void ActivatePrevious();
+    virtual void ActivateNext() wxOVERRIDE;
+    virtual void ActivatePrevious() wxOVERRIDE;
 
     static bool IsTDI() { return true; }
 
@@ -64,14 +63,14 @@ public:
 
     bool                m_justInserted;
 
-    virtual void OnInternalIdle();
+    virtual void OnInternalIdle() wxOVERRIDE;
 
 protected:
-    void Init();
-    virtual void DoGetClientSize(int* width, int* height) const;
+    virtual void DoGetClientSize(int* width, int* height) const wxOVERRIDE;
 
 private:
     friend class wxMDIChildFrame;
+    void Init();
 
     DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 };
@@ -107,17 +106,18 @@ public:
 
     virtual ~wxMDIChildFrame();
 
-    virtual void SetMenuBar( wxMenuBar *menu_bar );
-    virtual wxMenuBar *GetMenuBar() const;
+    virtual void SetMenuBar( wxMenuBar *menu_bar ) wxOVERRIDE;
+    virtual wxMenuBar *GetMenuBar() const wxOVERRIDE;
 
-    virtual void Activate();
+    virtual void Activate() wxOVERRIDE;
 
-    virtual void SetTitle(const wxString& title);
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
 
     // implementation
 
     void OnActivate( wxActivateEvent& event );
     void OnMenuHighlight( wxMenuEvent& event );
+    virtual void GTKHandleRealized() wxOVERRIDE;
 
     wxMenuBar         *m_menuBar;
     bool               m_justInserted;
@@ -142,10 +142,10 @@ public:
     ~wxMDIClientWindow();
 
     virtual bool CreateClient(wxMDIParentFrame *parent,
-                              long style = wxVSCROLL | wxHSCROLL);
+                              long style = wxVSCROLL | wxHSCROLL) wxOVERRIDE;
 
 private:
-    virtual void AddChildGTK(wxWindowGTK* child);
+    virtual void AddChildGTK(wxWindowGTK* child) wxOVERRIDE;
 
     DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 };

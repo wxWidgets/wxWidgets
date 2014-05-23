@@ -3,7 +3,6 @@
 // Purpose:     Helper functions for cppunit
 // Author:      Steven Lamerton
 // Created:     2010-07-23
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 

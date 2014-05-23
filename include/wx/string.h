@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,30 +23,15 @@
 
 #include "wx/defs.h"        // everybody should include this
 
-#ifndef __WXPALMOS5__
-#if defined(__WXMAC__) || defined(__VISAGECPP__)
+#if defined(__WXMAC__)
     #include <ctype.h>
 #endif
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-   // problem in VACPP V4 with including stdlib.h multiple times
-   // strconv includes it anyway
-#  include <stdio.h>
-#  include <string.h>
-#  include <stdarg.h>
-#  include <limits.h>
-#else
-#  include <string.h>
-#  include <stdio.h>
-#  include <stdarg.h>
-#  include <limits.h>
-#  include <stdlib.h>
-#endif
-
-#ifdef HAVE_STRCASECMP_IN_STRINGS_H
-    #include <strings.h>    // for strcasecmp()
-#endif // HAVE_STRCASECMP_IN_STRINGS_H
-#endif // ! __WXPALMOS5__
+#include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <limits.h>
+#include <stdlib.h>
 
 #include "wx/wxcrtbase.h"   // for wxChar, wxStrlen() etc.
 #include "wx/strvararg.h"
@@ -71,7 +55,7 @@
 // it would have to be re-tested and probably corrected
 // CS: under OSX release builds the string destructor/cache cleanup sometimes
 // crashes, disable until we find the true reason or a better workaround
-#if wxUSE_UNICODE_UTF8 && !defined(__WXMSW__) && !defined(__WXOSX__)
+#if wxUSE_UNICODE_UTF8 && !defined(__WINDOWS__) && !defined(__WXOSX__)
     #define wxUSE_STRING_POS_CACHE 1
 #else
     #define wxUSE_STRING_POS_CACHE 0
@@ -117,15 +101,6 @@ namespace wxPrivate
 // constants
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_6
-
-// deprecated in favour of wxString::npos, don't use in new code
-//
-// maximum possible length for a string means "take all string" everywhere
-#define wxSTRING_MAXLEN wxString::npos
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // ---------------------------------------------------------------------------
 // global functions complementing standard C string library replacements for
 // strlen() and portable strcasecmp()
@@ -136,70 +111,18 @@ namespace wxPrivate
 // backwards compatibility only.
 
 // checks whether the passed in pointer is NULL and if the string is empty
-wxDEPRECATED( inline bool IsEmpty(const char *p) );
+wxDEPRECATED_MSG("use wxIsEmpty() instead")
 inline bool IsEmpty(const char *p) { return (!p || !*p); }
 
 // safe version of strlen() (returns 0 if passed NULL pointer)
-wxDEPRECATED( inline size_t Strlen(const char *psz) );
+wxDEPRECATED_MSG("use wxStrlen() instead")
 inline size_t Strlen(const char *psz)
   { return psz ? strlen(psz) : 0; }
 
 // portable strcasecmp/_stricmp
-wxDEPRECATED( inline int Stricmp(const char *psz1, const char *psz2) );
+wxDEPRECATED_MSG("use wxStricmp() instead")
 inline int Stricmp(const char *psz1, const char *psz2)
-{
-#if defined(__VISUALC__) && defined(__WXWINCE__)
-  register char c1, c2;
-  do {
-    c1 = tolower(*psz1++);
-    c2 = tolower(*psz2++);
-  } while ( c1 && (c1 == c2) );
-
-  return c1 - c2;
-#elif defined(__VISUALC__) || ( defined(__MWERKS__) && defined(__INTEL__) )
-  return _stricmp(psz1, psz2);
-#elif defined(__SC__)
-  return _stricmp(psz1, psz2);
-#elif defined(__BORLANDC__)
-  return stricmp(psz1, psz2);
-#elif defined(__WATCOMC__)
-  return stricmp(psz1, psz2);
-#elif defined(__DJGPP__)
-  return stricmp(psz1, psz2);
-#elif defined(__EMX__)
-  return stricmp(psz1, psz2);
-#elif defined(__WXPM__)
-  return stricmp(psz1, psz2);
-#elif defined(__WXPALMOS__) || \
-      defined(HAVE_STRCASECMP_IN_STRING_H) || \
-      defined(HAVE_STRCASECMP_IN_STRINGS_H) || \
-      defined(__GNUWIN32__)
-  return strcasecmp(psz1, psz2);
-#elif defined(__MWERKS__) && !defined(__INTEL__)
-  register char c1, c2;
-  do {
-    c1 = tolower(*psz1++);
-    c2 = tolower(*psz2++);
-  } while ( c1 && (c1 == c2) );
-
-  return c1 - c2;
-#else
-  // almost all compilers/libraries provide this function (unfortunately under
-  // different names), that's why we don't implement our own which will surely
-  // be more efficient than this code (uncomment to use):
-  /*
-    register char c1, c2;
-    do {
-      c1 = tolower(*psz1++);
-      c2 = tolower(*psz2++);
-    } while ( c1 && (c1 == c2) );
-
-    return c1 - c2;
-  */
-
-  #error  "Please define string case-insensitive compare for your OS/compiler"
-#endif  // OS/compiler
-}
+    { return wxCRT_StricmpA(psz1, psz2); }
 
 #endif // WXWIN_COMPATIBILITY_2_8
 
@@ -313,104 +236,9 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxStringPrintfMixin
-// ---------------------------------------------------------------------------
-
-// NB: VC6 has a bug that causes linker errors if you have template methods
-//     in a class using __declspec(dllimport). The solution is to split such
-//     class into two classes, one that contains the template methods and does
-//     *not* use WXDLLIMPEXP_BASE and another class that contains the rest
-//     (with DLL linkage).
-//
-//     We only do this for VC6 here, because the code is less efficient
-//     (Printf() has to use dynamic_cast<>) and because OpenWatcom compiler
-//     cannot compile this code.
-
-#if defined(__VISUALC__) && __VISUALC__ < 1300
-    #define wxNEEDS_WXSTRING_PRINTF_MIXIN
-#endif
-
-#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-// this class contains implementation of wxString's vararg methods, it's
-// exported from wxBase DLL
-class WXDLLIMPEXP_BASE wxStringPrintfMixinBase
-{
-protected:
-    wxStringPrintfMixinBase() {}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-    int DoPrintfWchar(const wxChar *format, ...);
-    static wxString DoFormatWchar(const wxChar *format, ...);
-#endif
-#if wxUSE_UNICODE_UTF8
-    int DoPrintfUtf8(const char *format, ...);
-    static wxString DoFormatUtf8(const char *format, ...);
-#endif
-};
-
-// this class contains template wrappers for wxString's vararg methods, it's
-// intentionally *not* exported from the DLL in order to fix the VC6 bug
-// described above
-class wxStringPrintfMixin : public wxStringPrintfMixinBase
-{
-private:
-    // to further complicate things, we can't return wxString from
-    // wxStringPrintfMixin::Format() because wxString is not yet declared at
-    // this point; the solution is to use this fake type trait template - this
-    // way the compiler won't know the return type until Format() is used
-    // (this doesn't compile with Watcom, but VC6 compiles it just fine):
-    template<typename T> struct StringReturnType
-    {
-        typedef wxString type;
-    };
-
-public:
-    // these are duplicated wxString methods, they're also declared below
-    // if !wxNEEDS_WXSTRING_PRINTF_MIXIN:
-
-    // static wxString Format(const wString& format, ...) WX_ATTRIBUTE_PRINTF_1;
-    WX_DEFINE_VARARG_FUNC_SANS_N0(static typename StringReturnType<T1>::type,
-                                  Format, 1, (const wxFormatString&),
-                                  DoFormatWchar, DoFormatUtf8)
-    // We have to implement the version without template arguments manually
-    // because of the StringReturnType<> hack, although WX_DEFINE_VARARG_FUNC
-    // normally does it itself. It has to be a template so that we can use
-    // the hack, even though there's no real template parameter. We can't move
-    // it to wxStrig, because it would shadow these versions of Format() then.
-    template<typename T>
-    inline static typename StringReturnType<T>::type
-    Format(const T& fmt)
-    {
-        // NB: this doesn't compile if T is not (some form of) a string;
-        //     this makes Format's prototype equivalent to
-        //     Format(const wxFormatString& fmt)
-        return DoFormatWchar(wxFormatString(fmt));
-    }
-
-    // int Printf(const wxString& format, ...);
-    WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxFormatString&),
-                          DoPrintfWchar, DoPrintfUtf8)
-    // int sprintf(const wxString& format, ...) WX_ATTRIBUTE_PRINTF_2;
-    WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxFormatString&),
-                          DoPrintfWchar, DoPrintfUtf8)
-
-protected:
-    wxStringPrintfMixin() : wxStringPrintfMixinBase() {}
-};
-#endif // wxNEEDS_WXSTRING_PRINTF_MIXIN
-
-
-// ----------------------------------------------------------------------------
 // wxString: string class trying to be compatible with std::string, MFC
 //           CString and wxWindows 1.x wxString all at once
 // ---------------------------------------------------------------------------
-
-#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-    // "non dll-interface class 'wxStringPrintfMixin' used as base interface
-    // for dll-interface class 'wxString'" -- this is OK in our case
-    #pragma warning (push)
-    #pragma warning (disable:4275)
-#endif
 
 #if wxUSE_UNICODE_UTF8
 // see the comment near wxString::iterator for why we need this
@@ -450,9 +278,6 @@ private:
 #endif // wxUSE_UNICODE_UTF8
 
 class WXDLLIMPEXP_BASE wxString
-#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-                                : public wxStringPrintfMixin
-#endif
 {
   // NB: special care was taken in arranging the member functions in such order
   //     that all inline functions can be effectively inlined, verify that all
@@ -900,7 +725,7 @@ public:
       public:                                                               \
           WX_DEFINE_ITERATOR_CATEGORY(WX_STR_ITERATOR_TAG)                  \
           typedef wxUniChar value_type;                                     \
-          typedef int difference_type;                                      \
+          typedef ptrdiff_t difference_type;                                \
           typedef reference_type reference;                                 \
           typedef pointer_type pointer;                                     \
                                                                             \
@@ -1152,6 +977,25 @@ public:
 
   #undef WX_STR_ITERATOR_TAG
   #undef WX_STR_ITERATOR_IMPL
+
+  // This method is mostly used by wxWidgets itself and return the offset of
+  // the given iterator in bytes relative to the start of the buffer
+  // representing the current string contents in the current locale encoding.
+  //
+  // It is inefficient as it involves converting part of the string to this
+  // encoding (and also unsafe as it simply returns 0 if the conversion fails)
+  // and so should be avoided if possible, wx itself only uses it to implement
+  // backwards-compatible API.
+  ptrdiff_t IterOffsetInMBStr(const const_iterator& i) const
+  {
+      const wxString str(begin(), i);
+
+      // This is logically equivalent to strlen(str.mb_str()) but avoids
+      // actually converting the string to multibyte and just computes the
+      // length that it would have after conversion.
+      size_t ofs = wxConvLibc.FromWChar(NULL, 0, str.wc_str(), str.length());
+      return ofs == wxCONV_FAILED ? 0 : static_cast<ptrdiff_t>(ofs);
+  }
 
   friend class iterator;
   friend class const_iterator;
@@ -1687,13 +1531,8 @@ public:
     // also optionally return the buffer length
     //
     // this is mostly/only useful for the template functions
-    //
-    // FIXME-VC6: the second argument only exists for VC6 which doesn't support
-    //            explicit template function selection, do not use it unless
-    //            you must support VC6!
     template <typename T>
-    wxCharTypeBuffer<T> tchar_str(size_t *len = NULL,
-                                  T * WXUNUSED(dummy) = NULL) const
+    wxCharTypeBuffer<T> tchar_str(size_t *len = NULL) const
     {
 #if wxUSE_UNICODE
         // we need a helper dispatcher depending on type
@@ -2334,45 +2173,19 @@ public:
     // in C locale
   static wxString FromCDouble(double val, int precision = -1);
 
-#ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error
     // (take 'this' into account in attribute parameter count)
   // int Printf(const wxString& format, ...);
   WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxFormatString&),
                         DoPrintfWchar, DoPrintfUtf8)
-#ifdef __WATCOMC__
-  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  WX_VARARG_WATCOM_WORKAROUND(int, Printf, 1, (const wxString&),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(int, Printf, 1, (const wxCStrData&),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(int, Printf, 1, (const char*),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(int, Printf, 1, (const wchar_t*),
-                              (wxFormatString(f1)));
-#endif
-#endif // !wxNEEDS_WXSTRING_PRINTF_MIXIN
     // as vprintf(), returns the number of characters written or < 0 on error
   int PrintfV(const wxString& format, va_list argptr);
 
-#ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
     // returns the string containing the result of Printf() to it
   // static wxString Format(const wxString& format, ...) WX_ATTRIBUTE_PRINTF_1;
   WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxFormatString&),
                         DoFormatWchar, DoFormatUtf8)
-#ifdef __WATCOMC__
-  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  WX_VARARG_WATCOM_WORKAROUND(static wxString, Format, 1, (const wxString&),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(static wxString, Format, 1, (const wxCStrData&),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(static wxString, Format, 1, (const char*),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(static wxString, Format, 1, (const wchar_t*),
-                              (wxFormatString(f1)));
-#endif
-#endif
     // the same as above, but takes a va_list
   static wxString FormatV(const wxString& format, va_list argptr);
 
@@ -2404,24 +2217,11 @@ public:
     // values for first parameter of Strip function
   enum stripType {leading = 0x1, trailing = 0x2, both = 0x3};
 
-#ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // use Printf()
   // (take 'this' into account in attribute parameter count)
   // int sprintf(const wxString& format, ...) WX_ATTRIBUTE_PRINTF_2;
   WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxFormatString&),
                         DoPrintfWchar, DoPrintfUtf8)
-#ifdef __WATCOMC__
-  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  WX_VARARG_WATCOM_WORKAROUND(int, sprintf, 1, (const wxString&),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(int, sprintf, 1, (const wxCStrData&),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(int, sprintf, 1, (const char*),
-                              (wxFormatString(f1)));
-  WX_VARARG_WATCOM_WORKAROUND(int, sprintf, 1, (const wchar_t*),
-                              (wxFormatString(f1)));
-#endif
-#endif // wxNEEDS_WXSTRING_PRINTF_MIXIN
 
     // use Cmp()
   int CompareTo(const wxChar* psz, caseCompare cmp = exact) const
@@ -2616,9 +2416,21 @@ public:
       return *this;
   }
 
+    // This is a non-standard-compliant overload taking the first "len"
+    // characters of the source string.
   wxString& assign(const wxString& str, size_t len)
   {
+#if wxUSE_STRING_POS_CACHE
+      // It is legal to pass len > str.length() to wxStringImpl::assign() but
+      // by restricting it here we save some work for that function so it's not
+      // really less efficient and, at the same time, ensure that we don't
+      // cache invalid length.
+      const size_t lenSrc = str.length();
+      if ( len > lenSrc )
+          len = lenSrc;
+
       wxSTRING_SET_CACHED_LENGTH(len);
+#endif // wxUSE_STRING_POS_CACHE
 
       m_impl.assign(str.m_impl, 0, str.LenToImpl(len));
 
@@ -2660,7 +2472,7 @@ public:
 
   wxString& assign(const char *sz, size_t n)
   {
-      wxSTRING_SET_CACHED_LENGTH(n);
+      wxSTRING_INVALIDATE_CACHE();
 
       SubstrBufFromMB str(ImplStr(sz, n));
       m_impl.assign(str.data, str.len);
@@ -2891,16 +2703,12 @@ public:
       return iterator(this, m_impl.erase(first.impl()));
   }
 
-#ifdef wxSTRING_BASE_HASNT_CLEAR
-  void clear() { erase(); }
-#else
   void clear()
   {
       wxSTRING_SET_CACHED_LENGTH(0);
 
       m_impl.clear();
   }
-#endif
 
     // replaces the substring of length nLen starting at nStart
   wxString& replace(size_t nStart, size_t nLen, const char* sz)
@@ -3476,13 +3284,12 @@ private:
 
   void DoUngetWriteBuf(size_t nLen)
   {
-      wxSTRING_SET_CACHED_LENGTH(nLen);
+      wxSTRING_INVALIDATE_CACHE();
 
       m_impl.DoUngetWriteBuf(nLen);
   }
 #endif // !wxUSE_STL_BASED_WXSTRING
 
-#ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   #if !wxUSE_UTF8_LOCALE_ONLY
   int DoPrintfWchar(const wxChar *format, ...);
   static wxString DoFormatWchar(const wxChar *format, ...);
@@ -3491,7 +3298,6 @@ private:
   int DoPrintfUtf8(const char *format, ...);
   static wxString DoFormatUtf8(const char *format, ...);
   #endif
-#endif
 
 #if !wxUSE_STL_BASED_WXSTRING
   // check string's data validity
@@ -3635,10 +3441,6 @@ private:
   friend class wxStringInternalBuffer;
   friend class wxStringInternalBufferLength;
 };
-
-#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-    #pragma warning (pop)
-#endif
 
 // string iterator operators that satisfy STL Random Access Iterator
 // requirements:
@@ -3815,10 +3617,8 @@ public:
         // access to wxString internal buffer, initialize ourselves with the
         // string initial contents
 
-        // FIXME-VC6: remove the ugly (CharType *)NULL and use normal
-        //            tchar_str<CharType>
         size_t len;
-        const wxCharTypeBuffer<CharType> buf(str.tchar_str(&len, (CharType *)NULL));
+        const wxCharTypeBuffer<CharType> buf(str.tchar_str<CharType>(&len));
         if ( buf )
         {
             if ( len > lenWanted )
@@ -3898,8 +3698,6 @@ public:
 
 #if wxUSE_STL_BASED_WXSTRING
 
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferBase<wxStringCharType> )
-
 class wxStringInternalBuffer : public wxStringTypeBufferBase<wxStringCharType>
 {
 public:
@@ -3910,9 +3708,6 @@ public:
 
     wxDECLARE_NO_COPY_CLASS(wxStringInternalBuffer);
 };
-
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE(
-    wxStringTypeBufferLengthBase<wxStringCharType> )
 
 class wxStringInternalBufferLength
     : public wxStringTypeBufferLengthBase<wxStringCharType>
@@ -3945,8 +3740,6 @@ typedef wxStringInternalBuffer                wxUTF8StringBuffer;
 typedef wxStringInternalBufferLength          wxUTF8StringBufferLength;
 #elif wxUSE_UNICODE_WCHAR
 
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferBase<char> )
-
 // Note about inlined dtors in the classes below: this is done not for
 // performance reasons but just to avoid linking errors in the MSVC DLL build
 // under Windows: if a class has non-inline methods it must be declared as
@@ -3978,8 +3771,6 @@ public:
 
     wxDECLARE_NO_COPY_CLASS(wxUTF8StringBuffer);
 };
-
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferLengthBase<char> )
 
 class wxUTF8StringBufferLength : public wxStringTypeBufferLengthBase<char>
 {

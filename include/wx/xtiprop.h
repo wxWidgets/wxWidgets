@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by: Francesco Montorsi
 // Created:     27/07/03
-// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
 //              (c) 2003 Stefan Csomor
 // Licence:     wxWindows licence
@@ -20,9 +19,11 @@
 #include "wx/xti.h"
 #include "wx/any.h"
 
+/*
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+*/
 class WXDLLIMPEXP_BASE wxHashTable;
 class WXDLLIMPEXP_BASE wxHashTable_Node;
 class WXDLLIMPEXP_BASE wxEvent;
@@ -95,7 +96,6 @@ private:
 class wxPropertySetter##property : public wxPropertySetter              \
 {                                                                       \
 public:                                                                 \
-    wxINFUNC_CLASS_TYPE_FIX(Klass)                                      \
     wxPropertySetter##property() : wxPropertySetter( wxT(#setterMethod) ) {}            \
     virtual ~wxPropertySetter##property() {}                            \
                                                                         \
@@ -106,7 +106,7 @@ public:                                                                 \
         if ( variantValue.GetAs(&tempobj) )                                \
             obj->setterMethod(tempobj);                                    \
         else                                                            \
-            obj->setterMethod(*wxANY_AS(variantValue, valueType*));      \
+            obj->setterMethod(*variantValue.As<valueType*>());      \
     }                                                                   \
 };
 
@@ -114,7 +114,6 @@ public:                                                                 \
 class wxPropertyGetter##property : public wxPropertyGetter                              \
 {                                                                       \
 public:                                                                 \
-    wxINFUNC_CLASS_TYPE_FIX(Klass)                                      \
     wxPropertyGetter##property() : wxPropertyGetter( wxT(#gettermethod) ) {}            \
     virtual ~wxPropertyGetter##property() {}                                    \
                                                                         \
@@ -129,7 +128,6 @@ public:                                                                 \
 class wxPropertyCollectionAdder##property : public wxPropertyCollectionAdder                                \
 {                                                                       \
 public:                                                                 \
-    wxINFUNC_CLASS_TYPE_FIX(Klass)                                      \
     wxPropertyCollectionAdder##property() : wxPropertyCollectionAdder( wxT(#addermethod) ) {}               \
     virtual ~wxPropertyCollectionAdder##property() {}                                     \
                                                                         \
@@ -140,7 +138,7 @@ public:                                                                 \
         if ( variantValue.GetAs(&tempobj) )                                \
             obj->addermethod(tempobj);    \
         else                                                                            \
-            obj->addermethod(*wxANY_AS(variantValue, valueType*));  \
+            obj->addermethod(*variantValue.As<valueType*>());  \
     }                                                                                   \
 };
 
@@ -148,7 +146,6 @@ public:                                                                 \
 class wxPropertyCollectionGetter##property : public wxPropertyCollectionGetter              \
 {                                                                           \
 public:                                                                     \
-    wxINFUNC_CLASS_TYPE_FIX(Klass)                                          \
     wxPropertyCollectionGetter##property() : wxPropertyCollectionGetter( wxT(#gettermethod) ) {} \
     virtual ~wxPropertyCollectionGetter##property() {}                              \
                                                                             \
@@ -175,7 +172,7 @@ public:
         if ( m_setter ) 
             m_setter->Set( object, value ); 
         else 
-            wxLogError( _("SetProperty called w/o valid setter") ); 
+            wxLogError( wxGetTranslation("SetProperty called w/o valid setter") ); 
     }
 
     // Getting a simple property (non-collection)
@@ -184,7 +181,7 @@ public:
         if ( m_getter ) 
             m_getter->Get( object, result ); 
         else 
-            wxLogError( _("GetProperty called w/o valid getter") ); 
+            wxLogError( wxGetTranslation("GetProperty called w/o valid getter") ); 
     }
 
     // Adding an element to a collection property
@@ -193,7 +190,7 @@ public:
         if ( m_adder ) 
             m_adder->Add( object, value ); 
         else 
-            wxLogError( _("AddToPropertyCollection called w/o valid adder") ); 
+            wxLogError( wxGetTranslation("AddToPropertyCollection called w/o valid adder") ); 
     }
 
     // Getting a collection property
@@ -202,7 +199,7 @@ public:
         if ( m_collectionGetter ) 
             m_collectionGetter->Get( obj, result); 
         else 
-            wxLogError( _("GetPropertyCollection called w/o valid collection getter") ); 
+            wxLogError( wxGetTranslation("GetPropertyCollection called w/o valid collection getter") ); 
     }
 
     virtual bool HasSetter() const { return m_setter != NULL; }
@@ -255,14 +252,14 @@ public:
     virtual void AddToPropertyCollection(wxObject *WXUNUSED(object), 
                                          const wxAny &WXUNUSED(value)) const
     { 
-        wxLogError( _("AddToPropertyCollection called on a generic accessor") ); 
+        wxLogError( wxGetTranslation("AddToPropertyCollection called on a generic accessor") ); 
     }
 
     // Getting a collection property
     virtual void GetPropertyCollection( const wxObject *WXUNUSED(obj), 
                                         wxAnyList &WXUNUSED(result)) const
     { 
-        wxLogError ( _("GetPropertyCollection called on a generic accessor") ); 
+        wxLogError ( wxGetTranslation("GetPropertyCollection called on a generic accessor") ); 
     }
 
 private:
@@ -302,7 +299,7 @@ enum
 
 class WXDLLIMPEXP_BASE wxPropertyInfo
 {
-    friend class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+    friend class /* WXDLLIMPEXP_BASE */ wxDynamicClassInfo;
 
 public:
     wxPropertyInfo(wxPropertyInfo* &iter,
@@ -443,8 +440,19 @@ private:
     // when the component is dropped on the container.
 };
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMap, 
+// stl is giving problems when forwarding declarations, therefore we define it as a subclass
+
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMapBase, 
                                       class WXDLLIMPEXP_BASE );
+
+class WXDLLIMPEXP_BASE wxPropertyInfoMap : public wxPropertyInfoMapBase {
+};
+
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxAny, wxStringToAnyHashMapBase,
+                                     class WXDLLIMPEXP_BASE );
+
+class WXDLLIMPEXP_FWD_BASE wxStringToAnyHashMap : public wxStringToAnyHashMapBase {
+};
 
 #define wxBEGIN_PROPERTIES_TABLE(theClass)                      \
     wxPropertyInfo *theClass::GetPropertiesStatic()             \
@@ -523,13 +531,13 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMap,
         &_accessor##pname, flags, help, group  );
 
 #define wxEVENT_PROPERTY( name, eventType, eventClass )                               \
-    static wxEventSourceTypeInfo _typeInfo##name( eventType, CLASSINFO( eventClass ) );  \
+    static wxEventSourceTypeInfo _typeInfo##name( eventType, wxCLASSINFO( eventClass ) );  \
     static wxPropertyInfo _propertyInfo##name( first,class_t::GetClassInfoStatic(),   \
         wxT(#name), &_typeInfo##name, NULL, wxAny() );
 
 #define wxEVENT_RANGE_PROPERTY( name, eventType, lastEventType, eventClass )          \
     static wxEventSourceTypeInfo _typeInfo##name( eventType, lastEventType,              \
-                                               CLASSINFO( eventClass ) );             \
+                                               wxCLASSINFO( eventClass ) );             \
     static wxPropertyInfo _propertyInfo##name( first, class_t::GetClassInfoStatic(),  \
         wxT(#name), &_typeInfo##name, NULL, wxAny() );
 
@@ -543,9 +551,6 @@ private:                                                \
 public:                                                 \
   void  Set##name( type const & p) { m_##name = p; }    \
   type const & Get##name() const  { return m_##name; }
-
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxAny, wxStringToAnyHashMap,
-    class WXDLLIMPEXP_BASE );
 
 #endif      // wxUSE_EXTENDED_RTTI
 #endif      // _XTIPROP_H_

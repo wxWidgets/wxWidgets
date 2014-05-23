@@ -4,7 +4,6 @@
 // Author:      Guillermo Rodriguez Garcia, <guille@iies.es>
 // Modified by:
 // Created:     Jan/2000
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000, Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,7 +37,7 @@
 // resources
 // --------------------------------------------------------------------------
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__) || defined(__WXQT__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
     // application icon
     #include "mondrian.xpm"
 

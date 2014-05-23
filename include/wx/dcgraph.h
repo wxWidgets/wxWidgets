@@ -5,7 +5,6 @@
 // Modified by:
 // Created:
 // Copyright:   (c) Stefan Csomor
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -29,10 +28,15 @@ public:
 #if wxUSE_PRINTING_ARCHITECTURE
     wxGCDC( const wxPrinterDC& dc );
 #endif
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+    wxGCDC( const wxEnhMetaFileDC& dc );
+#endif
+    wxGCDC(wxGraphicsContext* context);
+    
     wxGCDC();
     virtual ~wxGCDC();
 
-    wxGraphicsContext* GetGraphicsContext();
+    wxGraphicsContext* GetGraphicsContext() const;
     void SetGraphicsContext( wxGraphicsContext* ctx );
 
 #ifdef __WXMSW__
@@ -56,12 +60,12 @@ public:
 #if wxUSE_PRINTING_ARCHITECTURE
     wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc );
 #endif
+#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+    wxGCDCImpl( wxDC *owner, const wxEnhMetaFileDC& dc );
+#endif
     wxGCDCImpl( wxDC *owner );
 
     virtual ~wxGCDCImpl();
-
-    void Init();
-
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -94,8 +98,6 @@ public:
     virtual int GetDepth() const;
     virtual wxSize GetPPI() const;
 
-    virtual void SetMapMode(wxMappingMode mode);
-
     virtual void SetLogicalFunction(wxRasterOperationMode function);
 
     virtual void SetTextForeground(const wxColour& colour);
@@ -103,8 +105,10 @@ public:
 
     virtual void ComputeScaleAndOrigin();
 
-    wxGraphicsContext* GetGraphicsContext() { return m_graphicContext; }
+    wxGraphicsContext* GetGraphicsContext() const { return m_graphicContext; }
     virtual void SetGraphicsContext( wxGraphicsContext* ctx );
+
+    virtual void* GetHandle() const;
 
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -172,12 +176,12 @@ public:
     virtual void DoGetSize(int *,int *) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
 
-    virtual void DoDrawLines(int n, wxPoint points[],
+    virtual void DoDrawLines(int n, const wxPoint points[],
         wxCoord xoffset, wxCoord yoffset);
-    virtual void DoDrawPolygon(int n, wxPoint points[],
+    virtual void DoDrawPolygon(int n, const wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
-    virtual void DoDrawPolyPolygon(int n, int count[], wxPoint points[],
+    virtual void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
                                    wxPolygonFillMode fillStyle);
 
@@ -193,16 +197,26 @@ public:
 
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
+#ifdef __WXMSW__
+    virtual wxRect MSWApplyGDIPlusTransform(const wxRect& r) const;
+#endif // __WXMSW__
+
 protected:
+    // unused int parameter distinguishes this version, which does not create a
+    // wxGraphicsContext, in the expectation that the derived class will do it
+    wxGCDCImpl(wxDC* owner, int);
+
     // scaling variables
     bool m_logicalFunctionSupported;
-    double       m_mm_to_pix_x, m_mm_to_pix_y;
     wxGraphicsMatrix m_matrixOriginal;
     wxGraphicsMatrix m_matrixCurrent;
 
     double m_formerScaleX, m_formerScaleY;
 
     wxGraphicsContext* m_graphicContext;
+
+private:
+    void Init(wxGraphicsContext*);
 
     DECLARE_CLASS(wxGCDCImpl)
     wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);

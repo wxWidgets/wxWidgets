@@ -3,7 +3,6 @@
 // Purpose:     Generic list control
 // Author:      Robert Roebling
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,10 +10,9 @@
 #ifndef _WX_GENERIC_LISTCTRL_H_
 #define _WX_GENERIC_LISTCTRL_H_
 
+#include "wx/containr.h"
 #include "wx/scrolwin.h"
 #include "wx/textctrl.h"
-
-class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 #if wxUSE_DRAG_AND_DROP
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
@@ -31,7 +29,7 @@ class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 // wxListCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxControl,
+class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxNavigationEnabled<wxListCtrlBase>,
                                           public wxScrollHelper
 {
 public:
@@ -65,10 +63,10 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString &name = wxListCtrlNameStr);
 
-    bool GetColumn( int col, wxListItem& item ) const;
-    bool SetColumn( int col, wxListItem& item );
-    int GetColumnWidth( int col ) const;
-    bool SetColumnWidth( int col, int width);
+    bool GetColumn( int col, wxListItem& item ) const wxOVERRIDE;
+    bool SetColumn( int col, const wxListItem& item ) wxOVERRIDE;
+    int GetColumnWidth( int col ) const wxOVERRIDE;
+    bool SetColumnWidth( int col, int width) wxOVERRIDE;
     int GetCountPerPage() const; // not the same in wxGLC as in Windows, I think
     wxRect GetViewRect() const;
 
@@ -89,7 +87,7 @@ public:
     bool GetItemPosition( long item, wxPoint& pos ) const;
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
     int GetItemCount() const;
-    int GetColumnCount() const;
+    int GetColumnCount() const wxOVERRIDE;
     void SetItemSpacing( int spacing, bool isSmall = false );
     wxSize GetItemSpacing() const;
     void SetItemTextColour( long item, const wxColour& col);
@@ -104,19 +102,19 @@ public:
     long GetTopItem() const;
 
     void SetSingleStyle( long style, bool add = true ) ;
-    void SetWindowStyleFlag( long style );
+    void SetWindowStyleFlag( long style ) wxOVERRIDE;
     void RecreateWindow() {}
     long GetNextItem( long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE ) const;
-    wxImageList *GetImageList( int which ) const;
-    void SetImageList( wxImageList *imageList, int which );
-    void AssignImageList( wxImageList *imageList, int which );
+    wxImageList *GetImageList( int which ) const wxOVERRIDE;
+    void SetImageList( wxImageList *imageList, int which ) wxOVERRIDE;
+    void AssignImageList( wxImageList *imageList, int which ) wxOVERRIDE;
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
 
     void ClearAll();
     bool DeleteItem( long item );
     bool DeleteAllItems();
-    bool DeleteAllColumns();
-    bool DeleteColumn( int col );
+    bool DeleteAllColumns() wxOVERRIDE;
+    bool DeleteColumn( int col ) wxOVERRIDE;
 
     void SetItemCount(long count);
 
@@ -134,17 +132,8 @@ public:
     long InsertItem( long index, const wxString& label );
     long InsertItem( long index, int imageIndex );
     long InsertItem( long index, const wxString& label, int imageIndex );
-    long InsertColumn( long col, wxListItem& info );
-    long InsertColumn( long col, const wxString& heading,
-                       int format = wxLIST_FORMAT_LEFT, int width = -1 );
     bool ScrollList( int dx, int dy );
     bool SortItems( wxListCtrlCompare fn, wxIntPtr data );
-
-    // are we in report mode?
-    bool InReportView() const { return HasFlag(wxLC_REPORT); }
-
-    // are we in virtual report mode?
-    bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 
     // do we have a header window?
     bool HasHeader() const
@@ -154,16 +143,12 @@ public:
     void RefreshItem(long item);
     void RefreshItems(long itemFrom, long itemTo);
 
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete, don't use
-    wxDEPRECATED( int GetItemSpacing( bool isSmall ) const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
+    virtual void EnableBellOnNoMatch(bool on = true) wxOVERRIDE;
 
     // overridden base class virtuals
     // ------------------------------
 
-    virtual wxVisualAttributes GetDefaultAttributes() const
+    virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {
         return GetClassDefaultAttributes(GetWindowVariant());
     }
@@ -171,7 +156,7 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    virtual void Update();
+    virtual void Update() wxOVERRIDE;
 
 
     // implementation only from now on
@@ -180,26 +165,25 @@ public:
     // generic version extension, don't use in portable code
     bool Update( long item );
 
-    void OnInternalIdle( );
+    void OnInternalIdle( ) wxOVERRIDE;
 
     // We have to hand down a few functions
     virtual void Refresh(bool eraseBackground = true,
-                         const wxRect *rect = NULL);
+                         const wxRect *rect = NULL) wxOVERRIDE;
 
-    virtual bool SetBackgroundColour( const wxColour &colour );
-    virtual bool SetForegroundColour( const wxColour &colour );
+    virtual bool SetBackgroundColour( const wxColour &colour ) wxOVERRIDE;
+    virtual bool SetForegroundColour( const wxColour &colour ) wxOVERRIDE;
     virtual wxColour GetBackgroundColour() const;
     virtual wxColour GetForegroundColour() const;
-    virtual bool SetFont( const wxFont &font );
-    virtual bool SetCursor( const wxCursor &cursor );
+    virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
+    virtual bool SetCursor( const wxCursor &cursor ) wxOVERRIDE;
 
 #if wxUSE_DRAG_AND_DROP
-    virtual void SetDropTarget( wxDropTarget *dropTarget );
-    virtual wxDropTarget *GetDropTarget() const;
+    virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
+    virtual wxDropTarget *GetDropTarget() const wxOVERRIDE;
 #endif
 
-    virtual bool ShouldInheritColours() const { return false; }
-    virtual void SetFocus();
+    virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
 
     // implementation
     // --------------
@@ -214,14 +198,13 @@ public:
     wxListMainWindow    *m_mainWin;
 
 protected:
-    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+    // Implement base class pure virtual methods.
+    long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
-    // take into account the coordinates difference between the container
-    // window and the list control window itself here
-    virtual void DoClientToScreen( int *x, int *y ) const;
-    virtual void DoScreenToClient( int *x, int *y ) const;
 
-    virtual wxSize DoGetBestClientSize() const;
+    virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) wxOVERRIDE;
+
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     // return the text for the given column of the given item
     virtual wxString OnGetItemText(long item, long column) const;
@@ -234,15 +217,12 @@ protected:
     // return the icon for the given item and column.
     virtual int OnGetItemColumnImage(long item, long column) const;
 
-    // return the attribute for the item (may return NULL if none)
-    virtual wxListItemAttr *OnGetItemAttr(long item) const;
-
     // it calls our OnGetXXX() functions
     friend class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 
-    virtual wxBorder GetDefaultBorder() const;
+    virtual wxBorder GetDefaultBorder() const wxOVERRIDE;
 
-    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) wxOVERRIDE;
 
 private:
     void CreateOrDestroyHeaderWindowAsNeeded();

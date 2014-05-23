@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing toggle control
 // Author:      Dimitri Schoolwerth, Vadim Zeitlin
 // Created:     27 Sep 2003
-// Id:          $Id$
 // Copyright:   (c) 2006 Wlodzmierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -90,11 +89,11 @@ public:
     ToggleWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~ToggleWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_toggle; }
-    virtual void RecreateWidget() { CreateToggle(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_toggle; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateToggle(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -151,7 +150,7 @@ protected:
     wxTextCtrl *m_textLabel;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ToggleWidgetsPage)
 };
 
@@ -159,13 +158,13 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ToggleWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(ToggleWidgetsPage, WidgetsPage)
     EVT_BUTTON(TogglePage_Reset, ToggleWidgetsPage::OnButtonReset)
     EVT_BUTTON(TogglePage_ChangeLabel, ToggleWidgetsPage::OnButtonChangeLabel)
 
     EVT_CHECKBOX(wxID_ANY, ToggleWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, ToggleWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -526,7 +525,7 @@ wxBitmap ToggleWidgetsPage::CreateBitmap(const wxString& label)
     wxBitmap bmp(180, 70); // shouldn't hardcode but it's simpler like this
     wxMemoryDC dc;
     dc.SelectObject(bmp);
-    dc.SetBackground(wxBrush(*wxCYAN));
+    dc.SetBackground(*wxCYAN_BRUSH);
     dc.Clear();
     dc.SetTextForeground(*wxBLACK);
     dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + wxT("\n")

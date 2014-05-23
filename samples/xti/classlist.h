@@ -4,7 +4,6 @@
 // Author:      Francesco Montorsi
 // Modified by: 
 // Created:     03/06/2007 14:49:55
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence
 ////////////////////////////////////////////////////
@@ -45,10 +44,10 @@
 class ClassListDialog: public wxDialog
 {    
     // we explicitly don't want to use the following macro:
-    //     DECLARE_DYNAMIC_CLASS( ClassListDialog )
+    //     wxDECLARE_DYNAMIC_CLASS( ClassListDialog );
     // as otherwise the ClassListDialog class would appear in the list
     // shown by this dialog!
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 public:
     // Constructors

@@ -2,9 +2,16 @@
 // Name:        wrapsizer.h
 // Purpose:     interface of wxWrapSizer
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// flags for wxWrapSizer
+enum
+{
+    wxEXTEND_LAST_ON_EACH_LINE,
+    wxREMOVE_LEADING_SPACES,
+    wxWRAPSIZER_DEFAULT_FLAGS
+};
 
 /**
     @class wxWrapSizer
@@ -51,6 +58,9 @@ public:
     */
     virtual bool InformFirstDirection(int direction, int size,
                                       int availableOtherDir);
+    
+    virtual void RecalcSizes();
+    virtual wxSize CalcMin();
 
 protected:
     /**

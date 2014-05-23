@@ -4,7 +4,6 @@
 // Author:      derived from wxPalmOS code
 // Modified by:
 // Created:     10.13.04
-// RCS-ID:      $Id$
 // Copyright:   (c) William Osborne
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

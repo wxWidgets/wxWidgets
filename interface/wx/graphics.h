@@ -2,7 +2,6 @@
 // Name:        graphics.h
 // Purpose:     interface of various wxGraphics* classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,7 +9,7 @@
     @class wxGraphicsPath
 
     A wxGraphicsPath is a native representation of a geometric path. The
-    contents are specific an private to the respective renderer. Instances are
+    contents are specific and private to the respective renderer. Instances are
     reference counted and can therefore be assigned as usual. The only way to
     get a valid instance is by using wxGraphicsContext::CreatePath() or
     wxGraphicsRenderer::CreatePath().
@@ -116,12 +115,12 @@ public:
         @return @true if the point is within the path.
     */
     bool Contains(const wxPoint2DDouble& c,
-                  int fillStyle = wxODDEVEN_RULE) const;
+                  wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
     /**
         @return @true if the point is within the path.
     */
     virtual bool Contains(wxDouble x, wxDouble y,
-                          int fillStyle = wxODDEVEN_RULE) const;
+                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
 
     /**
         Gets the bounding box enclosing all points (possibly including control
@@ -241,6 +240,14 @@ enum wxInterpolationQuality
 */
 enum wxCompositionMode
 {
+    /**
+        Indicates invalid or unsupported composition mode.
+
+        This value can't be passed to wxGraphicsContext::SetCompositionMode().
+
+        @since 2.9.2
+     */
+    wxCOMPOSITION_INVALID = -1,
     wxCOMPOSITION_CLEAR, /**< @e R = 0 */
     wxCOMPOSITION_SOURCE, /**< @e R = S */
     wxCOMPOSITION_OVER, /**< @e R = @e S + @e D*(1 - @e Sa) */
@@ -254,9 +261,49 @@ enum wxCompositionMode
     wxCOMPOSITION_DEST_OUT, /**< @e R = @e D*(1 - @e Sa) */
     wxCOMPOSITION_DEST_ATOP, /**< @e R = @e S*(1 - @e Da) + @e D*@e Sa */
     wxCOMPOSITION_XOR, /**< @e R = @e S*(1 - @e Da) + @e D*(1 - @e Sa) */
-    wxCOMPOSITION_ADD, /**< @e R = @e S + @e D */
+    wxCOMPOSITION_ADD  /**< @e R = @e S + @e D */
 };
 
+/**
+    Represents a bitmap.
+
+    The objects of this class are not created directly but only via
+    wxGraphicsContext or wxGraphicsRenderer CreateBitmap(),
+    CreateBitmapFromImage() or CreateSubBitmap() methods. They can subsequently
+    be used with wxGraphicsContext::DrawBitmap(). The only other operation is
+    testing for the bitmap validity which can be performed using IsNull()
+    method inherited from the base class.
+ */
+class wxGraphicsBitmap : public wxGraphicsObject
+{
+public:
+    /**
+        Default constructor creates an invalid bitmap.
+     */
+    wxGraphicsBitmap() {}
+
+    /**
+        Return the contents of this bitmap as wxImage.
+
+        Using this method is more efficient than converting wxGraphicsBitmap to
+        wxBitmap first and then to wxImage and can be useful if, for example,
+        you want to save wxGraphicsBitmap as a disk file in a format not
+        directly supported by wxBitmap.
+
+        Invalid image is returned if the bitmap is invalid.
+
+        @since 2.9.3
+     */
+    wxImage ConvertToImage() const;
+
+    /**
+        Return the pointer to the native bitmap data. (CGImageRef for Core Graphics, 
+        cairo_surface_t for Cairo, Bitmap* for GDI+.)
+
+        @since 2.9.4
+     */
+    void* GetNativeBitmap() const;
+};
 
 /**
     @class wxGraphicsContext
@@ -316,14 +363,14 @@ public:
 
         @see wxGraphicsRenderer::CreateContext()
     */
-    static wxGraphicsContext* Create(const wxWindowDC& dc);
+    static wxGraphicsContext* Create(const wxWindowDC& windowDC);
 
     /**
         Creates a wxGraphicsContext from a wxMemoryDC
 
         @see wxGraphicsRenderer::CreateContext()
     */
-    static wxGraphicsContext* Create(const wxMemoryDC& dc);
+    static wxGraphicsContext* Create(const wxMemoryDC& memoryDC);
 
     /**
         Creates a wxGraphicsContext from a wxPrinterDC. Under GTK+, this will
@@ -332,7 +379,35 @@ public:
 
         @see wxGraphicsRenderer::CreateContext(), @ref overview_unixprinting
     */
-    static wxGraphicsContext* Create(const wxPrinterDC& dc);
+    static wxGraphicsContext* Create(const wxPrinterDC& printerDC);
+
+    /**
+        Creates a wxGraphicsContext from a wxEnhMetaFileDC.
+
+        This function, as wxEnhMetaFileDC class itself, is only available only
+        under MSW.
+
+        @see wxGraphicsRenderer::CreateContext()
+    */
+    static wxGraphicsContext* Create(const wxEnhMetaFileDC& metaFileDC);
+
+    /**
+        Creates a wxGraphicsContext associated with a wxImage.
+
+        The image specifies the size of the context as well as whether alpha is
+        supported (if wxImage::HasAlpha()) or not and the initial contents of
+        the context. The @a image object must have a life time greater than
+        that of the new context as the context copies its contents back to the
+        image when it is destroyed.
+
+        @since 2.9.3
+     */
+    static wxGraphicsContext* Create(wxImage& image);
+
+    /**
+       Create a lightweight context that can be used only for measuring text.
+    */
+    static wxGraphicsContext* Create();
 
     /**
         Clips drawings to the specified region.
@@ -351,6 +426,35 @@ public:
     virtual void ConcatTransform(const wxGraphicsMatrix& matrix) = 0;
 
     /**
+        Creates wxGraphicsBitmap from an existing wxBitmap.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+     */
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+
+    /**
+        Creates wxGraphicsBitmap from an existing wxImage.
+
+        This method is more efficient than converting wxImage to wxBitmap first
+        and then calling CreateBitmap() but otherwise has the same effect.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image);
+
+    /**
+        Extracts a sub-bitmap from an existing bitmap.
+
+        Currently this function is implemented in the native MSW and OS X
+        versions but not when using Cairo.
+     */
+    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
+                                             wxDouble x, wxDouble y,
+                                             wxDouble w, wxDouble h) = 0;
+
+    /**
         Creates a native brush from a wxBrush.
     */
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) const;
@@ -359,6 +463,19 @@ public:
         Creates a native graphics font from a wxFont and a text colour.
     */
     virtual wxGraphicsFont CreateFont(const wxFont& font,
+                                      const wxColour& col = *wxBLACK) const;
+
+    /**
+        Creates a font object with the specified attributes.
+
+        The use of overload taking wxFont is preferred, see
+        wxGraphicsRenderer::CreateFont() for more details.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) const;
 
     /**
@@ -408,6 +525,14 @@ public:
                                           wxDouble ty = 0.0) const;
 
     /**
+        Creates a native affine transformation matrix from the passed
+        generic one.
+
+        @since 2.9.4
+    */
+    wxGraphicsMatrix CreateMatrix(const wxAffineMatrix2DBase& mat) const;
+
+    /**
         Creates a native graphics path which is initially empty.
     */
     wxGraphicsPath CreatePath() const;
@@ -447,8 +572,14 @@ public:
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask
         and the current brushed is used for filling.
     */
-    virtual void DrawBitmap(const wxBitmap& bmp, wxDouble x, wxDouble y,
+    //@{
+    virtual void DrawBitmap(const wxGraphicsBitmap& bmp,
+                            wxDouble x, wxDouble y,
+                            wxDouble w, wxDouble h ) = 0;
+    virtual void DrawBitmap(const wxBitmap& bmp,
+                            wxDouble x, wxDouble y,
                             wxDouble w, wxDouble h) = 0;
+    //@}
 
     /**
         Draws an ellipse.
@@ -676,15 +807,17 @@ public:
     virtual wxAntialiasMode GetAntialiasMode() const ;
 
     /**
-        Sets the interpolation quality, returns true if it supported
+        Sets the interpolation quality, returns true if it is supported.
+
+        Not implemented in Cairo backend currently.
      */
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
-    
+
     /**
-        Returns the current interpolation quality
+        Returns the current interpolation quality.
      */
     virtual wxInterpolationQuality GetInterpolationQuality() const;
-    
+
     /**
         Sets the compositing operator, returns true if it supported
     */
@@ -694,6 +827,66 @@ public:
         Returns the current compositing operator
     */
     virtual wxCompositionMode GetCompositionMode() const;
+
+
+    /**
+       Push the current state of the context's transformation matrix on a
+       stack.
+
+       @see wxGraphicsContext::PopState
+    */
+    virtual void PushState() = 0;
+
+    /**
+       Pops a stored state from the stack and sets the current transformation
+       matrix to that state.
+
+       @see wxGraphicsContext::PopState
+    */
+    virtual void PopState() = 0;
+
+
+    virtual bool ShouldOffset() const;
+    virtual void EnableOffset(bool enable = true);
+    void DisableOffset();
+    bool OffsetEnabled();
+
+    /**
+       Begin a new document (relevant only for printing / pdf etc.)
+       If there is a progress dialog, message will be shown.
+    */
+    virtual bool StartDoc( const wxString& message );
+
+    /**
+       Done with that document (relevant only for printing / pdf etc.)
+    */
+    virtual void EndDoc();
+
+    /**
+       Opens a new page (relevant only for printing / pdf etc.) with the given
+       size in points.  (If both are null the default page size will be used.)
+    */
+    virtual void StartPage( wxDouble width = 0, wxDouble height = 0 );
+
+    /**
+       Ends the current page  (relevant only for printing / pdf etc.)
+    */
+    virtual void EndPage();
+
+    /**
+       Make sure that the current content of this context is immediately visible.
+    */
+    virtual void Flush();
+
+    /**
+       Returns the size of the graphics context in device coordinates.
+    */
+    void GetSize(wxDouble* width, wxDouble* height) const;
+    
+    /**
+       Returns the resolution of the graphics context in device points per inch.
+    */
+    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
 
 };
 
@@ -787,7 +980,7 @@ public:
     /**
         Returns the number of stops.
     */
-    unsigned GetCount() const;
+    size_t GetCount() const;
 
     /**
         Set the start colour to @a col
@@ -835,6 +1028,41 @@ class wxGraphicsRenderer : public wxObject
 {
 public:
     /**
+        Creates wxGraphicsBitmap from an existing wxBitmap.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+     */
+    virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+
+    /**
+        Creates wxGraphicsBitmap from an existing wxImage.
+
+        This method is more efficient than converting wxImage to wxBitmap first
+        and then calling CreateBitmap() but otherwise has the same effect.
+
+        Returns an invalid wxNullGraphicsBitmap on failure.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) = 0;
+
+    /**
+       Creates a wxImage from a wxGraphicsBitmap.
+
+       This method is used by the more convenient wxGraphicsBitmap::ConvertToImage.
+    */
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) = 0;
+
+    /**
+        Creates wxGraphicsBitmap from a native bitmap handle.
+
+        @a bitmap meaning is platform-dependent. Currently it's a GDI+ @c
+        Bitmap pointer under MSW, @c CGImage pointer under OS X or a @c
+        cairo_surface_t pointer when using Cairo under any platform.
+     */
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) = 0;
+
+    /**
         Creates a wxGraphicsContext from a wxWindow.
     */
     virtual wxGraphicsContext* CreateContext(wxWindow* window) = 0;
@@ -842,17 +1070,35 @@ public:
     /**
         Creates a wxGraphicsContext from a wxWindowDC
     */
-    virtual wxGraphicsContext* CreateContext(const wxWindowDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxWindowDC& windowDC) = 0 ;
 
     /**
         Creates a wxGraphicsContext from a wxMemoryDC
     */
-    virtual wxGraphicsContext* CreateContext(const wxMemoryDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxMemoryDC& memoryDC) = 0 ;
 
     /**
         Creates a wxGraphicsContext from a wxPrinterDC
     */
-    virtual wxGraphicsContext* CreateContext(const wxPrinterDC& dc) = 0 ;
+    virtual wxGraphicsContext* CreateContext(const wxPrinterDC& printerDC) = 0 ;
+
+    /**
+        Creates a wxGraphicsContext from a wxEnhMetaFileDC.
+
+        This function, as wxEnhMetaFileDC class itself, is only available only
+        under MSW.
+    */
+    virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& metaFileDC) = 0;
+
+    /**
+        Creates a wxGraphicsContext associated with a wxImage.
+
+        This function is used by wxContext::CreateFromImage() and is not
+        normally called directly.
+
+        @since 2.9.3
+     */
+    wxGraphicsContext* CreateContextFromImage(wxImage& image);
 
     /**
         Creates a native brush from a wxBrush.
@@ -881,6 +1127,35 @@ public:
         Creates a native graphics font from a wxFont and a text colour.
     */
     virtual wxGraphicsFont CreateFont(const wxFont& font,
+                                      const wxColour& col = *wxBLACK) = 0;
+
+    /**
+        Creates a graphics font with the given characteristics.
+
+        If possible, the CreateFont() overload taking wxFont should be used
+        instead. The main advantage of this overload is that it can be used
+        without X server connection under Unix when using Cairo.
+
+        @param sizeInPixels
+            Height of the font in user space units, i.e. normally pixels.
+            Notice that this is different from the overload taking wxFont as
+            wxFont size is specified in points.
+        @param facename
+            The name of the font. The same font name might not be available
+            under all platforms so the font name can also be empty to use the
+            default platform font.
+        @param flags
+            Combination of wxFontFlag enum elements. Currently only
+            @c wxFONTFLAG_ITALIC and @c wxFONTFLAG_BOLD are supported. By
+            default the normal font version is used.
+        @param col
+            The font colour, black by default.
+
+        @since 2.9.3
+     */
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) = 0;
 
 
@@ -927,11 +1202,51 @@ public:
                                                       const wxGraphicsGradientStops& stops) = 0;
 
     /**
+        Extracts a sub-bitmap from an existing bitmap.
+
+        Currently this function is implemented in the native MSW and OS X
+        versions but not when using Cairo.
+     */
+    virtual wxGraphicsBitmap CreateSubBitmap(const wxGraphicsBitmap& bitmap,
+                                             wxDouble x, wxDouble y,
+                                             wxDouble w, wxDouble h) = 0;
+
+    /**
+        Returns the name of the technology used by the renderer.
+
+        Currently this function returns "gdiplus" for Windows GDI+ implementation,
+        "cairo" for Cairo implementation and "cg" for OS X CoreGraphics
+        implementation.
+
+        Note: the string returned by this method is not user-readable and is
+        expected to be used internally by the program only.
+
+        @since 3.1.0
+     */
+    virtual wxString GetName() const = 0;
+
+    /**
+        Returns the version major, minor and micro/build of the technology used
+        by the renderer.
+
+        Currently this function returns the OS major and minor versions in
+        the parameters with the matching names and sets @a micro to 0 for
+        the GDI+ and CoreGraphics engines which are considered to be parts of
+        their respective OS.
+
+        For Cairo, this is the major,minor,micro version of the Cairo library
+        which is returned.
+     */
+    virtual void GetVersion(int* major, int* minor = NULL, int* micro=NULL) const = 0;
+
+    /**
         Returns the default renderer on this platform. On OS X this is the Core
         Graphics (a.k.a. Quartz 2D) renderer, on MSW the GDIPlus renderer, and
         on GTK we currently default to the cairo renderer.
     */
     static wxGraphicsRenderer* GetDefaultRenderer();
+    static wxGraphicsRenderer* GetCairoRenderer();
+
 };
 
 
@@ -1054,7 +1369,10 @@ public:
     virtual bool IsIdentity() const;
 
     /**
-        Rotates this matrix (in radians).
+        Rotates this matrix clockwise (in radians).
+
+        @param angle
+            Rotation angle in radians, clockwise.
     */
     virtual void Rotate(wxDouble angle);
 
@@ -1087,3 +1405,10 @@ public:
     virtual void Translate(wxDouble dx, wxDouble dy);
 };
 
+
+const wxGraphicsPen     wxNullGraphicsPen;
+const wxGraphicsBrush   wxNullGraphicsBrush;
+const wxGraphicsFont    wxNullGraphicsFont;
+const wxGraphicsBitmap  wxNullGraphicsBitmap;
+const wxGraphicsMatrix  wxNullGraphicsMatrix;
+const wxGraphicsPath    wxNullGraphicsPath;

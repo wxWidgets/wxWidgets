@@ -4,7 +4,6 @@
 // Purpose:     Common stuff for all widgets project files
 // Author:      Vadim Zeitlin
 // Created:     27.03.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,7 +17,7 @@
     #define WidgetsBookCtrl wxTreebook
     #define WidgetsBookCtrlEvent wxTreebookEvent
     #define EVT_WIDGETS_PAGE_CHANGING(id,func) EVT_TREEBOOK_PAGE_CHANGING(id,func)
-    #define wxEVT_COMMAND_WIDGETS_PAGE_CHANGED wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED
+    #define wxEVT_COMMAND_WIDGETS_PAGE_CHANGED wxEVT_TREEBOOK_PAGE_CHANGED
     #define wxWidgetsbookEventHandler(func) wxTreebookEventHandler(func)
 #else
     #include "wx/bookctrl.h"
@@ -26,7 +25,7 @@
     #define WidgetsBookCtrl wxBookCtrl
     #define WidgetsBookCtrlEvent wxBookCtrlEvent
     #define EVT_WIDGETS_PAGE_CHANGING(id,func) EVT_BOOKCTRL_PAGE_CHANGING(id,func)
-    #define wxEVT_COMMAND_WIDGETS_PAGE_CHANGED wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED
+    #define wxEVT_COMMAND_WIDGETS_PAGE_CHANGED wxEVT_BOOKCTRL_PAGE_CHANGED
     #define wxWidgetsbookEventHandler(func) wxBookCtrlEventHandler(func)
 #endif
 
@@ -57,8 +56,8 @@ class WidgetsPageInfo;
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
 enum
 {
-    // On wxUniversal-based build (wxX11, wxMGL, wxMSWUniv, wxGTKUniv, etc.)
-    // 'native' means 'made with wxUniv port renderer'
+    // In wxUniversal-based builds 'native' means 'made with wxUniv port
+    // renderer'
     NATIVE_PAGE = 0,
     UNIVERSAL_PAGE = NATIVE_PAGE,
     GENERIC_PAGE,

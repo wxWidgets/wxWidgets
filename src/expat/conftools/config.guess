@@ -960,7 +960,7 @@ EOF
 	echo ${UNAME_MACHINE}-ibm-linux
 	exit ;;
     sh64*:Linux:*:*)
-	echo ${UNAME_MACHINE}-unknown-linux-gnu
+    	echo ${UNAME_MACHINE}-unknown-linux-gnu
 	exit ;;
     sh*:Linux:*:*)
 	echo ${UNAME_MACHINE}-unknown-linux-gnu
@@ -1288,7 +1288,7 @@ EOF
 	echo ${UNAME_MACHINE}-unknown-dragonfly`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`
 	exit ;;
     *:*VMS:*:*)
-	UNAME_MACHINE=`(uname -p) 2>/dev/null`
+    	UNAME_MACHINE=`(uname -p) 2>/dev/null`
 	case "${UNAME_MACHINE}" in
 	    A*) echo alpha-dec-vms ; exit ;;
 	    I*) echo ia64-dec-vms ; exit ;;

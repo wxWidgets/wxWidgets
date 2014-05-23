@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -17,9 +16,11 @@
 #if wxUSE_DOC_VIEW_ARCHITECTURE
 
 #include "wx/list.h"
+#include "wx/dlist.h"
 #include "wx/string.h"
 #include "wx/frame.h"
 #include "wx/filehistory.h"
+#include "wx/vector.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
     #include "wx/print.h"
@@ -59,6 +60,10 @@ enum
 
 #define wxMAX_FILE_HISTORY 9
 
+typedef wxVector<wxDocument*> wxDocVector;
+typedef wxVector<wxView*> wxViewVector;
+typedef wxVector<wxDocTemplate*> wxDocTemplateVector;
+
 class WXDLLIMPEXP_CORE wxDocument : public wxEvtHandler
 {
 public:
@@ -79,6 +84,9 @@ public:
     // SetDocumentSaved() is only used internally, don't call it
     bool GetDocumentSaved() const { return m_savedYet; }
     void SetDocumentSaved(bool saved = true) { m_savedYet = saved; }
+
+    // activate the first view of the document if any
+    void Activate();
 
     // return true if the document hasn't been modified since the last time it
     // was saved (implying that it returns false if it was never saved, even if
@@ -139,8 +147,12 @@ public:
 
     virtual bool AddView(wxView *view);
     virtual bool RemoveView(wxView *view);
+
+    wxViewVector GetViewsVector() const;
+
     wxList& GetViews() { return m_documentViews; }
     const wxList& GetViews() const { return m_documentViews; }
+
     wxView *GetFirstView() const;
 
     virtual void UpdateAllViews(wxView *sender = NULL, wxObject *hint = NULL);
@@ -172,6 +184,10 @@ public:
     // dialogs. Override if necessary.
     virtual wxWindow *GetDocumentWindow() const;
 
+    // Returns true if this document is a child document corresponding to a
+    // part of the parent document and not a disk file as usual.
+    bool IsChildDocument() const { return m_documentParent != NULL; }
+
 protected:
     wxList                m_documentViews;
     wxString              m_documentFile;
@@ -179,7 +195,12 @@ protected:
     wxString              m_documentTypeName;
     wxDocTemplate*        m_documentTemplate;
     bool                  m_documentModified;
+
+    // if the document parent is non-NULL, it's a pseudo-document corresponding
+    // to a part of the parent document which can't be saved or loaded
+    // independently of its parent and is always closed when its parent is
     wxDocument*           m_documentParent;
+
     wxCommandProcessor*   m_commandProcessor;
     bool                  m_savedYet;
 
@@ -193,6 +214,10 @@ protected:
     wxString DoGetUserReadableName() const;
 
 private:
+    // list of all documents whose m_documentParent is this one
+    typedef wxDList<wxDocument> DocsList;
+    DocsList m_childDocuments;
+
     DECLARE_ABSTRACT_CLASS(wxDocument)
     wxDECLARE_NO_COPY_CLASS(wxDocument);
 };
@@ -252,9 +277,12 @@ public:
     // destroyed
     void SetDocChildFrame(wxDocChildFrameAnyBase *docChildFrame);
 
+    // get the associated frame, may be NULL during destruction
+    wxDocChildFrameAnyBase* GetDocChildFrame() const { return m_docChildFrame; }
+
 protected:
     // hook the document into event handlers chain here
-    virtual bool TryBefore(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE;
 
     wxDocument*       m_viewDocument;
     wxString          m_viewTypeName;
@@ -386,6 +414,7 @@ public:
     void OnUpdateFileRevert(wxUpdateUIEvent& event);
     void OnUpdateFileNew(wxUpdateUIEvent& event);
     void OnUpdateFileSave(wxUpdateUIEvent& event);
+    void OnUpdateFileSaveAs(wxUpdateUIEvent& event);
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
@@ -417,6 +446,9 @@ public:
     // Find template from document class info, may return NULL.
     wxDocTemplate* FindTemplate(const wxClassInfo* documentClassInfo);
 
+    // Find document from file name, may return NULL.
+    wxDocument* FindDocumentByPath(const wxString& path) const;
+
     wxDocument *GetCurrentDocument() const;
 
     void SetMaxDocsOpen(int n) { m_maxDocsOpen = n; }
@@ -439,6 +471,15 @@ public:
     // when a view is going in or out of focus
     virtual void ActivateView(wxView *view, bool activate = true);
     virtual wxView *GetCurrentView() const { return m_currentView; }
+
+    // This method tries to find an active view harder than GetCurrentView():
+    // if the latter is NULL, it also checks if we don't have just a single
+    // view and returns it then.
+    wxView *GetAnyUsableView() const;
+
+
+    wxDocVector GetDocumentsVector() const;
+    wxDocTemplateVector GetTemplatesVector() const;
 
     wxList& GetDocuments() { return m_docs; }
     wxList& GetTemplates() { return m_templates; }
@@ -488,13 +529,12 @@ public:
     );
 #endif
 
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, use GetHistoryFilesCount() instead
-    wxDEPRECATED( size_t GetNoHistoryFiles() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
-
 protected:
+    // Called when a file selected from the MRU list doesn't exist any more.
+    // The default behaviour is to remove the file from the MRU and notify the
+    // user about it but this method can be overridden to customize it.
+    virtual void OnMRUFileNotExist(unsigned n, const wxString& filename);
+
     // Open the MRU file with the given index in our associated file history.
     void DoOpenMRUFile(unsigned n);
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -504,19 +544,10 @@ protected:
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
     // hook the currently active view into event handlers chain here
-    virtual bool TryBefore(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event) wxOVERRIDE;
 
     // return the command processor for the current document, if any
     wxCommandProcessor *GetCurrentCommandProcessor() const;
-
-    // this method tries to find an active view harder than GetCurrentView():
-    // if the latter is NULL, it also checks if we don't have just a single
-    // view and returns it then
-    wxView *GetActiveView() const;
-
-    // activate the first view of the given document if any
-    void ActivateDocument(wxDocument *doc);
-
 
     int               m_defaultDocumentNameCounter;
     int               m_maxDocsOpen;
@@ -536,13 +567,6 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxDocManager);
 };
 
-#if WXWIN_COMPATIBILITY_2_6
-inline size_t wxDocManager::GetNoHistoryFiles() const
-{
-    return GetHistoryFilesCount();
-}
-#endif // WXWIN_COMPATIBILITY_2_6
-
 // ----------------------------------------------------------------------------
 // Base class for child frames -- this is what wxView renders itself into
 //
@@ -559,9 +583,10 @@ public:
         m_childDocument = NULL;
         m_childView = NULL;
         m_win = NULL;
+        m_lastEvent = NULL;
     }
 
-    // full ctor equivalent to using the default one and Create(0
+    // full ctor equivalent to using the default one and Create()
     wxDocChildFrameAnyBase(wxDocument *doc, wxView *view, wxWindow *win)
     {
         Create(doc, view, win);
@@ -600,14 +625,19 @@ public:
 
     wxWindow *GetWindow() const { return m_win; }
 
+    // implementation only
+
+    // Check if this event had been just processed in this frame.
+    bool HasAlreadyProcessed(wxEvent& event) const
+    {
+        return m_lastEvent == &event;
+    }
+
 protected:
     // we're not a wxEvtHandler but we provide this wxEvtHandler-like function
     // which is called from TryBefore() of the derived classes to give our view
     // a chance to process the message before the frame event handlers are used
-    bool TryProcessEvent(wxEvent& event)
-    {
-        return m_childView && m_childView->ProcessEventLocally(event);
-    }
+    bool TryProcessEvent(wxEvent& event);
 
     // called from EVT_CLOSE handler in the frame: check if we can close and do
     // cleanup if so; veto the event otherwise
@@ -621,6 +651,10 @@ protected:
     // allows us to avoid having any virtual functions in this class
     wxWindow* m_win;
 
+private:
+    // Pointer to the last processed event used to avoid sending the same event
+    // twice to wxDocManager, from here and from wxDocParentFrameAnyBase.
+    wxEvent* m_lastEvent;
 
     wxDECLARE_NO_COPY_CLASS(wxDocChildFrameAnyBase);
 };
@@ -723,15 +757,6 @@ private:
 // otherwise we could simply typedef it
 // ----------------------------------------------------------------------------
 
-#ifdef __VISUALC6__
-    // "non dll-interface class 'wxDocChildFrameAny<>' used as base interface
-    // for dll-interface class 'wxDocChildFrame'" -- this is bogus as the
-    // template will be DLL-exported but only once it is used as base class
-    // here!
-    #pragma warning (push)
-    #pragma warning (disable:4275)
-#endif
-
 typedef wxDocChildFrameAny<wxFrame, wxFrame> wxDocChildFrameBase;
 
 class WXDLLIMPEXP_CORE wxDocChildFrame : public wxDocChildFrameBase
@@ -791,11 +816,22 @@ private:
 class WXDLLIMPEXP_CORE wxDocParentFrameAnyBase
 {
 public:
-    wxDocParentFrameAnyBase() { m_docManager = NULL; }
+    wxDocParentFrameAnyBase(wxWindow* frame)
+        : m_frame(frame)
+    {
+        m_docManager = NULL;
+    }
 
     wxDocManager *GetDocumentManager() const { return m_docManager; }
 
 protected:
+    // This is similar to wxDocChildFrameAnyBase method with the same name:
+    // while we're not an event handler ourselves and so can't override
+    // TryBefore(), we provide a helper that the derived template class can use
+    // from its TryBefore() implementation.
+    bool TryProcessEvent(wxEvent& event);
+
+    wxWindow* const m_frame;
     wxDocManager *m_docManager;
 
     wxDECLARE_NO_COPY_CLASS(wxDocParentFrameAnyBase);
@@ -808,7 +844,7 @@ class WXDLLIMPEXP_CORE wxDocParentFrameAny : public BaseFrame,
                                              public wxDocParentFrameAnyBase
 {
 public:
-    wxDocParentFrameAny() { }
+    wxDocParentFrameAny() : wxDocParentFrameAnyBase(this) { }
     wxDocParentFrameAny(wxDocManager *manager,
                         wxFrame *frame,
                         wxWindowID id,
@@ -817,6 +853,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
                         const wxString& name = wxFrameNameStr)
+        : wxDocParentFrameAnyBase(this)
     {
         Create(manager, frame, id, title, pos, size, style, name);
     }
@@ -835,7 +872,7 @@ public:
         if ( !BaseFrame::Create(frame, id, title, pos, size, style, name) )
             return false;
 
-        this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
+        this->Connect(wxID_EXIT, wxEVT_MENU,
                       wxCommandEventHandler(wxDocParentFrameAny::OnExit));
         this->Connect(wxEVT_CLOSE_WINDOW,
                       wxCloseEventHandler(wxDocParentFrameAny::OnCloseWindow));
@@ -847,10 +884,11 @@ protected:
     // hook the document manager into event handling chain here
     virtual bool TryBefore(wxEvent& event)
     {
-        if ( m_docManager && m_docManager->ProcessEventLocally(event) )
-            return true;
-
-        return BaseFrame::TryBefore(event);
+        // It is important to send the event to the base class first as
+        // wxMDIParentFrame overrides its TryBefore() to send the menu events
+        // to the currently active child frame and the child must get them
+        // before our own TryProcessEvent() is executed, not afterwards.
+        return BaseFrame::TryBefore(event) || TryProcessEvent(event);
     }
 
 private:
@@ -916,11 +954,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDocParentFrame);
 };
 
-#ifdef __VISUALC6__
-    // reenable warning 4275
-    #pragma warning (pop)
-#endif
-
 // ----------------------------------------------------------------------------
 // Provide simple default printing facilities
 // ----------------------------------------------------------------------------
@@ -932,11 +965,11 @@ public:
     wxDocPrintout(wxView *view = NULL, const wxString& title = wxString());
 
     // implement wxPrintout methods
-    virtual bool OnPrintPage(int page);
-    virtual bool HasPage(int page);
-    virtual bool OnBeginDocument(int startPage, int endPage);
+    virtual bool OnPrintPage(int page) wxOVERRIDE;
+    virtual bool HasPage(int page) wxOVERRIDE;
+    virtual bool OnBeginDocument(int startPage, int endPage) wxOVERRIDE;
     virtual void GetPageInfo(int *minPage, int *maxPage,
-                             int *selPageFrom, int *selPageTo);
+                             int *selPageFrom, int *selPageTo) wxOVERRIDE;
 
     virtual wxView *GetView() { return m_printoutView; }
 
@@ -966,7 +999,7 @@ wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
 
 // these flags are not used anywhere by wxWidgets and kept only for an unlikely
 // case of existing user code using them for its own purposes
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
 enum
 {
     wxDOC_SDI = 1,
@@ -974,6 +1007,21 @@ enum
     wxDEFAULT_DOCMAN_FLAGS = wxDOC_SDI
 };
 #endif // WXWIN_COMPATIBILITY_2_8
+
+inline wxViewVector wxDocument::GetViewsVector() const
+{
+    return m_documentViews.AsVector<wxView*>();
+}
+
+inline wxDocVector wxDocManager::GetDocumentsVector() const
+{
+    return m_docs.AsVector<wxDocument*>();
+}
+
+inline wxDocTemplateVector wxDocManager::GetTemplatesVector() const
+{
+    return m_templates.AsVector<wxDocTemplate*>();
+}
 
 #endif // wxUSE_DOC_VIEW_ARCHITECTURE
 

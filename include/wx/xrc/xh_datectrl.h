@@ -3,7 +3,6 @@
 // Purpose:     XML resource handler for wxDatePickerCtrl
 // Author:      Vaclav Slavik
 // Created:     2005-02-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

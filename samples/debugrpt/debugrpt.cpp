@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-01-20
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,7 +34,7 @@
     #error "This sample can't be built without wxUSE_ON_FATAL_EXCEPTION"
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -62,7 +61,7 @@ protected:
     // this is called with the contents of the server response: you will
     // probably want to parse the XML document in OnServerReply() instead of
     // just dumping it as I do
-    virtual bool OnServerReply(const wxArrayString& reply)
+    virtual bool OnServerReply(const wxArrayString& reply) wxOVERRIDE
     {
         if ( reply.IsEmpty() )
         {
@@ -170,7 +169,7 @@ private:
     int m_numLines;
 
     wxDECLARE_NO_COPY_CLASS(MyFrame);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -188,10 +187,10 @@ public:
     MyApp();
 
     // create our main window here
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
     // called when a crash occurs in this application
-    virtual void OnFatalException();
+    virtual void OnFatalException() wxOVERRIDE;
 
     // this is where we really generate the debug report
     void GenerateReport(wxDebugReport::Context ctx);
@@ -217,7 +216,7 @@ IMPLEMENT_APP(MyApp)
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DebugRpt_Quit, MyFrame::OnQuit)
     EVT_MENU(DebugRpt_Crash, MyFrame::OnReportForCrash)
     EVT_MENU(DebugRpt_Current, MyFrame::OnReportForCurrent)
@@ -226,7 +225,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DebugRpt_About, MyFrame::OnAbout)
 
     EVT_PAINT(MyFrame::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, wxT("wxWidgets Debug Report Sample"),
@@ -251,7 +250,7 @@ MyFrame::MyFrame()
                        wxT("You need to configure a web server accepting debug report uploads to use this function"));
 
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(DebugRpt_About, wxT("&About...\tF1"));
+    menuHelp->Append(DebugRpt_About, wxT("&About\tF1"));
 
     wxMenuBar *mbar = new wxMenuBar();
     mbar->Append(menuFile, wxT("&File"));

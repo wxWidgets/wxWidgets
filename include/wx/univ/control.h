@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     14.08.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -64,10 +63,10 @@ public:
 
     // this function will filter out '&' characters and will put the
     // accelerator char (the one immediately after '&') into m_chAccel
-    virtual void SetLabel(const wxString& label);
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
 
     // return the current label
-    virtual wxString GetLabel() const { return m_label; }
+    virtual wxString GetLabel() const wxOVERRIDE { return m_label; }
 
     // wxUniversal-specific methods
 
@@ -80,7 +79,7 @@ public:
         return m_indexAccel == -1 ? wxT('\0') : (wxChar)m_label[m_indexAccel];
     }
 
-    virtual wxWindow *GetInputWindow() const { return (wxWindow*)this; }
+    virtual wxWindow *GetInputWindow() const wxOVERRIDE { return (wxWindow*)this; }
 
 protected:
     // common part of all ctors

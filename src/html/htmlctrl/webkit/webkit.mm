@@ -4,7 +4,6 @@
 // Author:      Jethro Grassie / Kevin Ollivier
 // Modified by:
 // Created:     2004-4-16
-// RCS-ID:      $Id$
 // Copyright:   (c) Jethro Grassie / Kevin Ollivier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -99,7 +98,6 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
 
     UInt32 keyCode ;
     UInt32 modifiers ;
-    Point point ;
     UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
 
 #if wxUSE_UNICODE
@@ -128,10 +126,9 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
     }
 #endif
 
-    GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
+    GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode );
     GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
     GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
-    GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
 
     UInt32 message = (keyCode << 8) + charCode;
     switch ( GetEventKind( event ) )
@@ -143,7 +140,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
                 WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
                 wxTheApp->MacSetCurrentEvent( event , handler ) ;
                 if ( /* focus && */ wxTheApp->MacSendKeyDownEvent(
-                    focus , message , modifiers , when , point.h , point.v , uniChar[0] ) )
+                    focus , message , modifiers , when , uniChar[0] ) )
                 {
                     result = noErr ;
                 }
@@ -153,7 +150,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
 
         case kEventRawKeyUp :
             if ( /* focus && */ wxTheApp->MacSendKeyUpEvent(
-                focus , message , modifiers , when , point.h , point.v , uniChar[0] ) )
+                focus , message , modifiers , when , uniChar[0] ) )
             {
                 result = noErr ;
             }
@@ -164,11 +161,9 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
                 wxKeyEvent event(wxEVT_KEY_DOWN);
 
                 event.m_shiftDown = modifiers & shiftKey;
-                event.m_controlDown = modifiers & controlKey;
+                event.m_rawControlDown = modifiers & controlKey;
                 event.m_altDown = modifiers & optionKey;
-                event.m_metaDown = modifiers & cmdKey;
-                event.m_x = point.h;
-                event.m_y = point.v;
+                event.m_controlDown = modifiers & cmdKey;
 
 #if wxUSE_UNICODE
                 event.m_uniChar = uniChar[0] ;
@@ -179,7 +174,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
 
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & controlKey )
                 {
-                    event.m_keyCode = WXK_CONTROL ;
+                    event.m_keyCode = WXK_RAW_CONTROL ;
                     event.SetEventType( ( modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
@@ -197,7 +192,7 @@ static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , Ev
                 }
                 if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & cmdKey )
                 {
-                    event.m_keyCode = WXK_COMMAND ;
+                    event.m_keyCode = WXK_CONTROL ;
                     event.SetEventType( ( modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
                     focus->GetEventHandler()->ProcessEvent( event ) ;
                 }
@@ -381,7 +376,7 @@ inline int wxNavTypeFromWebNavType(int type){
     wxWebKitCtrl* webKitWindow;
 }
 
-- initWithWxWindow: (wxWebKitCtrl*)inWindow;
+- (id)initWithWxWindow: (wxWebKitCtrl*)inWindow;
 
 @end
 
@@ -390,7 +385,16 @@ inline int wxNavTypeFromWebNavType(int type){
     wxWebKitCtrl* webKitWindow;
 }
 
-- initWithWxWindow: (wxWebKitCtrl*)inWindow;
+- (id)initWithWxWindow: (wxWebKitCtrl*)inWindow;
+
+@end
+
+@interface MyUIDelegate : NSObject
+{
+    wxWebKitCtrl* webKitWindow;
+}
+
+- (id)initWithWxWindow: (wxWebKitCtrl*)inWindow;
 
 @end
 
@@ -454,10 +458,7 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 
     m_webView = (WebView*) HIWebViewGetWebView( peer->GetControlRef() );
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-    if ( UMAGetSystemVersion() >= 0x1030 )
-        HIViewChangeFeatures( peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
-#endif
+    HIViewChangeFeatures( peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
     InstallControlEventHandler( peer->GetControlRef() , GetwxWebKitCtrlEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,
         (EventHandlerRef *)&m_webKitCtrlEventHandler);
@@ -485,6 +486,10 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     MyPolicyDelegate* myPolicyDelegate = [[MyPolicyDelegate alloc] initWithWxWindow: this];
     [m_webView setPolicyDelegate:myPolicyDelegate];
 
+    // this is used to provide printing support for JavaScript
+    MyUIDelegate* myUIDelegate = [[MyUIDelegate alloc] initWithWxWindow: this];
+    [m_webView setUIDelegate:myUIDelegate];
+
     LoadURL(m_currentURL);
     return true;
 }
@@ -493,14 +498,19 @@ wxWebKitCtrl::~wxWebKitCtrl()
 {
     MyFrameLoadMonitor* myFrameLoadMonitor = [m_webView frameLoadDelegate];
     MyPolicyDelegate* myPolicyDelegate = [m_webView policyDelegate];
+    MyUIDelegate* myUIDelegate = [m_webView UIDelegate];
     [m_webView setFrameLoadDelegate: nil];
     [m_webView setPolicyDelegate: nil];
+    [m_webView setUIDelegate: nil];
     
     if (myFrameLoadMonitor)
         [myFrameLoadMonitor release];
         
     if (myPolicyDelegate)
         [myPolicyDelegate release];
+
+    if (myUIDelegate)
+        [myUIDelegate release];
 }
 
 // ----------------------------------------------------------------------------
@@ -682,18 +692,20 @@ wxString wxWebKitCtrl::RunScript(const wxString& javascript){
     id result = [[m_webView windowScriptObject] evaluateWebScript:(NSString*)wxNSStringWithWxString( javascript )];
 
     NSString* resultAsString;
-    NSString* className = NSStringFromClass([result class]);
-    if ([className isEqualToString:@"NSCFNumber"])
-        resultAsString = [NSString stringWithFormat:@"%@", result];
-    else if ([className isEqualToString:@"NSCFString"])
-        resultAsString = result;
-    else if ([className isEqualToString:@"NSCFBoolean"]){
-        if ([result boolValue])
-            resultAsString = @"true";
+    if ([result isKindOfClass:[NSNumber class]]){
+        // __NSCFBoolean is a subclass of NSNumber
+        if (strcmp([result objCType], @encode(BOOL)) == 0){
+            if ([result boolValue])
+                resultAsString = @"true";
+            else
+                resultAsString = @"false";
+        }
         else
-            resultAsString = @"false";
+            resultAsString = [NSString stringWithFormat:@"%@", result];
     }
-    else if ([className isEqualToString:@"WebScriptObject"])
+    else if ([result isKindOfClass:[NSString class]])
+        resultAsString = result;
+    else if ([result isKindOfClass:[WebScriptObject class]])
         resultAsString = [result stringRepresentation];
     else
         return wxString(); // This can happen, see e.g. #12361.
@@ -702,7 +714,7 @@ wxString wxWebKitCtrl::RunScript(const wxString& javascript){
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
-#if defined(__WXMAC_) && wxOSX_USE_CARBON
+#if defined(__WXMAC__) && wxOSX_USE_CARBON
     // This is a nasty hack because WebKit seems to lose its position when it is embedded
     // in a control that is not itself the content view for a TLW.
     // I put it in OnSize because these calcs are not perfect, and in fact are basically
@@ -794,9 +806,9 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 @implementation MyFrameLoadMonitor
 
-- initWithWxWindow: (wxWebKitCtrl*)inWindow
+- (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
-    [super init];
+    self = [super init];
     webKitWindow = inWindow;    // non retained
     return self;
 }
@@ -875,9 +887,9 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 @implementation MyPolicyDelegate
 
-- initWithWxWindow: (wxWebKitCtrl*)inWindow
+- (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
 {
-    [super init];
+    self = [super init];
     webKitWindow = inWindow;    // non retained
     return self;
 }
@@ -920,6 +932,25 @@ void wxWebKitCtrl::MacVisibilityChanged(){
         webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
 
     [listener use];
+}
+@end
+
+
+@implementation MyUIDelegate
+
+- (id)initWithWxWindow: (wxWebKitCtrl*)inWindow
+{
+    self = [super init];
+    webKitWindow = inWindow;    // non retained
+    return self;
+}
+
+- (void)webView:(WebView *)sender printFrameView:(WebFrameView *)frameView
+{
+    wxUnusedVar(sender);
+    wxUnusedVar(frameView);
+
+    webKitWindow->Print(true);
 }
 @end
 

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     07.07.99
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,18 +39,17 @@
 #include "wx/generic/choicdgg.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/hiddenwin.h"
 #include "wx/dynlib.h"
 
 wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );
 wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 
-// Doesn't yet compile under VC++ 4, BC++, Watcom C++,
+// Doesn't yet compile under BC++
 // Wine: no wininet.h
 #if (!defined(__BORLANDC__) || (__BORLANDC__>=0x550)) && \
     (!defined(__GNUWIN32__) || wxCHECK_W32API_VERSION(0, 5)) && \
-    !defined(__GNUWIN32_OLD__) && \
-    !defined(__WINE__) && \
-    (!defined(__VISUALC__) || (__VISUALC__ >= 1020))
+    !defined(__WINE__)
 
 #include <ras.h>
 #include <raserror.h>
@@ -65,10 +63,6 @@ wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 #ifndef INTERNET_CONNECTION_PROXY
 #define INTERNET_CONNECTION_PROXY 4
 #endif
-
-// implemented in utils.cpp
-extern "C" WXDLLIMPEXP_BASE HWND
-wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 static const wxChar *
     wxMSWDIALUP_WNDCLASSNAME = wxT("_wxDialUpManager_Internal_Class");
@@ -833,7 +827,6 @@ bool wxDialUpManagerMSW::Dial(const wxString& nameOfISP,
     // default values for other fields
     rasDialParams.szPhoneNumber[0] = '\0';
     rasDialParams.szCallbackNumber[0] = '\0';
-    rasDialParams.szCallbackNumber[0] = '\0';
 
     rasDialParams.szDomain[0] = '*';
     rasDialParams.szDomain[1] = '\0';
@@ -1154,6 +1147,8 @@ bool wxDialUpManagerMSW::EnableAutoCheckOnlineStatus(size_t nSeconds)
             wxLogLastError(wxT("CreateThread(RasStatusThread)"));
 
             CleanUpThreadData();
+
+            ok = false;
         }
     }
 
@@ -1288,7 +1283,7 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
     }
 
     // we don't need it any more now and if this thread ran, it is our
-    // responsability to free the data
+    // responsibility to free the data
     delete data;
 
     return 0;

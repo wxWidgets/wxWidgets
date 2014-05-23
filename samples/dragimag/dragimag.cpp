@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     28/2/2000
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,7 @@
 
 #include "dragimag.h"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
     #include "dragicon.xpm"
 #endif
@@ -49,11 +48,11 @@ IMPLEMENT_APP(MyApp)
 
 IMPLEMENT_CLASS(MyCanvas, wxScrolledWindow)
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_PAINT(MyCanvas::OnPaint)
   EVT_ERASE_BACKGROUND(MyCanvas::OnEraseBackground)
   EVT_MOUSE_EVENTS(MyCanvas::OnMouseEvent)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
@@ -308,17 +307,17 @@ DragShape* MyCanvas::FindShape(const wxPoint& pt) const
 // MyFrame
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
-BEGIN_EVENT_TABLE(MyFrame,wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame,wxFrame)
   EVT_MENU    (wxID_ABOUT, MyFrame::OnAbout)
   EVT_MENU    (wxID_EXIT,  MyFrame::OnQuit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
 : wxFrame( (wxFrame *)NULL, wxID_ANY, wxT("wxDragImage sample"),
           wxPoint(20,20), wxSize(470,360) )
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( wxID_ABOUT, wxT("&About..."));
+    file_menu->Append( wxID_ABOUT, wxT("&About"));
     file_menu->AppendCheckItem( TEST_USE_SCREEN, wxT("&Use whole screen for dragging"), wxT("Use whole screen"));
     file_menu->Append( wxID_EXIT, wxT("E&xit"));
 
@@ -354,9 +353,9 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 // MyApp
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyApp, wxApp)
+wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(TEST_USE_SCREEN, MyApp::OnUseScreen)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyApp::MyApp()
 {

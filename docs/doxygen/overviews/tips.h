@@ -2,13 +2,14 @@
 // Name:        tips.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
 @page overview_tips wxTipProvider Overview
+
+@tableofcontents
 
 Many "modern" Windows programs have a feature (some would say annoyance) of
 presenting the user tips at program startup. While this is probably useless to
@@ -73,4 +74,3 @@ See the dialogs program in your samples folder for a working example inside a
 program.
 
 */
-

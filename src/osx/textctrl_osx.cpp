@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by: Ryan Norton (MLTE GetLineLength and GetLineText)
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -154,11 +153,6 @@ void wxTextCtrl::MacCheckSpelling(bool check)
     GetTextPeer()->CheckSpelling(check);
 }
 
-void wxTextCtrl::SetMaxLength(unsigned long len)
-{
-    m_maxLength = len ;
-}
-
 bool wxTextCtrl::SetFont( const wxFont& font )
 {
     if ( !wxTextCtrlBase::SetFont( font ) )
@@ -290,7 +284,7 @@ void wxTextCtrl::Copy()
 {
     if (CanCopy())
     {
-        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_COPY, GetId());
+        wxClipboardTextEvent evt(wxEVT_TEXT_COPY, GetId());
         evt.SetEventObject(this);
         if (!GetEventHandler()->ProcessEvent(evt))
         {
@@ -303,7 +297,7 @@ void wxTextCtrl::Cut()
 {
     if (CanCut())
     {
-        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_CUT, GetId());
+        wxClipboardTextEvent evt(wxEVT_TEXT_CUT, GetId());
         evt.SetEventObject(this);
         if (!GetEventHandler()->ProcessEvent(evt))
         {
@@ -318,7 +312,7 @@ void wxTextCtrl::Paste()
 {
     if (CanPaste())
     {
-        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_PASTE, GetId());
+        wxClipboardTextEvent evt(wxEVT_TEXT_PASTE, GetId());
         evt.SetEventObject(this);
         if (!GetEventHandler()->ProcessEvent(evt))
         {
@@ -339,7 +333,7 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
-    if ( event.GetModifiers() == wxMOD_CMD )
+    if ( event.GetModifiers() == wxMOD_CONTROL )
     {
         switch( event.GetKeyCode() )
         {
@@ -381,18 +375,21 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         return ;
     }
 
-    // Check if we have reached the max # of chars (if it is set), but still
-    // allow navigation and deletion
-    GetSelection( &from, &to );
-    if ( !IsMultiLine() && m_maxLength && GetValue().length() >= m_maxLength &&
-        !event.IsKeyInCategory(WXK_CATEGORY_ARROW | WXK_CATEGORY_TAB | WXK_CATEGORY_CUT) &&
-        !( key == WXK_RETURN && (m_windowStyle & wxTE_PROCESS_ENTER) ) &&
-        from == to )
+    if ( !GetTextPeer()->CanClipMaxLength() )
     {
-        // eat it, we don't want to add more than allowed # of characters
+        // Check if we have reached the max # of chars (if it is set), but still
+        // allow navigation and deletion
+        GetSelection( &from, &to );
+        if ( !IsMultiLine() && m_maxLength && GetValue().length() >= m_maxLength &&
+            !event.IsKeyInCategory(WXK_CATEGORY_ARROW | WXK_CATEGORY_TAB | WXK_CATEGORY_CUT) &&
+            !( key == WXK_RETURN && (m_windowStyle & wxTE_PROCESS_ENTER) ) &&
+            from == to )
+        {
+            // eat it, we don't want to add more than allowed # of characters
 
-        // TODO: generate EVT_TEXT_MAXLEN()
-        return;
+            // TODO: generate EVT_TEXT_MAXLEN()
+            return;
+        }
     }
 
     // assume that any key not processed yet is going to modify the control
@@ -403,7 +400,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         case WXK_RETURN:
             if (m_windowStyle & wxTE_PROCESS_ENTER)
             {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
                 event.SetEventObject( this );
                 event.SetString( GetValue() );
                 if ( HandleWindowEvent(event) )
@@ -418,7 +415,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                     wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
-                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
 
@@ -471,7 +468,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
          key == WXK_DELETE ||
          key == WXK_BACK)
     {
-        wxCommandEvent event1(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
+        wxCommandEvent event1(wxEVT_TEXT, m_windowId);
         event1.SetEventObject( this );
         wxPostEvent( GetEventHandler(), event1 );
     }
@@ -600,21 +597,6 @@ bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
         return wxWindow::MacSetupCursor( pt ) ;
     else
         return true ;
-}
-
-bool wxTextCtrl::SetHint(const wxString& hint)
-{
-    m_hintString = hint;
-    
-    if ( GetTextPeer() && GetTextPeer()->SetHint(hint) )
-        return true;
-    
-    return false;
-}
-
-wxString wxTextCtrl::GetHint() const
-{
-    return m_hintString;
 }
 
 // ----------------------------------------------------------------------------
@@ -775,9 +757,10 @@ int wxTextWidgetImpl::GetLineLength(long lineNo) const
             count = 0;
             for (size_t j = i; j < content.length(); j++)
             {
-                count++;
                 if (content[j] == '\n')
                     return count;
+
+                count++;
             }
 
             return count;

@@ -2,7 +2,6 @@
 // Name:        src/gtk1/window.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1141,7 +1140,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
             int command = ancestor->GetAcceleratorTable()->GetCommand( event );
             if (command != -1)
             {
-                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                wxCommandEvent command_event( wxEVT_MENU, command );
                 ret = ancestor->HandleWindowEvent( command_event );
                 break;
             }
@@ -1257,7 +1256,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
         if ( btnCancel )
         {
-            wxCommandEvent eventClick(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+            wxCommandEvent eventClick(wxEVT_BUTTON, wxID_CANCEL);
             eventClick.SetEventObject(btnCancel);
             ret = btnCancel->HandleWindowEvent(eventClick);
         }
@@ -1332,6 +1331,7 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     if (event.GetEventType() == wxEVT_MOUSEWHEEL)
     {
        event.m_linesPerAction = 3;
+       event.m_columnsPerAction = 3;
        event.m_wheelDelta = 120;
        if (((GdkEventButton*)gdk_event)->button == 4)
            event.m_wheelRotation = 120;

@@ -5,7 +5,6 @@
 // Modified by: extended to enumerate more than just font facenames and works
 //              not only on Windows now (VZ)
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart, Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

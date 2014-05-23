@@ -3,7 +3,6 @@
 // Purpose:     STC test declarations
 // Maintainer:  Wyo
 // Created:     2003-09-01
-// RCS-ID:      $Id$
 // Copyright:   (c) wxGuide
 // Licence:     wxWindows licence
 //////////////////////////////////////////////////////////////////////////////
@@ -40,7 +39,8 @@
 enum {
     // menu IDs
     myID_PROPERTIES = wxID_HIGHEST,
-    myID_INDENTINC,
+    myID_EDIT_FIRST,
+    myID_INDENTINC = myID_EDIT_FIRST,
     myID_INDENTRED,
     myID_FINDNEXT,
     myID_REPLACE,
@@ -57,6 +57,12 @@ enum {
     myID_OVERTYPE,
     myID_READONLY,
     myID_WRAPMODEON,
+    myID_ANNOTATION_ADD,
+    myID_ANNOTATION_REMOVE,
+    myID_ANNOTATION_CLEAR,
+    myID_ANNOTATION_STYLE_HIDDEN,
+    myID_ANNOTATION_STYLE_STANDARD,
+    myID_ANNOTATION_STYLE_BOXED,
     myID_CHANGECASE,
     myID_CHANGELOWER,
     myID_CHANGEUPPER,
@@ -67,12 +73,16 @@ enum {
     myID_CONVERTCR,
     myID_CONVERTCRLF,
     myID_CONVERTLF,
+    myID_MULTIPLE_SELECTIONS,
+    myID_MULTI_PASTE,
+    myID_MULTIPLE_SELECTIONS_TYPING,
     myID_USECHARSET,
     myID_CHARSETANSI,
     myID_CHARSETMAC,
     myID_PAGEPREV,
     myID_PAGENEXT,
     myID_SELECTLINE,
+    myID_EDIT_LAST = myID_SELECTLINE,
     myID_WINDOW_MINIMAL,
 
     // other IDs
@@ -101,7 +111,7 @@ extern wxString *g_appname;
 
 //! global print data, to remember settings during the session
 extern wxPrintData *g_printData;
-extern wxPageSetupData *g_pageSetupData;
+extern wxPageSetupDialogData *g_pageSetupData;
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 

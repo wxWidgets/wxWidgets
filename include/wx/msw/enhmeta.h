@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     13.01.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,13 +52,21 @@ public:
     // this method
     bool SetClipboard(int width = 0, int height = 0);
 
+    // Detach the HENHMETAFILE from this object, i.e. don't delete the handle
+    // in the dtor -- the caller is now responsible for doing this, e.g. using
+    // Free() method below.
+    WXHANDLE Detach() { WXHANDLE h = m_hMF; m_hMF = 0; return h; }
+
+    // Destroy the given HENHMETAFILE object.
+    static void Free(WXHANDLE handle);
+
     // implementation
     WXHANDLE GetHENHMETAFILE() const { return m_hMF; }
     void SetHENHMETAFILE(WXHANDLE hMF) { Free(); m_hMF = hMF; }
 
 protected:
     void Init();
-    void Free();
+    void Free() { Free(m_hMF); }
     void Assign(const wxEnhMetaFile& mf);
 
     // we don't use these functions (but probably should) but have to implement
@@ -89,6 +96,7 @@ public:
 
     // as above, but takes reference DC as first argument to take resolution,
     // size, font metrics etc. from
+    wxEXPLICIT
     wxEnhMetaFileDC(const wxDC& referenceDC,
                     const wxString& filename = wxEmptyString,
                     int width = 0, int height = 0,

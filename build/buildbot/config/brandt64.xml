@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       brandt64.xml
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/unix.xml"/>
+
+<build>
+    <name>Linux x64 wxGTK trunk</name>
+    <builddir>brandt64_gtk</builddir>
+    <scheduler>trunk_quick</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--enable-compat28 --enable-debug"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x64 wxGTK trunk STL no compat</name>
+    <builddir>brandt64_gtk_stl</builddir>
+    <scheduler>trunk_quick</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-compat28 --enable-stl"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>

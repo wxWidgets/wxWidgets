@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -63,11 +62,6 @@
 #include <string.h>
 
 #ifndef __WXUNIVERSAL__
-
-#if wxUSE_LIBGNOMEPRINT
-    #include "wx/link.h"
-    wxFORCE_LINK_MODULE(gnome_print)
-#endif
 
 #if wxUSE_GTKPRINT
     #include "wx/link.h"
@@ -804,7 +798,7 @@ wxComboBox *wxGenericPrintSetupDialog::CreatePaperTypeChoice()
 
     wxComboBox *choice = new wxComboBox( this,
                                          wxPRINTID_PAPERSIZE,
-                                         _("Paper Size"),
+                                         _("Paper size"),
                                          wxDefaultPosition,
                                          wxSize(width, wxDefaultCoord),
                                          n, choices );
@@ -831,7 +825,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
                                                     wxPageSetupDialogData* data)
     : wxPageSetupDialogBase( parent,
                 wxID_ANY,
-                _("Page Setup"),
+                _("Page setup"),
                 wxPoint(0,0),
                 wxSize(600, 600),
                 wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL )
@@ -858,7 +852,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
 
     m_paperTypeChoice = new wxComboBox( this,
                                         wxPRINTID_PAPERSIZE,
-                                        _("Paper Size"),
+                                        _("Paper size"),
                                         wxDefaultPosition,
                                         wxSize(300, wxDefaultCoord),
                                         n, choices );
@@ -1060,7 +1054,7 @@ wxComboBox *wxGenericPageSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 
     wxComboBox *choice = new wxComboBox( this,
                                          wxPRINTID_PAPERSIZE,
-                                         _("Paper Size"),
+                                         _("Paper size"),
                                          wxPoint(*x, *y),
                                          wxSize(300, wxDefaultCoord),
                                          n, choices );

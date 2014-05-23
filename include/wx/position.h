@@ -3,7 +3,6 @@
 // Purpose:     Common structure and methods for positional information.
 // Author:      Vadim Zeitlin, Robin Dunn, Brad Anderson, Bryan Petty
 // Created:     2007-03-13
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 The wxWidgets Team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

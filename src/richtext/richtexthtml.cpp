@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     2005-09-30
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -75,7 +74,8 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
 
     ClearTemporaryImageLocations();
 
-    buffer->Defragment();
+    wxRichTextDrawingContext context(buffer);
+    buffer->Defragment(context);
 
 #if wxUSE_UNICODE
     wxCSConv* customEncoding = NULL;
@@ -225,15 +225,25 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxRichTextAttr& curre
         m_font = true;
     }
 
-    if (thisStyle.GetFontWeight() == wxBOLD)
+    if (thisStyle.GetFontWeight() == wxFONTWEIGHT_BOLD)
         str << wxT("<b>");
-    if (thisStyle.GetFontStyle() == wxITALIC)
+    if (thisStyle.GetFontStyle() == wxFONTSTYLE_ITALIC)
         str << wxT("<i>");
     if (thisStyle.GetFontUnderlined())
         str << wxT("<u>");
 
     if (thisStyle.HasURL())
         str << wxT("<a href=\"") << thisStyle.GetURL() << wxT("\">");
+
+    if (thisStyle.HasTextEffects())
+    {
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
+            str << wxT("<del>");
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT)
+            str << wxT("<sup>");
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT)
+            str << wxT("<sub>");
+    }
 }
 
 void wxRichTextHTMLHandler::EndCharacterFormatting(const wxRichTextAttr& WXUNUSED(currentStyle), const wxRichTextAttr& thisStyle, const wxRichTextAttr& WXUNUSED(paraStyle), wxTextOutputStream& stream)
@@ -243,10 +253,20 @@ void wxRichTextHTMLHandler::EndCharacterFormatting(const wxRichTextAttr& WXUNUSE
 
     if (thisStyle.GetFontUnderlined())
         stream << wxT("</u>");
-    if (thisStyle.GetFontStyle() == wxITALIC)
+    if (thisStyle.GetFontStyle() == wxFONTSTYLE_ITALIC)
         stream << wxT("</i>");
-    if (thisStyle.GetFontWeight() == wxBOLD)
+    if (thisStyle.GetFontWeight() == wxFONTWEIGHT_BOLD)
         stream << wxT("</b>");
+
+    if (thisStyle.HasTextEffects())
+    {
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
+            stream << wxT("</del>");
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT)
+            stream << wxT("</sup>");
+        if (thisStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT)
+            stream << wxT("</sub>");
+    }
 
     if (m_font)
     {
@@ -304,29 +324,29 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxRichTextAttr& WXUNU
 
             if ((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) && thisStyle.HasParagraphSpacingBefore())
             {
-                float spacingBeforeMM = thisStyle.GetParagraphSpacingBefore() / 10.0;
+                float spacingBeforeMM = thisStyle.GetParagraphSpacingBefore() / 10.0f;
 
                 styleStr += wxString::Format(wxT("margin-top: %.2fmm; "), spacingBeforeMM);
             }
             if ((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) && thisStyle.HasParagraphSpacingAfter())
             {
-                float spacingAfterMM = thisStyle.GetParagraphSpacingAfter() / 10.0;
+                float spacingAfterMM = thisStyle.GetParagraphSpacingAfter() / 10.0f;
 
                 styleStr += wxString::Format(wxT("margin-bottom: %.2fmm; "), spacingAfterMM);
             }
 
-            float indentLeftMM = (thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent())/10.0;
+            float indentLeftMM = (thisStyle.GetLeftIndent() + thisStyle.GetLeftSubIndent())/10.0f;
             if ((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) && (indentLeftMM > 0.0))
             {
                 styleStr += wxString::Format(wxT("margin-left: %.2fmm; "), indentLeftMM);
             }
-            float indentRightMM = thisStyle.GetRightIndent()/10.0;
+            float indentRightMM = thisStyle.GetRightIndent()/10.0f;
             if ((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) && thisStyle.HasRightIndent() && (indentRightMM > 0.0))
             {
                 styleStr += wxString::Format(wxT("margin-right: %.2fmm; "), indentRightMM);
             }
             // First line indentation
-            float firstLineIndentMM = - thisStyle.GetLeftSubIndent() / 10.0;
+            float firstLineIndentMM = - thisStyle.GetLeftSubIndent() / 10.0f;
             if ((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) && (firstLineIndentMM > 0.0))
             {
                 styleStr += wxString::Format(wxT("text-indent: %.2fmm; "), firstLineIndentMM);
@@ -364,13 +384,13 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxRichTextAttr& WXUNU
 
         if ((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) && thisStyle.HasParagraphSpacingBefore())
         {
-            float spacingBeforeMM = thisStyle.GetParagraphSpacingBefore() / 10.0;
+            float spacingBeforeMM = thisStyle.GetParagraphSpacingBefore() / 10.0f;
 
             styleStr += wxString::Format(wxT("margin-top: %.2fmm; "), spacingBeforeMM);
         }
         if ((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) && thisStyle.HasParagraphSpacingAfter())
         {
-            float spacingAfterMM = thisStyle.GetParagraphSpacingAfter() / 10.0;
+            float spacingAfterMM = thisStyle.GetParagraphSpacingAfter() / 10.0f;
 
             styleStr += wxString::Format(wxT("margin-bottom: %.2fmm; "), spacingAfterMM);
         }
@@ -501,7 +521,7 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
             if (img.IsOk())
             {
                 wxString ext(image->GetImageBlock().GetExtension());
-                wxString tempFilename(wxString::Format(wxT("image%d.%s"), sm_fileCounter, ext));
+                wxString tempFilename(wxString::Format(wxT("image%d.%s"), sm_fileCounter, ext.c_str()));
                 wxMemoryFSHandler::AddFile(tempFilename, img, image->GetImageBlock().GetImageType());
 
                 m_imageLocations.Add(tempFilename);
@@ -530,7 +550,7 @@ void wxRichTextHTMLHandler::WriteImage(wxRichTextImage* image, wxOutputStream& s
                 tempDir = wxFileName::GetTempDir();
 
             wxString ext(image->GetImageBlock().GetExtension());
-            wxString tempFilename(wxString::Format(wxT("%s/image%d.%s"), tempDir, sm_fileCounter, ext));
+            wxString tempFilename(wxString::Format(wxT("%s/image%d.%s"), tempDir.c_str(), sm_fileCounter, ext.c_str()));
             image->GetImageBlock().Write(tempFilename);
 
             m_imageLocations.Add(tempFilename);
@@ -588,7 +608,7 @@ const wxChar* wxRichTextHTMLHandler::GetMimeType(int imageType)
     {
     case wxBITMAP_TYPE_BMP:
         return wxT("image/bmp");
-    case wxBITMAP_TYPE_TIF:
+    case wxBITMAP_TYPE_TIFF:
         return wxT("image/tiff");
     case wxBITMAP_TYPE_GIF:
         return wxT("image/gif");
@@ -614,7 +634,7 @@ wxChar* wxRichTextHTMLHandler::b64enc( unsigned char* input, size_t in_len )
 
     while( in_len-- > 0 )
     {
-        register wxChar a, b;
+        wxChar a, b;
 
         a = *input++;
 

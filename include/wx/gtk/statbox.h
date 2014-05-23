@@ -2,7 +2,6 @@
 // Name:        wx/gtk/statbox.h
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,24 +32,24 @@ public:
                  long style = 0,
                  const wxString &name = wxStaticBoxNameStr );
 
-    virtual void SetLabel( const wxString &label );
+    virtual void SetLabel( const wxString &label ) wxOVERRIDE;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // implementation
 
-    virtual bool IsTransparentForMouse() const { return true; }
+    virtual bool GTKIsTransparentForMouse() const wxOVERRIDE { return true; }
 
-    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const wxOVERRIDE;
 
-    virtual void AddChild( wxWindowBase *child );
+    virtual void AddChild( wxWindowBase *child ) wxOVERRIDE;
 
 protected:
-    virtual bool GTKWidgetNeedsMnemonic() const;
-    virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);
+    virtual bool GTKWidgetNeedsMnemonic() const wxOVERRIDE;
+    virtual void GTKWidgetDoSetMnemonic(GtkWidget* w) wxOVERRIDE;
 
-    void DoApplyWidgetStyle(GtkRcStyle *style);
+    void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
 
     DECLARE_DYNAMIC_CLASS(wxStaticBox)
 };

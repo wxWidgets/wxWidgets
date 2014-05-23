@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin: merge with the MDI version and general cleanup
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -15,9 +14,7 @@
 
 #include "wx/docview.h"
 
-class MyFrame;
 class MyCanvas;
-class DrawingView;
 
 // Define a new application
 class MyApp : public wxApp
@@ -36,11 +33,11 @@ public:
     MyApp();
 
     // override some wxApp virtual methods
-    virtual bool OnInit();
-    virtual int OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual int OnExit() wxOVERRIDE;
 
-    virtual void OnInitCmdLine(wxCmdLineParser& parser);
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
 
     // our specific methods
     Mode GetMode() const { return m_mode; }
@@ -79,7 +76,7 @@ private:
     MyCanvas *m_canvas;
     wxMenu *m_menuEdit;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 

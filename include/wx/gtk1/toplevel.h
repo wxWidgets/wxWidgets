@@ -2,7 +2,6 @@
 // Name:        wx/gtk1/toplevel.h
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -51,7 +50,7 @@ public:
     virtual void Restore();
 
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual bool IsFullScreen() const { return m_fsIsShowing; };
+    virtual bool IsFullScreen() const { return m_fsIsShowing; }
 
     virtual bool SetShape(const wxRegion& region);
 

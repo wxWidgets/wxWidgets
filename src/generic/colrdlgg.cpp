@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -170,13 +169,6 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
     int x = (int)event.GetX();
     int y = (int)event.GetY();
 
-#ifdef __WXPM__
-    // Handle OS/2's reverse coordinate system and account for the dialog title
-    int                             nClientHeight;
-
-    GetClientSize(NULL, &nClientHeight);
-    y = (nClientHeight - y) + 20;
-#endif
     if ((x >= m_standardColoursRect.x && x <= (m_standardColoursRect.x + m_standardColoursRect.width)) &&
         (y >= m_standardColoursRect.y && y <= (m_standardColoursRect.y + m_standardColoursRect.height)))
     {
@@ -200,14 +192,8 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
       event.Skip();
 }
 
-void wxGenericColourDialog::OnPaint(wxPaintEvent& event)
+void wxGenericColourDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-#if !defined(__WXMOTIF__) && !defined(__WXPM__) && !defined(__WXCOCOA__) && !defined(__WXOSX__)
-    wxDialog::OnPaint(event);
-#else
-    wxUnusedVar(event);
-#endif
-
     wxPaintDC dc(this);
 
     PaintBasicColours(dc);
@@ -227,11 +213,7 @@ void wxGenericColourDialog::CalculateMeasurements()
     m_sectionSpacing = 15;
 
     m_standardColoursRect.x = 10;
-#ifdef __WXPM__
-    m_standardColoursRect.y = 15 + 20; /* OS/2 needs to account for dialog titlebar */
-#else
     m_standardColoursRect.y = 15;
-#endif
     m_standardColoursRect.width = (8*m_smallRectangleSize.x) + (7*m_gridSpacing);
     m_standardColoursRect.height = (6*m_smallRectangleSize.y) + (5*m_gridSpacing);
 

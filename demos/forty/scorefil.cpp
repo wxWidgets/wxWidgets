@@ -4,7 +4,6 @@
 // Author:      Chris Breeze
 // Modified by:
 // Created:     21/07/97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -20,11 +19,6 @@
 #include "wx/wx.h"
 #endif
 
-#ifdef __WXGTK__
-#include <unistd.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#endif
 #include "wx/textfile.h"
 #include "wx/config.h"
 #include "wx/fileconf.h"

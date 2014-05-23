@@ -3,7 +3,6 @@
 // Purpose:     common classes for persistence support
 // Author:      Vadim Zeitlin
 // Created:     2009-01-18
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,12 +43,18 @@ wxPersistentObject *wxCreatePersistentObject(T *obj);
 class WXDLLIMPEXP_CORE wxPersistenceManager
 {
 public:
+    // Call this method to specify a non-default persistence manager to use.
+    // This function should usually be called very early to affect creation of
+    // all persistent controls and the object passed to it must have a lifetime
+    // long enough to be still alive when the persistent controls are destroyed
+    // and need it to save their state so typically this would be a global or a
+    // wxApp member.
+    static void Set(wxPersistenceManager& manager);
+
     // accessor to the unique persistence manager object
     static wxPersistenceManager& Get();
 
     // trivial but virtual dtor
-    //
-    // FIXME-VC6: this only needs to be public because of VC6 bug
     virtual ~wxPersistenceManager();
 
 
@@ -133,7 +138,7 @@ public:
 
 #undef wxPERSIST_DECLARE_SAVE_RESTORE_FOR
 
-private:
+protected:
     // ctor is private, use Get()
     wxPersistenceManager()
     {
@@ -142,15 +147,18 @@ private:
     }
 
 
-    // helpers of Save/Restore()
-    //
-    // TODO: make this customizable by allowing
-    //          (a) specifying custom wxConfig object to use
-    //          (b) allowing to use something else entirely
-    wxConfigBase *GetConfig() const { return wxConfigBase::Get(); }
-    wxString GetKey(const wxPersistentObject& who, const wxString& name) const;
+    // Return the config object to use, by default just the global one but a
+    // different one could be used by the derived class if needed.
+    virtual wxConfigBase *GetConfig() const { return wxConfigBase::Get(); }
+
+    // Return the path to use for saving the setting with the given name for
+    // the specified object (notice that the name is the name of the setting,
+    // not the name of the object itself which can be retrieved with GetName()).
+    virtual wxString GetKey(const wxPersistentObject& who,
+                            const wxString& name) const;
 
 
+private:
     // map with the registered objects as keys and associated
     // wxPersistentObjects as values
     wxPersistentObjectsMap m_persistentObjects;
@@ -221,15 +229,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPersistentObject);
 };
 
-// FIXME-VC6: VC6 has troubles with template methods of DLL-exported classes,
-//            apparently it believes they should be defined in the DLL (which
-//            is, of course, impossible as the DLL doesn't know for which types
-//            will they be instantiated) instead of compiling them when
-//            building the main application itself. Because of this problem
-//            (which only arises in debug build!) we can't use the usual
-//            RegisterAndRestore(obj) with it and need to explicitly create the
-//            persistence adapter. To hide this ugliness we define a global
-//            function which does it for us.
+// Helper function calling RegisterAndRestore() on the global persistence
+// manager object.
 template <typename T>
 inline bool wxPersistentRegisterAndRestore(T *obj)
 {

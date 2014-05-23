@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     13.11.97
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,7 @@ public:
     void OnListboxDblClick  (wxCommandEvent& event);
     bool OnClose            ()                        { return true; }
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 private:
     void InitMenu();
@@ -75,15 +74,15 @@ enum
     Control_Listbox, Control_Listbox2
 };
 
-BEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(OwnerDrawnFrame, wxFrame)
     EVT_MENU(Menu_Toggle, OwnerDrawnFrame::OnMenuToggle)
     EVT_MENU(Menu_About, OwnerDrawnFrame::OnAbout)
     EVT_MENU(Menu_Quit, OwnerDrawnFrame::OnQuit)
     EVT_LISTBOX(Control_Listbox, OwnerDrawnFrame::OnListboxSelect)
     EVT_CHECKLISTBOX(Control_Listbox, OwnerDrawnFrame::OnCheckboxToggle)
-    EVT_COMMAND(Control_Listbox, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
+    EVT_COMMAND(Control_Listbox, wxEVT_LISTBOX_DCLICK,
                 OwnerDrawnFrame::OnListboxDblClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_APP(OwnerDrawnApp)
 
@@ -111,11 +110,11 @@ void OwnerDrawnFrame::InitMenu()
     wxMenu *sub_menu  = new wxMenu;
 
     // vars used for menu construction
-    wxFont fontLarge(18, wxROMAN, wxNORMAL, wxBOLD, false),
-           fontUlined(12, wxDEFAULT, wxNORMAL, wxNORMAL, true),
-           fontItalic(12, wxMODERN, wxITALIC, wxBOLD, false),
+    wxFont fontLarge(wxFontInfo(18).Family(wxFONTFAMILY_ROMAN).Bold()),
+           fontUlined(wxFontInfo(12).Underlined()),
+           fontItalic(wxFontInfo(12).Italic().Bold()),
            // should be at least of the size of bitmaps
-           fontBmp(14, wxDEFAULT, wxNORMAL, wxNORMAL, false);
+           fontBmp(wxFontInfo(14));
 
     // sorry for my artistic skills...
     wxBitmap bmpBell(wxT("bell")),

@@ -3,7 +3,6 @@
 // Author:      Chris Elliott
 // Modified by:
 // Created:     26/Apr/07
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 //
@@ -23,15 +22,15 @@
 #define WinMain WinMain
 
 //wx libs (you may not need all of these
-#pragma link  "wxbase29ud.lib"
-#pragma link  "wxmsw29ud_adv.lib"
-#pragma link  "wxmsw29ud_core.lib"
-#pragma link  "wxmsw29ud_html.lib"
-#pragma link  "wxmsw29ud_media.lib"
-#pragma link  "wxmsw29ud_xrc.lib"
-#pragma link  "wxmsw29ud_aui.lib"
-#pragma link  "wxmsw29ud_stc.lib"
-#pragma link  "wxmsw29ud_richtext.lib"
+#pragma link  "wxbase31ud.lib"
+#pragma link  "wxmsw31ud_adv.lib"
+#pragma link  "wxmsw31ud_core.lib"
+#pragma link  "wxmsw31ud_html.lib"
+#pragma link  "wxmsw31ud_media.lib"
+#pragma link  "wxmsw31ud_xrc.lib"
+#pragma link  "wxmsw31ud_aui.lib"
+#pragma link  "wxmsw31ud_stc.lib"
+#pragma link  "wxmsw31ud_richtext.lib"
 
 //graphics libs
 #pragma link  "wxpngd.lib"

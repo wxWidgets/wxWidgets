@@ -3,7 +3,6 @@
 // Purpose:     Misc debug functions and macros
 // Author:      Vadim Zeitlin
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -11,7 +10,7 @@
 #ifndef _WX_DEBUG_H_
 #define _WX_DEBUG_H_
 
-#if !defined(__WXPALMOS5__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     #include  <assert.h>
 #endif // systems without assert.h
 
@@ -162,7 +161,7 @@ inline void wxDisableAsserts() { wxSetAssertHandler(NULL); }
 
 /*
     wxOnAssert() is used by the debugging macros defined below. Different
-    overloads are needed because these macros can be used with or without _T().
+    overloads are needed because these macros can be used with or without wxT().
 
     All of them are implemented in src/common/appcmn.cpp and unconditionally
     call wxTheAssertHandler so the caller must check that it is non-NULL
@@ -172,34 +171,34 @@ inline void wxDisableAsserts() { wxSetAssertHandler(NULL); }
 #if wxUSE_UNICODE
 
 // these overloads are the ones typically used by debugging macros: we have to
-// provide wxChar* msg version because it's common to use _T() in the macros
+// provide wxChar* msg version because it's common to use wxT() in the macros
 // and finally, we can't use const wx(char)* msg = NULL, because that would
 // be ambiguous
 //
 // also notice that these functions can't be inline as wxString is not defined
 // yet (and can't be as wxString code itself may use assertions)
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond,
                                         const char *msg);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond,
-                                        const wxChar *msg);
+                                        const wxChar *msg) ;
 #endif /* wxUSE_UNICODE */
 
 // this version is for compatibility with wx 2.8 Unicode build only, we don't
 // use it ourselves any more except in ANSI-only build in which case it is all
 // we need
-extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *file,
+extern WXDLLIMPEXP_BASE void wxOnAssert(const wxChar *file,
                                         int line,
                                         const char *func,
                                         const wxChar *cond,
@@ -208,24 +207,24 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *file,
 // these overloads work when msg passed to debug macro is a string and we
 // also have to provide wxCStrData overload to resolve ambiguity which would
 // otherwise arise from wxASSERT( s.c_str() )
-extern void WXDLLIMPEXP_BASE wxOnAssert(const wxString& file,
+extern WXDLLIMPEXP_BASE void wxOnAssert(const wxString& file,
                                         int line,
                                         const wxString& func,
                                         const wxString& cond,
                                         const wxString& msg);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const wxString& file,
+extern WXDLLIMPEXP_BASE void wxOnAssert(const wxString& file,
                                         int line,
                                         const wxString& func,
                                         const wxString& cond);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond,
                                         const wxCStrData& msg);
 
-extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
+extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
                                         int line,
                                         const char *func,
                                         const char *cond,
@@ -251,22 +250,41 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
     this macro only does anything if wxDEBUG_LEVEL >= 2.
  */
 #if wxDEBUG_LEVEL
-    // call this function to break into the debugger unconditionally (assuming
-    // the program is running under debugger, of course)
-    extern void WXDLLIMPEXP_BASE wxTrap();
-
-    // assert checks if the condition is true and calls the assert handler with
-    // the provided message if it isn't
+    // wxTrap() can be used to break into the debugger unconditionally
+    // (assuming the program is running under debugger, of course).
     //
-    // NB: the macro is defined like this to ensure that nested if/else
-    //     statements containing it are compiled in the same way whether it is
-    //     defined as empty or not; also notice that we can't use ";" instead
-    //     of "{}" as some compilers warn about "possible unwanted ;" then
+    // If possible, we prefer to define it as a macro rather than as a function
+    // to open the debugger at the position where we trapped and not inside the
+    // trap function itself which is not very useful.
+    #ifdef __VISUALC__
+        #define wxTrap() __debugbreak()
+    #else
+        extern WXDLLIMPEXP_BASE void wxTrap();
+    #endif // Win VisualC
+
+    // Global flag used to indicate that assert macros should call wxTrap(): it
+    // is set by the default assert handler if the user answers yes to the
+    // question of whether to trap.
+    extern WXDLLIMPEXP_DATA_BASE(bool) wxTrapInAssert;
+
+    // This macro checks if the condition is true and calls the assert handler
+    // with the provided message if it isn't and finally traps if the special
+    // flag indicating that it should do it was set by the handler.
+    //
+    // Notice that we don't use the handler return value for compatibility
+    // reasons (if we changed its return type, we'd need to change wxApp::
+    // OnAssertFailure() too which would break user code overriding it), hence
+    // the need for the ugly global flag.
     #define wxASSERT_MSG(cond, msg)                                           \
-        if ( !wxTheAssertHandler || (cond) )                                  \
-        {}                                                                    \
-        else                                                                  \
-            wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__, #cond, msg)
+        wxSTATEMENT_MACRO_BEGIN                                               \
+            if ( wxTheAssertHandler && !(cond) &&                             \
+                    (wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__,           \
+                                #cond, msg), wxTrapInAssert) )                \
+            {                                                                 \
+                wxTrapInAssert = false;                                       \
+                wxTrap();                                                     \
+            }                                                                 \
+        wxSTATEMENT_MACRO_END
 
     // a version without any additional message, don't use unless condition
     // itself is fully self-explanatory
@@ -274,11 +292,17 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
 
     // wxFAIL is a special form of assert: it always triggers (and so is
     // usually used in normally unreachable code)
-    #define wxFAIL_COND_MSG(cond, msg) \
-        if ( !wxTheAssertHandler )                                            \
-        {}                                                                    \
-        else                                                                  \
-            wxOnAssert(__FILE__, __LINE__,  __WXFUNCTION__, cond, msg)
+    #define wxFAIL_COND_MSG(cond, msg)                                        \
+        wxSTATEMENT_MACRO_BEGIN                                               \
+            if ( wxTheAssertHandler &&                                        \
+                    (wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__,           \
+                                cond, msg), wxTrapInAssert) )                \
+            {                                                                 \
+                wxTrapInAssert = false;                                       \
+                wxTrap();                                                     \
+            }                                                                 \
+        wxSTATEMENT_MACRO_END
+
     #define wxFAIL_MSG(msg) wxFAIL_COND_MSG("Assert failure", msg)
     #define wxFAIL wxFAIL_MSG((const char*)NULL)
 #else // !wxDEBUG_LEVEL
@@ -299,6 +323,13 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
     #define wxASSERT_LEVEL_2(cond)
 #endif
 
+// This is simply a wrapper for the standard abort() which is not available
+// under all platforms.
+//
+// It isn't really debug-related but there doesn't seem to be any better place
+// for it, so declare it here and define it in appbase.cpp, together with
+// wxTrap().
+extern void WXDLLIMPEXP_BASE wxAbort();
 
 /*
     wxCHECK macros always check their conditions, setting debug level to 0 only
@@ -373,14 +404,7 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
 
  It may be used both within a function and in the global scope.
 */
-#if defined(__WATCOMC__)
-    /* avoid "unused symbol" warning */
-    #define wxCOMPILE_TIME_ASSERT(expr, msg) \
-        class wxMAKE_UNIQUE_ASSERT_NAME { \
-          unsigned int msg: expr; \
-          wxMAKE_UNIQUE_ASSERT_NAME() { wxUnusedVar(msg); } \
-        }
-#elif defined( __VMS )
+#if defined( __VMS )
 namespace wxdebug{
 
 // HP aCC cannot deal with missing names for template value parameters
@@ -430,10 +454,9 @@ template<int x> struct static_assert_test{};
 /*
     Return true if we're running under debugger.
 
-    Currently this only really works under Win32 and Mac in CodeWarrior builds,
-    it always returns false in other cases.
+    Currently only really works under Win32 and just returns false elsewhere.
  */
-#if defined(__WXMAC__) || defined(__WIN32__)
+#if defined(__WIN32__)
     extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
 #else // !Mac
     inline bool wxIsDebuggerRunning() { return false; }

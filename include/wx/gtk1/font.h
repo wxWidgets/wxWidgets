@@ -2,7 +2,6 @@
 // Name:        wx/gtk1/font.h
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,26 +31,26 @@ public:
     // ctors and such
     wxFont() { }
 
-    // wxGTK-specific
+    wxFont(const wxFontInfo& info)
+    {
+        Create(info.GetPointSize(),
+               info.GetFamily(),
+               info.GetStyle(),
+               info.GetWeight(),
+               info.IsUnderlined(),
+               info.GetFaceName(),
+               info.GetEncoding());
+
+        if ( info.IsUsingSizeInPixels() )
+            SetPixelSize(info.GetPixelSize());
+    }
+
     wxFont(const wxString& fontname)
     {
         Create(fontname);
     }
 
     wxFont(const wxNativeFontInfo& info);
-
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxFont(int size,
-           int family,
-           int style,
-           int weight,
-           bool underlined = false,
-           const wxString& face = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
-    {
-        (void)Create(size, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
-    }
-#endif
 
     wxFont(int size,
            wxFontFamily family,
@@ -109,6 +108,18 @@ public:
     virtual void SetEncoding(wxFontEncoding encoding);
 
     wxDECLARE_COMMON_FONT_METHODS();
+
+    wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants")
+    wxFont(int size,
+           int family,
+           int style,
+           int weight,
+           bool underlined = false,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        (void)Create(size, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
+    }
 
     // implementation from now on
     void Unshare();

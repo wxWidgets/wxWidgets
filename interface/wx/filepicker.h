@@ -2,9 +2,27 @@
 // Name:        filepicker.h
 // Purpose:     interface of wxFilePickerCtrl
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+#define wxFLP_OPEN                    0x0400
+#define wxFLP_SAVE                    0x0800
+#define wxFLP_OVERWRITE_PROMPT        0x1000
+#define wxFLP_FILE_MUST_EXIST         0x2000
+#define wxFLP_CHANGE_DIR              0x4000
+#define wxFLP_SMALL                   wxPB_SMALL
+#define wxFLP_USE_TEXTCTRL            (wxPB_USE_TEXTCTRL)
+#define wxFLP_DEFAULT_STYLE           (wxFLP_OPEN|wxFLP_FILE_MUST_EXIST)
+
+#define wxDIRP_DIR_MUST_EXIST         0x0008
+#define wxDIRP_CHANGE_DIR             0x0010
+#define wxDIRP_SMALL                  wxPB_SMALL
+#define wxDIRP_USE_TEXTCTRL           (wxPB_USE_TEXTCTRL)
+#define wxDIRP_DEFAULT_STYLE          (wxDIRP_DIR_MUST_EXIST)
+
+wxEventType wxEVT_FILEPICKER_CHANGED;
+wxEventType wxEVT_DIRPICKER_CHANGED;
+
 
 /**
     @class wxFilePickerCtrl
@@ -37,6 +55,9 @@
            existing file.
     @style{wxFLP_CHANGE_DIR}
            Change current working directory on each user file selection change.
+    @style{wxFLP_SMALL}
+           Use smaller version of the control with a small "..." button instead
+           of the normal "Browse" one. This flag is new since wxWidgets 2.9.3.
     @endStyleTable
 
 
@@ -50,13 +71,15 @@
 
     @library{wxcore}
     @category{pickers}
-    @appearance{filepickerctrl.png}
+    @appearance{filepickerctrl}
 
     @see wxFileDialog, wxFileDirPickerEvent
 */
 class wxFilePickerCtrl : public wxPickerBase
 {
 public:
+    wxFilePickerCtrl();
+    
     /**
         Initializes the object and calls Create() with
         all the parameters.
@@ -128,6 +151,20 @@ public:
     void SetFileName(const wxFileName& filename);
 
     /**
+        Set the directory to show when starting to browse for files.
+
+        This function is mostly useful for the file picker controls which have
+        no selection initially to configure the directory that should be shown
+        if the user starts browsing for files as otherwise the directory of
+        initially selected file is used, which is usually the desired
+        behaviour and so the directory specified by this function is ignored in
+        this case.
+
+        @since 2.9.4
+     */
+    void SetInitialDirectory(const wxString& dir);
+
+    /**
         Sets the absolute path of the currently selected file.
         This must be a valid file if the @c wxFLP_FILE_MUST_EXIST style was given.
     */
@@ -161,6 +198,9 @@ public:
            support its absence.
     @style{wxDIRP_CHANGE_DIR}
            Change current working directory on each user directory selection change.
+    @style{wxDIRP_SMALL}
+           Use smaller version of the control with a small "..." button instead
+           of the normal "Browse" one. This flag is new since wxWidgets 2.9.3.
     @endStyleTable
 
     @beginEventEmissionTable{wxFileDirPickerEvent}
@@ -174,13 +214,15 @@ public:
 
     @library{wxcore}
     @category{pickers}
-    @appearance{dirpickerctrl.png}
+    @appearance{dirpickerctrl}
 
     @see wxDirDialog, wxFileDirPickerEvent
 */
 class wxDirPickerCtrl : public wxPickerBase
 {
 public:
+    wxDirPickerCtrl();
+    
     /**
         Initializes the object and calls Create() with
         all the parameters.
@@ -247,8 +289,22 @@ public:
     void SetDirName(const wxFileName& dirname);
 
     /**
-        Sets the absolute path of  (the default converter uses current locale's
-        charset)the currently selected directory.
+        Set the directory to show when starting to browse for directories.
+
+        This function is mostly useful for the directory picker controls which
+        have no selection initially to configure the directory that should be
+        shown if the user starts browsing for directories as otherwise the
+        initially selected directory is used, which is usually the desired
+        behaviour and so the directory specified by this function is ignored in
+        this case.
+
+        @since 2.9.4
+     */
+    void SetInitialDirectory(const wxString& dir);
+
+    /**
+        Sets the absolute path of the currently selected directory (the default converter uses current locale's
+        charset).
         This must be a valid directory if @c wxDIRP_DIR_MUST_EXIST style was given.
     */
     void SetPath(const wxString& dirname);
@@ -277,6 +333,8 @@ public:
 class wxFileDirPickerEvent : public wxCommandEvent
 {
 public:
+    wxFileDirPickerEvent();
+
     /**
         The constructor is not normally used by the user code.
     */

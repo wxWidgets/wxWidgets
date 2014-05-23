@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.05.03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -162,7 +161,7 @@ class wxHtmlListBoxStyle : public wxDefaultHtmlRenderingStyle
 public:
     wxHtmlListBoxStyle(const wxHtmlListBox& hlbox) : m_hlbox(hlbox) { }
 
-    virtual wxColour GetSelectedTextColour(const wxColour& colFg)
+    virtual wxColour GetSelectedTextColour(const wxColour& colFg) wxOVERRIDE
     {
         // by default wxHtmlListBox doesn't implement GetSelectedTextColour()
         // and returns wxNullColour from it, so use the default HTML colour for
@@ -176,7 +175,7 @@ public:
         return col;
     }
 
-    virtual wxColour GetSelectedTextBgColour(const wxColour& colBg)
+    virtual wxColour GetSelectedTextBgColour(const wxColour& colBg) wxOVERRIDE
     {
         wxColour col = m_hlbox.GetSelectedTextBgColour(colBg);
         if ( !col.IsOk() )
@@ -607,7 +606,7 @@ bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
                                  const wxSize& size,
                                  int n, const wxString choices[],
                                  long style,
-                                 const wxValidator& validator,
+                                 const wxValidator& wxVALIDATOR_PARAM(validator),
                                  const wxString& name)
 {
     if (!wxHtmlListBox::Create(parent, id, pos, size, style, name))
@@ -627,7 +626,7 @@ bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
                                  const wxSize& size,
                                  const wxArrayString& choices,
                                  long style,
-                                 const wxValidator& validator,
+                                 const wxValidator& wxVALIDATOR_PARAM(validator),
                                  const wxString& name)
 {
     if (!wxHtmlListBox::Create(parent, id, pos, size, style, name))

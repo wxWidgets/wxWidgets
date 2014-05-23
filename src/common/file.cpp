@@ -5,7 +5,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,7 +23,7 @@
 #if wxUSE_FILE
 
 // standard
-#if defined(__WXMSW__) && !defined(__GNUWIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if defined(__WINDOWS__) && !defined(__GNUWIN32__) && !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 
 #define   WIN32_LEAN_AND_MEAN
 #define   NOSERVICE
@@ -47,10 +46,8 @@
 #define   NOCRYPT
 #define   NOMCX
 
-#elif defined(__WXMSW__) && defined(__WXWINCE__)
+#elif defined(__WINDOWS__) && defined(__WXWINCE__)
     #include  "wx/msw/missing.h"
-#elif (defined(__OS2__))
-    #include <io.h>
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
     #include  <unistd.h>
     #include  <time.h>
@@ -59,9 +56,7 @@
         #include "wx/msw/wrapwin.h"
     #endif
 #elif defined(__DOS__)
-    #if defined(__WATCOMC__)
-       #include <io.h>
-    #elif defined(__DJGPP__)
+    #if defined(__DJGPP__)
        #include <io.h>
        #include <unistd.h>
        #include <stdio.h>
@@ -80,8 +75,6 @@
     char* mktemp( char * path ) { return path ;}
     #include <stat.h>
     #include <unistd.h>
-#elif defined(__WXPALMOS__)
-    #include "wx/palmos/missing.h"
 #else
     #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
@@ -121,16 +114,8 @@
     #define   O_BINARY    (0)
 #endif  //__UNIX__
 
-#ifdef __WXMSW__
-    #include "wx/msw/mslu.h"
-#endif
-
 #ifdef __WXWINCE__
     #include "wx/msw/private.h"
-#endif
-
-#ifndef MAX_PATH
-    #define MAX_PATH 512
 #endif
 
 // ============================================================================
@@ -154,7 +139,7 @@ bool wxFile::Access(const wxString& name, OpenMode mode)
     {
         default:
             wxFAIL_MSG(wxT("bad wxFile::Access mode parameter."));
-            // fall through
+            wxFALLTHROUGH;
 
         case read:
             how = R_OK;
@@ -206,17 +191,17 @@ bool wxFile::Create(const wxString& fileName, bool bOverwrite, int accessMode)
 {
     // if bOverwrite we create a new file or truncate the existing one,
     // otherwise we only create the new file and fail if it already exists
-    int fd = wxOpen( fileName,
+    int fildes = wxOpen( fileName,
                      O_BINARY | O_WRONLY | O_CREAT |
                      (bOverwrite ? O_TRUNC : O_EXCL),
                      accessMode );
-    if ( CheckForError(fd) )
+    if ( CheckForError(fildes) )
     {
         wxLogSysError(_("can't create file '%s'"), fileName);
         return false;
     }
 
-    Attach(fd);
+    Attach(fildes);
     return true;
 }
 
@@ -239,6 +224,7 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
             }
             //else: fall through as write_append is the same as write if the
             //      file doesn't exist
+            wxFALLTHROUGH;
 
         case write:
             flags |= O_WRONLY | O_CREAT | O_TRUNC;
@@ -260,15 +246,15 @@ bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
     accessMode &= wxS_IRUSR | wxS_IWUSR;
 #endif // __WINDOWS__
 
-    int fd = wxOpen( fileName, flags, accessMode);
+    int fildes = wxOpen( fileName, flags, accessMode);
 
-    if ( CheckForError(fd) )
+    if ( CheckForError(fildes) )
     {
         wxLogSysError(_("can't open file '%s'"), fileName);
         return false;
     }
 
-    Attach(fd);
+    Attach(fildes);
     return true;
 }
 
@@ -293,9 +279,44 @@ bool wxFile::Close()
 // read/write
 // ----------------------------------------------------------------------------
 
+bool wxFile::ReadAll(wxString *str, const wxMBConv& conv)
+{
+    wxCHECK_MSG( str, false, wxS("Output string must be non-NULL") );
+
+    ssize_t length = Length();
+    wxCHECK_MSG( (wxFileOffset)length == Length(), false, wxT("huge file not supported") );
+
+    wxCharBuffer buf(length);
+    char* p = buf.data();
+    for ( ;; )
+    {
+        static const ssize_t READSIZE = 4096;
+
+        ssize_t nread = Read(p, length > READSIZE ? READSIZE : length);
+        if ( nread == wxInvalidOffset )
+            return false;
+
+        p += nread;
+        if ( length <= nread )
+            break;
+
+        length -= nread;
+    }
+
+    *p = 0;
+
+    wxString strTmp(buf, conv);
+    str->swap(strTmp);
+
+    return true;
+}
+
 // read
 ssize_t wxFile::Read(void *pBuf, size_t nCount)
 {
+    if ( !nCount )
+        return 0;
+
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
     ssize_t iRc = wxRead(m_fd, pBuf, nCount);
@@ -312,6 +333,9 @@ ssize_t wxFile::Read(void *pBuf, size_t nCount)
 // write
 size_t wxFile::Write(const void *pBuf, size_t nCount)
 {
+    if ( !nCount )
+        return 0;
+
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
     ssize_t iRc = wxWrite(m_fd, pBuf, nCount);
@@ -375,7 +399,7 @@ wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
     switch ( mode ) {
         default:
             wxFAIL_MSG(wxT("unknown seek origin"));
-
+            wxFALLTHROUGH;
         case wxFromStart:
             origin = SEEK_SET;
             break;
@@ -462,7 +486,7 @@ bool wxFile::Eof() const
 
     wxFileOffset iRc;
 
-#if defined(__DOS__) || defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ )
+#if defined(__DOS__) || defined(__UNIX__) || defined(__GNUWIN32__)
     // @@ this doesn't work, of course, on unseekable file descriptors
     wxFileOffset ofsCur = Tell(),
     ofsMax = Length();
@@ -480,10 +504,6 @@ bool wxFile::Eof() const
     if ( iRc == wxInvalidOffset )
     {
         wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
-    }
-    else if ( iRc != 1 )
-    {
-        wxFAIL_MSG(wxT("invalid eof() return value."));
     }
 
     return true;
@@ -547,9 +567,7 @@ bool wxTempFile::Open(const wxString& strName)
 
     if ( chmod( (const char*) m_strTemp.fn_str(), mode) == -1 )
     {
-#ifndef __OS2__
         wxLogSysError(_("Failed to set temporary file permissions"));
-#endif
     }
 #endif // Unix
 

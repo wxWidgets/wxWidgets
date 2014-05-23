@@ -2,7 +2,6 @@
 // Name:        cursor.h
 // Purpose:     interface of wxCursor
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -135,8 +134,9 @@ public:
             platforms:
             - under Windows, it defaults to @c wxBITMAP_TYPE_CUR_RESOURCE.
               Other permitted types under Windows are @c wxBITMAP_TYPE_CUR
-              (to load a cursor from a .cur cursor file) and @c wxBITMAP_TYPE_ICO
-              (to load a cursor from a .ico icon file).
+              (to load a cursor from a .cur cursor file), @c wxBITMAP_TYPE_ICO
+              (to load a cursor from a .ico icon file) and @c wxBITMAP_TYPE_ANI
+              (to load a cursor from a .ani icon file).
             - under MacOS, it defaults to @c wxBITMAP_TYPE_MACCURSOR_RESOURCE;
               when specifying a string resource name, first the color cursors 'crsr' 
               and then the black/white cursors 'CURS' in the resource chain are scanned 
@@ -178,8 +178,15 @@ public:
         foreground and background. In any case, the cursor will be displayed
         at the size of the image.
 
-        In wxMac, if the cursor is larger than 16x16 it is resized and
-        currently only shown as black/white (mask respected).
+        Under wxMac (Cocoa), large cursors are supported.
+
+        Notice that the @a image can define the cursor hot spot. To set it you
+        need to use wxImage::SetOption() with @c wxIMAGE_OPTION_CUR_HOTSPOT_X
+        or @c wxIMAGE_OPTION_CUR_HOTSPOT_Y, e.g.
+        @code
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX);
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotY);
+        @endcode
     */
     wxCursor(const wxImage& image);
 

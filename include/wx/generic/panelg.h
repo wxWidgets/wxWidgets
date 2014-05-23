@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,7 @@ public:
         Create(parent, winid, pos, size, style, name);
     }
 
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_CONSTRUCTOR(
     wxPanel(wxWindow *parent,
             int x, int y, int width, int height,
@@ -42,18 +41,7 @@ public:
     )
 #endif // WXWIN_COMPATIBILITY_2_8
 
-protected:
-    virtual void DoSetBackgroundBitmap(const wxBitmap& bmp);
-
 private:
-    // Event handler for erasing the background which is only used when we have
-    // a valid background bitmap.
-    void OnEraseBackground(wxEraseEvent& event);
-
-
-    // The bitmap used for painting the background if valid.
-    wxBitmap m_bitmapBg;
-
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPanel);
 };
 

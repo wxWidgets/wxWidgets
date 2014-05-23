@@ -2,7 +2,6 @@
 // Name:        cmndata.h
 // Purpose:     interface of print wx*Data classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -255,38 +254,6 @@ enum wxPrintBin
     wxPageSetupDialogData, as part of the mechanism for transferring data
     between the print dialogs and the application.
 
-    @remarks
-
-    The following functions are specific to PostScript printing and have not
-    yet been documented:
-
-    @code
-    const wxString& GetPrinterCommand() const ;
-    const wxString& GetPrinterOptions() const ;
-    const wxString& GetPreviewCommand() const ;
-    const wxString& GetFilename() const ;
-    const wxString& GetFontMetricPath() const ;
-    double GetPrinterScaleX() const ;
-    double GetPrinterScaleY() const ;
-    long GetPrinterTranslateX() const ;
-    long GetPrinterTranslateY() const ;
-    // wxPRINT_MODE_PREVIEW, wxPRINT_MODE_FILE, wxPRINT_MODE_PRINTER
-    wxPrintMode GetPrintMode() const ;
-
-    void SetPrinterCommand(const wxString& command) ;
-    void SetPrinterOptions(const wxString& options) ;
-    void SetPreviewCommand(const wxString& command) ;
-    void SetFilename(const wxString& filename) ;
-    void SetFontMetricPath(const wxString& path) ;
-    void SetPrinterScaleX(double x) ;
-    void SetPrinterScaleY(double y) ;
-    void SetPrinterScaling(double x, double y) ;
-    void SetPrinterTranslateX(long x) ;
-    void SetPrinterTranslateY(long y) ;
-    void SetPrinterTranslation(long x, long y) ;
-    void SetPrintMode(wxPrintMode printMode) ;
-    @endcode
-
     @library{wxcore}
     @category{printing,data}
 
@@ -446,6 +413,13 @@ public:
         Assigns print data to this object.
     */
     wxPrintData& operator =(const wxPrintData& data);
+
+
+    wxString GetFilename() const;
+    void SetFilename( const wxString &filename );
+
+    wxPrintMode GetPrintMode() const ;
+    void SetPrintMode(wxPrintMode printMode) ;
 };
 
 

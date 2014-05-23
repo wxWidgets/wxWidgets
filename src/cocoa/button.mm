@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2002/12/30
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -79,7 +78,7 @@ wxButton::~wxButton()
 void wxButton::Cocoa_wxNSButtonAction(void)
 {
     wxLogTrace(wxTRACE_COCOA,wxT("YAY!"));
-    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
+    wxCommandEvent event(wxEVT_BUTTON, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
     Command(event);
 }

@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin, Andrej Putrin
 // Modified by:
 // Created:     2005-01-21
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,7 +38,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/filename.h"
-#include "wx/ffile.h"
+#ifdef wxUSE_FFILE
+    #include "wx/ffile.h"
+#else
+    #include "wx/file.h"
+#endif
 #include "wx/mimetype.h"
 
 #include "wx/statline.h"
@@ -228,7 +231,7 @@ void wxDumpOpenExternalDlg::OnBrowse(wxCommandEvent& )
                      fname.GetPathWithSep(),
                      fname.GetFullName()
 #ifdef __WXMSW__
-                     , _("Executable files (*.exe)|*.exe|All files (*.*)|*.*||")
+                     , _("Executable files (*.exe)|*.exe|") + wxALL_FILES
 #endif // __WXMSW__
                      );
     if ( dlg.ShowModal() == wxID_OK )
@@ -249,8 +252,8 @@ class wxDebugReportDialog : public wxDialog
 public:
     wxDebugReportDialog(wxDebugReport& dbgrpt);
 
-    virtual bool TransferDataToWindow();
-    virtual bool TransferDataFromWindow();
+    virtual bool TransferDataToWindow() wxOVERRIDE;
+    virtual bool TransferDataFromWindow() wxOVERRIDE;
 
 private:
     void OnView(wxCommandEvent& );
@@ -432,7 +435,12 @@ void wxDebugReportDialog::OnView(wxCommandEvent& )
     wxFileName fn(m_dbgrpt.GetDirectory(), m_files[sel]);
     wxString str;
 
-    wxFFile file(fn.GetFullPath());
+    const wxString& fullPath = fn.GetFullPath();
+#if wxUSE_FFILE
+    wxFFile file(fullPath);
+#elif wxUSE_FILE
+    wxFile file(fullPath);
+#endif
     if ( file.IsOpened() && file.ReadAll(&str) )
     {
         wxDumpPreviewDlg dlg(this, m_files[sel], str);

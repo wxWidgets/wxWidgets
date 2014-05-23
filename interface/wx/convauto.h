@@ -2,9 +2,76 @@
 // Name:        convauto.h
 // Purpose:     interface of wxConvAuto
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+    Constants representing various BOM types.
+
+    BOM is an abbreviation for "Byte Order Mark", a special Unicode character
+    which may be inserted into the beginning of a text stream to indicate its
+    encoding.
+
+    @since 2.9.3
+ */
+enum wxBOM
+{
+    /**
+        Unknown BOM.
+
+        This is returned if BOM presence couldn't be determined and normally
+        happens because not enough bytes of input have been analysed.
+     */
+    wxBOM_Unknown = -1,
+
+    /**
+        No BOM.
+
+        The stream doesn't contain BOM character at all.
+     */
+    wxBOM_None,
+
+    /**
+        UTF-32 big endian BOM.
+
+        The stream is encoded in big endian variant of UTF-32.
+     */
+    wxBOM_UTF32BE,
+
+    /**
+        UTF-32 little endian BOM.
+
+        The stream is encoded in little endian variant of UTF-32.
+     */
+    wxBOM_UTF32LE,
+
+    /**
+        UTF-16 big endian BOM.
+
+        The stream is encoded in big endian variant of UTF-16.
+     */
+    wxBOM_UTF16BE,
+
+    /**
+        UTF-16 little endian BOM.
+
+        The stream is encoded in little endian variant of UTF-16.
+     */
+    wxBOM_UTF16LE,
+
+    /**
+        UTF-8 BOM.
+
+        The stream is encoded in UTF-8.
+
+        Notice that contrary to a popular belief, it's perfectly possible and,
+        n fact, common under Microsoft Windows systems, to have a BOM in an
+        UTF-8 stream: while it's not used to indicate the endianness of UTF-8
+        stream (as it's byte-oriented), the BOM can still be useful just as an
+        unambiguous indicator of UTF-8 being used.
+     */
+    wxBOM_UTF8
+};
 
 /**
     @class wxConvAuto
@@ -66,6 +133,39 @@ public:
     */
     wxConvAuto(wxFontEncoding enc = wxFONTENCODING_DEFAULT);
 
+
+    /**
+        Return the detected BOM type.
+
+        The BOM type is detected after sufficiently many initial bytes have
+        passed through this conversion object so it will always return
+        wxBOM_Unknown immediately after the object creation but may return a
+        different value later.
+
+        @since 2.9.3
+    */
+    wxBOM GetBOM() const;
+
+    /**
+        Return a pointer to the characters that makes up this BOM.
+
+        The returned character count is 2, 3 or 4, or undefined if the return
+        value is NULL.
+
+        @param bom
+            A valid BOM type, i.e. not wxBOM_Unknown or wxBOM_None.
+        @param count
+            A non-@NULL pointer receiving the number of characters in this BOM.
+        @return
+            Pointer to characters composing the BOM or @NULL if BOM is unknown
+            or invalid. Notice that the returned string is not NUL-terminated
+            and may contain embedded NULs so @a count must be used to handle it
+            correctly.
+
+        @since 2.9.3
+    */
+    const char* GetBOMChars(wxBOM bom, size_t* count);
+
     /**
         Disable the use of the fall back encoding: if the input doesn't have a
         BOM and is not valid UTF-8, the conversion will fail.
@@ -92,5 +192,16 @@ public:
         @c wxFONTENCODING_DEFAULT can't be used here.
     */
     static void SetFallbackEncoding(wxFontEncoding enc);
-};
 
+    /**
+        Return the BOM type of this buffer.
+
+        This is a helper function which is normally only used internally by
+        wxConvAuto but provided for convenience of the code that wants to
+        detect the encoding of a stream by checking it for BOM presence on its
+        own.
+
+        @since 2.9.3
+    */
+    static wxBOM DetectBOM(const char *src, size_t srcLen);
+};

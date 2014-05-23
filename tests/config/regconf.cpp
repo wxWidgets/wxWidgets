@@ -3,7 +3,6 @@
 // Purpose:     wxRegConfig unit test
 // Author:      Francesco Montorsi (extracted from console sample)
 // Created:     2010-06-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 

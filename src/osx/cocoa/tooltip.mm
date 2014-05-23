@@ -2,7 +2,6 @@
 // Name:        src/osx/cocoa/tooltip.mm
 // Purpose:     wxToolTip implementation
 // Author:      Stefan Csomor
-// Id:          $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

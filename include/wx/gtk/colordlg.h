@@ -4,7 +4,6 @@
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2004/06/04
-// RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik, 2004
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,16 +25,16 @@ public:
 
     wxColourData &GetColourData() { return m_data; }
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
 protected:
     // implement some base class methods to do nothing to avoid asserts and
     // GTK warnings, since this is not a real wxDialog.
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
-                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) wxOVERRIDE {}
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
-                              int WXUNUSED(width), int WXUNUSED(height)) {}
+                              int WXUNUSED(width), int WXUNUSED(height)) wxOVERRIDE {}
 
     // copy data between the dialog and m_colourData:
     void ColourDataToDialog();

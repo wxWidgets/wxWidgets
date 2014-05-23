@@ -2,7 +2,6 @@
 // Name:        wx/gtk1/gauge.h
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -45,8 +44,8 @@ public:
     void SetBezelFace( int WXUNUSED(w) ) { }
     void SetRange( int r );
     void SetValue( int pos );
-    int GetShadowWidth() const { return 0; };
-    int GetBezelFace() const { return 0; };
+    int GetShadowWidth() const { return 0; }
+    int GetBezelFace() const { return 0; }
     int GetRange() const;
     int GetValue() const;
 

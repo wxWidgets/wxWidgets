@@ -3,7 +3,6 @@
 // Purpose:     macros for implementing type-safe vararg passing of strings
 // Author:      Vaclav Slavik
 // Created:     2007-02-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 REA Elektronik GmbH
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,6 +160,19 @@ public:
         {
             if ( CopyFmtChar(*format++) == wxT('%') )
             {
+#if wxUSE_PRINTF_POS_PARAMS
+                if ( *format >= '0' && *format <= '9' )
+                {
+                    SkipDigits(&format);
+                    if ( *format == '$' )
+                    {
+                        // It was a positional argument specification.
+                        CopyFmtChar(*format++);
+                    }
+                    //else: it was a width specification, nothing else to do.
+                }
+#endif // wxUSE_PRINTF_POS_PARAMS
+
                 // skip any flags
                 while ( IsFlagChar(*format) )
                     CopyFmtChar(*format++);
@@ -199,7 +211,7 @@ public:
                             format++;
                             break;
                         }
-                        //else: fall through
+                        wxFALLTHROUGH;
 
                     default:
                         size = Size_Default;
@@ -406,7 +418,7 @@ class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 {
     virtual void HandleString(CharType WXUNUSED(conv),
                               SizeModifier WXUNUSED(size),
-                              CharType& outConv, SizeModifier& outSize)
+                              CharType& outConv, SizeModifier& outSize) wxOVERRIDE
     {
         outConv = 's';
         outSize = Size_Long;
@@ -414,7 +426,7 @@ class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 
     virtual void HandleChar(CharType WXUNUSED(conv),
                             SizeModifier WXUNUSED(size),
-                            CharType& outConv, SizeModifier& outSize)
+                            CharType& outConv, SizeModifier& outSize) wxOVERRIDE
     {
         outConv = 'c';
         outSize = Size_Long;
@@ -422,12 +434,14 @@ class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 };
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
+#endif // __WINDOWS__/!__WINDOWS__
+
 #if wxUSE_UNICODE_UTF8
 class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
 {
     virtual void HandleString(CharType WXUNUSED(conv),
                               SizeModifier WXUNUSED(size),
-                              CharType& outConv, SizeModifier& outSize)
+                              CharType& outConv, SizeModifier& outSize) wxOVERRIDE
     {
         outConv = 's';
         outSize = Size_Default;
@@ -435,7 +449,7 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
 
     virtual void HandleChar(CharType WXUNUSED(conv),
                             SizeModifier WXUNUSED(size),
-                            CharType& outConv, SizeModifier& outSize)
+                            CharType& outConv, SizeModifier& outSize) wxOVERRIDE
     {
         // chars are represented using wchar_t in both builds, so this is
         // the same as above
@@ -444,8 +458,6 @@ class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
     }
 };
 #endif // wxUSE_UNICODE_UTF8
-
-#endif // __WINDOWS__/!__WINDOWS__
 
 #if !wxUSE_UNICODE // FIXME-UTF8: remove
 class wxPrintfFormatConverterANSI : public wxFormatConverterBase<char>
@@ -487,14 +499,14 @@ class wxPrintfFormatConverterANSI : public wxFormatConverterBase<char>
 class wxScanfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
 {
     virtual void HandleString(CharType conv, SizeModifier size,
-                              CharType& outConv, SizeModifier& outSize)
+                              CharType& outConv, SizeModifier& outSize) wxOVERRIDE
     {
         outConv = 's';
         outSize = GetOutSize(conv == 'S', size);
     }
 
     virtual void HandleChar(CharType conv, SizeModifier size,
-                            CharType& outConv, SizeModifier& outSize)
+                            CharType& outConv, SizeModifier& outSize) wxOVERRIDE
     {
         outConv = 'c';
         outSize = GetOutSize(conv == 'C', size);
@@ -642,8 +654,17 @@ wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
 
     wxPrintfConvSpecParser<CharType> parser(format);
 
-    wxCHECK_MSG( n <= parser.nargs, wxFormatString::Arg_Unknown,
-                 "more arguments than format string specifiers?" );
+    if ( n > parser.nargs )
+    {
+        // The n-th argument doesn't appear in the format string and is unused.
+        // This can happen e.g. if a translation of the format string is used
+        // and the translation language tends to avoid numbers in singular forms.
+        // The translator would then typically replace "%d" with "One" (e.g. in
+        // Hebrew). Passing too many vararg arguments does not harm, so its
+        // better to be more permissive here and allow legitimate uses in favour
+        // of catching harmless errors.
+        return wxFormatString::Arg_Unused;
+    }
 
     wxCHECK_MSG( parser.pspec[n-1] != NULL, wxFormatString::Arg_Unknown,
                  "requested argument not found - invalid format string?" );

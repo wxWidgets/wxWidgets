@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,18 +23,7 @@ public:
     // ctors and such
     wxFont() { }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxFont(int size,
-           int family,
-           int style,
-           int weight,
-           bool underlined = false,
-           const wxString& face = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
-    {
-        (void)Create(size, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
-    }
-#endif
+    wxFont(const wxFontInfo& info);
 
     wxFont(int size,
            wxFontFamily family,
@@ -59,20 +47,6 @@ public:
         return DoCreate(size, wxDefaultSize, false, family, style,
                         weight, underlined, face, encoding);
     }
-
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxFont(const wxSize& pixelSize,
-           int family,
-           int style,
-           int weight,
-           bool underlined = false,
-           const wxString& face = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
-    {
-        (void)Create(pixelSize, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight,
-                     underlined, face, encoding);
-    }
-#endif
 
     wxFont(const wxSize& pixelSize,
            wxFontFamily family,
@@ -117,6 +91,7 @@ public:
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
     virtual bool GetUnderlined() const;
+    virtual bool GetStrikethrough() const;
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
@@ -128,11 +103,37 @@ public:
     virtual void SetWeight(wxFontWeight weight);
     virtual bool SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
+    virtual void SetStrikethrough(bool strikethrough);
     virtual void SetEncoding(wxFontEncoding encoding);
 
     wxDECLARE_COMMON_FONT_METHODS();
 
     virtual bool IsFixedWidth() const;
+
+    wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants ie: wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD")
+    wxFont(int size,
+           int family,
+           int style,
+           int weight,
+           bool underlined = false,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        (void)Create(size, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
+    }
+
+    wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants ie: wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD")
+    wxFont(const wxSize& pixelSize,
+           int family,
+           int style,
+           int weight,
+           bool underlined = false,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        (void)Create(pixelSize, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight,
+                     underlined, face, encoding);
+    }
 
     // implementation only from now on
     // -------------------------------

@@ -3,7 +3,6 @@
 // Purpose:     persistence support for wxBookCtrl
 // Author:      Vadim Zeitlin
 // Created:     2009-01-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -35,12 +34,12 @@ public:
     {
     }
 
-    virtual void Save() const
+    virtual void Save() const wxOVERRIDE
     {
         SaveValue(wxPERSIST_BOOK_SELECTION, Get()->GetSelection());
     }
 
-    virtual bool Restore()
+    virtual bool Restore() wxOVERRIDE
     {
         long sel;
         if ( RestoreValue(wxPERSIST_BOOK_SELECTION, &sel) )
@@ -56,7 +55,7 @@ public:
         return false;
     }
 
-    virtual wxString GetKind() const { return wxPERSIST_BOOK_KIND; }
+    virtual wxString GetKind() const wxOVERRIDE { return wxPERSIST_BOOK_KIND; }
 };
 
 inline wxPersistentObject *wxCreatePersistentObject(wxBookCtrlBase *book)

@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- $Id$ -->
 
 <makefile>
 
@@ -28,11 +27,11 @@
         <dirname>$(LIBDIRNAME)</dirname>
         <include cond="FORMAT!='autoconf'">$(LIBDIRNAME)</include>
         <include cond="FORMAT=='autoconf'">$(BUILDDIR)/src/expat</include>
+        <define cond="FORMAT=='autoconf'">
+            HAVE_EXPAT_CONFIG_H
+        </define>
         <define cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             COMPILED_FROM_DSP
-        </define>
-        <define cond="FORMAT=='watcom' and PLATFORM_OS2=='1'">
-            OS2_32
         </define>
         <define cond="FORMAT=='watcom' and PLATFORM_MSDOS=='1'">
             __MSDOS__

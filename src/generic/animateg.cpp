@@ -4,7 +4,6 @@
 // Author:      Julian Smart and Guillermo Rodriguez Garcia
 // Modified by: Francesco Montorsi
 // Created:     13/8/99
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -254,8 +253,8 @@ class wxAnimationModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxAnimationModule)
 public:
     wxAnimationModule() {}
-    bool OnInit() { wxAnimation::InitStandardHandlers(); return true; }
-    void OnExit() { wxAnimation::CleanUpHandlers(); }
+    bool OnInit() wxOVERRIDE { wxAnimation::InitStandardHandlers(); return true; }
+    void OnExit() wxOVERRIDE { wxAnimation::CleanUpHandlers(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxAnimationModule, wxModule)

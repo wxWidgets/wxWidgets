@@ -4,7 +4,6 @@
 // Author:      Mattia Barbon, Vaclav Slavik, Robert Roebling
 // Modified by:
 // Created:     25.03.02
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,8 +37,13 @@
 
 #ifdef __WXGTK__
 #include <gdk/gdk.h>
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
+#endif
+
+// Only X11 backend is supported for wxGTK here
+#if !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
 
 // Various X11 Atoms used in this file:
 static Atom _NET_WM_STATE = 0;
@@ -272,7 +276,7 @@ static bool wxQueryWMspecSupport(Display* WXUNUSED(display),
                                  Atom (feature))
 {
     GdkAtom gatom = gdk_x11_xatom_to_atom(feature);
-    return gdk_net_wm_supports(gatom);
+    return gdk_x11_screen_supports_net_wm_hint(gdk_screen_get_default(), gatom);
 }
 #else
 static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
@@ -848,6 +852,8 @@ bool wxGetKeyState(wxKeyCode key)
     XQueryKeymap(pDisplay, key_vector);
     return key_vector[keyCode >> 3] & (1 << (keyCode & 7));
 }
+
+#endif // !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
 
 // ----------------------------------------------------------------------------
 // Launch document with default app

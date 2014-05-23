@@ -1,10 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtexttabspage.h
-// Purpose:
+// Purpose:     Declares the rich text formatting dialog tabs page.
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/4/2006 8:03:20 AM
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +32,7 @@
  */
 
 ////@begin control identifiers
-#define SYMBOL_WXRICHTEXTTABSPAGE_STYLE wxRESIZE_BORDER|wxTAB_TRAVERSAL
+#define SYMBOL_WXRICHTEXTTABSPAGE_STYLE wxTAB_TRAVERSAL
 #define SYMBOL_WXRICHTEXTTABSPAGE_TITLE wxEmptyString
 #define SYMBOL_WXRICHTEXTTABSPAGE_IDNAME ID_RICHTEXTTABSPAGE
 #define SYMBOL_WXRICHTEXTTABSPAGE_SIZE wxSize(400, 300)

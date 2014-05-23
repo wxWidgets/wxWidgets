@@ -3,7 +3,6 @@
 // Purpose:     XML resource compiler
 // Author:      Vaclav Slavik, Eduardo Marques <edrdo@netcabo.pt>
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -224,8 +223,8 @@ class XmlResApp : public wxAppConsole
 {
 public:
     // don't use builtin cmd line parsing:
-    virtual bool OnInit() { return true; }
-    virtual int OnRun();
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual int OnRun() wxOVERRIDE;
 
 private:
     void ParseParams(const wxCmdLineParser& cmdline);
@@ -243,8 +242,10 @@ private:
     ExtractedStrings FindStrings();
     ExtractedStrings FindStrings(const wxString& filename, wxXmlNode *node);
 
-    bool flagVerbose, flagCPP, flagPython, flagGettext;
-    wxString parOutput, parFuncname, parOutputPath;
+    bool Validate();
+
+    bool flagVerbose, flagCPP, flagPython, flagGettext, flagValidate, flagValidateOnly;
+    wxString parOutput, parFuncname, parOutputPath, parSchemaFile;
     wxArrayString parFiles;
     int retCode;
 
@@ -267,6 +268,9 @@ int XmlResApp::OnRun()
         { wxCMD_LINE_SWITCH, "g", "gettext",  "output list of translatable strings (to stdout or file if -o used)" },
         { wxCMD_LINE_OPTION, "n", "function",  "C++/Python function name (with -c or -p) [InitXmlResource]" },
         { wxCMD_LINE_OPTION, "o", "output",  "output file [resource.xrs/cpp]" },
+        { wxCMD_LINE_SWITCH, "",  "validate", "check XRC correctness (in addition to other processing)" },
+        { wxCMD_LINE_SWITCH, "",  "validate-only", "check XRC correctness and do nothing else" },
+        { wxCMD_LINE_OPTION, "",  "xrc-schema", "RELAX NG schema file to validate against (optional)" },
 #if 0 // not yet implemented
         { wxCMD_LINE_OPTION, "l", "list-of-handlers",  "output list of necessary handlers to this file" },
 #endif
@@ -287,6 +291,15 @@ int XmlResApp::OnRun()
         case 0:
             retCode = 0;
             ParseParams(parser);
+
+            if (flagValidate)
+            {
+                if ( !Validate() )
+                    return 2;
+                if ( flagValidateOnly )
+                    return 0;
+            }
+
             if (flagGettext)
                 OutputGettext();
             else
@@ -306,7 +319,10 @@ void XmlResApp::ParseParams(const wxCmdLineParser& cmdline)
     flagCPP = cmdline.Found("c");
     flagPython = cmdline.Found("p");
     flagH = flagCPP && cmdline.Found("e");
+    flagValidateOnly = cmdline.Found("validate-only");
+    flagValidate = flagValidateOnly || cmdline.Found("validate");
 
+    cmdline.Found("xrc-schema", &parSchemaFile);
 
     if (!cmdline.Found("o", &parOutput))
     {
@@ -356,7 +372,8 @@ void XmlResApp::CompileRes()
 {
     wxArrayString files = PrepareTempFiles();
 
-    wxRemoveFile(parOutput);
+    if ( wxFileExists(parOutput) )
+        wxRemoveFile(parOutput);
 
     if (!retCode)
     {
@@ -559,7 +576,8 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
     wxSetWorkingDirectory(parOutputPath);
     int execres = wxExecute(wxT("zip -9 -j ") +
                             wxString(flagVerbose ? wxT("\"") : wxT("-q \"")) +
-                            parOutput + wxT("\" ") + files, true);
+                            parOutput + wxT("\" ") + files,
+                            wxEXEC_BLOCK);
     wxSetWorkingDirectory(cwd);
     if (execres == -1)
     {
@@ -896,7 +914,9 @@ static wxString ConvertText(const wxString& str)
     {
         if (*dt == wxT('_'))
         {
-            if ( *(++dt) == wxT('_') )
+            if ( *(dt+1) == 0 )
+                str2 << wxT('_');
+            else if ( *(++dt) == wxT('_') )
                 str2 << wxT('_');
             else
                 str2 << wxT('&') << *dt;
@@ -950,7 +970,14 @@ XmlResApp::FindStrings(const wxString& filename, wxXmlNode *node)
                 node/*not n!*/->GetName() == wxT("tooltip") ||
                 node/*not n!*/->GetName() == wxT("htmlcode") ||
                 node/*not n!*/->GetName() == wxT("title") ||
-                node/*not n!*/->GetName() == wxT("item")
+                node/*not n!*/->GetName() == wxT("item") ||
+                node/*not n!*/->GetName() == wxT("message") ||
+                node/*not n!*/->GetName() == wxT("note") ||
+                node/*not n!*/->GetName() == wxT("defaultdirectory") ||
+                node/*not n!*/->GetName() == wxT("defaultfilename") ||
+                node/*not n!*/->GetName() == wxT("defaultfolder") ||
+                node/*not n!*/->GetName() == wxT("filter") ||
+                node/*not n!*/->GetName() == wxT("caption")
             ))
             // ...and known to contain translatable string
         {
@@ -979,4 +1006,57 @@ XmlResApp::FindStrings(const wxString& filename, wxXmlNode *node)
         n = n->GetNext();
     }
     return arr;
+}
+
+
+bool XmlResApp::Validate()
+{
+    if ( flagVerbose )
+        wxPuts("validating XRC files...");
+
+    wxString schemaURI;
+
+    if ( !parSchemaFile.empty() )
+    {
+        schemaURI = parSchemaFile;
+    }
+    else
+    {
+        schemaURI = "http://www.wxwidgets.org/wxxrc";
+
+        // Normally, we'd use an OASIS XML catalog to map the URI to a local copy,
+        // but Jing's catalog support (-C catalogFile) requires additional
+        // dependency, resolver.jar, that is not commonly installed alongside Jing
+        // by systems that package Jing. So do the (trivial) mapping manually here:
+        wxString wxWinRoot;
+        if ( wxGetEnv("WXWIN", &wxWinRoot) )
+        {
+            wxString schemaFile(wxWinRoot + "/misc/schema/xrc_schema.rnc");
+            if ( wxFileExists(schemaFile) )
+                schemaURI = schemaFile;
+        }
+    }
+
+    wxString cmdline = wxString::Format("jing -c \"%s\"", schemaURI);
+    for ( size_t i = 0; i < parFiles.GetCount(); i++ )
+        cmdline << wxString::Format(" \"%s\"", parFiles[i]);
+
+    int res = wxExecute(cmdline, wxEXEC_BLOCK);
+    if (res == -1)
+    {
+        wxLogError("Running RELAX NG validator failed.");
+        wxLogError("Please install Jing (http://www.thaiopensource.com/relaxng/jing.html).");
+        wxLogError("See http://svn.wxwidgets.org/svn/wx/wxWidgets/trunk/misc/schema/README for more information.");
+        return false;
+    }
+
+    if ( flagVerbose )
+    {
+        if ( res == 0 )
+            wxPuts("XRC validation passed without errors.");
+        else
+            wxPuts("XRC validation failed, there are errors.");
+    }
+
+    return res == 0;
 }

@@ -4,7 +4,6 @@
 // Author:      Ryan Norton <wxprojects@comcast.net>, Lindsay Mathieson <???>
 // Modified by:
 // Created:     11/07/04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Lindsay Mathieson, (c) 2005 Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -633,6 +632,10 @@ public:
         return S_OK;
     }
 
+    friend bool QueryClientSiteInterface(FrameSite *self, REFIID iid, void **_interface, const char *&desc)
+    {
+        return self->m_window->QueryClientSiteInterface(iid,_interface,desc);
+    }
 
 protected:
     wxActiveXContainer * m_window;
@@ -670,6 +673,7 @@ DEFINE_OLE_TABLE(FrameSite)
     OLE_IINTERFACE(IOleDocumentSite)
     OLE_IINTERFACE(IAdviseSink)
     OLE_IINTERFACE(IOleControlSite)
+    OLE_INTERFACE_CUSTOM(QueryClientSiteInterface)
 END_OLE_TABLE
 
 
@@ -1105,28 +1109,28 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     m_oleObjectHWND = 0;
 
-    if (m_oleInPlaceObject.IsOk())
-    {
-        hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
-        if (SUCCEEDED(hret))
-            ::SetActiveWindow(m_oleObjectHWND);
-    }
-
 
     if (! (dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME))
     {
         RECT posRect;
         wxCopyRectToRECT(m_realparent->GetClientSize(), posRect);
 
+        hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL,
+            m_clientSite, 0, (HWND)m_realparent->GetHWND(), &posRect);
+        CHECK_HR(hret);
+
+        if (m_oleInPlaceObject.IsOk())
+        {
+            hret = m_oleInPlaceObject->GetWindow(&m_oleObjectHWND);
+            CHECK_HR(hret);
+            ::SetActiveWindow(m_oleObjectHWND);
+        }
+
         if (posRect.right > 0 && posRect.bottom > 0 &&
             m_oleInPlaceObject.IsOk())
         {
             m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
         }
-
-        hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL,
-            m_clientSite, 0, (HWND)m_realparent->GetHWND(), &posRect);
-        CHECK_HR(hret);
 
         hret = m_oleObject->DoVerb(OLEIVERB_SHOW, 0, m_clientSite, 0,
             (HWND)m_realparent->GetHWND(), &posRect);
@@ -1178,14 +1182,12 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
     posRect.right = w;
     posRect.bottom = h;
 
-    if (w <= 0 && h <= 0)
+    if (w <= 0 || h <= 0)
         return;
 
     // extents are in HIMETRIC units
     if (m_oleObject.IsOk())
     {
-        m_oleObject->DoVerb(OLEIVERB_HIDE, 0, m_clientSite, 0,
-            (HWND)m_realparent->GetHWND(), &posRect);
 
         SIZEL sz = {w, h};
         PixelsToHimetric(sz);
@@ -1196,8 +1198,6 @@ void wxActiveXContainer::OnSize(wxSizeEvent& event)
         if (sz2.cx !=  sz.cx || sz.cy != sz2.cy)
             m_oleObject->SetExtent(DVASPECT_CONTENT, &sz);
 
-        m_oleObject->DoVerb(OLEIVERB_SHOW, 0, m_clientSite, 0,
-            (HWND)m_realparent->GetHWND(), &posRect);
     }
 
     if (m_oleInPlaceObject.IsOk())
@@ -1262,6 +1262,35 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
         m_oleInPlaceActiveObject->OnFrameWindowActivate(FALSE);
 
     event.Skip();
+}
+
+//---------------------------------------------------------------------------
+// wxActiveXContainer::MSWTranslateMessage
+//
+// Called for every message that needs to be translated.
+// Some controls might need more keyboard keys to process (CTRL-C, CTRL-A etc),
+// In that case TranslateAccelerator should always be called first.
+//---------------------------------------------------------------------------
+bool wxActiveXContainer::MSWTranslateMessage(WXMSG* pMsg)
+{
+    if(m_oleInPlaceActiveObject.IsOk() && m_oleInPlaceActiveObject->TranslateAccelerator(pMsg) == S_OK)
+    {
+        return true;
+    }
+    return wxWindow::MSWTranslateMessage(pMsg);
+}
+
+//---------------------------------------------------------------------------
+// wxActiveXContainer::QueryClientSiteInterface
+//
+// Called in the host's site's query method for other interfaces.
+//---------------------------------------------------------------------------
+bool wxActiveXContainer::QueryClientSiteInterface(REFIID iid, void **_interface, const char *&desc)
+{
+    wxUnusedVar(iid);
+    wxUnusedVar(_interface);
+    wxUnusedVar(desc);
+    return false;
 }
 
 #endif // wxUSE_ACTIVEX

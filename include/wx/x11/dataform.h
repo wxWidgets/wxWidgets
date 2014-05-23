@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by:
 // Created:     19.10.99 (extracted from motif/dataobj.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 1999 Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

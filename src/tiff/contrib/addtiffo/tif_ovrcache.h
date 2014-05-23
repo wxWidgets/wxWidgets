@@ -51,8 +51,8 @@ typedef struct
     uint16      nPlanarConfig;
     uint32	nBlockXSize;
     uint32	nBlockYSize;
-    uint32	nBytesPerBlock;
-    uint32      nBytesPerRow;
+    toff_t	nBytesPerBlock;
+    toff_t      nBytesPerRow;
 
     int		nBlocksPerRow;
     int		nBlocksPerColumn;
@@ -61,13 +61,13 @@ typedef struct
     unsigned char *pabyRow1Blocks;
     unsigned char *pabyRow2Blocks;
 
-    int		nDirOffset;
+    toff_t	nDirOffset;
     TIFF	*hTIFF;
     int		bTiled;
     
 } TIFFOvrCache;
 
-TIFFOvrCache *TIFFCreateOvrCache( TIFF *hTIFF, int nDirOffset );
+TIFFOvrCache *TIFFCreateOvrCache( TIFF *hTIFF, toff_t nDirOffset );
 unsigned char *TIFFGetOvrBlock( TIFFOvrCache *psCache, int iTileX, int iTileY,
                                 int iSample );
 unsigned char *TIFFGetOvrBlock_Subsampled( TIFFOvrCache *psCache, int iTileX, int iTileY );
@@ -76,17 +76,12 @@ void           TIFFDestroyOvrCache( TIFFOvrCache * );
 void TIFFBuildOverviews( TIFF *, int, int *, int, const char *,
                          int (*)(double,void*), void * );
 
-void TIFF_ProcessFullResBlock( TIFF *hTIFF, int nPlanarConfig,
-                               int bSubsampled, int nHorSamples, int nVerSamples,
-                               int nOverviews, int * panOvList,
-                               int nBitsPerPixel, 
-                               int nSamples, TIFFOvrCache ** papoRawBIs,
-                               int nSXOff, int nSYOff,
-                               unsigned char *pabySrcTile,
-                               int nBlockXSize, int nBlockYSize,
-                               int nSampleFormat, const char * pszResampling );
+void TIFF_ProcessFullResBlock( TIFF *, int, int, int, int, int, int *, int, 
+                               int, TIFFOvrCache **, uint32, uint32,
+                               unsigned char *, uint32, uint32,
+                               int, const char * );
 
-uint32 TIFF_WriteOverview( TIFF *, int, int, int, int, int, int, int,
+uint32 TIFF_WriteOverview( TIFF *, uint32, uint32, int, int, int, int, int,
                            int, int, int, int, unsigned short *,
                            unsigned short *, unsigned short *, int,
                            int, int);
@@ -99,3 +94,10 @@ uint32 TIFF_WriteOverview( TIFF *, int, int, int, int, int, int, int,
     
 #endif /* ndef TIF_OVRCACHE_H_INCLUDED */
 
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

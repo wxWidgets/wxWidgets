@@ -2,7 +2,6 @@
 // Name:        image.h
 // Purpose:     interface of wxImageHandler and wxImage
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -73,6 +72,57 @@ enum wxImagePNGType
     wxPNG_TYPE_GREY_RED = 3,    ///< Greyscale PNG image using red as grey.
     wxPNG_TYPE_PALETTE = 4      ///< Palette encoding.
 };
+
+
+/**
+   Image option names.
+*/
+#define wxIMAGE_OPTION_QUALITY                          wxString("quality")
+#define wxIMAGE_OPTION_FILENAME                         wxString("FileName")
+#define wxIMAGE_OPTION_RESOLUTION                       wxString("Resolution")
+#define wxIMAGE_OPTION_RESOLUTIONX                      wxString("ResolutionX")
+#define wxIMAGE_OPTION_RESOLUTIONY                      wxString("ResolutionY")
+#define wxIMAGE_OPTION_RESOLUTIONUNIT                   wxString("ResolutionUnit")
+#define wxIMAGE_OPTION_MAX_WIDTH                        wxString("MaxWidth")
+#define wxIMAGE_OPTION_MAX_HEIGHT                       wxString("MaxHeight")
+#define wxIMAGE_OPTION_ORIGINAL_WIDTH                   wxString("OriginalWidth")
+#define wxIMAGE_OPTION_ORIGINAL_HEIGHT                  wxString("OriginalHeight")
+
+#define wxIMAGE_OPTION_BMP_FORMAT                       wxString("wxBMP_FORMAT")
+#define wxIMAGE_OPTION_CUR_HOTSPOT_X                    wxString("HotSpotX")
+#define wxIMAGE_OPTION_CUR_HOTSPOT_Y                    wxString("HotSpotY")
+
+#define wxIMAGE_OPTION_GIF_COMMENT                      wxString("GifComment")
+
+#define wxIMAGE_OPTION_PNG_FORMAT                       wxString("PngFormat")
+#define wxIMAGE_OPTION_PNG_BITDEPTH                     wxString("PngBitDepth")
+#define wxIMAGE_OPTION_PNG_FILTER                       wxString("PngF")
+#define wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL            wxString("PngZL")
+#define wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL        wxString("PngZM")
+#define wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY         wxString("PngZS")
+#define wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE      wxString("PngZB")
+
+#define wxIMAGE_OPTION_TIFF_BITSPERSAMPLE               wxString("BitsPerSample")
+#define wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL             wxString("SamplesPerPixel")
+#define wxIMAGE_OPTION_TIFF_COMPRESSION                 wxString("Compression")
+#define wxIMAGE_OPTION_TIFF_PHOTOMETRIC                 wxString("Photometric")
+#define wxIMAGE_OPTION_TIFF_IMAGEDESCRIPTOR             wxString("ImageDescriptor")
+
+
+enum
+{
+    wxBMP_24BPP        = 24, // default, do not need to set
+    //wxBMP_16BPP      = 16, // wxQuantize can only do 236 colors?
+    wxBMP_8BPP         =  8, // 8bpp, quantized colors
+    wxBMP_8BPP_GREY    =  9, // 8bpp, rgb averaged to greys
+    wxBMP_8BPP_GRAY    =  wxBMP_8BPP_GREY,
+    wxBMP_8BPP_RED     = 10, // 8bpp, red used as greyscale
+    wxBMP_8BPP_PALETTE = 11, // 8bpp, use the wxImage's palette
+    wxBMP_4BPP         =  4, // 4bpp, quantized colors
+    wxBMP_1BPP         =  1, // 1bpp, quantized "colors"
+    wxBMP_1BPP_BW      =  2  // 1bpp, black & white from red
+};
+
 
 /**
     @class wxImageHandler
@@ -284,6 +334,24 @@ public:
         @since 2.9.2
      */
      static wxVersionInfo GetLibraryVersionInfo();
+
+protected:
+    /**
+       Called to get the number of images available in a multi-image file
+       type, if supported.
+       
+       NOTE: this function is allowed to change the current stream position
+             since GetImageCount() will take care of restoring it later
+    */
+    virtual int DoGetImageCount( wxInputStream& stream );
+
+    /**
+       Called to test if this handler can read an image from the given stream.
+       
+       NOTE: this function is allowed to change the current stream position
+             since CallDoCanRead() will take care of restoring it later
+    */
+    virtual bool DoCanRead( wxInputStream& stream ) = 0;
 };
 
 
@@ -299,6 +367,9 @@ const unsigned char wxIMAGE_ALPHA_TRANSPARENT = 0;
 */
 const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 
+const unsigned char wxIMAGE_ALPHA_THRESHOLD = 0x80;
+
+
 /**
     @class wxImage
 
@@ -313,6 +384,17 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     Instead, a platform-specific wxBitmap object must be created from it using
     the wxBitmap::wxBitmap(wxImage,int depth) constructor.
     This bitmap can then be drawn in a device context, using wxDC::DrawBitmap.
+
+    More on the difference between wxImage and wxBitmap: wxImage is just a
+    buffer of RGB bytes with an optional buffer for the alpha bytes. It is all
+    generic, platform independent and image file format independent code. It
+    includes generic code for scaling, resizing, clipping, and other manipulations
+    of the image data. OTOH, wxBitmap is intended to be a wrapper of whatever is
+    the native image format that is quickest/easiest to draw to a DC or to be the
+    target of the drawing operations performed on a wxMemoryDC. By splitting the
+    responsibilities between wxImage/wxBitmap like this then it's easier to use
+    generic code shared by all platforms and image types for generic operations and
+    platform specific code where performance or compatibility is needed.
 
     One colour value of the image may be used as a mask colour which will lead to
     the automatic creation of a wxMask object associated to the bitmap object.
@@ -331,12 +413,12 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 
     While all images have RGB data, not all images have an alpha channel. Before
     using wxImage::GetAlpha you should check if this image contains an alpha
-    channel with wxImage::HasAlpha. Currently the BMP, PNG, and TIFF format
+    channel with wxImage::HasAlpha. Currently the BMP, PNG, TGA, and TIFF format
     handlers have full alpha channel support for loading so if you want to use
     alpha you have to use one of these formats. If you initialize the image
     alpha channel yourself using wxImage::SetAlpha, you should save it in
-    either PNG or TGA format to avoid losing it as these are the only handlers
-    that currently support saving with alpha.
+    either PNG, TGA, or TIFF format to avoid losing it as these are the only
+    handlers that currently support saving with alpha.
 
 
     @section image_handlers Available image handlers
@@ -352,7 +434,7 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     - wxGIFHandler: For loading and saving (see below).
     - wxPCXHandler: For loading and saving (see below).
     - wxPNMHandler: For loading and saving (see below).
-    - wxTIFFHandler: For loading (including alpha support) and saving.
+    - wxTIFFHandler: For loading and saving. Includes alpha support.
     - wxTGAHandler: For loading and saving. Includes alpha support.
     - wxIFFHandler: For loading only.
     - wxXPMHandler: For loading and saving.
@@ -396,6 +478,10 @@ public:
             between HSV color space and RGB color space.
         */
         RGBValue(unsigned char r=0, unsigned char g=0, unsigned char b=0);
+
+        unsigned char red;
+        unsigned char green;
+        unsigned char blue;
     };
 
     /**
@@ -412,6 +498,10 @@ public:
             between HSV color space and RGB color space.
         */
         HSVValue(double h=0.0, double s=0.0, double v=0.0);
+
+        double hue;
+        double saturation;
+        double value;        
     };
 
     /**
@@ -483,7 +573,7 @@ public:
     /**
         @overload
     */
-    wxImage(const wxSize& sz, unsigned char* data, unsigned char* data, unsigned char* alpha,
+    wxImage(const wxSize& sz, unsigned char* data, unsigned char* alpha,
             bool static_data = false);
 
     /**
@@ -511,7 +601,7 @@ public:
             @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
             @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
             @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-            @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+            @li wxBITMAP_TYPE_TIFF: Load a TIFF bitmap file.
             @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
             @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
             @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
@@ -1004,7 +1094,7 @@ public:
         This is most often used when doing direct image manipulation.
         The return value points to an array of characters in RGBRGBRGB... format
         in the top-to-bottom, left-to-right order, that is the first RGB triplet
-        corresponds to the pixel first pixel of the first row, the second one ---
+        corresponds to the first pixel of the first row, the second one ---
         to the second pixel of the first row and so on until the end of the first
         row, with second row following after it and so on.
 
@@ -1073,9 +1163,15 @@ public:
     /**
         Gets a user-defined string-valued option.
 
-        Currently the only defined string option is
+        Generic options:
         @li @c wxIMAGE_OPTION_FILENAME: The name of the file from which the image
             was loaded.
+
+        Options specific to wxGIFHandler:
+        @li @c wxIMAGE_OPTION_GIF_COMMENT: The comment text that is read from
+            or written to the GIF file. In an animated GIF each frame can have
+            its own comment. If there is only a comment in the first frame of
+            a GIF it will not be repeated in other frames.
 
         @param name
             The name of the option, case-insensitive.
@@ -1107,6 +1203,12 @@ public:
             rescaling it later (if these options are not supported by the
             handler, this is still what happens however). These options must be
             set before calling LoadFile() to have any effect.
+
+        @li @c wxIMAGE_OPTION_ORIGINAL_WIDTH and @c wxIMAGE_OPTION_ORIGINAL_HEIGHT:
+            These options will return the original size of the image if either
+            @c wxIMAGE_OPTION_MAX_WIDTH or @c wxIMAGE_OPTION_MAX_HEIGHT is
+            specified.
+            @since 2.9.3
 
         @li @c wxIMAGE_OPTION_QUALITY: JPEG quality used when saving. This is an
             integer in 0..100 range with 0 meaning very poor and 100 excellent
@@ -1151,11 +1253,38 @@ public:
             the resulting PNG file. Use this option if your application produces
             images with small size variation.
 
-        Options specific to wxGIFHandler:
-        @li @c wxIMAGE_OPTION_GIF_COMMENT: The comment text that is read from
-            or written to the GIF file. In an animated GIF each frame can have
-            its own comment. If there is only a comment in the first frame of
-            a GIF it will not be repeated in other frames.
+        Options specific to wxTIFFHandler:
+        @li @c wxIMAGE_OPTION_TIFF_BITSPERSAMPLE: Number of bits per
+            sample (channel). Currently values of 1 and 8 are supported. A
+            value of 1 results in a black and white image. A value of 8 (the
+            default) can mean greyscale or RGB, depending on the value of
+            @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL.
+        @li @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL: Number of samples
+            (channels) per pixel. Currently values of 1 and 3 are supported.
+            A value of 1 results in either a greyscale (by default) or black and
+            white image, depending on the value of
+            @c wxIMAGE_OPTION_TIFF_BITSPERSAMPLE. A value of 3 (the default)
+            will result in an RGB image.
+        @li @c wxIMAGE_OPTION_TIFF_COMPRESSION: Compression type. By default
+            it is set to 1 (COMPRESSION_NONE). Typical other values are
+            5 (COMPRESSION_LZW) and 7 (COMPRESSION_JPEG). See tiff.h for more
+            options.
+        @li @c wxIMAGE_OPTION_TIFF_PHOTOMETRIC: Specifies the photometric
+            interpretation. By default it is set to 2 (PHOTOMETRIC_RGB) for RGB
+            images and 0 (PHOTOMETRIC_MINISWHITE) for greyscale or black and
+            white images. It can also be set to 1 (PHOTOMETRIC_MINISBLACK) to
+            treat the lowest value as black and highest as white.
+            If you want a greyscale image it is also sufficient to only specify
+            @c wxIMAGE_OPTION_TIFF_PHOTOMETRIC and set it to either
+            PHOTOMETRIC_MINISWHITE or PHOTOMETRIC_MINISBLACK. The other values
+            are taken care of.
+
+        @note
+        Be careful when combining the options @c wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL,
+        @c wxIMAGE_OPTION_TIFF_BITSPERSAMPLE, and @c wxIMAGE_OPTION_TIFF_PHOTOMETRIC.
+        While some measures are taken to prevent illegal combinations and/or
+        values, it is still easy to abuse them and come up with invalid
+        results in the form of either corrupted images or crashes.
 
         @param name
             The name of the option, case-insensitive.
@@ -1226,7 +1355,7 @@ public:
     bool IsOk() const;
 
     /**
-        Returns @true if the given pixel is transparent, i.e. either has the mask
+        Returns @true if the given pixel is transparent, i.e.\ either has the mask
         colour if this image has a mask or if this image has alpha channel and alpha
         value of this pixel is strictly less than @a threshold.
     */
@@ -1255,7 +1384,7 @@ public:
             @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
             @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
             @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-            @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+            @li wxBITMAP_TYPE_TIFF: Load a TIFF bitmap file.
             @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
             @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
             @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
@@ -1542,6 +1671,12 @@ public:
     void SetPalette(const wxPalette& palette);
 
     /**
+       Set the color of the pixel at the given x and y coordinate.
+    */
+    
+    void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
+
+    /**
         Sets the colour of the pixels within the given rectangle.
 
         This routine performs bounds-checks for the coordinate so it can be considered
@@ -1737,7 +1872,7 @@ public:
         @li wxBITMAP_TYPE_PNG: Load a PNG bitmap file.
         @li wxBITMAP_TYPE_PCX: Load a PCX bitmap file.
         @li wxBITMAP_TYPE_PNM: Load a PNM bitmap file.
-        @li wxBITMAP_TYPE_TIF: Load a TIFF bitmap file.
+        @li wxBITMAP_TYPE_TIFF: Load a TIFF bitmap file.
         @li wxBITMAP_TYPE_TGA: Load a TGA bitmap file.
         @li wxBITMAP_TYPE_XPM: Load a XPM bitmap file.
         @li wxBITMAP_TYPE_ICO: Load a Windows icon file (ICO).
@@ -1783,6 +1918,30 @@ public:
         Converts a color in HSV color space to RGB color space.
     */
     static wxImage::RGBValue HSVtoRGB(const wxImage::HSVValue& hsv);
+};
+
+
+class wxImageHistogram : public wxImageHistogramBase
+{
+public:
+    wxImageHistogram();
+
+    // get the key in the histogram for the given RGB values
+    static unsigned long MakeKey(unsigned char r,
+                                 unsigned char g,
+                                 unsigned char b);
+
+    // find first colour that is not used in the image and has higher
+    // RGB values than RGB(startR, startG, startB)
+    //
+    // returns true and puts this colour in r, g, b (each of which may be NULL)
+    // on success or returns false if there are no more free colours
+    bool FindFirstUnusedColour(unsigned char *r,
+                               unsigned char *g,
+                               unsigned char *b,
+                               unsigned char startR = 1,
+                               unsigned char startG = 0,
+                               unsigned char startB = 0 ) const;
 };
 
 /**

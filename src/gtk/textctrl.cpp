@@ -2,7 +2,6 @@
 // Name:        src/gtk/textctrl.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Vadim Zeitlin, 2005 Mart Raudsepp
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +29,9 @@
 #include <sys/stat.h>
 #include <ctype.h>
 
+#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk2-compat.h"
 
 // ----------------------------------------------------------------------------
 // helpers
@@ -110,6 +111,18 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                                                   NULL );
             gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
         }
+        if ( font.GetStrikethrough() )
+        {
+            g_snprintf(buf, sizeof(buf), "WXFONTSTRIKETHROUGH");
+            tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                             buf );
+            if (!tag)
+                tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                                  "strikethrough-set", TRUE,
+                                                  "strikethrough", TRUE,
+                                                  NULL );
+            gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+        }
     }
 
     if (attr.HasTextColour())
@@ -155,25 +168,29 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         GtkJustification align;
         switch (attr.GetAlignment())
         {
-            default:
-                align = GTK_JUSTIFY_LEFT;
-                break;
             case wxTEXT_ALIGNMENT_RIGHT:
                 align = GTK_JUSTIFY_RIGHT;
                 break;
             case wxTEXT_ALIGNMENT_CENTER:
                 align = GTK_JUSTIFY_CENTER;
                 break;
+            case wxTEXT_ALIGNMENT_JUSTIFIED:
+#ifdef __WXGTK3__
+                align = GTK_JUSTIFY_FILL;
+                break;
+#elif GTK_CHECK_VERSION(2,11,0)
 // gtk+ doesn't support justify before gtk+-2.11.0 with pango-1.17 being available
 // (but if new enough pango isn't available it's a mere gtk warning)
-#if GTK_CHECK_VERSION(2,11,0)
-            case wxTEXT_ALIGNMENT_JUSTIFIED:
                 if (!gtk_check_version(2,11,0))
+                {
                     align = GTK_JUSTIFY_FILL;
-                else
-                    align = GTK_JUSTIFY_LEFT;
-                break;
+                    break;
+                }
+                // fallthrough
 #endif
+            default:
+                align = GTK_JUSTIFY_LEFT;
+                break;
         }
 
         g_snprintf(buf, sizeof(buf), "WXALIGNMENT %d", align);
@@ -391,7 +408,7 @@ au_check_word( GtkTextIter *s, GtkTextIter *e )
     for( n = 0; n < WXSIZEOF(URIPrefixes); ++n )
     {
         prefix_len = strlen(URIPrefixes[n]);
-        if((len > prefix_len) && !strncasecmp(text, URIPrefixes[n], prefix_len))
+        if((len > prefix_len) && !wxStrnicmp(text, URIPrefixes[n], prefix_len))
             break;
     }
 
@@ -443,6 +460,25 @@ au_check_range(GtkTextIter *s,
 //-----------------------------------------------------------------------------
 
 extern "C" {
+
+// Normal version used for detecting IME input and generating appropriate
+// events for it.
+void
+wx_insert_text_callback(GtkTextBuffer* buffer,
+                        GtkTextIter* WXUNUSED(end),
+                        gchar *text,
+                        gint WXUNUSED(len),
+                        wxTextCtrl *win)
+{
+    if ( win->GTKOnInsertText(text) )
+    {
+        // If we already handled the new text insertion, don't do it again.
+        g_signal_stop_emission_by_name (buffer, "insert_text");
+    }
+}
+
+
+// And an "after" version used for detecting URLs in the text.
 static void
 au_insert_text_callback(GtkTextBuffer * WXUNUSED(buffer),
                         GtkTextIter *end,
@@ -528,54 +564,10 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
     if ( win->IgnoreTextUpdate() )
         return;
 
-    if (!win->m_hasVMT) return;
-
     if ( win->MarkDirtyOnChange() )
         win->MarkDirty();
 
     win->SendTextUpdatedEvent();
-}
-}
-
-//-----------------------------------------------------------------------------
-//  clipboard events: "copy-clipboard", "cut-clipboard", "paste-clipboard"
-//-----------------------------------------------------------------------------
-
-// common part of the event handlers below
-static void
-handle_text_clipboard_callback( GtkWidget *widget, wxTextCtrl *win,
-                                wxEventType eventType, const gchar * signal_name)
-{
-    wxClipboardTextEvent event( eventType, win->GetId() );
-    event.SetEventObject( win );
-    if ( win->HandleWindowEvent( event ) )
-    {
-        // don't let the default processing to take place if we did something
-        // ourselves in the event handler
-        g_signal_stop_emission_by_name (widget, signal_name);
-    }
-}
-
-extern "C" {
-static void
-gtk_copy_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
-{
-    handle_text_clipboard_callback(
-        widget, win, wxEVT_COMMAND_TEXT_COPY, "copy-clipboard" );
-}
-
-static void
-gtk_cut_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
-{
-    handle_text_clipboard_callback(
-        widget, win, wxEVT_COMMAND_TEXT_CUT, "cut-clipboard" );
-}
-
-static void
-gtk_paste_clipboard_callback( GtkWidget *widget, wxTextCtrl *win )
-{
-    handle_text_clipboard_callback(
-        widget, win, wxEVT_COMMAND_TEXT_PASTE, "paste-clipboard" );
 }
 }
 
@@ -590,6 +582,19 @@ static void mark_set(GtkTextBuffer*, GtkTextIter*, GtkTextMark* mark, GSList** m
         *markList = g_slist_prepend(*markList, mark);
 }
 }
+
+#ifdef __WXGTK3__
+//-----------------------------------------------------------------------------
+//  "state_flags_changed"
+//-----------------------------------------------------------------------------
+extern "C" {
+static void state_flags_changed(GtkWidget*, GtkStateFlags, wxTextCtrl* win)
+{
+    // restore non-default cursor, if any
+    win->GTKUpdateCursor(false, true);
+}
+}
+#endif // __WXGTK3__
 
 //-----------------------------------------------------------------------------
 //  wxTextCtrl
@@ -631,12 +636,23 @@ void wxTextCtrl::Init()
     SetUpdateFont(false);
 
     m_text = NULL;
+    m_buffer = NULL;
     m_showPositionOnThaw = NULL;
     m_anonymousMarkList = NULL;
 }
 
 wxTextCtrl::~wxTextCtrl()
 {
+    if (m_text)
+        GTKDisconnect(m_text);
+    if (m_buffer)
+        GTKDisconnect(m_buffer);
+
+    // this is also done by wxWindowGTK dtor, but has to be done here so our
+    // DoThaw() override is called
+    while (IsFrozen())
+        Thaw();
+
     if (m_anonymousMarkList)
         g_slist_free(m_anonymousMarkList);
 }
@@ -775,7 +791,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
             GtkTextIter start, end;
 
             // We create our wxUrl tag here for slight efficiency gain - we
-            // don't have to check for the tag existance in callbacks,
+            // don't have to check for the tag existence in callbacks,
             // hereby it's guaranteed to exist.
             gtk_text_buffer_create_tag(m_buffer, "wxUrl",
                                        "foreground", "blue",
@@ -802,23 +818,26 @@ bool wxTextCtrl::Create( wxWindow *parent,
             gtk_text_buffer_get_end_iter(m_buffer, &end);
             au_check_range(&start, &end);
         }
+
+        // Also connect a normal (not "after") signal handler for checking for
+        // the IME-generated input.
+        g_signal_connect(m_buffer, "insert_text",
+                         G_CALLBACK(wx_insert_text_callback), this);
     }
     else // single line
     {
         // do the right thing with Enter presses depending on whether we have
         // wxTE_PROCESS_ENTER or not
         GTKSetActivatesDefault();
+
+        GTKConnectInsertTextSignal(GTK_ENTRY(m_text));
     }
 
+    GTKConnectClipboardSignals(m_text);
 
-    g_signal_connect (m_text, "copy-clipboard",
-                      G_CALLBACK (gtk_copy_clipboard_callback), this);
-    g_signal_connect (m_text, "cut-clipboard",
-                      G_CALLBACK (gtk_cut_clipboard_callback), this);
-    g_signal_connect (m_text, "paste-clipboard",
-                      G_CALLBACK (gtk_paste_clipboard_callback), this);
-
-    m_cursor = wxCursor( wxCURSOR_IBEAM );
+#ifdef __WXGTK3__
+    g_signal_connect(m_text, "state_flags_changed", G_CALLBACK(state_flags_changed), this);
+#endif
 
     return true;
 }
@@ -833,6 +852,28 @@ GtkEditable *wxTextCtrl::GetEditable() const
 GtkEntry *wxTextCtrl::GetEntry() const
 {
     return GTK_ENTRY(m_text);
+}
+
+int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
+{
+    if (IsSingleLine())
+        return wxTextEntry::GTKIMFilterKeypress(event);
+
+    int result;
+#if GTK_CHECK_VERSION(2, 22, 0)
+#ifndef __WXGTK3__
+    result = false;
+    if (gtk_check_version(2,22,0) == NULL)
+#endif
+    {
+        result = gtk_text_view_im_context_filter_keypress(GTK_TEXT_VIEW(m_text), event);
+    }
+#else // GTK+ < 2.22
+    wxUnusedVar(event);
+    result = false;
+#endif // GTK+ 2.22+
+
+    return result;
 }
 
 // ----------------------------------------------------------------------------
@@ -1091,11 +1132,7 @@ void wxTextCtrl::WriteText( const wxString &text )
 #endif
 
     // First remove the selection if there is one
-    // TODO:  Is there an easier GTK specific way to do this?
-    long from, to;
-    GetSelection(&from, &to);
-    if (from != to)
-        Remove(from, to);
+    gtk_text_buffer_delete_selection(m_buffer, false, true);
 
     // Insert the text
     wxGtkTextInsert( m_text, m_buffer, m_defaultStyle, buffer );
@@ -1218,6 +1255,37 @@ int wxTextCtrl::GetLineLength(long lineNo) const
     }
 }
 
+wxPoint wxTextCtrl::DoPositionToCoords(long pos) const
+{
+    if ( !IsMultiLine() )
+    {
+        // Single line text entry (GtkTextEntry) doesn't have support for
+        // getting the coordinates for the given offset. Perhaps we could
+        // find them ourselves by using GetTextExtent() but for now just leave
+        // it unimplemented, this function is more useful for multiline
+        // controls anyhow.
+        return wxDefaultPosition;
+    }
+
+    // Window coordinates for the given position is calculated by getting
+    // the buffer coordinates and converting them to window coordinates.
+    GtkTextView *textview = GTK_TEXT_VIEW(m_text);
+
+    GtkTextIter iter;
+    gtk_text_buffer_get_iter_at_offset(m_buffer, &iter, pos);
+
+    GdkRectangle bufferCoords;
+    gtk_text_view_get_iter_location(textview, &iter, &bufferCoords);
+
+    gint winCoordX = 0,
+         winCoordY = 0;
+    gtk_text_view_buffer_to_window_coords(textview, GTK_TEXT_WINDOW_WIDGET,
+                                          bufferCoords.x, bufferCoords.y,
+                                          &winCoordX, &winCoordY);
+
+    return wxPoint(winCoordX, winCoordY);
+}
+
 int wxTextCtrl::GetNumberOfLines() const
 {
     if ( IsMultiLine() )
@@ -1275,29 +1343,8 @@ bool wxTextCtrl::Enable( bool enable )
     }
 
     gtk_widget_set_sensitive( m_text, enable );
-    SetCursor(enable ? wxCursor(wxCURSOR_IBEAM) : wxCursor());
 
     return true;
-}
-
-// wxGTK-specific: called recursively by Enable,
-// to give widgets an opportunity to correct their colours after they
-// have been changed by Enable
-void wxTextCtrl::OnEnabled(bool WXUNUSED(enable))
-{
-    // If we have a custom background colour, we use this colour in both
-    // disabled and enabled mode, or we end up with a different colour under the
-    // text.
-    wxColour oldColour = GetBackgroundColour();
-    if (oldColour.IsOk())
-    {
-        // Need to set twice or it'll optimize the useful stuff out
-        if (oldColour == * wxWHITE)
-            SetBackgroundColour(*wxBLACK);
-        else
-            SetBackgroundColour(*wxWHITE);
-        SetBackgroundColour(oldColour);
-    }
 }
 
 void wxTextCtrl::MarkDirty()
@@ -1556,7 +1603,7 @@ bool wxTextCtrl::IsEditable() const
 
     if ( IsMultiLine() )
     {
-        return gtk_text_view_get_editable(GTK_TEXT_VIEW(m_text));
+        return gtk_text_view_get_editable(GTK_TEXT_VIEW(m_text)) != 0;
     }
     else
     {
@@ -1577,7 +1624,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
     {
         if ( HasFlag(wxTE_PROCESS_ENTER) )
         {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+            wxCommandEvent event(wxEVT_TEXT_ENTER, m_windowId);
             event.SetEventObject(this);
             event.SetString(GetValue());
             if ( HandleWindowEvent(event) )
@@ -1602,7 +1649,11 @@ GdkWindow *wxTextCtrl::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     }
     else
     {
+#ifdef __WXGTK3__
+        return GTKFindWindow(m_text);
+#else
         return gtk_entry_get_text_window(GTK_ENTRY(m_text));
+#endif
     }
 }
 
@@ -1722,7 +1773,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     // Obtain a copy of the default attributes
     GtkTextAttributes * const
         pattr = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(m_text));
-    wxON_BLOCK_EXIT1( g_free, pattr );
+    wxON_BLOCK_EXIT1(gtk_text_attributes_unref, pattr);
 
     // And query GTK for the attributes at the given position using it as base
     if ( !gtk_text_iter_get_attributes(&positioni, pattr) )
@@ -1749,7 +1800,40 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    gtk_widget_modify_style(m_text, style);
+#ifdef __WXGTK3__
+    // Preserve selection colors, otherwise the GTK_STATE_FLAG_NORMAL override
+    // will be used, and the selection is invisible
+    const GtkStateFlags selectedFocused =
+        GtkStateFlags(GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_FOCUSED);
+    // remove any previous override
+    gtk_widget_override_color(m_text, GTK_STATE_FLAG_NORMAL, NULL);
+    gtk_widget_override_color(m_text, selectedFocused, NULL);
+    gtk_widget_override_background_color(m_text, GTK_STATE_FLAG_NORMAL, NULL);
+    gtk_widget_override_background_color(m_text, selectedFocused, NULL);
+    const bool fg_ok = m_foregroundColour.IsOk();
+    const bool bg_ok = m_backgroundColour.IsOk();
+    if (fg_ok || bg_ok)
+    {
+        GdkRGBA fg_orig, bg_orig;
+        GtkStyleContext* context = gtk_widget_get_style_context(m_text);
+        if (IsMultiLine())
+        {
+            gtk_style_context_save(context);
+            gtk_style_context_add_class(context, GTK_STYLE_CLASS_VIEW);
+        }
+        gtk_style_context_get_color(context, selectedFocused, &fg_orig);
+        gtk_style_context_get_background_color(context, selectedFocused, &bg_orig);
+        if (IsMultiLine())
+            gtk_style_context_restore(context);
+
+        if (fg_ok)
+            gtk_widget_override_color(m_text, selectedFocused, &fg_orig);
+        if (bg_ok)
+            gtk_widget_override_background_color(m_text, selectedFocused, &bg_orig);
+    }
+#endif // __WXGTK3__
+
+    GTKApplyStyle(m_text, style);
 }
 
 void wxTextCtrl::OnCut(wxCommandEvent& WXUNUSED(event))
@@ -1804,12 +1888,70 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    // FIXME should be different for multi-line controls...
-    wxSize ret( wxControl::DoGetBestSize() );
-    wxSize best(80, ret.y);
-    CacheBestSize(best);
-    return best;
+    return DoGetSizeFromTextSize(80);
 }
+
+wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    wxASSERT_MSG( m_widget, wxS("GetSizeFromTextSize called before creation") );
+
+    wxSize tsize(xlen, 0);
+    int cHeight = GetCharHeight();
+
+    if ( IsSingleLine() )
+    {
+        if ( HasFlag(wxBORDER_NONE) )
+        {
+            tsize.y = cHeight;
+#ifdef __WXGTK3__
+            tsize.IncBy(9, 0);
+#else
+            tsize.IncBy(4, 0);
+#endif // GTK3
+        }
+        else
+        {
+            // default height
+            tsize.y = GTKGetPreferredSize(m_widget).y;
+            // Add the margins we have previously set, but only the horizontal border
+            // as vertical one has been taken account at GTKGetPreferredSize().
+            // Also get other GTK+ margins.
+            tsize.IncBy( GTKGetEntryMargins(GetEntry()).x, 0);
+        }
+    }
+
+    //multiline
+    else
+    {
+        // add space for vertical scrollbar
+        if ( m_scrollBar[1] && !(m_windowStyle & wxTE_NO_VSCROLL) )
+            tsize.IncBy(GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[1])).x + 3, 0);
+
+        // height
+        tsize.y = cHeight;
+        if ( ylen <= 0 )
+        {
+            tsize.y = 1 + cHeight * wxMax(wxMin(GetNumberOfLines(), 10), 2);
+            // add space for horizontal scrollbar
+            if ( m_scrollBar[0] && (m_windowStyle & wxHSCROLL) )
+                tsize.IncBy(0, GTKGetPreferredSize(GTK_WIDGET(m_scrollBar[0])).y + 3);
+        }
+
+        if ( !HasFlag(wxBORDER_NONE) )
+        {
+            // hardcode borders, margins, etc
+            tsize.IncBy(5, 4);
+        }
+    }
+
+    // Perhaps the user wants something different from CharHeight, or ylen
+    // is used as the height of a multiline text.
+    if ( ylen > 0 )
+        tsize.IncBy(0, ylen - cHeight);
+
+    return tsize;
+}
+
 
 // ----------------------------------------------------------------------------
 // freeze/thaw
@@ -1819,12 +1961,10 @@ void wxTextCtrl::DoFreeze()
 {
     wxCHECK_RET(m_text != NULL, wxT("invalid text ctrl"));
 
-    wxWindow::DoFreeze();
+    GTKFreezeWidget(m_text);
 
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        GTKFreezeWidget(m_text);
-
         // removing buffer dramatically speeds up insertion:
         g_object_ref(m_buffer);
         GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
@@ -1865,12 +2005,9 @@ void wxTextCtrl::DoThaw()
                 GTK_TEXT_VIEW(m_text), m_showPositionOnThaw);
             m_showPositionOnThaw = NULL;
         }
-
-        // and thaw the window
-        GTKThawWidget(m_text);
     }
 
-    wxWindow::DoThaw();
+    GTKThawWidget(m_text);
 }
 
 // ----------------------------------------------------------------------------
@@ -1897,7 +2034,7 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
     gtk_text_view_get_iter_at_location(GTK_TEXT_VIEW(m_text), &end, x, y);
     if (!gtk_text_iter_has_tag(&end, tag))
     {
-        SetCursor(wxCursor(wxCURSOR_IBEAM));
+        SetCursor(wxCursor());
         return;
     }
 
@@ -1910,7 +2047,7 @@ void wxTextCtrl::OnUrlMouseEvent(wxMouseEvent& event)
         gtk_text_iter_forward_to_tag_toggle(&end, tag);
 
     // Native context menu is probably not desired on an URL.
-    // Consider making this dependant on ProcessEvent(wxTextUrlEvent) return value
+    // Consider making this dependent on ProcessEvent(wxTextUrlEvent) return value
     if(event.GetEventType() == wxEVT_RIGHT_DOWN)
         event.Skip(false);
 
@@ -1940,7 +2077,7 @@ bool wxTextCtrl::GTKProcessEvent(wxEvent& event) const
 wxVisualAttributes
 wxTextCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
-    return GetDefaultAttributesFromGTKWidget(gtk_entry_new, true);
+    return GetDefaultAttributesFromGTKWidget(gtk_entry_new(), true);
 }
 
 #endif // wxUSE_TEXTCTRL

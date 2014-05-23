@@ -2,7 +2,6 @@
 // Name:        src/gtk1/scrolbar.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -79,7 +78,7 @@ static void gtk_scrollbar_callback( GtkAdjustment *adjust,
     win->HandleWindowEvent( event );
 
 /*
-    wxCommandEvent cevent( wxEVT_COMMAND_SCROLLBAR_UPDATED, win->GetId() );
+    wxCommandEvent cevent( wxEVT_SCROLLBAR, win->GetId() );
     cevent.SetEventObject( win );
     win->ProcessEvent( cevent );
 */

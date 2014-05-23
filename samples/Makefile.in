@@ -9,3 +9,8 @@ all:
 
 clean:
 	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE) clean); done
+
+distclean:
+	@for d in $(SAMPLES_SUBDIRS); do (cd $$d && $(MAKE) distclean); done
+
+.PHONY: all clean distclean

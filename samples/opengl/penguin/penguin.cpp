@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by: Sandro Sigala
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -67,11 +66,11 @@ IMPLEMENT_APP(MyApp)
 // MyFrame
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_OPEN, MyFrame::OnMenuFileOpen)
     EVT_MENU(wxID_EXIT, MyFrame::OnMenuFileExit)
     EVT_MENU(wxID_HELP, MyFrame::OnMenuHelpAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // MyFrame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
@@ -87,7 +86,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     fileMenu->Append(wxID_EXIT, wxT("E&xit\tALT-X"));
     // Make the "Help" menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP, wxT("&About..."));
+    helpMenu->Append(wxID_HELP, wxT("&About"));
 
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(fileMenu, wxT("&File"));
@@ -124,7 +123,7 @@ void MyFrame::OnMenuFileExit( wxCommandEvent& WXUNUSED(event) )
     Close(true);
 }
 
-// Help|About... command
+// Help|About command
 void MyFrame::OnMenuHelpAbout( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageBox(wxT("OpenGL Penguin Sample (c) Robert Roebling, Sandro Sigala et al"));
@@ -134,12 +133,12 @@ void MyFrame::OnMenuHelpAbout( wxCommandEvent& WXUNUSED(event) )
 // TestGLCanvas
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
+wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
     EVT_PAINT(TestGLCanvas::OnPaint)
     EVT_ERASE_BACKGROUND(TestGLCanvas::OnEraseBackground)
     EVT_MOUSE_EVENTS(TestGLCanvas::OnMouse)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent,
                            wxWindowID id,
@@ -152,9 +151,6 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent,
 {
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext(this);
-
-    // Make the new context current (activate it for use) with this canvas.
-    SetCurrent(*m_glRC);
 
     m_gldata.initialized = false;
 
@@ -279,7 +275,7 @@ void TestGLCanvas::InitGL()
     static const GLfloat light1_color[4] = { 0.4f, 0.4f, 1.0f, 1.0f };
 
     /* remove back faces */
-    glDisable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
     /* speedups */
@@ -303,6 +299,9 @@ void TestGLCanvas::InitGL()
 
 void TestGLCanvas::ResetProjectionMode()
 {
+    if ( !IsShownOnScreen() )
+        return;
+
     // This is normally only necessary if there is more than one wxGLCanvas
     // or more than one wxGLContext in the application.
     SetCurrent(*m_glRC);

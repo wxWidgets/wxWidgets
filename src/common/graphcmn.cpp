@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -24,20 +23,12 @@
     #include "wx/icon.h"
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
+    #include "wx/math.h"
     #include "wx/region.h"
     #include "wx/log.h"
 #endif
 
 #include "wx/private/graphics.h"
-
-//-----------------------------------------------------------------------------
-// Local functions
-//-----------------------------------------------------------------------------
-
-static inline double DegToRad(double deg)
-{
-    return (deg * M_PI) / 180.0;
-}
 
 //-----------------------------------------------------------------------------
 
@@ -471,7 +462,7 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
         alpha = 360 + alpha;
     // TODO obtuse angles
 
-    alpha = DegToRad(alpha);
+    alpha = wxDegToRad(alpha);
 
     wxDouble dist = r / sin(alpha/2) * cos(alpha/2);
     // calculate tangential points
@@ -485,7 +476,7 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
     wxDouble a2 = v2.GetVectorAngle()-90;
 
     AddLineToPoint(t1.m_x,t1.m_y);
-    AddArc(c.m_x,c.m_y,r,DegToRad(a1),DegToRad(a2),true);
+    AddArc(c.m_x,c.m_y,r,wxDegToRad(a1),wxDegToRad(a2),true);
     AddLineToPoint(p2.m_x,p2.m_y);
 }
 
@@ -524,6 +515,11 @@ void wxGraphicsGradientStops::Add(const wxGraphicsGradientStop& stop)
     }
 }
 
+void * wxGraphicsBitmap::GetNativeBitmap() const
+{
+    return GetBitmapData()->GetNativeBitmap();
+}
+
 //-----------------------------------------------------------------------------
 // wxGraphicsContext Convenience Methods
 //-----------------------------------------------------------------------------
@@ -535,6 +531,7 @@ wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) :
     wxGraphicsObject(renderer),
       m_antialias(wxANTIALIAS_DEFAULT),
       m_composition(wxCOMPOSITION_OVER),
+      m_interpolation(wxINTERPOLATION_DEFAULT),
       m_enableOffset(false)
 {
 }
@@ -837,16 +834,31 @@ wxGraphicsContext::CreateRadialGradientBrush(
                           );
 }
 
-// sets the font
 wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col ) const
 {
     return GetRenderer()->CreateFont(font,col);
+}
+
+wxGraphicsFont
+wxGraphicsContext::CreateFont(double size,
+                              const wxString& facename,
+                              int flags,
+                              const wxColour& col) const
+{
+    return GetRenderer()->CreateFont(size, facename, flags, col);
 }
 
 wxGraphicsBitmap wxGraphicsContext::CreateBitmap( const wxBitmap& bmp ) const
 {
     return GetRenderer()->CreateBitmap(bmp);
 }
+
+#if wxUSE_IMAGE
+wxGraphicsBitmap wxGraphicsContext::CreateBitmapFromImage(const wxImage& image) const
+{
+    return GetRenderer()->CreateBitmapFromImage(image);
+}
+#endif // wxUSE_IMAGE
 
 wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h   ) const
 {
@@ -893,6 +905,13 @@ wxGraphicsContext* wxGraphicsContext::Create( wxWindow* window )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContext(window);
 }
+
+#if wxUSE_IMAGE
+/* static */ wxGraphicsContext* wxGraphicsContext::Create(wxImage& image)
+{
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromImage(image);
+}
+#endif // wxUSE_IMAGE
 
 wxGraphicsContext* wxGraphicsContext::Create()
 {

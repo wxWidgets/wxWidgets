@@ -2,9 +2,29 @@
 // Name:        docview.h
 // Purpose:     interface of various doc/view framework classes
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+    A vector of wxDocument pointers.
+
+    @since 2.9.5
+*/
+typedef wxVector<wxDocument*> wxDocVector;
+
+/**
+    A vector of wxView pointers.
+
+    @since 2.9.5
+*/
+typedef wxVector<wxView*> wxViewVector;
+
+/**
+    A vector of wxDocTemplate pointers.
+
+    @since 2.9.5
+*/
+typedef wxVector<wxDocTemplate*> wxDocTemplateVector;
 
 /**
     @class wxDocTemplate
@@ -393,6 +413,19 @@ public:
      */
     wxDocTemplate* FindTemplate(const wxClassInfo* classinfo);
 
+
+    /**
+        Search for the document corresponding to the given file.
+
+        @param path
+            Document file path.
+        @return
+            Pointer to a wxDocument, or @NULL if none found.
+
+        @since 2.9.5
+     */
+    wxDocument* FindDocumentByPath(const wxString& path) const;
+
     /**
         Closes the specified document.
 
@@ -524,15 +557,45 @@ public:
     virtual wxDocTemplate* FindTemplateForPath(const wxString& path);
 
     /**
+        Returns the view to apply a user command to.
+
+        This method tries to find the view that the user wants to interact
+        with. It returns the same view as GetCurrentDocument() if there is any
+        currently active view but falls back to the first view of the first
+        document if there is no active view.
+
+        @since 2.9.5
+     */
+    wxView* GetAnyUsableView() const;
+
+    /**
         Returns the document associated with the currently active view (if
         any).
     */
     wxDocument* GetCurrentDocument() const;
 
     /**
-        Returns the currently active view
+        Returns the currently active view.
+
+        This method can return @NULL if no view is currently active.
+
+        @see GetAnyUsableView()
     */
     virtual wxView* GetCurrentView() const;
+
+    /**
+        Returns a vector of wxDocument pointers.
+
+        @since 2.9.5
+    */
+    wxDocVector GetDocumentsVector() const;
+
+    /**
+        Returns a vector of wxDocTemplate pointers.
+
+        @since 2.9.5
+    */
+    wxDocTemplateVector GetTemplatesVector() const;
 
     /**
         Returns a reference to the list of documents.
@@ -564,24 +627,6 @@ public:
         Returns a reference to the list of associated templates.
     */
     wxList& GetTemplates();
-
-    /**
-        Create the frame used for print preview.
-
-        This method can be overridden if you need to change the behaviour or
-        appearance of the preview window. By default, a standard wxPreviewFrame
-        is created.
-
-        @since 2.9.1
-
-        @param preview The associated preview object.
-        @param parent The parent window for the frame.
-        @param title The suggested title for the print preview frame.
-        @return A new print preview frame, must not return @NULL.
-    */
-    virtual wxPreviewFrame* CreatePreviewFrame(wxPrintPreviewBase* preview,
-                                               wxWindow* parent,
-                                               const wxString& title);
 
     /**
         Initializes data; currently just calls OnCreateFileHistory().
@@ -747,6 +792,55 @@ public:
     */
     void SetMaxDocsOpen(int n);
 
+
+protected:
+    /**
+        Called when a file selected from the MRU list doesn't exist any more.
+
+        The default behaviour is to remove the file from the MRU (most recently
+        used) files list and the corresponding menu and notify the user about
+        it but this method can be overridden to customize it.
+
+        For example, an application may want to just give an error about the
+        missing file @a filename but not remove it from the file history. Or it
+        could ask the user whether the file should be kept or removed.
+
+        Notice that this method is called only if the file selected by user
+        from the MRU files in the menu doesn't exist, but not if opening it
+        failed for any other reason because in the latter case the default
+        behaviour of removing the file from the MRU list is inappropriate.
+        If you still want to do it, you would need to do it by calling
+        RemoveFileFromHistory() explicitly in the part of the file opening code
+        that may fail.
+
+        @since 2.9.3
+
+        @param n
+            The index of the file in the MRU list, it can be passed to
+            RemoveFileFromHistory() to remove this file from the list.
+        @param filename
+            The full name of the file.
+     */
+    virtual void OnMRUFileNotExist(unsigned n, const wxString& filename);
+
+    /**
+        Create the frame used for print preview.
+
+        This method can be overridden if you need to change the behaviour or
+        appearance of the preview window. By default, a standard wxPreviewFrame
+        is created.
+
+        @since 2.9.1
+
+        @param preview The associated preview object.
+        @param parent The parent window for the frame.
+        @param title The suggested title for the print preview frame.
+        @return A new print preview frame, must not return @NULL.
+    */
+    virtual wxPreviewFrame* CreatePreviewFrame(wxPrintPreviewBase* preview,
+                                               wxWindow* parent,
+                                               const wxString& title);
+
     /**
         The currently active view.
     */
@@ -769,18 +863,15 @@ public:
     wxFileHistory* m_fileHistory;
 
     /**
-        Stores the flags passed to the constructor.
-    */
-    long m_flags;
-
-    /**
         The directory last selected by the user when opening a file.
     */
-    wxFileHistory* m_fileHistory;
+    wxString m_lastDirectory;
 
     /**
         Stores the maximum number of documents that can be opened before
-        existing documents are closed. By default, this is 10,000.
+        existing documents are closed.
+
+        By default, this is @c INT_MAX i.e. practically unlimited.
     */
     int m_maxDocsOpen;
 };
@@ -985,6 +1076,13 @@ public:
     and cooperates with the wxView, wxDocument, wxDocManager and wxDocTemplate
     classes.
 
+    Notice that this class handles ::wxEVT_ACTIVATE event and activates the
+    child view on receiving it. Don't intercept this event unless you want to
+    prevent from this happening.
+
+    The same remark applies to ::wxEVT_CLOSE_WINDOW, as wxDocParentFrame the
+    frame handles this event by trying to close the associated view.
+
     @library{wxcore}
     @category{docview}
 
@@ -1019,18 +1117,6 @@ public:
     wxView* GetView() const;
 
     /**
-        Sets the currently active view to be the frame's view. You may need to
-        override (but still call) this function in order to set the keyboard
-        focus for your subwindow.
-    */
-    void OnActivate(wxActivateEvent& event);
-
-    /**
-        Closes and deletes the current view and document.
-    */
-    void OnCloseWindow(wxCloseEvent& event);
-
-    /**
         Sets the document for this frame.
     */
     void SetDocument(wxDocument* doc);
@@ -1062,6 +1148,12 @@ public:
 
     It cooperates with the wxView, wxDocument, wxDocManager and wxDocTemplate
     classes.
+
+    Notice that this class processes ::wxEVT_CLOSE_WINDOW event and tries to
+    close all open views from its handler. If all the views can be closed, i.e.
+    if none of them contains unsaved changes or the user decides to not save
+    them, the window is destroyed. Don't intercept this event in your code
+    unless you want to replace this logic.
 
     @library{wxcore}
     @category{docview}
@@ -1102,26 +1194,6 @@ public:
         Returns the associated document manager object.
     */
     wxDocManager* GetDocumentManager() const;
-
-    /**
-        Deletes all views and documents. If no user input cancelled the
-        operation, the frame will be destroyed and the application will exit.
-        Since understanding how document/view clean-up takes place can be
-        difficult, the implementation of this function is shown below:
-
-        @code
-        void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
-        {
-            if (m_docManager->Clear(!event.CanVeto()))
-            {
-                this->Destroy();
-            }
-            else
-                event.Veto();
-        }
-        @endcode
-    */
-    void OnCloseWindow(wxCloseEvent& event);
 };
 
 
@@ -1130,8 +1202,24 @@ public:
     @class wxDocument
 
     The document class can be used to model an application's file-based data.
+
     It is part of the document/view framework supported by wxWidgets, and
     cooperates with the wxView, wxDocTemplate and wxDocManager classes.
+
+    A normal document is the one created without parent document and is
+    associated with a disk file. Since version 2.9.2 wxWidgets also supports a
+    special kind of documents called <em>child documents</em> which are virtual
+    in the sense that they do not correspond to a file but rather to a part of
+    their parent document. Because of this, the child documents can't be
+    created directly by user but can only be created by the parent document
+    (usually when it's being created itself). They also can't be independently
+    saved. A child document has its own view with the corresponding window.
+    This view can be closed by user but, importantly, is also automatically
+    closed when its parent document is closed. Thus, child documents may be
+    convenient for creating additional windows which need to be closed when the
+    main document is. The docview sample demonstrates this use of child
+    documents by creating a child document containing the information about the
+    parameters of the image opened in the main document.
 
     @library{wxcore}
     @category{docview}
@@ -1144,8 +1232,14 @@ public:
     /**
         Constructor. Define your own default constructor to initialize
         application-specific data.
+
+        @param parent
+            Specifying a non-@c NULL parent document here makes this document a
+            special <em>child document</em>, see their description in the class
+            documentation. Notice that this parameter exists but is ignored in
+            wxWidgets versions prior to 2.9.1.
     */
-    wxDocument(wxDocument* parent = 0);
+    wxDocument(wxDocument* parent = NULL);
 
     /**
         Destructor. Removes itself from the document manager.
@@ -1173,6 +1267,29 @@ public:
         @since 2.9.0
      */
     bool AlreadySaved() const;
+
+    /**
+        Activate the first view of the document if any.
+
+        This function simply calls the Raise() method of the frame of the first
+        view. You may need to override the Raise() method to get the desired
+        effect if you are not using a standard wxFrame for your view. For
+        instance, if your document is inside its own notebook tab you could
+        implement Raise() like this:
+
+        @code
+        void MyNotebookPage::Raise()
+        {
+            wxNotebook* notebook = wxStaticCast(GetParent(), wxNotebook);
+            notebook->SetSelection(notebook->FindPage(this));
+        }
+        @endcode
+
+        @see GetFirstView()
+
+        @since 2.9.5
+     */
+    void Activate() const;
 
     /**
         Closes the document, by calling OnSaveModified() and then (if this
@@ -1268,6 +1385,13 @@ public:
     */
     virtual wxString GetUserReadableName() const;
 
+    /**
+        Returns a vector of wxView pointers.
+
+        @since 2.9.5
+    */
+    wxViewVector GetViewsVector() const;
+
     //@{
     /**
         Returns the list whose elements are the views on the document.
@@ -1277,6 +1401,18 @@ public:
     wxList& GetViews();
     const wxList& GetViews() const;
     //@}
+
+    /**
+        Returns true if this document is a child document corresponding to a
+        part of the parent document and not a disk file as usual.
+
+        This method can be used to check whether file-related operations make
+        sense for this document as they only apply to top-level documents and
+        not child ones.
+
+        @since 2.9.2
+     */
+    bool IsChildDocument() const;
 
     /**
         Returns @true if the document has been modified since the last save,

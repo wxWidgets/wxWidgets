@@ -3,7 +3,6 @@
 // Purpose:     generic implementation of wxGenericNotificationMessage
 // Author:      Vadim Zeitlin
 // Created:     2007-11-24
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

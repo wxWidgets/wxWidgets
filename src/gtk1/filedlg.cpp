@@ -2,7 +2,6 @@
 // Name:        src/gtk1/filedlg.cpp
 // Purpose:     native implementation of wxFileDialog
 // Author:      Robert Roebling, Zbigniew Zagorski, Mart Raudsepp
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, 2004 Zbigniew Zagorski, 2005 Mart Raudsepp
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -13,6 +12,7 @@
 #if wxUSE_FILEDLG
 
 #include "wx/filedlg.h"
+#include "wx/modalhook.h"
 
 
 //-----------------------------------------------------------------------------
@@ -49,6 +49,8 @@ void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 
 int wxFileDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
     return wxGenericFileDialog::ShowModal();
 }
 

@@ -4,7 +4,6 @@
 // Author:      Jethro Grassie / Kevin Ollivier
 // Modified by:
 // Created:     2004-4-16
-// RCS-ID:      $Id$
 // Copyright:   (c) Jethro Grassie / Kevin Ollivier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@ class WXDLLIMPEXP_CORE wxWebKitCtrl : public wxControl
 public:
     DECLARE_DYNAMIC_CLASS(wxWebKitCtrl)
 
-    wxWebKitCtrl() {};
+    wxWebKitCtrl() {}
     wxWebKitCtrl(wxWindow *parent,
                     wxWindowID winID,
                     const wxString& strURL,
@@ -42,7 +41,7 @@ public:
                     const wxString& name = wxWebKitCtrlNameStr)
     {
         Create(parent, winID, strURL, pos, size, style, validator, name);
-    };
+    }
     bool Create(wxWindow *parent,
                 wxWindowID winID,
                 const wxString& strURL,
@@ -232,7 +231,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNew
             wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_NEW_WINDOW, \
                             wxID_ANY, \
                             wxID_ANY, \
-                            wxWebKitNewWindowEventFunction( func ), \
+                            wxWebKitNewWindowEventHandler( func ), \
                             NULL ),
 #endif // wxUSE_WEBKIT
 

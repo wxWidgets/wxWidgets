@@ -3,7 +3,6 @@
 // Purpose:     MSW/GTK compatible notebook (a.k.a. property sheet)
 // Author:      Robert Roebling
 // Modified by: Vadim Zeitlin for Windows version
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -96,7 +95,7 @@ public:
                   wxNotebookPage *pPage,
                   const wxString& strText,
                   bool bSelect = false,
-                  int imageId = -1);
+                  int imageId = NO_IMAGE);
 
     // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
     // style.

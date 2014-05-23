@@ -4,7 +4,6 @@
 // Author:      Robin Dunn
 // Modified by:
 // Created:     28-Mar-2003
-// RCS-ID:      $Id$
 // Copyright:   (c) Robin Dunn
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,9 +37,10 @@
 #endif
 
 #include "wx/dcclient.h"
+#include "wx/graphics.h"
 #include "wx/image.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -77,7 +77,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 
@@ -91,8 +91,9 @@ private:
     void OnShowShaped(wxCommandEvent& event);
     void OnShowTransparent(wxCommandEvent& event);
     void OnShowEffect(wxCommandEvent& event);
+    void OnExit(wxCommandEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to the frame showing the
@@ -113,12 +114,21 @@ public:
     void OnPaint(wxPaintEvent& evt);
 
 private:
-    bool     m_hasShape;
+    enum ShapeKind
+    {
+        Shape_None,
+        Shape_Star,
+#if wxUSE_GRAPHICS_CONTEXT
+        Shape_Circle,
+#endif // wxUSE_GRAPHICS_CONTEXT
+        Shape_Max
+    } m_shapeKind;
+
     wxBitmap m_bmp;
     wxPoint  m_delta;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame type: this is going to the frame showing the
@@ -127,26 +137,15 @@ private:
 class SeeThroughFrame : public wxFrame
 {
 public:
-    // ctor(s)
-    SeeThroughFrame();
+    void Create();
 
+private:
     // event handlers (these functions should _not_ be virtual)
     void OnDoubleClick(wxMouseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
 
-private:
-    enum State
-    {
-        STATE_SEETHROUGH,
-        STATE_TRANSPARENT,
-        STATE_OPAQUE,
-        STATE_MAX
-    };
-
-    State m_currentState;
-
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class EffectFrame : public wxFrame
@@ -240,11 +239,12 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MainFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MainFrame, wxFrame)
     EVT_MENU(Show_Shaped, MainFrame::OnShowShaped)
     EVT_MENU(Show_Transparent, MainFrame::OnShowTransparent)
     EVT_MENU_RANGE(Show_Effect_First, Show_Effect_Last, MainFrame::OnShowEffect)
-END_EVENT_TABLE()
+    EVT_MENU(wxID_EXIT, MainFrame::OnExit)
+wxEND_EVENT_TABLE()
 
 MainFrame::MainFrame()
          : wxFrame(NULL, wxID_ANY, "wxWidgets Shaped Sample",
@@ -278,8 +278,14 @@ void MainFrame::OnShowShaped(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
 {
-    SeeThroughFrame *seeThroughFrame = new SeeThroughFrame();
-    seeThroughFrame->Show(true);
+    if (IsTransparentBackgroundSupported())
+    {
+        SeeThroughFrame *seeThroughFrame = new SeeThroughFrame;
+        seeThroughFrame->Create();
+        seeThroughFrame->Show(true);
+    }
+    else
+        wxMessageBox(wxS("transparent window requires a composited screen"));
 }
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)
@@ -350,18 +356,23 @@ void MainFrame::OnShowEffect(wxCommandEvent& event)
     new EffectFrame(this,  eff, 1000);
 }
 
+void MainFrame::OnExit(wxCommandEvent& WXUNUSED(event))
+{
+    Close();
+}
+
 // ----------------------------------------------------------------------------
 // shaped frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ShapedFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(ShapedFrame, wxFrame)
     EVT_LEFT_DCLICK(ShapedFrame::OnDoubleClick)
     EVT_LEFT_DOWN(ShapedFrame::OnLeftDown)
     EVT_LEFT_UP(ShapedFrame::OnLeftUp)
     EVT_MOTION(ShapedFrame::OnMouseMove)
     EVT_RIGHT_UP(ShapedFrame::OnExit)
     EVT_PAINT(ShapedFrame::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 
 // frame constructor
@@ -375,29 +386,46 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
                   | wxSTAY_ON_TOP
             )
 {
-    m_hasShape = false;
+    m_shapeKind = Shape_None;
     m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-    SetToolTip(wxT("Right-click to close"));
+    SetToolTip(wxT("Right-click to close, double click to cycle shape"));
     SetWindowShape();
 }
 
 void ShapedFrame::SetWindowShape()
 {
-    wxRegion region(m_bmp, *wxWHITE);
-    m_hasShape = SetShape(region);
+    switch ( m_shapeKind )
+    {
+        case Shape_None:
+            SetShape(wxRegion());
+            break;
+
+        case Shape_Star:
+            SetShape(wxRegion(m_bmp, *wxWHITE));
+            break;
+
+#if wxUSE_GRAPHICS_CONTEXT
+        case Shape_Circle:
+            {
+                wxGraphicsPath
+                    path = wxGraphicsRenderer::GetDefaultRenderer()->CreatePath();
+                path.AddCircle(m_bmp.GetWidth()/2, m_bmp.GetHeight()/2, 30);
+                SetShape(path);
+            }
+            break;
+#endif // wxUSE_GRAPHICS_CONTEXT
+
+        case Shape_Max:
+            wxFAIL_MSG( "invalid shape kind" );
+            break;
+    }
 }
 
 void ShapedFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
 {
-    if (m_hasShape)
-    {
-        wxRegion region;
-        SetShape(region);
-        m_hasShape = false;
-    }
-    else
-        SetWindowShape();
+    m_shapeKind = static_cast<ShapeKind>((m_shapeKind + 1) % Shape_Max);
+    SetWindowShape();
 }
 
 void ShapedFrame::OnLeftDown(wxMouseEvent& evt)
@@ -443,21 +471,20 @@ void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 // see-through frame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(SeeThroughFrame, wxFrame)
     EVT_LEFT_DCLICK(SeeThroughFrame::OnDoubleClick)
     EVT_PAINT(SeeThroughFrame::OnPaint)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
-SeeThroughFrame::SeeThroughFrame()
-       : wxFrame(NULL, wxID_ANY, "Transparency test: double click here",
-                  wxPoint(100, 30), wxSize(300, 300),
-                  wxDEFAULT_FRAME_STYLE |
-                  wxFULL_REPAINT_ON_RESIZE |
-                  wxSTAY_ON_TOP),
-         m_currentState(STATE_SEETHROUGH)
+void SeeThroughFrame::Create()
 {
-    SetBackgroundColour(wxColour(255, 255, 255, 255));
     SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+    wxFrame::Create(NULL, wxID_ANY, "Transparency test: double click here",
+           wxPoint(100, 30), wxSize(300, 300),
+           wxDEFAULT_FRAME_STYLE |
+           wxFULL_REPAINT_ON_RESIZE |
+           wxSTAY_ON_TOP);
+    SetBackgroundColour(*wxWHITE);
 }
 
 // Paints a grid of varying hue and alpha
@@ -491,34 +518,11 @@ void SeeThroughFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
     }
 }
 
-// Switches between colour and transparent background on doubleclick
 void SeeThroughFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
 {
-    m_currentState = (State)((m_currentState + 1) % STATE_MAX);
-
-    switch ( m_currentState )
-    {
-        case STATE_OPAQUE:
-            SetBackgroundStyle(wxBG_STYLE_COLOUR);
-            SetTransparent(255);
-            SetTitle("Opaque");
-            break;
-
-        case STATE_SEETHROUGH:
-            SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
-            SetTransparent(255);
-            SetTitle("See through");
-            break;
-
-        case STATE_TRANSPARENT:
-            SetBackgroundStyle(wxBG_STYLE_COLOUR);
-            SetTransparent(128);
-            SetTitle("Semi-transparent");
-            break;
-
-        case STATE_MAX:
-            wxFAIL_MSG( "unreachable" );
-    }
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
+    SetTransparent(255);
+    SetTitle("Opaque");
 
     Refresh();
 }

@@ -4,7 +4,6 @@
 // Author:      Robert Roebling
 // Modified by: Francesco Montorsi
 // Created:     1998
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998-2005 Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,6 +37,8 @@ public:
     wxBitmap  my_horse_ico16;
     wxBitmap  my_horse_ico;
     wxBitmap  my_horse_cur;
+    wxBitmap  my_png_from_res,
+              my_png_from_mem;
 
     wxBitmap  my_smile_xbm;
     wxBitmap  my_square;
@@ -67,5 +68,5 @@ private:
     wxBitmap m_bmpSmileXpm;
     wxIcon   m_iconSmileXpm;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };

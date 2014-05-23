@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -114,28 +113,6 @@
     #define DFCS_HOT 0x1000
 #endif
 
-// When we're using GDI+, the DC might have transforms applied to it,
-// but the renderer APIs don't respect them. So we need to apply
-// the transforms to the rect ourselves.
-inline
-wxRect applyGDIPlusTransformsToRect(wxDC& dc, const wxRect& r)
-{
-    wxRect rect = r;
-#if wxUSE_GRAPHICS_CONTEXT
-    wxGCDC* gcdc = dynamic_cast<wxGCDC*>(&dc);
-    if (gcdc) 
-    {
-        double xtrans = 0;
-        double ytrans = 0;
-        wxGraphicsContext* gc = gcdc->GetGraphicsContext();
-        gc->GetTransform().TransformPoint(&xtrans, &ytrans);
-        rect.x = rect.x + (int)xtrans;
-        rect.y = rect.y + (int)ytrans;
-    }
-#endif
-    return rect;
-}
-
 // ----------------------------------------------------------------------------
 // methods common to wxRendererMSW and wxRendererXP
 // ----------------------------------------------------------------------------
@@ -156,6 +133,26 @@ public:
                                 wxDC& dc,
                                 const wxRect& rect,
                                 int flags = 0);
+
+    void DrawChoice(wxWindow* win,
+                     wxDC& dc,
+                     const wxRect& rect,
+                     int flags = 0);
+
+    void DrawComboBox(wxWindow* win,
+                       wxDC& dc,
+                       const wxRect& rect,
+                       int flags = 0);
+
+    virtual void DrawComboBoxDropButton(wxWindow *win,
+                                         wxDC& dc,
+                                         const wxRect& rect,
+                                         int flags = 0) = 0;
+
+    virtual void DrawTextCtrl(wxWindow* win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) = 0;
 };
 
 // ----------------------------------------------------------------------------
@@ -186,16 +183,6 @@ public:
                                 wxDC& dc,
                                 const wxRect& rect,
                                 int flags = 0);
-
-    virtual void DrawChoice(wxWindow* win,
-                            wxDC& dc,
-                            const wxRect& rect,
-                            int flags = 0);
-
-    virtual void DrawComboBox(wxWindow* win,
-                              wxDC& dc,
-                              const wxRect& rect,
-                              int flags = 0);
 
     virtual void DrawTextCtrl(wxWindow* win,
                               wxDC& dc,
@@ -301,6 +288,11 @@ public:
             m_rendererNative.DrawPushButton(win, dc, rect, flags);
     }
 
+    virtual void DrawTextCtrl(wxWindow* win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
+
     virtual void DrawRadioBitmap(wxWindow *win,
                                  wxDC& dc,
                                  const wxRect& rect,
@@ -386,6 +378,31 @@ void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
         DrawFocusRect( win, dc, rect, flags );
 }
 
+void wxRendererMSWBase::DrawChoice(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags)
+{
+    DrawComboBox(win, dc, rect, flags);
+}
+
+void wxRendererMSWBase::DrawComboBox(wxWindow* win,
+                                     wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags)
+{
+    // Draw the main part of the control same as TextCtrl
+    DrawTextCtrl(win, dc, rect, flags);
+
+    // Draw the button inside the border, on the right side
+    wxRect br(rect);
+    br.height -= 2;
+    br.x += br.width - br.height - 1;
+    br.width = br.height;
+    br.y += 1;
+
+    DrawComboBoxDropButton(win, dc, br, flags);
+}
 
 // ============================================================================
 // wxRendererNative and wxRendererMSW implementation
@@ -417,7 +434,9 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
                                       const wxRect& rect,
                                       int flags)
 {
-    wxRect adjustedRect = applyGDIPlusTransformsToRect(dc, rect);
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
     
     RECT r;
     wxCopyRectToRECT(adjustedRect, r);
@@ -439,7 +458,9 @@ wxRendererMSW::DoDrawFrameControl(UINT type,
                                   const wxRect& rect,
                                   int flags)
 {
-    wxRect adjustedRect = applyGDIPlusTransformsToRect(dc, rect);
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
 
     RECT r;
     wxCopyRectToRECT(adjustedRect, r);
@@ -455,6 +476,11 @@ wxRendererMSW::DoDrawFrameControl(UINT type,
         style |= DFCS_PUSHED;
     if ( flags & wxCONTROL_CURRENT )
         style |= DFCS_HOT;
+    if ( flags & wxCONTROL_UNDETERMINED )
+        // Using DFCS_BUTTON3STATE here doesn't work (as might be expected),
+        // use the following two styles to get the same look of a check box
+        // in the undetermined state.
+        style |= DFCS_INACTIVE | DFCS_CHECKED;
 
     ::DrawFrameControl(GetHdcOf(dc.GetTempHDC()), &r, type, style);
 }
@@ -552,65 +578,23 @@ int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
 }
 
 // Uses the theme to draw the border and fill for something like a wxTextCtrl
-void wxRendererMSW::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+void wxRendererMSW::DrawTextCtrl(wxWindow* WXUNUSED(win),
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int WXUNUSED(flags))
 {
     wxColour fill;
     wxColour bdr;
-    COLORREF cref;
-
-#if wxUSE_UXTHEME
-    wxUxThemeHandle hTheme(win, L"EDIT");
-    if (hTheme)
-    {
-        wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
-                                              ETS_NORMAL, TMT_FILLCOLOR, &cref);
-        fill = wxRGBToColour(cref);
-
-        int etsState;
-        if ( flags & wxCONTROL_DISABLED )
-            etsState = ETS_DISABLED;
-        else
-            etsState = ETS_NORMAL;
-
-        wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
-                                              etsState, TMT_BORDERCOLOR, &cref);
-        bdr = wxRGBToColour(cref);
-    }
-    else
-#endif
     {
         fill = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
         bdr = *wxBLACK;
     }
 
-    dc.SetPen( bdr );
-    dc.SetBrush( fill );
+    dc.SetPen(bdr);
+    dc.SetBrush(fill);
     dc.DrawRectangle(rect);
 }
 
-
-// Draw the equivalent of a wxComboBox
-void wxRendererMSW::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
-{
-    // Draw the main part of the control same as TextCtrl
-    DrawTextCtrl(win, dc, rect, flags);
-
-    // Draw the button inside the border, on the right side
-    wxRect br(rect);
-    br.height -= 2;
-    br.x += br.width - br.height - 1;
-    br.width = br.height;
-    br.y += 1;
-
-    DrawComboBoxDropButton(win, dc, br, flags);
-}
-
-
-void wxRendererMSW::DrawChoice(wxWindow* win, wxDC& dc,
-                           const wxRect& rect, int flags)
-{
-    DrawComboBox(win, dc, rect, flags);
-}
 
 // ============================================================================
 // wxRendererXP implementation
@@ -642,7 +626,9 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
         return;
     }
 
-    wxRect adjustedRect = applyGDIPlusTransformsToRect(dc, rect);
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
 
     RECT r;
     wxCopyRectToRECT(adjustedRect, r);
@@ -683,7 +669,9 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
         return m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
     }
 
-    wxRect adjustedRect = applyGDIPlusTransformsToRect(dc, rect);
+    wxCHECK_MSG( dc.GetImpl(), -1, wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
 
     RECT r;
     wxCopyRectToRECT(adjustedRect, r);
@@ -727,7 +715,9 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
         return;
     }
 
-    wxRect adjustedRect = applyGDIPlusTransformsToRect(dc, rect);
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
 
     RECT r;
     wxCopyRectToRECT(adjustedRect, r);
@@ -767,7 +757,9 @@ wxRendererXP::DoDrawButtonLike(HTHEME htheme,
                                const wxRect& rect,
                                int flags)
 {
-    wxRect adjustedRect = applyGDIPlusTransformsToRect(dc, rect);
+    wxCHECK_RET( dc.GetImpl(), wxT("Invalid wxDC") );
+
+    wxRect adjustedRect = dc.GetImpl()->MSWApplyGDIPlusTransform(rect);
 
     RECT r;
     wxCopyRectToRECT(adjustedRect, r);
@@ -858,6 +850,42 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
     }
 
     DoDrawButtonLike(hTheme, part, dc, rect, flags);
+}
+
+// Uses the theme to draw the border and fill for something like a wxTextCtrl
+void wxRendererXP::DrawTextCtrl(wxWindow* win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags)
+{
+    wxUxThemeHandle hTheme(win, L"EDIT");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawTextCtrl(win,dc,rect,flags);
+        return;
+    }
+
+    wxColour fill;
+    wxColour bdr;
+    COLORREF cref;
+
+    wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
+                                          ETS_NORMAL, TMT_FILLCOLOR, &cref);
+    fill = wxRGBToColour(cref);
+
+    int etsState;
+    if ( flags & wxCONTROL_DISABLED )
+        etsState = ETS_DISABLED;
+    else
+        etsState = ETS_NORMAL;
+
+    wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
+                                              etsState, TMT_BORDERCOLOR, &cref);
+    bdr = wxRGBToColour(cref);
+
+    dc.SetPen( bdr );
+    dc.SetBrush( fill );
+    dc.DrawRectangle(rect);
 }
 
 // ----------------------------------------------------------------------------

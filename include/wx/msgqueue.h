@@ -3,7 +3,6 @@
 // Purpose:     Message queues for inter-thread communication
 // Author:      Evgeniy Tarassov
 // Created:     2007-10-31
-// RCS-ID:      $Id$
 // Copyright:   (C) 2007 TT-Solutions SARL
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

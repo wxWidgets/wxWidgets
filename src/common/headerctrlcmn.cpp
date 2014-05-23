@@ -3,7 +3,6 @@
 // Purpose:     implementation of wxHeaderCtrlBase
 // Author:      Vadim Zeitlin
 // Created:     2008-12-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,6 +30,7 @@
 
 #include "wx/headerctrl.h"
 #include "wx/rearrangectrl.h"
+#include "wx/renderer.h"
 
 namespace
 {
@@ -107,6 +107,21 @@ void wxHeaderCtrlBase::SetColumnCount(unsigned int count)
     DoSetCount(count);
 }
 
+int wxHeaderCtrlBase::GetColumnTitleWidth(const wxHeaderColumn& col)
+{
+    int w = wxWindowBase::GetTextExtent(col.GetTitle()).x;
+
+    // add some margin:
+    w += wxRendererNative::Get().GetHeaderButtonMargin(this);
+
+    // if a bitmap is used, add space for it and 2px border:
+    wxBitmap bmp = col.GetBitmap();
+    if ( bmp.IsOk() )
+        w += bmp.GetWidth() + 2;
+
+    return w;
+}
+
 // ----------------------------------------------------------------------------
 // wxHeaderCtrlBase event handling
 // ----------------------------------------------------------------------------
@@ -122,8 +137,7 @@ void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
         return;
     }
 
-    int w = wxWindowBase::GetTextExtent(column.GetTitle()).x;
-    w += 4*GetCharWidth(); // add some arbitrary margins around text
+    int w = GetColumnTitleWidth(column);
 
     if ( !UpdateColumnWidthToFit(col, w) )
         event.Skip();
@@ -204,15 +218,10 @@ unsigned int wxHeaderCtrlBase::GetColumnPos(unsigned int idx) const
     wxCHECK_MSG( idx < count, wxNO_COLUMN, "invalid index" );
 
     const wxArrayInt order = GetColumnsOrder();
-    for ( unsigned n = 0; n < count; n++ )
-    {
-        if ( (unsigned)order[n] == idx )
-            return n;
-    }
+    int pos = order.Index(idx);
+    wxCHECK_MSG( pos != wxNOT_FOUND, wxNO_COLUMN, "column unexpectedly not displayed at all" );
 
-    wxFAIL_MSG( "column unexpectedly not displayed at all" );
-
-    return wxNO_COLUMN;
+    return (unsigned int)pos;
 }
 
 /* static */
@@ -220,31 +229,14 @@ void wxHeaderCtrlBase::MoveColumnInOrderArray(wxArrayInt& order,
                                               unsigned int idx,
                                               unsigned int pos)
 {
-    const unsigned count = order.size();
+    int posOld = order.Index(idx);
+    wxASSERT_MSG( posOld != wxNOT_FOUND, "invalid index" );
 
-    wxArrayInt orderNew;
-    orderNew.reserve(count);
-    for ( unsigned n = 0; ; n++ )
+    if ( pos != (unsigned int)posOld )
     {
-        // NB: order of checks is important for this to work when the new
-        //     column position is the same as the old one
-
-        // insert the column at its new position
-        if ( orderNew.size() == pos )
-            orderNew.push_back(idx);
-
-        if ( n == count )
-            break;
-
-        // delete the column from its old position
-        const unsigned idxOld = order[n];
-        if ( idxOld == idx )
-            continue;
-
-        orderNew.push_back(idxOld);
+        order.RemoveAt(posOld);
+        order.Insert(idx, pos);
     }
-
-    order.swap(orderNew);
 }
 
 void
@@ -443,7 +435,7 @@ void wxHeaderCtrlSimple::DoShowSortIndicator(unsigned int idx, bool ascending)
 {
     RemoveSortIndicator();
 
-    m_cols[idx].SetAsSortKey(ascending);
+    m_cols[idx].SetSortOrder(ascending);
     m_sortKey = idx;
 
     UpdateColumn(idx);
@@ -480,23 +472,23 @@ wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
 
 IMPLEMENT_DYNAMIC_CLASS(wxHeaderCtrlEvent, wxNotifyEvent)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_CLICK, wxHeaderCtrlEvent);
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_RIGHT_CLICK, wxHeaderCtrlEvent);
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_MIDDLE_CLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_CLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_RIGHT_CLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_MIDDLE_CLICK, wxHeaderCtrlEvent);
 
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_DCLICK, wxHeaderCtrlEvent);
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_RIGHT_DCLICK, wxHeaderCtrlEvent);
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_MIDDLE_DCLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_DCLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_RIGHT_DCLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_MIDDLE_DCLICK, wxHeaderCtrlEvent);
 
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_SEPARATOR_DCLICK, wxHeaderCtrlEvent);
 
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_BEGIN_RESIZE, wxHeaderCtrlEvent);
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_RESIZING, wxHeaderCtrlEvent);
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_END_RESIZE, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_BEGIN_RESIZE, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_RESIZING, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_END_RESIZE, wxHeaderCtrlEvent);
 
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_BEGIN_REORDER, wxHeaderCtrlEvent);
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_END_REORDER, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_BEGIN_REORDER, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_END_REORDER, wxHeaderCtrlEvent);
 
-wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_HEADER_DRAGGING_CANCELLED, wxHeaderCtrlEvent);
 
 #endif // wxUSE_HEADERCTRL

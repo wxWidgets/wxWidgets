@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -42,9 +41,10 @@
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/metrics.h"
 #include "wx/msw/private/msgdlg.h"
+#include "wx/modalhook.h"
+#include "wx/fontutil.h"
 
 #if wxUSE_MSGBOX_HOOK
-    #include "wx/fontutil.h"
     #include "wx/textbuf.h"
     #include "wx/display.h"
 #endif
@@ -52,6 +52,12 @@
 // For MB_TASKMODAL
 #ifdef __WXWINCE__
     #include "wx/msw/wince/missing.h"
+#endif
+
+// Interestingly, this symbol currently seems to be absent from Platform SDK
+// headers but it is documented at MSDN.
+#ifndef TDF_SIZE_TO_CONTENT
+    #define TDF_SIZE_TO_CONTENT 0x1000000
 #endif
 
 using namespace wxMSWMessageDialog;
@@ -265,7 +271,7 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     HWND hwndEdit = ::CreateWindow
                       (
                         wxT("EDIT"),
-                        wxTextBuffer::Translate(text).wx_str(),
+                        wxTextBuffer::Translate(text).t_str(),
                         WS_CHILD | WS_VSCROLL | WS_VISIBLE |
                         ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL,
                         rc.left, rc.top,
@@ -367,7 +373,7 @@ void wxMessageDialog::AdjustButtonLabels()
         if ( widthNeeded > wBtnNew )
             wBtnNew = widthNeeded;
 
-        ::SetWindowText(hwndBtn, label.wx_str());
+        ::SetWindowText(hwndBtn, label.t_str());
     }
 
     if ( wBtnNew <= wBtnOld )
@@ -454,12 +460,16 @@ int wxMessageDialog::ShowMessageBox()
 #if wxUSE_INTL
     // native message box always uses the current user locale but the program
     // may be using a different one and in this case we need to manually
-    // translate the button labels to avoid mismatch between the language of
-    // the message box text and its buttons
+    // translate the default button labels (if they're non default we have no
+    // way to translate them and so we must assume they were already
+    // translated) to avoid mismatch between the language of the message box
+    // text and its buttons
     wxLocale * const loc = wxGetLocale();
     if ( loc && loc->GetLanguage() != wxLocale::GetSystemLanguage() )
     {
-        if ( m_dialogStyle & wxYES_NO )
+        if ( m_dialogStyle & wxYES_NO &&
+                (GetCustomYesLabel().empty() && GetCustomNoLabel().empty()) )
+
         {
             // use the strings with mnemonics here as the native message box
             // does
@@ -475,7 +485,8 @@ int wxMessageDialog::ShowMessageBox()
         // native message box (which probably doesn't use them because
         // Enter/Esc keys can be already used to dismiss the message box
         // using keyboard)
-        SetOKCancelLabels(_("OK"), _("Cancel"));
+        if ( GetCustomOKLabel().empty() && GetCustomCancelLabel().empty() )
+            SetOKCancelLabels(_("OK"), _("Cancel"));
     }
 #endif // wxUSE_INTL
 
@@ -509,6 +520,11 @@ int wxMessageDialog::ShowMessageBox()
         {
             msStyle = MB_OK;
         }
+    }
+
+    if ( wxStyle & wxHELP )
+    {
+        msStyle |= MB_HELP;
     }
 
     // set the icon style
@@ -568,13 +584,15 @@ int wxMessageDialog::ShowMessageBox()
 #endif // wxUSE_MSGBOX_HOOK
 
     // do show the dialog
-    int msAns = MessageBox(hWnd, message.wx_str(), m_caption.wx_str(), msStyle);
+    int msAns = MessageBox(hWnd, message.t_str(), m_caption.t_str(), msStyle);
 
     return MSWTranslateReturnCode(msAns);
 }
 
 int wxMessageDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
+
 #ifdef wxHAS_MSW_TASKDIALOG
     if ( HasNativeTaskDialog() )
     {
@@ -610,6 +628,18 @@ int wxMessageDialog::ShowModal()
     return ShowMessageBox();
 }
 
+long wxMessageDialog::GetEffectiveIcon() const
+{
+    // only use the auth needed icon if available, otherwise fallback to the default logic
+    if ( (m_dialogStyle & wxICON_AUTH_NEEDED) &&
+        wxMSWMessageDialog::HasNativeTaskDialog() )
+    {
+        return wxICON_AUTH_NEEDED;
+    }
+
+    return wxMessageDialogBase::GetEffectiveIcon();
+}
+
 void wxMessageDialog::DoCentre(int dir)
 {
 #ifdef wxHAS_MSW_TASKDIALOG
@@ -630,7 +660,7 @@ void wxMessageDialog::DoCentre(int dir)
 #ifdef wxHAS_MSW_TASKDIALOG
 
 wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
-                     : buttons(new TASKDIALOG_BUTTON[3])
+                     : buttons(new TASKDIALOG_BUTTON[MAX_BUTTONS])
 {
     parent = dlg.GetParentForModalDialog();
     caption = dlg.GetCaption();
@@ -665,13 +695,22 @@ wxMSWTaskDialogConfig::wxMSWTaskDialogConfig(const wxMessageDialogBase& dlg)
     btnNoLabel = dlg.GetNoLabel();
     btnOKLabel = dlg.GetOKLabel();
     btnCancelLabel = dlg.GetCancelLabel();
+    btnHelpLabel = dlg.GetHelpLabel();
 }
 
 void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 {
-    tdc.dwFlags = TDF_EXPAND_FOOTER_AREA | TDF_POSITION_RELATIVE_TO_WINDOW;
+    // Use TDF_SIZE_TO_CONTENT to try to prevent Windows from truncating or
+    // ellipsizing the message text. This doesn't always work as Windows will
+    // still do it if the message contains too long "words" (i.e. runs of the
+    // text without spaces) but at least it ensures that the message text is
+    // fully shown for reasonably-sized words whereas without it using almost
+    // any file system path in a message box would result in truncation.
+    tdc.dwFlags = TDF_EXPAND_FOOTER_AREA |
+                  TDF_POSITION_RELATIVE_TO_WINDOW |
+                  TDF_SIZE_TO_CONTENT;
     tdc.hInstance = wxGetInstance();
-    tdc.pszWindowTitle = caption.wx_str();
+    tdc.pszWindowTitle = caption.t_str();
 
     // use the top level window as parent if none specified
     tdc.hwndParent = parent ? GetHwndOf(parent) : NULL;
@@ -688,12 +727,12 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
     // message in our ctor, see comment there.
     if ( !extendedMessage.empty() )
     {
-        tdc.pszMainInstruction = message.wx_str();
-        tdc.pszContent = extendedMessage.wx_str();
+        tdc.pszMainInstruction = message.t_str();
+        tdc.pszContent = extendedMessage.t_str();
     }
     else
     {
-        tdc.pszContent = message.wx_str();
+        tdc.pszContent = message.t_str();
     }
 
     // set an icon to be used, if possible
@@ -709,6 +748,10 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
 
         case wxICON_INFORMATION:
             tdc.pszMainIcon = TD_INFORMATION_ICON;
+            break;
+
+        case wxICON_AUTH_NEEDED:
+            tdc.pszMainIcon = TD_SHIELD_ICON;
             break;
     }
 
@@ -755,6 +798,15 @@ void wxMSWTaskDialogConfig::MSWCommonTaskDialogInit(TASKDIALOGCONFIG &tdc)
             AddTaskDialogButton(tdc, IDCANCEL, TDCBF_CANCEL_BUTTON, btnOKLabel);
         }
     }
+
+    if ( style & wxHELP )
+    {
+        // There is no support for "Help" button in the task dialog, it can
+        // only show "Retry" or "Close" ones.
+        useCustomLabels = true;
+
+        AddTaskDialogButton(tdc, IDHELP, 0 /* not used */, btnHelpLabel);
+    }
 }
 
 void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
@@ -768,8 +820,12 @@ void wxMSWTaskDialogConfig::AddTaskDialogButton(TASKDIALOGCONFIG &tdc,
         TASKDIALOG_BUTTON &tdBtn = buttons[tdc.cButtons];
 
         tdBtn.nButtonID = btnCustomId;
-        tdBtn.pszButtonText = customLabel.wx_str();
+        tdBtn.pszButtonText = customLabel.t_str();
         tdc.cButtons++;
+
+        // We should never have more than 4 buttons currently as this is the
+        // maximal number of buttons supported by the message dialog.
+        wxASSERT_MSG( tdc.cButtons <= MAX_BUTTONS, wxT("Too many buttons") );
     }
     else
     {
@@ -838,6 +894,9 @@ int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)
             break;
         case IDNO:
             ans = wxID_NO;
+            break;
+        case IDHELP:
+            ans = wxID_HELP;
             break;
     }
 

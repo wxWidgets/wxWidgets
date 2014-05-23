@@ -4,7 +4,6 @@
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
 // Modified by: Santiago Palacios
 // Created:     1/08/1999
-// RCS-ID:      $Id$
 // Copyright:   (c) Michael Bedward
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,6 +14,10 @@
 #include "wx/defs.h"
 
 #if wxUSE_GRID
+
+// Internally used (and hence intentionally not exported) event telling wxGrid
+// to hide the currently shown editor.
+wxDECLARE_EVENT( wxEVT_GRID_HIDE_EDITOR, wxCommandEvent );
 
 // ----------------------------------------------------------------------------
 // array classes
@@ -301,6 +304,8 @@ public:
         m_owner = owner;
     }
 
+    virtual wxWindow *GetMainWindowOfCompositeControl() { return m_owner; }
+
     virtual bool AcceptsFocus() const { return false; }
 
     wxGrid *GetOwner() { return m_owner; }
@@ -551,7 +556,7 @@ public:
     // NB: As GetLineAt(), currently this is always identity for rows.
     virtual int GetLinePos(const wxGrid *grid, int line) const = 0;
 
-    // Return the index of the line just before the given one.
+    // Return the index of the line just before the given one or wxNOT_FOUND.
     virtual int GetLineBefore(const wxGrid* grid, int line) const = 0;
 
     // Get the row or column label window
@@ -624,7 +629,7 @@ public:
         { return line; } // TODO: implement row reordering
 
     virtual int GetLineBefore(const wxGrid* WXUNUSED(grid), int line) const
-        { return line ? line - 1 : line; }
+        { return line - 1; }
 
     virtual wxWindow *GetHeaderWindow(wxGrid *grid) const
         { return grid->GetGridRowLabelWindow(); }
@@ -690,7 +695,10 @@ public:
         { return grid->GetColPos(line); }
 
     virtual int GetLineBefore(const wxGrid* grid, int line) const
-        { return grid->GetColAt(wxMax(0, grid->GetColPos(line) - 1)); }
+    {
+        int posBefore = grid->GetColPos(line) - 1;
+        return posBefore >= 0 ? grid->GetColAt(posBefore) : wxNOT_FOUND;
+    }
 
     virtual wxWindow *GetHeaderWindow(wxGrid *grid) const
         { return grid->GetGridColLabelWindow(); }
@@ -760,6 +768,12 @@ protected:
         return m_oper.GetLineAt(m_grid, pos);
     }
 
+    // Check if the given line is visible, i.e. has non 0 size.
+    bool IsLineVisible(int line) const
+    {
+        return m_oper.GetLineSize(m_grid, line) != 0;
+    }
+
 
     wxGrid * const m_grid;
     const wxGridOperations& m_oper;
@@ -777,14 +791,38 @@ public:
     {
         wxASSERT_MSG( m_oper.Select(coords) >= 0, "invalid row/column" );
 
-        return GetLinePos(coords) == 0;
+        int pos = GetLinePos(coords);
+        while ( pos )
+        {
+            // Check the previous line.
+            int line = GetLineAt(--pos);
+            if ( IsLineVisible(line) )
+            {
+                // There is another visible line before this one, hence it's
+                // not at boundary.
+                return false;
+            }
+        }
+
+        // We reached the boundary without finding any visible lines.
+        return true;
     }
 
     virtual void Advance(wxGridCellCoords& coords) const
     {
-        wxASSERT( !IsAtBoundary(coords) );
+        int pos = GetLinePos(coords);
+        for ( ;; )
+        {
+            // This is not supposed to happen if IsAtBoundary() returned false.
+            wxCHECK_RET( pos, "can't advance when already at boundary" );
 
-        m_oper.Set(coords, GetLineAt(GetLinePos(coords) - 1));
+            int line = GetLineAt(--pos);
+            if ( IsLineVisible(line) )
+            {
+                m_oper.Set(coords, line);
+                break;
+            }
+        }
     }
 
     virtual int MoveByPixelDistance(int line, int distance) const
@@ -794,6 +832,8 @@ public:
     }
 };
 
+// Please refer to the comments above when reading this class code, it's
+// absolutely symmetrical to wxGridBackwardOperations.
 class wxGridForwardOperations : public wxGridDirectionOperations
 {
 public:
@@ -807,14 +847,32 @@ public:
     {
         wxASSERT_MSG( m_oper.Select(coords) < m_numLines, "invalid row/column" );
 
-        return GetLinePos(coords) == m_numLines - 1;
+        int pos = GetLinePos(coords);
+        while ( pos < m_numLines - 1 )
+        {
+            int line = GetLineAt(++pos);
+            if ( IsLineVisible(line) )
+                return false;
+        }
+
+        return true;
     }
 
     virtual void Advance(wxGridCellCoords& coords) const
     {
-        wxASSERT( !IsAtBoundary(coords) );
+        int pos = GetLinePos(coords);
+        for ( ;; )
+        {
+            wxCHECK_RET( pos < m_numLines - 1,
+                         "can't advance when already at boundary" );
 
-        m_oper.Set(coords, GetLineAt(GetLinePos(coords) + 1));
+            int line = GetLineAt(++pos);
+            if ( IsLineVisible(line) )
+            {
+                m_oper.Set(coords, line);
+                break;
+            }
+        }
     }
 
     virtual int MoveByPixelDistance(int line, int distance) const

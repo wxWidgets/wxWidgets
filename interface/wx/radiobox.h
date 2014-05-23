@@ -2,7 +2,6 @@
 // Name:        radiobox.h
 // Purpose:     interface of wxRadioBox
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,20 +18,17 @@
     @style{wxRA_SPECIFY_COLS}
            The major dimension parameter refers to the maximum number of
            columns.
-    @style{wxRA_USE_CHECKBOX}
-           Use of the checkbox controls instead of radio buttons (currently
-           supported only on PalmOS)
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_RADIOBOX(id, func)}
-           Process a @c wxEVT_COMMAND_RADIOBOX_SELECTED event, when a radiobutton
+           Process a @c wxEVT_RADIOBOX event, when a radiobutton
            is clicked.
     @endEventTable
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{radiobox.png}
+    @appearance{radiobox}
 
     @see @ref overview_events, wxRadioButton, wxCheckBox
 */
@@ -185,15 +181,6 @@ public:
 
         @see wxWindow::Enable()
 
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the following methods:
-
-        @beginTable
-        @row2col{Enable(flag), Enables or disables the entire radiobox.}
-        @row2col{EnableItem(n\, flag), Enables or disables an individual button in the radiobox.}
-        @endTable
-
-        @endWxPythonOnly
     */
     virtual bool Enable(unsigned int n, bool enable = true);
 
@@ -300,6 +287,14 @@ public:
     void SetItemToolTip(unsigned int item, const wxString& text);
 
     /**
+        Sets the selection to the given item.
+
+        Notice that a radio box always has selection, so @a n must be valid
+        here and passing @c wxNOT_FOUND is not allowed.
+     */
+    virtual void SetSelection(int n);
+
+    /**
         Shows or hides individual buttons.
 
         @param show
@@ -314,16 +309,14 @@ public:
         @see
             wxWindow::Show()
 
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the following methods:
-
-        @beginTable
-        @row2col{Show(flag), Shows or hides the entire radiobox.}
-        @row2col{ShowItem(n\, flag), Shows or hides individual buttons.}
-        @endTable
-
-        @endWxPythonOnly
-
     */
     virtual bool Show(unsigned int item, bool show = true);
+
+
+    // pure virtuals that have implementations here
+    virtual unsigned int GetCount() const;
+    virtual wxString GetString(unsigned int n) const;
+    virtual void SetString(unsigned int n, const wxString& string);
+    virtual int GetSelection() const;
+
 };

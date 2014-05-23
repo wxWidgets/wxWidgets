@@ -3,7 +3,6 @@
 // Purpose:     wxBitmapToggleButton unit test
 // Author:      Steven Lamerton
 // Created:     2010-07-17
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -74,10 +73,7 @@ void BitmapToggleButtonTestCase::tearDown()
 void BitmapToggleButtonTestCase::Click()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_button, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_TOGGLEBUTTON);
 
     wxUIActionSimulator sim;
 
@@ -88,25 +84,23 @@ void BitmapToggleButtonTestCase::Click()
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, clicked.GetCount());
     CPPUNIT_ASSERT(m_button->GetValue());
 
+    clicked.Clear();
     wxMilliSleep(1000);
 
     sim.MouseClick();
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+    CPPUNIT_ASSERT_EQUAL(1, clicked.GetCount());
     CPPUNIT_ASSERT(!m_button->GetValue());
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
 void BitmapToggleButtonTestCase::Value()
 {
-    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
-                                          wxTestableFrame);
-
-    EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     m_button->SetValue(true);
 
@@ -116,7 +110,7 @@ void BitmapToggleButtonTestCase::Value()
 
     CPPUNIT_ASSERT(!m_button->GetValue());
 
-    CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );
+    CPPUNIT_ASSERT_EQUAL( 0, clicked.GetCount() );
 }
 
 #endif // wxHAS_BITMAPTOGGLEBUTTON

@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     Apr-30-2006
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -94,8 +93,6 @@ protected:
 #endif
 #elif defined(__WXMAC__)
     // Looks like there's nothing we need to override here
-#elif defined(__WXPM__)
-    virtual WXHWND GetEditHWND() const { return NULL; }
 #endif
 
     // For better transparent background rendering

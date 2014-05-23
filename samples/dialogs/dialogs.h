@@ -3,7 +3,6 @@
 // Purpose:     Common dialogs demo
 // Author:      Julian Smart, Vadim Zeitlin, ABX
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 //              (c) 2004 ABX
 //              (c) Vadim Zeitlin
@@ -53,7 +52,7 @@ of MSW, MAC and OS2
     #define USE_WXMAC 0
 #endif
 
-#if defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2) && USE_NATIVE_FONT_DIALOG_FOR_MACOSX
+#if USE_NATIVE_FONT_DIALOG_FOR_MACOSX
     #define USE_WXMACFONTDLG 1
 #else
     #define USE_WXMACFONTDLG 0
@@ -65,12 +64,6 @@ of MSW, MAC and OS2
     #define USE_WXGTK 0
 #endif
 
-#ifdef __WXPM__
-    #define USE_WXPM 1
-#else
-    #define USE_WXPM 0
-#endif
-
 #define USE_GENERIC_DIALOGS (!USE_WXUNIVERSAL && !USE_DLL)
 
 #define USE_COLOURDLG_GENERIC \
@@ -78,10 +71,10 @@ of MSW, MAC and OS2
 #define USE_DIRDLG_GENERIC \
     ((USE_WXMSW || USE_WXMAC) && USE_GENERIC_DIALOGS && wxUSE_DIRDLG)
 #define USE_FILEDLG_GENERIC \
-    ((((USE_WXMSW || USE_WXMAC || USE_WXPM || USE_WXGTK) \
+    ((((USE_WXMSW || USE_WXMAC || USE_WXGTK) \
                     && USE_GENERIC_DIALOGS) || USE_WXWINCE) && wxUSE_FILEDLG)
 #define USE_FONTDLG_GENERIC \
-    ((USE_WXMSW || USE_WXMACFONTDLG || USE_WXPM) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
+    ((USE_WXMSW || USE_WXMACFONTDLG) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
 
 // Turn USE_MODAL_PRESENTATION to 0 if there is any reason for not presenting difference
 // between modal and modeless dialogs (ie. not implemented it in your port yet)
@@ -106,7 +99,7 @@ of MSW, MAC and OS2
 class MyAppTraits : public wxGUIAppTraits
 {
 public:
-    virtual wxLog *CreateLogTarget();
+    virtual wxLog *CreateLogTarget() wxOVERRIDE;
 };
 
 #endif // wxUSE_LOG
@@ -117,16 +110,16 @@ class MyApp: public wxApp
 public:
     MyApp() { m_startupProgressStyle = -1; }
 
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 
 #if wxUSE_CMDLINE_PARSER
-    virtual void OnInitCmdLine(wxCmdLineParser& parser);
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) wxOVERRIDE;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) wxOVERRIDE;
 #endif // wxUSE_CMDLINE_PARSER
 
 protected:
 #if wxUSE_LOG
-    virtual wxAppTraits *CreateTraits() { return new MyAppTraits; }
+    virtual wxAppTraits *CreateTraits() wxOVERRIDE { return new MyAppTraits; }
 #endif // wxUSE_LOG
 
 private:
@@ -149,7 +142,7 @@ public:
     void OnClose(wxCloseEvent& event);
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // A custom modal dialog
@@ -165,7 +158,7 @@ private:
              *m_btnModeless,
              *m_btnDelete;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif // USE_MODAL_PRESENTATION
@@ -196,7 +189,7 @@ private:
 
     wxSizer *m_buttonsSizer;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Test harness for wxMessageDialog.
@@ -208,6 +201,7 @@ public:
     bool Create();
 
 protected:
+    wxString GetBoxTitle() { return m_textTitle->GetValue(); }
     wxString GetMessage() { return m_textMsg->GetValue(); }
     long GetStyle();
 
@@ -215,6 +209,8 @@ protected:
 
     virtual void AddAdditionalTextOptions(wxSizer *WXUNUSED(sizer)) { }
     virtual void AddAdditionalFlags(wxSizer *WXUNUSED(sizer)) { }
+
+    void ShowResult(int res);
 
     void OnApply(wxCommandEvent& event);
     void OnClose(wxCommandEvent& event);
@@ -228,6 +224,7 @@ private:
         Btn_No,
         Btn_Ok,
         Btn_Cancel,
+        Btn_Help,
         Btn_Max
     };
 
@@ -247,10 +244,12 @@ private:
         MsgDlgIcon_Question,
         MsgDlgIcon_Warning,
         MsgDlgIcon_Error,
+        MsgDlgIcon_AuthNeeded,
         MsgDlgIcon_Max
     };
 
-    wxTextCtrl *m_textMsg,
+    wxTextCtrl *m_textTitle,
+               *m_textMsg,
                *m_textExtMsg;
 
     wxCheckBox *m_buttons[Btn_Max];
@@ -261,7 +260,9 @@ private:
     wxCheckBox *m_chkNoDefault,
                *m_chkCentre;
 
-    DECLARE_EVENT_TABLE()
+    wxStaticText *m_labelResult;
+
+    wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
 };
 
@@ -273,8 +274,8 @@ public:
 
 protected:
     // overrides method in base class
-    virtual void AddAdditionalTextOptions(wxSizer *sizer);
-    virtual void AddAdditionalFlags(wxSizer *sizer);
+    virtual void AddAdditionalTextOptions(wxSizer *sizer) wxOVERRIDE;
+    virtual void AddAdditionalFlags(wxSizer *sizer) wxOVERRIDE;
 
     void OnApply(wxCommandEvent& event);
 
@@ -283,7 +284,7 @@ private:
     wxCheckBox *m_initialValueCheckBox;
     wxTextCtrl *m_textDetailed;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 #endif // wxUSE_RICHMSGDLG
 
@@ -293,13 +294,16 @@ public:
     TestDefaultActionDialog( wxWindow *parent );
 
     void OnListBoxDClick(wxCommandEvent& event);
+    void OnDisableOK(wxCommandEvent& event);
+    void OnDisableCancel(wxCommandEvent& event);
     void OnCatchListBoxDClick(wxCommandEvent& event);
+    void OnTextEnter(wxCommandEvent& event);
 
 private:
     bool   m_catchListBoxDClick;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -461,9 +465,14 @@ public:
     void OnNotifMsgHide(wxCommandEvent& event);
 #endif // wxUSE_NOTIFICATION_MESSAGE
 
+#if wxUSE_RICHTOOLTIP
+    void OnRichTipDialog(wxCommandEvent& event);
+#endif // wxUSE_RICHTOOLTIP
+
     void OnStandardButtonsSizerDialog(wxCommandEvent& event);
 
     void OnTestDefaultActionDialog(wxCommandEvent& event);
+    void OnModalHook(wxCommandEvent& event);
 
     void OnExit(wxCommandEvent& event);
 
@@ -499,7 +508,7 @@ private:
               *m_infoBarAdvanced;
 #endif // wxUSE_INFOBAR
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyCanvas: public wxScrolledWindow
@@ -515,7 +524,7 @@ public:
 private:
     void OnPaint(wxPaintEvent& event);
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -572,11 +581,13 @@ enum
     DIALOGS_NOTIFY_AUTO,
     DIALOGS_NOTIFY_SHOW,
     DIALOGS_NOTIFY_HIDE,
+    DIALOGS_RICHTIP_DIALOG,
     DIALOGS_PROPERTY_SHEET,
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,
     DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
     DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,
-    DIALOGS_TEST_DEFAULT_ACTION
+    DIALOGS_TEST_DEFAULT_ACTION,
+    DIALOGS_MODAL_HOOK
 };
 
 #endif

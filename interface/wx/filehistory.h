@@ -2,7 +2,6 @@
 // Name:        filehistory.h
 // Purpose:     wxFileHistory class
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

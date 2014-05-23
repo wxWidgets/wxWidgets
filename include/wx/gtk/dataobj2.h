@@ -3,7 +3,6 @@
 // Purpose:     declaration of standard wxDataObjectSimple-derived classes
 // Author:      Robert Roebling
 // Created:     19.10.99 (extracted from gtk/dataobj.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998, 1999 Vadim Zeitlin, Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,30 +25,29 @@ public:
     virtual ~wxBitmapDataObject();
 
     // override base class virtual to update PNG data too
-    virtual void SetBitmap(const wxBitmap& bitmap);
+    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE;
 
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual size_t GetDataSize() const { return m_pngSize; }
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
+    virtual size_t GetDataSize() const wxOVERRIDE { return m_pngSize; }
+    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const
+    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
     {
         return SetData(len, buf);
     }
 
 protected:
-    void Init() { m_pngData = NULL; m_pngSize = 0; }
     void Clear() { free(m_pngData); }
     void ClearAll() { Clear(); Init(); }
 
@@ -57,6 +55,9 @@ protected:
     void       *m_pngData;
 
     void DoConvertToPng();
+
+private:
+    void Init() { m_pngData = NULL; m_pngSize = 0; }
 };
 
 // ----------------------------------------------------------------------------
@@ -71,19 +72,19 @@ public:
 
     void AddFile( const wxString &filename );
 
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
+    virtual size_t GetDataSize() const wxOVERRIDE;
+    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
     // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const
+    virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
     {
         return GetDataSize();
     }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
+    virtual bool GetDataHere(const wxDataFormat&, void *buf) const wxOVERRIDE
     {
         return GetDataHere(buf);
     }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
+    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf) wxOVERRIDE
     {
         return SetData(len, buf);
     }
@@ -93,34 +94,19 @@ public:
 // wxURLDataObject is a specialization of wxDataObject for URLs
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxURLDataObject : public wxDataObjectSimple
+class WXDLLIMPEXP_CORE wxURLDataObject : public wxDataObjectComposite
 {
 public:
     wxURLDataObject(const wxString& url = wxEmptyString);
 
-    wxString GetURL() const { return m_url; }
-    void SetURL(const wxString& url) { m_url = url; }
-
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
-
-    // Must provide overloads to avoid hiding them (and warnings about it)
-    virtual size_t GetDataSize(const wxDataFormat&) const
-    {
-        return GetDataSize();
-    }
-    virtual bool GetDataHere(const wxDataFormat&, void *buf) const
-    {
-        return GetDataHere(buf);
-    }
-    virtual bool SetData(const wxDataFormat&, size_t len, const void *buf)
-    {
-        return SetData(len, buf);
-    }
+    wxString GetURL() const;
+    void SetURL(const wxString& url);
 
 private:
-    wxString m_url;
+    class wxTextURIListDataObject* const m_dobjURIList;
+    wxTextDataObject* const m_dobjText;
+
+    wxDECLARE_NO_COPY_CLASS(wxURLDataObject);
 };
 
 

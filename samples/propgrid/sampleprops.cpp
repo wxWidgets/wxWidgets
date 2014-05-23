@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     2006-03-05
-// RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,6 +22,7 @@
 #endif
 
 #include "wx/fontdlg.h"
+#include "wx/numformatter.h"
 
 // -----------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ void wxFontDataProperty::OnSetValue()
 
         wxFont font = fontData.GetChosenFont();
         if ( !font.IsOk() )
-            font = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
+            font = wxFontInfo(10).Family(wxFONTFAMILY_SWISS);
 
         m_value = WXVARIANT(font);
     }
@@ -344,29 +344,24 @@ public:
     void SetPrecision ( int precision )
     {
         m_precision = precision;
-        m_dtoaTemplate.Empty();
     }
 
 protected:
     // Mandatory array of type
     wxArrayDouble   m_array;
 
-    // Use this to avoid extra wxString creation+Printf
-    // on double-to-wxString conversion.
-    wxString        m_dtoaTemplate;
-
     int             m_precision;
 
     // Mandatory overridden methods
-    virtual wxString ArrayGet( size_t index );
-    virtual size_t ArrayGetCount();
-    virtual bool ArrayInsert( const wxString& str, int index );
-    virtual bool ArraySet( size_t index, const wxString& str );
-    virtual void ArrayRemoveAt( int index );
-    virtual void ArraySwap( size_t first, size_t second );
+    virtual wxString ArrayGet( size_t index ) wxOVERRIDE;
+    virtual size_t ArrayGetCount() wxOVERRIDE;
+    virtual bool ArrayInsert( const wxString& str, int index ) wxOVERRIDE;
+    virtual bool ArraySet( size_t index, const wxString& str ) wxOVERRIDE;
+    virtual void ArrayRemoveAt( int index ) wxOVERRIDE;
+    virtual void ArraySwap( size_t first, size_t second ) wxOVERRIDE;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxArrayDoubleEditorDialog)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxArrayDoubleEditorDialog);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxArrayDoubleEditorDialog, wxPGArrayEditorDialog)
@@ -377,9 +372,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxArrayDoubleEditorDialog, wxPGArrayEditorDialog)
 
 wxString wxArrayDoubleEditorDialog::ArrayGet( size_t index )
 {
-    wxString str;
-    wxPropertyGrid::DoubleToString(str,m_array[index],m_precision,true,&m_dtoaTemplate);
-    return str;
+    return wxNumberFormatter::ToString(
+        m_array[index], m_precision, wxNumberFormatter::Style_NoTrailingZeroes);
 }
 
 size_t wxArrayDoubleEditorDialog::ArrayGetCount()
@@ -552,8 +546,6 @@ wxString wxArrayDoubleProperty::ValueToString( wxVariant& value,
 
 void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, bool removeZeroes ) const
 {
-    wxString s;
-    wxString template_str;
     wxChar between[3] = wxT(", ");
     size_t i;
 
@@ -562,13 +554,13 @@ void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, b
     target.Empty();
 
     const wxArrayDouble& value = wxArrayDoubleRefFromVariant(m_value);
+    wxNumberFormatter::Style style = wxNumberFormatter::Style_None;
+    if (removeZeroes)
+        style = wxNumberFormatter::Style_NoTrailingZeroes;
 
     for ( i=0; i<value.GetCount(); i++ )
     {
-
-        wxPropertyGrid::DoubleToString(s,value[i],prec,removeZeroes,&template_str);
-
-        target += s;
+        target += wxNumberFormatter::ToString(value[i], prec, style);
 
         if ( i<(value.GetCount()-1) )
             target += between;

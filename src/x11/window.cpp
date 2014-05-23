@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -1107,7 +1106,7 @@ void wxWindowX11::DoGetTextExtent(const wxString& string,
     PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
     pango_layout_set_font_description(layout, desc);
 
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string.wc_str() );
     pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
 
     PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
@@ -1486,6 +1485,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent,
                     button = xevent->xbutton.button;
 
                     wxevent.m_linesPerAction = 3;
+                    wxevent.m_columnsPerAction = 3;
                     wxevent.m_wheelDelta = WHEEL_DELTA;
 
                     // Button 4 means mousewheel up, 5 means down

@@ -4,7 +4,6 @@
 // Author:      Ported to Linux by Guilhem Lavaux
 // Modified by:
 // Created:     05/23/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -19,6 +18,7 @@
 #ifndef WX_PRECOMP
     #include "wx/event.h"
     #include "wx/window.h"
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #include "wx/thread.h"
@@ -63,7 +63,7 @@ class wxJoystickThread : public wxThread
 {
 public:
     wxJoystickThread(int device, int joystick);
-    void* Entry();
+    void* Entry() wxOVERRIDE;
 
 private:
     void      SendEvent(wxEventType type, long ts, int change = 0);
@@ -136,6 +136,14 @@ void* wxJoystickThread::Entry()
 
             if ((j_evt.type & JS_EVENT_AXIS) && (j_evt.number < wxJS_MAX_AXES))
             {
+                // Ignore invalid axis.
+                if ( j_evt.number >= wxJS_MAX_AXES )
+                {
+                    wxLogDebug(wxS("Invalid axis index %d in joystick message."),
+                               j_evt.number);
+                    continue;
+                }
+
                 if (   (m_axe[j_evt.number] + m_threshold < j_evt.value)
                     || (m_axe[j_evt.number] - m_threshold > j_evt.value) )
             {

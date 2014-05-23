@@ -55,3 +55,10 @@ struct _TIFFImageIter {
 	    ImageIterTileSeparateRoutine	separate;
 	} callback;				/* fn to exec for each block */
 };
+/*
+ * Local Variables:
+ * mode: c
+ * c-basic-offset: 8
+ * fill-column: 78
+ * End:
+ */

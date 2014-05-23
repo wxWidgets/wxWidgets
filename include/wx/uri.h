@@ -4,7 +4,6 @@
 // Author:      Ryan Norton
 //              Vadim Zeitlin (UTF-8 URI support, many other changes)
 // Created:     07/01/2004
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Ryan Norton
 //                  2008 Vadim Zeitlin
 // Licence:     wxWindows Licence

@@ -2,9 +2,62 @@
 // Name:        textctrl.h
 // Purpose:     interface of wxTextAttr
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+   wxTextCtrl style flags
+*/
+#define wxTE_NO_VSCROLL     0x0002
+
+#define wxTE_READONLY       0x0010
+#define wxTE_MULTILINE      0x0020
+#define wxTE_PROCESS_TAB    0x0040
+
+// alignment flags
+#define wxTE_LEFT           0x0000                    // 0x0000
+#define wxTE_CENTER         wxALIGN_CENTER_HORIZONTAL // 0x0100
+#define wxTE_RIGHT          wxALIGN_RIGHT             // 0x0200
+#define wxTE_CENTRE         wxTE_CENTER
+
+// this style means to use RICHEDIT control and does something only under wxMSW
+// and Win32 and is silently ignored under all other platforms
+#define wxTE_RICH           0x0080
+
+#define wxTE_PROCESS_ENTER  0x0400
+#define wxTE_PASSWORD       0x0800
+
+// automatically detect the URLs and generate the events when mouse is
+// moved/clicked over an URL
+//
+// this is for Win32 richedit and wxGTK2 multiline controls only so far
+#define wxTE_AUTO_URL       0x1000
+
+// by default, the Windows text control doesn't show the selection when it
+// doesn't have focus - use this style to force it to always show it
+#define wxTE_NOHIDESEL      0x2000
+
+// use wxHSCROLL to not wrap text at all, wxTE_CHARWRAP to wrap it at any
+// position and wxTE_WORDWRAP to wrap at words boundary
+//
+// if no wrapping style is given at all, the control wraps at word boundary
+#define wxTE_DONTWRAP       wxHSCROLL
+#define wxTE_CHARWRAP       0x4000  // wrap at any position
+#define wxTE_WORDWRAP       0x0001  // wrap only at words boundaries
+#define wxTE_BESTWRAP       0x0000  // this is the default
+
+// force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
+// wxTE_RICH controls - can be used together with or instead of wxTE_RICH
+#define wxTE_RICH2          0x8000
+
+
+#define wxTEXT_TYPE_ANY     0
+
+
+/**
+   wxTextCoord is a line or row number
+*/
+typedef long wxTextCoord;
 
 
 /**
@@ -33,19 +86,23 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_BACKGROUND_COLOUR    = 0x00000002,
 
     wxTEXT_ATTR_FONT_FACE            = 0x00000004,
-    wxTEXT_ATTR_FONT_SIZE            = 0x00000008,
+    wxTEXT_ATTR_FONT_POINT_SIZE      = 0x00000008,
+    wxTEXT_ATTR_FONT_PIXEL_SIZE      = 0x10000000,
     wxTEXT_ATTR_FONT_WEIGHT          = 0x00000010,
     wxTEXT_ATTR_FONT_ITALIC          = 0x00000020,
     wxTEXT_ATTR_FONT_UNDERLINE       = 0x00000040,
+    wxTEXT_ATTR_FONT_STRIKETHROUGH   = 0x08000000,
     wxTEXT_ATTR_FONT_ENCODING        = 0x02000000,
     wxTEXT_ATTR_FONT_FAMILY          = 0x04000000,
 
+    wxTEXT_ATTR_FONT_SIZE = \
+        ( wxTEXT_ATTR_FONT_POINT_SIZE | wxTEXT_ATTR_FONT_PIXEL_SIZE ),
     /**
         Defined as the combination of all @c wxTEXT_ATTR_FONT_* values above.
     */
     wxTEXT_ATTR_FONT = \
         ( wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | \
-            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING | wxTEXT_ATTR_FONT_FAMILY ),
+            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_STRIKETHROUGH | wxTEXT_ATTR_FONT_ENCODING | wxTEXT_ATTR_FONT_FAMILY ),
 
     wxTEXT_ATTR_ALIGNMENT            = 0x00000080,
     wxTEXT_ATTR_LEFT_INDENT          = 0x00000100,
@@ -75,6 +132,9 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_EFFECTS              = 0x00800000,
     wxTEXT_ATTR_OUTLINE_LEVEL        = 0x01000000,
 
+    wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE = 0x20000000,
+    wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER =  0x40000000,
+
     /**
         Combines the styles @c wxTEXT_ATTR_FONT, @c wxTEXT_ATTR_EFFECTS, @c wxTEXT_ATTR_BACKGROUND_COLOUR,
         @c wxTEXT_ATTR_TEXT_COLOUR, @c wxTEXT_ATTR_CHARACTER_STYLE_NAME, @c wxTEXT_ATTR_URL.
@@ -90,7 +150,8 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_PARAGRAPH = \
         (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-            wxTEXT_ATTR_BULLET|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL),
+            wxTEXT_ATTR_BULLET|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL|\
+            wxTEXT_ATTR_PAGE_BREAK|wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE|wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER),
 
     /**
         Combines all previous values.
@@ -121,13 +182,16 @@ enum wxTextAttrBulletStyle
 
     wxTEXT_ATTR_BULLET_STYLE_ALIGN_LEFT      = 0x00000000,
     wxTEXT_ATTR_BULLET_STYLE_ALIGN_RIGHT     = 0x00001000,
-    wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE    = 0x00002000
+    wxTEXT_ATTR_BULLET_STYLE_ALIGN_CENTRE    = 0x00002000,
+
+    wxTEXT_ATTR_BULLET_STYLE_CONTINUATION    = 0x00004000
 };
 
 /**
     Styles for wxTextAttr::SetTextEffects(). They can be combined together as a bitlist.
 
-    Of these, only wxTEXT_ATTR_EFFECT_CAPITALS and wxTEXT_ATTR_EFFECT_STRIKETHROUGH are implemented.
+    Of these, only wxTEXT_ATTR_EFFECT_CAPITALS, wxTEXT_ATTR_EFFECT_STRIKETHROUGH,
+    wxTEXT_ATTR_EFFECT_SUPERSCRIPT and wxTEXT_ATTR_EFFECT_SUBSCRIPT are implemented.
 */
 enum wxTextAttrEffects
 {
@@ -141,7 +205,9 @@ enum wxTextAttrEffects
     wxTEXT_ATTR_EFFECT_OUTLINE               = 0x00000040,
     wxTEXT_ATTR_EFFECT_ENGRAVE               = 0x00000080,
     wxTEXT_ATTR_EFFECT_SUPERSCRIPT           = 0x00000100,
-    wxTEXT_ATTR_EFFECT_SUBSCRIPT             = 0x00000200
+    wxTEXT_ATTR_EFFECT_SUBSCRIPT             = 0x00000200,
+    wxTEXT_ATTR_EFFECT_RTL                   = 0x00000400,
+    wxTEXT_ATTR_EFFECT_SUPPRESS_HYPHENATION  = 0x00001000
 };
 
 /**
@@ -221,11 +287,6 @@ public:
                const wxTextAttr* compareWith = NULL);
 
     /**
-        Creates a font from the font attributes.
-    */
-    wxFont CreateFont() const;
-
-    /**
         Copies all defined/valid properties from overlay to current object.
     */
     void Merge(const wxTextAttr& overlay);
@@ -239,6 +300,14 @@ public:
     static wxTextAttr Merge(const wxTextAttr& base,
                             const wxTextAttr& overlay);
 
+
+    /**
+        Partial equality test.  If @a weakTest is @true, attributes of this object do not
+        have to be present if those attributes of @a attr are present. If @a weakTest is
+        @false, the function will fail if an attribute is present in @a attr but not
+        in this object.
+    */
+    bool EqPartial(const wxTextAttr& attr, bool weakTest = true) const;
 
     /**
         @name GetXXX functions
@@ -517,9 +586,19 @@ public:
     bool HasFontItalic() const;
 
     /**
-        Returns @true if the attribute object specifies a font point size.
+        Returns @true if the attribute object specifies a font point or pixel size.
     */
     bool HasFontSize() const;
+
+    /**
+        Returns @true if the attribute object specifies a font point size.
+    */
+    bool HasFontPointSize() const;
+
+    /**
+        Returns @true if the attribute object specifies a font pixel size.
+    */
+    bool HasFontPixelSize() const;
 
     /**
         Returns @true if the attribute object specifies either underlining or no
@@ -688,7 +767,7 @@ public:
         Sets the attributes for the given font.
         Note that wxTextAttr does not store an actual wxFont object.
     */
-    void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT);
+    void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT & ~wxTEXT_ATTR_FONT_PIXEL_SIZE);
 
     /**
         Sets the font encoding.
@@ -709,6 +788,16 @@ public:
         Sets the font size in points.
     */
     void SetFontSize(int pointSize);
+
+    /**
+        Sets the font size in points.
+    */
+    void SetFontPointSize(int pointSize);
+
+    /**
+        Sets the font size in pixels.
+    */
+    void SetFontPixelSize(int pixelSize);
 
     /**
         Sets the font style (normal, italic or slanted).
@@ -812,8 +901,8 @@ public:
         Sets the text effects, a bit list of styles.
         The ::wxTextAttrEffects enumeration values can be used.
 
-        Of these, only wxTEXT_ATTR_EFFECT_CAPITALS and wxTEXT_ATTR_EFFECT_STRIKETHROUGH
-        are implemented.
+        Of these, only wxTEXT_ATTR_EFFECT_CAPITALS, wxTEXT_ATTR_EFFECT_STRIKETHROUGH,
+        wxTEXT_ATTR_EFFECT_SUPERSCRIPT and wxTEXT_ATTR_EFFECT_SUBSCRIPT are implemented.
 
         wxTEXT_ATTR_EFFECT_CAPITALS capitalises text when displayed (leaving the case
         of the actual buffer text unchanged), and wxTEXT_ATTR_EFFECT_STRIKETHROUGH draws
@@ -838,7 +927,7 @@ public:
     /**
         Assignment from a wxTextAttr object.
     */
-    void operator operator=(const wxTextAttr& attr);
+    void operator=(const wxTextAttr& attr);
 };
 
 
@@ -854,7 +943,7 @@ public:
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_COMMAND_TEXT_ENTER
+           The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
            control or used for navigation between dialog controls).
     @style{wxTE_PROCESS_TAB}
@@ -992,7 +1081,7 @@ public:
     stream.flush();
     @endcode
 
-    Note that even if your compiler doesn't support this (the symbol
+    Note that even if your build of wxWidgets doesn't support this (the symbol
     @c wxHAS_TEXT_WINDOW_STREAM has value of 0 then) you can still use
     wxTextCtrl itself in a stream-like manner:
 
@@ -1049,14 +1138,14 @@ public:
 
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}
-        Respond to a @c wxEVT_COMMAND_TEXT_UPDATED event, generated when the text
+        Respond to a @c wxEVT_TEXT event, generated when the text
         changes. Notice that this event will be sent when the text controls
         contents changes -- whether this is due to user input or comes from the
         program itself (for example, if wxTextCtrl::SetValue() is called); see
         wxTextCtrl::ChangeValue() for a function which does not send this event.
         This event is however not sent during the control creation.
     @event{EVT_TEXT_ENTER(id, func)}
-        Respond to a @c wxEVT_COMMAND_TEXT_ENTER event, generated when enter is
+        Respond to a @c wxEVT_TEXT_ENTER event, generated when enter is
         pressed in a text control which must have wxTE_PROCESS_ENTER style for
         this event to be generated.
     @event{EVT_TEXT_URL(id, func)}
@@ -1069,7 +1158,7 @@ public:
 
     @library{wxcore}
     @category{ctrl}
-    @appearance{textctrl.png}
+    @appearance{textctrl}
 
     @see wxTextCtrl::Create, wxValidator
 */
@@ -1140,11 +1229,6 @@ public:
                 const wxString& name = wxTextCtrlNameStr);
 
     /**
-        Copies the selected text to the clipboard and removes the selection.
-    */
-    virtual void Cut();
-
-    /**
         Resets the internal modified flag as if the current changes had been
         saved.
     */
@@ -1197,19 +1281,15 @@ public:
     /**
         Returns the number of lines in the text control buffer.
 
+        The returned number is the number of logical lines, i.e. just the count
+        of the number of newline characters in the control + 1, for wxGTK and
+        wxOSX/Cocoa ports while it is the number of physical lines, i.e. the
+        count of lines actually shown in the control, in wxMSW and wxOSX/Carbon.
+        Because of this discrepancy, it is not recommended to use this function.
+
         @remarks
             Note that even empty text controls have one line (where the
             insertion point is), so GetNumberOfLines() never returns 0.
-            For wxGTK using GTK+ 1.2.x and earlier, the number of lines in a
-            multi-line text control is calculated by actually counting newline
-            characters in the buffer, i.e. this function returns the number of
-            logical lines and doesn't depend on whether any of them are wrapped.
-            For all the other platforms, the number of physical lines in the
-            control is returned.
-            Also note that you may wish to avoid using functions that work with
-            line numbers if you are working with controls that contain large
-            amounts of text as this function has O(N) complexity for N being
-            the number of lines.
     */
     virtual int GetNumberOfLines() const;
 
@@ -1226,14 +1306,34 @@ public:
     */
     virtual bool GetStyle(long position, wxTextAttr& style);
 
-    //@{
     /**
-        This function finds the character at the specified position expressed
-        in pixels.
+        Finds the position of the character at the specified point.
 
-        The two overloads of this method allow to find either the position of
-        the character, as an index into the text control contents, or its row
-        and column.
+        If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
+        character closest to this position are returned, otherwise the output
+        parameters are not modified.
+
+        Please note that this function is currently only implemented in wxUniv,
+        wxMSW and wxGTK2 ports and always returns @c wxTE_HT_UNKNOWN in the
+        other ports.
+
+        @beginWxPerlOnly
+        In wxPerl this function takes only the @a pt argument and
+        returns a 3-element list (result, col, row).
+        @endWxPerlOnly
+
+        @param pt
+            The position of the point to check, in window device coordinates.
+        @param pos
+            Receives the position of the character at the given position. May
+            be @NULL.
+
+        @see PositionToXY(), XYToPosition()
+    */
+    wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
+
+    /**
+        Finds the row and column of the character at the specified point.
 
         If the return code is not @c wxTE_HT_UNKNOWN the row and column of the
         character closest to this position are returned, otherwise the output
@@ -1256,17 +1356,12 @@ public:
         @param row
             Receives the row of the character at the given position. May be
             @NULL.
-        @param pos
-            Receives the position of the character at the given position. May
-            be @NULL.
 
         @see PositionToXY(), XYToPosition()
     */
-    wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                     wxTextCoord *col,
                                     wxTextCoord *row) const;
-    //@}
 
     /**
         Returns @true if the text has been modified by user.
@@ -1347,6 +1442,28 @@ public:
         @see XYToPosition()
     */
     virtual bool PositionToXY(long pos, long* x, long* y) const;
+
+    /**
+        Converts given text position to client coordinates in pixels.
+
+        This function allows to find where is the character at the given
+        position displayed in the text control.
+
+        @onlyfor{wxmsw,wxgtk}. Additionally, wxGTK only implements this method
+        for multiline controls and ::wxDefaultPosition is always returned for
+        the single line ones.
+
+        @param pos
+            Text position in 0 to GetLastPosition() range (inclusive).
+        @return
+            On success returns a wxPoint which contains client coordinates for
+            the given position in pixels, otherwise returns ::wxDefaultPosition.
+
+        @since 2.9.3
+
+        @see XYToPosition(), PositionToXY()
+    */
+    wxPoint PositionToCoords(long pos) const;
 
     /**
         Saves the contents of the control in a text file.
@@ -1458,6 +1575,33 @@ public:
     //@}
 };
 
+
+
+wxEventType wxEVT_TEXT;
+wxEventType wxEVT_TEXT_ENTER;
+wxEventType wxEVT_TEXT_URL;
+wxEventType wxEVT_TEXT_MAXLEN;
+
+
+class wxTextUrlEvent : public wxCommandEvent
+{
+public:
+    wxTextUrlEvent(int winid, const wxMouseEvent& evtMouse,
+                   long start, long end);
+
+    wxTextUrlEvent(const wxTextUrlEvent& event);
+
+    // get the mouse event which happened over the URL
+    const wxMouseEvent& GetMouseEvent() const;
+
+    // get the start of the URL
+    long GetURLStart() const;
+
+    // get the end of the URL
+    long GetURLEnd() const;
+
+    virtual wxEvent *Clone() const;
+};
 
 
 /**

@@ -4,8 +4,8 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
+//              (c) 2013 Rob Bresalier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,6 +15,8 @@
 #if defined(__BORLANDC__)
     #pragma hdrstop
 #endif
+
+#include "wx/private/eventloopsourcesmanager.h"
 
 // ============================================================================
 // declarations
@@ -58,8 +60,6 @@
 #pragma message disable nosimpint
 #endif
 
-#include "wx/unix/execute.h"
-
 #include "wx/x11/private.h"
 
 #include "X11/Xutil.h"
@@ -94,14 +94,11 @@ bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
 // ----------------------------------------------------------------------------
 
 // Emit a beeeeeep
-#ifndef __EMX__
-// on OS/2, we use the wxBell from wxBase library (src/os2/utils.cpp)
 void wxBell()
 {
     // Use current setting for the bell
     XBell ((Display*) wxGetDisplay(), 0);
 }
-#endif
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 {
@@ -395,3 +392,27 @@ wxString wxGetXEventName(XEvent& event)
 #endif
 }
 
+#if wxUSE_EVENTLOOP_SOURCE
+
+class wxX11EventLoopSourcesManager : public wxEventLoopSourcesManagerBase
+{
+public:
+    wxEventLoopSource *
+    AddSourceForFD(int WXUNUSED(fd),
+                   wxEventLoopSourceHandler* WXUNUSED(handler),
+                   int WXUNUSED(flags))
+    {
+        wxFAIL_MSG("Monitoring FDs in the main loop is not implemented in wxX11");
+
+        return NULL;
+    }
+};
+
+wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
+{
+    static wxX11EventLoopSourcesManager s_eventLoopSourcesManager;
+
+    return &s_eventLoopSourcesManager;
+}
+
+#endif // wxUSE_EVENTLOOP_SOURCE

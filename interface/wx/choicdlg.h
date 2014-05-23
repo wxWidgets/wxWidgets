@@ -2,15 +2,41 @@
 // Name:        choicdlg.h
 // Purpose:     interface of wx[Multi|Single]ChoiceDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+    Default width of the choice dialog.
+*/
+#define wxCHOICE_WIDTH 150
+
+/**
+    Default height of the choice dialog.
+*/
+#define wxCHOICE_HEIGHT 200
+
+/**
+    Default style of the choice dialog.
+
+    @remarks wxRESIZE_BORDER is not used under WinCE.
+*/
+#define wxCHOICEDLG_STYLE (wxDEFAULT_DIALOG_STYLE | wxOK | wxCANCEL | wxCENTRE | wxRESIZE_BORDER)
+
 
 /**
     @class wxMultiChoiceDialog
 
     This class represents a dialog that shows a list of strings, and allows the
     user to select one or more.
+
+    @beginStyleTable
+    @style{wxOK}
+        Show an OK button.
+    @style{wxCANCEL}
+        Show a Cancel button.
+    @style{wxCENTRE}
+        Centre the message. Not Windows.
+    @endStyleTable
 
     @library{wxbase}
     @category{cmndlg}
@@ -36,30 +62,13 @@ public:
             An array of strings, or a string list, containing the choices.
         @param style
             A dialog style (bitlist) containing flags chosen from standard
-            dialog style and the ones listed below. The default value is
-            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
-            wxCANCEL | wxCENTRE.
+            dialog styles and the ones listed in the class documentation. The
+            default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+            wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
             Dialog position. Not Windows.
 
-        @beginStyleTable
-        @style{wxOK}
-            Show an OK button.
-        @style{wxCANCEL}
-            Show a Cancel button.
-        @style{wxCENTRE}
-            Centre the message. Not Windows.
-        @endStyleTable
-
         @remarks Use ShowModal() to show the dialog.
-
-        @beginWxPythonOnly
-
-        For Python the two parameters @a n and @a choices are collapsed into a
-        multi parameter @a choices which is expected to be a Python list of
-        strings.
-
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Not supported by wxPerl.
@@ -83,30 +92,13 @@ public:
             An array of strings, or a string list, containing the choices.
         @param style
             A dialog style (bitlist) containing flags chosen from standard
-            dialog style and the ones listed below. The default value is
-            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
-            wxCANCEL | wxCENTRE.
+            dialog styles and the ones listed in the class documentation. The
+            default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+            wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
             Dialog position. Not Windows.
 
-        @beginStyleTable
-        @style{wxOK}
-            Show an OK button.
-        @style{wxCANCEL}
-            Show a Cancel button.
-        @style{wxCENTRE}
-            Centre the message. Not Windows.
-        @endStyleTable
-
         @remarks Use ShowModal() to show the dialog.
-
-        @beginWxPythonOnly
-
-        For Python the two parameters @a n and @a choices are collapsed into a
-        multi parameter @a choices which is expected to be a Python list of
-        strings.
-
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Use an array reference for the @a choices parameter.
@@ -123,7 +115,7 @@ public:
     /**
         Returns array with indexes of selected items.
     */
-    wxArrayInt GetSelection() const;
+    wxArrayInt GetSelections() const;
 
     /**
         Sets selected items from the array of selected items' indexes.
@@ -144,6 +136,15 @@ public:
     This class represents a dialog that shows a list of strings, and allows the
     user to select one. Double-clicking on a list item is equivalent to
     single-clicking and then pressing OK.
+
+    @beginStyleTable
+    @style{wxOK}
+        Show an OK button.
+    @style{wxCANCEL}
+        Show a Cancel button.
+    @style{wxCENTRE}
+        Centre the message. Not Windows.
+    @endStyleTable
 
     @library{wxbase}
     @category{cmndlg}
@@ -170,33 +171,16 @@ public:
             An array of strings, or a string list, containing the choices.
         @param clientData
             An array of client data to be associated with the items. See
-            GetSelectionClientData().
+            GetSelectionData().
         @param style
             A dialog style (bitlist) containing flags chosen from standard
-            dialog styles and the ones listed below. The default value is
-            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
-            wxCANCEL | wxCENTRE.
+            dialog styles and the ones listed in the class documentation. The
+            default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+            wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
             Dialog position. Not Windows.
 
-        @beginStyleTable
-        @style{wxOK}
-            Show an OK button.
-        @style{wxCANCEL}
-            Show a Cancel button.
-        @style{wxCENTRE}
-            Centre the message. Not Windows.
-        @endStyleTable
-
         @remarks Use ShowModal() to show the dialog.
-
-        @beginWxPythonOnly
-
-        For Python the two parameters @a n and @a choices are collapsed into a
-        multi parameter @a choices which is expected to be a Python list of
-        strings.
-
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Not supported by wxPerl.
@@ -222,33 +206,16 @@ public:
             An array of strings, or a string list, containing the choices.
         @param clientData
             An array of client data to be associated with the items. See
-            GetSelectionClientData().
+            GetSelectionData().
         @param style
             A dialog style (bitlist) containing flags chosen from standard
-            dialog styles and the ones listed below. The default value is
-            equivalent to wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK |
-            wxCANCEL | wxCENTRE.
+            dialog styles and the ones listed in the class documentation. The
+            default value is equivalent to wxDEFAULT_DIALOG_STYLE |
+            wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE.
         @param pos
             Dialog position. Not Windows.
 
-        @beginStyleTable
-        @style{wxOK}
-            Show an OK button.
-        @style{wxCANCEL}
-            Show a Cancel button.
-        @style{wxCENTRE}
-            Centre the message. Not Windows.
-        @endStyleTable
-
         @remarks Use ShowModal() to show the dialog.
-
-        @beginWxPythonOnly
-
-        For Python the two parameters @a n and @a choices are collapsed into a
-        multi parameter @a choices which is expected to be a Python list of
-        strings.
-
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         Use an array reference for the @a choices parameter.
@@ -270,8 +237,10 @@ public:
 
     /**
         Returns the client data associated with the selection.
+
+        @since 2.9.4
     */
-    char* GetSelectionClientData() const;
+    void* GetSelectionData() const;
 
     /**
         Returns the selected string.
@@ -312,11 +281,11 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& aChoices,
                            wxWindow* parent = NULL,
-                           int x = -1,
-                           int y = -1,
+                           int x = wxDefaultCoord,
+                           int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = 150,
-                           int height = 200,
+                           int width = wxCHOICE_WIDTH,
+                           int height = wxCHOICE_HEIGHT,
                            int initialSelection = 0);
 
 int wxGetSingleChoiceIndex(const wxString& message,
@@ -324,11 +293,11 @@ int wxGetSingleChoiceIndex(const wxString& message,
                            int n,
                            const wxString& choices[],
                            wxWindow* parent = NULL,
-                           int x = -1,
-                           int y = -1,
+                           int x = wxDefaultCoord,
+                           int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = 150,
-                           int height = 200,
+                           int width = wxCHOICE_WIDTH,
+                           int height = wxCHOICE_HEIGHT,
                            int initialSelection = 0);
 
 
@@ -372,22 +341,22 @@ wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            const wxArrayString& aChoices,
                            wxWindow* parent = NULL,
-                           int x = -1,
-                           int y = -1,
+                           int x = wxDefaultCoord,
+                           int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = 150,
-                           int height = 200
+                           int width = wxCHOICE_WIDTH,
+                           int height = wxCHOICE_HEIGHT,
                            int initialSelection = 0);
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
                            int n,
                            const wxString& choices[],
                            wxWindow* parent = NULL,
-                           int x = -1,
-                           int y = -1,
+                           int x = wxDefaultCoord,
+                           int y = wxDefaultCoord,
                            bool centre = true,
-                           int width = 150,
-                           int height = 200
+                           int width = wxCHOICE_WIDTH,
+                           int height = wxCHOICE_HEIGHT,
                            int initialSelection = 0);
 
 
@@ -425,11 +394,11 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                const wxArrayString& aChoices,
                                const wxString& client_data[],
                                wxWindow* parent = NULL,
-                               int x = -1,
-                               int y = -1,
+                               int x = wxDefaultCoord,
+                               int y = wxDefaultCoord,
                                bool centre = true,
-                               int width = 150,
-                               int height = 200
+                               int width = wxCHOICE_WIDTH,
+                               int height = wxCHOICE_HEIGHT,
                                int initialSelection = 0);
 
 wxString wxGetSingleChoiceData(const wxString& message,
@@ -438,11 +407,11 @@ wxString wxGetSingleChoiceData(const wxString& message,
                                const wxString& choices[],
                                const wxString& client_data[],
                                wxWindow* parent = NULL,
-                               int x = -1,
-                               int y = -1,
+                               int x = wxDefaultCoord,
+                               int y = wxDefaultCoord,
                                bool centre = true,
-                               int width = 150,
-                               int height = 200
+                               int width = wxCHOICE_WIDTH,
+                               int height = wxCHOICE_HEIGHT,
                                int initialSelection = 0);
 
 void* wxGetSingleChoiceData(const wxString& message,
@@ -492,11 +461,11 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& caption,
                             const wxArrayString& aChoices,
                             wxWindow* parent = NULL,
-                            int x = -1,
-                            int y = -1,
+                            int x = wxDefaultCoord,
+                            int y = wxDefaultCoord,
                             bool centre = true,
-                            int width = 150,
-                            int height = 200);
+                            int width = wxCHOICE_WIDTH,
+                            int height = wxCHOICE_HEIGHT);
 
 int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& message,
@@ -504,11 +473,11 @@ int wxGetSelectedChoices(wxArrayInt& selections,
                             int n,
                             const wxString& choices[],
                             wxWindow* parent = NULL,
-                            int x = -1,
-                            int y = -1,
+                            int x = wxDefaultCoord,
+                            int y = wxDefaultCoord,
                             bool centre = true,
-                            int width = 150,
-                            int height = 200);
+                            int width = wxCHOICE_WIDTH,
+                            int height = wxCHOICE_HEIGHT);
 
 //@}
 

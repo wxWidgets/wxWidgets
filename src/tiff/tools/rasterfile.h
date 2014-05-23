@@ -1,4 +1,4 @@
-/* $Header: /cvs/maptools/cvsroot/libtiff/tools/rasterfile.h,v 1.3 2003/11/12 19:14:33 dron Exp $ */
+/* $Header: /cvs/libtiff/tools/rasterfile.h,v 1.3 2003/11/12 19:14:33 dron Exp $ */
 
 /*
  * Description of header for files containing raster images

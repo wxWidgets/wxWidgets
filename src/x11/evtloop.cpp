@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     01.06.01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2002 Julian Smart
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,14 +124,9 @@ wxGUIEventLoop::~wxGUIEventLoop()
     wxASSERT_MSG( !m_impl, wxT("should have been deleted in Run()") );
 }
 
-int wxGUIEventLoop::Run()
+int wxGUIEventLoop::DoRun()
 {
-    // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !m_impl, -1, wxT("can't reenter a message loop") );
-
     m_impl = new wxEventLoopImpl;
-
-    wxEventLoopActivator activate(this);
 
     m_impl->m_keepGoing = true;
     while ( m_impl->m_keepGoing )
@@ -167,7 +161,7 @@ int wxGUIEventLoop::Run()
     return exitcode;
 }
 
-void wxGUIEventLoop::Exit(int rc)
+void wxGUIEventLoop::ScheduleExit(int rc)
 {
     if ( m_impl )
     {
@@ -248,7 +242,7 @@ bool wxGUIEventLoop::Dispatch()
     return true;
 }
 
-bool wxGUIEventLoop::YieldFor(long eventsToProcess)
+void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 {
     // Sometimes only 2 yields seem
     // to do the trick, e.g. in the
@@ -256,9 +250,6 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     int i;
     for (i = 0; i < 2; i++)
     {
-        m_isInsideYield = true;
-        m_eventsToProcessInsideYield = eventsToProcess;
-
         // Call dispatch at least once so that sockets
         // can be tested
         wxTheApp->Dispatch();
@@ -272,8 +263,6 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
 #endif
         ProcessIdle();
 
-        m_isInsideYield = false;
+        wxEventLoopBase::DoYieldFor(eventsToProcess);
     }
-
-    return true;
 }

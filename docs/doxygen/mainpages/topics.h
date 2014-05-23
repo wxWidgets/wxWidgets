@@ -2,27 +2,18 @@
 // Name:        topics.h
 // Purpose:     Topic overviews page of the Doxygen manual
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
-@page page_topics Topic Overviews
+@page page_topics Programming Guides
 
-This chapter contains a selection of topic overviews.
-The following is a basic categorization of them:
+@tableofcontents
 
-@li @ref page_topics_starting
-@li @ref page_topics_programming
-@li @ref page_topics_nongui
-@li @ref page_topics_drawing
-@li @ref page_topics_gui
-@li @ref page_topics_indivctrl
-@li @ref page_topics_other
+The guides here cover all high level details of a full range of development
+topics related to building applications with wxWidgets.
 
-
-<hr>
 
 
 @section page_topics_starting Starting with wxWidgets
@@ -31,7 +22,6 @@ The following is a basic categorization of them:
 @li @subpage overview_roughguide
 @li @subpage overview_helloworld
 @li @subpage overview_python
-@li @subpage overview_changes_since28
 
 @section page_topics_programming Important wxWidgets Topics
 
@@ -111,4 +101,3 @@ The following is a basic categorization of them:
 @li @subpage overview_customwidgets
 
 */
-

@@ -2,7 +2,6 @@
 // Name:        funcmacro_events.h
 // Purpose:     Event functions and macro group doc
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,6 @@
 // Purpose:     wxPen class declaration
 // Author:      Vaclav Slavik
 // Created:     2006-08-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 REA Elektronik GmbH
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,9 +32,6 @@ class WXDLLIMPEXP_CORE wxPen: public wxPenBase
 public:
     wxPen() {}
     wxPen(const wxColour &colour, int width = 1, wxPenStyle style = wxPENSTYLE_SOLID);
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( wxPen(const wxColour& col, int width, int style) );
-#endif
 
     wxPen(const wxBitmap& stipple, int width);
 
@@ -61,10 +57,12 @@ public:
     wxDash* GetDash() const;
     wxBitmap *GetStipple() const;
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_FUTURE( void SetStyle(int style) )
-        { SetStyle((wxPenStyle)style); }
-#endif
+
+    wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
+    wxPen(const wxColour& col, int width, int style);
+
+    wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
+    void SetStyle(int style) { SetStyle((wxPenStyle)style); }
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

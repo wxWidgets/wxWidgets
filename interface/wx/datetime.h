@@ -2,14 +2,13 @@
 // Name:        datetime.h
 // Purpose:     interface of wxDateTime
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
     @class wxDateTime
 
-    wxDateTime class represents an absolute moment in the time.
+    wxDateTime class represents an absolute moment in time.
 
     The type @c wxDateTime_t is typedefed as <tt>unsigned short</tt> and is
     used to contain the number of years, hours, minutes, seconds and
@@ -28,12 +27,6 @@
     Please note that although several function accept an extra Calendar
     parameter, it is currently ignored as only the Gregorian calendar is
     supported. Future versions will support other calendars.
-
-    @beginWxPythonOnly
-    These methods are standalone functions named
-    "wxDateTime_<StaticMethodName>" in wxPython.
-    @endWxPythonOnly
-
 
     @section datetime_formatting Date Formatting and Parsing
 
@@ -245,6 +238,27 @@ public:
 
 
     /**
+        Class representing a time zone.
+
+        The representation is simply the offset, in seconds, from UTC.
+     */
+    class WXDLLIMPEXP_BASE TimeZone
+    {
+    public:
+        /// Constructor for a named time zone.
+        TimeZone(TZ tz);
+
+        /// Constructor for the given offset in seconds.
+        TimeZone(long offset = 0);
+
+        /// Create a time zone with the given offset in seconds.
+        static TimeZone Make(long offset);
+
+        /// Return the offset of this time zone from UTC, in seconds.
+        long GetOffset() const;
+    };
+
+    /**
         Contains broken down date-time representation.
 
         This struct is analogous to standard C <code>struct tm</code> and uses
@@ -295,45 +309,33 @@ public:
         object later.
     */
     wxDateTime();
+
+    /**
+       Copy constructor.
+    */
+    wxDateTime(const wxDateTime& date);
+    
     /**
         Same as Set().
-
-        @beginWxPythonOnly
-        This constructor is named "wxDateTimeFromTimeT" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime(time_t timet);
     /**
         Same as Set().
-
-        @beginWxPythonOnly Unsupported. @endWxPythonOnly
     */
     wxDateTime(const struct tm& tm);
     /**
         Same as Set().
-
-        @beginWxPythonOnly
-        This constructor is named "wxDateTimeFromJDN" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime(double jdn);
     /**
         Same as Set().
-
-        @beginWxPythonOnly
-        This constructor is named "wxDateTimeFromHMS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime(wxDateTime_t hour, wxDateTime_t minute = 0,
                wxDateTime_t second = 0, wxDateTime_t millisec = 0);
     /**
         Same as Set().
-
-        @beginWxPythonOnly
-        This constructor is named "wxDateTimeFromDMY" in wxPython.
-        @endWxPythonOnly
     */
-    wxDateTime(wxDateTime_t day, Month month = Inv_Month,
+    wxDateTime(wxDateTime_t day, Month month,
                int year = Inv_Year, wxDateTime_t hour = 0,
                wxDateTime_t minute = 0, wxDateTime_t second = 0,
                wxDateTime_t millisec = 0);
@@ -345,6 +347,7 @@ public:
             Input, Windows SYSTEMTIME reference
         @since 2.9.0
         @remarks MSW only
+        @onlyfor{wxmsw}
     */
     wxDateTime(const struct _SYSTEMTIME& st);
 
@@ -356,20 +359,24 @@ public:
 
     /**
         Constructs the object from @a timet value holding the number of seconds
-        since Jan 1, 1970.
+        since Jan 1, 1970 UTC.
 
-        @beginWxPythonOnly
-        This method is named "SetTimeT" in wxPython.
-        @endWxPythonOnly
+        If @a timet is invalid, i.e. @code (time_t)-1 @endcode, wxDateTime
+        becomes invalid too, i.e. its IsValid() will return @false.
     */
     wxDateTime& Set(time_t timet);
     /**
         Sets the date and time from the broken down representation in the
         standard @a tm structure.
-
-        @beginWxPythonOnly Unsupported. @endWxPythonOnly
     */
     wxDateTime& Set(const struct tm& tm);
+
+    /**
+       Sets the date and time from the broken down representation in the
+       @a wxDateTime::Tm structure.
+    */
+    wxDateTime& Set(const Tm& tm);
+    
     /**
         Sets the date from the so-called Julian Day Number.
 
@@ -377,26 +384,32 @@ public:
         particular instant is the fractional number of days since 12 hours
         Universal Coordinated Time (Greenwich mean noon) on January 1 of the
         year -4712 in the Julian proleptic calendar.
-
-        @beginWxPythonOnly
-        This method is named "SetJDN" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Set(double jdn);
     /**
         Sets the date to be equal to Today() and the time from supplied
         parameters.
 
-        @beginWxPythonOnly
-        This method is named "SetHMS" in wxPython.
-        @endWxPythonOnly
+        See the full Set() overload for the remarks about DST.
     */
     wxDateTime& Set(wxDateTime_t hour, wxDateTime_t minute = 0,
                     wxDateTime_t second = 0, wxDateTime_t millisec = 0);
     /**
         Sets the date and time from the parameters.
+
+        If the function parameters are invalid, e.g. @a month is February and
+        @a day is 30, the object is left in an invalid state, i.e. IsValid()
+        method will return @false.
+
+        If the specified time moment is invalid due to DST, i.e. it falls into
+        the "missing" hour on the date on which the DST starts, a valid
+        wxDateTime object is still constructed but its hour component is moved
+        forward to ensure that it corresponds to a valid moment in the local
+        time zone. For example, in the CET time zone the DST started on
+        2013-03-31T02:00:00 in 2013 and so setting the object to 2:30 at this
+        date actually sets the hour to 3, and not 2.
     */
-    wxDateTime& Set(wxDateTime_t day, Month month = Inv_Month,
+    wxDateTime& Set(wxDateTime_t day, Month month,
                     int year = Inv_Year, wxDateTime_t hour = 0,
                     wxDateTime_t minute = 0, wxDateTime_t second = 0,
                     wxDateTime_t millisec = 0);
@@ -472,7 +485,7 @@ public:
     /**
         Returns the date and time in DOS format.
     */
-    long unsigned int GetAsDOS() const;
+    unsigned long GetAsDOS() const;
 
     /**
         Initialize using the Windows SYSTEMTIME structure.
@@ -480,6 +493,7 @@ public:
             Input, Windows SYSTEMTIME reference
         @since 2.9.0
         @remarks MSW only
+        @onlyfor{wxmsw}
     */
     wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME& st);
 
@@ -489,6 +503,7 @@ public:
             Output, pointer to Windows SYSTEMTIME
         @since 2.9.0
         @remarks MSW only
+        @onlyfor{wxmsw}
     */
     void GetAsMSWSysTime(struct _SYSTEMTIME* st) const;
 
@@ -510,28 +525,28 @@ public:
     /**
         Returns the day in the given timezone (local one by default).
     */
-    short unsigned int GetDay(const TimeZone& tz = Local) const;
+    unsigned short GetDay(const TimeZone& tz = Local) const;
 
     /**
         Returns the day of the year (in 1-366 range) in the given timezone
         (local one by default).
     */
-    short unsigned int GetDayOfYear(const TimeZone& tz = Local) const;
+    unsigned short GetDayOfYear(const TimeZone& tz = Local) const;
 
     /**
         Returns the hour in the given timezone (local one by default).
     */
-    short unsigned int GetHour(const TimeZone& tz = Local) const;
+    unsigned short GetHour(const TimeZone& tz = Local) const;
 
     /**
         Returns the milliseconds in the given timezone (local one by default).
     */
-    short unsigned int GetMillisecond(const TimeZone& tz = Local) const;
+    unsigned short GetMillisecond(const TimeZone& tz = Local) const;
 
     /**
         Returns the minute in the given timezone (local one by default).
     */
-    short unsigned int GetMinute(const TimeZone& tz = Local) const;
+    unsigned short GetMinute(const TimeZone& tz = Local) const;
 
     /**
         Returns the month in the given timezone (local one by default).
@@ -541,11 +556,13 @@ public:
     /**
         Returns the seconds in the given timezone (local one by default).
     */
-    short unsigned int GetSecond(const TimeZone& tz = Local) const;
+    unsigned short GetSecond(const TimeZone& tz = Local) const;
 
     /**
-        Returns the number of seconds since Jan 1, 1970. An assert failure will
-        occur if the date is not in the range covered by @c time_t type.
+        Returns the number of seconds since Jan 1, 1970 UTC.
+
+        An assert failure will occur if the date is not in the range covered by
+        @c time_t type, use GetValue() if you work with dates outside of it.
     */
     time_t GetTicks() const;
 
@@ -590,13 +607,6 @@ public:
     int GetYear(const TimeZone& tz = Local) const;
 
     /**
-        Returns @true if the given date is later than the date of adoption of
-        the Gregorian calendar in the given country (and hence the Gregorian
-        calendar calculations make sense for it).
-    */
-    bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
-
-    /**
         Returns @true if the object represents a valid time moment.
     */
     bool IsValid() const;
@@ -630,7 +640,7 @@ public:
 
     /**
         Returns @true if the date is equal to another one up to the given time
-        interval, i.e. if the absolute difference between the two dates is less
+        interval, i.e.\ if the absolute difference between the two dates is less
         than this interval.
     */
     bool IsEqualUpTo(const wxDateTime& dt, const wxTimeSpan& ts) const;
@@ -689,67 +699,35 @@ public:
 
     /**
         Adds the given date span to this object.
-
-        @beginWxPythonOnly
-        This method is named "AddDS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Add(const wxDateSpan& diff) const;
     /**
         Adds the given date span to this object.
-
-        @beginWxPythonOnly
-        This method is named "AddDS" in wxPython.
-        @endWxPythonOnly
     */
-    wxDateTime Add(const wxDateSpan& diff);
+    wxDateTime& Add(const wxDateSpan& diff);
     /**
         Adds the given time span to this object.
-
-        @beginWxPythonOnly
-        This method is named "AddTS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Add(const wxTimeSpan& diff) const;
     /**
         Adds the given time span to this object.
-
-        @beginWxPythonOnly
-        This method is named "AddTS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Add(const wxTimeSpan& diff);
 
     /**
         Subtracts the given time span from this object.
-
-        @beginWxPythonOnly
-        This method is named "SubtractTS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Subtract(const wxTimeSpan& diff) const;
     /**
         Subtracts the given time span from this object.
-
-        @beginWxPythonOnly
-        This method is named "SubtractTS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Subtract(const wxTimeSpan& diff);
     /**
         Subtracts the given date span from this object.
-
-        @beginWxPythonOnly
-        This method is named "SubtractDS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime Subtract(const wxDateSpan& diff) const;
     /**
         Subtracts the given date span from this object.
-
-        @beginWxPythonOnly
-        This method is named "SubtractDS" in wxPython.
-        @endWxPythonOnly
     */
     wxDateTime& Subtract(const wxDateSpan& diff);
     /**
@@ -757,23 +735,53 @@ public:
         them as a wxTimeSpan.
     */
     wxTimeSpan Subtract(const wxDateTime& dt) const;
+    /**
+       Returns the difference between this object and @a dt as a wxDateSpan.
+
+       This method allows to find the number of entire years, months, weeks and
+       days between @a dt and this date.
+
+       @since 2.9.5
+    */
+    wxDateSpan DiffAsDateSpan(const wxDateTime& dt) const;
 
     /**
         Adds the given date span to this object.
     */
-    wxDateTime operator+=(const wxDateSpan& diff);
+    wxDateTime& operator+=(const wxDateSpan& diff);
+    /**
+        Adds the given date span to this object.
+    */
+    wxDateTime operator+(const wxDateSpan& ds) const;
     /**
         Subtracts the given date span from this object.
     */
     wxDateTime& operator-=(const wxDateSpan& diff);
     /**
+        Subtracts the given date span from this object.
+    */
+    wxDateTime operator-(const wxDateSpan& ds) const;
+    /**
         Adds the given time span to this object.
     */
     wxDateTime& operator+=(const wxTimeSpan& diff);
     /**
+        Adds the given time span to this object.
+    */
+    wxDateTime operator+(const wxTimeSpan& ts) const;
+    /**
         Subtracts the given time span from this object.
     */
     wxDateTime& operator-=(const wxTimeSpan& diff);
+    /**
+        Subtracts the given time span from this object.
+    */
+    wxDateTime operator-(const wxTimeSpan& ts) const;
+    /**
+        Subtracts another date from this one and returns the difference between
+        them as a wxTimeSpan.
+    */
+    wxTimeSpan operator-(const wxDateTime& dt2) const;
 
     //@}
 
@@ -1113,7 +1121,7 @@ public:
                                       WeekFlags flags = Monday_First);
 
     /**
-        Sets the date to the day number @a yday in the same year (i.e., unlike
+        Sets the date to the day number @a yday in the same year (i.e.\ unlike
         the other functions, this one does not use the current year). The day
         number should be in the range 1-366 for the leap years and 1-365 for
         the other ones.
@@ -1238,7 +1246,7 @@ public:
 
 
     /**
-        Converts the year in absolute notation (i.e. a number which can be
+        Converts the year in absolute notation (i.e.\ a number which can be
         negative, positive or zero) to the year in BC/AD notation. For the
         positive years, nothing is done, but the year 0 is year 1 BC and so for
         other years there is a difference of 1.
@@ -1280,7 +1288,7 @@ public:
                                  Country country = Country_Default);
 
     /**
-        Get the current century, i.e. first two digits of the year, in given
+        Get the current century, i.e.\ first two digits of the year, in given
         calendar (only Gregorian is currently supported).
     */
     static int GetCentury(int year);
@@ -1361,20 +1369,12 @@ public:
     /**
         Returns the number of days in the given year. The only supported value
         for @a cal currently is @c Gregorian.
-
-        @beginWxPythonOnly
-        This method is named "GetNumberOfDaysInYear" in wxPython.
-        @endWxPythonOnly
     */
     static wxDateTime_t GetNumberOfDays(int year, Calendar cal = Gregorian);
 
     /**
         Returns the number of days in the given month of the given year. The
         only supported value for @a cal currently is @c Gregorian.
-
-        @beginWxPythonOnly
-        This method is named "GetNumberOfDaysInMonth" in wxPython.
-        @endWxPythonOnly
     */
     static wxDateTime_t GetNumberOfDays(Month month, int year = Inv_Year,
                                         Calendar cal = Gregorian);
@@ -1445,9 +1445,8 @@ public:
         printf("Current time in Paris:\t%s\n", now.Format("%c", wxDateTime::CET).c_str());
         @endcode
 
-        @note This function is accurate up to seconds. UNow() should be used
-              for better precision, but it is less efficient and might not be
-              available on all platforms.
+        @note This function is accurate up to seconds. UNow() can be used if
+              better precision is required.
 
         @see Today()
     */
@@ -1475,18 +1474,20 @@ public:
 
     /**
         Returns the object corresponding to the midnight of the current day
-        (i.e. the same as Now(), but the time part is set to 0).
+        (i.e.\ the same as Now(), but the time part is set to 0).
 
         @see Now()
     */
     static wxDateTime Today();
 
     /**
-        Returns the object corresponding to the current time including the
-        milliseconds if a function to get time with such precision is available
-        on the current platform (supported under most Unices and Win32).
+        Returns the object corresponding to the current UTC time including the
+        milliseconds.
 
-        @see Now()
+        Notice that unlike Now(), this method creates a wxDateTime object
+        corresponding to UTC, not local, time.
+
+        @see Now(), wxGetUTCTimeMillis()
     */
     static wxDateTime UNow();
 };
@@ -1611,6 +1612,16 @@ public:
         span.
     */
     int GetMonths() const;
+
+    /**
+        Returns the combined number of months in this date span, counting both
+        years and months.
+
+        @see GetYears(), GetMonths()
+
+        @since 2.9.5
+    */
+    int GetTotalMonths() const;
 
     /**
         Returns the combined number of days in this date span, counting both
@@ -1769,7 +1780,7 @@ public:
     /**
         Returns @true if this date span is different from the other one.
     */
-    bool operator!=(const wxDateSpan&) const;
+    bool operator!=(const wxDateSpan& other) const;
 
     /**
         Returns @true if this date span is equal to the other one. Two date
@@ -1777,7 +1788,7 @@ public:
         years and months and the same total number of days (counting both days
         and weeks).
     */
-    bool operator==(const wxDateSpan&) const;
+    bool operator==(const wxDateSpan& other) const;
 };
 
 
@@ -1859,7 +1870,7 @@ public:
         specifier of larger unit, only the rest part is taken, otherwise the
         full value is used.
     */
-    wxString Format(const wxString& = wxDefaultTimeSpanFormat) const;
+    wxString Format(const wxString& format = wxDefaultTimeSpanFormat) const;
 
     /**
         Returns the difference in number of days.
@@ -1912,7 +1923,7 @@ public:
     bool IsEqualTo(const wxTimeSpan& ts) const;
 
     /**
-        Compares two timespans: works with the absolute values, i.e. -2 hours
+        Compares two timespans: works with the absolute values, i.e.\ -2 hours
         is longer than 1 hour. Also, it will return @false if the timespans are
         equal in absolute value.
     */
@@ -1934,7 +1945,7 @@ public:
     bool IsPositive() const;
 
     /**
-        Compares two timespans: works with the absolute values, i.e. 1 hour is
+        Compares two timespans: works with the absolute values, i.e.\ 1 hour is
         shorter than -2 hours. Also, it will return @false if the timespans are
         equal in absolute value.
     */

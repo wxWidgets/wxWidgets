@@ -2,9 +2,14 @@
 // Name:        msgdlg.h
 // Purpose:     interface of wxMessageDialog
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+    Default message box caption string.
+*/
+const char wxMessageBoxCaptionStr[] = "Message";
+
 
 /**
     @class wxMessageDialog
@@ -22,6 +27,12 @@
         Puts Yes and No buttons in the message box. It is recommended to always
         use @c wxCANCEL with this style as otherwise the message box won't have
         a close button under wxMSW and the user will be forced to answer it.
+    @style{wxHELP}
+        Puts a Help button to the message box. This button can have special
+        appearance or be specially positioned if its label is not changed from
+        the default one. Notice that using this button is not supported when
+        showing a message box from non-main thread in wxOSX/Cocoa and it is not
+        supported in wxOSX/Carbon at all. Available since wxWidgets 2.9.3.
     @style{wxNO_DEFAULT}
         Makes the "No" button default, can only be used with @c wxYES_NO.
     @style{wxCANCEL_DEFAULT}
@@ -56,6 +67,15 @@
         Displays an information symbol. This icon is used by default if
         @c wxYES_NO is not given so it is usually unnecessary to specify it
         explicitly.
+    @style{wxICON_AUTH_NEEDED}
+        Displays an authentication needed symbol. This style is only supported
+        for message dialogs under wxMSW when a task dialog is used to implement
+        them (i.e. when running under Windows Vista or later). In other cases
+        the default icon selection logic will be used. Note this can be
+        combined with other styles to provide a fallback. For instance, using
+        wxICON_AUTH_NEEDED | wxICON_QUESTION will show a shield symbol on
+        Windows Vista or above and a question symbol on other platforms.
+        Available since wxWidgets 2.9.5
     @style{wxSTAY_ON_TOP}
         Makes the message box stay on top of all other windows and not only
         just its parent (currently implemented only under MSW and GTK).
@@ -75,6 +95,39 @@
 class wxMessageDialog : public wxDialog
 {
 public:
+    /**
+        Helper class allowing to use either stock id or string labels.
+
+        This class should never be used explicitly and is not really part of
+        wxWidgets API but rather is just an implementation helper allowing the
+        methods such as SetYesNoLabels() and SetOKCancelLabels() below to be
+        callable with either stock ids (e.g. ::wxID_CLOSE) or strings
+        ("&Close").
+     */
+    class ButtonLabel
+    {
+    public:
+        /// Construct the label from a stock id.
+        ButtonLabel(int stockId);
+
+        /// Construct the label from the specified string.
+        ButtonLabel(const wxString& label);
+
+        /**
+            Return the associated label as string.
+
+            Get the string label, whether it was originally specified directly
+            or as a stock id -- this is only useful for platforms without native
+            stock items id support
+         */
+        wxString GetAsString() const;
+
+        /**
+            Return the stock id or wxID_NONE if this is not a stock label.
+         */
+        int GetStockId() const;
+    };
+
     /**
         Constructor specifying the message box properties.
         Use ShowModal() to show the dialog.
@@ -115,6 +168,19 @@ public:
         @since 2.9.0
     */
     virtual void SetExtendedMessage(const wxString& extendedMessage);
+
+    /**
+        Sets the label for the Help button.
+
+        Please see the remarks in SetYesNoLabels() documentation.
+
+        Notice that changing the label of the help button resets its special
+        status (if any, this depends on the platform) and it will be treated
+        just like another button in this case.
+
+        @since 2.9.3
+     */
+    virtual bool SetHelpLabel(const ButtonLabel& help);
 
     /**
         Sets the message shown by the dialog.
@@ -190,12 +256,27 @@ public:
     virtual bool SetYesNoLabels(const ButtonLabel& yes, const ButtonLabel& no);
 
     /**
-        Shows the dialog, returning one of wxID_OK, wxID_CANCEL, wxID_YES, wxID_NO.
+        Shows the dialog, returning one of wxID_OK, wxID_CANCEL, wxID_YES,
+        wxID_NO or wxID_HELP.
 
         Notice that this method returns the identifier of the button which was
         clicked unlike wxMessageBox() function.
     */
     virtual int ShowModal();
+
+
+    wxString GetCaption() const;
+    wxString GetMessage() const;
+    wxString GetExtendedMessage() const;
+    long GetMessageDialogStyle() const;
+    bool HasCustomLabels() const;
+    wxString GetYesLabel() const;
+    wxString GetNoLabel() const;
+    wxString GetOKLabel() const;
+    wxString GetCancelLabel() const;
+    wxString GetHelpLabel() const;
+    long GetEffectiveIcon() const;
+
 };
 
 
@@ -215,9 +296,9 @@ public:
     extended text and custom labels for the message box buttons, are not
     provided by this function but only by wxMessageDialog.
 
-    The return value is one of: @c wxYES, @c wxNO, @c wxCANCEL or @c wxOK
-    (notice that this return value is @b different from the return value of
-    wxMessageDialog::ShowModal()).
+    The return value is one of: @c wxYES, @c wxNO, @c wxCANCEL, @c wxOK or @c
+    wxHELP (notice that this return value is @b different from the return value
+    of wxMessageDialog::ShowModal()).
 
     For example:
     @code
@@ -243,11 +324,12 @@ public:
         for @a x and @a y to let the system position the window.
     @param y
         Vertical dialog position (ignored under MSW).
+
     @header{wx/msgdlg.h}
 */
 int wxMessageBox(const wxString& message,
-                 const wxString& caption = "Message",
-                 int style = wxOK,
+                 const wxString& caption = wxMessageBoxCaptionStr,
+                 int style = wxOK | wxCENTRE,
                  wxWindow* parent = NULL,
                  int x = wxDefaultCoord,
                  int y = wxDefaultCoord);

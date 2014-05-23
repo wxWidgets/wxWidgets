@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin to derive from wxChoiceBase
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,6 +34,8 @@
     #include "wx/brush.h"
     #include "wx/settings.h"
 #endif
+
+#include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
 
@@ -86,10 +87,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
 
 
     // initialize the controls contents
-    for ( int i = 0; i < n; i++ )
-    {
-        Append(choices[i]);
-    }
+    Append(n, choices);
 
     // and now we may finally size the control properly (if needed)
     SetInitialSize(size);
@@ -302,19 +300,6 @@ unsigned int wxChoice::GetCount() const
 
 int wxChoice::FindString(const wxString& s, bool bCase) const
 {
-#if defined(__WATCOMC__) && defined(__WIN386__)
-    // For some reason, Watcom in WIN386 mode crashes in the CB_FINDSTRINGEXACT message.
-    // wxChoice::Do it the long way instead.
-    unsigned int count = GetCount();
-    for ( unsigned int i = 0; i < count; i++ )
-    {
-        // as CB_FINDSTRINGEXACT is case insensitive, be case insensitive too
-        if (GetString(i).IsSameAs(s, bCase))
-            return i;
-    }
-
-    return wxNOT_FOUND;
-#else // !Watcom
    //TODO:  Evidently some MSW versions (all?) don't like empty strings
    //passed to SendMessage, so we have to do it ourselves in that case
    if ( s.empty() )
@@ -336,11 +321,10 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
    else
    {
        int pos = (int)SendMessage(GetHwnd(), CB_FINDSTRINGEXACT,
-                                  (WPARAM)-1, (LPARAM)s.wx_str());
+                                  (WPARAM)-1, wxMSW_CONV_LPARAM(s));
 
        return pos == LB_ERR ? wxNOT_FOUND : pos;
    }
-#endif // Watcom/!Watcom
 }
 
 void wxChoice::SetString(unsigned int n, const wxString& s)
@@ -358,8 +342,12 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     else if ( HasClientObjectData() )
         oldObjData = GetClientObject(n);
 
+    // and also the selection if we're going to delete the item that was
+    // selected
+    const bool wasSelected = static_cast<int>(n) == GetSelection();
+
     ::SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
-    ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LPARAM)s.wx_str() );
+    ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, wxMSW_CONV_LPARAM(s) );
 
     // restore the client data
     if ( oldData )
@@ -367,6 +355,11 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     else if ( oldObjData )
         SetClientObject(n, oldObjData);
 
+    // and the selection
+    if ( wasSelected )
+        SetSelection(n);
+
+    // the width could have changed so the best size needs to be recomputed
     InvalidateBestSize();
 }
 
@@ -407,8 +400,17 @@ void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
 
 void* wxChoice::DoGetItemClientData(unsigned int n) const
 {
+    // Before using GetLastError() below, ensure that we don't have a stale
+    // error code from a previous API call as CB_GETITEMDATA doesn't reset it
+    // in case of success, it only sets it if an error occurs.
+    SetLastError(ERROR_SUCCESS);
+
     LPARAM rc = SendMessage(GetHwnd(), CB_GETITEMDATA, n, 0);
-    if ( rc == CB_ERR )
+
+    // Notice that we must call GetLastError() to distinguish between a real
+    // error and successfully retrieving a previously stored client data value
+    // of CB_ERR (-1).
+    if ( rc == CB_ERR && GetLastError() != ERROR_SUCCESS )
     {
         wxLogLastError(wxT("CB_GETITEMDATA"));
 
@@ -495,15 +497,16 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
-    const int heightBest = GetBestSize().y;
+    // The height of the control itself, i.e. of its visible part.
+    int heightVisible = height;
 
     // we need the real height below so get the current one if it's not given
     if ( height == wxDefaultCoord )
     {
         // height not specified, use the same as before
-        DoGetSize(NULL, &height);
+        DoGetSize(NULL, &heightVisible);
     }
-    else if ( height == heightBest )
+    else if ( height == GetBestSize().y )
     {
         // we don't need to manually manage our height, let the system use the
         // default one
@@ -544,7 +547,10 @@ void wxChoice::DoSetSize(int x, int y,
     const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
     int heightWithItems = 0;
     if (!HasFlag(wxCB_SIMPLE))
-        heightWithItems = height + hItem*nItems;
+        // The extra item (" + 1") is required to prevent a vertical
+        // scrollbar from appearing with comctl32.dll versions earlier
+        // than 6.0 (such as found in Win2k).
+        heightWithItems = heightVisible + hItem*(nItems + 1);
     else
         heightWithItems = SetHeightSimpleComboBox(nItems);
 
@@ -578,35 +584,8 @@ void wxChoice::DoSetSize(int x, int y,
 
 wxSize wxChoice::DoGetBestSize() const
 {
-    // find the widest string
-    int wChoice = 0;
-    int hChoice;
-    const unsigned int nItems = GetCount();
-    for ( unsigned int i = 0; i < nItems; i++ )
-    {
-        int wLine;
-        GetTextExtent(GetString(i), &wLine, NULL);
-        if ( wLine > wChoice )
-            wChoice = wLine;
-    }
-
-    // give it some reasonable default value if there are no strings in the
-    // list
-    if ( wChoice == 0 )
-        wChoice = 100;
-
-    // the combobox should be slightly larger than the widest string
-    wChoice += 5*GetCharWidth();
-    if( HasFlag( wxCB_SIMPLE ) )
-    {
-        hChoice = SetHeightSimpleComboBox( nItems );
-    }
-    else
-        hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight());
-
-    wxSize best(wChoice, hChoice);
-    CacheBestSize(best);
-    return best;
+    // The base version returns the size of the largest string
+    return GetSizeFromTextSize(wxChoiceBase::DoGetBestSize().x);
 }
 
 int wxChoice::SetHeightSimpleComboBox(int nItems) const
@@ -615,6 +594,71 @@ int wxChoice::SetHeightSimpleComboBox(int nItems) const
     wxGetCharSize( GetHWND(), &cx, &cy, GetFont() );
     int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, (WPARAM)-1, 0);
     return EDIT_HEIGHT_FROM_CHAR_HEIGHT( cy ) * wxMin( wxMax( nItems, 3 ), 6 ) + hItem - 1;
+}
+
+wxSize wxChoice::DoGetSizeFromTextSize(int xlen, int ylen) const
+{
+    int cHeight = GetCharHeight();
+
+    // We are interested in the difference of sizes between the whole control
+    // and its child part. I.e. arrow, separators, etc.
+    wxSize tsize(xlen, 0);
+
+    WinStruct<COMBOBOXINFO> info;
+    if ( ::GetComboBoxInfo(GetHwnd(), &info) )
+    {
+        tsize.x += info.rcItem.left + info.rcButton.right - info.rcItem.right
+                    + info.rcItem.left + 3; // right and extra margins
+    }
+    else // Just use some rough approximation.
+    {
+        tsize.x += 4*cHeight;
+    }
+
+    // set height on our own
+    if( HasFlag( wxCB_SIMPLE ) )
+        tsize.y = SetHeightSimpleComboBox(GetCount());
+    else
+        tsize.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cHeight);
+
+    // Perhaps the user wants something different from CharHeight
+    if ( ylen > 0 )
+        tsize.IncBy(0, ylen - cHeight);
+
+    return tsize;
+}
+
+// ----------------------------------------------------------------------------
+// Popup operations
+// ----------------------------------------------------------------------------
+
+void wxChoice::MSWDoPopupOrDismiss(bool show)
+{
+    wxASSERT_MSG( !HasFlag(wxCB_SIMPLE),
+                  wxT("can't popup/dismiss the list for simple combo box") );
+
+    // we *must* set focus to the combobox before showing or hiding the drop
+    // down as without this we get WM_LBUTTONDOWN messages with invalid HWND
+    // when hiding it (whether programmatically or manually) resulting in a
+    // crash when we pass them to IsDialogMessage()
+    //
+    // this can be seen in the combo page of the widgets sample under Windows 7
+    SetFocus();
+
+    ::SendMessage(GetHwnd(), CB_SHOWDROPDOWN, show, 0);
+}
+
+bool wxChoice::Show(bool show)
+{
+    if ( !wxChoiceBase::Show(show) )
+        return false;
+
+    // When hiding the combobox, we also need to hide its popup part as it
+    // doesn't happen automatically.
+    if ( !show && ::SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0) )
+        MSWDoPopupOrDismiss(false);
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -665,9 +709,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     /*
         The native control provides a great variety in the events it sends in
         the different selection scenarios (undoubtedly for greater amusement of
-        the programmers using it). For the reference, here are the cases when
-        the final selection is accepted (things are quite interesting when it
-        is cancelled too):
+        the programmers using it). Here are the different cases:
 
         A. Selecting with just the arrows without opening the dropdown:
             1. CBN_SELENDOK
@@ -689,6 +731,12 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         Admire the different order of messages in all of those cases, it must
         surely have taken a lot of effort to Microsoft developers to achieve
         such originality.
+
+        Additionally, notice that CBN_SELENDCANCEL doesn't seem to actually
+        cancel anything, if we get CBN_SELCHANGE before it, as it happens in
+        the case (B), the selection is still accepted. This doesn't make much
+        sense and directly contradicts MSDN documentation but is how the native
+        comboboxes behave and so we do the same thing.
      */
     switch ( param )
     {
@@ -701,44 +749,40 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             break;
 
         case CBN_CLOSEUP:
-            // if the selection was accepted by the user, it should have been
-            // reset to wxID_NONE by CBN_SELENDOK, otherwise the selection was
-            // cancelled and we must restore the old one
-            if ( m_lastAcceptedSelection != wxID_NONE )
+            if ( m_pendingSelection != wxID_NONE )
             {
-                SetSelection(m_lastAcceptedSelection);
-                m_lastAcceptedSelection = wxID_NONE;
+                // This can only happen in the case (B), so set the item
+                // selected in the drop down as our real selection.
+                SendSelectionChangedEvent(wxEVT_CHOICE);
+                m_pendingSelection = wxID_NONE;
             }
             break;
 
         case CBN_SELENDOK:
-            // reset it to prevent CBN_CLOSEUP from undoing the selection (it's
-            // ok to reset it now as GetCurrentSelection() will now return the
-            // same thing anyhow)
-            m_lastAcceptedSelection = wxID_NONE;
+            // Reset the variables to prevent CBN_CLOSEUP from doing anything,
+            // it's not needed if we do get CBN_SELENDOK.
+            m_lastAcceptedSelection =
+            m_pendingSelection = wxID_NONE;
 
-            {
-                const int n = GetSelection();
-
-                wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId);
-                event.SetInt(n);
-                event.SetEventObject(this);
-
-                if ( n > -1 )
-                {
-                    event.SetString(GetStringSelection());
-                    InitCommandEventWithItems(event, n);
-                }
-
-                ProcessCommand(event);
-            }
+            SendSelectionChangedEvent(wxEVT_CHOICE);
             break;
 
-        // don't handle CBN_SELENDCANCEL: just leave m_lastAcceptedSelection
-        // valid and the selection will be undone in CBN_CLOSEUP above
+        case CBN_SELCHANGE:
+            // If we get this event after CBN_SELENDOK, i.e. cases (A) or (C)
+            // above, we don't have anything to do. But in the case (B) we need
+            // to remember that the selection should really change once the
+            // drop down is closed.
+            if ( m_lastAcceptedSelection != wxID_NONE )
+                m_pendingSelection = GetCurrentSelection();
+            break;
 
-        // don't handle CBN_SELCHANGE neither, we don't want to generate events
-        // while the dropdown is opened -- but do add it if we ever need this
+        case CBN_SELENDCANCEL:
+            // Do not reset m_pendingSelection here -- it would make sense but,
+            // as described above, native controls keep the selection even when
+            // closing the drop down by pressing Escape or TAB, so conform to
+            // their behaviour.
+            m_lastAcceptedSelection = wxID_NONE;
+            break;
 
         default:
             return false;
@@ -749,7 +793,7 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 WXHBRUSH wxChoice::MSWControlColor(WXHDC hDC, WXHWND hWnd)
 {
-    if ( !IsEnabled() )
+    if ( !IsThisEnabled() )
         return MSWControlColorDisabled(hDC);
 
     return wxChoiceBase::MSWControlColor(hDC, hWnd);

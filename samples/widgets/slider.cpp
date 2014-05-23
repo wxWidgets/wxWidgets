@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing wxSlider
 // Author:      Vadim Zeitlin
 // Created:     16.04.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -97,11 +96,11 @@ public:
     SliderWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
     virtual ~SliderWidgetsPage(){};
 
-    virtual wxControl *GetWidget() const { return m_slider; }
-    virtual void RecreateWidget() { CreateSlider(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_slider; }
+    virtual void RecreateWidget() wxOVERRIDE { CreateSlider(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -182,7 +181,7 @@ protected:
                *m_textThumbLen;
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(SliderWidgetsPage)
 };
 
@@ -190,7 +189,7 @@ private:
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
     EVT_BUTTON(SliderPage_Reset, SliderWidgetsPage::OnButtonReset)
     EVT_BUTTON(SliderPage_SetValue, SliderWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(SliderPage_SetMinAndMax, SliderWidgetsPage::OnButtonSetMinAndMax)
@@ -216,7 +215,7 @@ BEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, SliderWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation

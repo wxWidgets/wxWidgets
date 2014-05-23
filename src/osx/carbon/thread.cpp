@@ -4,7 +4,6 @@
 // Author:      Original from Wolfram Gloger/Guilhem Lavaux/Vadim Zeitlin
 // Modified by: Aj Lavin, Stefan Csomor
 // Created:     04/22/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998),
 //                  Vadim Zeitlin (1999), Stefan Csomor (2000)
 // Licence:     wxWindows licence
@@ -119,6 +118,11 @@ wxCriticalSection::~wxCriticalSection()
 void wxCriticalSection::Enter()
 {
     MPEnterCriticalRegion( (MPCriticalRegionID) m_critRegion, kDurationForever );
+}
+
+bool wxCriticalSection::TryEnter()
+{
+    return MPEnterCriticalRegion( (MPCriticalRegionID) m_critRegion, kDurationImmediate ) == noErr;
 }
 
 void wxCriticalSection::Leave()
@@ -470,7 +474,7 @@ public:
     {
         m_tid = kInvalidID;
         m_state = STATE_NEW;
-        m_prio = WXTHREAD_DEFAULT_PRIORITY;
+        m_prio = wxPRIORITY_DEFAULT;
         m_notifyQueueId = kInvalidID;
         m_exitcode = 0;
         m_cancelled = false ;
@@ -619,7 +623,7 @@ OSStatus wxThreadInternal::MacThreadStart(void *parameter)
 
     if ( !dontRunAtAll )
     {
-        pthread->m_exitcode = thread->Entry();
+        pthread->m_exitcode = thread->CallEntry();
 
         {
             wxCriticalSectionLocker lock(thread->m_critsect);
@@ -651,6 +655,9 @@ bool wxThreadInternal::Create( wxThread *thread, unsigned int stackSize )
     wxASSERT_MSG( m_state == STATE_NEW && !m_tid,
                     wxT("Create()ing thread twice?") );
 
+    if ( thread->IsDetached() )
+        Detach();
+
     OSStatus err = noErr;
     m_thread = thread;
 
@@ -659,7 +666,7 @@ bool wxThreadInternal::Create( wxThread *thread, unsigned int stackSize )
         OSStatus err = MPCreateQueue( &m_notifyQueueId );
         if (err != noErr)
         {
-            wxLogSysError( wxT("Cant create the thread event queue") );
+            wxLogSysError( wxT("Can't create the thread event queue") );
 
             return false;
         }
@@ -678,7 +685,7 @@ bool wxThreadInternal::Create( wxThread *thread, unsigned int stackSize )
         return false;
     }
 
-    if ( m_prio != WXTHREAD_DEFAULT_PRIORITY )
+    if ( m_prio != wxPRIORITY_DEFAULT )
         SetPriority( m_prio );
 
     return true;
@@ -863,13 +870,9 @@ wxThreadError wxThread::Create( unsigned int stackSize )
 {
     wxCriticalSectionLocker lock(m_critsect);
 
-    if ( m_isDetached )
-        m_internal->Detach() ;
-
     if ( !m_internal->Create(this, stackSize) )
     {
         m_internal->SetState( STATE_EXITED );
-
         return wxTHREAD_NO_RESOURCE;
     }
 
@@ -879,6 +882,17 @@ wxThreadError wxThread::Create( unsigned int stackSize )
 wxThreadError wxThread::Run()
 {
     wxCriticalSectionLocker lock(m_critsect);
+
+    // Create the thread if it wasn't created yet with an explicit
+    // Create() call:
+    if ( m_internal->GetId() == kInvalidID )
+    {
+        if ( !m_internal->Create(this, stackSize) )
+        {
+            m_internal->SetState( STATE_EXITED );
+            return wxTHREAD_NO_RESOURCE;
+        }
+    }
 
     wxCHECK_MSG( m_internal->GetId(), wxTHREAD_MISC_ERROR,
                  wxT("must call wxThread::Create() first") );
@@ -1105,8 +1119,7 @@ bool wxThread::TestDestroy()
 
 void wxThread::SetPriority(unsigned int prio)
 {
-    wxCHECK_RET( ((int)WXTHREAD_MIN_PRIORITY <= (int)prio) &&
-                 ((int)prio <= (int)WXTHREAD_MAX_PRIORITY),
+    wxCHECK_RET( wxPRIORITY_MIN <= prio && prio <= wxPRIORITY_MAX,
                  wxT("invalid thread priority") );
 
     wxCriticalSectionLocker lock(m_critsect);

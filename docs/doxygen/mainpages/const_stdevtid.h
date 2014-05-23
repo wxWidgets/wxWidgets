@@ -2,14 +2,13 @@
 // Name:        const_stdevtid.h
 // Purpose:     std event values enumerated
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
 /**
 
-@page page_stdevtid Standard event identifiers
+@page page_stdevtid Standard Event Identifiers
 
 wxWidgets defines a special identifier value @c wxID_ANY which is used in
 the following two situations:
@@ -30,6 +29,7 @@ identifiers are all in the range between @c wxID_LOWEST and
 @c wxID_HIGHEST and, accordingly, the user code should avoid defining its
 own constants in this range (e.g. by using wxNewId()).
 
-Refer to ::wxStockID enumeration values for the reference of these IDs.
+Refer to @ref page_stockitems "the list of stock items" for the subset of standard IDs 
+which are stock IDs as well.
 
 */

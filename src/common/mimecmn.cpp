@@ -5,7 +5,6 @@
 // Modified by:
 //  Chris Elliott (biol75@york.ac.uk) 5 Dec 00: write support for Win32
 // Created:     23.09.98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
@@ -46,13 +45,10 @@
 #include <ctype.h>
 
 // implementation classes:
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     #include "wx/msw/mimetype.h"
-#elif ( defined(__WXMAC__) )
+#elif ( defined(__DARWIN__) )
     #include "wx/osx/mimetype.h"
-#elif defined(__WXPM__) || defined (__EMX__)
-    #include "wx/os2/mimetype.h"
-    #undef __UNIX__
 #elif defined(__DOS__)
     #include "wx/msdos/mimetype.h"
 #else // Unix
@@ -346,9 +342,9 @@ bool wxFileType::GetIcon(wxIconLocation *iconLoc) const
         if ( iconLoc )
         {
             iconLoc->SetFileName(m_info->GetIconFile());
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
             iconLoc->SetIndex(m_info->GetIconIndex());
-#endif // __WXMSW__
+#endif // __WINDOWS__
         }
 
         return true;
@@ -444,9 +440,9 @@ size_t wxFileType::GetAllCommands(wxArrayString *verbs,
     if ( commands )
         commands->Clear();
 
-#if defined (__WXMSW__)  || defined(__UNIX__)
+#if defined (__WINDOWS__)  || defined(__UNIX__)
     return m_impl->GetAllCommands(verbs, commands, params);
-#else // !__WXMSW__ || Unix
+#else // !__WINDOWS__ || __UNIX__
     // we don't know how to retrieve all commands, so just try the 2 we know
     // about
     size_t count = 0;
@@ -471,12 +467,12 @@ size_t wxFileType::GetAllCommands(wxArrayString *verbs,
     }
 
     return count;
-#endif // __WXMSW__/| __UNIX__
+#endif // __WINDOWS__/| __UNIX__
 }
 
 bool wxFileType::Unassociate()
 {
-#if defined(__WXMSW__)
+#if defined(__WINDOWS__)
     return m_impl->Unassociate();
 #elif defined(__UNIX__)
     return m_impl->Unassociate(this);
@@ -490,7 +486,7 @@ bool wxFileType::SetCommand(const wxString& cmd,
                             const wxString& verb,
                             bool overwriteprompt)
 {
-#if defined (__WXMSW__)  || defined(__UNIX__)
+#if defined (__WINDOWS__)  || defined(__UNIX__)
     return m_impl->SetCommand(cmd, verb, overwriteprompt);
 #else
     wxUnusedVar(cmd);
@@ -504,7 +500,7 @@ bool wxFileType::SetCommand(const wxString& cmd,
 bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 {
     wxString sTmp = cmd;
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     // VZ: should we do this?
     // chris elliott : only makes sense in MS windows
     if ( sTmp.empty() )
@@ -512,7 +508,7 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
 #endif
     wxCHECK_MSG( !sTmp.empty(), false, wxT("need the icon file") );
 
-#if defined (__WXMSW__) || defined(__UNIX__)
+#if defined (__WINDOWS__) || defined(__UNIX__)
     return m_impl->SetDefaultIcon (cmd, index);
 #else
     wxUnusedVar(index);
@@ -610,7 +606,7 @@ wxMimeTypesManager::Associate(const wxFileTypeInfo& ftInfo)
 {
     EnsureImpl();
 
-#if defined(__WXMSW__) || defined(__UNIX__)
+#if defined(__WINDOWS__) || defined(__UNIX__)
     return m_impl->Associate(ftInfo);
 #else // other platforms
     wxUnusedVar(ftInfo);
@@ -742,8 +738,8 @@ class wxMimeTypeCmnModule: public wxModule
 public:
     wxMimeTypeCmnModule() : wxModule() { }
 
-    virtual bool OnInit() { return true; }
-    virtual void OnExit()
+    virtual bool OnInit() wxOVERRIDE { return true; }
+    virtual void OnExit() wxOVERRIDE
     {
         wxMimeTypesManagerFactory::Set(NULL);
 

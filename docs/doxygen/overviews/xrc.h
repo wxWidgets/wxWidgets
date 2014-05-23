@@ -2,7 +2,6 @@
 // Name:        xrc.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,7 +9,7 @@
 
 @page overview_xrc XML Based Resource System (XRC)
 
-Classes: wxXmlResource, wxXmlResourceHandler
+@tableofcontents
 
 The XML-based resource system, known as XRC, allows user interface elements
 such as dialogs, menu bars and toolbars, to be stored in text files and loaded
@@ -31,20 +30,13 @@ There are several advantages to using XRC resources:
 @li The XRC format uses sizers for flexibility, allowing dialogs to be
     resizable and highly portable.
 @li The XRC format is a wxWidgets standard, and can be generated or
-    postprocessed by any program that understands it. As it is basedon the XML
+    postprocessed by any program that understands it. As it is based on the XML
     standard, existing XML editors can be used for simple editing purposes.
 
 XRC was written by Vaclav Slavik.
 
-@li @ref overview_xrc_gettingstarted
-@li @ref overview_xrc_xrcsample
-@li @ref overview_xrc_binaryresourcefiles
-@li @ref overview_xrc_embeddedresource
-@li @ref overview_xrc_cppheader
-@li @ref overview_xrc_newresourcehandlers
+@see wxXmlResource, wxXmlResourceHandler, @ref overview_xrcformat
 
-See also the separate @ref overview_xrcformat page for more information, and
-details about the XRC file format.
 
 
 @section overview_xrc_gettingstarted Getting Started with XRC
@@ -472,7 +464,7 @@ IMPLEMENT_DYNAMIC_CLASS(MyControlXmlHandler, wxXmlResourceHandler)
 
 MyControlXmlHandler::MyControlXmlHandler()
 {
-    // this call adds support for all wxWindows class styles
+    // this call adds support for all wxWidgets class styles
     // (e.g. wxBORDER_SIMPLE, wxBORDER_SUNKEN, wxWS_EX_* etc etc)
     AddWindowStyles();
 
@@ -545,4 +537,3 @@ built-in getters it contains. It's very easy to retrieve also complex
 structures out of XRC files using them.
 
 */
-

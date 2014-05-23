@@ -2,7 +2,6 @@
 // Name:        platinfo.h
 // Purpose:     interface of wxPlatformInfo
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,7 +13,7 @@
     The values of the constants are chosen so that they can be combined as flags;
     this allows to check for operating system families like e.g. @c wxOS_MAC and @c wxOS_UNIX.
     
-    Note that you can obtain more detailed informations about the current OS
+    Note that you can obtain more detailed information about the current OS
     version in use by checking the major and minor version numbers returned
     by ::wxGetOsVersion() or by wxPlatformInfo::GetOSMajorVersion(), 
     wxPlatformInfo::GetOSMinorVersion().
@@ -77,14 +76,12 @@ enum wxPortId
     wxPORT_MSW      = 1 << 1,       //!< wxMSW, native toolkit is Windows API
     wxPORT_MOTIF    = 1 << 2,       //!< wxMotif, using [Open]Motif or Lesstif
     wxPORT_GTK      = 1 << 3,       //!< wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
-    wxPORT_MGL      = 1 << 4,       //!< wxMGL, using wxUniversal
+    wxPORT_DFB      = 1 << 4,       //!< wxDFB, using wxUniversal
     wxPORT_X11      = 1 << 5,       //!< wxX11, using wxUniversal
     wxPORT_OS2      = 1 << 6,       //!< wxOS2, using OS/2 Presentation Manager
     wxPORT_MAC      = 1 << 7,       //!< wxMac, using Carbon or Classic Mac API
     wxPORT_COCOA    = 1 << 8,       //!< wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_WINCE    = 1 << 9,       //!< wxWinCE, toolkit is WinCE SDK API
-    wxPORT_PALMOS   = 1 << 10,      //!< wxPalmOS, toolkit is PalmOS API
-    wxPORT_DFB      = 1 << 11       //!< wxDFB, using wxUniversal
+    wxPORT_WINCE    = 1 << 9        //!< wxWinCE, toolkit is WinCE SDK API
 };
 
 
@@ -119,7 +116,7 @@ enum wxEndianness
 };
 
 /**
-    A structure containing informations about a Linux distribution as returned 
+    A structure containing information about a Linux distribution as returned 
     by the @c lsb_release utility.
     
     See wxGetLinuxDistributionInfo() or wxPlatformInfo::GetLinuxDistributionInfo()
@@ -140,18 +137,18 @@ struct wxLinuxDistributionInfo
 /**
     @class wxPlatformInfo
 
-    This class holds informations about the operating system, the toolkit and the 
+    This class holds information about the operating system, the toolkit and the 
     basic architecture of the machine where the application is currently running.
     
-    This class does not only have @e getters for the informations above, it also has
-    @e setters. This allows you to e.g. save the current platform informations in a 
+    This class does not only have @e getters for the information above, it also has
+    @e setters. This allows you to e.g. save the current platform information in a 
     data file (maybe in string form) so that when you later load it, you can easily
     retrieve (see the static getters for string->enum conversion functions) and store
     inside a wxPlatformInfo instance (using its setters) the signature of the system 
     which generated it.
     
     In general however you only need to use the static Get() function and then
-    access the various informations for the current platform:
+    access the various information for the current platform:
     @code
         wxLogMessage("This application is running under %s.",
                      wxPlatformInfo::Get().GetOperatingSystemIdName());
@@ -181,7 +178,7 @@ public:
     /**
         Initializes the object using given values.
     */
-    wxPlatformInfo(wxPortId pid = wxPORT_UNKNOWN,
+    wxPlatformInfo(wxPortId pid,
                    int tkMajor = -1,
                    int tkMinor = -1,
                    wxOperatingSystemId id = wxOS_UNKNOWN,

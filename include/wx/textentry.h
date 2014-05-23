@@ -3,7 +3,6 @@
 // Purpose:     declares wxTextEntry interface defining a simple text entry
 // Author:      Vadim Zeitlin
 // Created:     2007-09-24
-// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,6 +19,7 @@ class WXDLLIMPEXP_FWD_CORE wxTextCompleter;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
+#include "wx/filefn.h"              // for wxFILE and wxDIR only
 #include "wx/gdicmn.h"              // for wxPoint
 
 // ----------------------------------------------------------------------------
@@ -97,6 +97,8 @@ public:
 
     virtual void SetSelection(long from, long to) = 0;
     virtual void SelectAll() { SetSelection(-1, -1); }
+    virtual void SelectNone()
+        { const long pos = GetInsertionPoint(); SetSelection(pos, pos); }
     virtual void GetSelection(long *from, long *to) const = 0;
     bool HasSelection() const;
     virtual wxString GetStringSelection() const;
@@ -117,7 +119,10 @@ public:
         { return DoAutoCompleteStrings(choices); }
 
     bool AutoCompleteFileNames()
-        { return DoAutoCompleteFileNames(); }
+        { return DoAutoCompleteFileNames(wxFILE); }
+
+    bool AutoCompleteDirectories()
+        { return DoAutoCompleteFileNames(wxDIR); }
 
     // notice that we take ownership of the pointer and will delete it
     //
@@ -167,20 +172,20 @@ public:
     // implementation only
     // -------------------
 
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for GetEditableWindow(),
+    // generate the wxEVT_TEXT event for GetEditableWindow(),
     // like SetValue() does and return true if the event was processed
     //
     // NB: this is public for wxRichTextCtrl use only right now, do not call it
     static bool SendTextUpdatedEvent(wxWindow *win);
 
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window
+    // generate the wxEVT_TEXT event for this window
     bool SendTextUpdatedEvent()
     {
         return SendTextUpdatedEvent(GetEditableWindow());
     }
 
 
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window if the
+    // generate the wxEVT_TEXT event for this window if the
     // events are not currently disabled
     void SendTextUpdatedEventIfAllowed()
     {
@@ -230,7 +235,8 @@ protected:
     // the other one(s)
     virtual bool DoAutoCompleteStrings(const wxArrayString& WXUNUSED(choices))
         { return false; }
-    virtual bool DoAutoCompleteFileNames() { return false; }
+    virtual bool DoAutoCompleteFileNames(int WXUNUSED(flags)) // wxFILE | wxDIR
+        { return false; }
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer);
 
 
@@ -313,8 +319,6 @@ private:
     #include "wx/msw/textentry.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/textentry.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/textentry.h"
 #elif defined(__WXQT__)
     #include "wx/qt/textentry.h"
 #else

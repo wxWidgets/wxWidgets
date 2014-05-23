@@ -2,7 +2,6 @@
 // Name:        derivdlg.h
 // Purpose:     XML resources sample: A derived dialog
 // Author:      Robert O'Connor (rob@medicalmnemonics.com), Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Robert O'Connor and Vaclav Slavik
 // Licence:     wxWindows licence
 //-----------------------------------------------------------------------------
@@ -52,7 +51,7 @@ private:
     void OnOK( wxCommandEvent &event );
 
     // Any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 
 };
 

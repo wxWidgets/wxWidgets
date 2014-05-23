@@ -51,4 +51,3 @@ example, look at AlphaBlt()-related code in src/msw/dc.cpp.
 === EOF ===
 
 Author:  VZ
-Version: $Id$

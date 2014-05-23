@@ -3,7 +3,6 @@
 // Purpose:     wxAnyButton class
 // Author:      Julian Smart
 // Created:     1997-02-01 (extracted from button.h)
-// RCS-ID:      $Id: anybutton.h 67065 2011-02-27 12:48:26Z VZ $
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,6 @@
 // Name:        textfile.h
 // Purpose:     interface of wxTextFile
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -145,9 +144,9 @@ public:
 
         @e typeDefault is the value defined during the compilation and corresponds
         to the native format of the platform, i.e. it will be @c wxTextFileType_Dos
-        under Windows, @c wxTextFileType_Unix under Unix (including Mac OS X when
-        compiling with the Apple Developer Tools) and @c wxTextFileType_Mac under
-        Mac OS (including Mac OS X when compiling with CodeWarrior).
+        under Windows and @c wxTextFileType_Unix under Unix (including Mac OS
+        X, the value @c wxTextFileType_Mac was only used for classic Mac OS
+        versions).
     */
     static const wxChar* GetEOL(wxTextFileType type = typeDefault);
 
@@ -190,10 +189,14 @@ public:
     /**
         Retrieves the line number @a n from the file.
 
-        The returned line may be modified but you shouldn't add line terminator
-        at the end - this will be done by wxTextFile.
+        The returned line may be modified when non-const method is used but you
+        shouldn't add line terminator at the end -- this will be done by
+        wxTextFile itself.
     */
-    wxString& GetLine(size_t n) const;
+    //@{
+    wxString& GetLine(size_t n);
+    const wxString& GetLine(size_t n) const;
+    //@}
 
     /**
         Get the number of lines in the file.
@@ -255,7 +258,7 @@ public:
         The @a conv argument is only meaningful in Unicode build of wxWidgets when
         it is used to convert the file to wide character representation.
     */
-    bool Open(const wxMBConv& conv = wxConvAuto()) const;
+    bool Open(const wxMBConv& conv = wxConvAuto());
 
     /**
         Opens the file with the given name and also loads file in memory on success.
@@ -265,7 +268,7 @@ public:
         The @a conv argument is only meaningful in Unicode build of wxWidgets when
         it is used to convert the file to wide character representation.
     */
-    bool Open(const wxString& strFile, const wxMBConv& conv = wxConvAuto()) const;
+    bool Open(const wxString& strFile, const wxMBConv& conv = wxConvAuto());
 
     /**
         Delete line number @a n from the file.

@@ -4,7 +4,6 @@
  * Author:      Stefan Csomor
  * Modified by:
  * Created:     2008-07-30
- * RCS-ID:      $Id$
  * Copyright:   (c) Stefan Csomor
  * Licence:     wxWindows licence
  */
@@ -20,7 +19,6 @@
  * under a certain platform
  */
 
-#define wxOSX_USE_CORE_TEXT 0
 #define wxOSX_USE_ATSU_TEXT 0
 #define wxHAS_OPENGL_ES
 
@@ -64,6 +62,11 @@
 #if wxUSE_DATAVIEWCTRL
 #undef wxUSE_DATAVIEWCTRL
 #define wxUSE_DATAVIEWCTRL 0
+#endif
+
+#if wxUSE_TREELISTCTRL
+#undef wxUSE_TREELISTCTRL
+#define wxUSE_TREELISTCTRL 0
 #endif
 
 #if wxUSE_DRAG_AND_DROP
@@ -318,6 +321,9 @@
 #define wxUSE_NOTIFICATION_MESSAGE 0
 #endif
 
+#undef wxUSE_PREFERENCES_EDITOR
+#define wxUSE_PREFERENCES_EDITOR 0
+
 #if wxUSE_PROPGRID
 #undef wxUSE_PROPGRID
 #define wxUSE_PROPGRID 0
@@ -346,6 +352,21 @@
 #if wxUSE_RICHTEXT
 #undef wxUSE_RICHTEXT
 #define wxUSE_RICHTEXT 0
+#endif
+
+#if wxUSE_TIMEPICKCTRL
+#undef wxUSE_TIMEPICKCTRL
+#define wxUSE_TIMEPICKCTRL 0
+#endif
+
+#if wxUSE_RICHTOOLTIP
+#undef wxUSE_RICHTOOLTIP
+#define wxUSE_RICHTOOLTIP 0
+#endif
+
+#if wxUSE_WEBVIEW
+#undef wxUSE_WEBVIEW
+#define wxUSE_WEBVIEW 0
 #endif
 
 #endif

@@ -3,7 +3,6 @@
 // Purpose:     SVG sample
 // Author:      Chris Elliott
 // Modified by:
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -36,9 +35,11 @@
 #include "bitmaps/help.xpm"
 #include "SVGlogo24.xpm"
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
+
+#include <math.h>
 
 class MyChild;
 class MyCanvas;
@@ -50,7 +51,7 @@ class MyCanvas;
 class MyApp : public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 class MyFrame : public wxMDIParentFrame
@@ -73,7 +74,7 @@ public:
 private:
     unsigned int m_nWinCreated;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyChild: public wxMDIChildFrame
@@ -96,20 +97,20 @@ private:
     MyCanvas *m_canvas;
     MyFrame  *m_frame;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyCanvas : public wxScrolledWindow
 {
 public:
     MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size);
-    virtual void OnDraw(wxDC& dc);
+    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
 
 private:
     int m_index;
     MyChild* m_child;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ---------------------------------------------------------------------------
@@ -131,14 +132,14 @@ enum
 // event tables
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(MDI_ABOUT, MyFrame::OnAbout)
     EVT_MENU(MDI_NEW_WINDOW, MyFrame::OnNewWindow)
     EVT_MENU(MDI_QUIT, MyFrame::OnQuit)
     EVT_MENU (MDI_SAVE, MyFrame::FileSavePicture)
 
     EVT_SIZE(MyFrame::OnSize)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ===========================================================================
 // implementation
@@ -311,17 +312,17 @@ void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
 // MyCanvas
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-END_EVENT_TABLE()
+wxBEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+wxEND_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size)
     : wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
 {
-    SetBackgroundColour(wxColour(wxT("WHITE")));
+    SetBackgroundColour(*wxWHITE);
 
     m_child = parent;
-    m_index = m_child->GetFrame()->GetCountOfChildren() % 7;
+    m_index = m_child->GetFrame()->GetCountOfChildren() % 9;
 }
 
 // Define the repainting behaviour
@@ -335,7 +336,6 @@ void MyCanvas::OnDraw(wxDC& dc)
     wxBrush wB;
     wxPoint points[6];
     wxColour wC;
-    wxFont wF;
 
     dc.SetFont(*wxSWISS_FONT);
     dc.SetPen(*wxGREEN_PEN);
@@ -398,8 +398,10 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawText(wxT("This is a Red string"), 50, 200);
             dc.DrawRotatedText(wxT("This is a 45 deg string"), 50, 200, 45);
             dc.DrawRotatedText(wxT("This is a 90 deg string"), 50, 200, 90);
-            wF = wxFont ( 18, wxROMAN, wxITALIC, wxBOLD, false, wxT("Times New Roman"));
-            dc.SetFont(wF);
+            dc.SetFont(wxFontInfo(18)
+                        .FaceName("Times New Roman")
+                        .Family(wxFONTFAMILY_ROMAN)
+                        .Italic().Bold());
             dc.SetTextForeground (wC);
             dc.DrawText(wxT("This is a Times-style string"), 50, 60);
 #if wxUSE_STATUSBAR
@@ -454,8 +456,10 @@ void MyCanvas::OnDraw(wxDC& dc)
             break;
 
         case 5:
-            wF = wxFont ( 18, wxROMAN, wxITALIC, wxBOLD, false, wxT("Times New Roman"));
-            dc.SetFont(wF);
+            dc.SetFont(wxFontInfo(18)
+                        .FaceName("Times New Roman")
+                        .Family(wxFONTFAMILY_ROMAN)
+                        .Italic().Bold());
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
             dc.DrawText(wxT("This is an 18pt string"), 50, 60);
@@ -493,6 +497,111 @@ void MyCanvas::OnDraw(wxDC& dc)
 #endif // wxUSE_STATUSBAR
             break;
 
+        case 7:
+            dc.SetTextForeground(wxT("RED"));
+            dc.DrawText(wxT("Red = Clipping Off"), 30, 5);
+            dc.SetTextForeground(wxT("GREEN"));
+            dc.DrawText(wxT("Green = Clipping On"), 30, 25);
+
+            dc.SetTextForeground(wxT("BLACK"));
+
+            dc.SetPen(*wxRED_PEN);
+            dc.SetBrush (wxBrush (wxT("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
+            dc.DrawCheckMark ( 80,50,75,75);
+            dc.DrawRectangle ( 80,50,75,75);
+
+            dc.SetPen(*wxGREEN_PEN);
+
+            // Clipped checkmarks
+            dc.DrawRectangle(180,50,75,75);
+            dc.SetClippingRegion(180,50,75,75);                   // x,y,width,height version
+            dc.DrawCheckMark ( 180,50,75,75);
+            dc.DestroyClippingRegion();
+
+            dc.DrawRectangle(wxRect(80,150,75,75));
+            dc.SetClippingRegion(wxPoint(80,150),wxSize(75,75));  // pt,size version
+            dc.DrawCheckMark ( 80,150,75,75);
+            dc.DestroyClippingRegion();
+
+            dc.DrawRectangle(wxRect(180,150,75,75));
+            dc.SetClippingRegion(wxRect(180,150,75,75));          // rect version
+            dc.DrawCheckMark ( 180,150,75,75);
+            dc.DestroyClippingRegion();
+
+            dc.DrawRectangle(wxRect( 80,250,50,65));
+            dc.DrawRectangle(wxRect(105,260,50,65));
+            dc.SetClippingRegion(wxRect( 80,250,50,65));  // second call to SetClippingRegion
+            dc.SetClippingRegion(wxRect(105,260,50,65));  // forms intersection with previous
+            dc.DrawCheckMark(80,250,75,75);
+            dc.DestroyClippingRegion();                   // only one call to destroy (there's no stack)
+
+            /*
+            ** Clipping by wxRegion not implemented for SVG.   Should be
+            ** possible, but need to access points that define the wxRegion
+            ** from inside DoSetDeviceClippingRegion() and wxRegion does not
+            ** implement anything like getPoints().
+            points[0].x = 180; points[0].y = 250;
+            points[1].x = 255; points[1].y = 250;
+            points[2].x = 180; points[2].y = 325;
+            points[3].x = 255; points[3].y = 325;
+            points[4].x = 180; points[4].y = 250;
+
+            dc.DrawLines (5, points);
+            wxRegion reg = wxRegion(5,points);
+
+            dc.SetClippingRegion(reg);
+            dc.DrawCheckMark ( 180,250,75,75);
+            dc.DestroyClippingRegion();
+            */
+
+#if wxUSE_STATUSBAR
+            s = wxT("Clipping region");
+#endif // wxUSE_STATUSBAR
+            break;
+
+        case 8:
+            wxString txtStr;
+            wxCoord txtX, txtY, txtW, txtH, txtDescent, txtEL;
+            wxCoord txtPad = 0;
+
+            wP = *wxRED_PEN;
+            dc.SetPen(wP);
+            //dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
+            //dc.SetTextBackground(*wxBLUE);
+
+            // Horizontal text
+            txtStr = wxT("Horizontal string");
+            dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
+            txtX = 50;
+            txtY = 300;
+            dc.DrawRectangle(txtX, txtY, txtW + 2*txtPad, txtH + 2*txtPad);
+            dc.DrawText(txtStr, txtX + txtPad, txtY + txtPad);
+
+            // Vertical text
+            txtStr = wxT("Vertical string");
+            dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
+            txtX = 50;
+            txtY = 250;
+            dc.DrawRectangle(txtX, txtY - (txtW + 2*txtPad), txtH + 2*txtPad, txtW + 2*txtPad);
+            dc.DrawRotatedText(txtStr, txtX + txtPad, txtY - txtPad, 90);
+
+            // 45 degree text
+            txtStr = wxT("45 deg string");
+            dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
+            double lenW = (double)(txtW + 2*txtPad) / sqrt(2.0);
+            double lenH = (double)(txtH + 2*txtPad) / sqrt(2.0);
+            double padding = (double)txtPad / sqrt(2.0);
+            txtX = 150;
+            txtY = 200;
+            dc.DrawLine(txtX - padding, txtY, txtX + lenW, txtY - lenW); // top
+            dc.DrawLine(txtX + lenW, txtY - lenW, txtX - padding + lenH + lenW, txtY + (lenH - lenW));
+            dc.DrawLine(txtX - padding, txtY, txtX - padding + lenH, txtY + lenH);
+            dc.DrawLine(txtX - padding + lenH, txtY + lenH, txtX - padding + lenH + lenW, txtY + (lenH - lenW)); // bottom
+            dc.DrawRotatedText(txtStr, txtX, txtY, 45);
+#if wxUSE_STATUSBAR
+            s = wxT("Text position test page");
+#endif // wxUSE_STATUSBAR
+            break;
     }
 #if wxUSE_STATUSBAR
     m_child->SetStatusText(s);
@@ -507,9 +616,9 @@ void MyCanvas::OnDraw(wxDC& dc)
 // Note that MDI_NEW_WINDOW and MDI_ABOUT commands get passed
 // to the parent window for processing, so no need to
 // duplicate event handlers here.
-BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
+wxBEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
     EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title,
                  const wxPoint& pos, const wxSize& size,

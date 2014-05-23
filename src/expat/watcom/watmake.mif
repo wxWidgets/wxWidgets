@@ -1,0 +1,223 @@
+######################################################################
+#
+# Open Watcom 1.5 multiplatform target makefile. This file is called
+# by main makefile.
+#
+# Author        : Michael Greene, July 2006
+#
+# User selectable project options are set in buildopts.inc
+#
+######################################################################
+
+# include options set by main makefile
+!include watopts.tmp
+
+# include user selectable option
+!include buildopts.inc
+
+# project directories
+PROJ   = $+ $(%cwd) $-
+RELDIR = $(PROJ)\release
+DEBDIR = $(PROJ)\debug
+SRCDIR = $(PROJ)\..\lib
+TSTDIR = $(PROJ)\..\tests
+XMLDIR = $(PROJ)\..\xmlwf
+
+CC  = wcl386
+LD  = wlink
+LB  = wlib
+
+
+########################################
+#
+# ***** platform specific options *****
+#
+!ifeqi SYSPLATFORM os2
+SYSCOMP    = os2
+SYSLINK    = os2v2
+LINKFILE   = expat.lnk
+COMINC     = $(%watcom)\h;$(%watcom)\h\os2
+EXPATDLL   = $(DLLNAME)
+EXT        = .exe
+!else ifeqi SYSPLATFORM nt
+SYSCOMP    = nt
+SYSLINK    = nt
+LINKFILE   = wexpat.lnk
+COMINC     = $(%watcom)\h;$(%watcom)\h\nt
+EXPATDLL   = $(DLLNAME)
+EXT        = .exe
+NTLIB      = LIB $(%watcom)\lib386\nt\kernel32.lib
+!else ifeqi SYSPLATFORM linux
+SYSCOMP    = linux
+SYSLINK    = linux
+COMINC     = $(%watcom)\lh
+LINUXEXT   = op noext
+#EXT = .elf
+!endif
+# ***** END platform specific options *****
+
+
+########################################
+#
+#  ***** Release/Debug options *****
+#
+!ifndef DEBUG
+LD_OPTS   = op el
+# -wcd to quiet warning 201 - might need to check
+C_COMMON  = -d0 -wcd=201
+OPT       = $(OPTIMIZATION)
+TARGDIR   = $(RELDIR)
+!else
+LD_OPTS   = d all op map,symf
+C_COMMON  = $(DEBUGOPTS) -of
+# overrides optimization options set in buildopts.inc
+OPT       = -od
+TARGDIR   = $(DEBDIR)
+!endif
+#  ***** END Release/Debug options *****
+
+
+# MULTITHREAD set in buildopts.inc
+!ifdef MULTITHREAD
+MT = -bm
+!endif
+
+# CLIBLNK set in buildopts.inc
+!ifdef CLIBLNK
+CLIBOPT = -br
+!endif
+
+INCLUDE   = $(SRCDIR);$(TSTDIR);$(COMINC)
+
+EXTRA_C   = $(C_COMMON) $(OPT) $(MT) $(CLIBOPT) $(MACHINE)
+COMMONC   = -w4 -e25 -zq -bt=$(SYSCOMP) -mf
+
+CFLAGS    = -i=$(INCLUDE) $(DEFS) $(COMMONC) $(EXTRA_C)
+LDFLAGS   = $(LD_OPTS) op maxe=25
+LIBFLAGS  = -b -c -n -p=512
+
+SRCS = $(SRCDIR)\xmlparse.c $(SRCDIR)\xmlrole.c $(SRCDIR)\xmltok.c
+OBJS = xmlparse.obj xmlrole.obj xmltok.obj
+
+XMLWFS = $(XMLDIR)\xmlwf.c $(XMLDIR)\xmlfile.c $(XMLDIR)\codepage.c &
+         $(XMLDIR)\readfilemap.c
+XMLWFO = xmlwf.obj xmlfile.obj codepage.obj readfilemap.obj
+
+TESTSRC = ..\tests\chardata.c ..\tests\minicheck.c ..\tests\runtests.c
+TESTOBJ = chardata.obj minicheck.obj runtests.obj
+
+
+#############################################################
+#
+#       ***** Project target build procedures *****
+#
+#############################################################
+
+all: clean $(EXPATDLL) $(TARGLIB) xmlwf$(EXT) tests release .SYMBOLIC
+
+# dll is built only for OS/2-ECS and LINUX platforms
+#expat.dll: .ALWAYS
+$(DLLNAME): .ALWAYS
+  $(CC) -c $(CFLAGS) -bd $(SRCS)
+!ifeqi SYSPLATFORM os2
+  $(LD) NAME $* @expat.lnk $(LDFLAGS) FILE {$(OBJS)}
+!else
+  $(LD) NAME $* @wexpat.lnk $(LDFLAGS) FILE {$(OBJS)}
+!endif
+  $(LB) $(IMPORTLIB) +$*.dll
+
+# build static lib for platform
+$(TARGLIB): .ALWAYS
+  $(CC) -c $(CFLAGS) $(CLIBOPT) $(SRCS)
+  $(LB) $(LIBFLAGS) $*.lib $(OBJS)
+
+# build standalone XML parser
+xmlwf$(EXT):
+  $(CC) -c $(CFLAGS) $(CLIBOPT) $(XMLWFS)
+  $(LD) NAME $* SYS $(SYSLINK) $(LDFLAGS) $(LINUXEXT) LIB $(TARGLIB) $(NTLIB) FILE {$(XMLWFO)}
+
+# The following builds EXPAT test and example programs
+tests: runtests$(EXT) elements$(EXT) outline$(EXT) benchmark$(EXT) .SYMBOLIC
+
+runtests$(EXT): $(LINKLIB)
+  $(CC) -c $(CFLAGS) $(CLIBOPT) $(TESTSRC)
+  $(LD) NAME $* SYS $(SYSLINK) $(LDFLAGS) $(LINUXEXT) LIB $(TARGLIB) FILE {$(TESTOBJ)}
+
+elements$(EXT): $(LINKLIB)
+  $(CC) -c $(CFLAGS) $(CLIBOPT) ..\examples\elements.c
+  $(LD) NAME $* SYS $(SYSLINK) $(LDFLAGS) $(LINUXEXT) LIB $(TARGLIB) FILE $*.obj
+
+outline$(EXT): $(LINKLIB)
+  $(CC) -c $(CFLAGS) $(CLIBOPT) ..\examples\outline.c
+  $(LD) NAME $* SYS $(SYSLINK) $(LDFLAGS) $(LINUXEXT) LIB $(TARGLIB) FILE $*.obj
+
+benchmark$(EXT): $(LINKLIB)
+  $(CC) -c $(CFLAGS) $(CLIBOPT) ..\tests\benchmark\benchmark.c
+  $(LD) NAME $* SYS $(SYSLINK) $(LDFLAGS) $(LINUXEXT) LIB $(TARGLIB) FILE $*.obj
+
+# requires wget to download and unzip XML_TEST_SUITE
+xmlts.zip:  .SYMBOLIC
+  $(WGET)wget --output-document=..\tests\xmlts.zip &
+                       http://www.w3.org/XML/Test/xmlts20020606.zip
+  unzip -q ..\tests\xmlts.zip -d ..\tests
+
+
+#############################################################
+#
+#  ***** Project make release directories procedures *****
+#
+#############################################################
+
+release: .SYMBOLIC
+TARGEXE = xmlwf$(EXT) runtests$(EXT) elements$(EXT) outline$(EXT) benchmark$(EXT)
+  @if not EXIST $(TARGDIR) -@mkdir $(TARGDIR)
+  @if not EXIST $(TARGDIR)\$(SYSPLATFORM) @%make mktargdir
+!ifneqi SYSPLATFORM linux
+  -@copy  .\$(EXPATDLL) $(TARGDIR)\$(SYSPLATFORM)\dll
+!endif
+  @for %a in ($(TARGEXE)) do -@copy .\%a $(TARGDIR)\$(SYSPLATFORM)\bin
+  -@copy  .\*.lib $(TARGDIR)\$(SYSPLATFORM)\lib
+  -@copy  ..\lib\expat.h $(TARGDIR)\$(SYSPLATFORM)\include
+  -@copy  ..\lib\expat_external.h $(TARGDIR)\$(SYSPLATFORM)\include
+
+mktargdir: .PROCEDURE
+  -@mkdir $(TARGDIR)\$(SYSPLATFORM)
+  -@mkdir $(TARGDIR)\$(SYSPLATFORM)\bin
+  -@mkdir $(TARGDIR)\$(SYSPLATFORM)\lib
+  -@mkdir $(TARGDIR)\$(SYSPLATFORM)\include
+!ifneqi SYSPLATFORM linux
+  -@mkdir $(TARGDIR)\$(SYSPLATFORM)\dll
+!endif
+
+#############################################################
+#
+#           ***** Project clean procedures *****
+#
+#############################################################
+
+# cleanup build files
+clean: .SYMBOLIC
+CLEANEXTS   = obj exe err lst map sym lib dll
+CLEANLINUX  = xmlwf runtests elements outline benchmark
+  @for %a in ($(CLEANEXTS))  do -@rm *.%a
+  @for %a in ($(CLEANLINUX)) do -@rm %a*
+
+cleanall: clean .SYMBOLIC
+  @%write  watclean.tmp RELDIR=$(RELDIR)
+  @%append watclean.tmp DEBDIR=$(DEBDIR)
+  @if EXIST $(RELDIR)\os2   @wmake -h -f watclean.mif os2
+  @if EXIST $(DEBDIR)\os2   @wmake -h -f watclean.mif os2d
+  @if EXIST $(RELDIR)\nt    @wmake -h -f watclean.mif nt
+  @if EXIST $(DEBDIR)\nt    @wmake -h -f watclean.mif ntd
+  @if EXIST $(RELDIR)\linux @wmake -h -f watclean.mif linux
+  @if EXIST $(DEBDIR)\linux @wmake -h -f watclean.mif linuxd
+  @if EXIST $(RELDIR) -@rd $(RELDIR)
+  @if EXIST $(DEBDIR) -@rd $(DEBDIR)
+  @if EXIST watclean.tmp -@rm watclean.tmp
+  @if EXIST watopts.tmp -@rm watopts.tmp
+  @cd ..\tests
+  @if EXIST xmlts.zip -@rm xmlts.zip
+  @echo Clean complete.
+
+
+

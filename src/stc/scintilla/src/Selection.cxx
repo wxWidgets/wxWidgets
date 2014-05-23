@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include <vector>
+#include <algorithm>
 
 #include "Platform.h"
 
@@ -21,16 +22,24 @@ using namespace Scintilla;
 
 void SelectionPosition::MoveForInsertDelete(bool insertion, int startChange, int length) {
 	if (insertion) {
-		if (position > startChange) {
+		if (position == startChange) {
+			int virtualLengthRemove = std::min(length, virtualSpace);
+			virtualSpace -= virtualLengthRemove;
+			position += virtualLengthRemove;
+		} else if (position > startChange) {
 			position += length;
 		}
 	} else {
+		if (position == startChange) {
+			virtualSpace = 0;
+		}
 		if (position > startChange) {
 			int endDeletion = startChange + length;
 			if (position > endDeletion) {
 				position -= length;
 			} else {
 				position = startChange;
+				virtualSpace = 0;
 			}
 		}
 	}
@@ -127,7 +136,7 @@ bool SelectionRange::Trim(SelectionRange range) {
 		} else if (start <= startRange) {
 			// Trim end
 			end = startRange;
-		} else { // 
+		} else { //
 			PLATFORM_ASSERT(end >= endRange);
 			// Trim start
 			start = endRange;
@@ -157,7 +166,7 @@ void SelectionRange::MinimizeVirtualSpace() {
 }
 
 Selection::Selection() : mainRange(0), moveExtends(false), tentativeMain(false), selType(selStream) {
-	AddSelection(SelectionPosition(0));
+	AddSelection(SelectionRange(SelectionPosition(0)));
 }
 
 Selection::~Selection() {
@@ -267,7 +276,7 @@ void Selection::TrimSelection(SelectionRange range) {
 	for (size_t i=0; i<ranges.size();) {
 		if ((i != mainRange) && (ranges[i].Trim(range))) {
 			// Trimmed to empty so remove
-			for (size_t j=i;j<ranges.size()-1;j++) {
+			for (size_t j=i; j<ranges.size()-1; j++) {
 				ranges[j] = ranges[j+1];
 				if (j == mainRange-1)
 					mainRange--;
@@ -289,6 +298,26 @@ void Selection::AddSelection(SelectionRange range) {
 	TrimSelection(range);
 	ranges.push_back(range);
 	mainRange = ranges.size() - 1;
+}
+
+void Selection::AddSelectionWithoutTrim(SelectionRange range) {
+	ranges.push_back(range);
+	mainRange = ranges.size() - 1;
+}
+
+void Selection::DropSelection(size_t r) {
+	if ((ranges.size() > 1) && (r < ranges.size())) {
+		size_t mainNew = mainRange;
+		if (mainNew >= r) {
+			if (mainNew == 0) {
+				mainNew = ranges.size() - 2;
+			} else {
+				mainNew--;
+			}
+		}
+		ranges.erase(ranges.begin() + r);
+		mainRange = mainNew;
+	}
 }
 
 void Selection::TentativeSelection(SelectionRange range) {

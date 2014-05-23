@@ -2,7 +2,6 @@
 // Name:        renderer.h
 // Purpose:     interface of wxRendererNative
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -13,6 +12,13 @@
 */
 enum
 {
+    /**
+        Default state, no special flags.
+
+        @since 3.1.0
+     */
+    wxCONTROL_NONE       = 0x00000000,
+
     /** Control is disabled. */
     wxCONTROL_DISABLED   = 0x00000001,
 
@@ -43,7 +49,7 @@ enum
     /** Mouse is currently over the control. */
     wxCONTROL_CURRENT    = 0x00000010,
 
-    /** Selected item in e.g. listbox. */
+    /** Selected item in e.g.\ listbox. */
     wxCONTROL_SELECTED   = 0x00000020,
 
     /** (Check/radio button) is checked. */
@@ -77,7 +83,7 @@ enum wxTitleBarButton
     It doesn't have any methods and all of its fields are constant, so they can
     only be examined but not modified.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{gdi}
 */
 struct wxSplitterRenderParams
@@ -111,7 +117,7 @@ struct wxSplitterRenderParams
     wxRendererNative::DrawHeaderButton() to specify custom values used to draw
     the text or bitmap label.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{gdi}
 */
 struct wxHeaderButtonParams
@@ -561,11 +567,13 @@ public:
     renderer which has the age greater or equal to its age. This verification is
     done by IsCompatible() method.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{gdi}
 */
 struct wxRendererVersion
 {
+    wxRendererVersion(int version_, int age_);
+    
     /**
         Checks if the main program is compatible with the renderer having the version
         @e ver, returns @true if it is and @false otherwise.

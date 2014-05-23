@@ -5,7 +5,6 @@
 // Author:      Ryan Norton, Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton, Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,19 +27,25 @@ public :
     virtual bool Play(unsigned int flags) = 0;
     // stops the sound and deletes the optional timer
     virtual void Stop();
-    // can be called by a timer for repeated tasks during playback
-    virtual void SoundTask();
     // mark this to be deleted
     virtual void MarkForDeletion();
     virtual bool IsMarkedForDeletion() const { return m_markedForDeletion; }
 
     // does the true work of stopping and cleaning up
     virtual void DoStop() = 0;
+
+#if wxOSX_USE_CARBON
+    // can be called by a timer for repeated tasks during playback
+    virtual void SoundTask();
+
 protected :
     void CreateAndStartTimer();
 
-    unsigned int m_flags;
     wxSoundTimer* m_pTimer;
+#endif // wxOSX_USE_CARBON
+
+protected:
+    unsigned int m_flags;
     bool m_markedForDeletion;
 } ;
 
@@ -49,13 +54,13 @@ class WXDLLIMPEXP_ADV wxSound : public wxSoundBase
 public:
     wxSound();
     wxSound(const wxString& fileName, bool isResource = false);
-    wxSound(int size, const wxByte* data);
+    wxSound(size_t size, const void* data);
     virtual ~wxSound();
 
     // Create from resource or file
     bool  Create(const wxString& fileName, bool isResource = false);
     // Create from data
-    bool Create(int size, const wxByte* data);
+    bool Create(size_t size, const void* data);
 
     bool IsOk() const { return m_data != NULL; }
 

@@ -49,7 +49,7 @@ if [ $rebake = "yes" ]; then
   ## better to not use unix2dos on the wxWidgets tree so we don't get the conflicts
   ##fix this -B gave an option not recognised  error (sf bug 1537221)...
   rm .ba*
-  bakefile_gen -d ../../distrib/scripts/Bakefiles.release.bkgen
+  bakefile_gen
 fi
 
 # Now generate the mega tarball with everything. We will push this to our build machines.

@@ -5,7 +5,6 @@
 // Modified by:
 // Created:
 // Copyright:   (c) Julian Smart
-// RCS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,9 +15,7 @@
 
 #if wxUSE_MINIFRAME
 
-#if defined(__WXPALMOS__)
-#include "wx/palmos/minifram.h"
-#elif defined(__WXMSW__)
+#if defined(__WXMSW__)
 #include "wx/msw/minifram.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/minifram.h"
@@ -30,8 +27,6 @@
 #include "wx/x11/minifram.h"
 #elif defined(__WXMAC__)
 #include "wx/osx/minifram.h"
-#elif defined(__WXPM__)
-#include "wx/os2/minifram.h"
 #else
 // TODO: it seems that wxMiniFrame could be just defined here generically
 //       instead of having all the above port-specific headers

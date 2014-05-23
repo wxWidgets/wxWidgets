@@ -3,7 +3,6 @@
 // Purpose:     wxXmlResource::InitAllHandlers
 // Author:      Vaclav Slavik
 // Created:     2000/03/05
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -37,6 +36,9 @@ void wxXmlResource::InitAllHandlers()
     // please keep them in alphabetical order of wxUSE_XXX guards
 #if wxUSE_ANIMATIONCTRL
     AddHandler(new wxAnimationCtrlXmlHandler);
+#endif
+#if wxUSE_BANNERWINDOW
+    AddHandler(new wxBannerWindowXmlHandler);
 #endif
 #if wxUSE_BITMAPCOMBOBOX
     AddHandler(new wxBitmapComboBoxXmlHandler);
@@ -143,9 +145,6 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_RADIOBTN
     AddHandler(new wxRadioButtonXmlHandler);
 #endif
-#if 0 && wxUSE_RICHTEXT
-    AddHandler(new wxRichTextCtrlXmlHandler);
-#endif
 #if wxUSE_SCROLLBAR
     AddHandler(new wxScrollBarXmlHandler);
 #endif
@@ -184,6 +183,9 @@ void wxXmlResource::InitAllHandlers()
 #endif
 #if wxUSE_TOGGLEBTN
     AddHandler(new wxToggleButtonXmlHandler);
+#endif
+#if wxUSE_TIMEPICKCTRL
+    AddHandler(new wxTimeCtrlXmlHandler);
 #endif
 #if wxUSE_TOOLBAR
     AddHandler(new wxToolBarXmlHandler);

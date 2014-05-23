@@ -3,7 +3,6 @@
 // Purpose:     various controls for rearranging the items interactively
 // Author:      Vadim Zeitlin
 // Created:     2008-12-15
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,6 +94,10 @@ public:
     // or false if the current item was the first/last one and so nothing was done
     bool MoveCurrentUp();
     bool MoveCurrentDown();
+
+
+    // Override this to keep our m_order array in sync with the real item state.
+    virtual void Check(unsigned int item, bool check = true) wxOVERRIDE;
 
 private:
     // swap two items at the given positions in the listbox

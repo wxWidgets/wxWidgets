@@ -5,7 +5,6 @@
 // Modified by: Michael N. Filippov <michael@idisys.iae.nsk.su>
 //              (2003/09/30 - plural forms support)
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -60,17 +59,17 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
 {
     int Language;                   // wxLanguage id
     wxString CanonicalName;         // Canonical name, e.g. fr_FR
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     wxUint32 WinLang,               // Win32 language identifiers
              WinSublang;
-#endif // __WXMSW__
+#endif // __WINDOWS__
     wxString Description;           // human-readable name of the language
     wxLayoutDirection LayoutDirection;
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     // return the LCID corresponding to this language
     wxUint32 GetLCID() const;
-#endif // __WXMSW__
+#endif // __WINDOWS__
 
     // return the locale name corresponding to this language usable with
     // setlocale() on the current system
@@ -79,9 +78,9 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
 
 // for Unix systems GetLocaleName() is trivial so implement it inline here, for
 // MSW it's implemented in intl.cpp
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
 inline wxString wxLanguageInfo::GetLocaleName() const { return CanonicalName; }
-#endif // !__WXMSW__
+#endif // !__WINDOWS__
 
 
 // ----------------------------------------------------------------------------
@@ -307,12 +306,6 @@ public:
     {
         return wxGetTranslation(origString, origString2, n, domain);
     }
-
-    // this is hack to work around a problem with wxGetTranslation() which
-    // returns const wxString& and not wxString, so when it returns untranslated
-    // string, it needs to have a copy of it somewhere
-    static const wxString& GetUntranslatedString(const wxString& str)
-        { return wxTranslations::GetUntranslatedString(str); }
 
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }

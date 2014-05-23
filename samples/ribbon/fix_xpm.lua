@@ -5,7 +5,6 @@
 -- Author:      Peter Cawley
 -- Modified by:
 -- Created:     2009-07-06
--- RCS-ID:      $Id$
 -- Copyright:   (C) Copyright 2009, Peter Cawley
 -- Licence:     wxWindows Library Licence
 -------------------------------------------------------------------------------

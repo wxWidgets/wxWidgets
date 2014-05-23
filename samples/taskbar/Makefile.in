@@ -30,6 +30,7 @@ TOOLKIT_LOWERCASE = @TOOLKIT_LOWERCASE@
 TOOLKIT_VERSION = @TOOLKIT_VERSION@
 TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
+EXTRALIBS_XML = @EXTRALIBS_XML@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
 EXTRALIBS_SDL = @EXTRALIBS_SDL@
 CXXWARNINGS = @CXXWARNINGS@
@@ -40,8 +41,8 @@ wx_top_builddir = @wx_top_builddir@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 2.9
-WX_VERSION = $(WX_RELEASE).2
+WX_RELEASE = 3.1
+WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 TASKBAR_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -49,7 +50,6 @@ TASKBAR_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 TASKBAR_OBJECTS =  \
 	$(__taskbar___win32rc) \
-	$(__taskbar_os2_lib_res) \
 	taskbar_tbtest.o
 
 ### Conditionally set variables: ###
@@ -64,7 +64,8 @@ TASKBAR_OBJECTS =  \
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
-@COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) \
+@COND_MONOLITHIC_1@	$(EXTRALIBS_XML) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
 @COND_PLATFORM_MAC_0@__taskbar___mac_setfilecmd = @true
@@ -88,8 +89,6 @@ COND_PLATFORM_OS2_1___taskbar___os2_emxbindcmd = $(NM) taskbar$(EXEEXT) | if \
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_PLATFORM_WIN32_1@__taskbar___win32rc = taskbar_sample_rc.o
-@COND_PLATFORM_OS2_1@__taskbar_os2_lib_res = \
-@COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__taskbar_app_Contents_PkgInfo___depname \
 @COND_PLATFORM_MACOSX_1@	= taskbar.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@__taskbar_bundle___depname = taskbar_bundle
@@ -115,6 +114,9 @@ COND_MONOLITHIC_0___WXLIB_BASE_p = \
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
+@COND_MONOLITHIC_1_USE_STC_1@__LIB_SCINTILLA_IF_MONO_p \
+@COND_MONOLITHIC_1_USE_STC_1@	= \
+@COND_MONOLITHIC_1_USE_STC_1@	-lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@__LIB_TIFF_p \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBTIFF_builtin@	-lwxtiff$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
@@ -152,7 +154,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 taskbar$(EXEEXT): $(TASKBAR_OBJECTS) $(__taskbar___win32rc)
-	$(CXX) -o $@ $(TASKBAR_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(TASKBAR_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	
 	$(__taskbar___mac_setfilecmd)
 	$(__taskbar___os2_emxbindcmd)
@@ -169,7 +171,7 @@ taskbar$(EXEEXT): $(TASKBAR_OBJECTS) $(__taskbar___win32rc)
 @COND_PLATFORM_MACOSX_1@	$(top_srcdir)/src/osx/carbon/Info.plist.in >taskbar.app/Contents/Info.plist
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >taskbar.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@	/bin/echo "APPL????" >taskbar.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	ln -f taskbar$(EXEEXT) taskbar.app/Contents/MacOS/taskbar
@@ -180,7 +182,7 @@ taskbar$(EXEEXT): $(TASKBAR_OBJECTS) $(__taskbar___win32rc)
 @COND_PLATFORM_MACOSX_1@taskbar_bundle: $(____taskbar_BUNDLE_TGT_REF_DEP)
 
 taskbar_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)  --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 taskbar_tbtest.o: $(srcdir)/tbtest.cpp
 	$(CXXC) -c -o $@ $(TASKBAR_CXXFLAGS) $(srcdir)/tbtest.cpp

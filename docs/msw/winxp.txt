@@ -23,7 +23,7 @@ need to create your own manifest file and put it in a file called
 Alternatively, you can include the manifest in your applications resource
 section. Please see the MSDN documentation at
 
-http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnwxp/html/xptheming.asp
+http://msdn.microsoft.com/en-us/library/windows/desktop/bb773175
 
 for more details.
 

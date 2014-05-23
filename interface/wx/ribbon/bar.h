@@ -2,9 +2,38 @@
 // Name:        ribbon/bar.h
 // Purpose:     interface of wxRibbonBar
 // Author:      Peter Cawley
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
+
+
+/**
+    The possible display modes of the panel area of a wxRibbonBar widget.
+
+    @see wxRibbonBar::ShowPanels()
+    @see wxRibbonBar::GetDisplayMode()
+
+    @since 2.9.5
+*/
+enum wxRibbonDisplayMode
+{
+    /**
+        The panel area is visible and pinned: it remains visible when the
+        ribbon bar loses the focus.
+     */
+    wxRIBBON_BAR_PINNED,
+
+    /**
+        The panel area is hidden: only the pages tabs remain visible.
+     */
+    wxRIBBON_BAR_MINIMIZED,
+
+    /**
+        The panel area is visible, but not pinned: it minimizes as soon as the
+        focus is lost.
+     */
+    wxRIBBON_BAR_EXPANDED
+};
+
 
 /**
     @class wxRibbonBarEvent
@@ -64,7 +93,8 @@ public:
     @beginStyleTable
     @style{wxRIBBON_BAR_DEFAULT_STYLE}
         Defined as wxRIBBON_BAR_FLOW_HORIZONTAL |
-        wxRIBBON_BAR_SHOW_PAGE_LABELS | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
+        wxRIBBON_BAR_SHOW_PAGE_LABELS | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
+        wxRIBBON_BAR_SHOW_TOGGLE_BUTTON | wxRIBBON_BAR_SHOW_HELP_BUTTON.
     @style{wxRIBBON_BAR_FOLDBAR_STYLE}
         Defined as wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
         | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
@@ -83,6 +113,12 @@ public:
     @style{wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS}
         Causes minimise buttons to be shown on panels (where the panel has
         such a button).
+    @style{wxRIBBON_BAR_SHOW_TOGGLE_BUTTON}
+        Causes a toggle button to appear on the ribbon bar at top-right corner.
+        This style is new since wxWidgets 2.9.5.
+    @style{wxRIBBON_BAR_SHOW_HELP_BUTTON}
+        Causes a help button to appear on the ribbon bar at the top-right corner.
+        This style is new since wxWidgets 2.9.5.
     @endStyleTable
 
 
@@ -103,6 +139,12 @@ public:
         Triggered when the right mouse button is released on a tab.
     @event{EVT_RIBBONBAR_TAB_LEFT_DCLICK(id, func)}
         Triggered when the left mouse button is double clicked on a tab.
+    @event{EVT_RIBBONBAR_TOGGLED(id, func)}
+        Triggered when the button triggering the ribbon bar is clicked. This
+        event is new since wxWidgets 2.9.5.
+    @event{EVT_RIBBONBAR_HELP_CLICK(id, func)}
+        Triggered when the help button is clicked. This even is new since
+        wxWidgets 2.9.5.
     @endEventTable
 
     @library{wxribbon}
@@ -207,12 +249,112 @@ public:
     wxRibbonPage* GetPage(int n);
     
     /**
+        Get the number of pages in this bar.
+
+        @since 2.9.4
+    */
+    size_t GetPageCount() const;
+
+    /**
         Dismiss the expanded panel of the currently active page.
         
-        Calls and returns the value fromwxRibbonPage::DismissExpandedPanel()
+        Calls and returns the value from wxRibbonPage::DismissExpandedPanel()
         for the currently active page, or @false if there is no active page.
     */
     bool DismissExpandedPanel();
+
+    /**
+        Returns the number for a given ribbon bar page.
+
+        The number can be used in other ribbon bar calls.
+
+        @since 2.9.5
+    */
+    int GetPageNumber(wxRibbonPage* page) const;
+
+    /**
+        Delete a single page from this ribbon bar.
+
+        The user must call wxRibbonBar::Realize() after one (or more) calls to
+        this function.
+
+        @since 2.9.4
+    */
+    void DeletePage(size_t n);
+
+    /**
+        Delete all pages from the ribbon bar.
+
+        @since 2.9.4
+    */
+    void ClearPages();
+
+    /**
+        Indicates whether the tab for the given page is shown to the user or
+        not.
+
+        By default all page tabs are shown.
+
+        @since 2.9.5
+    */
+    bool IsPageShown(size_t page) const;
+
+    /**
+        Show or hide the tab for a given page.
+
+        After showing or hiding a tab, you need to call wxRibbonBar::Realize().
+        If you hide the tab for the currently active page (GetActivePage) then
+        you should call SetActivePage to activate a different page.
+
+        @since 2.9.5
+    */
+    void ShowPage(size_t page, bool show_tab=true);
+
+    /**
+        Hides the tab for a given page.
+
+        Equivalent to @c ShowPage(page, false).
+
+        @since 2.9.5
+    */
+    void HidePage(size_t page);
+
+    /**
+        Indicates whether a tab is currently highlighted.
+
+        @see AddPageHighlight()
+
+        @since 2.9.5
+    */
+    bool IsPageHighlighted(size_t page) const;
+
+    /**
+        Highlight the specified tab.
+
+        Highlighted tabs have a colour between that of the active tab
+        and a tab over which the mouse is hovering. This can be used
+        to make a tab (usually temporarily) more noticeable to the user.
+
+        @since 2.9.5
+    */
+    void AddPageHighlight(size_t page, bool highlight = true);
+
+    /**
+        Changes a tab to not be highlighted.
+
+        @see AddPageHighlight()
+
+        @since 2.9.5
+    */
+    void RemovePageHighlight(size_t page);
+
+    /**
+        Shows or hide the panel area of the ribbon bar according to the
+        given display mode.
+
+        @since 3.1.0
+    */
+    void ShowPanels(wxRibbonDisplayMode mode);
 
     /**
         Shows or hides the panel area of the ribbon bar.
@@ -221,6 +363,10 @@ public:
         be shown. This is useful for giving the user more screen space to work
         with when he/she doesn't need to see the ribbon's options.
 
+        If the panel is currently shown, this method pins it, use the other
+        overload of this method to specify the exact panel display mode to
+        avoid it.
+
         @since 2.9.2
     */
     void ShowPanels(bool show = true);
@@ -228,7 +374,7 @@ public:
     /**
         Hides the panel area of the ribbon bar.
 
-        This method simply calls ShowPanels() with @false argument.
+        This method behaves like ShowPanels() with @false argument.
 
         @since 2.9.2
     */
@@ -243,6 +389,16 @@ public:
     */
     bool ArePanelsShown() const;
     
+    /**
+        Returns the current display mode of the panel area.
+
+        @see ShowPanels()
+
+        @since 3.1.0
+    */
+    wxRibbonDisplayMode GetDisplayMode() const;
+
+
     /**
         Perform initial layout and size calculations of the bar and its
         children. This must be called after all of the bar's children have been

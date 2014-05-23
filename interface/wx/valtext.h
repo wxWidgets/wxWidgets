@@ -2,7 +2,6 @@
 // Name:        valtext.h
 // Purpose:     interface of wxTextValidator
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

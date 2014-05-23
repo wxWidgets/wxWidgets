@@ -1,0 +1,36 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bench", "bench_vc8_bench.vcproj", "{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bench_gui", "bench_vc8_bench_gui.vcproj", "{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}.Debug|Win32.Build.0 = Debug|Win32
+		{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}.Release|Win32.ActiveCfg = Release|Win32
+		{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}.Release|Win32.Build.0 = Release|Win32
+		{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{6DD4A887-C3C2-5C7D-9C00-8A250C1856D6}.DLL Release|Win32.Build.0 = DLL Release|Win32
+		{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}.Debug|Win32.Build.0 = Debug|Win32
+		{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}.Release|Win32.ActiveCfg = Release|Win32
+		{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}.Release|Win32.Build.0 = Release|Win32
+		{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{4BBE5BC1-5EE7-5792-84D5-A2611CE91B42}.DLL Release|Win32.Build.0 = DLL Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

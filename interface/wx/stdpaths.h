@@ -2,7 +2,6 @@
 // Name:        stdpaths.h
 // Purpose:     interface of wxStandardPaths
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -11,6 +10,13 @@
 
     wxStandardPaths returns the standard locations in the file system and should be
     used by applications to find their data files in a portable way.
+
+    Note that you must not create objects of class wxStandardPaths directly,
+    but use the global standard paths object returned by wxStandardPaths::Get()
+    (which can be of a type derived from wxStandardPaths and not of exactly
+    this type) and call the methods you need on it. The object returned by
+    Get() may be customized by overriding wxAppTraits::GetStandardPaths()
+    methods.
 
     In the description of the methods below, the example return values are given
     for the Unix, Windows and Mac OS X systems, however please note that these are
@@ -41,10 +47,6 @@
 
     This class is MT-safe: its methods may be called concurrently from different
     threads without additional locking.
-
-    Note that you don't allocate an instance of class wxStandardPaths, but retrieve the
-    global standard paths object using @c wxStandardPaths::Get on which you call the
-    desired methods.
 
     @library{wxbase}
     @category{file}
@@ -112,7 +114,7 @@ public:
     virtual wxString GetConfigDir() const;
 
     /**
-        Return the location of the applications global, i.e. not user-specific,
+        Return the location of the applications global, i.e.\ not user-specific,
         data files.
 
         Example return values:
@@ -156,13 +158,16 @@ public:
     virtual wxString GetExecutablePath() const;
 
     /**
-        Return the program installation prefix, e.g. @c /usr, @c /opt or @c /home/zeitlin.
+        Return the program installation prefix, e.g.\ @c /usr, @c /opt or @c /home/zeitlin.
 
         If the prefix had been previously by SetInstallPrefix(), returns that
         value, otherwise tries to determine it automatically (Linux only right now)
         and finally returns the default @c /usr/local value if it failed.
 
-        @note This function is only available under Unix.
+        @note This function is only available under Unix platforms (but not limited
+        to wxGTK mentioned below).
+
+        @onlyfor{wxgtk}
     */
     wxString GetInstallPrefix() const;
 
@@ -234,7 +239,8 @@ public:
         - Mac: @c ~/Library/Preferences
 
         Only use this method if you have a single configuration file to put in this
-        directory, otherwise GetUserDataDir() is more appropriate.
+        directory, otherwise GetUserDataDir() is more appropriate as the latter
+        adds @c appinfo to the path, unlike this function.
     */
     virtual wxString GetUserConfigDir() const;
 
@@ -331,7 +337,10 @@ public:
         is set during program configuration if using GNU autotools and so it is enough
         to pass its value defined in @c config.h to this function.
 
-        @note This function is only available under Unix.
+        @note This function is only available under Unix platforms (but not limited
+        to wxGTK mentioned below).
+
+        @onlyfor{wxgtk}
     */
     void SetInstallPrefix(const wxString& prefix);
 
@@ -353,5 +362,15 @@ public:
         @since 2.9.0
     */
     void UseAppInfo(int info);
+
+protected:
+    /**
+        Protected default constructor.
+
+        This constructor is protected in order to prevent creation of objects
+        of this class as Get() should be used instead to access the unique
+        global wxStandardPaths object of the correct type.
+     */
+    wxStandardPaths();
 };
 

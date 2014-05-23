@@ -25,7 +25,7 @@ LDFLAGS ?=
 # Location and arguments of wx-config script 
 WX_CONFIG ?= wx-config
 
-# Port of the wx library to build against [gtk1,gtk2,msw,x11,motif,mgl,osx_cocoa,osx_carbon,dfb]
+# Port of the wx library to build against [gtk1,gtk2,msw,x11,motif,osx_cocoa,osx_carbon,dfb]
 WX_PORT ?= $(shell $(WX_CONFIG) --query-toolkit)
 
 # Use DLL build of wx library to use? [0,1]
@@ -79,6 +79,7 @@ WIDGETS_OBJECTS =  \
 	widgets_static.o \
 	widgets_statbmp.o \
 	widgets_textctrl.o \
+	widgets_timepick.o \
 	widgets_toggle.o \
 	widgets_widgets.o
 
@@ -193,6 +194,9 @@ widgets_statbmp.o: ./statbmp.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_textctrl.o: ./textctrl.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+widgets_timepick.o: ./timepick.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_toggle.o: ./toggle.cpp

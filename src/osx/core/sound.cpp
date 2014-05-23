@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by: Stefan Csomor
 // Created:     2009-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -39,21 +38,23 @@ public:
 
     ~wxOSXAudioToolboxSoundData();
 
-    virtual bool Play(unsigned flags);
+    virtual bool Play(unsigned flags) wxOVERRIDE;
 
-    virtual void DoStop();
+    virtual void DoStop() wxOVERRIDE;
 protected:
     static void CompletionCallback(SystemSoundID  mySSID, void * soundRef);
     void SoundCompleted();
 
     SystemSoundID m_soundID;
     wxString m_sndname; //file path
+    bool m_playing;
 };
 
 wxOSXAudioToolboxSoundData::wxOSXAudioToolboxSoundData(const wxString& fileName) :
     m_soundID(NULL)
 {
     m_sndname = fileName;
+    m_playing = false;
 }
 
 wxOSXAudioToolboxSoundData::~wxOSXAudioToolboxSoundData()
@@ -92,10 +93,10 @@ void wxOSXAudioToolboxSoundData::SoundCompleted()
 
 void wxOSXAudioToolboxSoundData::DoStop()
 {
-    if (m_soundID)
+    if ( m_playing )
     {
+        m_playing = false;
         AudioServicesDisposeSystemSoundID (m_soundID);
-        m_soundID = NULL;
 
         wxSound::SoundStopped(this);
     }
@@ -111,16 +112,24 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
     CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
     wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
 
-    AudioServicesCreateSystemSoundID(url, &m_soundID);
+    OSStatus err = AudioServicesCreateSystemSoundID(url, &m_soundID);
+    if ( err != 0 )
+    {
+        wxLogError(_("Failed to load sound from \"%s\" (error %d)."), m_sndname, err);
+        return false;
+    }
+
     AudioServicesAddSystemSoundCompletion( m_soundID, CFRunLoopGetCurrent(), NULL, wxOSXAudioToolboxSoundData::CompletionCallback, (void *) this );
 
     bool sync = !(flags & wxSOUND_ASYNC);
+
+    m_playing = true;
 
     AudioServicesPlaySystemSound(m_soundID);
 
     if ( sync )
     {
-        while( m_soundID )
+        while ( m_playing )
         {
             CFRunLoopRun();
         }
@@ -129,7 +138,7 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
     return true;
 }
 
-bool wxSound::Create(int WXUNUSED(size), const wxByte* WXUNUSED(data))
+bool wxSound::Create(size_t WXUNUSED(size), const void* WXUNUSED(data))
 {
     wxFAIL_MSG( "not implemented" );
 

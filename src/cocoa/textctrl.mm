@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by: Mark Oxenham
 // Created:     2003/03/16
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

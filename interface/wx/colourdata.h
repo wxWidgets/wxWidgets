@@ -2,7 +2,6 @@
 // Name:        colourdata.h
 // Purpose:     interface of wxColourData
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,6 +18,12 @@
 class wxColourData : public wxObject
 {
 public:
+    /// number of custom colours we store
+    enum
+    {
+        NUM_CUSTOM = 16
+    };
+
     /**
         Constructor. Initializes the custom colours to @c wxNullColour, the
         @e data colour setting to black, and the @e choose full setting to
@@ -33,10 +38,9 @@ public:
 
     /**
         Under Windows, determines whether the Windows colour dialog will
-        display the full dialog with custom colour selection controls. Under
-        PalmOS, determines whether colour dialog will display full rgb colour
-        picker or only available palette indexer. Has no meaning under other
-        platforms.
+        display the full dialog with custom colour selection controls.
+
+        Has no meaning under other platforms.
 
         The default value is @true.
     */

@@ -1,0 +1,12 @@
+#
+# RELAX NG schema for XRC files.
+#
+# Super-strict variant that only accepts wx's builtin classes.
+#
+# See http://docs.wxwidgets.org/trunk/overview_xrcformat.html for freeform
+# description of the format.
+#
+
+include "xrc_schema.rnc" {
+  customClasses = notAllowed
+}

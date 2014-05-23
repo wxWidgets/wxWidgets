@@ -2,7 +2,6 @@
 // Name:        wx/gtk/listbox.h
 // Purpose:     wxListBox class declaration
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,7 +9,7 @@
 #ifndef _WX_GTK_LISTBOX_H_
 #define _WX_GTK_LISTBOX_H_
 
-struct _GtkTreeEntry;
+struct _wxTreeEntry;
 struct _GtkTreeIter;
 
 //-----------------------------------------------------------------------------
@@ -64,25 +63,25 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
 
-    virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const;
-    virtual void SetString(unsigned int n, const wxString& s);
-    virtual int FindString(const wxString& s, bool bCase = false) const;
+    virtual unsigned int GetCount() const wxOVERRIDE;
+    virtual wxString GetString(unsigned int n) const wxOVERRIDE;
+    virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
+    virtual int FindString(const wxString& s, bool bCase = false) const wxOVERRIDE;
 
-    virtual bool IsSelected(int n) const;
-    virtual int GetSelection() const;
-    virtual int GetSelections(wxArrayInt& aSelections) const;
+    virtual bool IsSelected(int n) const wxOVERRIDE;
+    virtual int GetSelection() const wxOVERRIDE;
+    virtual int GetSelections(wxArrayInt& aSelections) const wxOVERRIDE;
 
-    virtual void EnsureVisible(int n);
+    virtual void EnsureVisible(int n) wxOVERRIDE;
 
-    virtual void Update();
+    virtual void Update() wxOVERRIDE;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // implementation from now on
 
-    virtual GtkWidget *GetConnectWidget();
+    virtual GtkWidget *GetConnectWidget() wxOVERRIDE;
 
     struct _GtkTreeView   *m_treeview;
     struct _GtkListStore  *m_liststore;
@@ -91,7 +90,7 @@ public:
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
 
-    struct _GtkTreeEntry* GTKGetEntry(unsigned pos) const;
+    struct _wxTreeEntry* GTKGetEntry(unsigned pos) const;
 
     void GTKDisableEvents();
     void GTKEnableEvents();
@@ -100,31 +99,29 @@ public:
     void GTKOnActivated(int item);
 
 protected:
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int n);
-    virtual wxSize DoGetBestSize() const;
-    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
-    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
+    virtual void DoClear() wxOVERRIDE;
+    virtual void DoDeleteOneItem(unsigned int n) wxOVERRIDE;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
-    virtual void DoSetSelection(int n, bool select);
+    virtual void DoSetSelection(int n, bool select) wxOVERRIDE;
 
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
-                              void **clientData, wxClientDataType type);
+                              void **clientData, wxClientDataType type) wxOVERRIDE;
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos) wxOVERRIDE;
 
-    virtual void DoSetFirstItem(int n);
-    virtual void DoSetItemClientData(unsigned int n, void* clientData);
-    virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual int DoListHitTest(const wxPoint& point) const;
+    virtual void DoSetFirstItem(int n) wxOVERRIDE;
+    virtual void DoSetItemClientData(unsigned int n, void* clientData) wxOVERRIDE;
+    virtual void* DoGetItemClientData(unsigned int n) const wxOVERRIDE;
+    virtual int DoListHitTest(const wxPoint& point) const wxOVERRIDE;
 
     // get the iterator for the given index, returns false if invalid
     bool GTKGetIteratorFor(unsigned pos, _GtkTreeIter *iter) const;
 
     // get the index for the given iterator, return wxNOT_FOUND on failure
     int GTKGetIndexFor(_GtkTreeIter& iter) const;
-
-    // set the specified item
-    void GTKSetItem(_GtkTreeIter& iter, const _GtkTreeEntry *entry);
 
     // common part of DoSetFirstItem() and EnsureVisible()
     void DoScrollToCell(int n, float alignY, float alignX);

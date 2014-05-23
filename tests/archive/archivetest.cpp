@@ -2,7 +2,6 @@
 // Name:        tests/archive/archive.cpp
 // Purpose:     Test the archive classes
 // Author:      Mike Wetherell
-// RCS-ID:      $Id$
 // Copyright:   (c) 2004 Mike Wetherell
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -18,12 +17,6 @@
 #endif
 
 #if wxUSE_STREAMS && wxUSE_ARCHIVE_STREAMS
-
-// VC++ 6 warns that the list iterator's '->' operator will not work whenever
-// std::list is used with a non-pointer, so switch it off.
-#if defined _MSC_VER && _MSC_VER < 1300
-#pragma warning (disable:4284)
-#endif
 
 #include "archivetest.h"
 #include "wx/dir.h"
@@ -46,12 +39,6 @@ using std::auto_ptr;
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined __BORLANDC__ && __BORLANDC__ >= 0x530
-#   define WXARC_MEMBER_TEMPLATES
-#endif
-#if defined __DMC__ && __DMC__ >= 0x832
-#   define WXARC_MEMBER_TEMPLATES
-#endif
-#if defined __MWERKS__ && __MWERKS__ >= 0x2200
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined __HP_aCC && __HP_aCC > 33300
@@ -409,7 +396,7 @@ void TempDir::RemoveDir(wxString& path)
 #   define WXARC_pclose(fp)
 #endif
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 #   define WXARC_b "b"
 #else
 #   define WXARC_b
@@ -661,7 +648,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
         wxFileName fn(i->first, wxPATH_UNIX);
         TestEntry& entry = *i->second;
         wxDateTime dt = entry.GetDateTime();
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
         if (fn.IsDir())
             entry.SetDateTime(wxDateTime());
         else
@@ -675,7 +662,10 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
         wxString tmparc = fn.GetPath(wxPATH_GET_SEPARATOR) + fn.GetFullName();
 
         // call the archiver to create an archive file
-        system(wxString::Format(archiver, tmparc.c_str()).mb_str());
+        if ( system(wxString::Format(archiver, tmparc.c_str()).mb_str()) == -1 )
+        {
+            wxLogError("Failed to run acrhiver command \"%s\"", archiver);
+        }
 
         // then load the archive file
         {
@@ -806,7 +796,7 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
 
         const TestEntry& testEntry = *it->second;
 
-#ifndef __WXMSW__
+#ifndef __WINDOWS__
         // On Windows some archivers compensate for Windows DST handling, but
         // other don't, so disable the test for now.
         wxDateTime dt = testEntry.GetDateTime();
@@ -898,7 +888,11 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
         }
 
         // call unarchiver
-        system(wxString::Format(unarchiver, tmparc.c_str()).mb_str());
+        if ( system(wxString::Format(unarchiver, tmparc.c_str()).mb_str()) == -1 )
+        {
+            wxLogError("Failed to run unarchiver command \"%s\"", unarchiver);
+        }
+
         wxRemoveFile(tmparc);
     }
     else {
@@ -950,7 +944,7 @@ void ArchiveTestCase<ClassFactoryT>::VerifyDir(wxString& path,
 
             const TestEntry& testEntry = *it->second;
 
-#if 0 //ndef __WXMSW__
+#if 0 //ndef __WINDOWS__
             CPPUNIT_ASSERT_MESSAGE("timestamp check" + error_context,
                                    testEntry.GetDateTime() ==
                                    wxFileName(path).GetModificationTime());
@@ -1300,7 +1294,7 @@ void ArchiveTestSuite::AddCmd(wxArrayString& cmdlist, const wxString& cmd)
 bool ArchiveTestSuite::IsInPath(const wxString& cmd)
 {
     wxString c = cmd.BeforeFirst(wxT(' '));
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
     c += wxT(".exe");
 #endif
     return !m_path.FindValidPath(c).empty();

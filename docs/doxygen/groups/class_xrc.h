@@ -2,7 +2,6 @@
 // Name:        class_xrc.h
 // Purpose:     XML Based Resource System (XRC) classes group docs
 // Author:      wxWidgets team
-// RCS-ID:      $Id: class_dc.h 52454 2008-03-12 19:08:48Z BP $
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

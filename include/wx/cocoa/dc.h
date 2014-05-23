@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/04/01
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -80,10 +79,10 @@ public:
     virtual void Clear();
 
     virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return true; }
-    virtual void EndDoc(void) {};
+    virtual void EndDoc(void) {}
 
-    virtual void StartPage(void) {};
-    virtual void EndPage(void) {};
+    virtual void StartPage(void) {}
+    virtual void EndPage(void) {}
 
     virtual void SetFont(const wxFont& font);
     virtual void SetPen(const wxPen& pen);
@@ -165,9 +164,9 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
 
-    virtual void DoDrawLines(int n, wxPoint points[],
+    virtual void DoDrawLines(int n, const wxPoint points[],
                              wxCoord xoffset, wxCoord yoffset);
-    virtual void DoDrawPolygon(int n, wxPoint points[],
+    virtual void DoDrawPolygon(int n, const wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 };

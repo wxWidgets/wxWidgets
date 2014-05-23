@@ -2,7 +2,6 @@
 // Name:        src/common/anidecod.cpp
 // Purpose:     wxANIDecoder, ANI reader for wxImage and wxAnimation
 // Author:      Francesco Montorsi
-// RCS-ID:      $Id$
 // Copyright:   (c) Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

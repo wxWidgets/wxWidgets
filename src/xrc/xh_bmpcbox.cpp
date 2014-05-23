@@ -3,7 +3,6 @@
 // Purpose:     XRC resource for wxBitmapComboBox
 // Author:      Jaakko Salli
 // Created:     Sep-10-2006
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -25,6 +24,8 @@
 #endif
 
 #include "wx/bmpcbox.h"
+
+#include "wx/xml/xml.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapComboBoxXmlHandler, wxXmlResourceHandler)
 

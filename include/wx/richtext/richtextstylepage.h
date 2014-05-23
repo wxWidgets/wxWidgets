@@ -1,10 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/richtext/richtextstylepage.h
-// Purpose:
+// Purpose:     Declares the rich text formatting dialog style page.
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/5/2006 11:34:55 AM
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -57,6 +56,10 @@ public:
     /// Gets the attributes associated with the main formatting dialog
     wxRichTextAttr* GetAttributes();
 
+    /// Determines whether the style name can be edited
+    bool GetNameIsEditable() const { return m_nameIsEditable; }
+    void SetNameIsEditable(bool editable) { m_nameIsEditable = editable; }
+
 ////@begin wxRichTextStylePage event handler declarations
 
     /// wxEVT_UPDATE_UI event handler for ID_RICHTEXTSTYLEPAGE_NEXT_STYLE
@@ -88,6 +91,8 @@ public:
         ID_RICHTEXTSTYLEPAGE_NEXT_STYLE = 10406
     };
 ////@end wxRichTextStylePage member variables
+
+    bool m_nameIsEditable;
 };
 
 #endif

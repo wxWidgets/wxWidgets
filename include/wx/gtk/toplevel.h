@@ -2,7 +2,6 @@
 // Name:        wx/gtk/toplevel.h
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -44,40 +43,38 @@ public:
     virtual ~wxTopLevelWindowGTK();
 
     // implement base class pure virtuals
-    virtual void Maximize(bool maximize = true);
-    virtual bool IsMaximized() const;
-    virtual void Iconize(bool iconize = true);
-    virtual bool IsIconized() const;
-    virtual void SetIcons(const wxIconBundle& icons);
-    virtual void Restore();
+    virtual void Maximize(bool maximize = true) wxOVERRIDE;
+    virtual bool IsMaximized() const wxOVERRIDE;
+    virtual void Iconize(bool iconize = true) wxOVERRIDE;
+    virtual bool IsIconized() const wxOVERRIDE;
+    virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
+    virtual void Restore() wxOVERRIDE;
 
-    virtual bool EnableCloseButton(bool enable = true);
+    virtual bool EnableCloseButton(bool enable = true) wxOVERRIDE;
 
-    virtual void ShowWithoutActivating();
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual bool IsFullScreen() const { return m_fsIsShowing; };
+    virtual void ShowWithoutActivating() wxOVERRIDE;
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
+    virtual bool IsFullScreen() const wxOVERRIDE { return m_fsIsShowing; }
 
-    virtual bool SetShape(const wxRegion& region);
+    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO) wxOVERRIDE;
 
-    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
+    virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
 
-    virtual void SetWindowStyleFlag( long style );
+    virtual bool Show(bool show = true) wxOVERRIDE;
 
-    virtual bool Show(bool show = true);
+    virtual void Raise() wxOVERRIDE;
 
-    virtual void Raise();
+    virtual bool IsActive() wxOVERRIDE;
 
-    virtual bool IsActive();
+    virtual void SetTitle( const wxString &title ) wxOVERRIDE;
+    virtual wxString GetTitle() const wxOVERRIDE { return m_title; }
 
-    virtual void SetTitle( const wxString &title );
-    virtual wxString GetTitle() const { return m_title; }
-
-    virtual void SetLabel(const wxString& label) { SetTitle( label ); }
-    virtual wxString GetLabel() const            { return GetTitle(); }
+    virtual void SetLabel(const wxString& label) wxOVERRIDE { SetTitle( label ); }
+    virtual wxString GetLabel() const wxOVERRIDE            { return GetTitle(); }
 
 
-    virtual bool SetTransparent(wxByte alpha);
-    virtual bool CanSetTransparent();
+    virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
+    virtual bool CanSetTransparent() wxOVERRIDE;
 
     // Experimental, to allow help windows to be
     // viewable from within modal dialogs
@@ -87,13 +84,17 @@ public:
 
 
     virtual void Refresh( bool eraseBackground = true,
-                          const wxRect *rect = (const wxRect *) NULL );
+                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
 
     // implementation from now on
     // --------------------------
 
     // GTK callbacks
-    virtual void OnInternalIdle();
+    virtual void OnInternalIdle() wxOVERRIDE;
+
+    virtual void GTKHandleRealized() wxOVERRIDE;
+
+    void GTKConfigureEvent(int x, int y);
 
     // do *not* call this to iconize the frame, this is a private function!
     void SetIconizeState(bool iconic);
@@ -109,10 +110,11 @@ public:
                   m_gdkDecor;
 
     // size of WM decorations
-    wxSize m_decorSize;
-
-    // shape of the frame
-    wxRegion m_shape;
+    struct DecorSize
+    {
+        int left, right, top, bottom;
+    };
+    DecorSize m_decorSize;
 
     // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
@@ -123,27 +125,24 @@ public:
     // return the size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;
 
-    void GTKUpdateDecorSize(const wxSize& decorSize);
+    void GTKUpdateDecorSize(const DecorSize& decorSize);
 
 protected:
     // give hints to the Window Manager for how the size
     // of the TLW can be changed by dragging
     virtual void DoSetSizeHints( int minW, int minH,
                                  int maxW, int maxH,
-                                 int incW, int incH);
-    // common part of all ctors
-    void Init();
-
+                                 int incW, int incH) wxOVERRIDE;
     // move the window to the specified location and resize it
-    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 
     // take into account WM decorations here
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
 
-    virtual void DoSetClientSize(int width, int height);
-    virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
+    virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
 
     // string shown in the title bar
     wxString m_title;
@@ -151,7 +150,11 @@ protected:
     bool m_deferShow;
 
 private:
-    wxSize& GetCachedDecorSize();
+    void Init();
+    DecorSize& GetCachedDecorSize();
+
+    // size hint increments
+    int m_incWidth, m_incHeight;
 
     // is the frame currently iconized?
     bool m_isIconized;

@@ -2,7 +2,6 @@
 // Name:        src/gtk/mdi.cpp
 // Purpose:
 // Author:      Robert Roebling
-// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -191,7 +190,7 @@ void wxMDIParentFrame::DoGetClientSize(int* width, int* height) const
 {
     wxFrame::DoGetClientSize(width, height);
 
-    if (height)
+    if (!m_useCachedClientSize && height)
     {
         wxMDIChildFrame* active_child_frame = GetActiveChild();
         if (active_child_frame)
@@ -200,7 +199,7 @@ void wxMDIParentFrame::DoGetClientSize(int* width, int* height) const
             if (menubar && menubar->IsShown())
             {
                 GtkRequisition req;
-                gtk_widget_size_request(menubar->m_widget, &req);
+                gtk_widget_get_preferred_height(menubar->m_widget, NULL, &req.height);
                 *height -= req.height;
                 if (*height < 0) *height = 0;
             }
@@ -294,6 +293,12 @@ wxMDIChildFrame::~wxMDIChildFrame()
         gtk_widget_queue_draw(m_parent->m_widget);
 }
 
+void wxMDIChildFrame::GTKHandleRealized()
+{
+    // since m_widget is not a GtkWindow, must bypass wxTopLevelWindowGTK
+    wxTopLevelWindowBase::GTKHandleRealized();
+}
+
 void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 {
     wxASSERT_MSG( m_menuBar == NULL, "Only one menubar allowed" );
@@ -310,14 +315,6 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
         m_menuBar->Show(false);
         gtk_box_pack_start(GTK_BOX(mdi_frame->m_mainWidget), m_menuBar->m_widget, false, false, 0);
         gtk_box_reorder_child(GTK_BOX(mdi_frame->m_mainWidget), m_menuBar->m_widget, 0);
-
-        gulong handler_id = g_signal_handler_find(
-            m_menuBar->m_widget,
-            GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
-            g_signal_lookup("size_request", GTK_TYPE_WIDGET),
-            0, NULL, NULL, m_menuBar);
-        if (handler_id != 0)
-            g_signal_handler_disconnect(m_menuBar->m_widget, handler_id);
         gtk_widget_set_size_request(m_menuBar->m_widget, -1, -1);
     }
 }

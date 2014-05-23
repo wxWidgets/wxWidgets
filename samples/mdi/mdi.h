@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,14 +14,14 @@
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 class MyCanvas : public wxScrolledWindow
 {
 public:
     MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size);
-    virtual void OnDraw(wxDC& dc);
+    virtual void OnDraw(wxDC& dc) wxOVERRIDE;
 
     bool IsDirty() const { return m_dirty; }
 
@@ -35,7 +34,7 @@ private:
 
     bool m_dirty;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Define a new frame
@@ -61,7 +60,7 @@ private:
 
     wxTextCtrl *m_textWindow;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 class MyChild : public wxMDIChildFrame
@@ -109,12 +108,12 @@ private:
 
         const unsigned m_numChild;
 
-        DECLARE_EVENT_TABLE()
+        wxDECLARE_EVENT_TABLE();
 
         wxDECLARE_NO_COPY_CLASS(EventHandler);
     };
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // menu items ids

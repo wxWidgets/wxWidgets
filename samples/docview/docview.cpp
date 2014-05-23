@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin: merge with the MDI version and general cleanup
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -55,12 +54,13 @@
 #include "view.h"
 
 #include "wx/cmdline.h"
+#include "wx/config.h"
 
 #ifdef __WXMAC__
     #include "wx/filename.h"
 #endif
 
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "doc.xpm"
     #include "chart.xpm"
     #include "notepad.xpm"
@@ -72,9 +72,9 @@
 
 IMPLEMENT_APP(MyApp)
 
-BEGIN_EVENT_TABLE(MyApp, wxApp)
+wxBEGIN_EVENT_TABLE(MyApp, wxApp)
     EVT_MENU(wxID_ABOUT, MyApp::OnAbout)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyApp::MyApp()
 {
@@ -150,7 +150,10 @@ bool MyApp::OnInit()
 
     ::wxInitAllImageHandlers();
 
-    SetAppName("DocView Sample");
+    // Fill in the application information fields before creating wxConfig.
+    SetVendorName("wxWidgets");
+    SetAppName("wx_docview_sample");
+    SetAppDisplayName("wxWidgets DocView Sample");
 
     //// Create a document manager
     wxDocManager *docManager = new wxDocManager;
@@ -217,6 +220,10 @@ bool MyApp::OnInit()
 
     // A nice touch: a history of files visited. Use this menu.
     docManager->FileHistoryUseMenu(menuFile);
+#if wxUSE_CONFIG
+    docManager->FileHistoryLoad(*wxConfig::Get());
+#endif // wxUSE_CONFIG
+
 
     if ( m_mode == Mode_Single )
     {
@@ -236,7 +243,11 @@ bool MyApp::OnInit()
 
 int MyApp::OnExit()
 {
-    delete wxDocManager::GetDocumentManager();
+    wxDocManager * const manager = wxDocManager::GetDocumentManager();
+#if wxUSE_CONFIG
+    manager->FileHistorySave(*wxConfig::Get());
+#endif // wxUSE_CONFIG
+    delete manager;
 
     return wxApp::OnExit();
 }
@@ -374,15 +385,19 @@ void MyApp::OnAbout(wxCommandEvent& WXUNUSED(event))
             wxFAIL_MSG( "unknown mode ");
     }
 
+    const int docsCount =
+        wxDocManager::GetDocumentManager()->GetDocumentsVector().size();
+
     wxLogMessage
     (
         "This is the wxWidgets Document/View Sample\n"
         "running in %s mode.\n"
+        "%d open documents.\n"
         "\n"
         "Authors: Julian Smart, Vadim Zeitlin\n"
         "\n"
         "Usage: docview [--{mdi,sdi,single}]",
-        modeName
+        modeName,
+        docsCount
     );
 }
-

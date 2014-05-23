@@ -2,7 +2,6 @@
 // Name:        wx/gtk/menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -28,22 +27,21 @@ public:
     virtual ~wxMenuItem();
 
     // implement base class virtuals
-    virtual void SetItemLabel( const wxString& str );
-    virtual void Enable( bool enable = true );
-    virtual void Check( bool check = true );
-    virtual bool IsChecked() const;
+    virtual void SetItemLabel( const wxString& str ) wxOVERRIDE;
+    virtual void Enable( bool enable = true ) wxOVERRIDE;
+    virtual void Check( bool check = true ) wxOVERRIDE;
+    virtual bool IsChecked() const wxOVERRIDE;
     virtual void SetBitmap(const wxBitmap& bitmap);
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
     // implementation
-    void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
+    void SetMenuItem(GtkWidget *menuItem);
     GtkWidget *GetMenuItem() const { return m_menuItem; }
     void SetGtkLabel();
 
 #if WXWIN_COMPATIBILITY_2_8
     // compatibility only, don't use in new code
-    wxDEPRECATED(
-    inline
+    wxDEPRECATED_CONSTRUCTOR(
     wxMenuItem(wxMenu *parentMenu,
                int id,
                const wxString& text,

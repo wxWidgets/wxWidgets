@@ -2,9 +2,25 @@
 // Name:        statusbr.h
 // Purpose:     interface of wxStatusBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// wxStatusBar styles
+#define wxSTB_SIZEGRIP         0x0010
+#define wxSTB_SHOW_TIPS        0x0020
+
+#define wxSTB_ELLIPSIZE_START   0x0040
+#define wxSTB_ELLIPSIZE_MIDDLE  0x0080
+#define wxSTB_ELLIPSIZE_END     0x0100
+
+#define wxSTB_DEFAULT_STYLE    (wxSTB_SIZEGRIP|wxSTB_ELLIPSIZE_END|wxSTB_SHOW_TIPS|wxFULL_REPAINT_ON_RESIZE)
+
+// style flags for wxStatusBar fields
+#define wxSB_NORMAL    0x0000
+#define wxSB_FLAT      0x0001
+#define wxSB_RAISED    0x0002
+#define wxSB_SUNKEN    0x0003
+
 
 /**
     @class wxStatusBarPane
@@ -22,7 +38,7 @@ public:
     /**
         Constructs the pane with the given @a style and @a width.
     */
-    wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0);
+    wxStatusBarPane(int style = wxSB_NORMAL, int width = 0);
 
     /**
         Returns the pane width; it maybe negative, indicating a variable-width field.
@@ -252,10 +268,12 @@ public:
             number passed to SetFieldsCount() the last time it was called.
         @param styles
             Contains an array of @a n integers with the styles for each field.
-            There are three possible styles:
-            - @c wxSB_NORMAL (default): The field appears sunken with a standard 3D border.
+            There are four possible styles:
+            - @c wxSB_NORMAL (default): The field appears with the default native border.
             - @c wxSB_FLAT: No border is painted around the field so that it appears flat.
             - @c wxSB_RAISED: A raised 3D border is painted around the field.
+            - @c wxSB_SUNKEN: A sunken 3D border is painted around the field
+              (this style is new since wxWidgets 2.9.5).
     */
     virtual void SetStatusStyles(int n, const int* styles);
 

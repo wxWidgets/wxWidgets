@@ -3,7 +3,6 @@
 // Purpose:     wxPen class implementation
 // Author:      Vaclav Slavik
 // Created:     2006-08-04
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 REA Elektronik GmbH
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -68,12 +67,10 @@ wxPen::wxPen(const wxColour &colour, int width, wxPenStyle style)
     m_refData = new wxPenRefData(colour, style);
 }
 
-#if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxPen::wxPen(const wxColour& col, int width, int style)
 {
     m_refData = new wxPenRefData(col, (wxPenStyle)style);
 }
-#endif
 
 wxPen::wxPen(const wxBitmap& WXUNUSED(stipple), int WXUNUSED(width))
 {
@@ -84,7 +81,7 @@ wxPen::wxPen(const wxBitmap& WXUNUSED(stipple), int WXUNUSED(width))
 
 bool wxPen::operator==(const wxPen& pen) const
 {
-#warning "this is incorrect (MGL too)"
+#warning "this is incorrect"
     return m_refData == pen.m_refData;
 }
 

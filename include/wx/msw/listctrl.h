@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Agron Selimaj
 // Created:     01/02/97
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -16,7 +15,6 @@
 #include "wx/dynarray.h"
 #include "wx/vector.h"
 
-class WXDLLIMPEXP_FWD_CORE wxImageList;
 class wxMSWListItemData;
 
 // define this symbol to indicate the availability of SetColumnsOrder() and
@@ -77,7 +75,7 @@ class wxMSWListItemData;
 
  */
 
-class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxListCtrl: public wxListCtrlBase
 {
 public:
     /*
@@ -256,12 +254,6 @@ public:
     void SetImageList(wxImageList *imageList, int which);
     void AssignImageList(wxImageList *imageList, int which);
 
-    // are we in report mode?
-    bool InReportView() const { return HasFlag(wxLC_REPORT); }
-
-    // are we in virtual report mode?
-    bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
-
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
     void RefreshItems(long itemFrom, long itemTo);
@@ -326,14 +318,6 @@ public:
     // Insert an image/string item
     long InsertItem(long index, const wxString& label, int imageIndex);
 
-    // For list view mode (only), inserts a column.
-    long InsertColumn(long col, const wxListItem& info);
-
-    long InsertColumn(long col,
-                      const wxString& heading,
-                      int format = wxLIST_FORMAT_LEFT,
-                      int width = -1);
-
     // set the number of items in a virtual list control
     void SetItemCount(long count);
 
@@ -381,12 +365,6 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-
-#if WXWIN_COMPATIBILITY_2_6
-    // obsolete stuff, for compatibility only -- don't use
-    wxDEPRECATED( int GetItemSpacing(bool isSmall) const);
-#endif // WXWIN_COMPATIBILITY_2_6
-
     // convert our styles to Windows
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
@@ -398,6 +376,17 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    // Implement constrained best size calculation.
+    virtual int DoGetBestClientHeight(int width) const
+        { return MSWGetBestViewRect(width, -1).y; }
+    virtual int DoGetBestClientWidth(int height) const
+        { return MSWGetBestViewRect(-1, height).x; }
+
+    wxSize MSWGetBestViewRect(int x, int y) const;
+
+    // Implement base class pure virtual methods.
+    long DoInsertColumn(long col, const wxListItem& info);
 
     // free memory taken by all internal data
     void FreeAllInternalData();
@@ -443,9 +432,6 @@ protected:
     // return the icon for the given item and column.
     virtual int OnGetItemColumnImage(long item, long column) const;
 
-    // return the attribute for the item (may return NULL if none)
-    virtual wxListItemAttr *OnGetItemAttr(long item) const;
-
     // return the attribute for the given item and column (may return NULL if none)
     virtual wxListItemAttr *OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
     {
@@ -465,6 +451,10 @@ private:
 
     // destroy m_textCtrl if it's currently valid and reset it to NULL
     void DeleteEditControl();
+
+    // Intercept Escape and Enter keys to avoid them being stolen from our
+    // in-place editor control.
+    void OnCharHook(wxKeyEvent& event);
 
 
     DECLARE_DYNAMIC_CLASS(wxListCtrl)

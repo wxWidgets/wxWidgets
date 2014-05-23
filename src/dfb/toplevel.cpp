@@ -3,7 +3,6 @@
 // Purpose:     Top level window, abstraction of wxFrame and wxDialog
 // Author:      Vaclav Slavik
 // Created:     2006-08-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 REA Elektronik GmbH
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -74,7 +73,6 @@ bool wxTopLevelWindowDFB::Create(wxWindow *parent,
 // showing and hiding
 // ----------------------------------------------------------------------------
 
-#warning "FIXME: the rest of this file is almost same as for MGL, merge it"
 bool wxTopLevelWindowDFB::ShowFullScreen(bool show, long style)
 {
     if ( show == m_fsIsShowing )

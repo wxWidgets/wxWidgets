@@ -4,7 +4,6 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/03/16
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -182,7 +181,7 @@ void wxRadioButton::Cocoa_wxNSButtonAction(void)
     {
         Cocoa_DeselectOtherButtonsInTheGroup();
     }
-    wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_RADIOBUTTON, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
     event.SetInt(GetValue());
     Command(event);

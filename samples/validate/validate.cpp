@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +32,7 @@
 #include "wx/valtext.h"
 #include "wx/valnum.h"
 
-#ifndef __WXMSW__
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -147,11 +146,11 @@ bool MyApp::OnInit()
 // MyFrame
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
        : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),

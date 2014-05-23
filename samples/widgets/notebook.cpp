@@ -4,7 +4,6 @@
 // Purpose:     Part of the widgets sample showing book controls
 // Author:      Vadim Zeitlin, Wlodzimierz ABX Skiba
 // Created:     06.04.01
-// Id:          $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin, 2006 Wlodzimierz Skiba
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -89,11 +88,11 @@ public:
     BookWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist, const char *const icon[]);
     virtual ~BookWidgetsPage();
 
-    virtual wxControl *GetWidget() const { return m_book; }
-    virtual void RecreateWidget() { RecreateBook(); }
+    virtual wxControl *GetWidget() const wxOVERRIDE { return m_book; }
+    virtual void RecreateWidget() wxOVERRIDE { RecreateBook(); }
 
     // lazy creation of the content
-    virtual void CreateContent();
+    virtual void CreateContent() wxOVERRIDE;
 
 protected:
     // event handlers
@@ -162,14 +161,14 @@ protected:
 #endif // USE_ICONS_IN_BOOK
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(BookWidgetsPage, WidgetsPage)
+wxBEGIN_EVENT_TABLE(BookWidgetsPage, WidgetsPage)
     EVT_BUTTON(BookPage_Reset, BookWidgetsPage::OnButtonReset)
     EVT_BUTTON(BookPage_SelectPage, BookWidgetsPage::OnButtonSelectPage)
     EVT_BUTTON(BookPage_AddPage, BookWidgetsPage::OnButtonAddPage)
@@ -186,7 +185,7 @@ BEGIN_EVENT_TABLE(BookWidgetsPage, WidgetsPage)
 
     EVT_CHECKBOX(wxID_ANY, BookWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, BookWidgetsPage::OnCheckOrRadioBox)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -561,7 +560,7 @@ protected:
     void OnPageChanged(wxNotebookEvent& event);
 
     // (re)create book
-    virtual wxBookCtrlBase *CreateBook(long flags)
+    virtual wxBookCtrlBase *CreateBook(long flags) wxOVERRIDE
     {
         return new wxNotebook(this, BookPage_Book,
                               wxDefaultPosition, wxDefaultSize,
@@ -569,7 +568,7 @@ protected:
     }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(NotebookWidgetsPage)
 };
 
@@ -577,10 +576,10 @@ private:
 // event table
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(NotebookWidgetsPage, BookWidgetsPage)
+wxBEGIN_EVENT_TABLE(NotebookWidgetsPage, BookWidgetsPage)
     EVT_NOTEBOOK_PAGE_CHANGING(wxID_ANY, NotebookWidgetsPage::OnPageChanging)
     EVT_NOTEBOOK_PAGE_CHANGED(wxID_ANY, NotebookWidgetsPage::OnPageChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 #if defined(__WXUNIVERSAL__)
     #define FAMILY_CTRLS UNIVERSAL_CTRLS
@@ -642,7 +641,7 @@ protected:
     void OnPageChanged(wxListbookEvent& event);
 
     // (re)create book
-    virtual wxBookCtrlBase *CreateBook(long flags)
+    virtual wxBookCtrlBase *CreateBook(long flags) wxOVERRIDE
     {
         return new wxListbook(this, BookPage_Book,
                               wxDefaultPosition, wxDefaultSize,
@@ -650,7 +649,7 @@ protected:
     }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ListbookWidgetsPage)
 };
 
@@ -658,10 +657,10 @@ private:
 // event table
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ListbookWidgetsPage, BookWidgetsPage)
+wxBEGIN_EVENT_TABLE(ListbookWidgetsPage, BookWidgetsPage)
     EVT_LISTBOOK_PAGE_CHANGING(wxID_ANY, ListbookWidgetsPage::OnPageChanging)
     EVT_LISTBOOK_PAGE_CHANGED(wxID_ANY, ListbookWidgetsPage::OnPageChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(ListbookWidgetsPage, wxT("Listbook"),
                        GENERIC_CTRLS | BOOK_CTRLS
@@ -715,7 +714,7 @@ protected:
     void OnPageChanged(wxChoicebookEvent& event);
 
     // (re)create book
-    virtual wxBookCtrlBase *CreateBook(long flags)
+    virtual wxBookCtrlBase *CreateBook(long flags) wxOVERRIDE
     {
         return new wxChoicebook(this, BookPage_Book,
                                 wxDefaultPosition, wxDefaultSize,
@@ -723,7 +722,7 @@ protected:
     }
 
 private:
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(ChoicebookWidgetsPage)
 };
 
@@ -731,10 +730,10 @@ private:
 // event table
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(ChoicebookWidgetsPage, BookWidgetsPage)
+wxBEGIN_EVENT_TABLE(ChoicebookWidgetsPage, BookWidgetsPage)
     EVT_CHOICEBOOK_PAGE_CHANGING(wxID_ANY, ChoicebookWidgetsPage::OnPageChanging)
     EVT_CHOICEBOOK_PAGE_CHANGED(wxID_ANY, ChoicebookWidgetsPage::OnPageChanged)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 IMPLEMENT_WIDGETS_PAGE(ChoicebookWidgetsPage, wxT("Choicebook"),
                        GENERIC_CTRLS | BOOK_CTRLS

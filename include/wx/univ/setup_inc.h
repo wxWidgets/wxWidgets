@@ -5,7 +5,6 @@
 //              generated include/wx/univ/setup0.h)
 // Author:      Vadim Zeitlin
 // Created:     2008-02-03
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

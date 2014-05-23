@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -65,9 +64,6 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
 END_EVENT_TABLE()
 
-
-// platform specific static variables
-static const short kwxMacAppleMenuId = 1 ;
 
 wxWindow* wxApp::s_captureWindow = NULL ;
 long      wxApp::s_lastModifiers = 0 ;
@@ -130,7 +126,7 @@ pascal OSErr AEHandleGURL( const AppleEvent *event , AppleEvent *reply , SRefCon
 }
 
 
-// AEODoc Calls MacOpenFile on each of the files passed
+// AEODoc Calls MacOpenFiles with all of the files passed
 
 short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
 {
@@ -158,15 +154,22 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
     wxString fName ;
     FSRef theRef ;
 
+    wxArrayString fileNames;
     for (i = 1; i <= itemsInList; i++)
     {
-        AEGetNthPtr(
+        err = AEGetNthPtr(
             &docList, i, typeFSRef, &keywd, &returnedType,
             (Ptr)&theRef, sizeof(theRef), &actualSize);
+        
+        if ( err != noErr)
+            return err;
+        
         fName = wxMacFSRefToPath( &theRef ) ;
 
-        MacOpenFile(fName);
+        fileNames.Add(fName);
     }
+
+    MacOpenFiles(fileNames);
 
     return noErr;
 }
@@ -223,16 +226,23 @@ short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF WXUNUSED(reply)
 
     wxString fName ;
     FSRef theRef ;
+    
+    wxArrayString fileNames;
 
     for (i = 1; i <= itemsInList; i++)
     {
-        AEGetNthPtr(
+        err = AEGetNthPtr(
             &docList, i, typeFSRef, &keywd, &returnedType,
             (Ptr)&theRef, sizeof(theRef), &actualSize);
+        
+        if ( err != noErr)
+            return err;
+        
         fName = wxMacFSRefToPath( &theRef ) ;
-
-        MacPrintFile(fName);
+        fileNames.Add( fName );
     }
+    
+    MacPrintFiles(fileNames);
 
     return noErr;
 }
@@ -274,6 +284,16 @@ short wxApp::MacHandleAERApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
 // Support Routines linking the Mac...File Calls to the Document Manager
 //----------------------------------------------------------------------
 
+void wxApp::MacOpenFiles(const wxArrayString & fileNames )
+{
+    size_t i;
+    const size_t fileCount = fileNames.GetCount();
+    for (i = 0; i < fileCount; i++)
+    {
+        MacOpenFile(fileNames[i]);
+    }
+}
+
 void wxApp::MacOpenFile(const wxString & fileName )
 {
 #if wxUSE_DOC_VIEW_ARCHITECTURE
@@ -285,6 +305,16 @@ void wxApp::MacOpenFile(const wxString & fileName )
 
 void wxApp::MacOpenURL(const wxString & WXUNUSED(url) )
 {
+}
+
+void wxApp::MacPrintFiles(const wxArrayString & fileNames )
+{
+    size_t i;
+    const size_t fileCount = fileNames.GetCount();
+    for (i = 0; i < fileCount; i++)
+    {
+        MacPrintFile(fileNames[i]);
+    }
 }
 
 void wxApp::MacPrintFile(const wxString & fileName )
@@ -369,10 +399,44 @@ void wxApp::MacReopenApp()
 
         if ( firstIconized )
             firstIconized->Iconize( false ) ;
+        
+        // showing hidden windows is not really always a good solution, also non-modal dialogs when closed end up
+        // as hidden tlws, we don't want to reshow those, so let's just reopen the minimized a.k.a. iconized tlws
+        // unless we find a regression ...
+#if 0
         else if ( firstHidden )
             firstHidden->Show( true );
+#endif
     }
 }
+
+#if wxOSX_USE_COCOA_OR_IPHONE
+void wxApp::OSXOnWillFinishLaunching()
+{
+}
+
+void wxApp::OSXOnDidFinishLaunching()
+{
+    // on cocoa we cannot do this, as it would arrive "AFTER" an OpenFiles event
+#if wxOSX_USE_IPHONE
+    wxTheApp->OnInit();
+#endif
+}
+
+void wxApp::OSXOnWillTerminate()
+{
+    wxCloseEvent event;
+    event.SetCanVeto(false);
+    wxTheApp->OnEndSession(event);
+}
+
+bool wxApp::OSXOnShouldTerminate()
+{
+    wxCloseEvent event;
+    wxTheApp->OnQueryEndSession(event);
+    return !event.GetVeto();
+}
+#endif
 
 //----------------------------------------------------------------------
 // Macintosh CommandID support - converting between native and wx IDs
@@ -381,6 +445,9 @@ void wxApp::MacReopenApp()
 // if no native match they just return the passed-in id
 
 #if wxOSX_USE_CARBON
+
+// platform specific static variables
+static const short kwxMacAppleMenuId = 1 ;
 
 struct IdPair
 {
@@ -697,22 +764,7 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
             break ;
 #endif
         case kEventClassAppleEvent :
-            {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-                if ( AEProcessEvent != NULL )
-                {
-                    result = AEProcessEvent(event);
-                }
-#endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-                {
-                    EventRecord rec ;
-
-                    wxMacConvertEventToRecord( event , &rec ) ;
-                    result = AEProcessAppleEvent( &rec ) ;
-                }
-#endif
-            }
+            result = AEProcessEvent(event);
             break ;
 
         default :
@@ -783,18 +835,33 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     InstallDebugAssertOutputHandler( NewDebugAssertOutputHandlerUPP( wxMacAssertOutputHandler ) );
 #endif
 
-    // Mac OS X passes a process serial number command line argument when
-    // the application is launched from the Finder. This argument must be
-    // removed from the command line arguments before being handled by the
-    // application (otherwise applications would need to handle it)
-    if ( argc > 1 )
+    /*
+     Cocoa supports -Key value options which set the user defaults key "Key"
+     to the value "value"  Some of them are very handy for debugging like
+     -NSShowAllViews YES.  Cocoa picks these up from the real argv so
+     our removal of them from the wx copy of it does not affect Cocoa's
+     ability to see them.
+     
+     We basically just assume that any "-NS" option and its following
+     argument needs to be removed from argv.  We hope that user code does
+     not expect to see -NS options and indeed it's probably a safe bet
+     since most user code accepting options is probably using the
+     double-dash GNU-style syntax.
+     */
+    for(int i=1; i < argc; ++i)
     {
-        static const wxChar *ARG_PSN = wxT("-psn_");
-        if ( wxStrncmp(argv[1], ARG_PSN, wxStrlen(ARG_PSN)) == 0 )
+        static const wxChar *ARG_NS = wxT("-NS");
+        if( wxStrncmp(argv[i], ARG_NS, wxStrlen(ARG_NS)) == 0 )
         {
-            // remove this argument
-            --argc;
-            memmove(argv + 1, argv + 2, argc * sizeof(char *));
+            // Only eat this option if it has an argument
+            if( (i + 1) < argc )
+            {
+                memmove(argv + i, argv + i + 2, (argc-i-1)*sizeof(wxChar*));
+                argc -= 2;
+                // drop back one position so the next run through the loop
+                // reprocesses the argument at our current index.
+                --i;
+            }
         }
     }
 
@@ -821,7 +888,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxOSX_USE_CARBON
 bool wxApp::CallOnInit()
 {
     wxMacAutoreleasePool autoreleasepool;
@@ -939,98 +1006,6 @@ void wxApp::CleanUp()
 // misc initialization stuff
 //----------------------------------------------------------------------
 
-#if wxOSX_USE_CARBON && MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec)
-{
-    OSStatus err = noErr ;
-    bool converted = ConvertEventRefToEventRecord( event, rec) ;
-
-    if ( !converted )
-    {
-        switch ( GetEventClass( event ) )
-        {
-            case kEventClassKeyboard :
-            {
-                converted = true ;
-                switch ( GetEventKind(event) )
-                {
-                    case kEventRawKeyDown :
-                        rec->what = keyDown ;
-                        break ;
-
-                    case kEventRawKeyRepeat :
-                        rec->what = autoKey ;
-                        break ;
-
-                    case kEventRawKeyUp :
-                        rec->what = keyUp ;
-                        break ;
-
-                    case kEventRawKeyModifiersChanged :
-                        rec->what = nullEvent ;
-                        break ;
-
-                    default :
-                        converted = false ;
-                        break ;
-                }
-
-                if ( converted )
-                {
-                    UInt32 keyCode ;
-                    unsigned char charCode ;
-                    UInt32 modifiers ;
-                    GetMouse( &rec->where) ;
-                    err = GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
-                    err = GetEventParameter(event, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
-                    err = GetEventParameter(event, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode);
-                    rec->modifiers = modifiers ;
-                    rec->message = (keyCode << 8 ) + charCode ;
-                }
-            }
-            break ;
-
-            case kEventClassTextInput :
-            {
-                switch ( GetEventKind( event ) )
-                {
-                    case kEventTextInputUnicodeForKeyEvent :
-                        {
-                            EventRef rawEvent ;
-                            err = GetEventParameter(
-                                event, kEventParamTextInputSendKeyboardEvent, typeEventRef, NULL,
-                                sizeof(rawEvent), NULL, &rawEvent ) ;
-                            converted = true ;
-
-                            {
-                                UInt32 keyCode, modifiers;
-                                unsigned char charCode ;
-                                GetMouse( &rec->where) ;
-                                rec->what = keyDown ;
-                                err = GetEventParameter(rawEvent, kEventParamKeyModifiers, typeUInt32, NULL, 4, NULL, &modifiers);
-                                err = GetEventParameter(rawEvent, kEventParamKeyCode, typeUInt32, NULL, 4, NULL, &keyCode);
-                                err = GetEventParameter(rawEvent, kEventParamKeyMacCharCodes, typeChar, NULL, 1, NULL, &charCode);
-                                rec->modifiers = modifiers ;
-                                rec->message = (keyCode << 8 ) + charCode ;
-                            }
-                       }
-                       break ;
-
-                    default :
-                        break ;
-                }
-            }
-            break ;
-
-            default :
-                break ;
-        }
-    }
-
-    return converted ;
-}
-#endif
-
 wxApp::wxApp()
 {
     m_printMode = wxPRINT_WINDOWS;
@@ -1126,139 +1101,21 @@ void wxApp::MacHandleUnhandledEvent( WXEVENTREF WXUNUSED(evr) )
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
-
-// adding forward compatible defines for keys that are different on different keyboard layouts
-// see Inside Mac Volume V
-
-enum {
-    kVK_ANSI_A = 0x00,
-    kVK_ANSI_S = 0x01,
-    kVK_ANSI_D = 0x02,
-    kVK_ANSI_F = 0x03,
-    kVK_ANSI_H = 0x04,
-    kVK_ANSI_G = 0x05,
-    kVK_ANSI_Z = 0x06,
-    kVK_ANSI_X = 0x07,
-    kVK_ANSI_C = 0x08,
-    kVK_ANSI_V = 0x09,
-    kVK_ANSI_B = 0x0B,
-    kVK_ANSI_Q = 0x0C,
-    kVK_ANSI_W = 0x0D,
-    kVK_ANSI_E = 0x0E,
-    kVK_ANSI_R = 0x0F,
-    kVK_ANSI_Y = 0x10,
-    kVK_ANSI_T = 0x11,
-    kVK_ANSI_1 = 0x12,
-    kVK_ANSI_2 = 0x13,
-    kVK_ANSI_3 = 0x14,
-    kVK_ANSI_4 = 0x15,
-    kVK_ANSI_6 = 0x16,
-    kVK_ANSI_5 = 0x17,
-    kVK_ANSI_Equal = 0x18,
-    kVK_ANSI_9 = 0x19,
-    kVK_ANSI_7 = 0x1A,
-    kVK_ANSI_Minus = 0x1B,
-    kVK_ANSI_8 = 0x1C,
-    kVK_ANSI_0 = 0x1D,
-    kVK_ANSI_RightBracket = 0x1E,
-    kVK_ANSI_O = 0x1F,
-    kVK_ANSI_U = 0x20,
-    kVK_ANSI_LeftBracket = 0x21,
-    kVK_ANSI_I = 0x22,
-    kVK_ANSI_P = 0x23,
-    kVK_ANSI_L = 0x25,
-    kVK_ANSI_J = 0x26,
-    kVK_ANSI_Quote = 0x27,
-    kVK_ANSI_K = 0x28,
-    kVK_ANSI_Semicolon = 0x29,
-    kVK_ANSI_Backslash = 0x2A,
-    kVK_ANSI_Comma = 0x2B,
-    kVK_ANSI_Slash = 0x2C,
-    kVK_ANSI_N = 0x2D,
-    kVK_ANSI_M = 0x2E,
-    kVK_ANSI_Period = 0x2F,
-    kVK_ANSI_Grave = 0x32,
-    kVK_ANSI_KeypadDecimal = 0x41,
-    kVK_ANSI_KeypadMultiply = 0x43,
-    kVK_ANSI_KeypadPlus = 0x45,
-    kVK_ANSI_KeypadClear = 0x47,
-    kVK_ANSI_KeypadDivide = 0x4B,
-    kVK_ANSI_KeypadEnter = 0x4C,
-    kVK_ANSI_KeypadMinus = 0x4E,
-    kVK_ANSI_KeypadEquals = 0x51,
-    kVK_ANSI_Keypad0 = 0x52,
-    kVK_ANSI_Keypad1 = 0x53,
-    kVK_ANSI_Keypad2 = 0x54,
-    kVK_ANSI_Keypad3 = 0x55,
-    kVK_ANSI_Keypad4 = 0x56,
-    kVK_ANSI_Keypad5 = 0x57,
-    kVK_ANSI_Keypad6 = 0x58,
-    kVK_ANSI_Keypad7 = 0x59,
-    kVK_ANSI_Keypad8 = 0x5B,
-    kVK_ANSI_Keypad9 = 0x5C
-};
-
-// defines for keys that are the same on all layouts
-
-enum {
-    kVK_Return = 0x24,
-    kVK_Tab = 0x30,
-    kVK_Space = 0x31,
-    kVK_Delete = 0x33,
-    kVK_Escape = 0x35,
-    kVK_Command = 0x37,
-    kVK_Shift = 0x38,
-    kVK_CapsLock = 0x39,
-    kVK_Option = 0x3A,
-    kVK_Control = 0x3B,
-    kVK_RightShift = 0x3C,
-    kVK_RightOption = 0x3D,
-    kVK_RightControl = 0x3E,
-    kVK_Function = 0x3F,
-    kVK_F17 = 0x40,
-    kVK_VolumeUp = 0x48,
-    kVK_VolumeDown = 0x49,
-    kVK_Mute = 0x4A,
-    kVK_F18 = 0x4F,
-    kVK_F19 = 0x50,
-    kVK_F20 = 0x5A,
-    kVK_F5 = 0x60,
-    kVK_F6 = 0x61,
-    kVK_F7 = 0x62,
-    kVK_F3 = 0x63,
-    kVK_F8 = 0x64,
-    kVK_F9 = 0x65,
-    kVK_F11 = 0x67,
-    kVK_F13 = 0x69,
-    kVK_F16 = 0x6A,
-    kVK_F14 = 0x6B,
-    kVK_F10 = 0x6D,
-    kVK_F12 = 0x6F,
-    kVK_F15 = 0x71,
-    kVK_Help = 0x72,
-    kVK_Home = 0x73,
-    kVK_PageUp = 0x74,
-    kVK_ForwardDelete = 0x75,
-    kVK_F4 = 0x76,
-    kVK_End = 0x77,
-    kVK_F2 = 0x78,
-    kVK_PageDown = 0x79,
-    kVK_F1 = 0x7A,
-    kVK_LeftArrow = 0x7B,
-    kVK_RightArrow = 0x7C,
-    kVK_DownArrow = 0x7D,
-    kVK_UpArrow = 0x7E
-};
-
-#endif    
-
 CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
 {
     CGKeyCode keycode;
     
     switch (code)
     {
+        // Clang warns about switch values not of the same type as (enumerated)
+        // switch controlling expression. This is generally useful but here we
+        // really want to be able to use letters and digits without making them
+        // part of wxKeyCode enum.
+#ifdef __clang__
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wswitch"
+#endif // __clang__
+
         case 'a': case 'A':   keycode = kVK_ANSI_A; break;
         case 'b': case 'B':   keycode = kVK_ANSI_B; break;
         case 'c': case 'C':   keycode = kVK_ANSI_C; break;
@@ -1296,18 +1153,22 @@ CGKeyCode wxCharCodeWXToOSX(wxKeyCode code)
         case '7':             keycode = kVK_ANSI_7; break;
         case '8':             keycode = kVK_ANSI_8; break;
         case '9':             keycode = kVK_ANSI_9; break;
+
+#ifdef __clang__
+    #pragma clang diagnostic pop
+#endif // __clang__
             
         case WXK_BACK:        keycode = kVK_Delete; break;
         case WXK_TAB:         keycode = kVK_Tab; break;
         case WXK_RETURN:      keycode = kVK_Return; break;
         case WXK_ESCAPE:      keycode = kVK_Escape; break;
         case WXK_SPACE:       keycode = kVK_Space; break;
-        case WXK_DELETE:      keycode = kVK_Delete; break;
+        case WXK_DELETE:      keycode = kVK_ForwardDelete; break;
             
         case WXK_SHIFT:       keycode = kVK_Shift; break;
         case WXK_ALT:         keycode = kVK_Option; break;
-        case WXK_CONTROL:     keycode = kVK_Control; break;
-        case WXK_COMMAND:     keycode = kVK_Command; break;
+        case WXK_RAW_CONTROL: keycode = kVK_Control; break;
+        case WXK_CONTROL:     keycode = kVK_Command; break;
             
         case WXK_CAPITAL:     keycode = kVK_CapsLock; break;
         case WXK_END:         keycode = kVK_End; break;
@@ -1517,6 +1378,7 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
     {
     case WXK_START:
     case WXK_MENU:
+    case WXK_COMMAND:
         return cmdKey;
 
     case WXK_SHIFT:
@@ -1528,7 +1390,7 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
     case WXK_ALT:
         return optionKey;
 
-    case WXK_CONTROL:
+    case WXK_RAW_CONTROL:
         return controlKey;
 
     default:
@@ -1557,10 +1419,10 @@ wxMouseState wxGetMouseState()
     ms.SetRightDown( (buttons & 0x02) != 0 );
 
     UInt32 modifiers = GetCurrentKeyModifiers();
-    ms.SetControlDown(modifiers & controlKey);
+    ms.SetRawControlDown(modifiers & controlKey);
     ms.SetShiftDown(modifiers & shiftKey);
     ms.SetAltDown(modifiers & optionKey);
-    ms.SetMetaDown(modifiers & cmdKey);
+    ms.SetControlDown(modifiers & cmdKey);
 
     return ms;
 }
@@ -1569,53 +1431,49 @@ wxMouseState wxGetMouseState()
 
 // TODO : once the new key/char handling is tested, move all the code to wxWindow
 
-bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar )
 {
     if ( !focus )
         return false ;
 
     wxKeyEvent event(wxEVT_KEY_DOWN) ;
-    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , uniChar ) ;
 
     return focus->OSXHandleKeyEvent(event);
 }
 
-bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar )
 {
     if ( !focus )
         return false ;
 
     wxKeyEvent event( wxEVT_KEY_UP ) ;
-    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , uniChar ) ;
 
     return focus->OSXHandleKeyEvent(event) ;
 }
 
-bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar )
 {
     if ( !focus )
         return false ;
     wxKeyEvent event(wxEVT_CHAR) ;
-    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
+    MacCreateKeyEvent( event, focus , keymessage , modifiers , when , uniChar ) ;
 
     bool handled = false ;
 
 #if wxOSX_USE_CARBON
     long keyval = event.m_keyCode ;
-    wxNonOwnedWindow *tlw = focus->MacGetTopLevelWindow() ;
 
-    if (tlw)
     {
-        event.SetEventType( wxEVT_CHAR_HOOK );
-        handled = tlw->HandleWindowEvent( event );
-        if ( handled && event.GetSkipped() )
+        wxKeyEvent eventCharHook(wxEVT_CHAR_HOOK, event);
+        handled = focus->HandleWindowEvent( eventCharHook );
+        if ( handled && eventCharHook.IsNextEventAllowed() )
             handled = false ;
     }
 
     if ( !handled )
     {
-        event.SetEventType( wxEVT_CHAR );
-        event.Skip( false ) ;
         handled = focus->HandleWindowEvent( event ) ;
     }
 
@@ -1658,7 +1516,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
                     wxButton *def = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
                     if ( def && def->IsEnabled() )
                     {
-                        wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, def->GetId() );
+                        wxCommandEvent event(wxEVT_BUTTON, def->GetId() );
                         event.SetEventObject(def);
                         def->Command(event);
 
@@ -1669,7 +1527,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
             else if (keyval == WXK_ESCAPE || (keyval == '.' && modifiers & cmdKey ) )
             {
                 // generate wxID_CANCEL if command-. or <esc> has been pressed (typically in dialogs)
-                wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
+                wxCommandEvent new_event(wxEVT_BUTTON,wxID_CANCEL);
                 new_event.SetEventObject( focus );
                 handled = focus->HandleWindowEvent( new_event );
             }
@@ -1681,7 +1539,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
 }
 
 // This method handles common code for SendKeyDown, SendKeyUp, and SendChar events.
-void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
+void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , wxChar uniChar )
 {
 #if wxOSX_USE_COCOA_OR_CARBON
     
@@ -1753,9 +1611,9 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     }
 
     event.m_shiftDown = modifiers & shiftKey;
-    event.m_controlDown = modifiers & controlKey;
+    event.m_rawControlDown = modifiers & controlKey;
     event.m_altDown = modifiers & optionKey;
-    event.m_metaDown = modifiers & cmdKey;
+    event.m_controlDown = modifiers & cmdKey;
     event.m_keyCode = keyval ;
 #if wxUSE_UNICODE
     event.m_uniChar = uniChar ;
@@ -1763,8 +1621,6 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
 
     event.m_rawCode = keymessage;
     event.m_rawFlags = modifiers;
-    event.m_x = wherex;
-    event.m_y = wherey;
     event.SetTimestamp(when);
     event.SetEventObject(focus);
 #else
@@ -1773,8 +1629,6 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     wxUnusedVar(keymessage);
     wxUnusedVar(modifiers);
     wxUnusedVar(when);
-    wxUnusedVar(wherex);
-    wxUnusedVar(wherey);
     wxUnusedVar(uniChar);
 #endif
 }

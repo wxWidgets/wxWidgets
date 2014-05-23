@@ -4,7 +4,6 @@
 // Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
-// RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -140,9 +139,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     fileMenu->Append(wxID_CLOSE, _("&Close"));
 
     wxMenu* helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, _("&About..."));
+    helpMenu->Append(wxID_ABOUT, _("&About"));
     // Ensures we don't get an empty help menu
-    helpMenu->Append(wxID_HELP_CONTENTS, _("&About..."));
+    helpMenu->Append(wxID_HELP_CONTENTS, _("&About"));
 
     menuBar->Append(fileMenu,_("&File"));
     menuBar->Append(helpMenu,_("&Help"));
@@ -204,7 +203,7 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
     if (m_HtmlHelpWin->GetSplitterWindow() && m_HtmlHelpWin->GetCfgData().navig_on)
         m_HtmlHelpWin->GetCfgData().sashpos = m_HtmlHelpWin->GetSplitterWindow()->GetSashPosition();
 
-    if (m_helpController && m_helpController->IsKindOf(CLASSINFO(wxHtmlHelpController)))
+    if (m_helpController && wxDynamicCast(m_helpController, wxHtmlHelpController))
     {
         ((wxHtmlHelpController*) m_helpController)->OnCloseFrame(evt);
     }

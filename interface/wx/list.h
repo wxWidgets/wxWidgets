@@ -2,7 +2,6 @@
 // Name:        list.h
 // Purpose:     interface of wxList<T>
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -155,7 +154,7 @@ public:
     void Erase(const compatibility_iterator& iter);
 
     /**
-        Returns the iterator refering to @a object or @NULL if none found.
+        Returns the iterator referring to @a object or @NULL if none found.
     */
     wxList<T>::compatibility_iterator Find(T* object) const;
 
@@ -203,7 +202,7 @@ public:
     bool IsEmpty() const;
 
     /**
-        Returns the iterator refering to the object at the given
+        Returns the iterator referring to the object at the given
         @a index in the list.
     */
     wxList<T>::compatibility_iterator Item(size_t index) const;
@@ -391,6 +390,13 @@ public:
         Returns the size of the list.
     */
     size_type size() const;
+
+    /**
+        Returns a wxVector holding the list elements.
+
+        @since 2.9.5
+    */
+    wxVector<T> AsVector() const;
 };
 
 

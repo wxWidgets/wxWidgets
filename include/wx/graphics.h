@@ -5,7 +5,6 @@
 // Modified by:
 // Created:
 // Copyright:   (c) Stefan Csomor
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,15 +15,18 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
 
+#include "wx/affinematrix2d.h"
 #include "wx/geometry.h"
+#include "wx/colour.h"
 #include "wx/dynarray.h"
-#include "wx/dc.h"
+#include "wx/font.h"
+#include "wx/image.h"
 #include "wx/vector.h"
 
 enum wxAntialiasMode
 {
     wxANTIALIAS_NONE, // should be 0
-    wxANTIALIAS_DEFAULT,
+    wxANTIALIAS_DEFAULT
 };
 
 enum wxInterpolationQuality
@@ -49,6 +51,7 @@ enum wxCompositionMode
     // classic Porter-Duff compositions
     // http://keithp.com/~keithp/porterduff/p253-porter.pdf
 
+    wxCOMPOSITION_INVALID = -1, /* indicates invalid/unsupported mode */
     wxCOMPOSITION_CLEAR, /* R = 0 */
     wxCOMPOSITION_SOURCE, /* R = S */
     wxCOMPOSITION_OVER, /* R = S + D*(1 - Sa) */
@@ -64,7 +67,7 @@ enum wxCompositionMode
     wxCOMPOSITION_XOR, /* R = S*(1 - Da) + D*(1 - Sa) */
 
     // mathematical compositions
-    wxCOMPOSITION_ADD, /* R = S + D */
+    wxCOMPOSITION_ADD /* R = S + D */
 };
 
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
@@ -105,6 +108,7 @@ class WXDLLIMPEXP_FWD_CORE wxGraphicsBitmap;
 //
 
 class WXDLLIMPEXP_FWD_CORE wxGraphicsObjectRefData;
+class WXDLLIMPEXP_FWD_CORE wxGraphicsBitmapData;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsMatrixData;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsPathData;
 
@@ -121,8 +125,8 @@ public:
     wxGraphicsRenderer* GetRenderer() const;
     wxGraphicsObjectRefData* GetGraphicsData() const;
 protected:
-    virtual wxObjectRefData* CreateRefData() const;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+    virtual wxObjectRefData* CreateRefData() const wxOVERRIDE;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const wxOVERRIDE;
 
     DECLARE_DYNAMIC_CLASS(wxGraphicsObject)
 };
@@ -165,6 +169,21 @@ class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
 public:
     wxGraphicsBitmap() {}
     virtual ~wxGraphicsBitmap() {}
+
+    // Convert bitmap to wxImage: this is more efficient than converting to
+    // wxBitmap first and then to wxImage and also works without X server
+    // connection under Unix that wxBitmap requires.
+#if wxUSE_IMAGE
+    wxImage ConvertToImage() const;
+#endif // wxUSE_IMAGE
+    
+    void* GetNativeBitmap() const;
+
+    const wxGraphicsBitmapData* GetBitmapData() const
+    { return (const wxGraphicsBitmapData*) GetRefData(); }
+    wxGraphicsBitmapData* GetBitmapData()
+    { return (wxGraphicsBitmapData*) GetRefData(); }
+
 private:
     DECLARE_DYNAMIC_CLASS(wxGraphicsBitmap)
 };
@@ -380,7 +399,7 @@ public:
     void Add(wxColour col, float pos) { Add(wxGraphicsGradientStop(col, pos)); }
 
     // Get the number of stops.
-    unsigned GetCount() const { return m_stops.size(); }
+    size_t GetCount() const { return m_stops.size(); }
 
     // Return the stop at the given index (which must be valid).
     wxGraphicsGradientStop Item(unsigned n) const { return m_stops.at(n); }
@@ -423,6 +442,13 @@ public:
     static wxGraphicsContext* CreateFromNativeWindow( void * window );
 
     static wxGraphicsContext* Create( wxWindow* window );
+
+#if wxUSE_IMAGE
+    // Create a context for drawing onto a wxImage. The image life time must be
+    // greater than that of the context itself as when the context is destroyed
+    // it will copy its contents to the specified image.
+    static wxGraphicsContext* Create(wxImage& image);
+#endif // wxUSE_IMAGE
 
     // create a context that can be used for measuring texts only, no drawing allowed
     static wxGraphicsContext * Create();
@@ -473,11 +499,18 @@ public:
                               wxDouble xc, wxDouble yc, wxDouble radius,
                               const wxGraphicsGradientStops& stops) const;
 
-    // sets the font
+    // creates a font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK) const;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) const;
+#if wxUSE_IMAGE
+    wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) const;
+#endif // wxUSE_IMAGE
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) const;
@@ -485,6 +518,16 @@ public:
     // create a 'native' matrix corresponding to these values
     virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
         wxDouble tx=0.0, wxDouble ty=0.0) const;
+
+    wxGraphicsMatrix CreateMatrix( const wxAffineMatrix2DBase& mat ) const
+    {
+        wxMatrix2D mat2D;
+        wxPoint2DDouble tr;
+        mat.Get(&mat2D, &tr);
+
+        return CreateMatrix(mat2D.m_11, mat2D.m_12, mat2D.m_21, mat2D.m_22,
+                            tr.m_x, tr.m_y);
+    }
 
     // push the current state of the context, ie the transformation matrix on a stack
     virtual void PushState() = 0;
@@ -523,7 +566,7 @@ public:
     virtual bool SetCompositionMode(wxCompositionMode op) = 0;
 
     // returns the size of the graphics context in device coordinates
-    void GetSize(wxDouble* width, wxDouble* height)
+    void GetSize(wxDouble* width, wxDouble* height) const
     {
         if ( width )
             *width = m_width;
@@ -771,6 +814,10 @@ public:
 
     virtual wxGraphicsContext * CreateContext( wxWindow* window ) = 0;
 
+#if wxUSE_IMAGE
+    virtual wxGraphicsContext * CreateContextFromImage(wxImage& image) = 0;
+#endif // wxUSE_IMAGE
+
     // create a context that can be used for measuring texts only, no drawing allowed
     virtual wxGraphicsContext * CreateMeasuringContext() = 0;
 
@@ -805,9 +852,17 @@ public:
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
+                                      const wxString& facename,
+                                      int flags = wxFONTFLAG_DEFAULT,
+                                      const wxColour& col = *wxBLACK) = 0;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+#if wxUSE_IMAGE
+    virtual wxGraphicsBitmap CreateBitmapFromImage(const wxImage& image) = 0;
+    virtual wxImage CreateImageFromBitmap(const wxGraphicsBitmap& bmp) = 0;
+#endif // wxUSE_IMAGE
 
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) = 0;
@@ -815,11 +870,25 @@ public:
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) = 0;
 
+    virtual wxString GetName() const = 0;
+    virtual void
+    GetVersion(int* major, int* minor = NULL, int* micro = NULL) const = 0;
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxGraphicsRenderer);
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)
 };
 
-#endif
+
+#if wxUSE_IMAGE
+inline
+wxImage wxGraphicsBitmap::ConvertToImage() const
+{
+    wxGraphicsRenderer* renderer = GetRenderer();
+    return renderer ? renderer->CreateImageFromBitmap(*this) : wxNullImage;
+}
+#endif // wxUSE_IMAGE
+
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 #endif // _WX_GRAPHICS_H_

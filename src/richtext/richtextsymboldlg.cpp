@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     10/5/2006 3:11:58 PM
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -293,7 +292,6 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
 
 ////@begin wxSymbolPickerDialog event table entries
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_FONT, wxSymbolPickerDialog::OnFontCtrlSelected )
-
 #if defined(__UNICODE__)
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_SUBSET, wxSymbolPickerDialog::OnSubsetSelected )
     EVT_UPDATE_UI( ID_SYMBOLPICKERDIALOG_SUBSET, wxSymbolPickerDialog::OnSymbolpickerdialogSubsetUpdate )
@@ -304,7 +302,8 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
 #endif
 
     EVT_UPDATE_UI( wxID_OK, wxSymbolPickerDialog::OnOkUpdate )
-
+    EVT_BUTTON( wxID_HELP, wxSymbolPickerDialog::OnHelpClick )
+    EVT_UPDATE_UI( wxID_HELP, wxSymbolPickerDialog::OnHelpUpdate )
 ////@end wxSymbolPickerDialog event table entries
 
 END_EVENT_TABLE()
@@ -379,6 +378,10 @@ void wxSymbolPickerDialog::Init()
 
 void wxSymbolPickerDialog::CreateControls()
 {
+#ifdef __WXMAC__
+    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+#endif
+
 ////@begin wxSymbolPickerDialog content construction
     wxSymbolPickerDialog* itemDialog1 = this;
 
@@ -535,7 +538,7 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
         m_symbolsCtrl->SetSelection(sel);
     }
 
-    UpdateSymbolDisplay();
+    UpdateSymbolDisplay(true, m_symbol.empty());
 
     m_dontUpdate = false;
 
@@ -553,7 +556,7 @@ void wxSymbolPickerDialog::UpdateSymbolDisplay(bool updateSymbolList, bool showA
 
     if (!fontNameToUse.empty())
     {
-        font = wxFont(14, wxDEFAULT, wxNORMAL, wxNORMAL, false, fontNameToUse);
+        font = wxFont(14, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, fontNameToUse);
     }
     else
         font = *wxNORMAL_FONT;
@@ -566,7 +569,7 @@ void wxSymbolPickerDialog::UpdateSymbolDisplay(bool updateSymbolList, bool showA
     if (!m_symbol.empty())
     {
         m_symbolStaticCtrl->SetFont(font);
-        m_symbolStaticCtrl->SetLabel(m_symbol);
+        m_symbolStaticCtrl->SetLabelText(m_symbol);
 
         int symbol = (int) m_symbol[0];
         m_characterCodeCtrl->SetValue(wxString::Format(wxT("%X hex (%d dec)"), symbol, symbol));
@@ -869,7 +872,7 @@ bool wxSymbolListCtrl::DoSetCurrent(int current)
 
 void wxSymbolListCtrl::SendSelectedEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
+    wxCommandEvent event(wxEVT_LISTBOX, GetId());
     event.SetEventObject(this);
     event.SetInt(m_current);
 
@@ -1176,7 +1179,7 @@ void wxSymbolListCtrl::OnLeftDClick(wxMouseEvent& eventMouse)
         // this event as a left-click instead
         if ( item == m_current )
         {
-            wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, GetId());
+            wxCommandEvent event(wxEVT_LISTBOX_DCLICK, GetId());
             event.SetEventObject(this);
             event.SetInt(item);
 
@@ -1288,4 +1291,24 @@ wxSymbolListCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
     return wxListBox::GetClassDefaultAttributes(variant);
 }
 
-#endif // wxUSE_RICHTEXT
+/*!
+ * wxEVT_BUTTON event handler for wxID_HELP
+ */
+
+void wxSymbolPickerDialog::OnHelpClick( wxCommandEvent& WXUNUSED(event) )
+{
+    if ((GetHelpInfo().GetHelpId() != -1) && GetHelpInfo().GetUICustomization())
+        ShowHelp(this);
+}
+
+/*!
+ * wxEVT_UPDATE_UI event handler for wxID_HELP
+ */
+
+void wxSymbolPickerDialog::OnHelpUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable((GetHelpInfo().GetHelpId() != -1) && GetHelpInfo().GetUICustomization());
+}
+
+#endif
+    // wxUSE_RICHTEXT

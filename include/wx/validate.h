@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     29/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -37,6 +36,11 @@ class WXDLLIMPEXP_CORE wxValidator : public wxEvtHandler
 {
 public:
     wxValidator();
+    wxValidator(const wxValidator& other)
+        : wxEvtHandler()
+        , m_validatorWindow(other.m_validatorWindow)
+    {
+    }
     virtual ~wxValidator();
 
     // Make a clone of this validator (or return NULL) - currently necessary
@@ -87,7 +91,7 @@ private:
     static bool ms_isSilent;
 
     DECLARE_DYNAMIC_CLASS(wxValidator)
-    wxDECLARE_NO_COPY_CLASS(wxValidator);
+    wxDECLARE_NO_ASSIGN_CLASS(wxValidator);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
@@ -100,7 +104,8 @@ extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
     // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
     // everywhere
     class WXDLLIMPEXP_FWD_CORE wxValidator;
-    #define wxDefaultValidator (*reinterpret_cast<wxValidator*>(NULL))
+    static const wxValidator* const wxDefaultValidatorPtr = NULL;
+    #define wxDefaultValidator (*wxDefaultValidatorPtr)
 
     // this macro allows to avoid warnings about unused parameters when
     // wxUSE_VALIDATORS == 0

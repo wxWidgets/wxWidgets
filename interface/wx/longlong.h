@@ -2,7 +2,6 @@
 // Name:        longlong.h
 // Purpose:     interface of wxLongLong
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

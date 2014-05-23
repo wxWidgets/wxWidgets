@@ -18,8 +18,8 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: internat.cpp:198
-msgid "&About..."
-msgstr "&O programu..."
+msgid "&About"
+msgstr "&O programu"
 
 #: internat.cpp:200
 msgid "E&xit"

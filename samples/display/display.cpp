@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by: Ryan Norton & Brian Victor
 // Created:     23.02.03
-// RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,7 @@
 
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__) || defined(__WXQT__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -54,7 +53,7 @@ public:
     // this one is called on application startup and is a good place for the app
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -90,7 +89,7 @@ private:
     wxBookCtrl *m_book;
 
     // any class wishing to process wxWidgets events must use this macro
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // Client data class for the choice control containing the video modes
@@ -133,7 +132,7 @@ enum
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Display_Quit,  MyFrame::OnQuit)
     EVT_MENU(Display_FromPoint,  MyFrame::OnFromPoint)
     EVT_MENU(Display_FullScreen, MyFrame::OnFullScreen)
@@ -147,7 +146,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_DISPLAY
 
     EVT_LEFT_UP(MyFrame::OnLeftClick)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
 // the application object during program execution (it's better than using a
@@ -213,12 +212,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Display_About, _("&About...\tF1"), _("Show about dialog"));
+    helpMenu->Append(Display_About, _("&About\tF1"), _("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuDisplay, _("&Display"));
     menuBar->Append(helpMenu, _("&Help"));
+    EnableFullScreenView();
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);

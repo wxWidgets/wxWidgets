@@ -4,7 +4,6 @@
 // Author:      Jaakko Salli
 // Modified by:
 // Created:     Apr-30-2006
-// RCS-ID:      $Id$
 // Copyright:   (c) 2005 Jaakko Salli
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -117,9 +116,6 @@
 #define NATIVE_TEXT_INDENT_XP       4
 #define NATIVE_TEXT_INDENT_CLASSIC  2
 
-#define TEXTCTRLYADJUST_XP          3
-#define TEXTCTRLYADJUST_CLASSIC     3
-
 #define COMBOBOX_ANIMATION_RESOLUTION   10
 
 #define COMBOBOX_ANIMATION_DURATION     200  // In milliseconds
@@ -229,26 +225,13 @@ void wxComboCtrl::OnResize()
     //
     // Recalculates button and textctrl areas
 
-    int textCtrlYAdjust;
-
-#if wxUSE_UXTHEME
-    if ( wxUxThemeEngine::GetIfActive() )
-    {
-        textCtrlYAdjust = TEXTCTRLYADJUST_XP;
-    }
-    else
-#endif
-    {
-        textCtrlYAdjust = TEXTCTRLYADJUST_CLASSIC;
-    }
-
     // Technically Classic Windows style combo has more narrow button,
     // but the native renderer doesn't paint it well like that.
     int btnWidth = 17;
     CalculateAreas(btnWidth);
 
     // Position textctrl using standard routine
-    PositionTextCtrl(0, textCtrlYAdjust);
+    PositionTextCtrl();
 }
 
 // Draws non-XP GUI dotted line around the focus area
@@ -310,7 +293,7 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
     if ( !(flags & wxCONTROL_ISSUBMENU) )
     {
         // Drawing control
-        isEnabled = IsEnabled();
+        isEnabled = IsThisEnabled();
         doDrawFocusRect = ShouldDrawFocus();
 
 #if wxUSE_UXTHEME
@@ -442,10 +425,17 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
     const wxRect& rectButton = m_btnArea;
     wxRect rectTextField = m_tcArea;
-    wxColour bgCol = GetBackgroundColour();
+
+    // FIXME: Either SetBackgroundColour or GetBackgroundColour
+    //        doesn't work under Vista, so here's a temporary
+    //        workaround.
+    //        In the theme-less rendering code below, this fixes incorrect
+    //        background on read-only comboboxes (they are gray, but should be
+    //        white).
+    wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
 #if wxUSE_UXTHEME
-    const bool isEnabled = IsEnabled();
+    const bool isEnabled = IsThisEnabled();
 
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HDC hDc = GetHdcOf(*impl);
@@ -518,11 +508,6 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
         if ( useVistaComboBox )
         {
-            // FIXME: Either SetBackgroundColour or GetBackgroundColour
-            //        doesn't work under Vista, so here's a temporary
-            //        workaround.
-            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-
             // Draw the entire control as a single button?
             if ( !isNonStdButton )
             {

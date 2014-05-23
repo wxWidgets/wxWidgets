@@ -2,9 +2,39 @@
 // Name:        print.h
 // Purpose:     interface of wxPreviewControlBar
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+enum wxPrinterError
+{
+    wxPRINTER_NO_ERROR = 0,
+    wxPRINTER_CANCELLED,
+    wxPRINTER_ERROR
+};
+
+#define wxPREVIEW_PRINT        1
+#define wxPREVIEW_PREVIOUS     2
+#define wxPREVIEW_NEXT         4
+#define wxPREVIEW_ZOOM         8
+#define wxPREVIEW_FIRST       16
+#define wxPREVIEW_LAST        32
+#define wxPREVIEW_GOTO        64
+
+#define wxPREVIEW_DEFAULT  (wxPREVIEW_PREVIOUS|wxPREVIEW_NEXT|wxPREVIEW_ZOOM\
+                            |wxPREVIEW_FIRST|wxPREVIEW_GOTO|wxPREVIEW_LAST)
+
+// Ids for controls
+#define wxID_PREVIEW_CLOSE      1
+#define wxID_PREVIEW_NEXT       2
+#define wxID_PREVIEW_PREVIOUS   3
+#define wxID_PREVIEW_PRINT      4
+#define wxID_PREVIEW_ZOOM       5
+#define wxID_PREVIEW_FIRST      6
+#define wxID_PREVIEW_LAST       7
+#define wxID_PREVIEW_GOTO       8
+#define wxID_PREVIEW_ZOOM_IN    9
+#define wxID_PREVIEW_ZOOM_OUT   10
+
 
 /**
     @class wxPreviewControlBar
@@ -15,7 +45,7 @@
     You can derive a new class from this and override some or all member functions
     to change the behaviour and appearance; or you can leave it as it is.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see wxPreviewFrame, wxPreviewCanvas, wxPrintPreview
@@ -89,7 +119,7 @@ public:
     A preview canvas is the default canvas used by the print preview
     system to display the preview.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see wxPreviewFrame, wxPreviewControlBar, wxPrintPreview
@@ -152,7 +182,7 @@ enum wxPreviewFrameModalityKind
     Member functions may be overridden to replace functionality, or the
     class may be used without derivation.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see wxPreviewCanvas, wxPreviewControlBar, wxPrintPreview
@@ -195,21 +225,44 @@ public:
     virtual void CreateControlBar();
 
     /**
-        Creates the preview canvas and control bar.
+        Initializes the frame elements and prepares for showing it.
 
-        By default also disables the other existing top level windows to
-        prepare for showing the preview frame modally. Since wxWidgets 2.9.2
-        this can be changed by specifying either wxPreviewFrame_WindowModal --
-        to disable just the parent window -- or wxPreviewFrame_NonModal -- to
-        not disable any windows at all -- as @a kind parameter.
+        Calling this method is equivalent to calling InitializeWithModality()
+        with wxPreviewFrame_AppModal argument, please see its documentation for
+        more details.
 
-        This function must be called by the application prior to showing the frame.
+        Please notice that this function is virtual mostly for backwards
+        compatibility only, there is no real need to override it as it's never
+        called by wxWidgets itself.
+     */
+    virtual void Initialize();
+
+    /**
+        Initializes the frame elements and prepares for showing it with the
+        given modality kind.
+
+        This method creates the frame elements by calling CreateCanvas() and
+        CreateControlBar() methods (which may be overridden to customize them)
+        and prepares to show the frame according to the value of @a kind
+        parameter:
+            - If it is wxPreviewFrame_AppModal, all the other application
+            windows will be disabled when this frame is shown. This is the same
+            behaviour as that of simple Initialize().
+            - If it is wxPreviewFrame_WindowModal, only the parent window of
+            the preview frame will be disabled when it is shown.
+            - And if it is wxPreviewFrame_NonModal, no windows at all will be
+            disabled while the preview is shown.
+
+        Notice that this function (or Initialize()) must be called by the
+        application prior to showing the frame but you still must call @c
+        Show(true) to actually show it afterwards.
 
         @param kind
-            The modality kind of preview frame. @since 2.9.2
+            The modality kind of preview frame.
+
+        @since 2.9.2
     */
-    virtual void Initialize(wxPreviewFrameModalityKind kind
-                                = wxPreviewFrame_AppModal);
+    virtual void InitializeWithModality(wxPreviewFrameModalityKind kind);
 
     /**
         Enables any disabled frames in the application, and deletes the print preview
@@ -239,7 +292,7 @@ public:
     affected. It is recommended to use native preview functionality on
     platforms that offer it (OS X, GTK+).
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPrintout, wxPrinter,
@@ -259,8 +312,8 @@ public:
         the preview frame so that the user can print directly from the preview interface.
 
         @remarks
-        Do not explicitly delete the printout objects once this destructor has been
-        called, since they will be deleted in the wxPrintPreview constructor.
+        Do not explicitly delete the printout objects once this constructor has been
+        called, since they will be deleted in the wxPrintPreview destructor.
         The same does not apply to the @a data argument.
 
         Use IsOk() to check whether the wxPrintPreview object was created correctly.
@@ -268,6 +321,9 @@ public:
     wxPrintPreview(wxPrintout* printout,
                    wxPrintout* printoutForPrinting = NULL,
                    wxPrintDialogData* data = NULL);
+    wxPrintPreview(wxPrintout* printout,
+                   wxPrintout* printoutForPrinting,
+                   wxPrintData* data);
 
     /**
         Destructor.
@@ -275,7 +331,7 @@ public:
         Deletes both print preview objects, so do not destroy these objects
         in your application.
     */
-    ~wxPrinter();
+    ~wxPrintPreview();
 
     /**
         Gets the preview window used for displaying the print preview image.
@@ -387,7 +443,7 @@ public:
     but this and associated classes provide a more convenient and general method
     of printing.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPrintout, wxPrintPreview
@@ -408,7 +464,7 @@ public:
     /**
         Creates the default printing abort window, with a cancel button.
     */
-    virtual wxWindow* CreateAbortWindow(wxWindow* parent, wxPrintout* printout);
+    virtual wxPrintAbortDialog* CreateAbortWindow(wxWindow* parent, wxPrintout* printout);
 
     /**
         Returns @true if the user has aborted the print job.
@@ -505,7 +561,7 @@ public:
     to create the print preview image, and to create the printed paper image, and
     achieve a common appearance to the preview image and the printed page.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{printing}
 
     @see @ref overview_printing, wxPrinterDC, wxPrintDialog, wxPageSetupDialog,
@@ -618,10 +674,6 @@ public:
         Or you can just use the FitThisSizeToXXX() and MapScreenSizeToXXX routines below,
         which do most of the scaling calculations for you.
 
-        @beginWxPythonOnly
-        This method returns the output-only parameters as a tuple.
-        @endWxPythonOnly
-
         @beginWxPerlOnly
         In wxPerl this method takes no arguments and returns a
         2-element list (w, h).
@@ -637,10 +689,6 @@ public:
 
         If you are doing your own scaling, remember to multiply this by a scaling
         factor to take the preview DC size into account.
-
-        @beginWxPythonOnly
-        This method returns the output-only parameters as a tuple.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method takes no arguments and returns a
@@ -659,22 +707,12 @@ public:
 
         @a minPage must be greater than zero and @a maxPage must be greater
         than @a minPage.
-
-        @beginWxPythonOnly
-        When this method is implemented in a derived Python class, it should be designed
-        to take no parameters (other than the self reference) and to return a tuple of
-        four integers.
-        @endWxPythonOnly
     */
     virtual void GetPageInfo(int* minPage, int* maxPage, int* pageFrom,
                              int* pageTo);
 
     /**
         Returns the size of the printer page in millimetres.
-
-        @beginWxPythonOnly
-        This method returns the output-only parameters as a tuple.
-        @endWxPythonOnly
 
         @beginWxPerlOnly
         In wxPerl this method takes no arguments and returns a
@@ -692,15 +730,6 @@ public:
         previewing, a memory device context is used, which uses a bitmap size reflecting
         the current preview zoom. The application must take this discrepancy into
         account if previewing is to be supported.
-
-        @beginWxPythonOnly
-        This method returns the output-only parameters as a tuple.
-        @endWxPythonOnly
-
-        @beginWxPerlOnly
-        In wxPerl this method takes no arguments and returns a
-        2-element list (w, h).
-        @endWxPerlOnly
     */
     void GetPageSizePixels(int* w, int* h) const;
 
@@ -823,11 +852,6 @@ public:
         @remarks
         The base OnBeginDocument() must be called (and the return value
         checked) from within the overridden function, since it calls wxDC::StartDoc().
-
-        @beginWxPythonOnly
-         If this method is overridden in a Python class then the base class version can
-         be called by using the method <tt>base_OnBeginDocument(startPage, endPage)</tt>.
-        @endWxPythonOnly
     */
     virtual bool OnBeginDocument(int startPage, int endPage);
 
@@ -880,3 +904,23 @@ public:
     void SetLogicalOrigin(wxCoord x, wxCoord y);
 };
 
+
+/**
+   @class wxPrintAbortDialog
+
+   The dialog created by default by the print framework that enables aborting
+   the printing process.
+ */
+class wxPrintAbortDialog: public wxDialog
+{
+public:
+    wxPrintAbortDialog(wxWindow *parent,
+                       const wxString& documentTitle,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxDEFAULT_DIALOG_STYLE,
+                       const wxString& name = "dialog");
+
+    void SetProgress(int currentPage, int totalPages,
+                     int currentCopy, int totalCopies);
+};

@@ -2,19 +2,8 @@
 // Name:        protocol/ftp.h
 // Purpose:     interface of wxFTP
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
-/**
-    Transfer modes used by wxFTP.
-*/
-enum TransferMode
-{
-    NONE,       //!< not set by user explicitly.
-    ASCII,
-    BINARY
-};
 
 /**
     @class wxFTP
@@ -54,7 +43,7 @@ enum TransferMode
             wxLogError("Couldn't get the file size for \"%s\"", filename);
         }
 
-        wxInputStream *i = ftp.GetInputStream(filename);
+        wxInputStream *in = ftp.GetInputStream(filename);
         if ( !in )
         {
             wxLogError("Couldn't get the file");
@@ -100,6 +89,16 @@ enum TransferMode
 class wxFTP : public wxProtocol
 {
 public:
+    /**
+        Transfer modes used by wxFTP.
+    */
+    enum TransferMode
+    {
+        NONE,       //!< not set by user explicitly.
+        ASCII,
+        BINARY
+    };
+
     /**
         Default constructor.
     */

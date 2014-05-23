@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        popupwin.h
-// Purpose:     interface of wxPoppWindow
+// Purpose:     interface of wxPopupWindow
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -23,6 +22,11 @@ class wxPopupWindow: public wxNonOwnedWindow
 public:
 
     /**
+      Default constructor
+    */
+    wxPopupWindow();
+    
+    /**
       Constructor
     */
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
@@ -33,7 +37,7 @@ public:
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
     /**
-        Move the popup window to the right position, i.e. such that it is
+        Move the popup window to the right position, i.e.\ such that it is
         entirely visible.
 
         The popup is positioned at ptOrigin + size if it opens below and to the
@@ -68,6 +72,11 @@ class wxPopupTransientWindow : public wxPopupWindow
 {
 public:
     /**
+        Default constructor.
+    */
+    wxPopupTransientWindow();
+
+    /**
         Constructor.
     */
     wxPopupTransientWindow(wxWindow *parent, int flags = wxBORDER_NONE);
@@ -96,4 +105,12 @@ public:
         (which consists in dismissing it if the mouse is clicked outside it).
     */
     virtual bool ProcessLeftDown(wxMouseEvent& event);
+
+protected:
+    /**
+       This is called when the popup is disappeared because of anything
+       else but direct call to Dismiss().
+    */
+    virtual void OnDismiss();
+    
 };

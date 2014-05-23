@@ -2,13 +2,14 @@
 // Name:        windowstyles.h
 // Purpose:     topic overview
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
 
 @page overview_windowstyles Window Styles
+
+@tableofcontents
 
 Window styles are used to specify alternative behaviour and appearances for
 windows, when they are created. The symbols are defined in such a way that they
@@ -27,4 +28,3 @@ Most windows can use the generic styles listed for wxWindow in addition to
 their own styles.
 
 */
-

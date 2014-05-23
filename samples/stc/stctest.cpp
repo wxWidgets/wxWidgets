@@ -3,7 +3,6 @@
 // Purpose:     STC test application
 // Maintainer:  Otto Wyss
 // Created:     2003-09-01
-// RCS-ID:      $Id$
 // Copyright:   (c) wxGuide
 // Licence:     wxWindows licence
 //////////////////////////////////////////////////////////////////////////////
@@ -44,7 +43,7 @@
 //----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if !defined(__WXMSW__) && !defined(__WXPM__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
@@ -79,7 +78,7 @@ wxString *g_appname = NULL;
 
 //! global print data, to remember settings during the session
 wxPrintData *g_printData = (wxPrintData*) NULL;
-wxPageSetupData *g_pageSetupData = (wxPageSetupData*) NULL;
+wxPageSetupDialogData *g_pageSetupData = (wxPageSetupDialogData*) NULL;
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
@@ -105,7 +104,7 @@ private:
     wxFrame* MinimalEditor();
 protected:
     void OnMinimalEditor(wxCommandEvent&);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 // created dynamically by wxWidgets
@@ -160,7 +159,7 @@ private:
     // print preview position and size
     wxRect DeterminePrintSize ();
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 //----------------------------------------------------------------------------
@@ -183,7 +182,7 @@ private:
     // timer
     wxTimer *m_timer;
 
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -194,9 +193,9 @@ private:
 IMPLEMENT_APP (App)
 
 
-BEGIN_EVENT_TABLE(App, wxApp)
+wxBEGIN_EVENT_TABLE(App, wxApp)
 EVT_MENU(myID_WINDOW_MINIMAL, App::OnMinimalEditor)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 //----------------------------------------------------------------------------
 // App
@@ -248,7 +247,7 @@ int App::OnExit () {
 // AppFrame
 //----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE (AppFrame, wxFrame)
+wxBEGIN_EVENT_TABLE (AppFrame, wxFrame)
     // common
     EVT_CLOSE (                      AppFrame::OnClose)
     // file
@@ -263,47 +262,21 @@ BEGIN_EVENT_TABLE (AppFrame, wxFrame)
     EVT_MENU (wxID_PREVIEW,          AppFrame::OnPrintPreview)
     EVT_MENU (wxID_PRINT,            AppFrame::OnPrint)
     EVT_MENU (wxID_EXIT,             AppFrame::OnExit)
-    // edit
+    // Menu items with standard IDs forwarded to the editor.
     EVT_MENU (wxID_CLEAR,            AppFrame::OnEdit)
     EVT_MENU (wxID_CUT,              AppFrame::OnEdit)
     EVT_MENU (wxID_COPY,             AppFrame::OnEdit)
     EVT_MENU (wxID_PASTE,            AppFrame::OnEdit)
-    EVT_MENU (myID_INDENTINC,        AppFrame::OnEdit)
-    EVT_MENU (myID_INDENTRED,        AppFrame::OnEdit)
     EVT_MENU (wxID_SELECTALL,        AppFrame::OnEdit)
-    EVT_MENU (myID_SELECTLINE,       AppFrame::OnEdit)
     EVT_MENU (wxID_REDO,             AppFrame::OnEdit)
     EVT_MENU (wxID_UNDO,             AppFrame::OnEdit)
-    // find
     EVT_MENU (wxID_FIND,             AppFrame::OnEdit)
-    EVT_MENU (myID_FINDNEXT,         AppFrame::OnEdit)
-    EVT_MENU (myID_REPLACE,          AppFrame::OnEdit)
-    EVT_MENU (myID_REPLACENEXT,      AppFrame::OnEdit)
-    EVT_MENU (myID_BRACEMATCH,       AppFrame::OnEdit)
-    EVT_MENU (myID_GOTO,             AppFrame::OnEdit)
-    // view
-    EVT_MENU_RANGE (myID_HILIGHTFIRST, myID_HILIGHTLAST,
+    // And all our edit-related menu commands.
+    EVT_MENU_RANGE (myID_EDIT_FIRST, myID_EDIT_LAST,
                                      AppFrame::OnEdit)
-    EVT_MENU (myID_DISPLAYEOL,       AppFrame::OnEdit)
-    EVT_MENU (myID_INDENTGUIDE,      AppFrame::OnEdit)
-    EVT_MENU (myID_LINENUMBER,       AppFrame::OnEdit)
-    EVT_MENU (myID_LONGLINEON,       AppFrame::OnEdit)
-    EVT_MENU (myID_WHITESPACE,       AppFrame::OnEdit)
-    EVT_MENU (myID_FOLDTOGGLE,       AppFrame::OnEdit)
-    EVT_MENU (myID_OVERTYPE,         AppFrame::OnEdit)
-    EVT_MENU (myID_READONLY,         AppFrame::OnEdit)
-    EVT_MENU (myID_WRAPMODEON,       AppFrame::OnEdit)
-    // extra
-    EVT_MENU (myID_CHANGELOWER,      AppFrame::OnEdit)
-    EVT_MENU (myID_CHANGEUPPER,      AppFrame::OnEdit)
-    EVT_MENU (myID_CONVERTCR,        AppFrame::OnEdit)
-    EVT_MENU (myID_CONVERTCRLF,      AppFrame::OnEdit)
-    EVT_MENU (myID_CONVERTLF,        AppFrame::OnEdit)
-    EVT_MENU (myID_CHARSETANSI,      AppFrame::OnEdit)
-    EVT_MENU (myID_CHARSETMAC,       AppFrame::OnEdit)
     // help
     EVT_MENU (wxID_ABOUT,            AppFrame::OnAbout)
-END_EVENT_TABLE ()
+wxEND_EVENT_TABLE ()
 
 AppFrame::AppFrame (const wxString &title)
         : wxFrame ((wxFrame *)NULL, wxID_ANY, title, wxDefaultPosition, wxSize(750,550),
@@ -317,9 +290,6 @@ AppFrame::AppFrame (const wxString &title)
     // set icon and background
     SetTitle (*g_appname);
     SetBackgroundColour (wxT("WHITE"));
-
-    // about box shown for 1 seconds
-    AppAbout dlg(this, 1000);
 
     // create menu
     m_menuBar = new wxMenuBar;
@@ -544,6 +514,20 @@ void AppFrame::CreateMenu ()
     menuView->AppendSeparator();
     menuView->Append (myID_USECHARSET, _("Use &code page of .."), menuCharset);
 
+    // Annotations menu
+    wxMenu* menuAnnotations = new wxMenu;
+    menuAnnotations->Append(myID_ANNOTATION_ADD, _("&Add or edit an annotation..."),
+                            _("Add an annotation for the current line"));
+    menuAnnotations->Append(myID_ANNOTATION_REMOVE, _("&Remove annotation"),
+                            _("Remove the annotation for the current line"));
+    menuAnnotations->Append(myID_ANNOTATION_CLEAR, _("&Clear all annotations"));
+
+    wxMenu* menuAnnotationsStyle = new wxMenu;
+    menuAnnotationsStyle->AppendRadioItem(myID_ANNOTATION_STYLE_HIDDEN, _("&Hidden"));
+    menuAnnotationsStyle->AppendRadioItem(myID_ANNOTATION_STYLE_STANDARD, _("&Standard"));
+    menuAnnotationsStyle->AppendRadioItem(myID_ANNOTATION_STYLE_BOXED, _("&Boxed"));
+    menuAnnotations->AppendSubMenu(menuAnnotationsStyle, "&Style");
+
     // change case submenu
     wxMenu *menuChangeCase = new wxMenu;
     menuChangeCase->Append (myID_CHANGEUPPER, _("&Upper case"));
@@ -562,6 +546,9 @@ void AppFrame::CreateMenu ()
     menuExtra->Append (myID_CHANGECASE, _("Change &case to .."), menuChangeCase);
     menuExtra->AppendSeparator();
     menuExtra->Append (myID_CONVERTEOL, _("Convert line &endings to .."), menuConvertEOL);
+    menuExtra->AppendCheckItem(myID_MULTIPLE_SELECTIONS, _("Toggle &multiple selections"));
+    menuExtra->AppendCheckItem(myID_MULTI_PASTE, _("Toggle multi-&paste"));
+    menuExtra->AppendCheckItem(myID_MULTIPLE_SELECTIONS_TYPING, _("Toggle t&yping on multiple selections"));
 
     // Window menu
     wxMenu *menuWindow = new wxMenu;
@@ -571,22 +558,26 @@ void AppFrame::CreateMenu ()
 
     // Help menu
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append (wxID_ABOUT, _("&About ..\tShift+F1"));
+    menuHelp->Append (wxID_ABOUT, _("&About ..\tCtrl+D"));
 
     // construct menu
     m_menuBar->Append (menuFile, _("&File"));
     m_menuBar->Append (menuEdit, _("&Edit"));
     m_menuBar->Append (menuView, _("&View"));
+    m_menuBar->Append (menuAnnotations, _("&Annotations"));
     m_menuBar->Append (menuExtra, _("E&xtra"));
     m_menuBar->Append (menuWindow, _("&Window"));
     m_menuBar->Append (menuHelp, _("&Help"));
     SetMenuBar (m_menuBar);
+
+    m_menuBar->Check(myID_ANNOTATION_STYLE_BOXED, true);
 }
 
 void AppFrame::FileOpen (wxString fname)
 {
     wxFileName w(fname); w.Normalize(); fname = w.GetFullPath();
     m_edit->LoadFile (fname);
+    m_edit->SelectNone();
 }
 
 wxRect AppFrame::DeterminePrintSize () {
@@ -608,9 +599,9 @@ wxRect AppFrame::DeterminePrintSize () {
 // AppAbout
 //----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE (AppAbout, wxDialog)
+wxBEGIN_EVENT_TABLE (AppAbout, wxDialog)
     EVT_TIMER (myID_ABOUTTIMER, AppAbout::OnTimerEvent)
-END_EVENT_TABLE ()
+wxEND_EVENT_TABLE ()
 
 AppAbout::AppAbout (wxWindow *parent,
                     int milliseconds,
@@ -660,7 +651,7 @@ AppAbout::AppAbout (wxWindow *parent,
     wxBoxSizer *totalpane = new wxBoxSizer (wxVERTICAL);
     totalpane->Add (0, 20);
     wxStaticText *appname = new wxStaticText(this, wxID_ANY, *g_appname);
-    appname->SetFont (wxFont (24, wxDEFAULT, wxNORMAL, wxBOLD));
+    appname->SetFont (wxFontInfo(24).Bold());
     totalpane->Add (appname, 0, wxALIGN_CENTER | wxLEFT | wxRIGHT, 40);
     totalpane->Add (0, 10);
     totalpane->Add (aboutpane, 0, wxEXPAND | wxALL, 4);
@@ -762,13 +753,13 @@ public:
 protected:
     void OnMarginClick(wxStyledTextEvent&);
     void OnText(wxStyledTextEvent&);
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 
-BEGIN_EVENT_TABLE(MinimalEditor, wxStyledTextCtrl)
+wxBEGIN_EVENT_TABLE(MinimalEditor, wxStyledTextCtrl)
     EVT_STC_MARGINCLICK(wxID_ANY, MinimalEditor::OnMarginClick)
     EVT_STC_CHANGE(wxID_ANY, MinimalEditor::OnText)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 
 void MinimalEditor::OnMarginClick(wxStyledTextEvent &event)
 {

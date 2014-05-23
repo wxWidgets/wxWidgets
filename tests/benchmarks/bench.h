@@ -3,7 +3,6 @@
 // Purpose:     Main header of the benchmarking suite
 // Author:      Vadim Zeitlin
 // Created:     2008-07-19
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -12,6 +11,7 @@
 #define _WX_TESTS_BENCHMARKS_BENCH_H_
 
 #include "wx/cpp.h"
+#include "wx/crt.h"
 #include "wx/defs.h"
 
 namespace Bench

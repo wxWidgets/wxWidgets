@@ -2,7 +2,6 @@
 // Name:        wx/msgqueue.h
 // Purpose:     interface of wxMessageQueue<T>
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

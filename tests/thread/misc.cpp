@@ -3,7 +3,6 @@
 // Purpose:     Miscellaneous wxThread test cases
 // Author:      Francesco Montorsi (extracted from console sample)
 // Created:     2010-05-10
-// RCS-ID:      $Id$
 // Copyright:   (c) 2010 wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -168,6 +167,8 @@ public:
 
     virtual ExitCode Entry()
     {
+        wxUnusedVar(m_i);
+
         //wxPrintf(wxT("%s: Thread #%d (%ld) starting to wait for semaphore...\n"),
         //         wxDateTime::Now().FormatTime().c_str(), m_i, (long)GetId());
 
@@ -257,8 +258,8 @@ void MiscThreadTestCase::TestDetached()
         threads[n] = new MyDetachedThread(10, 'A' + n);
     }
 
-    threads[0]->SetPriority(WXTHREAD_MIN_PRIORITY);
-    threads[1]->SetPriority(WXTHREAD_MAX_PRIORITY);
+    threads[0]->SetPriority(wxPRIORITY_MIN);
+    threads[1]->SetPriority(wxPRIORITY_MAX);
 
     for ( n = 0; n < nThreads; n++ )
     {

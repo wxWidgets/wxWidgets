@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by: Eric Dowty
 // Created:     25/01/99
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -45,7 +44,7 @@
 //#define wxUSE_DDE_FOR_IPC 0
 #include <wx/ipc.h>
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#ifndef wxHAS_IMAGES_IN_RESOURCES
 #include "mondrian.xpm"
 #endif
 

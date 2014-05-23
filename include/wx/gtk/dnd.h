@@ -2,7 +2,6 @@
 // Name:        wx/gtk/dnd.h
 // Purpose:     declaration of the wxDropTarget class
 // Author:      Robert Roebling
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin, Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,10 +30,10 @@ class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
 public:
     wxDropTarget(wxDataObject *dataObject = NULL );
 
-    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
-    virtual bool OnDrop(wxCoord x, wxCoord y);
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
-    virtual bool GetData();
+    virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
+    virtual bool OnDrop(wxCoord x, wxCoord y) wxOVERRIDE;
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
+    virtual bool GetData() wxOVERRIDE;
 
     // Can only be called during OnXXX methods.
     wxDataFormat GetMatchingPair();
@@ -50,13 +49,13 @@ public:
     GdkDragContext     *m_dragContext;
     GtkWidget          *m_dragWidget;
     GtkSelectionData   *m_dragData;
-    guint               m_dragTime;
+    unsigned            m_dragTime;
     bool                m_firstMotion;     // gdk has no "gdk_drag_enter" event
 
     void GTKSetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
     void GTKSetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
     void GTKSetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
-    void GTKSetDragTime( guint time ) { m_dragTime = time; }
+    void GTKSetDragTime(unsigned time) { m_dragTime = time; }
 };
 
 //-------------------------------------------------------------------------
@@ -81,8 +80,19 @@ public:
 
     virtual ~wxDropSource();
 
+    // set the icon corresponding to given drag result
+    void SetIcon(wxDragResult res, const wxIcon& icon)
+    {
+        if ( res == wxDragCopy )
+            m_iconCopy = icon;
+        else if ( res == wxDragMove )
+            m_iconMove = icon;
+        else
+            m_iconNone = icon;
+    }
+
     // start drag action
-    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) wxOVERRIDE;
 
     void PrepareIcon( int action, GdkDragContext *context );
 

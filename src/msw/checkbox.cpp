@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,7 +34,6 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/msw/dc.h"          // for wxDCTemp
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private/button.h"
@@ -86,8 +84,6 @@ enum
 void wxCheckBox::Init()
 {
     m_state = wxCHK_UNCHECKED;
-    m_isPressed =
-    m_isHot = false;
 }
 
 bool wxCheckBox::Create(wxWindow *parent,
@@ -104,7 +100,18 @@ bool wxCheckBox::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
 
-    long msStyle = WS_TABSTOP;
+    WXDWORD exstyle;
+    WXDWORD msStyle = MSWGetStyle(style, &exstyle);
+
+    msStyle |= wxMSWButton::GetMultilineStyle(label);
+
+    return MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, exstyle);
+}
+
+WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    // buttons never have an external border, they draw their own one
+    WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
     if ( style & wxCHK_3STATE )
         msStyle |= BS_3STATE;
@@ -116,16 +123,14 @@ bool wxCheckBox::Create(wxWindow *parent,
         msStyle |= BS_LEFTTEXT | BS_RIGHT;
     }
 
-    msStyle |= wxMSWButton::GetMultilineStyle(label);
-
-    return MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, 0);
+    return msStyle;
 }
 
 // ----------------------------------------------------------------------------
 // wxCheckBox geometry
 // ----------------------------------------------------------------------------
 
-wxSize wxCheckBox::DoGetBestSize() const
+wxSize wxCheckBox::DoGetBestClientSize() const
 {
     static int s_checkSize = 0;
 
@@ -146,6 +151,19 @@ wxSize wxCheckBox::DoGetBestSize() const
         dc.SetFont(GetFont());
         dc.GetMultiLineTextExtent(GetLabelText(str), &wCheckbox, &hCheckbox);
         wCheckbox += s_checkSize + GetCharWidth();
+
+        if ( ::GetWindowLong(GetHwnd(), GWL_STYLE) & BS_MULTILINE )
+        {
+            // We need to make the checkbox even wider in this case because
+            // otherwise it wraps lines automatically and not only on "\n"s as
+            // we need and this makes the size computed here wrong resulting in
+            // checkbox contents being truncated when it's actually displayed.
+            // Without this hack simple checkbox with "Some thing\n and more"
+            // label appears on 3 lines, not 2, under Windows 2003 using
+            // classic look and feel (although it works fine under Windows 7,
+            // with or without themes).
+            wCheckbox += s_checkSize;
+        }
 
         if ( hCheckbox < s_checkSize )
             hCheckbox = s_checkSize;
@@ -239,7 +257,7 @@ bool wxCheckBox::MSWCommand(WXUINT cmd, WXWORD WXUNUSED(id))
 
 
     // generate the event
-    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId);
+    wxCommandEvent event(wxEVT_CHECKBOX, m_windowId);
 
     event.SetInt(state);
     event.SetEventObject(this);
@@ -249,220 +267,43 @@ bool wxCheckBox::MSWCommand(WXUINT cmd, WXWORD WXUNUSED(id))
 }
 
 // ----------------------------------------------------------------------------
-// owner drawn checkboxes stuff
+// owner drawn checkboxes support
 // ----------------------------------------------------------------------------
 
-bool wxCheckBox::SetForegroundColour(const wxColour& colour)
+int wxCheckBox::MSWGetButtonStyle() const
 {
-    if ( !wxCheckBoxBase::SetForegroundColour(colour) )
-        return false;
-
-    // the only way to change the checkbox foreground colour under Windows XP
-    // is to owner draw it
-    if ( wxUxThemeEngine::GetIfActive() )
-        MakeOwnerDrawn(colour.IsOk());
-
-    return true;
+    return HasFlag(wxCHK_3STATE) ? BS_3STATE : BS_CHECKBOX;
 }
 
-bool wxCheckBox::IsOwnerDrawn() const
+void wxCheckBox::MSWOnButtonResetOwnerDrawn()
 {
-    return
-        (::GetWindowLong(GetHwnd(), GWL_STYLE) & BS_OWNERDRAW) == BS_OWNERDRAW;
+    // ensure that controls state is consistent with internal state
+    DoSet3StateValue(m_state);
 }
 
-void wxCheckBox::MakeOwnerDrawn(bool ownerDrawn)
+int wxCheckBox::MSWGetButtonCheckedFlag() const
 {
-    long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-
-    // note that BS_CHECKBOX & BS_OWNERDRAW != 0 so we can't operate on
-    // them as on independent style bits
-    if ( ownerDrawn )
-    {
-        style &= ~(BS_CHECKBOX | BS_3STATE);
-        style |= BS_OWNERDRAW;
-
-        Connect(wxEVT_ENTER_WINDOW,
-                wxMouseEventHandler(wxCheckBox::OnMouseEnterOrLeave));
-        Connect(wxEVT_LEAVE_WINDOW,
-                wxMouseEventHandler(wxCheckBox::OnMouseEnterOrLeave));
-        Connect(wxEVT_LEFT_DOWN, wxMouseEventHandler(wxCheckBox::OnMouseLeft));
-        Connect(wxEVT_LEFT_UP, wxMouseEventHandler(wxCheckBox::OnMouseLeft));
-        Connect(wxEVT_SET_FOCUS, wxFocusEventHandler(wxCheckBox::OnFocus));
-        Connect(wxEVT_KILL_FOCUS, wxFocusEventHandler(wxCheckBox::OnFocus));
-    }
-    else // reset to default colour
-    {
-        style &= ~BS_OWNERDRAW;
-        style |= HasFlag(wxCHK_3STATE) ? BS_3STATE : BS_CHECKBOX;
-
-        Disconnect(wxEVT_ENTER_WINDOW,
-                   wxMouseEventHandler(wxCheckBox::OnMouseEnterOrLeave));
-        Disconnect(wxEVT_LEAVE_WINDOW,
-                   wxMouseEventHandler(wxCheckBox::OnMouseEnterOrLeave));
-        Disconnect(wxEVT_LEFT_DOWN, wxMouseEventHandler(wxCheckBox::OnMouseLeft));
-        Disconnect(wxEVT_LEFT_UP, wxMouseEventHandler(wxCheckBox::OnMouseLeft));
-        Disconnect(wxEVT_SET_FOCUS, wxFocusEventHandler(wxCheckBox::OnFocus));
-        Disconnect(wxEVT_KILL_FOCUS, wxFocusEventHandler(wxCheckBox::OnFocus));
-    }
-
-    ::SetWindowLong(GetHwnd(), GWL_STYLE, style);
-
-    if ( !ownerDrawn )
-    {
-        // ensure that controls state is consistent with internal state
-        DoSet3StateValue(m_state);
-    }
-}
-
-void wxCheckBox::OnMouseEnterOrLeave(wxMouseEvent& event)
-{
-    m_isHot = event.GetEventType() == wxEVT_ENTER_WINDOW;
-    if ( !m_isHot )
-        m_isPressed = false;
-
-    Refresh();
-
-    event.Skip();
-}
-
-void wxCheckBox::OnMouseLeft(wxMouseEvent& event)
-{
-    // TODO: we should capture the mouse here to be notified about left up
-    //       event but this interferes with BN_CLICKED generation so if we
-    //       want to do this we'd need to generate them ourselves
-    m_isPressed = event.GetEventType() == wxEVT_LEFT_DOWN;
-    Refresh();
-
-    event.Skip();
-}
-
-void wxCheckBox::OnFocus(wxFocusEvent& event)
-{
-    Refresh();
-
-    event.Skip();
-}
-
-bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
-{
-    DRAWITEMSTRUCT *dis = (DRAWITEMSTRUCT *)item;
-
-    if ( !IsOwnerDrawn() || dis->CtlType != ODT_BUTTON )
-        return wxCheckBoxBase::MSWOnDraw(item);
-
-    // calculate the rectangles for the check mark itself and the label
-    HDC hdc = dis->hDC;
-    RECT& rect = dis->rcItem;
-    RECT rectCheck,
-         rectLabel;
-    rectCheck.top =
-    rectLabel.top = rect.top;
-    rectCheck.bottom =
-    rectLabel.bottom = rect.bottom;
-    const int checkSize = GetBestSize().y;
-    const int MARGIN = 3;
-
-    const bool isRightAligned = HasFlag(wxALIGN_RIGHT);
-    if ( isRightAligned )
-    {
-        rectCheck.right = rect.right;
-        rectCheck.left = rectCheck.right - checkSize;
-
-        rectLabel.right = rectCheck.left - MARGIN;
-        rectLabel.left = rect.left;
-    }
-    else // normal, left-aligned checkbox
-    {
-        rectCheck.left = rect.left;
-        rectCheck.right = rectCheck.left + checkSize;
-
-        rectLabel.left = rectCheck.right + MARGIN;
-        rectLabel.right = rect.right;
-    }
-
-    // show we draw a focus rect?
-    const bool isFocused = m_isPressed || FindFocus() == this;
-
-
-    // draw the checkbox itself
-    wxDCTemp dc(hdc);
-
-    int flags = 0;
-    if ( !IsEnabled() )
-        flags |= wxCONTROL_DISABLED;
     switch ( Get3StateValue() )
     {
         case wxCHK_CHECKED:
-            flags |= wxCONTROL_CHECKED;
-            break;
+            return wxCONTROL_CHECKED;
 
         case wxCHK_UNDETERMINED:
-            flags |= wxCONTROL_PRESSED;
-            break;
-
-        default:
-            wxFAIL_MSG( wxT("unexpected Get3StateValue() return value") );
-            // fall through
+            return wxCONTROL_PRESSED;
 
         case wxCHK_UNCHECKED:
             // no extra styles needed
-            break;
+            return 0;
     }
 
-    if ( wxFindWindowAtPoint(wxGetMousePosition()) == this )
-        flags |= wxCONTROL_CURRENT;
+    wxFAIL_MSG( wxT("unexpected Get3StateValue() return value") );
 
-    wxRendererNative::Get().
-        DrawCheckBox(this, dc, wxRectFromRECT(rectCheck), flags);
+    return 0;
+}
 
-    // draw the text
-    const wxString& label = GetLabel();
-
-    // first we need to measure it
-    UINT fmt = DT_NOCLIP;
-
-    // drawing underlying doesn't look well with focus rect (and the native
-    // control doesn't do it)
-    if ( isFocused )
-        fmt |= DT_HIDEPREFIX;
-    if ( isRightAligned )
-        fmt |= DT_RIGHT;
-    // TODO: also use DT_HIDEPREFIX if the system is configured so
-
-    // we need to get the label real size first if we have to draw a focus rect
-    // around it
-    if ( isFocused )
-    {
-        if ( !::DrawText(hdc, label.wx_str(), label.length(), &rectLabel,
-                         fmt | DT_CALCRECT) )
-        {
-            wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
-        }
-    }
-
-    if ( !IsEnabled() )
-    {
-        ::SetTextColor(hdc, ::GetSysColor(COLOR_GRAYTEXT));
-    }
-
-    if ( !::DrawText(hdc, label.wx_str(), label.length(), &rectLabel, fmt) )
-    {
-        wxLogLastError(wxT("DrawText()"));
-    }
-
-    // finally draw the focus
-    if ( isFocused )
-    {
-        rectLabel.left--;
-        rectLabel.right++;
-        if ( !::DrawFocusRect(hdc, &rectLabel) )
-        {
-            wxLogLastError(wxT("DrawFocusRect()"));
-        }
-    }
-
-    return true;
+void wxCheckBox::MSWDrawButtonBitmap(wxDC& dc, const wxRect& rect, int flags)
+{
+    wxRendererNative::Get().DrawCheckBox(this, dc, rect, flags);
 }
 
 #endif // wxUSE_CHECKBOX

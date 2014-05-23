@@ -3,10 +3,16 @@
 // Purpose:     interface of wxTextEntry
 // Author:      Vadim Zeitlin
 // Created:     2009-03-01 (extracted from wx/textctrl.h)
-// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+
+/**
+    wxTextPos is a position in the text
+*/
+typedef long wxTextPos;
+
 
 /**
     @class wxTextEntry
@@ -47,7 +53,8 @@ public:
         single-line text control using the given @a choices.
 
         Notice that currently this function is only implemented in wxGTK2,
-        wxMSW and wxOSX/Cocoa ports and does nothing under the other platforms.
+        wxMSW and wxOSX/Cocoa (for wxTextCtrl only, but not for wxComboBox)
+        ports and does nothing under the other platforms.
 
         @since 2.9.0
 
@@ -75,7 +82,8 @@ public:
         Notice that you need to include @c wx/textcompleter.h in order to
         define your class inheriting from wxTextCompleter.
 
-        Currently this method is only implemented in wxMSW and wxOSX/Cocoa.
+        Currently this method is only implemented in wxMSW and wxOSX/Cocoa (for
+        wxTextCtrl only, but not for wxComboBox).
 
         @since 2.9.2
 
@@ -111,6 +119,27 @@ public:
         @see AutoComplete()
     */
     bool AutoCompleteFileNames();
+
+    /**
+        Call this function to enable auto-completion of the text using the file
+        system directories.
+
+        Unlike AutoCompleteFileNames() which completes both file names and
+        directories, this function only completes the directory names.
+
+        Notice that currently this function is only implemented in wxMSW port
+        and does nothing under the other platforms.
+
+        @since 2.9.3
+
+        @return
+            @true if the auto-completion was enabled or @false if the operation
+            failed, typically because auto-completion is not supported by the
+            current platform.
+
+        @see AutoComplete()
+     */
+    bool AutoCompleteDirectories();
 
     /**
         Returns @true if the selection can be copied to the clipboard.
@@ -152,7 +181,7 @@ public:
         The insertion point is set to the start of the control (i.e. position
         0) by this function.
 
-        This functions does not generate the @c wxEVT_COMMAND_TEXT_UPDATED
+        This functions does not generate the @c wxEVT_TEXT
         event but otherwise is identical to SetValue().
 
         See @ref overview_events_prog for more information.
@@ -168,7 +197,7 @@ public:
     /**
         Clears the text in the control.
 
-        Note that this function will generate a @c wxEVT_COMMAND_TEXT_UPDATED
+        Note that this function will generate a @c wxEVT_TEXT
         event, i.e. its effect is identical to calling @c SetValue("").
     */
     virtual void Clear();
@@ -179,23 +208,37 @@ public:
     virtual void Copy();
 
     /**
+        Copies the selected text to the clipboard and removes it from the control.
+    */
+    virtual void Cut();
+
+    /**
         Returns the insertion point, or cursor, position.
 
         This is defined as the zero based index of the character position to
         the right of the insertion point. For example, if the insertion point
-        is at the end of the single-line text control, it is equal to both
-        GetLastPosition() and @c "GetValue().Length()" (but notice that the latter
-        equality is not necessarily true for multiline edit controls which may
-        use multiple new line characters).
+        is at the end of the single-line text control, it is equal to
+        GetLastPosition().
 
-        The following code snippet safely returns the character at the insertion
-        point or the zero character if the point is at the end of the control.
+        Notice that insertion position is, in general, different from the index
+        of the character the cursor position at in the string returned by
+        GetValue(). While this is always the case for the single line controls,
+        multi-line controls can use two characters @c "\\r\\n" as line
+        separator (this is notably the case under MSW) meaning that indices in
+        the control and its string value are offset by 1 for every line.
+
+        Hence to correctly get the character at the current cursor position,
+        taking into account that there can be none if the cursor is at the end
+        of the string, you could do the following:
 
         @code
-        char GetCurrentChar(wxTextCtrl *tc) {
-            if (tc->GetInsertionPoint() == tc->GetLastPosition())
-            return '\0';
-            return tc->GetValue[tc->GetInsertionPoint()];
+        wxString GetCurrentChar(wxTextCtrl *tc)
+        {
+            long pos = tc->GetInsertionPoint();
+            if ( pos == tc->GetLastPosition() )
+                return wxString();
+
+            return tc->GetRange(pos, pos + 1);
         }
         @endcode
     */
@@ -359,7 +402,7 @@ public:
         and the user may enter as much text as the underlying native text control widget
         supports (typically at least 32Kb).
         If the user tries to enter more characters into the text control when it
-        already is filled up to the maximal length, a @c wxEVT_COMMAND_TEXT_MAXLEN
+        already is filled up to the maximal length, a @c wxEVT_TEXT_MAXLEN
         event is sent to notify the program about it (giving it the possibility
         to show an explanatory message, for example) and the extra input is discarded.
 
@@ -393,6 +436,13 @@ public:
     virtual void SelectAll();
 
     /**
+        Deselects selected text in the control.
+
+        @since 2.9.5
+    */
+    virtual void SelectNone();
+
+    /**
         Sets a hint shown in an empty unfocused text control.
 
         The hints are usually used to indicate to the user what is supposed to
@@ -409,19 +459,27 @@ public:
         Notice that hints are known as <em>cue banners</em> under MSW or
         <em>placeholder strings</em> under OS X.
 
-        @remarks For the platforms without native hints support (and currently
-            only the MSW port does have it and even there it is only used under
-            Windows Vista and later only), the implementation has several known
-            limitations. Notably, the hint display will not be properly updated
-            if you change wxTextEntry contents programmatically when the hint
-            is displayed using methods other than SetValue() or ChangeValue()
-            or others which use them internally (e.g. Clear()). In other words,
-            currently you should avoid calling methods such as WriteText() or
-            Replace() when using hints and the text control is empty.
+        @remarks Currently implemented natively on Windows (Vista and later
+            only), OS X and GTK+ (3.2 and later).
+
+            For the platforms without native hints support, the implementation
+            has several known limitations. Notably, the hint display will not
+            be properly updated if you change wxTextEntry contents
+            programmatically when the hint is displayed using methods other
+            than SetValue() or ChangeValue() or others which use them
+            internally (e.g. Clear()). In other words, currently you should
+            avoid calling methods such as WriteText() or Replace() when using
+            hints and the text control is empty. If you bind to the control's
+            focus and wxEVT_TEXT events, you must call wxEvent::Skip() on them
+            so that the generic implementation works correctly.
+
+        @remarks Hints can only be used for single line text controls,
+            native multi-line text controls don't support hints under any
+            platform and hence wxWidgets doesn't provide them neither.
 
         @since 2.9.0
      */
-    virtual void SetHint(const wxString& hint);
+    virtual bool SetHint(const wxString& hint);
 
     /**
         Returns the current hint string.
@@ -471,7 +529,7 @@ public:
         0) by this function.
 
         Note that, unlike most other functions changing the controls values,
-        this function generates a @c wxEVT_COMMAND_TEXT_UPDATED event. To avoid
+        this function generates a @c wxEVT_TEXT event. To avoid
         this you can use ChangeValue() instead.
 
         @param value

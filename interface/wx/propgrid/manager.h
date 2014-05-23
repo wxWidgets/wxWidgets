@@ -2,7 +2,6 @@
 // Name:        manager.h
 // Purpose:     interface of wxPropertyGridManager
 // Author:      wxWidgets team
-// RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -147,7 +146,7 @@ public:
     acquire the internal grid (GetGrid()) or wxPropertyGridPage object (GetPage()).
 
     wxPropertyGridManager constructor has exact same format as wxPropertyGrid
-    constructor, and basicly accepts same extra window style flags (albeit also
+    constructor, and basically accepts same extra window style flags (albeit also
     has some extra ones).
 
     Here's some example code for creating and populating a wxPropertyGridManager:
@@ -162,8 +161,6 @@ public:
             wxPG_TOOLBAR |
             // Include description box.
             wxPG_DESCRIPTION |
-            // Include compactor.
-            wxPG_COMPACTOR |
             // Plus defaults.
             wxPGMAN_DEFAULT_STYLE
            );
@@ -256,7 +253,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxPGMAN_DEFAULT_STYLE,
-                 const wxChar* name = wxPropertyGridManagerNameStr );
+                 const wxString& name = wxPropertyGridManagerNameStr );
 
     /**
         Enables or disables (shows/hides) categories according to parameter enable.
@@ -340,11 +337,11 @@ public:
     /** Returns index to currently selected page. */
     int GetSelectedPage() const;
 
-    /** Shortcut for GetGrid()->GetSelection(). */
+    /** Alias for GetSelection(). */
     wxPGProperty* GetSelectedProperty() const;
 
-    /** Synonyme for GetSelectedPage. */
-    int GetSelection() const;
+    /** Shortcut for GetGrid()->GetSelection(). */
+    wxPGProperty* GetSelection() const;
 
     /**
         Returns a pointer to the toolbar currently associated with the
@@ -467,6 +464,11 @@ public:
     */
     void SetSplitterLeft( bool subProps = false, bool allPages = true );
 
+    /** Moves splitter as left as possible on an individual page, while still allowing all
+        labels to be shown in full.
+    */
+    void SetPageSplitterLeft(int page, bool subProps = false);
+
     /**
         Sets splitter position on individual page.
 
@@ -489,9 +491,6 @@ public:
                  ones present in wxPropertyGrid or wxPropertyGridPage.
     */
     void SetSplitterPosition( int pos, int column = 0 );
-
-    /** Synonyme for SelectPage(name). */
-    void SetStringSelection( const wxChar* name );
 
     /**
         Show or hide the property grid header control. It is hidden

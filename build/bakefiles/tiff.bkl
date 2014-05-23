@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- $Id$ -->
 
 <makefile>
 
@@ -37,10 +36,7 @@
     <set var="TIFF_PLATFORM_SRC">
         <if cond="PLATFORM_UNIX=='1'">src/tiff/libtiff/tif_unix.c</if>
         <if cond="PLATFORM_MACOSX=='1'">src/tiff/libtiff/tif_unix.c</if>
-        <if cond="PLATFORM_OS2=='1'">src/tiff/libtiff/tif_unix.c</if>
         <if cond="PLATFORM_WIN32=='1'">src/tiff/libtiff/tif_win32.c</if>
-        <if cond="PLATFORM_MACOS=='1'">src/tiff/libtiff/tif_apple.c</if>
-        <if cond="PLATFORM_MSDOS=='1'">src/tiff/libtiff/tif_msdos.c</if>
     </set>
 
     <lib id="wxtiff" template="3rdparty_lib"
@@ -53,7 +49,6 @@
         <cflags-borland>-w-8004 -w-8012 -w-8057 -w-8060 -w-8066</cflags-borland>
         <cflags-dmars>-w2</cflags-dmars>
         <cflags-watcom>-wcd=124</cflags-watcom>
-        <define cond="PLATFORM_OS2=='1' and FORMAT=='watcom'">OS2_32</define>
         <define cond="PLATFORM_MSDOS=='1' and FORMAT=='watcom'">__MSDOS__</define>
         <if cond="IS_MSVC">
             <!--
@@ -83,8 +78,11 @@
             src/tiff/libtiff/tif_fax3sm.c
             src/tiff/libtiff/tif_flush.c
             src/tiff/libtiff/tif_getimage.c
+            src/tiff/libtiff/tif_jbig.c
             src/tiff/libtiff/tif_jpeg.c
+            src/tiff/libtiff/tif_jpeg_12.c
             src/tiff/libtiff/tif_luv.c
+            src/tiff/libtiff/tif_lzma.c
             src/tiff/libtiff/tif_lzw.c
             src/tiff/libtiff/tif_next.c
             src/tiff/libtiff/tif_ojpeg.c

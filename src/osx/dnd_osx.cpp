@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) 1998 Stefan Csomor
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -79,7 +78,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
             for (size_t i = 0; !supported && i < formatcount; i++)
             {
                 wxDataFormat format = array[i];
-                if ( m_dataObject->IsSupported( format ) )
+                if ( m_dataObject->IsSupported( format, wxDataObject::Set ) )
                 {
                     supported = true;
                     break;
@@ -119,7 +118,7 @@ bool wxDropTarget::GetData()
             for (size_t i = 0; !transferred && i < formatcount; i++)
             {
                 wxDataFormat format = array[i];
-                if ( m_dataObject->IsSupported( format ) )
+                if ( m_dataObject->IsSupported( format, wxDataObject::Set ) )
                 {
                     int size = data->GetDataSize( format );
                     transferred = true;
@@ -130,10 +129,9 @@ bool wxDropTarget::GetData()
                     }
                     else
                     {
-                        char *d = new char[size];
-                        data->GetDataHere( format, (void*)d );
-                        m_dataObject->SetData( format, size, d );
-                        delete [] d;
+                        wxCharBuffer d(size);
+                        data->GetDataHere( format, d.data() );
+                        m_dataObject->SetData( format, size, d.data() );
                     }
                 }
             }

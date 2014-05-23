@@ -3,7 +3,6 @@
 // Purpose:     wxBitmapBase
 // Author:      VaclavSlavik
 // Created:     2001/04/11
-// RCS-ID:      $Id$
 // Copyright:   (c) 2001, Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,6 +22,12 @@
     #include "wx/image.h"
 #endif // WX_PRECOMP
 
+#if wxUSE_IMAGE && wxUSE_LIBPNG && wxUSE_STREAMS
+    #define wxHAS_PNG_LOAD
+
+    #include "wx/mstream.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxVariant support
 // ----------------------------------------------------------------------------
@@ -36,6 +41,31 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxIcon,WXDLLEXPORT)
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxBitmap>)
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxIcon>)
 #endif
+
+// ----------------------------------------------------------------------------
+// wxBitmapHelpers
+// ----------------------------------------------------------------------------
+
+// wxOSX has a native version and doesn't use this one.
+
+#ifndef __WXOSX__
+
+/* static */
+wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
+{
+    wxBitmap bitmap;
+
+#ifdef wxHAS_PNG_LOAD
+    wxMemoryInputStream is(data, size);
+    wxImage image(is, wxBITMAP_TYPE_PNG);
+    if ( image.IsOk() )
+        bitmap = wxBitmap(image);
+#endif // wxHAS_PNG_LOAD
+
+    return bitmap;
+}
+
+#endif // !__WXOSX__
 
 // ----------------------------------------------------------------------------
 // wxBitmapBase
@@ -136,8 +166,8 @@ class wxBitmapBaseModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxBitmapBaseModule)
 public:
     wxBitmapBaseModule() {}
-    bool OnInit() { wxBitmap::InitStandardHandlers(); return true; }
-    void OnExit() { wxBitmap::CleanUpHandlers(); }
+    bool OnInit() wxOVERRIDE { wxBitmap::InitStandardHandlers(); return true; }
+    void OnExit() wxOVERRIDE { wxBitmap::CleanUpHandlers(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule)

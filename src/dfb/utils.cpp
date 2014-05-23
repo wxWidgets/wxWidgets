@@ -3,7 +3,6 @@
 // Purpose:     Miscellaneous utility functions and classes
 // Author:      Vaclav Slavik
 // Created:     2006-08-08
-// RCS-ID:      $Id$
 // Copyright:   (c) 2006 REA Elektronik GmbH
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -18,7 +17,6 @@
 #include "wx/utils.h"
 #include "wx/evtloop.h"
 #include "wx/apptrait.h"
-#include "wx/unix/execute.h"
 #include "wx/unix/private/timer.h"
 
 #ifndef WX_PRECOMP

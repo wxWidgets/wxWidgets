@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     28/2/2000
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -35,8 +34,8 @@ public:
 private:
     MyCanvas*       m_canvas;
 
-    DECLARE_DYNAMIC_CLASS(MyFrame)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_DYNAMIC_CLASS(MyFrame);
+    wxDECLARE_EVENT_TABLE();
 };
 
 // MyApp
@@ -45,8 +44,8 @@ class MyApp: public wxApp
 {
 public:
     MyApp();
-    virtual bool OnInit();
-    virtual int OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual int OnExit() wxOVERRIDE;
 
 //// Operations
 
@@ -106,8 +105,8 @@ private:
     wxPoint         m_dragStartPos;
     wxDragImage*    m_dragImage;
 
-    DECLARE_CLASS(MyCanvas)
-    DECLARE_EVENT_TABLE()
+    wxDECLARE_ABSTRACT_CLASS(MyCanvas);
+    wxDECLARE_EVENT_TABLE();
 };
 
 
@@ -181,7 +180,7 @@ public:
     // On some platforms, notably Mac OS X with Core Graphics, we can't blit from
     // a window, so we need to draw the background explicitly.
     virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC, const wxRect& sourceRect,
-                    const wxRect& destRect) const;
+                    const wxRect& destRect) const wxOVERRIDE;
 
 protected:
     MyCanvas*   m_canvas;

@@ -4,7 +4,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -360,7 +359,7 @@ void wxMDIChildFrame::MacActivate(long timestamp, bool activating)
 {
     wxLogTrace(TRACE_MDI, wxT("MDI child=%p  MacActivate(0x%08lx,%s)"),this, timestamp, activating ? wxT("ACTIV") : wxT("deact"));
 
-    wxMDIParentFrame *mdiparent = wxDynamicCast(m_parent, wxMDIParentFrame);
+    wxMDIParentFrame *mdiparent = m_mdiParent;
     wxASSERT(mdiparent);
 
     if (activating)
@@ -417,7 +416,9 @@ void wxMDIChildFrame::MacActivate(long timestamp, bool activating)
 // MDI operations
 void wxMDIChildFrame::Activate()
 {
-    Raise ();
+    // The base class method calls Activate() so skip it to avoid infinite
+    // recursion and go directly to the real Raise() implementation.
+    wxFrame::Raise();
 }
 
 //-----------------------------------------------------------------------------

@@ -3,7 +3,6 @@
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // Version:     3.04
-// RCS-ID:      $Id$
 // Copyright:   (c) Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -26,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "wx/gifdecod.h"
+#include "wx/scopedarray.h"
 #include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 
@@ -318,26 +318,18 @@ wxGIFErrorCode
 wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
 {
     static const int allocSize = 4096 + 1;
-    int *ab_prefix = new int[allocSize]; // alphabet (prefixes)
-    if (ab_prefix == NULL)
-    {
-        return wxGIF_MEMERR;
-    }
 
-    int *ab_tail = new int[allocSize];   // alphabet (tails)
-    if (ab_tail == NULL)
-    {
-        delete[] ab_prefix;
+    wxScopedArray<int> ab_prefix(allocSize); // alphabet (prefixes)
+    if ( !ab_prefix )
         return wxGIF_MEMERR;
-    }
 
-    int *stack = new int[allocSize];     // decompression stack
-    if (stack == NULL)
-    {
-        delete[] ab_prefix;
-        delete[] ab_tail;
+    wxScopedArray<int> ab_tail(allocSize);   // alphabet (tails)
+    if ( !ab_tail )
         return wxGIF_MEMERR;
-    }
+
+    wxScopedArray<int> stack(allocSize);     // decompression stack
+    if ( !stack )
+        return wxGIF_MEMERR;
 
     int ab_clr;                     // clear code
     int ab_fin;                     // end of info code
@@ -354,7 +346,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
     ab_clr = (1 << bits);
     ab_fin = (1 << bits) + 1;
 
-    // these will change through the decompression proccess
+    // these will change through the decompression process
     ab_bits  = bits + 1;
     ab_free  = (1 << bits) + 2;
     ab_max   = (1 << ab_bits) - 1;
@@ -407,21 +399,11 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
             // GIF files, the allocSize of 4096+1 is enough. This
             // will only happen with badly formed GIFs.
             if (pos >= allocSize)
-            {
-                delete[] ab_prefix;
-                delete[] ab_tail;
-                delete[] stack;
                 return wxGIF_INVFORMAT;
-            }
         }
 
         if (pos >= allocSize)
-        {
-            delete[] ab_prefix;
-            delete[] ab_tail;
-            delete[] stack;
             return wxGIF_INVFORMAT;
-        }
 
         stack[pos] = code;              // push last code into the stack
         abcabca    = code;              // save for special case
@@ -434,12 +416,7 @@ wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
             // to reset it. This checks whether we really got it, otherwise
             // the GIF is damaged.
             if (ab_free > ab_max)
-            {
-                delete[] ab_prefix;
-                delete[] ab_tail;
-                delete[] stack;
                 return wxGIF_INVFORMAT;
-            }
 
             // This assert seems unnecessary since the condition above
             // eliminates the only case in which it went false. But I really
@@ -578,10 +555,6 @@ as an End of Information itself)
         lastcode = readcode;
     }
     while (code != ab_fin);
-
-    delete [] ab_prefix ;
-    delete [] ab_tail ;
-    delete [] stack ;
 
     return wxGIF_OK;
 }

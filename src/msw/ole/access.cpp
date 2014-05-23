@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     2003-02-12
-// RCS-ID:      $Id$
 // Copyright:   (c) 2003 Julian Smart
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -32,11 +31,6 @@
     #include "wx/msw/wrapwin.h"
     #include "wx/window.h"
     #include "wx/log.h"
-#endif
-
-// for some compilers, the entire ole2.h must be included, not only oleauto.h
-#if wxUSE_NORLANDER_HEADERS || defined(__WATCOMC__)
-    #include <ole2.h>
 #endif
 
 #include <oleauto.h>

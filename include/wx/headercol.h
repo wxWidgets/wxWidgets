@@ -3,7 +3,6 @@
 // Purpose:     declaration of wxHeaderColumn class
 // Author:      Vadim Zeitlin
 // Created:     2008-12-02
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -186,8 +185,12 @@ public:
     virtual void SetHidden(bool hidden)
         { ChangeFlag(wxCOL_HIDDEN, hidden); }
 
-    virtual void SetAsSortKey(bool sort = true) = 0;
-    void UnsetAsSortKey() { SetAsSortKey(false); }
+    // This function can be called to indicate that this column is not used for
+    // sorting any more. Under some platforms it's not necessary to do anything
+    // in this case as just setting another column as a sort key takes care of
+    // everything but under MSW we currently need to call this explicitly to
+    // reset the sort indicator displayed on the column.
+    virtual void UnsetAsSortKey() { }
 
     virtual void SetSortOrder(bool ascending) = 0;
     void ToggleSortOrder() { SetSortOrder(!IsSortOrderAscending()); }
@@ -231,29 +234,34 @@ public:
     }
 
     // implement base class pure virtuals
-    virtual void SetTitle(const wxString& title) { m_title = title; }
-    virtual wxString GetTitle() const { return m_title; }
+    virtual void SetTitle(const wxString& title) wxOVERRIDE { m_title = title; }
+    virtual wxString GetTitle() const wxOVERRIDE { return m_title; }
 
-    virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
-    wxBitmap GetBitmap() const { return m_bitmap; }
+    virtual void SetBitmap(const wxBitmap& bitmap) wxOVERRIDE { m_bitmap = bitmap; }
+    wxBitmap GetBitmap() const wxOVERRIDE { return m_bitmap; }
 
-    virtual void SetWidth(int width) { m_width = width; }
-    virtual int GetWidth() const { return m_width; }
+    virtual void SetWidth(int width) wxOVERRIDE { m_width = width; }
+    virtual int GetWidth() const wxOVERRIDE { return m_width; }
 
-    virtual void SetMinWidth(int minWidth) { m_minWidth = minWidth; }
-    virtual int GetMinWidth() const { return m_minWidth; }
+    virtual void SetMinWidth(int minWidth) wxOVERRIDE { m_minWidth = minWidth; }
+    virtual int GetMinWidth() const wxOVERRIDE { return m_minWidth; }
 
-    virtual void SetAlignment(wxAlignment align) { m_align = align; }
-    virtual wxAlignment GetAlignment() const { return m_align; }
+    virtual void SetAlignment(wxAlignment align) wxOVERRIDE { m_align = align; }
+    virtual wxAlignment GetAlignment() const wxOVERRIDE { return m_align; }
 
-    virtual void SetFlags(int flags) { m_flags = flags; }
-    virtual int GetFlags() const { return m_flags; }
+    virtual void SetFlags(int flags) wxOVERRIDE { m_flags = flags; }
+    virtual int GetFlags() const wxOVERRIDE { return m_flags; }
 
-    virtual void SetAsSortKey(bool sort = true) { m_sort = sort; }
-    virtual bool IsSortKey() const { return m_sort; }
+    virtual bool IsSortKey() const wxOVERRIDE { return m_sort; }
+    virtual void UnsetAsSortKey() wxOVERRIDE { m_sort = false; }
 
-    virtual void SetSortOrder(bool ascending) { m_sortAscending = ascending; }
-    virtual bool IsSortOrderAscending() const { return m_sortAscending; }
+    virtual void SetSortOrder(bool ascending) wxOVERRIDE
+    {
+        m_sort = true;
+        m_sortAscending = ascending;
+    }
+
+    virtual bool IsSortOrderAscending() const wxOVERRIDE { return m_sortAscending; }
 
 private:
     // common part of all ctors

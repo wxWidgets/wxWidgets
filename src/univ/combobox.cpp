@@ -4,7 +4,6 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     15.12.00
-// RCS-ID:      $Id$
 // Copyright:   (c) 2000 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -180,7 +179,7 @@ void wxComboListBox::OnLeftUp(wxMouseEvent& event)
     m_combo->SetValue(wxListBox::GetStringSelection());
 
     // next let the user code have the event
-    wxCommandEvent evt(wxEVT_COMMAND_COMBOBOX_SELECTED,m_combo->GetId());
+    wxCommandEvent evt(wxEVT_COMBOBOX,m_combo->GetId());
     evt.SetInt(wxListBox::GetSelection());
     evt.SetEventObject(m_combo);
     m_combo->ProcessWindowEvent(evt);
@@ -273,12 +272,15 @@ wxComboBox::~wxComboBox()
 
 wxString wxComboBox::DoGetValue() const
 {
-    return wxComboCtrl::GetValue();
+    return GetTextCtrl() ? GetTextCtrl()->GetValue() : m_valueString;
 }
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    wxComboCtrl::SetValue(value);
+    if ( GetTextCtrl() )
+        GetTextCtrl()->SetValue(value);
+    else
+        m_valueString = value;
 }
 
 void wxComboBox::WriteText(const wxString& value)
@@ -357,7 +359,7 @@ void wxComboBox::SetEditable(bool editable)
 void wxComboBox::DoClear()
 {
     GetLBox()->Clear();
-    if ( GetTextCtrl() ) GetTextCtrl()->SetValue(wxEmptyString);
+    SetValue(wxEmptyString);
 }
 
 void wxComboBox::DoDeleteOneItem(unsigned int n)
@@ -365,7 +367,7 @@ void wxComboBox::DoDeleteOneItem(unsigned int n)
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxComboBox::Delete") );
 
     if (GetSelection() == (int)n)
-        if ( GetTextCtrl() ) GetTextCtrl()->SetValue(wxEmptyString);
+        SetValue(wxEmptyString);
 
     GetLBox()->Delete(n);
 }

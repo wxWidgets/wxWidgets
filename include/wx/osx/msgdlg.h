@@ -5,7 +5,6 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     1998-01-01
-// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,7 +42,7 @@ protected:
     void* ConstructNSAlert();
 #endif
 
-    int m_buttonId[3];
+    int m_buttonId[4];
     int m_buttonCount;
 
 #if wxOSX_USE_COCOA

@@ -4,7 +4,6 @@
 // Author:      Julian Smart
 // Modified by:
 // Created:     17/09/98
-// RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -69,6 +68,10 @@ public:
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxComboBoxNameStr);
 
+    // See wxComboBoxBase discussion of IsEmpty().
+    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
+    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
+
     // resolve ambiguities among virtual functions inherited from both base
     // classes
     virtual void Clear();
@@ -100,6 +103,10 @@ public:
     virtual void ChangeForegroundColour();
     WXWidget GetTopWidget() const { return m_mainWidget; }
     WXWidget GetMainWidget() const { return m_mainWidget; }
+
+   //Copied from wxComboBoxBase because for wxMOTIF wxComboBox does not inherit from it.
+    virtual void Popup() { wxFAIL_MSG( wxT("Not implemented") ); }
+    virtual void Dismiss() { wxFAIL_MSG( wxT("Not implemented") ); }
 
 protected:
     virtual wxSize DoGetBestSize() const;

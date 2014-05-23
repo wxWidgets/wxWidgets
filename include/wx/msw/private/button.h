@@ -3,7 +3,6 @@
 // Purpose:     helper functions used with native BUTTON control
 // Author:      Vadim Zeitlin
 // Created:     2008-06-07
-// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,7 +43,8 @@ void UpdateMultilineStyle(HWND hwnd, const wxString& label);
 // flags for ComputeBestSize() and GetFittingSize()
 enum
 {
-    Size_AuthNeeded = 1
+    Size_AuthNeeded = 1,
+    Size_ExactFit   = 2
 };
 
 // NB: All the functions below are implemented in src/msw/button.cpp

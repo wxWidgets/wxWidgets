@@ -4,7 +4,6 @@
 // Author:      Ove Kaven
 // Modified by: Ron Lee, Francesco Montorsi
 // Created:     09/04/99
-// RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets copyright
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -40,14 +39,12 @@
     extern "C" int vswscanf(const wchar_t *, const wchar_t *, va_list);
 #endif
 
-#ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
     #include <time.h>
     #include <locale.h>
 #else
     #include "wx/msw/wince/time.h"
 #endif
-#endif // !__WXPALMOS5__
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -67,11 +64,6 @@
     #include <errno.h>
 
     #define wxSET_ERRNO(value) errno = value
-#endif
-
-#if defined(__MWERKS__) && __MSL__ >= 0x6000
-namespace std {}
-using namespace std ;
 #endif
 
 #if defined(__DARWIN__)
@@ -97,20 +89,20 @@ WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 #ifdef HAVE_WCSRTOMBS
     return mbsrtowcs(buf, &psz, n, &mbstate);
 #else
-    return wxMbstowcs(buf, psz, n);
+    return mbstowcs(buf, psz, n);
 #endif
   }
 
-  // note that we rely on common (and required by Unix98 but unfortunately not
+  // Note that we rely on common (and required by Unix98 but unfortunately not
   // C99) extension which allows to call mbs(r)towcs() with NULL output pointer
   // to just get the size of the needed buffer -- this is needed as otherwise
-  // we have no idea about how much space we need and if the CRT doesn't
-  // support it (the only currently known example being Metrowerks, see
-  // wx/crt.h) we don't use its mbstowcs() at all
+  // we have no idea about how much space we need. Currently all supported
+  // compilers do provide it and if they don't, HAVE_WCSRTOMBS shouldn't be
+  // defined at all.
 #ifdef HAVE_WCSRTOMBS
   return mbsrtowcs(NULL, &psz, 0, &mbstate);
 #else
-  return wxMbstowcs(NULL, psz, 0);
+  return mbstowcs(NULL, psz, 0);
 #endif
 }
 
@@ -130,14 +122,14 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 #ifdef HAVE_WCSRTOMBS
     return wcsrtombs(buf, &pwz, n, &mbstate);
 #else
-    return wxWcstombs(buf, pwz, n);
+    return wcstombs(buf, pwz, n);
 #endif
   }
 
 #ifdef HAVE_WCSRTOMBS
   return wcsrtombs(NULL, &pwz, 0, &mbstate);
 #else
-  return wxWcstombs(NULL, pwz, 0);
+  return wcstombs(NULL, pwz, 0);
 #endif
 }
 
@@ -199,19 +191,6 @@ char* wxSetlocale(int category, const char *locale)
 
     int wxCRT_VfprintfW( FILE *stream, const wchar_t *format, va_list argptr );
 #endif
-
-#if defined(__DMC__)
-/* Digital Mars adds count to _stprintf (C99) so convert */
-int wxCRT_SprintfW (wchar_t * __RESTRICT s, const wchar_t * __RESTRICT format, ... )
-{
-    va_list arglist;
-
-    va_start( arglist, format );
-    int iLen = swprintf ( s, -1, format, arglist );
-    va_end( arglist );
-    return iLen ;
-}
-#endif //__DMC__
 
 // ----------------------------------------------------------------------------
 // implement the standard IO functions for wide char if libc doesn't have them
@@ -307,13 +286,13 @@ static int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
     // of the function. This doesn't work with %c and %s because of difference
     // in size of char and wchar_t, though.
 
-    wxCHECK_MSG( wxStrstr(format, wxT("%s")) == NULL, -1,
+    wxCHECK_MSG( wxStrstr(format, L"%s") == NULL, -1,
                  wxT("incomplete vswscanf implementation doesn't allow %s") );
-    wxCHECK_MSG( wxStrstr(format, wxT("%c")) == NULL, -1,
+    wxCHECK_MSG( wxStrstr(format, L"%c") == NULL, -1,
                  wxT("incomplete vswscanf implementation doesn't allow %c") );
 
-    return vsscanf(static_cast<const char*>(wxConvLibc.cWX2MB(ws)),
-        wxConvLibc.cWX2MB(format), argptr);
+    return wxCRT_VsscanfA(static_cast<const char*>(wxConvLibc.cWC2MB(ws)),
+        wxConvLibc.cWC2MB(format), argptr);
 }
 #endif
 
@@ -591,11 +570,11 @@ int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
     const size_t len = buf.length();
     if ( outsize > len )
     {
-        memcpy(out, buf, (len+1) * sizeof(char));
+        memcpy(out, buf, len+1);
     }
     else // not enough space
     {
-        memcpy(out, buf, (outsize-1) * sizeof(char));
+        memcpy(out, buf, outsize-1);
         out[outsize-1] = '\0';
     }
 
@@ -656,20 +635,7 @@ int wxVsprintf(char *str, const wxString& format, va_list argptr)
 int wxVsprintf(wchar_t *str, const wxString& format, va_list argptr)
 {
 #if wxUSE_UNICODE_WCHAR
-#ifdef __DMC__
-/*
-This fails with a bug similar to
-http://www.digitalmars.com/pnews/read.php?server=news.digitalmars.com&group=c++.beta&artnum=680
-in DMC 8.49 and 8.50
-I don't see it being used in the wxWidgets sources at present (oct 2007) CE
-*/
-#pragma message ( "warning ::::: wxVsprintf(wchar_t *str, const wxString& format, va_list argptr) not yet implemented" )
-    wxFAIL_MSG( wxT("TODO") );
-
-    return -1;
-#else
     return wxCRT_VsprintfW(str, format.wc_str(), argptr);
-#endif //DMC
 #else // wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
     if ( !wxLocaleIsUtf8 )
@@ -745,54 +711,6 @@ int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argpt
 // ctype.h stuff (currently unused)
 // ----------------------------------------------------------------------------
 
-#ifdef wxNEED_WX_MBSTOWCS
-
-WXDLLIMPEXP_BASE size_t wxMbstowcs (wchar_t * out, const char * in, size_t outlen)
-{
-    if (!out)
-    {
-        size_t outsize = 0;
-        while(*in++)
-            outsize++;
-        return outsize;
-    }
-
-    const char* origin = in;
-
-    while (outlen-- && *in)
-    {
-        *out++ = (wchar_t) *in++;
-    }
-
-    *out = '\0';
-
-    return in - origin;
-}
-
-WXDLLIMPEXP_BASE size_t wxWcstombs (char * out, const wchar_t * in, size_t outlen)
-{
-    if (!out)
-    {
-        size_t outsize = 0;
-        while(*in++)
-            outsize++;
-        return outsize;
-    }
-
-    const wchar_t* origin = in;
-
-    while (outlen-- && *in)
-    {
-        *out++ = (char) *in++;
-    }
-
-    *out = '\0';
-
-    return in - origin;
-}
-
-#endif // wxNEED_WX_MBSTOWCS
-
 #ifndef wxCRT_StrdupA
 WXDLLIMPEXP_BASE char *wxCRT_StrdupA(const char *s)
 {
@@ -841,7 +759,8 @@ wxChar32* wxStrdup(const wxChar32* s)
 {
   size_t size = (wxStrlen(s) + 1) * sizeof(wxChar32);
   wxChar32 *ret = (wxChar32*) malloc(size);
-  memcpy(ret, s, size);
+  if ( ret )
+      memcpy(ret, s, size);
   return ret;
 }
 #endif
@@ -849,7 +768,7 @@ wxChar32* wxStrdup(const wxChar32* s)
 #ifndef wxCRT_StricmpA
 WXDLLIMPEXP_BASE int wxCRT_StricmpA(const char *psz1, const char *psz2)
 {
-  register char c1, c2;
+  char c1, c2;
   do {
     c1 = wxTolower(*psz1++);
     c2 = wxTolower(*psz2++);
@@ -861,7 +780,7 @@ WXDLLIMPEXP_BASE int wxCRT_StricmpA(const char *psz1, const char *psz2)
 #ifndef wxCRT_StricmpW
 WXDLLIMPEXP_BASE int wxCRT_StricmpW(const wchar_t *psz1, const wchar_t *psz2)
 {
-  register wchar_t c1, c2;
+  wchar_t c1, c2;
   do {
     c1 = wxTolower(*psz1++);
     c2 = wxTolower(*psz2++);
@@ -874,7 +793,7 @@ WXDLLIMPEXP_BASE int wxCRT_StricmpW(const wchar_t *psz1, const wchar_t *psz2)
 WXDLLIMPEXP_BASE int wxCRT_StrnicmpA(const char *s1, const char *s2, size_t n)
 {
   // initialize the variables just to suppress stupid gcc warning
-  register char c1 = 0, c2 = 0;
+  char c1 = 0, c2 = 0;
   while (n && ((c1 = wxTolower(*s1)) == (c2 = wxTolower(*s2)) ) && c1) n--, s1++, s2++;
   if (n) {
     if (c1 < c2) return -1;
@@ -888,7 +807,7 @@ WXDLLIMPEXP_BASE int wxCRT_StrnicmpA(const char *s1, const char *s2, size_t n)
 WXDLLIMPEXP_BASE int wxCRT_StrnicmpW(const wchar_t *s1, const wchar_t *s2, size_t n)
 {
   // initialize the variables just to suppress stupid gcc warning
-  register wchar_t c1 = 0, c2 = 0;
+  wchar_t c1 = 0, c2 = 0;
   while (n && ((c1 = wxTolower(*s1)) == (c2 = wxTolower(*s2)) ) && c1) n--, s1++, s2++;
   if (n) {
     if (c1 < c2) return -1;
@@ -982,23 +901,35 @@ wxCRT_StrtoullBase(const T* nptr, T** endptr, int base, T* sign)
         }
     }
 
-    // Starts with 0x?
+    // Starts with octal or hexadecimal prefix?
     if ( i != end && *i == wxT('0') )
     {
         ++i;
         if ( i != end )
         {
-            if ( *i == wxT('x') && (base == 16 || base == 0) )
+            if ( (*i == wxT('x')) || (*i == wxT('X')) )
             {
-                base = 16;
-                ++i;
+                // Hexadecimal prefix: use base 16 if auto-detecting.
+                if ( base == 0 )
+                    base = 16;
+
+                // If we do use base 16, just skip "x" as well.
+                if ( base == 16 )
+                {
+                    ++i;
+                }
+                else // Not using base 16
+                {
+                    // Then it's an error.
+                    if ( endptr )
+                        *endptr = (T*) nptr;
+                    wxSET_ERRNO(EINVAL);
+                    return sum;
+                }
             }
-            else
+            else if ( base == 0 )
             {
-                if ( endptr )
-                    *endptr = (T*) nptr;
-                wxSET_ERRNO(EINVAL);
-                return sum;
+                base = 8;
             }
         }
         else
@@ -1319,7 +1250,7 @@ wchar_t *wxFgets(wchar_t *s, int size, FILE *stream)
 // wxScanf() and friends
 // ----------------------------------------------------------------------------
 
-#ifdef HAVE_VSSCANF // __VISUALC__ and __DMC__ see wx/crt.h
+#ifdef HAVE_VSSCANF // __VISUALC__, see wx/crt.h
 int wxVsscanf(const char *str, const char *format, va_list ap)
     { return wxCRT_VsscanfA(str, format, ap); }
 int wxVsscanf(const wchar_t *str, const wchar_t *format, va_list ap)
