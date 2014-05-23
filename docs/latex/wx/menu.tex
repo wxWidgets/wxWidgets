@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+l%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        menu.tex
 %% Purpose:     wxMenu documentation
 %% Author:      wxWidgets Team
@@ -959,7 +959,7 @@ Use only after the menubar has been associated with a frame.
 
 \membersection{wxMenuBar::GetLabelTop}\label{wxmenubargetlabeltop}
 
-\constfunc{wxString}{GetLabelTop}{\param{int}{ pos}}
+\constfunc{wxString}{GetLabelTop}{\param{size\_t}{ pos}}
 
 Returns the label of a top-level menu. Note that the returned string does not
 include the accelerator characters which could have been specified in the menu
@@ -986,21 +986,21 @@ This function is deprecated in favour of \helpref{GetMenuLabel}{wxmenubargetmenu
 
 \membersection{wxMenuBar::GetMenu}\label{wxmenubargetmenu}
 
-\constfunc{wxMenu*}{GetMenu}{\param{int}{ menuIndex}}
+\constfunc{wxMenu*}{GetMenu}{\param{size\_t}{ menuIndex}}
 
 Returns the menu at {\it menuIndex} (zero-based).
 
 
 \membersection{wxMenuBar::GetMenuCount}\label{wxmenubargetmenucount}
 
-\constfunc{int}{GetMenuCount}{\void}
+\constfunc{size\_t}{GetMenuCount}{\void}
 
 Returns the number of menus in this menubar.
 
 
 \membersection{wxMenuBar::GetMenuLabel}\label{wxmenubargetmenulabel}
 
-\constfunc{wxString}{GetMenuLabel}{\param{int}{ pos}}
+\constfunc{wxString}{GetMenuLabel}{\param{size\_t}{ pos}}
 
 Returns the label of a top-level menu. Note that the returned string
 includes the accelerator characters that have been specified in the menu
@@ -1025,7 +1025,7 @@ Use only after the menubar has been associated with a frame.
 
 \membersection{wxMenuBar::GetMenuLabelText}\label{wxmenubargetmenulabeltext}
 
-\constfunc{wxString}{GetMenuLabelText}{\param{int}{ pos}}
+\constfunc{wxString}{GetMenuLabelText}{\param{size\_t}{ pos}}
 
 Returns the label of a top-level menu. Note that the returned string does not
 include any accelerator characters that may have been specified in the menu
@@ -1190,7 +1190,7 @@ Use only after the menubar has been associated with a frame.
 
 \membersection{wxMenuBar::SetLabelTop}\label{wxmenubarsetlabeltop}
 
-\func{void}{SetLabelTop}{\param{int}{ pos}, \param{const wxString\& }{label}}
+\func{void}{SetLabelTop}{\param{size\_t}{ pos}, \param{const wxString\& }{label}}
 
 Sets the label of a top-level menu.
 
