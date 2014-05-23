@@ -36,6 +36,7 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
+SAMPLES_CXXFLAGS = @SAMPLES_CXXFLAGS@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -47,7 +48,7 @@ LIBDIRNAME = $(wx_top_builddir)/lib
 HTLBOX_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(SAMPLES_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
 HTLBOX_OBJECTS =  \
 	$(__htlbox___win32rc) \
 	htlbox_htlbox.o
