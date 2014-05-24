@@ -692,7 +692,7 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
     return true;
 }
 
-void wxQtDCImpl::DoDrawLines(int n, wxPoint points[],
+void wxQtDCImpl::DoDrawLines(int n, const wxPoint points[],
                          wxCoord xoffset, wxCoord yoffset )
 {
     if (n > 0)
@@ -711,7 +711,7 @@ void wxQtDCImpl::DoDrawLines(int n, wxPoint points[],
     }
 }
 
-void wxQtDCImpl::DoDrawPolygon(int n, wxPoint points[],
+void wxQtDCImpl::DoDrawPolygon(int n, const wxPoint points[],
                        wxCoord xoffset, wxCoord yoffset,
                        wxPolygonFillMode fillStyle )
 {
