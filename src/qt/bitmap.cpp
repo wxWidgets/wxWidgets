@@ -222,6 +222,10 @@ bool wxBitmap::Create(const wxSize& sz, int depth )
     return Create(sz.GetWidth(), sz.GetHeight(), depth);
 }
 
+bool wxBitmap::Create(int width, int height, const wxDC& WXUNUSED(dc))
+{
+    return Create(width, height);
+}
 
 int wxBitmap::GetHeight() const
 {

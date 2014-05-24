@@ -34,6 +34,7 @@ public:
 
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
+    virtual bool Create(int width, int height, const wxDC& WXUNUSED(dc));
 
     virtual int GetHeight() const;
     virtual int GetWidth() const;
