@@ -94,6 +94,13 @@ bool wxStaticText::Create(wxWindow *parent,
 
     PostCreation(size);
 
+#ifndef __WXGTK3__
+    // GtkLabel does its layout based on its size-request, rather than its
+    // actual size. The size-request may not always get set, specifically if
+    // the initial size is fully specified. So make sure it's set here.
+    gtk_widget_set_size_request(m_widget, m_width, m_height);
+#endif
+
     return true;
 }
 
