@@ -439,6 +439,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/textctrl.cpp
     src/qt/textdlg.cpp
     src/qt/textentry.cpp
+    src/generic/textmeasure.cpp
     src/qt/tglbtn.cpp
     src/qt/timer.cpp
     src/qt/toolbar.cpp
