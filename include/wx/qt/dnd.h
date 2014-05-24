@@ -20,6 +20,8 @@ public:
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool GetData();
 
+    wxDataFormat GetMatchingPair();
+
 protected:
 
 private:
