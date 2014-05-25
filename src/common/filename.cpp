@@ -2444,7 +2444,7 @@ public :
     m_type = type ;
     m_creator = creator ;
   }
-  wxChar m_ext[kMacExtensionMaxLength] ;
+  wxChar m_ext[kMacExtensionMaxLength + 1] ;
   OSType m_type ;
   OSType m_creator ;
 }  ;
