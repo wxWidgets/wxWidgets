@@ -221,7 +221,7 @@ bool WebApp::OnInit()
 {
     // We spawn a separate subprocess
     int code = 0;
-    if(!wxWebViewChromium::StartUp(code, "subprocess.exe"))
+    if(!wxWebViewChromium::StartUp(code, ""))
         exit(code);
 
     if ( !wxApp::OnInit() )
