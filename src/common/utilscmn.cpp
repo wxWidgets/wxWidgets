@@ -92,8 +92,8 @@
     #include <gtk/gtk.h>    // for GTK_XXX_VERSION constants
 #endif
 
-#if wxUSE_GUI && defined(__WXGTK__)
-    #include <QtGlobals>       // for QT_VERSION_STR constants
+#if wxUSE_GUI && defined(__WXQT__)
+    #include <QtGlobal>       // for QT_VERSION_STR constants
 #endif
 
 #if wxUSE_BASE
