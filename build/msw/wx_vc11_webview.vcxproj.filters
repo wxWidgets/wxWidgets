@@ -43,6 +43,9 @@
     <ClInclude Include="..\..\include\wx\msw\webview_ie.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\webview_missing.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\webviewhistoryitem_ie.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>

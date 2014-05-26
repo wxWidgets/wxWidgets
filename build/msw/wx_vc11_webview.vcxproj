@@ -518,6 +518,7 @@
     <ClInclude Include="..\..\include\wx\webview.h" />
     <ClInclude Include="..\..\include\wx\webviewarchivehandler.h" />
     <ClInclude Include="..\..\include\wx\webviewfshandler.h" />
+    <ClInclude Include="..\..\include\wx\msw\webview_missing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
