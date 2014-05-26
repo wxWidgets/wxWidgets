@@ -240,6 +240,9 @@
     <ClCompile Include="..\..\src\common\textfile.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\threadinfo.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\time.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -296,6 +299,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\common\zstream.cpp">
       <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\fswatcherg.cpp">
+      <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\basemsw.cpp">
       <Filter>MSW Sources</Filter>
@@ -360,12 +366,6 @@
     <ClCompile Include="..\..\src\msw\volume.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\generic\fswatcherg.cpp">
-      <Filter>Generic Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\common\threadinfo.cpp">
-      <Filter>Common Sources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -373,75 +373,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\wx\msw\apptbase.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\apptrait.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\chkconf.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\crashrpt.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\dde.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\debughlp.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\evtloopconsole.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\fswatcher.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\gccpriv.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\libraries.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\mimetype.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\private.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\regconf.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\registry.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\seh.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\stackwalk.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\stdpaths.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\winundef.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\wrapcctl.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\wrapcdlg.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\wrapwin.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\generic\fswatcher.h">
-      <Filter>Generic Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\html\forcelnk.h">
-      <Filter>wxHTML Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\afterstd.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -458,6 +389,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\archive.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\arrimpl.cpp">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\arrstr.h">
@@ -496,6 +430,9 @@
     <ClInclude Include="..\..\include\wx\cmdline.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\compiler.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\confbase.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -506,9 +443,6 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\convauto.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\meta\convertible.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\cpp.h">
@@ -610,6 +544,9 @@
     <ClInclude Include="..\..\include\wx\fswatcher.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\fswatcher.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\hash.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -619,19 +556,13 @@
     <ClInclude Include="..\..\include\wx\hashset.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\html\forcelnk.h">
+      <Filter>wxHTML Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\iconloc.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\meta\if.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\meta\implicitconversion.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\init.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\meta\int2type.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\intl.h">
@@ -661,6 +592,9 @@
     <ClInclude Include="..\..\include\wx\list.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\listimpl.cpp">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\log.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -679,6 +613,27 @@
     <ClInclude Include="..\..\include\wx\memtext.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\meta\convertible.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\meta\if.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\meta\implicitconversion.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\meta\int2type.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\meta\movable.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\meta\pod.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\meta\removeref.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\mimetype.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -686,9 +641,6 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\mousestate.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\meta\movable.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msgout.h">
@@ -700,6 +652,69 @@
     <ClInclude Include="..\..\include\wx\mstream.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\apptbase.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\apptrait.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\chkconf.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\crashrpt.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\dde.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\debughlp.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\evtloopconsole.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\fswatcher.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\gccpriv.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\libraries.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\mimetype.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\private.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\regconf.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\registry.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\seh.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\stackwalk.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\stdpaths.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\winundef.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\wrapcctl.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\wrapcdlg.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\wrapwin.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\numformatter.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -710,9 +725,6 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\platinfo.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\meta\pod.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\power.h">
@@ -803,6 +815,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\thread.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\thrimpl.cpp">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\time.h">
