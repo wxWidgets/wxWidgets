@@ -1,0 +1,156 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use autodie;
+
+use Getopt::Long;
+
+use FindBin qw($Bin);
+use lib "$Bin/tools/upmake/lib";
+
+use Text::Upmake;
+use Text::Upmake::Bakefile0;
+use Text::Upmake::MSBuild;
+
+my $verbose = 0;
+my $quiet = 0;
+my ($only_bkl, $only_msbuild, $only_project, $only_version);
+
+GetOptions(
+        'verbose|v'      => \$verbose,
+        'quiet|q'        => \$quiet,
+        'only-bkl'       => \$only_bkl,
+        'only-project=s' => sub { $only_msbuild = 1; $only_project = $_[1] },
+        'only-version=i' => sub { $only_msbuild = 1; $only_version = $_[1] },
+    ) or die <<EOF
+Usage: $0 [--verbose] [--quiet] [--only-bkl] [--only-project=<name>] [--only-version=<ver>]
+
+Update the files used by bakefile and MSBuild projects from the master list
+of files in build/files.
+
+If --no-xxx option is specified, the corresponding outputs are not updated.
+By default everything is.
+EOF
+;
+
+if ($only_bkl && $only_msbuild) {
+    die qq{Options --only-bkl and --only-project or --only-version can't be used together.\n}
+}
+
+sub log_upmake
+{
+    my ($fname, @args) = @_;
+
+    if (upmake($fname, @args)) {
+        print qq{File "$fname" successfully updated.\n} unless $quiet;
+        return 1;
+    } else {
+        print qq{No changes in the file "$fname".\n} if $verbose;
+        return 0;
+    }
+}
+
+open my $files, '<', "$Bin/files";
+my $vars = read_files_list($files);
+
+if (!$only_msbuild) {
+    if (log_upmake("$Bin/bakefiles/files.bkl", \&update_bakefile_0, $vars)) {
+        print qq{Don't forget to run "bakefile_gen -b wx.bkl".} if $verbose;
+    }
+}
+
+if (!$only_bkl) {
+    # Path to the project root directory from the directory containing the
+    # projects.
+    my $top_srcdir = '../../';
+
+    # The base names of all our MSBuild projects with the list of variables
+    # containing the files that should appear in them.
+    my %projects_vars = (
+            adv      => [qw(ADVANCED_CMN ADVANCED_MSW ADVANCED_MSW_DESKTOP ADVANCED_MSW_NATIVE)],
+            aui      => [qw(AUI_CMN)],
+            base     => [qw(BASE_CMN BASE_AND_GUI_CMN BASE_WIN32 BASE_AND_GUI_WIN32)],
+            core     => [qw(BASE_AND_GUI_CMN BASE_AND_GUI_WIN32 MSW_LOWLEVEL MSW_DESKTOP_LOWLEVEL MSW MSW_DESKTOP GUI_CMN)],
+            gl       => [qw(OPENGL_CMN OPENGL_MSW)],
+            html     => [qw(HTML_CMN HTML_MSW)],
+            media    => [qw(MEDIA_CMN MEDIA_MSW MEDIA_MSW_DESKTOP)],
+            net      => [qw(NET_CMN NET_WIN32)],
+            propgrid => [qw(PROPGRID)],
+            qa       => [qw(QA)],
+            ribbon   => [qw(RIBBON)],
+            stc      => [qw(STC)],
+            webview  => [qw(WEBVIEW_CMN WEBVIEW_MSW)],
+            xml      => [qw(XML)],
+            xrc      => [qw(XRC)],
+        );
+
+    # The versions of the projects.
+    my @projects_versions = qw(10 11 12);
+
+    # Return the "filter" to use for the given file.
+    sub filter_cb
+    {
+        my ($file) = @_;
+
+        my %filters = (
+                'src/common/.*'         => 'Common Sources',
+                'src/gtk/.*'            => 'GTK+ Sources',
+                'src/msw/.*'            => 'MSW Sources',
+                'src/generic/.*'        => 'Generic Sources',
+                'src/univ/.*'           => 'wxUniv Sources',
+                'src/html/.*'           => 'wxHTML Sources',
+                'include/.*/setup.h'    => 'Setup Headers',
+                'include/wx/gtk/.*'     => 'GTK+ Headers',
+                'include/wx/msw/.*'     => 'MSW Headers',
+                'include/wx/generic/.*' => 'Generic Headers',
+                'include/wx/univ/.*'    => 'wxUniv Headers',
+                'include/wx/html/.*'    => 'wxHTML Headers',
+            );
+
+        foreach (keys %filters) {
+            return $filters{$_} if $file =~ qr{^${top_srcdir}$_$};
+        }
+
+        # Two fall backs which can't be used in the hash as they must be
+        # checked after the other patterns.
+        return 'Source Files' if $file =~ q{src/.*};
+        return 'Common Headers' if $file =~ q{include/wx/.*};
+
+        warn qq{No filter defined for the file "$file".\n};
+
+        undef
+    }
+
+    foreach my $proj (sort keys %projects_vars) {
+        next if defined $only_project && $proj ne $only_project;
+
+        my (@sources, @headers);
+
+        # All our projects use the special dummy file for PCH creation, but it's
+        # not included in the file lists.
+        push @sources, "${top_srcdir}src/common/dummy.cpp";
+
+        foreach my $var (@{$projects_vars{$proj}}) {
+            # The paths in the files lists are relative to the project root,
+            # so add relative path to it from the projects directory.
+            push @sources, "${top_srcdir}$_" for @{$vars->{"${var}_SRC"}};
+
+            # It is possible that we don't have any headers of some kind at all.
+            if (exists $vars->{"${var}_HDR"}) {
+                # Our files lists don't use the full path for the headers, the
+                # common "include/" prefix is ommitted, add it back here.
+                push @headers, "${top_srcdir}include/$_" for @{$vars->{"${var}_HDR"}};
+            }
+        }
+
+        my @args = (\@sources, \@headers, \&filter_cb);
+
+        foreach my $ver (@projects_versions) {
+            next if defined $only_version && $ver != $only_version;
+
+            log_upmake("$Bin/msw/wx_vc${ver}_${proj}.vcxproj", \&update_msbuild, @args);
+            log_upmake("$Bin/msw/wx_vc${ver}_${proj}.vcxproj.filters", \&update_msbuild_filters, @args);
+        }
+    }
+}

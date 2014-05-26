@@ -77,6 +77,12 @@ Files used to build the library are:
 3. Adding files to existing library
 -----------------------------------
 
+UPDATE: files.bkl is now itself partially generated from the master file
+        build/files. If the variable which you need to modify, according to the
+        instructions below, is already defined in build/files, update it there
+        and run build/upmake to update files.bkl.
+
+
 All files used by main libraries are listed in files.bkl. The file is
 organized into variables for toolkits, platforms and libraries. The variables
 come in pairs: there's always FOO_SRC for source files and FOO_HDR for header
