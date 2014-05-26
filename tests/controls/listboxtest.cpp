@@ -122,9 +122,10 @@ void ListBoxTestCase::Sort()
     CPPUNIT_ASSERT_EQUAL("aab", m_list->GetString(4));
     CPPUNIT_ASSERT_EQUAL("aba", m_list->GetString(5));
 
-    m_list->Append("a");
+    m_list->Append("a", wxUIntToPtr(1));
 
     CPPUNIT_ASSERT_EQUAL("a", m_list->GetString(0));
+    CPPUNIT_ASSERT_EQUAL(wxUIntToPtr(1), m_list->GetClientData(0));
 #endif
 }
 

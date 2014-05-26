@@ -460,8 +460,12 @@ int wxListBox::DoInsertOneItem(const wxString& item, unsigned int pos)
 #else
     int entryCol = 0;
 #endif
-    gtk_list_store_insert_with_values(m_liststore, NULL, pos, entryCol, entry, -1);
+    GtkTreeIter iter;
+    gtk_list_store_insert_with_values(m_liststore, &iter, pos, entryCol, entry, -1);
     g_object_unref(entry);
+
+    if (HasFlag(wxLB_SORT))
+        pos = GTKGetIndexFor(iter);
 
     return pos;
 }
