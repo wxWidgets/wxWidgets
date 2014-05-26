@@ -4051,7 +4051,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/renderer.h \
 	wx/richmsgdlg.h \
 	wx/scrolbar.h \
-	wx/scrolbar.h \
 	wx/scrolwin.h \
 	wx/selstore.h \
 	wx/settings.h \

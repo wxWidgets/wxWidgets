@@ -849,7 +849,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/renderer.h
     wx/richmsgdlg.h
     wx/scrolbar.h
-    wx/scrolbar.h
     wx/scrolwin.h
     wx/selstore.h
     wx/settings.h
@@ -2058,15 +2057,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OSX_LOWLEVEL_HDR" hints="files">
 </set>
-
-<!--
-<set var="OSX_LOWLEVEL_SRC" hints="files">
-    <if cond="PLATFORM_MACOSX=='1'">$(OSX_LOWLEVEL_SRC)</if>
-</set>
-<set var="OSX_LOWLEVEL_HDR" hints="files">
-    <if cond="PLATFORM_MACOSX=='1'">$(OSX_LOWLEVEL_HDR)</if>
-</set>
--->
 
 <set var="OSX_CARBON_COCOA_SRC" hints="files">
 <if cond="PLATFORM_MACOSX=='1'">
