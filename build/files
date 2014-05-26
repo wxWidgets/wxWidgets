@@ -334,7 +334,6 @@ BASE_CMN_HDR =
     wx/hash.h
     wx/hashmap.h
     wx/hashset.h
-    wx/html/forcelnk.h
     wx/iconloc.h
     wx/init.h
     wx/intl.h
@@ -2842,6 +2841,7 @@ HTML_CMN_SRC =
 HTML_MSW_HDR =
     wx/msw/helpbest.h
 HTML_CMN_HDR =
+    wx/html/forcelnk.h
     wx/html/helpctrl.h
     wx/html/helpdata.h
     wx/html/helpdlg.h

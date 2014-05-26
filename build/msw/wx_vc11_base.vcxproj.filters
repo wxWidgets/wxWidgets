@@ -19,9 +19,6 @@
     <Filter Include="Generic Headers">
       <UniqueIdentifier>{61C63C83-EF8C-51CA-A418-51936E7FCD4A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="wxHTML Headers">
-      <UniqueIdentifier>{B4103426-A5DB-5CF0-A30E-BC9546513AAF}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common Headers">
       <UniqueIdentifier>{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}</UniqueIdentifier>
     </Filter>
@@ -555,9 +552,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\wx\hashset.h">
       <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\html\forcelnk.h">
-      <Filter>wxHTML Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\iconloc.h">
       <Filter>Common Headers</Filter>

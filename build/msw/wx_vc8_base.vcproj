@@ -1135,15 +1135,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="wxHTML Headers"
-			UniqueIdentifier="{B4103426-A5DB-5CF0-A30E-BC9546513AAF}"
-			>
-			<File
-				RelativePath="..\..\include\wx\html\forcelnk.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="Common Headers"
 			UniqueIdentifier="{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}"
 			>

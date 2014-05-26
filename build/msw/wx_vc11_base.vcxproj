@@ -660,7 +660,6 @@
     <ClInclude Include="..\..\include\wx\msw\wrapcdlg.h" />
     <ClInclude Include="..\..\include\wx\msw\wrapwin.h" />
     <ClInclude Include="..\..\include\wx\generic\fswatcher.h" />
-    <ClInclude Include="..\..\include\wx\html\forcelnk.h" />
     <ClInclude Include="..\..\include\wx\afterstd.h" />
     <ClInclude Include="..\..\include\wx\any.h" />
     <ClInclude Include="..\..\include\wx\anystr.h" />
