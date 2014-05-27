@@ -401,14 +401,6 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
     return false;
 }
 
-#if WXWIN_COMPATIBILITY_2_6
-int wxListCtrl::GetItemSpacing(bool isSmall) const
-{
-    return 0;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
 
 QListWidget *wxListCtrl::GetHandle() const
 {
