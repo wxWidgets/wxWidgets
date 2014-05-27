@@ -15,9 +15,9 @@ Currently wxWebViewChromium only supports on Windows.
 
 2. Specify your CEF path to `CEF_INCLUDE_DIR` variable in `build/bakefiles/files.bkl` and `samples/webview_chromium/webview_chromium.bkl`
 
-3. Regenerate the MSVC project files by running `bakefile_gen` command under `build/bakefiles` directory.
+3. Regenerate the MSVC project files by running `bakefile_gen -f msvs2008prj` command under `build/bakefiles` directory.
 
-4. Since step3 only generates vc6~vc9 project files, for using VS2010 or upper, you need to upgrade the project.
+4. Since step3 only generates vc9 project files, for using VS2010 or upper, you need to upgrade the project.
 (Use VS2010 open the project files and it will upgrade automatically.)
 
 5. Build `build/msw/wx_vc9.sln` and `samples/webview_chromium/webview_chromium_vc9.sln` solution.
