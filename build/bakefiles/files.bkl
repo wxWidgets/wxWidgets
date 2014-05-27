@@ -339,7 +339,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    wx/qt/treectrl.h
+    <!-- wx/qt/treectrl.h -->
     wx/qt/utils.h
     wx/qt/window.h
     wx/qt/window_qt.h
@@ -445,7 +445,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
     src/qt/toplevel.cpp
-    src/qt/treectrl.cpp
+    <!-- src/qt/treectrl.cpp -->
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp

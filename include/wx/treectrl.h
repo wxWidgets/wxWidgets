@@ -467,7 +467,7 @@ private:
 #elif defined(__WXCOCOA__)
     #include "wx/generic/treectlg.h"
 #elif defined(__WXQT__)
-    #include "wx/qt/treectrl.h"
+    #include "wx/generic/treectlg.h"
 #endif
 
 #endif // wxUSE_TREECTRL
