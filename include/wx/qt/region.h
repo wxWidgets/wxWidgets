@@ -2,7 +2,6 @@
 // Name:        wx/qt/region.h
 // Purpose:     header for wxRegion
 // Author:      Peter Most, Javier Torres
-// RCS-ID:      $Id$
 // Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,6 @@
 // Purpose:     wxColour class implementation for wxQt
 // Author:      Peter Most, Kolya Kosenko
 // Created:     2010-05-12
-// RCS-ID:      $Id$
 // Copyright:   (C) 2010 Kolya Kosenko
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
