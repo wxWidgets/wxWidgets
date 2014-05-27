@@ -17,6 +17,12 @@ Changes in behaviour not resulting in compilation errors
   wxINTERPOLATION_DEFAULT and not wxINTERPOLATION_GOOD as in 3.0 for
   consistency with OS X, call SetInterpolationQuality() explicitly if needed.
 
+Changes in behaviour which may result in build errors
+-----------------------------------------------------
+
+- "webview" library is not included in `wx-config --libs` output any more, you
+  need to request it explicitly, e.g. `wx-config --libs std,webview`.
+
 
 3.1.0: (released 2014-xx-xx)
 ----------------------------
