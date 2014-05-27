@@ -324,6 +324,9 @@ static NSResponder* s_formerFirstResponder = NULL;
 - (void)windowDidMove:(NSNotification *)notification;
 - (BOOL)windowShouldClose:(id)window;
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
+#if wxHAS_FULL_SCREEN_API
+- (void)windowWillEnterFullScreen:(NSNotification *)notification;
+#endif
 
 @end
 
@@ -557,6 +560,30 @@ extern int wxOSXGetIdFromSelector(SEL action );
     }
     return true;
 }
+
+#if wxHAS_FULL_SCREEN_API
+
+// work around OS X bug, on a secondary monitor an already fully sized window
+// (eg maximized) will not be correctly put to full screen size and keeps a 22px
+// title band at the top free, therefore we force the correct content size
+
+- (void)windowWillEnterFullScreen:(NSNotification *)notification
+{
+    NSWindow* window = (NSWindow*) [notification object];
+
+    NSView* view = [window contentView];
+    NSRect windowframe = [window frame];
+    NSRect viewframe = [view frame];
+    NSUInteger stylemask = [window styleMask] | NSFullScreenWindowMask;
+    NSRect expectedframerect = [NSWindow contentRectForFrameRect: windowframe styleMask: stylemask];
+    
+    if ( !NSEqualSizes(expectedframerect.size, viewframe.size) )
+    {
+        [view setFrameSize: expectedframerect.size];
+    }
+}
+
+#endif
 
 @end
 
