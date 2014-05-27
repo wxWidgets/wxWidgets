@@ -7,8 +7,10 @@
     <set var="CEF_INCLUDE_DIR">
     </set>
 
-    <set var="CONFIGURE" cond="BUILD=='debug'">Debug</set>
-    <set var="CONFIGURE" cond="BUILD=='release'">Release</set>
+    <set var="CONFIGURE" >
+        <if cond="BUILD=='debug'">Debug</if>
+        <if cond="BUILD=='release'">Release</if>
+    </set>
 
     <!--specify CEF lib dir-->
     <set var="CEF_LIB_DIR">
