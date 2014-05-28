@@ -1638,14 +1638,6 @@ wxMBConvUTF16straight::ToWChar(wchar_t *dst, size_t dstLen,
         return wxCONV_FAILED;
 
     const size_t inLen = srcLen / BYTES_PER_CHAR;
-    if ( !dst )
-    {
-        // optimization: return maximal space which could be needed for this
-        // string even if the real size could be smaller if the buffer contains
-        // any surrogates
-        return inLen;
-    }
-
     size_t outLen = 0;
     const wxUint16 *inBuff = reinterpret_cast<const wxUint16 *>(src);
     for ( const wxUint16 * const inEnd = inBuff + inLen; inBuff < inEnd; )
@@ -1654,10 +1646,15 @@ wxMBConvUTF16straight::ToWChar(wchar_t *dst, size_t dstLen,
         if ( !inBuff )
             return wxCONV_FAILED;
 
-        if ( ++outLen > dstLen )
-            return wxCONV_FAILED;
+        outLen++;
 
-        *dst++ = ch;
+        if ( dst )
+        {
+            if ( outLen > dstLen )
+                return wxCONV_FAILED;
+
+            *dst++ = ch;
+        }
     }
 
 
@@ -1711,14 +1708,6 @@ wxMBConvUTF16swap::ToWChar(wchar_t *dst, size_t dstLen,
         return wxCONV_FAILED;
 
     const size_t inLen = srcLen / BYTES_PER_CHAR;
-    if ( !dst )
-    {
-        // optimization: return maximal space which could be needed for this
-        // string even if the real size could be smaller if the buffer contains
-        // any surrogates
-        return inLen;
-    }
-
     size_t outLen = 0;
     const wxUint16 *inBuff = reinterpret_cast<const wxUint16 *>(src);
     for ( const wxUint16 * const inEnd = inBuff + inLen; inBuff < inEnd; )
@@ -1737,10 +1726,15 @@ wxMBConvUTF16swap::ToWChar(wchar_t *dst, size_t dstLen,
         if ( numChars == 2 )
             inBuff++;
 
-        if ( ++outLen > dstLen )
-            return wxCONV_FAILED;
+        outLen++;
 
-        *dst++ = ch;
+        if ( dst )
+        {
+            if ( outLen > dstLen )
+                return wxCONV_FAILED;
+
+            *dst++ = ch;
+        }
     }
 
 
