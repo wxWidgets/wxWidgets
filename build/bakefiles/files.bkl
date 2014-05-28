@@ -3409,6 +3409,24 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="CEF_INCLUDE_DIR">
 </set>
 
+<set var="CONFIGURE" >
+    <if cond="BUILD=='debug'">Debug</if>
+    <if cond="BUILD=='release'">Release</if>
+</set>
+
+<!--specify CEF lib dir-->
+<set var="CEF_LIB_DIR">
+  <if cond="PLATFORM_WIN32=='1'">
+     $(CEF_INCLUDE_DIR)/$(CONFIGURE)/,$(CEF_INCLUDE_DIR)/out/$(CONFIGURE)/lib/
+  </if>
+  <if cond="PLATFORM_MACOSX=='1'">
+    <!--TODO -->
+  </if>
+  <if cond="PLATFORM_UNIX=='1'">
+    <!--TODO -->
+  </if>
+</set>
+
 <set var="WEBVIEW_SRC_PLATFORM">
     <if cond="TOOLKIT=='MSW'">src/msw/webview_ie.cpp</if>
     <if cond="TOOLKIT=='GTK'">src/gtk/webview_webkit.cpp</if>

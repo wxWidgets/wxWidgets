@@ -26,7 +26,7 @@
 #pragma warning(pop)
 #endif
 
-extern const char wxWebViewBackendChromium[];
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[];
 
 class wxWebViewChromium;
 

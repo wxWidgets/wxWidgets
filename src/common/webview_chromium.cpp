@@ -26,7 +26,7 @@
 #pragma warning(pop)
 #endif
 
-extern const char wxWebViewBackendChromium[] = "wxWebViewChromium";
+extern WXDLLIMPEXP_DATA_WEBVIEW(const char) wxWebViewBackendChromium[] = "wxWebViewChromium";
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWebViewChromium, wxWebView);
 
