@@ -390,6 +390,11 @@ void UnicodeTestCase::ConversionUTF16()
     size_t len;
     conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len);
     CPPUNIT_ASSERT_EQUAL( 3, len );
+
+    // Another one: verify that the length of the resulting string is computed
+    // correctly when there is a surrogate in the input.
+    wxMBConvUTF16BE().cMB2WC("\xd8\x03\xdc\x01" /* OLD TURKIC LETTER YENISEI A */, wxNO_LEN, &len);
+    CPPUNIT_ASSERT_EQUAL( 1, len );
 }
 
 void UnicodeTestCase::ConversionUTF32()
