@@ -56,6 +56,7 @@ All (GUI):
 - Add support for loading old V1 BMP files to wxImage (Artur Wieczorek).
 - Improve auto sizing of wrapped cells in wxGrid (iwbnwif).
 - Fix handling of rectangular selections in wxStyledTextCtrl (roberto).
+- Fix characters outside of the BMP in wxStyledTextCtrl (Thomas Goyne).
 
 wxGTK:
 
