@@ -3,28 +3,6 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <!--specify CEF head files include dir -->
-    <set var="CEF_INCLUDE_DIR">
-    </set>
-
-    <set var="CONFIGURE" >
-        <if cond="BUILD=='debug'">Debug</if>
-        <if cond="BUILD=='release'">Release</if>
-    </set>
-
-    <!--specify CEF lib dir-->
-    <set var="CEF_LIB_DIR">
-      <if cond="PLATFORM_WIN32=='1'">
-         $(CEF_INCLUDE_DIR)/$(CONFIGURE)/,$(CEF_INCLUDE_DIR)/out/$(CONFIGURE)/lib/
-      </if>
-      <if cond="PLATFORM_MACOSX=='1'">
-        <!--TODO -->
-      </if>
-      <if cond="PLATFORM_UNIX=='1'">
-        <!--TODO -->
-      </if>
-    </set>
-
     <exe id="webview_chromium" template="wx_sample" template_append="wx_append">
         <sources>
             webview.cpp
@@ -35,10 +13,12 @@
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <lib-path>$(CEF_LIB_DIR)</lib-path>
-        <include>$(CEF_INCLUDE_DIR)</include>
-        <sys-lib>libcef</sys-lib>
-        <sys-lib>libcef_dll_wrapper</sys-lib>
+        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
+            <lib-path>$(CEF_LIB_DIR)</lib-path>
+            <include>$(CEF_INCLUDE_DIR)</include>
+            <sys-lib>libcef</sys-lib>
+            <sys-lib>libcef_dll_wrapper</sys-lib>
+        </if>
         <win32-res>../sample.rc</win32-res>
 
 		<if cond="OUT_OF_TREE_MAKEFILES=='0'">
