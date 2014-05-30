@@ -606,6 +606,7 @@ All (GUI):
 - Fix selecting elements from wxPropertyGrid enum properties (Artur Wieczorek).
 - Don't show the dialog twice for colours in wxPropertyGrid (Artur Wieczorek).
 - Fix handling of custom colours in wxPropertyGrid choices (Artur Wieczorek).
+- Add "hint" property to wxTextCtrl XRC handler.
 
 wxGTK:
 
