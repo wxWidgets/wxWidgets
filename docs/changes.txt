@@ -625,6 +625,7 @@ wxGTK:
   special folder from combobox
 - Fix wxSystemSettings::GetColour() returning transparent colors with GTK3.
 - Fix setting client data when adding items to a sorted wxListBox.
+- Fix X 'BadPixmap' crash in wxDC::Blit() with mask when GTK+ <= 2.16.
 
 wxMSW:
 
