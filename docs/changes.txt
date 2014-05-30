@@ -605,6 +605,7 @@ All (GUI):
 - Fix dragging columns in wxGrid when some of them are hidden (Artur Wieczorek).
 - Fix selecting elements from wxPropertyGrid enum properties (Artur Wieczorek).
 - Don't show the dialog twice for colours in wxPropertyGrid (Artur Wieczorek).
+- Fix handling of custom colours in wxPropertyGrid choices (Artur Wieczorek).
 
 wxGTK:
 
