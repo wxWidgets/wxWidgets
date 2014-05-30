@@ -13,7 +13,7 @@
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
+        <if cond="OUT_OF_TREE_MAKEFILES=='0' and CEF_INCLUDE_DIR!=''">
             <lib-path>$(CEF_LIB_DIR)</lib-path>
             <include>$(CEF_INCLUDE_DIR)</include>
             <sys-lib>libcef</sys-lib>
