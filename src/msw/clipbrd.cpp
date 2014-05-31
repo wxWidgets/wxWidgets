@@ -296,8 +296,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 handle = SetClipboardData(dataFormat, hGlobalMemory);
                 break;
             }
-            // Only tested with Visual C++ 6.0 so far
-#if defined(__VISUALC__)
+
         case wxDF_HTML:
             {
                 char* html = (char *)data;
@@ -365,7 +364,6 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 delete [] buf;
                 break;
             }
-#endif
     }
 
     if ( handle == 0 )
