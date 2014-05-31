@@ -187,8 +187,8 @@
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
         <include>$(CEF_INCLUDE_DIR)</include>
         <lib-path>$(CEF_LIB_DIR)</lib-path>
-        <sys-lib>libcef</sys-lib>
-        <sys-lib>libcef_dll_wrapper</sys-lib>
+        <sys-lib>cef</sys-lib>
+        <sys-lib>cef_dll_wrapper</sys-lib>
     </dll>
 
     <lib id="webviewlib" template="wx_lib"
