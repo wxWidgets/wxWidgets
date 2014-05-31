@@ -110,6 +110,10 @@
 #undef wxUSE_TASKBARICON_BALLOONS
 #define wxUSE_TASKBARICON_BALLOONS 0
 
+// there is no support for taskbar button
+#undef wxUSE_TASKBARBUTTON
+#define wxUSE_TASKBARBUTTON 1
+
 // not sure if this is supported by eVC but VC8 SDK lacks the tooltips control
 // related declarations
 #if wxCHECK_VISUALC_VERSION(8)
