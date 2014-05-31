@@ -2019,7 +2019,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
   #endif
 #endif
 
-    if ( selected->HasFlag(wxPG_PROP_READONLY) )
+    if ( selected->HasFlag(wxPG_PROP_READONLY) && !selected->HasFlag(wxPG_PROP_ACTIVE_BTN) )
         but->Disable();
 
     return but;

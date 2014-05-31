@@ -651,6 +651,9 @@ protected:
 // -----------------------------------------------------------------------
 
 #define wxPG_PROP_NO_ESCAPE     wxPG_PROP_CLASS_SPECIFIC_1
+// Flag used in wxLongStringProperty to mark that edit button
+// should be enabled even in the read-only mode.
+#define wxPG_PROP_ACTIVE_BTN    wxPG_PROP_CLASS_SPECIFIC_3
 
 
 /** @class wxPGLongStringDialogAdapter
