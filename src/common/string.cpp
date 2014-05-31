@@ -1755,6 +1755,13 @@ bool wxString::ToLongLong(wxLongLong_t *val, int base) const
 {
 #ifdef wxHAS_STRTOLL
     return wxStringToIntType(c_str(), val, base, wxStrtoll);
+#elif wxUSE_UNICODE && defined(HAVE_WCSTOULL)
+	// Not precisly clean to check for the unsigned version and
+	// to use the signed one, but this is e.how wxchar.h sets wxStrtoll,
+	// so this shouldn't cause any problems.
+	return wxStringToIntType(c_str(), val, base, wcstoll);
+#elif !wxUSE_UNICODE && defined(HAVE_STRTOULL)
+	return wxStringToIntType(c_str(), val, base, strtoll);
 #else
     // TODO: implement this ourselves
     wxUnusedVar(val);
@@ -1767,6 +1774,10 @@ bool wxString::ToULongLong(wxULongLong_t *val, int base) const
 {
 #ifdef wxHAS_STRTOLL
     return wxStringToIntType(c_str(), val, base, wxStrtoull);
+#elif wxUSE_UNICODE && defined(HAVE_WCSTOULL)
+	return wxStringToIntType(c_str(), val, base, wcstoull);
+#elif !wxUSE_UNICODE && defined(HAVE_STRTOULL)
+	return wxStringToIntType(c_str(), val, base, strtoull);
 #else
     // TODO: implement this ourselves
     wxUnusedVar(val);
