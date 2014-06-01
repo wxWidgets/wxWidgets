@@ -25,6 +25,8 @@ public:
 
     // Operations:
     virtual void SetProgressValue(int value) = 0;
+    virtual void ShowInTaskbar() = 0;
+    virtual void HideInTaskbar() = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
