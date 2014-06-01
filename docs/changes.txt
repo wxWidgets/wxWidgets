@@ -677,6 +677,7 @@ wxOSX:
 - Implement support for wxGA_VERTICAL in wxGauge (themindiswatching).
 - Add support for wxEVT_COMBOBOX_DROPDOWN and wxEVT_COMBOBOX_CLOSEUP
   events to wxOSX/Cocoa (Igor Korot).
+- Fix several memory leaks in wxDataViewCtrl (John Roberts).
 
 
 3.0.0: (released 2013-11-11)

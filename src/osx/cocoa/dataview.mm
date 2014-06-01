@@ -2045,6 +2045,10 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
     // specified position the column is first appended and - if necessary -
     // moved to its final position:
     [m_OutlineView addTableColumn:nativeColumn];
+
+    // it is owned, and kepy alive, by m_OutlineView now
+    [nativeColumn release];
+
     if (pos != static_cast<unsigned int>([m_OutlineView numberOfColumns]-1))
         [m_OutlineView moveColumn:[m_OutlineView numberOfColumns]-1 toColumn:pos];
 
