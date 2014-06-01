@@ -349,7 +349,12 @@ void wxDataViewCustomRenderer::SetDC(wxDC* newDCPtr)
 
 wxDataViewCtrl::~wxDataViewCtrl()
 {
-  ClearColumns();
+  // Notice that we don't call ClearColumns() from here as with Cocoa this
+  // method actually recreates the entire control which is unnecessary when
+  // we're about to dsetroy it and results in unexpected side effects (e.g.
+  // calls to comparison function as the entire contents of the control is
+  // re-added to it and so possibly re-sorted).
+  WX_CLEAR_ARRAY(m_ColumnPtrs);
 
   // Ensure that the already destructed controls is not notified about changes
   // in the model any more.
