@@ -17,6 +17,18 @@
 // wxTaskBarButton: define wxTaskBarButton interface.
 // ----------------------------------------------------------------------------
 
+/**
+    State of the task bar button.
+*/
+enum wxTaskBarButtonState
+{
+    wxTASKBAR_BUTTON_NO_PROGRESS   = 0,
+    wxTASKBAR_BUTTON_INDETERMINATE = 1,
+    wxTASKBAR_BUTTON_NORMAL        = 2,
+    wxTASKBAR_BUTTON_ERROR         = 4,
+    wxTASKBAR_BUTTON_PAUSED        = 8
+};
+
 class WXDLLIMPEXP_ADV wxTaskBarButton
 {
 public:
@@ -25,8 +37,12 @@ public:
 
     // Operations:
     virtual void SetProgressValue(int value) = 0;
-    virtual void ShowInTaskbar() = 0;
-    virtual void HideInTaskbar() = 0;
+    virtual void Show() = 0;
+    virtual void Hide() = 0;
+    virtual void SetThumbnailTooltip(const wxString& tooltip) = 0;
+    virtual void SetProgressState(wxTaskBarButtonState state) = 0;
+    virtual void SetOverlayIcon(const wxIcon& icon) = 0;
+    virtual void SetThumbnailClip(const wxRect& rect) = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
