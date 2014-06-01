@@ -2755,7 +2755,9 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer(const wxString& varianttype,
       m_editorCtrlPtr(NULL),
       m_DCPtr(NULL)
 {
-    SetNativeData(new wxDataViewRendererNativeData([[wxCustomCell alloc] init]));
+    wxCustomCell* cell = [[wxCustomCell alloc] init];
+    SetNativeData(new wxDataViewRendererNativeData(cell));
+    [cell release];
 }
 
 bool wxDataViewCustomRenderer::MacRender()
