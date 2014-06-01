@@ -495,6 +495,8 @@ initWithModelPtr:(wxDataViewModel*)initModelPtr
 
         currentParentItem = nil;
 
+        sortDescriptors = nil;
+
         children = [[NSMutableArray alloc] init];
         items    = [[NSMutableSet   alloc] init];
     }
@@ -503,6 +505,8 @@ initWithModelPtr:(wxDataViewModel*)initModelPtr
 
 -(void) dealloc
 {
+    [sortDescriptors release];
+
     [currentParentItem release];
 
     [children release];
