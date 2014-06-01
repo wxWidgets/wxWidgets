@@ -56,7 +56,7 @@ bool wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
     // although on MSW it works even if the window is still hidden, it doesn't
     // work in other ports (notably X11-based ones) and documentation mentions
     // that SetCurrent() can only be called for a shown window, so check for it
-    wxASSERT_MSG( IsShownOnScreen(), wxT("can't make hidden GL canvas current") );
+    wxASSERT_MSG( IsShown(), wxT("can't make hidden GL canvas current") );
 
 
     return context.SetCurrent(*static_cast<const wxGLCanvas *>(this));
