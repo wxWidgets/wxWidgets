@@ -189,9 +189,9 @@ template <int INVALID_VALUE = INVALID_HANDLE_VALUE>
 class AutoHANDLE
 {
 public:
-    wxEXPLICIT AutoHANDLE(HANDLE handle = INVALID_VALUE) : m_handle(handle) { }
+    wxEXPLICIT AutoHANDLE(HANDLE handle = InvalidHandle()) : m_handle(handle) { }
 
-    bool IsOk() const { return m_handle != INVALID_VALUE; }
+    bool IsOk() const { return m_handle != InvalidHandle(); }
     operator HANDLE() const { return m_handle; }
 
     ~AutoHANDLE() { if ( IsOk() ) DoClose(); }
@@ -202,10 +202,17 @@ public:
 
         DoClose();
 
-        m_handle = INVALID_VALUE;
+        m_handle = InvalidHandle();
     }
 
 protected:
+    // We need this helper function because integer INVALID_VALUE is not
+    // implicitly convertible to HANDLE, which is a pointer.
+    static HANDLE InvalidHandle()
+    {
+        return static_cast<HANDLE>(INVALID_VALUE);
+    }
+
     void DoClose()
     {
         if ( !::CloseHandle(m_handle) )
