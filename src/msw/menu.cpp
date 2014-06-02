@@ -167,6 +167,57 @@ public:
         return true;
     }
 
+    // Update the ranges of the existing radio groups after removing the menu
+    // item at the given position.
+    //
+    // The item being removed can be the item of any kind, not only the radio
+    // button belonging to the radio group, and this function checks for it
+    // and, as a side effect, returns true if this item was found inside an
+    // existing radio group.
+    bool UpdateOnRemoveItem(int pos)
+    {
+        bool inExistingGroup = false;
+
+        // Pointer to (necessarily unique) empty group which could be left
+        // after removing the last radio button from it.
+        Ranges::iterator itEmptyGroup = m_ranges.end();
+
+        for ( Ranges::iterator it = m_ranges.begin();
+              it != m_ranges.end();
+              ++it )
+        {
+            Range& r = *it;
+
+            if ( pos < r.start )
+            {
+                // Removed item was positioned before this range, update its
+                // indices.
+                r.start--;
+                r.end--;
+            }
+            else if ( pos <= r.end )
+            {
+                // Removed item belongs to this radio group (it is a radio
+                // button), update index of its end.
+                r.end--;
+
+                // Check if empty group left after removal.
+                // If so, it will be deleted later on.
+                if ( r.end < r.start )
+                    itEmptyGroup = it;
+
+                inExistingGroup = true;
+            }
+            //else: Removed item was after this range, nothing to do for it.
+        }
+
+        // Remove empty group from the list.
+        if ( itEmptyGroup != m_ranges.end() )
+            m_ranges.erase(itEmptyGroup);
+
+        return inExistingGroup;
+    }
+
 private:
     // Contains the inclusive positions of the range start and end.
     struct Range
@@ -750,6 +801,15 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     }
     //else: this item doesn't have an accel, nothing to do
 #endif // wxUSE_ACCEL
+
+    // Update indices of radio groups.
+    if ( m_radioData )
+    {
+        bool inExistingGroup = m_radioData->UpdateOnRemoveItem(pos);
+
+        wxASSERT_MSG( !inExistingGroup || item->GetKind() == wxITEM_RADIO,
+                      wxT("Removing non radio button from radio group?") );
+    }
 
     // remove the item from the menu
     if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
