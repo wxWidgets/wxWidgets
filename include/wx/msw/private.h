@@ -185,7 +185,7 @@ extern LONG APIENTRY _EXPORT
 #endif
 
 // close the handle in the class dtor
-template <int INVALID_VALUE = INVALID_HANDLE_VALUE>
+template <wxUIntPtr INVALID_VALUE = (wxUIntPtr)INVALID_HANDLE_VALUE>
 class AutoHANDLE
 {
 public:
