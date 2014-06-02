@@ -592,20 +592,29 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <if cond="BUILD=='release'">Release</if>
     </set>
 
-    <!--specify CEF lib dir-->
-    <set var="CEF_LIB_DIR">
+    <!--specify libcef library directory-->
+    <set var="LIBCEF_PATH">
       <if cond="PLATFORM_WIN32=='1'">
-         $(CEF_INCLUDE_DIR)/$(CONFIGURE)/,$(CEF_INCLUDE_DIR)/out/$(CONFIGURE)/lib/
+         $(CEF_INCLUDE_DIR)/$(CONFIGURE)/
       </if>
       <if cond="PLATFORM_MACOSX=='1'">
         <!--TODO -->
       </if>
-
-      <!-- Since bakefile_gen will not add -L in the second link directory path(maybe a bug)
-           We add -L option explicitly as a temp solution. -->
       <if cond="PLATFORM_UNIX=='1'">
         $(CEF_INCLUDE_DIR)/Release/
-        -L$(CEF_INCLUDE_DIR)/out/Release/obj.target/
+      </if>
+    </set>
+
+    <!--specify libcef_dll_wrapper library directory-->
+    <set var="LIBCEF_WRAPPER_PATH">
+      <if cond="PLATFORM_WIN32=='1'">
+         $(CEF_INCLUDE_DIR)/out/$(CONFIGURE)/lib/
+      </if>
+      <if cond="PLATFORM_MACOSX=='1'">
+        <!--TODO -->
+      </if>
+      <if cond="PLATFORM_UNIX=='1'">
+        $(CEF_INCLUDE_DIR)/out/Release/obj.target/
       </if>
     </set>
 
