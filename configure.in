@@ -7046,7 +7046,7 @@ fi
 if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW=1
     AC_DEFINE(wxUSE_WEBVIEW)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview webview_chromium"
 else
     USE_WEBVIEW=0
 fi
