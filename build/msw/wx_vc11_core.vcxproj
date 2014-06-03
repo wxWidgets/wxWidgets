@@ -973,105 +973,25 @@
     <ClCompile Include="..\..\src\msw\uxtheme.cpp" />
     <ClCompile Include="..\..\src\msw\volume.cpp" />
     <ClCompile Include="..\..\src\msw\window.cpp" />
-    <ClCompile Include="..\..\src\generic\accel.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\generic\busyinfo.cpp" />
     <ClCompile Include="..\..\src\generic\buttonbar.cpp" />
     <ClCompile Include="..\..\src\generic\choicbkg.cpp" />
     <ClCompile Include="..\..\src\generic\choicdgg.cpp" />
     <ClCompile Include="..\..\src\generic\clrpickerg.cpp" />
     <ClCompile Include="..\..\src\generic\collpaneg.cpp" />
-    <ClCompile Include="..\..\src\generic\colrdlgg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\generic\combog.cpp" />
     <ClCompile Include="..\..\src\generic\dcpsg.cpp" />
     <ClCompile Include="..\..\src\generic\dirctrlg.cpp" />
-    <ClCompile Include="..\..\src\generic\dirdlgg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\generic\dragimgg.cpp" />
-    <ClCompile Include="..\..\src\generic\fdrepdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\generic\filectrlg.cpp" />
-    <ClCompile Include="..\..\src\generic\filedlgg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\generic\filepickerg.cpp" />
-    <ClCompile Include="..\..\src\generic\fontdlgg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\generic\fontpickerg.cpp" />
     <ClCompile Include="..\..\src\generic\graphicc.cpp" />
     <ClCompile Include="..\..\src\generic\headerctrlg.cpp" />
     <ClCompile Include="..\..\src\generic\infobar.cpp" />
     <ClCompile Include="..\..\src\generic\listbkg.cpp" />
-    <ClCompile Include="..\..\src\generic\listctrl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\generic\logg.cpp" />
     <ClCompile Include="..\..\src\generic\markuptext.cpp" />
-    <ClCompile Include="..\..\src\generic\mdig.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DLL Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\src\generic\msgdlgg.cpp" />
     <ClCompile Include="..\..\src\generic\numdlgg.cpp" />
     <ClCompile Include="..\..\src\generic\printps.cpp" />
@@ -1132,10 +1052,8 @@
     <ClInclude Include="..\..\include\wx\msw\ole\automtn.h" />
     <ClInclude Include="..\..\include\wx\msw\bitmap.h" />
     <ClInclude Include="..\..\include\wx\msw\bmpbuttn.h" />
-    <ClInclude Include="..\..\include\wx\msw\bmpcbox.h" />
     <ClInclude Include="..\..\include\wx\msw\brush.h" />
     <ClInclude Include="..\..\include\wx\msw\button.h" />
-    <ClInclude Include="..\..\include\wx\msw\calctrl.h" />
     <ClInclude Include="..\..\include\wx\msw\caret.h" />
     <ClInclude Include="..\..\include\wx\msw\checkbox.h" />
     <ClInclude Include="..\..\include\wx\msw\checklst.h" />
@@ -1145,7 +1063,6 @@
     <ClInclude Include="..\..\include\wx\msw\colour.h" />
     <ClInclude Include="..\..\include\wx\msw\combo.h" />
     <ClInclude Include="..\..\include\wx\msw\combobox.h" />
-    <ClInclude Include="..\..\include\wx\msw\commandlinkbutton.h" />
     <ClInclude Include="..\..\include\wx\msw\control.h" />
     <ClInclude Include="..\..\include\wx\msw\ctrlsub.h" />
     <ClInclude Include="..\..\include\wx\msw\cursor.h" />
@@ -1153,8 +1070,6 @@
     <ClInclude Include="..\..\include\wx\msw\ole\dataform.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\dataobj.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\dataobj2.h" />
-    <ClInclude Include="..\..\include\wx\msw\datectrl.h" />
-    <ClInclude Include="..\..\include\wx\msw\datetimectrl.h" />
     <ClInclude Include="..\..\include\wx\msw\dc.h" />
     <ClInclude Include="..\..\include\wx\msw\dcclient.h" />
     <ClInclude Include="..\..\include\wx\msw\dcmemory.h" />
@@ -1185,18 +1100,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
-    <ClInclude Include="..\..\include\wx\msw\glcanvas.h" />
     <ClInclude Include="..\..\include\wx\msw\headerctrl.h" />
-    <ClInclude Include="..\..\include\wx\msw\helpbest.h" />
     <ClInclude Include="..\..\include\wx\msw\helpchm.h" />
     <ClInclude Include="..\..\include\wx\msw\helpwin.h" />
     <ClInclude Include="..\..\include\wx\msw\htmlhelp.h" />
-    <ClInclude Include="..\..\include\wx\msw\hyperlink.h" />
     <ClInclude Include="..\..\include\wx\msw\icon.h" />
     <ClInclude Include="..\..\include\wx\msw\imaglist.h" />
     <ClInclude Include="..\..\include\wx\msw\iniconf.h" />
     <ClInclude Include="..\..\include\wx\msw\init.h" />
-    <ClInclude Include="..\..\include\wx\msw\joystick.h" />
     <ClInclude Include="..\..\include\wx\msw\listbox.h" />
     <ClInclude Include="..\..\include\wx\msw\listctrl.h" />
     <ClInclude Include="..\..\include\wx\msw\mdi.h" />
@@ -1209,7 +1120,6 @@
     <ClInclude Include="..\..\include\wx\msw\msvcrt.h" />
     <ClInclude Include="..\..\include\wx\msw\nonownedwnd.h" />
     <ClInclude Include="..\..\include\wx\msw\notebook.h" />
-    <ClInclude Include="..\..\include\wx\msw\notifmsg.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\oleutils.h" />
     <ClInclude Include="..\..\include\wx\msw\ownerdrw.h" />
     <ClInclude Include="..\..\include\wx\msw\ownerdrawnbutton.h" />
@@ -1227,7 +1137,6 @@
     <ClInclude Include="..\..\include\wx\msw\richmsgdlg.h" />
     <ClInclude Include="..\..\include\wx\msw\scrolbar.h" />
     <ClInclude Include="..\..\include\wx\msw\slider.h" />
-    <ClInclude Include="..\..\include\wx\msw\sound.h" />
     <ClInclude Include="..\..\include\wx\msw\spinbutt.h" />
     <ClInclude Include="..\..\include\wx\msw\spinctrl.h" />
     <ClInclude Include="..\..\include\wx\msw\statbmp.h" />
@@ -1235,11 +1144,9 @@
     <ClInclude Include="..\..\include\wx\msw\statline.h" />
     <ClInclude Include="..\..\include\wx\msw\stattext.h" />
     <ClInclude Include="..\..\include\wx\msw\statusbar.h" />
-    <ClInclude Include="..\..\include\wx\msw\taskbar.h" />
     <ClInclude Include="..\..\include\wx\msw\textctrl.h" />
     <ClInclude Include="..\..\include\wx\msw\textentry.h" />
     <ClInclude Include="..\..\include\wx\msw\tglbtn.h" />
-    <ClInclude Include="..\..\include\wx\msw\timectrl.h" />
     <ClInclude Include="..\..\include\wx\msw\toolbar.h" />
     <ClInclude Include="..\..\include\wx\msw\tooltip.h" />
     <ClInclude Include="..\..\include\wx\msw\toplevel.h" />
@@ -1247,116 +1154,55 @@
     <ClInclude Include="..\..\include\wx\msw\ole\uuid.h" />
     <ClInclude Include="..\..\include\wx\msw\uxtheme.h" />
     <ClInclude Include="..\..\include\wx\msw\uxthemep.h" />
-    <ClInclude Include="..\..\include\wx\msw\webview_ie.h" />
-    <ClInclude Include="..\..\include\wx\msw\webviewhistoryitem_ie.h" />
     <ClInclude Include="..\..\include\wx\msw\window.h" />
-    <ClInclude Include="..\..\include\wx\generic\aboutdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\accel.h" />
-    <ClInclude Include="..\..\include\wx\generic\animate.h" />
-    <ClInclude Include="..\..\include\wx\generic\bmpcbox.h" />
     <ClInclude Include="..\..\include\wx\generic\busyinfo.h" />
     <ClInclude Include="..\..\include\wx\generic\buttonbar.h" />
-    <ClInclude Include="..\..\include\wx\generic\calctrlg.h" />
     <ClInclude Include="..\..\include\wx\generic\choicdgg.h" />
     <ClInclude Include="..\..\include\wx\generic\clrpickerg.h" />
     <ClInclude Include="..\..\include\wx\generic\collpaneg.h" />
-    <ClInclude Include="..\..\include\wx\generic\colrdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\combo.h" />
-    <ClInclude Include="..\..\include\wx\generic\ctrlsub.h" />
     <ClInclude Include="..\..\include\wx\generic\custombgwin.h" />
-    <ClInclude Include="..\..\include\wx\generic\dataview.h" />
-    <ClInclude Include="..\..\include\wx\generic\datectrl.h" />
     <ClInclude Include="..\..\include\wx\generic\dcpsg.h" />
     <ClInclude Include="..\..\include\wx\generic\dirctrlg.h" />
-    <ClInclude Include="..\..\include\wx\generic\dirdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\dragimgg.h" />
-    <ClInclude Include="..\..\include\wx\generic\dvrenderer.h" />
-    <ClInclude Include="..\..\include\wx\generic\dvrenderers.h" />
-    <ClInclude Include="..\..\include\wx\generic\fdrepdlg.h" />
     <ClInclude Include="..\..\include\wx\generic\filectrlg.h" />
-    <ClInclude Include="..\..\include\wx\generic\filedlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\filepickerg.h" />
-    <ClInclude Include="..\..\include\wx\generic\fontdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\fontpickerg.h" />
-    <ClInclude Include="..\..\include\wx\generic\grid.h" />
-    <ClInclude Include="..\..\include\wx\generic\gridctrl.h" />
-    <ClInclude Include="..\..\include\wx\generic\grideditors.h" />
-    <ClInclude Include="..\..\include\wx\generic\gridsel.h" />
     <ClInclude Include="..\..\include\wx\generic\headerctrlg.h" />
-    <ClInclude Include="..\..\include\wx\generic\helpext.h" />
-    <ClInclude Include="..\..\include\wx\generic\hyperlink.h" />
     <ClInclude Include="..\..\include\wx\generic\infobar.h" />
-    <ClInclude Include="..\..\include\wx\generic\laywin.h" />
-    <ClInclude Include="..\..\include\wx\generic\listctrl.h" />
     <ClInclude Include="..\..\include\wx\generic\logg.h" />
-    <ClInclude Include="..\..\include\wx\generic\mdig.h" />
     <ClInclude Include="..\..\include\wx\generic\msgdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\notebook.h" />
-    <ClInclude Include="..\..\include\wx\generic\notifmsg.h" />
     <ClInclude Include="..\..\include\wx\generic\numdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\panelg.h" />
     <ClInclude Include="..\..\include\wx\generic\printps.h" />
     <ClInclude Include="..\..\include\wx\generic\prntdlgg.h" />
     <ClInclude Include="..\..\include\wx\generic\progdlgg.h" />
-    <ClInclude Include="..\..\include\wx\generic\propdlg.h" />
     <ClInclude Include="..\..\include\wx\generic\richmsgdlgg.h" />
-    <ClInclude Include="..\..\include\wx\generic\sashwin.h" />
     <ClInclude Include="..\..\include\wx\generic\scrolwin.h" />
     <ClInclude Include="..\..\include\wx\generic\spinctlg.h" />
-    <ClInclude Include="..\..\include\wx\generic\splash.h" />
     <ClInclude Include="..\..\include\wx\generic\splitter.h" />
     <ClInclude Include="..\..\include\wx\generic\srchctlg.h" />
     <ClInclude Include="..\..\include\wx\generic\statbmpg.h" />
     <ClInclude Include="..\..\include\wx\generic\stattextg.h" />
-    <ClInclude Include="..\..\include\wx\generic\statusbr.h" />
     <ClInclude Include="..\..\include\wx\generic\textdlgg.h" />
-    <ClInclude Include="..\..\include\wx\generic\timectrl.h" />
     <ClInclude Include="..\..\include\wx\generic\treectlg.h" />
-    <ClInclude Include="..\..\include\wx\generic\wizard.h" />
-    <ClInclude Include="..\..\include\wx\html\helpctrl.h" />
-    <ClInclude Include="..\..\include\wx\html\helpdata.h" />
-    <ClInclude Include="..\..\include\wx\html\helpdlg.h" />
-    <ClInclude Include="..\..\include\wx\html\helpfrm.h" />
-    <ClInclude Include="..\..\include\wx\html\helpwnd.h" />
-    <ClInclude Include="..\..\include\wx\html\htmlcell.h" />
-    <ClInclude Include="..\..\include\wx\html\htmldefs.h" />
-    <ClInclude Include="..\..\include\wx\html\htmlfilt.h" />
-    <ClInclude Include="..\..\include\wx\html\htmlpars.h" />
-    <ClInclude Include="..\..\include\wx\html\htmlproc.h" />
-    <ClInclude Include="..\..\include\wx\html\htmltag.h" />
-    <ClInclude Include="..\..\include\wx\html\htmlwin.h" />
-    <ClInclude Include="..\..\include\wx\html\htmprint.h" />
-    <ClInclude Include="..\..\include\wx\html\m_templ.h" />
-    <ClInclude Include="..\..\include\wx\html\styleparams.h" />
-    <ClInclude Include="..\..\include\wx\html\winpars.h" />
-    <ClInclude Include="..\..\include\wx\aboutdlg.h" />
     <ClInclude Include="..\..\include\wx\accel.h" />
     <ClInclude Include="..\..\include\wx\access.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\advprops.h" />
     <ClInclude Include="..\..\include\wx\affinematrix2d.h" />
     <ClInclude Include="..\..\include\wx\affinematrix2dbase.h" />
     <ClInclude Include="..\..\include\wx\anidecod.h" />
-    <ClInclude Include="..\..\include\wx\animate.h" />
     <ClInclude Include="..\..\include\wx\animdecod.h" />
     <ClInclude Include="..\..\include\wx\anybutton.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\art.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\art_internal.h" />
     <ClInclude Include="..\..\include\wx\artprov.h" />
-    <ClInclude Include="..\..\include\wx\aui\aui.h" />
-    <ClInclude Include="..\..\include\wx\aui\auibar.h" />
-    <ClInclude Include="..\..\include\wx\aui\auibook.h" />
-    <ClInclude Include="..\..\include\wx\bannerwindow.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\bar.h" />
     <ClInclude Include="..\..\include\wx\bitmap.h" />
     <ClInclude Include="..\..\include\wx\bmpbuttn.h" />
-    <ClInclude Include="..\..\include\wx\bmpcbox.h" />
     <ClInclude Include="..\..\include\wx\bookctrl.h" />
     <ClInclude Include="..\..\include\wx\persist\bookctrl.h" />
     <ClInclude Include="..\..\include\wx\brush.h" />
     <ClInclude Include="..\..\include\wx\busyinfo.h" />
     <ClInclude Include="..\..\include\wx\button.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\buttonbar.h" />
-    <ClInclude Include="..\..\include\wx\calctrl.h" />
     <ClInclude Include="..\..\include\wx\caret.h" />
     <ClInclude Include="..\..\include\wx\checkbox.h" />
     <ClInclude Include="..\..\include\wx\checklst.h" />
@@ -1373,21 +1219,14 @@
     <ClInclude Include="..\..\include\wx\colourdata.h" />
     <ClInclude Include="..\..\include\wx\combo.h" />
     <ClInclude Include="..\..\include\wx\combobox.h" />
-    <ClInclude Include="..\..\include\wx\commandlinkbutton.h" />
     <ClInclude Include="..\..\include\wx\compositewin.h" />
     <ClInclude Include="..\..\include\wx\control.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\control.h" />
     <ClInclude Include="..\..\include\wx\cshelp.h" />
     <ClInclude Include="..\..\include\wx\ctrlsub.h" />
     <ClInclude Include="..\..\include\wx\cursor.h" />
     <ClInclude Include="..\..\include\wx\custombgwin.h" />
     <ClInclude Include="..\..\include\wx\dataobj.h" />
-    <ClInclude Include="..\..\include\wx\dataview.h" />
-    <ClInclude Include="..\..\include\wx\datectrl.h" />
-    <ClInclude Include="..\..\include\wx\dateevt.h" />
-    <ClInclude Include="..\..\include\wx\datetimectrl.h" />
     <ClInclude Include="..\..\include\wx\dc.h" />
-    <ClInclude Include="..\..\include\wx\dcbuffer.h" />
     <ClInclude Include="..\..\include\wx\dcclient.h" />
     <ClInclude Include="..\..\include\wx\dcgraph.h" />
     <ClInclude Include="..\..\include\wx\dcmemory.h" />
@@ -1396,7 +1235,6 @@
     <ClInclude Include="..\..\include\wx\dcps.h" />
     <ClInclude Include="..\..\include\wx\dcscreen.h" />
     <ClInclude Include="..\..\include\wx\dcsvg.h" />
-    <ClInclude Include="..\..\include\wx\debugrpt.h" />
     <ClInclude Include="..\..\include\wx\dialog.h" />
     <ClInclude Include="..\..\include\wx\dialup.h" />
     <ClInclude Include="..\..\include\wx\dirctrl.h" />
@@ -1404,13 +1242,9 @@
     <ClInclude Include="..\..\include\wx\display.h" />
     <ClInclude Include="..\..\include\wx\display_impl.h" />
     <ClInclude Include="..\..\include\wx\dnd.h" />
-    <ClInclude Include="..\..\include\wx\aui\dockart.h" />
     <ClInclude Include="..\..\include\wx\docmdi.h" />
     <ClInclude Include="..\..\include\wx\docview.h" />
     <ClInclude Include="..\..\include\wx\dragimag.h" />
-    <ClInclude Include="..\..\include\wx\dvrenderers.h" />
-    <ClInclude Include="..\..\include\wx\editlbox.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\editors.h" />
     <ClInclude Include="..\..\include\wx\effects.h" />
     <ClInclude Include="..\..\include\wx\encinfo.h" />
     <ClInclude Include="..\..\include\wx\evtloopsrc.h" />
@@ -1419,7 +1253,6 @@
     <ClInclude Include="..\..\include\wx\filedlg.h" />
     <ClInclude Include="..\..\include\wx\filehistory.h" />
     <ClInclude Include="..\..\include\wx\filepicker.h" />
-    <ClInclude Include="..\..\include\wx\aui\floatpane.h" />
     <ClInclude Include="..\..\include\wx\fmappriv.h" />
     <ClInclude Include="..\..\include\wx\font.h" />
     <ClInclude Include="..\..\include\wx\fontdata.h" />
@@ -1428,25 +1261,19 @@
     <ClInclude Include="..\..\include\wx\fontpicker.h" />
     <ClInclude Include="..\..\include\wx\fontutil.h" />
     <ClInclude Include="..\..\include\wx\frame.h" />
-    <ClInclude Include="..\..\include\wx\aui\framemanager.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\gallery.h" />
     <ClInclude Include="..\..\include\wx\gauge.h" />
     <ClInclude Include="..\..\include\wx\gbsizer.h" />
     <ClInclude Include="..\..\include\wx\gdicmn.h" />
     <ClInclude Include="..\..\include\wx\gdiobj.h" />
     <ClInclude Include="..\..\include\wx\geometry.h" />
     <ClInclude Include="..\..\include\wx\gifdecod.h" />
-    <ClInclude Include="..\..\include\wx\glcanvas.h" />
     <ClInclude Include="..\..\include\wx\graphics.h" />
-    <ClInclude Include="..\..\include\wx\grid.h" />
     <ClInclude Include="..\..\include\wx\headercol.h" />
     <ClInclude Include="..\..\include\wx\headerctrl.h" />
     <ClInclude Include="..\..\include\wx\help.h" />
     <ClInclude Include="..\..\include\wx\helpbase.h" />
     <ClInclude Include="..\..\include\wx\helphtml.h" />
     <ClInclude Include="..\..\include\wx\helpwin.h" />
-    <ClInclude Include="..\..\include\wx\htmllbox.h" />
-    <ClInclude Include="..\..\include\wx\hyperlink.h" />
     <ClInclude Include="..\..\include\wx\icon.h" />
     <ClInclude Include="..\..\include\wx\iconbndl.h" />
     <ClInclude Include="..\..\include\wx\imagbmp.h" />
@@ -1463,17 +1290,13 @@
     <ClInclude Include="..\..\include\wx\imagxpm.h" />
     <ClInclude Include="..\..\include\wx\infobar.h" />
     <ClInclude Include="..\..\include\wx\itemid.h" />
-    <ClInclude Include="..\..\include\wx\joystick.h" />
     <ClInclude Include="..\..\include\wx\layout.h" />
-    <ClInclude Include="..\..\include\wx\laywin.h" />
     <ClInclude Include="..\..\include\wx\listbase.h" />
     <ClInclude Include="..\..\include\wx\listbook.h" />
     <ClInclude Include="..\..\include\wx\listbox.h" />
     <ClInclude Include="..\..\include\wx\listctrl.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\manager.h" />
     <ClInclude Include="..\..\include\wx\matrix.h" />
     <ClInclude Include="..\..\include\wx\mdi.h" />
-    <ClInclude Include="..\..\include\wx\mediactrl.h" />
     <ClInclude Include="..\..\include\wx\menu.h" />
     <ClInclude Include="..\..\include\wx\menuitem.h" />
     <ClInclude Include="..\..\include\wx\metafile.h" />
@@ -1484,15 +1307,11 @@
     <ClInclude Include="..\..\include\wx\nativewin.h" />
     <ClInclude Include="..\..\include\wx\nonownedwnd.h" />
     <ClInclude Include="..\..\include\wx\notebook.h" />
-    <ClInclude Include="..\..\include\wx\notifmsg.h" />
     <ClInclude Include="..\..\include\wx\numdlg.h" />
-    <ClInclude Include="..\..\include\wx\odcombo.h" />
     <ClInclude Include="..\..\include\wx\overlay.h" />
     <ClInclude Include="..\..\include\wx\ownerdrw.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\page.h" />
     <ClInclude Include="..\..\include\wx\palette.h" />
     <ClInclude Include="..\..\include\wx\panel.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\panel.h" />
     <ClInclude Include="..\..\include\wx\paper.h" />
     <ClInclude Include="..\..\include\wx\pen.h" />
     <ClInclude Include="..\..\include\wx\persist.h" />
@@ -1503,13 +1322,6 @@
     <ClInclude Include="..\..\include\wx\printdlg.h" />
     <ClInclude Include="..\..\include\wx\prntbase.h" />
     <ClInclude Include="..\..\include\wx\progdlg.h" />
-    <ClInclude Include="..\..\include\wx\propdlg.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\property.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\propgrid.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\propgriddefs.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\propgridiface.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\propgridpagestate.h" />
-    <ClInclude Include="..\..\include\wx\propgrid\props.h" />
     <ClInclude Include="..\..\include\wx\quantize.h" />
     <ClInclude Include="..\..\include\wx\radiobox.h" />
     <ClInclude Include="..\..\include\wx\radiobut.h" />
@@ -1519,29 +1331,6 @@
     <ClInclude Include="..\..\include\wx\region.h" />
     <ClInclude Include="..\..\include\wx\renderer.h" />
     <ClInclude Include="..\..\include\wx\richmsgdlg.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextbackgroundpage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextborderspage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextbuffer.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextbulletspage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextctrl.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextdialogpage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextfontpage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextformatdlg.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtexthtml.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextimagedlg.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextindentspage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextliststylepage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextmarginspage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextprint.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextsizepage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextstyledlg.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextstylepage.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextstyles.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextsymboldlg.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextuicustomization.h" />
-    <ClInclude Include="..\..\include\wx\richtext\richtextxml.h" />
-    <ClInclude Include="..\..\include\wx\richtooltip.h" />
-    <ClInclude Include="..\..\include\wx\sashwin.h" />
     <ClInclude Include="..\..\include\wx\scopeguard.h" />
     <ClInclude Include="..\..\include\wx\scrolbar.h" />
     <ClInclude Include="..\..\include\wx\scrolwin.h" />
@@ -1550,10 +1339,8 @@
     <ClInclude Include="..\..\include\wx\simplebook.h" />
     <ClInclude Include="..\..\include\wx\sizer.h" />
     <ClInclude Include="..\..\include\wx\slider.h" />
-    <ClInclude Include="..\..\include\wx\sound.h" />
     <ClInclude Include="..\..\include\wx\spinbutt.h" />
     <ClInclude Include="..\..\include\wx\spinctrl.h" />
-    <ClInclude Include="..\..\include\wx\splash.h" />
     <ClInclude Include="..\..\include\wx\persist\splitter.h" />
     <ClInclude Include="..\..\include\wx\splitter.h" />
     <ClInclude Include="..\..\include\wx\srchctrl.h" />
@@ -1562,10 +1349,6 @@
     <ClInclude Include="..\..\include\wx\statline.h" />
     <ClInclude Include="..\..\include\wx\stattext.h" />
     <ClInclude Include="..\..\include\wx\statusbr.h" />
-    <ClInclude Include="..\..\include\wx\stc\stc.h" />
-    <ClInclude Include="..\..\include\wx\aui\tabart.h" />
-    <ClInclude Include="..\..\include\wx\aui\tabmdi.h" />
-    <ClInclude Include="..\..\include\wx\taskbar.h" />
     <ClInclude Include="..\..\include\wx\tbarbase.h" />
     <ClInclude Include="..\..\include\wx\textcompleter.h" />
     <ClInclude Include="..\..\include\wx\textctrl.h" />
@@ -1573,10 +1356,7 @@
     <ClInclude Include="..\..\include\wx\textentry.h" />
     <ClInclude Include="..\..\include\wx\textwrapper.h" />
     <ClInclude Include="..\..\include\wx\tglbtn.h" />
-    <ClInclude Include="..\..\include\wx\timectrl.h" />
-    <ClInclude Include="..\..\include\wx\tipdlg.h" />
     <ClInclude Include="..\..\include\wx\tipwin.h" />
-    <ClInclude Include="..\..\include\wx\ribbon\toolbar.h" />
     <ClInclude Include="..\..\include\wx\toolbar.h" />
     <ClInclude Include="..\..\include\wx\toolbook.h" />
     <ClInclude Include="..\..\include\wx\tooltip.h" />
@@ -1586,7 +1366,6 @@
     <ClInclude Include="..\..\include\wx\persist\treebook.h" />
     <ClInclude Include="..\..\include\wx\treebook.h" />
     <ClInclude Include="..\..\include\wx\treectrl.h" />
-    <ClInclude Include="..\..\include\wx\treelist.h" />
     <ClInclude Include="..\..\include\wx\uiaction.h" />
     <ClInclude Include="..\..\include\wx\valgen.h" />
     <ClInclude Include="..\..\include\wx\validate.h" />
@@ -1596,83 +1375,19 @@
     <ClInclude Include="..\..\include\wx\vlbox.h" />
     <ClInclude Include="..\..\include\wx\vms_x_fix.h" />
     <ClInclude Include="..\..\include\wx\vscroll.h" />
-    <ClInclude Include="..\..\include\wx\webview.h" />
-    <ClInclude Include="..\..\include\wx\webviewarchivehandler.h" />
     <ClInclude Include="..\..\include\wx\persist\window.h" />
     <ClInclude Include="..\..\include\wx\window.h" />
     <ClInclude Include="..\..\include\wx\windowid.h" />
     <ClInclude Include="..\..\include\wx\windowptr.h" />
     <ClInclude Include="..\..\include\wx\withimages.h" />
-    <ClInclude Include="..\..\include\wx\wizard.h" />
     <ClInclude Include="..\..\include\wx\wrapsizer.h" />
     <ClInclude Include="..\..\include\wx\wupdlock.h" />
-    <ClInclude Include="..\..\include\wx\wxhtml.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_all.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_animatctrl.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_bannerwindow.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_bmp.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_bmpbt.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_bmpcbox.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_bttn.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_cald.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_chckb.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_chckl.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_choic.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_choicbk.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_clrpicker.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_cmdlinkbn.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_collpane.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_combo.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_comboctrl.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_datectrl.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_dirpicker.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_dlg.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_editlbox.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_filectrl.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_filepicker.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_fontpicker.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_frame.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_gauge.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_gdctl.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_grid.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_html.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_htmllbox.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_hyperlink.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_listb.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_listbk.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_listc.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_mdi.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_menu.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_notbk.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_odcombo.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_panel.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_propdlg.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_radbt.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_radbx.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_scrol.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_scwin.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_sizer.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_slidr.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_spin.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_split.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_srchctrl.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_statbar.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_stbmp.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_stbox.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_stlin.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_sttxt.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_text.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_tglbtn.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_timectrl.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_toolb.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_toolbk.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_tree.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_treebk.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_unkwn.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xh_wizrd.h" />
-    <ClInclude Include="..\..\include\wx\xrc\xmlres.h" />
     <ClInclude Include="..\..\include\wx\xpmdecod.h" />
     <ClInclude Include="..\..\include\wx\xpmhand.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xmlreshandler.h" />
+    <ClInclude Include="..\..\include\wx\preferences.h" />
+    <ClInclude Include="..\..\include\wx\testing.h" />
+    <ClInclude Include="..\..\include\wx\msw\ole\safearray.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

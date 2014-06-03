@@ -349,7 +349,12 @@ void wxDataViewCustomRenderer::SetDC(wxDC* newDCPtr)
 
 wxDataViewCtrl::~wxDataViewCtrl()
 {
-  ClearColumns();
+  // Notice that we don't call ClearColumns() from here as with Cocoa this
+  // method actually recreates the entire control which is unnecessary when
+  // we're about to dsetroy it and results in unexpected side effects (e.g.
+  // calls to comparison function as the entire contents of the control is
+  // re-added to it and so possibly re-sorted).
+  WX_CLEAR_ARRAY(m_ColumnPtrs);
 
   // Ensure that the already destructed controls is not notified about changes
   // in the model any more.
@@ -429,8 +434,6 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
   wxCHECK_MSG(dataViewWidgetPtr != NULL,                                         false,"Pointer to native control must not be NULL.");
   wxCHECK_MSG(columnPtr != NULL,                                                 false,"Column pointer must not be NULL.");
   wxCHECK_MSG(columnPtr->GetRenderer() != NULL,                                  false,"Column does not have a renderer.");
-  wxCHECK_MSG(GetModel() != NULL,                                          false,"No model associated with control.");
-  wxCHECK_MSG(columnPtr->GetModelColumn() < GetModel()->GetColumnCount(),false,"Column's model column has no equivalent in the associated model.");
 
  // add column to wxWidget's internal structure:
   if (wxDataViewCtrlBase::InsertColumn(pos,columnPtr))

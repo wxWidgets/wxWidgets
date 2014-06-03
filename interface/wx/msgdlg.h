@@ -36,7 +36,8 @@ const char wxMessageBoxCaptionStr[] = "Message";
     @style{wxNO_DEFAULT}
         Makes the "No" button default, can only be used with @c wxYES_NO.
     @style{wxCANCEL_DEFAULT}
-        Makes the "Cancel" button default, can only be used with @c wxCANCEL
+        Makes the "Cancel" button default, can only be used with @c wxCANCEL.
+        This style is currently not supported (and ignored) in wxOSX.
     @style{wxYES_DEFAULT}
         Makes the "Yes" button default, this is the default behaviour and
         this flag exists solely for symmetry with @c wxNO_DEFAULT.

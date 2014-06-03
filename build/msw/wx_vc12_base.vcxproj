@@ -660,7 +660,6 @@
     <ClInclude Include="..\..\include\wx\msw\wrapcdlg.h" />
     <ClInclude Include="..\..\include\wx\msw\wrapwin.h" />
     <ClInclude Include="..\..\include\wx\generic\fswatcher.h" />
-    <ClInclude Include="..\..\include\wx\html\forcelnk.h" />
     <ClInclude Include="..\..\include\wx\afterstd.h" />
     <ClInclude Include="..\..\include\wx\any.h" />
     <ClInclude Include="..\..\include\wx\anystr.h" />
@@ -818,6 +817,11 @@
     <ClInclude Include="..\..\include\wx\xtitypes.h" />
     <ClInclude Include="..\..\include\wx\zipstrm.h" />
     <ClInclude Include="..\..\include\wx\zstream.h" />
+    <ClInclude Include="..\..\include\wx\listimpl.cpp" />
+    <ClInclude Include="..\..\include\wx\meta\removeref.h" />
+    <ClInclude Include="..\..\include\wx\compiler.h" />
+    <ClInclude Include="..\..\include\wx\thrimpl.cpp" />
+    <ClInclude Include="..\..\include\wx\arrimpl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

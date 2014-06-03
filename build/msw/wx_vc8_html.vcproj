@@ -679,6 +679,10 @@
 			UniqueIdentifier="{B4103426-A5DB-5CF0-A30E-BC9546513AAF}"
 			>
 			<File
+				RelativePath="..\..\include\wx\html\forcelnk.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\html\helpctrl.h"
 				>
 			</File>

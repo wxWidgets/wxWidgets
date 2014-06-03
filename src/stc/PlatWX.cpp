@@ -522,23 +522,31 @@ void SurfaceImpl::MeasureWidths(Font &font, const char *s, int len, XYPOSITION *
     hdc->GetPartialTextExtents(str, tpos);
 
 #if wxUSE_UNICODE
-    // Map the widths for UCS-2 characters back to the UTF-8 input string
-    // NOTE:  I don't think this is right for when sizeof(wxChar) > 2, ie wxGTK2
-    // so figure it out and fix it!
-    size_t i = 0;
-    size_t ui = 0;
-    while ((int)i < len) {
-        unsigned char uch = (unsigned char)s[i];
-        positions[i++] = tpos[ui];
-        if (uch >= 0x80) {
-            if (uch < (0x80 + 0x40 + 0x20)) {
-                positions[i++] = tpos[ui];
-            } else {
-                positions[i++] = tpos[ui];
-                positions[i++] = tpos[ui];
-            }
+    // Map the widths back to the UTF-8 input string
+    size_t utf8i = 0;
+    for (size_t wxi = 0; wxi < str.size(); ++wxi) {
+        wxUniChar c = str[wxi];
+
+#if SIZEOF_WCHAR_T == 2
+        // For surrogate pairs, the position for the lead surrogate is garbage
+        // and we need to use the position of the trail surrogate for all four bytes
+        if (c >= 0xD800 && c < 0xE000 && wxi + 1 < str.size()) {
+            ++wxi;
+            positions[utf8i++] = tpos[wxi];
+            positions[utf8i++] = tpos[wxi];
+            positions[utf8i++] = tpos[wxi];
+            positions[utf8i++] = tpos[wxi];
+            continue;
         }
-        ui++;
+#endif
+
+        positions[utf8i++] = tpos[wxi];
+        if (c >= 0x80)
+            positions[utf8i++] = tpos[wxi];
+        if (c >= 0x800)
+            positions[utf8i++] = tpos[wxi];
+        if (c >= 0x10000)
+            positions[utf8i++] = tpos[wxi];
     }
 #else // !wxUSE_UNICODE
     // If not unicode then just use the widths we have

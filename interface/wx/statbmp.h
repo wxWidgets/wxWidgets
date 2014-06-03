@@ -18,7 +18,7 @@
 
     Notice that for the best results, the size of the control should be the
     same as the size of the image displayed in it, as happens by default if
-    if it's not resized explicitly. Otherwise, behaviour depends on the
+    it's not resized explicitly. Otherwise, behaviour depends on the
     platform: under MSW, the bitmap is drawn centred inside the control, while
     elsewhere it is drawn at the origin of the control.
 
@@ -26,7 +26,7 @@
     @category{ctrl}
     @appearance{staticbitmap}
 
-    @see wxStaticBitmap, wxStaticBox
+    @see wxBitmap
 */
 class wxStaticBitmap : public wxControl
 {

@@ -651,7 +651,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/hash.h
     wx/hashmap.h
     wx/hashset.h
-    wx/html/forcelnk.h
     wx/iconloc.h
     wx/init.h
     wx/intl.h
@@ -1088,7 +1087,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/rearrangectrl.h
     wx/renderer.h
     wx/richmsgdlg.h
-    wx/scrolbar.h
     wx/scrolbar.h
     wx/scrolwin.h
     wx/selstore.h
@@ -2118,7 +2116,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/toplevel.h
     wx/msw/treectrl.h
     wx/msw/window.h
-
+</set>
+<set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
     wx/msw/wx.manifest
     wx/msw/amd64.manifest
@@ -2298,15 +2297,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OSX_LOWLEVEL_HDR" hints="files">
 </set>
-
-<!--
-<set var="OSX_LOWLEVEL_SRC" hints="files">
-    <if cond="PLATFORM_MACOSX=='1'">$(OSX_LOWLEVEL_SRC)</if>
-</set>
-<set var="OSX_LOWLEVEL_HDR" hints="files">
-    <if cond="PLATFORM_MACOSX=='1'">$(OSX_LOWLEVEL_HDR)</if>
-</set>
--->
 
 <set var="OSX_CARBON_COCOA_SRC" hints="files">
 <if cond="PLATFORM_MACOSX=='1'">
@@ -3363,8 +3353,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         src/html/chm.cpp
     </if>
 </set>
-<set var="HTML_SRC" hints="files">
-    $(HTML_SRC_PLATFORM)
+<set var="HTML_CMN_SRC" hints="files">
     src/html/helpctrl.cpp
     src/html/helpdata.cpp
     src/html/helpdlg.cpp
@@ -3392,10 +3381,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxHTML users: -->
     src/generic/htmllbox.cpp
 </set>
+<set var="HTML_SRC" hints="files">
+    $(HTML_SRC_PLATFORM)
+    $(HTML_CMN_SRC)
+</set>
 <set var="MSW_HTML_HDR" hints="files">
     <if cond="TOOLKIT=='MSW'">wx/msw/helpbest.h</if>
 </set>
-<set var="HTML_HDR" hints="files">
+<set var="HTML_CMN_HDR" hints="files">
     wx/html/helpctrl.h
     wx/html/helpdata.h
     wx/html/helpdlg.h
@@ -3415,6 +3408,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wxhtml.h
     <!-- wxHTML users: -->
     wx/htmllbox.h
+    wx/html/forcelnk.h
+</set>
+<set var="HTML_HDR" hints="files">
+    $(HTML_CMN_HDR)
     $(MSW_HTML_HDR)
 </set>
 
@@ -3427,11 +3424,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='GTK'">src/gtk/webview_webkit.cpp</if>
     <if cond="PLATFORM_MACOSX=='1'">src/osx/webview_webkit.mm</if>
 </set>
-<set var="WEBVIEW_SRC" hints="files">
-    $(WEBVIEW_SRC_PLATFORM)
+<set var="WEBVIEW_CMN_SRC" hints="files">
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
+</set>
+<set var="WEBVIEW_SRC" hints="files">
+    $(WEBVIEW_SRC_PLATFORM)
+    $(WEBVIEW_CMN_SRC)
 </set>
 
 <set var="WEBVIEW_HDR_PLATFORM" hints="files">
@@ -3449,11 +3449,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         wx/osx/webview_webkit.h
     </if>
 </set>
-<set var="WEBVIEW_HDR" hints="files">
-    $(WEBVIEW_HDR_PLATFORM)
+<set var="WEBVIEW_CMN_HDR" hints="files">
     wx/webview.h
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
+</set>
+<set var="WEBVIEW_HDR" hints="files">
+    $(WEBVIEW_HDR_PLATFORM)
+    $(WEBVIEW_CMN_HDR)
 </set>
 
 <!-- ====================================================================== -->
@@ -3693,7 +3696,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         wx/aui/tabartgtk.h
     </if>
 </set>
-<set var="AUI_SRC" hints="files">
+<set var="AUI_CMN_SRC" hints="files">
     src/aui/framemanager.cpp
     src/aui/dockart.cpp
     src/aui/floatpane.cpp
@@ -3703,9 +3706,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/aui/tabart.cpp
     src/xrc/xh_auinotbk.cpp
     src/xrc/xh_auitoolb.cpp
+</set>
+<set var="AUI_SRC" hints="files">
+    $(AUI_CMN_SRC)
     $(AUI_GTK_SRC)
 </set>
-<set var="AUI_HDR" hints="files">
+<set var="AUI_CMN_HDR" hints="files">
     wx/aui/framemanager.h
     wx/aui/dockart.h
     wx/aui/floatpane.h
@@ -3716,6 +3722,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/aui/tabart.h
     wx/xrc/xh_auinotbk.h
     wx/xrc/xh_auitoolb.h
+</set>
+<set var="AUI_HDR" hints="files">
+    $(AUI_CMN_HDR)
     $(AUI_GTK_HDR)
 </set>
 
@@ -3974,7 +3983,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='3'">$(GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(GTK1_HDR)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_HDR)</if>
-        <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_DESKTOP_HDR)</if>
+        <if cond="TOOLKIT=='MSW'">$(MSW_HDR) $(MSW_DESKTOP_HDR) $(MSW_RSC)</if>
         <if cond="TOOLKIT=='WINCE'">$(MSW_HDR) $(WINCE_HDR)</if>
         <if cond="TOOLKIT=='OSX_CARBON'">$(OSX_SHARED_HDR) $(OSX_CARBON_HDR)</if>
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
