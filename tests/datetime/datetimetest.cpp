@@ -1034,10 +1034,10 @@ void DateTimeTestCase::TestDateParse()
         { "31/03/2006",  { 31, wxDateTime::Mar, 2006, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
 
         // some invalid ones too
-        { "29 Feb 2006", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
-        { "31/04/06", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
-        { "bloordyblop", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
-        { "2 .  .    ", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
+		{ "29 Feb 2006", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "31/04/06", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "bloordyblop", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "2 .  .    ", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
     };
 
     // special cases
@@ -1087,10 +1087,10 @@ void DateTimeTestCase::TestDateParseISO()
         { "0006-03-31", { 31, wxDateTime::Mar,    6, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
 
         // some invalid ones too
-        { "2006:03:31", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
-        { "31/04/06", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
-        { "bloordyblop", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
-        { "", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
+        { "2006:03:31", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "31/04/06", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "bloordyblop", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
     };
 
     static const struct
@@ -1104,10 +1104,10 @@ void DateTimeTestCase::TestDateParseISO()
         { "02:17:01",  2, 17,  1, true },
 
         // some invalid ones too
-        { "66:03:31", 0, 0, 0, true },
-        { "31/04/06", 0, 0, 0, true },
-        { "bloordyblop", 0, 0, 0, true },
-        { "", 0, 0, 0, true },
+        { "66:03:31", 0, 0, 0, false },
+        { "31/04/06", 0, 0, 0, false },
+        { "bloordyblop", 0, 0, 0, false },
+        { "", 0, 0, 0, false },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
