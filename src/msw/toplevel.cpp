@@ -38,6 +38,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/dynlib.h"
+#include "wx/tooltip.h"
 
 #include "wx/msw/private.h"
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__)
