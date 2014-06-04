@@ -75,7 +75,21 @@ bool wxNotebook::SetPageImage(size_t n, int imageId)
 bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     bool bSelect, int imageId)
 {
-    m_qtTabWidget->insertTab( n, page->GetHandle(), wxQtConvertString( text ));
+
+    if (imageId != -1)
+    {
+        if (HasImageList())
+        {
+            const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(imageId);
+            m_qtTabWidget->insertTab( n, page->GetHandle(), QIcon( *bitmap->GetHandle() ), wxQtConvertString( text ));
+        }
+        else
+        {
+            wxFAIL_MSG("invalid notebook imagelist");
+        }
+    } else {
+        m_qtTabWidget->insertTab( n, page->GetHandle(), wxQtConvertString( text ));
+    }
 //    m_qtTabWidget->setTabEnabled( n, bSelect );
 
     m_pages.Insert(page, n);
