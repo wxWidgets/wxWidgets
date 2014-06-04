@@ -11,6 +11,10 @@
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
+#if wxUSE_TASKBARBUTTON
+class WXDLLIMPEXP_FWD_ADV wxTaskBarButton;
+#endif
+
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
@@ -109,6 +113,15 @@ public:
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
 #endif // wxUSE_MENUS
 
+#if wxUSE_TASKBARBUTTON
+    // Return the taskbar button of the window.
+    //
+    // The pointer returned by this method belongs to the window and will be
+    // deleted when the window itself is, do not delete it yourself. May return
+    // NULL if the initialization of taskbar button failed.
+    wxTaskBarButton* MSWGetTaskBarButton();
+#endif // wxUSE_TASKBARBUTTON
+
 protected:
     // common part of all ctors
     void Init();
@@ -164,6 +177,10 @@ private:
 
     // used by IconizeChildFrames(), see comments there
     bool m_wasMinimized;
+
+#if wxUSE_TASKBARBUTTON
+    wxTaskBarButton *m_taskBarButton;
+#endif
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxFrame)
