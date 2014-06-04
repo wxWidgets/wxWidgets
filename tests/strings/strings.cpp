@@ -610,24 +610,24 @@ static const struct ToLongData
     bool IsOk() const { return !(flags & Number_Invalid); }
 } longData[] =
 {
-    { wxT("1"), 1, Number_Ok },
-    { wxT("0"), 0, Number_Ok },
-    { wxT("a"), 0, Number_Invalid },
-    { wxT("12345"), 12345, Number_Ok },
-    { wxT("--1"), 0, Number_Invalid },
+    { wxT("1"), 1, Number_Ok, 10 },
+    { wxT("0"), 0, Number_Ok, 10 },
+    { wxT("a"), 0, Number_Invalid, 10 },
+    { wxT("12345"), 12345, Number_Ok, 10 },
+    { wxT("--1"), 0, Number_Invalid, 10 },
 
-    { wxT("-1"), -1, Number_Signed | Number_Long },
+    { wxT("-1"), -1, Number_Signed | Number_Long, 10 },
     // this is surprising but consistent with strtoul() behaviour
-    { wxT("-1"), ULONG_MAX, Number_Unsigned | Number_Long },
+    { wxT("-1"), ULONG_MAX, Number_Unsigned | Number_Long, 10 },
 
     // this must overflow, even with 64 bit long
-    { wxT("922337203685477580711"), 0, Number_Invalid },
+    { wxT("922337203685477580711"), 0, Number_Invalid, 10 },
 
 #ifdef wxLongLong_t
-    { wxT("2147483648"), wxLL(2147483648), Number_LongLong },
-    { wxT("-2147483648"), wxLL(-2147483648), Number_LongLong | Number_Signed },
+    { wxT("2147483648"), wxLL(2147483648), Number_LongLong, 10 },
+    { wxT("-2147483648"), wxLL(-2147483648), Number_LongLong | Number_Signed, 10 },
     { wxT("9223372036854775808"), wxULL(9223372036854775808), Number_LongLong |
-                                                             Number_Unsigned },
+                                                             Number_Unsigned, 10 },
 #endif // wxLongLong_t
 
     // Base tests.
@@ -945,6 +945,10 @@ template<typename T> bool CheckStr(const wxString& expected, T s)
     return expected == wxString(s);
 }
 
+#ifdef __GNUC__
+    #pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
+
 void StringTestCase::DoCStrDataTernaryOperator(bool cond)
 {
     // test compilation of wxCStrData when used with operator?: (the asserts
@@ -968,6 +972,10 @@ void StringTestCase::DoCStrDataTernaryOperator(bool cond)
     CPPUNIT_ASSERT( CheckStr(empty, (cond ? empty.c_str() : wxEmptyString)) );
     CPPUNIT_ASSERT( CheckStr(empty, (cond ? wxEmptyString : empty.c_str())) );
 }
+
+#ifdef __GNUC__
+    #pragma GCC diagnostic pop
+#endif
 
 void StringTestCase::CStrDataOperators()
 {
