@@ -29,6 +29,24 @@ enum wxTaskBarButtonState
     wxTASKBAR_BUTTON_PAUSED        = 8
 };
 
+class WXDLLIMPEXP_ADV wxThumbBarButton {
+public:
+    wxThumbBarButton(int id,
+                     const wxIcon& icon,
+                     const wxString& tooltip = wxEmptyString);
+
+    virtual ~wxThumbBarButton() {}
+
+    int GetID() const { return m_id; }
+    const wxIcon& GetIcon() const { return m_icon; }
+    const wxString& GetTooltip() const { return m_tooltip; }
+
+private:
+    int m_id;
+    wxIcon m_icon;
+    wxString m_tooltip;
+};
+
 class WXDLLIMPEXP_ADV wxTaskBarButton
 {
 public:
@@ -43,6 +61,16 @@ public:
     virtual void SetProgressState(wxTaskBarButtonState state) = 0;
     virtual void SetOverlayIcon(const wxIcon& icon) = 0;
     virtual void SetThumbnailClip(const wxRect& rect) = 0;
+
+    /**
+        Adds a thumbnail toolbar button to the thumbnail image of a window in
+        the taskbar button flyout. Note that a wxTaskbarButton can only have no
+        more than seven wxThumbBarButtons, and ShowThumbnailToolbar should be
+        called to show them, then these buttons cannot be added or removed until
+        the window is re-created.
+    */
+    virtual bool AddThumbBarButton(wxThumbBarButton *button) = 0;
+    virtual void ShowThumbnailToolbar() = 0;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
