@@ -185,18 +185,41 @@ extern LONG APIENTRY _EXPORT
 #endif
 
 // close the handle in the class dtor
+template <wxUIntPtr INVALID_VALUE = (wxUIntPtr)INVALID_HANDLE_VALUE>
 class AutoHANDLE
 {
 public:
-    wxEXPLICIT AutoHANDLE(HANDLE handle) : m_handle(handle) { }
+    wxEXPLICIT AutoHANDLE(HANDLE handle = InvalidHandle()) : m_handle(handle) { }
 
-    bool IsOk() const { return m_handle != INVALID_HANDLE_VALUE; }
+    bool IsOk() const { return m_handle != InvalidHandle(); }
     operator HANDLE() const { return m_handle; }
 
-    ~AutoHANDLE() { if ( IsOk() ) ::CloseHandle(m_handle); }
+    ~AutoHANDLE() { if ( IsOk() ) DoClose(); }
+
+    void Close()
+    {
+        wxCHECK_RET(IsOk(), wxT("Handle must be valid"));
+
+        DoClose();
+
+        m_handle = InvalidHandle();
+    }
 
 protected:
-    HANDLE m_handle;
+    // We need this helper function because integer INVALID_VALUE is not
+    // implicitly convertible to HANDLE, which is a pointer.
+    static HANDLE InvalidHandle()
+    {
+        return static_cast<HANDLE>(INVALID_VALUE);
+    }
+
+    void DoClose()
+    {
+        if ( !::CloseHandle(m_handle) )
+            wxLogLastError(wxT("CloseHandle"));
+    }
+
+    WXHANDLE m_handle;
 };
 
 // a template to make initializing Windows styructs less painful: it zeroes all

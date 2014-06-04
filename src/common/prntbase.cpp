@@ -855,6 +855,10 @@ wxPreviewCanvas::wxPreviewCanvas(wxPrintPreviewBase *preview, wxWindow *parent,
                                  const wxPoint& pos, const wxSize& size, long style, const wxString& name):
 wxScrolledWindow(parent, wxID_ANY, pos, size, style | wxFULL_REPAINT_ON_RESIZE, name)
 {
+    // As we rely on getting idle events, do this to ensure that we do receive
+    // them even when using wxIDLE_PROCESS_SPECIFIED global idle mode.
+    SetExtraStyle(wxWS_EX_PROCESS_IDLE);
+
     m_printPreview = preview;
 #ifdef __WXMAC__
     // The app workspace colour is always white, but we should have

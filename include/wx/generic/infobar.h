@@ -46,6 +46,10 @@ public:
 
     virtual void RemoveButton(wxWindowID btnid) wxOVERRIDE;
 
+    virtual size_t GetButtonCount() const wxOVERRIDE;
+    virtual wxWindowID GetButtonId(size_t idx) const wxOVERRIDE;
+    virtual bool HasButtonId(wxWindowID btnid) const wxOVERRIDE;
+
     // methods specific to this version
     // --------------------------------
 

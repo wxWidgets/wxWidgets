@@ -1764,6 +1764,7 @@ wxDirProperty::wxDirProperty( const wxString& name, const wxString& label, const
   : wxLongStringProperty(name,label,value)
 {
     m_flags |= wxPG_PROP_NO_ESCAPE;
+    m_flags &= ~wxPG_PROP_ACTIVE_BTN; // Property button enabled only in not read-only mode.
 }
 
 wxDirProperty::~wxDirProperty() { }
@@ -2108,6 +2109,7 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS(wxLongStringProperty,wxPGProperty,
 wxLongStringProperty::wxLongStringProperty( const wxString& label, const wxString& name,
     const wxString& value ) : wxPGProperty(label,name)
 {
+    m_flags |= wxPG_PROP_ACTIVE_BTN; // Property button always enabled.
     SetValue(value);
 }
 
@@ -2176,14 +2178,18 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
 #endif
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
+    long edStyle = wxTE_MULTILINE;
+    if ( prop->HasFlag(wxPG_PROP_READONLY) )
+        edStyle |= wxTE_READONLY;
     wxTextCtrl* ed = new wxTextCtrl(dlg,11,value,
-        wxDefaultPosition,wxDefaultSize,wxTE_MULTILINE);
+        wxDefaultPosition,wxDefaultSize,edStyle);
 
     rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
     topsizer->Add( rowsizer, 1, wxEXPAND, 0 );
 
     wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
-    buttonSizer->AddButton(new wxButton(dlg, wxID_OK));
+    if ( !prop->HasFlag(wxPG_PROP_READONLY) )
+        buttonSizer->AddButton(new wxButton(dlg, wxID_OK));
     buttonSizer->AddButton(new wxButton(dlg, wxID_CANCEL));
     buttonSizer->Realize();
     topsizer->Add( buttonSizer, 0,

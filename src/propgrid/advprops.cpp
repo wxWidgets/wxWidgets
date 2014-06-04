@@ -1267,7 +1267,7 @@ bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, int arg
     int index = number;
     int type = m_choices.GetValue(index);
 
-    if ( type == wxPG_COLOUR_CUSTOM )
+    if ( m_choices.GetLabel(index) == _("Custom") )
     {
          if ( !(argFlags & wxPG_PROPERTY_SPECIFIC) )
             return QueryColourFromUser(variant);

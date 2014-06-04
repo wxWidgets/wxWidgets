@@ -1864,6 +1864,8 @@ No additional properties.
     Initial value of the control (default: empty).}
 @row3col{maxlength, integer,
     Maximum length of the text which can be entered by user (default: unlimited).}
+@row3col{hint, @ref overview_xrcformat_type_text,
+    Hint shown in empty control (new since wxWidgets 3.0.1).}
 @endTable
 
 

@@ -717,6 +717,9 @@ void wxTopLevelWindowMSW::DoShowWindow(int nShowCmd)
         // makes it not iconized and only minimizing it does make it iconized.
         m_iconized = nShowCmd == SW_MINIMIZE;
     }
+
+    // Don't leave a tooltip hanging around if TLW is hidden now.
+    wxToolTip::UpdateVisibility();
 }
 
 void wxTopLevelWindowMSW::ShowWithoutActivating()
