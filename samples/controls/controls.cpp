@@ -768,7 +768,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxCheckBox( panel, ID_CHANGE_COLOUR, wxT("&Toggle colour"),
                           wxPoint(110,170) );
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
-    m_book->AddPage(panel, wxT("wxListBox"), true, Image_List);
+    m_book->AddPage(panel, wxT("wxListBox"), true);
+    m_book->SetPageImage(0, Image_List);
+    m_book->SetPageImage(0, -1);
 
     // ------------------------------------------------------------------------
     // choice page
