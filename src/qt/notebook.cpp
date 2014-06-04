@@ -12,6 +12,45 @@
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
+
+class wxQtTabWidget: public QTabWidget
+{
+
+public:
+
+    wxQtTabWidget( QWidget *parent, wxNotebook *handler ):
+        QTabWidget(parent)
+    {
+        m_handler = handler;
+        m_selection = 0;
+        // use new Qt5 syntax to connect QObject member (sender, signal, receiver, "slot"):
+        connect(this, &QTabWidget::currentChanged, this, &wxQtTabWidget::currentChanged);
+    }
+
+    void currentChanged(int index) {
+        if (!m_handler->SendPageChangingEvent(index))
+        {
+            // simulate veto (select back the old tab):
+            this->setCurrentIndex(m_selection);
+        }
+        else
+        {
+            // not vetoed, send the event and store new index
+            m_handler->SendPageChangedEvent(m_selection, index);
+            m_selection = index;
+        }
+    }
+
+private:
+    wxNotebook *m_handler;
+    // we need to store the old selection since there
+    // is no other way to know about it at the time
+    // of the change selection event
+    int m_selection;
+
+};
+
+
 wxNotebook::wxNotebook()
 {
 }
@@ -33,7 +72,7 @@ bool wxNotebook::Create(wxWindow *parent,
           long style,
           const wxString& name)
 {
-    m_qtTabWidget = new QTabWidget( parent->GetHandle() );
+    m_qtTabWidget = new wxQtTabWidget( parent->GetHandle(), this );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
