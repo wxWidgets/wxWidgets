@@ -770,7 +770,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
     m_book->AddPage(panel, wxT("wxListBox"), true);
     m_book->SetPageImage(0, Image_List);
-    m_book->SetPageImage(0, -1);
+    wxASSERT_MSG(m_book->GetPageImage(m_book->GetPageCount()-1) == Image_List, "invalid imageId");
+    //m_book->SetPageImage(0, -1);  // remove the image to test wxQT
+    //m_book->RemovePage(0);  // remove the page to test wxQT
+
 
     // ------------------------------------------------------------------------
     // choice page
@@ -794,6 +797,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxCheckBox( panel, ID_CHOICE_ENABLE, wxT("&Disable"), wxPoint(20,130), wxSize(140,30) );
 
     m_book->AddPage(panel, wxT("wxChoice"), false, Image_Choice);
+    wxASSERT_MSG(m_book->GetPageImage(m_book->GetPageCount()-1) == Image_Choice, "invalid imageId");
+
 #endif // wxUSE_CHOICE
 
     // ------------------------------------------------------------------------
@@ -817,6 +822,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_COMBO_SET_TEXT, wxT("Set 'Hi!' at #2"), wxPoint(380,180), wxSize(140,30) );
     (void)new wxCheckBox( panel, ID_COMBO_ENABLE, wxT("&Disable"), wxPoint(20,130), wxSize(140,30) );
     m_book->AddPage(panel, wxT("wxComboBox"), false, Image_Combo);
+    wxASSERT_MSG(m_book->GetPageImage(m_book->GetPageCount()-1) == Image_Combo, "invalid imageId");
 
     // ------------------------------------------------------------------------
     // radio box
