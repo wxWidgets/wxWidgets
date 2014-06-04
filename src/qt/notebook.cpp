@@ -76,7 +76,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     bool bSelect, int imageId)
 {
     m_qtTabWidget->insertTab( n, page->GetHandle(), wxQtConvertString( text ));
-    m_qtTabWidget->setTabEnabled( n, bSelect );
+//    m_qtTabWidget->setTabEnabled( n, bSelect );
 
 //    AddChild( page );
 
