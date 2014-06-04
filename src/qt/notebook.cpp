@@ -144,6 +144,7 @@ wxWindow *wxNotebook::DoRemovePage(size_t page)
 {
     QWidget *qtWidget = m_qtTabWidget->widget( page );
     m_qtTabWidget->removeTab( page );
+    wxNotebookBase::DoRemovePage(page);
     m_images.RemoveAt( page );
 
     return QtRetrieveWindowPointer( qtWidget );
