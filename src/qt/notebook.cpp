@@ -13,7 +13,7 @@
 #include "wx/qt/converter.h"
 
 
-class wxQtTabWidget: public QTabWidget
+class wxQtTabWidget : public QTabWidget
 {
 
 public:
@@ -27,11 +27,12 @@ public:
         connect(this, &QTabWidget::currentChanged, this, &wxQtTabWidget::currentChanged);
     }
 
-    void currentChanged(int index) {
+    void currentChanged(int index)
+    {
         if (!m_handler->SendPageChangingEvent(index))
         {
             // simulate veto (select back the old tab):
-            this->setCurrentIndex(m_selection);
+            setCurrentIndex(m_selection);
         }
         else
         {
@@ -48,6 +49,7 @@ private:
     // of the change selection event
     int m_selection;
 
+    wxDECLARE_NO_COPY_CLASS(wxQtTabWidget);
 };
 
 
@@ -143,10 +145,11 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
         {
             wxFAIL_MSG("invalid notebook imagelist");
         }
-    } else {
+    }
+    else
+    {
         m_qtTabWidget->insertTab( n, page->GetHandle(), wxQtConvertString( text ));
     }
-//    m_qtTabWidget->setTabEnabled( n, bSelect );
 
     m_pages.Insert(page, n);
 
