@@ -153,7 +153,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
 
     m_pages.Insert(page, n);
 
-    m_images.Insert(imageId, n);
+    m_images.insert(m_images.begin() + n, imageId);
 
     return true;
 }
@@ -187,7 +187,7 @@ wxWindow *wxNotebook::DoRemovePage(size_t page)
     QWidget *qtWidget = m_qtTabWidget->widget( page );
     m_qtTabWidget->removeTab( page );
     wxNotebookBase::DoRemovePage(page);
-    m_images.RemoveAt( page );
+    m_images.erase( m_images.begin() + page );
 
     return QtRetrieveWindowPointer( qtWidget );
 }
