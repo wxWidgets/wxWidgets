@@ -941,6 +941,7 @@ void ScintillaWX::DoLoseFocus(){
     SetFocusState(false);
     focusEvent = false;
     DestroySystemCaret();
+    SetTicking(false);
 }
 
 void ScintillaWX::DoGainFocus(){
@@ -949,6 +950,7 @@ void ScintillaWX::DoGainFocus(){
     focusEvent = false;
     DestroySystemCaret();
     CreateSystemCaret();
+    SetTicking(true);
 }
 
 void ScintillaWX::DoSysColourChange() {
