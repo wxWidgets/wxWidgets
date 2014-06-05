@@ -719,8 +719,10 @@ void wxTopLevelWindowMSW::DoShowWindow(int nShowCmd)
         m_iconized = nShowCmd == SW_MINIMIZE;
     }
 
+#if wxUSE_TOOLTIPS
     // Don't leave a tooltip hanging around if TLW is hidden now.
     wxToolTip::UpdateVisibility();
+#endif // wxUSE_TOOLTIPS
 }
 
 void wxTopLevelWindowMSW::ShowWithoutActivating()
