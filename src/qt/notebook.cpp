@@ -155,6 +155,11 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
 
     m_images.insert(m_images.begin() + n, imageId);
 
+    if (bSelect && GetPageCount() > 1)
+    {
+        SetSelection( n );
+    }
+
     return true;
 }
 
