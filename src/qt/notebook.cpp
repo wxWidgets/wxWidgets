@@ -11,46 +11,30 @@
 #include "wx/notebook.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/winevent_qt.h"
 
-
-class wxQtTabWidget : public QTabWidget
+wxQtTabWidget::wxQtTabWidget( wxWindow *parent, wxNotebook *handler )
+    : wxQtEventSignalHandler< QTabWidget, wxNotebook >( parent, handler )
 {
+    m_selection = 0;
+    // use new Qt5 syntax to connect QObject member (sender, signal, receiver, "slot"):
+    connect(this, &QTabWidget::currentChanged, this, &wxQtTabWidget::currentChanged);
+}
 
-public:
-
-    wxQtTabWidget( QWidget *parent, wxNotebook *handler ):
-        QTabWidget(parent)
+void wxQtTabWidget::currentChanged(int index)
+{
+    if (!GetHandler()->SendPageChangingEvent(index))
     {
-        m_handler = handler;
-        m_selection = 0;
-        // use new Qt5 syntax to connect QObject member (sender, signal, receiver, "slot"):
-        connect(this, &QTabWidget::currentChanged, this, &wxQtTabWidget::currentChanged);
+        // simulate veto (select back the old tab):
+        setCurrentIndex(m_selection);
     }
-
-    void currentChanged(int index)
+    else
     {
-        if (!m_handler->SendPageChangingEvent(index))
-        {
-            // simulate veto (select back the old tab):
-            setCurrentIndex(m_selection);
-        }
-        else
-        {
-            // not vetoed, send the event and store new index
-            m_handler->SendPageChangedEvent(m_selection, index);
-            m_selection = index;
-        }
+        // not vetoed, send the event and store new index
+        GetHandler()->SendPageChangedEvent(m_selection, index);
+        m_selection = index;
     }
-
-private:
-    wxNotebook *m_handler;
-    // we need to store the old selection since there
-    // is no other way to know about it at the time
-    // of the change selection event
-    int m_selection;
-
-    wxDECLARE_NO_COPY_CLASS(wxQtTabWidget);
-};
+}
 
 
 wxNotebook::wxNotebook()
@@ -74,7 +58,7 @@ bool wxNotebook::Create(wxWindow *parent,
           long style,
           const wxString& name)
 {
-    m_qtTabWidget = new wxQtTabWidget( parent->GetHandle(), this );
+    m_qtTabWidget = new wxQtTabWidget( parent, this );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
