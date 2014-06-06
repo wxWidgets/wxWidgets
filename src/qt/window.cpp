@@ -645,11 +645,6 @@ void wxWindow::DoSetClientSize(int width, int height)
     qtWidget->setGeometry( geometry );
 }
 
-wxSize wxWindow::DoGetBestSize() const
-{
-    return wxQtConvertSize( GetHandle()->sizeHint() );
-}
-
 void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
     QWidget *qtWidget = GetHandle();
