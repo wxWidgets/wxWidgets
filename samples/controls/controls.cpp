@@ -650,13 +650,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
-#ifdef __WXQT__
-    // use a custom position and size (currently is not recalculated)
-    m_book = new wxBookCtrl(this, ID_BOOK, wxPoint(0, 0), wxSize(100,250));
-#else
     // use default position and size (will be recalculated automatically)
     m_book = new wxBookCtrl(this, ID_BOOK);
-#endif
 
     wxString choices[] =
     {
