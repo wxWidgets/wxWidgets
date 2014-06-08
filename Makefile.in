@@ -2764,7 +2764,6 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/bmpbuttn.h \
 	wx/qt/brush.h \
 	wx/qt/button.h \
-	wx/qt/button_qt.h \
 	wx/qt/checkbox.h \
 	wx/qt/checklst.h \
 	wx/qt/choice.h \
@@ -2790,7 +2789,6 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/dcscreen.h \
 	wx/qt/defs.h \
 	wx/qt/dialog.h \
-	wx/qt/dialog_qt.h \
 	wx/qt/dirdlg.h \
 	wx/qt/dnd.h \
 	wx/qt/evtloop.h \
@@ -5328,8 +5326,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_bmpbuttn.o \
 	monodll_qt_brush.o \
 	monodll_qt_button.o \
-	monodll_button_qt.o \
-	monodll_button_qt_moc.o \
 	monodll_generic_caret.o \
 	monodll_qt_checkbox.o \
 	monodll_qt_checklst.o \
@@ -5341,8 +5337,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_colordlg.o \
 	monodll_qt_colour.o \
 	monodll_qt_combobox.o \
-	monodll_combobox_qt.o \
-	monodll_combobox_qt_moc.o \
 	monodll_qt_control.o \
 	monodll_converter.o \
 	monodll_qt_ctrlsub.o \
@@ -5355,15 +5349,11 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_dcscreen.o \
 	monodll_defs.o \
 	monodll_qt_dialog.o \
-	monodll_dialog_qt.o \
-	monodll_dialog_qt_moc.o \
 	monodll_unix_dialup.o \
 	monodll_qt_dirdlg.o \
 	monodll_qt_display.o \
 	monodll_qt_dnd.o \
 	monodll_qt_evtloop.o \
-	monodll_evtloop_qt.o \
-	monodll_evtloop_qt_moc.o \
 	monodll_generic_fdrepdlg.o \
 	monodll_qt_filedlg.o \
 	monodll_filepickerg.o \
@@ -5373,11 +5363,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_fontenum.o \
 	monodll_fontpickerg.o \
 	monodll_qt_frame.o \
-	monodll_frame_moc.o \
 	monodll_qt_gauge.o \
 	monodll_qt_graphics.o \
-	monodll_groupbox_qt.o \
-	monodll_groupbox_qt_moc.o \
 	monodll_generic_icon.o \
 	monodll_generic_imaglist.o \
 	monodll_qt_listbox.o \
@@ -5385,9 +5372,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_mdi.o \
 	monodll_qt_menu.o \
 	monodll_qt_menuitem.o \
-	monodll_menuitem_moc.o \
 	monodll_qt_msgdlg.o \
-	monodll_msgdlg_moc.o \
 	monodll_qt_notebook.o \
 	monodll_qt_palette.o \
 	monodll_qt_pen.o \
@@ -5399,7 +5384,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_radiobut.o \
 	monodll_qt_region.o \
 	monodll_qt_scrolbar.o \
-	monodll_scrolbar_moc.o \
 	monodll_qt_settings.o \
 	monodll_qt_slider.o \
 	monodll_qt_spinbutt.o \
@@ -5409,7 +5393,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_statline.o \
 	monodll_qt_stattext.o \
 	monodll_qt_statusbar.o \
-	monodll_statusbar_moc.o \
 	monodll_qt_textctrl.o \
 	monodll_textdlg.o \
 	monodll_qt_textentry.o \
@@ -5421,9 +5404,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_toplevel.o \
 	monodll_qt_uiaction.o \
 	monodll_qt_utils.o \
-	monodll_qt_window.o \
-	monodll_window_qt.o \
-	monodll_window_qt_moc.o
+	monodll_qt_window.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_activex.o \
@@ -6296,8 +6277,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_bmpbuttn.o \
 	monodll_qt_brush.o \
 	monodll_qt_button.o \
-	monodll_button_qt.o \
-	monodll_button_qt_moc.o \
 	monodll_generic_caret.o \
 	monodll_qt_checkbox.o \
 	monodll_qt_checklst.o \
@@ -6309,8 +6288,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_colordlg.o \
 	monodll_qt_colour.o \
 	monodll_qt_combobox.o \
-	monodll_combobox_qt.o \
-	monodll_combobox_qt_moc.o \
 	monodll_qt_control.o \
 	monodll_converter.o \
 	monodll_qt_ctrlsub.o \
@@ -6323,15 +6300,11 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_dcscreen.o \
 	monodll_defs.o \
 	monodll_qt_dialog.o \
-	monodll_dialog_qt.o \
-	monodll_dialog_qt_moc.o \
 	monodll_unix_dialup.o \
 	monodll_qt_dirdlg.o \
 	monodll_qt_display.o \
 	monodll_qt_dnd.o \
 	monodll_qt_evtloop.o \
-	monodll_evtloop_qt.o \
-	monodll_evtloop_qt_moc.o \
 	monodll_generic_fdrepdlg.o \
 	monodll_qt_filedlg.o \
 	monodll_filepickerg.o \
@@ -6341,11 +6314,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_fontenum.o \
 	monodll_fontpickerg.o \
 	monodll_qt_frame.o \
-	monodll_frame_moc.o \
 	monodll_qt_gauge.o \
 	monodll_qt_graphics.o \
-	monodll_groupbox_qt.o \
-	monodll_groupbox_qt_moc.o \
 	monodll_generic_icon.o \
 	monodll_generic_imaglist.o \
 	monodll_qt_listbox.o \
@@ -6353,9 +6323,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_mdi.o \
 	monodll_qt_menu.o \
 	monodll_qt_menuitem.o \
-	monodll_menuitem_moc.o \
 	monodll_qt_msgdlg.o \
-	monodll_msgdlg_moc.o \
 	monodll_qt_notebook.o \
 	monodll_qt_palette.o \
 	monodll_qt_pen.o \
@@ -6367,7 +6335,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_radiobut.o \
 	monodll_qt_region.o \
 	monodll_qt_scrolbar.o \
-	monodll_scrolbar_moc.o \
 	monodll_qt_settings.o \
 	monodll_qt_slider.o \
 	monodll_qt_spinbutt.o \
@@ -6377,7 +6344,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_statline.o \
 	monodll_qt_stattext.o \
 	monodll_qt_statusbar.o \
-	monodll_statusbar_moc.o \
 	monodll_qt_textctrl.o \
 	monodll_textdlg.o \
 	monodll_qt_textentry.o \
@@ -6389,9 +6355,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_toplevel.o \
 	monodll_qt_uiaction.o \
 	monodll_qt_utils.o \
-	monodll_qt_window.o \
-	monodll_window_qt.o \
-	monodll_window_qt_moc.o
+	monodll_qt_window.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_activex.o \
@@ -6636,7 +6600,6 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_animateg.o \
 	monodll_qt_calctrl.o \
-	monodll_calctrl_moc.o \
 	monodll_converter.o \
 	monodll_qt_dataview.o \
 	monodll_dvrenderer.o \
@@ -6776,7 +6739,6 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 	monodll_animateg.o \
 	monodll_qt_calctrl.o \
-	monodll_calctrl_moc.o \
 	monodll_converter.o \
 	monodll_qt_dataview.o \
 	monodll_dvrenderer.o \
@@ -7710,8 +7672,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_bmpbuttn.o \
 	monolib_qt_brush.o \
 	monolib_qt_button.o \
-	monolib_button_qt.o \
-	monolib_button_qt_moc.o \
 	monolib_generic_caret.o \
 	monolib_qt_checkbox.o \
 	monolib_qt_checklst.o \
@@ -7723,8 +7683,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_colordlg.o \
 	monolib_qt_colour.o \
 	monolib_qt_combobox.o \
-	monolib_combobox_qt.o \
-	monolib_combobox_qt_moc.o \
 	monolib_qt_control.o \
 	monolib_converter.o \
 	monolib_qt_ctrlsub.o \
@@ -7737,15 +7695,11 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_dcscreen.o \
 	monolib_defs.o \
 	monolib_qt_dialog.o \
-	monolib_dialog_qt.o \
-	monolib_dialog_qt_moc.o \
 	monolib_unix_dialup.o \
 	monolib_qt_dirdlg.o \
 	monolib_qt_display.o \
 	monolib_qt_dnd.o \
 	monolib_qt_evtloop.o \
-	monolib_evtloop_qt.o \
-	monolib_evtloop_qt_moc.o \
 	monolib_generic_fdrepdlg.o \
 	monolib_qt_filedlg.o \
 	monolib_filepickerg.o \
@@ -7755,11 +7709,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_fontenum.o \
 	monolib_fontpickerg.o \
 	monolib_qt_frame.o \
-	monolib_frame_moc.o \
 	monolib_qt_gauge.o \
 	monolib_qt_graphics.o \
-	monolib_groupbox_qt.o \
-	monolib_groupbox_qt_moc.o \
 	monolib_generic_icon.o \
 	monolib_generic_imaglist.o \
 	monolib_qt_listbox.o \
@@ -7767,9 +7718,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_mdi.o \
 	monolib_qt_menu.o \
 	monolib_qt_menuitem.o \
-	monolib_menuitem_moc.o \
 	monolib_qt_msgdlg.o \
-	monolib_msgdlg_moc.o \
 	monolib_qt_notebook.o \
 	monolib_qt_palette.o \
 	monolib_qt_pen.o \
@@ -7781,7 +7730,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_radiobut.o \
 	monolib_qt_region.o \
 	monolib_qt_scrolbar.o \
-	monolib_scrolbar_moc.o \
 	monolib_qt_settings.o \
 	monolib_qt_slider.o \
 	monolib_qt_spinbutt.o \
@@ -7791,7 +7739,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_statline.o \
 	monolib_qt_stattext.o \
 	monolib_qt_statusbar.o \
-	monolib_statusbar_moc.o \
 	monolib_qt_textctrl.o \
 	monolib_textdlg.o \
 	monolib_qt_textentry.o \
@@ -7803,9 +7750,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_toplevel.o \
 	monolib_qt_uiaction.o \
 	monolib_qt_utils.o \
-	monolib_qt_window.o \
-	monolib_window_qt.o \
-	monolib_window_qt_moc.o
+	monolib_qt_window.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_activex.o \
@@ -8678,8 +8623,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_bmpbuttn.o \
 	monolib_qt_brush.o \
 	monolib_qt_button.o \
-	monolib_button_qt.o \
-	monolib_button_qt_moc.o \
 	monolib_generic_caret.o \
 	monolib_qt_checkbox.o \
 	monolib_qt_checklst.o \
@@ -8691,8 +8634,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_colordlg.o \
 	monolib_qt_colour.o \
 	monolib_qt_combobox.o \
-	monolib_combobox_qt.o \
-	monolib_combobox_qt_moc.o \
 	monolib_qt_control.o \
 	monolib_converter.o \
 	monolib_qt_ctrlsub.o \
@@ -8705,15 +8646,11 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_dcscreen.o \
 	monolib_defs.o \
 	monolib_qt_dialog.o \
-	monolib_dialog_qt.o \
-	monolib_dialog_qt_moc.o \
 	monolib_unix_dialup.o \
 	monolib_qt_dirdlg.o \
 	monolib_qt_display.o \
 	monolib_qt_dnd.o \
 	monolib_qt_evtloop.o \
-	monolib_evtloop_qt.o \
-	monolib_evtloop_qt_moc.o \
 	monolib_generic_fdrepdlg.o \
 	monolib_qt_filedlg.o \
 	monolib_filepickerg.o \
@@ -8723,11 +8660,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_fontenum.o \
 	monolib_fontpickerg.o \
 	monolib_qt_frame.o \
-	monolib_frame_moc.o \
 	monolib_qt_gauge.o \
 	monolib_qt_graphics.o \
-	monolib_groupbox_qt.o \
-	monolib_groupbox_qt_moc.o \
 	monolib_generic_icon.o \
 	monolib_generic_imaglist.o \
 	monolib_qt_listbox.o \
@@ -8735,9 +8669,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_mdi.o \
 	monolib_qt_menu.o \
 	monolib_qt_menuitem.o \
-	monolib_menuitem_moc.o \
 	monolib_qt_msgdlg.o \
-	monolib_msgdlg_moc.o \
 	monolib_qt_notebook.o \
 	monolib_qt_palette.o \
 	monolib_qt_pen.o \
@@ -8749,7 +8681,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_radiobut.o \
 	monolib_qt_region.o \
 	monolib_qt_scrolbar.o \
-	monolib_scrolbar_moc.o \
 	monolib_qt_settings.o \
 	monolib_qt_slider.o \
 	monolib_qt_spinbutt.o \
@@ -8759,7 +8690,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_statline.o \
 	monolib_qt_stattext.o \
 	monolib_qt_statusbar.o \
-	monolib_statusbar_moc.o \
 	monolib_qt_textctrl.o \
 	monolib_textdlg.o \
 	monolib_qt_textentry.o \
@@ -8771,9 +8701,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_toplevel.o \
 	monolib_qt_uiaction.o \
 	monolib_qt_utils.o \
-	monolib_qt_window.o \
-	monolib_window_qt.o \
-	monolib_window_qt_moc.o
+	monolib_qt_window.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_activex.o \
@@ -9018,7 +8946,6 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_2 =  \
 	monolib_animateg.o \
 	monolib_qt_calctrl.o \
-	monolib_calctrl_moc.o \
 	monolib_converter.o \
 	monolib_qt_dataview.o \
 	monolib_dvrenderer.o \
@@ -9158,7 +9085,6 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 	monolib_animateg.o \
 	monolib_qt_calctrl.o \
-	monolib_calctrl_moc.o \
 	monolib_converter.o \
 	monolib_qt_dataview.o \
 	monolib_dvrenderer.o \
@@ -10250,8 +10176,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_bmpbuttn.o \
 	coredll_qt_brush.o \
 	coredll_qt_button.o \
-	coredll_button_qt.o \
-	coredll_button_qt_moc.o \
 	coredll_generic_caret.o \
 	coredll_qt_checkbox.o \
 	coredll_qt_checklst.o \
@@ -10263,8 +10187,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_colordlg.o \
 	coredll_qt_colour.o \
 	coredll_qt_combobox.o \
-	coredll_combobox_qt.o \
-	coredll_combobox_qt_moc.o \
 	coredll_qt_control.o \
 	coredll_converter.o \
 	coredll_qt_ctrlsub.o \
@@ -10277,15 +10199,11 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_dcscreen.o \
 	coredll_defs.o \
 	coredll_qt_dialog.o \
-	coredll_dialog_qt.o \
-	coredll_dialog_qt_moc.o \
 	coredll_unix_dialup.o \
 	coredll_qt_dirdlg.o \
 	coredll_qt_display.o \
 	coredll_qt_dnd.o \
 	coredll_qt_evtloop.o \
-	coredll_evtloop_qt.o \
-	coredll_evtloop_qt_moc.o \
 	coredll_generic_fdrepdlg.o \
 	coredll_qt_filedlg.o \
 	coredll_filepickerg.o \
@@ -10295,11 +10213,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_fontenum.o \
 	coredll_fontpickerg.o \
 	coredll_qt_frame.o \
-	coredll_frame_moc.o \
 	coredll_qt_gauge.o \
 	coredll_qt_graphics.o \
-	coredll_groupbox_qt.o \
-	coredll_groupbox_qt_moc.o \
 	coredll_generic_icon.o \
 	coredll_generic_imaglist.o \
 	coredll_qt_listbox.o \
@@ -10307,9 +10222,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_mdi.o \
 	coredll_qt_menu.o \
 	coredll_qt_menuitem.o \
-	coredll_menuitem_moc.o \
 	coredll_qt_msgdlg.o \
-	coredll_msgdlg_moc.o \
 	coredll_qt_notebook.o \
 	coredll_qt_palette.o \
 	coredll_qt_pen.o \
@@ -10321,7 +10234,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_radiobut.o \
 	coredll_qt_region.o \
 	coredll_qt_scrolbar.o \
-	coredll_scrolbar_moc.o \
 	coredll_qt_settings.o \
 	coredll_qt_slider.o \
 	coredll_qt_spinbutt.o \
@@ -10331,7 +10243,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_statline.o \
 	coredll_qt_stattext.o \
 	coredll_qt_statusbar.o \
-	coredll_statusbar_moc.o \
 	coredll_qt_textctrl.o \
 	coredll_textdlg.o \
 	coredll_qt_textentry.o \
@@ -10343,9 +10254,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_toplevel.o \
 	coredll_qt_uiaction.o \
 	coredll_qt_utils.o \
-	coredll_qt_window.o \
-	coredll_window_qt.o \
-	coredll_window_qt_moc.o
+	coredll_qt_window.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_activex.o \
@@ -11218,8 +11127,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_bmpbuttn.o \
 	coredll_qt_brush.o \
 	coredll_qt_button.o \
-	coredll_button_qt.o \
-	coredll_button_qt_moc.o \
 	coredll_generic_caret.o \
 	coredll_qt_checkbox.o \
 	coredll_qt_checklst.o \
@@ -11231,8 +11138,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_colordlg.o \
 	coredll_qt_colour.o \
 	coredll_qt_combobox.o \
-	coredll_combobox_qt.o \
-	coredll_combobox_qt_moc.o \
 	coredll_qt_control.o \
 	coredll_converter.o \
 	coredll_qt_ctrlsub.o \
@@ -11245,15 +11150,11 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_dcscreen.o \
 	coredll_defs.o \
 	coredll_qt_dialog.o \
-	coredll_dialog_qt.o \
-	coredll_dialog_qt_moc.o \
 	coredll_unix_dialup.o \
 	coredll_qt_dirdlg.o \
 	coredll_qt_display.o \
 	coredll_qt_dnd.o \
 	coredll_qt_evtloop.o \
-	coredll_evtloop_qt.o \
-	coredll_evtloop_qt_moc.o \
 	coredll_generic_fdrepdlg.o \
 	coredll_qt_filedlg.o \
 	coredll_filepickerg.o \
@@ -11263,11 +11164,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_fontenum.o \
 	coredll_fontpickerg.o \
 	coredll_qt_frame.o \
-	coredll_frame_moc.o \
 	coredll_qt_gauge.o \
 	coredll_qt_graphics.o \
-	coredll_groupbox_qt.o \
-	coredll_groupbox_qt_moc.o \
 	coredll_generic_icon.o \
 	coredll_generic_imaglist.o \
 	coredll_qt_listbox.o \
@@ -11275,9 +11173,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_mdi.o \
 	coredll_qt_menu.o \
 	coredll_qt_menuitem.o \
-	coredll_menuitem_moc.o \
 	coredll_qt_msgdlg.o \
-	coredll_msgdlg_moc.o \
 	coredll_qt_notebook.o \
 	coredll_qt_palette.o \
 	coredll_qt_pen.o \
@@ -11289,7 +11185,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_radiobut.o \
 	coredll_qt_region.o \
 	coredll_qt_scrolbar.o \
-	coredll_scrolbar_moc.o \
 	coredll_qt_settings.o \
 	coredll_qt_slider.o \
 	coredll_qt_spinbutt.o \
@@ -11299,7 +11194,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_statline.o \
 	coredll_qt_stattext.o \
 	coredll_qt_statusbar.o \
-	coredll_statusbar_moc.o \
 	coredll_qt_textctrl.o \
 	coredll_textdlg.o \
 	coredll_qt_textentry.o \
@@ -11311,9 +11205,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_toplevel.o \
 	coredll_qt_uiaction.o \
 	coredll_qt_utils.o \
-	coredll_qt_window.o \
-	coredll_window_qt.o \
-	coredll_window_qt_moc.o
+	coredll_qt_window.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_activex.o \
@@ -12053,8 +11945,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_bmpbuttn.o \
 	corelib_qt_brush.o \
 	corelib_qt_button.o \
-	corelib_button_qt.o \
-	corelib_button_qt_moc.o \
 	corelib_generic_caret.o \
 	corelib_qt_checkbox.o \
 	corelib_qt_checklst.o \
@@ -12066,8 +11956,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_colordlg.o \
 	corelib_qt_colour.o \
 	corelib_qt_combobox.o \
-	corelib_combobox_qt.o \
-	corelib_combobox_qt_moc.o \
 	corelib_qt_control.o \
 	corelib_converter.o \
 	corelib_qt_ctrlsub.o \
@@ -12080,15 +11968,11 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_dcscreen.o \
 	corelib_defs.o \
 	corelib_qt_dialog.o \
-	corelib_dialog_qt.o \
-	corelib_dialog_qt_moc.o \
 	corelib_unix_dialup.o \
 	corelib_qt_dirdlg.o \
 	corelib_qt_display.o \
 	corelib_qt_dnd.o \
 	corelib_qt_evtloop.o \
-	corelib_evtloop_qt.o \
-	corelib_evtloop_qt_moc.o \
 	corelib_generic_fdrepdlg.o \
 	corelib_qt_filedlg.o \
 	corelib_filepickerg.o \
@@ -12098,11 +11982,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_fontenum.o \
 	corelib_fontpickerg.o \
 	corelib_qt_frame.o \
-	corelib_frame_moc.o \
 	corelib_qt_gauge.o \
 	corelib_qt_graphics.o \
-	corelib_groupbox_qt.o \
-	corelib_groupbox_qt_moc.o \
 	corelib_generic_icon.o \
 	corelib_generic_imaglist.o \
 	corelib_qt_listbox.o \
@@ -12110,9 +11991,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_mdi.o \
 	corelib_qt_menu.o \
 	corelib_qt_menuitem.o \
-	corelib_menuitem_moc.o \
 	corelib_qt_msgdlg.o \
-	corelib_msgdlg_moc.o \
 	corelib_qt_notebook.o \
 	corelib_qt_palette.o \
 	corelib_qt_pen.o \
@@ -12124,7 +12003,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_radiobut.o \
 	corelib_qt_region.o \
 	corelib_qt_scrolbar.o \
-	corelib_scrolbar_moc.o \
 	corelib_qt_settings.o \
 	corelib_qt_slider.o \
 	corelib_qt_spinbutt.o \
@@ -12134,7 +12012,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_statline.o \
 	corelib_qt_stattext.o \
 	corelib_qt_statusbar.o \
-	corelib_statusbar_moc.o \
 	corelib_qt_textctrl.o \
 	corelib_textdlg.o \
 	corelib_qt_textentry.o \
@@ -12146,9 +12023,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_toplevel.o \
 	corelib_qt_uiaction.o \
 	corelib_qt_utils.o \
-	corelib_qt_window.o \
-	corelib_window_qt.o \
-	corelib_window_qt_moc.o
+	corelib_qt_window.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_activex.o \
@@ -13021,8 +12896,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_bmpbuttn.o \
 	corelib_qt_brush.o \
 	corelib_qt_button.o \
-	corelib_button_qt.o \
-	corelib_button_qt_moc.o \
 	corelib_generic_caret.o \
 	corelib_qt_checkbox.o \
 	corelib_qt_checklst.o \
@@ -13034,8 +12907,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_colordlg.o \
 	corelib_qt_colour.o \
 	corelib_qt_combobox.o \
-	corelib_combobox_qt.o \
-	corelib_combobox_qt_moc.o \
 	corelib_qt_control.o \
 	corelib_converter.o \
 	corelib_qt_ctrlsub.o \
@@ -13048,15 +12919,11 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_dcscreen.o \
 	corelib_defs.o \
 	corelib_qt_dialog.o \
-	corelib_dialog_qt.o \
-	corelib_dialog_qt_moc.o \
 	corelib_unix_dialup.o \
 	corelib_qt_dirdlg.o \
 	corelib_qt_display.o \
 	corelib_qt_dnd.o \
 	corelib_qt_evtloop.o \
-	corelib_evtloop_qt.o \
-	corelib_evtloop_qt_moc.o \
 	corelib_generic_fdrepdlg.o \
 	corelib_qt_filedlg.o \
 	corelib_filepickerg.o \
@@ -13066,11 +12933,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_fontenum.o \
 	corelib_fontpickerg.o \
 	corelib_qt_frame.o \
-	corelib_frame_moc.o \
 	corelib_qt_gauge.o \
 	corelib_qt_graphics.o \
-	corelib_groupbox_qt.o \
-	corelib_groupbox_qt_moc.o \
 	corelib_generic_icon.o \
 	corelib_generic_imaglist.o \
 	corelib_qt_listbox.o \
@@ -13078,9 +12942,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_mdi.o \
 	corelib_qt_menu.o \
 	corelib_qt_menuitem.o \
-	corelib_menuitem_moc.o \
 	corelib_qt_msgdlg.o \
-	corelib_msgdlg_moc.o \
 	corelib_qt_notebook.o \
 	corelib_qt_palette.o \
 	corelib_qt_pen.o \
@@ -13092,7 +12954,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_radiobut.o \
 	corelib_qt_region.o \
 	corelib_qt_scrolbar.o \
-	corelib_scrolbar_moc.o \
 	corelib_qt_settings.o \
 	corelib_qt_slider.o \
 	corelib_qt_spinbutt.o \
@@ -13102,7 +12963,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_statline.o \
 	corelib_qt_stattext.o \
 	corelib_qt_statusbar.o \
-	corelib_statusbar_moc.o \
 	corelib_qt_textctrl.o \
 	corelib_textdlg.o \
 	corelib_qt_textentry.o \
@@ -13114,9 +12974,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_toplevel.o \
 	corelib_qt_uiaction.o \
 	corelib_qt_utils.o \
-	corelib_qt_window.o \
-	corelib_window_qt.o \
-	corelib_window_qt_moc.o
+	corelib_qt_window.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_activex.o \
@@ -13430,7 +13288,6 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_4 =  \
 	advdll_animateg.o \
 	advdll_qt_calctrl.o \
-	advdll_calctrl_moc.o \
 	advdll_converter.o \
 	advdll_qt_dataview.o \
 	advdll_dvrenderer.o \
@@ -13570,7 +13427,6 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_5 =  \
 	advdll_animateg.o \
 	advdll_qt_calctrl.o \
-	advdll_calctrl_moc.o \
 	advdll_converter.o \
 	advdll_qt_dataview.o \
 	advdll_dvrenderer.o \
@@ -13765,7 +13621,6 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_6 =  \
 	advlib_animateg.o \
 	advlib_qt_calctrl.o \
-	advlib_calctrl_moc.o \
 	advlib_converter.o \
 	advlib_qt_dataview.o \
 	advlib_dvrenderer.o \
@@ -13905,7 +13760,6 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_7 =  \
 	advlib_animateg.o \
 	advlib_qt_calctrl.o \
-	advlib_calctrl_moc.o \
 	advlib_converter.o \
 	advlib_qt_dataview.o \
 	advlib_dvrenderer.o \
@@ -20593,12 +20447,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_button.o: $(srcdir)/src/qt/button.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/button.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_button_qt.o: $(srcdir)/src/qt/button_qt.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/button_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_button_qt_moc.o: $(srcdir)/src/qt/button_qt.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/button_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_checkbox.o: $(srcdir)/src/qt/checkbox.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/checkbox.cpp
 
@@ -20683,12 +20531,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_combobox.o: $(srcdir)/src/qt/combobox.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/combobox.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_combobox_qt.o: $(srcdir)/src/qt/combobox_qt.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/combobox_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_combobox_qt_moc.o: $(srcdir)/src/qt/combobox_qt.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/combobox_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_control.o: $(srcdir)/src/qt/control.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/control.cpp
 
@@ -20728,12 +20570,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_dialog_qt.o: $(srcdir)/src/qt/dialog_qt.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_dialog_qt_moc.o: $(srcdir)/src/qt/dialog_qt.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
 
@@ -20745,12 +20581,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -20869,20 +20699,11 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_frame.o: $(srcdir)/src/qt/frame.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/frame.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_frame_moc.o: $(srcdir)/src/qt/frame.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/frame.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_gauge.o: $(srcdir)/src/qt/gauge.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/gauge.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_groupbox_qt.o: $(srcdir)/src/qt/groupbox_qt.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/groupbox_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_groupbox_qt_moc.o: $(srcdir)/src/qt/groupbox_qt.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/groupbox_qt.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_listbox.o: $(srcdir)/src/qt/listbox.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/listbox.cpp
@@ -20899,14 +20720,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_menuitem.o: $(srcdir)/src/qt/menuitem.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/menuitem.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_menuitem_moc.o: $(srcdir)/src/qt/menuitem.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/menuitem.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_msgdlg_moc.o: $(srcdir)/src/qt/msgdlg.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
@@ -20971,9 +20786,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_scrolbar.o: $(srcdir)/src/qt/scrolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/scrolbar.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_scrolbar_moc.o: $(srcdir)/src/qt/scrolbar.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/scrolbar.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_settings.o: $(srcdir)/src/qt/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/settings.cpp
 
@@ -21000,9 +20812,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_statusbar.o: $(srcdir)/src/qt/statusbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/statusbar.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_statusbar_moc.o: $(srcdir)/src/qt/statusbar.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/statusbar.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_textctrl.o: $(srcdir)/src/qt/textctrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/textctrl.cpp
@@ -21039,12 +20848,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/window.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_window_qt.o: $(srcdir)/src/qt/window_qt.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monodll_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
@@ -23190,9 +22993,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_calctrl.o: $(srcdir)/src/qt/calctrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/calctrl.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_calctrl_moc.o: $(srcdir)/src/qt/calctrl.moc.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/calctrl.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dataview.o: $(srcdir)/src/qt/dataview.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dataview.cpp
@@ -26512,12 +26312,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_button.o: $(srcdir)/src/qt/button.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/button.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_button_qt.o: $(srcdir)/src/qt/button_qt.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/button_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_button_qt_moc.o: $(srcdir)/src/qt/button_qt.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/button_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_checkbox.o: $(srcdir)/src/qt/checkbox.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/checkbox.cpp
 
@@ -26602,12 +26396,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_combobox.o: $(srcdir)/src/qt/combobox.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/combobox.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_combobox_qt.o: $(srcdir)/src/qt/combobox_qt.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/combobox_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_combobox_qt_moc.o: $(srcdir)/src/qt/combobox_qt.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/combobox_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_control.o: $(srcdir)/src/qt/control.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/control.cpp
 
@@ -26647,12 +26435,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_dialog_qt.o: $(srcdir)/src/qt/dialog_qt.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_dialog_qt_moc.o: $(srcdir)/src/qt/dialog_qt.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
 
@@ -26664,12 +26446,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -26788,20 +26564,11 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_frame.o: $(srcdir)/src/qt/frame.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/frame.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_frame_moc.o: $(srcdir)/src/qt/frame.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/frame.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_gauge.o: $(srcdir)/src/qt/gauge.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/gauge.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_groupbox_qt.o: $(srcdir)/src/qt/groupbox_qt.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/groupbox_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_groupbox_qt_moc.o: $(srcdir)/src/qt/groupbox_qt.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/groupbox_qt.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_listbox.o: $(srcdir)/src/qt/listbox.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/listbox.cpp
@@ -26818,14 +26585,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_menuitem.o: $(srcdir)/src/qt/menuitem.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/menuitem.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_menuitem_moc.o: $(srcdir)/src/qt/menuitem.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/menuitem.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_msgdlg_moc.o: $(srcdir)/src/qt/msgdlg.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
@@ -26890,9 +26651,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_scrolbar.o: $(srcdir)/src/qt/scrolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/scrolbar.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_scrolbar_moc.o: $(srcdir)/src/qt/scrolbar.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/scrolbar.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_settings.o: $(srcdir)/src/qt/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/settings.cpp
 
@@ -26919,9 +26677,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_statusbar.o: $(srcdir)/src/qt/statusbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/statusbar.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_statusbar_moc.o: $(srcdir)/src/qt/statusbar.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/statusbar.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_textctrl.o: $(srcdir)/src/qt/textctrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/textctrl.cpp
@@ -26958,12 +26713,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/window.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_window_qt.o: $(srcdir)/src/qt/window_qt.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monolib_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
@@ -29109,9 +28858,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_calctrl.o: $(srcdir)/src/qt/calctrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/calctrl.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_calctrl_moc.o: $(srcdir)/src/qt/calctrl.moc.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/calctrl.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dataview.o: $(srcdir)/src/qt/dataview.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dataview.cpp
@@ -32545,12 +32291,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_button.o: $(srcdir)/src/qt/button.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/button.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_button_qt.o: $(srcdir)/src/qt/button_qt.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/button_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_button_qt_moc.o: $(srcdir)/src/qt/button_qt.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/button_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_checkbox.o: $(srcdir)/src/qt/checkbox.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/checkbox.cpp
 
@@ -32635,12 +32375,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_combobox.o: $(srcdir)/src/qt/combobox.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/combobox.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_combobox_qt.o: $(srcdir)/src/qt/combobox_qt.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/combobox_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_combobox_qt_moc.o: $(srcdir)/src/qt/combobox_qt.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/combobox_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_control.o: $(srcdir)/src/qt/control.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/control.cpp
 
@@ -32677,12 +32411,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_dialog_qt.o: $(srcdir)/src/qt/dialog_qt.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_dialog_qt_moc.o: $(srcdir)/src/qt/dialog_qt.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
 
@@ -32694,12 +32422,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -32818,20 +32540,11 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_frame.o: $(srcdir)/src/qt/frame.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/frame.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_frame_moc.o: $(srcdir)/src/qt/frame.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/frame.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_gauge.o: $(srcdir)/src/qt/gauge.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/gauge.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_groupbox_qt.o: $(srcdir)/src/qt/groupbox_qt.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/groupbox_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_groupbox_qt_moc.o: $(srcdir)/src/qt/groupbox_qt.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/groupbox_qt.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_listbox.o: $(srcdir)/src/qt/listbox.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/listbox.cpp
@@ -32848,14 +32561,8 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_menuitem.o: $(srcdir)/src/qt/menuitem.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/menuitem.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_menuitem_moc.o: $(srcdir)/src/qt/menuitem.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/menuitem.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_msgdlg_moc.o: $(srcdir)/src/qt/msgdlg.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
@@ -32920,9 +32627,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_scrolbar.o: $(srcdir)/src/qt/scrolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/scrolbar.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_scrolbar_moc.o: $(srcdir)/src/qt/scrolbar.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/scrolbar.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_settings.o: $(srcdir)/src/qt/settings.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/settings.cpp
 
@@ -32949,9 +32653,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_statusbar.o: $(srcdir)/src/qt/statusbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/statusbar.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_statusbar_moc.o: $(srcdir)/src/qt/statusbar.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/statusbar.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_textctrl.o: $(srcdir)/src/qt/textctrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/textctrl.cpp
@@ -32985,12 +32686,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_window.o: $(srcdir)/src/qt/window.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_window_qt.o: $(srcdir)/src/qt/window_qt.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@coredll_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
@@ -36979,12 +36674,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_button.o: $(srcdir)/src/qt/button.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/button.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_button_qt.o: $(srcdir)/src/qt/button_qt.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/button_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_button_qt_moc.o: $(srcdir)/src/qt/button_qt.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/button_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_checkbox.o: $(srcdir)/src/qt/checkbox.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/checkbox.cpp
 
@@ -37069,12 +36758,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_combobox.o: $(srcdir)/src/qt/combobox.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/combobox.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_combobox_qt.o: $(srcdir)/src/qt/combobox_qt.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/combobox_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_combobox_qt_moc.o: $(srcdir)/src/qt/combobox_qt.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/combobox_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_control.o: $(srcdir)/src/qt/control.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/control.cpp
 
@@ -37111,12 +36794,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_dialog_qt.o: $(srcdir)/src/qt/dialog_qt.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_dialog_qt_moc.o: $(srcdir)/src/qt/dialog_qt.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
 
@@ -37128,12 +36805,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_evtloop.o: $(srcdir)/src/qt/evtloop.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_evtloop_qt.o: $(srcdir)/src/qt/evtloop_qt.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_evtloop_qt_moc.o: $(srcdir)/src/qt/evtloop_qt.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/evtloop_qt.moc.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_generic_fdrepdlg.o: $(srcdir)/src/generic/fdrepdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fdrepdlg.cpp
@@ -37252,20 +36923,11 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_frame.o: $(srcdir)/src/qt/frame.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/frame.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_frame_moc.o: $(srcdir)/src/qt/frame.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/frame.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_gauge.o: $(srcdir)/src/qt/gauge.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/gauge.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_groupbox_qt.o: $(srcdir)/src/qt/groupbox_qt.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/groupbox_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_groupbox_qt_moc.o: $(srcdir)/src/qt/groupbox_qt.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/groupbox_qt.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_listbox.o: $(srcdir)/src/qt/listbox.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/listbox.cpp
@@ -37282,14 +36944,8 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_menuitem.o: $(srcdir)/src/qt/menuitem.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/menuitem.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_menuitem_moc.o: $(srcdir)/src/qt/menuitem.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/menuitem.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_msgdlg_moc.o: $(srcdir)/src/qt/msgdlg.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
@@ -37354,9 +37010,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_scrolbar.o: $(srcdir)/src/qt/scrolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/scrolbar.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_scrolbar_moc.o: $(srcdir)/src/qt/scrolbar.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/scrolbar.moc.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_settings.o: $(srcdir)/src/qt/settings.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/settings.cpp
 
@@ -37383,9 +37036,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_statusbar.o: $(srcdir)/src/qt/statusbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/statusbar.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_statusbar_moc.o: $(srcdir)/src/qt/statusbar.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/statusbar.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_textctrl.o: $(srcdir)/src/qt/textctrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/textctrl.cpp
@@ -37419,12 +37069,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_window.o: $(srcdir)/src/qt/window.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_window_qt.o: $(srcdir)/src/qt/window_qt.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@corelib_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
@@ -39577,9 +39221,6 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_QT@advdll_qt_calctrl.o: $(srcdir)/src/qt/calctrl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/qt/calctrl.cpp
 
-@COND_TOOLKIT_QT@advdll_calctrl_moc.o: $(srcdir)/src/qt/calctrl.moc.cpp $(ADVDLL_ODEP)
-@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/qt/calctrl.moc.cpp
-
 @COND_TOOLKIT_QT@advdll_converter.o: $(srcdir)/src/qt/converter.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/qt/converter.cpp
 
@@ -40074,9 +39715,6 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_QT@advlib_qt_calctrl.o: $(srcdir)/src/qt/calctrl.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/qt/calctrl.cpp
-
-@COND_TOOLKIT_QT@advlib_calctrl_moc.o: $(srcdir)/src/qt/calctrl.moc.cpp $(ADVLIB_ODEP)
-@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/qt/calctrl.moc.cpp
 
 @COND_TOOLKIT_QT@advlib_converter.o: $(srcdir)/src/qt/converter.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/qt/converter.cpp

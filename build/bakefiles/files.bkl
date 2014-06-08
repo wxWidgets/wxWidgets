@@ -268,7 +268,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
     wx/qt/button.h
-    wx/qt/button_qt.h
     wx/qt/checkbox.h
     wx/qt/checklst.h
     wx/qt/choice.h
@@ -294,7 +293,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dcscreen.h
     wx/qt/defs.h
     wx/qt/dialog.h
-    wx/qt/dialog_qt.h
     wx/qt/dirdlg.h
     wx/qt/dnd.h
     wx/qt/evtloop.h
@@ -354,8 +352,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/bmpbuttn.cpp
     src/qt/brush.cpp
     src/qt/button.cpp
-    src/qt/button_qt.cpp
-    src/qt/button_qt.moc.cpp
     src/generic/caret.cpp
     src/qt/checkbox.cpp
     src/qt/checklst.cpp
@@ -367,8 +363,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/colordlg.cpp
     src/qt/colour.cpp
     src/qt/combobox.cpp
-    src/qt/combobox_qt.cpp
-    src/qt/combobox_qt.moc.cpp
     src/qt/control.cpp
     src/qt/converter.cpp
     src/qt/ctrlsub.cpp
@@ -381,15 +375,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
-    src/qt/dialog_qt.cpp
-    src/qt/dialog_qt.moc.cpp
     src/unix/dialup.cpp
     src/qt/dirdlg.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
     src/qt/evtloop.cpp
-    src/qt/evtloop_qt.cpp
-    src/qt/evtloop_qt.moc.cpp
     src/generic/fdrepdlg.cpp
     src/qt/filedlg.cpp
     src/generic/filepickerg.cpp
@@ -399,11 +389,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/fontenum.cpp
     src/generic/fontpickerg.cpp
     src/qt/frame.cpp
-    src/qt/frame.moc.cpp
     src/qt/gauge.cpp
     src/qt/graphics.cpp
-    src/qt/groupbox_qt.cpp
-    src/qt/groupbox_qt.moc.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/qt/listbox.cpp
@@ -411,9 +398,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/mdi.cpp
     src/qt/menu.cpp
     src/qt/menuitem.cpp
-    src/qt/menuitem.moc.cpp
     src/qt/msgdlg.cpp
-    src/qt/msgdlg.moc.cpp
     src/qt/notebook.cpp
     src/qt/palette.cpp
     src/qt/pen.cpp
@@ -425,7 +410,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/radiobut.cpp
     src/qt/region.cpp
     src/qt/scrolbar.cpp
-    src/qt/scrolbar.moc.cpp
     src/qt/settings.cpp
     src/qt/slider.cpp
     src/qt/spinbutt.cpp
@@ -435,7 +419,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/statline.cpp
     src/qt/stattext.cpp
     src/qt/statusbar.cpp
-    src/qt/statusbar.moc.cpp
     src/qt/textctrl.cpp
     src/qt/textdlg.cpp
     src/qt/textentry.cpp
@@ -449,8 +432,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
-    src/qt/window_qt.cpp
-    src/qt/window_qt.moc.cpp
 </set>
 
 <set var="ADVANCED_QT_HDR" hints="files">
@@ -465,7 +446,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_QT_SRC" hints="files">
     src/generic/animateg.cpp
     src/qt/calctrl.cpp
-    src/qt/calctrl.moc.cpp
     src/qt/converter.cpp
     src/qt/dataview.cpp
     src/qt/dvrenderer.cpp

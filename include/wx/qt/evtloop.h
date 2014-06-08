@@ -58,4 +58,22 @@ public:
 
 #endif // wxUSE_GUI
 
+
+class wxQtEventLoopBase;
+
+class wxQtIdleTimer : public QTimer
+{
+Q_OBJECT
+
+public:
+    wxQtIdleTimer( wxQtEventLoopBase *eventLoop );
+    virtual bool eventFilter( QObject * watched, QEvent * event  );
+
+private Q_SLOTS:
+    void idle();
+
+private:
+    wxQtEventLoopBase *m_eventLoop;
+};
+
 #endif // _WX_QT_EVTLOOP_H_
