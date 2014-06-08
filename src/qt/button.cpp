@@ -14,7 +14,7 @@
 wxQtPushButton::wxQtPushButton( wxWindow *parent, wxControl *handler )
     : wxQtEventSignalHandler< QPushButton, wxControl >( parent, handler )
 {
-    connect( this, SIGNAL( clicked( bool )), this, SLOT( OnButtonClicked( bool )));
+    connect(this, &QPushButton::clicked, this, &wxQtPushButton::OnButtonClicked);
 }
 
 void wxQtPushButton::SetToggleable()
