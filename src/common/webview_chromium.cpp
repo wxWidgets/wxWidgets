@@ -8,9 +8,11 @@
 #include <wx/webview.h>
 #include <wx/webview_chromium.h>
 #include <wx/filesys.h>
-#include <wx/msw/private.h>
 #include <wx/rtti.h>
 
+#ifdef __WXMSW__
+#include <wx/msw/private.h>
+#endif
 
 #ifdef __VISUALC__
 #pragma warning(push)
@@ -85,15 +87,28 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     // Initialize window info to the defaults for a child window
     info.SetAsChild(GetHWND(), wxGetClientRect(this->GetHWND()));
 #endif
+
+#ifdef __WXGTK__
+    GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    GtkWidget* vbox = gtk_vbox_new(FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
+    info.SetAsChild(vbox);
+#endif
     // Creat the new child browser window, we do this async as we use a multi
     // threaded message loop
 
 #if CHROME_VERSION_BUILD >= 1650
-    CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient>>(m_clientHandler),
+    CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
                                   url.ToStdString(), browsersettings, NULL);
 #else
-    CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient>>(m_clientHandler),
+    CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
                                   url.ToStdString(), browsersettings);
+#endif
+
+#ifndef __WXMSW__
+    // Show browser window.
+    gtk_widget_show_all(GTK_WIDGET(window));
 #endif
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
 
@@ -403,9 +418,17 @@ void wxWebViewChromium::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
     // We currently don't support custom scheme handlers
 }
 
-bool wxWebViewChromium::StartUp(int &code, const wxString &path)
+#ifdef __WXMSW__
+bool StartUp(int &code, const wxString &path = "")
+#else
+bool wxWebViewChromium::StartUp(int &code, const wxString &path,
+                                int argc, char* argv[])
+#endif
 {
-    CefMainArgs args(wxGetInstance()); 
+#ifdef __WXMSW__
+    CefMainArgs args(wxGetInstance());
+#else
+    CefMainArgs args(argc, argv);
 
     // If there is no subprocess then we need to execute on this process
     if ( path == "" )
@@ -418,7 +441,7 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path)
     CefSettings settings;
     // We use a multithreaded message loop so we don't have to integrate
     // with the wx message loop
-    settings.multi_threaded_message_loop = true;
+    //settings.multi_threaded_message_loop = true;
     CefString(&settings.browser_subprocess_path) = path.ToStdString();
 
     return CefInitialize(args, settings, NULL);
@@ -426,9 +449,17 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path)
 
 int wxWebViewChromium::StartUpSubprocess()
 {
-    CefMainArgs args(wxGetInstance()); 
+#if __WXMSW__
+    CefMainArgs args(wxGetInstance());
+#else
+    CefMainArgs args;
 
     return CefExecuteProcess(args, NULL);
+}
+
+void wxWebViewChromium::RunMessageLoopOnce()
+{
+    CefDoMessageLoopWork();
 }
 
 void wxWebViewChromium::Shutdown()
