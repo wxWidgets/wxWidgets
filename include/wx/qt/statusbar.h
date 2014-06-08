@@ -52,12 +52,11 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventSignalHandler< QStatusBar, wxStatusBar >
 {
-    Q_OBJECT
 
 public:
     wxQtStatusBar( wxWindow *parent, wxStatusBar *handler );
 
-private Q_SLOTS:
+private:
 };
 
 #endif // _WX_QT_STATUSBAR_H_

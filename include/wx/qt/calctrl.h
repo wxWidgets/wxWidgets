@@ -100,12 +100,11 @@ private:
 
 class WXDLLIMPEXP_ADV wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
 {
-    Q_OBJECT
 
 public:
     wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handler );
 
-private Q_SLOTS:
+private:
     void OnSelectionChanged();
     void OnActivated(const QDate &date);
 
