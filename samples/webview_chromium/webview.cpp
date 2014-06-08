@@ -72,6 +72,7 @@ public:
 
     virtual bool OnInit();
     virtual int OnExit();
+    virtual bool ProcessIdle();
     /*
 #if wxUSE_CMDLINE_PARSER
     virtual void OnInitCmdLine(wxCmdLineParser& parser)
@@ -221,7 +222,12 @@ bool WebApp::OnInit()
 {
     // We spawn a separate subprocess
     int code = 0;
+#ifdef __WXMSW__
     if(!wxWebViewChromium::StartUp(code, ""))
+#else
+    if(!wxWebViewChromium::StartUp(code, "",
+                                   wxApp::argc, wxApp::argv))
+#endif
         exit(code);
 
     if ( !wxApp::OnInit() )
@@ -258,6 +264,11 @@ int WebApp::OnExit()
 {
     wxWebViewChromium::Shutdown();
     return wxApp::OnExit();
+}
+
+bool WebApp::ProcessIdle() {
+  wxWebViewChromium::RunMessageLoopOnce();
+  return wxApp::ProcessIdle();
 }
 
 WebFrame::WebFrame(const wxString& url) :

@@ -7,7 +7,6 @@
 #ifndef _WX_WEBVIEWCHROMIUM_H_
 #define _WX_WEBVIEWCHROMIUM_H_
 
-#include <wx/wxprec.h>
 #include <wx/control.h>
 #include <wx/webview.h>
 #include <wx/sharedptr.h>
@@ -212,10 +211,17 @@ public:
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler);
 
+#ifdef __WXMSW__
     static bool StartUp(int &code, const wxString &path = "");
+#else
+    static bool StartUp(int &code, const wxString &path,
+                        int argc, char* argv[]);
+#endif
+
     // If using a separate subprocess then return the result of this function
     static int StartUpSubprocess();
     static void Shutdown();
+    static void RunMessageLoopOnce();
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl);
