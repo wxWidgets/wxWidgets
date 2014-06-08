@@ -54,7 +54,9 @@ public:
     virtual ~wxTaskBarButton() { }
 
     // Operations:
+    virtual void SetProgressRange(int range) = 0;
     virtual void SetProgressValue(int value) = 0;
+    virtual void PulseProgress() = 0;
     virtual void Show(bool show = true) = 0;
     virtual void Hide() = 0;
     virtual void SetThumbnailTooltip(const wxString& tooltip) = 0;

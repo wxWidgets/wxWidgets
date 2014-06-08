@@ -30,7 +30,10 @@ wxThumbBarButton::wxThumbBarButton(int id,
 }
 
 wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
-    : m_hwnd(parent), m_taskbarList(NULL), m_hasShownThumbnailToolbar(false)
+    : m_hwnd(parent),
+      m_taskbarList(NULL),
+      m_progressRange(0),
+      m_hasShownThumbnailToolbar(false)
 {
     HRESULT hr = CoCreateInstance
                  (
@@ -68,12 +71,21 @@ wxTaskBarButtonImpl::~wxTaskBarButtonImpl()
     m_thumbBarButtons.clear();
 }
 
+void wxTaskBarButtonImpl::SetProgressRange(int range)
+{
+    m_progressRange = range;
+    if ( m_progressRange == 0 )
+        SetProgressState(wxTASKBAR_BUTTON_NO_PROGRESS);
+}
+
 void wxTaskBarButtonImpl::SetProgressValue(int value)
 {
-    wxCHECK_RET( value >= 0 && value <= 100,
-                 wxT("Invalid value, must be in the range of [0, 100].") );
+    m_taskbarList->SetProgressValue(m_hwnd, value, m_progressRange);
+}
 
-    m_taskbarList->SetProgressValue(m_hwnd, value, 100);
+void wxTaskBarButtonImpl::PulseProgress()
+{
+    SetProgressState(wxTASKBAR_BUTTON_INDETERMINATE);
 }
 
 void wxTaskBarButtonImpl::Show(bool show)
