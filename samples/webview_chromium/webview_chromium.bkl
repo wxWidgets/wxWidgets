@@ -17,17 +17,8 @@
             <lib-path>$(LIBCEF_PATH)</lib-path>
             <lib-path>$(LIBCEF_WRAPPER_PATH)</lib-path>
             <include>$(CEF_INCLUDE_DIR)</include>
-            <if cond="PLATFORM_WIN32=='1'">
-              <sys-lib>libcef</sys-lib>
-              <sys-lib>libcef_dll_wrapper</sys-lib>
-            </if>
-            <if cond="PLATFORM_UNIX=='1'">
-              <sys-lib>cef</sys-lib>
-              <sys-lib>cef_dll_wrapper</sys-lib>
-            </if>
-            <if cond="PLATFORM_MACOSX=='1'">
-              <!--TODO -->
-            </if>
+            <sys-lib>$(LIBCEF_NAME)</sys-lib>
+            <sys-lib>$(LIBCEF_DLL_WRAPPER_NAME)</sys-lib>
         </if>
         <win32-res>../sample.rc</win32-res>
 

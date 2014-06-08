@@ -618,4 +618,28 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
       </if>
     </set>
 
+    <set var="LIBCEF_NAME">
+      <if cond="PLATFORM_WIN32=='1'">
+        libcef
+      </if>
+      <if cond="PLATFORM_MACOSX=='1'">
+        <!--TODO -->
+      </if>
+      <if cond="PLATFORM_UNIX=='1'">
+        cef
+      </if>
+    </set>
+
+    <set var="LIBCEF_DLL_WRAPPER_NAME">
+      <if cond="PLATFORM_WIN32=='1'">
+        libcef
+      </if>
+      <if cond="PLATFORM_MACOSX=='1'">
+        <!--TODO -->
+      </if>
+      <if cond="PLATFORM_UNIX=='1'">
+        cef_dll_wrapper
+      </if>
+    </set>
+
 </makefile>
