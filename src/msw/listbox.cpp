@@ -25,6 +25,7 @@
     #include "wx/brush.h"
     #include "wx/font.h"
     #include "wx/dc.h"
+    #include "wx/dcclient.h"
     #include "wx/utils.h"
     #include "wx/log.h"
     #include "wx/window.h"
