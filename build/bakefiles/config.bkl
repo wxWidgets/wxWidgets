@@ -632,7 +632,7 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
 
     <set var="LIBCEF_DLL_WRAPPER_NAME">
       <if cond="PLATFORM_WIN32=='1'">
-        libcef
+        libcef_dll_wrapper
       </if>
       <if cond="PLATFORM_MACOSX=='1'">
         <!--TODO -->
