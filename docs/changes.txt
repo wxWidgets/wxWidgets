@@ -670,6 +670,7 @@ wxMSW:
 - Fix precision loss in wxGraphicsContext::{Draw,Stroke}Lines() (tibo_).
 - Fix destroying the font from wxFont::GetFaceName() in some cases (aebailey82).
 - Fix wxCheckListBox appearance when using larger fonts (Igor Korot).
+- Return correct results from wxPopupWindow::GetPosition() (Christian Walther).
 
 wxOSX:
 

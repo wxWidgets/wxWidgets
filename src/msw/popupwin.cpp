@@ -49,12 +49,9 @@ bool wxPopupWindow::Create(wxWindow *parent, int flags)
 
 void wxPopupWindow::DoGetPosition(int *x, int *y) const
 {
-    // the position of a "top level" window such as this should be in
-    // screen coordinates, not in the client ones which MSW gives us
-    // (because we are a child window)
+    // This method only exists for ABI compatibility but does nothing special
+    // any more, it is removed in 3.1.0 and later.
     wxPopupWindowBase::DoGetPosition(x, y);
-
-    GetParent()->ClientToScreen(x, y);
 }
 
 WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
