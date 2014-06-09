@@ -221,7 +221,7 @@ public:
     // If using a separate subprocess then return the result of this function
     static int StartUpSubprocess();
     static void Shutdown();
-    static void RunMessageLoopOnce();
+    static void RunCEFMessageLoopOnIdle(wxIdleEvent& event);
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl);

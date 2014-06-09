@@ -111,7 +111,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     gtk_widget_show_all(GTK_WIDGET(window));
 #endif
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
-
+    this->Bind(wxEVT_IDLE, &wxWebViewChromium::RunCEFMessageLoopOnIdle);
     return true;
 }
 
@@ -457,7 +457,7 @@ int wxWebViewChromium::StartUpSubprocess()
     return CefExecuteProcess(args, NULL);
 }
 
-void wxWebViewChromium::RunMessageLoopOnce()
+void wxWebViewChromium::RunCEFMessageLoopOnIdle(wxIdleEvent& event)
 {
     CefDoMessageLoopWork();
 }
