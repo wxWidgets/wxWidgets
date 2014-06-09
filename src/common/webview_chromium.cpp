@@ -419,7 +419,7 @@ void wxWebViewChromium::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 }
 
 #ifdef __WXMSW__
-bool StartUp(int &code, const wxString &path = "")
+bool wxWebViewChromium::StartUp(int &code, const wxString &path)
 #else
 bool wxWebViewChromium::StartUp(int &code, const wxString &path,
                                 int argc, char* argv[])
