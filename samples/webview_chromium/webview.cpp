@@ -72,7 +72,7 @@ public:
 
     virtual bool OnInit();
     virtual int OnExit();
-    virtual bool ProcessIdle();
+
     /*
 #if wxUSE_CMDLINE_PARSER
     virtual void OnInitCmdLine(wxCmdLineParser& parser)
@@ -149,6 +149,7 @@ public:
     void OnFindText(wxCommandEvent& evt);
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
+
 
 private:
     wxTextCtrl* m_url;
@@ -264,11 +265,6 @@ int WebApp::OnExit()
 {
     wxWebViewChromium::Shutdown();
     return wxApp::OnExit();
-}
-
-bool WebApp::ProcessIdle() {
-  wxWebViewChromium::RunMessageLoopOnce();
-  return wxApp::ProcessIdle();
 }
 
 WebFrame::WebFrame(const wxString& url) :
