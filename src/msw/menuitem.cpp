@@ -677,14 +677,11 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     m_parentMenu->UpdateAccel(this);
 #endif // wxUSE_ACCEL
 
-    const UINT id = GetMSWId();
-    HMENU hMenu = GetHMenuOf(m_parentMenu);
-    if ( !hMenu )
+    const int itemPos = MSGetMenuItemPos();
+    if ( itemPos == -1 )
         return;
 
-    const UINT state = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
-    if ( state == (UINT)-1 )
-        return;
+    HMENU hMenu = GetHMenuOf(m_parentMenu);
 
     // update the text of the native menu item
     WinStruct<MENUITEMINFO> info;
@@ -699,7 +696,7 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
                  MIIM_DATA |
                  MIIM_BITMAP |
                  MIIM_FTYPE;
-    if ( !::GetMenuItemInfo(hMenu, id, FALSE, &info) )
+    if ( !::GetMenuItemInfo(hMenu, itemPos, TRUE, &info) )
     {
         wxLogLastError(wxT("GetMenuItemInfo"));
         return;
@@ -719,7 +716,7 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     // Also notice that we shouldn't use our IsOwnerDrawn() because it can be
     // true because it was set by e.g. SetBitmap(), even if the item wasn't
     // made owner drawn at Windows level.
-    if ( !(state & MF_OWNERDRAW) )
+    if ( !(info.fState & MF_OWNERDRAW) )
 #endif // wxUSE_OWNER_DRAWN
     {
         info.fMask |= MIIM_STRING;
@@ -727,7 +724,7 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
         info.cch = m_text.length();
     }
 
-    if ( !::SetMenuItemInfo(hMenu, id, FALSE, &info) )
+    if ( !::SetMenuItemInfo(hMenu, itemPos, TRUE, &info) )
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
@@ -778,20 +775,13 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
     }
 #endif // wxUSE_OWNER_DRAWN
 
-    // the item can be not attached to any menu yet and SetBitmap() is still
-    // valid to call in this case and should do nothing else
-    if ( !m_parentMenu )
+    const int itemPos = MSGetMenuItemPos();
+    if ( itemPos == -1 )
+    {
+        // The item is probably not attached to any menu yet. SetBitmap() is
+        // still valid to call in this case, just do nothing else here.
         return;
-
-    HMENU hMenu = GetHMenuOf(m_parentMenu);
-    if ( !hMenu )
-        return;
-
-    const UINT id = GetMSWId();
-
-    const UINT state = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
-    if ( state == (UINT)-1 )
-        return;
+    }
 
     // update the bitmap of the native menu item
     // don't set hbmpItem for the checkable items as it would
@@ -809,7 +799,7 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
         mii.hbmpItem = GetHBitmapForMenu();
     }
 
-    if ( !::SetMenuItemInfo(hMenu, id, FALSE, &mii) )
+    if ( !::SetMenuItemInfo(GetHMenuOf(m_parentMenu), itemPos, TRUE, &mii) )
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
@@ -1405,6 +1395,42 @@ HBITMAP wxMenuItem::GetHBitmapForMenu(bool checked)
 #endif // wxUSE_IMAGE
 
     return HBMMENU_CALLBACK;
+}
+
+int wxMenuItem::MSGetMenuItemPos() const
+{
+    if ( !m_parentMenu )
+        return -1;
+
+    const HMENU hMenu = GetHMenuOf(m_parentMenu);
+    if ( !hMenu )
+        return -1;
+
+    const UINT id = GetMSWId();
+    const int menuItems = ::GetMenuItemCount(hMenu);
+    for ( int i = 0; i < menuItems; i++ )
+    {
+        const UINT state = ::GetMenuState(hMenu, i, MF_BYPOSITION);
+        if ( state == (UINT)-1 )
+        {
+            // This indicates that the item at this position and is not
+            // supposed to happen here, but test for it just in case.
+            continue;
+        }
+
+        if ( state & MF_POPUP )
+        {
+            if ( ::GetSubMenu(hMenu, i) == (HMENU)id )
+                return i;
+        }
+        else if ( !(state & MF_SEPARATOR) )
+        {
+            if ( ::GetMenuItemID(hMenu, i) == id )
+                return i;
+        }
+    }
+
+    return -1;
 }
 
 // ----------------------------------------------------------------------------
