@@ -25,6 +25,9 @@
     #include "wx/sizer.h"
 #endif
 
+#ifdef __WXMSW__
+    #include "wx/msw/private.h"
+#endif
 
 class wxUnknownControlContainer : public wxPanel
 {
@@ -63,6 +66,13 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
     SetBackgroundColour(m_bg);
     child->SetName(m_controlName);
     child->SetId(wxXmlResource::GetXRCID(m_controlName));
+
+#ifdef __WXMSW__
+    // In 3.0, wxWindowBase::SetId() is not virtual and can't be overridden in
+    // wxWindowMSW to do the right thing, so work around it here instead.
+    ::SetWindowLong(GetHwndOf((wxWindow*)child), GWL_ID, child->GetId());
+#endif // __WXMSW__
+
     m_controlAdded = true;
 
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
