@@ -106,7 +106,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
                                   url.ToStdString(), browsersettings);
 #endif
 
-#ifndef __WXMSW__
+#ifdef __WXGTK__
     // Show browser window.
     gtk_widget_show_all(GTK_WIDGET(window));
 #endif
@@ -429,7 +429,7 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     CefMainArgs args(wxGetInstance());
 #else
     CefMainArgs args(argc, argv);
-
+#endif
     // If there is no subprocess then we need to execute on this process
     if ( path == "" )
     {
@@ -449,11 +449,11 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
 
 int wxWebViewChromium::StartUpSubprocess()
 {
-#if __WXMSW__
+#ifdef __WXMSW__
     CefMainArgs args(wxGetInstance());
 #else
     CefMainArgs args;
-
+#endif
     return CefExecuteProcess(args, NULL);
 }
 
