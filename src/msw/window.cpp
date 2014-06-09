@@ -552,6 +552,20 @@ bool wxWindowMSW::Create(wxWindow *parent,
     return true;
 }
 
+void wxWindowMSW::SetId(wxWindowID winid)
+{
+    wxWindowBase::SetId(winid);
+
+    // Also update the ID used at the Windows level to avoid nasty surprises
+    // when we can't find the control when handling messages for it after
+    // changing its ID because Windows still uses the old one.
+    if ( GetHwnd() )
+    {
+        if ( !::SetWindowLong(GetHwnd(), GWL_ID, winid) )
+            wxLogLastError(wxT("SetWindowLong(GWL_ID)"));
+    }
+}
+
 // ---------------------------------------------------------------------------
 // basic operations
 // ---------------------------------------------------------------------------

@@ -115,6 +115,8 @@ public:
                                              wxCoord width,
                                              wxCoord widthTotal) const;
 
+    virtual void SetId(wxWindowID winid);
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP
