@@ -386,7 +386,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
                   | wxSTAY_ON_TOP
             )
 {
-    m_shapeKind = Shape_None;
+    m_shapeKind = Shape_Star;
     m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
     SetToolTip(wxT("Right-click to close, double click to cycle shape"));
