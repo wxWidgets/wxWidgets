@@ -64,7 +64,7 @@ public:
     virtual void SetOverlayIcon(const wxIcon& icon,
                                 const wxString& description = wxString()) = 0;
     virtual void SetThumbnailClip(const wxRect& rect) = 0;
-    virtual void SetThumbnailContents(const wxWindow* child) = 0;
+    virtual void SetThumbnailContents(const wxWindow *child) = 0;
 
     /**
         Adds a thumbnail toolbar button to the thumbnail image of a window in
