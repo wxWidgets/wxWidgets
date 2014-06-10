@@ -306,8 +306,8 @@ wxQtCalendarWidget::wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handle
     : wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >( parent, handler )
 {
     m_date = selectedDate();
-    connect(this, SIGNAL(selectionChanged()), this, SLOT(OnSelectionChanged()));
-    connect(this, SIGNAL(activated(QDate)),   this, SLOT(OnActivated(QDate)));
+    connect(this, &QCalendarWidget::selectionChanged, this, &wxQtCalendarWidget::OnSelectionChanged);
+    connect(this, &QCalendarWidget::activated, this, &wxQtCalendarWidget::OnActivated);
 }
 
 void wxQtCalendarWidget::OnSelectionChanged()

@@ -106,10 +106,11 @@ QScrollBar *wxScrollBar::GetHandle() const
 wxQtScrollBar::wxQtScrollBar( wxWindow *parent, wxScrollBar *handler )
     : wxQtEventSignalHandler< QScrollBar, wxScrollBar >( parent, handler )
 {
-    connect( this, SIGNAL( actionTriggered(int) ), this, SLOT( OnActionTriggered(int) ) );
-    connect( this, SIGNAL( sliderReleased() ), this, SLOT( OnSliderReleased() ) );
-    connect( this, SIGNAL( valueChanged(int) ), this, SLOT( OnValueChanged(int) ) );
+    connect( this, &QScrollBar::actionTriggered, this, &wxQtScrollBar::OnActionTriggered );
+    connect( this, &QScrollBar::sliderReleased, this, &wxQtScrollBar::OnSliderReleased );
+    connect( this, &QScrollBar::valueChanged, this, &wxQtScrollBar::OnValueChanged );
 }
+
 
 void wxQtScrollBar::OnActionTriggered( int action )
 {

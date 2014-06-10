@@ -9,6 +9,49 @@
 #include "wx/wxprec.h"
 
 #include "wx/button.h"
+#include "wx/bitmap.h"
+
+wxQtPushButton::wxQtPushButton( wxWindow *parent, wxControl *handler )
+    : wxQtEventSignalHandler< QPushButton, wxControl >( parent, handler )
+{
+    connect(this, &QPushButton::clicked, this, &wxQtPushButton::OnButtonClicked);
+}
+
+void wxQtPushButton::SetToggleable()
+{
+    setCheckable( true );
+}
+
+void wxQtPushButton::SetValue( bool state )
+{
+    setChecked( state );
+}
+
+bool wxQtPushButton::GetValue() const
+{
+    return isChecked();
+}
+
+void wxQtPushButton::SetDefault()
+{
+    setDefault( true );
+}
+
+void wxQtPushButton::SetLabel( const wxString &label )
+{
+    setText( wxQtConvertString( label ));
+}
+
+void wxQtPushButton::SetBitmap( const wxBitmap &bitmap )
+{
+    setIcon( QIcon( *bitmap.GetHandle() ));
+}
+
+void wxQtPushButton::OnButtonClicked( bool WXUNUSED( checked ))
+{
+    wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, GetHandler()->GetId() );
+    EmitEvent( event );
+}
 
 wxButton::wxButton()
 {
@@ -56,3 +99,5 @@ QPushButton *wxButton::GetHandle() const
 {
     return m_qtPushButton;
 }
+
+

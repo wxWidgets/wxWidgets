@@ -10,7 +10,11 @@
 
 #include "wx/dialog.h"
 #include "wx/qt/utils.h"
-#include "wx/qt/dialog_qt.h"
+
+wxQtDialog::wxQtDialog( wxWindow *parent, wxDialog *handler )
+    : wxQtEventSignalHandler< QDialog, wxDialog >( parent, handler )
+{
+}
 
 wxDialog::wxDialog()
 {

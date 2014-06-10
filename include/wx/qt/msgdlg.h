@@ -32,7 +32,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageDialog >
 {
-    Q_OBJECT
     
     public:
         wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler );

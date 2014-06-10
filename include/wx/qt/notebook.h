@@ -9,6 +9,7 @@
 #define _WX_QT_NOTEBOOK_H_
 
 #include "wx/qt/pointer_qt.h"
+#include "wx/qt/winevent_qt.h"
 #include <QtWidgets/QTabWidget>
 
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase
@@ -61,5 +62,24 @@ private:
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxNotebook );
 };
+
+
+class WXDLLIMPEXP_CORE wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
+{
+
+public:
+
+    wxQtTabWidget( wxWindow *parent, wxNotebook *handler );
+    void currentChanged(int index);
+
+private:
+
+    // we need to store the old selection since there
+    // is no other way to know about it at the time
+    // of the change selection event
+    int m_selection;
+
+};
+
 
 #endif // _WX_QT_NOTEBOOK_H_

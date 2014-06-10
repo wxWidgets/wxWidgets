@@ -10,6 +10,7 @@
 
 #include "wx/radiobox.h"
 #include "wx/qt/utils.h"
+#include "wx/qt/groupbox_qt.h"
 #include "wx/qt/converter.h"
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QRadioButton>

@@ -8,13 +8,42 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/app.h"
 #include "wx/apptrait.h"
 #include "wx/evtloop.h"
 #include "wx/private/eventloopsourcesmanager.h"
-#include "wx/qt/evtloop_qt.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QAbstractEventDispatcher>
+
+wxQtIdleTimer::wxQtIdleTimer( wxQtEventLoopBase *eventLoop )
+{
+    m_eventLoop = eventLoop;
+
+    connect( this, &QTimer::timeout, this, &wxQtIdleTimer::idle );
+    setSingleShot( true );
+    start( 0 );
+}
+
+bool wxQtIdleTimer::eventFilter( QObject *WXUNUSED( watched ), QEvent *WXUNUSED( event ) )
+{
+    // Called for each Qt event, start with timeout 0 (run as soon as idle)
+    if ( !isActive() )
+        start( 0 );
+
+    return false; // Continue handling the event
+}
+
+void wxQtIdleTimer::idle()
+{
+    // Process pending events
+    if ( wxTheApp )
+        wxTheApp->ProcessPendingEvents();
+    
+    // Send idle event
+    if ( m_eventLoop->ProcessIdle() )
+        start( 0 );
+}
 
 wxQtEventLoopBase::wxQtEventLoopBase()
 {

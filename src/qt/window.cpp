@@ -24,6 +24,25 @@
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0
 
+wxQtWidget::wxQtWidget( wxWindow *parent, wxWindow *handler )
+    : wxQtEventSignalHandler< QWidget, wxWindow >( parent, handler )
+{
+}
+
+#if wxUSE_ACCEL
+wxQtShortcutHandler::wxQtShortcutHandler( wxWindow *window )
+    : wxQtSignalHandler< wxWindow >( window )
+{
+}
+
+void wxQtShortcutHandler::activated()
+{
+    int command = sender()->property("wxQt_Command").toInt();
+
+    GetHandler()->QtHandleShortcut( command );
+}
+#endif // wxUSE_ACCEL
+
 //##############################################################################
 
 wxBEGIN_EVENT_TABLE( wxWindow, wxWindowBase )
@@ -692,8 +711,8 @@ void wxWindow::SetAcceleratorTable( const wxAcceleratorTable& accel )
     // Connect shortcuts to window
     Q_FOREACH( QShortcut *s, m_qtShortcuts )
     {
-        QObject::connect( s, SIGNAL( activated() ), m_qtShortcutHandler, SLOT( activated() ) );
-        QObject::connect( s, SIGNAL( activatedAmbiguously() ), m_qtShortcutHandler, SLOT( activated() ) );
+        QObject::connect( s, &QShortcut::activated, m_qtShortcutHandler, &wxQtShortcutHandler::activated );
+        QObject::connect( s, &QShortcut::activatedAmbiguously, m_qtShortcutHandler, &wxQtShortcutHandler::activated );
     }
 }
 #endif // wxUSE_ACCEL

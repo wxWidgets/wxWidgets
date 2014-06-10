@@ -9,7 +9,14 @@
 #include "wx/wxprec.h"
 
 #include "wx/statbox.h"
+#include "wx/window.h"
 #include "wx/qt/groupbox_qt.h"
+#include "wx/qt/converter.h"
+
+wxQtGroupBox::wxQtGroupBox( wxWindow *parent, const wxString &label )
+    : QGroupBox( wxQtConvertString( label ), parent->GetHandle() )
+{
+}
 
 wxStaticBox::wxStaticBox()
 {

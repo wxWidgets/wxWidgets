@@ -54,12 +54,11 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 {
-    Q_OBJECT
     
     public:
         wxQtScrollBar( wxWindow *parent, wxScrollBar *handler );
                        
-    private Q_SLOTS:
+    private:
         void OnActionTriggered( int action );
         void OnSliderReleased();
         void OnValueChanged( int position );

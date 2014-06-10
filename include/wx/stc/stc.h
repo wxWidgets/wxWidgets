@@ -55,7 +55,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #endif
 #endif
 
-
 //----------------------------------------------------------------------
 // STC constants generated section {{{
 
@@ -76,7 +75,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// The SC_CP_UTF8 value can be used to enter Unicode mode.
 /// This is the same value as CP_UTF8 in Windows
 #define wxSTC_CP_UTF8 65001
-
 #define wxSTC_MARKER_MAX 31
 #define wxSTC_MARK_CIRCLE 0
 #define wxSTC_MARK_ROUNDRECT 1
@@ -2302,6 +2300,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 /// U+2029 Paragraph Separator, and U+0085 Next Line
 #define wxSTC_LINE_END_TYPE_DEFAULT 0
 #define wxSTC_LINE_END_TYPE_UNICODE 1
+
 //}}}
 //----------------------------------------------------------------------
 
@@ -2603,6 +2602,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 
 /// Like VCHomeDisplay but extending selection to new caret position.
 #define wxSTC_CMD_VCHOMEDISPLAYEXTEND 2653
+
 //}}}
 //----------------------------------------------------------------------
 
@@ -2671,6 +2671,7 @@ public:
 
     // Delete a range of text in the document.
     void DeleteRange(int pos, int deleteLength);
+
     // Set all style bytes to 0, remove all folding information.
     void ClearDocumentStyle();
 
@@ -2803,6 +2804,7 @@ public:
 
     // Enable/disable highlight for current folding bloc (smallest one that contains the caret)
     void MarkerEnableHighlight(bool enabled);
+
     // Add a marker to a line, returning an ID which can be used to find or delete the marker.
     int MarkerAdd(int line, int markerNumber);
 
@@ -2860,6 +2862,7 @@ public:
 
     // Retrieve the cursor shown in a margin.
     int GetMarginCursor(int margin) const;
+
     // Clear all the styles and make equivalent to the global default style.
     void StyleClearAll();
 
@@ -2944,6 +2947,7 @@ public:
 
     // Get the weight of characters of a style.
     int StyleGetWeight(int style) const;
+
     // Set a style to be a hotspot or not.
     void StyleSetHotSpot(int style, bool hotspot);
 
@@ -2995,6 +2999,7 @@ public:
 
     // Get the set of characters making up words for when moving or selecting by word.
     wxString GetWordChars() const;
+
     // Start a sequence of actions that is undone and redone as a unit.
     // May be nested.
     void BeginUndoAction();
@@ -3189,6 +3194,7 @@ public:
 
     // Count characters between two positions.
     int CountCharacters(int startPos, int endPos);
+
     // Show or hide the horizontal scroll bar.
     void SetUseHorizontalScrollBar(bool show);
 
@@ -3237,6 +3243,7 @@ public:
 
     // Set caret to a position, while removing any existing selection.
     void SetEmptySelection(int pos);
+
     // Sets the print magnification added to the point size of each style for printing.
     void SetPrintMagnification(int magnification);
 
@@ -3310,6 +3317,7 @@ public:
     // priority to the primary position then the secondary position.
     // This may be used to make a search match visible.
     void ScrollRange(int secondary, int primary);
+
     // Replace the selected text with the argument text.
     void ReplaceSelection(const wxString& text);
 
@@ -3413,6 +3421,7 @@ public:
 
     // Set the start position in order to change when backspacing removes the calltip.
     void CallTipSetPosAtStart(int posStart);
+
     // Highlight a segment of the definition.
     void CallTipSetHighlight(int start, int end);
 
@@ -3430,6 +3439,7 @@ public:
 
     // Set position of calltip, above or below text.
     void CallTipSetPosition(bool above);
+
     // Find the display line of a document line taking hidden lines into account.
     int VisibleFromDocLine(int line);
 
@@ -3464,6 +3474,7 @@ public:
 
     // Are all lines visible?
     bool GetAllLinesVisible() const;
+
     // Show the children of a header line.
     void SetFoldExpanded(int line, bool expanded);
 
@@ -3484,6 +3495,7 @@ public:
 
     // Expand or contract all fold headers.
     void FoldAll(int action);
+
     // Ensure a particular line is visible by expanding any header line hiding it.
     void EnsureVisible(int line);
 
@@ -3492,6 +3504,7 @@ public:
 
     // Get automatic folding behaviours.
     int GetAutomaticFold() const;
+
     // Set some style options for folding.
     void SetFoldFlags(int flags);
 
@@ -3615,6 +3628,7 @@ public:
 
     // Retrieve the value of a tag from a regular expression search.
     wxString GetTag(int tagNumber) const;
+
     // Make the target range start and end be the same as the selection range start and end.
     void TargetFromSelection();
 
@@ -3813,11 +3827,13 @@ public:
 
     // Use specified indicator to highlight matching braces instead of changing their style.
     void BraceHighlightIndicator(bool useBraceHighlightIndicator, int indicator);
+
     // Highlight the character at a position indicating there is no matching brace.
     void BraceBadLight(int pos);
 
     // Use specified indicator to highlight non matching brace instead of changing its style.
     void BraceBadLightIndicator(bool useBraceBadLightIndicator, int indicator);
+
     // Find the position of a matching brace or INVALID_POSITION if no match.
     int BraceMatch(int pos);
 
@@ -4014,6 +4030,7 @@ public:
     // Given a valid document position, return a position that differs in a number
     // of characters. Returned value is always between 0 and last position in document.
     int PositionRelative(int pos, int relative);
+
     // Copy a range of text to the clipboard. Positions are clipped into the document.
     void CopyRange(int start, int end);
 
@@ -4099,6 +4116,7 @@ public:
 
     // Get the set of characters making up punctuation characters
     wxString GetPunctuationChars() const;
+
     // Reset the set of characters for whitespace and word characters to the defaults.
     void SetCharsDefault();
 
@@ -4223,6 +4241,7 @@ public:
 
     // Get the alpha outline colour of the given indicator.
     int IndicatorGetOutlineAlpha(int indicator) const;
+
     // Set extra ascent for each line
     void SetExtraAscent(int extraAscent);
 
@@ -4270,6 +4289,7 @@ public:
 
     // Get the margin options.
     int GetMarginOptions() const;
+
     // Set the annotation text for a line
     void AnnotationSetText(int line, const wxString& text);
 
@@ -4311,6 +4331,7 @@ public:
 
     // Allocate some extended (>255) style numbers and return the start of the range
     int AllocateExtendedStyles(int numberStyles);
+
     // Add a container action to the undo stack
     void AddUndoAction(int token, int flags);
 
@@ -4326,6 +4347,7 @@ public:
 
     // Whether switching to rectangular mode while selecting with the mouse is allowed.
     bool GetMouseSelectionRectangularSwitch() const;
+
     // Set whether multiple selections can be made
     void SetMultipleSelection(bool multipleSelection);
 
@@ -4355,6 +4377,7 @@ public:
 
     // Is every selected range empty?
     bool GetSelectionEmpty() const;
+
     // Clear selections to a single empty stream selection
     void ClearSelections();
 
@@ -4363,6 +4386,7 @@ public:
 
     // Drop one selection
     void DropSelectionN(int selection);
+
     // Set the main selection
     void SetMainSelection(int selection);
 
@@ -4510,6 +4534,7 @@ public:
 
     // Remove a character representation.
     void ClearRepresentation(const wxString& encodedCharacter);
+
     // Start notifying the container of all key presses and commands.
     void StartRecord();
 
@@ -4603,6 +4628,7 @@ public:
 
     // Get the set of base styles that can be extended with sub styles
     wxString GetSubStyleBases() const;
+
     //}}}
     //----------------------------------------------------------------------
 
@@ -4703,11 +4729,13 @@ public:
 #ifdef STC_USE_DND
     // Allow for simulating a DnD DragEnter
     wxDragResult DoDragEnter(wxCoord x, wxCoord y, wxDragResult def);
+
     // Allow for simulating a DnD DragOver
     wxDragResult DoDragOver(wxCoord x, wxCoord y, wxDragResult def);
 
     // Allow for simulating a DnD DragLeave
     void DoDragLeave();
+
     // Allow for simulating a DnD DropText
     bool DoDropText(long x, long y, const wxString& data);
 #endif
@@ -4722,6 +4750,7 @@ public:
 
     // Clear annotations from the given line.
     void AnnotationClearLine(int line);
+
 
 
     // The following methods are nearly equivalent to their similarly named
@@ -4774,6 +4803,7 @@ public:
     {
         ReplaceSelection(text);
     }
+
     virtual void Remove(long from, long to)
     {
         Replace(from, to, "");
@@ -4824,6 +4854,7 @@ public:
     {
         ClearSelections();
     }
+
 #ifdef SWIG
     void GetSelection(long* OUTPUT, long* OUTPUT) const;
 #else
@@ -4905,6 +4936,7 @@ public:
         int l = LineFromPosition((int)pos);
         if ( l == -1 )
             return false;
+
         if ( x )
             *x = pos - PositionFromLine(l);
 
@@ -4989,7 +5021,6 @@ protected:
     wxScrollBar*        m_hScrollBar;
 
     bool                m_lastKeyDownConsumed;
-
 
     friend class ScintillaWX;
     friend class Platform;
@@ -5109,6 +5140,7 @@ private:
     int m_token;                // wxEVT_STC__MODIFIED with SC_MOD_CONTAINER 
     int m_annotationLinesAdded; // wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION 
     int m_updated;              // wxEVT_STC_UPDATEUI
+
 #if wxUSE_DRAG_AND_DROP
     int      m_dragFlags;       // wxEVT_STC_START_DRAG
     wxDragResult m_dragResult;  // wxEVT_STC_DRAG_OVER,wxEVT_STC_DO_DROP
