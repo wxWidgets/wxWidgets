@@ -102,7 +102,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_HDR)
-    wx/unix/execute.h
     wx/unix/mimetype.h
 </set>
 
