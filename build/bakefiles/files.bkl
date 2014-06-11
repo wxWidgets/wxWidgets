@@ -102,6 +102,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_HDR)
+    wx/private/streamtempinput.h
+    wx/private/pipestream.h
+    wx/unix/private/pipestream.h
     wx/unix/execute.h
     wx/unix/mimetype.h
 </set>

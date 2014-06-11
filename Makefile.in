@@ -699,6 +699,9 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
+	wx/private/streamtempinput.h \
+	wx/private/pipestream.h \
+	wx/unix/private/pipestream.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/fswatcher_inotify.h \
@@ -2476,6 +2479,9 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
+	wx/private/streamtempinput.h \
+	wx/private/pipestream.h \
+	wx/unix/private/pipestream.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2499,6 +2505,9 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
+	wx/private/streamtempinput.h \
+	wx/private/pipestream.h \
+	wx/unix/private/pipestream.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2522,6 +2531,9 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
+	wx/private/streamtempinput.h \
+	wx/private/pipestream.h \
+	wx/unix/private/pipestream.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2545,6 +2557,9 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
+	wx/private/streamtempinput.h \
+	wx/private/pipestream.h \
+	wx/unix/private/pipestream.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2568,6 +2583,9 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
+	wx/private/streamtempinput.h \
+	wx/private/pipestream.h \
+	wx/unix/private/pipestream.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2604,6 +2622,9 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
+	wx/private/streamtempinput.h \
+	wx/private/pipestream.h \
+	wx/unix/private/pipestream.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/unix/fswatcher_inotify.h
