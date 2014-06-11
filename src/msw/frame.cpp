@@ -905,7 +905,9 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 #if wxUSE_TASKBARBUTTON
     if ( cmd == wxTHBN_CLICKED && m_taskBarButton )
     {
-        wxCommandEvent event(wxEVT_BUTTON, id);
+        wxTaskBarButtonImpl * const
+            tbButton = reinterpret_cast<wxTaskBarButtonImpl*>(m_taskBarButton); 
+        wxCommandEvent event(wxEVT_BUTTON, tbButton->GetThumbBarButtonID(id));
         event.SetEventObject(this);
         return ProcessEvent(event);
     }

@@ -30,7 +30,7 @@ enum
     SetThumbnailClipBtn,
     RestoreThumbnailClipBtn,
     AddThumbBarButtonBtn,
-    ShowThumbnailToolbarBtn,
+    RemoveThumbBarButtonBtn,
 };
 
 enum
@@ -114,13 +114,16 @@ private:
     void OnClearOverlayIcon(wxCommandEvent& WXUNUSED(event));
     void OnSetOrRestoreThumbnailClip(wxCommandEvent& event);
     void OnAddThubmBarButton(wxCommandEvent& WXUNUSED(event));
-    void OnShowThumbnailToolbar(wxCommandEvent& WXUNUSED(event));
+    void OnRemoveThubmBarButton(wxCommandEvent& WXUNUSED(event));
     void OnThumbnailToolbarBtnClicked(wxCommandEvent& event);
 
     wxSlider *m_slider;
     wxRadioBox *m_visibilityRadioBox;
     wxTextCtrl *m_textCtrl;
     wxChoice *m_stateChoice;
+
+    typedef wxVector<wxThumbBarButton*> wxThumbBarButtons;
+    wxThumbBarButtons m_thumbBarButtons;
 };
 
 IMPLEMENT_APP(MyApp)
@@ -215,8 +218,8 @@ MyFrame::MyFrame(const wxString& title)
     wxButton *addThumbBarButtonBtn =
         new wxButton(panel, AddThumbBarButtonBtn, wxT("Add ThumbBar Button"));
     wxButton *showThumbnailToolbarBtn =
-        new wxButton(panel, ShowThumbnailToolbarBtn,
-                     wxT("Show Thumbnail Toolbar"));
+        new wxButton(panel, RemoveThumbBarButtonBtn,
+                     wxT("Remove Last ThumbBar Button"));
     ttbSizer->Add(addThumbBarButtonBtn, 1, wxEXPAND | wxALL, 2);
     ttbSizer->Add(showThumbnailToolbarBtn, 1, wxEXPAND | wxALL, 2);
 
@@ -250,7 +253,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(SetThumbnailClipBtn, MyFrame::OnSetOrRestoreThumbnailClip)
     EVT_BUTTON(RestoreThumbnailClipBtn, MyFrame::OnSetOrRestoreThumbnailClip)
     EVT_BUTTON(AddThumbBarButtonBtn, MyFrame::OnAddThubmBarButton)
-    EVT_BUTTON(ShowThumbnailToolbarBtn, MyFrame::OnShowThumbnailToolbar)
+    EVT_BUTTON(RemoveThumbBarButtonBtn, MyFrame::OnRemoveThubmBarButton)
     EVT_BUTTON(ThumbnailToolbarBtn_0, MyFrame::OnThumbnailToolbarBtnClicked)
     EVT_BUTTON(ThumbnailToolbarBtn_1, MyFrame::OnThumbnailToolbarBtnClicked)
     EVT_BUTTON(ThumbnailToolbarBtn_2, MyFrame::OnThumbnailToolbarBtnClicked)
@@ -311,6 +314,7 @@ void MyFrame::OnChoice(wxCommandEvent& event)
             break;
     }
 
+    MSWGetTaskBarButton()->SetProgressValue(m_slider->GetValue());
     MSWGetTaskBarButton()->SetProgressState(state);
 }
 
@@ -341,21 +345,27 @@ void MyFrame::OnSetOrRestoreThumbnailClip(wxCommandEvent& event)
     MSWGetTaskBarButton()->SetThumbnailClip(rect);
 }
 
+
 void MyFrame::OnAddThubmBarButton(wxCommandEvent& WXUNUSED(event))
 {
-    static int thumbBarButtonCounter = 0;
-    if ( thumbBarButtonCounter >= 7 )
+    if ( m_thumbBarButtons.size() >= 7 )
         return;
 
-    wxThumbBarButton *btn = new wxThumbBarButton(
-        thumbBarButtonCounter + ThumbnailToolbarBtn_0 , CreateRandomIcon());
-    MSWGetTaskBarButton()->AddThumbBarButton(btn);
-    ++thumbBarButtonCounter;
+    wxThumbBarButton* button =
+        new wxThumbBarButton(m_thumbBarButtons.size() + ThumbnailToolbarBtn_0 ,
+                             CreateRandomIcon());
+    MSWGetTaskBarButton()->AppendThumbBarButton(button);
+    m_thumbBarButtons.push_back(button);
 }
 
-void MyFrame::OnShowThumbnailToolbar(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnRemoveThubmBarButton(wxCommandEvent& WXUNUSED(event))
 {
-    MSWGetTaskBarButton()->ShowThumbnailToolbar();
+    if ( m_thumbBarButtons.empty() )
+        return;
+
+    wxThumbBarButton* button = m_thumbBarButtons.back();
+    m_thumbBarButtons.pop_back();
+    MSWGetTaskBarButton()->RemoveThumbBarButton(button);
 }
 
 void MyFrame::OnThumbnailToolbarBtnClicked(wxCommandEvent& event)
