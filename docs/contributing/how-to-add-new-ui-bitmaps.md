@@ -1,5 +1,5 @@
-                How to add new bitmaps to wxWidgets UI elements
-                ===============================================
+How to add new bitmaps to wxWidgets UI elements
+===============================================
 
 0. Introduction
 ---------------
@@ -21,6 +21,7 @@ when adding new bitmap/icon.
 
 First of all, you have to add new wxArtID constant to include/wx/artprov.h.
 Look for "Art IDs" and add new definition to the list, e.g.
+
     #define wxART_MY_BITMAP     wxART_MAKE_ART_ID(wxART_MY_BITMAP)
 
 Add it to interface/wx/artprov.h, too.
@@ -30,6 +31,7 @@ of defined client categories (search for "Art clients" in the header). In case
 the new resource is part of a larger category, you need to define a new
 client. Just add it to the list of existing clients (and don't forget to
 update artprov.tex):
+
     #define wxART_MY_CLIENT wxART_MAKE_CLIENT_ID(wxART_MY_CLIENT)
 
 Alternatively, you may use wxART_OTHER when accessing the resource if the
@@ -48,8 +50,8 @@ can be used by users, not only the library.
 Finally, wxDefaultArtProvider in $(wx)/src/common/artstd.cpp must be updated.
 This consists of two steps:
 
-  a) add #include line for your XPM file, e.g. #include "../../art/my_bmp.xpm"
-  b) add ART(...) line to wxDefaultArtProvider::CreateBitmap(). The first
+  - add #include line for your XPM file, e.g. #include "../../art/my_bmp.xpm"
+  - add ART(...) line to wxDefaultArtProvider::CreateBitmap(). The first
      argument is wxArtID, the other is XPM file name (w/o extension), e.g.
      ART(wxART_MY_BITMAP, my_bmp)
 
@@ -111,10 +113,7 @@ dialog that displays all available art resources.
 
 It has to be updated to accommodate for new bitmaps. Fortunately, this is
 trivial: open $(wx)/samples/artprov/artbrows.cpp in text editor and
-ART_ICON(wxART_MY_BITMAP) line to the FillBitmaps() function.
+`ART_ICON(wxART_MY_BITMAP)` line to the FillBitmaps() function.
 
 Similarly, if you add a new client, please update FillClients() by adding new
 client to the end of the list.
-
-=== EOF ===
-

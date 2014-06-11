@@ -1,5 +1,5 @@
-                         How to add a new XRC handler
-                         ============================
+How to add a new XRC handler
+============================
 
 0. Purpose
 ----------
@@ -16,12 +16,12 @@ wxFooXmlHandler and is declared in the file wx/xrc/xh_foo.h (this last rule
 wasn't always respected in the past, however it's not a reason to not respect
 it in the future). The steps for adding a new handler are:
 
-a) Add handler declaration in include/wx/xrc/xh_foo.h, it will usually be the
+- Add handler declaration in include/wx/xrc/xh_foo.h, it will usually be the
    same as in the other files so you can get inspiration for your brand new
-   handler from e.g. wx/xrc/xh_srchctrl.h. Notice the use of wxUSE_FOO if wxFoo
+   handler from e.g. wx/xrc/xh_srchctrl.h. Notice the use of `wxUSE_FOO` if wxFoo
    is guarded by this symbol.
 
-b) Add implementation in src/xrc/xh_foo.cpp: again, it will be almost always
+- Add implementation in src/xrc/xh_foo.cpp: again, it will be almost always
    very similar to the existing controls. You will need to add support for
    the control-specific styles.
 
@@ -32,12 +32,12 @@ b) Add implementation in src/xrc/xh_foo.cpp: again, it will be almost always
 There are a few other files to update to make wxWidgets aware of the new
 handler:
 
-a) Add the new files created above to build/bakefiles/files.bkl: search for
+- Add the new files created above to build/bakefiles/files.bkl: search for
    "xh_srchctrl" to see where you need to add them
 
-b) Add #include "wx/xrc/xh_foo.h" to wx/xrc/xh_all.h.
+- Add #include "wx/xrc/xh_foo.h" to wx/xrc/xh_all.h.
 
-c) Register the new handler in wxXmlResource::InitAllHandlers() in
+- Register the new handler in wxXmlResource::InitAllHandlers() in
    src/xrc/xmlrsall.cpp
 
 
@@ -46,9 +46,3 @@ c) Register the new handler in wxXmlResource::InitAllHandlers() in
 
 Demonstrate that the new handler works by adding a control using it to
 samples/xrc/rc/controls.xrc.
-
-
-=== EOF ===
-
-Author:  VZ
-

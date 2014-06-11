@@ -1,35 +1,35 @@
-               How to add a new wxUSE_XXX preprocessor constant
-               ================================================
+How to add a new `wxUSE_XXX` preprocessor constant
+================================================
 
 0. Purpose
 ----------
 
 Detailed description of what needs to be done when you want to add a new
-wxUSE_XXX compilation flag. The text below assumes you need new wxUSE_FOO.
+`wxUSE_XXX` compilation flag. The text below assumes you need new `wxUSE_FOO`.
 
 
 1. Overview
 -----------
 
-wxWidgets uses wxUSE_XXX macros for conditionally compiling in (or not)
+wxWidgets uses `wxUSE_XXX` macros for conditionally compiling in (or not)
 optional components. In general, whenever a new non critical (i.e. not
 absolutely required by important parts of the library) class Foo is added it
-should use its own wxUSE_FOO compilation flag.
+should use its own `wxUSE_FOO` compilation flag.
 
-wxUSE_FOO must be always defined and have value of 0 or 1. Be careful with
+`wxUSE_FOO` must be always defined and have value of 0 or 1. Be careful with
 testing for it in wx/foo.h: don't do it at the very beginning of the file
-because then wxUSE_FOO would be not defined at all if the user directly
-includes wx/foo.h, include "wx/defs.h" before testing for wxUSE_FOO.
+because then `wxUSE_FOO` would be not defined at all if the user directly
+includes wx/foo.h, include "wx/defs.h" before testing for `wxUSE_FOO`.
 
 
 2. Files to update
 ------------------
 
-The following files need to be modified when adding a new wxUSE_FOO:
+The following files need to be modified when adding a new `wxUSE_FOO`:
 
 a) include/wx/setup_inc.h
 
-   This file contains all common wxUSE_XXXs, and is used to update wxMSW, wxMac
+   This file contains all common `wxUSE_XXXs`, and is used to update wxMSW, wxMac
    setup.h and Unix setup.h.in using build/update-setup-h. Please try to add
    the new define in a logical place (i.e. near any related ones) and write a
    detailed comment explaining what does it do and why would you want to turn
@@ -47,11 +47,11 @@ a') include/wx/msw/setup_inc.h for MSW-specific options
 
 b) include/wx/chkconf.h
 
-   Add the check for wxUSE_FOO definedness in the corresponding (base or GUI)
+   Add the check for `wxUSE_FOO` definedness in the corresponding (base or GUI)
    section. Please keep the alphabetic order.
 
-   If there are any dependencies, i.e. wxUSE_FOO requires wxUSE_BAR and
-   wxUSE_BAZ, check for thme here too.
+   If there are any dependencies, i.e. `wxUSE_FOO` requires `wxUSE_BAR` and
+   `wxUSE_BAZ`, check for thme here too.
 
 b') include/wx/msw/chkconf.h for MSW-specific options
 
@@ -60,7 +60,7 @@ b') include/wx/msw/chkconf.h for MSW-specific options
 
 c) configure.in
 
-   Here you need to add DEFAULT_wxUSE_FOO define. It should be added in the
+   Here you need to add `DEFAULT_wxUSE_FOO` define. It should be added in the
    block beginning after WX_ARG_CACHE_INIT line and should default to "no" for
    "if DEBUG_CONFIGURE = 1" branch (this is used for absolutely minimal builds)
    and the same as default value in setup_inc.h in the "else" branch.
@@ -69,15 +69,9 @@ c) configure.in
    reasonably described as support for a 3rd party library, WX_ARG_WITH)
    line togetherw with all the existing WX_ARG_ENABLEs.
 
-   If you have a sample/foo which should be only built when wxUSE_FOO==1,
-   then only add it to the SAMPLES_SUBDIRS if wxUSE_FOO=yes in configure.
+   If you have a sample/foo which should be only built when `wxUSE_FOO==1`,
+   then only add it to the SAMPLES_SUBDIRS if `wxUSE_FOO=yes` in configure.
 
 d) docs/doxygen/mainpages/const_wxusedef.h
 
    Add a brief description of the new constant.
-
-
-=== EOF ===
-
-Author:  VZ
-

@@ -1,5 +1,5 @@
-                    Special notes about writing wxMSW code
-                    ======================================
+Special notes about writing wxMSW code
+======================================
 
 0. Purpose
 ----------
@@ -14,12 +14,12 @@ doesn't cover any wxWidgets-wide issues not specific to Windows.
 1. Windows headers wrappers
 ---------------------------
 
-In no event should the Windows headers such as <windows.h> or <commctrl.h> be
-included directly. So instead of #include <...> use "wx/msw/wrapwin.h" or
-"wx/msw/wrapcctl.h".
+In no event should the Windows headers such as `<windows.h>` or `<commctrl.h>` be
+included directly. So instead of `#include <...>` use `"wx/msw/wrapwin.h"` or
+`wx/msw/wrapcctl.h`.
 
-For convenience it is also possible to replace #include <commdlg.h> and
-<shlobj.h> with #include "wx/msw/wrapcdlg.h" and wrapshl.h but this is less
+For convenience it is also possible to replace `#include <commdlg.h>` and
+`<shlobj.h>` with `#include "wx/msw/wrapcdlg.h"` and `wrapshl.h` but this is less
 vital.
 
 Also notice that many convenient (albeit undocumented) functions and classes
@@ -46,8 +46,3 @@ Windows versions should be resolved dynamically, i.e. using wxDynamicLibrary as
 otherwise any wx application -- even not needing them at all -- would refuse to
 start up on Windows versions not implementing the feature in question. As an
 example, look at AlphaBlt()-related code in src/msw/dc.cpp.
-
-
-=== EOF ===
-
-Author:  VZ

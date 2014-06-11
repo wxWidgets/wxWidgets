@@ -1,5 +1,5 @@
-                    How to write unit tests for wxWidgets
-                    =====================================
+How to write unit tests for wxWidgets
+=====================================
 
 Unit tests for wxWidgets are written using small cppunit framework. To compile
 (but not to run) them you need to have it installed. Hence the first part of
@@ -13,13 +13,13 @@ I. CppUnit Installation
    (latest version as of the time of this writing is 1.10.2)
 
 2. Build the library:
- a) Under Windows using VC++:
+ - Under Windows using VC++:
     - build everything in CppUnitLibraries.dsw work space
     - add include and lib subdirectories of the directory
       where you installed cppunit to the compiler search path
       using "Tools|Options" menu in VC IDE
 
- b) Under Unix: run configure && make && make install as usual
+ - Under Unix: run `configure && make && make install` as usual
 
 
 II. Writing tests with CppUnit
@@ -29,9 +29,12 @@ II. Writing tests with CppUnit
 
 2. Write a cpp file for the test copying, if you want,
    from one of the existing tests. The things to look for:
+
  a) #include "wx/cppunit.h" instead of directly including CppUnit headers
+
  b) don't put too many things in one test case nor in one method of a test
     case as it makes understanding what exactly failed harder later
+
  c) 'register' your tests as follows so that the test program will find and
     execute them:
 
@@ -42,6 +45,7 @@ II. Writing tests with CppUnit
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MBConvTestCase, "MBConvTestCase");
 
     Read CppUnit documentation for more.
+
  d) wxUIActionSimulator can be used when user input is required, for example
     clicking buttons or typing text. A simple example of this can be found
     in controls/buttontest.cpp. After simulating some user input always
@@ -49,9 +53,10 @@ II. Writing tests with CppUnit
     wxUIActionSimulator always add the test using WXUISIM_TEST rather than
     CPPUNIT_TEST as then it won't run on unsupported platforms. The test itself
     must also be wrapped in a #if wxUSE_UIACTIONSIMULATOR block.
+
  e) There are a number of classes that are available to help with testing GUI
     elements. Firstly throughout the test run there is a frame of type
-    wxTestableFrame that you can access through wxTheApp->GetTopWindow(). This
+    wxTestableFrame that you can access through `wxTheApp->GetTopWindow()`. This
     class adds two new functions, GetEventCount, which takes an optional
     wxEventType. It then returns the number of events of that type that it has
     received since the last call. Passing nothing returns the total number of
@@ -62,9 +67,9 @@ II. Writing tests with CppUnit
     event type. It disconnects again once it is out of scope. It simply reduces
     the amount of typing required to count events.
 
-3. add a '<sources>' tag for your source file to tests/test.bkl. Make sure it's
-   in the correct section: the one starting '<exe id="test_gui"' for a gui test,
-   the one starting '<exe id="test" template="wx_sample_console' otherwise.
+3. add a `<sources>` tag for your source file to tests/test.bkl. Make sure it's
+   in the correct section: the one starting `<exe id="test_gui"` for a gui test,
+   the one starting `<exe id="test" template="wx_sample_console` otherwise.
 
 
 III. Running the tests
@@ -137,8 +142,3 @@ IV. Notes
    instead of the unnamed registry. The default suite should execute reasonably
    quickly. To run the default and advanced tests together:
     test "" advanced
-
-
-=== EOF ===
-
-Author:  VZ & MW

@@ -1,5 +1,5 @@
-                          wxWidgets translator guide
-                          ==========================
+wxWidgets translator guide
+==========================
 
 This note is addressed to wxWidgets translators.
 
@@ -73,30 +73,3 @@ in wx.bkl:
         <linguas>it</linguas>
         <install-to>$(LOCALEDIR)</install-to>
     </gettext-catalogs>
-
-=== EOF ===
-
-Author:  VZ
-
-$Log$
-Revision 1.7  2005/08/12 15:34:01  MW
-Typo
-
-Revision 1.6  2005/08/12 15:29:47  MW
-Translate '&Help' to '&' for italian Windows only
-
-Revision 1.5  2004/10/22 19:12:59  KH
-*** empty log message ***
-
-Revision 1.4  2004/05/04 08:26:58  JS
-Name change replacements
-
-Revision 1.3  2003/11/18 16:37:11  DS
-Updated translation technote to mention Makefile usage under Windows.
-
-Revision 1.2  2002/07/03 15:01:26  VZ
-typos and other doc corrections from Olly Betts (patch 573738)
-
-Revision 1.1  2000/03/07 10:53:53  VZ
-technote about translations added
-

@@ -1,5 +1,5 @@
-            How to update a third party library to a newer version
-            ======================================================
+How to update a third party library to a newer version
+======================================================
 
 0. Introduction
 ---------------
