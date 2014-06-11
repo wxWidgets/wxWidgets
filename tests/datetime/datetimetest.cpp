@@ -689,19 +689,19 @@ void DateTimeTestCase::TestTimeFormat()
 
     static const Date formatTestDates[] =
     {
-        { 29, wxDateTime::May, 1976, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
-        { 31, wxDateTime::Dec, 1999, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
-        {  6, wxDateTime::Feb, 1937, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
-        {  6, wxDateTime::Feb, 1856, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
-        {  6, wxDateTime::Feb, 1857, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
-        { 29, wxDateTime::May, 2076, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
+        { 29, wxDateTime::May, 1976, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay, -1 },
+        { 31, wxDateTime::Dec, 1999, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, -1 },
+        {  6, wxDateTime::Feb, 1937, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, -1 },
+        {  6, wxDateTime::Feb, 1856, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, -1 },
+        {  6, wxDateTime::Feb, 1857, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, -1 },
+        { 29, wxDateTime::May, 2076, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay, -1 },
 
         // FIXME: the test with 02:15:25 time doesn't pass because of DST
         //        computation problems, we get back 03:15:25
-        { 29, wxDateTime::Feb, 2400, 04, 15, 25, 0.0, wxDateTime::Inv_WeekDay },
+        { 29, wxDateTime::Feb, 2400, 04, 15, 25, 0.0, wxDateTime::Inv_WeekDay, -1 },
 #if 0
         // Need to add support for BCE dates.
-        { 01, wxDateTime::Jan,  -52, 03, 16, 47, 0.0, wxDateTime::Inv_WeekDay },
+        { 01, wxDateTime::Jan,  -52, 03, 16, 47, 0.0, wxDateTime::Inv_WeekDay, -1 },
 #endif
     };
 
@@ -957,37 +957,37 @@ void DateTimeTestCase::TestParceRFC822()
     {
         {
             "Sat, 18 Dec 1999 00:46:40 +0100",
-            { 17, wxDateTime::Dec, 1999, 23, 46, 40 },
+            { 17, wxDateTime::Dec, 1999, 23, 46, 40, 0.0, wxDateTime::Inv_WeekDay, -1 },
             true
         },
         {
             "Wed, 1 Dec 1999 05:17:20 +0300",
-            {  1, wxDateTime::Dec, 1999, 2, 17, 20 },
+            {  1, wxDateTime::Dec, 1999, 2, 17, 20, 0.0, wxDateTime::Inv_WeekDay, -1 },
             true
         },
         {
             "Sun, 28 Aug 2005 03:31:30 +0200",
-            { 28, wxDateTime::Aug, 2005, 1, 31, 30 },
+            { 28, wxDateTime::Aug, 2005, 1, 31, 30, 0.0, wxDateTime::Inv_WeekDay, -1 },
             true
         },
 
         {
             "Sat, 18 Dec 1999 10:48:30 -0500",
-            { 18, wxDateTime::Dec, 1999, 15, 48, 30 },
+            { 18, wxDateTime::Dec, 1999, 15, 48, 30, 0.0, wxDateTime::Inv_WeekDay, -1 },
             true
         },
 
         // seconds are optional according to the RFC
         {
             "Sun, 01 Jun 2008 16:30 +0200",
-            {  1, wxDateTime::Jun, 2008, 14, 30, 00 },
+            {  1, wxDateTime::Jun, 2008, 14, 30, 00, 0.0, wxDateTime::Inv_WeekDay, -1 },
             true
         },
 
         // try some bogus ones too
         {
             "Sun, 01 Jun 2008 16:30: +0200",
-            { 0 },
+            { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 },
             false
         },
     };
@@ -1027,17 +1027,17 @@ void DateTimeTestCase::TestDateParse()
         bool good;
     } parseTestDates[] =
     {
-        { "21 Mar 2006", { 21, wxDateTime::Mar, 2006 }, true },
-        { "29 Feb 1976", { 29, wxDateTime::Feb, 1976 }, true },
-        { "Feb 29 1976", { 29, wxDateTime::Feb, 1976 }, true },
-        { "31/03/06",    { 31, wxDateTime::Mar,    6 }, true },
-        { "31/03/2006",  { 31, wxDateTime::Mar, 2006 }, true },
+        { "21 Mar 2006", { 21, wxDateTime::Mar, 2006, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
+        { "29 Feb 1976", { 29, wxDateTime::Feb, 1976, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
+        { "Feb 29 1976", { 29, wxDateTime::Feb, 1976, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
+        { "31/03/06",    { 31, wxDateTime::Mar,    6, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
+        { "31/03/2006",  { 31, wxDateTime::Mar, 2006, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
 
         // some invalid ones too
-        { "29 Feb 2006" },
-        { "31/04/06" },
-        { "bloordyblop" },
-        { "2 .  .    " },
+		{ "29 Feb 2006", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "31/04/06", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "bloordyblop", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "2 .  .    ", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
     };
 
     // special cases
@@ -1082,15 +1082,15 @@ void DateTimeTestCase::TestDateParseISO()
         bool good;
     } parseTestDates[] =
     {
-        { "2006-03-21", { 21, wxDateTime::Mar, 2006 }, true },
-        { "1976-02-29", { 29, wxDateTime::Feb, 1976 }, true },
-        { "0006-03-31", { 31, wxDateTime::Mar,    6 }, true },
+        { "2006-03-21", { 21, wxDateTime::Mar, 2006, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
+        { "1976-02-29", { 29, wxDateTime::Feb, 1976, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
+        { "0006-03-31", { 31, wxDateTime::Mar,    6, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, true },
 
         // some invalid ones too
-        { "2006:03:31" },
-        { "31/04/06" },
-        { "bloordyblop" },
-        { "" },
+        { "2006:03:31", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "31/04/06", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "bloordyblop", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
+        { "", { 0, wxDateTime::Inv_Month, 00, 00, 00, 00, 0.0, wxDateTime::Inv_WeekDay, -1 }, false },
     };
 
     static const struct
@@ -1104,10 +1104,10 @@ void DateTimeTestCase::TestDateParseISO()
         { "02:17:01",  2, 17,  1, true },
 
         // some invalid ones too
-        { "66:03:31" },
-        { "31/04/06" },
-        { "bloordyblop" },
-        { "" },
+        { "66:03:31", 0, 0, 0, false },
+        { "31/04/06", 0, 0, 0, false },
+        { "bloordyblop", 0, 0, 0, false },
+        { "", 0, 0, 0, false },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
@@ -1158,25 +1158,25 @@ void DateTimeTestCase::TestDateTimeParse()
     {
         {
             "Thu 22 Nov 2007 07:40:00 PM",
-            { 22, wxDateTime::Nov, 2007, 19, 40,  0 },
+            { 22, wxDateTime::Nov, 2007, 19, 40,  0, 0.0, wxDateTime::Inv_WeekDay, -1 },
             true
         },
 
         {
             "2010-01-04 14:30",
-            {  4, wxDateTime::Jan, 2010, 14, 30,  0 },
+            {  4, wxDateTime::Jan, 2010, 14, 30,  0, 0.0, wxDateTime::Inv_WeekDay, -1 },
             true
         },
 
         {
             "bloordyblop",
-            {  1, wxDateTime::Jan, 9999,  0,  0,  0},
+            {  1, wxDateTime::Jan, 9999,  0,  0,  0, 0.0, wxDateTime::Inv_WeekDay, -1 },
             false
         },
 
         {
             "2012-01-01 10:12:05 +0100",
-            {  1, wxDateTime::Jan, 2012,  10,  12,  5, -1 },
+            {  1, wxDateTime::Jan, 2012,  10,  12,  5, -1, wxDateTime::Inv_WeekDay, -1 },
             false // ParseDateTime does know yet +0100
         },
     };

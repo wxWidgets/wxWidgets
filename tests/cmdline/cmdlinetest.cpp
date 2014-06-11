@@ -286,20 +286,20 @@ void CmdLineTestCase::Usage()
     // details, its format can change in the future)
     static const wxCmdLineEntryDesc desc[] =
     {
-        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "Verbosity options" },
-        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
-        { wxCMD_LINE_SWITCH, "q", "quiet",   "be quiet" },
+        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "Verbosity options", wxCMD_LINE_VAL_STRING, 0x0 },
+        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose", wxCMD_LINE_VAL_STRING, 0x0 },
+        { wxCMD_LINE_SWITCH, "q", "quiet",   "be quiet", wxCMD_LINE_VAL_STRING, 0x0 },
 
-        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "Output options" },
-        { wxCMD_LINE_OPTION, "o", "output",  "output file" },
-        { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
-        { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE },
-        { wxCMD_LINE_OPTION, "f", "double",  "output double", wxCMD_LINE_VAL_DOUBLE },
+        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "Output options", wxCMD_LINE_VAL_STRING, 0x0 },
+        { wxCMD_LINE_OPTION, "o", "output",  "output file", wxCMD_LINE_VAL_STRING, 0x0 },
+        { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER, 0x0 },
+        { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE, 0x0 },
+        { wxCMD_LINE_OPTION, "f", "double",  "output double", wxCMD_LINE_VAL_DOUBLE, 0x0 },
 
-        { wxCMD_LINE_PARAM,  NULL, NULL, "input file", },
+        { wxCMD_LINE_PARAM,  NULL, NULL, "input file", wxCMD_LINE_VAL_STRING, 0x0 },
 
-        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "\nEven more usage text" },
-        { wxCMD_LINE_NONE }
+        { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "\nEven more usage text", wxCMD_LINE_VAL_STRING, 0x0 },
+        wxCMD_LINE_DESC_END
     };
 
     wxCmdLineParser p(desc);
@@ -333,13 +333,13 @@ void CmdLineTestCase::Found()
 {
     static const wxCmdLineEntryDesc desc[] =
     {
-        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
-        { wxCMD_LINE_OPTION, "o", "output",  "output file" },
-        { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER },
-        { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE },
-        { wxCMD_LINE_OPTION, "f", "double",  "output double", wxCMD_LINE_VAL_DOUBLE },
-        { wxCMD_LINE_PARAM,  NULL, NULL, "input file", },
-        { wxCMD_LINE_NONE }
+        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose", wxCMD_LINE_VAL_STRING, 0x0 },
+        { wxCMD_LINE_OPTION, "o", "output",  "output file", wxCMD_LINE_VAL_STRING, 0x0 },
+        { wxCMD_LINE_OPTION, "s", "size",    "output block size", wxCMD_LINE_VAL_NUMBER, 0x0 },
+        { wxCMD_LINE_OPTION, "d", "date",    "output file date", wxCMD_LINE_VAL_DATE, 0x0 },
+        { wxCMD_LINE_OPTION, "f", "double",  "output double", wxCMD_LINE_VAL_DOUBLE, 0x0 },
+        { wxCMD_LINE_PARAM,  NULL, NULL, "input file", wxCMD_LINE_VAL_STRING, 0x0 },
+        wxCMD_LINE_DESC_END
     };
 
     wxCmdLineParser p(desc);
