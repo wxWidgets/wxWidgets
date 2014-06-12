@@ -66,9 +66,11 @@ bool wxWebViewChromium::Create(wxWindow* parent,
            long style,
            const wxString& name)
 {
-    if (!wxControl::Create(parent, id, pos, size, style,
-                           wxDefaultValidator, name))
+    style |= wxHSCROLL | wxVSCROLL;
+    if (!PreCreation( parent, pos, size ) ||
+        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
+        wxFAIL_MSG( wxT("wxWebViewChromium creation failed") );
         return false;
     }
 
@@ -89,14 +91,11 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #endif
 
 #ifdef __WXGTK__
-    GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     GtkWidget* vbox = gtk_vbox_new(FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(window), vbox);
-    gtk_window_set_default_size(GTK_WINDOW(window), 400, 400);
+    GTKCreateScrolledWindowWith(vbox);
+    g_object_ref(m_widget);
     info.SetAsChild(vbox);
 #endif
-    // Creat the new child browser window, we do this async as we use a multi
-    // threaded message loop
 
 #if CHROME_VERSION_BUILD >= 1650
     CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
@@ -106,12 +105,10 @@ bool wxWebViewChromium::Create(wxWindow* parent,
                                   url.ToStdString(), browsersettings);
 #endif
 
-#ifdef __WXGTK__
-    // Show browser window.
-    gtk_widget_show_all(GTK_WIDGET(window));
-#endif
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
     this->Bind(wxEVT_IDLE, &wxWebViewChromium::RunCEFMessageLoopOnIdle);
+    m_parent->DoAddChild( this );
+    PostCreation(size);
     return true;
 }
 
