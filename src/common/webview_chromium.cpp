@@ -436,6 +436,10 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     }
 
     CefSettings settings;
+#ifdef __WXDEBUG__
+    settings.log_severity = LOGSEVERITY_INFO;
+    CefString(&settings.log_file).FromASCII("./debug.log");
+#endif
     // We use a multithreaded message loop so we don't have to integrate
     // with the wx message loop
     //settings.multi_threaded_message_loop = true;
