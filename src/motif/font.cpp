@@ -37,6 +37,7 @@
     #include "wx/gdicmn.h"
 #endif
 
+#include "wx/crt.h"         // for wxSscanf()
 #include "wx/fontutil.h"    // for wxNativeFontInfo
 #include "wx/tokenzr.h"
 #include "wx/motif/private.h"
