@@ -106,7 +106,6 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #endif
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
-    this->Bind(wxEVT_IDLE, &wxWebViewChromium::RunCEFMessageLoopOnIdle);
     m_parent->DoAddChild( this );
     PostCreation(size);
     return true;
@@ -458,7 +457,7 @@ int wxWebViewChromium::StartUpSubprocess()
     return CefExecuteProcess(args, NULL);
 }
 
-void wxWebViewChromium::RunCEFMessageLoopOnIdle(wxIdleEvent& event)
+void wxWebViewChromium::RunCEFMessageLoopOnIdle()
 {
     CefDoMessageLoopWork();
 }
