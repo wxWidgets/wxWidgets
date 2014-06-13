@@ -72,6 +72,7 @@ public:
 
     virtual bool OnInit();
     virtual int OnExit();
+    virtual bool ProcessIdle();
 
     /*
 #if wxUSE_CMDLINE_PARSER
@@ -266,6 +267,12 @@ int WebApp::OnExit()
     wxWebViewChromium::Shutdown();
     return wxApp::OnExit();
 }
+
+bool WebApp::ProcessIdle() {
+  wxWebViewChromium::RunCEFMessageLoopOnIdle();
+  return wxApp::ProcessIdle();
+}
+
 
 WebFrame::WebFrame(const wxString& url) :
     wxFrame(NULL, wxID_ANY, "wxWebView Sample")
