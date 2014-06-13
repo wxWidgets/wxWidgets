@@ -237,9 +237,6 @@ private:
     wxString m_title;
     wxWebViewZoom m_zoomLevel;
 
-    //The timer calls the CEF event loop
-    wxTimer *m_timer;
-
     // Current main frame page source
     wxString m_pageSource;
 
