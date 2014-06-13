@@ -66,13 +66,23 @@ bool wxWebViewChromium::Create(wxWindow* parent,
            long style,
            const wxString& name)
 {
+#ifdef __WXMSW__
+    if ( !wxControl::Create(parent, id, pos, size, style,
+                           wxDefaultValidator, name) )
+    {
+        return false;
+    }
+#endif
+
+#ifdef __WXGTK__
     style |= wxHSCROLL | wxVSCROLL;
-    if (!PreCreation( parent, pos, size ) ||
-        !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
+    if ( !PreCreation( parent, pos, size ) ||
+         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ) )
     {
         wxFAIL_MSG( wxT("wxWebViewChromium creation failed") );
         return false;
     }
+#endif
 
     m_historyLoadingFromList = false;
     m_historyEnabled = true;
@@ -95,6 +105,8 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     GTKCreateScrolledWindowWith(vbox);
     g_object_ref(m_widget);
     info.SetAsChild(vbox);
+    m_parent->DoAddChild( this );
+    PostCreation(size);
 #endif
 
 #if CHROME_VERSION_BUILD >= 1650
@@ -106,8 +118,6 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #endif
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
-    m_parent->DoAddChild( this );
-    PostCreation(size);
     return true;
 }
 
