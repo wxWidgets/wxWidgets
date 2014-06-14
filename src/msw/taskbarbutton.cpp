@@ -25,11 +25,15 @@
 #include "wx/taskbarbutton.h"
 
 #include <Shobjidl.h>
+#include <initguid.h>
 
 namespace {
 
 // The maximum number of thumbnail toolbar buttons allowed on windows is 7.
 static const int LIMITED_BUTTON_SIZE = 7;
+
+DEFINE_GUID(wxCLSID_TaskbarList,
+    0x56fdf344, 0xfd6d, 0x11d0, 0x95, 0x8a, 0x0, 0x60, 0x97, 0xc9, 0xa0, 0x90);
 
 THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
 {
@@ -75,15 +79,15 @@ wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
 {
     HRESULT hr = CoCreateInstance
                  (
-                    CLSID_TaskbarList,
+                    wxCLSID_TaskbarList,
                     NULL,
-                    CLSCTX_ALL,
+                    CLSCTX_INPROC_SERVER,
                     IID_ITaskbarList3,
                     reinterpret_cast<void **>(&m_taskbarList)
                  );
     if ( FAILED(hr) )
     {
-        wxLogApiError(wxT("CoCreateInstance(CLSID_TaskbarButtonList)"), hr);
+        wxLogApiError(wxT("CoCreateInstance(CLSID_TaskbarList)"), hr);
         return;
     }
 
@@ -230,14 +234,14 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
         memset(&buttons[i], 0, sizeof buttons[i]);
         buttons[i].iId = i;
         buttons[i].dwFlags = THBF_HIDDEN;
-        buttons[i].dwMask  = THB_FLAGS;
+        buttons[i].dwMask = static_cast<THUMBBUTTONMASK>(THB_FLAGS);
     }
 
     for ( i = 0; i < m_thumbBarButtons.size(); ++i )
     {
         buttons[i].hIcon = GetHiconOf(m_thumbBarButtons[i]->GetIcon());
         buttons[i].dwFlags = GetNativeThumbButtonFlags(*m_thumbBarButtons[i]);
-        buttons[i].dwMask = THB_ICON | THB_FLAGS;
+        buttons[i].dwMask = static_cast<THUMBBUTTONMASK>(THB_ICON | THB_FLAGS);
         wxString tooltip = m_thumbBarButtons[i]->GetTooltip();
         if ( tooltip.empty() )
             continue;
@@ -247,7 +251,8 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
         if ( tooltip.length() > WXSIZEOF(buttons[i].szTip) )
             tooltip = tooltip.SubString(0, WXSIZEOF(buttons[i].szTip) - 1);
         wxStrlcpy(buttons[i].szTip, tooltip.t_str(), tooltip.length());
-        buttons[i].dwMask |= THB_TOOLTIP;
+        buttons[i].dwMask =
+            static_cast<THUMBBUTTONMASK>(buttons[i].dwMask | THB_TOOLTIP);
     }
 
     if ( !m_hasInitThumbnailToolbar )
