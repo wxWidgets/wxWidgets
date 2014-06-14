@@ -67,7 +67,17 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
-
+wxSize wxChoice::DoGetBestSize() const
+{
+    wxSize basesize = wxChoiceBase::DoGetBestSize();
+    wxSize size = wxControl::DoGetBestSize();
+    // mix calculated size by wx base prioritizing qt hint (max):
+    if (size.GetWidth() < basesize.GetWidth())
+        size.SetWidth(basesize.GetWidth());
+    if (size.GetHeight() < basesize.GetHeight())
+        size.SetHeight(basesize.GetHeight());
+    return size;
+}
 
 
 unsigned wxChoice::GetCount() const
