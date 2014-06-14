@@ -49,3 +49,10 @@ QGroupBox *wxStaticBox::GetHandle() const
     return m_qtGroupBox;
 }
 
+void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
+{
+    wxStaticBoxBase::GetBordersForSizer(borderTop, borderOther);
+
+    // need extra space for the label:
+    *borderTop += GetCharHeight();
+}
