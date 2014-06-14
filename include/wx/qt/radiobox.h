@@ -11,6 +11,7 @@
 #include "wx/qt/pointer_qt.h"
 #include "wx/qt/groupbox_qt.h"
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QVBoxLayout>
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
@@ -84,6 +85,9 @@ private:
 
     // Handles the mutual exclusion of buttons:
     wxQtPointer< QButtonGroup > m_qtButtonGroup;
+
+    // Autofit layout
+    wxQtPointer< QVBoxLayout > m_qtVBoxLayout;
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };
