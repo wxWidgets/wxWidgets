@@ -805,9 +805,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                               5, choices,
                               wxTE_PROCESS_ENTER);
     wxSize combosize(m_combo->GetBestSize().x + 20, 100);
-    (void)new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
+    wxStaticBox *stbox = new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
                            wxPoint(5, 5), combosize);
-
+#ifdef __WXQT__
+    m_combo->Reparent(stbox);
+#endif
     (void)new wxButton( panel, ID_COMBO_SEL_NUM, wxT("Select #&2"), wxPoint(220,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_SEL_STR, wxT("&Select 'This'"), wxPoint(380,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_CLEAR, wxT("&Clear"), wxPoint(220,80), wxSize(140,30) );
