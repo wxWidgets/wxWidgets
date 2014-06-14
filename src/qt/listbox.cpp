@@ -46,6 +46,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 {
     m_qtListWidget = new QListWidget( parent->GetHandle() );
 
+    while ( n-- > 0 )
+        m_qtListWidget->addItem( wxQtConvertString( *choices++ ));
+
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
 
