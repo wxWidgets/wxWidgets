@@ -920,7 +920,8 @@ inline wxString wxGetFullModuleName()
 //      0x0502      Windows XP SP2, 2003 SP1
 //      0x0600      Windows Vista, 2008
 //      0x0601      Windows 7
-//      0x0602      Windows 8 (currently also returned for 8.1)
+//      0x0602      Windows 8 (currently also returned for 8.1 if program does not have a manifest indicating 8.1 support)
+//      0x0603      Windows 8.1 (currently only returned for 8.1 if program has a manifest indicating 8.1 support)
 //
 // for the other Windows versions 0 is currently returned
 enum wxWinVersion
@@ -950,7 +951,8 @@ enum wxWinVersion
 
     wxWinVersion_7 = 0x601,
 
-    wxWinVersion_8 = 0x602
+    wxWinVersion_8 = 0x602,
+    wxWinVersion_8_1 = 0x603
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
