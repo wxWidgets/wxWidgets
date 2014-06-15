@@ -10,8 +10,14 @@ http://blogs.msdn.com/b/vcblog/archive/2012/07/12/10329460.aspx
 http://code.msdn.microsoft.com/windowsdesktop/Writing-type-visualizers-2eae77a2#content
 -->
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <!-- We want to avoid showing 'L' before the string, this is useless and
+         makes the display less readable. But we still do want to put quotes
+         around the string to show that it is, in fact, a string. So we use
+         "sb" qualifier to get rid of L"..." around the string and then add
+		 the quotes back. This also has a (nice) side effect of not doubling
+		 the backslashes inside the string. -->
     <Type Name="wxString">
-        <DisplayString>{m_impl}</DisplayString>
+        <DisplayString>"{m_impl,sb}"</DisplayString>
         <StringView>m_impl</StringView>
     </Type>
 
