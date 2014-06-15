@@ -10,6 +10,7 @@
 
 #include "wx/button.h"
 #include "wx/bitmap.h"
+#include "wx/qt/utils.h"
 
 wxQtPushButton::wxQtPushButton( wxWindow *parent, wxControl *handler )
     : wxQtEventSignalHandler< QPushButton, wxControl >( parent, handler )
@@ -44,7 +45,10 @@ void wxQtPushButton::SetLabel( const wxString &label )
 
 void wxQtPushButton::SetBitmap( const wxBitmap &bitmap )
 {
-    setIcon( QIcon( *bitmap.GetHandle() ));
+    // load the bitmap and resize the button:
+    QPixmap *pixmap = bitmap.GetHandle();
+    setIcon( QIcon( *pixmap  ));
+    setIconSize( pixmap->rect().size() );
 }
 
 void wxQtPushButton::OnButtonClicked( bool WXUNUSED( checked ))
@@ -100,4 +104,29 @@ QPushButton *wxButton::GetHandle() const
     return m_qtPushButton;
 }
 
+void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+{
+    switch ( which )
+    {
+        case State_Normal:
+            m_qtPushButton->SetBitmap(bitmap);
+            InvalidateBestSize();
+            break;
+
+        case State_Pressed:
+            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Pressed ));
+            break;
+
+        case State_Current:
+            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Current ));
+            break;
+
+        case State_Focused:
+            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Focused ));
+            break;
+
+        default:
+            ;
+    }
+}
 
