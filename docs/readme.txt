@@ -1,9 +1,9 @@
                 wxWidgets 3.0.1 Release Notes
                 =============================
 
-Welcome to the latest release of wxWidgets, a free and open source
-cross-platform C++ framework for writing advanced GUI applications
-using native controls.
+Welcome to the latest stable release of wxWidgets, a free and open
+source cross-platform C++ framework for writing advanced GUI
+applications using native controls.
 
 
 wxWidgets allows you to write native-looking GUI applications for
@@ -38,26 +38,44 @@ files available at these locations.
 Changes in this release
 -----------------------
 
-This release contains several years worth of improvements compared
-to 2.8 version. Notably, Unicode support has been completely
-overhauled and made much easier to use. Debugging support, including
-when using a release build of the library, was greatly improved making
-it less likely that you use the library incorrectly. Dynamic event
-handling was made much more comfortable. Many new GUI and base classes
-have been added or improved and all ports, and especially wxOSX/Cocoa
-and wxGTK3, were enhanced.
+This is a bug fix release with no significant new features compared to
+3.0.0 and compatible with it at both the API and the ABI level (i.e.
+all applications linked against 3.0.0 DLLs or shared libraries will
+continue to work when using 3.0.1 libraries).
 
-Compared to the previous 2.9 development releases the most important
-change is that this release is part of the new 3.0 stable series,
-guarantying backwards API and ABI compatibility with the next 3.0.x
-releases.
+There were more than a hundred bug fixes, please see docs/changes.txt
+for more details. The most important user-visible changes are:
 
-Please see the file docs/changes.txt for more details and make sure
-to read the section "Incompatible changes since 2.8" if you upgrade
-from a previous wxWidgets release.
+* In all ports:
+ - wxHTML displays tables much faster now.
+ - Double clicking wxGrid columns doesn't make them too small any more.
+ - Fix bugs when dragging columns in wxGrid with hidden columns.
+ - Loading ICO files with PNG data is now supported.
 
-This release introduces many important changes and we are looking
-forward to your feedback about them!
+* In wxGTK:
+ - Mouse wheel scrolling in wxListCtrl works again.
+ - wxStaticBoxSizer contents is not truncated any more.
+ - AUI panels may now be re-docked after floating them.
+
+* In wxMSW:
+ - wxBitmapComboBox works again and doesn't just remain blank.
+ - Checkboxes in wxDataViewCtrl work again too now.
+ - wxCheckListBox appears correctly when using large fonts.
+
+* In wxOSX:
+ - Cancelling choice selection in wxDataViewCtrl doesn't crash any more.
+ - ShowModal() doesn't use quite as much CPU now.
+
+There are also many other bug fixes, including many improvements to
+alpha transparency handling in different places (mostly in wxMSW, but
+also in wxGTK) and resource/memory leak fixes in all ports.
+
+Finally, this release includes Visual Studio 2012 and 2013 projects for
+building wxWidgets, in addition to the project files for the previous
+versions already provided in 3.0.0 release.
+
+Please make sure to read the section "Incompatible changes since 2.8"
+in docs/changes.txt if you are upgrading from wxWidgets 2.8 or earlier.
 
 
 Platforms supported
@@ -113,7 +131,7 @@ Unless you have downloaded the binaries for your compiler, you
 will need to build wxWidgets before you can test out the samples
 or write your own applications. For installation information,
 please see the install.txt file in the docs subdirectory
-appropriate for the platform you use.
+appropriate for the platform you use, e.g. docs/msw/install.txt.
 
 
 Licence information
@@ -157,21 +175,16 @@ If you use wxXML classes or XRC, see src/expat/COPYING for licence
 details.
 
 
-Documentation
--------------
-
-wxWidgets documentation is available online at
-http://docs.wxwidgets.org/3.0.1/ and can also be downloaded in
-HTML format. To generate documentation in other formats (PDF, CHM,
-...) please use the scripts in docs/doxygen directory.
-
-
 Bug reporting
 -------------
 
 The wxWidgets bug tracker can be browsed at:
 
     http://trac.wxwidgets.org/report
+
+and new bugs can be opened from
+
+    http://trac.wxwidgets.org/newticket
 
 Please use the search function of our Trac installation to find
 any possibly relevant bugs before reporting new ones. Also please
@@ -196,4 +209,4 @@ If you are looking for support, you can get it from
 
 Have fun!
 
-The wxWidgets Team, November 2013
+The wxWidgets Team, July 2014

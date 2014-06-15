@@ -1,15 +1,15 @@
-November 11, 2013 -- The wxWidgets team is pleased to announce a
+June 15, 2014 -- The wxWidgets team is pleased to announce a
 major new release of our open source framework for the development
 of native cross-platform applications in C++.
 
-wxWidgets 3.0.0 is the first release in the new major stable 3.0
-branch and is available at
+wxWidgets 3.0.1 is a stable bug fix release in 3.0 branch and is
+available at
 
-        https://sourceforge.net/downloads/wxwindows/3.0.0/
+        https://sourceforge.net/downloads/wxwindows/3.0.1/
 
 and at our FTP mirror at
 
-        ftp://ftp.wxwidgets.org/pub/3.0.0/
+        ftp://ftp.wxwidgets.org/pub/3.0.1/
 
 Please choose the archive format suitable for your platform, i.e. 7z
 or ZIP for Windows platforms and tar.bz2 for the Unix systems
@@ -22,39 +22,61 @@ as only sources, not binaries, are installed.
 We also provide the pre-built versions of wxMSW libraries for the
 selected compilers at
 
-        https://sourceforge.net/downloads/wxwindows/3.0.0/binaries/
+        https://sourceforge.net/downloads/wxwindows/3.0.1/binaries/
 
 Please see the README file there for the descriptions of the
 individual files.
 
 
-This release is a culmination of several years of development since
-the last stable 2.8 release. There are too many changes to be listed
-here, but the most important ones are:
+This release is perfectly compatible with 3.0.0 at both the source
+(API) and binary (ABI) level and upgrading to it is strongly
+recommended for all users of wxWidgets 3.0.0 as it contains more than
+a hundred important bug fixes since it.
 
-- Completely overhauled Unicode support which is much easier to use.
-- New Cocoa-based wxOSX port for Mac OS X for both 32 and 64 bits.
-- New wxGTK3 port, including support for Broadway (HTML5) backend.
-- Access to the native web rendering engine with wxWebView.
-- New property grid and ribbon libraries are now included in wxWidgets.
-- Better interoperability with standard library classes.
-- Totally revised and more readable manual.
-- Improved debugging support.
+The most important user-visible changes are:
+
+* In all ports:
+ - wxHTML displays tables much faster now.
+ - Double clicking wxGrid columns doesn't make them too small any more.
+ - Fix bugs when dragging columns in wxGrid with hidden columns.
+ - Loading ICO files with PNG data is now supported.
+
+* In wxGTK:
+ - Mouse wheel scrolling in wxListCtrl works again.
+ - wxStaticBoxSizer contents is not truncated any more.
+ - AUI panels may now be re-docked after floating them.
+
+* In wxMSW:
+ - wxBitmapComboBox works again and doesn't just remain blank.
+ - Checkboxes in wxDataViewCtrl work again too now.
+ - wxCheckListBox appears correctly when using large fonts.
+
+* In wxOSX:
+ - Cancelling choice selection in wxDataViewCtrl doesn't crash any more.
+ - ShowModal() doesn't use quite as much CPU now.
+
+There are also many other bug fixes, including many improvements to
+alpha transparency handling in different places (mostly in wxMSW, but
+also in wxGTK) and resource/memory leak fixes in all ports.
+
+Finally, this release includes Visual Studio 2012 and 2013 projects for
+building wxWidgets, in addition to the project files for the previous
+versions already provided in 3.0.0 release.
 
 Please see the changes.txt file in the "docs" subdirectory of
 wxWidgets distribution or also available online at
-https://sourceforge.net/projects/wxwindows/files/3.0.0/changes.txt
+https://sourceforge.net/projects/wxwindows/files/3.0.1/changes.txt
 for more details and please read the "INCOMPATIBLE CHANGES" section
 in its beginning for a brief description of changes if you are
 upgrading from wxWidgets 2.8. For more details, please see
 http://docs.wxwidgets.org/3.0.0/overview_changes_since28.html
 
 
-We recommend that you use wxWidgets 3.0 for any new programs and
-also update any existing code using the older versions to the new
-one (which should be easier than the jump in the version number
-indicates) as all the future development will only happen in 3.x
-series.
+We recommend that you upgrade to wxWidgets 3.0.1 if you already use
+wxWidgets 3.0.0, the upgrade is completely transparent and doesn't
+require any changes in the existing code. If you are still using
+wxWidgets 2.8 or earlier, please consider updating to wxWidgets 3.0
+to profit from all the new functionality.
 
 
 We hope that you will enjoy using the new release!
