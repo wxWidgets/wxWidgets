@@ -40,14 +40,17 @@ working copy and you want to prepare distribution for the version x.y.z:
 4. This step must be done under Windows as it relies on having hhc.exe, the
    Html Help compiler, in PATH: run the following commands
 
+    ```
     cd docs\doxygen
     regen.bat chm
     cd out
     zip ..\..\..\wxWidgets-x.y.z-docs-chm.zip wx.chm
+    ```
 
 5. This step also must be done under Windows as it uses Inno Setup to produce
    the .exe file and it also requires the CHM file built above:
 
+    ```
     md x.y.z-sources
     cd x.y.z-sources
     7z x ..\wxWidgets-x.y.z.7z
@@ -55,46 +58,7 @@ working copy and you want to prepare distribution for the version x.y.z:
     cp ..\docs\doxygen\out\wx.chm docs\htmlhelp
     set WXW_VER=x.y.z
     iscc build\tools\wxwidgets.iss
-
-
-
-Instructions for the previous version of release scripts
---------------------------------------------------------
-
-NB: These scripts haven't been used since 2.8 series and may not work any longer!
-
-Currently our release system uses a Python 2.x script to generate releases.
-The script requires Unix utilities such as tar, zip and unix2dos and thus must
-be run either on Unix or using Cygwin on Windows. To generate a release, simply
-run the following command:
-
-build/tools/create-archive.py --compression=all /path/to/output/dir
-
-This will produce zip, gzip and bzip archives of the tree (without
-"compression" argument only .gz is made). Note that this commands produces huge
-amounts of output so redirecting it to a file is recommended.
-
-To add a prefix to the release, such as RC1, the SVN revision, or a date, just
-pass --postfix="postfix" to the script. More info on the options and their
-possible values can be found by calling `create-archive.py --help`.
-
-IMPORTANT NOTE: You *must* run this script from a clean source tree, that is,
-          with no junk files in it or modifications. This is because the
-          release should be a pristine copy of the tree as of the time of
-          release. If you have legitimate modifications in the tree that need
-          to be in the release, commit them first.
-
-To generate the windows installer (.exe) and the documentation files (chm and htb formats)
-run:
-
-build\tools\bld_chm_exe.bat
-
-which depends on the wxwidgets.iss file, and generates output in the %DAILY% directory. It 
-assumes a clean copy of the wxWidgets source tree in %INNO%. Temporary files will be generated 
-in the tree from which the batch file is run. It depends on doxygen, a number of gnu
-win32 tools and Microsofts htmlhelp compiler. The wxwidgets.iss file should not need 
-editing, but you will want to check that the bld_chm_exe.bat has the correct version number.
-
+    ```
 
 
 Uploading
