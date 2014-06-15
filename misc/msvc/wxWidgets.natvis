@@ -34,4 +34,46 @@ http://code.msdn.microsoft.com/windowsdesktop/Writing-type-visualizers-2eae77a2#
     <Type Name="wxULongLong">
         <DisplayString>{m_ll}</DisplayString>
     </Type>
+
+    <Type Name="wxArrayString">
+        <DisplayString Condition="m_nCount==0">empty</DisplayString>
+        <DisplayString Condition="m_nCount==1">{m_pItems[0]}</DisplayString>
+        <DisplayString Condition="m_nCount==2">{m_pItems[0]} and {m_pItems[1]}</DisplayString>
+        <DisplayString>size={m_nCount}: {m_pItems[0]}, {m_pItems[1]}, ...</DisplayString>
+        <Expand>
+            <ArrayItems>
+                <Size>m_nCount</Size>
+                <ValuePointer>m_pItems</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+
+    <!--
+        Defining visualizer for wxListBase is not really useful, so do it for
+        the most commonly used "concrete" list type.
+     -->
+    <Type Name="wxWindowList">
+        <DisplayString>size={m_count}</DisplayString>
+        <Expand>
+            <Item Name="[size]">m_count</Item>
+            <LinkedListItems>
+                <Size>m_count</Size>
+                <HeadPointer>m_nodeFirst</HeadPointer>
+                <NextPointer>m_next</NextPointer>
+                <ValueNode>(wxWindow*)m_data</ValueNode>
+            </LinkedListItems>
+        </Expand>
+    </Type>
+
+    <Type Name="wxVector&lt;*&gt;">
+        <DisplayString>size={m_size}</DisplayString>
+        <Expand>
+            <Item Name="[size]">m_size</Item>
+            <Item Name="[capacity]">m_capacity</Item>
+            <ArrayItems>
+                <Size>m_size</Size>
+                <ValuePointer>m_values</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
 </AutoVisualizer>
