@@ -30,7 +30,7 @@
 namespace {
 
 // The maximum number of thumbnail toolbar buttons allowed on windows is 7.
-static const int LIMITED_BUTTON_SIZE = 7;
+static const int MAX_BUTTON_COUNT = 7;
 
 DEFINE_GUID(wxCLSID_TaskbarList,
     0x56fdf344, 0xfd6d, 0x11d0, 0x95, 0x8a, 0x0, 0x60, 0x97, 0xc9, 0xa0, 0x90);
@@ -175,8 +175,8 @@ void wxTaskBarButtonImpl::SetThumbnailContents(const wxWindow *child)
 
 bool wxTaskBarButtonImpl::AppendThumbBarButton(wxThumbBarButton *button)
 {
-    if ( m_thumbBarButtons.size() >= LIMITED_BUTTON_SIZE )
-        return false;
+    wxASSERT_MSG( m_thumbBarButtons.size() < MAX_BUTTON_COUNT,
+                  "Number of thumb buttons is limited to 7" );
 
     m_thumbBarButtons.push_back(button);
     return InitOrUpdateThumbBarButtons();
@@ -185,9 +185,10 @@ bool wxTaskBarButtonImpl::AppendThumbBarButton(wxThumbBarButton *button)
 bool wxTaskBarButtonImpl::InsertThumbBarButton(size_t pos,
                                                wxThumbBarButton *button)
 {
-    if ( m_thumbBarButtons.size() >= LIMITED_BUTTON_SIZE ||
-         m_thumbBarButtons.size() < pos )
-        return false;
+    wxASSERT_MSG( m_thumbBarButtons.size() < MAX_BUTTON_COUNT,
+                  "Number of thumb buttons is limited to 7" );
+    wxASSERT_MSG( pos <= m_thumbBarButtons.size(),
+                  "Invalid index when inserting the button" );
 
     m_thumbBarButtons.insert(m_thumbBarButtons.begin() + pos, button);
     return InitOrUpdateThumbBarButtons();
@@ -195,12 +196,13 @@ bool wxTaskBarButtonImpl::InsertThumbBarButton(size_t pos,
 
 bool wxTaskBarButtonImpl::RemoveThumbBarButton(wxThumbBarButton *button)
 {
-    wxThumbBarButtons::iterator it;
-    for ( it = m_thumbBarButtons.begin(); it != m_thumbBarButtons.end(); ++it )
+    for ( wxThumbBarButtons::iterator iter = m_thumbBarButtons.begin();
+          iter != m_thumbBarButtons.end();
+          ++iter )
     {
-        if ( button == *it )
+        if ( button == *iter )
         {
-            m_thumbBarButtons.erase(it);
+            m_thumbBarButtons.erase(iter);
             return InitOrUpdateThumbBarButtons();
         }
     }
@@ -210,12 +212,13 @@ bool wxTaskBarButtonImpl::RemoveThumbBarButton(wxThumbBarButton *button)
 
 bool wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
 {
-    wxThumbBarButtons::iterator it;
-    for ( it = m_thumbBarButtons.begin(); it != m_thumbBarButtons.end(); ++it )
+    for ( wxThumbBarButtons::iterator iter = m_thumbBarButtons.begin();
+          iter != m_thumbBarButtons.end();
+          ++iter )
     {
-        if ( id == (*it)->GetID() )
+        if ( id == (*iter)->GetID() )
         {
-            m_thumbBarButtons.erase(it);
+            m_thumbBarButtons.erase(iter);
             return InitOrUpdateThumbBarButtons();
         }
     }
@@ -225,11 +228,10 @@ bool wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
 
 bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
 {
-    THUMBBUTTON buttons[LIMITED_BUTTON_SIZE];
-    size_t i;
+    THUMBBUTTON buttons[MAX_BUTTON_COUNT];
     HRESULT hr;
 
-    for ( i = 0; i < LIMITED_BUTTON_SIZE; ++i )
+    for ( size_t i = 0; i < MAX_BUTTON_COUNT; ++i )
     {
         memset(&buttons[i], 0, sizeof buttons[i]);
         buttons[i].iId = i;
@@ -237,7 +239,7 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
         buttons[i].dwMask = static_cast<THUMBBUTTONMASK>(THB_FLAGS);
     }
 
-    for ( i = 0; i < m_thumbBarButtons.size(); ++i )
+    for ( size_t i = 0; i < m_thumbBarButtons.size(); ++i )
     {
         buttons[i].hIcon = GetHiconOf(m_thumbBarButtons[i]->GetIcon());
         buttons[i].dwFlags = GetNativeThumbButtonFlags(*m_thumbBarButtons[i]);
@@ -248,8 +250,7 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
 
         // Truncate the tooltip if its length longer than szTip(THUMBBUTTON)
         // allowed length (260).
-        if ( tooltip.length() > WXSIZEOF(buttons[i].szTip) )
-            tooltip = tooltip.SubString(0, WXSIZEOF(buttons[i].szTip) - 1);
+        tooltip.Truncate(260);
         wxStrlcpy(buttons[i].szTip, tooltip.t_str(), tooltip.length());
         buttons[i].dwMask =
             static_cast<THUMBBUTTONMASK>(buttons[i].dwMask | THB_TOOLTIP);
@@ -258,7 +259,7 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
     if ( !m_hasInitThumbnailToolbar )
     {
         hr = m_taskbarList->ThumbBarAddButtons(m_hwnd,
-                                               LIMITED_BUTTON_SIZE,
+                                               MAX_BUTTON_COUNT,
                                                buttons);
         if ( FAILED(hr) )
         {
@@ -269,7 +270,7 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
     else
     {
         hr = m_taskbarList->ThumbBarUpdateButtons(m_hwnd,
-                                                  LIMITED_BUTTON_SIZE,
+                                                  MAX_BUTTON_COUNT,
                                                   buttons);
         if ( FAILED(hr) )
         {
