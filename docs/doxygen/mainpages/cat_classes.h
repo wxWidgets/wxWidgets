@@ -15,6 +15,7 @@ This page contains a summarized listing of classes, please see the
 @ref group_class page for a full listing by category or the
 <a href="classes.html">full list of classes</a> in alphabetical order.
 
+For a more visual approach, see @ref page_screenshots "the screenshots" page.
 
 
 @section page_class_cat_basicwnd Basic Windows
