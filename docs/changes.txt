@@ -574,7 +574,7 @@ Major new features in this release
 
 
 
-3.0.1: (released 2014-xx-xx)
+3.0.1: (released 2014-06-15)
 ----------------------------
 
 All:
