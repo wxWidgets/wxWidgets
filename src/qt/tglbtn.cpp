@@ -92,7 +92,7 @@ bool wxToggleButton::Create(wxWindow *parent,
     m_qtPushButton->SetToggleable();
     m_qtPushButton->SetLabel( label );
 
-    return wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 void wxToggleButton::SetValue(bool state)
