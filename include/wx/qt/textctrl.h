@@ -9,6 +9,7 @@
 #define _WX_QT_TEXTCTRL_H_
 
 #include "wx/qt/pointer_qt.h"
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QTextEdit>
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
@@ -50,7 +51,7 @@ public:
 
     virtual void ShowPosition(long pos);
     
-    virtual QTextEdit *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -59,6 +60,7 @@ protected:
     virtual bool DoSaveFile(const wxString& file, int fileType);
     
 private:
+    wxQtPointer< QLineEdit > m_qtLineEdit;
     wxQtPointer< QTextEdit > m_qtTextEdit;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxTextCtrl );

@@ -10,6 +10,7 @@
 
 #include "wx/textctrl.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/utils.h"
 
 wxTextCtrl::wxTextCtrl()
 {
@@ -36,14 +37,22 @@ bool wxTextCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString &name)
 {
-    m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->GetHandle() );
+    bool multiline = (style & wxTE_MULTILINE) != 0;
 
+    if (!multiline)
+    {
+        m_qtLineEdit = new QLineEdit( wxQtConvertString( value ), parent->GetHandle() );
+    }
+    else
+    {
+        m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->GetHandle() );
+    }
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
-    return wxSize( 100, 50 ); // wxTextCtrlBase::DoGetBestSize();
+    return wxTextCtrlBase::DoGetBestSize();
 
 }
 int wxTextCtrl::GetLineLength(long lineNo) const
@@ -113,7 +122,10 @@ bool wxTextCtrl::DoSaveFile(const wxString& file, int fileType)
     return false;
 }
 
-QTextEdit *wxTextCtrl::GetHandle() const
+QWidget *wxTextCtrl::GetHandle() const
 {
-    return m_qtTextEdit;
+    if (!m_qtLineEdit.isNull())
+        return (QWidget *) m_qtLineEdit;
+    else
+        return (QWidget *) m_qtTextEdit;
 }
