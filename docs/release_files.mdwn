@@ -1,17 +1,21 @@
-wxWidgets 3.0.0
+wxWidgets 3.0.1
 ===============
 
 This directory contains the files containing the sources and documentation of
-wxWidgets 3.0.0 release. Please see the binaries subdirectory for the binaries
+wxWidgets 3.0.1 release. Please see the binaries subdirectory for the binaries
 for the selected platforms/compilers.
 
 Please notice that since the 2.9 series only a single source distribution is
 provided instead of the multiple distributions containing only the files for
-each port as was done before. So you only need to download wxWidgets-3.0.0.zip
+each port as was done before. So you only need to download wxWidgets-3.0.1.zip
 (or .7z for much smaller archive size) for Microsoft Windows systems or
-wxWidgets-3.0.0.tar.bz2 for Unix ones, including Mac OS X. The only difference
+wxWidgets-3.0.1.tar.bz2 for Unix ones, including Mac OS X. The only difference
 between these files is that the ZIP (and 7z) archives contain files with DOS
 line endings while the tar balls contain files with Unix line endings.
+
+Note for the Windows users: please note that the installer installs *only* the
+sources and you still need to compile the library before using it. See binaries
+subdirectory for the pre-built binaries for the selected compilers.
 
 
 Reporting Problems
@@ -24,13 +28,13 @@ or by posting to [wx-users mailing list](http://groups.google.com/group/wx-users
 Check Sums
 ----------
 
-To verify your download you can use the following sha1sums:
+To verify your download please use the following sha1sums:
 
-    d19985b4ea4277ac7707615b7c00b15e3d58d2c0  wxWidgets-3.0.0.7z
-    756a9c54d1f411e262f03bacb78ccef085a9880a  wxWidgets-3.0.0.tar.bz2
-    becf924bb06441bfd2e7f3f4bf4501e58ff5c7b8  wxWidgets-3.0.0.zip
-    6950f26601f5b71f955803854b19dce22af5e020  wxWidgets-3.0.0-docs-html.tar.bz2
-    b2909e17d19765cedf9d79793a78c3f7eda7d88b  wxWidgets-3.0.0-docs-html.zip
-    bf0d8baa476baba8ac13442a6c9cd74c2f356993  wxWidgets-3.0.0-docs-chm.zip
-    2f4f7013845930e069b4f3c5226d771eadee6986  wxWidgets-3.0.0_headers.7z
-    ff997beecf047ef9c94a1caccd9770300033c136  wxMSW-3.0.0-Setup.exe
+    e0ad42932fc8e9462d0a852086a1ecc97fae3a48  wxWidgets-3.0.1.7z
+    73e58521d6871c9f4d1e7974c6e3a81629fddcf8  wxWidgets-3.0.1.tar.bz2
+    e88ad739f3be41ae13ff5ef6b73b5d3a2bb5ee7f  wxWidgets-3.0.1.zip
+    b070994dceff8e2db4263d8b0eab5b149e68e959  wxWidgets-3.0.1-docs-html.tar.bz2
+    2933c60e5ceca650cc9168066bf69e96b648ee96  wxWidgets-3.0.1-docs-html.zip
+    b13c987892392d2c204750f935efe0d1e28b8e0b  wxWidgets-3.0.1-docs-chm.zip
+    f6beb163df207fbfba5caa1a485a8ed5d55978ea  wxWidgets-3.0.1_headers.7z
+    5bb83e64eac8a77a1e3a5157a0ff8a7ff4db4583  wxMSW-3.0.1-Setup.exe
