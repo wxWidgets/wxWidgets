@@ -101,12 +101,19 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #endif
 
 #ifdef __WXGTK__
-    GtkWidget* vbox = gtk_vbox_new(FALSE, 0);
-    GTKCreateScrolledWindowWith(vbox);
-    g_object_ref(m_widget);
-    info.SetAsChild(vbox);
+    m_widget = gtk_scrolled_window_new( NULL, NULL );
+    g_object_ref( m_widget );
+    GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW( m_widget );
+    // Hide the scroll bar.
+    gtk_scrolled_window_set_policy( scrolled_window, GTK_POLICY_NEVER, GTK_POLICY_NEVER);
+    GtkWidget* view_port = gtk_viewport_new( NULL, NULL );
+    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(scrolled_window),
+                                           view_port );
+    info.SetAsChild( view );
     m_parent->DoAddChild( this );
-    PostCreation(size);
+    PostCreation( size );
+
+    gtk_widget_show( view );
 #endif
 
 #if CHROME_VERSION_BUILD >= 1650
