@@ -120,7 +120,8 @@ For major releases, submit the announcement to http://slashdot.org/submission
 Update www.wxwidgets.org, usually a news item is enough but something more can
 be called for for major releases.
 
-Modify the links at downloads/index.html to point to the new release.
+Modify the links at downloads/index.html to point to the new release. Also
+update the release date on this page.
 
 Also update docs/index.html for the minor or major (i.e. not micro) releases.
 
