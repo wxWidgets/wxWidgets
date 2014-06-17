@@ -109,11 +109,11 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     GtkWidget* view_port = gtk_viewport_new( NULL, NULL );
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(scrolled_window),
                                            view_port );
-    info.SetAsChild( view );
+    info.SetAsChild( view_port );
     m_parent->DoAddChild( this );
     PostCreation( size );
 
-    gtk_widget_show( view );
+    gtk_widget_show( view_port );
 #endif
 
 #if CHROME_VERSION_BUILD >= 1650
