@@ -122,6 +122,52 @@ bool wxTextCtrl::DoSaveFile(const wxString& file, int fileType)
     return false;
 }
 
+void wxTextCtrl::SetInsertionPoint(long pos)
+{
+    QTextCursor::MoveOperation op;
+    QTextCursor cursor;
+
+    // check if pos indicates end of text:
+    if ( pos == -1 )
+    {
+        pos = 0;
+        op = QTextCursor::End;
+    }
+    else
+    {
+        op = QTextCursor::Start;
+    }
+    if ( !IsMultiLine() )
+    {
+        if (op == QTextCursor::End)
+            m_qtLineEdit->end(false);
+        else
+            m_qtLineEdit->setCursorPosition(pos);
+    }
+    else
+    {
+        cursor = m_qtTextEdit->textCursor();
+        cursor.movePosition(op, QTextCursor::MoveAnchor, pos);
+        m_qtTextEdit->setTextCursor(cursor);
+    }
+}
+
+long wxTextCtrl::GetInsertionPoint() const
+{
+    QTextCursor cursor;
+
+    if ( !IsMultiLine() )
+    {
+        return m_qtLineEdit->cursorPosition();
+    }
+    else
+    {
+        cursor = m_qtTextEdit->textCursor();
+        return cursor.position();
+    }
+}
+
+
 void wxTextCtrl::WriteText( const wxString &text )
 {
     // Insert the text
