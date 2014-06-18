@@ -412,7 +412,7 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
     return true ;
 }
 
-void wxOSXPrintData::TransferFrom( wxPageSetupDialogData *WXUNUSED(data) )
+void wxOSXPrintData::TransferFrom( const wxPageSetupDialogData *WXUNUSED(data) )
 {
     // should we setup the page rect here ?
     // since MacOS sometimes has two same paper rects with different
@@ -492,7 +492,7 @@ void wxOSXPrintData::TransferTo( wxPrintDialogData* data )
     }
 }
 
-void wxOSXPrintData::TransferFrom( wxPrintDialogData* data )
+void wxOSXPrintData::TransferFrom( const wxPrintDialogData* data )
 {
     // Respect the value of m_printAllPages
     if ( data->GetAllPages() )
