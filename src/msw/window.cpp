@@ -3491,6 +3491,26 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 }
             }
             break;
+
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+        case WM_INITMENUPOPUP:
+        case WM_MENUSELECT:
+        case WM_EXITMENULOOP:
+        case WM_UNINITMENUPOPUP:
+            {
+                // Contrary to MSDN implications, at least some of these messages are
+                // not actually sent to the TLW for popup menus, but to the owning
+                // window or even its parent window.
+                //
+                // wx-3.1+ handles these messages in wxWindow instead, but binary
+                // compatibility requirements on wx-3.0 make it simpler to just forward
+                // the messages to the wxTLW.
+                wxWindow *tlw = wxGetTopLevelParent(this);
+                if ( tlw && tlw != this )
+                    processed = tlw->MSWWindowProc(message, wParam, lParam);
+            }
+            break;
+#endif // !__WXMICROWIN__
 #endif // wxUSE_MENUS
 
 #ifndef __WXWINCE__
