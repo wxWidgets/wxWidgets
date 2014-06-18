@@ -50,6 +50,8 @@ public:
     virtual bool PositionToXY(long pos, long *x, long *y) const;
 
     virtual void ShowPosition(long pos);
+
+    virtual void WriteText(const wxString& text);
     
     virtual QWidget *GetHandle() const;
 

@@ -122,6 +122,20 @@ bool wxTextCtrl::DoSaveFile(const wxString& file, int fileType)
     return false;
 }
 
+void wxTextCtrl::WriteText( const wxString &text )
+{
+    // Insert the text
+    if ( !IsMultiLine() )
+    {
+        m_qtLineEdit->insert(wxQtConvertString( text ));
+    }
+    else
+    {
+        m_qtTextEdit->insertPlainText(wxQtConvertString( text ));
+    }
+
+}
+
 QWidget *wxTextCtrl::GetHandle() const
 {
     if (!m_qtLineEdit.isNull())
