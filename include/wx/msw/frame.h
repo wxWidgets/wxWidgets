@@ -104,6 +104,9 @@ public:
     // normal frames but is overridden by wxMDIParentFrame
     virtual WXHMENU MSWGetActiveMenu() const { return m_hMenu; }
 
+    virtual bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+    virtual bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup);
+
     // Look up the menu in the menu bar.
     virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
 #endif // wxUSE_MENUS
@@ -150,6 +153,10 @@ protected:
 #if wxUSE_MENUS
     // frame menu, NULL if none
     WXHMENU m_hMenu;
+
+    // The number of currently opened menus: 0 initially, 1 when a top level
+    // menu is opened, 2 when its submenu is opened and so on.
+    int m_menuDepth;
 #endif // wxUSE_MENUS
 
 private:

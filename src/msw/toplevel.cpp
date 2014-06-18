@@ -64,15 +64,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-#if wxUSE_MENUS || wxUSE_MENUS_NATIVE
-    extern wxMenu *wxCurrentPopupMenu;
-#endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
-
-
-// ----------------------------------------------------------------------------
 // stubs for missing functions under MicroWindows
 // ----------------------------------------------------------------------------
 
@@ -153,7 +144,6 @@ void wxTopLevelWindowMSW::Init()
 #endif
 
     m_menuSystem = NULL;
-    m_menuDepth = 0;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -424,38 +414,6 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
 #endif // #ifndef __WXUNIVERSAL__
             }
             break;
-
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
-        case WM_INITMENUPOPUP:
-            processed = HandleMenuPopup(wxEVT_MENU_OPEN, (WXHMENU)wParam);
-            break;
-
-        case WM_MENUSELECT:
-            {
-                WXWORD item, flags;
-                WXHMENU hmenu;
-                UnpackMenuSelect(wParam, lParam, &item, &flags, &hmenu);
-
-                processed = HandleMenuSelect(item, flags, hmenu);
-            }
-            break;
-
-        case WM_EXITMENULOOP:
-            // Under Windows 98 and 2000 and later we're going to get
-            // WM_UNINITMENUPOPUP which will be used to generate this event
-            // with more information (notably the menu that was closed) so we
-            // only need this one under old Windows systems where the newer
-            // event is never sent.
-            if ( wxGetWinVersion() < wxWinVersion_98 )
-                processed = HandleExitMenuLoop(wParam);
-            break;
-
-        case WM_UNINITMENUPOPUP:
-            processed = HandleMenuPopup(wxEVT_MENU_CLOSE, (WXHMENU)wParam);
-            break;
-#endif // wxUSE_MENUS && !__WXUNIVERSAL__
-#endif // !__WXMICROWIN__
     }
 
     if ( !processed )
@@ -1475,117 +1433,6 @@ void wxTopLevelWindowMSW::OnActivate(wxActivateEvent& event)
         event.Skip();
     }
 }
-
-#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
-
-bool
-wxTopLevelWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
-{
-    // Ignore the special messages generated when the menu is closed (this is
-    // the only case when the flags are set to -1), in particular don't clear
-    // the help string in the status bar when this happens as it had just been
-    // restored by the base class code.
-    if ( !hMenu && flags == 0xffff )
-        return false;
-
-    // Unfortunately we also need to ignore another message which is sent after
-    // closing the currently active submenu of the menu bar by pressing Escape:
-    // in this case we get WM_UNINITMENUPOPUP, from which we generate
-    // wxEVT_MENU_CLOSE, and _then_ we get WM_MENUSELECT for the top level menu
-    // from which we overwrite the help string just restored by OnMenuClose()
-    // handler in wxFrameBase. To prevent this from happening we discard these
-    // messages but only in the case it's really the top level menu as we still
-    // need to clear the help string when a submenu is selected in a menu.
-    if ( flags == (MF_POPUP | MF_HILITE) && !m_menuDepth )
-        return false;
-
-    // sign extend to int from unsigned short we get from Windows
-    int item = (signed short)nItem;
-
-    // WM_MENUSELECT is generated for both normal items and menus, including
-    // the top level menus of the menu bar, which can't be represented using
-    // any valid identifier in wxMenuEvent so use an otherwise unused value for
-    // them
-    if ( flags & (MF_POPUP | MF_SEPARATOR) )
-        item = wxID_NONE;
-
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
-    event.SetEventObject(this);
-
-    if ( HandleWindowEvent(event) )
-        return true;
-
-    // by default, i.e. if the event wasn't handled above, clear the status bar
-    // text when an item which can't have any associated help string in wx API
-    // is selected
-    if ( item == wxID_NONE )
-        DoGiveHelp(wxEmptyString, true);
-
-    return false;
-}
-
-bool
-wxTopLevelWindowMSW::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup)
-{
-    // Update the menu depth when dealing with the top level menus.
-    if ( !popup )
-    {
-        if ( evtType == wxEVT_MENU_OPEN )
-        {
-            m_menuDepth++;
-        }
-        else if ( evtType == wxEVT_MENU_CLOSE )
-        {
-            wxASSERT_MSG( m_menuDepth > 0, wxS("No open menus?") );
-
-            m_menuDepth--;
-        }
-        else
-        {
-            wxFAIL_MSG( wxS("Unexpected menu event type") );
-        }
-    }
-
-    wxMenuEvent event(evtType, popup ? wxID_ANY : 0, menu);
-    event.SetEventObject(menu);
-
-    return HandleWindowEvent(event);
-}
-
-bool wxTopLevelWindowMSW::HandleExitMenuLoop(WXWORD isPopup)
-{
-    return DoSendMenuOpenCloseEvent(wxEVT_MENU_CLOSE,
-                                    isPopup ? wxCurrentPopupMenu : NULL,
-                                    isPopup != 0);
-}
-
-bool wxTopLevelWindowMSW::HandleMenuPopup(wxEventType evtType, WXHMENU hMenu)
-{
-    bool isPopup = false;
-    wxMenu* menu = NULL;
-    if ( wxCurrentPopupMenu && wxCurrentPopupMenu->GetHMenu() == hMenu )
-    {
-        menu = wxCurrentPopupMenu;
-        isPopup = true;
-    }
-    else
-    {
-        menu = MSWFindMenuFromHMENU(hMenu);
-    }
-
-
-    return DoSendMenuOpenCloseEvent(evtType, menu, isPopup);
-}
-
-wxMenu* wxTopLevelWindowMSW::MSWFindMenuFromHMENU(WXHMENU WXUNUSED(hMenu))
-{
-    // We don't have any menus at this level.
-    return NULL;
-}
-
-#endif // wxUSE_MENUS && !__WXUNIVERSAL__
-
-
 
 // the DialogProc for all wxWidgets dialogs
 LONG APIENTRY _EXPORT

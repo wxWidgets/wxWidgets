@@ -2273,6 +2273,86 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 
 #endif // wxUSE_MENUS_NATIVE
 
+// ---------------------------------------------------------------------------
+// menu events
+// ---------------------------------------------------------------------------
+
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
+
+bool
+wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
+{
+    // Ignore the special messages generated when the menu is closed (this is
+    // the only case when the flags are set to -1), in particular don't clear
+    // the help string in the status bar when this happens as it had just been
+    // restored by the base class code.
+    if ( !hMenu && flags == 0xffff )
+        return false;
+
+    // sign extend to int from unsigned short we get from Windows
+    int item = (signed short)nItem;
+
+    // WM_MENUSELECT is generated for both normal items and menus, including
+    // the top level menus of the menu bar, which can't be represented using
+    // any valid identifier in wxMenuEvent so use an otherwise unused value for
+    // them
+    if ( flags & (MF_POPUP | MF_SEPARATOR) )
+        item = wxID_NONE;
+
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
+    event.SetEventObject(this);
+
+    if ( HandleWindowEvent(event) )
+        return true;
+
+    // by default, i.e. if the event wasn't handled above, clear the status bar
+    // text when an item which can't have any associated help string in wx API
+    // is selected
+    if ( item == wxID_NONE )
+    {
+        wxFrame *frame = wxDynamicCast(wxGetTopLevelParent(this), wxFrame);
+        if ( frame )
+            frame->DoGiveHelp(wxEmptyString, true);
+    }
+
+    return false;
+}
+
+bool
+wxWindowMSW::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup)
+{
+    wxMenuEvent event(evtType, popup ? wxID_ANY : 0, menu);
+    event.SetEventObject(menu);
+
+    return HandleWindowEvent(event);
+}
+
+bool wxWindowMSW::HandleMenuPopup(wxEventType evtType, WXHMENU hMenu)
+{
+    bool isPopup = false;
+    wxMenu* menu = NULL;
+    if ( wxCurrentPopupMenu && wxCurrentPopupMenu->GetHMenu() == hMenu )
+    {
+        menu = wxCurrentPopupMenu;
+        isPopup = true;
+    }
+    else
+    {
+        menu = MSWFindMenuFromHMENU(hMenu);
+    }
+
+
+    return DoSendMenuOpenCloseEvent(evtType, menu, isPopup);
+}
+
+wxMenu* wxWindowMSW::MSWFindMenuFromHMENU(WXHMENU WXUNUSED(hMenu))
+{
+    // We don't have any menus at this level.
+    return NULL;
+}
+
+#endif // wxUSE_MENUS && !defined(__WXUNIVERSAL__)
+
 // ===========================================================================
 // pre/post message processing
 // ===========================================================================
@@ -3470,7 +3550,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             break;
 #endif
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
         case WM_MENUCHAR:
             // we're only interested in our own menus, not MF_SYSMENU
             if ( HIWORD(wParam) == MF_POPUP )
@@ -3484,7 +3564,27 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 }
             }
             break;
-#endif // wxUSE_MENUS
+
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+        case WM_INITMENUPOPUP:
+            processed = HandleMenuPopup(wxEVT_MENU_OPEN, (WXHMENU)wParam);
+            break;
+
+        case WM_MENUSELECT:
+            {
+                WXWORD item, flags;
+                WXHMENU hmenu;
+                UnpackMenuSelect(wParam, lParam, &item, &flags, &hmenu);
+
+                processed = HandleMenuSelect(item, flags, hmenu);
+            }
+            break;
+
+        case WM_UNINITMENUPOPUP:
+            processed = HandleMenuPopup(wxEVT_MENU_CLOSE, (WXHMENU)wParam);
+            break;
+#endif // !__WXMICROWIN__
+#endif // wxUSE_MENUS && !defined(__WXUNIVERSAL__)
 
 #ifndef __WXWINCE__
         case WM_POWERBROADCAST:

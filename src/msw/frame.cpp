@@ -96,6 +96,7 @@ void wxFrame::Init()
 {
 #if wxUSE_MENUS
     m_hMenu = NULL;
+    m_menuDepth = 0;
 #endif // wxUSE_MENUS
 
 #if wxUSE_TOOLTIPS
@@ -429,12 +430,52 @@ void wxFrame::InternalSetMenuBar()
 
 #endif // wxUSE_MENUS_NATIVE
 
-#if wxUSE_MENUS
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
+bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
+{
+    // Unfortunately we need to ignore a message which is sent after
+    // closing the currently active submenu of the menu bar by pressing Escape:
+    // in this case we get WM_UNINITMENUPOPUP, from which we generate
+    // wxEVT_MENU_CLOSE, and _then_ we get WM_MENUSELECT for the top level menu
+    // from which we overwrite the help string just restored by OnMenuClose()
+    // handler in wxFrameBase. To prevent this from happening we discard these
+    // messages but only in the case it's really the top level menu as we still
+    // need to clear the help string when a submenu is selected in a menu.
+    if ( flags == (MF_POPUP | MF_HILITE) && !m_menuDepth )
+        return false;
+
+    return wxWindow::HandleMenuSelect(nItem, flags, hMenu);
+}
+
+bool wxFrame::DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup)
+{
+    // Update the menu depth when dealing with the top level menus.
+    if ( !popup )
+    {
+        if ( evtType == wxEVT_MENU_OPEN )
+        {
+            m_menuDepth++;
+        }
+        else if ( evtType == wxEVT_MENU_CLOSE )
+        {
+            wxASSERT_MSG( m_menuDepth > 0, wxS("No open menus?") );
+
+            m_menuDepth--;
+        }
+        else
+        {
+            wxFAIL_MSG( wxS("Unexpected menu event type") );
+        }
+    }
+
+    return wxWindow::DoSendMenuOpenCloseEvent(evtType, menu, popup);
+}
+
 wxMenu* wxFrame::MSWFindMenuFromHMENU(WXHMENU hMenu)
 {
     return GetMenuBar() ? GetMenuBar()->MSWGetMenu(hMenu) : NULL;
 }
-#endif // wxUSE_MENUS
+#endif // wxUSE_MENUS && !defined(__WXUNIVERSAL__)
 
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
