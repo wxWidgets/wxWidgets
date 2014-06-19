@@ -355,18 +355,32 @@ bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxStri
     m_icon.CopyFromIcon(icon);
     
     // status item doesn't scale automatically
+    // first scale to optimal pixel resolution
     
-    int dimension = m_icon.GetHeight();
-    if ( m_icon.GetWidth() > dimension )
-        dimension = m_icon.GetWidth();
-    if ( dimension > 16 )
+    int dimension = wxMax( m_icon.GetHeight(), m_icon.GetWidth() );
+    int target_dimension = 16 * wxOSXGetMainScreenContentScaleFactor();
+    if ( dimension > target_dimension )
     {
         wxImage img = m_icon.ConvertToImage();
-        int factor = (dimension+15)/16;
+        int factor = (dimension+(target_dimension-1))/target_dimension;
         m_icon = img.ShrinkBy(factor, factor);
     }
-
-    [m_statusItem setImage:m_icon.GetNSImage()];
+    
+    NSImage* nsimage = m_icon.GetNSImage();
+    NSSize size = [nsimage size];
+    
+    // then scale to optimal point resolution
+    
+    dimension = wxMax(size.width,size.height);
+    if ( dimension > 16 )
+    {
+        int factor = (dimension+15)/16;
+        size.width /= factor;
+        size.height /= factor;
+        [nsimage setSize:size];
+    }
+    [m_statusItem setImage:nsimage];
+    
     wxCFStringRef cfTooltip(tooltip);
     [m_statusItem setToolTip:cfTooltip.AsNSString()];
     return true;
