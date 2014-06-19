@@ -31,6 +31,8 @@ public:
                 long style = 0,
                 const wxString &name = wxStaticTextNameStr );
 
+    void SetLabel(const wxString& label);
+
     QLabel *GetHandle() const;
 private:
     wxQtPointer< QLabel > m_qtLabel;
