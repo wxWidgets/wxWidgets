@@ -36045,7 +36045,7 @@ fi
 if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
     $as_echo "#define wxUSE_PREFERENCES_EDITOR 1" >>confdefs.h
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS prefseditor"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS preferences"
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then

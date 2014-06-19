@@ -6825,7 +6825,7 @@ fi
 
 if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
     AC_DEFINE(wxUSE_PREFERENCES_EDITOR)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS prefseditor"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS preferences"
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
