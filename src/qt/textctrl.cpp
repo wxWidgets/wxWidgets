@@ -179,6 +179,8 @@ void wxTextCtrl::WriteText( const wxString &text )
     else
     {
         m_qtTextEdit->insertPlainText(wxQtConvertString( text ));
+        // the cursor is moved to the end, ensure it is shown
+        m_qtTextEdit->ensureCursorVisible();
     }
 
 }
