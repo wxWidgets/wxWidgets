@@ -111,11 +111,14 @@ unsigned wxListBox::GetCount() const
 
 wxString wxListBox::GetString(unsigned int n) const
 {
-    return wxString();
+    QListWidgetItem* item = m_qtListWidget->item(n);
+    return wxQtConvertString( item->text() );
 }
 
 void wxListBox::SetString(unsigned int n, const wxString& s)
 {
+    QListWidgetItem* item = m_qtListWidget->item(n);
+    item->setText(wxQtConvertString(s));
 }
 
 void wxListBox::SetSelection(int n)
