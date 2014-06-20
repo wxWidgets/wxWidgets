@@ -55,6 +55,11 @@ void wxQtPushButton::SetBitmap( const wxBitmap &bitmap )
 void wxQtPushButton::OnButtonClicked( bool WXUNUSED( checked ))
 {
     wxCommandEvent event( m_eventType, GetHandler()->GetId() );
+    // for toggle buttons, send the checked state in the wx event:
+    if ( isCheckable() )
+    {
+        event.SetInt( isChecked() );
+    }
     EmitEvent( event );
 }
 
