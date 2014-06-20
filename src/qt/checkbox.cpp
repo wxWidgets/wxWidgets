@@ -12,6 +12,29 @@
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
+class wxQtCheckBox : public wxQtEventSignalHandler< QCheckBox, wxCheckBox >
+{
+public:
+    wxQtCheckBox( wxWindow *parent, wxCheckBox *handler );
+
+private:
+    void clicked( bool checked );
+};
+
+wxQtCheckBox::wxQtCheckBox( wxWindow *parent, wxCheckBox *handler )
+    : wxQtEventSignalHandler< QCheckBox, wxCheckBox >( parent, handler )
+{
+    connect(this, &QCheckBox::clicked, this, &wxQtCheckBox::clicked);
+}
+
+void wxQtCheckBox::clicked( bool checked )
+{
+    wxCommandEvent event( wxEVT_COMMAND_CHECKBOX_CLICKED, GetHandler()->GetId() );
+    event.SetInt( checked );
+    EmitEvent( event );
+}
+
+
 wxCheckBox::wxCheckBox()
 {
 }
@@ -27,7 +50,8 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
             const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator,
             const wxString& name )
 {
-    m_qtCheckBox = new QCheckBox( wxQtConvertString( label ), parent->GetHandle() );
+    m_qtCheckBox = new wxQtCheckBox( parent, this );
+    m_qtCheckBox->setText( wxQtConvertString( label ) );
 
     if ( style & wxCHK_2STATE )
         m_qtCheckBox->setTristate( false );
