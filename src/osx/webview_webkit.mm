@@ -296,7 +296,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
     wxWebViewWebKit* webKitWindow;
 }
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow;
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow;
 
 @end
 
@@ -305,7 +305,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
     wxWebViewWebKit* webKitWindow;
 }
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow;
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow;
 
 @end
 
@@ -314,7 +314,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebViewWebKitEventHandler )
     wxWebViewWebKit* webKitWindow;
 }
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow;
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow;
 
 @end
 
@@ -442,7 +442,7 @@ void wxWebViewWebKit::GoBack()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView goBack];
+    [m_webView goBack];
 }
 
 void wxWebViewWebKit::GoForward()
@@ -450,7 +450,7 @@ void wxWebViewWebKit::GoForward()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView goForward];
+    [m_webView goForward];
 }
 
 void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
@@ -849,7 +849,7 @@ void wxWebViewWebKit::Cut()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView cut:m_webView];
+    [m_webView cut:m_webView];
 }
 
 void wxWebViewWebKit::Copy()
@@ -857,7 +857,7 @@ void wxWebViewWebKit::Copy()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView copy:m_webView];
+    [m_webView copy:m_webView];
 }
 
 void wxWebViewWebKit::Paste()
@@ -865,7 +865,7 @@ void wxWebViewWebKit::Paste()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView paste:m_webView];
+    [m_webView paste:m_webView];
 }
 
 void wxWebViewWebKit::DeleteSelection()
@@ -873,7 +873,7 @@ void wxWebViewWebKit::DeleteSelection()
     if ( !m_webView )
         return;
 
-    [(WebView*)m_webView deleteSelection];
+    [m_webView deleteSelection];
 }
 
 bool wxWebViewWebKit::HasSelection() const
@@ -1007,7 +1007,7 @@ void wxWebViewWebKit::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 
 @implementation WebViewLoadDelegate
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
@@ -1197,7 +1197,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 @implementation WebViewPolicyDelegate
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
@@ -1335,7 +1335,7 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
 @implementation WebViewUIDelegate
 
-- initWithWxWindow: (wxWebViewWebKit*)inWindow
+- (id)initWithWxWindow: (wxWebViewWebKit*)inWindow
 {
     [super init];
     webKitWindow = inWindow;    // non retained
