@@ -41,7 +41,6 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
 
-    wxQtPointer< wxQtPushButton > m_qtPushButton;
 };
 
 
@@ -73,7 +72,7 @@ public:
     virtual QPushButton *GetHandle() const;
 
 private:
-    wxQtPointer< wxQtPushButton > m_qtPushButton;
+
 };
 
 #endif // _WX_QT_TGLBTN_H_

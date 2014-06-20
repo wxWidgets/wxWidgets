@@ -12,56 +12,6 @@
 #include "wx/bitmap.h"
 #include "wx/qt/utils.h"
 
-wxQtPushButton::wxQtPushButton( wxWindow *parent, wxControl *handler, wxEventType eventType )
-    : wxQtEventSignalHandler< QPushButton, wxControl >( parent, handler )
-{
-    m_eventType = eventType;
-    connect(this, &QPushButton::clicked, this, &wxQtPushButton::OnButtonClicked);
-}
-
-void wxQtPushButton::SetToggleable()
-{
-    setCheckable( true );
-}
-
-void wxQtPushButton::SetValue( bool state )
-{
-    setChecked( state );
-}
-
-bool wxQtPushButton::GetValue() const
-{
-    return isChecked();
-}
-
-void wxQtPushButton::SetDefault()
-{
-    setDefault( true );
-}
-
-void wxQtPushButton::SetLabel( const wxString &label )
-{
-    setText( wxQtConvertString( label ));
-}
-
-void wxQtPushButton::SetBitmap( const wxBitmap &bitmap )
-{
-    // load the bitmap and resize the button:
-    QPixmap *pixmap = bitmap.GetHandle();
-    setIcon( QIcon( *pixmap  ));
-    setIconSize( pixmap->rect().size() );
-}
-
-void wxQtPushButton::OnButtonClicked( bool WXUNUSED( checked ))
-{
-    wxCommandEvent event( m_eventType, GetHandler()->GetId() );
-    // for toggle buttons, send the checked state in the wx event:
-    if ( isCheckable() )
-    {
-        event.SetInt( isChecked() );
-    }
-    EmitEvent( event );
-}
 
 wxButton::wxButton()
 {
@@ -94,45 +44,9 @@ wxWindow *wxButton::SetDefault()
 {
     wxWindow *oldDefault = wxButtonBase::SetDefault();
 
-    m_qtPushButton->SetDefault();
+    m_qtPushButton->setDefault( true );
 
     return oldDefault;
 
-}
-
-void wxButton::SetLabel( const wxString &label )
-{
-    m_qtPushButton->SetLabel( label );
-}
-
-QPushButton *wxButton::GetHandle() const
-{
-    return m_qtPushButton;
-}
-
-void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
-{
-    switch ( which )
-    {
-        case State_Normal:
-            m_qtPushButton->SetBitmap(bitmap);
-            InvalidateBestSize();
-            break;
-
-        case State_Pressed:
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Pressed ));
-            break;
-
-        case State_Current:
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Current ));
-            break;
-
-        case State_Focused:
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Focused ));
-            break;
-
-        default:
-            ;
-    }
 }
 

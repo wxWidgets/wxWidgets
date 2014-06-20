@@ -189,7 +189,7 @@ protected:
 //#elif defined(__WXCOCOA__)
 //    #include "wx/cocoa/anybutton.h"
 #else
-    typedef wxAnyButtonBase wxAnyButton;
+    #include "wx/qt/anybutton.h"
 #endif
 
 #endif // wxHAS_ANY_BUTTON
