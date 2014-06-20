@@ -464,16 +464,6 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     return CefInitialize(args, settings, NULL);
 }
 
-int wxWebViewChromium::StartUpSubprocess()
-{
-#ifdef __WXMSW__
-    CefMainArgs args(wxGetInstance());
-#else
-    CefMainArgs args;
-#endif
-    return CefExecuteProcess(args, NULL);
-}
-
 void wxWebViewChromium::RunCEFMessageLoopOnIdle()
 {
     CefDoMessageLoopWork();

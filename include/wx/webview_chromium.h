@@ -218,8 +218,6 @@ public:
                         int argc, char* argv[]);
 #endif
 
-    // If using a separate subprocess then return the result of this function
-    static int StartUpSubprocess();
     static void Shutdown();
     static void RunCEFMessageLoopOnIdle();
 
