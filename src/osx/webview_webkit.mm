@@ -40,15 +40,6 @@
 
 // using native types to get compile errors and warnings
 
-#if wxOSX_USE_COCOA_OR_CARBON
-typedef WebView OSXWebView;
-#elif wxOSX_USE_IPHONE
-typedef UIWebView OSXWebView;
-#else
-#error "unsupport OSX variant"
-#endif
-
-
 #define DEBUG_WEBKIT_SIZING 0
 
 // ----------------------------------------------------------------------------
@@ -467,7 +458,7 @@ void wxWebViewWebKit::GoBack()
     if ( !m_webView )
         return;
 
-    [(OSXWebView*)m_webView goBack];
+    [m_webView goBack];
 }
 
 void wxWebViewWebKit::GoForward()
@@ -475,7 +466,7 @@ void wxWebViewWebKit::GoForward()
     if ( !m_webView )
         return;
 
-    [(OSXWebView*)m_webView goForward];
+    [m_webView goForward];
 }
 
 void wxWebViewWebKit::Reload(wxWebViewReloadFlags flags)
@@ -874,7 +865,7 @@ void wxWebViewWebKit::Cut()
     if ( !m_webView )
         return;
 
-    [(OSXWebView*)m_webView cut:m_webView];
+    [m_webView cut:m_webView];
 }
 
 void wxWebViewWebKit::Copy()
@@ -882,7 +873,7 @@ void wxWebViewWebKit::Copy()
     if ( !m_webView )
         return;
 
-    [(OSXWebView*)m_webView copy:m_webView];
+    [m_webView copy:m_webView];
 }
 
 void wxWebViewWebKit::Paste()
@@ -890,7 +881,7 @@ void wxWebViewWebKit::Paste()
     if ( !m_webView )
         return;
 
-    [(OSXWebView*)m_webView paste:m_webView];
+    [m_webView paste:m_webView];
 }
 
 void wxWebViewWebKit::DeleteSelection()
@@ -898,7 +889,7 @@ void wxWebViewWebKit::DeleteSelection()
     if ( !m_webView )
         return;
 
-    [(OSXWebView*)m_webView deleteSelection];
+    [m_webView deleteSelection];
 }
 
 bool wxWebViewWebKit::HasSelection() const
