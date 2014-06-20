@@ -12,9 +12,10 @@
 #include "wx/bitmap.h"
 #include "wx/qt/utils.h"
 
-wxQtPushButton::wxQtPushButton( wxWindow *parent, wxControl *handler )
+wxQtPushButton::wxQtPushButton( wxWindow *parent, wxControl *handler, wxEventType eventType )
     : wxQtEventSignalHandler< QPushButton, wxControl >( parent, handler )
 {
+    m_eventType = eventType;
     connect(this, &QPushButton::clicked, this, &wxQtPushButton::OnButtonClicked);
 }
 
@@ -53,7 +54,7 @@ void wxQtPushButton::SetBitmap( const wxBitmap &bitmap )
 
 void wxQtPushButton::OnButtonClicked( bool WXUNUSED( checked ))
 {
-    wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, GetHandler()->GetId() );
+    wxCommandEvent event( m_eventType, GetHandler()->GetId() );
     EmitEvent( event );
 }
 
@@ -78,7 +79,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id,
        const wxValidator& validator,
        const wxString& name )
 {
-    m_qtPushButton = new wxQtPushButton( parent, this );
+    m_qtPushButton = new wxQtPushButton( parent, this, wxEVT_COMMAND_BUTTON_CLICKED );
     SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
