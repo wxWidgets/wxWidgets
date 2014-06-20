@@ -10,6 +10,35 @@
 
 #include "wx/listbox.h"
 
+
+class wxQtListWidget : public wxQtEventSignalHandler< QListWidget, wxListBox >
+{
+public:
+    wxQtListWidget( wxWindow *parent, wxListBox *handler );
+
+private:
+    void clicked( const QModelIndex &index );
+    void doubleClicked( const QModelIndex &index );
+};
+
+wxQtListWidget::wxQtListWidget( wxWindow *parent, wxListBox *handler )
+    : wxQtEventSignalHandler< QListWidget, wxListBox >( parent, handler )
+{
+    connect(this, &QListWidget::clicked, this, &wxQtListWidget::clicked);
+    connect(this, &QListWidget::doubleClicked, this, &wxQtListWidget::doubleClicked);
+}
+
+void wxQtListWidget::clicked(const QModelIndex &index )
+{
+    GetHandler()->QtSendEvent(wxEVT_LISTBOX, index, true);
+}
+
+void wxQtListWidget::doubleClicked( const QModelIndex &index )
+{
+    GetHandler()->QtSendEvent(wxEVT_LISTBOX_DCLICK, index, true);
+}
+
+
 wxListBox::wxListBox()
 {
 }
@@ -44,7 +73,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtListWidget = new QListWidget( parent->GetHandle() );
+    m_qtListWidget = new wxQtListWidget( parent, this );
 
     while ( n-- > 0 )
         m_qtListWidget->addItem( wxQtConvertString( *choices++ ));
@@ -60,7 +89,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtListWidget = new QListWidget( parent->GetHandle() );
+    m_qtListWidget = new wxQtListWidget( parent, this );
 
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
@@ -134,4 +163,9 @@ void wxListBox::DoDeleteOneItem(unsigned int pos)
 QListWidget *wxListBox::GetHandle() const
 {
     return m_qtListWidget;
+}
+
+void wxListBox::QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected)
+{
+    SendEvent(evtType, index.row(), selected);
 }
