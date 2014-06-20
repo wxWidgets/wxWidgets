@@ -219,7 +219,12 @@ wxString wxWindow::GetLabel() const
 {
     return ( wxQtConvertString( GetHandle()->windowTitle() ));
 }
-    
+
+void wxWindow::DoEnable(bool enable)
+{
+    GetHandle()->setEnabled(enable);
+}
+
 void wxWindow::SetFocus()
 {
     GetHandle()->setFocus();
