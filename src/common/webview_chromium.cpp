@@ -5,13 +5,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
-#include <wx/webview.h>
-#include <wx/webview_chromium.h>
-#include <wx/filesys.h>
-#include <wx/rtti.h>
+#include "wx/webview.h"
+#include "wx/webview_chromium.h"
+#include "wx/filesys.h"
+#include "wx/rtti.h"
 
 #ifdef __WXMSW__
-#include <wx/msw/private.h>
+#include "wx/msw/private.h"
 #endif
 
 #ifdef __VISUALC__
@@ -19,10 +19,10 @@
 #pragma warning(disable:4100)
 #endif
 
-#include <include/cef_app.h>
-#include <include/cef_browser.h>
-#include <include/cef_string_visitor.h>
-#include <include/cef_version.h>
+#include "include/cef_app.h"
+#include "include/cef_browser.h"
+#include "include/cef_string_visitor.h"
+#include "include/cef_version.h"
 
 #ifdef __VISUALC__
 #pragma warning(pop)

@@ -7,19 +7,19 @@
 #ifndef _WX_WEBVIEWCHROMIUM_H_
 #define _WX_WEBVIEWCHROMIUM_H_
 
-#include <wx/control.h>
-#include <wx/webview.h>
-#include <wx/sharedptr.h>
-#include <wx/vector.h>
-#include <wx/timer.h>
+#include "wx/control.h"
+#include "wx/webview.h"
+#include "wx/sharedptr.h"
+#include "wx/vector.h"
+#include "wx/timer.h"
 
 #ifdef __VISUALC__
 #pragma warning(push)
 #pragma warning(disable:4100)
 #endif
 
-#include <include/cef_browser.h>
-#include <include/cef_client.h>
+#include "include/cef_browser.h"
+#include "include/cef_client.h"
 
 #ifdef __VISUALC__
 #pragma warning(pop)
