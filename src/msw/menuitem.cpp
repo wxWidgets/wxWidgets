@@ -761,7 +761,7 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
         if ( m_parentMenu )
         {
             size_t pos;
-            wxMenuItem *item = m_parentMenu->FindChildItem(GetMSWId(), &pos);
+            wxMenuItem *item = m_parentMenu->FindChildItem(GetId(), &pos);
             if ( item )
             {
                 wxCHECK_RET( item == this, wxS("Non unique menu item ID?") );
