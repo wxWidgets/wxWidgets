@@ -19,10 +19,15 @@ public:
     ~wxMemoryDCImpl();
 
     virtual void DoSelect(const wxBitmap& bitmap);
+
+    virtual const wxBitmap& GetSelectedBitmap() const;
+    virtual wxBitmap& GetSelectedBitmap();
+
 protected:
 
 private:
     QPixmap *m_pixmap;
+    wxBitmap m_selected;
 };
 
 #endif // _WX_QT_DCMEMORY_H_
