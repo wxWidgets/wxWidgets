@@ -9,7 +9,7 @@
 #define _WX_QT_RADIOBOX_H_
 
 #include "wx/qt/pointer_qt.h"
-#include "wx/qt/groupbox_qt.h"
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QVBoxLayout>
 
@@ -81,7 +81,7 @@ public:
 
 private:
     // The 'visual' group box:
-    wxQtPointer< wxQtGroupBox > m_qtGroupBox;
+    wxQtPointer< QGroupBox > m_qtGroupBox;
 
     // Handles the mutual exclusion of buttons:
     wxQtPointer< QButtonGroup > m_qtButtonGroup;

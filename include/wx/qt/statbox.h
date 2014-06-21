@@ -9,7 +9,7 @@
 #define _WX_QT_STATBOX_H_
 
 #include "wx/qt/pointer_qt.h"
-#include "wx/qt/groupbox_qt.h"
+#include <QtWidgets/QGroupBox>
 
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
@@ -37,7 +37,7 @@ public:
 protected:
 
 private:
-    wxQtPointer< wxQtGroupBox > m_qtGroupBox;
+    wxQtPointer< QGroupBox > m_qtGroupBox;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxStaticBox );
 };
