@@ -14,6 +14,14 @@
 #include <QtWidgets/QGroupBox>
 
 
+class wxQtGroupBox : public wxQtEventSignalHandler< QGroupBox, wxStaticBox >
+{
+public:
+    wxQtGroupBox( wxWindow *parent, wxStaticBox *handler ):
+        wxQtEventSignalHandler< QGroupBox, wxStaticBox >( parent, handler ){}
+};
+
+
 wxStaticBox::wxStaticBox()
 {
 }
@@ -35,7 +43,8 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
             long style,
             const wxString& name)
 {
-    m_qtGroupBox = new QGroupBox( wxQtConvertString( label ), parent->GetHandle() );
+    m_qtGroupBox = new wxQtGroupBox( parent, this );
+    m_qtGroupBox->setTitle( wxQtConvertString( label ) );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
