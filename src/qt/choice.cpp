@@ -9,7 +9,30 @@
 #include "wx/wxprec.h"
 
 #include "wx/choice.h"
-#include "wx/qt/combobox_qt.h"
+#include <QtWidgets/QComboBox>
+
+class wxQtChoice : public wxQtEventSignalHandler< QComboBox, wxChoice >
+{
+public:
+    wxQtChoice( wxWindow *parent, wxChoice *handler );
+
+private:
+    void activated(int index);
+};
+
+wxQtChoice::wxQtChoice( wxWindow *parent, wxChoice *handler )
+    : wxQtEventSignalHandler< QComboBox, wxChoice >( parent, handler )
+{
+    // the activated signal is overloaded, the following explicit cast is needed:
+    connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
+            this, &wxQtChoice::activated);
+}
+
+void wxQtChoice::activated(int index)
+{
+    GetHandler()->SendSelectionChangedEvent(wxEVT_CHOICE);
+}
+
 
 wxChoice::wxChoice()
 {
@@ -61,8 +84,8 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxValidator& validator,
         const wxString& name )
 {
-    m_qtComboBox = new wxQtComboBox( parent );
-    m_qtComboBox->AddChoices( n, choices );
+    m_qtComboBox = new wxQtChoice( parent, this );
+    //m_qtComboBox->AddChoices( n, choices );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
