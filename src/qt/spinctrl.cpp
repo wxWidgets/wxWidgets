@@ -163,6 +163,13 @@ bool wxSpinCtrl::SetBase(int base)
     return true;
 }
 
+void wxQtSpinBox::valueChanged(int value)
+{
+    wxCommandEvent event( wxEVT_SPINCTRL, GetHandler()->GetId() );
+    event.SetInt( value );
+    EmitEvent( event );
+}
+
 //##############################################################################
 
 template class wxQtSpinCtrlBase< double, wxQtDoubleSpinBox >;
