@@ -11,6 +11,31 @@
 #include "wx/slider.h"
 #include "wx/qt/converter.h"
 
+
+class wxQtSlider : public wxQtEventSignalHandler< QSlider, wxSlider >
+{
+public:
+    wxQtSlider( wxWindow *parent, wxSlider *handler );
+
+private:
+    void sliderMoved(int position);
+};
+
+wxQtSlider::wxQtSlider( wxWindow *parent, wxSlider *handler )
+    : wxQtEventSignalHandler< QSlider, wxSlider >( parent, handler )
+{
+    connect(this, &QSlider::sliderMoved, this, &wxQtSlider::sliderMoved);
+}
+
+void wxQtSlider::sliderMoved(int position)
+{
+    // TODO: use SendSelectionChangedEvent(wxEVT_COMBOBOX);
+    wxCommandEvent event( wxEVT_SLIDER, GetHandler()->GetId() );
+    event.SetInt( position );
+    EmitEvent( event );
+}
+
+
 wxSlider::wxSlider()
 {
 }
@@ -36,8 +61,8 @@ bool wxSlider::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtSlider = new QSlider( wxQtConvertOrientation( style, wxSL_HORIZONTAL ),
-            parent->GetHandle() );
+    m_qtSlider = new wxQtSlider( parent, this );
+    m_qtSlider->setOrientation( wxQtConvertOrientation( style, wxSL_HORIZONTAL ) );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
