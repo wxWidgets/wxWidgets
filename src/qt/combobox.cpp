@@ -32,7 +32,11 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
 
 void wxQtComboBox::activated(int index)
 {
-    //GetHandler()->SendSelectionChangedEvent(wxEVT_COMBOBOX);
+    // TODO: use SendSelectionChangedEvent(wxEVT_COMBOBOX);
+    wxCommandEvent event( wxEVT_COMBOBOX, GetHandler()->GetId() );
+    event.SetInt(index);
+    event.SetString(GetHandler()->GetStringSelection());
+    EmitEvent( event );
 }
 
 
