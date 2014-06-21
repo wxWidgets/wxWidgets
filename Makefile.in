@@ -2775,7 +2775,6 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/colordlg.h \
 	wx/qt/colour.h \
 	wx/qt/combobox.h \
-	wx/qt/combobox_qt.h \
 	wx/qt/control.h \
 	wx/qt/converter.h \
 	wx/qt/ctrlsub.h \
