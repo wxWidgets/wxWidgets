@@ -20,14 +20,17 @@ public:
 
 private:
     void activated(int index);
+    void editTextChanged(const QString &text);
 };
 
 wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
     : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler )
 {
-    setEditable( false );
+    setEditable( true );
     connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
             this, &wxQtComboBox::activated);
+    connect(this, &QComboBox::editTextChanged,
+            this, &wxQtComboBox::editTextChanged);
 }
 
 void wxQtComboBox::activated(int index)
@@ -36,6 +39,13 @@ void wxQtComboBox::activated(int index)
     wxCommandEvent event( wxEVT_COMBOBOX, GetHandler()->GetId() );
     event.SetInt(index);
     event.SetString(GetHandler()->GetStringSelection());
+    EmitEvent( event );
+}
+
+void wxQtComboBox::editTextChanged(const QString &text)
+{
+    wxCommandEvent event( wxEVT_TEXT, GetHandler()->GetId() );
+    event.SetString( wxQtConvertString( text ) );
     EmitEvent( event );
 }
 
