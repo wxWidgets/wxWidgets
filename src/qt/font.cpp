@@ -225,6 +225,14 @@ void wxFont::SetPointSize( int pointSize )
     M_FONTDATA.setPointSize(pointSize);
 }
 
+bool wxFont::SetFaceName(const wxString& facename)
+{
+    AllocExclusive();
+    M_FONTDATA.setFamily(wxQtConvertString(facename));
+    // qt uses a "font matching algoritm" so the font will be allways valid
+    return true;
+}
+
 void wxFont::SetFamily( wxFontFamily family )
 {
     AllocExclusive();
