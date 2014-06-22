@@ -2669,6 +2669,9 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
 void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)
 {
+    if (HasCapture())
+        return;
+
     wxRect cli_rect(wxPoint(0,0), GetClientSize());
 
     if (m_gripperSizerItem)
@@ -2705,6 +2708,9 @@ void wxAuiToolBar::OnRightDown(wxMouseEvent& evt)
 
 void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
 {
+    if (HasCapture())
+        return;
+
     wxAuiToolBarItem* hitItem;
     hitItem = FindToolByPosition(evt.GetX(), evt.GetY());
 
@@ -2735,6 +2741,9 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
 
 void wxAuiToolBar::OnMiddleDown(wxMouseEvent& evt)
 {
+    if (HasCapture())
+        return;
+
     wxRect cli_rect(wxPoint(0,0), GetClientSize());
 
     if (m_gripperSizerItem)
@@ -2774,6 +2783,9 @@ void wxAuiToolBar::OnMiddleDown(wxMouseEvent& evt)
 
 void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
 {
+    if (HasCapture())
+        return;
+
     wxAuiToolBarItem* hitItem;
     hitItem = FindToolByPosition(evt.GetX(), evt.GetY());
 
