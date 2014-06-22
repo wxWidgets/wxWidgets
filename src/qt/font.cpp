@@ -79,8 +79,11 @@ class wxFontRefData: public wxGDIRefData
             if (!face.isEmpty())
                 m_qtFont.setFamily(face);
             else
+            {
                 m_qtFont.setStyleHint(family);
-
+                // force qt to choose a font using the hint:
+                m_qtFont.setFamily("");
+            }
             m_qtFont.setItalic(italic);
             m_qtFont.setWeight(weight);
             m_qtFont.setUnderline(underlined);
@@ -237,6 +240,8 @@ void wxFont::SetFamily( wxFontFamily family )
 {
     AllocExclusive();
     M_FONTDATA.setStyleHint(ConvertFontFamily(family));
+    // reset the face name to force qt to choose a new font
+    M_FONTDATA.setFamily("");
 }
 
 void wxFont::SetStyle( wxFontStyle style )
