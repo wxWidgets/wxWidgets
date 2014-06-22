@@ -1,0 +1,596 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		405B1AE010EF25D200676938 /* libwx_osx_cocoa_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 405B1A8C10EF202100676938 /* libwx_osx_cocoa_static.a */; };
+		40AC73361325727300982A5C /* libwx_osx_cocoa.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 405B1A8A10EF202100676938 /* libwx_osx_cocoa.dylib */; };
+		40AC73371325728400982A5C /* libwx_osx_cocoa.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 405B1A8A10EF202100676938 /* libwx_osx_cocoa.dylib */; };
+		769F79321953E1DD00ED92BF /* Chromium Embedded Framework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 76DA77EA1953DFD200E1DD9D /* Chromium Embedded Framework.framework */; };
+		769F79331953E1E600ED92BF /* webview_chromium Helper.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 76DA77DF1953DE8200E1DD9D /* webview_chromium Helper.app */; };
+		769F79351953E46500ED92BF /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 769F79341953E46500ED92BF /* AppKit.framework */; };
+		769F79361953E47100ED92BF /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76DA77EA1953DFD200E1DD9D /* Chromium Embedded Framework.framework */; };
+		769F79371953E48400ED92BF /* libcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76DA77E81953DFB200E1DD9D /* libcef_dll_wrapper.a */; };
+		76DA77E21953DF3400E1DD9D /* process_helper_mac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76DA77E11953DF3400E1DD9D /* process_helper_mac.cpp */; };
+		76DA77E41953DF4B00E1DD9D /* webview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76DA77E31953DF4B00E1DD9D /* webview.cpp */; };
+		76DA77E51953DF4B00E1DD9D /* webview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 76DA77E31953DF4B00E1DD9D /* webview.cpp */; };
+		76DA77E71953DF9800E1DD9D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76DA77E61953DF9800E1DD9D /* AppKit.framework */; };
+		76DA77E91953DFB200E1DD9D /* libcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 76DA77E81953DFB200E1DD9D /* libcef_dll_wrapper.a */; };
+		76DA77EB1953DFD200E1DD9D /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76DA77EA1953DFD200E1DD9D /* Chromium Embedded Framework.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		405B1A8910EF202100676938 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC0C705546C1D00DB518D;
+			remoteInfo = dynamic;
+		};
+		405B1A8B10EF202100676938 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 404BEE6110EC83280080E2B8;
+			remoteInfo = static;
+		};
+		405B1A9010EF207D00676938 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 363401F972C53D8EBD3D4BD9;
+			remoteInfo = dynamic;
+		};
+		405B1ADD10EF25B100676938 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BAB02EC06578349A9171CCAC;
+			remoteInfo = static;
+		};
+		769F792F1953E18700ED92BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 76DA77D61953DE8200E1DD9D;
+			remoteInfo = webview_helper_static;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		405B1A9410EF209B00676938 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				40AC73371325728400982A5C /* libwx_osx_cocoa.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		769F79311953E1C700ED92BF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				769F79331953E1E600ED92BF /* webview_chromium Helper.app in CopyFiles */,
+				769F79321953E1DD00ED92BF /* Chromium Embedded Framework.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		405B1A8410EF202100676938 /* wxcocoa.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = wxcocoa.xcodeproj; path = ../../build/osx/wxcocoa.xcodeproj; sourceTree = SOURCE_ROOT; };
+		405B1ACB10EF253300676938 /* webview_chromium.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = webview_chromium.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxcocoa.xcconfig; path = ../../build/osx/wxcocoa.xcconfig; sourceTree = SOURCE_ROOT; };
+		407A752313B0E1EB006BC2D5 /* wxdebug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxdebug.xcconfig; path = ../../build/osx/wxdebug.xcconfig; sourceTree = SOURCE_ROOT; };
+		407A752413B0E1EB006BC2D5 /* wxrelease.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = wxrelease.xcconfig; path = ../../build/osx/wxrelease.xcconfig; sourceTree = SOURCE_ROOT; };
+		769F79341953E46500ED92BF /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		76DA77DF1953DE8200E1DD9D /* webview_chromium Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "webview_chromium Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		76DA77E11953DF3400E1DD9D /* process_helper_mac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = process_helper_mac.cpp; path = mac/process_helper_mac.cpp; sourceTree = "<group>"; };
+		76DA77E31953DF4B00E1DD9D /* webview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = webview.cpp; sourceTree = "<group>"; };
+		76DA77E61953DF9800E1DD9D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AppKit.framework; sourceTree = DEVELOPER_DIR; };
+		76DA77E81953DFB200E1DD9D /* libcef_dll_wrapper.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcef_dll_wrapper.a; path = ../../cef/xcodebuild/Debug/libcef_dll_wrapper.a; sourceTree = "<group>"; };
+		76DA77EA1953DFD200E1DD9D /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "../../cef/Release/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* webview_chromium.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = webview_chromium.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		405B1AC410EF253300676938 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				769F79371953E48400ED92BF /* libcef_dll_wrapper.a in Frameworks */,
+				769F79361953E47100ED92BF /* Chromium Embedded Framework.framework in Frameworks */,
+				769F79351953E46500ED92BF /* AppKit.framework in Frameworks */,
+				405B1AE010EF25D200676938 /* libwx_osx_cocoa_static.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76DA77DA1953DE8200E1DD9D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76DA77EB1953DFD200E1DD9D /* Chromium Embedded Framework.framework in Frameworks */,
+				76DA77E91953DFB200E1DD9D /* libcef_dll_wrapper.a in Frameworks */,
+				76DA77E71953DF9800E1DD9D /* AppKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40AC73361325727300982A5C /* libwx_osx_cocoa.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* webview_chromium.app */,
+				405B1ACB10EF253300676938 /* webview_chromium.app */,
+				76DA77DF1953DE8200E1DD9D /* webview_chromium Helper.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* minimal_cocoa */ = {
+			isa = PBXGroup;
+			children = (
+				769F79341953E46500ED92BF /* AppKit.framework */,
+				76DA77EA1953DFD200E1DD9D /* Chromium Embedded Framework.framework */,
+				76DA77E81953DFB200E1DD9D /* libcef_dll_wrapper.a */,
+				76DA77E61953DF9800E1DD9D /* AppKit.framework */,
+				407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */,
+				407A752313B0E1EB006BC2D5 /* wxdebug.xcconfig */,
+				407A752413B0E1EB006BC2D5 /* wxrelease.xcconfig */,
+				405B1A8410EF202100676938 /* wxcocoa.xcodeproj */,
+				405B1A9710EF227D00676938 /* src */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = minimal_cocoa;
+			sourceTree = "<group>";
+		};
+		405B1A8510EF202100676938 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				405B1A8A10EF202100676938 /* libwx_osx_cocoa.dylib */,
+				405B1A8C10EF202100676938 /* libwx_osx_cocoa_static.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		405B1A9710EF227D00676938 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				76DA77E31953DF4B00E1DD9D /* webview.cpp */,
+				76DA77E11953DF3400E1DD9D /* process_helper_mac.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		405B1ABF10EF253300676938 /* webview_chromium_static */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 405B1AC810EF253300676938 /* Build configuration list for PBXNativeTarget "webview_chromium_static" */;
+			buildPhases = (
+				405B1AC210EF253300676938 /* Sources */,
+				405B1AC410EF253300676938 /* Frameworks */,
+				769F79311953E1C700ED92BF /* CopyFiles */,
+				769F79381953E49E00ED92BF /* Fix CEF Link */,
+				769F79391953E4C800ED92BF /* Make More Helper */,
+				769F793A1953E51600ED92BF /* Match-O flags */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				769F79301953E18700ED92BF /* PBXTargetDependency */,
+				405B1ADE10EF25B100676938 /* PBXTargetDependency */,
+			);
+			name = webview_chromium_static;
+			productInstallPath = "$(HOME)/Applications";
+			productName = minimal_cocoa;
+			productReference = 405B1ACB10EF253300676938 /* webview_chromium.app */;
+			productType = "com.apple.product-type.application";
+		};
+		76DA77D61953DE8200E1DD9D /* webview_helper_static */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 76DA77DC1953DE8200E1DD9D /* Build configuration list for PBXNativeTarget "webview_helper_static" */;
+			buildPhases = (
+				76DA77D91953DE8200E1DD9D /* Sources */,
+				76DA77DA1953DE8200E1DD9D /* Frameworks */,
+				76DA77EC1953DFEB00E1DD9D /* Fix CEF Link */,
+				76DA77ED1953E02500E1DD9D /* Change Mach-O Flags */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = webview_helper_static;
+			productInstallPath = "$(HOME)/Applications";
+			productName = minimal_cocoa;
+			productReference = 76DA77DF1953DE8200E1DD9D /* webview_chromium Helper.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8D1107260486CEB800E47090 /* webview_chromium_dynamic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "webview_chromium_dynamic" */;
+			buildPhases = (
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				405B1A9410EF209B00676938 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				405B1A9110EF207D00676938 /* PBXTargetDependency */,
+			);
+			name = webview_chromium_dynamic;
+			productInstallPath = "$(HOME)/Applications";
+			productName = minimal_cocoa;
+			productReference = 8D1107320486CEB800E47090 /* webview_chromium.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "webview_chromium" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* minimal_cocoa */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 405B1A8510EF202100676938 /* Products */;
+					ProjectRef = 405B1A8410EF202100676938 /* wxcocoa.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* webview_chromium_dynamic */,
+				405B1ABF10EF253300676938 /* webview_chromium_static */,
+				76DA77D61953DE8200E1DD9D /* webview_helper_static */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		405B1A8A10EF202100676938 /* libwx_osx_cocoa.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libwx_osx_cocoa.dylib;
+			remoteRef = 405B1A8910EF202100676938 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		405B1A8C10EF202100676938 /* libwx_osx_cocoa_static.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libwx_osx_cocoa_static.a;
+			remoteRef = 405B1A8B10EF202100676938 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		769F79381953E49E00ED92BF /* Fix CEF Link */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)",
+			);
+			name = "Fix CEF Link";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exec install_name_tool -change \"@executable_path/Chromium Embedded Framework\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\nexit 1";
+			showEnvVarsInLog = 0;
+		};
+		769F79391953E4C800ED92BF /* Make More Helper */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)",
+			);
+			name = "Make More Helper";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exec ../../cef/tools/make_more_helpers.sh Frameworks webview_chromium\nexit 1\n";
+			showEnvVarsInLog = 0;
+		};
+		769F793A1953E51600ED92BF /* Match-O flags */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)",
+			);
+			name = "Match-O flags";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exec ../../cef/tools/change_mach_o_flags_from_xcode.sh\nexit 1\n";
+			showEnvVarsInLog = 0;
+		};
+		76DA77EC1953DFEB00E1DD9D /* Fix CEF Link */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)",
+			);
+			name = "Fix CEF Link";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exec install_name_tool -change \"@executable_path/Chromium Embedded Framework\" \"@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\"\nexit 1\n";
+			showEnvVarsInLog = 0;
+		};
+		76DA77ED1953E02500E1DD9D /* Change Mach-O Flags */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)",
+			);
+			name = "Change Mach-O Flags";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "exec ../../cef/tools/change_mach_o_flags_from_xcode.sh\nexit 1\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		405B1AC210EF253300676938 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76DA77E51953DF4B00E1DD9D /* webview.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		76DA77D91953DE8200E1DD9D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76DA77E21953DF3400E1DD9D /* process_helper_mac.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				76DA77E41953DF4B00E1DD9D /* webview.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		405B1A9110EF207D00676938 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = dynamic;
+			targetProxy = 405B1A9010EF207D00676938 /* PBXContainerItemProxy */;
+		};
+		405B1ADE10EF25B100676938 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = static;
+			targetProxy = 405B1ADD10EF25B100676938 /* PBXContainerItemProxy */;
+		};
+		769F79301953E18700ED92BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 76DA77D61953DE8200E1DD9D /* webview_helper_static */;
+			targetProxy = 769F792F1953E18700ED92BF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		405B1AC910EF253300676938 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(WXROOT)/cef/Release\"",
+				);
+				INFOPLIST_FILE = "webview_chromium-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(WXROOT)/cef/xcodebuild/Debug\"",
+				);
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-Wl,-pie",
+				);
+				PRODUCT_NAME = webview_chromium;
+				USER_HEADER_SEARCH_PATHS = "\"$(WXROOT)/include\" \"$(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include\" \"$(WXROOT)/src/zlib\" \"$(WXROOT)/src/jpeg\" \"$(WXROOT)/src/png\" \"$(WXROOT)/src/regex\" \"$(WXROOT)/src/expat/lib\" \"$(WXROOT)/src/tiff/libtiff\" \"$(WXROOT)/src/stc/scintilla/src\" \"$(WXROOT)/src/stc/scintilla/include\" \"$(WXROOT)/src/stc/scintilla/lexlib\" \"$(WXROOT)/cef\"";
+			};
+			name = Debug;
+		};
+		405B1ACA10EF253300676938 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(WXROOT)/cef/Release\"",
+				);
+				INFOPLIST_FILE = "webview_chromium-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(WXROOT)/cef/xcodebuild/Release\"",
+				);
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-Wl,-pie",
+				);
+				PRODUCT_NAME = webview_chromium;
+				USER_HEADER_SEARCH_PATHS = "\"$(WXROOT)/include\" \"$(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include\" \"$(WXROOT)/src/zlib\" \"$(WXROOT)/src/jpeg\" \"$(WXROOT)/src/png\" \"$(WXROOT)/src/regex\" \"$(WXROOT)/src/expat/lib\" \"$(WXROOT)/src/tiff/libtiff\" \"$(WXROOT)/src/stc/scintilla/src\" \"$(WXROOT)/src/stc/scintilla/include\" \"$(WXROOT)/src/stc/scintilla/lexlib\" \"$(WXROOT)/cef\"";
+			};
+			name = Release;
+		};
+		76DA77DD1953DE8200E1DD9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(WXROOT)/cef/Debug\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				INFOPLIST_FILE = "helper-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(WXROOT)/cef/xcodebuild/Debug\"",
+				);
+				OTHER_LDFLAGS = "-Wl,-pie";
+				PRODUCT_NAME = "webview_chromium Helper";
+				SDKROOT = macosx10.8;
+				USER_HEADER_SEARCH_PATHS = "\"$(WXROOT)/cef\"";
+			};
+			name = Debug;
+		};
+		76DA77DE1953DE8200E1DD9D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(WXROOT)/cef/Release\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				INFOPLIST_FILE = "helper-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(WXROOT)/cef/xcodebuild/Release\"",
+				);
+				OTHER_LDFLAGS = "-Wl,-pie";
+				PRODUCT_NAME = "webview_chromium Helper";
+				SDKROOT = macosx10.8;
+				USER_HEADER_SEARCH_PATHS = "\"$(WXROOT)/cef\"";
+			};
+			name = Release;
+		};
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				LIBRARY_SEARCH_PATHS = /Users/hokein/GitHub/wxWidgets/build/osx/Build/Products/Debug;
+				PRODUCT_NAME = webview_chromium;
+				USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include";
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752213B0E1EB006BC2D5 /* wxcocoa.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				PRODUCT_NAME = webview_chromium;
+				USER_HEADER_SEARCH_PATHS = "$(WXROOT)/include $(WXROOT)/build/osx/setup/$(WXTOOLKIT)/include";
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752313B0E1EB006BC2D5 /* wxdebug.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = Info_cocoa.plist;
+				WXROOT = "$(PROJECT_DIR)/../..";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407A752413B0E1EB006BC2D5 /* wxrelease.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = Info_cocoa.plist;
+				WXROOT = "$(PROJECT_DIR)/../..";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		405B1AC810EF253300676938 /* Build configuration list for PBXNativeTarget "webview_chromium_static" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				405B1AC910EF253300676938 /* Debug */,
+				405B1ACA10EF253300676938 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		76DA77DC1953DE8200E1DD9D /* Build configuration list for PBXNativeTarget "webview_helper_static" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76DA77DD1953DE8200E1DD9D /* Debug */,
+				76DA77DE1953DE8200E1DD9D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "webview_chromium_dynamic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "webview_chromium" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
