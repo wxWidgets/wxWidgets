@@ -84,6 +84,10 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     }
 #endif
 
+#ifdef __WXOSX__
+    wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name);
+#endif
+
     m_historyLoadingFromList = false;
     m_historyEnabled = true;
     m_historyPosition = -1;
@@ -114,6 +118,10 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     PostCreation( size );
 
     gtk_widget_show( view_port );
+#endif
+
+#ifdef __WXOSX__
+    info.SetAsChild(parent->GetHandle(), 0, 0, parent->GetSize().GetX(), parent->GetSize().GetY());
 #endif
 
 #if CHROME_VERSION_BUILD >= 1650
