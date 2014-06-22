@@ -91,7 +91,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 
     CefBrowserSettings browsersettings;
     CefWindowInfo info;
-    
+
     m_clientHandler = new ClientHandler();
     m_clientHandler->SetWebView(this);
 
@@ -446,7 +446,11 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     // If there is no subprocess then we need to execute on this process
     if ( path == "" )
     {
+#if CHROME_VERSION_BUILD >= 1750
+        code = CefExecuteProcess(args, NULL, NULL);
+#else
         code = CefExecuteProcess(args, NULL);
+#endif
         if ( code >= 0 )
             return false;
     }
@@ -461,7 +465,11 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     //settings.multi_threaded_message_loop = true;
     CefString(&settings.browser_subprocess_path) = path.ToStdString();
 
+#if CHROME_VERSION_BUILD >= 1750
+    return CefInitialize(args, settings, NULL, NULL);
+#else
     return CefInitialize(args, settings, NULL);
+#endif
 }
 
 void wxWebViewChromium::RunCEFMessageLoopOnIdle()
