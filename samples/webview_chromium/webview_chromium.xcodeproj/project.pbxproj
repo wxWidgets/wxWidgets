@@ -56,12 +56,12 @@
 			remoteGlobalIDString = BAB02EC06578349A9171CCAC;
 			remoteInfo = static;
 		};
-		763672B919583DFB002CC711 /* PBXContainerItemProxy */ = {
+		763672C219584758002CC711 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 405B1ABF10EF253300676938;
-			remoteInfo = webview_chromium_static;
+			remoteGlobalIDString = 76DA77D61953DE8200E1DD9D;
+			remoteInfo = webview_helper;
 		};
 		769F792F1953E18700ED92BF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -255,7 +255,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				763672BA19583DFB002CC711 /* PBXTargetDependency */,
+				763672C319584758002CC711 /* PBXTargetDependency */,
 				405B1A9110EF207D00676938 /* PBXTargetDependency */,
 			);
 			name = webview_chromium_dynamic;
@@ -484,10 +484,10 @@
 			name = static;
 			targetProxy = 405B1ADD10EF25B100676938 /* PBXContainerItemProxy */;
 		};
-		763672BA19583DFB002CC711 /* PBXTargetDependency */ = {
+		763672C319584758002CC711 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 405B1ABF10EF253300676938 /* webview_chromium_static */;
-			targetProxy = 763672B919583DFB002CC711 /* PBXContainerItemProxy */;
+			target = 76DA77D61953DE8200E1DD9D /* webview_helper */;
+			targetProxy = 763672C219584758002CC711 /* PBXContainerItemProxy */;
 		};
 		769F79301953E18700ED92BF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
