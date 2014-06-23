@@ -69,7 +69,8 @@ wxThumbBarButton::wxThumbBarButton(int id,
       m_dismissOnClick(dismissOnClick),
       m_hasBackground(hasBackground),
       m_shown(shown),
-      m_interactive(interactive)
+      m_interactive(interactive),
+      m_taskBarButtonParent(NULL)
 {
 }
 
@@ -91,6 +92,60 @@ bool wxThumbBarButton::Create(int id,
     m_shown = shown;
     m_interactive = interactive;
     return true;
+}
+
+void wxThumbBarButton::Enable(bool enable)
+{
+    if ( m_enable != enable )
+    {
+        m_enable = enable;
+        UpdateParentTaskBarButton();
+    }
+}
+
+void wxThumbBarButton::SetHasBackground(bool has)
+{
+    if ( m_hasBackground != has )
+    {
+        m_hasBackground = has;
+        UpdateParentTaskBarButton();
+    }
+}
+
+void wxThumbBarButton::EnableDismissOnClick(bool enable)
+{
+    if ( m_dismissOnClick != enable )
+    {
+        m_dismissOnClick = enable;
+        UpdateParentTaskBarButton();
+    }
+}
+
+void wxThumbBarButton::Show(bool shown)
+{
+    if ( m_shown != shown )
+    {
+        m_shown = shown;
+        UpdateParentTaskBarButton();
+    }
+}
+
+void wxThumbBarButton::EnableInteractive(bool interactive)
+{
+    if ( m_interactive != interactive )
+    {
+        m_interactive = interactive;
+        UpdateParentTaskBarButton();
+    }
+}
+
+bool wxThumbBarButton::UpdateParentTaskBarButton()
+{
+    if ( !m_taskBarButtonParent )
+        return false;
+
+    return static_cast<wxTaskBarButtonImpl*>(
+               m_taskBarButtonParent)->InitOrUpdateThumbBarButtons();
 }
 
 wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
@@ -200,6 +255,7 @@ bool wxTaskBarButtonImpl::AppendThumbBarButton(wxThumbBarButton *button)
     wxASSERT_MSG( m_thumbBarButtons.size() < MAX_BUTTON_COUNT,
                   "Number of thumb buttons is limited to 7" );
 
+    button->SetParent(this);
     m_thumbBarButtons.push_back(button);
     return InitOrUpdateThumbBarButtons();
 }
@@ -212,11 +268,13 @@ bool wxTaskBarButtonImpl::InsertThumbBarButton(size_t pos,
     wxASSERT_MSG( pos <= m_thumbBarButtons.size(),
                   "Invalid index when inserting the button" );
 
+    button->SetParent(this);
     m_thumbBarButtons.insert(m_thumbBarButtons.begin() + pos, button);
     return InitOrUpdateThumbBarButtons();
 }
 
-wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(wxThumbBarButton *button)
+wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(
+    wxThumbBarButton *button)
 {
     for ( wxThumbBarButtons::iterator iter = m_thumbBarButtons.begin();
           iter != m_thumbBarButtons.end();
@@ -225,6 +283,7 @@ wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(wxThumbBarButton *bu
         if ( button == *iter )
         {
             m_thumbBarButtons.erase(iter);
+            button->SetParent(NULL);
             InitOrUpdateThumbBarButtons();
             return *iter;
         }
@@ -242,6 +301,7 @@ wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
         if ( id == (*iter)->GetID() )
         {
             m_thumbBarButtons.erase(iter);
+            (*iter)->SetParent(NULL);
             InitOrUpdateThumbBarButtons();
             return *iter;
         }
