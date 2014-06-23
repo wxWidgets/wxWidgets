@@ -88,6 +88,7 @@ private:
         CPPUNIT_TEST( Labels );
         CPPUNIT_TEST( RadioItems );
         CPPUNIT_TEST( RemoveAdd );
+        CPPUNIT_TEST( ChangeBitmap );
         WXUISIM_TEST( Events );
     CPPUNIT_TEST_SUITE_END();
 
@@ -100,6 +101,7 @@ private:
     void Labels();
     void RadioItems();
     void RemoveAdd();
+    void ChangeBitmap();
     void Events();
 
     wxFrame* m_frame;
@@ -403,6 +405,22 @@ void MenuTestCase::RemoveAdd()
     menu0->Insert(0, item);
     CPPUNIT_ASSERT( menu0->FindItemByPosition(0) == item );
     menu0->Delete(item);
+}
+
+void MenuTestCase::ChangeBitmap()
+{
+    wxMenu *menu = new wxMenu;
+
+    wxMenuItem *item = new wxMenuItem(menu, wxID_ANY, "Item");
+    menu->Append(item);
+
+    // On Windows Vista (and later) calling SetBitmap, *after* the menu
+    // item has already been added, used to result in a stack overflow:
+    // [Do]SetBitmap can call GetHBitmapForMenu which will call SetBitmap
+    // again etc...
+    item->SetBitmap( wxBitmap(1, 1) );
+
+    wxDELETE(menu);
 }
 
 void MenuTestCase::Events()

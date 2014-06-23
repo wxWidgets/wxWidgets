@@ -732,6 +732,8 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
 
 void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
 {
+    static bool s_insideSetBitmap = false;
+
     if ( bChecked )
     {
         if ( m_bmpChecked.IsSameAs(bmp) )
@@ -746,6 +748,18 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
 
         m_bmpUnchecked = bmp;
     }
+
+    if (s_insideSetBitmap)
+    {
+        // We can arrive here because of calling GetHBitmapForMenu
+        // further down below, which itself can call [Do]SetBitmap
+        // resulting in infinite recursion. After having set the
+        // bitmap just return instead.
+        return;
+    }
+
+    wxON_BLOCK_EXIT_SET(s_insideSetBitmap, false);
+    s_insideSetBitmap = true;
 
 #if wxUSE_OWNER_DRAWN
     // already marked as owner-drawn, cannot be reverted
