@@ -222,9 +222,9 @@
 			productReference = 405B1ACB10EF253300676938 /* webview_chromium.app */;
 			productType = "com.apple.product-type.application";
 		};
-		76DA77D61953DE8200E1DD9D /* webview_helper_static */ = {
+		76DA77D61953DE8200E1DD9D /* webview_helper */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 76DA77DC1953DE8200E1DD9D /* Build configuration list for PBXNativeTarget "webview_helper_static" */;
+			buildConfigurationList = 76DA77DC1953DE8200E1DD9D /* Build configuration list for PBXNativeTarget "webview_helper" */;
 			buildPhases = (
 				76DA77D91953DE8200E1DD9D /* Sources */,
 				76DA77DA1953DE8200E1DD9D /* Frameworks */,
@@ -235,7 +235,7 @@
 			);
 			dependencies = (
 			);
-			name = webview_helper_static;
+			name = webview_helper;
 			productInstallPath = "$(HOME)/Applications";
 			productName = minimal_cocoa;
 			productReference = 76DA77DF1953DE8200E1DD9D /* webview_chromium Helper.app */;
@@ -293,7 +293,7 @@
 			targets = (
 				8D1107260486CEB800E47090 /* webview_chromium_dynamic */,
 				405B1ABF10EF253300676938 /* webview_chromium_static */,
-				76DA77D61953DE8200E1DD9D /* webview_helper_static */,
+				76DA77D61953DE8200E1DD9D /* webview_helper */,
 			);
 		};
 /* End PBXProject section */
@@ -491,7 +491,7 @@
 		};
 		769F79301953E18700ED92BF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 76DA77D61953DE8200E1DD9D /* webview_helper_static */;
+			target = 76DA77D61953DE8200E1DD9D /* webview_helper */;
 			targetProxy = 769F792F1953E18700ED92BF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -690,7 +690,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		76DA77DC1953DE8200E1DD9D /* Build configuration list for PBXNativeTarget "webview_helper_static" */ = {
+		76DA77DC1953DE8200E1DD9D /* Build configuration list for PBXNativeTarget "webview_helper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				76DA77DD1953DE8200E1DD9D /* Debug */,
