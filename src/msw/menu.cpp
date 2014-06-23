@@ -573,8 +573,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 if ( pItem->IsCheckable() )
                 {
                     mii.fMask |= MIIM_CHECKMARKS;
-                    mii.hbmpChecked = pItem->GetHBitmapForMenu(true);
-                    mii.hbmpUnchecked = pItem->GetHBitmapForMenu(false);
+                    mii.hbmpChecked = pItem->GetHBitmapForMenuCheckable(true);
+                    mii.hbmpUnchecked = pItem->GetHBitmapForMenuCheckable(false);
                 }
                 else if ( pItem->GetBitmap().IsOk() )
                 {
