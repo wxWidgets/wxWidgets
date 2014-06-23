@@ -780,8 +780,11 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
             {
                 wxCHECK_RET( item == this, wxS("Non unique menu item ID?") );
 
-                m_parentMenu->Remove(this);
-                m_parentMenu->Insert(pos, this);
+                // Use a copied value of m_parentMenu because it is
+                // nullified by Remove.
+                wxMenu *menu = m_parentMenu;
+                menu->Remove(this);
+                menu->Insert(pos, this);
             }
             //else: the item hasn't been inserted into the parent menu yet
         }

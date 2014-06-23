@@ -420,6 +420,12 @@ void MenuTestCase::ChangeBitmap()
     // again etc...
     item->SetBitmap( wxBitmap(1, 1) );
 
+
+    // Force owner drawn usage by having a bitmap that's wider than the
+    // standard size. This results in rearranging the parent menu which
+    // hasn't always worked properly and lead to a null pointer exception.
+    item->SetBitmap( wxBitmap(512, 1) );
+
     wxDELETE(menu);
 }
 
