@@ -52,6 +52,8 @@ THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
 
 } // namespace
 
+IMPLEMENT_DYNAMIC_CLASS(wxThumbBarButton, wxObject)
+
 wxThumbBarButton::wxThumbBarButton(int id,
                                    const wxIcon& icon,
                                    const wxString& tooltip,
@@ -69,6 +71,26 @@ wxThumbBarButton::wxThumbBarButton(int id,
       m_shown(shown),
       m_interactive(interactive)
 {
+}
+
+bool wxThumbBarButton::Create(int id,
+                              const wxIcon& icon,
+                              const wxString& tooltip,
+                              bool enable,
+                              bool dismissOnClick,
+                              bool hasBackground,
+                              bool shown,
+                              bool interactive)
+{
+    m_id = id;
+    m_icon = icon;
+    m_tooltip = tooltip;
+    m_enable = enable;
+    m_dismissOnClick = dismissOnClick;
+    m_hasBackground = hasBackground;
+    m_shown = shown;
+    m_interactive = interactive;
+    return true;
 }
 
 wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
@@ -283,12 +305,12 @@ bool wxTaskBarButtonImpl::InitOrUpdateThumbBarButtons()
     return SUCCEEDED(hr);
 }
 
-int wxTaskBarButtonImpl::GetThumbBarButtonID(size_t index)
+wxThumbBarButton* wxTaskBarButtonImpl::GetThumbBarButtonByIndex(size_t index)
 {
     if ( index >= m_thumbBarButtons.size() )
-        return -1;
+        return NULL;
 
-    return m_thumbBarButtons[index]->GetID();
+    return m_thumbBarButtons[index];
 }
 
 #endif // wxUSE_TASKBARBUTTON

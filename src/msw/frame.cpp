@@ -906,9 +906,12 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     if ( cmd == wxTHBN_CLICKED && m_taskBarButton )
     {
         wxTaskBarButtonImpl * const
-            tbButton = reinterpret_cast<wxTaskBarButtonImpl*>(m_taskBarButton); 
-        wxCommandEvent event(wxEVT_BUTTON, tbButton->GetThumbBarButtonID(id));
-        event.SetEventObject(this);
+            tbButton = reinterpret_cast<wxTaskBarButtonImpl*>(m_taskBarButton);
+        // we use the index as id when adding thumbnail toolbar button.
+        wxThumbBarButton * const
+            thumbBarButton = tbButton->GetThumbBarButtonByIndex(id);
+        wxCommandEvent event(wxEVT_BUTTON, thumbBarButton->GetID());
+        event.SetEventObject(thumbBarButton);
         return ProcessEvent(event);
     }
 #endif // wxUSE_TASKBARBUTTON

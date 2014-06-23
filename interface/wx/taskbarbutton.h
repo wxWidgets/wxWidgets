@@ -32,6 +32,10 @@ enum WXDLLIMPEXP_CORE wxTaskBarButtonState
 */
 class WXDLLIMPEXP_CORE wxThumbBarButton {
 public:
+    /**
+        Default constructor to allow 2-phase creation.
+    */
+    wxThumbBarButton();
 
     /**
         Constructs the thumbnail toolbar button.
@@ -67,6 +71,15 @@ public:
                      bool hasBackground = true,
                      bool shown = true,
                      bool interactive = true);
+
+    bool Create(int id,
+                const wxIcon& icon,
+                const wxString& tooltip = wxString(),
+                bool enable = true,
+                bool dismissOnClick = false,
+                bool hasBackground = true,
+                bool shown = true,
+                bool interactive = true);
 
     virtual ~wxThumbBarButton();
 
