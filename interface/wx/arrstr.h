@@ -54,7 +54,15 @@ class wxArrayString : public wxArray
 {
 public:
     /**
-        The function type used with wxArrayString::Sort function.
+        The function type used with wxArrayString::Sort().
+
+        This function uses the same conventions as the standard @c qsort()
+        comparison function, that is it should return a negative value if the
+        first argument is less than the second one, a positive value if the
+        first argument is greater than the second one and 0 if the arguments
+        are equal.
+
+        @since 3.1.0
     */
     typedef int (*CompareFunction)(const wxString& first, const wxString& second);
 
@@ -280,6 +288,21 @@ public:
 class wxSortedArrayString : public wxArray
 {
 public:
+    /**
+        Default constructor.
+
+        The elements of the array are kept sorted in alphabetical order.
+     */
+    wxSortedArrayString();
+
+    /**
+        Constructs a sorted array using the specified @a compareFunction for
+        item comparison.
+
+        @since 3.1.0
+    */
+    wxSortedArrayString(CompareFunction compareFunction);
+
     /**
         Conversion constructor.
 

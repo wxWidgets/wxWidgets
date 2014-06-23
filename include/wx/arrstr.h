@@ -85,6 +85,9 @@ public:
         for ( size_t n = 0; n < src.size(); n++ )
             Add(src[n]);
     }
+    wxEXPLICIT wxSortedArrayString(wxArrayString::CompareFunction compareFunction)
+        : wxSortedArrayStringBase(compareFunction)
+        { }
 
     int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
 
@@ -342,6 +345,8 @@ protected:
   void Init(bool autoSort);             // common part of all ctors
   void Copy(const wxArrayString& src);  // copies the contents of another array
 
+  CompareFunction m_compareFunction;    // set only from wxSortedArrayString
+
 private:
   void Grow(size_t nIncrement = 0);     // makes array bigger if needed
 
@@ -360,6 +365,10 @@ public:
     { }
   wxSortedArrayString(const wxArrayString& array) : wxArrayString(true)
     { Copy(array); }
+
+  wxEXPLICIT wxSortedArrayString(CompareFunction compareFunction)
+      : wxArrayString(true)
+    { m_compareFunction = compareFunction; }
 };
 
 #endif // !wxUSE_STD_CONTAINERS

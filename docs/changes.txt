@@ -35,6 +35,7 @@ All:
 - Implement wxThread::SetPriority() for pthreads (Luca Bacci).
 - Add wxInt64 support to wxText{Input,Output}Stream (Alexander Bezzubikov).
 - Define wxOVERRIDE as override for supporting compilers (Thomas Goyne).
+- Allow specifying custom comparator for wxSortedArrayString (Catalin Raceanu).
 
 All (GUI):
 
