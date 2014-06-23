@@ -27,6 +27,22 @@ inline int wxCMPFUNC_CONV wxStringSortDescending(const wxString& s1, const wxStr
     return wxStringSortAscending(s2, s1);
 }
 
+// This comparison function ignores case when comparing strings differing not
+// in case only, i.e. this ensures that "Aa" comes before "AB", unlike with
+// wxStringSortAscending().
+inline int wxCMPFUNC_CONV
+wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2)
+{
+    const int cmp = s1.CmpNoCase(s2);
+    return cmp ? cmp : s1.Cmp(s2);
+}
+
+inline int wxCMPFUNC_CONV
+wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2)
+{
+    return wxDictionaryStringSortAscending(s2, s1);
+}
+
 #if wxUSE_STD_CONTAINERS
 
 #include "wx/dynarray.h"

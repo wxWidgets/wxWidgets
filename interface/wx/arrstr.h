@@ -299,6 +299,8 @@ public:
         Constructs a sorted array using the specified @a compareFunction for
         item comparison.
 
+        @see wxStringSortAscending(), wxDictionaryStringSortAscending()
+
         @since 3.1.0
     */
     wxSortedArrayString(CompareFunction compareFunction);
@@ -355,6 +357,57 @@ public:
     //@}
 };
 
+/**
+    Comparison function comparing strings in alphabetical order.
+
+    This function can be used with wxSortedArrayString::Sort() or passed as an
+    argument to wxSortedArrayString constructor.
+
+    @see wxStringSortDescending(), wxDictionaryStringSortAscending()
+
+    @since 3.1.0
+ */
+int wxStringSortAscending(const wxString& s1, const wxString& s2);
+
+/**
+    Comparison function comparing strings in reverse alphabetical order.
+
+    This function can be used with wxSortedArrayString::Sort() or passed as an
+    argument to wxSortedArrayString constructor.
+
+    @see wxStringSortAscending(), wxDictionaryStringSortAscending()
+
+    @since 3.1.0
+ */
+int wxStringSortDescending(const wxString& s1, const wxString& s2);
+
+/**
+    Comparison function comparing strings in dictionary order.
+
+    The "dictionary order" differs from the alphabetical order in that the
+    strings differing not only in case are compared case-insensitively to
+    ensure that "Aa" comes before "AB" in the sorted array, unlike with
+    wxStringSortAscending().
+
+    This function can be used with wxSortedArrayString::Sort() or passed as an
+    argument to wxSortedArrayString constructor.
+
+    @see wxStringSortAscending(), wxDictionaryStringSortDescending()
+
+    @since 3.1.0
+ */
+int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
+
+/**
+    Comparison function comparing strings in reverse dictionary order.
+
+    See wxDictionaryStringSortAscending() for the dictionary sort description.
+
+    @see wxStringSortDescending()
+
+    @since 3.1.0
+ */
+int wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2);
 
 // ============================================================================
 // Global functions/macros
