@@ -64,7 +64,11 @@ bool wxSlider::Create(wxWindow *parent,
     m_qtSlider = new wxQtSlider( parent, this );
     m_qtSlider->setOrientation( wxQtConvertOrientation( style, wxSL_HORIZONTAL ) );
     SetRange( minValue, maxValue );
-
+    // draw ticks marks (bellow if horizontal, right if vertical):
+    if (style & wxSL_AUTOTICKS)
+    {
+        m_qtSlider->setTickPosition( QSlider::TicksBelow );
+    }
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
@@ -93,12 +97,23 @@ int wxSlider::GetMax() const
     return m_qtSlider->maximum();
 }
 
+void wxSlider::DoSetTickFreq(int freq)
+{
+    m_qtSlider->setTickInterval(freq);
+}
+
+int wxSlider::GetTickFreq() const
+{
+    return m_qtSlider->tickInterval();
+}
+
 void wxSlider::SetLineSize(int lineSize)
 {
 }
 
 void wxSlider::SetPageSize(int pageSize)
 {
+    m_qtSlider->setPageStep(pageSize);
 }
 
 int wxSlider::GetLineSize() const
@@ -108,7 +123,7 @@ int wxSlider::GetLineSize() const
 
 int wxSlider::GetPageSize() const
 {
-    return 0;
+    return m_qtSlider->pageStep();
 }
 
 void wxSlider::SetThumbLength(int lenPixels)

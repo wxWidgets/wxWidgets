@@ -40,6 +40,9 @@ public:
     virtual int GetMin() const;
     virtual int GetMax() const;
 
+    virtual void DoSetTickFreq(int freq);
+    virtual int GetTickFreq() const;
+
     virtual void SetLineSize(int lineSize);
     virtual void SetPageSize(int pageSize);
     virtual int GetLineSize() const;
