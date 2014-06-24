@@ -34,24 +34,13 @@ protected:
 
     wxQtPointer< QPushButton > m_qtPushButton;
 
+    void QtCreate(wxWindow *parent);
     void QtSetBitmap( const wxBitmap &bitmap );
 
 private:
     typedef wxAnyButtonBase base_type;
 
     wxDECLARE_NO_COPY_CLASS(wxAnyButton);
-};
-
-
-class WXDLLIMPEXP_CORE wxQtPushButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
-{
-
-public:
-    wxQtPushButton( wxWindow *parent, wxAnyButton *handler, wxEventType eventType );
-
-private:
-    void OnButtonClicked( bool checked );
-    wxEventType m_eventType;
 };
 
 

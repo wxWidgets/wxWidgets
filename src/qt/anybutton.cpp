@@ -18,11 +18,32 @@
 #include "wx/qt/utils.h"
 
 
-wxQtPushButton::wxQtPushButton( wxWindow *parent, wxAnyButton *handler, wxEventType eventType )
+class wxQtPushButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
+{
+
+public:
+    wxQtPushButton( wxWindow *parent, wxAnyButton *handler);
+
+private:
+    void clicked(bool);
+};
+
+wxQtPushButton::wxQtPushButton(wxWindow *parent, wxAnyButton *handler)
     : wxQtEventSignalHandler< QPushButton, wxAnyButton >( parent, handler )
 {
-    m_eventType = eventType;
-    connect(this, &QPushButton::clicked, this, &wxQtPushButton::OnButtonClicked);
+    connect(this, &QPushButton::clicked, this, &wxQtPushButton::clicked);
+}
+
+void wxQtPushButton::clicked( bool WXUNUSED(checked) )
+{
+    wxCommandEvent event( wxEVT_BUTTON, GetHandler()->GetId() );
+    EmitEvent( event );
+}
+
+void wxAnyButton::QtCreate(wxWindow *parent)
+{
+    // create the default push button (used in button and bmp button)
+    m_qtPushButton = new wxQtPushButton( parent, this );
 }
 
 void wxAnyButton::QtSetBitmap( const wxBitmap &bitmap )
@@ -31,17 +52,6 @@ void wxAnyButton::QtSetBitmap( const wxBitmap &bitmap )
     QPixmap *pixmap = bitmap.GetHandle();
     m_qtPushButton->setIcon( QIcon( *pixmap  ));
     m_qtPushButton->setIconSize( pixmap->rect().size() );
-}
-
-void wxQtPushButton::OnButtonClicked( bool WXUNUSED( checked ))
-{
-    wxCommandEvent event( m_eventType, GetHandler()->GetId() );
-    // for toggle buttons, send the checked state in the wx event:
-    if ( isCheckable() )
-    {
-        event.SetInt( isChecked() );
-    }
-    EmitEvent( event );
 }
 
 void wxAnyButton::SetLabel( const wxString &label )
