@@ -574,6 +574,14 @@ Major new features in this release
 
 
 
+3.0.2: (released 2014-xx-xx)
+----------------------------
+
+wxMSW:
+
+- Fix Cygwin 1.7 build.
+
+
 3.0.1: (released 2014-06-15)
 ----------------------------
 
