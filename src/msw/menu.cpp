@@ -573,13 +573,13 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 if ( pItem->IsCheckable() )
                 {
                     mii.fMask |= MIIM_CHECKMARKS;
-                    mii.hbmpChecked = pItem->GetHBitmapForMenuCheckable(true);
-                    mii.hbmpUnchecked = pItem->GetHBitmapForMenuCheckable(false);
+                    mii.hbmpChecked = pItem->GetHBitmapForMenu(wxMenuItem::Checked);
+                    mii.hbmpUnchecked = pItem->GetHBitmapForMenu(wxMenuItem::Unchecked);
                 }
                 else if ( pItem->GetBitmap().IsOk() )
                 {
                     mii.fMask |= MIIM_BITMAP;
-                    mii.hbmpItem = pItem->GetHBitmapForMenu();
+                    mii.hbmpItem = pItem->GetHBitmapForMenu(wxMenuItem::Normal);
                 }
 
                 mii.cch = itemText.length();

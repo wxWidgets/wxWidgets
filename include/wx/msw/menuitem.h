@@ -117,11 +117,15 @@ private:
     bool MSWMustUseOwnerDrawn();
 #endif // wxUSE_OWNER_DRAWN
 
-    // helper function to get a handle for normal bitmap associated with item
-    WXHBITMAP GetHBitmapForMenu(bool checked = true);
+    enum BitmapKind
+    {
+        Normal,
+        Checked,
+        Unchecked
+    };
 
-    // helper function to get a handle for checkable bitmap associated with item
-    WXHBITMAP GetHBitmapForMenuCheckable(bool checked);
+    // helper function to get a handle for bitmap associated with item
+    WXHBITMAP GetHBitmapForMenu(BitmapKind kind);
 
     // helper function to set/change the bitmap
     void DoSetBitmap(const wxBitmap& bmp, bool bChecked);

@@ -807,13 +807,13 @@ void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
     if ( IsCheckable() )
     {
         mii.fMask = MIIM_CHECKMARKS;
-        mii.hbmpChecked = GetHBitmapForMenuCheckable(true);
-        mii.hbmpUnchecked = GetHBitmapForMenuCheckable(false);
+        mii.hbmpChecked = GetHBitmapForMenu(Checked);
+        mii.hbmpUnchecked = GetHBitmapForMenu(Unchecked);
     }
     else
     {
         mii.fMask = MIIM_BITMAP;
-        mii.hbmpItem = GetHBitmapForMenu();
+        mii.hbmpItem = GetHBitmapForMenu(Normal);
     }
 
     if ( !::SetMenuItemInfo(GetHMenuOf(m_parentMenu), itemPos, TRUE, &mii) )
@@ -1184,52 +1184,6 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 namespace
 {
 
-// Returns the HBITMAP to use in MENUITEMINFO, either for hBmpItem (then
-// forCheckableItem is false) or for hbmpChecked/hBmpUnchecked
-// usage (forCheckableItem is true). The difference is needed because
-// HBMMENU_CALLBACK can only be used for hBmpItem items.
-HBITMAP DoGetHBitmapForMenu(wxMenuItem *menuItem,
-    bool checked, bool forCheckableItem)
-{
-    // Under versions of Windows older than Vista we can't pass HBITMAP
-    // directly as hbmpItem for 2 reasons:
-    //  1. We can't draw it with transparency then (this is not
-    //     very important now but would be with themed menu bg)
-    //  2. Worse, Windows inverts the bitmap for the selected
-    //     item and this looks downright ugly
-    //
-    // So we prefer to instead draw it ourselves in MSWOnDrawItem() by using
-    // HBMMENU_CALLBACK for normal menu items when inserting it. And use
-    // NULL for checkable menu items as hbmpChecked/hBmpUnchecked does not
-    // support HBMMENU_CALLBACK.
-    //
-    // However under Vista using HBMMENU_CALLBACK causes the entire menu to be
-    // drawn using the classic theme instead of the current one and it does
-    // handle transparency just fine so do use the real bitmap there
-#if wxUSE_IMAGE
-    if ( wxGetWinVersion() >= wxWinVersion_Vista )
-    {
-        wxBitmap bmp = menuItem->GetBitmap(checked);
-        if ( bmp.IsOk() )
-        {
-            // we must use PARGB DIB for the menu bitmaps so ensure that we do
-            wxImage img(bmp.ConvertToImage());
-            if ( !img.HasAlpha() )
-            {
-                img.InitAlpha();
-                menuItem->SetBitmap(img, checked);
-            }
-
-            return GetHbitmapOf(menuItem->GetBitmap(checked));
-        }
-        //else: bitmap is not set
-        return NULL;
-    }
-#endif // wxUSE_IMAGE
-
-    return forCheckableItem ? NULL : HBMMENU_CALLBACK;
-}
-
 // helper function for draw coloured check mark
 void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask, int idxColor)
 {
@@ -1422,17 +1376,47 @@ bool wxMenuItem::MSWMustUseOwnerDrawn()
 
 #endif // wxUSE_OWNER_DRAWN
 
-// returns the HBITMAP to use in MENUITEMINFO for hBmpItem member
-HBITMAP wxMenuItem::GetHBitmapForMenu(bool checked)
+// returns the HBITMAP to use in MENUITEMINFO
+HBITMAP wxMenuItem::GetHBitmapForMenu(BitmapKind kind)
 {
-    return ::DoGetHBitmapForMenu(this, checked, false /*for checkable item?*/);
-}
+    // Under versions of Windows older than Vista we can't pass HBITMAP
+    // directly as hbmpItem for 2 reasons:
+    //  1. We can't draw it with transparency then (this is not
+    //     very important now but would be with themed menu bg)
+    //  2. Worse, Windows inverts the bitmap for the selected
+    //     item and this looks downright ugly
+    //
+    // So we prefer to instead draw it ourselves in MSWOnDrawItem() by using
+    // HBMMENU_CALLBACK for normal menu items when inserting it. And use
+    // NULL for checkable menu items as hbmpChecked/hBmpUnchecked does not
+    // support HBMMENU_CALLBACK.
+    //
+    // However under Vista using HBMMENU_CALLBACK causes the entire menu to be
+    // drawn using the classic theme instead of the current one and it does
+    // handle transparency just fine so do use the real bitmap there
+#if wxUSE_IMAGE
+    if ( wxGetWinVersion() >= wxWinVersion_Vista )
+    {
+        bool checked = (kind != Unchecked);
+        wxBitmap bmp = GetBitmap(checked);
+        if ( bmp.IsOk() )
+        {
+            // we must use PARGB DIB for the menu bitmaps so ensure that we do
+            wxImage img(bmp.ConvertToImage());
+            if ( !img.HasAlpha() )
+            {
+                img.InitAlpha();
+                SetBitmap(img, checked);
+            }
 
-// returns the HBITMAP to use in MENUITEMINFO for hbmpChecked and
-// hbmpUnchecked member
-HBITMAP wxMenuItem::GetHBitmapForMenuCheckable(bool checked)
-{
-    return ::DoGetHBitmapForMenu(this, checked, true /*for checkable item?*/);
+            return GetHbitmapOf(GetBitmap(checked));
+        }
+        //else: bitmap is not set
+        return NULL;
+    }
+#endif // wxUSE_IMAGE
+
+    return (kind == Normal) ? HBMMENU_CALLBACK : NULL;
 }
 
 int wxMenuItem::MSGetMenuItemPos() const
