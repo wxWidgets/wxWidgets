@@ -13,6 +13,23 @@
 #include "wx/qt/converter.h"
 #include "wx/qt/winevent_qt.h"
 
+class wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
+{
+
+public:
+
+    wxQtTabWidget( wxWindow *parent, wxNotebook *handler );
+    void currentChanged(int index);
+
+private:
+
+    // we need to store the old selection since there
+    // is no other way to know about it at the time
+    // of the change selection event
+    int m_selection;
+
+};
+
 wxQtTabWidget::wxQtTabWidget( wxWindow *parent, wxNotebook *handler )
     : wxQtEventSignalHandler< QTabWidget, wxNotebook >( parent, handler )
 {
