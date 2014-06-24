@@ -1005,7 +1005,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     wxBitmap bitmap( 100, 100 );
     wxMemoryDC dc;
+    wxFont font;
+    font.SetFamily(wxFONTFAMILY_ROMAN);
+    font.SetPointSize(10);
     dc.SelectObject( bitmap );
+    dc.SetFont(font);
     dc.SetBackground(*wxGREEN);
     dc.SetPen(*wxRED_PEN);
     dc.Clear();
