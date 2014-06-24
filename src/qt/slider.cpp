@@ -18,18 +18,17 @@ public:
     wxQtSlider( wxWindow *parent, wxSlider *handler );
 
 private:
-    void sliderMoved(int position);
+    void valueChanged(int position);
 };
 
 wxQtSlider::wxQtSlider( wxWindow *parent, wxSlider *handler )
     : wxQtEventSignalHandler< QSlider, wxSlider >( parent, handler )
 {
-    connect(this, &QSlider::sliderMoved, this, &wxQtSlider::sliderMoved);
+    connect(this, &QSlider::valueChanged, this, &wxQtSlider::valueChanged);
 }
 
-void wxQtSlider::sliderMoved(int position)
+void wxQtSlider::valueChanged(int position)
 {
-    // TODO: use SendSelectionChangedEvent(wxEVT_COMBOBOX);
     wxCommandEvent event( wxEVT_SLIDER, GetHandler()->GetId() );
     event.SetInt( position );
     EmitEvent( event );
