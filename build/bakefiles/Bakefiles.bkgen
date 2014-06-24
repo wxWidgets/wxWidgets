@@ -143,6 +143,11 @@
         -o$(INPUT_FILE_DIR)/$(INPUT_FILE_BASENAME_NOEXT)_vc9.sln
     </add-flags>
 
+    <add-flags formats="msvs2005prj,msvs2008prj">
+        -DMSVS_PLATFORMS=win32,win64
+    </add-flags>
+
+
     <!-- Makefile specific settings: -->
 
     <add-flags formats="borland,dmars_smake,dmars,mingw,msvc,watcom">

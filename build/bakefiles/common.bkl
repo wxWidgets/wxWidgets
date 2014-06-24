@@ -31,6 +31,8 @@
 
     <set var="ARCH_SUFFIX">
         <if cond="FORMAT=='msevc4prj'">_$(CPU)</if>
+        <if cond="FORMAT=='msvs2005prj' and MSVS_PLATFORM=='win64'">_x64</if>
+        <if cond="FORMAT=='msvs2008prj' and MSVS_PLATFORM=='win64'">_x64</if>
         <if cond="TARGET_CPU=='amd64'">_x64</if>
         <if cond="TARGET_CPU=='AMD64'">_x64</if>
         <if cond="TARGET_CPU=='ia64'">_ia64</if>
