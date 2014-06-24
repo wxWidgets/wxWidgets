@@ -458,12 +458,14 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                                 pastelocationset = true;
                            }
                         }
+#if 0 // See https://groups.google.com/forum/#!topic/wx-dev/wFxevpvbhvQ/discussion
                         else if ( flavorFormat.GetType() != wxDF_PRIVATE )
                         {
                             // indicate the expected format for the type, benefiting from native conversions eg utf8 -> utf16
                             flavorType = (CFStringRef) wxDataFormat( flavorFormat.GetType()).GetFormatId();
                         }
-                        
+#endif
+
                         err = PasteboardCopyItemFlavorData( pasteboard, itemID, flavorType , &flavorData );
                         if ( err == noErr )
                         {
