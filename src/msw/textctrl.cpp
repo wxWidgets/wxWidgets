@@ -79,6 +79,25 @@ static wxDropTarget *
 
 #endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
+#if wxUSE_OLE
+// This must be the last header included to only affect the DEFINE_GUID()
+// occurrences below but not any GUIDs declared in the standard files included
+// above.
+#include <initguid.h>
+
+namespace
+{
+
+// Normally the IRichEditOleCallback interface and its IID are defined in
+// richole.h header file included in the platform SDK but MinGW doesn't
+// have the IID symbol (but does have the interface). Work around it by
+// defining it ourselves.
+DEFINE_GUID(wxIID_IRichEditOleCallback,
+    0x00020d03, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+
+} // anonymous namespace
+#endif // wxUSE_OLE
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -187,7 +206,7 @@ private:
 
 BEGIN_IID_TABLE(wxTextCtrlOleCallback)
     ADD_IID(Unknown)
-    ADD_IID(RichEditOleCallback)
+    ADD_RAW_IID(wxIID_IRichEditOleCallback)
 END_IID_TABLE;
 
 IMPLEMENT_IUNKNOWN_METHODS(wxTextCtrlOleCallback)
