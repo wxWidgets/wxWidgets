@@ -130,7 +130,7 @@ void wxThumbBarButton::Show(bool shown)
     }
 }
 
-void wxThumbBarButton::EnableInteractive(bool interactive)
+void wxThumbBarButton::SetInteractive(bool interactive)
 {
     if ( m_interactive != interactive )
     {
