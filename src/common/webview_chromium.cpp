@@ -121,7 +121,7 @@ bool wxWebViewChromium::Create(wxWindow* parent,
 #endif
 
 #ifdef __WXOSX__
-    info.SetAsChild(parent->GetHandle(), 0, 0, parent->GetSize().GetX(), parent->GetSize().GetY());
+    info.SetAsChild( GetHandle(), 0, 0, size.GetX(), size.GetY() );
 #endif
 
 #if CHROME_VERSION_BUILD >= 1650

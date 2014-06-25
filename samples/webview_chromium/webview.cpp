@@ -360,9 +360,7 @@ WebFrame::WebFrame(const wxString& url) :
                                                                      (new wxWebViewFactoryChromium));
 
     m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxSize(300, 300), wxWebViewBackendChromium);
-#ifndef __WXOSX__
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
-#endif
 
 
     //We register the wxfs:// protocol for testing purposes
