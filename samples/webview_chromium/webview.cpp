@@ -359,7 +359,7 @@ WebFrame::WebFrame(const wxString& url) :
     wxWebView::RegisterFactory(wxWebViewBackendChromium, wxSharedPtr<wxWebViewFactory>
                                                                      (new wxWebViewFactoryChromium));
 
-    m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxSize(300, 300), wxWebViewBackendChromium);
+    m_browser = wxWebView::New(this, wxID_ANY, url, wxDefaultPosition, wxSize(800, 525), wxWebViewBackendChromium);
     topsizer->Add(m_browser, wxSizerFlags().Expand().Proportion(1));
 
 
