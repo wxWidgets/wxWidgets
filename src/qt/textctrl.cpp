@@ -49,6 +49,30 @@ void wxQtLineEdit::returnPressed()
 }
 
 
+class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
+{
+public:
+    wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler );
+
+private:
+    void textChanged();
+};
+
+wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
+    : wxQtEventSignalHandler< QTextEdit, wxTextCtrl >( parent, handler )
+{
+    connect(this, &QTextEdit::textChanged,
+            this, &wxQtTextEdit::textChanged);
+}
+
+void wxQtTextEdit::textChanged()
+{
+    wxCommandEvent event( wxEVT_TEXT, GetHandler()->GetId() );
+    event.SetString( GetHandler()->GetValue() );
+    EmitEvent( event );
+}
+
+
 wxTextCtrl::wxTextCtrl()
 {
 }
@@ -83,7 +107,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     }
     else
     {
-        m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->GetHandle() );
+        m_qtTextEdit = new wxQtTextEdit( parent, this );
     }
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
