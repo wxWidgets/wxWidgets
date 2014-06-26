@@ -123,6 +123,7 @@ public:
 
     void OnEnableAll(wxCommandEvent& event);
     void OnChangeColour(wxCommandEvent& event);
+    void OnChangeCheck(wxCommandEvent& event);
     void OnTestButton(wxCommandEvent& event);
     void OnBmpButton(wxCommandEvent& event);
     void OnBmpButtonToggle(wxCommandEvent& event);
@@ -505,6 +506,7 @@ const int  ID_SIZER_CHECKBIG    = 206;
 
 const int  ID_HYPERLINK         = 300;
 const int  ID_SPIN_TEXT         = 301;
+const int  ID_CHANGE_CHECK      = 302;
 
 wxBEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_IDLE      (                         MyPanel::OnIdle)
@@ -574,6 +576,7 @@ EVT_TEXT      (ID_SPINCTRL,             MyPanel::OnSpinCtrlText)
 EVT_BUTTON    (ID_BTNNEWTEXT,           MyPanel::OnNewText)
 EVT_TOGGLEBUTTON(ID_BUTTON_LABEL,       MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
+EVT_CHECKBOX  (ID_CHANGE_CHECK,         MyPanel::OnChangeCheck)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
@@ -767,6 +770,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     button->MoveAfterInTabOrder(m_checkbox);
     (void)new wxCheckBox( panel, ID_CHANGE_COLOUR, wxT("&Toggle colour"),
                           wxPoint(110,170) );
+    (void)new wxCheckBox( panel, ID_CHANGE_CHECK, wxT("&Toggle check"),
+                          wxPoint(270,170) );
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
     m_book->AddPage(panel, wxT("wxCheckListBox"), true);
     m_book->SetPageImage(0, Image_List);
@@ -1283,6 +1288,14 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
     Refresh();
 }
 
+void MyPanel::OnChangeCheck(wxCommandEvent& event)
+{
+    // check/uncheck all the items in the wxCheckListBox
+    for (unsigned int n=0; n < m_listbox->GetCount(); n++) {
+        m_listbox->Check(n, event.GetInt());
+    }
+}
+
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
     wxCheckListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
@@ -1324,6 +1337,11 @@ void MyPanel::OnListBox( wxCommandEvent &event )
     else
         m_text->AppendText( wxString(wxT("none")) );
     m_text->AppendText( wxT("'\n") );
+
+    if (listbox->IsChecked(event.GetInt()))
+        m_text->AppendText( "Item checked \n" );
+    else
+        m_text->AppendText( "Item unchecked \n" );
 }
 
 void MyPanel::OnListBoxDoubleClick( wxCommandEvent &event )
