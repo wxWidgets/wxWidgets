@@ -56,8 +56,9 @@ public:
     virtual void SetSelection( long from, long to );
 
     virtual wxString DoGetValue() const;
+    virtual void DoSetValue(const wxString &text, int flags = 0);
     virtual void WriteText(const wxString& text);
-    
+
     virtual QWidget *GetHandle() const;
 
 protected:

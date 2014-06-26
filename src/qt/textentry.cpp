@@ -88,6 +88,10 @@ wxString wxTextEntry::DoGetValue() const
     return wxString();
 }
 
+void wxTextEntry::DoSetValue(const wxString &value, int flags)
+{
+}
+
 wxWindow *wxTextEntry::GetEditableWindow()
 {
     return NULL;

@@ -248,7 +248,39 @@ void wxTextCtrl::WriteText( const wxString &text )
         // the cursor is moved to the end, ensure it is shown
         m_qtTextEdit->ensureCursorVisible();
     }
+}
 
+void wxTextCtrl::DoSetValue( const wxString &text, int flags )
+{
+    // do not fire qt signals for certain methods (i.e. ChangeText)
+    if ( !(flags & SetValue_SendEvent) )
+    {
+        if ( !IsMultiLine() )
+            m_qtLineEdit->blockSignals(true);
+        else
+            m_qtTextEdit->blockSignals(true);
+    }
+
+    // Replace the text int the control
+    if ( !IsMultiLine() )
+    {
+        m_qtLineEdit->setText(wxQtConvertString( text ));
+    }
+    else
+    {
+        m_qtTextEdit->setPlainText(wxQtConvertString( text ));
+        // the cursor is moved to the end, ensure it is shown
+        m_qtTextEdit->ensureCursorVisible();
+    }
+
+    // re-enable qt signals
+    if ( !(flags & SetValue_SendEvent) )
+    {
+        if ( !IsMultiLine() )
+            m_qtLineEdit->blockSignals(false);
+        else
+            m_qtTextEdit->blockSignals(false);
+    }
 }
 
 QWidget *wxTextCtrl::GetHandle() const

@@ -38,6 +38,7 @@ public:
     
 protected:
     virtual wxString DoGetValue() const;
+    virtual void DoSetValue(const wxString& value, int flags=0);
 
     virtual wxWindow *GetEditableWindow();
 
