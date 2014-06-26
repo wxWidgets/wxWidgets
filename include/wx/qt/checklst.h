@@ -47,6 +47,8 @@ public:
     virtual void Check(unsigned int item, bool check = true);
 
 private:
+    virtual void Init(); //common construction
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);
 };
 
