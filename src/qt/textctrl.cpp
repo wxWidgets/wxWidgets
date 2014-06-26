@@ -103,12 +103,13 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if (!multiline)
     {
         m_qtLineEdit = new wxQtLineEdit( parent, this );
-        m_qtLineEdit->setText( wxQtConvertString( value ) );
     }
     else
     {
         m_qtTextEdit = new wxQtTextEdit( parent, this );
     }
+    // set the initial text value without sending the event:
+    ChangeValue( value );
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
