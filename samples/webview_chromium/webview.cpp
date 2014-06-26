@@ -71,7 +71,6 @@ public:
     }
 
     virtual bool OnInit();
-    virtual int OnExit();
     virtual bool ProcessIdle();
 
     /*
@@ -262,11 +261,6 @@ bool WebApp::OnInit()
     frame->Show();
 
     return true;
-}
-
-int WebApp::OnExit()
-{
-    return wxApp::OnExit();
 }
 
 bool WebApp::ProcessIdle() {
