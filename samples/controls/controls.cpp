@@ -106,6 +106,8 @@ public:
     void OnSpinUp( wxSpinEvent &event );
     void OnSpinDown( wxSpinEvent &event );
     void OnSpinUpdate( wxSpinEvent &event );
+    void OnSpinTextChanged(wxCommandEvent& event);
+    void OnSpinTextEnter(wxCommandEvent& WXUNUSED(event));
 #if wxUSE_PROGRESSDLG
     void OnUpdateShowProgress( wxUpdateUIEvent& event );
     void OnShowProgress( wxCommandEvent &event );
@@ -502,6 +504,7 @@ const int  ID_SIZER_CHECK14     = 205;
 const int  ID_SIZER_CHECKBIG    = 206;
 
 const int  ID_HYPERLINK         = 300;
+const int  ID_SPIN_TEXT         = 301;
 
 wxBEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_IDLE      (                         MyPanel::OnIdle)
@@ -555,6 +558,8 @@ EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
 EVT_SPIN_UP   (ID_SPIN,                 MyPanel::OnSpinUp)
 EVT_SPIN_DOWN (ID_SPIN,                 MyPanel::OnSpinDown)
+EVT_TEXT      (ID_SPIN_TEXT,            MyPanel::OnSpinTextChanged)
+EVT_TEXT_ENTER(ID_SPIN_TEXT,            MyPanel::OnSpinTextEnter)
 #if wxUSE_PROGRESSDLG
 EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
 EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
@@ -957,7 +962,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     int initialSpinValue = -5;
     wxString s;
     s << initialSpinValue;
-    m_spintext = new wxTextCtrl( panel, wxID_ANY, s );
+    m_spintext = new wxTextCtrl( panel, ID_SPIN_TEXT, s );
     gauge_page_second_row_sizer->Add( m_spintext, 0, wxALL, 5 );
 
 #if wxUSE_SPINBTN
@@ -1708,13 +1713,33 @@ void MyPanel::OnSpinUpdate( wxSpinEvent &event )
 {
     wxString value;
     value.Printf( wxT("%d"), event.GetPosition() );
-    m_spintext->SetValue( value );
+    // update the value of the text control without sending an event
+    m_spintext->ChangeValue( value );
 
     value.Printf( wxT("Spin control range: (%d, %d), current = %d\n"),
                  m_spinbutton->GetMin(), m_spinbutton->GetMax(),
                  m_spinbutton->GetValue());
 
     m_text->AppendText(value);
+}
+
+void MyPanel::OnSpinTextChanged(wxCommandEvent& event)
+{
+    if (m_spintext)
+    {
+        wxLogMessage(wxT("EVT_TEXT for the spin text: \"%s\" (event) or \"%s\" (control)."),
+                     event.GetString().c_str(),
+                     m_spintext->GetValue().c_str());
+    }
+}
+
+void MyPanel::OnSpinTextEnter(wxCommandEvent& WXUNUSED(event))
+{
+    if (m_spintext)
+    {
+        wxLogMessage(wxT("Enter pressed in the spin text: value is '%s'."),
+                     m_spintext->GetValue().c_str());
+    }
 }
 
 void MyPanel::OnNewText( wxCommandEvent& /* event */)
