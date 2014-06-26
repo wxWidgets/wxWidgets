@@ -150,7 +150,7 @@ public:
     void OnFindText(wxCommandEvent& evt);
     void OnFindOptions(wxCommandEvent& evt);
     void OnEnableContextMenu(wxCommandEvent& evt);
-
+    void OnClose(wxCloseEvent& evt);
 
 private:
     wxTextCtrl* m_url;
@@ -206,6 +206,8 @@ private:
     wxMenuHistoryMap m_histMenuItems;
     wxString m_findText;
     int m_findFlags, m_findCount;
+
+    DECLARE_EVENT_TABLE()
 };
 
 class SourceViewDialog : public wxDialog
@@ -264,7 +266,6 @@ bool WebApp::OnInit()
 
 int WebApp::OnExit()
 {
-    wxWebViewChromium::Shutdown();
     return wxApp::OnExit();
 }
 
@@ -1090,4 +1091,14 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
     wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(text, 1, wxEXPAND);
     SetSizer(sizer);
+}
+
+BEGIN_EVENT_TABLE(WebFrame, wxFrame)
+    EVT_CLOSE(WebFrame::OnClose)
+END_EVENT_TABLE()
+
+void WebFrame::OnClose(wxCloseEvent &evt)
+{
+    wxWebViewChromium::Shutdown();
+    Destroy();
 }
