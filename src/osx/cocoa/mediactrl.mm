@@ -36,9 +36,14 @@
 
 #include "wx/osx/private.h"
 
+#define wxOSX_USE_QTKIT 1
+#define wxOSX_USE_AVKIT 0
+
 //===========================================================================
 //  BACKEND DECLARATIONS
 //===========================================================================
+
+#if wxOSX_USE_QTKIT
 
 //---------------------------------------------------------------------------
 //
@@ -434,6 +439,394 @@ void wxQTMediaBackend::DoShowPlayerControls(wxMediaCtrlPlayerControls flags)
         [m_movieview setVolumeButtonVisible:(flags & wxMEDIACTRLPLAYERCONTROLS_VOLUME) ? YES:NO];
     }
 }
+
+#endif
+
+#if wxOSX_USE_AVKIT
+
+//---------------------------------------------------------------------------
+//
+//  wxAVMediaBackend
+//
+//---------------------------------------------------------------------------
+
+#import <AVFoundation/AVFoundation.h>
+#import <AVKit/AVKit.h>
+
+class WXDLLIMPEXP_FWD_MEDIA wxAVMediaBackend;
+
+static void *AVSPPlayerItemStatusContext = &AVSPPlayerItemStatusContext;
+static void *AVSPPlayerRateContext = &AVSPPlayerRateContext;
+
+@interface wxAVPlayer : AVPlayer {
+    
+    AVPlayerLayer *playerLayer;
+
+    wxAVMediaBackend* m_backend;
+}
+
+-(BOOL)isPlaying;
+
+@property (retain) AVPlayerLayer *playerLayer;
+
+@end
+
+class WXDLLIMPEXP_MEDIA wxAVMediaBackend : public wxMediaBackendCommonBase
+{
+public:
+    
+    wxAVMediaBackend();
+    ~wxAVMediaBackend();
+    
+    virtual bool CreateControl(wxControl* ctrl, wxWindow* parent,
+                               wxWindowID id,
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               long style,
+                               const wxValidator& validator,
+                               const wxString& name) wxOVERRIDE;
+    
+    virtual bool Play() wxOVERRIDE;
+    virtual bool Pause() wxOVERRIDE;
+    virtual bool Stop() wxOVERRIDE;
+    
+    virtual bool Load(const wxString& fileName) wxOVERRIDE;
+    virtual bool Load(const wxURI& location) wxOVERRIDE;
+    
+    virtual wxMediaState GetState() wxOVERRIDE;
+    
+    virtual bool SetPosition(wxLongLong where) wxOVERRIDE;
+    virtual wxLongLong GetPosition() wxOVERRIDE;
+    virtual wxLongLong GetDuration() wxOVERRIDE;
+    
+    virtual void Move(int x, int y, int w, int h) wxOVERRIDE;
+    wxSize GetVideoSize() const wxOVERRIDE;
+    
+    virtual double GetPlaybackRate() wxOVERRIDE;
+    virtual bool SetPlaybackRate(double dRate) wxOVERRIDE;
+    
+    virtual double GetVolume() wxOVERRIDE;
+    virtual bool SetVolume(double dVolume) wxOVERRIDE;
+    
+    void Cleanup();
+    void FinishLoad();
+    
+    virtual bool   ShowPlayerControls(wxMediaCtrlPlayerControls flags) wxOVERRIDE;
+private:
+    void DoShowPlayerControls(wxMediaCtrlPlayerControls flags);
+    
+    wxSize m_bestSize;              //Original movie size
+    wxAVPlayer* m_player;               //AVPlayer handle/instance
+    AVPlayerLayer* m_playerlayer;       //AVPlayerView instance
+    
+    wxMediaCtrlPlayerControls m_interfaceflags; // Saved interface flags
+    
+    wxDECLARE_DYNAMIC_CLASS(wxAVMediaBackend);
+};
+
+// --------------------------------------------------------------------------
+// wxAVMediaBackend
+// --------------------------------------------------------------------------
+
+@implementation wxAVPlayer
+
+@synthesize playerLayer;
+
+- (id) init
+{
+    self = [super init];
+    
+    [self addObserver:self forKeyPath:@"currentItem.status"
+                  options:NSKeyValueObservingOptionNew context:AVSPPlayerItemStatusContext];
+    [self addObserver:self forKeyPath:@"rate"
+              options:NSKeyValueObservingOptionNew context:AVSPPlayerRateContext];
+
+    return self;
+}
+
+- (void)dealloc
+{
+	[playerLayer release];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [self removeObserver:self forKeyPath:@"rate" context:AVSPPlayerRateContext];
+	[self removeObserver:self forKeyPath:@"currentItem.status" context:AVSPPlayerItemStatusContext];
+	
+	[super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if (context == AVSPPlayerItemStatusContext)
+	{
+        id val = [change objectForKey:NSKeyValueChangeNewKey];
+        if ( val != [NSNull null ] )
+        {
+            AVPlayerStatus status = [ val integerValue];
+
+            switch (status)
+            {
+                case AVPlayerItemStatusUnknown:
+                    break;
+                case AVPlayerItemStatusReadyToPlay:
+                    [[NSNotificationCenter defaultCenter]
+                     addObserver:self selector:@selector(playerItemDidReachEnd:)
+                     name:AVPlayerItemDidPlayToEndTimeNotification object:self.currentItem];
+                    m_backend->FinishLoad();
+                    break;
+                case AVPlayerItemStatusFailed:
+                    break;
+                default:
+                    break;
+            }
+        }
+	}
+	else if (context == AVSPPlayerRateContext)
+	{
+		NSNumber* newRate = [change objectForKey:NSKeyValueChangeNewKey];
+        if ([newRate intValue] == 0)
+        {
+            m_backend->QueuePauseEvent();
+        }
+        else if ( [self isPlaying] == NO )
+        {
+            m_backend->QueuePlayEvent();
+        }
+	}
+	else
+	{
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+	}
+}
+
+-(wxAVMediaBackend*) backend
+{
+    return m_backend;
+}
+
+-(void) setBackend:(wxAVMediaBackend*) backend
+{
+    m_backend = backend;
+}
+
+- (void)playerItemDidReachEnd:(NSNotification *)notification
+{
+    if ( m_backend )
+    {
+        if ( m_backend->SendStopEvent() )
+            m_backend->QueueFinishEvent();
+    }
+}
+
+-(BOOL)isPlaying
+{
+	if ([self rate] == 0)
+	{
+		return NO;
+	}
+	
+	return YES;
+}
+
+@end
+
+
+IMPLEMENT_DYNAMIC_CLASS(wxAVMediaBackend, wxMediaBackend);
+
+wxAVMediaBackend::wxAVMediaBackend() :
+m_player(nil), m_playerlayer(nil),
+m_interfaceflags(wxMEDIACTRLPLAYERCONTROLS_NONE)
+{
+}
+
+wxAVMediaBackend::~wxAVMediaBackend()
+{
+    Cleanup();
+}
+
+bool wxAVMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
+                                     wxWindowID wid,
+                                     const wxPoint& pos,
+                                     const wxSize& size,
+                                     long style,
+                                     const wxValidator& validator,
+                                     const wxString& name)
+{
+    wxMediaCtrl* mediactrl = (wxMediaCtrl*) inctrl;
+    
+    if ( !mediactrl->wxControl::Create(
+                                       parent, wid, pos, size,
+                                       wxWindow::MacRemoveBordersFromStyle(style),
+                                       validator, name))
+    {
+        return false;
+    }
+    
+    NSView* view = mediactrl->GetHandle();
+    [view setWantsLayer:YES];
+    
+    m_player = [[wxAVPlayer alloc] init];
+    [m_player setBackend:this];
+    
+    m_playerlayer = [[AVPlayerLayer playerLayerWithPlayer: m_player] retain];
+    [m_playerlayer setFrame:[[view layer] bounds]];
+    [m_playerlayer setAutoresizingMask:kCALayerWidthSizable | kCALayerHeightSizable];
+
+    [[view layer] addSublayer:m_playerlayer];
+    [m_player setPlayerLayer:m_playerlayer];
+    
+    m_ctrl = mediactrl;
+    return true;
+}
+
+bool wxAVMediaBackend::Load(const wxString& fileName)
+{
+    return Load(
+                wxURI(
+                      wxString( wxT("file://") ) + fileName
+                      )
+                );
+}
+
+bool wxAVMediaBackend::Load(const wxURI& location)
+{
+    wxCFStringRef uri(location.BuildURI());
+    NSURL *url = [NSURL URLWithString: uri.AsNSString()];
+    
+    AVAsset* asset = [AVAsset assetWithURL:url];
+    if (! asset )
+        return false;
+    
+    if ( [asset isPlayable] )
+    {
+        AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:asset];
+        [m_player replaceCurrentItemWithPlayerItem:playerItem];
+    
+        return playerItem != nil;
+    }
+    return false;
+}
+
+void wxAVMediaBackend::FinishLoad()
+{
+    DoShowPlayerControls(m_interfaceflags);
+    
+    AVPlayerItem *playerItem = [m_player currentItem];
+	
+    CGSize s = [playerItem presentationSize];
+    m_bestSize = wxSize(s.width, s.height);
+    
+    NotifyMovieLoaded();
+}
+
+bool wxAVMediaBackend::Play()
+{
+    [m_player play];
+    return true;
+}
+
+bool wxAVMediaBackend::Pause()
+{
+    [m_player pause];
+    return true;
+}
+
+bool wxAVMediaBackend::Stop()
+{
+    [m_player pause];
+    [m_player seekToTime:kCMTimeZero];
+    return true;
+}
+
+double wxAVMediaBackend::GetVolume()
+{
+    return [m_player volume];
+}
+
+bool wxAVMediaBackend::SetVolume(double dVolume)
+{
+    [m_player setVolume:dVolume];
+    return true;
+}
+double wxAVMediaBackend::GetPlaybackRate()
+{
+    return [m_player rate];
+}
+
+bool wxAVMediaBackend::SetPlaybackRate(double dRate)
+{
+    [m_player setRate:dRate];
+    return true;
+}
+
+bool wxAVMediaBackend::SetPosition(wxLongLong where)
+{
+	[m_player seekToTime:CMTimeMakeWithSeconds(where.GetValue() / 1000.0, 1)
+              toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+
+    return true;
+}
+
+wxLongLong wxAVMediaBackend::GetPosition()
+{
+    return CMTimeGetSeconds([m_player currentTime])*1000.0;
+}
+
+wxLongLong wxAVMediaBackend::GetDuration()
+{
+    AVPlayerItem *playerItem = [m_player currentItem];
+	
+	if ([playerItem status] == AVPlayerItemStatusReadyToPlay)
+		return CMTimeGetSeconds([[playerItem asset] duration])*1000.0;
+	else
+		return 0.f;
+}
+
+wxMediaState wxAVMediaBackend::GetState()
+{
+    if ( [m_player isPlaying] )
+        return wxMEDIASTATE_PLAYING;
+    else
+    {
+        if ( GetPosition() == 0 )
+            return wxMEDIASTATE_STOPPED;
+        else
+            return wxMEDIASTATE_PAUSED;
+    }
+}
+
+void wxAVMediaBackend::Cleanup()
+{
+    [m_player pause];
+    [m_player release];
+    m_player = nil;
+}
+
+wxSize wxAVMediaBackend::GetVideoSize() const
+{
+    return m_bestSize;
+}
+
+void wxAVMediaBackend::Move(int x, int y, int w, int h)
+{
+    // as we have a native player, no need to move the video area
+}
+
+bool wxAVMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
+{
+    if ( m_interfaceflags != flags )
+        DoShowPlayerControls(flags);
+    
+    m_interfaceflags = flags;
+    return true;
+}
+
+void wxAVMediaBackend::DoShowPlayerControls(wxMediaCtrlPlayerControls flags)
+{
+    // TODO NATIVE CONTROLS (AVKit is only available on 10.9)
+}
+
+#endif
 
 //in source file that contains stuff you don't directly use
 #include "wx/html/forcelnk.h"
