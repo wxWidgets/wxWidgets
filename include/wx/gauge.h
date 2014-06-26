@@ -26,7 +26,8 @@
 
 // Win32 only, is default (and only) on some other platforms
 #define wxGA_SMOOTH          0x0020
-
+// QT only, display current completed percentage (text default format "%p%")
+#define wxGA_TEXT            0x0040
 
 // GTK and Mac always have native implementation of the indeterminate mode
 // wxMSW has native implementation only if comctl32.dll >= 6.00

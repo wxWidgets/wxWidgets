@@ -55,7 +55,7 @@ bool wxGauge::Create(wxWindow *parent,
     m_qtProgressBar = new wxQtProgressBar( parent, this);
     m_qtProgressBar->setOrientation( wxQtConvertOrientation( style, wxGA_HORIZONTAL ));
     m_qtProgressBar->setRange( 0, range );
-    m_qtProgressBar->setTextVisible(false);
+    m_qtProgressBar->setTextVisible( style & wxGA_TEXT );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
