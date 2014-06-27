@@ -15,6 +15,8 @@
 
 // Win32 only, is default (and only) on some other platforms
 #define wxGA_SMOOTH          0x0020
+// QT only, display current completed percentage (text default format "%p%")
+#define wxGA_TEXT            0x0040
 
 /**
     @class wxGauge
@@ -43,6 +45,10 @@
     @style{wxGA_SMOOTH}
            Creates smooth progress bar with one pixel wide update step (not
            supported by all platforms).
+    @style{wxGA_TEXT}
+           Display current completed percentage: text default format "%p%"
+           (only supported in wxQt, may be not available on all platforms).
+           @since 3.1.0
     @endStyleTable
 
     @library{wxcore}
