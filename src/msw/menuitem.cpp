@@ -730,36 +730,25 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     }
 }
 
-void wxMenuItem::DoSetBitmap(const wxBitmap& bmp, bool bChecked)
+void wxMenuItem::DoSetBitmap(const wxBitmap& bmpNew, bool bChecked)
 {
-    static bool s_insideSetBitmap = false;
+    wxBitmap& bmp = bChecked ? m_bmpChecked : m_bmpUnchecked;
+    if ( bmp.IsSameAs(bmpNew) )
+        return;
 
-    if ( bChecked )
+#if wxUSE_IMAGE
+    if ( !bmpNew.HasAlpha() && wxGetWinVersion() >= wxWinVersion_Vista)
     {
-        if ( m_bmpChecked.IsSameAs(bmp) )
-            return;
-
-        m_bmpChecked = bmp;
+        // we must use PARGB DIB for the menu bitmaps so ensure that we do
+        wxImage img(bmpNew.ConvertToImage());
+        img.InitAlpha();
+        bmp = wxBitmap(img);
     }
     else
+#endif // wxUSE_IMAGE
     {
-        if ( m_bmpUnchecked.IsSameAs(bmp) )
-            return;
-
-        m_bmpUnchecked = bmp;
+        bmp = bmpNew;
     }
-
-    if (s_insideSetBitmap)
-    {
-        // We can arrive here because of calling GetHBitmapForMenu
-        // further down below, which itself can call [Do]SetBitmap
-        // resulting in infinite recursion. After having set the
-        // bitmap just return instead.
-        return;
-    }
-
-    wxON_BLOCK_EXIT_SET(s_insideSetBitmap, false);
-    s_insideSetBitmap = true;
 
 #if wxUSE_OWNER_DRAWN
     // already marked as owner-drawn, cannot be reverted
@@ -1377,7 +1366,7 @@ bool wxMenuItem::MSWMustUseOwnerDrawn()
 #endif // wxUSE_OWNER_DRAWN
 
 // returns the HBITMAP to use in MENUITEMINFO
-HBITMAP wxMenuItem::GetHBitmapForMenu(BitmapKind kind)
+HBITMAP wxMenuItem::GetHBitmapForMenu(BitmapKind kind) const
 {
     // Under versions of Windows older than Vista we can't pass HBITMAP
     // directly as hbmpItem for 2 reasons:
@@ -1401,15 +1390,7 @@ HBITMAP wxMenuItem::GetHBitmapForMenu(BitmapKind kind)
         wxBitmap bmp = GetBitmap(checked);
         if ( bmp.IsOk() )
         {
-            // we must use PARGB DIB for the menu bitmaps so ensure that we do
-            wxImage img(bmp.ConvertToImage());
-            if ( !img.HasAlpha() )
-            {
-                img.InitAlpha();
-                SetBitmap(img, checked);
-            }
-
-            return GetHbitmapOf(GetBitmap(checked));
+            return GetHbitmapOf(bmp);
         }
         //else: bitmap is not set
         return NULL;

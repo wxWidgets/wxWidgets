@@ -125,7 +125,7 @@ private:
     };
 
     // helper function to get a handle for bitmap associated with item
-    WXHBITMAP GetHBitmapForMenu(BitmapKind kind);
+    WXHBITMAP GetHBitmapForMenu(BitmapKind kind) const;
 
     // helper function to set/change the bitmap
     void DoSetBitmap(const wxBitmap& bmp, bool bChecked);
