@@ -821,7 +821,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
                            wxPoint(5, 5), combosize);
 #ifdef __WXQT__
-    m_combo->Reparent(stbox);
+    m_combo->Raise();
 #endif
     (void)new wxButton( panel, ID_COMBO_SEL_NUM, wxT("Select #&2"), wxPoint(220,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_SEL_STR, wxT("&Select 'This'"), wxPoint(380,30), wxSize(140,30) );
