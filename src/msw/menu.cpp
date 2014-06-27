@@ -641,7 +641,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         if ( pItem->GetBitmap().IsOk() )
         {
             flags |= MF_BITMAP;
-            pData = reinterpret_cast<LPCTSTR>(pItem->GetHBitmapForMenu());
+            pData = reinterpret_cast<LPCTSTR>(
+                pItem->GetHBitmapForMenu(wxMenuItem::Normal));
         }
         else
         {
