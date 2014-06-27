@@ -68,7 +68,7 @@ QString  wxQtConvertString( const wxString &str )
 
 wxDateTime wxQtConvertDate(const QDate& date)
 {
-    if ( date.isNull() )
+    if ( !date.isNull() )
         return wxDateTime(date.day(),
             static_cast<wxDateTime::Month>(date.month() - 1),
             date.year(), 0, 0, 0, 0);
