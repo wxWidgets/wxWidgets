@@ -9,7 +9,6 @@
 #define _WX_QT_DIALOG_H_
 
 #include "wx/dialog.h"
-#include "wx/qt/private/winevent.h"
 #include <QtWidgets/QDialog>
 
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase

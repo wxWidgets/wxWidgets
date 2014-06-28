@@ -11,6 +11,7 @@
 #include "wx/checkbox.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 
 class wxQtCheckBox : public wxQtEventSignalHandler< QCheckBox, wxCheckBox >
 {

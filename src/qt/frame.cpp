@@ -12,6 +12,7 @@
 #include "wx/menu.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >

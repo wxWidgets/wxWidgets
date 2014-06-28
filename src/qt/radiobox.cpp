@@ -11,6 +11,7 @@
 #include "wx/radiobox.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QRadioButton>

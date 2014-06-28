@@ -10,7 +10,6 @@
 
 #include "wx/msgdlg.h"
 
-#include "wx/qt/private/winevent.h"
 #include <QtWidgets/QMessageBox>
 
 class WXDLLIMPEXP_CORE wxMessageDialog : public wxMessageDialogBase

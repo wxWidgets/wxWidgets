@@ -10,6 +10,7 @@
 
 #include "wx/slider.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtSlider : public wxQtEventSignalHandler< QSlider, wxSlider >

@@ -11,6 +11,7 @@
 #include "wx/statbox.h"
 #include "wx/window.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 #include <QtWidgets/QGroupBox>
 
 

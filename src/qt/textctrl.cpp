@@ -10,6 +10,7 @@
 
 #include "wx/textctrl.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 #include "wx/qt/utils.h"
 
 class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >

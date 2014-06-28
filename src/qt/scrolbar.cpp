@@ -10,6 +10,7 @@
 
 #include "wx/scrolbar.h"
 #include "wx/qt/utils.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >

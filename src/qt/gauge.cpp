@@ -10,6 +10,7 @@
 
 #include "wx/gauge.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtProgressBar : public wxQtEventSignalHandler< QProgressBar, wxGauge >

@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/spinbutt.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtSpinButton : public wxQtEventSignalHandler< QSpinBox, wxSpinButton  >

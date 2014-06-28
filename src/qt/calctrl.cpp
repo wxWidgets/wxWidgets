@@ -18,6 +18,7 @@
 
 #include "wx/calctrl.h"
 #include "wx/qt/utils.h"
+#include "wx/qt/private/winevent.h"
 
 #include <QtGui/QTextCharFormat>
 

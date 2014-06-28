@@ -12,7 +12,6 @@
 
 #include "wx/calctrl.h"
 #include "wx/qt/converter.h"
-#include "wx/qt/private/winevent.h"
 #include "wx/qt/pointer.h"
 #include <QtWidgets/QCalendarWidget>
 
