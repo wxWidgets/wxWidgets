@@ -13,6 +13,15 @@
 
 #include <QtWidgets/qmessagebox.h>
 
+
+class wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageDialog >
+{
+    
+    public:
+        wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler );
+};
+
+
 wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         const wxString& caption, long style, const wxPoint& pos )
     : wxMessageDialogBase( parent, message, caption, style )

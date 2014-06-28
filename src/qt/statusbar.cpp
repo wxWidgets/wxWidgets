@@ -12,6 +12,17 @@
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
+
+class wxQtStatusBar : public wxQtEventSignalHandler< QStatusBar, wxStatusBar >
+{
+
+public:
+    wxQtStatusBar( wxWindow *parent, wxStatusBar *handler );
+
+private:
+};
+
+
 wxStatusBar::wxStatusBar()
 {
 }

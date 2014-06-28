@@ -30,11 +30,4 @@ private:
     wxQtPointer< QMessageBox > m_qtMessageBox;
 };
 
-class WXDLLIMPEXP_CORE wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageDialog >
-{
-    
-    public:
-        wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler );
-};
-
 #endif // _WX_QT_MSGDLG_H_

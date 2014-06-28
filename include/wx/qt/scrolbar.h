@@ -46,22 +46,10 @@ public:
     virtual QScrollBar* GetHandle() const;
 
 private:
-    wxQtPointer< wxQtScrollBar > m_qtScrollBar;
+    wxQtPointer< QScrollBar > m_qtScrollBar;
 
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };
 
-
-class WXDLLIMPEXP_CORE wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
-{
-    
-    public:
-        wxQtScrollBar( wxWindow *parent, wxScrollBar *handler );
-                       
-    private:
-        void OnActionTriggered( int action );
-        void OnSliderReleased();
-        void OnValueChanged( int position );
-};
 
 #endif // _WX_QT_SCROLBAR_H_
