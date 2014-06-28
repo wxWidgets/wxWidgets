@@ -24,7 +24,6 @@ wxQtSpinCtrlBase< T, Widget >::wxQtSpinCtrlBase( wxWindow *parent, wxWindowID id
     const wxString& value, const wxPoint& pos, const wxSize& size, long style,
     T min, T max, T initial, T inc, const wxString& name )
 {
-    Create( parent, id, value, pos, size, style, min, max, initial, inc, name );
 }
 
 template< typename T, typename Widget >
@@ -32,7 +31,6 @@ bool wxQtSpinCtrlBase< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     const wxString& value, const wxPoint& pos, const wxSize& size, long style,
     T min, T max, T initial, T inc, const wxString& name )
 {
-    m_qtSpinBox = new Widget( parent, this );
     wxMISSING_IMPLEMENTATION( wxSTRINGIZE( style ));
     SetValue( initial );
     SetRange( min, max );
@@ -42,12 +40,6 @@ bool wxQtSpinCtrlBase< T, Widget >::Create( wxWindow *parent, wxWindowID id,
         SetValue( value );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
-}
-
-template< typename T, typename Widget >
-void wxQtSpinCtrlBase< T, Widget >::SetValue( const wxString &value )
-{
-    m_qtSpinBox->setValue( m_qtSpinBox->valueFromText( wxQtConvertString( value )));
 }
 
 template< typename T, typename Widget >
@@ -119,9 +111,44 @@ Widget *wxQtSpinCtrlBase< T, Widget >::GetHandle() const
 }
 
 
+// Define a derived helper class to get access to valueFromText:
+
+template < typename Widget >
+class wxQtSpinBoxBase : public wxQtEventSignalHandler< Widget, wxControl >
+{
+public:
+    wxQtSpinBoxBase( wxWindow *parent, wxControl *handler )
+        : wxQtEventSignalHandler< Widget, wxControl >( parent, handler )
+    { }
+
+    using Widget::valueFromText;
+};
+
+class wxQtSpinBox : public wxQtSpinBoxBase< QSpinBox >
+{
+public:
+    wxQtSpinBox( wxWindow *parent, wxControl *handler )
+        : wxQtSpinBoxBase< QSpinBox >( parent, handler )
+    {
+        connect(this, static_cast<void (QSpinBox::*)(int index)>(&QSpinBox::valueChanged),
+                this, &wxQtSpinBox::valueChanged);
+    }
+private:
+    void valueChanged(int value);
+};
+
+class wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
+{
+public:
+    wxQtDoubleSpinBox( wxWindow *parent, wxControl *handler )
+        : wxQtSpinBoxBase< QDoubleSpinBox >( parent, handler )
+    { }
+};
+
+
 //##############################################################################
 
-template class wxQtSpinCtrlBase< int, wxQtSpinBox >;
+template class wxQtSpinCtrlBase< int, QSpinBox >;
 
 wxSpinCtrl::wxSpinCtrl()
 {
@@ -133,10 +160,11 @@ wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,
     int min, int max, int initial,
     const wxString& name )
 
-: wxQtSpinCtrlBase< int, wxQtSpinBox >( parent, id, value, pos, size, style,
+: wxQtSpinCtrlBase< int, QSpinBox >( parent, id, value, pos, size, style,
      min, max, initial, 1, name )
 {
     Init();
+    Create( parent, id, value, pos, size, style, min, max, initial, name );
 }
 
 bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
@@ -144,7 +172,8 @@ bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     int min, int max, int initial,
     const wxString& name )
 {
-    return wxQtSpinCtrlBase< int, wxQtSpinBox >::Create( parent, id, value,
+    m_qtSpinBox = new wxQtSpinBox( parent, this );
+    return wxQtSpinCtrlBase< int, QSpinBox >::Create( parent, id, value,
         pos, size, style, min, max, initial, 1, name );
 }
 
@@ -163,6 +192,14 @@ bool wxSpinCtrl::SetBase(int base)
     return true;
 }
 
+void wxSpinCtrl::SetValue( const wxString &value )
+{
+    // valueFromText can be called if m_qtSpinBox is an instance of the helper class
+    wxQtSpinBox * qtSpinBox = dynamic_cast<wxQtSpinBox *> ((QSpinBox *) m_qtSpinBox);
+    if (qtSpinBox != NULL)
+        qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
+}
+
 void wxQtSpinBox::valueChanged(int value)
 {
     wxCommandEvent event( wxEVT_SPINCTRL, GetHandler()->GetId() );
@@ -172,7 +209,7 @@ void wxQtSpinBox::valueChanged(int value)
 
 //##############################################################################
 
-template class wxQtSpinCtrlBase< double, wxQtDoubleSpinBox >;
+template class wxQtSpinCtrlBase< double, QDoubleSpinBox >;
 
 wxIMPLEMENT_DYNAMIC_CLASS( wxSpinCtrlDouble, wxSpinCtrlBase );
 
@@ -185,9 +222,10 @@ wxSpinCtrlDouble::wxSpinCtrlDouble(wxWindow *parent, wxWindowID id, const wxStri
     double min, double max, double initial, double inc,
     const wxString& name )
 
-: wxQtSpinCtrlBase< double, wxQtDoubleSpinBox >( parent, id, value, pos, size, style,
+: wxQtSpinCtrlBase< double, QDoubleSpinBox >( parent, id, value, pos, size, style,
         min, max, initial, inc, name )
 {
+    Create( parent, id, value, pos, size, style, min, max, initial, inc, name );
 }
 
 bool wxSpinCtrlDouble::Create(wxWindow *parent, wxWindowID id, const wxString& value,
@@ -195,7 +233,8 @@ bool wxSpinCtrlDouble::Create(wxWindow *parent, wxWindowID id, const wxString& v
     double min, double max, double initial, double inc,
     const wxString& name )
 {
-    return wxQtSpinCtrlBase< double, wxQtDoubleSpinBox >::Create( parent, id, value,
+    m_qtSpinBox = new wxQtDoubleSpinBox( parent, this );
+    return wxQtSpinCtrlBase< double, QDoubleSpinBox >::Create( parent, id, value,
         pos, size, style, min, max, initial, inc, name );
 }
 
@@ -207,6 +246,14 @@ void wxSpinCtrlDouble::SetDigits(unsigned digits)
 unsigned wxSpinCtrlDouble::GetDigits() const
 {
     return m_qtSpinBox->decimals();
+}
+
+void wxSpinCtrlDouble::SetValue( const wxString &value )
+{
+    // valueFromText can be called if m_qtSpinBox is an instance of the helper class
+    wxQtDoubleSpinBox * qtSpinBox = dynamic_cast<wxQtDoubleSpinBox *> ((QDoubleSpinBox *) m_qtSpinBox);
+    if (qtSpinBox != NULL)
+        qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
 }
 
 

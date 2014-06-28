@@ -12,40 +12,6 @@
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QDoubleSpinBox>
 
-// Define a derived helper class to get access to valueFromText:
-
-template < typename Widget >
-class WXDLLIMPEXP_CORE wxQtSpinBoxBase : public wxQtEventSignalHandler< Widget, wxControl >
-{
-public:
-    wxQtSpinBoxBase( wxWindow *parent, wxControl *handler )
-        : wxQtEventSignalHandler< Widget, wxControl >( parent, handler )
-    { }
-
-    using Widget::valueFromText;
-};
-
-class WXDLLIMPEXP_CORE wxQtSpinBox : public wxQtSpinBoxBase< QSpinBox >
-{
-public:
-    wxQtSpinBox( wxWindow *parent, wxControl *handler )
-        : wxQtSpinBoxBase< QSpinBox >( parent, handler )
-    {
-        connect(this, static_cast<void (QSpinBox::*)(int index)>(&QSpinBox::valueChanged),
-                this, &wxQtSpinBox::valueChanged);
-    }
-private:
-    void valueChanged(int value);
-};
-
-class WXDLLIMPEXP_CORE wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
-{
-public:
-    wxQtDoubleSpinBox( wxWindow *parent, wxControl *handler )
-        : wxQtSpinBoxBase< QDoubleSpinBox >( parent, handler )
-    { }
-};
-
 // Take advantage of the Qt compile time polymorphy and use a template to avoid
 // copy&paste code for the usage of QSpinBox/QDoubleSpinBox.
 
@@ -64,14 +30,14 @@ public:
         T min, T max, T initial, T inc,
         const wxString& name );
 
-    virtual void SetValue(const wxString& value);
+    virtual void SetValue(const wxString&) {}
 
     virtual void SetSnapToTicks(bool snap_to_ticks);
     virtual bool GetSnapToTicks() const;
 
     virtual void SetSelection(long from, long to);
 
-    void SetValue(T val);
+    virtual void SetValue(T val);
     void SetRange(T minVal, T maxVal);
     void SetIncrement(T inc);
 
@@ -84,9 +50,10 @@ public:
 
 protected:
     wxQtPointer< Widget > m_qtSpinBox;
+
 };
 
-class WXDLLIMPEXP_CORE wxSpinCtrl : public wxQtSpinCtrlBase< int, wxQtSpinBox >
+class WXDLLIMPEXP_CORE wxSpinCtrl : public wxQtSpinCtrlBase< int, QSpinBox >
 {
 public:
     wxSpinCtrl();
@@ -109,6 +76,8 @@ public:
                 const wxString& name = wxT("wxSpinCtrl"));
     virtual int GetBase() const wxOVERRIDE { return m_base; }
     virtual bool SetBase(int base) wxOVERRIDE;
+    virtual void SetValue(const wxString & val);
+    virtual void SetValue(int val) { wxQtSpinCtrlBase::SetValue(val); }
 
 private:
     // Common part of all ctors.
@@ -120,7 +89,7 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrl )
 };
 
-class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxQtSpinCtrlBase< double, wxQtDoubleSpinBox >
+class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxQtSpinCtrlBase< double, QDoubleSpinBox >
 {
 public:
     wxSpinCtrlDouble();
@@ -149,6 +118,8 @@ public:
 
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
+    virtual void SetValue(const wxString & val);
+    virtual void SetValue(double val) { wxQtSpinCtrlBase::SetValue(val); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrlDouble );

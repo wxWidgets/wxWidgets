@@ -981,6 +981,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, wxEmptyString );
     m_spinctrl->SetRange(-10,30);
     m_spinctrl->SetValue(15);
+    m_spinctrl->SetValue("20");
     gauge_page_second_row_sizer->Add( m_spinctrl, 0, wxALL, 5 );
 #endif // wxUSE_SPINCTRL
 
