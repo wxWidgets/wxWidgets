@@ -76,9 +76,6 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
         return false;
 
-    // Always use LTR layout. Otherwise, the label would be mirrored.
-    SetLayoutDirection(wxLayout_LeftToRight);
-
 #ifndef __WXWINCE__
     if (!wxSystemOptions::IsFalse(wxT("msw.staticbox.optimized-paint")))
     {
@@ -116,12 +113,6 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     }
 
     styleWin |= BS_GROUPBOX;
-
-    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
-    {
-        // Make sure label is on the right
-        styleWin |= BS_RIGHT;
-    }
 
     return styleWin;
 }
@@ -391,7 +382,7 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
     ::FillRect(GetHdcOf(*impl), &rc, hbr);
 }
 
-void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
+void wxStaticBox::PaintForeground(wxDC& dc, const RECT&)
 {
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(*impl), 0);
@@ -406,10 +397,6 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         // draw over the text in default colour in our colour
         HDC hdc = GetHdcOf(*impl);
         ::SetTextColor(hdc, GetForegroundColour().GetPixel());
-
-        const bool rtl = wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
-        if ( rtl )
-            ::SetTextAlign(hdc, TA_RTLREADING | TA_RIGHT);
 
         // Get dimensions of the label
         const wxString label = GetLabel();
@@ -458,18 +445,9 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         // FIXME: value of x is hardcoded as this is what it is on my system,
         //        no idea if it's true everywhere
         RECT dimensions = {0, 0, 0, y};
-        if ( !rtl )
-        {
-            x = 9;
-            dimensions.left = x;
-            dimensions.right = x + width;
-        }
-        else
-        {
-            x = rc.right - 7;
-            dimensions.left = x - width;
-            dimensions.right = x;
-        }
+        x = 9;
+        dimensions.left = x;
+        dimensions.right = x + width;
 
         // need to adjust the rectangle to cover all the label background
         dimensions.left -= 2;
@@ -505,18 +483,9 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         }
 
         // now draw the text
-        if ( !rtl )
-        {
-            RECT rc2 = { x, 0, x + width, y };
-            ::DrawText(hdc, label.t_str(), label.length(), &rc2,
-                       drawTextFlags);
-        }
-        else // RTL
-        {
-            RECT rc2 = { x, 0, x - width, y };
-            ::DrawText(hdc, label.t_str(), label.length(), &rc2,
-                       drawTextFlags | DT_RTLREADING);
-        }
+        RECT rc2 = { x, 0, x + width, y };
+        ::DrawText(hdc, label.t_str(), label.length(), &rc2,
+                   drawTextFlags);
     }
 #endif // wxUSE_UXTHEME
 }
@@ -525,9 +494,10 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     RECT rc;
     ::GetClientRect(GetHwnd(), &rc);
+    wxPaintDC dc(this);
 
     // draw the entire box in a memory DC
-    wxMemoryDC memdc;
+    wxMemoryDC memdc(&dc);
     wxBitmap bitmap(rc.right, rc.bottom);
     memdc.SelectObject(bitmap);
 
@@ -540,7 +510,6 @@ void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     // note that it seems to be faster to do 4 small blits here and then paint
     // directly into wxPaintDC than painting background in wxMemoryDC and then
     // blitting everything at once to wxPaintDC, this is why we do it like this
-    wxPaintDC dc(this);
     int borderTop, border;
     GetBordersForSizer(&borderTop, &border);
 
