@@ -9,9 +9,9 @@
 #define _WX_QT_MENUITEM_H_
 
 #include "wx/menuitem.h"
-#include "wx/qt/winevent_qt.h"
+#include "wx/qt/private/winevent.h"
 #include <QtWidgets/QAction>
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxMenu;

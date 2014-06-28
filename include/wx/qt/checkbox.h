@@ -8,7 +8,7 @@
 #ifndef _WX_QT_CHECKBOX_H_
 #define _WX_QT_CHECKBOX_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QCheckBox>
 
 class WXDLLIMPEXP_CORE wxCheckBox : public wxCheckBoxBase

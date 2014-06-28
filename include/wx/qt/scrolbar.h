@@ -9,7 +9,7 @@
 #define _WX_QT_SCROLBAR_H_
 
 #include "wx/scrolbar.h"
-#include "wx/qt/winevent_qt.h"
+#include "wx/qt/private/winevent.h"
 
 #include <QtWidgets/QScrollBar>
 

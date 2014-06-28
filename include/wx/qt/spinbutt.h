@@ -9,7 +9,7 @@
 #define _WX_QT_SPINBUTT_H_
 
 #include "wx/spinbutt.h"
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QSpinBox>
 
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase

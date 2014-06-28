@@ -11,7 +11,7 @@
 #ifndef _WX_QT_APP_H_
 #define _WX_QT_APP_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QApplication>
 
 class WXDLLIMPEXP_CORE wxApp : public wxAppBase

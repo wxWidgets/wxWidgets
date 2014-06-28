@@ -12,9 +12,8 @@
 #define _WX_QT_FRAME_H_
 
 #include "wx/frame.h"
-#include "wx/qt/winevent_qt.h"
-
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/private/winevent.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QMainWindow>
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase

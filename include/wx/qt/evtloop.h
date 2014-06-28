@@ -8,7 +8,7 @@
 #ifndef _WX_QT_EVTLOOP_H_
 #define _WX_QT_EVTLOOP_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtCore/QTimer>
 
 class WXDLLIMPEXP_BASE wxQtEventLoopBase : public wxEventLoopBase

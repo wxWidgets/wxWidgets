@@ -8,7 +8,7 @@
 #ifndef _WX_QT_STATBOX_H_
 #define _WX_QT_STATBOX_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QGroupBox>
 
 class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase

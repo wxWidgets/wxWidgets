@@ -9,7 +9,7 @@
 #define _WX_QT_LISTCTRL_H_
 
 #include "wx/textctrl.h"
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QListWidget>
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;

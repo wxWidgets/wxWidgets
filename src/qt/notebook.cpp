@@ -11,7 +11,7 @@
 #include "wx/notebook.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
-#include "wx/qt/winevent_qt.h"
+#include "wx/qt/private/winevent.h"
 
 class wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
 {

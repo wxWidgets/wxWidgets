@@ -10,8 +10,8 @@
 
 #include "wx/control.h"
 #include "wx/button.h"
-#include "wx/qt/pointer_qt.h"
-#include "wx/qt/winevent_qt.h"
+#include "wx/qt/pointer.h"
+#include "wx/qt/private/winevent.h"
 
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {

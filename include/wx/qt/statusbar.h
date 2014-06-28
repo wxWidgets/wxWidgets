@@ -9,7 +9,7 @@
 #define _WX_QT_STATUSBAR_H_
 
 #include "wx/statusbr.h"
-#include "wx/qt/winevent_qt.h"
+#include "wx/qt/private/winevent.h"
 
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QStatusBar>

@@ -8,7 +8,7 @@
 #ifndef _WX_QT_STATLINE_H_
 #define _WX_QT_STATLINE_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QFrame>
 
 class WXDLLIMPEXP_CORE wxStaticLine : public wxStaticLineBase
