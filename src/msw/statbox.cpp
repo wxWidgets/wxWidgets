@@ -268,11 +268,26 @@ void wxStaticBox::MSWGetRegionWithoutSelf(WXHRGN hRgn, int w, int h)
     SubtractRectFromRgn(hrgn, w - border, 0, w, h);
 }
 
+namespace {
+RECT AdjustRectForRtl(wxLayoutDirection dir, RECT const& childRect, RECT const& boxRect) {
+    RECT ret = childRect;
+    if( dir == wxLayout_RightToLeft ) {
+        // The clipping region too is mirrored in RTL layout.
+        // We need to mirror screen coordinates relative to static box window priot to
+        // intersecting with region.
+        ret.right = boxRect.right - childRect.left - boxRect.left;
+        ret.left = boxRect.right - childRect.right - boxRect.left;
+    }
+
+    return ret;
+}
+}
+
 WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
 {
-    RECT rc;
-    ::GetWindowRect(GetHwnd(), &rc);
-    HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+    RECT boxRc;
+    ::GetWindowRect(GetHwnd(), &boxRc);
+    HRGN hrgn = ::CreateRectRgn(boxRc.left, boxRc.top, boxRc.right + 1, boxRc.bottom + 1);
     bool foundThis = false;
 
     // Iterate over all sibling windows as in the old wxWidgets API the
@@ -311,7 +326,9 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
                 continue;
         }
 
+        RECT rc;
         ::GetWindowRect(child, &rc);
+        rc = AdjustRectForRtl(GetLayoutDirection(), rc, boxRc );
         if ( ::RectInRegion(hrgn, &rc) )
         {
             // need to remove WS_CLIPSIBLINGS from all sibling windows
@@ -346,7 +363,9 @@ WXHRGN wxStaticBox::MSWGetRegionWithoutChildren()
             continue;
         }
 
+        RECT rc;
         ::GetWindowRect(child, &rc);
+        rc = AdjustRectForRtl(GetLayoutDirection(), rc, boxRc );
         AutoHRGN hrgnChild(::CreateRectRgnIndirect(&rc));
         ::CombineRgn(hrgn, hrgn, hrgnChild, RGN_DIFF);
     }
