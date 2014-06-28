@@ -346,13 +346,12 @@ void MyFrame::OnSetOrRestoreThumbnailClip(wxCommandEvent& event)
     MSWGetTaskBarButton()->SetThumbnailClip(rect);
 }
 
-
 void MyFrame::OnAddThubmBarButton(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_thumbBarButtons.size() >= 7 )
         return;
 
-    wxThumbBarButton* button =
+    wxThumbBarButton *button =
         new wxThumbBarButton(m_thumbBarButtons.size() + ThumbnailToolbarBtn_0 ,
                              CreateRandomIcon());
     MSWGetTaskBarButton()->AppendThumbBarButton(button);

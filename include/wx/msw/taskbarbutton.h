@@ -35,6 +35,7 @@ public:
     virtual bool InsertThumbBarButton(size_t pos,
                                       wxThumbBarButton *button) wxOVERRIDE;
     virtual bool AppendThumbBarButton(wxThumbBarButton *button) wxOVERRIDE;
+    virtual bool AppendSeparatorInThumbBar() wxOVERRIDE;
     virtual wxThumbBarButton* RemoveThumbBarButton(
         wxThumbBarButton *button) wxOVERRIDE;
     virtual wxThumbBarButton* RemoveThumbBarButton(int id) wxOVERRIDE;
