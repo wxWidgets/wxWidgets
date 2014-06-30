@@ -7503,6 +7503,7 @@ if test "$wxUSE_MAC" = 1 ; then
             dnl in 64 bit builds results in a warning because the framework is
             dnl not available in 64 bits itself. So make an effort to avoid it
             dnl when building for 64 bits only (i.e. not universal build).
+            if test "$wxUSE_MEDIACTRL" = "yes"; then
 
             if test "$cross_compiling" != "no"; then
                 dnl The check below doesn't work well when cross-compiling
@@ -7528,6 +7529,8 @@ if test "$wxUSE_MAC" = 1 ; then
 
             if test "$wx_cv_target_x86_64" != "yes"; then
                 EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
+            fi
+
             fi
         fi
     fi
