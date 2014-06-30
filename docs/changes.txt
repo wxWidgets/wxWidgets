@@ -577,6 +577,10 @@ Major new features in this release
 3.0.2: (released 2014-xx-xx)
 ----------------------------
 
+All:
+
+- Make wxString::FromCDouble() work when the global C++ locale is not the C one.
+
 wxMSW:
 
 - Fix Cygwin 1.7 build.
