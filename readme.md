@@ -19,7 +19,7 @@ For more details, you can refer to [wxWebViewChromium's wiki](https://github.com
 
 ## Building Instructions 
 
-Currently wxWebViewChromium only supports on Windows/Linux platforms.
+wxWebViewChromium supports Windows/Linux/Mac OS X platforms.
 
 ###Common Steps
 
@@ -50,6 +50,14 @@ By default, wxWidgets provides Visual Stdio 2010 project file to build wxWebView
 
 7. Add `libcef.so` directory path to `LD_LIBRARY_PATH`(`export LD_LIBRARY_PATH=<libcef_directory>`),
 otherwise webview_chromium will not find `libcef.so`.
+
+
+##Mac OS X Platform
+
+wxWidgets provides xcode building files to build wxWebViewChromium, supports OS X 10.8 or above.
+
+1. Open `samples/webview_chromium/webview_chromium.xcodeproj`, and build `webview_chromium` sample target. 
+
 
 ##Notes
 
