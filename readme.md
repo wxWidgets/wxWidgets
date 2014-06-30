@@ -7,7 +7,18 @@ Embedded Framework(CEF3).
 
 * [Chromium Embedded Framework][1]: 3.1650.1562.
 
-1. Download CEF3 from [1], and build `libcef_dll_wrapper` static library.
+1. Download CEF3 from [here][1], and build `libcef_dll_wrapper` static library.
+
+**Note**:
+On Windows platform, you will need to change the vistual stdio building
+properties of `libcef_dll_wrapper` to consistent with wxWidgets, see following steps:
+
+* C/C++ - General - Treat Warngings as Error - No
+* C/C++ - Code Generation - Runtime Library - Multithreaded [Debug] DLL
+* C/C++ - Code Generation - Enable C++ Exceptions - Yes
+* C/C++ - Language - Enable Run-Time Type Information - Yes
+
+For more details, you can refer to [wxWebViewChromium's wiki](https://github.com/wxWidgets/wxWebViewChromium/wiki/Windows-Build). 
 
 ## Building Instructions 
 
