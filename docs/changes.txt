@@ -581,6 +581,7 @@ wxMSW:
 
 - Fix Cygwin 1.7 build.
 - Include x64 configurations in MSVC 8/9 project files too.
+- Fix appearance of wxToggleButtons with non default colours (Artur Wieczorek).
 
 
 3.0.1: (released 2014-06-15)
