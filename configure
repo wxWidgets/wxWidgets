@@ -37085,7 +37085,7 @@ if test "$wxUSE_MAC" = 1 ; then
         if test "$wxUSE_OSX_IPHONE" = 1; then
             EXTRA_FRAMEWORKS="-framework IOKit -framework UIKit -framework CFNetwork -framework AudioToolbox -framework CoreFoundation -framework CoreGraphics -framework OpenGLES -framework Foundation -framework QuartzCore"
         else
-            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
+            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System"
 
 
             if test "$cross_compiling" != "no"; then
