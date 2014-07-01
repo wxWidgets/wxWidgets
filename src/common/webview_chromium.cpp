@@ -464,6 +464,10 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
     }
 
     CefSettings settings;
+#if CHROME_VERSION_BUILD >= 1750
+    settings.no_sandbox = true;
+#endif
+
 #ifdef __WXDEBUG__
     settings.log_severity = LOGSEVERITY_INFO;
     CefString(&settings.log_file).FromASCII("./debug.log");
