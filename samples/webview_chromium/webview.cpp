@@ -206,7 +206,6 @@ private:
     wxString m_findText;
     int m_findFlags, m_findCount;
 
-    DECLARE_EVENT_TABLE()
 };
 
 class SourceViewDialog : public wxDialog
@@ -549,6 +548,7 @@ WebFrame::WebFrame(const wxString& url) :
 
     //Connect the idle events
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(WebFrame::OnIdle), NULL, this);
+    Connect(wxID_ANY, wxEVT_CLOSE_WINDOW, wxCloseEventHandler(WebFrame::OnClose), NULL, this);
 }
 
 WebFrame::~WebFrame()
@@ -1086,10 +1086,6 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
     sizer->Add(text, 1, wxEXPAND);
     SetSizer(sizer);
 }
-
-BEGIN_EVENT_TABLE(WebFrame, wxFrame)
-    EVT_CLOSE(WebFrame::OnClose)
-END_EVENT_TABLE()
 
 void WebFrame::OnClose(wxCloseEvent &evt)
 {
