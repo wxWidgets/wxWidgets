@@ -86,8 +86,6 @@ private:
     #include "wx/gtk1/choice.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/choice.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/choice.h"
 #endif
 
 #endif // wxUSE_CHOICE

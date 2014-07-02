@@ -194,8 +194,6 @@ public:
     #include "wx/gtk1/glcanvas.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/glcanvas.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/glcanvas.h"
 #else
     #error "wxGLCanvas not supported in this wxWidgets port"
 #endif

@@ -362,9 +362,6 @@ protected:
 #elif defined(__WXMAC__)
     #include "wx/osx/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMac
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/toplevel.h"
-    #define wxTopLevelWindowNative wxTopLevelWindowCocoa
 #elif defined(__WXMOTIF__)
     #include "wx/motif/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMotif

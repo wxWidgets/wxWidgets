@@ -290,8 +290,6 @@ private:
 
 #if defined(__WXMSW__)
     #include "wx/msw/evtloop.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/evtloop.h"
 #elif defined(__WXOSX__)
     #include "wx/osx/evtloop.h"
 #elif defined(__WXDFB__)

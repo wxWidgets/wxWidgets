@@ -264,8 +264,6 @@ protected:
         #include "wx/motif/frame.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/frame.h"
-    #elif defined(__WXCOCOA__)
-        #include "wx/cocoa/frame.h"
     #endif
 #endif
 

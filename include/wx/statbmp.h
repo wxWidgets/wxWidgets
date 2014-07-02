@@ -64,8 +64,6 @@ protected:
     #include "wx/gtk1/statbmp.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/statbmp.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/statbmp.h"
 #endif
 
 #endif // wxUSE_STATBMP

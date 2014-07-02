@@ -1915,13 +1915,6 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowMac wxWindow
     #endif // wxUniv
     #include "wx/osx/window.h"
-#elif defined(__WXCOCOA__)
-    #ifdef __WXUNIVERSAL__
-        #define wxWindowNative wxWindowCocoa
-    #else // !wxUniv
-        #define wxWindowCocoa wxWindow
-    #endif // wxUniv
-    #include "wx/cocoa/window.h"
 #endif
 
 // for wxUniversal, we now derive the real wxWindow from wxWindow<platform>,

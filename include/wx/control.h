@@ -236,8 +236,6 @@ protected:
     #include "wx/gtk1/control.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/control.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/control.h"
 #endif
 
 #endif // wxUSE_CONTROLS

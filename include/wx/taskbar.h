@@ -83,8 +83,6 @@ private:
     #include "wx/unix/taskbarx11.h"
 #elif defined (__WXMAC__)
     #include "wx/osx/taskbarosx.h"
-#elif defined (__WXCOCOA__)
-    #include "wx/cocoa/taskbar.h"
 #endif
 
 // ----------------------------------------------------------------------------

@@ -706,8 +706,6 @@ protected:
     #include "wx/x11/app.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/app.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/app.h"
 #endif
 
 #else // !GUI

@@ -55,8 +55,6 @@ public:
     #include "wx/gtk1/checklst.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/checklst.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/checklst.h"
 #endif
 
 #endif // wxUSE_CHECKLISTBOX

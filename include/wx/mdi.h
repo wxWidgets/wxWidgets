@@ -367,8 +367,6 @@ public:
     #include "wx/gtk1/mdi.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/mdi.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/mdi.h"
 #endif
 
 inline wxMDIClientWindow *wxMDIParentFrameBase::OnCreateClient()

@@ -109,8 +109,6 @@ protected:
     #include "wx/gtk1/gauge.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/gauge.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/gauge.h"
 #endif
 
 #endif // wxUSE_GAUGE

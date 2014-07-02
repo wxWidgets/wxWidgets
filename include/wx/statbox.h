@@ -64,8 +64,6 @@ protected:
     #include "wx/gtk1/statbox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/statbox.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/statbox.h"
 #endif
 
 #endif // wxUSE_STATBOX

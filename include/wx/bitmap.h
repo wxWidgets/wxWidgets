@@ -287,9 +287,6 @@ protected:
 #elif defined(__WXMAC__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_PICT_RESOURCE
     #include "wx/osx/bitmap.h"
-#elif defined(__WXCOCOA__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
-    #include "wx/cocoa/bitmap.h"
 #endif
 
 #if wxUSE_IMAGE
