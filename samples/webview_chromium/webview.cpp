@@ -1089,6 +1089,11 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
 
 void WebFrame::OnClose(wxCloseEvent &evt)
 {
+// On Windows/Linux, calling `Shutdown` here will cause a crash when closing WebFrame.
+// This is a temporary fix.
+#ifdef __WXOSX__
     wxWebViewChromium::Shutdown();
+#endif
+
     Destroy();
 }
