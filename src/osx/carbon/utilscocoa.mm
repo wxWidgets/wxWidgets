@@ -27,7 +27,7 @@
 
 #include "wx/fontutil.h"
 
-#if wxOSX_USE_COCOA
+#if defined( __WXCOCOA__ )
 #include "wx/cocoa/string.h"
 #endif
 
@@ -148,7 +148,7 @@ void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
             fontstyle = wxFONTSTYLE_ITALIC ;
 
         info->Init(size,fontFamily,fontstyle,fontweight,underlined,
-            wxStringWithNSString([theFont familyName]), wxFONTENCODING_DEFAULT);
+                   wxCFStringRef::AsString([theFont familyName]), wxFONTENCODING_DEFAULT);
 
     }
 }

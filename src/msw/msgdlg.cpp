@@ -132,19 +132,6 @@ void MoveWindowToScreenRect(HWND hwnd, RECT rc)
     SetWindowRect(hwnd, rc);
 }
 
-// helper of AdjustButtonLabels(): move the given window by dx
-//
-// works for both child and top level windows
-void OffsetWindow(HWND hwnd, int dx)
-{
-    RECT rc = wxGetWindowRect(hwnd);
-
-    rc.left += dx;
-    rc.right += dx;
-
-    MoveWindowToScreenRect(hwnd, rc);
-}
-
 } // anonymous namespace
 
 /* static */

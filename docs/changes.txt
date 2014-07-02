@@ -35,6 +35,7 @@ All:
 - Implement wxThread::SetPriority() for pthreads (Luca Bacci).
 - Add wxInt64 support to wxText{Input,Output}Stream (Alexander Bezzubikov).
 - Define wxOVERRIDE as override for supporting compilers (Thomas Goyne).
+- Allow specifying custom comparator for wxSortedArrayString (Catalin Raceanu).
 
 All (GUI):
 
@@ -68,6 +69,7 @@ wxMSW:
 - Improve wxMimeTypesManager open command detection (Eric Jensen).
 - Make wxFILTER_INCLUDE_LIST in wxTextValidator actually usable.
 - Fix setting menu item bitmaps after appending them (Artur Wieczorek).
+- Fix setting label of submenu items (Artur Wieczorek).
 - Fix handling of selected images in wxBitmapButton (Artur Wieczorek).
 - Fix loading of bitmap with non-pre-multiplied alpha (Artur Wieczorek).
 - Support multiline strings in wxDC::DrawRotatedText() (Artur Wieczorek).

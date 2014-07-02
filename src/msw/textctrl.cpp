@@ -40,6 +40,7 @@
     #include "wx/wxcrtvararg.h"
 #endif
 
+#include "wx/scopedptr.h"
 #include "wx/stack.h"
 #include "wx/sysopt.h"
 
@@ -63,6 +64,8 @@
 
 #if wxUSE_RICHEDIT
     #include <richedit.h>
+    #include <richole.h>
+    #include "wx/msw/ole/oleutils.h"
 #endif // wxUSE_RICHEDIT
 
 #include "wx/msw/missing.h"
@@ -75,6 +78,25 @@ static wxDropTarget *
     wxRICHTEXT_DEFAULT_DROPTARGET = reinterpret_cast<wxDropTarget *>(1);
 
 #endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
+
+#if wxUSE_OLE
+// This must be the last header included to only affect the DEFINE_GUID()
+// occurrences below but not any GUIDs declared in the standard files included
+// above.
+#include <initguid.h>
+
+namespace
+{
+
+// Normally the IRichEditOleCallback interface and its IID are defined in
+// richole.h header file included in the platform SDK but MinGW doesn't
+// have the IID symbol (but does have the interface). Work around it by
+// defining it ourselves.
+DEFINE_GUID(wxIID_IRichEditOleCallback,
+    0x00020d03, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+
+} // anonymous namespace
+#endif // wxUSE_OLE
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -125,6 +147,73 @@ bool             wxRichEditModule::ms_inkEditLibLoadAttemped = false;
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
+
+#if wxUSE_OLE
+
+extern wxMenu *wxCurrentPopupMenu;
+
+class wxTextCtrlOleCallback : public IRichEditOleCallback
+{
+public:
+    wxTextCtrlOleCallback(wxTextCtrl *text) : m_textCtrl(text), m_menu(NULL) {}
+    ~wxTextCtrlOleCallback() { DeleteContextMenuObject(); }
+
+    STDMETHODIMP ContextSensitiveHelp(BOOL WXUNUSED(enterMode)) { return E_NOTIMPL; }
+    STDMETHODIMP DeleteObject(LPOLEOBJECT WXUNUSED(oleobj)) { return E_NOTIMPL; }
+    STDMETHODIMP GetClipboardData(CHARRANGE* WXUNUSED(chrg), DWORD WXUNUSED(reco), LPDATAOBJECT* WXUNUSED(dataobj)) { return E_NOTIMPL; }
+    STDMETHODIMP GetDragDropEffect(BOOL WXUNUSED(drag), DWORD WXUNUSED(grfKeyState), LPDWORD WXUNUSED(effect)) { return E_NOTIMPL; }
+    STDMETHODIMP GetInPlaceContext(LPOLEINPLACEFRAME* WXUNUSED(frame), LPOLEINPLACEUIWINDOW* WXUNUSED(doc), LPOLEINPLACEFRAMEINFO WXUNUSED(frameInfo)) { return E_NOTIMPL; }
+    STDMETHODIMP GetNewStorage(LPSTORAGE *WXUNUSED(stg)) { return E_NOTIMPL; }
+    STDMETHODIMP QueryAcceptData(LPDATAOBJECT WXUNUSED(dataobj), CLIPFORMAT* WXUNUSED(format), DWORD WXUNUSED(reco), BOOL WXUNUSED(really), HGLOBAL WXUNUSED(hMetaPict)) { return E_NOTIMPL; }
+    STDMETHODIMP QueryInsertObject(LPCLSID WXUNUSED(clsid), LPSTORAGE WXUNUSED(stg), LONG WXUNUSED(cp)) { return E_NOTIMPL; }
+    STDMETHODIMP ShowContainerUI(BOOL WXUNUSED(show)) { return E_NOTIMPL; }
+
+    STDMETHODIMP GetContextMenu(WORD WXUNUSED(seltype), LPOLEOBJECT WXUNUSED(oleobj), CHARRANGE* WXUNUSED(chrg), HMENU *menu)
+    {
+        // 'menu' will be shown and destroyed by the caller. We need to keep
+        // its wx counterpart, the wxMenu instance, around until it is
+        // dismissed, though, so store it in m_menu and destroy sometime later.
+        DeleteContextMenuObject();
+        m_menu = m_textCtrl->MSWCreateContextMenu();
+        *menu = m_menu->GetHMenu();
+
+        // Make wx handle events from the popup menu correctly:
+        m_menu->SetInvokingWindow(m_textCtrl);
+        wxCurrentPopupMenu = m_menu;
+
+        m_menu->UpdateUI();
+
+        return S_OK;
+    }
+
+    DECLARE_IUNKNOWN_METHODS;
+
+private:
+    void DeleteContextMenuObject()
+    {
+        if ( m_menu )
+        {
+            m_menu->MSWDetachHMENU();
+            if ( wxCurrentPopupMenu == m_menu )
+                wxCurrentPopupMenu = NULL;
+            wxDELETE(m_menu);
+        }
+    }
+
+    wxTextCtrl *m_textCtrl;
+    wxMenu *m_menu;
+
+    wxDECLARE_NO_COPY_CLASS(wxTextCtrlOleCallback);
+};
+
+BEGIN_IID_TABLE(wxTextCtrlOleCallback)
+    ADD_IID(Unknown)
+    ADD_RAW_IID(wxIID_IRichEditOleCallback)
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(wxTextCtrlOleCallback)
+
+#endif // wxUSE_OLE
 
 #endif // wxUSE_RICHEDIT
 
@@ -185,10 +274,6 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_KEY_DOWN(wxTextCtrl::OnKeyDown)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
-
-#if wxUSE_RICHEDIT
-    EVT_CONTEXT_MENU(wxTextCtrl::OnContextMenu)
-#endif
 
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
@@ -480,6 +565,17 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         }
 
         ::SendMessage(GetHwnd(), EM_SETEVENTMASK, 0, mask);
+
+        bool contextMenuConnected = false;
+#if wxUSE_OLE
+        if ( m_verRichEdit >= 4 )
+        {
+            wxTextCtrlOleCallback *cb = new wxTextCtrlOleCallback(this);
+            contextMenuConnected = ::SendMessage(GetHwnd(), EM_SETOLECALLBACK, 0, (LPARAM)cb) != 0;
+        }
+#endif
+        if ( !contextMenuConnected )
+            Connect(wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(wxTextCtrl::OnContextMenu));
     }
     else
 #endif // wxUSE_RICHEDIT
@@ -2278,32 +2374,6 @@ void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
     event.Enable( !IsEmpty() );
 }
 
-void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
-{
-#if wxUSE_RICHEDIT
-    if (IsRich())
-    {
-        if (!m_privateContextMenu)
-        {
-            m_privateContextMenu = new wxMenu;
-            m_privateContextMenu->Append(wxID_UNDO, _("&Undo"));
-            m_privateContextMenu->Append(wxID_REDO, _("&Redo"));
-            m_privateContextMenu->AppendSeparator();
-            m_privateContextMenu->Append(wxID_CUT, _("Cu&t"));
-            m_privateContextMenu->Append(wxID_COPY, _("&Copy"));
-            m_privateContextMenu->Append(wxID_PASTE, _("&Paste"));
-            m_privateContextMenu->Append(wxID_CLEAR, _("&Delete"));
-            m_privateContextMenu->AppendSeparator();
-            m_privateContextMenu->Append(wxID_SELECTALL, _("Select &All"));
-        }
-        PopupMenu(m_privateContextMenu);
-        return;
-    }
-    else
-#endif
-    event.Skip();
-}
-
 void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
 {
     // be sure the caret remains invisible if the user had hidden it
@@ -2317,6 +2387,34 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
 
 // the rest of the file only deals with the rich edit controls
 #if wxUSE_RICHEDIT
+
+void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
+{
+    if (IsRich())
+    {
+        if (!m_privateContextMenu)
+            m_privateContextMenu = MSWCreateContextMenu();
+        PopupMenu(m_privateContextMenu);
+        return;
+    }
+    else
+        event.Skip();
+}
+
+wxMenu *wxTextCtrl::MSWCreateContextMenu()
+{
+    wxMenu *m = new wxMenu;
+    m->Append(wxID_UNDO, _("&Undo"));
+    m->Append(wxID_REDO, _("&Redo"));
+    m->AppendSeparator();
+    m->Append(wxID_CUT, _("Cu&t"));
+    m->Append(wxID_COPY, _("&Copy"));
+    m->Append(wxID_PASTE, _("&Paste"));
+    m->Append(wxID_CLEAR, _("&Delete"));
+    m->AppendSeparator();
+    m->Append(wxID_SELECTALL, _("Select &All"));
+    return m;
+}
 
 // ----------------------------------------------------------------------------
 // EN_LINK processing

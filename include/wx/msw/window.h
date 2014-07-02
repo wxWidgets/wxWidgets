@@ -115,6 +115,8 @@ public:
                                              wxCoord width,
                                              wxCoord widthTotal) const;
 
+    virtual void SetId(wxWindowID winid);
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP
@@ -532,6 +534,19 @@ public:
     // virtual function for implementing internal idle
     // behaviour
     virtual void OnInternalIdle();
+
+#if wxUSE_MENUS && !defined(__WXUNIVERSAL__)
+    virtual bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+
+    // handle WM_(UN)INITMENUPOPUP message to generate wxEVT_MENU_OPEN/CLOSE
+    bool HandleMenuPopup(wxEventType evtType, WXHMENU hMenu);
+
+    // Command part of HandleMenuPopup() and HandleExitMenuLoop().
+    virtual bool DoSendMenuOpenCloseEvent(wxEventType evtType, wxMenu* menu, bool popup);
+
+    // Find the menu corresponding to the given handle.
+    virtual wxMenu* MSWFindMenuFromHMENU(WXHMENU hMenu);
+#endif // wxUSE_MENUS && !__WXUNIVERSAL__
 
 protected:
     // this allows you to implement standard control borders without

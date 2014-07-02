@@ -17,14 +17,30 @@
 // these functions are only used in STL build now but we define them in any
 // case for compatibility with the existing code outside of the library which
 // could be using them
-inline int wxCMPFUNC_CONV wxStringSortAscending(wxString* s1, wxString* s2)
+inline int wxCMPFUNC_CONV wxStringSortAscending(const wxString& s1, const wxString& s2)
 {
-    return s1->Cmp(*s2);
+    return s1.Cmp(s2);
 }
 
-inline int wxCMPFUNC_CONV wxStringSortDescending(wxString* s1, wxString* s2)
+inline int wxCMPFUNC_CONV wxStringSortDescending(const wxString& s1, const wxString& s2)
 {
     return wxStringSortAscending(s2, s1);
+}
+
+// This comparison function ignores case when comparing strings differing not
+// in case only, i.e. this ensures that "Aa" comes before "AB", unlike with
+// wxStringSortAscending().
+inline int wxCMPFUNC_CONV
+wxDictionaryStringSortAscending(const wxString& s1, const wxString& s2)
+{
+    const int cmp = s1.CmpNoCase(s2);
+    return cmp ? cmp : s1.Cmp(s2);
+}
+
+inline int wxCMPFUNC_CONV
+wxDictionaryStringSortDescending(const wxString& s1, const wxString& s2)
+{
+    return wxDictionaryStringSortAscending(s2, s1);
 }
 
 #if wxUSE_STD_CONTAINERS
@@ -38,9 +54,6 @@ _WX_DECLARE_BASEARRAY_2(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase,
                         class WXDLLIMPEXP_BASE);
 WX_DEFINE_USER_EXPORTED_TYPEARRAY(wxString, wxArrayStringBase,
                                   wxBaseArrayStringBase, WXDLLIMPEXP_BASE);
-_WX_DEFINE_SORTED_TYPEARRAY_2(wxString, wxSortedArrayStringBase,
-                              wxBaseArrayStringBase, = wxStringSortAscending,
-                              class WXDLLIMPEXP_BASE, CMPFUNCwxString);
 
 class WXDLLIMPEXP_BASE wxArrayString : public wxArrayStringBase
 {
@@ -68,6 +81,10 @@ public:
     }
 };
 
+_WX_DEFINE_SORTED_TYPEARRAY_2(wxString, wxSortedArrayStringBase,
+                              wxBaseArrayStringBase, = wxStringSortAscending,
+                              class WXDLLIMPEXP_BASE, wxArrayString::CompareFunction);
+
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
 {
 public:
@@ -84,6 +101,9 @@ public:
         for ( size_t n = 0; n < src.size(); n++ )
             Add(src[n]);
     }
+    wxEXPLICIT wxSortedArrayString(wxArrayString::CompareFunction compareFunction)
+        : wxSortedArrayStringBase(compareFunction)
+        { }
 
     int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
 
@@ -341,6 +361,8 @@ protected:
   void Init(bool autoSort);             // common part of all ctors
   void Copy(const wxArrayString& src);  // copies the contents of another array
 
+  CompareFunction m_compareFunction;    // set only from wxSortedArrayString
+
 private:
   void Grow(size_t nIncrement = 0);     // makes array bigger if needed
 
@@ -359,6 +381,10 @@ public:
     { }
   wxSortedArrayString(const wxArrayString& array) : wxArrayString(true)
     { Copy(array); }
+
+  wxEXPLICIT wxSortedArrayString(CompareFunction compareFunction)
+      : wxArrayString(true)
+    { m_compareFunction = compareFunction; }
 };
 
 #endif // !wxUSE_STD_CONTAINERS
