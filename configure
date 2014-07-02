@@ -37466,6 +37466,7 @@ if test "$wxUSE_MAC" = 1 ; then
         else
             EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
 
+                                                                        if test "$wxUSE_MEDIACTRL" = "yes"; then
 
             if test "$cross_compiling" != "no"; then
                                                                                                 wx_cv_target_x86_64=no
@@ -37497,6 +37498,8 @@ $as_echo "$wx_cv_target_x86_64" >&6; }
 
             if test "$wx_cv_target_x86_64" != "yes"; then
                 EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
+            fi
+
             fi
         fi
     fi
