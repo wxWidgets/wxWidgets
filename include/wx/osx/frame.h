@@ -43,8 +43,6 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrame();
-
     // implementation only from now on
     // -------------------------------
 
