@@ -1601,7 +1601,7 @@ void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
     wxPoint screenpt = ClientToScreen(clientpt);
 
     wxLogMessage(wxT("OnItemMenu for item \"%s\" at screen coords (%i, %i)"),
-                 item->GetDesc(), screenpt.x, screenpt.y);
+                 item ? item->GetDesc() : wxS("unknown"), screenpt.x, screenpt.y);
 
     ShowMenu(itemId, clientpt);
     event.Skip();
@@ -1646,7 +1646,7 @@ void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)
 
     MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
 
-    wxLogMessage(wxT("Item \"%s\" right clicked"), item->GetDesc());
+    wxLogMessage(wxT("Item \"%s\" right clicked"), item ? item->GetDesc() : wxS("unknown"));
 
     event.Skip();
 }
