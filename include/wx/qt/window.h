@@ -180,6 +180,7 @@ protected:
     virtual WXWidget QtGetScrollBarsContainer() const;
 
 private:
+    void Init();
     wxQtPointer< QWidget > m_qtWindow;
     wxQtPointer< QWidget > m_qtContainer;
 
