@@ -436,7 +436,8 @@ bool wxWebViewChromium::CanSetZoomType(wxWebViewZoomType type) const
 
 void wxWebViewChromium::RegisterHandler(wxSharedPtr<wxWebViewHandler> handler)
 {
-    // We currently don't support custom scheme handlers
+    CefRegisterSchemeHandlerFactory( handler->GetName().ToStdWstring(), "",
+                                     new SchemeHandlerFactory(handler) );
 }
 
 #ifdef __WXMSW__
@@ -726,4 +727,72 @@ void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
         ERROR_TYPE_CASE(ERR_INSECURE_RESPONSE, wxWEBVIEW_NAV_ERR_SECURITY);
     }
     m_loadErrorCode = type;
+}
+
+bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,
+                                   CefRefPtr<CefCallback> callback)
+{
+    bool handled = false;
+
+    AutoLock lock_scope( this );
+
+    std::string url = request->GetURL();
+    wxFSFile* file = m_handler->GetFile( url );
+
+    if ( file )
+    {
+        mime_type_ = (file->GetMimeType()).ToStdString();
+
+        size_t size = file->GetStream()->GetLength();
+        char* buf = new char[size];
+        file->GetStream()->Read( buf, size );
+        data_ = std::string( buf, buf+size );
+
+        delete[] buf;
+        handled = true;
+    }
+
+    if ( handled )
+    {
+        // Indicate the headers are available.
+        callback->Continue();
+        return true;
+    }
+    return false;
+}
+
+void SchemeHandler::GetResponseHeaders(CefRefPtr<CefResponse> response,
+                                       int64& response_length,
+                                       CefString& redirectUrl)
+{
+    response->SetMimeType( mime_type_ );
+    response->SetStatus( 200 );
+
+    // Set the resulting response length
+    response_length = data_.length();
+}
+
+bool SchemeHandler::ReadResponse(void* data_out,
+                                 int bytes_to_read,
+                                 int& bytes_read,
+                                 CefRefPtr<CefCallback> callback)
+{
+    bool has_data = false;
+    bytes_read = 0;
+
+    AutoLock lock_scope( this );
+
+    if ( offset_ < data_.length() )
+    {
+        // Copy the next block of data into the buffer.
+        int transfer_size =
+            std::min( bytes_to_read, static_cast<int>( data_.length() - offset_ ) );
+        memcpy( data_out, data_.c_str() + offset_, transfer_size );
+        offset_ += transfer_size;
+
+        bytes_read = transfer_size;
+        has_data = true;
+    }
+
+    return has_data;
 }

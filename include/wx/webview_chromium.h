@@ -11,7 +11,6 @@
 #include "wx/webview.h"
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
-#include "wx/timer.h"
 
 #ifdef __VISUALC__
 #pragma warning(push)
@@ -20,6 +19,7 @@
 
 #include "include/cef_browser.h"
 #include "include/cef_client.h"
+#include "include/cef_scheme.h"
 
 #ifdef __VISUALC__
 #pragma warning(pop)
@@ -112,11 +112,55 @@ private:
     IMPLEMENT_REFCOUNTING(ClientHandler);
 };
 
+class SchemeHandler : public CefResourceHandler
+{
+public:
+    SchemeHandler(const wxSharedPtr<wxWebViewHandler>& handler) : offset_(0), m_handler(handler) {}
+
+    // CefResourceHandler methods
+    virtual bool ProcessRequest(CefRefPtr<CefRequest> request,
+                                CefRefPtr<CefCallback> callback);
+    virtual void GetResponseHeaders(CefRefPtr<CefResponse> response,
+                                    int64& response_length,
+                                    CefString& redirectUrl);
+    virtual bool ReadResponse(void* data_out,
+                              int bytes_to_read,
+                              int& bytes_read,
+                              CefRefPtr<CefCallback> callback);
+    virtual void Cancel() {}
+
+private:
+    wxSharedPtr<wxWebViewHandler> m_handler;
+    std::string data_;
+    std::string mime_type_;
+    size_t offset_;
+
+    IMPLEMENT_REFCOUNTING(SchemeHandler);
+    IMPLEMENT_LOCKING(SchemeHandler);
+};
+
+class SchemeHandlerFactory : public CefSchemeHandlerFactory
+{
+public:
+    SchemeHandlerFactory(wxSharedPtr<wxWebViewHandler> handler): m_handler(handler) {}
+
+    // Return a new scheme handler instance to handle the request.
+    virtual CefRefPtr<CefResourceHandler> Create(CefRefPtr<CefBrowser> browser,
+                                                 CefRefPtr<CefFrame> frame,
+                                                 const CefString& scheme_name,
+                                                 CefRefPtr<CefRequest> request)
+    {
+      return new SchemeHandler( m_handler );
+    }
+
+    IMPLEMENT_REFCOUNTING(SchemeHandlerFactory);
+private:
+    wxSharedPtr<wxWebViewHandler> m_handler;
+};
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewChromium : public wxWebView
 {
 public:
-
     wxWebViewChromium() {}
 
     wxWebViewChromium(wxWindow* parent,
