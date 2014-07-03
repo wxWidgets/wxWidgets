@@ -103,8 +103,6 @@ protected:
     #define wxDirDialog wxGenericDirDialog
 #elif defined(__WXMAC__)
     #include "wx/osx/dirdlg.h"      // Native Mac
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/dirdlg.h"    // Native Cocoa
 #elif defined(__WXMOTIF__) || \
       defined(__WXX11__)   || \
       defined(__WXCOCOA__)

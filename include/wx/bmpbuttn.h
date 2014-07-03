@@ -25,6 +25,7 @@
 #endif
 
 class WXDLLIMPEXP_FWD_CORE wxBitmapButton;
+
 // ----------------------------------------------------------------------------
 // wxBitmapButton: a button which shows bitmaps instead of the usual string.
 // It has different bitmaps for different states (focused/disabled/pressed)
@@ -68,6 +69,8 @@ public:
     // simply create a close button with the image appropriate for the common
     // platform.
     static wxBitmapButton* NewCloseButton(wxWindow* parent, wxWindowID winid);
+
+
     // set/get the margins around the button
     virtual void SetMargins(int x, int y)
     {
@@ -76,7 +79,6 @@ public:
 
     int GetMarginX() const { return DoGetBitmapMargins().x; }
     int GetMarginY() const { return DoGetBitmapMargins().y; }
-
 
 protected:
 #ifndef wxHAS_BUTTON_BITMAP
@@ -121,8 +123,6 @@ protected:
     #include "wx/gtk1/bmpbuttn.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/bmpbuttn.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/bmpbuttn.h"
 #elif defined(__WXQT__)
     #include "wx/qt/bmpbuttn.h"
 #endif

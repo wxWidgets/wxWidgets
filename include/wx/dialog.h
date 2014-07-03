@@ -82,6 +82,7 @@ public:
 
     template<typename Functor>
     void ShowWindowModalThenDo(const Functor& onEndModal);
+
     // Modal dialogs have a return code - usually the id of the last
     // pressed button
     void SetReturnCode(int returnCode) { m_returnCode = returnCode; }
@@ -244,7 +245,6 @@ protected:
     static bool                         sm_layoutAdaptation;
 
 private:
-
     // helper of GetParentForModalDialog(): returns the passed in window if it
     // can be used as our parent or NULL if it can't
     wxWindow *CheckIfCanBeUsedAsParent(wxWindow *parent) const;
@@ -360,8 +360,6 @@ public:
         #include "wx/gtk1/dialog.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/dialog.h"
-    #elif defined(__WXCOCOA__)
-        #include "wx/cocoa/dialog.h"
     #elif defined(__WXQT__)
         #include "wx/qt/dialog.h"
     #endif
@@ -391,6 +389,7 @@ typedef void (wxEvtHandler::*wxWindowModalDialogEventFunction)(wxWindowModalDial
 
 #define wxWindowModalDialogEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxWindowModalDialogEventFunction, func)
+
 #define EVT_WINDOW_MODAL_DIALOG_CLOSED(winid, func) \
     wx__DECLARE_EVT1(wxEVT_WINDOW_MODAL_DIALOG_CLOSED, winid, wxWindowModalDialogEventHandler(func))
 

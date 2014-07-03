@@ -95,7 +95,6 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 #define wxTE_WORDWRAP       0x0001  // wrap only at words boundaries
 #define wxTE_BESTWRAP       0x0000  // this is the default
 
-
 #if WXWIN_COMPATIBILITY_2_8
     // this style is (or at least should be) on by default now, don't use it
     #define wxTE_AUTO_SCROLL    0
@@ -198,6 +197,7 @@ enum wxTextAttrFlags
 
     wxTEXT_ATTR_AVOID_PAGE_BREAK_BEFORE = 0x20000000,
     wxTEXT_ATTR_AVOID_PAGE_BREAK_AFTER =  0x40000000,
+
     /*!
     * Character and paragraph combined styles
     */
@@ -438,6 +438,7 @@ public:
     // is non-NULL, then it will be used to mask out those attributes that are the same in style
     // and compareWith, for situations where we don't want to explicitly set inherited attributes.
     bool Apply(const wxTextAttr& style, const wxTextAttr* compareWith = NULL);
+
     // merges the attributes of the base and the overlay objects and returns
     // the result; the parameter attributes take precedence
     //
@@ -587,6 +588,8 @@ public:
     // translate the given position (which is just an index in the text control)
     // to client coordinates
     wxPoint PositionToCoords(long pos) const;
+
+
     virtual void ShowPosition(long pos) = 0;
 
     // find the character at position given in pixels
@@ -650,6 +653,7 @@ protected:
     {
         return pos >= 0 && pos <= GetLastPosition();
     }
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlIface);
 };
@@ -729,6 +733,7 @@ public:
 
     // wxTextEntry overrides
     virtual bool SetHint(const wxString& hint) wxOVERRIDE;
+
     // wxWindow overrides
     virtual wxVisualAttributes GetDefaultAttributes() const wxOVERRIDE
     {
@@ -780,8 +785,6 @@ protected:
     #include "wx/gtk1/textctrl.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/textctrl.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/textctrl.h"
 #elif defined(__WXQT__)
     #include "wx/qt/textctrl.h"
 #endif
@@ -898,6 +901,7 @@ private:
 };
 
 #endif // wxHAS_TEXT_WINDOW_STREAM
+
 // old wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_TEXT_UPDATED   wxEVT_TEXT
 #define wxEVT_COMMAND_TEXT_ENTER     wxEVT_TEXT_ENTER

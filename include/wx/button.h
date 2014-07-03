@@ -58,8 +58,6 @@ protected:
     #include "wx/gtk1/button.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/button.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/button.h"
 #elif defined(__WXQT__)
     #include "wx/qt/button.h"
 #endif

@@ -18,6 +18,7 @@
 // For compatibility with 2.8 include this header to allow using wxTE_XXX
 // styles with wxComboBox without explicitly including it in the user code.
 #include "wx/textctrl.h"
+
 extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 
 // ----------------------------------------------------------------------------
@@ -80,8 +81,6 @@ public:
     #include "wx/gtk1/combobox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/combobox.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/combobox.h"
 #elif defined(__WXQT__)
     #include "wx/qt/combobox.h"
 #endif

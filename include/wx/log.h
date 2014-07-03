@@ -1494,11 +1494,6 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
     #define wxLogLastError(api) wxLogNop()
 #endif // wxUSE_LOG_DEBUG/!wxUSE_LOG_DEBUG
 
-// wxCocoa has additiional trace masks
-#if defined(__WXCOCOA__)
-#include "wx/cocoa/log.h"
-#endif
-
 // macro which disables debug logging in release builds: this is done by
 // default by wxIMPLEMENT_APP() so usually it doesn't need to be used explicitly
 #if defined(NDEBUG) && wxUSE_LOG_DEBUG

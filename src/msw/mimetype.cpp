@@ -42,6 +42,13 @@
     #include <shlwapi.h>
 #endif // OS
 
+// Unfortunately the corresponding SDK constants are absent from the headers
+// shipped with some old MinGW versions (e.g. 4.2.1 from Debian) and we can't
+// even test whether they're defined or not, as they're enum elements and not
+// preprocessor constants. So we have to always use our own constants.
+#define wxASSOCF_NOTRUNCATE (static_cast<ASSOCF>(0x20))
+#define wxASSOCSTR_DEFAULTICON (static_cast<ASSOCSTR>(15))
+
 // other standard headers
 #include <ctype.h>
 
@@ -246,7 +253,7 @@ wxString wxAssocQueryString(ASSOCSTR assoc,
 
     HRESULT hr = s_pfnAssocQueryString
                  (
-                    ASSOCF_NOTRUNCATE,  // Fail if buffer is too small.
+                    wxASSOCF_NOTRUNCATE,// Fail if buffer is too small.
                     assoc,              // The association to retrieve.
                     ext.t_str(),        // The extension to retrieve it for.
                     verb.empty() ? NULL
@@ -385,7 +392,7 @@ bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
 
 bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
 {
-    wxString strIcon = wxAssocQueryString(ASSOCSTR_DEFAULTICON, m_ext);
+    wxString strIcon = wxAssocQueryString(wxASSOCSTR_DEFAULTICON, m_ext);
 
     if ( !strIcon.empty() )
     {
