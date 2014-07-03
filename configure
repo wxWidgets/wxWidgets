@@ -37087,7 +37087,7 @@ if test "$wxUSE_MAC" = 1 ; then
         else
             EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
 
-                                                                        if test "$wxUSE_MEDIACTRL" = "yes"; then
+                                                                                                if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_MEDIACTRL" = "yes"; then
 
             if test "$cross_compiling" != "no"; then
                                                                                                 wx_cv_target_x86_64=no

@@ -7498,12 +7498,14 @@ if test "$wxUSE_MAC" = 1 ; then
         else
             EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
 
-            dnl The case of QuickTime framework is special: we only need it in
-            dnl 32 bit builds and not in 64 bit and, moreover, linking with it
-            dnl in 64 bit builds results in a warning because the framework is
-            dnl not available in 64 bits itself. So make an effort to avoid it
-            dnl when building for 64 bits only (i.e. not universal build).
-            if test "$wxUSE_MEDIACTRL" = "yes"; then
+            dnl The case of QuickTime framework is special: with Cocoa, we only
+            dnl need it in 32 bit builds and not in 64 bit and, moreover,
+            dnl linking with it in 64 bit builds results in a warning because
+            dnl the framework is not available in 64 bits itself. So make an
+            dnl effort to avoid using it unnecessarily. Note that with Carbon
+            dnl we also need it for wxSound an as Carbon is itself not
+            dnl available in 64 bits anyhow, there is no reason to avoid it.
+            if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_MEDIACTRL" = "yes"; then
 
             if test "$cross_compiling" != "no"; then
                 dnl The check below doesn't work well when cross-compiling
