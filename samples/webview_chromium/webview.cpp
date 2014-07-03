@@ -682,11 +682,19 @@ void WebFrame::OnMode(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
 {
-    wxFileName helpfile("../help/doc.zip");
-    helpfile.MakeAbsolute();
-    wxString path = helpfile.GetFullPath();
+    // Since webview sample build directory is different from platforms, We traverse
+    // from building directory to retrieve `<wxwidgets-src>/samples/help/` absolute path.
+    wxFileName cur_dir(".");
+    cur_dir.MakeAbsolute();
+    wxString cur_path = cur_dir.GetFullPath();
     //Under MSW we need to flip the slashes
-    path.Replace("\\", "/");
+    cur_path.Replace("\\", "/");
+    int samples_begin_pos = cur_path.find("samples");
+    // Invalid sample directory, just return.
+    if (samples_begin_pos == -1)
+      return;
+
+    wxString path = cur_path.substr(0, samples_begin_pos+7) + "/help/doc.zip";
     path = "wxfs:///" + path + ";protocol=zip/doc.htm";
     m_browser->LoadURL(path);
 }
