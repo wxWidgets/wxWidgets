@@ -149,6 +149,7 @@ wxWindow::~wxWindow()
 
     delete m_qtPicture;
     delete m_qtPaintBuffer;
+    delete m_qtShortcutHandler;
 }
 
 
