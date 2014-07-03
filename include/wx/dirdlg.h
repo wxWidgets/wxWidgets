@@ -104,8 +104,7 @@ protected:
 #elif defined(__WXMAC__)
     #include "wx/osx/dirdlg.h"      // Native Mac
 #elif defined(__WXMOTIF__) || \
-      defined(__WXX11__)   || \
-      defined(__WXCOCOA__)
+      defined(__WXX11__)
     #include "wx/generic/dirdlgg.h"     // Other ports use generic implementation
     #define wxDirDialog wxGenericDirDialog
 #endif

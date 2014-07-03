@@ -29,7 +29,6 @@
          !defined(__WXOSX_CARBON__)   && \
          !defined(__WXOSX_COCOA__)   && \
          !defined(__WXOSX_IPHONE__)   && \
-         !defined(__WXCOCOA__) && \
          !defined(__X__)       && \
          !defined(__WXDFB__)   && \
          !defined(__WXX11__)   && \
@@ -2642,7 +2641,7 @@ enum wxKeyModifier
     wxMOD_SHIFT     = 0x0004,
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
+#if defined(__WXMAC__)
     wxMOD_RAW_CONTROL = 0x0010,
 #else
     wxMOD_RAW_CONTROL = wxMOD_CONTROL,
@@ -2963,7 +2962,7 @@ typedef MenuRef WXHMENU;
 
 #endif
 
-#if defined( __WXCOCOA__ ) || defined(__WXMAC__)
+#if defined(__WXMAC__)
 
 /* Definitions of 32-bit/64-bit types
  * These are typedef'd exactly the same way in newer OS X headers so
@@ -3064,10 +3063,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSView);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLContext);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLPixelFormat);
 DECLARE_WXCOCOA_OBJC_CLASS( NSPrintInfo );
-#ifndef __WXMAC__
-typedef WX_NSView WXWidget; /*  wxWidgets BASE definition */
-#endif
-#endif /*  __WXCOCOA__  || ( __WXMAC__ &__DARWIN__)*/
+#endif /* __WXMAC__ &__DARWIN__ */
 
 #ifdef __WXMAC__
 

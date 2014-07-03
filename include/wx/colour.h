@@ -65,7 +65,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLIMPEXP_CORE)
     not need the wxGDIObject machinery to handle colors, please add it to the
     list of ports which do not need it.
  */
-#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXCOCOA__ )
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
 #define wxCOLOUR_IS_GDIOBJECT 0
 #else
 #define wxCOLOUR_IS_GDIOBJECT 1

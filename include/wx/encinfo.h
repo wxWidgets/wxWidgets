@@ -37,8 +37,7 @@ struct WXDLLIMPEXP_CORE wxNativeEncodingInfo
     wxFontEncoding encoding;    // so that we know what this struct represents
 
 #if defined(__WXMSW__) || \
-    defined(__WXMAC__) || \
-    defined(__WXCOCOA__) // FIXME: __WXCOCOA__
+    defined(__WXMAC__)
 
     wxNativeEncodingInfo()
         : facename()

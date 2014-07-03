@@ -103,7 +103,6 @@ ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 D
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
-DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
@@ -117,7 +116,6 @@ DEFAULT_wxUSE_DFB=0
 dnl these are the values which are really default for the given platform:
 dnl they're used if no --with-<toolkit> options were given to detect the
 dnl toolkit to use by default for the target platform
-DEFAULT_DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
@@ -436,7 +434,6 @@ AC_ARG_WITH(carbon,        [  --with-carbon           same as --with-osx_carbon]
 AC_ARG_WITH(cocoa,         [  --with-cocoa            same as --with-osx_cocoa], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(iphone,        [  --with-iphone           same as --with-osx_iphone], [wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mac,           [  --with-mac              same as --with-osx], [wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1])
-AC_ARG_WITH(old_cocoa,     [  --with-old_cocoa        use old, deprecated, Cocoa port], [wxUSE_OLD_COCOA="$withval" CACHE_OLD_COCOA=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(wine,          [  --with-wine             use Wine], [wxUSE_WINE="$withval" CACHE_WINE=1])
 AC_ARG_WITH(msw,           [  --with-msw              use MS-Windows], [wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1])
@@ -494,7 +491,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
-    NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
+    NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
@@ -2664,21 +2661,6 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK3=
     WXGPE=
 
-    if test "$wxUSE_OLD_COCOA" = 1 ; then
-        if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes"; then
-            AC_MSG_WARN([Printing not supported under wxCocoa yet, disabled])
-            wxUSE_PRINTING_ARCHITECTURE=no
-        fi
-        if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
-            AC_MSG_WARN([Drag and Drop not supported under wxCocoa yet, disabled])
-            wxUSE_DRAG_AND_DROP=no
-        fi
-        if test "$wxUSE_DRAGIMAGE" = "yes"; then
-            AC_MSG_WARN([wxDragImage not supported under wxCocoa yet, disabled])
-            wxUSE_DRAGIMAGE=no
-        fi
-    fi
-
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
         GUIDIST=MSW_DIST
@@ -3302,11 +3284,6 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         TOOLKIT=OSX_IPHONE
     fi
 
-    if test "$wxUSE_OLD_COCOA" = 1; then
-        TOOLKIT=COCOA
-        GUIDIST=COCOA_DIST
-    fi
-
     dnl the name of the directory where the files for this toolkit live
     TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[[A-Z]]' '[[a-z]]'`
 
@@ -3408,7 +3385,7 @@ dnl ---------------------------------------------------------------------------
 dnl X11 session management
 dnl ---------------------------------------------------------------------------
 if test "$wxUSE_DETECT_SM" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1; then
         WX_FIND_LIB(SM, SmcOpenConnection)
         if test "$ac_find_libraries" != "" ; then
             if test "$ac_find_libraries" != "std" ; then
@@ -3437,7 +3414,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
     dnl look in glcanvas.h for the list of platforms supported by wxGlCanvas:
 
-    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
+    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -3694,7 +3671,7 @@ dnl library link name
 dnl These just save us from exporting lib_{unicode,flavour}_suffix.
 dnl If we ever need to do that, we won't need to keep these.
 
-if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
+if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
     WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
     WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
@@ -3702,35 +3679,6 @@ fi
 WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 
 
-
-if test "$wxUSE_OLD_COCOA" = 1; then
-    AC_LANG_SAVE
-    AC_WX_LANG_OBJECTIVEC
-dnl Recent AppKit/NSEvent.h include parts of IOKit which eventually
-dnl gets IOKit/graphics/IOGraphicsTypes.h included which typedefs
-dnl Point but only if MacTypes.h was not included first.  Of course,
-dnl if MacTypes.h is included later then you're screwed when it
-dnl tries to typedef Point.  Defining __Point__ will cause IOGraphicsTypes.h
-dnl to not typedef Point and thus fix the problem.
-    AC_MSG_CHECKING([if AppKit/NSEvent.h conflicts with CoreFoundation])
-    AC_TRY_COMPILE([#include <AppKit/NSEvent.h>
-#include <CoreFoundation/CoreFoundation.h>
-        ],[],
-        [AC_MSG_RESULT([no])],
-        [AC_MSG_RESULT([yes])
-        AC_MSG_CHECKING([if defining __Point__ will fix it])
-        AC_TRY_COMPILE([#define __Point__ 1
-#include <AppKit/NSEvent.h>
-#include <CoreFoundation/CoreFoundation.h>
-            ],[],
-            [AC_MSG_RESULT([yes])
-            AC_DEFINE(__Point__)
-            ],
-            [AC_MSG_FAILURE([no])]
-        )]
-    )
-    AC_LANG_RESTORE
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for typedefs
@@ -6749,15 +6697,8 @@ if test "$wxUSE_TIMEPICKCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-    if test "$wxUSE_OLD_COCOA" = 1 ; then
-        AC_MSG_WARN([Toggle button not yet supported under Mac OS X... disabled])
-        wxUSE_TOGGLEBTN=no
-    fi
-
-    if test "$wxUSE_TOGGLEBTN" = "yes"; then
-        AC_DEFINE(wxUSE_TOGGLEBTN)
-        USES_CONTROLS=1
-    fi
+    AC_DEFINE(wxUSE_TOGGLEBTN)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_TOOLBAR" = "yes"; then
@@ -6813,14 +6754,10 @@ if test "$wxUSE_TREELISTCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    if test "$wxUSE_OLD_COCOA" = 1 ; then
-        AC_MSG_WARN([Popup window not yet supported under Mac OS X... disabled])
-    else
-        AC_DEFINE(wxUSE_POPUPWIN)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
+    AC_DEFINE(wxUSE_POPUPWIN)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
 
-        USES_CONTROLS=1
-    fi
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
@@ -6829,7 +6766,7 @@ if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
+    if test "$wxUSE_MAC" = 1; then
         AC_MSG_WARN([Dialup manager not supported on this platform... disabled])
     else
         AC_DEFINE(wxUSE_DIALUP_MANAGER)
@@ -6914,8 +6851,6 @@ if test "$wxUSE_WEBKIT" = "yes"; then
                            #include <WebKit/WebKit.h>
                         ])
         CPPFLAGS="$old_CPPFLAGS"
-    elif test "$wxUSE_OLD_COCOA" = 1; then
-        AC_DEFINE(wxUSE_WEBKIT)
     else
         wxUSE_WEBKIT=no
     fi
@@ -7537,13 +7472,7 @@ if test "$wxUSE_MAC" = 1 ; then
         fi
     fi
 fi
-if test "$wxUSE_OLD_COCOA" = 1 ; then
-    EXTRA_FRAMEWORKS="-framework IOKit -framework Cocoa"
-    if test "$wxUSE_MEDIACTRL" = "yes"; then
-        EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
-    fi
-fi
-if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1 ; then
+if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1; then
     EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
 fi
 
@@ -7910,7 +7839,7 @@ if test "$wxUSE_MSW" = 1 ; then
     RESCOMP="$WINDRES"
 fi
 
-if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
+if test "$wxUSE_MAC" = 1; then
     dnl base name of the resource file for wxMac must be the same
     dnl as library installation base name (-install_name)
     WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"

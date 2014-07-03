@@ -24,7 +24,6 @@ using @ifdef_ and not @if_.
 
 @beginDefList
 @itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
-@itemdef{__WXCOCOA__, OS X using wxCocoa Port}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
 @itemdef{__WXWINCE__, Windows CE}
 @itemdef{__WXGTK__, GTK+}
@@ -45,8 +44,6 @@ while @c __WINDOWS__ should be used for the platform tests.}
 @itemdef{__WXOSX_CARBON__, Mac OS X using Carbon}
 @itemdef{__WXOSX_COCOA__, Mac OS X using Cocoa (AppKit)}
 @itemdef{__WXOSX_MAC__, Mac OS X (Carbon or Cocoa)}
-@itemdef{__WXOSX_OR_COCOA__, Any Mac OS X port (wxOSX-Carbon, wxOSX-Cocoa or 
-                        wxCocoa)}
 @itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
@@ -66,8 +63,8 @@ which has not been updated very actively since beginning 2008. To summarize:
     @c __WXOSX_MAC__.
 @li If you want to test for wxOSX on the iPhone, use
     @c __WXOSX_IPHONE__.
-@li If you want to test for any GUI Mac port under OS X, use
-    @c __WXOSX_OR_COCOA__.
+@li If you want to test for a particular GUI Mac port under OS X, use
+    @c __WXOSX_CARBON__ or @c __WXOSX_COCOA__.
 @li If you want to test for any port under Mac OS X, including, for
     example, wxGTK and also wxBase, use @c __DARWIN__ (see below).
 

@@ -56,11 +56,6 @@
 //---------------------------------------------------------------------------
 #include <QTKit/QTKit.h>
 
-#if defined( __WXCOCOA__ )
-#include "wx/cocoa/autorelease.h"
-#include "wx/cocoa/string.h"
-#endif
-
 class WXDLLIMPEXP_FWD_MEDIA wxQTMediaBackend;
 
 @interface wxQTMovie : QTMovie {

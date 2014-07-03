@@ -65,7 +65,6 @@ protected:
 
 #if defined(__WXUNIVERSAL__) || \
     defined(__WXMOTIF__)     || \
-    defined(__WXCOCOA__)     || \
     defined(__WXWINCE__)     || \
     defined(__WXGPE__)
 

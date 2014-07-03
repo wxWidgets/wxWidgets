@@ -382,10 +382,6 @@ bool wxPlatform::Is(int platform)
     if (platform == wxOS_UNIX)
         return true;
 #endif
-#ifdef __WXCOCOA__
-    if (platform == wxPORT_MAC)
-        return true;
-#endif
 
     if (sm_customPlatforms && sm_customPlatforms->Index(platform) != wxNOT_FOUND)
         return true;
@@ -1000,8 +996,7 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 // implemented in a port-specific utils source file:
 bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int flags);
 
-#elif defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || \
-      (defined(__WXOSX__) )
+#elif defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXOSX__)
 
 // implemented in a port-specific utils source file:
 bool wxDoLaunchDefaultBrowser(const wxString& url, int flags);

@@ -18,15 +18,11 @@
 
 #if wxUSE_WEBKIT
 
-#ifdef __WXCOCOA__
-#include "wx/cocoa/autorelease.h"
-#else
 #include "wx/osx/private.h"
 
 #include <WebKit/WebKit.h>
 #include <WebKit/HIWebView.h>
 #include <WebKit/CarbonUtils.h>
-#endif
 
 #include "wx/html/webkit.h"
 
@@ -431,24 +427,6 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 */
     // now create and attach WebKit view...
     DontCreatePeer();
-#ifdef __WXCOCOA__
-    wxControl::Create(parent, m_windowID, pos, sizeInstance, style , validator , name);
-    SetSize(pos.x, pos.y, sizeInstance.x, sizeInstance.y);
-
-    wxTopLevelWindowCocoa *topWin = wxDynamicCast(this, wxTopLevelWindowCocoa);
-    NSWindow* nsWin = topWin->GetNSWindow();
-    NSRect rect;
-    rect.origin.x = pos.x;
-    rect.origin.y = pos.y;
-    rect.size.width = sizeInstance.x;
-    rect.size.height = sizeInstance.y;
-    m_webView = (WebView*)[[WebView alloc] initWithFrame:rect frameName:@"webkitFrame" groupName:@"webkitGroup"];
-    SetNSView(m_webView);
-    [m_cocoaNSView release];
-
-    if(m_parent) m_parent->CocoaAddChild(this);
-    SetInitialFrameRect(pos,sizeInstance);
-#else
     DontCreatePeer();
     wxControl::Create(parent, winID, pos, size, style , validator , name);
 #if wxOSX_USE_CARBON
@@ -476,7 +454,6 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 #endif
     [m_webView setHidden:false];
 
-#endif
 
     // Register event listener interfaces
     MyFrameLoadMonitor* myFrameLoadMonitor = [[MyFrameLoadMonitor alloc] initWithWxWindow: this];

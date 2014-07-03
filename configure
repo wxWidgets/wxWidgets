@@ -1082,7 +1082,6 @@ with_carbon
 with_cocoa
 with_iphone
 with_mac
-with_old_cocoa
 with_wine
 with_msw
 with_directfb
@@ -2305,7 +2304,6 @@ Optional Packages:
   --with-cocoa            same as --with-osx_cocoa
   --with-iphone           same as --with-osx_iphone
   --with-mac              same as --with-osx
-  --with-old_cocoa        use old, deprecated, Cocoa port
   --with-wine             use Wine
   --with-msw              use MS-Windows
   --with-directfb         use DirectFB
@@ -3832,7 +3830,6 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
 ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MICROWIN MOTIF MSW X11 DFB"
 
-DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
@@ -3843,7 +3840,6 @@ DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_X11=0
 DEFAULT_wxUSE_DFB=0
 
-DEFAULT_DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
@@ -4503,12 +4499,6 @@ if test "${with_mac+set}" = set; then :
 fi
 
 
-# Check whether --with-old_cocoa was given.
-if test "${with_old_cocoa+set}" = set; then :
-  withval=$with_old_cocoa; wxUSE_OLD_COCOA="$withval" CACHE_OLD_COCOA=1 TOOLKIT_GIVEN=1
-fi
-
-
 # Check whether --with-wine was given.
 if test "${with_wine+set}" = set; then :
   withval=$with_wine; wxUSE_WINE="$withval" CACHE_WINE=1
@@ -4671,7 +4661,7 @@ if test "$wxUSE_GUI" = "yes"; then
       done
     fi
 
-            NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
+            NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
@@ -22939,24 +22929,6 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK3=
     WXGPE=
 
-    if test "$wxUSE_OLD_COCOA" = 1 ; then
-        if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Printing not supported under wxCocoa yet, disabled" >&5
-$as_echo "$as_me: WARNING: Printing not supported under wxCocoa yet, disabled" >&2;}
-            wxUSE_PRINTING_ARCHITECTURE=no
-        fi
-        if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Drag and Drop not supported under wxCocoa yet, disabled" >&5
-$as_echo "$as_me: WARNING: Drag and Drop not supported under wxCocoa yet, disabled" >&2;}
-            wxUSE_DRAG_AND_DROP=no
-        fi
-        if test "$wxUSE_DRAGIMAGE" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxDragImage not supported under wxCocoa yet, disabled" >&5
-$as_echo "$as_me: WARNING: wxDragImage not supported under wxCocoa yet, disabled" >&2;}
-            wxUSE_DRAGIMAGE=no
-        fi
-    fi
-
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
         GUIDIST=MSW_DIST
@@ -26112,11 +26084,6 @@ $as_echo "none" >&6; }
         TOOLKIT=OSX_IPHONE
     fi
 
-    if test "$wxUSE_OLD_COCOA" = 1; then
-        TOOLKIT=COCOA
-        GUIDIST=COCOA_DIST
-    fi
-
         TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[A-Z]' '[a-z]'`
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
@@ -26925,7 +26892,7 @@ done
 fi
 
 if test "$wxUSE_DETECT_SM" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1; then
 
   ac_find_libraries=
 
@@ -27302,7 +27269,7 @@ USE_OPENGL=0
 if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
 
-    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
+    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -28934,7 +28901,7 @@ TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffi
 TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 
-if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
+if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
     WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
     WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
@@ -28942,78 +28909,6 @@ fi
 WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 
 
-
-if test "$wxUSE_OLD_COCOA" = 1; then
-
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-ac_ext=m
-
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking if AppKit/NSEvent.h conflicts with CoreFoundation" >&5
-$as_echo_n "checking if AppKit/NSEvent.h conflicts with CoreFoundation... " >&6; }
-    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <AppKit/NSEvent.h>
-#include <CoreFoundation/CoreFoundation.h>
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking if defining __Point__ will fix it" >&5
-$as_echo_n "checking if defining __Point__ will fix it... " >&6; }
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#define __Point__ 1
-#include <AppKit/NSEvent.h>
-#include <CoreFoundation/CoreFoundation.h>
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-            $as_echo "#define __Point__ 1" >>confdefs.h
-
-
-else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "no
-See \`config.log' for more details" "$LINENO" 5; }
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-fi
 
 
 ac_fn_c_check_type "$LINENO" "mode_t" "ac_cv_type_mode_t" "$ac_includes_default"
@@ -35954,17 +35849,9 @@ if test "$wxUSE_TIMEPICKCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-    if test "$wxUSE_OLD_COCOA" = 1 ; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Toggle button not yet supported under Mac OS X... disabled" >&5
-$as_echo "$as_me: WARNING: Toggle button not yet supported under Mac OS X... disabled" >&2;}
-        wxUSE_TOGGLEBTN=no
-    fi
+    $as_echo "#define wxUSE_TOGGLEBTN 1" >>confdefs.h
 
-    if test "$wxUSE_TOGGLEBTN" = "yes"; then
-        $as_echo "#define wxUSE_TOGGLEBTN 1" >>confdefs.h
-
-        USES_CONTROLS=1
-    fi
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_TOOLBAR" = "yes"; then
@@ -36030,16 +35917,11 @@ if test "$wxUSE_TREELISTCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    if test "$wxUSE_OLD_COCOA" = 1 ; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Popup window not yet supported under Mac OS X... disabled" >&5
-$as_echo "$as_me: WARNING: Popup window not yet supported under Mac OS X... disabled" >&2;}
-    else
-        $as_echo "#define wxUSE_POPUPWIN 1" >>confdefs.h
+    $as_echo "#define wxUSE_POPUPWIN 1" >>confdefs.h
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
 
-        USES_CONTROLS=1
-    fi
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
@@ -36049,7 +35931,7 @@ if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
+    if test "$wxUSE_MAC" = 1; then
         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Dialup manager not supported on this platform... disabled" >&5
 $as_echo "$as_me: WARNING: Dialup manager not supported on this platform... disabled" >&2;}
     else
@@ -36145,9 +36027,6 @@ fi
 
 
         CPPFLAGS="$old_CPPFLAGS"
-    elif test "$wxUSE_OLD_COCOA" = 1; then
-        $as_echo "#define wxUSE_WEBKIT 1" >>confdefs.h
-
     else
         wxUSE_WEBKIT=no
     fi
@@ -37125,13 +37004,7 @@ $as_echo "$wx_cv_target_x86_64" >&6; }
         fi
     fi
 fi
-if test "$wxUSE_OLD_COCOA" = 1 ; then
-    EXTRA_FRAMEWORKS="-framework IOKit -framework Cocoa"
-    if test "$wxUSE_MEDIACTRL" = "yes"; then
-        EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
-    fi
-fi
-if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1 ; then
+if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1; then
     EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
 fi
 
@@ -40076,7 +39949,7 @@ if test "$wxUSE_MSW" = 1 ; then
     RESCOMP="$WINDRES"
 fi
 
-if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
+if test "$wxUSE_MAC" = 1; then
             WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"
     WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
 

@@ -206,8 +206,7 @@ enum wxStockCursor
       defined(__WXMOTIF__) || \
       defined(__WXX11__)   || \
       defined(__WXMAC__)   || \
-      defined(__WXDFB__)   || \
-      defined(__WXCOCOA__)
+      defined(__WXDFB__)
     // Initialize from an included XPM
     #define wxBITMAP(name) wxBitmap(name##_xpm)
 #else // other platforms
