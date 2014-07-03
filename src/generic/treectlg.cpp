@@ -458,6 +458,13 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
 
 void wxTreeTextCtrl::EndEdit(bool discardChanges)
 {
+    if ( m_aboutToFinish )
+    {
+        // We already called Finish which cannot be called
+        // more than once.
+        return;
+    }
+
     m_aboutToFinish = true;
 
     if ( discardChanges )
@@ -555,6 +562,7 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
     if ( !m_aboutToFinish )
     {
+        m_aboutToFinish = true;
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
 

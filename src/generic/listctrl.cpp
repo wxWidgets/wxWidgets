@@ -1420,6 +1420,13 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
 
 void wxListTextCtrlWrapper::EndEdit(EndReason reason)
 {
+    if( m_aboutToFinish )
+    {
+        // We already called Finish which cannot be called
+        // more than once.
+        return;
+    }
+
     m_aboutToFinish = true;
 
     switch ( reason )
@@ -1525,6 +1532,7 @@ void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 {
     if ( !m_aboutToFinish )
     {
+        m_aboutToFinish = true;
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
 
