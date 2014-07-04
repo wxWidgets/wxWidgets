@@ -23,6 +23,8 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/osx/core/cfref.h"
+
 #include "wx/hashmap.h"
 #include "wx/filesys.h"
 
