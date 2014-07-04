@@ -164,7 +164,11 @@ public:
 
     virtual bool TransferTo( wxPrintData &data ) = 0;
     virtual bool TransferFrom( const wxPrintData &data ) = 0;
-
+#if __WXOSX__
+    // in order to expose functionality already to the result type of the ..PrintData->GetNativeData() 
+    virtual void TransferFrom( const wxPageSetupDialogData * ) = 0;
+    virtual void TransferTo( wxPageSetupDialogData * ) = 0;
+#endif
     virtual bool Ok() const { return IsOk(); }
     virtual bool IsOk() const = 0;
 
