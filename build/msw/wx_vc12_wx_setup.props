@@ -3,7 +3,7 @@
   <PropertyGroup Label="UserMacros">
     <wxShortVersionString>30</wxShortVersionString>
     <wxToolkitPrefix>msw</wxToolkitPrefix>
-    <wxCompilerPrefix>vc120</wxCompilerPrefix>
+    <wxCompilerPrefix>vc</wxCompilerPrefix>
     <wxCfg>
     </wxCfg>
     <wxVendor>custom</wxVendor>
