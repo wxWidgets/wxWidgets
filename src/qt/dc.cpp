@@ -34,6 +34,7 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
 {
     m_clippingRegion = new wxRegion;
     m_qtImage = NULL;
+    m_rasterColourOp = wxQtNONE;
 }
 
 wxQtDCImpl::~wxQtDCImpl()
