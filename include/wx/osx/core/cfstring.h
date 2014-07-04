@@ -46,12 +46,10 @@ public:
     wxCFStringRef(const wxString &str,
                         wxFontEncoding encoding = wxFONTENCODING_DEFAULT) ;
 
-#if wxOSX_USE_COCOA_OR_IPHONE
     wxCFStringRef(NSString* ref)
         : wxCFRef< CFStringRef >((CFStringRef) ref)
     {
     }
-#endif
 
     wxCFStringRef(CFStringRef ref)
         : wxCFRef< CFStringRef >(ref)
@@ -71,14 +69,10 @@ public:
 
     static wxString AsString( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
     static wxString AsStringWithNormalizationFormC( CFStringRef ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-#if wxOSX_USE_COCOA_OR_IPHONE
     static wxString AsString( NSString* ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
     static wxString AsStringWithNormalizationFormC( NSString* ref, wxFontEncoding encoding = wxFONTENCODING_DEFAULT ) ;
-#endif
 
-#if wxOSX_USE_COCOA_OR_IPHONE
     NSString* AsNSString() const { return (NSString*)(CFStringRef) *this; }
-#endif
 private:
 } ;
 
