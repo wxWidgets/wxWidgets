@@ -582,6 +582,10 @@ All:
 - Fix silent data loss in wx[F]File::Write(wxString) if conversion fails.
 - Make wxString::FromCDouble() work when the global C++ locale is not the C one.
 
+wxGTK:
+
+- Fix mouse handling in wxNotebook containing wxListCtrl (Charlie Fenton).
+
 wxMSW:
 
 - Fix Cygwin 1.7 build.
