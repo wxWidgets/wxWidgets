@@ -387,7 +387,9 @@ class WXDLLIMPEXP_CORE wxCairoContext : public wxGraphicsContext
 public:
     wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc );
     wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc );
+#if wxUSE_PRINTING_ARCHITECTURE
     wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc );
+#endif
 #ifdef __WXGTK__
     wxCairoContext( wxGraphicsRenderer* renderer, GdkWindow *window );
 #endif
@@ -1640,6 +1642,7 @@ public :
     bool m_offset;
 } ;
 
+#if wxUSE_PRINTING_ARCHITECTURE
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC& dc )
 : wxGraphicsContext(renderer)
 {
@@ -1684,6 +1687,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
     org = dc.GetLogicalOrigin();
     cairo_translate( m_context, -org.x, -org.y );
 }
+#endif
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
 : wxGraphicsContext(renderer)
@@ -2336,7 +2340,9 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc);
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
+#if wxUSE_PRINTING_ARCHITECTURE
     virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
+#endif
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
@@ -2432,11 +2438,13 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxMemoryDC& dc)
     return new wxCairoContext(this,dc);
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     return new wxCairoContext(this, dc);
 }
+#endif
 
 #ifdef __WXMSW__
 #if wxUSE_ENH_METAFILE
