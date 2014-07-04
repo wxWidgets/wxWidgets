@@ -213,10 +213,12 @@ public:
     void CreateStyles();
 
     wxRichTextStyleSheet* GetStyleSheet() const { return m_styleSheet; }
-    wxRichTextPrinting* GetPrinting() const { return m_printing; }
-
     wxRichTextStyleSheet*   m_styleSheet;
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    wxRichTextPrinting* GetPrinting() const { return m_printing; }
     wxRichTextPrinting*     m_printing;
+#endif
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -303,8 +305,10 @@ public:
     void OnURL(wxTextUrlEvent& event);
     void OnStyleSheetReplacing(wxRichTextEvent& event);
 
+#if wxUSE_PRINTING_ARCHITECTURE
     void OnPrint(wxCommandEvent& event);
     void OnPreview(wxCommandEvent& event);
+#endif
     void OnPageSetup(wxCommandEvent& event);
 
     void OnInsertImage(wxCommandEvent& event);
@@ -479,8 +483,10 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_SWITCH_STYLE_SHEETS, MyFrame::OnSwitchStyleSheets)
     EVT_MENU(ID_MANAGE_STYLES, MyFrame::OnManageStyles)
 
+#if wxUSE_PRINTING_ARCHITECTURE
     EVT_MENU(ID_PRINT, MyFrame::OnPrint)
     EVT_MENU(ID_PREVIEW, MyFrame::OnPreview)
+#endif
     EVT_MENU(ID_PAGE_SETUP, MyFrame::OnPageSetup)
 
     EVT_TEXT_URL(wxID_ANY, MyFrame::OnURL)
@@ -516,10 +522,12 @@ bool MyApp::OnInit()
 #endif
 
     m_styleSheet = new wxRichTextStyleSheet;
+#if wxUSE_PRINTING_ARCHITECTURE
     m_printing = new wxRichTextPrinting(wxT("Test Document"));
 
     m_printing->SetFooterText(wxT("@TITLE@"), wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_CENTRE);
     m_printing->SetFooterText(wxT("Page @PAGENUM@"), wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_RIGHT);
+#endif
 
     CreateStyles();
 
@@ -570,7 +578,9 @@ bool MyApp::OnInit()
     size.Scale(0.75, 0.75);
     MyFrame *frame = new MyFrame(wxT("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, size);
 
+#if wxUSE_PRINTING_ARCHITECTURE
     m_printing->SetParentWindow(frame);
+#endif
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -584,7 +594,9 @@ bool MyApp::OnInit()
 
 int MyApp::OnExit()
 {
+#if wxUSE_PRINTING_ARCHITECTURE
     delete m_printing;
+#endif
     delete m_styleSheet;
 
     return 0;
@@ -769,8 +781,10 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     fileMenu->Append(ID_RELOAD, wxT("&Reload Text\tF2"), wxT("Reload the initial text"));
     fileMenu->AppendSeparator();
     fileMenu->Append(ID_PAGE_SETUP, wxT("Page Set&up..."), wxT("Page setup"));
+#if wxUSE_PRINTING_ARCHITECTURE
     fileMenu->Append(ID_PRINT, wxT("&Print...\tCtrl+P"), wxT("Print"));
     fileMenu->Append(ID_PREVIEW, wxT("Print Pre&view"), wxT("Print preview"));
+#endif
     fileMenu->AppendSeparator();
     fileMenu->Append(ID_VIEW_HTML, wxT("&View as HTML"), wxT("View HTML"));
     fileMenu->AppendSeparator();
@@ -2082,6 +2096,7 @@ void MyFrame::OnStyleSheetReplacing(wxRichTextEvent& event)
     event.Veto();
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
 void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().GetPrinting()->PrintBuffer(m_richTextCtrl->GetBuffer());
@@ -2091,6 +2106,7 @@ void MyFrame::OnPreview(wxCommandEvent& WXUNUSED(event))
 {
     wxGetApp().GetPrinting()->PreviewBuffer(m_richTextCtrl->GetBuffer());
 }
+#endif
 
 void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
