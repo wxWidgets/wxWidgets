@@ -19,7 +19,7 @@
 
     <steps>
         <checkout/>
-        <configure options="CXXFLAGS=&quot;-Qunused-arguments&quot; CFLAGS=&quot;-Qunused-arguments&quot;"/>
+        <configure options="CXXFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot; CFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot;"/>
         <compile-all/>
         <run-tests/>
     </steps>
