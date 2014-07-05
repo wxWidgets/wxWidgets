@@ -13,8 +13,8 @@
 
 <xi:include href="include/csleobuild.xml"/>
 
-<xsl:variable name="CLANGOPTIONS" select="'&quot;-Qunused-arguments -Wno-parentheses-equality&quot;'"/>
-<xsl:variable name="CLANGOPTIONS32" select="'&quot;-Qunused-arguments -Wno-parentheses-equality -arch i386&quot;'"/>
+    <xsl:variable name="CLANGOPTIONS" select="'&quot;-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations&quot;'"/>
+    <xsl:variable name="CLANGOPTIONS32" select="'&quot;-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wnounused-function -Wno-deprecated-declarations -arch i386&quot;'"/>
 <xsl:variable name="SDK106" select="'--with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk'"/>
     
 <build>
@@ -37,7 +37,7 @@
 
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32}"/>
+        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32} LDFLAGS=&quot;-arch i386&quot;"/>
         <compile-all/>
         <run-tests/>
     </steps>
@@ -50,7 +50,7 @@
 
     <steps>
     <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32}"/>
+        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32} LDFLAGS=&quot;-arch i386&quot;"/>
     <compile-all/>
     <run-tests/>
     </steps>
