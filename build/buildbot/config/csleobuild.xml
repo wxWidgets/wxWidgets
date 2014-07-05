@@ -8,10 +8,13 @@
     Licence:
 -->
 
-<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+<bot xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
 
 <xi:include href="include/csleobuild.xml"/>
 
+<xsl:variable name="CLANGOPTIONS" select="'&quot;-Qunused-arguments -Wno-parentheses-equality&quot;'"/>
+    
 <build>
     <name>OSX 10.9 Intel wxOSX Cocoa trunk</name>
     <builddir>csleo_cocoa</builddir>
@@ -19,7 +22,7 @@
 
     <steps>
         <checkout/>
-        <configure options="CXXFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot; CFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot; OBJCXXFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot;"/>
+        <configure options="CXXFLAGS={$CLANGOPTIONS} CFLAGS={$CLANGOPTIONS} OBJCXXFLAGS={$CLANGOPTIONS}"/>
         <compile-all/>
         <run-tests/>
     </steps>
