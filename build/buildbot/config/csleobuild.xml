@@ -19,12 +19,14 @@
 
     <steps>
         <checkout/>
-        <configure options="CXXFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot; CFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot;"/>
+        <configure options="CXXFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot; CFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot; OBJCXXFLAGS=&quot;-Qunused-arguments -Wno-parentheses-equality&quot;"/>
         <compile-all/>
         <run-tests/>
     </steps>
 </build>
-
+    
+    <disable>
+        
 <build>
     <name>OSX 10.5 Intel wxOSX Cocoa Stable</name>
     <builddir>csleo_stable_cocoa</builddir>
@@ -50,5 +52,6 @@
     <run-tests/>
     </steps>
 </build>
-
+        </disable>
+            
 </bot>
