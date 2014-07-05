@@ -13,26 +13,13 @@
 <xi:include href="include/csleobuild.xml"/>
 
 <build>
-    <name>OSX 10.5 Intel wxOSX Cocoa trunk</name>
+    <name>OSX 10.9 Intel wxOSX Cocoa trunk</name>
     <builddir>csleo_cocoa</builddir>
     <scheduler>trunk_quick</scheduler>
 
     <steps>
         <checkout/>
         <configure/>
-        <compile-all/>
-        <run-tests/>
-    </steps>
-</build>
-
-<build>
-    <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
-    <builddir>csleo_carbon</builddir>
-    <scheduler>trunk_quick</scheduler>
-
-    <steps>
-        <checkout/>
-        <configure options="--with-osx_carbon"/>
         <compile-all/>
         <run-tests/>
     </steps>
