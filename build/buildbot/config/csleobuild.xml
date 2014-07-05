@@ -14,7 +14,7 @@
 <xi:include href="include/csleobuild.xml"/>
 
     <xsl:variable name="CLANGOPTIONS" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations'"/>
-    <xsl:variable name="CLANGOPTIONS32" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wnounused-function -Wno-deprecated-declarations -arch i386'"/>
+    <xsl:variable name="CLANGOPTIONS32" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations -arch i386'"/>
 <xsl:variable name="SDK106" select="'--with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk'"/>
     
 <build>
