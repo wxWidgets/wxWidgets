@@ -19,7 +19,7 @@
 
     <steps>
         <checkout/>
-        <configure/>
+        <configure options="CXXFLAGS=&quot;-Qunused-arguments&quot; CFLAGS=&quot;-Qunused-arguments&quot;"/>
         <compile-all/>
         <run-tests/>
     </steps>
