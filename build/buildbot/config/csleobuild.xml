@@ -13,8 +13,8 @@
 
 <xi:include href="include/csleobuild.xml"/>
 
-    <xsl:variable name="CLANGOPTIONS" select="'&quot;-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations&quot;'"/>
-    <xsl:variable name="CLANGOPTIONS32" select="'&quot;-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wnounused-function -Wno-deprecated-declarations -arch i386&quot;'"/>
+    <xsl:variable name="CLANGOPTIONS" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations'"/>
+    <xsl:variable name="CLANGOPTIONS32" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wnounused-function -Wno-deprecated-declarations -arch i386'"/>
 <xsl:variable name="SDK106" select="'--with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk'"/>
     
 <build>
@@ -24,7 +24,7 @@
 
     <steps>
         <checkout/>
-        <configure options="CXXFLAGS={$CLANGOPTIONS} CFLAGS={$CLANGOPTIONS} OBJCXXFLAGS={$CLANGOPTIONS}"/>
+        <configure options="CXXFLAGS='{$CLANGOPTIONS}' CFLAGS='{$CLANGOPTIONS}' OBJCXXFLAGS='{$CLANGOPTIONS}'"/>
         <compile-all/>
         <run-tests/>
     </steps>
@@ -37,7 +37,7 @@
 
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32} LDFLAGS='-arch i386'"/>
+        <configure options="CXXFLAGS='{$CLANGOPTIONS32}' CFLAGS='{$CLANGOPTIONS32}' OBJCXXFLAGS='{$CLANGOPTIONS32}' LDFLAGS='-arch i386'"/>
         <compile-all/>
         <run-tests/>
     </steps>
@@ -50,7 +50,7 @@
 
     <steps>
     <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32} LDFLAGS='-arch i386'"/>
+        <configure options="CXXFLAGS='{$CLANGOPTIONS32}' CFLAGS='{$CLANGOPTIONS32}' OBJCXXFLAGS='{$CLANGOPTIONS32}' LDFLAGS='-arch i386'"/>
     <compile-all/>
     <run-tests/>
     </steps>
