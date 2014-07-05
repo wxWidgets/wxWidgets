@@ -104,10 +104,12 @@ bool wxTextCtrl::Create(wxWindow *parent,
     if (!multiline)
     {
         m_qtLineEdit = new wxQtLineEdit( parent, this );
+        m_qtTextEdit = NULL;
     }
     else
     {
         m_qtTextEdit = new wxQtTextEdit( parent, this );
+        m_qtLineEdit = NULL;
     }
     if ( QtCreateControl( parent, id, pos, size, style, validator, name ) )
     {
@@ -315,7 +317,7 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
 
 QWidget *wxTextCtrl::GetHandle() const
 {
-    if (!m_qtLineEdit.isNull())
+    if (m_qtLineEdit!=NULL)
         return (QWidget *) m_qtLineEdit;
     else
         return (QWidget *) m_qtTextEdit;

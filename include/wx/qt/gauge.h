@@ -8,7 +8,6 @@
 #ifndef _WX_QT_GAUGE_H_
 #define _WX_QT_GAUGE_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QProgressBar>
 
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
@@ -44,7 +43,7 @@ public:
     virtual int GetValue() const;
 
 private:
-    wxQtPointer< QProgressBar > m_qtProgressBar;
+    QProgressBar *m_qtProgressBar;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge);
 };

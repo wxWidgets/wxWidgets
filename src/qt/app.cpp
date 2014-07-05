@@ -23,7 +23,7 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-    delete m_qtApplication;
+    m_qtApplication->deleteLater();
 
     delete [] m_qtArgv;
 }

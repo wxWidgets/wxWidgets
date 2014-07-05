@@ -121,6 +121,8 @@ void wxWindow::Init()
 
     m_qtShortcutHandler = new wxQtShortcutHandler( this );
     m_processingShortcut = false;
+    m_qtWindow = NULL;
+    m_qtContainer = NULL;
 }
 
 wxWindow::wxWindow()
@@ -150,6 +152,12 @@ wxWindow::~wxWindow()
     delete m_qtPicture;
     delete m_qtPaintBuffer;
     delete m_qtShortcutHandler;
+    // delete QWidget when control return to event loop (safer)
+    if (GetHandle())
+    {
+        // commented by now as it is protected
+        //GetHandle()->deleteLater();
+    }
 }
 
 

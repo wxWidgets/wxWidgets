@@ -38,7 +38,7 @@ public:
     virtual QDialog *GetHandle() const;
 
 private:
-    wxQtPointer< QDialog > m_qtDialog;
+    QDialog *m_qtDialog;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxDialog );
 };

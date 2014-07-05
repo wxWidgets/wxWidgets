@@ -8,7 +8,6 @@
 #ifndef _WX_QT_SPINCTRL_H_
 #define _WX_QT_SPINCTRL_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QDoubleSpinBox>
 
@@ -49,7 +48,7 @@ public:
     virtual Widget *GetHandle() const;
 
 protected:
-    wxQtPointer< Widget > m_qtSpinBox;
+    Widget *m_qtSpinBox;
 
 };
 

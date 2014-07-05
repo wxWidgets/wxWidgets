@@ -8,7 +8,6 @@
 #ifndef _WX_QT_RADIOBOX_H_
 #define _WX_QT_RADIOBOX_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QVBoxLayout>
@@ -81,13 +80,13 @@ public:
 
 private:
     // The 'visual' group box:
-    wxQtPointer< QGroupBox > m_qtGroupBox;
+    QGroupBox *m_qtGroupBox;
 
     // Handles the mutual exclusion of buttons:
-    wxQtPointer< QButtonGroup > m_qtButtonGroup;
+    QButtonGroup *m_qtButtonGroup;
 
     // Autofit layout for buttons (either vert. or horiz.):
-    wxQtPointer< QBoxLayout > m_qtBoxLayout;
+    QBoxLayout *m_qtBoxLayout;
 
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };

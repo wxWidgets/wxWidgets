@@ -8,7 +8,6 @@
 #ifndef _WX_QT_SLIDER_H_
 #define _WX_QT_SLIDER_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QSlider>
 
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
@@ -54,7 +53,7 @@ public:
     virtual QSlider *GetHandle() const;
 
 private:
-    wxQtPointer< QSlider > m_qtSlider;
+    QSlider *m_qtSlider;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSlider );
 };

@@ -8,7 +8,6 @@
 #ifndef _WX_QT_LISTBOX_H_
 #define _WX_QT_LISTBOX_H_
 
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QListWidget>
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
@@ -83,7 +82,7 @@ protected:
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
 
-    wxQtPointer< QListWidget > m_qtListWidget;
+    QListWidget *m_qtListWidget;
 
 private:
     virtual void Init(); //common construction

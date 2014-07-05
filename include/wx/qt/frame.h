@@ -12,7 +12,6 @@
 #define _WX_QT_FRAME_H_
 
 #include "wx/frame.h"
-#include "wx/qt/pointer.h"
 #include <QtWidgets/QMainWindow>
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
@@ -26,6 +25,8 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxDEFAULT_FRAME_STYLE,
                const wxString& name = wxFrameNameStr);
+
+    virtual ~wxFrame();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -46,7 +47,7 @@ public:
     virtual QMainWindow *GetHandle() const;
 
 private:
-    wxQtPointer< QMainWindow > m_qtMainWindow;
+    QMainWindow *m_qtMainWindow;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxFrame );
 };

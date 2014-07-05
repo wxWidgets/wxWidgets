@@ -8,7 +8,6 @@
 #ifndef _WX_QT_EVTLOOP_H_
 #define _WX_QT_EVTLOOP_H_
 
-#include "wx/qt/pointer.h"
 #include <QtCore/QTimer>
 
 class WXDLLIMPEXP_BASE wxQtEventLoopBase : public wxEventLoopBase
@@ -30,7 +29,7 @@ public:
 protected:
 
 private:
-    wxQtPointer< QTimer > m_qtIdleTimer;
+    QTimer *m_qtIdleTimer;
     
     wxDECLARE_NO_COPY_CLASS(wxQtEventLoopBase);
 };
