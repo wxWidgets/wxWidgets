@@ -67,6 +67,11 @@ wxListBox::wxListBox(wxWindow *parent, wxWindowID id,
     Create( parent, id, pos, size, choices, style, validator, name );
 }
 
+wxListBox::~wxListBox()
+{
+    Clear();
+}
+
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
             const wxSize& size,

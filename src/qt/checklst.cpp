@@ -37,6 +37,10 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
     Create( parent, id, pos, size, choices, style, validator, name );
 }
 
+wxCheckListBox::~wxCheckListBox()
+{
+    Clear();
+}
 
 bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
               const wxPoint& pos,
