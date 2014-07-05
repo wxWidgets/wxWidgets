@@ -37,7 +37,7 @@
 
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="{$SDK106} CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32}"/>
+        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32}"/>
         <compile-all/>
         <run-tests/>
     </steps>
@@ -50,7 +50,7 @@
 
     <steps>
     <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="{$SDK106} CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32}"/>
+        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32}"/>
     <compile-all/>
     <run-tests/>
     </steps>
