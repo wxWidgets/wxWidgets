@@ -14,6 +14,8 @@
 <xi:include href="include/csleobuild.xml"/>
 
 <xsl:variable name="CLANGOPTIONS" select="'&quot;-Qunused-arguments -Wno-parentheses-equality&quot;'"/>
+<xsl:variable name="CLANGOPTIONS32" select="'&quot;-Qunused-arguments -Wno-parentheses-equality -arch i386&quot;'"/>
+<xsl:variable name="SDK106" select="'--with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk'"/>
     
 <build>
     <name>OSX 10.9 Intel wxOSX Cocoa trunk</name>
@@ -28,33 +30,30 @@
     </steps>
 </build>
     
-    <disable>
-        
 <build>
-    <name>OSX 10.5 Intel wxOSX Cocoa Stable</name>
+    <name>OSX 10.6 Intel wxOSX Cocoa Stable</name>
     <builddir>csleo_stable_cocoa</builddir>
     <scheduler>stable_quick</scheduler>
 
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
-        <configure/>
+        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32} {$SDK106}"/>
         <compile-all/>
         <run-tests/>
     </steps>
 </build>
 
 <build>
-    <name>OSX 10.5 Intel wxOSX Carbon Stable</name>
+    <name>OSX 10.6 Intel wxOSX Carbon Stable</name>
     <builddir>csleo_stable_carbon</builddir>
     <scheduler>stable_quick</scheduler>
 
     <steps>
     <checkout branch="{$STABLE_BRANCH}"/>
-    <configure options="--with-osx_carbon"/>
+        <configure options="CXXFLAGS={$CLANGOPTIONS32} CFLAGS={$CLANGOPTIONS32} OBJCXXFLAGS={$CLANGOPTIONS32} {$SDK106} --with-osx_carbon"/>
     <compile-all/>
     <run-tests/>
     </steps>
 </build>
-        </disable>
             
 </bot>
