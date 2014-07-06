@@ -5,7 +5,11 @@ Embedded Framework(CEF3).
 
 ## Requirements
 
-* [Chromium Embedded Framework][1]: 3.1650.1562.
+[Chromium Embedded Framework][1]: 3.1750.1738
+
+* Windows: 3.1750.1738 or 3.1650.1562
+* Linux: 3.1750.1738 or 3.1650.1562
+* Mac OS X: 3.1750.1738
 
 On Windows platform, you will need to change the vistual stdio building
 properties of `libcef_dll_wrapper` to consistent with wxWidgets, see following steps:
@@ -35,7 +39,7 @@ By default, wxWidgets provides Visual Stdio 2010 project file to build wxWebView
 
 4. Open `samples/webview_chromium/webview_chromium_vc10.vcxproj` file in Visual Stdio 2010, and build it.
 
-5. Copy CEF3 related resources(libcef.dll, libffmpegsumo.so, locales/*, cef.apk, devtools_resources.pak) to webview_chromium binary directory.
+5. Copy CEF3 related resources(libcef.dll, libffmpegsumo.so, locales/\*, cef.apk, devtools_resources.pak) to webview_chromium binary directory.
 
 
 ###Linux Platform
@@ -52,7 +56,7 @@ By default, wxWidgets provides Visual Stdio 2010 project file to build wxWebView
 otherwise webview_chromium will not find `libcef.so`.
 
 
-##Mac OS X Platform
+###Mac OS X Platform
 
 wxWidgets provides xcode building files to build wxWebViewChromium, supports OS X 10.8 or above.
 
