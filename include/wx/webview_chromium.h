@@ -115,7 +115,7 @@ private:
 class SchemeHandler : public CefResourceHandler
 {
 public:
-    SchemeHandler(const wxSharedPtr<wxWebViewHandler>& handler) : offset_(0), m_handler(handler) {}
+    SchemeHandler(const wxSharedPtr<wxWebViewHandler>& handler) : m_handler(handler), m_offset(0) {}
 
     // CefResourceHandler methods
     virtual bool ProcessRequest(CefRefPtr<CefRequest> request,
@@ -131,9 +131,9 @@ public:
 
 private:
     wxSharedPtr<wxWebViewHandler> m_handler;
-    std::string data_;
-    std::string mime_type_;
-    size_t offset_;
+    std::string m_data;
+    std::string m_mime_type;
+    size_t m_offset;
 
     IMPLEMENT_REFCOUNTING(SchemeHandler);
     IMPLEMENT_LOCKING(SchemeHandler);
@@ -150,7 +150,7 @@ public:
                                                  const CefString& scheme_name,
                                                  CefRefPtr<CefRequest> request)
     {
-      return new SchemeHandler( m_handler );
+        return new SchemeHandler( m_handler );
     }
 
     IMPLEMENT_REFCOUNTING(SchemeHandlerFactory);

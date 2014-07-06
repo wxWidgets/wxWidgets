@@ -741,12 +741,12 @@ bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,
 
     if ( file )
     {
-        mime_type_ = (file->GetMimeType()).ToStdString();
+        m_mime_type = (file->GetMimeType()).ToStdString();
 
         size_t size = file->GetStream()->GetLength();
         char* buf = new char[size];
         file->GetStream()->Read( buf, size );
-        data_ = std::string( buf, buf+size );
+        m_data = std::string( buf, buf+size );
 
         delete[] buf;
         handled = true;
@@ -765,11 +765,11 @@ void SchemeHandler::GetResponseHeaders(CefRefPtr<CefResponse> response,
                                        int64& response_length,
                                        CefString& redirectUrl)
 {
-    response->SetMimeType( mime_type_ );
+    response->SetMimeType( m_mime_type );
     response->SetStatus( 200 );
 
     // Set the resulting response length
-    response_length = data_.length();
+    response_length = m_data.length();
 }
 
 bool SchemeHandler::ReadResponse(void* data_out,
@@ -782,13 +782,13 @@ bool SchemeHandler::ReadResponse(void* data_out,
 
     AutoLock lock_scope( this );
 
-    if ( offset_ < data_.length() )
+    if ( m_offset < m_data.length() )
     {
         // Copy the next block of data into the buffer.
         int transfer_size =
-            std::min( bytes_to_read, static_cast<int>( data_.length() - offset_ ) );
-        memcpy( data_out, data_.c_str() + offset_, transfer_size );
-        offset_ += transfer_size;
+            std::min( bytes_to_read, static_cast<int>( m_data.length() - m_offset ) );
+        memcpy( data_out, m_data.c_str() + m_offset, transfer_size );
+        m_offset += transfer_size;
 
         bytes_read = transfer_size;
         has_data = true;
