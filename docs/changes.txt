@@ -59,6 +59,7 @@ All (GUI):
 - Fix handling of rectangular selections in wxStyledTextCtrl (roberto).
 - Fix characters outside of the BMP in wxStyledTextCtrl (Thomas Goyne).
 - Allow access to the currently shown wxInfoBar buttons (Hanmac).
+- Add wxGenericListCtrl::EndEditLabel() (Tim Kosse).
 
 wxGTK:
 
