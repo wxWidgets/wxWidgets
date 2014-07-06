@@ -18,6 +18,7 @@
 #endif
 
 #include "wx/taskbarbutton.h"
+#include "wx/stdpaths.h"
 
 enum
 {
@@ -133,6 +134,16 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+    wxJumpList jump;
+    wxJumpListItems tasks;
+    wxJumpListItem item(wxT("Task 1"),
+                        wxStandardPaths::Get().GetExecutablePath(),
+                        wxEmptyString,
+                        wxT("Test Task"),
+                        wxStandardPaths::Get().GetExecutablePath(),
+                        0);
+    tasks.push_back(item);
+    jump.SetTasks(tasks);
 
     MyFrame *frame = new MyFrame("wxTaskBarButton App");
     frame->Show(true);

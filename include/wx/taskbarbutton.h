@@ -20,6 +20,12 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
+struct WXDLLIMPEXP_FWD_CORE IObjectArray;
+
+namespace {
+class WXDLLIMPEXP_FWD_CORE ICustomDestinationList;
+}
+
 
 /**
     State of the task bar button.
@@ -124,6 +130,56 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
 };
 
+class WXDLLIMPEXP_CORE wxJumpListItem
+{
+public:
+    wxJumpListItem(const wxString& title = wxEmptyString,
+                   const wxString& filePath = wxEmptyString,
+                   const wxString& arguments = wxEmptyString,
+                   const wxString& tooltip = wxEmptyString,
+                   const wxString& iconPath = wxEmptyString,
+                   int iconIndex = 0);
+
+    const wxString& GetTitle() const;
+    void SetTitle(const wxString& title);
+    const wxString& GetFilePath() const;
+    void SetFilePath(const wxString& filePath);
+    const wxString& GetArguments() const;
+    void SetArguments(const wxString& arguments);
+    const wxString& GetTooltip() const;
+    void SetTooltip(const wxString& tooltip);
+    const wxString& GetIconPath() const;
+    void SetIconPath(const wxString& iconPath);
+    int GetIconIndex() const;
+    void SetIconIndex(int iconIndex);
+
+private:
+    wxString m_title;
+    wxString m_filePath;
+    wxString m_arguments;
+    wxString m_tooltip;
+    wxString m_iconPath;
+    int      m_iconIndex;
+};
+
+typedef wxVector<wxJumpListItem> wxJumpListItems;
+
+class WXDLLIMPEXP_CORE wxJumpList
+{
+public:
+    wxJumpList();
+    virtual ~wxJumpList();
+    void SetTasks(const wxJumpListItems& tasks);
+
+private:
+    bool BeginUpdate();
+    bool CommitUpdate();
+    void AddTasksToDestinationList();
+
+    ICustomDestinationList *m_destinationList;
+    IObjectArray *m_objectArray;
+    wxJumpListItems m_tasks;
+};
 
 #if defined(__WXMSW__)
     #include "wx/msw/taskbarbutton.h"

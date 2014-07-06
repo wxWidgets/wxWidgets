@@ -20,11 +20,13 @@
 
 #if wxUSE_TASKBARBUTTON
 
-#include "wx/msw/wrapshl.h"
 #include "wx/msw/private.h"
 #include "wx/taskbarbutton.h"
 
-#include <Shobjidl.h>
+#include <Propvarutil.h>
+#include <propsys.h>
+#include <propkey.h>
+#include <Objectarray.h>
 #include <initguid.h>
 
 namespace {
@@ -34,6 +36,168 @@ static const int MAX_BUTTON_COUNT = 7;
 
 DEFINE_GUID(wxCLSID_TaskbarList,
     0x56fdf344, 0xfd6d, 0x11d0, 0x95, 0x8a, 0x0, 0x60, 0x97, 0xc9, 0xa0, 0x90);
+DEFINE_GUID(wxCLSID_DestinationList,
+    0x77f10cf0, 0x3db5, 0x4966, 0xb5, 0x20, 0xb7, 0xc5, 0x4f, 0xd3,0x5e, 0xd6);
+DEFINE_GUID(wxCLSID_EnumerableObjectCollection,
+    0x2d3468c1, 0x36a7, 0x43b6, 0xac, 0x24, 0xd3, 0xf0, 0x2f, 0xd9, 0x60, 0x7a);
+DEFINE_GUID(wxCLSID_ShellLink,
+    0x00021401, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+DEFINE_GUID(wxIID_ICustomDestinationList,
+    0x6332debf, 0x87b5, 0x4670, 0x90, 0xc0, 0x5e, 0x57, 0xb4, 0x08, 0xa4, 0x9e);
+DEFINE_GUID(wxIID_ITaskbarList3,
+    0xea1afb91, 0x9e28, 0x4b86, 0x90, 0xe9, 0x9e, 0x9f, 0x8a, 0x5e, 0xef, 0xaf);
+
+typedef IUnknown *HIMAGELIST;
+
+typedef enum THUMBBUTTONFLAGS
+{
+    THBF_ENABLED    = 0,
+    THBF_DISABLED   = 0x1,
+    THBF_DISMISSONCLICK = 0x2,
+    THBF_NOBACKGROUND   = 0x4,
+    THBF_HIDDEN = 0x8,
+    THBF_NONINTERACTIVE = 0x10
+} THUMBBUTTONFLAGS;
+
+typedef enum THUMBBUTTONMASK
+{
+    THB_BITMAP  = 0x1,
+    THB_ICON    = 0x2,
+    THB_TOOLTIP = 0x4,
+    THB_FLAGS   = 0x8
+} THUMBBUTTONMASK;
+
+typedef struct THUMBBUTTON
+{
+    THUMBBUTTONMASK dwMask;
+    UINT iId;
+    UINT iBitmap;
+    HICON hIcon;
+    WCHAR szTip[260];
+    THUMBBUTTONFLAGS dwFlags;
+} THUMBBUTTON;
+
+typedef struct THUMBBUTTON *LPTHUMBBUTTON;
+
+typedef enum TBPFLAG
+{
+    TBPF_NOPROGRESS = 0,
+    TBPF_INDETERMINATE  = 0x1,
+    TBPF_NORMAL = 0x2,
+    TBPF_ERROR  = 0x4,
+    TBPF_PAUSED = 0x8
+} TBPFLAG;
+
+class ITaskbarList : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL HrInit( ) = 0;
+    virtual HRESULT wxSTDCALL AddTab(HWND) = 0;
+    virtual HRESULT wxSTDCALL DeleteTab(HWND) = 0;
+    virtual HRESULT wxSTDCALL ActivateTab(HWND) = 0;
+    virtual HRESULT wxSTDCALL SetActiveAlt(HWND) = 0;
+};
+
+class ITaskbarList2 : public ITaskbarList
+{
+public:
+    virtual HRESULT wxSTDCALL MarkFullscreenWindow(HWND, BOOL) = 0;
+};
+
+class ITaskbarList3 : public ITaskbarList2
+{
+public:
+    virtual HRESULT wxSTDCALL SetProgressValue(HWND, ULONGLONG, ULONGLONG) = 0;
+    virtual HRESULT wxSTDCALL SetProgressState(HWND, TBPFLAG) = 0;
+    virtual HRESULT wxSTDCALL RegisterTab(HWND, HWND) = 0;
+    virtual HRESULT wxSTDCALL UnregisterTab(HWND) = 0;
+    virtual HRESULT wxSTDCALL SetTabOrder(HWND, HWND) = 0;
+    virtual HRESULT wxSTDCALL SetTabActive(HWND, HWND, DWORD) = 0;
+    virtual HRESULT wxSTDCALL ThumbBarAddButtons(HWND, UINT, LPTHUMBBUTTON) = 0;
+    virtual
+        HRESULT wxSTDCALL ThumbBarUpdateButtons(HWND, UINT, LPTHUMBBUTTON) = 0;
+    virtual HRESULT wxSTDCALL ThumbBarSetImageList(HWND, HIMAGELIST) = 0;
+    virtual HRESULT wxSTDCALL SetOverlayIcon(HWND, HICON, LPCWSTR) = 0;
+    virtual HRESULT wxSTDCALL SetThumbnailTooltip(HWND, LPCWSTR pszTip) = 0;
+    virtual HRESULT wxSTDCALL SetThumbnailClip(HWND, RECT *) = 0;
+};
+
+
+class IShellLinkA : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL GetPath(LPSTR, int, WIN32_FIND_DATAA*, DWORD) = 0;
+    virtual HRESULT wxSTDCALL GetIDList(PIDLIST_ABSOLUTE*) = 0;
+    virtual HRESULT wxSTDCALL SetIDList(PCIDLIST_ABSOLUTE) = 0;
+    virtual HRESULT wxSTDCALL GetDescription(LPSTR, int) = 0;
+    virtual HRESULT wxSTDCALL SetDescription(LPCSTR) = 0;
+    virtual HRESULT wxSTDCALL GetWorkingDirectory(LPSTR, int) = 0;
+    virtual HRESULT wxSTDCALL SetWorkingDirectory(LPCSTR) = 0;
+    virtual HRESULT wxSTDCALL GetArguments(LPSTR, int) = 0;
+    virtual HRESULT wxSTDCALL SetArguments(LPCSTR) = 0;
+    virtual HRESULT wxSTDCALL GetHotkey(WORD*) = 0;
+    virtual HRESULT wxSTDCALL SetHotkey(WORD) = 0;
+    virtual HRESULT wxSTDCALL GetShowCmd(int*) = 0;
+    virtual HRESULT wxSTDCALL SetShowCmd(int) = 0;
+    virtual HRESULT wxSTDCALL GetIconLocation(LPSTR, int, int*) = 0;
+    virtual HRESULT wxSTDCALL SetIconLocation(LPCSTR, int) = 0;
+    virtual HRESULT wxSTDCALL SetRelativePath(LPCSTR, DWORD) = 0;
+    virtual HRESULT wxSTDCALL Resolve(HWND, DWORD) = 0;
+    virtual HRESULT wxSTDCALL SetPath(LPCSTR) = 0;
+};
+
+class IShellLinkW : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL GetPath(LPWSTR, int, WIN32_FIND_DATAW*, DWORD) = 0;
+    virtual HRESULT wxSTDCALL GetIDList(PIDLIST_ABSOLUTE*) = 0;
+    virtual HRESULT wxSTDCALL SetIDList(PCIDLIST_ABSOLUTE) = 0;
+    virtual HRESULT wxSTDCALL GetDescription(LPWSTR, int) = 0;
+    virtual HRESULT wxSTDCALL SetDescription(LPCWSTR) = 0;
+    virtual HRESULT wxSTDCALL GetWorkingDirectory(LPWSTR, int) = 0;
+    virtual HRESULT wxSTDCALL SetWorkingDirectory(LPCWSTR) = 0;
+    virtual HRESULT wxSTDCALL GetArguments(LPWSTR, int) = 0;
+    virtual HRESULT wxSTDCALL SetArguments(LPCWSTR) = 0;
+    virtual HRESULT wxSTDCALL GetHotkey(WORD*) = 0;
+    virtual HRESULT wxSTDCALL SetHotkey(WORD) = 0;
+    virtual HRESULT wxSTDCALL GetShowCmd(int*) = 0;
+    virtual HRESULT wxSTDCALL SetShowCmd(int) = 0;
+    virtual HRESULT wxSTDCALL GetIconLocation(LPWSTR, int, int*) = 0;
+    virtual HRESULT wxSTDCALL SetIconLocation(LPCWSTR, int) = 0;
+    virtual HRESULT wxSTDCALL SetRelativePath(LPCWSTR, DWORD) = 0;
+    virtual HRESULT wxSTDCALL Resolve(HWND, DWORD) = 0;
+    virtual HRESULT wxSTDCALL SetPath(LPCWSTR) = 0;
+};
+
+#ifdef wxUSE_UNICODE
+#define IShellLink      IShellLinkW
+DEFINE_GUID(wxIID_IShellLink,
+    0x000214F9, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+#else
+#define IShellLink      IShellLinkA
+DEFINE_GUID(wxIID_IShellLink,
+    0x000214EE, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+#endif
+
+typedef enum KNOWNDESTCATEGORY
+{
+    KDC_FREQUENT	= 1,
+	KDC_RECENT	= ( KDC_FREQUENT + 1 )
+} KNOWNDESTCATEGORY;
+
+class ICustomDestinationList : public IUnknown
+{
+public:
+    virtual HRESULT wxSTDCALL SetAppID(LPCWSTR) = 0;
+    virtual HRESULT wxSTDCALL BeginList(UINT*, REFIID, void**) = 0;
+    virtual HRESULT wxSTDCALL AppendCategory(LPCWSTR, IObjectArray *) = 0;
+    virtual HRESULT wxSTDCALL AppendKnownCategory(KNOWNDESTCATEGORY) = 0;
+    virtual HRESULT wxSTDCALL AddUserTasks(IObjectArray *) = 0;
+    virtual HRESULT wxSTDCALL CommitList() = 0;
+    virtual HRESULT wxSTDCALL GetRemovedDestinations(REFIID, void**) = 0;
+    virtual HRESULT wxSTDCALL DeleteList(LPCWSTR) = 0;
+    virtual HRESULT wxSTDCALL AbortList() = 0;
+};
 
 THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
 {
@@ -48,6 +212,57 @@ THUMBBUTTONFLAGS GetNativeThumbButtonFlags(const wxThumbBarButton& button)
     if ( !button.IsInteractive() )
         flags |= THBF_NONINTERACTIVE;
     return static_cast<THUMBBUTTONFLAGS>(flags);
+}
+
+IShellLink* CreateShellLink(const wxJumpListItem& item)
+{
+    IShellLink* shellLink = NULL;
+    IPropertyStore* propertyStore = NULL;
+
+    HRESULT hr = CoCreateInstance
+                 (
+                     wxCLSID_ShellLink,
+                     NULL,
+                     CLSCTX_INPROC_SERVER,
+                     wxIID_IShellLink,
+                     reinterpret_cast<void**> (&(shellLink))
+                 );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("CoCreateInstance(wxCLSID_ShellLink)", hr);
+        return shellLink;
+    }
+
+    if ( !item.GetFilePath().IsEmpty() )
+        shellLink->SetPath(item.GetFilePath().wc_str());
+    if ( !item.GetArguments().IsEmpty() )
+        shellLink->SetArguments(item.GetArguments().wc_str());
+    if ( !item.GetIconPath().IsEmpty() )
+    {
+        shellLink->SetIconLocation(item.GetIconPath().wc_str(),
+                                    item.GetIconIndex());
+    }
+    if ( !item.GetTooltip().IsEmpty() )
+        shellLink->SetDescription(item.GetTooltip().wc_str());
+
+    hr = shellLink->QueryInterface(IID_IPropertyStore,
+                                    reinterpret_cast<void**>(&(propertyStore)));
+    if ( SUCCEEDED(hr ))
+    {
+        PROPVARIANT pv;
+        hr = InitPropVariantFromString(item.GetTitle().wc_str(), &pv);
+        if ( SUCCEEDED(hr) )
+        {
+            hr = propertyStore->SetValue(PKEY_Title, pv);
+        }
+
+        //Save the changes we made to the property store
+        propertyStore->Commit();
+        propertyStore->Release();
+        PropVariantClear(&pv);
+    }
+
+    return shellLink;
 }
 
 } // namespace
@@ -159,12 +374,12 @@ wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
                     wxCLSID_TaskbarList,
                     NULL,
                     CLSCTX_INPROC_SERVER,
-                    IID_ITaskbarList3,
+                    wxIID_ITaskbarList3,
                     reinterpret_cast<void **>(&m_taskbarList)
                  );
     if ( FAILED(hr) )
     {
-        wxLogApiError(wxT("CoCreateInstance(CLSID_TaskbarList)"), hr);
+        wxLogApiError(wxT("CoCreateInstance(wxCLSID_TaskbarList)"), hr);
         return;
     }
 
@@ -388,6 +603,168 @@ wxThumbBarButton* wxTaskBarButtonImpl::GetThumbBarButtonByIndex(size_t index)
         return NULL;
 
     return m_thumbBarButtons[index];
+}
+
+wxJumpListItem::wxJumpListItem(const wxString& title,
+                               const wxString& filePath,
+                               const wxString& arguments,
+                               const wxString& tooltip,
+                               const wxString& iconPath,
+                               int iconIndex)
+    : m_title(title),
+      m_filePath(filePath),
+      m_arguments(arguments),
+      m_tooltip(tooltip),
+      m_iconPath(iconPath),
+      m_iconIndex(iconIndex)
+{
+}
+
+const wxString& wxJumpListItem::GetTitle() const
+{
+    return m_title;
+}
+
+void wxJumpListItem::SetTitle(const wxString& title)
+{
+    m_title = title;
+}
+
+const wxString& wxJumpListItem::GetFilePath() const
+{
+    return m_filePath;
+}
+
+void wxJumpListItem::SetFilePath(const wxString& filePath)
+{
+    m_filePath = filePath;
+}
+
+const wxString& wxJumpListItem::GetArguments() const
+{
+    return m_arguments;
+}
+
+void wxJumpListItem::SetArguments(const wxString& arguments)
+{
+    m_arguments = arguments;
+}
+
+const wxString& wxJumpListItem::GetTooltip() const
+{
+    return m_tooltip;
+}
+
+void wxJumpListItem::SetTooltip(const wxString& tooltip)
+{
+    m_tooltip = tooltip;
+}
+
+const wxString& wxJumpListItem::GetIconPath() const
+{
+    return m_iconPath;
+}
+
+void wxJumpListItem::SetIconPath(const wxString& iconPath)
+{
+    m_iconPath = iconPath;
+}
+
+int wxJumpListItem::GetIconIndex() const
+{
+    return m_iconIndex;
+}
+
+void wxJumpListItem::SetIconIndex(int iconIndex)
+{
+    m_iconIndex = iconIndex;
+}
+
+wxJumpList::wxJumpList() : m_destinationList(NULL)
+{
+
+    HRESULT hr = CoCreateInstance
+                 (
+                    wxCLSID_DestinationList,
+                    NULL,
+                    CLSCTX_INPROC_SERVER,
+                    wxIID_ICustomDestinationList,
+                    reinterpret_cast<void**> (&(m_destinationList))
+                );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError(wxT("CoCreateInstance(wxCLSID_DestinationList)"), hr);
+        return;
+    }
+}
+
+wxJumpList::~wxJumpList()
+{
+    if ( m_destinationList )
+        m_destinationList->Release();
+}
+
+void wxJumpList::SetTasks(const wxJumpListItems& tasks)
+{
+    m_tasks = tasks;
+    if ( !BeginUpdate() )
+        return;
+
+    AddTasksToDestinationList();
+    CommitUpdate();
+}
+
+bool wxJumpList::BeginUpdate()
+{
+    if ( m_destinationList == NULL )
+        return false;
+
+    unsigned int max_count = 0;
+    HRESULT hr = m_destinationList->BeginList(&max_count,
+                                              IID_IObjectArray,
+                                              reinterpret_cast<void**>(&(m_objectArray)));
+    return SUCCEEDED(hr);
+}
+
+bool wxJumpList::CommitUpdate()
+{
+    m_objectArray->Release();
+    return SUCCEEDED(m_destinationList->CommitList());
+}
+
+void wxJumpList::AddTasksToDestinationList()
+{
+    IObjectArray* objectArray;
+    IObjectCollection* collection;
+
+    HRESULT hr;
+    hr = CoCreateInstance
+         (
+             wxCLSID_EnumerableObjectCollection,
+             NULL,
+             CLSCTX_INPROC,
+             IID_IObjectCollection,
+             reinterpret_cast<void**>(&(collection))
+         );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("CoCreateInstance(wxCLSID_EnumerableObjectCollection)",
+                      hr);
+        return;
+    }
+
+    hr = collection->QueryInterface(IID_IObjectArray,
+                                    reinterpret_cast<void**>(&(objectArray)));
+    for ( wxJumpListItems::const_iterator iter = m_tasks.begin();
+          iter != m_tasks.end();
+          ++iter )
+    {
+        collection->AddObject(CreateShellLink(*iter));
+    }
+    m_destinationList->AddUserTasks(objectArray);
+
+    objectArray->Release();
+    collection->Release();
 }
 
 #endif // wxUSE_TASKBARBUTTON

@@ -15,7 +15,9 @@
 #include "wx/defs.h"
 #include "wx/vector.h"
 
-struct ITaskbarList3;
+namespace {
+class ITaskbarList3;
+}
 
 class WXDLLIMPEXP_CORE wxTaskBarButtonImpl : public wxTaskBarButton {
 public:
