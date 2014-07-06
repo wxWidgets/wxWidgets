@@ -452,7 +452,7 @@ private:
 // wxExecute implementations
 // ----------------------------------------------------------------------------
 
-#if defined(__DARWIN__)
+#if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
 bool wxMacLaunch(char **argv);
 #endif
 
@@ -577,7 +577,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
                     wxT("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS
 
-#ifdef __DARWIN__
+#if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
     // wxMacLaunch() only executes app bundles and only does it asynchronously.
     // It returns false if the target is not an app bundle, thus falling
     // through to the regular code for non app bundles.
