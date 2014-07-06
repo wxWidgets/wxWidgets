@@ -3510,9 +3510,10 @@ wxTextCtrl* wxGenericTreeCtrl::GetEditControl() const
 void wxGenericTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item),
                                      bool discardChanges)
 {
-    wxCHECK_RET( m_textCtrl, wxT("not editing label") );
-
-    m_textCtrl->EndEdit(discardChanges);
+    if (m_textCtrl)
+    {
+        m_textCtrl->EndEdit(discardChanges);
+    }
 }
 
 bool wxGenericTreeCtrl::OnRenameAccept(wxGenericTreeItem *item,
