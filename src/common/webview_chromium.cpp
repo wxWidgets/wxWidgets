@@ -765,7 +765,8 @@ void SchemeHandler::GetResponseHeaders(CefRefPtr<CefResponse> response,
                                        int64& response_length,
                                        CefString& redirectUrl)
 {
-    response->SetMimeType( m_mime_type );
+    if ( !m_mime_type.empty() )
+        response->SetMimeType( m_mime_type );
     response->SetStatus( 200 );
 
     // Set the resulting response length
