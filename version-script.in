@@ -29,6 +29,11 @@
         *wxTDIChildFrame*DoMoveWindow*;
 };
 
+# public symbols added in 3.0.2 (please keep in alphabetical order):
+@WX_VERSION_TAG@.2 {
+	*wxGenericListCtrl*EndEditLabel*;
+};
+
 # symbols available since the beginning of this branch are only given
 # generic branch tag (don't remove this!):
 

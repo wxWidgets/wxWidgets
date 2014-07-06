@@ -2260,6 +2260,17 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     return m_textctrlWrapper->GetText();
 }
 
+bool wxListMainWindow::EndEditLabel(bool cancel)
+{
+    if (!m_textctrlWrapper)
+    {
+        return false;
+    }
+
+    m_textctrlWrapper->EndEdit(cancel ? wxListTextCtrlWrapper::End_Discard : wxListTextCtrlWrapper::End_Accept);
+    return true;
+}
+
 void wxListMainWindow::OnRenameTimer()
 {
     wxCHECK_RET( HasCurrent(), wxT("unexpected rename timer") );
@@ -5069,6 +5080,13 @@ wxTextCtrl *wxGenericListCtrl::EditLabel(long item,
 {
     return m_mainWin->EditLabel( item, textControlClass );
 }
+
+#if wxABI_VERSION >= 30002
+bool wxGenericListCtrl::EndEditLabel(bool cancel)
+{
+    return m_mainWin->EndEditLabel(cancel);
+}
+#endif
 
 wxTextCtrl *wxGenericListCtrl::GetEditControl() const
 {
