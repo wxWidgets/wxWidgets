@@ -39,7 +39,7 @@ public:
       PAGE_SOURCE,
       PAGE_TEXT,
     };
-    wxStringVisitor(wxWebViewChromium* webview, StringType type) : m_webview(webview), m_type(type) {}
+    wxStringVisitor(wxWebViewChromium* webview, StringType type) : m_type(type), m_webview(webview) {}
     void Visit(const CefString& string)
     {
         switch(m_type)
@@ -148,9 +148,8 @@ wxWebViewChromium::~wxWebViewChromium()
 
 void wxWebViewChromium::OnSize(wxSizeEvent& event)
 {
-    wxSize size = GetClientSize();
-
 #ifdef __WXMSW__
+    wxSize size = GetClientSize();
     if ( m_clientHandler && m_clientHandler->GetBrowser() && m_clientHandler->GetBrowser()->GetHost() )
     {
         HWND handle = m_clientHandler->GetBrowser()->GetHost()->GetWindowHandle();
