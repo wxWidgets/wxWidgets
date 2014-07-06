@@ -167,6 +167,8 @@ public :
 
     virtual bool IsFullScreen() const;
 
+    virtual bool EnableFullScreenView(bool enable);
+    
     virtual bool ShowFullScreen(bool show, long style);
 
     virtual void RequestUserAttention(int flags);
