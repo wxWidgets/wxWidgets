@@ -51,7 +51,7 @@ protected:
 };
 
 wxOSXAudioToolboxSoundData::wxOSXAudioToolboxSoundData(const wxString& fileName) :
-    m_soundID(NULL)
+    m_soundID(0)
 {
     m_sndname = fileName;
     m_playing = false;
