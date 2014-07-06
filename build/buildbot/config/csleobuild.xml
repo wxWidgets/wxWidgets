@@ -19,7 +19,7 @@
     <xsl:variable name="SDKCURRENT" select="'--with-macosx-version-min=10.7 --with-cppunit-prefix=/Developer/libc++variants/cppunit'"/>
     
 <build>
-    <name>OSX 10.9 trunk libc++</name>
+    <name>OSX 10.9 Intel wxOSX Cocoa trunk</name>
     <builddir>csleo_cocoa</builddir>
     <scheduler>trunk_quick</scheduler>
 
