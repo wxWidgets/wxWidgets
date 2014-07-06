@@ -15,8 +15,10 @@
 
     <xsl:variable name="CLANGOPTIONS" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations'"/>
     <xsl:variable name="CLANGOPTIONS32" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations -arch i386'"/>
+    <xsl:variable name="CLANGOPTIONIOSSIM" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations -arch x86_64'"/>
     <xsl:variable name="SDK106" select="'--with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk'"/>
     <xsl:variable name="SDKCURRENT" select="'--with-macosx-version-min=10.7 --with-cppunit-prefix=/Developer/libc++variants/cppunit'"/>
+    <xsl:variable name="SDKCURRENTIOSSIM" select="'--with-macosx-version-min=7.1 --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk'"/>
     
 <build>
     <name>OSX 10.9 Intel wxOSX Cocoa trunk</name>
@@ -56,5 +58,17 @@
     <run-tests/>
     </steps>
 </build>
-            
+   
+<build>
+    <name>iOS 7.1 64bit iPad sim trunk</name>
+    <builddir>csios64_ipadsim</builddir>
+    <scheduler>trunk_quick</scheduler>
+    
+    <steps>
+        <checkout/>
+        <configure options="--with-osx_iphone --enable-monolithic {$SDKCURRENTIOSSIM} CXXFLAGS='{$CLANGOPTIONIOSSIM}' CFLAGS='{$CLANGOPTIONIOSSIM}' OBJCXXFLAGS='{$CLANGOPTIONIOSSIM}'"/>
+        <compile-all samples="false" utils="false" demos="false" contrib="false" tests="false" />
+    </steps>
+</build>
+    
 </bot>
