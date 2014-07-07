@@ -16,7 +16,7 @@
 */
 enum wxLanguage
 {
-    /// User's default/preferred language as got from OS.
+    /// User's default/preffered language as got from OS.
     wxLANGUAGE_DEFAULT,
 
     /// Unknown language, returned if wxLocale::GetSystemLanguage fails.
@@ -254,6 +254,7 @@ enum wxLanguage
     wxLANGUAGE_YORUBA,
     wxLANGUAGE_ZHUANG,
     wxLANGUAGE_ZULU,
+    wxLANGUAGE_KABYLE,
 
     /// For custom, user-defined languages.
     wxLANGUAGE_USER_DEFINED

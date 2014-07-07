@@ -232,3 +232,4 @@ wxLANGUAGE_YIDDISH                     yi     -                -                
 wxLANGUAGE_YORUBA                      yo     -                -                                   LTR    "Yoruba"
 wxLANGUAGE_ZHUANG                      za     -                -                                   LTR    "Zhuang"
 wxLANGUAGE_ZULU                        zu     -                -                                   LTR    "Zulu"
+wxLANGUAGE_KABYLE                      kab    LANG_KABYLE      SUBLANG_DEFAULT                     LTR    "Kabyle"
