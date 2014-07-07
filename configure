@@ -36854,7 +36854,11 @@ fi
         fi
 
     elif test "$wxUSE_MAC" = 1; then
+        if test "$wxUSE_OSX_IPHONE" = 1; then
+                           GST_LIBS="-framework AVFoundation -framework CoreMedia"
+        else
                            GST_LIBS="-framework QTKit"
+        fi
     fi
 
     if test $USE_MEDIA = 1; then
