@@ -388,7 +388,7 @@ void UnicodeTestCase::ConversionUTF16()
     // terminate the string, this exposed a bug in our conversion code which
     // got confused in this case
     size_t len;
-    conv.cMB2WC("\x01\0\0B\0C\0" /* A macron BC */, 6, &len);
+    conv.cMB2WC("\x01\0\0B\0C" /* A macron BC */, 6, &len);
     CPPUNIT_ASSERT_EQUAL( 3, len );
 
     // Another one: verify that the length of the resulting string is computed
@@ -417,7 +417,7 @@ void UnicodeTestCase::ConversionUTF32()
     }
 
     size_t len;
-    conv.cMB2WC("\0\0\x01\0\0\0\0B\0\0\0C\0\0" /* A macron BC */, 12, &len);
+    conv.cMB2WC("\0\0\x01\0\0\0\0B\0\0\0C" /* A macron BC */, 12, &len);
     CPPUNIT_ASSERT_EQUAL( 3, len );
 }
 
