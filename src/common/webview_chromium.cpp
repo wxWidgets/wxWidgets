@@ -484,7 +484,7 @@ bool wxWebViewChromium::StartUp(int &code, const wxString &path,
 #endif
 }
 
-void wxWebViewChromium::RunCEFMessageLoopOnIdle()
+void wxWebViewChromium::DoCEFWork()
 {
     CefDoMessageLoopWork();
 }

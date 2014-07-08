@@ -263,7 +263,7 @@ bool WebApp::OnInit()
 }
 
 bool WebApp::ProcessIdle() {
-  wxWebViewChromium::RunCEFMessageLoopOnIdle();
+  wxWebViewChromium::DoCEFWork();
   return wxApp::ProcessIdle();
 }
 
