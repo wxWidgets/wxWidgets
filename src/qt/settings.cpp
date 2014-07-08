@@ -135,7 +135,27 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
-    return wxFont();
+    wxFont font;
+    switch (index)
+    {
+        case wxSYS_OEM_FIXED_FONT:
+        case wxSYS_ANSI_FIXED_FONT:
+        case wxSYS_SYSTEM_FIXED_FONT:
+            font = *wxNORMAL_FONT;
+            break;
+
+        case wxSYS_ANSI_VAR_FONT:
+        case wxSYS_SYSTEM_FONT:
+        case wxSYS_DEVICE_DEFAULT_FONT:
+        case wxSYS_DEFAULT_GUI_FONT:
+        default:
+            break;
+    }
+
+    wxASSERT( font.IsOk() );
+
+    return font;
+
 }
 
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow * win)
