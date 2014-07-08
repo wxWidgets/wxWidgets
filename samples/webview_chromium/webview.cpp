@@ -72,6 +72,7 @@ public:
     }
 
     virtual bool OnInit();
+    virtual int OnExit();
 
     /*
 #if wxUSE_CMDLINE_PARSER
@@ -266,6 +267,13 @@ bool WebApp::OnInit()
     return true;
 }
 
+int WebApp::OnExit()
+{
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    wxWebViewChromium::Shutdown();
+#endif
+    return wxApp::OnExit();
+}
 
 WebFrame::WebFrame(const wxString& url) :
     wxFrame(NULL, wxID_ANY, "wxWebView Sample")
