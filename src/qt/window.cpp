@@ -786,15 +786,14 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
     }
     else
     {
+        // QScrollArea can only draw in the viewport:
+        QWidget *widget = QtGetScrollBarsContainer() ? QtGetScrollBarsContainer()->viewport() : GetHandle();
         if ( !m_qtPicture->isNull() )
         {
             // Data from wxClientDC, paint it
-            QPainter p( GetHandle() );
+            QPainter p( widget );
             p.drawPicture( QPoint( 0, 0 ), *m_qtPicture );
-            p.end();
             QtPaintClientDCPicture( handler );
-
-            return true;
         }
         else
         {
@@ -811,9 +810,8 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
 
             if ( m_qtPaintBuffer )
             {
-                QPainter p( GetHandle() );
+                QPainter p( widget );
                 p.drawImage( QPoint( 0, 0 ), *m_qtPaintBuffer );
-                p.end();
             }
 
             return handled;
