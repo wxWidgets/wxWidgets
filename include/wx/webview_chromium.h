@@ -263,7 +263,7 @@ public:
 #endif
 
     static void Shutdown();
-    static void RunCEFMessageLoopOnIdle();
+    static void DoCEFWork();
 
 protected:
     virtual void DoSetPage(const wxString& html, const wxString& baseUrl);
