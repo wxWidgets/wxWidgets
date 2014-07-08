@@ -13,6 +13,7 @@
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 #include "wx/qt/private/winevent.h"
+#include <QtWidgets/QScrollArea>
 
 
 class wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >
@@ -43,7 +44,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     // TODO: Could we use a wxPanel as the central widget? If so then we could
     // remove wxWindow::QtReparent.
 
-    m_qtMainWindow->setCentralWidget( new QWidget() );
+    m_qtMainWindow->setCentralWidget( new QScrollArea() );
 
     return wxFrameBase::Create( parent, id, title, pos, size, style, name );
 }
@@ -108,7 +109,11 @@ void wxFrame::RemoveChild( wxWindowBase *child )
 QMainWindow *wxFrame::GetHandle() const
 {
     return m_qtMainWindow;
-//    return m_qtMainWindow->centralWidget();
+}
+
+QScrollArea *wxFrame::QtGetScrollBarsContainer() const
+{
+    return dynamic_cast <QScrollArea *> (m_qtMainWindow->centralWidget() );
 }
 
 //=============================================================================
