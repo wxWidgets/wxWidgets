@@ -101,7 +101,12 @@ public:
     // Styles
     virtual void SetWindowStyleFlag( long style );
     virtual void SetExtraStyle( long exStyle );
-                               
+
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style);
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const;
+    virtual bool SetTransparent(wxByte alpha);
+    virtual bool CanSetTransparent() { return true; }
+
     virtual WXWidget GetHandle() const;
 
     virtual void SetDropTarget( wxDropTarget *dropTarget );
