@@ -204,11 +204,6 @@ protected:
             Widget::paintEvent(event);
         else
             event->accept();
-
-        // Extra: Paint the wxClientDC part for both Qt and wx handling
-        // This has to be here to be able to call after Qt paints if wx
-        // doesn't handle the event.
-        this->GetHandler()->QtPaintClientDCPicture( this );
     }
 
     //wxSizeEvent

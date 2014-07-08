@@ -793,7 +793,8 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
             // Data from wxClientDC, paint it
             QPainter p( widget );
             p.drawPicture( QPoint( 0, 0 ), *m_qtPicture );
-            QtPaintClientDCPicture( handler );
+            // Reset picture
+            m_qtPicture->setData( NULL, 0 );
         }
         else
         {
@@ -817,19 +818,6 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( ev
             return handled;
         }
     }
-}
-
-void wxWindow::QtPaintClientDCPicture( QWidget *handler )
-{
-    if ( m_qtContainer && handler != m_qtContainer )
-        return;
-
-    // Paint wxClientDC data
-    QPainter painter( handler );
-    painter.drawPicture( 0, 0, *m_qtPicture );
-
-    // Reset picture
-    m_qtPicture->setData( NULL, 0 );
 }
 
 bool wxWindow::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEvent *event )
