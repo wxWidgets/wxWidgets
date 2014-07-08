@@ -1171,11 +1171,11 @@ int wxEnumProperty::GetIndexForValue( int value ) const
     if ( !m_choices.IsOk() )
         return -1;
 
-    int intVal = m_choices.Index(value);
+    const int intVal = m_choices.Index(value);
     if ( intVal >= 0 )
         return intVal;
 
-    return value;
+    return -1;
 }
 
 wxEnumProperty::~wxEnumProperty ()
