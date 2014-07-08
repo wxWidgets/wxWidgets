@@ -37,6 +37,7 @@
 #include "wx/filesys.h"
 #include "wx/fs_arc.h"
 #include "wx/fs_mem.h"
+#include "wx/timer.h"
 
 #include "wx/webview_chromium.h"
 
@@ -71,7 +72,6 @@ public:
     }
 
     virtual bool OnInit();
-    virtual bool ProcessIdle();
 
     /*
 #if wxUSE_CMDLINE_PARSER
@@ -107,6 +107,7 @@ public:
     virtual ~WebFrame();
 
     void UpdateState();
+    void OnTimer(wxTimerEvent& evt);
     void OnIdle(wxIdleEvent& evt);
     void OnUrl(wxCommandEvent& evt);
     void OnBack(wxCommandEvent& evt);
@@ -154,6 +155,9 @@ public:
 private:
     wxTextCtrl* m_url;
     wxWebView* m_browser;
+
+    // A timer to run CEF message loop.
+    wxTimer* m_timer;
 
     wxToolBar* m_toolbar;
     wxToolBarToolBase* m_toolbar_back;
@@ -260,11 +264,6 @@ bool WebApp::OnInit()
     frame->Show();
 
     return true;
-}
-
-bool WebApp::ProcessIdle() {
-  wxWebViewChromium::DoCEFWork();
-  return wxApp::ProcessIdle();
 }
 
 
@@ -549,6 +548,11 @@ WebFrame::WebFrame(const wxString& url) :
     //Connect the idle events
     Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(WebFrame::OnIdle), NULL, this);
     Connect(wxID_ANY, wxEVT_CLOSE_WINDOW, wxCloseEventHandler(WebFrame::OnClose), NULL, this);
+    Connect(wxID_ANY, wxEVT_TIMER, wxTimerEventHandler(WebFrame::OnTimer), NULL, this);
+
+    m_timer = new wxTimer(this);
+    // Running each 100 milliseconds.
+    m_timer->Start(100);
 }
 
 WebFrame::~WebFrame()
@@ -576,6 +580,11 @@ void WebFrame::UpdateState()
 
     SetTitle( m_browser->GetCurrentTitle() );
     m_url->SetValue( m_browser->GetCurrentURL() );
+}
+
+void WebFrame::OnTimer(wxTimerEvent& WXUNUSED(evt))
+{
+     wxWebViewChromium::DoCEFWork();
 }
 
 void WebFrame::OnIdle(wxIdleEvent& WXUNUSED(evt))
@@ -1097,6 +1106,7 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
 
 void WebFrame::OnClose(wxCloseEvent &evt)
 {
+    delete m_timer;
 // On Windows/Linux, calling `Shutdown` here will cause a crash when closing WebFrame.
 // This is a temporary fix.
 #ifdef __WXOSX__
