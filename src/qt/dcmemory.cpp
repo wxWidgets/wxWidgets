@@ -16,6 +16,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
 {
     m_qtImage = NULL;
     m_ok = false;
+    m_qtPainter = new QPainter();
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
@@ -23,6 +24,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
 {
     m_qtImage = NULL;
     m_ok = false;
+    m_qtPainter = new QPainter();
     DoSelect( bitmap );
 }
 
@@ -44,11 +46,11 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     if ( IsOk() )
     {
         // Copy image to bitmap
-        m_qtPainter.end();
+        m_qtPainter->end();
 
-        m_qtPainter.begin( m_pixmap );
-        m_qtPainter.drawImage( QPoint( 0, 0 ), *m_qtImage );
-        m_qtPainter.end();
+        m_qtPainter->begin( m_pixmap );
+        m_qtPainter->drawImage( QPoint( 0, 0 ), *m_qtImage );
+        m_qtPainter->end();
 
         m_ok = false;
         m_pixmap = NULL;
@@ -65,7 +67,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
         m_qtImage = new QImage( m_pixmap->toImage() );
 
-        m_ok = m_qtPainter.begin( m_qtImage );
+        m_ok = m_qtPainter->begin( m_qtImage );
     }
 }
 

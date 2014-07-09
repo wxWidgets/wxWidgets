@@ -20,7 +20,7 @@ public:
 
 protected:
     wxWindow *m_window;
-    
+
 private:
 
 };
