@@ -78,7 +78,11 @@ wxClientDCImpl::~wxClientDCImpl()
         m_ok = false;
 
         if ( m_window != NULL )
+        {
             m_window->GetHandle()->repaint();
+            // let destroy the m_qtPainter (see inherited classes destructors)
+            m_window = NULL;
+        }
     }
 }
 
