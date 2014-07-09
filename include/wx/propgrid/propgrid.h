@@ -332,15 +332,6 @@ wxPG_EX_TOOLBAR_SEPARATOR               = 0x10000000
 
 // -----------------------------------------------------------------------
 
-//
-// Ids for sub-controls
-// NB: It should not matter what these are.
-#define wxPG_SUBID1                     2
-#define wxPG_SUBID2                     3
-#define wxPG_SUBID_TEMP1                4
-
-// -----------------------------------------------------------------------
-
 /** @class wxPGCommonValue
 
     wxPropertyGrid stores information about common values in these

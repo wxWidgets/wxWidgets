@@ -271,7 +271,7 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 #ifdef __WXMSW__
     wnd2->Hide();
 #endif
-    wnd2->Create( propgrid->GetPanel(), wxPG_SUBID2, butPos, butSz, wxSP_VERTICAL );
+    wnd2->Create( propgrid->GetPanel(), wxID_ANY, butPos, butSz, wxSP_VERTICAL );
 
     wnd2->SetRange( INT_MIN, INT_MAX );
     wnd2->SetValue( 0 );
@@ -487,7 +487,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
         dateValue = value.GetDateTime();
 
     ctrl->Create(propgrid->GetPanel(),
-                 wxPG_SUBID1,
+                 wxID_ANY,
                  dateValue,
                  pos,
                  useSz,

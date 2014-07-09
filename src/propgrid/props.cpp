@@ -2181,7 +2181,7 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     long edStyle = wxTE_MULTILINE;
     if ( prop->HasFlag(wxPG_PROP_READONLY) )
         edStyle |= wxTE_READONLY;
-    wxTextCtrl* ed = new wxTextCtrl(dlg,11,value,
+    wxTextCtrl* ed = new wxTextCtrl(dlg,wxID_ANY,value,
         wxDefaultPosition,wxDefaultSize,edStyle);
 
     rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
@@ -2870,7 +2870,7 @@ bool wxPGInDialogValidator::DoValidate( wxPropertyGrid* propGrid,
     if ( !tc )
     {
         {
-            tc = new wxTextCtrl( propGrid, wxPG_SUBID_TEMP1, wxEmptyString,
+            tc = new wxTextCtrl( propGrid, wxID_ANY, wxEmptyString,
                                  wxPoint(30000,30000));
             tc->Hide();
         }
