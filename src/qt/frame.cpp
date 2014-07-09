@@ -18,11 +18,18 @@
 
 class wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >
 {
-
 public:
     wxQtMainWindow( wxWindow *parent, wxFrame *handler );
 
 private:
+};
+
+// Central widget helper (container to show scroll bars and receive events):
+
+class wxQtCentralWidget : public wxQtEventSignalHandler< QScrollArea, wxFrame >
+{
+    public:
+        wxQtCentralWidget( wxWindow *parent, wxFrame *handler );
 };
 
 
@@ -44,7 +51,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     // TODO: Could we use a wxPanel as the central widget? If so then we could
     // remove wxWindow::QtReparent.
 
-    m_qtMainWindow->setCentralWidget( new QScrollArea() );
+    m_qtMainWindow->setCentralWidget( new wxQtCentralWidget( parent, this ) );
 
     return wxFrameBase::Create( parent, id, title, pos, size, style, name );
 }
@@ -122,4 +129,9 @@ wxQtMainWindow::wxQtMainWindow( wxWindow *parent, wxFrame *handler )
     : wxQtEventSignalHandler< QMainWindow, wxFrame >( parent, handler )
 {
 //    setCentralWidget( new wxQtWidget( parent, handler ));
+}
+
+wxQtCentralWidget::wxQtCentralWidget( wxWindow *parent, wxFrame *handler )
+    : wxQtEventSignalHandler< QScrollArea, wxFrame >( parent, handler )
+{
 }

@@ -825,7 +825,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
      * for the client area (the scrolled part). Events for the whole window
      * (including scrollbars and maybe status or menu bars are handled by Qt */
     
-    if ( m_qtContainer && handler != m_qtContainer )
+    if ( QtGetScrollBarsContainer() && handler != QtGetScrollBarsContainer() )
     {
         return false;
     }
