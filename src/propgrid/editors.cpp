@@ -1500,11 +1500,14 @@ private:
         Refresh();
         event.Skip();
     }
+    void OnLeftClickActivate( wxCommandEvent& evt );
 
     static wxBitmap* ms_doubleBuffer;
 
     DECLARE_EVENT_TABLE()
 };
+
+wxDEFINE_EVENT( wxEVT_CB_LEFT_CLICK_ACTIVATE, wxCommandEvent );
 
 BEGIN_EVENT_TABLE(wxSimpleCheckBox, wxControl)
     EVT_PAINT(wxSimpleCheckBox::OnPaint)
@@ -1512,6 +1515,7 @@ BEGIN_EVENT_TABLE(wxSimpleCheckBox, wxControl)
     EVT_LEFT_DCLICK(wxSimpleCheckBox::OnLeftClick)
     EVT_KEY_DOWN(wxSimpleCheckBox::OnKeyDown)
     EVT_SIZE(wxSimpleCheckBox::OnResize)
+    EVT_COMMAND(wxID_ANY, wxEVT_CB_LEFT_CLICK_ACTIVATE, wxSimpleCheckBox::OnLeftClickActivate)
 END_EVENT_TABLE()
 
 wxSimpleCheckBox::~wxSimpleCheckBox()
@@ -1585,6 +1589,15 @@ void wxSimpleCheckBox::SetValue( int value )
     propGrid->HandleCustomEditorEvent(evt);
 }
 
+void wxSimpleCheckBox::OnLeftClickActivate( wxCommandEvent& evt )
+{
+    // Construct mouse pseudo-event for initial mouse click
+    wxMouseEvent mouseEvt(wxEVT_LEFT_DOWN);
+    mouseEvt.m_x = evt.GetInt();
+    mouseEvt.m_y = evt.GetExtraLong();
+    OnLeftClick(mouseEvt);
+}
+
 wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
                                                    wxPGProperty* property,
                                                    const wxPoint& pos,
@@ -1607,22 +1620,15 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
 
     if ( !property->IsValueUnspecified() )
     {
-        // If mouse cursor was on the item, toggle the value now.
         if ( propGrid->GetInternalFlags() & wxPG_FL_ACTIVATION_BY_CLICK )
         {
+            // Send the event to toggle the value (if mouse cursor is on the item)
             wxPoint point = cb->ScreenToClient(::wxGetMousePosition());
-            if ( point.x <= (wxPG_XBEFORETEXT-2+cb->m_boxHeight) )
-            {
-                if ( cb->m_state & wxSCB_STATE_CHECKED )
-                    cb->m_state &= ~wxSCB_STATE_CHECKED;
-                else
-                    cb->m_state |= wxSCB_STATE_CHECKED;
-
-                // Makes sure wxPG_EVT_CHANGING etc. is sent for this initial
-                // click
-                propGrid->ChangePropertyValue(property,
-                                              wxPGVariant_Bool(cb->m_state));
-            }
+            wxCommandEvent *evt = new wxCommandEvent(wxEVT_CB_LEFT_CLICK_ACTIVATE, cb->GetId());
+            // Store mouse pointer position
+            evt->SetInt(point.x);
+            evt->SetExtraLong(point.y);
+            wxQueueEvent(cb, evt);
         }
     }
 
