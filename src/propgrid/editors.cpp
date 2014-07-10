@@ -1571,10 +1571,7 @@ void wxSimpleCheckBox::SetValue( int value )
 {
     if ( value == wxSCB_SETVALUE_CYCLE )
     {
-        if ( m_state & wxSCB_STATE_CHECKED )
-            m_state &= ~wxSCB_STATE_CHECKED;
-        else
-            m_state |= wxSCB_STATE_CHECKED;
+        m_state ^= wxSCB_STATE_CHECKED;
     }
     else
     {
