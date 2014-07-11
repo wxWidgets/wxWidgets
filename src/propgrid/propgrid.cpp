@@ -5798,23 +5798,37 @@ void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
 
     //
     // Resolve pending property removals
-    if ( m_deletedProperties.size() > 0 )
+    // In order to determine whether deletion/removal
+    // was done we need to track the size of the list
+    // before and after the operation.
+    // (Note that lists are changed at every operation.)
+    size_t cntAfter = m_deletedProperties.size();
+    while ( cntAfter > 0 )
     {
-        wxArrayPGProperty& arr = m_deletedProperties;
-        for ( unsigned int i=0; i<arr.size(); i++ )
-        {
-            DeleteProperty(arr[i]);
-        }
-        arr.clear();
+        size_t cntBefore = cntAfter;
+
+        DeleteProperty(m_deletedProperties[0]);
+
+        cntAfter = m_deletedProperties.size();
+        wxASSERT_MSG( cntAfter <= cntBefore,
+            wxT("Increased number of pending items after deletion") );
+        // Break if deletion was not done
+        if ( cntAfter >= cntBefore )
+            break;
     }
-    if ( m_removedProperties.size() > 0 )
+    cntAfter = m_removedProperties.size();
+    while ( cntAfter > 0 )
     {
-        wxArrayPGProperty& arr = m_removedProperties;
-        for ( unsigned int i=0; i<arr.size(); i++ )
-        {
-            RemoveProperty(arr[i]);
-        }
-        arr.clear();
+        size_t cntBefore = cntAfter;
+
+        RemoveProperty(m_removedProperties[0]);
+
+        cntAfter = m_removedProperties.size();
+        wxASSERT_MSG( cntAfter <= cntBefore,
+            wxT("Increased number of pending items after removal") );
+        // Break if removal was not done
+        if ( cntAfter >= cntBefore )
+            break;
     }
 }
 

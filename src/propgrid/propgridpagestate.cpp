@@ -1964,9 +1964,40 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 
     // We can actually delete it now
     if ( doDelete )
+    {
+        // Remove the item from both lists of pending operations.
+        // (Deleted item cannot be also the subject of further removal.)
+        int index = pg->m_deletedProperties.Index(item);
+        if ( index != wxNOT_FOUND )
+        {
+            pg->m_deletedProperties.RemoveAt(index);
+        }
+        wxASSERT_MSG( pg->m_deletedProperties.Index(item) == wxNOT_FOUND,
+                    wxT("Too many occurences of the item"));
+
+        index = pg->m_removedProperties.Index(item);
+        if ( index != wxNOT_FOUND )
+        {
+            pg->m_removedProperties.RemoveAt(index);
+        }
+        wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
+                    wxT("Too many occurences of the item"));
+
         delete item;
+    }
     else
+    {
+        // Remove the item from the list of pending removals.
+        int index = pg->m_removedProperties.Index(item);
+        if ( index != wxNOT_FOUND )
+        {
+            pg->m_removedProperties.RemoveAt(index);
+        }
+        wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
+                    wxT("Too many occurences of the item"));
+
         item->OnDetached(this, pg);
+    }
 
     m_itemsAdded = 1; // Not a logical assignment (but required nonetheless).
 
