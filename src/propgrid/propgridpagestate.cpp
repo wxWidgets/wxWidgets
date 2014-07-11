@@ -286,18 +286,33 @@ void wxPropertyGridPageState::DoClear()
         m_selection.clear();
     }
 
-    m_regularArray.Empty();
-    if ( m_abcArray )
-        m_abcArray->Empty();
+    // If handling wxPG event then every property item must be
+    // deleted individually (and with deferral).
+    if ( m_pPropGrid && m_pPropGrid->m_processedEvent )
+    {
+        wxPropertyGridIterator it;
+        for ( it = m_pPropGrid->GetIterator(wxPG_ITERATE_ALL);
+              !it.AtEnd();
+              it++ )
+        {
+            DoDelete(*it, true);
+        }
+    }
+    else
+    {
+        m_regularArray.Empty();
+        if ( m_abcArray )
+            m_abcArray->Empty();
 
-    m_dictName.clear();
+        m_dictName.clear();
 
-    m_currentCategory = NULL;
-    m_lastCaptionBottomnest = 1;
-    m_itemsAdded = 0;
+        m_currentCategory = NULL;
+        m_lastCaptionBottomnest = 1;
+        m_itemsAdded = 0;
 
-    m_virtualHeight = 0;
-    m_vhCalcPending = 0;
+        m_virtualHeight = 0;
+        m_vhCalcPending = 0;
+    }
 }
 
 // -----------------------------------------------------------------------
