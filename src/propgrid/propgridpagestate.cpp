@@ -1830,10 +1830,21 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     // Must defer deletion? Yes, if handling a wxPG event.
     if ( pg && pg->m_processedEvent )
     {
+        // Prevent adding duplicates to the lists.
         if ( doDelete )
-            pg->m_deletedProperties.push_back(item);
+        {
+            if ( pg->m_deletedProperties.Index(item) == wxNOT_FOUND )
+            {
+                pg->m_deletedProperties.push_back(item);
+            }
+        }
         else
-            pg->m_removedProperties.push_back(item);
+        {
+            if ( pg->m_removedProperties.Index(item) == wxNOT_FOUND )
+            {
+                pg->m_removedProperties.push_back(item);
+            }
+        }
 
         // Rename the property so it won't remain in the way
         // of the user code.
