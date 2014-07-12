@@ -60,6 +60,7 @@ All (GUI):
 - Fix characters outside of the BMP in wxStyledTextCtrl (Thomas Goyne).
 - Allow access to the currently shown wxInfoBar buttons (Hanmac).
 - Add wxGenericListCtrl::EndEditLabel() (Tim Kosse).
+- Use native renderer for drawing check boxes in wxPropertyGrid (Eran Ifrah).
 
 wxGTK:
 
