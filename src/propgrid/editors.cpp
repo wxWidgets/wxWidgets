@@ -1406,59 +1406,29 @@ enum
 
 const int wxSCB_SETVALUE_CYCLE = 2;
 
-
-static void DrawSimpleCheckBox( wxDC& dc, const wxRect& rect, int box_hei,
-                                int state )
+static void DrawSimpleCheckBox( wxWindow* win, wxDC& dc, const wxRect& rect,
+                                int box_h, int state )
 {
-    // Box rectangle.
-    wxRect r(rect.x+wxPG_XBEFORETEXT,rect.y+((rect.height-box_hei)/2),
-             box_hei,box_hei);
-    wxColour useCol = dc.GetTextForeground();
+    // Box rectangle
+    wxRect r(rect.x+wxPG_XBEFORETEXT, rect.y+((rect.height-box_h)/2),
+             box_h, box_h);
 
+    int cbFlags = 0;
     if ( state & wxSCB_STATE_UNSPECIFIED )
     {
-        useCol = wxColour(220, 220, 220);
+        cbFlags |= wxCONTROL_UNDETERMINED;
     }
-
-    // Draw check mark first because it is likely to overdraw the
-    // surrounding rectangle.
-    if ( state & wxSCB_STATE_CHECKED )
+    else if ( state & wxSCB_STATE_CHECKED )
     {
-        wxRect r2(r.x+wxPG_CHECKMARK_XADJ,
-                  r.y+wxPG_CHECKMARK_YADJ,
-                  r.width+wxPG_CHECKMARK_WADJ,
-                  r.height+wxPG_CHECKMARK_HADJ);
-    #if wxPG_CHECKMARK_DEFLATE
-        r2.Deflate(wxPG_CHECKMARK_DEFLATE);
-    #endif
-        dc.DrawCheckMark(r2);
-
-        // This would draw a simple cross check mark.
-        // dc.DrawLine(r.x,r.y,r.x+r.width-1,r.y+r.height-1);
-        // dc.DrawLine(r.x,r.y+r.height-1,r.x+r.width-1,r.y);
+        cbFlags |= wxCONTROL_CHECKED;
     }
 
-    if ( !(state & wxSCB_STATE_BOLD) )
+    if ( state & wxSCB_STATE_BOLD )
     {
-        // Pen for thin rectangle.
-        dc.SetPen(useCol);
-    }
-    else
-    {
-        // Pen for bold rectangle.
-        wxPen linepen(useCol,2,wxPENSTYLE_SOLID);
-        linepen.SetJoin(wxJOIN_MITER); // This prevents round edges.
-        dc.SetPen(linepen);
-        r.x++;
-        r.y++;
-        r.width--;
-        r.height--;
+        cbFlags |= wxCONTROL_PRESSED;
     }
 
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-    dc.DrawRectangle(r);
-    dc.SetPen(*wxTRANSPARENT_PEN);
+    wxRendererNative::Get().DrawCheckBox(win, dc, r, cbFlags);
 }
 
 //
@@ -1547,7 +1517,7 @@ void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
          GetFont().GetWeight() == wxFONTWEIGHT_BOLD )
         state |= wxSCB_STATE_BOLD;
 
-    DrawSimpleCheckBox(dc, rect, m_boxHeight, state);
+    DrawSimpleCheckBox(this, dc, rect, m_boxHeight, state);
 }
 
 void wxSimpleCheckBox::OnLeftClick( wxMouseEvent& event )
@@ -1651,7 +1621,7 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect,
         state |= wxSCB_STATE_UNSPECIFIED;
     }
 
-    DrawSimpleCheckBox(dc, rect, dc.GetCharHeight(), state);
+    DrawSimpleCheckBox(property->GetGrid(), dc, rect, dc.GetCharHeight(), state);
 }
 
 void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
