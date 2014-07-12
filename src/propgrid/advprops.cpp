@@ -1596,17 +1596,21 @@ wxColourProperty::wxColourProperty( const wxString& label,
                              NULL,
                              &gs_wxColourProperty_choicesCache, value )
 {
-    // Extended colour database with custom PG colours.
-    const char* const* colourLabels = gs_cp_es_normcolour_labels;
-    for ( int i = 0; *colourLabels; colourLabels++, i++ )
+    wxASSERT_MSG( wxTheColourDatabase, wxT("No colour database") );
+    if ( wxTheColourDatabase )
     {
-        wxColour clr = wxTheColourDatabase->Find(*colourLabels);
-        // Use standard wx colour value if its label was found,
-        // otherwise register custom PG colour.
-        if ( !clr.IsOk() )
+        // Extend colour database with custom PG colours.
+        const char* const* colourLabels = gs_cp_es_normcolour_labels;
+        for ( int i = 0; *colourLabels; colourLabels++, i++ )
         {
-            clr.Set(gs_cp_es_normcolour_colours[i]);
-            wxTheColourDatabase->AddColour(*colourLabels, clr);
+            wxColour clr = wxTheColourDatabase->Find(*colourLabels);
+            // Use standard wx colour value if its label was found,
+            // otherwise register custom PG colour.
+            if ( !clr.IsOk() )
+            {
+                clr.Set(gs_cp_es_normcolour_colours[i]);
+                wxTheColourDatabase->AddColour(*colourLabels, clr);
+            }
         }
     }
 
