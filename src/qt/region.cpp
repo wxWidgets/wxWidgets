@@ -271,7 +271,7 @@ bool wxRegionIterator::HaveRects() const
 {
     wxCHECK_MSG( m_qtRects != NULL, false, "Invalid iterator" );
     
-    return m_pos < (m_qtRects->size() - 1);
+    return m_pos < m_qtRects->size();
 }
 
 wxRegionIterator::operator bool () const
