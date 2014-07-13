@@ -7021,6 +7021,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                 #include <Carbon/Carbon.h>
                                 #include <WebKit/WebKit.h>
                             ])
+            CEF_LINK="$EXTRA_FRAMEWORKS -F\\$(top_srcdir)cef/Debug -framework Chromium\ Embedded\ framework"
             CPPFLAGS="$old_CPPFLAGS"
         fi
     fi
@@ -7644,7 +7645,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $CEF_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
