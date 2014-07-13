@@ -1409,6 +1409,7 @@ const int wxSCB_SETVALUE_CYCLE = 2;
 static void DrawSimpleCheckBox( wxWindow* win, wxDC& dc, const wxRect& rect,
                                 int box_h, int state )
 {
+#if wxPG_USE_RENDERER_NATIVE
     // Box rectangle
     wxRect r(rect.x+wxPG_XBEFORETEXT, rect.y+((rect.height-box_h)/2),
              box_h, box_h);
@@ -1429,6 +1430,59 @@ static void DrawSimpleCheckBox( wxWindow* win, wxDC& dc, const wxRect& rect,
     }
 
     wxRendererNative::Get().DrawCheckBox(win, dc, r, cbFlags);
+#else
+    wxUnusedVar(win);
+
+    // Box rectangle
+    wxRect r(rect.x+wxPG_XBEFORETEXT, rect.y+((rect.height-box_h)/2),
+             box_h, box_h);
+    wxColour useCol = dc.GetTextForeground();
+
+    if ( state & wxSCB_STATE_UNSPECIFIED )
+    {
+        useCol = wxColour(220, 220, 220);
+    }
+
+    // Draw check mark first because it is likely to overdraw the
+    // surrounding rectangle.
+    if ( state & wxSCB_STATE_CHECKED )
+    {
+        wxRect r2(r.x+wxPG_CHECKMARK_XADJ,
+                  r.y+wxPG_CHECKMARK_YADJ,
+                  r.width+wxPG_CHECKMARK_WADJ,
+                  r.height+wxPG_CHECKMARK_HADJ);
+    #if wxPG_CHECKMARK_DEFLATE
+        r2.Deflate(wxPG_CHECKMARK_DEFLATE);
+    #endif
+        dc.DrawCheckMark(r2);
+
+        // This would draw a simple cross check mark.
+        // dc.DrawLine(r.x,r.y,r.x+r.width-1,r.y+r.height-1);
+        // dc.DrawLine(r.x,r.y+r.height-1,r.x+r.width-1,r.y);
+    }
+
+    if ( !(state & wxSCB_STATE_BOLD) )
+    {
+        // Pen for thin rectangle.
+        dc.SetPen(useCol);
+    }
+    else
+    {
+        // Pen for bold rectangle.
+        wxPen linepen(useCol,2,wxPENSTYLE_SOLID);
+        linepen.SetJoin(wxJOIN_MITER); // This prevents round edges.
+        dc.SetPen(linepen);
+        r.x++;
+        r.y++;
+        r.width--;
+        r.height--;
+    }
+
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    dc.DrawRectangle(r);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+#endif
 }
 
 //
