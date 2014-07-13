@@ -724,6 +724,7 @@ void ArraysTestCase::TestSTL()
     items.push_back(new Item(17));
     CPPUNIT_ASSERT_EQUAL( 17, (*(items.rbegin()))->n );
     CPPUNIT_ASSERT_EQUAL( 17, (**items.begin()).n );
+    WX_CLEAR_ARRAY(items);
 }
 
 void ArraysTestCase::IndexFromEnd()
