@@ -583,9 +583,9 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         </if>
     </if>
 
-    <!--Add CEF directory here-->
+    <!--Specify CEF root directory here-->
     <set var="CEF_INCLUDE_DIR">
-      $(TOP_SRCDIR)/cef
+         $(TOP_SRCDIR)/cef
     </set>
 
     <set var="CONFIGURE" >
@@ -595,53 +595,53 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
 
     <!--specify libcef library directory-->
     <set var="LIBCEF_PATH">
-      <if cond="PLATFORM_WIN32=='1'">
-         $(CEF_INCLUDE_DIR)/$(CONFIGURE)/
-      </if>
-      <if cond="PLATFORM_MACOSX=='1'">
-        $(CEF_INCLUDE_DIR)/Release/
-      </if>
-      <if cond="PLATFORM_UNIX=='1'">
-        $(CEF_INCLUDE_DIR)/Release/
-      </if>
+        <if cond="PLATFORM_WIN32=='1'">
+            $(CEF_INCLUDE_DIR)/$(CONFIGURE)/
+        </if>
+        <if cond="PLATFORM_MACOSX=='1'">
+            $(CEF_INCLUDE_DIR)/Release/
+        </if>
+        <if cond="PLATFORM_UNIX=='1'">
+            $(CEF_INCLUDE_DIR)/Release/
+        </if>
     </set>
 
     <!--specify libcef_dll_wrapper library directory-->
     <set var="LIBCEF_WRAPPER_PATH">
-      <if cond="PLATFORM_WIN32=='1'">
-         $(CEF_INCLUDE_DIR)/out/$(CONFIGURE)/lib/
-      </if>
-      <if cond="PLATFORM_MACOSX=='1'">
-          $(CEF_INCLUDE_DIR)/xcodebuild/Debug/
-      </if>
-      <if cond="PLATFORM_UNIX=='1'">
-        $(CEF_INCLUDE_DIR)/out/Release/obj.target/
-      </if>
+        <if cond="PLATFORM_WIN32=='1'">
+            $(CEF_INCLUDE_DIR)/out/$(CONFIGURE)/lib/
+        </if>
+        <if cond="PLATFORM_MACOSX=='1'">
+            $(CEF_INCLUDE_DIR)/xcodebuild/Debug/
+        </if>
+        <if cond="PLATFORM_UNIX=='1'">
+            $(CEF_INCLUDE_DIR)/out/Release/obj.target/
+        </if>
     </set>
 
     <set var="LIBCEF_NAME">
-      <if cond="PLATFORM_WIN32=='1'">
-        libcef
-      </if>
-      <if cond="PLATFORM_MACOSX=='1'">
-          <!--Unlike Windows/Linux platfomrs, CEF3 won't provide libcef.so library on OS X. -->
-          <!--Instead, a Framework with related resources is provided. -->
-      </if>
-      <if cond="PLATFORM_UNIX=='1'">
-        cef
-      </if>
+        <if cond="PLATFORM_WIN32=='1'">
+            libcef
+        </if>
+        <if cond="PLATFORM_MACOSX=='1'">
+            <!--Unlike Windows/Linux platfomrs, CEF3 won't provide libcef.so library on OS X. -->
+            <!--Instead, a Framework with related resources is provided. -->
+        </if>
+        <if cond="PLATFORM_UNIX=='1'">
+            cef
+        </if>
     </set>
 
     <set var="LIBCEF_DLL_WRAPPER_NAME">
-      <if cond="PLATFORM_WIN32=='1'">
-        libcef_dll_wrapper
-      </if>
-      <if cond="PLATFORM_MACOSX=='1'">
-        cef_dll_wrapper
-      </if>
-      <if cond="PLATFORM_UNIX=='1'">
-        cef_dll_wrapper
-      </if>
+        <if cond="PLATFORM_WIN32=='1'">
+            libcef_dll_wrapper
+        </if>
+        <if cond="PLATFORM_MACOSX=='1'">
+            cef_dll_wrapper
+        </if>
+        <if cond="PLATFORM_UNIX=='1'">
+            cef_dll_wrapper
+        </if>
     </set>
 
 </makefile>
