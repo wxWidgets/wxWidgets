@@ -3,7 +3,43 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
+    <exe id="webview_chromium_helper">
+        <sources>
+            mac/process_helper_mac.cpp
+        </sources>
+        <if cond="OUT_OF_TREE_MAKEFILES=='0' and CEF_INCLUDE_DIR!=''">
+            <lib-path>$(LIBCEF_PATH)</lib-path>
+            <lib-path>$(LIBCEF_WRAPPER_PATH)</lib-path>
+            <include>$(CEF_INCLUDE_DIR)</include>
+            <sys-lib>$(LIBCEF_NAME)</sys-lib>
+            <sys-lib>$(LIBCEF_DLL_WRAPPER_NAME)</sys-lib>
+            <ldflags>-F$(TOP_SRCDIR)cef/Release/ -framework Chromium\ Embedded\ framework</ldflags>
+        </if>
+        <add-target target="fix_cef_link" type="action"
+                    cond="target and PLATFORM_MACOSX=='1'"/>
+        <modify-target target="fix_cef_link">
+            <dependency-of>all</dependency-of>
+            <command>
+                <!--make helper app bundle -->
+                mkdir -p webview_chromium_helper.app
+                mkdir -p webview_chromium_helper.app/Contents/MacOS
+                mkdir -p webview_chromium_helper.app/Contents/Resources
+	            sed -e "s/\$${PRODUCT_NAME}/webview_chromium Helper/"  \
+                    -e "s/\$${EXECUTABLE_NAME}/webview_chromium Helper/"  helper-Info.plist >webview_chromium_helper.app/Contents/Info.plist
+                /bin/echo "APPL????" >webview_chromium_helper.app/Contents/PkgInfo
+                <!--Fix CEF link path -->
+                install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" webview_chromium_helper
+                cp -f webview_chromium_helper webview_chromium_helper.app/Contents/MacOS/webview_chromium\ Helper
+                cp -f ../../src/osx/carbon/wxmac.icns webview_chromium_helper.app/Contents/Resources/wxmac.icns
+            </command>
+        </modify-target>
+        <modify-target target="clean">
+            <command>rm -rf $(id).app</command>
+        </modify-target>
+    </exe>
+
     <exe id="webview_chromium" template="wx_sample" template_append="wx_append">
+        <depends>webview_chromium_helper</depends>
         <sources>
             webview.cpp
         </sources>
@@ -22,6 +58,24 @@
         </if>
         <win32-res>../sample.rc</win32-res>
 
+        <add-target target="package" type="action"
+                    cond="target and PLATFORM_MACOSX=='1'"/>
+        <modify-target target="package">
+            <dependency-of>all</dependency-of>
+            <set var="webviewdll">$(DLLPREFIX)$(wxwin.mkDllName("webview")).dylib</set>
+            <command>
+                mkdir webview_chromium.app/Contents/Frameworks/
+                mkdir webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
+                cp $(TOP_SRCDIR)lib/$(webviewdll) webview_chromium.app/Contents/Frameworks/
+                cp -Rf $(LIBCEF_PATH)/Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
+                <!--Fix CEF link path-->
+                install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" $(TOP_SRCDIR)lib/$(webviewdll)
+
+                <!--Copy helper app-->
+                cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
+                ./mac/tools/make_more_helpers.sh $(wx_top_builddir)/samples/webview_chromium/webview_chromium.app/Contents/Frameworks webview_chromium
+            </command>>
+        </modify-target>>
 		<if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
         </if>
