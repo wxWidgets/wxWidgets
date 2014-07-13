@@ -45,6 +45,7 @@ public:
 private:
     friend class wxFrame;
     friend class wxThumbBarButton;
+    friend class wxAppProgressIndicator;
 
     wxTaskBarButtonImpl(WXWidget parent);
 

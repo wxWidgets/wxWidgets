@@ -70,7 +70,7 @@
 #endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
 
 #if wxUSE_TASKBARBUTTON
-    static WXUINT gs_msgTaskbarButtonCreated = 0;
+    WXUINT wxMsgTaskbarButtonCreated = 0;
     #define wxTHBN_CLICKED 0x1800
 #endif  // wxUSE_TASKBARBUTTON
 
@@ -144,14 +144,19 @@ bool wxFrame::Create(wxWindow *parent,
 
 #if wxUSE_TASKBARBUTTON
     m_taskBarButton = NULL;
-    static bool s_registered = false;
-    if ( !s_registered )
+    static bool s_taskbarButtonCreatedMsgRegistered = false;
+    if ( !s_taskbarButtonCreatedMsgRegistered )
     {
-        gs_msgTaskbarButtonCreated =
+        s_taskbarButtonCreatedMsgRegistered = true;
+        wxMsgTaskbarButtonCreated =
             ::RegisterWindowMessage(wxT("TaskbarButtonCreated"));
-        s_registered = true;
+
+        // In case the application is run elevated, allow the
+        // TaskbarButtonCreated and WM_COMMAND messages through.
+        ChangeWindowMessageFilter(wxMsgTaskbarButtonCreated, MSGFLT_ADD);
+        ChangeWindowMessageFilter(WM_COMMAND, MSGFLT_ADD);
     }
-#endif
+#endif // wxUSE_TASKBARBUTTON
 
     return true;
 }
@@ -971,7 +976,7 @@ WXLRESULT wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPara
 #endif // !__WXMICROWIN__
     }
 #if wxUSE_TASKBARBUTTON
-    if ( message == gs_msgTaskbarButtonCreated )
+    if ( message == wxMsgTaskbarButtonCreated )
     {
         m_taskBarButton = new wxTaskBarButtonImpl(GetHandle());
         processed = true;
