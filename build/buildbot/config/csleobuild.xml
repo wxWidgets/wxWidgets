@@ -28,7 +28,7 @@
 
     <steps>
         <checkout/>
-        <configure options="{$SDKCURRENT107} CXXFLAGS='{$CLANGOPTIONS}' CFLAGS='{$CLANGOPTIONS}' OBJCXXFLAGS='{$CLANGOPTIONS}'"/>
+        <configure options="--with-zlib=builtin --without-libiconv --without-liblzma {$SDKCURRENT107} CXXFLAGS='{$CLANGOPTIONS}' CFLAGS='{$CLANGOPTIONS}' OBJCXXFLAGS='{$CLANGOPTIONS}'"/>
         <compile-all/>
         <run-tests/>
     </steps>
