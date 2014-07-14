@@ -444,15 +444,23 @@ wxPropertyCategory* wxPropertyGridPageState::GetPropertyCategory( const wxPGProp
 // wxPropertyGridPageState GetPropertyXXX methods
 // -----------------------------------------------------------------------
 
-wxPGProperty* wxPropertyGridPageState::GetPropertyByLabel( const wxString& label,
-                                                           wxPGProperty* parent ) const
+#ifdef WXWIN_COMPATIBILITY_3_0
+wxPGProperty* wxPropertyGridPageState::GetPropertyByLabel
+                        ( const wxString& label, wxPGProperty* parent ) const
 {
+    return BaseGetPropertyByLabel(label, parent);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
 
-    size_t i;
+wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByLabel
+                        ( const wxString& label, wxPGProperty* parent ) const
+{
+    if ( !parent )
+    {
+        parent = (wxPGProperty*) &m_regularArray;
+    }
 
-    if ( !parent ) parent = (wxPGProperty*) &m_regularArray;
-
-    for ( i=0; i<parent->GetChildCount(); i++ )
+    for ( size_t i=0; i<parent->GetChildCount(); i++ )
     {
         wxPGProperty* p = parent->Item(i);
         if ( p->m_label == label )
@@ -460,7 +468,7 @@ wxPGProperty* wxPropertyGridPageState::GetPropertyByLabel( const wxString& label
         // Check children recursively.
         if ( p->GetChildCount() )
         {
-            p = GetPropertyByLabel(label,(wxPGProperty*)p);
+            p = BaseGetPropertyByLabel(label, p);
             if ( p )
                 return p;
         }
