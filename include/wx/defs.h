@@ -1526,12 +1526,21 @@ typedef double wxDouble;
         #define wxUINT64_SWAP_ON_LE(val)  (val)
         #define wxINT64_SWAP_ON_BE(val)  wxINT64_SWAP_ALWAYS(val)
         #define wxINT64_SWAP_ON_LE(val)  (val)
+
+        #define wxUINT64_SWAP_ON_BE_IN_PLACE(val)   val = wxUINT64_SWAP_ALWAYS(val)
+        #define wxINT64_SWAP_ON_BE_IN_PLACE(val)   val = wxINT64_SWAP_ALWAYS(val)
+        #define wxUINT64_SWAP_ON_LE_IN_PLACE(val)
+        #define wxINT64_SWAP_ON_LE_IN_PLACE(val)
     #endif
 
     #define wxUINT16_SWAP_ON_BE_IN_PLACE(val)   val = wxUINT16_SWAP_ALWAYS(val)
+    #define wxINT16_SWAP_ON_BE_IN_PLACE(val)   val = wxINT16_SWAP_ALWAYS(val)
     #define wxUINT16_SWAP_ON_LE_IN_PLACE(val)
+    #define wxINT16_SWAP_ON_LE_IN_PLACE(val)
     #define wxUINT32_SWAP_ON_BE_IN_PLACE(val)   val = wxUINT32_SWAP_ALWAYS(val)
+    #define wxINT32_SWAP_ON_BE_IN_PLACE(val)   val = wxINT32_SWAP_ALWAYS(val)
     #define wxUINT32_SWAP_ON_LE_IN_PLACE(val)
+    #define wxINT32_SWAP_ON_LE_IN_PLACE(val)
 #else
     #define wxUINT16_SWAP_ON_LE(val)  wxUINT16_SWAP_ALWAYS(val)
     #define wxINT16_SWAP_ON_LE(val)   wxINT16_SWAP_ALWAYS(val)
@@ -1546,12 +1555,20 @@ typedef double wxDouble;
         #define wxUINT64_SWAP_ON_BE(val)  (val)
         #define wxINT64_SWAP_ON_LE(val)  wxINT64_SWAP_ALWAYS(val)
         #define wxINT64_SWAP_ON_BE(val)  (val)
+        #define wxUINT64_SWAP_ON_BE_IN_PLACE(val)
+        #define wxINT64_SWAP_ON_BE_IN_PLACE(val)
+        #define wxUINT64_SWAP_ON_LE_IN_PLACE(val)   val = wxUINT64_SWAP_ALWAYS(val)
+        #define wxINT64_SWAP_ON_LE_IN_PLACE(val)   val = wxINT64_SWAP_ALWAYS(val)
     #endif
 
     #define wxUINT16_SWAP_ON_BE_IN_PLACE(val)
+    #define wxINT16_SWAP_ON_BE_IN_PLACE(val)
     #define wxUINT16_SWAP_ON_LE_IN_PLACE(val)   val = wxUINT16_SWAP_ALWAYS(val)
+    #define wxINT16_SWAP_ON_LE_IN_PLACE(val)   val = wxINT16_SWAP_ALWAYS(val)
     #define wxUINT32_SWAP_ON_BE_IN_PLACE(val)
+    #define wxINT32_SWAP_ON_BE_IN_PLACE(val)
     #define wxUINT32_SWAP_ON_LE_IN_PLACE(val)   val = wxUINT32_SWAP_ALWAYS(val)
+    #define wxINT32_SWAP_ON_LE_IN_PLACE(val)   val = wxINT32_SWAP_ALWAYS(val)
 #endif
 
 /*  ---------------------------------------------------------------------------- */
