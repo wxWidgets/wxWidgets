@@ -14,7 +14,7 @@
 #include "wx/gdicmn.h"
 #include "wx/font.h"
 
-namespace
+namespace wxTestPrivate
 {
     // by default colour components values are output incorrectly because they
     // are unsigned chars, define a small helper struct which formats them in
@@ -26,9 +26,8 @@ namespace
         unsigned char m_value;
     };
 
-} // anonymous namespace
-
-std::ostream& operator<<(std::ostream& os, const ColourChannel& cc);
+    std::ostream& operator<<(std::ostream& os, const ColourChannel& cc);
+} // wxTestPrivate namespace
 
 // this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxColour objects
 std::ostream& operator<<(std::ostream& os, const wxColour& c);

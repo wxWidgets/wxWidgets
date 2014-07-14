@@ -14,6 +14,9 @@
 
 #include "asserthelper.h"
 
+namespace wxTestPrivate
+{
+
 std::ostream& operator<<(std::ostream& os, const ColourChannel& cc)
 {
     os.width(2);
@@ -22,8 +25,12 @@ std::ostream& operator<<(std::ostream& os, const ColourChannel& cc)
     return os;
 }
 
+}
+
 std::ostream& operator<<(std::ostream& os, const wxColour& c)
 {
+    using wxTestPrivate::ColourChannel;
+
     os << std::hex << std::noshowbase
        << "("
        << ColourChannel(c.Red()) << ", "
