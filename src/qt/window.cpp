@@ -872,8 +872,17 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                 case wxBG_STYLE_ERASE:
                     {
                         // the background should be cleared by qt auto fill
-                        // send the erase event
-                        wxEraseEvent erase;
+                        // send the erase event (properly creating a DC for it)
+                        wxWindowDC dc( (wxWindow*)this );
+                        dc.SetDeviceClippingRegion( m_updateRegion );
+
+                        // Ensure DC is cleared if Qt didn't it
+                        if ( UseBgCol() && !GetHandle()->autoFillBackground() )
+                        {
+                            dc.SetBackground(GetBackgroundColour());
+                            dc.Clear();
+                        }
+                        wxEraseEvent erase( GetId(), &dc );
                         if ( ProcessWindowEvent(erase) )
                         {
                             // background erased, don't do it again
