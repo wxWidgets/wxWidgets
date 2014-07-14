@@ -19,7 +19,7 @@
     <xsl:variable name="SDK106" select="'--with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-cppunit-prefix=/Developer/libstdc++variants/cppunit'"/>
     <xsl:variable name="SDKCURRENT107" select="'--with-macosx-version-min=10.7 --with-cppunit-prefix=/Developer/libstdc++variants/cppunit'"/>
     <xsl:variable name="SDKCURRENT" select="'--with-macosx-version-min=10.9 --with-cppunit-prefix=/Developer/libc++variants/cppunit'"/>
-    <xsl:variable name="SDKCURRENTIOSSIM" select="'--with-macosx-version-min=7.1 --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk'"/>
+    <xsl:variable name="SDKCURRENTIOSSIM" select="'--with-macosx-version-min=7.1 --with-macosx-sdk=$(xcrun --sdk iphonesimulator --show-sdk-path)'"/>
     
 <build>
     <name>OSX 10.9 Cocoa trunk (libstdc++)</name>
