@@ -910,7 +910,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
             }
 
             // send the paint event (wxWindowDC will draw directly):
-            wxPaintEvent paint;
+            wxPaintEvent paint( GetId() );
             bool handled = ProcessWindowEvent(paint);
 
             if ( !m_qtPicture->isNull() )
