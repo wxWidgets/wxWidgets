@@ -114,3 +114,13 @@ wxString wxComboBox::DoGetValue() const
 {
     return wxQtConvertString( m_qtComboBox->currentText() );
 }
+
+void wxComboBox::Popup()
+{
+     GetHandle()->showPopup();
+}
+
+void wxComboBox::Dismiss()
+{
+    GetHandle()->hidePopup();
+}
