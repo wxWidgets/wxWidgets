@@ -26,9 +26,9 @@ namespace
         unsigned char m_value;
     };
 
-    std::ostream& operator<<(std::ostream& os, const ColourChannel& cc);
-
 } // anonymous namespace
+
+std::ostream& operator<<(std::ostream& os, const ColourChannel& cc);
 
 // this operator is needed to use CPPUNIT_ASSERT_EQUAL with wxColour objects
 std::ostream& operator<<(std::ostream& os, const wxColour& c);
