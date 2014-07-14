@@ -14,16 +14,13 @@
 
 #include "asserthelper.h"
 
-namespace
+std::ostream& operator<<(std::ostream& os, const ColourChannel& cc)
 {
-    std::ostream& operator<<(std::ostream& os, const ColourChannel& cc)
-    {
-        os.width(2);
-        os.fill('0');
-        os << static_cast<int>(cc.m_value);
-        return os;
-    }
-} // anonymous namespace
+    os.width(2);
+    os.fill('0');
+    os << static_cast<int>(cc.m_value);
+    return os;
+}
 
 std::ostream& operator<<(std::ostream& os, const wxColour& c)
 {
