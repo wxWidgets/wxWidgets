@@ -17,14 +17,28 @@
     <xsl:variable name="CLANGOPTIONS32" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations -arch i386'"/>
     <xsl:variable name="CLANGOPTIONIOSSIM" select="'-Qunused-arguments -Wno-parentheses-equality -Wno-self-assign -Wno-unused-function -Wno-deprecated-declarations -arch x86_64'"/>
     <xsl:variable name="SDK106" select="'--with-macosx-version-min=10.5 --with-macosx-sdk=/Developer/SDKs/MacOSX10.6.sdk --with-cppunit-prefix=/Developer/libstdc++variants/cppunit'"/>
-    <xsl:variable name="SDKCURRENT" select="'--with-macosx-version-min=10.7 --with-cppunit-prefix=/Developer/libc++variants/cppunit'"/>
+    <xsl:variable name="SDKCURRENT107" select="'--with-macosx-version-min=10.7 --with-cppunit-prefix=/Developer/libstdc++variants/cppunit'"/>
+    <xsl:variable name="SDKCURRENT" select="'--with-macosx-version-min=10.9 --with-cppunit-prefix=/Developer/libc++variants/cppunit'"/>
     <xsl:variable name="SDKCURRENTIOSSIM" select="'--with-macosx-version-min=7.1 --with-macosx-sdk=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk'"/>
     
 <build>
-    <name>OSX 10.9 Intel wxOSX Cocoa trunk</name>
+    <name>OSX 10.9 Intel wxOSX Cocoa trunk (min. Deployment 10.7, libstdc++)</name>
     <builddir>csleo_cocoa</builddir>
     <scheduler>trunk_quick</scheduler>
 
+    <steps>
+        <checkout/>
+        <configure options="{$SDKCURRENT107} CXXFLAGS='{$CLANGOPTIONS}' CFLAGS='{$CLANGOPTIONS}' OBJCXXFLAGS='{$CLANGOPTIONS}'"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>OSX 10.9 Intel wxOSX Cocoa trunk (min. Deployment 10.9, libc++)</name>
+    <builddir>csleo_cocoalibc++</builddir>
+    <scheduler>trunk_quick</scheduler>
+    
     <steps>
         <checkout/>
         <configure options="{$SDKCURRENT} CXXFLAGS='{$CLANGOPTIONS}' CFLAGS='{$CLANGOPTIONS}' OBJCXXFLAGS='{$CLANGOPTIONS}'"/>
@@ -32,7 +46,7 @@
         <run-tests/>
     </steps>
 </build>
-    
+
 <build>
     <name>OSX 10.6 Intel wxOSX Cocoa Stable</name>
     <builddir>csleo_stable_cocoa</builddir>
