@@ -144,7 +144,13 @@ struct wxCmdLineOption
     bool HasValue() const { return m_hasVal; }
 
     void SetNegated() { m_isNegated = true; }
-    bool IsNegated() const { return m_isNegated; }
+    bool IsNegated() const
+    {
+        wxASSERT_MSG( kind == wxCMD_LINE_SWITCH,
+                      wxT("kind mismatch in wxCmdLineArg") );
+
+        return m_isNegated;
+    }
 
     // Reset to the initial state, called before parsing another command line.
     void Reset()
