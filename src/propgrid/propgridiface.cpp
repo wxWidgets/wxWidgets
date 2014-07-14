@@ -441,15 +441,7 @@ wxPGProperty* wxPropertyGridInterface::GetPropertyByNameA( const wxString& name 
 
 wxPGProperty* wxPropertyGridInterface::GetPropertyByLabel( const wxString& label ) const
 {
-    wxPGVIterator it;
-
-    for ( it = GetVIterator( wxPG_ITERATE_PROPERTIES ); !it.AtEnd(); it.Next() )
-    {
-        if ( it.GetProperty()->GetLabel() == label )
-            return it.GetProperty();
-    }
-
-    return wxNullProperty;
+    return m_pState->BaseGetPropertyByLabel(label, NULL);
 }
 
 // ----------------------------------------------------------------------------
