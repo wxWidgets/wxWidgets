@@ -328,15 +328,32 @@ void wxWindow::WarpPointer(int x, int y)
 
 void wxWindow::Update()
 {
-    GetHandle()->update();
+    // send the paint event to the inner widget in scroll areas:
+    if ( QtGetScrollBarsContainer() )
+    {
+        QtGetScrollBarsContainer()->viewport()->update();
+    } else {
+        GetHandle()->update();
+    }
 }
 
 void wxWindow::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
 {
+    QWidget *widget;
+
+    // get the inner widget in scroll areas:
+    if ( QtGetScrollBarsContainer() )
+    {
+        widget = QtGetScrollBarsContainer()->viewport();
+    } else {
+        widget = GetHandle();
+    }
+
     if ( rect != NULL )
-        GetHandle()->update( wxQtConvertRect( *rect ));
+        widget->update( wxQtConvertRect( *rect ));
     else
-        GetHandle()->update();
+        widget->update();
+
 }
 
     
