@@ -77,7 +77,9 @@ protected:
     
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int pos);
-    
+
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
+
 #if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX

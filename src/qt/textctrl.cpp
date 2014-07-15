@@ -322,3 +322,11 @@ QWidget *wxTextCtrl::GetHandle() const
     else
         return (QWidget *) m_qtTextEdit;
 }
+
+QScrollArea *wxTextCtrl::QtGetScrollBarsContainer() const
+{
+    if (m_qtTextEdit!=NULL)
+        return (QScrollArea *) m_qtTextEdit;
+    else
+        return NULL;
+}

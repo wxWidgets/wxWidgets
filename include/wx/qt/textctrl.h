@@ -65,7 +65,9 @@ protected:
 
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
-    
+
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
+
 private:
     QLineEdit *m_qtLineEdit;
     QTextEdit *m_qtTextEdit;
