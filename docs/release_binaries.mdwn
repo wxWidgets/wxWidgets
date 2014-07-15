@@ -95,7 +95,7 @@ To verify your download please use the following sha1sums:
     4d7a49e3d67f6559ac8bfbbbecaba16653eee163 wxMSW-3.0.1_vc110_x64_ReleaseDLL.msi
     3670ac5cf20ea76e93fa6de8a91af5a6fe7a8de5 wxMSW-3.0.1_vc110_x64_ReleasePDB.7z
     2613d7c676ef35b4e08e32c6bf34f13083ac6e5b wxMSW-3.0.1_vc110_x86_ReleaseDLL.msi
-    6c4ba827489821a86408331013394d3150575c5f wxMSW-3.0.1_vc120_Dev.7z
+    7ecd00f81661ef0d3cf19958afe14f3b3dec0618 wxMSW-3.0.1_vc120_Dev.7z
     888c2c1eabfda5d248e14d8b56165468825558d5 wxMSW-3.0.1_vc120_ReleaseDLL.7z
     760567170bf5373da42b239f9774b91920ffec95 wxMSW-3.0.1_vc120_ReleasePDB.7z
     97968a620d203d4f1b4f521b91ea9ec7ad3ca50f wxMSW-3.0.1_vc120_x64_Dev.7z
