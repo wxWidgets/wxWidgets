@@ -35,7 +35,6 @@
     #include "wx/log.h"
     #include "wx/settings.h"
     #include "wx/ctrlsub.h"
-    #include "wx/msw/ownerdrawnbutton.h"
 #endif
 
 #if wxUSE_LISTCTRL
@@ -50,6 +49,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
+#include "wx/msw/ownerdrawnbutton.h"
 
 // Missing from MinGW 4.8 SDK headers.
 #ifndef BS_TYPEMASK
