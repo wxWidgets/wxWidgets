@@ -130,16 +130,25 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
 };
 
+enum WXDLLIMPEXP_CORE wxJumpListItemType {
+    wxJUMP_LIST_SEPARATOR,
+    wxJUMP_LIST_TASK,
+    wxJUMP_LIST_DESTIONATION
+};
+
 class WXDLLIMPEXP_CORE wxJumpListItem
 {
 public:
-    wxJumpListItem(const wxString& title = wxEmptyString,
+    wxJumpListItem(wxJumpListItemType type,
+                   const wxString& title = wxEmptyString,
                    const wxString& filePath = wxEmptyString,
                    const wxString& arguments = wxEmptyString,
                    const wxString& tooltip = wxEmptyString,
                    const wxString& iconPath = wxEmptyString,
                    int iconIndex = 0);
 
+    wxJumpListItemType GetType() const;
+    void SetType(wxJumpListItemType type);
     const wxString& GetTitle() const;
     void SetTitle(const wxString& title);
     const wxString& GetFilePath() const;
@@ -154,6 +163,7 @@ public:
     void SetIconIndex(int iconIndex);
 
 private:
+    wxJumpListItemType m_type;
     wxString m_title;
     wxString m_filePath;
     wxString m_arguments;
