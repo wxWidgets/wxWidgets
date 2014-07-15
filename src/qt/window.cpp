@@ -131,7 +131,7 @@ void wxWindow::Init()
     m_vertScrollBar = NULL;
 
     m_qtPicture = new QPicture();
-    m_qtPainter = NULL;
+    m_qtPainter = new QPainter();
 
     m_mouseInside = false;
 
@@ -168,6 +168,7 @@ wxWindow::~wxWindow()
     DestroyChildren(); // This also destroys scrollbars
 
     delete m_qtPicture;
+    delete m_qtPainter;
 
 #if wxUSE_ACCEL
     delete m_qtShortcutHandler;
@@ -847,7 +848,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     /* If this window has scrollbars, only let wx handle the event if it is
      * for the client area (the scrolled part). Events for the whole window
      * (including scrollbars and maybe status or menu bars are handled by Qt */
-    
+
     if ( QtGetScrollBarsContainer() && handler != QtGetScrollBarsContainer() )
     {
         return false;
@@ -858,8 +859,6 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         m_updateRegion = wxRegion( wxQtConvertRect( event->region().boundingRect() ) );
 
         // Real paint event, prepare the qt painter for wxWindowDC:
-        m_qtPainter = new QPainter();
-
         bool ok;
         if ( QtGetScrollBarsContainer() )
         {
@@ -939,10 +938,8 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                 handled = true;
             }
 
-            // destruction of painter
+            // commit changes of the painter to the widget
             m_qtPainter->end();
-            delete m_qtPainter;
-            m_qtPainter = NULL;
 
             return handled;
         }
