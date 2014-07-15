@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/cocoa/mediactrl.cpp
+// Name:        src/osx/cocoa/mediactrl.mm
 // Purpose:     Built-in Media Backends for Cocoa
-// Author:      Ryan Norton <wxprojects@comcast.net>
+// Author:      Ryan Norton <wxprojects@comcast.net>, Stefan Csomor
 // Modified by:
 // Created:     02/03/05
-// Copyright:   (c) 2004-2005 Ryan Norton, (c) 2005 David Elliot
+// Copyright:   (c) 2004-2005 Ryan Norton, (c) 2005 David Elliot, (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -36,8 +36,19 @@
 
 #include "wx/osx/private.h"
 
+#ifdef wxOSX_USE_IPHONE
+#define wxOSX_USE_QTKIT 0
+#define wxOSX_USE_AVFOUNDATION 1
+#else
 #define wxOSX_USE_QTKIT 1
+#define wxOSX_USE_AVFOUNDATION 0
+#endif
+
+#if wxOSX_USE_AVFOUNDATION && wxOSX_USE_COCOA && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+#define wxOSX_USE_AVKIT 1
+#else
 #define wxOSX_USE_AVKIT 0
+#endif
 
 //===========================================================================
 //  BACKEND DECLARATIONS
@@ -437,7 +448,7 @@ void wxQTMediaBackend::DoShowPlayerControls(wxMediaCtrlPlayerControls flags)
 
 #endif
 
-#if wxOSX_USE_AVKIT
+#if wxOSX_USE_AVFOUNDATION
 
 //---------------------------------------------------------------------------
 //
@@ -446,7 +457,10 @@ void wxQTMediaBackend::DoShowPlayerControls(wxMediaCtrlPlayerControls flags)
 //---------------------------------------------------------------------------
 
 #import <AVFoundation/AVFoundation.h>
+
+#if wxOSX_USE_AVKIT
 #import <AVKit/AVKit.h>
+#endif
 
 class WXDLLIMPEXP_FWD_MEDIA wxAVMediaBackend;
 
@@ -512,7 +526,6 @@ private:
     
     wxSize m_bestSize;              //Original movie size
     wxAVPlayer* m_player;               //AVPlayer handle/instance
-    AVPlayerLayer* m_playerlayer;       //AVPlayerView instance
     
     wxMediaCtrlPlayerControls m_interfaceflags; // Saved interface flags
     
@@ -625,11 +638,137 @@ private:
 
 @end
 
+#if wxOSX_USE_IPHONE
+
+@interface wxAVView : UIView
+{
+}
+
+@end
+
+@implementation wxAVView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXIPhoneClassAddWXMethods( self );
+    }
+}
+
++ (Class)layerClass
+{
+	return [AVPlayerLayer class];
+}
+
+- (id) initWithFrame:(CGRect)rect player:(wxAVPlayer*) player
+{
+    if ( !(self=[super initWithFrame:rect]) )
+        return nil;
+
+    AVPlayerLayer* playerLayer = (AVPlayerLayer*) [self layer];
+    [playerLayer setPlayer: player];
+    [player setPlayerLayer:playerLayer];
+
+    return self;
+}
+
+- (AVPlayerLayer*) playerLayer
+{
+    return (AVPlayerLayer*) [self layer];
+}
+@end
+
+#else
+
+#if wxOSX_USE_AVKIT
+
+@interface wxAVPlayerView : AVPlayerView
+{
+}
+
+@end
+
+@implementation wxAVPlayerView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+- (id) initWithFrame:(NSRect)rect player:(wxAVPlayer*) player
+{
+    if ( !(self=[super initWithFrame:rect]) )
+        return nil;
+    
+    self.player = player;
+    
+    return self;
+}
+
+- (AVPlayerLayer*) playerLayer
+{
+    return (AVPlayerLayer*) [[[self layer] sublayers] firstObject];
+}
+
+@end
+
+#endif // wxOSX_USE_AVKIT
+
+@interface wxAVView : NSView
+{
+}
+
+@end
+
+@implementation wxAVView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized)
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+- (id) initWithFrame:(NSRect)rect player:(AVPlayer*) player
+{
+    if ( !(self=[super initWithFrame:rect]) )
+        return nil;
+    
+    [self setWantsLayer:YES];
+    AVPlayerLayer* playerlayer = [[AVPlayerLayer playerLayerWithPlayer: player] retain];
+    [player setPlayerLayer:playerlayer];
+
+    [playerlayer setFrame:[[self layer] bounds]];
+    [playerlayer setAutoresizingMask:kCALayerWidthSizable | kCALayerHeightSizable];
+    [[self layer] addSublayer:playerlayer];
+
+    return self;
+}
+
+- (AVPlayerLayer*) playerLayer
+{
+    return (AVPlayerLayer*) [[[self layer] sublayers] firstObject];
+}
+
+@end
+
+#endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxAVMediaBackend, wxMediaBackend);
 
 wxAVMediaBackend::wxAVMediaBackend() :
-m_player(nil), m_playerlayer(nil),
+m_player(nil),
 m_interfaceflags(wxMEDIACTRLPLAYERCONTROLS_NONE)
 {
 }
@@ -649,6 +788,8 @@ bool wxAVMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
 {
     wxMediaCtrl* mediactrl = (wxMediaCtrl*) inctrl;
     
+    mediactrl->DontCreatePeer();
+    
     if ( !mediactrl->wxControl::Create(
                                        parent, wid, pos, size,
                                        wxWindow::MacRemoveBordersFromStyle(style),
@@ -656,20 +797,33 @@ bool wxAVMediaBackend::CreateControl(wxControl* inctrl, wxWindow* parent,
     {
         return false;
     }
-    
-    NSView* view = mediactrl->GetHandle();
-    [view setWantsLayer:YES];
-    
+
     m_player = [[wxAVPlayer alloc] init];
     [m_player setBackend:this];
-    
-    m_playerlayer = [[AVPlayerLayer playerLayerWithPlayer: m_player] retain];
-    [m_playerlayer setFrame:[[view layer] bounds]];
-    [m_playerlayer setAutoresizingMask:kCALayerWidthSizable | kCALayerHeightSizable];
 
-    [[view layer] addSublayer:m_playerlayer];
-    [m_player setPlayerLayer:m_playerlayer];
+    WXRect r = wxOSXGetFrameForControl( mediactrl, pos , size ) ;
     
+    WXWidget view = NULL;
+#if wxOSX_USE_AVKIT
+    if ( NSClassFromString(@"AVPlayerView") )
+    {
+        view = [[wxAVPlayerView alloc] initWithFrame: r player:m_player];
+        [(wxAVPlayerView*) view setControlsStyle:AVPlayerViewControlsStyleNone];
+    }
+#endif
+    
+    if ( view == NULL )
+    {
+        view = [[wxAVView alloc] initWithFrame: r player:m_player];
+    }
+    
+#if wxOSX_USE_IPHONE
+    wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl(mediactrl,view);
+#else
+    wxWidgetCocoaImpl* impl = new wxWidgetCocoaImpl(mediactrl,view);
+#endif
+    mediactrl->SetPeer(impl);
+
     m_ctrl = mediactrl;
     return true;
 }
@@ -818,7 +972,17 @@ bool wxAVMediaBackend::ShowPlayerControls(wxMediaCtrlPlayerControls flags)
 
 void wxAVMediaBackend::DoShowPlayerControls(wxMediaCtrlPlayerControls flags)
 {
-    // TODO NATIVE CONTROLS (AVKit is only available on 10.9)
+#if wxOSX_USE_AVKIT
+    NSView* view = m_ctrl->GetHandle();
+    if ( [view isKindOfClass:[wxAVPlayerView class]] )
+    {
+        wxAVPlayerView* playerView = (wxAVPlayerView*) view;
+        if (flags == wxMEDIACTRLPLAYERCONTROLS_NONE )
+            playerView.controlsStyle = AVPlayerViewControlsStyleNone;
+        else
+            playerView.controlsStyle = AVPlayerViewControlsStyleDefault;
+    }
+#endif
 }
 
 #endif
