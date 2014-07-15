@@ -36,18 +36,26 @@
 
 #include "wx/osx/private.h"
 
-#ifdef wxOSX_USE_IPHONE
-#define wxOSX_USE_QTKIT 0
-#define wxOSX_USE_AVFOUNDATION 1
+#ifndef wxOSX_USE_QTKIT
+    #if wxOSX_USE_IPHONE
+        #define wxOSX_USE_QTKIT 0
+        #define wxOSX_USE_AVFOUNDATION 1
+    #else
+        #define wxOSX_USE_QTKIT 1
+        #define wxOSX_USE_AVFOUNDATION 0
+    #endif
 #else
-#define wxOSX_USE_QTKIT 1
-#define wxOSX_USE_AVFOUNDATION 0
+    #if wxOSX_USE_QTKIT
+        #define wxOSX_USE_AVFOUNDATION 0
+    #else
+        #define wxOSX_USE_AVFOUNDATION 1
+    #endif
 #endif
 
 #if wxOSX_USE_AVFOUNDATION && wxOSX_USE_COCOA && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
-#define wxOSX_USE_AVKIT 1
+    #define wxOSX_USE_AVKIT 1
 #else
-#define wxOSX_USE_AVKIT 0
+    #define wxOSX_USE_AVKIT 0
 #endif
 
 //===========================================================================
