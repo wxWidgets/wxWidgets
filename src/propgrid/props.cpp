@@ -1096,9 +1096,8 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 // wxEnumProperty
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxEnumProperty, wxPGProperty)
-
-WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxEnumProperty,long,Choice)
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxEnumProperty, wxPGProperty,
+                               long, const long*, Choice)
 
 wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, int value ) : wxPGProperty(label,name)
@@ -1370,9 +1369,8 @@ int wxEnumProperty::GetIndex() const
 // wxEditEnumProperty
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxEditEnumProperty, wxPGProperty)
-
-WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxEditEnumProperty,wxString,ComboBox)
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxEditEnumProperty, wxPGProperty,
+                               wxString, const wxString&, ComboBox)
 
 wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, const wxString& value )
@@ -1410,9 +1408,8 @@ wxEditEnumProperty::~wxEditEnumProperty()
 // wxFlagsProperty
 // -----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFlagsProperty,wxPGProperty)
-
-WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxFlagsProperty,long,TextCtrl)
+WX_PG_IMPLEMENT_PROPERTY_CLASS(wxFlagsProperty, wxPGProperty,
+                               long, long, TextCtrl)
 
 void wxFlagsProperty::Init()
 {
