@@ -1315,6 +1315,10 @@ bool wxGenericTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
+    // Hidden root item is never visible.
+    if ( item == GetRootItem() && HasFlag(wxTR_HIDE_ROOT) )
+        return false;
+
     // An item is only visible if it's not a descendant of a collapsed item
     wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
     wxGenericTreeItem* parent = pItem->GetParent();
