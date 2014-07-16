@@ -206,10 +206,9 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         {
             m_qtWindow = new wxQtWidget( parent, this );
         }
+        // Do not let Qt erase the background by default (needed by wxClientDC)
+        GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
     }
-
-    // Do not let Qt erase the background by default (needed by wxClientDC)
-    GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         return false;
