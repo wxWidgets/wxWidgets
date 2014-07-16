@@ -207,6 +207,9 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         }
     }
 
+    // Do not let Qt erase the background by default (needed by wxClientDC)
+    GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
+
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         return false;
 
@@ -821,10 +824,12 @@ bool wxWindow::SetBackgroundStyle(wxBackgroundStyle style)
     }
     else if (style == wxBG_STYLE_SYSTEM)
     {
+        GetHandle()->setAutoFillBackground(true);
         GetHandle()->setAttribute(Qt::WA_NoSystemBackground, false);
     }
     else if (style == wxBG_STYLE_ERASE)
     {
+        GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
         GetHandle()->setAutoFillBackground(true);
     }
 
