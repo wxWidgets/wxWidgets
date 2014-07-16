@@ -332,9 +332,7 @@ void wxWindow::WarpPointer(int x, int y)
 
 void wxWindow::Update()
 {
-#if wxDEBUG_LEVEL >= 2
-    wxLogTrace("wxWindow", wxT("Update %s"), (const char*)GetName());
-#endif // wxDEBUG_LEVEL >= 2
+    wxLogDebug(wxT("wxWindow::Update %s"), (const char*)GetName());
     // send the paint event to the inner widget in scroll areas:
     if ( QtGetScrollBarsContainer() )
     {
@@ -358,19 +356,15 @@ void wxWindow::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
 
     if ( rect != NULL )
     {
-#if wxDEBUG_LEVEL >= 2
-        wxLogTrace("wxWindow", wxT("Refresh %s %d %d %d %d"),
+        wxLogDebug(wxT("wxWindow::Refresh %s rect %d %d %d %d"),
                    (const char*)GetName(),
                    rect->x, rect->y, rect->width, rect->height);
         widget->update( wxQtConvertRect( *rect ));
-#endif // wxDEBUG_LEVEL >= 2
     }
     else
     {
-#if wxDEBUG_LEVEL >= 2
-        wxLogTrace("wxWindow", wxT("Refresh %s"),
+        wxLogDebug(wxT("wxWindow::Refresh %s"),
                    (const char*)GetName());
-#endif // wxDEBUG_LEVEL >= 2
         widget->update();
     }
 }
@@ -880,13 +874,11 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         // use the bounding rect as a region in Qt could be complex or even elliptical:
         m_updateRegion = wxRegion( wxQtConvertRect( event->region().boundingRect() ) );
 
-#if wxDEBUG_LEVEL >= 2
-        wxLogTrace("wxWindow", wxT("Handle Paint %s %s region %d %d %d %d"),
+        wxLogDebug(wxT("wxWindow::QtHandlePaintEvent %s %s region %d %d %d %d"),
                    (const char*)GetName(),
                    m_qtPicture->isNull() ? "wxPaintDC" : "wxClientDC",
                    m_updateRegion.GetBox().x, m_updateRegion.GetBox().y,
                    m_updateRegion.GetBox().width, m_updateRegion.GetBox().height);
-#endif // wxDEBUG_LEVEL >= 2
 
         // Prepare the Qt painter for wxWindowDC:
         bool ok;

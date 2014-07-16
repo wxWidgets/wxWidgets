@@ -92,12 +92,9 @@ wxClientDCImpl::~wxClientDCImpl()
                 // only force the update of the rect affected by the DC
                 QRect rect = pict->boundingRect();
                 widget->repaint( rect );
-#if wxDEBUG_LEVEL >= 2
-                wxLogTrace("wxClientDC",
-                           wxT("Repainting %s (%d %d %d %d)"),
+                wxLogDebug( wxT("wxClientDC Repainting %s (%d %d %d %d)"),
                            (const char*) m_window->GetName(),
                            rect.left(), rect.top(), rect.width(), rect.height());
-#endif // wxDEBUG_LEVEL >= 2
             }
             // let destroy the m_qtPainter (see inherited classes destructors)
             m_window = NULL;
