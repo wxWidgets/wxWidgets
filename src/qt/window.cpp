@@ -206,9 +206,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         {
             m_qtWindow = new wxQtWidget( parent, this );
         }
-        // Do not let Qt erase the background by default (needed by wxClientDC)
-        GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
-        // Set the default color so Paint Event default handler clears it:
+        // Set the default color so Paint Event default handler clears the DC:
         m_hasBgCol = true;
         SetBackgroundColour(GetHandle()->palette().color(GetHandle()->backgroundRole()));
     }
@@ -855,6 +853,8 @@ bool wxWindow::QtSetBackgroundStyle()
         }
         else if (m_backgroundStyle == wxBG_STYLE_SYSTEM)
         {
+            // let Qt erase the background by default
+            // (note that wxClientDC will not work)
             widget->setAutoFillBackground(true);
             widget->setAttribute(Qt::WA_NoSystemBackground, false);
         }
