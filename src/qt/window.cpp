@@ -850,6 +850,8 @@ bool wxWindow::QtSetBackgroundStyle()
         else if (m_backgroundStyle == wxBG_STYLE_TRANSPARENT)
         {
             widget->setAttribute(Qt::WA_TranslucentBackground);
+            // avoid a default background color (usually black):
+            widget->setStyleSheet("background:transparent;");
         }
         else if (m_backgroundStyle == wxBG_STYLE_SYSTEM)
         {
