@@ -192,6 +192,8 @@ private:
     wxScrollBar *QtGetScrollBar( int orientation ) const;
     wxScrollBar *QtSetScrollBar( int orientation, wxScrollBar *scrollBar=NULL );
 
+    bool QtSetBackgroundStyle();
+
     QPicture *m_qtPicture;
     QPainter *m_qtPainter;
 

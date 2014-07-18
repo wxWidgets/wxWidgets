@@ -220,6 +220,9 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 
     parent->AddChild( this );
 
+    // set the background style after creation (not before like in wxGTK)
+    QtSetBackgroundStyle();
+
     DoMoveWindow( pos.x, pos.y, size.GetWidth(), size.GetHeight() );
 
 //    // Use custom Qt window flags (allow to turn on or off
@@ -825,26 +828,34 @@ bool wxWindow::SetBackgroundStyle(wxBackgroundStyle style)
 {
     if (!wxWindowBase::SetBackgroundStyle(style))
         return false;
+    // NOTE this could be called before creation, so it will be delayed:
+    return QtSetBackgroundStyle();
+}
 
-    if (style == wxBG_STYLE_PAINT)
+bool wxWindow::QtSetBackgroundStyle()
+{
+    // check if the control is created (wxGTK requires calling it before):
+    if ( GetHandle() != NULL )
     {
-        GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
+        if (m_backgroundStyle == wxBG_STYLE_PAINT)
+        {
+            GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
+        }
+        else if (m_backgroundStyle == wxBG_STYLE_TRANSPARENT)
+        {
+            GetHandle()->setAttribute(Qt::WA_TranslucentBackground);
+        }
+        else if (m_backgroundStyle == wxBG_STYLE_SYSTEM)
+        {
+            GetHandle()->setAutoFillBackground(true);
+            GetHandle()->setAttribute(Qt::WA_NoSystemBackground, false);
+        }
+        else if (m_backgroundStyle == wxBG_STYLE_ERASE)
+        {
+            GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
+            GetHandle()->setAutoFillBackground(true);
+        }
     }
-    else if (style == wxBG_STYLE_TRANSPARENT)
-    {
-        GetHandle()->setAttribute(Qt::WA_TranslucentBackground);
-    }
-    else if (style == wxBG_STYLE_SYSTEM)
-    {
-        GetHandle()->setAutoFillBackground(true);
-        GetHandle()->setAttribute(Qt::WA_NoSystemBackground, false);
-    }
-    else if (style == wxBG_STYLE_ERASE)
-    {
-        GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
-        GetHandle()->setAutoFillBackground(true);
-    }
-
     return true;
 }
 
