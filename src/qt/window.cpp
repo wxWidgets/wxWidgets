@@ -834,26 +834,32 @@ bool wxWindow::SetBackgroundStyle(wxBackgroundStyle style)
 
 bool wxWindow::QtSetBackgroundStyle()
 {
+    QWidget *widget;
+    // if it is a scroll area, don't make transparent (invisible) scroll bars:
+    if ( QtGetScrollBarsContainer() )
+        widget = QtGetScrollBarsContainer()->viewport();
+    else
+        widget = GetHandle();
     // check if the control is created (wxGTK requires calling it before):
-    if ( GetHandle() != NULL )
+    if ( widget != NULL )
     {
         if (m_backgroundStyle == wxBG_STYLE_PAINT)
         {
-            GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
+            widget->setAttribute(Qt::WA_OpaquePaintEvent);
         }
         else if (m_backgroundStyle == wxBG_STYLE_TRANSPARENT)
         {
-            GetHandle()->setAttribute(Qt::WA_TranslucentBackground);
+            widget->setAttribute(Qt::WA_TranslucentBackground);
         }
         else if (m_backgroundStyle == wxBG_STYLE_SYSTEM)
         {
-            GetHandle()->setAutoFillBackground(true);
-            GetHandle()->setAttribute(Qt::WA_NoSystemBackground, false);
+            widget->setAutoFillBackground(true);
+            widget->setAttribute(Qt::WA_NoSystemBackground, false);
         }
         else if (m_backgroundStyle == wxBG_STYLE_ERASE)
         {
-            GetHandle()->setAttribute(Qt::WA_OpaquePaintEvent);
-            GetHandle()->setAutoFillBackground(true);
+            widget->setAttribute(Qt::WA_OpaquePaintEvent);
+            widget->setAutoFillBackground(true);
         }
     }
     return true;
