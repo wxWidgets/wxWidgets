@@ -58,7 +58,12 @@
 
 #if wxUSE_TASKBARBUTTON
     #include "wx/taskbarbutton.h"
-#endif
+    #include "wx/dynlib.h"
+
+    WXUINT wxMsgTaskbarButtonCreated = 0;
+    #define wxTHBN_CLICKED 0x1800
+    #define wxMSGFLT_ADD   0x01
+#endif  // wxUSE_TASKBARBUTTON
 
 
 // ----------------------------------------------------------------------------
@@ -68,11 +73,6 @@
 #if wxUSE_MENUS || wxUSE_MENUS_NATIVE
     extern wxMenu *wxCurrentPopupMenu;
 #endif // wxUSE_MENUS || wxUSE_MENUS_NATIVE
-
-#if wxUSE_TASKBARBUTTON
-    WXUINT wxMsgTaskbarButtonCreated = 0;
-    #define wxTHBN_CLICKED 0x1800
-#endif  // wxUSE_TASKBARBUTTON
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -153,8 +153,29 @@ bool wxFrame::Create(wxWindow *parent,
 
         // In case the application is run elevated, allow the
         // TaskbarButtonCreated and WM_COMMAND messages through.
-        ChangeWindowMessageFilter(wxMsgTaskbarButtonCreated, MSGFLT_ADD);
-        ChangeWindowMessageFilter(WM_COMMAND, MSGFLT_ADD);
+#if wxUSE_DYNLIB_CLASS
+        typedef BOOL (WINAPI *ChangeWindowMessageFilter_t)(UINT message,
+                                                           DWORD dwFlag);
+        static ChangeWindowMessageFilter_t s_pfnChangeWindowMessageFilter = NULL;
+        if ( !s_pfnChangeWindowMessageFilter )
+        {
+            wxDynamicLibrary dllUser32(wxT("user32.dll"));
+            if ( dllUser32.IsLoaded() )
+            {
+                s_pfnChangeWindowMessageFilter = (ChangeWindowMessageFilter_t)
+                    dllUser32.GetSymbol(wxT("ChangeWindowMessageFilter"));
+                if ( s_pfnChangeWindowMessageFilter )
+                {
+                    s_pfnChangeWindowMessageFilter(wxMsgTaskbarButtonCreated,
+                                                   wxMSGFLT_ADD);
+                    s_pfnChangeWindowMessageFilter(WM_COMMAND, wxMSGFLT_ADD);
+                }
+            }
+        }
+#else
+        ChangeWindowMessageFilter(wxMsgTaskbarButtonCreated, wxMSGFLT_ADD);
+        ChangeWindowMessageFilter(WM_COMMAND, wxMSGFLT_ADD);
+#endif // wxUSE_DYNLIB_CLASS
     }
 #endif // wxUSE_TASKBARBUTTON
 
