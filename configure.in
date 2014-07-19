@@ -791,6 +791,7 @@ WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
 WX_ARG_FEATURE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac-only, use wxWebView instead)], wxUSE_WEBKIT)
 WX_ARG_FEATURE(webview,     [  --enable-webview        use wxWebView library], wxUSE_WEBVIEW)
+WX_ARG_ENABLE(webviewchromium,     [  --enable-webviewchromium        use wxWebView Chromium backend], wxUSE_WEBVIEW_CHROMIUM)
 
 dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
 dnl can't be disabled, don't even provide an option to do it
@@ -7021,7 +7022,6 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                 #include <Carbon/Carbon.h>
                                 #include <WebKit/WebKit.h>
                             ])
-            CEF_LINK="$EXTRA_FRAMEWORKS -F\\$(top_srcdir)cef/Debug -framework Chromium\ Embedded\ framework"
             CPPFLAGS="$old_CPPFLAGS"
         fi
     fi
@@ -7041,13 +7041,20 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
             wxUSE_WEBVIEW="yes"
             AC_DEFINE(wxUSE_WEBVIEW_IE)
         fi
+    elif test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        if "$wxUSE_MAC" = 1; then
+            CEF_LINK="$EXTRA_FRAMEWORKS -F\\$(top_srcdir)cef/Debug -framework Chromium\ Embedded\ framework"
+        fi
     fi
 fi
 
 if test "$wxUSE_WEBVIEW" = "yes"; then
     USE_WEBVIEW=1
     AC_DEFINE(wxUSE_WEBVIEW)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview webview_chromium"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
+    if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview_chromium"
+    fi
 else
     USE_WEBVIEW=0
 fi
