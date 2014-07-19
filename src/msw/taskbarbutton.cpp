@@ -706,6 +706,11 @@ wxAppProgressIndicator::wxAppProgressIndicator(wxTopLevelWindow *parent, int max
 {
 }
 
+wxAppProgressIndicator::~wxAppProgressIndicator()
+{
+    m_taskBarButton->SetProgressState(wxTASKBAR_BUTTON_NO_PROGRESS);
+}
+
 bool wxAppProgressIndicator::Update(int value)
 {
     wxASSERT_MSG( value <= m_maxValue, wxT("invalid progress value") );

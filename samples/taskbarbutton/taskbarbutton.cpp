@@ -422,7 +422,7 @@ void MyFrame::OnShowProgressDialog(wxCommandEvent& WXUNUSED(event))
                            NULL,
                            wxPD_AUTO_HIDE
                         );
-    wxAppProgressIndicator indicator(&dlg, PROGRESS_COUNT);
+    wxAppProgressIndicator indicator(this, PROGRESS_COUNT);
     for ( int i = 0; i <= PROGRESS_COUNT; i++ )
     {
         if ( !dlg.Update(i) )
@@ -442,7 +442,7 @@ void MyFrame::OnPulseProgressDialog(wxCommandEvent& WXUNUSED(event))
                            NULL,
                            wxPD_AUTO_HIDE
                         );
-    wxAppProgressIndicator indicator(&dlg, PROGRESS_COUNT);
+    wxAppProgressIndicator indicator(this, PROGRESS_COUNT);
     for ( int i = 0; i <= PROGRESS_COUNT; i++ )
     {
         if ( !dlg.Pulse() )

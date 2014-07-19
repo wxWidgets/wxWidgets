@@ -130,6 +130,22 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTaskBarButton);
 };
 
+class WXDLLIMPEXP_CORE wxAppProgressIndicator
+{
+public:
+    wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue);
+    virtual ~wxAppProgressIndicator();
+    bool Update(int value);
+    bool Pulse();
+
+private:
+    void Init();
+
+    wxTopLevelWindow *m_parent;
+    int m_maxValue;
+    wxScopedPtr<wxTaskBarButton> m_taskBarButton;
+};
+
 enum WXDLLIMPEXP_CORE wxJumpListItemType {
     wxJUMP_LIST_SEPARATOR,
     wxJUMP_LIST_TASK,
@@ -170,22 +186,6 @@ private:
     wxString m_tooltip;
     wxString m_iconPath;
     int      m_iconIndex;
-};
-
-class WXDLLIMPEXP_CORE wxAppProgressIndicator
-{
-public:
-    wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue);
-    virtual ~wxAppProgressIndicator() { }
-    bool Update(int value);
-    bool Pulse();
-
-private:
-    void Init();
-
-    wxTopLevelWindow *m_parent;
-    int m_maxValue;
-    wxScopedPtr<wxTaskBarButton> m_taskBarButton;
 };
 
 typedef wxVector<wxJumpListItem> wxJumpListItems;
