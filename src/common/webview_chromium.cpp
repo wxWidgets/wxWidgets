@@ -5,6 +5,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
+
 #include "wx/webview.h"
 #include "wx/webview_chromium.h"
 #include "wx/filesys.h"
@@ -796,3 +799,5 @@ bool SchemeHandler::ReadResponse(void* data_out,
 
     return has_data;
 }
+
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM

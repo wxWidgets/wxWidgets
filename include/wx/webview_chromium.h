@@ -7,6 +7,10 @@
 #ifndef _WX_WEBVIEWCHROMIUM_H_
 #define _WX_WEBVIEWCHROMIUM_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
+
 #include "wx/control.h"
 #include "wx/webview.h"
 #include "wx/sharedptr.h"
@@ -305,5 +309,7 @@ public:
                               const wxString& name = wxWebViewNameStr)
     { return new wxWebViewChromium(parent, id, url, pos, size, style, name); }
 };
+
+#endif // wxUSE_WEBVIEW && wxUSE_WEBVIEW_CHROMIUM
 
 #endif // _WX_WEBVIEWCHROMIUM_H_
