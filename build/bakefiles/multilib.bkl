@@ -190,6 +190,7 @@
         <lib-path>$(LIBCEF_WRAPPER_PATH)</lib-path>
         <sys-lib>$(LIBCEF_NAME)</sys-lib>
         <sys-lib>$(LIBCEF_DLL_WRAPPER_NAME)</sys-lib>
+        <ldflags>$(LIBCEF_FRAMEWORK)</ldflags>>
     </dll>
 
     <lib id="webviewlib" template="wx_lib"
