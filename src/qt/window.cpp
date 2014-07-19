@@ -893,8 +893,8 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     }
     else
     {
-        // use the bounding rect as a region in Qt could be complex or even elliptical:
-        m_updateRegion = wxRegion( wxQtConvertRect( event->region().boundingRect() ) );
+        // use the Qt event region:
+        m_updateRegion.QtSetRegion( event->region() );
 
         wxLogDebug(wxT("wxWindow::QtHandlePaintEvent %s %s region %d %d %d %d"),
                    (const char*)GetName(),
