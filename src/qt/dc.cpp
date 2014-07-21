@@ -52,11 +52,22 @@ wxQtDCImpl::~wxQtDCImpl()
         delete m_clippingRegion;
 }
 
-void wxQtDCImpl::QtPreparePainter( QSize size )
+void wxQtDCImpl::QtPreparePainter( )
 {
     //Do here all QPainter initialization (called after each begin())
-    m_qtPainter->setPen( wxPen().GetHandle() );
-    m_qtPainter->setBrush( wxBrush().GetHandle() );
+    if ( m_qtPainter == NULL )
+    {
+        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter is NULL!!!"));
+    }
+    else if ( m_qtPainter->isActive() )
+    {
+        m_qtPainter->setPen( wxPen().GetHandle() );
+        m_qtPainter->setBrush( wxBrush().GetHandle() );
+    }
+    else
+    {
+        wxLogDebug(wxT("wxQtDCImpl::QtPreparePainter not active!"));
+    }
 }
 
 bool wxQtDCImpl::CanDrawBitmap() const
