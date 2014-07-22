@@ -24,6 +24,7 @@ class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
 namespace {
 class WXDLLIMPEXP_FWD_CORE IObjectArray;
 class WXDLLIMPEXP_FWD_CORE ICustomDestinationList;
+class WXDLLIMPEXP_FWD_CORE IApplicationDocumentLists;
 }
 
 
@@ -188,23 +189,66 @@ private:
     int      m_iconIndex;
 };
 
-typedef wxVector<wxJumpListItem> wxJumpListItems;
+typedef wxVector<wxJumpListItem*> wxJumpListItems;
+
+class WXDLLIMPEXP_FWD_CORE  wxJumpList;
+
+class WXDLLIMPEXP_CORE wxJumpListCategory
+{
+public:
+    wxJumpListCategory(const wxString& title = wxEmptyString);
+    virtual ~wxJumpListCategory();
+
+    wxJumpListItem* Append(wxJumpListItem *item);
+    void Delete(wxJumpListItem *item);
+    wxJumpListItem* Remove(wxJumpListItem *item);
+    wxJumpListItem* FindItemByPosition (size_t pos) const;
+    wxJumpListItem* Insert(size_t pos, wxJumpListItem *item);
+    wxJumpListItem* Prepend(wxJumpListItem *item);
+    void SetTitle(const wxString& title);
+    const wxString& GetTitle() const;
+    const wxJumpListItems& GetItems() const;
+
+private:
+    wxJumpListItems m_items;
+    wxString m_title;
+};
 
 class WXDLLIMPEXP_CORE wxJumpList
 {
 public:
     wxJumpList();
     virtual ~wxJumpList();
-    void SetTasks(const wxJumpListItems& tasks);
+    wxJumpListCategory* GetTasks();
+    void ShowRecentCategory(bool shown = true);
+    void HideRecentCategory();
+    void ShowFrequentCategory(bool shown = true);
+    void HideFrequentCategory();
+
+    const wxJumpListCategory* GetFrequentCategory();
+    const wxJumpListCategory* GetRecentCategory();
+    const wxVector<wxJumpListCategory*>& GetCustomCategories();
+
+    void AddCategory(wxJumpListCategory * catalog);
+    wxJumpListCategory* RemoveCategory(const wxString& title);
+
+    void Update();
 
 private:
     bool BeginUpdate();
     bool CommitUpdate();
     void AddTasksToDestinationList();
+    void LoadKnownCategory(const wxString& title);
 
-    ICustomDestinationList *m_destinationList;
-    IObjectArray *m_objectArray;
-    wxJumpListItems m_tasks;
+    ICustomDestinationList    *m_destinationList;
+    IObjectArray              *m_objectArray;
+
+    wxScopedPtr<wxJumpListCategory> m_tasks;
+    wxScopedPtr<wxJumpListCategory> m_frequent;
+    wxScopedPtr<wxJumpListCategory> m_recent;
+    wxVector<wxJumpListCategory*>   m_customCategories;
+    bool m_recent_visible;
+    bool m_frequent_visible;
 };
 
 #if defined(__WXMSW__)
