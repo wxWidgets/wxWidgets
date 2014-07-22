@@ -5578,11 +5578,12 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
         // size of the rectangle is reduced to compensate for the thickness of
         // the line. If this is too strange on non-wxMSW platforms then
         // please #ifdef this appropriately.
+#ifndef __WXQT__
         rect.x += penWidth / 2;
         rect.y += penWidth / 2;
         rect.width -= penWidth - 1;
         rect.height -= penWidth - 1;
-
+#endif
         // Now draw the rectangle
         // use the cellHighlightColour if the cell is inside a selection, this
         // will ensure the cell is always visible.
@@ -5850,7 +5851,7 @@ wxGrid::DoDrawGridLines(wxDC& dc,
         int i = GetColAt( colPos );
 
         int colRight = GetColRight(i);
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXQT__)
         if (GetLayoutDirection() != wxLayout_RightToLeft)
 #endif
             colRight--;
@@ -6714,12 +6715,14 @@ wxRect wxGrid::CellToRect( int row, int col ) const
         for (i=row; i < row + cell_rows; i++)
             rect.height += GetRowHeight(i);
 
+#ifndef __WXQT__
         // if grid lines are enabled, then the area of the cell is a bit smaller
         if (m_gridLinesEnabled)
         {
             rect.width -= 1;
             rect.height -= 1;
         }
+#endif
     }
 
     return rect;
@@ -7451,7 +7454,7 @@ int wxGrid::GetColSize( int col ) const
 void wxGrid::SetDefaultCellBackgroundColour( const wxColour& col )
 {
     m_defaultCellAttr->SetBackgroundColour(col);
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXQT__)
     m_gridWin->SetBackgroundColour(col);
 #endif
 }
