@@ -868,7 +868,11 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     if (hasUnderline)
         str << wxT("<u>");
 
-    str += def->GetName();
+    wxString name(def->GetName());
+    if (attr.HasTextEffects() && (attr.GetTextEffects() & (wxTEXT_ATTR_EFFECT_CAPITALS|wxTEXT_ATTR_EFFECT_SMALL_CAPITALS)))
+        name = name.Upper();
+
+    str += name;
 
     if (hasUnderline)
         str << wxT("</u>");
