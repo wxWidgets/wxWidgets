@@ -214,6 +214,8 @@ private:
     wxString m_title;
 };
 
+typedef wxVector<wxJumpListCategory*> wxJumpListCategories;
+
 class WXDLLIMPEXP_CORE wxJumpList
 {
 public:
@@ -227,10 +229,11 @@ public:
 
     const wxJumpListCategory* GetFrequentCategory();
     const wxJumpListCategory* GetRecentCategory();
-    const wxVector<wxJumpListCategory*>& GetCustomCategories();
+    const wxJumpListCategories& GetCustomCategories();
 
     void AddCategory(wxJumpListCategory * catalog);
     wxJumpListCategory* RemoveCategory(const wxString& title);
+    void DeleteCategory(const wxString& title);
 
     void Update();
 
@@ -238,6 +241,7 @@ private:
     bool BeginUpdate();
     bool CommitUpdate();
     void AddTasksToDestinationList();
+    void AddCustomCategoriesToDestionationList();
     void LoadKnownCategory(const wxString& title);
 
     ICustomDestinationList    *m_destinationList;
@@ -246,7 +250,7 @@ private:
     wxScopedPtr<wxJumpListCategory> m_tasks;
     wxScopedPtr<wxJumpListCategory> m_frequent;
     wxScopedPtr<wxJumpListCategory> m_recent;
-    wxVector<wxJumpListCategory*>   m_customCategories;
+    wxJumpListCategories m_customCategories;
     bool m_recent_visible;
     bool m_frequent_visible;
 };

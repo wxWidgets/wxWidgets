@@ -364,7 +364,8 @@ bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
         return false;
     }
 
-    if ( item.GetType() == wxJUMP_LIST_TASK )
+    if ( item.GetType() == wxJUMP_LIST_TASK ||
+         item.GetType() == wxJUMP_LIST_DESTIONATION )
     {
         if ( !item.GetFilePath().IsEmpty() )
             shellLink->SetPath(item.GetFilePath().wc_str());
@@ -389,7 +390,8 @@ bool AddShellLink(IObjectCollection *collection, const wxJumpListItem& item)
     }
 
     PROPVARIANT pv;
-    if ( item.GetType() == wxJUMP_LIST_TASK )
+    if ( item.GetType() == wxJUMP_LIST_TASK ||
+         item.GetType() == wxJUMP_LIST_DESTIONATION )
     {
         hr = InitPropVariantFromString(item.GetTitle().wc_str(), &pv);
         if ( SUCCEEDED(hr) )
@@ -472,6 +474,29 @@ wxJumpListItem* GetItemFromIShellItem(IShellItem *shellItem)
     item->SetFilePath(wxString(name));
     CoTaskMemFree(name);
     return item;
+}
+
+IObjectCollection* CreateObjectCollection()
+{
+    IObjectCollection* collection;
+
+    HRESULT hr;
+    hr = CoCreateInstance
+         (
+             wxCLSID_EnumerableObjectCollection,
+             NULL,
+             CLSCTX_INPROC,
+             wxIID_IObjectCollection,
+             reinterpret_cast<void**>(&(collection))
+         );
+    if ( FAILED(hr) )
+    {
+        wxLogApiError("CoCreateInstance(wxCLSID_EnumerableObjectCollection)",
+                      hr);
+        return NULL;
+    }
+
+    return collection;
 }
 
 } // namespace
@@ -1040,6 +1065,13 @@ wxJumpList::~wxJumpList()
 {
     if ( m_destinationList )
         m_destinationList->Release();
+
+    for ( wxJumpListCategories::iterator it = m_customCategories.begin();
+          it != m_customCategories.end();
+          ++it )
+    {
+        delete *it;
+    }
 }
 
 void wxJumpList::Update()
@@ -1048,6 +1080,7 @@ void wxJumpList::Update()
         return;
 
     AddTasksToDestinationList();
+    AddCustomCategoriesToDestionationList();
     if ( m_recent_visible )
         m_destinationList->AppendKnownCategory(KDC_RECENT);
     if ( m_frequent_visible )
@@ -1101,7 +1134,7 @@ const wxJumpListCategory* wxJumpList::GetRecentCategory()
     return m_recent.get();
 }
 
-const wxVector<wxJumpListCategory*>& wxJumpList::GetCustomCategories()
+const wxJumpListCategories& wxJumpList::GetCustomCategories()
 {
     return m_customCategories;
 }
@@ -1113,7 +1146,7 @@ void wxJumpList::AddCategory(wxJumpListCategory *catalog)
 
 wxJumpListCategory* wxJumpList::RemoveCategory(const wxString& title)
 {
-    for ( wxVector<wxJumpListCategory*>::iterator it = m_customCategories.begin();
+    for ( wxJumpListCategories::iterator it = m_customCategories.begin();
           it != m_customCategories.end();
           ++it )
     {
@@ -1125,6 +1158,13 @@ wxJumpListCategory* wxJumpList::RemoveCategory(const wxString& title)
     }
 
     return NULL;
+}
+
+void wxJumpList::DeleteCategory(const wxString& title)
+{
+    wxJumpListCategory* category = RemoveCategory(title);
+    if ( category )
+        delete category;
 }
 
 bool wxJumpList::BeginUpdate()
@@ -1147,27 +1187,9 @@ bool wxJumpList::CommitUpdate()
 
 void wxJumpList::AddTasksToDestinationList()
 {
-    IObjectArray* objectArray;
-    IObjectCollection* collection;
-
-    HRESULT hr;
-    hr = CoCreateInstance
-         (
-             wxCLSID_EnumerableObjectCollection,
-             NULL,
-             CLSCTX_INPROC,
-             wxIID_IObjectCollection,
-             reinterpret_cast<void**>(&(collection))
-         );
-    if ( FAILED(hr) )
-    {
-        wxLogApiError("CoCreateInstance(wxCLSID_EnumerableObjectCollection)",
-                      hr);
+    IObjectCollection* collection = CreateObjectCollection();
+    if ( !collection )
         return;
-    }
-
-    hr = collection->QueryInterface(wxIID_IObjectArray,
-                                    reinterpret_cast<void**>(&(objectArray)));
 
     const wxJumpListItems& tasks = m_tasks->GetItems();
     for ( wxJumpListItems::const_iterator it = tasks.begin();
@@ -1176,10 +1198,31 @@ void wxJumpList::AddTasksToDestinationList()
     {
         AddShellLink(collection, *(*it));
     }
-    m_destinationList->AddUserTasks(objectArray);
-
-    objectArray->Release();
+    m_destinationList->AddUserTasks(collection);
     collection->Release();
+}
+
+void wxJumpList::AddCustomCategoriesToDestionationList()
+{
+    for ( wxJumpListCategories::iterator iter = m_customCategories.begin();
+          iter != m_customCategories.end();
+          ++iter )
+    {
+        IObjectCollection* collection = CreateObjectCollection();
+        if ( !collection )
+            continue;
+
+        const wxJumpListItems& tasks = (*iter)->GetItems();
+        for ( wxJumpListItems::const_iterator it = tasks.begin();
+              it != tasks.end();
+              ++it )
+        {
+            AddShellLink(collection, *(*it));
+        }
+        m_destinationList->AppendCategory((*iter)->GetTitle().wc_str(),
+                                          collection);
+        collection->Release();
+    }
 }
 
 void wxJumpList::LoadKnownCategory(const wxString& title)
