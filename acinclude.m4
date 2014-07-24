@@ -367,9 +367,16 @@ dnl this macro checks for a three-valued command line --with argument:
 dnl   possible arguments are 'yes', 'no', 'sys', or 'builtin'
 dnl usage: WX_ARG_SYS_WITH(option, helpmessage, variable-name)
 dnl
-dnl the default value (used if the option is not specified at all) is the value
-dnl of wxUSE_ALL_FEATURES (which is "yes" by default but can be changed by
-dnl giving configure --disable-all-features option)
+dnl the default value (used if the option is not specified at all) is
+dnl determined in the following way:
+dnl  1. If default value for the given library (DEFAULT_wxUSE_LIBXXX) exists,
+dnl     it is used: this allows to disable some libraries by default.
+dnl  2. If wxUSE_ALL_FEATURES is turned off, the use of the library is turned
+dnl     off as well: this ensures that minimal builds are really minimal.
+dnl  3. If wxUSE_SYS_LIBS is turned off, then "builtin" is used: this allows
+dnl     to prevent system libraries from being used by using a single option.
+dnl  4. Otherwise the default value is "yes", meaning that either the system
+dnl     (preferred) or builtin version of the library will be used.
 AC_DEFUN([WX_ARG_SYS_WITH],
         [
           AC_MSG_CHECKING([for --with-$1])
@@ -388,7 +395,17 @@ AC_DEFUN([WX_ARG_SYS_WITH],
                         fi
                       ],
                       [
-                        AS_TR_SH(wx_cv_use_$1)='$3=${'DEFAULT_$3":-$wxUSE_ALL_FEATURES}"
+                        if test "DEFAULT_$3" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        AS_TR_SH(wx_cv_use_$1)="$3=$value"
                       ])
 
           eval "$AS_TR_SH(wx_cv_use_$1)"

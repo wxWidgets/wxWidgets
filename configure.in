@@ -401,6 +401,7 @@ if test "x$VENDOR" = "x"; then
 fi
 
 WX_ARG_DISABLE(all-features,[  --disable-all-features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
+WX_ARG_DISABLE(sys-libs,    [  --disable-sys-libs      disable all use of system libraries, use only built-in ones], wxUSE_SYS_LIBS)
 
 if test "$wxUSE_ALL_FEATURES" = "no"; then
     dnl this is a bit ugly but currently we have no choice but to manually

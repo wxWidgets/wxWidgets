@@ -37,6 +37,10 @@ All:
 - Define wxOVERRIDE as override for supporting compilers (Thomas Goyne).
 - Allow specifying custom comparator for wxSortedArrayString (Catalin Raceanu).
 
+Unix:
+
+- Add --disable-sys-libs configure option.
+
 All (GUI):
 
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
