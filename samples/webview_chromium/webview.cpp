@@ -22,8 +22,8 @@
     #include "wx/wx.h"
 #endif
 
-#if !wxUSE_WEBVIEW_WEBKIT && !wxUSE_WEBVIEW_IE
-#error "A wxWebView backend is required by this sample"
+#if !wxUSE_WEBVIEW_CHROMIUM
+#error "A wxWebView Chromium backend is required by this sample"
 #endif
 
 #include "wx/artprov.h"
