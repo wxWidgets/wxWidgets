@@ -44,11 +44,13 @@ By default, wxWidgets provides Visual Stdio 2010 project file to build wxWebView
 
 ###Linux Platform
 
+By default, wxWebviewChromium feature is disabled in makefile build, you should enable it through `enable-webviewchromium` option.
+
 3. Regenerate the building files by running `bakefile_gen -f autoconf` command under `build/bakefiles` directory.
 
 4. Run `./autogen.sh` under `<wxWidgets_src>`.
 
-5. Run `./configure --enable-webview --enable-webviewwebkit` and `make` commands.
+5. Run `./configure --enable-webview --enable-webviewchromium` and `make` commands.
 
 6. Copy CEF3 related resources as above step5 in windows Platform.
 
@@ -58,10 +60,11 @@ otherwise webview_chromium will not find `libcef.so`.
 
 ###Mac OS X Platform
 
-wxWidgets provides xcode building files to build wxWebViewChromium, supports OS X 10.8 or above.
+wxWidgets supports xcode/makefile builds, requre OS X 10.8 or above.
 
-1. Open `samples/webview_chromium/webview_chromium.xcodeproj`, and build `webview_chromium` sample target. 
+* Xcode builds: open `samples/webview_chromium/webview_chromium.xcodeproj`, and build `webview_chromium` sample target.
 
+* Makefile: the same as linux platform mentioned above.
 
 ##Notes
 
