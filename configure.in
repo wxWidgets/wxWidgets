@@ -7049,6 +7049,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     AC_DEFINE(wxUSE_WEBVIEW)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview"
     if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
+        AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview_chromium"
     fi
 else
@@ -8237,7 +8238,7 @@ echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
-
+echo "                                       webview_chromium   ${wxUSE_WEBVIEW_CHROMIUM}"
 echo ""
 
 dnl vi: set et sts=4 sw=4 com=\:dnl:
