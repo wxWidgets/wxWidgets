@@ -333,6 +333,8 @@
 
 #define wxUSE_WEBVIEW 0
 
+#define wxUSE_WEBVIEW_CHROMIUM 0
+
 #ifdef __WXMSW__
 #define wxUSE_WEBVIEW_IE 0
 #else
