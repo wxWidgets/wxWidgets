@@ -34,6 +34,7 @@ class wxQtCentralWidget : public wxQtEventSignalHandler< QScrollArea, wxFrame >
 
 
 wxFrame::wxFrame()
+    : m_qtMainWindow(NULL)
 {
 }
 
@@ -41,6 +42,11 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
         const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
     Create( parent, id, title, pos, size, style, name );
+}
+
+wxFrame::~wxFrame()
+{
+    delete m_qtMainWindow;
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
