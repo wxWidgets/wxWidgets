@@ -585,6 +585,7 @@ All:
 All (GUI):
 
 - Add wxGenericListCtrl::EndEditLabel() (Tim Kosse).
+- Implement bounding box computation in wxGCDC (Toni Ruža).
 - Fix saving GIF animations with 2.5s+ delays between frames (elvissteinjr).
 
 wxGTK:
