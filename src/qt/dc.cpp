@@ -375,10 +375,21 @@ void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
     }
     else
     {
+        QRegion qregion = region.GetHandle();
+        // Save current origin / scale (logical coordinates)
+        QTransform qtrans = m_qtPainter->worldTransform();
+        // Reset transofrmation to match device coordinates
+        m_qtPainter->setWorldTransform( QTransform() );
+        wxLogDebug(wxT("wxQtDCImpl::DoSetDeviceClippingRegion rect %d %d %d %d"),
+                   qregion.boundingRect().x(), qregion.boundingRect().y(),
+                   qregion.boundingRect().width(), qregion.boundingRect().height());
         // Set QPainter clipping (intersection if not the first one)
-        m_qtPainter->setClipRegion( region.GetHandle(),
+        m_qtPainter->setClipRegion( qregion,
                                  m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
-                                 
+
+        // Restore the transformation (translation / scale):
+        m_qtPainter->setWorldTransform( qtrans );
+
         // Set internal state for getters
         /* Note: Qt states that QPainter::clipRegion() may be slow, so we
         * keep the region manually, which should be faster */
