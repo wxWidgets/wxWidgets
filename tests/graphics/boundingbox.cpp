@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        tests/graphics/gcdc_boundingbox.cpp
+// Name:        tests/graphics/boundingbox.cpp
 // Purpose:     wxGCDC bounding box unit tests
 // Author:      Vadim Zeitlin / Maarten Spoek / Toni Ruža
 // Created:     2011-01-36
