@@ -3,7 +3,7 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="webview_chromium_helper">
+    <exe id="webview_chromium_helper" cond="PLATFORM_MACOSX=='1'">
         <sources>
             mac/process_helper_mac.cpp
         </sources>
