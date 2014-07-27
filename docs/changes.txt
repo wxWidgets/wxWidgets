@@ -581,6 +581,7 @@ All:
 
 - Fix silent data loss in wx[F]File::Write(wxString) if conversion fails.
 - Make wxString::FromCDouble() work when the global C++ locale is not the C one.
+- Add support for "%V", "%G" and "%g" to wxDateTime::Format().
 
 All (GUI):
 
