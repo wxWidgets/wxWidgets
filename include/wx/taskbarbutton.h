@@ -20,12 +20,7 @@
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
-
-namespace {
-class WXDLLIMPEXP_FWD_CORE IObjectArray;
-class WXDLLIMPEXP_FWD_CORE ICustomDestinationList;
-class WXDLLIMPEXP_FWD_CORE IApplicationDocumentLists;
-}
+class WXDLLIMPEXP_FWD_CORE wxJumpListImpl;
 
 /**
     State of the task bar button.
@@ -146,7 +141,8 @@ private:
     wxScopedPtr<wxTaskBarButton> m_taskBarButton;
 };
 
-enum WXDLLIMPEXP_CORE wxJumpListItemType {
+enum WXDLLIMPEXP_CORE wxJumpListItemType
+{
     wxJUMP_LIST_SEPARATOR,
     wxJUMP_LIST_TASK,
     wxJUMP_LIST_DESTIONATION
@@ -190,8 +186,6 @@ private:
 
 typedef wxVector<wxJumpListItem*> wxJumpListItems;
 
-class WXDLLIMPEXP_FWD_CORE  wxJumpList;
-
 class WXDLLIMPEXP_CORE wxJumpListCategory
 {
 public:
@@ -220,38 +214,23 @@ class WXDLLIMPEXP_CORE wxJumpList
 public:
     wxJumpList();
     virtual ~wxJumpList();
-    wxJumpListCategory* GetTasks();
     void ShowRecentCategory(bool shown = true);
     void HideRecentCategory();
     void ShowFrequentCategory(bool shown = true);
     void HideFrequentCategory();
 
+    wxJumpListCategory* GetTasks();
     const wxJumpListCategory* GetFrequentCategory();
     const wxJumpListCategory* GetRecentCategory();
     const wxJumpListCategories& GetCustomCategories();
 
-    void AddCategory(wxJumpListCategory * catalog);
+    void AddCategory(wxJumpListCategory* category);
     wxJumpListCategory* RemoveCategory(const wxString& title);
     void DeleteCategory(const wxString& title);
-
     void Update();
 
 private:
-    bool BeginUpdate();
-    bool CommitUpdate();
-    void AddTasksToDestinationList();
-    void AddCustomCategoriesToDestionationList();
-    void LoadKnownCategory(const wxString& title);
-
-    ICustomDestinationList    *m_destinationList;
-    IObjectArray              *m_objectArray;
-
-    wxScopedPtr<wxJumpListCategory> m_tasks;
-    wxScopedPtr<wxJumpListCategory> m_frequent;
-    wxScopedPtr<wxJumpListCategory> m_recent;
-    wxJumpListCategories m_customCategories;
-    bool m_recent_visible;
-    bool m_frequent_visible;
+    wxJumpListImpl *m_jumpListImpl;
 };
 
 #endif // wxUSE_TASKBARBUTTON

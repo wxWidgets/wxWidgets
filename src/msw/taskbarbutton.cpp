@@ -27,6 +27,12 @@
 #include <shlwapi.h>
 #include <initguid.h>
 
+// ----------------------------------------------------------------------------
+// Redefine the interfaces: ITaskbarList3, IObjectCollection,
+// ICustomDestinationList, IShellLink, IShellItem, IApplicationDocumentLists
+// etc.
+// ----------------------------------------------------------------------------
+
 WINOLEAPI PropVariantClear(PROPVARIANT* pvar);
 
 #ifndef PropVariantInit
@@ -219,7 +225,6 @@ DEFINE_GUID(wxIID_IShellLink,
 DEFINE_GUID(wxIID_IShellLink,
     0x000214EE, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 #endif  // wxUSE_UNICODE
-
 
 typedef enum _SIGDN
 {
@@ -458,7 +463,7 @@ wxJumpListItem* GetItemFromIShellLink(IShellLink* link)
     link->GetIconLocation(buffer, bufferSize - 1, &dummyIndex);
     item->SetIconPath(wxString(buffer));
 
-    link->GetPath(buffer, bufferSize - 1, NULL, NULL);
+    link->GetPath(buffer, bufferSize - 1, NULL, 0x1);
     item->SetFilePath(wxString(buffer));
 
     return item;
@@ -503,6 +508,9 @@ IObjectCollection* CreateObjectCollection()
 
 } // namespace
 
+// ----------------------------------------------------------------------------
+// wxThumbBarButton Implementation.
+// ----------------------------------------------------------------------------
 IMPLEMENT_DYNAMIC_CLASS(wxThumbBarButton, wxObject)
 
 wxThumbBarButton::wxThumbBarButton(int id,
@@ -599,6 +607,9 @@ bool wxThumbBarButton::UpdateParentTaskBarButton()
                m_taskBarButtonParent)->InitOrUpdateThumbBarButtons();
 }
 
+// ----------------------------------------------------------------------------
+// wxTaskBarButtonImpl Implementation.
+// ----------------------------------------------------------------------------
 wxTaskBarButtonImpl::wxTaskBarButtonImpl(WXWidget parent)
     : m_hwnd(parent),
       m_taskbarList(NULL),
@@ -841,6 +852,9 @@ wxThumbBarButton* wxTaskBarButtonImpl::GetThumbBarButtonByIndex(size_t index)
     return m_thumbBarButtons[index];
 }
 
+// ----------------------------------------------------------------------------
+// wxAppProgressIndicator Implementation.
+// ----------------------------------------------------------------------------
 wxAppProgressIndicator::wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue)
     : m_parent(parent), m_maxValue(maxValue)
 {
@@ -880,6 +894,9 @@ void wxAppProgressIndicator::Init()
     }
 }
 
+// ----------------------------------------------------------------------------
+// wxJumpListItem Implementation.
+// ----------------------------------------------------------------------------
 wxJumpListItem::wxJumpListItem(wxJumpListItemType type,
                                const wxString& title,
                                const wxString& filePath,
@@ -968,6 +985,9 @@ void wxJumpListItem::SetIconIndex(int iconIndex)
     m_iconIndex = iconIndex;
 }
 
+// ----------------------------------------------------------------------------
+// wxJumpListCategory Implementation.
+// ----------------------------------------------------------------------------
 wxJumpListCategory::wxJumpListCategory(const wxString& title)
     : m_title(title)
 {
@@ -1014,13 +1034,13 @@ wxJumpListItem* wxJumpListCategory::Remove(wxJumpListItem *item)
 
 wxJumpListItem* wxJumpListCategory::FindItemByPosition(size_t pos) const
 {
-    wxASSERT_MSG(pos < m_items.size(), "invalid pos.");
+    wxASSERT_MSG( pos < m_items.size(), "invalid pos." );
     return m_items[pos];
 }
 
 wxJumpListItem* wxJumpListCategory::Insert(size_t pos, wxJumpListItem *item)
 {
-    wxASSERT_MSG(pos <= m_items.size(), "invalid pos.");
+    wxASSERT_MSG( pos <= m_items.size(), "invalid pos." );
     m_items.insert(m_items.begin() + pos, item);
     return item;
 }
@@ -1045,9 +1065,83 @@ const wxJumpListItems& wxJumpListCategory::GetItems() const
     return m_items;
 }
 
-wxJumpList::wxJumpList() : m_destinationList(NULL)
+// ----------------------------------------------------------------------------
+// wxJumpList Implementation.
+// ----------------------------------------------------------------------------
+wxJumpList::wxJumpList() : m_jumpListImpl(new wxJumpListImpl())
 {
+}
 
+wxJumpList::~wxJumpList()
+{
+    delete m_jumpListImpl;
+}
+
+wxJumpListCategory* wxJumpList::GetTasks()
+{
+    return m_jumpListImpl->GetTasks();
+}
+
+void wxJumpList::ShowRecentCategory(bool shown)
+{
+    m_jumpListImpl->ShowRecentCategory(shown);
+}
+
+void wxJumpList::HideRecentCategory()
+{
+    m_jumpListImpl->HideRecentCategory();
+}
+
+void wxJumpList::ShowFrequentCategory(bool shown)
+{
+    m_jumpListImpl->ShowFrequentCategory(shown);
+}
+
+void wxJumpList::HideFrequentCategory()
+{
+    m_jumpListImpl->HideFrequentCategory();
+}
+
+const wxJumpListCategory* wxJumpList::GetFrequentCategory()
+{
+    return m_jumpListImpl->GetFrequentCategory();
+}
+
+const wxJumpListCategory* wxJumpList::GetRecentCategory()
+{
+    return m_jumpListImpl->GetRecentCategory();
+}
+
+const wxJumpListCategories& wxJumpList::GetCustomCategories()
+{
+    return m_jumpListImpl->GetCustomCategories();
+}
+
+void wxJumpList::AddCategory(wxJumpListCategory* category)
+{
+    m_jumpListImpl->AddCategory(category);
+}
+
+wxJumpListCategory* wxJumpList::RemoveCategory(const wxString& title)
+{
+    return m_jumpListImpl->RemoveCategory(title);
+}
+
+void wxJumpList::DeleteCategory(const wxString& title)
+{
+    m_jumpListImpl->DeleteCategory(title);
+}
+
+void wxJumpList::Update()
+{
+    m_jumpListImpl->Update();
+}
+
+// ----------------------------------------------------------------------------
+// wxJumpListImpl Implementation.
+// ----------------------------------------------------------------------------
+wxJumpListImpl::wxJumpListImpl() : m_destinationList(NULL)
+{
     HRESULT hr = CoCreateInstance
                  (
                     wxCLSID_DestinationList,
@@ -1063,7 +1157,7 @@ wxJumpList::wxJumpList() : m_destinationList(NULL)
     }
 }
 
-wxJumpList::~wxJumpList()
+wxJumpListImpl::~wxJumpListImpl()
 {
     if ( m_destinationList )
         m_destinationList->Release();
@@ -1076,7 +1170,7 @@ wxJumpList::~wxJumpList()
     }
 }
 
-void wxJumpList::Update()
+void wxJumpListImpl::Update()
 {
     if ( !BeginUpdate() )
         return;
@@ -1090,7 +1184,7 @@ void wxJumpList::Update()
     CommitUpdate();
 }
 
-wxJumpListCategory* wxJumpList::GetTasks()
+wxJumpListCategory* wxJumpListImpl::GetTasks()
 {
     if ( m_tasks.get() == NULL )
         m_tasks.reset(new wxJumpListCategory(wxT("Tasks")));
@@ -1098,27 +1192,27 @@ wxJumpListCategory* wxJumpList::GetTasks()
     return m_tasks.get();
 }
 
-void wxJumpList::ShowRecentCategory(bool shown)
+void wxJumpListImpl::ShowRecentCategory(bool shown)
 {
     m_recent_visible = shown;
 }
 
-void wxJumpList::HideRecentCategory()
+void wxJumpListImpl::HideRecentCategory()
 {
     ShowRecentCategory(false);
 }
 
-void wxJumpList::ShowFrequentCategory(bool shown)
+void wxJumpListImpl::ShowFrequentCategory(bool shown)
 {
     m_frequent_visible = shown;
 }
 
-void wxJumpList::HideFrequentCategory()
+void wxJumpListImpl::HideFrequentCategory()
 {
     ShowFrequentCategory(false);
 }
 
-const wxJumpListCategory* wxJumpList::GetFrequentCategory()
+const wxJumpListCategory* wxJumpListImpl::GetFrequentCategory()
 {
     wxString title = wxT("Frequent");
     if ( m_frequent.get() == NULL )
@@ -1127,7 +1221,7 @@ const wxJumpListCategory* wxJumpList::GetFrequentCategory()
     return m_frequent.get();
 }
 
-const wxJumpListCategory* wxJumpList::GetRecentCategory()
+const wxJumpListCategory* wxJumpListImpl::GetRecentCategory()
 {
     wxString title = wxT("Recent");
     if ( m_recent.get() == NULL )
@@ -1136,17 +1230,17 @@ const wxJumpListCategory* wxJumpList::GetRecentCategory()
     return m_recent.get();
 }
 
-const wxJumpListCategories& wxJumpList::GetCustomCategories()
+const wxJumpListCategories& wxJumpListImpl::GetCustomCategories()
 {
     return m_customCategories;
 }
 
-void wxJumpList::AddCategory(wxJumpListCategory *catalog)
+void wxJumpListImpl::AddCategory(wxJumpListCategory *category)
 {
-    m_customCategories.push_back(catalog);
+    m_customCategories.push_back(category);
 }
 
-wxJumpListCategory* wxJumpList::RemoveCategory(const wxString& title)
+wxJumpListCategory* wxJumpListImpl::RemoveCategory(const wxString& title)
 {
     for ( wxJumpListCategories::iterator it = m_customCategories.begin();
           it != m_customCategories.end();
@@ -1162,14 +1256,14 @@ wxJumpListCategory* wxJumpList::RemoveCategory(const wxString& title)
     return NULL;
 }
 
-void wxJumpList::DeleteCategory(const wxString& title)
+void wxJumpListImpl::DeleteCategory(const wxString& title)
 {
     wxJumpListCategory* category = RemoveCategory(title);
     if ( category )
         delete category;
 }
 
-bool wxJumpList::BeginUpdate()
+bool wxJumpListImpl::BeginUpdate()
 {
     if ( m_destinationList == NULL )
         return false;
@@ -1181,14 +1275,17 @@ bool wxJumpList::BeginUpdate()
     return SUCCEEDED(hr);
 }
 
-bool wxJumpList::CommitUpdate()
+bool wxJumpListImpl::CommitUpdate()
 {
     m_objectArray->Release();
     return SUCCEEDED(m_destinationList->CommitList());
 }
 
-void wxJumpList::AddTasksToDestinationList()
+void wxJumpListImpl::AddTasksToDestinationList()
 {
+    if ( !m_tasks.get() )
+        return;
+
     IObjectCollection* collection = CreateObjectCollection();
     if ( !collection )
         return;
@@ -1198,13 +1295,16 @@ void wxJumpList::AddTasksToDestinationList()
           it != tasks.end();
           ++it )
     {
+        wxASSERT_MSG( ((*it)->GetType() == wxJUMP_LIST_TASK ||
+                      (*it)->GetType() == wxJUMP_LIST_SEPARATOR),
+                      "Invalid task Item." );
         AddShellLink(collection, *(*it));
     }
     m_destinationList->AddUserTasks(collection);
     collection->Release();
 }
 
-void wxJumpList::AddCustomCategoriesToDestionationList()
+void wxJumpListImpl::AddCustomCategoriesToDestionationList()
 {
     for ( wxJumpListCategories::iterator iter = m_customCategories.begin();
           iter != m_customCategories.end();
@@ -1219,6 +1319,8 @@ void wxJumpList::AddCustomCategoriesToDestionationList()
               it != tasks.end();
               ++it )
         {
+            wxASSERT_MSG( (*it)->GetType() == wxJUMP_LIST_DESTIONATION,
+                          "Invalid category item." );
             AddShellLink(collection, *(*it));
         }
         m_destinationList->AppendCategory((*iter)->GetTitle().wc_str(),
@@ -1227,7 +1329,7 @@ void wxJumpList::AddCustomCategoriesToDestionationList()
     }
 }
 
-void wxJumpList::LoadKnownCategory(const wxString& title)
+void wxJumpListImpl::LoadKnownCategory(const wxString& title)
 {
     IApplicationDocumentLists *docList = 0;
     HRESULT hr = CoCreateInstance
@@ -1245,7 +1347,7 @@ void wxJumpList::LoadKnownCategory(const wxString& title)
     }
 
     IObjectArray *array = NULL;
-    wxASSERT_MSG(title == "Recent" || title == "Frequent", "Invalid title.");
+    wxASSERT_MSG( title == "Recent" || title == "Frequent", "Invalid title." );
     hr = docList->GetList
                  (
                      title == "Recent" ? ADLT_RECENT : ADLT_FREQUENT,
