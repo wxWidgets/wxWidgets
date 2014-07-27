@@ -27,7 +27,6 @@ class WXDLLIMPEXP_FWD_CORE ICustomDestinationList;
 class WXDLLIMPEXP_FWD_CORE IApplicationDocumentLists;
 }
 
-
 /**
     State of the task bar button.
 */
@@ -254,10 +253,6 @@ private:
     bool m_recent_visible;
     bool m_frequent_visible;
 };
-
-#if defined(__WXMSW__)
-    #include "wx/msw/taskbarbutton.h"
-#endif
 
 #endif // wxUSE_TASKBARBUTTON
 

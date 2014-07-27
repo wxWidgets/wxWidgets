@@ -14,6 +14,7 @@
 
 #include "wx/defs.h"
 #include "wx/vector.h"
+#include "wx/taskbarbutton.h"
 
 namespace {
 class ITaskbarList3;

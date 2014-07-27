@@ -57,7 +57,7 @@
 #endif // __WXUNIVERSAL__
 
 #if wxUSE_TASKBARBUTTON
-    #include "wx/taskbarbutton.h"
+    #include "wx/msw/taskbarbutton.h"
     #include "wx/dynlib.h"
 
     WXUINT wxMsgTaskbarButtonCreated = 0;
@@ -182,17 +182,13 @@ bool wxFrame::Create(wxWindow *parent,
     return true;
 }
 
+#if wxUSE_TASKBARBUTTON
 wxFrame::~wxFrame()
 {
-    SendDestroyEvent();
-
-    DeleteAllBars();
-
-#if wxUSE_TASKBARBUTTON
     if ( m_taskBarButton )
         delete m_taskBarButton;
-#endif
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxFrame client size calculations
