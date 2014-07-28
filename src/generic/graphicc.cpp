@@ -86,6 +86,10 @@ using namespace std;
 #endif
 #endif
 
+#ifdef __WXQT__
+#include <QtGui/QPainter>
+#endif
+
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
 #include <cairo-quartz.h>
@@ -471,6 +475,11 @@ protected:
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
 
     void Init(cairo_t *context);
+
+#ifdef __WXQT__
+    QPainter* m_qtPainter;
+    cairo_surface_t* m_qtSurface;
+#endif
 
 private:
     cairo_t* m_context;
@@ -1731,6 +1740,18 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
     Init( cairo_create( surface ) );
     cairo_surface_destroy( surface );
 #endif
+
+#ifdef __WXQT__
+    m_qtPainter = (QPainter*) dc.GetHandle();
+    QImage *qimage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    qimage->fill(Qt::transparent);
+    m_qtSurface = cairo_image_surface_create_for_data(qimage->bits(),
+                                                      CAIRO_FORMAT_ARGB32,
+                                                      width, height,
+                                                      qimage->bytesPerLine());
+    Init( cairo_create( m_qtSurface ) );
+    delete qimage;
+#endif
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& dc )
@@ -1898,6 +1919,18 @@ wxCairoContext::~wxCairoContext()
     if ( m_mswSurface )
         cairo_surface_destroy(m_mswSurface);
 #endif
+#ifdef __WXQT__
+    if ( m_qtPainter != NULL )
+    {
+        const uchar* data = (const uchar*)cairo_image_surface_get_data(m_qtSurface);
+        int stride = cairo_image_surface_get_stride(m_qtSurface);
+        QImage qimage = QImage(data, m_width, m_height, stride,
+                               QImage::Format_ARGB32_Premultiplied);
+        m_qtPainter->drawImage( 0,0, qimage );
+        cairo_surface_destroy( m_qtSurface );
+    }
+#endif
+
 }
 
 void wxCairoContext::Init(cairo_t *context)
