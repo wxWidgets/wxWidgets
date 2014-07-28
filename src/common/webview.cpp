@@ -17,12 +17,16 @@
 
 #include "wx/webview.h"
 
+#if !wxUSE_WEBVIEW_CHROMIUM
+
 #if defined(__WXOSX__) 
 #include "wx/osx/webview_webkit.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/webview_webkit.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/webview_ie.h"
+#endif
+
 #endif
 
 // DLL options compatibility check:
@@ -97,6 +101,8 @@ wxStringWebViewFactoryMap::iterator wxWebView::FindFactory(const wxString &backe
 // static
 void wxWebView::InitFactoryMap()
 {
+#if !wxUSE_WEBVIEW_CHROMIUM
+
 #ifdef __WXMSW__
     if(m_factoryMap.find(wxWebViewBackendIE) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendIE, wxSharedPtr<wxWebViewFactory>
@@ -105,6 +111,8 @@ void wxWebView::InitFactoryMap()
     if(m_factoryMap.find(wxWebViewBackendWebKit) == m_factoryMap.end())
         RegisterFactory(wxWebViewBackendWebKit, wxSharedPtr<wxWebViewFactory>
                                                        (new wxWebViewFactoryWebKit));
+#endif
+
 #endif
 }
 
