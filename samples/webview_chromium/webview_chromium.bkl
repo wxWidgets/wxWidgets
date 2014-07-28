@@ -42,7 +42,7 @@
         <sources>
             webview.cpp
         </sources>
-        <wx-lib>webview</wx-lib>
+        <wx-lib>webviewchromium</wx-lib>
         <wx-lib>stc</wx-lib>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
