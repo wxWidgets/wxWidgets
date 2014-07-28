@@ -3414,7 +3414,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/webview.cpp
     src/common/webviewarchivehandler.cpp
     src/common/webviewfshandler.cpp
-    src/common/webview_chromium.cpp
 </set>
 <set var="WEBVIEW_SRC" hints="files">
     $(WEBVIEW_SRC_PLATFORM)
@@ -3440,7 +3439,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/webview.h
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
-    wx/webview_chromium.h
 </set>
 <set var="WEBVIEW_HDR" hints="files">
     $(WEBVIEW_HDR_PLATFORM)
