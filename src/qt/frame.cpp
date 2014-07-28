@@ -46,7 +46,12 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
 
 wxFrame::~wxFrame()
 {
-    delete m_qtMainWindow;
+    // Destroy the Qt object (delayed, once all pending events are processed)
+    // NOTE: don't do delete directly as it cause SIGSEGV on children
+    //       done here to not continue receiving events from Qt
+    m_qtMainWindow->deleteLater();
+    // Also, avoid base destructor to do it again (just in case):
+    //m_qtMainWindow = NULL;
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,

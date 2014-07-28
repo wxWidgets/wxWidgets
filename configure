@@ -26145,7 +26145,6 @@ $as_echo "none" >&6; }
         TOOLKIT_DIR="qt"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
         TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --cflags` -DQT_WIDGETS_LIB"
-        LIBS="$LIBS `pkg-config Qt5Gui Qt5Test --libs`"
         GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --libs`"
         if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
                         SAMPLES_CXXFLAGS="$SAMPLES_CXXFLAGS -fPIC"
@@ -36705,7 +36704,7 @@ $as_echo "$wx_cv_lib_gdiplus" >&6; }
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
-    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
+    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for CAIRO" >&5
