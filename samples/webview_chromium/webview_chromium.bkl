@@ -13,7 +13,7 @@
             <include>$(CEF_INCLUDE_DIR)</include>
             <sys-lib>$(LIBCEF_NAME)</sys-lib>
             <sys-lib>$(LIBCEF_DLL_WRAPPER_NAME)</sys-lib>
-            <ldflags>-F$(TOP_SRCDIR)cef/Release/ -framework Chromium\ Embedded\ framework</ldflags>
+            <ldflags>-F$(TOP_SRCDIR)/src/cef/Release/ -framework Chromium\ Embedded\ framework</ldflags>
         </if>
         <add-target target="fix_cef_link" type="action"
                     cond="target and PLATFORM_MACOSX=='1'"/>
@@ -60,7 +60,7 @@
         <modify-target target="package" cond="PLATFORM_MACOSX=='1'">
             <depends>webview_chromium_helper</depends>
             <dependency-of>all</dependency-of>
-            <set var="webviewdll">$(DLLPREFIX)$(wxwin.mkDllName("webview")).dylib</set>
+            <set var="webviewdll">$(DLLPREFIX)$(wxwin.mkDllName("webviewchromium")).dylib</set>
             <command>
                 mkdir webview_chromium.app/Contents/Frameworks/
                 mkdir webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
