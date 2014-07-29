@@ -16,8 +16,7 @@
             <ldflags>-F$(TOP_SRCDIR)/src/cef/Release/ -framework Chromium\ Embedded\ framework</ldflags>
         </if>
         <add-target target="fix_cef_link" type="action"
-                    cond="target and PLATFORM_MACOSX=='1'"/>
-        <modify-target target="fix_cef_link">
+                    cond="target and PLATFORM_MACOSX=='1'">
             <dependency-of>all</dependency-of>
             <command>
                 <!--make helper app bundle -->
@@ -32,7 +31,7 @@
                 cp -f webview_chromium_helper webview_chromium_helper.app/Contents/MacOS/webview_chromium\ Helper
                 cp -f ../../src/osx/carbon/wxmac.icns webview_chromium_helper.app/Contents/Resources/wxmac.icns
             </command>
-        </modify-target>
+        </add-target>
         <modify-target target="clean" cond="PLATFORM_MACOSX=='1'">
             <command>rm -rf $(id).app</command>
         </modify-target>
@@ -42,6 +41,7 @@
         <sources>
             webview.cpp
         </sources>
+        <define>wxUSE_WEBVIEW_CHROMIUM=1</define>
         <wx-lib>webviewchromium</wx-lib>
         <wx-lib>stc</wx-lib>
         <wx-lib>adv</wx-lib>
@@ -56,8 +56,7 @@
         </if>
         <win32-res>../sample.rc</win32-res>
 
-        <add-target target="package" type="action" cond="PLATFORM_MACOSX=='1'"/>
-        <modify-target target="package" cond="PLATFORM_MACOSX=='1'">
+        <add-target target="package" type="action" cond="PLATFORM_MACOSX=='1'">
             <depends>webview_chromium_helper</depends>
             <dependency-of>all</dependency-of>
             <set var="webviewdll">$(DLLPREFIX)$(wxwin.mkDllName("webviewchromium")).dylib</set>
@@ -73,7 +72,7 @@
                 cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
                 ./mac/tools/make_more_helpers.sh $(wx_top_builddir)/samples/webview_chromium/webview_chromium.app/Contents/Frameworks webview_chromium
             </command>
-        </modify-target>
+        </add-target>
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
         </if>
