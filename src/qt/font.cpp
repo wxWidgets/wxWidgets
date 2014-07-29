@@ -315,13 +315,13 @@ void wxFont::SetStyle( wxFontStyle style )
 void wxFont::SetWeight( wxFontWeight weight )
 {
     AllocExclusive();
-    M_FONTDATA.setItalic(ConvertFontWeight(weight));
+    M_FONTDATA.setWeight(ConvertFontWeight(weight));
 }
 
 void wxFont::SetUnderlined( bool underlined )
 {
     AllocExclusive();
-    M_FONTDATA.setItalic(underlined);
+    M_FONTDATA.setUnderline(underlined);
 }
 
 void wxFont::SetEncoding(wxFontEncoding encoding)
