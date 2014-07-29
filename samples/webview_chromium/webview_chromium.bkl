@@ -33,7 +33,7 @@
                 cp -f ../../src/osx/carbon/wxmac.icns webview_chromium_helper.app/Contents/Resources/wxmac.icns
             </command>
         </modify-target>
-        <modify-target target="clean">
+        <modify-target target="clean" cond="PLATFORM_MACOSX=='1'">
             <command>rm -rf $(id).app</command>
         </modify-target>
     </exe>
@@ -56,26 +56,24 @@
         </if>
         <win32-res>../sample.rc</win32-res>
 
-        <if cond="PLATFORM_MACOSX=='1'">
+        <add-target target="package" type="action" cond="PLATFORM_MACOSX=='1'"/>
+        <modify-target target="package" cond="PLATFORM_MACOSX=='1'">
             <depends>webview_chromium_helper</depends>
-            <add-target target="package" type="action"/>
-            <modify-target target="package">
-                <dependency-of>all</dependency-of>
-                <set var="webviewdll">$(DLLPREFIX)$(wxwin.mkDllName("webview")).dylib</set>
-                <command>
-                    mkdir webview_chromium.app/Contents/Frameworks/
-                    mkdir webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
-                    cp $(TOP_SRCDIR)lib/$(webviewdll) webview_chromium.app/Contents/Frameworks/
-                    cp -Rf $(LIBCEF_PATH)/Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
-                    <!--Fix CEF link path-->
-                    install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" $(TOP_SRCDIR)lib/$(webviewdll)
+            <dependency-of>all</dependency-of>
+            <set var="webviewdll">$(DLLPREFIX)$(wxwin.mkDllName("webview")).dylib</set>
+            <command>
+                mkdir webview_chromium.app/Contents/Frameworks/
+                mkdir webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app
+                cp $(TOP_SRCDIR)lib/$(webviewdll) webview_chromium.app/Contents/Frameworks/
+                cp -Rf $(LIBCEF_PATH)/Chromium\ Embedded\ Framework.framework webview_chromium.app/Contents/Frameworks/
+                <!--Fix CEF link path-->
+                install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" $(TOP_SRCDIR)lib/$(webviewdll)
 
-                    <!--Copy helper app-->
-                    cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
-                    ./mac/tools/make_more_helpers.sh $(wx_top_builddir)/samples/webview_chromium/webview_chromium.app/Contents/Frameworks webview_chromium
-                </command>
-            </modify-target>
-        </if>
+                <!--Copy helper app-->
+                cp -Rf webview_chromium_helper.app/ webview_chromium.app/Contents/Frameworks/webview_chromium\ Helper.app/
+                ./mac/tools/make_more_helpers.sh $(wx_top_builddir)/samples/webview_chromium/webview_chromium.app/Contents/Frameworks webview_chromium
+            </command>
+        </modify-target>
         <if cond="OUT_OF_TREE_MAKEFILES=='0'">
             <sys-lib>$(LIB_SCINTILLA)</sys-lib>
         </if>
