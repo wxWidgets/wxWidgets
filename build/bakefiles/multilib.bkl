@@ -196,10 +196,8 @@
     <wxshortcut id="wxwebview" cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'"/>
 
     <dll id="webviewchromiumdll" template="wx_dll"
-         cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
-        <if cond="IS_MSVC_PRJ=='1' and BUILDING_LIB=='1'">
-            <define>wxUSE_WEBVIEW_CHROMIUM=1</define>
-        </if>
+         cond="SHARED=='1' and USE_GUI=='1' and USE_WEBVIEW_CHROMIUM=='1' and MONOLITHIC=='0'">
+        <define>wxUSE_WEBVIEW_CHROMIUM=1</define>
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_WEBVIEW</define>
         <sources>$(WEBVIEWCHROMIUM_SRC)</sources>
@@ -215,16 +213,14 @@
     </dll>
 
     <lib id="webviewchromiumlib" template="wx_lib"
-         cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
-        <if cond="IS_MSVC_PRJ=='1' and BUILDING_LIB=='1'">
-            <define>wxUSE_WEBVIEW_CHROMIUM=1</define>
-        </if>
+         cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW_CHROMIUM=='1' and MONOLITHIC=='0'">
+        <define>wxUSE_WEBVIEW_CHROMIUM=1</define>
         <sources>$(WEBVIEWCHROMIUM_SRC)</sources>
         <msvc-headers>$(WEBVIEWCHROMIUM_HDR)</msvc-headers>
         <include>$(CEF_INCLUDE_DIR)</include>
     </lib>
 
-    <wxshortcut id="wxwebviewchromium" cond="MONOLITHIC=='0' and USE_WEBVIEW=='1'"/>
+    <wxshortcut id="wxwebviewchromium" cond="MONOLITHIC=='0' and USE_WEBVIEW_CHROMIUM=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">webview=webviewlib+webviewdll</set>
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">webviewchromium=webviewchromiumlib+webviewchromiumdll</set>

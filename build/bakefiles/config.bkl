@@ -234,6 +234,11 @@ Default is to use debug CRT if and only if BUILD==debug.
         </description>
     </option>
 
+    <option name="USE_WEBVIEW_CHROMIUM">
+        <values>0,1</values>
+        <default-value>0</default-value>
+    </option>
+
     <option name="USE_MEDIA">
         <values>0,1</values>
         <default-value>1</default-value>
@@ -541,6 +546,7 @@ For example, add "-F pe-i386" here if using 64 bit windres for 32 bit build.
         <set var="USE_STC">1</set>
         <set var="USE_HTML">1</set>
         <set var="USE_WEBVIEW">1</set>
+        <set var="USE_WEBVIEW_CHROMIUM">0</set>
         <set var="USE_MEDIA">1</set>
         <set var="USE_XRC">1</set>
         <set var="USE_OPENGL">1</set>
