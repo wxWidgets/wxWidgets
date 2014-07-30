@@ -46,18 +46,13 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
 
 wxFrame::~wxFrame()
 {
-    // Destroy the Qt object (delayed, once all pending events are processed)
-    // NOTE: don't do delete directly as it cause SIGSEGV on children
-    //       done here to not continue receiving events from Qt
-    m_qtMainWindow->deleteLater();
-    // Also, avoid base destructor to do it again (just in case):
-    //m_qtMainWindow = NULL;
+    // central widget should be deleted by qt when the main window is destroyed
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
-    m_qtMainWindow = new wxQtMainWindow( parent, this );
+    m_qtWindow = m_qtMainWindow = new wxQtMainWindow( parent, this );
 
     // TODO: Could we use a wxPanel as the central widget? If so then we could
     // remove wxWindow::QtReparent.

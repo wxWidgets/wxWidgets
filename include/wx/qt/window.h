@@ -182,9 +182,10 @@ protected:
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 #endif // wxUSE_MENUS
 
+    QWidget *m_qtWindow;
+
 private:
     void Init();
-    QWidget *m_qtWindow;
     QScrollArea *m_qtContainer;
 
     wxScrollBar *m_horzScrollBar;

@@ -27,7 +27,7 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         const wxString& caption, long style, const wxPoint& pos )
     : wxMessageDialogBase( parent, message, caption, style )
 {
-    m_qtMessageBox = new wxQtMessageDialog( parent, this );
+    m_qtWindow = m_qtMessageBox = new wxQtMessageDialog( parent, this );
 
     // Set properties
     Move( pos );
@@ -137,12 +137,6 @@ QMessageBox *wxMessageDialog::GetHandle() const
 
 wxMessageDialog::~wxMessageDialog()
 {
-    // Destroy the Qt object (delayed, once all pending events are processed)
-    // NOTE: don't do delete directly as it cause SIGSEGV on children
-    //       done here to not continue receiving events from Qt
-    m_qtMessageBox->deleteLater();
-    // Also, avoid base destructor to do it again (just in case):
-    m_qtMessageBox = NULL;
 }
 
 //=============================================================================

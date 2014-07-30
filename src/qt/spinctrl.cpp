@@ -173,7 +173,7 @@ bool wxSpinCtrl::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     int min, int max, int initial,
     const wxString& name )
 {
-    m_qtSpinBox = new wxQtSpinBox( parent, this );
+    m_qtWindow = m_qtSpinBox = new wxQtSpinBox( parent, this );
     return wxQtSpinCtrlBase< int, QSpinBox >::Create( parent, id, value,
         pos, size, style, min, max, initial, 1, name );
 }
@@ -234,7 +234,7 @@ bool wxSpinCtrlDouble::Create(wxWindow *parent, wxWindowID id, const wxString& v
     double min, double max, double initial, double inc,
     const wxString& name )
 {
-    m_qtSpinBox = new wxQtDoubleSpinBox( parent, this );
+    m_qtWindow = m_qtSpinBox = new wxQtDoubleSpinBox( parent, this );
     return wxQtSpinCtrlBase< double, QDoubleSpinBox >::Create( parent, id, value,
         pos, size, style, min, max, initial, inc, name );
 }

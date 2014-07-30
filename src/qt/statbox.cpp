@@ -44,7 +44,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
             long style,
             const wxString& name)
 {
-    m_qtGroupBox = new wxQtGroupBox( parent, this );
+    m_qtWindow = m_qtGroupBox = new wxQtGroupBox( parent, this );
     m_qtGroupBox->setTitle( wxQtConvertString( label ) );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );

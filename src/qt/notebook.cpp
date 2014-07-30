@@ -65,7 +65,7 @@ bool wxNotebook::Create(wxWindow *parent,
           long style,
           const wxString& name)
 {
-    m_qtTabWidget = new wxQtTabWidget( parent, this );
+    m_qtWindow = m_qtTabWidget = new wxQtTabWidget( parent, this );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }

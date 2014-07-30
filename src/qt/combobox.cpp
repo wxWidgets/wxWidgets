@@ -102,7 +102,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    m_qtComboBox = new wxQtComboBox( parent, this );
+    m_qtWindow = m_qtComboBox = new wxQtComboBox( parent, this );
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
     m_qtComboBox->setEditText( wxQtConvertString( value ));
