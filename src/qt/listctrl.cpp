@@ -9,6 +9,40 @@
 #include "wx/wxprec.h"
 
 #include "wx/listctrl.h"
+#include "wx/qt/private/winevent.h"
+
+
+class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
+{
+public:
+    wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler );
+
+private:
+    void clicked( const QModelIndex &index );
+    void doubleClicked( const QModelIndex &index );
+};
+
+wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler )
+    : wxQtEventSignalHandler< QTreeWidget, wxListCtrl >( parent, handler )
+{
+    connect(this, &QTreeWidget::clicked, this, &wxQtTreeWidget::clicked);
+    connect(this, &QTreeWidget::doubleClicked, this, &wxQtTreeWidget::doubleClicked);
+}
+
+void wxQtTreeWidget::clicked(const QModelIndex &index )
+{
+    wxListCtrl *handler = GetHandler();
+    //if ( handler )
+    //    handler->QtSendEvent(wxEVT_LISTBOX, index, true);
+}
+
+void wxQtTreeWidget::doubleClicked( const QModelIndex &index )
+{
+    wxListCtrl *handler = GetHandler();
+    //if ( handler )
+    //    handler->QtSendEvent(wxEVT_LISTBOX_DCLICK, index, true);
+}
+
 
 wxListCtrl::wxListCtrl()
 {
@@ -34,9 +68,9 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtListWidget = new QListWidget( parent->GetHandle() );
+    m_qtWindow = m_qtTreeWidget = new wxQtTreeWidget( parent, this );
 
-    return wxControl::Create( parent, id, pos, size, style, validator, name );
+    return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 bool wxListCtrl::SetForegroundColour(const wxColour& col)
@@ -394,7 +428,7 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
 }
 
 
-QListWidget *wxListCtrl::GetHandle() const
+QTreeWidget *wxListCtrl::GetHandle() const
 {
-    return m_qtListWidget;
+    return m_qtTreeWidget;
 }

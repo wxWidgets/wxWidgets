@@ -9,7 +9,7 @@
 #define _WX_QT_LISTCTRL_H_
 
 #include "wx/textctrl.h"
-#include <QtWidgets/QListWidget>
+#include <QtWidgets/QTreeWidget>
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -276,14 +276,14 @@ public:
 
 
 
-    virtual QListWidget *GetHandle() const;
+    virtual QTreeWidget *GetHandle() const;
 
 protected:
     // Implement base class pure virtual methods.
     long DoInsertColumn(long col, const wxListItem& info);
 
 private:
-    QListWidget *m_qtListWidget;
+    QTreeWidget *m_qtTreeWidget;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxListCtrl );
 };
