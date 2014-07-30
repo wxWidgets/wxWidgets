@@ -139,51 +139,56 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
-    wxJumpList jumpList;
-    wxJumpListItem *item1 = new wxJumpListItem(
-        wxJUMP_LIST_TASK,
+    wxTaskBarJumpList jumpList;
+    wxTaskBarJumpListItem *item1 = new wxTaskBarJumpListItem(
+        wxTASKBAR_JUMP_LIST_TASK,
         wxT("Task 1"),
         wxStandardPaths::Get().GetExecutablePath(),
         wxEmptyString,
         wxT("Test Task"),
         wxStandardPaths::Get().GetExecutablePath(),
         0);
-    wxJumpListItem *item2 = new wxJumpListItem(
-        wxJUMP_LIST_TASK,
+    wxTaskBarJumpListItem *item2 = new wxTaskBarJumpListItem(
+        wxTASKBAR_JUMP_LIST_TASK,
         wxT("Task 2"),
         wxStandardPaths::Get().GetExecutablePath(),
         wxEmptyString,
         wxT("Test Task"),
         wxStandardPaths::Get().GetExecutablePath(),
         0);
-    jumpList.GetTasks()->Append(item1);
-    jumpList.GetTasks()->Append(new wxJumpListItem(wxJUMP_LIST_SEPARATOR));
-    jumpList.GetTasks()->Append(item2);
+    jumpList.GetTasks().Append(item1);
+    jumpList.GetTasks().Append(
+        new wxTaskBarJumpListItem(wxTASKBAR_JUMP_LIST_SEPARATOR));
+    jumpList.GetTasks().Append(item2);
     jumpList.ShowRecentCategory();
     jumpList.ShowFrequentCategory();
 
-    wxJumpListItem* item3 = new wxJumpListItem(
-        wxJUMP_LIST_DESTIONATION,
+    wxTaskBarJumpListItem* item3 = new wxTaskBarJumpListItem(
+        wxTASKBAR_JUMP_LIST_DESTIONATION,
         wxT("Custom Item - Help"),
         wxStandardPaths::Get().GetExecutablePath(),
         wxT("--help"),
         wxT("Test Custom Category."),
         wxStandardPaths::Get().GetExecutablePath(),
         0);
-    wxJumpListCategory* customCategory = new wxJumpListCategory(wxT("Custom"));
+    wxTaskBarJumpListCategory* customCategory =
+        new wxTaskBarJumpListCategory(wxT("Custom"));
     customCategory->Append(item3);
     jumpList.AddCategory(customCategory);
 
     jumpList.Update();
 
-    const wxJumpListCategory* category = jumpList.GetFrequentCategory();
-    const wxJumpListItems& frequentItems = category->GetItems();
+    const wxTaskBarJumpListCategory& frequentCategory =
+        jumpList.GetFrequentCategory();
+    const wxTaskBarJumpListItems& frequentItems = frequentCategory.GetItems();
     for ( size_t i = 0; i < frequentItems.size(); ++i )
     {
         wxLogMessage(frequentItems[i]->GetFilePath());
     }
-    category = jumpList.GetRecentCategory();
-    const wxJumpListItems& recentItems = category->GetItems();
+
+    const wxTaskBarJumpListCategory& recentCategory =
+        jumpList.GetRecentCategory();
+    const wxTaskBarJumpListItems& recentItems = recentCategory.GetItems();
     for ( size_t i = 0; i < recentItems.size(); ++i )
     {
         wxLogMessage(recentItems[i]->GetFilePath());
