@@ -47,6 +47,7 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
 wxFrame::~wxFrame()
 {
     // central widget should be deleted by qt when the main window is destroyed
+    QtStoreWindowPointer( m_qtMainWindow->centralWidget(), NULL );
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
