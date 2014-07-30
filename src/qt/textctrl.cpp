@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/textctrl.h"
+#include "wx/settings.h"
 #include "wx/qt/converter.h"
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/utils.h"
@@ -128,6 +129,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // set the initial text value without sending the event:
         // (done here as needs CreateBase called to set flags for IsMultiLine)
         ChangeValue( value );
+        // set the default inner color (white), as it is replaced by PostCreation
+        SetBackgroundColour( wxSystemSettingsNative::GetColour( wxSYS_COLOUR_LISTBOX ) );
         return true;
     }
 }
