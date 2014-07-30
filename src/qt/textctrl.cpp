@@ -34,18 +34,26 @@ wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
 
 void wxQtLineEdit::textChanged(const QString &text)
 {
-    wxCommandEvent event( wxEVT_TEXT, GetHandler()->GetId() );
-    event.SetString( wxQtConvertString( text ) );
-    EmitEvent( event );
+    wxTextCtrl *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_TEXT, handler->GetId() );
+        event.SetString( wxQtConvertString( text ) );
+        EmitEvent( event );
+    }
 }
 
 void wxQtLineEdit::returnPressed()
 {
-    if ( GetHandler()->HasFlag(wxTE_PROCESS_ENTER) )
+    wxTextCtrl *handler = GetHandler();
+    if ( handler )
     {
-        wxCommandEvent event( wxEVT_TEXT_ENTER, GetHandler()->GetId() );
-        event.SetString( GetHandler()->GetValue() );
-        EmitEvent( event );
+        if ( handler->HasFlag(wxTE_PROCESS_ENTER) )
+        {
+            wxCommandEvent event( wxEVT_TEXT_ENTER, handler->GetId() );
+            event.SetString( handler->GetValue() );
+            EmitEvent( event );
+        }
     }
 }
 
@@ -68,9 +76,13 @@ wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
 
 void wxQtTextEdit::textChanged()
 {
-    wxCommandEvent event( wxEVT_TEXT, GetHandler()->GetId() );
-    event.SetString( GetHandler()->GetValue() );
-    EmitEvent( event );
+    wxTextCtrl *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_TEXT, handler->GetId() );
+        event.SetString( handler->GetValue() );
+        EmitEvent( event );
+    }
 }
 
 

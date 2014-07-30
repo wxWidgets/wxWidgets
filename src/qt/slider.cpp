@@ -30,9 +30,13 @@ wxQtSlider::wxQtSlider( wxWindow *parent, wxSlider *handler )
 
 void wxQtSlider::valueChanged(int position)
 {
-    wxCommandEvent event( wxEVT_SLIDER, GetHandler()->GetId() );
-    event.SetInt( position );
-    EmitEvent( event );
+    wxSlider *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_SLIDER, handler->GetId() );
+        event.SetInt( position );
+        EmitEvent( event );
+    }
 }
 
 

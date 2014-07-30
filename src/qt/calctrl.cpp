@@ -328,13 +328,21 @@ wxQtCalendarWidget::wxQtCalendarWidget( wxWindow *parent, wxCalendarCtrl *handle
 
 void wxQtCalendarWidget::selectionChanged()
 {
-    GetHandler()->GenerateAllChangeEvents(wxQtConvertDate(m_date));
-    m_date = selectedDate();
+    wxCalendarCtrl *win = GetHandler();
+    if ( win )
+    {
+        GetHandler()->GenerateAllChangeEvents(wxQtConvertDate(m_date));
+        m_date = selectedDate();
+    }
 }
 
 void wxQtCalendarWidget::activated(const QDate &WXUNUSED(date))
 {
-    GetHandler()->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+    wxCalendarCtrl *handler = GetHandler();
+    if ( handler )
+    {
+        handler->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+    }
 }
 
 #endif // wxUSE_CALENDARCTRL

@@ -31,12 +31,16 @@ wxQtListWidget::wxQtListWidget( wxWindow *parent, wxListBox *handler )
 
 void wxQtListWidget::clicked(const QModelIndex &index )
 {
-    GetHandler()->QtSendEvent(wxEVT_LISTBOX, index, true);
+    wxListBox *handler = GetHandler();
+    if ( handler )
+        handler->QtSendEvent(wxEVT_LISTBOX, index, true);
 }
 
 void wxQtListWidget::doubleClicked( const QModelIndex &index )
 {
-    GetHandler()->QtSendEvent(wxEVT_LISTBOX_DCLICK, index, true);
+    wxListBox *handler = GetHandler();
+    if ( handler )
+        handler->QtSendEvent(wxEVT_LISTBOX_DCLICK, index, true);
 }
 
 

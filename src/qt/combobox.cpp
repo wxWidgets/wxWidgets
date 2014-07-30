@@ -36,14 +36,20 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
 
 void wxQtComboBox::activated(int index)
 {
-    GetHandler()->SendSelectionChangedEvent(wxEVT_COMBOBOX);
+    wxComboBox *handler = GetHandler();
+    if ( handler )
+        handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
 }
 
 void wxQtComboBox::editTextChanged(const QString &text)
 {
-    wxCommandEvent event( wxEVT_TEXT, GetHandler()->GetId() );
-    event.SetString( wxQtConvertString( text ) );
-    EmitEvent( event );
+    wxComboBox *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_TEXT, handler->GetId() );
+        event.SetString( wxQtConvertString( text ) );
+        EmitEvent( event );
+    }
 }
 
 

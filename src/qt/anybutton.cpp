@@ -37,8 +37,12 @@ wxQtPushButton::wxQtPushButton(wxWindow *parent, wxAnyButton *handler)
 
 void wxQtPushButton::clicked( bool WXUNUSED(checked) )
 {
-    wxCommandEvent event( wxEVT_BUTTON, GetHandler()->GetId() );
-    EmitEvent( event );
+    wxAnyButton *handler = GetHandler();
+    if ( handler )
+    {
+        wxCommandEvent event( wxEVT_BUTTON, handler->GetId() );
+        EmitEvent( event );
+    }
 }
 
 void wxAnyButton::QtCreate(wxWindow *parent)

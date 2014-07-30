@@ -32,10 +32,14 @@ wxQtToggleButton::wxQtToggleButton(wxWindow *parent, wxAnyButton *handler)
 
 void wxQtToggleButton::clicked( bool checked )
 {
-    // for toggle buttons, send the checked state in the wx event:
-    wxCommandEvent event( wxEVT_TOGGLEBUTTON, GetHandler()->GetId() );
-    event.SetInt( checked );
-    EmitEvent( event );
+    wxAnyButton *handler = GetHandler();
+    if ( handler )
+    {
+        // for toggle buttons, send the checked state in the wx event:
+        wxCommandEvent event( wxEVT_TOGGLEBUTTON, handler->GetId() );
+        event.SetInt( checked );
+        EmitEvent( event );
+    }
 }
 
 wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
