@@ -9,6 +9,15 @@
 #include "wx/wxprec.h"
 
 #include "wx/statbmp.h"
+#include "wx/qt/private/winevent.h"
+
+class wxQtStaticBmp : public wxQtEventSignalHandler< QLabel, wxStaticBitmap >
+{
+public:
+    wxQtStaticBmp( wxWindow *parent, wxStaticBitmap *handler ):
+        wxQtEventSignalHandler< QLabel, wxStaticBitmap >( parent, handler ){}
+};
+
 
 wxStaticBitmap::wxStaticBitmap()
 {
@@ -33,7 +42,7 @@ bool wxStaticBitmap::Create( wxWindow *parent,
              long style,
              const wxString& name)
 {
-    m_qtLabel = new QLabel( parent->GetHandle() );
+    m_qtLabel = new wxQtStaticBmp( parent, this );
     SetBitmap( label );
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
