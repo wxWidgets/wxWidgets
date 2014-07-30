@@ -18,29 +18,34 @@ public:
     wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler );
 
 private:
-    void clicked( const QModelIndex &index );
-    void doubleClicked( const QModelIndex &index );
+    void itemClicked(QTreeWidgetItem * item, int column);
 };
 
 wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler )
     : wxQtEventSignalHandler< QTreeWidget, wxListCtrl >( parent, handler )
 {
-    connect(this, &QTreeWidget::clicked, this, &wxQtTreeWidget::clicked);
+    connect(this, &QTreeWidget::itemClicked, this, &wxQtTreeWidget::itemClicked);
     connect(this, &QTreeWidget::doubleClicked, this, &wxQtTreeWidget::doubleClicked);
 }
 
-void wxQtTreeWidget::clicked(const QModelIndex &index )
+void wxQtTreeWidget::itemClicked(QTreeWidgetItem *item, int column)
 {
     wxListCtrl *handler = GetHandler();
-    //if ( handler )
-    //    handler->QtSendEvent(wxEVT_LISTBOX, index, true);
-}
-
-void wxQtTreeWidget::doubleClicked( const QModelIndex &index )
-{
-    wxListCtrl *handler = GetHandler();
-    //if ( handler )
-    //    handler->QtSendEvent(wxEVT_LISTBOX_DCLICK, index, true);
+    if ( handler )
+    {
+        // prepare the event
+        // -----------------
+        wxListEvent event;
+        event.SetEventType(wxEVT_LIST_ITEM_SELECTED);
+        event.SetId(handler->GetId());
+        event.m_itemIndex = this->indexFromItem(item, column).row();
+        event.m_item.SetId(event.m_itemIndex);
+        event.m_item.SetMask(wxLIST_MASK_TEXT |
+                             wxLIST_MASK_IMAGE |
+                             wxLIST_MASK_DATA);
+        handler->GetItem(event.m_item);
+        EmitEvent(event);
+    }
 }
 
 Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
@@ -152,7 +157,14 @@ wxTextCtrl* wxListCtrl::GetEditControl() const
 
 bool wxListCtrl::GetItem(wxListItem& info) const
 {
-    return false;
+    const long id = info.GetId();
+    wxCHECK_MSG( id >= 0 && id < GetItemCount(), false,
+                 wxT("invalid item index in GetItem") );
+    QModelIndex index = m_qtTreeWidget->model()->index(id, 0);
+    // note that itemFromIndex(index) is protected
+    QTreeWidgetItem *item = (QTreeWidgetItem*)index.internalPointer();
+    info.SetText(wxQtConvertString(item->text(info.GetColumn())));
+    return true;
 }
 
 bool wxListCtrl::SetItem(wxListItem& info)
