@@ -264,8 +264,8 @@ void wxWindow::PostCreation()
 //
 //    SetWindowStyleFlag( style );
 //
-//    m_backgroundColour = wxColour( GetHandle()->palette().color( GetHandle()->backgroundRole() ) );
-//    m_foregroundColour = wxColour( GetHandle()->palette().color( GetHandle()->foregroundRole() ) );
+    SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
+    SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
 
 }
 
