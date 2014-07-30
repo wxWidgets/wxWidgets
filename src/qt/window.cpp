@@ -147,6 +147,7 @@ void wxWindow::Init()
 wxWindow::wxWindow()
 {
     Init();
+
 }
 
 
@@ -178,12 +179,20 @@ wxWindow::~wxWindow()
     // Delete only if the qt widget was created or assigned to this base class
     if (m_qtWindow)
     {
+        wxLogDebug(wxT("wxWindow::~wxWindow %s m_qtWindow=%p"),
+                   (const char*)GetName(), m_qtWindow);
         // Avoid sending further signals (i.e. if deleting the current page)
         m_qtWindow->blockSignals(true);
         // Reset the pointer to avoid handling pending event and signals
         QtStoreWindowPointer( GetHandle(), NULL );
         // Delete QWidget when control return to event loop (safer)
         m_qtWindow->deleteLater();
+        m_qtWindow = NULL;
+    }
+    else
+    {
+        wxLogDebug(wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"),
+                   (const char*)GetName());
     }
 }
 
@@ -221,10 +230,25 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 
     parent->AddChild( this );
 
+    DoMoveWindow( pos.x, pos.y, size.GetWidth(), size.GetHeight() );
+
+    PostCreation();
+
+    return ( true );
+}
+
+void wxWindow::PostCreation()
+{
+    if ( m_qtWindow == NULL )
+    {
+        // store pointer to the QWidget subclass (to be used in the destructor)
+        m_qtWindow = GetHandle();
+    }
+    wxLogDebug(wxT("wxWindow::Create %s m_qtWindow=%p"),
+               (const char*)GetName(), m_qtWindow);
+
     // set the background style after creation (not before like in wxGTK)
     QtSetBackgroundStyle();
-
-    DoMoveWindow( pos.x, pos.y, size.GetWidth(), size.GetHeight() );
 
 //    // Use custom Qt window flags (allow to turn on or off
 //    // the minimize/maximize/close buttons and title bar)
@@ -243,7 +267,6 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 //    m_backgroundColour = wxColour( GetHandle()->palette().color( GetHandle()->backgroundRole() ) );
 //    m_foregroundColour = wxColour( GetHandle()->palette().color( GetHandle()->foregroundRole() ) );
 
-    return ( true );
 }
 
 void wxWindow::AddChild( wxWindowBase *child )

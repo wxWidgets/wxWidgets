@@ -48,7 +48,7 @@ void wxQtPushButton::clicked( bool WXUNUSED(checked) )
 void wxAnyButton::QtCreate(wxWindow *parent)
 {
     // create the default push button (used in button and bmp button)
-    m_qtWindow = m_qtPushButton = new wxQtPushButton( parent, this );
+    m_qtPushButton = new wxQtPushButton( parent, this );
 }
 
 void wxAnyButton::QtSetBitmap( const wxBitmap &bitmap )

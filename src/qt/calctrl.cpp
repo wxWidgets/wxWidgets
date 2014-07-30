@@ -59,7 +59,7 @@ wxCalendarCtrl::~wxCalendarCtrl()
 bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id, const wxDateTime& date,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
-    m_qtWindow = m_qtCalendar = new wxQtCalendarWidget( parent, this );
+    m_qtCalendar = new wxQtCalendarWidget( parent, this );
     m_qtCalendar->resize(m_qtCalendar->sizeHint());
 
     {

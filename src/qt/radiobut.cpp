@@ -36,7 +36,7 @@ bool wxRadioButton::Create( wxWindow *parent,
              const wxValidator& validator,
              const wxString& name)
 {
-    m_qtWindow = m_qtRadioButton = new QRadioButton( parent->GetHandle() );
+    m_qtRadioButton = new QRadioButton( parent->GetHandle() );
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );

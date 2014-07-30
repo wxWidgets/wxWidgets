@@ -142,6 +142,6 @@ QPushButton *wxToggleButton::GetHandle() const
 void wxToggleButtonBase::QtCreate(wxWindow *parent)
 {
     // create a checkable push button
-    m_qtWindow = m_qtPushButton = new wxQtToggleButton( parent, this );
+    m_qtPushButton = new wxQtToggleButton( parent, this );
 }
 

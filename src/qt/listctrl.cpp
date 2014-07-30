@@ -85,7 +85,7 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtWindow = m_qtTreeWidget = new wxQtTreeWidget( parent, this );
+    m_qtTreeWidget = new wxQtTreeWidget( parent, this );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
@@ -179,6 +179,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     if ( !info.GetText().IsNull() )
         item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
     item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
+
     if ( info.GetTextColour().IsOk() )
         item->setTextColor(info.GetColumn(), info.GetTextColour().GetHandle());
     if ( info.GetBackgroundColour().IsOk() )

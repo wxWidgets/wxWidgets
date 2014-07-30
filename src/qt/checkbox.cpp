@@ -55,7 +55,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
             const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator,
             const wxString& name )
 {
-    m_qtWindow = m_qtCheckBox = new wxQtCheckBox( parent, this );
+    m_qtCheckBox = new wxQtCheckBox( parent, this );
     m_qtCheckBox->setText( wxQtConvertString( label ) );
 
     if ( style & wxCHK_2STATE )
