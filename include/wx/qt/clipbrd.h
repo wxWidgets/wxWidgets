@@ -1,17 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/clipbrd.h
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Name:        wx/qt/toolbar.h
+// Author:      Sean D'Epagnier
+// Copyright:   (c) Sean D'Epagnier 2014
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_CLIPBRD_H_
 #define _WX_QT_CLIPBRD_H_
 
+#include <QClipboard>
+
+class QtClipBoardSignalHandler;
+
 class WXDLLIMPEXP_CORE wxClipboard : public wxClipboardBase
 {
 public:
     wxClipboard();
+    ~wxClipboard();
 
     virtual bool Open();
     virtual void Close();
@@ -23,10 +28,18 @@ public:
     virtual void Clear();
 
     virtual bool IsSupported( const wxDataFormat& format );
-
-protected:
+    virtual bool IsSupportedAsync(wxEvtHandler *sink);
 
 private:
+    friend class QtClipBoardSignalHandler;
+    QClipboard::Mode Mode() { return m_usePrimary ? QClipboard::Selection : QClipboard::Clipboard; }
+
+    QObject *m_SignalHandler;
+    wxEvtHandlerRef    m_sink;
+
+    bool m_open;
+    
+    DECLARE_DYNAMIC_CLASS(wxClipboard)
 };
 
 #endif // _WX_QT_CLIPBRD_H_
