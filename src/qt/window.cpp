@@ -178,6 +178,8 @@ wxWindow::~wxWindow()
     // Delete only if the qt widget was created or assigned to this base class
     if (m_qtWindow)
     {
+        // Avoid sending further signals (i.e. if deleting the current page)
+        m_qtWindow->blockSignals(true);
         // Reset the pointer to avoid handling pending event and signals
         QtStoreWindowPointer( GetHandle(), NULL );
         // Delete QWidget when control return to event loop (safer)
