@@ -43,6 +43,18 @@ void wxQtTreeWidget::doubleClicked( const QModelIndex &index )
     //    handler->QtSendEvent(wxEVT_LISTBOX_DCLICK, index, true);
 }
 
+Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
+{
+    switch (align)
+    {
+        case wxLIST_FORMAT_LEFT:
+            return Qt::AlignLeft;
+        case wxLIST_FORMAT_RIGHT:
+            return Qt::AlignRight;
+        case wxLIST_FORMAT_CENTRE:
+            return Qt::AlignCenter;
+    }
+}
 
 wxListCtrl::wxListCtrl()
 {
@@ -409,7 +421,12 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 
 long wxListCtrl::DoInsertColumn(long col, const wxListItem& info)
 {
-    return 0;
+    QTreeWidgetItem *item = m_qtTreeWidget->headerItem();
+    item->setText(col, wxQtConvertString(info.GetText()));
+    item->setTextAlignment(col, wxQtConvertTextAlign(info.GetAlign()));
+    if (info.GetWidth())
+        m_qtTreeWidget->setColumnWidth(col, info.GetWidth());
+    return col;
 }
 
 
