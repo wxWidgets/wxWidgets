@@ -8,7 +8,7 @@
 #ifndef _WX_QT_CLIPBRD_H_
 #define _WX_QT_CLIPBRD_H_
 
-#include <QClipboard>
+#include "wx/weakref.h"
 
 class QtClipBoardSignalHandler;
 
@@ -26,15 +26,14 @@ public:
     virtual bool SetData( wxDataObject *data );
     virtual bool GetData( wxDataObject& data );
     virtual void Clear();
-
     virtual bool IsSupported( const wxDataFormat& format );
     virtual bool IsSupportedAsync(wxEvtHandler *sink);
 
 private:
     friend class QtClipBoardSignalHandler;
-    QClipboard::Mode Mode() { return m_usePrimary ? QClipboard::Selection : QClipboard::Clipboard; }
+    int Mode();
 
-    QObject *m_SignalHandler;
+    QtClipBoardSignalHandler *m_SignalHandler;
     wxEvtHandlerRef    m_sink;
 
     bool m_open;
