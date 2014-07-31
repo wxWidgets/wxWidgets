@@ -478,9 +478,35 @@ void wxListCtrl::SetWindowStyleFlag(long style)
 {
 }
 
-long wxListCtrl::GetNextItem(long item, int geometry, int state) const
+long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
 {
-    return 0;
+    wxListItem info;
+    long ret = item,
+         max = GetItemCount();
+    wxCHECK_MSG( (ret == -1) || (ret < max), -1,
+                 wxT("invalid listctrl index in GetNextItem()") );
+
+    // notice that we start with the next item (or the first one if item == -1)
+    // and this is intentional to allow writing a simple loop to iterate over
+    // all selected items
+    ret++;
+    if ( ret == max )
+        // this is not an error because the index was OK initially,
+        // just no such item
+        return -1;
+
+    if ( !state )
+        // any will do
+        return (size_t)ret;
+
+    size_t count = GetItemCount();
+    for ( size_t line = (size_t)ret; line < count; line++ )
+    {
+        if ( GetItemState(line, state) )
+            return line;
+    }
+
+    return -1;
 }
 
 wxImageList *wxListCtrl::GetImageList(int which) const
