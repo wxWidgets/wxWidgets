@@ -11,6 +11,7 @@
 #include "wx/qt/defs.h"
 #include "wx/qt/utils.h"
 #include "wx/uiaction.h"
+#include "wx/qt/converter.h"
 
 #include <QtTest/QtTestGui>
 
@@ -96,14 +97,11 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
 
 bool wxUIActionSimulator::DoKey(int keyCode, int modifiers, bool isDown)
 {
+    Qt::KeyboardModifiers qtmodifiers;
     enum Key key;
 
-    switch ( keyCode )
-    {
-        case WXK_PAGEUP:
-            key = Key_PageUp;
-            break;
-    }
+    key = (enum Key) wxQtConvertKeyCode( keyCode, modifiers, qtmodifiers );
+
     KeyAction keyAction = isDown ? Press : Release;
     return SimulateKeyboardKey( keyAction, key );
 }
