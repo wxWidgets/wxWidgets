@@ -884,6 +884,12 @@ dnl ### begin block 20_COND_TOOLKIT_QT_USE_GUI_1[wx.bkl] ###
         COND_TOOLKIT_QT_USE_GUI_1=""
     fi
     AC_SUBST(COND_TOOLKIT_QT_USE_GUI_1)
+dnl ### begin block 20_COND_TOOLKIT_Qt[wx.bkl] ###
+    COND_TOOLKIT_Qt="#"
+    if test "x$TOOLKIT" = "xQt" ; then
+        COND_TOOLKIT_Qt=""
+    fi
+    AC_SUBST(COND_TOOLKIT_Qt)
 dnl ### begin block 20_COND_TOOLKIT_WINCE[wx.bkl] ###
     COND_TOOLKIT_WINCE="#"
     if test "x$TOOLKIT" = "xWINCE" ; then
