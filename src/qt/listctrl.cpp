@@ -82,6 +82,20 @@ Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
     }
 }
 
+wxListColumnFormat wxQtConvertAlignFlag(int align)
+{
+    switch (align)
+    {
+        case Qt::AlignLeft:
+            return wxLIST_FORMAT_LEFT;
+        case Qt::AlignRight:
+            return wxLIST_FORMAT_RIGHT;
+        case Qt::AlignCenter:
+            return wxLIST_FORMAT_CENTRE;
+    }
+}
+
+
 wxListCtrl::wxListCtrl()
 {
 }
@@ -121,14 +135,19 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
     return wxListCtrlBase::SetBackgroundColour(col);
 }
 
-bool wxListCtrl::GetColumn(int col, wxListItem& item) const
+bool wxListCtrl::GetColumn(int col, wxListItem& info) const
 {
-    return false;
+    QTreeWidgetItem *item = m_qtTreeWidget->headerItem();
+    info.SetText(wxQtConvertString(item->text(col)));
+    info.SetAlign(wxQtConvertAlignFlag(item->textAlignment(col)));
+    info.SetWidth(m_qtTreeWidget->columnWidth(col));
+    return true;
 }
 
-bool wxListCtrl::SetColumn(int col, const wxListItem& item)
+bool wxListCtrl::SetColumn(int col, const wxListItem& info)
 {
-    return false;
+    DoInsertColumn(col, info);
+    return true;
 }
 
 int wxListCtrl::GetColumnWidth(int col) const
