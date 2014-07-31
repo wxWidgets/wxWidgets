@@ -158,7 +158,14 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
 
     SetWindowStyleFlag(style);
 
-    QMainWindow *mainwindow = qobject_cast<QMainWindow*>(parent->GetHandle());
+    // The ToolBar must attach to a QMainWindow, so try get parent recursively
+    QObject *handle = parent->GetHandle();
+    QMainWindow *mainwindow = NULL;
+    while (handle && !mainwindow)
+    {
+        mainwindow = dynamic_cast<QMainWindow*>(handle);
+        handle = handle->parent();
+    }
     if(!mainwindow)
         wxFAIL_MSG( wxT("wxToolBar::QtCreate() parent not a QMainWindow"));
 
