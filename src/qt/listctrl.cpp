@@ -215,8 +215,11 @@ bool wxListCtrl::SetColumnsOrder(const wxArrayInt& orders)
 int wxListCtrl::GetCountPerPage() const
 {
     // this may not be exact but should be a good aproximation:
-    return m_qtTreeWidget->height() /
-            m_qtTreeWidget->visualItemRect(m_qtTreeWidget->headerItem()).height();
+    int h = m_qtTreeWidget->visualItemRect(m_qtTreeWidget->headerItem()).height();
+    if ( h )
+        return m_qtTreeWidget->height() / h;
+    else
+        return 0;
 }
 
 wxRect wxListCtrl::GetViewRect() const
