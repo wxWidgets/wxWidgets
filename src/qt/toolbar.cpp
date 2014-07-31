@@ -85,7 +85,7 @@ void wxQtToolButton::enterEvent( QEvent *WXUNUSED(event) )
 {
     wxToolBarTool *handler = GetHandler();
     wxToolBarBase *toolbar = handler->GetToolBar();
-//    toolbar->OnMouseEnter( handler->GetId() );
+    toolbar->OnMouseEnter( handler->GetId() );
 }
 
 // is this needed?
