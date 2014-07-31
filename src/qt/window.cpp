@@ -939,7 +939,8 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         // use the Qt event region:
         m_updateRegion.QtSetRegion( event->region() );
 
-        wxLogDebug(wxT("wxWindow::QtHandlePaintEvent %s %s region %d %d %d %d"),
+        if (false)
+            wxLogDebug(wxT("wxWindow::QtHandlePaintEvent %s %s region %d %d %d %d"),
                    (const char*)GetName(),
                    m_qtPicture->isNull() ? "wxPaintDC" : "wxClientDC",
                    m_updateRegion.GetBox().x, m_updateRegion.GetBox().y,
