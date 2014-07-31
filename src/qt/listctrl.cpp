@@ -214,18 +214,21 @@ bool wxListCtrl::SetItem(wxListItem& info)
     wxCHECK_MSG( id >= 0 && id < GetItemCount(), false,
                  wxT("invalid item index in SetItem") );
 
-    QModelIndex index = m_qtTreeWidget->model()->index(id, 0);
+    QModelIndex index = m_qtTreeWidget->model()->index(id, info.GetColumn());
     // note that itemFromIndex(index) is protected
     QTreeWidgetItem *item = (QTreeWidgetItem*)index.internalPointer();
     if ( !info.GetText().IsNull() )
         item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
     item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
 
-    if ( info.GetTextColour().IsOk() )
-        item->setTextColor(info.GetColumn(), info.GetTextColour().GetHandle());
-    if ( info.GetBackgroundColour().IsOk() )
-        item->setBackgroundColor(info.GetColumn(), info.GetBackgroundColour().GetHandle());
-
+    for (int col=0; col<GetColumnCount(); col++)
+    {
+        if ( info.GetTextColour().IsOk() )
+            item->setTextColor(col, info.GetTextColour().GetHandle());
+        if ( info.GetBackgroundColour().IsOk() )
+            item->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+    }
+    return true;
 }
 
 long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
@@ -483,10 +486,13 @@ long wxListCtrl::InsertItem(const wxListItem& info)
     QTreeWidgetItem *item = new QTreeWidgetItem(m_qtTreeWidget);
     item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
     item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
-    if ( info.GetTextColour().IsOk() )
-        item->setTextColor(info.GetColumn(), info.GetTextColour().GetHandle());
-    if ( info.GetBackgroundColour().IsOk() )
-        item->setBackgroundColor(info.GetColumn(), info.GetBackgroundColour().GetHandle());
+    for (int col=0; col<GetColumnCount();col++)
+    {
+        if ( info.GetTextColour().IsOk() )
+            item->setTextColor(col, info.GetTextColour().GetHandle());
+        if ( info.GetBackgroundColour().IsOk() )
+            item->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+    }
     return GetItemCount() - 1;
 }
 
