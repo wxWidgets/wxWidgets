@@ -17,7 +17,7 @@ class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 public:
     wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler );
 
-    void EmitListEvent(wxEventType typ, QTreeWidgetItem *item, int column) const;
+    void EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const;
 
 private:
     void itemClicked(QTreeWidgetItem * item, int column);
@@ -33,7 +33,7 @@ wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler )
     connect(this, &QTreeWidget::itemActivated, this, &wxQtTreeWidget::itemActivated);
 }
 
-void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *item, int column) const
+void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const
 {
     wxListCtrl *handler = GetHandler();
     if ( handler )
@@ -43,7 +43,7 @@ void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *item, int c
         wxListEvent event;
         event.SetEventType(typ);
         event.SetId(handler->GetId());
-        event.m_itemIndex = this->indexFromItem(item, column).row();
+        event.m_itemIndex = this->indexFromItem(qitem, column).row();
         event.m_item.SetId(event.m_itemIndex);
         event.m_item.SetMask(wxLIST_MASK_TEXT |
                              wxLIST_MASK_IMAGE |
@@ -53,19 +53,19 @@ void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *item, int c
     }
 }
 
-void wxQtTreeWidget::itemClicked(QTreeWidgetItem *item, int column)
+void wxQtTreeWidget::itemClicked(QTreeWidgetItem *qitem, int column)
 {
-    EmitListEvent(wxEVT_LIST_ITEM_SELECTED, item, column);
+    EmitListEvent(wxEVT_LIST_ITEM_SELECTED, qitem, column);
 }
 
-void wxQtTreeWidget::itemPressed(QTreeWidgetItem *item, int column)
+void wxQtTreeWidget::itemPressed(QTreeWidgetItem *qitem, int column)
 {
-    EmitListEvent(wxEVT_LIST_ITEM_SELECTED, item, column);
+    EmitListEvent(wxEVT_LIST_ITEM_SELECTED, qitem, column);
 }
 
-void wxQtTreeWidget::itemActivated(QTreeWidgetItem *item, int column)
+void wxQtTreeWidget::itemActivated(QTreeWidgetItem *qitem, int column)
 {
-    EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, item, column);
+    EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, qitem, column);
 }
 
 
@@ -137,11 +137,16 @@ bool wxListCtrl::SetBackgroundColour(const wxColour& col)
 
 bool wxListCtrl::GetColumn(int col, wxListItem& info) const
 {
-    QTreeWidgetItem *item = m_qtTreeWidget->headerItem();
-    info.SetText(wxQtConvertString(item->text(col)));
-    info.SetAlign(wxQtConvertAlignFlag(item->textAlignment(col)));
-    info.SetWidth(m_qtTreeWidget->columnWidth(col));
-    return true;
+    QTreeWidgetItem *qitem = m_qtTreeWidget->headerItem();
+    if ( qitem != NULL )
+    {
+        info.SetText(wxQtConvertString(qitem->text(col)));
+        info.SetAlign(wxQtConvertAlignFlag(qitem->textAlignment(col)));
+        info.SetWidth(m_qtTreeWidget->columnWidth(col));
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxListCtrl::SetColumn(int col, const wxListItem& info)
@@ -208,29 +213,39 @@ QTreeWidgetItem *wxListCtrl::QtGetItem(int id) const
 bool wxListCtrl::GetItem(wxListItem& info) const
 {
     const long id = info.GetId();
-    QTreeWidgetItem *item = QtGetItem(id);
-    info.SetText(wxQtConvertString(item->text(info.GetColumn())));
-    return true;
+    QTreeWidgetItem *qitem = QtGetItem(id);
+    if ( qitem != NULL )
+    {
+        info.SetText(wxQtConvertString(qitem->text(info.GetColumn())));
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxListCtrl::SetItem(wxListItem& info)
 {
     const long id = info.GetId();
-    QTreeWidgetItem *item = QtGetItem(id);
-    if ( !info.GetText().IsNull() )
-        item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
-    item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
-
-    for (int col=0; col<GetColumnCount(); col++)
+    QTreeWidgetItem *qitem = QtGetItem(id);
+    if ( qitem != NULL )
     {
-        if ( info.GetFont().IsOk() )
-            item->setFont(col, info.GetFont().GetHandle() );
-        if ( info.GetTextColour().IsOk() )
-            item->setTextColor(col, info.GetTextColour().GetHandle());
-        if ( info.GetBackgroundColour().IsOk() )
-            item->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+        if ( !info.GetText().IsNull() )
+            qitem->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
+        qitem->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
+
+        for (int col=0; col<GetColumnCount(); col++)
+        {
+            if ( info.GetFont().IsOk() )
+                qitem->setFont(col, info.GetFont().GetHandle() );
+            if ( info.GetTextColour().IsOk() )
+                qitem->setTextColor(col, info.GetTextColour().GetHandle());
+            if ( info.GetBackgroundColour().IsOk() )
+                qitem->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+        }
+        return true;
     }
-    return true;
+    else
+        return false;
 }
 
 long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId)
@@ -492,19 +507,24 @@ long wxListCtrl::HitTest(const wxPoint& point, int& flags, long* ptrSubItem) con
 
 long wxListCtrl::InsertItem(const wxListItem& info)
 {
-    QTreeWidgetItem *item = new QTreeWidgetItem(m_qtTreeWidget);
-    item->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
-    item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
-    for (int col=0; col<GetColumnCount();col++)
+    QTreeWidgetItem *qitem = new QTreeWidgetItem(m_qtTreeWidget);
+    if ( qitem != NULL )
     {
-        if ( info.GetFont().IsOk() )
-            item->setFont(col, info.GetFont().GetHandle() );
-        if ( info.GetTextColour().IsOk() )
-            item->setTextColor(col, info.GetTextColour().GetHandle());
-        if ( info.GetBackgroundColour().IsOk() )
-            item->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+        qitem->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
+        qitem->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
+        for (int col=0; col<GetColumnCount();col++)
+        {
+            if ( info.GetFont().IsOk() )
+                qitem->setFont(col, info.GetFont().GetHandle() );
+            if ( info.GetTextColour().IsOk() )
+                qitem->setTextColor(col, info.GetTextColour().GetHandle());
+            if ( info.GetBackgroundColour().IsOk() )
+                qitem->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+        }
+        return GetItemCount() - 1;
     }
-    return GetItemCount() - 1;
+    else
+        return -1;
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label)
@@ -537,12 +557,17 @@ long wxListCtrl::InsertItem(long index, const wxString& label, int imageIndex)
 
 long wxListCtrl::DoInsertColumn(long col, const wxListItem& info)
 {
-    QTreeWidgetItem *item = m_qtTreeWidget->headerItem();
-    item->setText(col, wxQtConvertString(info.GetText()));
-    item->setTextAlignment(col, wxQtConvertTextAlign(info.GetAlign()));
-    if (info.GetWidth())
-        m_qtTreeWidget->setColumnWidth(col, info.GetWidth());
-    return col;
+    QTreeWidgetItem *qitem = m_qtTreeWidget->headerItem();
+    if ( qitem != NULL )
+    {
+        qitem->setText(col, wxQtConvertString(info.GetText()));
+        qitem->setTextAlignment(col, wxQtConvertTextAlign(info.GetAlign()));
+        if (info.GetWidth())
+            m_qtTreeWidget->setColumnWidth(col, info.GetWidth());
+        return col;
+    }
+    else
+        return -1;
 }
 
 
