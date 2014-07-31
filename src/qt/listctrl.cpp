@@ -391,12 +391,31 @@ bool wxListCtrl::SetItemData(long item, long data)
 
 bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 {
-    return false;
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem != NULL )
+    {
+        rect = wxQtConvertRect( m_qtTreeWidget->visualItemRect(qitem) );
+        return true;
+    }
+    else
+        return false;
 }
 
-bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code) const
+bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int WXUNUSED(code)) const
 {
-    return false;
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem != NULL )
+    {
+        wxCHECK_MSG( item >= 0 && item < GetItemCount(), NULL,
+                     wxT("invalid row index in GetSubItemRect") );
+        wxCHECK_MSG( subItem >= 0 && subItem < GetColumnCount(), NULL,
+                     wxT("invalid column index in GetSubItemRect") );
+        QModelIndex qindex = m_qtTreeWidget->model()->index(item, subItem);
+        rect = wxQtConvertRect( m_qtTreeWidget->visualRect(qindex) );
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
