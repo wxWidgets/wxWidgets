@@ -147,6 +147,7 @@ void wxWindow::Init()
 wxWindow::wxWindow()
 {
     Init();
+
 }
 
 
@@ -178,12 +179,20 @@ wxWindow::~wxWindow()
     // Delete only if the qt widget was created or assigned to this base class
     if (m_qtWindow)
     {
+        wxLogDebug(wxT("wxWindow::~wxWindow %s m_qtWindow=%p"),
+                   (const char*)GetName(), m_qtWindow);
         // Avoid sending further signals (i.e. if deleting the current page)
         m_qtWindow->blockSignals(true);
         // Reset the pointer to avoid handling pending event and signals
         QtStoreWindowPointer( GetHandle(), NULL );
         // Delete QWidget when control return to event loop (safer)
         m_qtWindow->deleteLater();
+        m_qtWindow = NULL;
+    }
+    else
+    {
+        wxLogDebug(wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"),
+                   (const char*)GetName());
     }
 }
 
@@ -211,9 +220,6 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         {
             m_qtWindow = new wxQtWidget( parent, this );
         }
-        // Set the default color so Paint Event default handler clears the DC:
-        m_hasBgCol = true;
-        SetBackgroundColour(GetHandle()->palette().color(GetHandle()->backgroundRole()));
     }
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -221,10 +227,29 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 
     parent->AddChild( this );
 
-    // set the background style after creation (not before like in wxGTK)
-    QtSetBackgroundStyle();
-
     DoMoveWindow( pos.x, pos.y, size.GetWidth(), size.GetHeight() );
+
+    PostCreation();
+
+    return ( true );
+}
+
+void wxWindow::PostCreation(bool generic)
+{
+    if ( m_qtWindow == NULL )
+    {
+        // store pointer to the QWidget subclass (to be used in the destructor)
+        m_qtWindow = GetHandle();
+    }
+    wxLogDebug(wxT("wxWindow::Create %s m_qtWindow=%p"),
+               (const char*)GetName(), m_qtWindow);
+
+    // set the background style after creation (not before like in wxGTK)
+    // (only for generic controls, to use qt defaults elsewere)
+    if (generic)
+        QtSetBackgroundStyle();
+    else
+        SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
 //    // Use custom Qt window flags (allow to turn on or off
 //    // the minimize/maximize/close buttons and title bar)
@@ -240,10 +265,11 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 //
 //    SetWindowStyleFlag( style );
 //
-//    m_backgroundColour = wxColour( GetHandle()->palette().color( GetHandle()->backgroundRole() ) );
-//    m_foregroundColour = wxColour( GetHandle()->palette().color( GetHandle()->foregroundRole() ) );
 
-    return ( true );
+    // Set the default color so Paint Event default handler clears the DC:
+    SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
+    SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
+
 }
 
 void wxWindow::AddChild( wxWindowBase *child )
@@ -869,7 +895,7 @@ bool wxWindow::QtSetBackgroundStyle()
         {
             // let Qt erase the background by default
             // (note that wxClientDC will not work)
-            widget->setAutoFillBackground(true);
+            //widget->setAutoFillBackground(true);
             // use system colors for background (default in Qt)
             widget->setAttribute(Qt::WA_NoSystemBackground, false);
         }

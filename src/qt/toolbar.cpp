@@ -85,7 +85,7 @@ void wxQtToolButton::enterEvent( QEvent *WXUNUSED(event) )
 {
     wxToolBarTool *handler = GetHandler();
     wxToolBarBase *toolbar = handler->GetToolBar();
-//    toolbar->OnMouseEnter( handler->GetId() );
+    toolbar->OnMouseEnter( handler->GetId() );
 }
 
 // is this needed?
@@ -122,6 +122,20 @@ void wxToolBarTool::SetToolTip()
     m_qtToolButton->setToolTip(wxQtConvertString( GetShortHelp() ));
 }
 
+
+class wxQtToolBar : public wxQtEventSignalHandler< QToolBar, wxToolBar >
+{
+public:
+    wxQtToolBar( wxWindow *parent, wxToolBar *handler );
+
+};
+
+wxQtToolBar::wxQtToolBar( wxWindow *parent, wxToolBar *handler )
+    : wxQtEventSignalHandler< QToolBar, wxToolBar >( parent, handler )
+{
+}
+
+
 QToolBar *wxToolBar::QtToolBar() const
 {
     return m_qtToolBar;
@@ -134,20 +148,24 @@ void wxToolBar::Init()
 
 wxToolBar::~wxToolBar()
 {
-    delete m_qtToolBar;
 }
 
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
                        const wxSize& size, long style, const wxString& name)
 {
-    m_qtToolBar = new QToolBar(wxQtConvertString( name ));
-
-    // reset pointer so we don't try to delete the toolbar when we exit
-    connect( m_qtToolBar, &QObject::destroyed, this, &wxToolBar::Init );
+    m_qtToolBar = new wxQtToolBar( parent, this );
+    m_qtToolBar->setWindowTitle( wxQtConvertString( name ) );
 
     SetWindowStyleFlag(style);
 
-    QMainWindow *mainwindow = qobject_cast<QMainWindow*>(parent->GetHandle());
+    // The ToolBar must attach to a QMainWindow, so try get parent recursively
+    QObject *handle = parent->GetHandle();
+    QMainWindow *mainwindow = NULL;
+    while (handle && !mainwindow)
+    {
+        mainwindow = dynamic_cast<QMainWindow*>(handle);
+        handle = handle->parent();
+    }
     if(!mainwindow)
         wxFAIL_MSG( wxT("wxToolBar::QtCreate() parent not a QMainWindow"));
 
@@ -158,6 +176,8 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
     if(HasFlag(wxTB_BOTTOM)) area |= Qt::BottomToolBarArea;
 
     mainwindow->addToolBar((Qt::ToolBarArea)area, m_qtToolBar);
+
+    PostCreation();
 
     return wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name );
 }

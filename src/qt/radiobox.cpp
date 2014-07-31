@@ -130,7 +130,7 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxValidator& val,
             const wxString& name)
 {
-    m_qtWindow = m_qtGroupBox = new wxQtRadioBox( parent, this );
+    m_qtGroupBox = new wxQtRadioBox( parent, this );
     m_qtGroupBox->setTitle( wxQtConvertString( title ) );
     m_qtButtonGroup = new wxQtButtonGroup( m_qtGroupBox, this );
 

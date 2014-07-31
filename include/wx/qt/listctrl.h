@@ -43,10 +43,10 @@ public:
     bool SetBackgroundColour(const wxColour& col);
 
     // Gets information about this column
-    bool GetColumn(int col, wxListItem& item) const;
+    bool GetColumn(int col, wxListItem& info) const;
 
     // Sets information about this column
-    bool SetColumn(int col, const wxListItem& item);
+    bool SetColumn(int col, const wxListItem& info);
 
     // Gets the column width
     int GetColumnWidth(int col) const;
@@ -281,6 +281,8 @@ public:
 protected:
     // Implement base class pure virtual methods.
     long DoInsertColumn(long col, const wxListItem& info);
+
+    QTreeWidgetItem *QtGetItem(int id) const;
 
 private:
     QTreeWidget *m_qtTreeWidget;

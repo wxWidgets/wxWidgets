@@ -55,6 +55,9 @@ public:
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
     
+    // Used by all window classes in the widget creation process.
+    void PostCreation( bool generic = true );
+
     void AddChild( wxWindowBase *child );
 
     virtual bool Show( bool show = true );

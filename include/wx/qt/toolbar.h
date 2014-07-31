@@ -12,7 +12,7 @@
 
 class wxQtToolBar;
 
-class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase, public QObject
+class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
 public:
 

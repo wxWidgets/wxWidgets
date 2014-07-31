@@ -52,8 +52,8 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
         long style,
         const wxString &name)
 {
-    m_qtWindow = m_qtDialog = new wxQtDialog( parent, this );
-    
+    m_qtDialog = new wxQtDialog( parent, this );
+    PostCreation();
     return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
 

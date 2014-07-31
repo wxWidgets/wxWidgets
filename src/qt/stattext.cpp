@@ -10,6 +10,15 @@
 
 #include "wx/stattext.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
+
+class wxQtStaticText : public wxQtEventSignalHandler< QLabel, wxStaticText >
+{
+public:
+    wxQtStaticText( wxWindow *parent, wxStaticText *handler ):
+        wxQtEventSignalHandler< QLabel, wxStaticText >( parent, handler ){}
+};
+
 
 wxStaticText::wxStaticText()
 {
@@ -34,7 +43,8 @@ bool wxStaticText::Create(wxWindow *parent,
             long style,
             const wxString &name)
 {
-    m_qtLabel = new QLabel( wxQtConvertString( label ), parent->GetHandle() );
+    m_qtLabel = new wxQtStaticText( parent, this );
+    m_qtLabel->setText( wxQtConvertString( label ) );
 
     // Set the buddy to itself to get the mnemonic key but ensure that we don't have
     // any unwanted side effects, so disable the interaction:

@@ -709,6 +709,7 @@ COND_TOOLKIT_WINCE_WXUNIV_0
 COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_WINCE_USE_GUI_1
 COND_TOOLKIT_WINCE
+COND_TOOLKIT_Qt
 COND_TOOLKIT_QT_USE_GUI_1
 COND_TOOLKIT_QT
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
@@ -26143,13 +26144,12 @@ $as_echo "none" >&6; }
         TOOLKIT=QT
         GUIDIST=QT_DIST
         TOOLKIT_DIR="qt"
-        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --cflags` -DQT_WIDGETS_LIB"
-        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --libs`"
-        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT_CFLAGS}"
-        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT_LIBS}"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
+        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --cflags` -DQT_WIDGETS_LIB"
+        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --libs`"
         if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
                         SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
-            WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $QT_CFLAGS"
+            WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
         fi
     fi
         TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[A-Z]' '[a-z]'`
@@ -27341,7 +27341,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
-    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1; then
+    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1; then
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for OpenGL headers" >&5
 $as_echo_n "checking for OpenGL headers... " >&6; }
@@ -39866,6 +39866,11 @@ EOF
     COND_TOOLKIT_QT_USE_GUI_1="#"
     if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" ; then
         COND_TOOLKIT_QT_USE_GUI_1=""
+    fi
+
+    COND_TOOLKIT_Qt="#"
+    if test "x$TOOLKIT" = "xQt" ; then
+        COND_TOOLKIT_Qt=""
     fi
 
     COND_TOOLKIT_WINCE="#"
