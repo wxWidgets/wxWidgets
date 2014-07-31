@@ -134,16 +134,12 @@ void wxToolBar::Init()
 
 wxToolBar::~wxToolBar()
 {
-    delete m_qtToolBar;
 }
 
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
                        const wxSize& size, long style, const wxString& name)
 {
     m_qtToolBar = new QToolBar(wxQtConvertString( name ));
-
-    // reset pointer so we don't try to delete the toolbar when we exit
-    connect( m_qtToolBar, &QObject::destroyed, this, &wxToolBar::Init );
 
     SetWindowStyleFlag(style);
 
