@@ -1,10 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/glcanvas.h
-// Purpose:     wxGLCanvas, for using OpenGL and QT
-// Author:      oSean D'Epagnier
-// Modified by:
-// Created:     29/7/2014
-// Copyright:   (c) S5B5B5B5B5Bean D'Epagnier
+// Name:        include/wx/qt/glcanvas.cpp
+// Author:      Sean D'Epagnier
+// Copyright:   (c) Sean D'Epagnier 2014
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,13 +14,13 @@ class WXDLLIMPEXP_GL wxGLContext : public wxGLContextBase
 {
 public:
     wxGLContext(wxGLCanvas *win, const wxGLContext* other = NULL);
-    virtual ~wxGLContext();
+///    virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const;
-
-protected:
+    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
 
 private:
+    QGLContext *m_glContext;
+
     DECLARE_CLASS(wxGLContext)
 };
 
@@ -53,27 +50,15 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
-    virtual ~wxGLCanvas();
-
-    // implement wxGLCanvasBase methods
     virtual bool SwapBuffers();
 
-protected:
-    // common part of all ctors
-    void Init();
-
-    // the real window creation function, Create() may reuse it twice as we may
-    // need to create an OpenGL window to query the available extensions and
-    // then potentially delete and recreate it with another pixel format
-    bool CreateWindow(wxWindow *parent,
-                      wxWindowID id = wxID_ANY,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxSize& size = wxDefaultSize,
-                      long style = 0,
-                      const wxString& name = wxGLCanvasName);
+    static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
 
 private:
-    DECLARE_EVENT_TABLE()
+
+    QGLWidget *GetQGLWidget() const { return static_cast<QGLWidget *>(m_qtWindow); }
+
+//    DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxGLCanvas)
 };
 
