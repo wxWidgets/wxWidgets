@@ -795,24 +795,25 @@ long wxListCtrl::HitTest(const wxPoint& point, int &flags, long* ptrSubItem) con
 
 long wxListCtrl::InsertItem(const wxListItem& info)
 {
-    QTreeWidgetItem *qitem = new QTreeWidgetItem(m_qtTreeWidget);
+    // default return value if not successful:
+    int index = -1;
+    wxASSERT_MSG( info.m_itemId != -1, wxS("Item ID must be set.") );
+    QTreeWidgetItem *qitem = new QTreeWidgetItem();
     if ( qitem != NULL )
     {
-        qitem->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
-        qitem->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
-        for (int col=0; col<GetColumnCount();col++)
+        // insert at the correct index and return it:
+        m_qtTreeWidget->insertTopLevelItem(info.GetId(), qitem);
+        // return the correct position of the item or -1 if not found:
+        index = m_qtTreeWidget->indexOfTopLevelItem(qitem);
+        if ( index != -1 )
         {
-            if ( info.GetFont().IsOk() )
-                qitem->setFont(col, info.GetFont().GetHandle() );
-            if ( info.GetTextColour().IsOk() )
-                qitem->setTextColor(col, info.GetTextColour().GetHandle());
-            if ( info.GetBackgroundColour().IsOk() )
-                qitem->setBackgroundColor(col, info.GetBackgroundColour().GetHandle());
+            // temporarily copy the item info (we need a non-const instance)
+            wxListItem tmp = info;
+            // set the text, image, etc.:
+            SetItem(tmp);
         }
-        return GetItemCount() - 1;
     }
-    else
-        return -1;
+    return index;
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label)
