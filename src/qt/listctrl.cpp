@@ -17,18 +17,23 @@ class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 public:
     wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler );
 
+    void EmitListEvent(wxEventType typ, QTreeWidgetItem *item, int column) const;
+
 private:
     void itemClicked(QTreeWidgetItem * item, int column);
+    void itemActivated(QTreeWidgetItem * item, int column);
+    void itemPressed(QTreeWidgetItem * item, int column);
 };
 
 wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler )
     : wxQtEventSignalHandler< QTreeWidget, wxListCtrl >( parent, handler )
 {
     connect(this, &QTreeWidget::itemClicked, this, &wxQtTreeWidget::itemClicked);
-    connect(this, &QTreeWidget::doubleClicked, this, &wxQtTreeWidget::doubleClicked);
+    connect(this, &QTreeWidget::itemPressed, this, &wxQtTreeWidget::itemPressed);
+    connect(this, &QTreeWidget::itemActivated, this, &wxQtTreeWidget::itemActivated);
 }
 
-void wxQtTreeWidget::itemClicked(QTreeWidgetItem *item, int column)
+void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *item, int column) const
 {
     wxListCtrl *handler = GetHandler();
     if ( handler )
@@ -36,7 +41,7 @@ void wxQtTreeWidget::itemClicked(QTreeWidgetItem *item, int column)
         // prepare the event
         // -----------------
         wxListEvent event;
-        event.SetEventType(wxEVT_LIST_ITEM_SELECTED);
+        event.SetEventType(typ);
         event.SetId(handler->GetId());
         event.m_itemIndex = this->indexFromItem(item, column).row();
         event.m_item.SetId(event.m_itemIndex);
@@ -47,6 +52,22 @@ void wxQtTreeWidget::itemClicked(QTreeWidgetItem *item, int column)
         EmitEvent(event);
     }
 }
+
+void wxQtTreeWidget::itemClicked(QTreeWidgetItem *item, int column)
+{
+    EmitListEvent(wxEVT_LIST_ITEM_SELECTED, item, column);
+}
+
+void wxQtTreeWidget::itemPressed(QTreeWidgetItem *item, int column)
+{
+    EmitListEvent(wxEVT_LIST_ITEM_SELECTED, item, column);
+}
+
+void wxQtTreeWidget::itemActivated(QTreeWidgetItem *item, int column)
+{
+    EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, item, column);
+}
+
 
 Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
 {
