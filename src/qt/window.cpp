@@ -220,9 +220,6 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         {
             m_qtWindow = new wxQtWidget( parent, this );
         }
-        // Set the default color so Paint Event default handler clears the DC:
-        m_hasBgCol = true;
-        SetBackgroundColour(GetHandle()->palette().color(GetHandle()->backgroundRole()));
     }
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -251,6 +248,8 @@ void wxWindow::PostCreation(bool generic)
     // (only for generic controls, to use qt defaults elsewere)
     if (generic)
         QtSetBackgroundStyle();
+    else
+        SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
 //    // Use custom Qt window flags (allow to turn on or off
 //    // the minimize/maximize/close buttons and title bar)
@@ -266,6 +265,8 @@ void wxWindow::PostCreation(bool generic)
 //
 //    SetWindowStyleFlag( style );
 //
+
+    // Set the default color so Paint Event default handler clears the DC:
     SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
     SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
 
