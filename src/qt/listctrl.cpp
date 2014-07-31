@@ -11,6 +11,8 @@
 #include "wx/listctrl.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QHeaderView>
+
 
 class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 {
@@ -188,12 +190,19 @@ bool wxListCtrl::SetColumnsOrder(const wxArrayInt& orders)
 
 int wxListCtrl::GetCountPerPage() const
 {
-    return 0;
+    // this may not be exact but should be a good aproximation:
+    return m_qtTreeWidget->height() /
+            m_qtTreeWidget->visualItemRect(m_qtTreeWidget->headerItem()).height();
 }
 
 wxRect wxListCtrl::GetViewRect() const
 {
-    return wxRect();
+    // this may not be exact but should be a good aproximation:
+    wxRect rect = wxQtConvertRect(m_qtTreeWidget->rect());
+    int h = m_qtTreeWidget->header()->defaultSectionSize();
+    rect.SetTop(h);
+    rect.SetHeight(rect.GetHeight() - h);
+    return rect;
 }
 
 wxTextCtrl* wxListCtrl::GetEditControl() const
@@ -420,7 +429,13 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int WXUNU
 
 bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
 {
-    return false;
+    wxRect rect;
+    GetItemRect(item, rect);
+
+    pos.x = rect.x;
+    pos.y = rect.y;
+
+    return true;
 }
 
 bool wxListCtrl::SetItemPosition(long item, const wxPoint& pos)
@@ -472,7 +487,7 @@ wxFont wxListCtrl::GetItemFont( long item ) const
 
 int wxListCtrl::GetSelectedItemCount() const
 {
-    return 0;
+    return m_qtTreeWidget->selectedItems().length();
 }
 
 wxColour wxListCtrl::GetTextColour() const
@@ -606,19 +621,41 @@ void wxListCtrl::ClearAll()
     m_qtTreeWidget->clear();
 }
 
-wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
+wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* WXUNUSED(textControlClass))
 {
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem != NULL )
+    {
+        m_qtTreeWidget->openPersistentEditor(qitem);
+    }
     return NULL;
 }
 
 bool wxListCtrl::EndEditLabel(bool cancel)
 {
+    int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
+    if (item > 0)
+    {
+        QTreeWidgetItem *qitem = QtGetItem(item);
+        if ( qitem != NULL )
+        {
+            m_qtTreeWidget->closePersistentEditor(qitem);
+            return true;
+        }
+    }
     return false;
 }
 
 bool wxListCtrl::EnsureVisible(long item)
 {
-    return false;
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem != NULL )
+    {
+         m_qtTreeWidget->scrollToItem(qitem);
+         return true;
+    }
+    else
+        return false;
 }
 
 long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
@@ -636,9 +673,20 @@ long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
     return 0;
 }
 
-long wxListCtrl::HitTest(const wxPoint& point, int& flags, long* ptrSubItem) const
+long wxListCtrl::HitTest(const wxPoint& point, int &flags, long* ptrSubItem) const
 {
-    return 0;
+    QModelIndex index = m_qtTreeWidget->indexAt(wxQtConvertPoint(point));
+    if ( index.isValid() )
+    {
+        flags = wxLIST_HITTEST_ONITEM;
+        *ptrSubItem = index.column();
+    }
+    else
+    {
+        flags = wxLIST_HITTEST_NOWHERE;
+        *ptrSubItem = 0;
+    }
+    return index.row();
 }
 
 long wxListCtrl::InsertItem(const wxListItem& info)
@@ -713,7 +761,8 @@ void wxListCtrl::SetItemCount(long count)
 
 bool wxListCtrl::ScrollList(int dx, int dy)
 {
-    return false;
+    // aproximate, as scrollContentsBy is protected
+    m_qtTreeWidget->scroll(dx, dy);
 }
 
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
