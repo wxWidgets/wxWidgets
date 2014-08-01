@@ -195,7 +195,8 @@ public:
                           (style & wxDD_DIR_MUST_EXIST ? wxFD_FILE_MUST_EXIST : 0) |
                           (style & wxDD_CHANGE_DIR ? wxFD_CHANGE_DIR : 0 ))
         {
-            setOption(ShowDirsOnly);
+            setFileMode(QFileDialog::Directory);
+            setOption(ShowDirsOnly, true);
         }
 };
 
