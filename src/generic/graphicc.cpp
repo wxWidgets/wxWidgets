@@ -1834,6 +1834,19 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     Init( cairo_create( surface ) );
     cairo_surface_destroy( surface );
 #endif
+
+#ifdef __WXQT__
+    m_qtPainter = NULL;
+    // create a internal buffer (fallback if cairo_qt_surface is missing)
+    m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    // clear the buffer to be painted over the current contents
+    m_qtImage->fill(Qt::transparent);
+    m_qtSurface = cairo_image_surface_create_for_data(m_qtImage->bits(),
+                                                      CAIRO_FORMAT_ARGB32,
+                                                      width, height,
+                                                      m_qtImage->bytesPerLine());
+    Init( cairo_create( m_qtSurface ) );
+#endif
 }
 
 #ifdef __WXGTK20__
