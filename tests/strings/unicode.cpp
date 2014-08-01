@@ -393,7 +393,7 @@ void UnicodeTestCase::ConversionUTF16()
 
     // Another one: verify that the length of the resulting string is computed
     // correctly when there is a surrogate in the input.
-    wxMBConvUTF16BE().cMB2WC("\xd8\x03\xdc\x01" /* OLD TURKIC LETTER YENISEI A */, wxNO_LEN, &len);
+    wxMBConvUTF16BE().cMB2WC("\xd8\x03\xdc\x01\0" /* OLD TURKIC LETTER YENISEI A */, wxNO_LEN, &len);
     CPPUNIT_ASSERT_EQUAL( 1, len );
 }
 

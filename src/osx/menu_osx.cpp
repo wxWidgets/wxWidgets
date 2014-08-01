@@ -1022,4 +1022,34 @@ void wxMenuBar::Attach(wxFrame *frame)
     wxMenuBarBase::Attach( frame ) ;
 }
 
+void wxMenuBar::DoGetPosition(int *x, int *y) const
+{
+    int _x,_y,_width,_height;
+    
+    m_rootMenu->GetPeer()->GetMenuBarDimensions(_x, _y, _width, _height);
+
+    if (x)
+        *x = _x;
+    if (y)
+        *y = _y;
+}
+
+void wxMenuBar::DoGetSize(int *width, int *height) const
+{
+    int _x,_y,_width,_height;
+    
+    m_rootMenu->GetPeer()->GetMenuBarDimensions(_x, _y, _width, _height);
+
+    if (width)
+        *width = _width;
+    if (height)
+        *height = _height;
+}
+
+void wxMenuBar::DoGetClientSize(int *width, int *height) const
+{
+    DoGetSize(width, height);
+}
+
+
 #endif // wxUSE_MENUS

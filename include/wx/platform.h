@@ -32,6 +32,9 @@
 #    ifndef MAC_OS_X_VERSION_10_8
 #       define MAC_OS_X_VERSION_10_8 1080
 #    endif
+#    ifndef MAC_OS_X_VERSION_10_9
+#       define MAC_OS_X_VERSION_10_9 1090
+#    endif
 #    include "wx/osx/config_xcode.h"
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
@@ -527,31 +530,18 @@
 #        ifndef MAC_OS_X_VERSION_10_8
 #           define MAC_OS_X_VERSION_10_8 1080
 #        endif
+#        ifndef MAC_OS_X_VERSION_10_9
+#           define MAC_OS_X_VERSION_10_9 1090
+#        endif
 #    else
 #        error "only mach-o configurations are supported"
 #    endif
 #endif
 
 /*
-    __WXOSX_OR_COCOA__ is a common define to wxOSX (Carbon or Cocoa) and wxCocoa ports under OS X.
-
-    DO NOT use this define in base library code.  Although wxMac has its own
-    private base library (and thus __WXOSX_OR_COCOA__,__WXMAC__ and related defines are
-    valid there), wxCocoa shares its library with other ports like wxGTK and wxX11.
-
-    To keep wx authors from screwing this up, only enable __WXOSX_OR_COCOA__ for wxCocoa when
-    not compiling the base library.  We determine this by first checking if
-    wxUSE_BASE is not defined.  If it is not defined, then we're not buildling
-    the base library, and possibly not building wx at all (but actually building
-    user code that's using wx). If it is defined then we must check to make sure
-    it is not true.  If it is true, we're building base.
-
-    If you want it in the common darwin base library then use __DARWIN__.  You
-    can use any Darwin-available libraries like CoreFoundation but please avoid
-    using OS X libraries like Carbon or CoreServices.
-
+    This is obsolete and kept for backwards compatibility only.
  */
-#if defined(__WXOSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
+#if defined(__WXOSX__)
 #   define __WXOSX_OR_COCOA__ 1
 #endif
 

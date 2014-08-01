@@ -348,8 +348,7 @@ public:
     // wxUniv always uses the generic MDI implementation and so do the ports
     // without native version (although wxCocoa seems to have one -- but it's
     // probably not functional?)
-    #if defined(__WXCOCOA__) || \
-        defined(__WXMOTIF__) || \
+    #if defined(__WXMOTIF__) || \
         defined(__WXUNIVERSAL__)
         #define wxUSE_GENERIC_MDI_AS_NATIVE   1
     #else

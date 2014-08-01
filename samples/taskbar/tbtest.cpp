@@ -148,9 +148,6 @@ MyDialog::MyDialog(const wxString& title)
 MyDialog::~MyDialog()
 {
     delete m_taskBarIcon;
-#if defined(__WXCOCOA__)
-    delete m_dockIcon;
-#endif
 }
 
 void MyDialog::OnAbout(wxCommandEvent& WXUNUSED(event))

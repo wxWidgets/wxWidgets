@@ -46,28 +46,6 @@
     #include "wx/cocoa/dcclient.h"
 #endif
 
-#ifdef __WXCOCOA__
-
-CGColorSpaceRef wxMacGetGenericRGBColorSpace()
-{
-    static wxCFRef<CGColorSpaceRef> genericRGBColorSpace;
-
-    if (genericRGBColorSpace == NULL)
-    {
-        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
-    }
-
-    return genericRGBColorSpace;
-}
-
-int UMAGetSystemVersion()
-{
-    return 0x1050;
-}
-
-
-#endif
-
 #if wxOSX_USE_COCOA_OR_IPHONE
 extern CGContextRef wxOSXGetContextFromCurrentContext() ;
 #if wxOSX_USE_COCOA

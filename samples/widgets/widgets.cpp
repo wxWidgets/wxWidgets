@@ -501,8 +501,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
         SetClientSize(sizeMin);
     SetMinClientSize(sizeMin);
 
-#if USE_LOG && !defined(__WXCOCOA__)
-    // wxCocoa's listbox is too flakey to use for logging right now
+#if USE_LOG
     // now that everything is created we can redirect the log messages to the
     // listbox
     m_logTarget = new LboxLogger(m_lboxLog, wxLog::GetActiveTarget());

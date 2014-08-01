@@ -160,7 +160,7 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfCancelString( GetCancelLabel().c_str(), GetFont().GetEncoding() );
 
         wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
-        wxCFStringRef cfText = msgtext.IsEmpty() ? NULL : wxCFStringRef( msgtext, GetFont().GetEncoding() );
+        wxCFStringRef cfText = msgtext.IsEmpty() ? wxCFStringRef() : wxCFStringRef( msgtext, GetFont().GetEncoding() );
 
         param.movable = true;
         param.flags = 0;

@@ -316,6 +316,8 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 
 #endif // wxUSE_GUI
 
+// TODO move these into a BASE file
+
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 {
     // get OS version

@@ -1157,7 +1157,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             case WXK_SHIFT:
             case WXK_ALT:
             case WXK_CONTROL:
-            case WXK_MENU:
             case WXK_PAUSE:
             case WXK_CAPITAL:
             case WXK_END:
@@ -1216,6 +1215,12 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             case WXK_NUMPAD_INSERT:
             case WXK_WINDOWS_LEFT:
             {
+                return;
+            }
+            case WXK_MENU:
+            {
+                // Necessary for the context menu to work on wxGTK
+                event.Skip();
                 return;
             }
             default:
@@ -1384,6 +1389,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         switch ( keycode )
         {
             case WXK_ESCAPE:
+            case WXK_MENU: // Necessary for the context menu to work on wxGTK
             {
                 event.Skip();
                 return;

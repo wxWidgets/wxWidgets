@@ -45,7 +45,7 @@ public:
     MyTreeItemData(const wxString& desc) : m_desc(desc) { }
 
     void ShowInfo(wxTreeCtrl *tree);
-    const wxChar *GetDesc() const { return m_desc.c_str(); }
+    wxString const& GetDesc() const { return m_desc; }
 
 private:
     wxString m_desc;

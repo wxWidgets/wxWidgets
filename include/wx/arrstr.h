@@ -364,7 +364,10 @@ protected:
   CompareFunction m_compareFunction;    // set only from wxSortedArrayString
 
 private:
-  void Grow(size_t nIncrement = 0);     // makes array bigger if needed
+  // Allocate the new buffer big enough to hold m_nCount + nIncrement items and
+  // return the pointer to the old buffer, which must be deleted by the caller
+  // (if the old buffer is big enough, just return NULL).
+  wxString *Grow(size_t nIncrement);
 
   size_t  m_nSize,    // current size of the array
           m_nCount;   // current number of elements

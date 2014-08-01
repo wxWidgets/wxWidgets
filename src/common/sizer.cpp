@@ -377,7 +377,7 @@ bool wxSizerItem::InformFirstDirection(int direction, int size, int availableOth
         {
             if( !wxIsNullDouble(m_ratio) )
             {
-                wxCHECK_MSG( (m_proportion==0), false, wxT("Shaped item, non-zero proportion in wxSizerItem::InformFirstDirection()") );
+                wxCHECK_MSG( m_proportion==0, false, wxT("Shaped item, non-zero proportion in wxSizerItem::InformFirstDirection()") );
                 if( direction==wxHORIZONTAL && !wxIsNullDouble(m_ratio) )
                 {
                     // Clip size so that we don't take too much
