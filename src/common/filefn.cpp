@@ -1052,7 +1052,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 
     wxDoCopyFile(fileIn, fbuf, file2, overwrite);
 
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
+#if defined(__WXMAC__)
     // copy the resource fork of the file too if it's present
     wxString pathRsrcOut;
     wxFile fileRsrcIn;
@@ -1092,7 +1092,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         if ( !wxDoCopyFile(fileRsrcIn, fbuf, pathRsrcOut, overwrite) )
             return false;
     }
-#endif // wxMac || wxCocoa
+#endif // wxMac
 
     if ( chmod(file2.fn_str(), fbuf.st_mode) != 0 )
     {

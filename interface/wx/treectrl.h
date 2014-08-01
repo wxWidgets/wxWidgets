@@ -223,7 +223,7 @@ public:
 
         The @a image and @a selImage parameters are an index within the normal
         image list specifying the image to use for unselected and selected
-        items, respectively. If @a image -1 and @a selImage is -1, the same
+        items, respectively. If @a image > -1 and @a selImage is -1, the same
         image is used for both selected and unselected items.
     */
     wxTreeItemId AppendItem(const wxTreeItemId& parent,

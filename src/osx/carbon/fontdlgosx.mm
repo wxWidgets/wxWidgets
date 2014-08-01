@@ -34,11 +34,6 @@
 // ============================================================================
 
 
-#if defined( __WXCOCOA__ )
-#include "wx/cocoa/autorelease.h"
-#include "wx/cocoa/string.h"
-#endif
-
 #if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
 #import <Foundation/Foundation.h>

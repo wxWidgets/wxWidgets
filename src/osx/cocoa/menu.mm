@@ -253,7 +253,16 @@ public :
         [popUpButtonCell performClickWithFrame:frame inView:view];
         [popUpButtonCell release];
     }
-
+    
+    virtual void GetMenuBarDimensions(int &x, int &y, int &width, int &height) const wxOVERRIDE
+    {
+        NSRect r = [(NSScreen*)[[NSScreen screens] objectAtIndex:0] frame];
+        height = [m_osxMenu menuBarHeight];
+        x = r.origin.x;
+        y = r.origin.y;
+        width = r.size.width;
+    }
+    
     WXHMENU GetHMenu() wxOVERRIDE { return m_osxMenu; }
 
     static wxMenuImpl* Create( wxMenu* peer, const wxString& title );

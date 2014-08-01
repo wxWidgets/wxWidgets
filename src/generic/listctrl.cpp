@@ -1420,6 +1420,13 @@ wxListTextCtrlWrapper::wxListTextCtrlWrapper(wxListMainWindow *owner,
 
 void wxListTextCtrlWrapper::EndEdit(EndReason reason)
 {
+    if( m_aboutToFinish )
+    {
+        // We already called Finish which cannot be called
+        // more than once.
+        return;
+    }
+
     m_aboutToFinish = true;
 
     switch ( reason )
@@ -1525,6 +1532,7 @@ void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 {
     if ( !m_aboutToFinish )
     {
+        m_aboutToFinish = true;
         if ( !AcceptChanges() )
             m_owner->OnRenameCancelled( m_itemEdited );
 
@@ -2252,6 +2260,17 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     return m_textctrlWrapper->GetText();
 }
 
+bool wxListMainWindow::EndEditLabel(bool cancel)
+{
+    if (!m_textctrlWrapper)
+    {
+        return false;
+    }
+
+    m_textctrlWrapper->EndEdit(cancel ? wxListTextCtrlWrapper::End_Discard : wxListTextCtrlWrapper::End_Accept);
+    return true;
+}
+
 void wxListMainWindow::OnRenameTimer()
 {
     wxCHECK_RET( HasCurrent(), wxT("unexpected rename timer") );
@@ -2418,6 +2437,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         {
             // reset the selection and bail out
             HighlightAll(false);
+
+            if ( event.LeftUp() )
+                event.Skip();
         }
 
         return;
@@ -2493,6 +2515,8 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
 
         m_lineSelectSingleOnUp = (size_t)-1;
+
+        event.Skip();
     }
     else
     {
@@ -5048,6 +5072,11 @@ wxTextCtrl *wxGenericListCtrl::EditLabel(long item,
                                          wxClassInfo* textControlClass)
 {
     return m_mainWin->EditLabel( item, textControlClass );
+}
+
+bool wxGenericListCtrl::EndEditLabel(bool cancel)
+{
+    return m_mainWin->EndEditLabel(cancel);
 }
 
 wxTextCtrl *wxGenericListCtrl::GetEditControl() const

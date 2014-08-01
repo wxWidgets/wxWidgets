@@ -120,6 +120,10 @@ public:
 
     wxTextCtrl *EditLabel(long item,
                           wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
+
+    // End label editing, optionally cancelling the edit
+    bool EndEditLabel(bool cancel);
+
     wxTextCtrl* GetEditControl() const;
     void Edit( long item ) { EditLabel(item); }
 

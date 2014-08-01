@@ -594,12 +594,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     if (!m_window)
         return wxNullBitmap;
 
-    wxSize sz = m_window->GetSize();
-
-    int width = subrect != NULL ? subrect->width : sz.x;
-    int height = subrect !=  NULL ? subrect->height : sz.y ;
-
-    wxBitmap bitmap(width, height);
+    wxBitmap bitmap(subrect ? subrect->GetSize() : m_window->GetSize());
 
     NSView* view = (NSView*) m_window->GetHandle();
     if ( [view isHiddenOrHasHiddenAncestor] == NO )

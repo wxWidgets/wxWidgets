@@ -541,7 +541,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     if ( style & wxLB_SORT )
     {
         // this will change Append() behaviour
-        m_strings = new wxSortedArrayString;
+        m_strings = new wxSortedArrayString(wxDictionaryStringSortAscending);
     }
     else
     {

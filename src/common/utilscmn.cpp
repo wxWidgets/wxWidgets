@@ -95,7 +95,6 @@
 #if wxUSE_GUI && defined(__WXQT__)
     #include <QtGlobal>       // for QT_VERSION_STR constants
 #endif
-
 #if wxUSE_BASE
 
 // ============================================================================
@@ -384,10 +383,6 @@ bool wxPlatform::Is(int platform)
 #endif
 #ifdef __UNIX__
     if (platform == wxOS_UNIX)
-        return true;
-#endif
-#ifdef __WXCOCOA__
-    if (platform == wxPORT_MAC)
         return true;
 #endif
 #ifdef __WXQT__
@@ -1017,7 +1012,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags);
 #else
 
 // a "generic" implementation:
-bool wxDoLaunchDefaultBrowser(const wxString& url, int WXUNUSED( flags ))
+bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
 {
     // on other platforms try to use mime types or wxExecute...
 
@@ -1391,7 +1386,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
 #ifdef __WXQT__
     msg += wxString::Format("Compile-time QT version is %s.\n",
                             QT_VERSION_STR);
-#endif // __WXGTK__
+#endif // __WXQT__
 
     return wxVersionInfo(wxS("wxWidgets"),
                          wxMAJOR_VERSION,

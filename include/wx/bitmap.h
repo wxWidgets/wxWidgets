@@ -71,7 +71,6 @@ protected:
 #if defined(__WXDFB__) || \
     defined(__WXMAC__) || \
     defined(__WXGTK__) || \
-    defined(__WXCOCOA__) || \
     defined(__WXMOTIF__) || \
     defined(__WXX11__) || \
     defined(__WXQT__)

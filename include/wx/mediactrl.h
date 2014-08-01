@@ -222,8 +222,7 @@ protected:
     //inheritance issues
 #if defined(__WXOSX_CARBON__)
     virtual void MacVisibilityChanged();
-#endif
-#if defined(__WXOSX_CARBON__) || defined(__WXCOCOA__)
+
     friend class wxQTMediaBackend;
 #endif
     class wxMediaBackend* m_imp;

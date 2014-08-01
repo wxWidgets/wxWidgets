@@ -4754,7 +4754,17 @@ if test "${with_libpng+set}" = set; then :
 
 else
 
-                        wx_cv_use_libpng='wxUSE_LIBPNG=${'DEFAULT_wxUSE_LIBPNG":-$wxUSE_ALL_FEATURES}"
+                        if test "DEFAULT_wxUSE_LIBPNG" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_libpng="wxUSE_LIBPNG=$value"
 
 fi
 
@@ -4798,7 +4808,17 @@ if test "${with_libjpeg+set}" = set; then :
 
 else
 
-                        wx_cv_use_libjpeg='wxUSE_LIBJPEG=${'DEFAULT_wxUSE_LIBJPEG":-$wxUSE_ALL_FEATURES}"
+                        if test "DEFAULT_wxUSE_LIBJPEG" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_libjpeg="wxUSE_LIBJPEG=$value"
 
 fi
 
@@ -4842,7 +4862,17 @@ if test "${with_libtiff+set}" = set; then :
 
 else
 
-                        wx_cv_use_libtiff='wxUSE_LIBTIFF=${'DEFAULT_wxUSE_LIBTIFF":-$wxUSE_ALL_FEATURES}"
+                        if test "DEFAULT_wxUSE_LIBTIFF" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_libtiff="wxUSE_LIBTIFF=$value"
 
 fi
 
@@ -4974,7 +5004,17 @@ if test "${with_libxpm+set}" = set; then :
 
 else
 
-                        wx_cv_use_libxpm='wxUSE_LIBXPM=${'DEFAULT_wxUSE_LIBXPM":-$wxUSE_ALL_FEATURES}"
+                        if test "DEFAULT_wxUSE_LIBXPM" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_libxpm="wxUSE_LIBXPM=$value"
 
 fi
 
@@ -5417,7 +5457,17 @@ if test "${with_regex+set}" = set; then :
 
 else
 
-                        wx_cv_use_regex='wxUSE_REGEX=${'DEFAULT_wxUSE_REGEX":-$wxUSE_ALL_FEATURES}"
+                        if test "DEFAULT_wxUSE_REGEX" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_regex="wxUSE_REGEX=$value"
 
 fi
 
@@ -5461,7 +5511,17 @@ if test "${with_zlib+set}" = set; then :
 
 else
 
-                        wx_cv_use_zlib='wxUSE_ZLIB=${'DEFAULT_wxUSE_ZLIB":-$wxUSE_ALL_FEATURES}"
+                        if test "DEFAULT_wxUSE_ZLIB" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_zlib="wxUSE_ZLIB=$value"
 
 fi
 
@@ -5505,7 +5565,17 @@ if test "${with_expat+set}" = set; then :
 
 else
 
-                        wx_cv_use_expat='wxUSE_EXPAT=${'DEFAULT_wxUSE_EXPAT":-$wxUSE_ALL_FEATURES}"
+                        if test "DEFAULT_wxUSE_EXPAT" = no; then
+                            value=no
+                        elif test "$wxUSE_ALL_FEATURES" = no; then
+                            value=no
+                        elif test "$wxUSE_SYS_LIBS" = no; then
+                            value=builtin
+                        else
+                            value=yes
+                        fi
+
+                        wx_cv_use_expat="wxUSE_EXPAT=$value"
 
 fi
 

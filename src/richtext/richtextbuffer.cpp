@@ -1205,6 +1205,20 @@ bool wxRichTextObject::LayoutToBestSize(wxDC& dc, wxRichTextDrawingContext& cont
     // on this basis
     if (!attr.GetTextBoxAttr().GetWidth().IsValid() && maxSize.x < availableChildRect.width)
     {
+        if (!attr.HasAlignment() || attr.GetAlignment() == wxTEXT_ALIGNMENT_LEFT)
+        {
+            // Redo the layout with a fixed, minimum size this time.
+            Invalidate(wxRICHTEXT_ALL);
+            wxRichTextAttr newAttr(attr);
+            newAttr.GetTextBoxAttr().GetWidth().SetValue(maxSize.x, wxTEXT_ATTR_UNITS_PIXELS);
+            newAttr.GetTextBoxAttr().GetWidth().SetPosition(wxTEXT_BOX_ATTR_POSITION_ABSOLUTE);
+
+            availableChildRect = AdjustAvailableSpace(dc, buffer, parentAttr, newAttr, availableParentSpace, availableContainerSpace);
+
+            Layout(dc, context, availableChildRect, availableContainerSpace, style);
+        }
+
+#if 0
         // Redo the layout with a fixed, minimum size this time.
         Invalidate(wxRICHTEXT_ALL);
         wxRichTextAttr newAttr(attr);
@@ -1231,6 +1245,7 @@ bool wxRichTextObject::LayoutToBestSize(wxDC& dc, wxRichTextDrawingContext& cont
         }
 
         Layout(dc, context, availableChildRect, availableContainerSpace, style);
+#endif
     }
 
     /*
@@ -7748,8 +7763,6 @@ bool wxRichTextParagraphLayoutBox::InsertTextWithUndo(wxRichTextBuffer* buffer, 
         length --;
         action->GetNewParagraphs().SetPartialParagraph(true);
     }
-    else if (!text.empty() && text.Last() == wxT('\n'))
-        length --;
 
     action->SetPosition(pos);
 

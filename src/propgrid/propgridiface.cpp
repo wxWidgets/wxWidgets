@@ -283,6 +283,24 @@ bool wxPropertyGridInterface::EnableProperty( wxPGPropArg id, bool enable )
     return true;
 }
 
+void wxPropertyGridInterface::SetPropertyReadOnly( wxPGPropArg id, bool set, int flags)
+{
+    wxPG_PROP_ARG_CALL_PROLOG()
+
+    if ( flags & wxPG_RECURSE )
+        p->SetFlagRecursively(wxPG_PROP_READONLY, set);
+    else
+        p->ChangeFlag(wxPG_PROP_READONLY, set);
+
+    wxPropertyGridPageState* state = p->GetParentState();
+    if( state )
+    {
+        // If property is attached to the property grid
+        // then refresh the view.
+        RefreshProperty( p );
+    }
+}
+
 // -----------------------------------------------------------------------
 
 bool wxPropertyGridInterface::ExpandAll( bool doExpand )
@@ -423,15 +441,7 @@ wxPGProperty* wxPropertyGridInterface::GetPropertyByNameA( const wxString& name 
 
 wxPGProperty* wxPropertyGridInterface::GetPropertyByLabel( const wxString& label ) const
 {
-    wxPGVIterator it;
-
-    for ( it = GetVIterator( wxPG_ITERATE_PROPERTIES ); !it.AtEnd(); it.Next() )
-    {
-        if ( it.GetProperty()->GetLabel() == label )
-            return it.GetProperty();
-    }
-
-    return wxNullProperty;
+    return m_pState->BaseGetPropertyByLabel(label, NULL);
 }
 
 // ----------------------------------------------------------------------------

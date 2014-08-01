@@ -693,7 +693,6 @@ wxString wxCFStringRef::AsString(wxFontEncoding encoding) const
     return AsString( get(), encoding );
 }
 
-#if wxOSX_USE_COCOA_OR_IPHONE
 wxString wxCFStringRef::AsString( NSString* ref, wxFontEncoding encoding )
 {
     return AsString( (CFStringRef) ref, encoding );
@@ -703,8 +702,6 @@ wxString wxCFStringRef::AsStringWithNormalizationFormC( NSString* ref, wxFontEnc
 {
     return AsStringWithNormalizationFormC( (CFStringRef) ref, encoding );
 }
-#endif // wxOSX_USE_COCOA_OR_IPHONE
-
 
 //
 // wxMacUniCharBuffer

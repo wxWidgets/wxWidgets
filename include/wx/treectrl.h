@@ -33,7 +33,6 @@ class WXDLLIMPEXP_CORE wxTreeCtrlBase : public wxControl
 {
 public:
     wxTreeCtrlBase();
-
     virtual ~wxTreeCtrlBase();
 
     // accessors
@@ -352,6 +351,7 @@ public:
         // Enable or disable beep when incremental match doesn't find any item.
         // Only implemented in the generic version currently.
     virtual void EnableBellOnNoMatch(bool WXUNUSED(on) = true) { }
+
     // sorting
     // -------
 
@@ -447,6 +447,8 @@ private:
     // control always gets them before they're used for dialog navigation or
     // anything else.
     void OnCharHook(wxKeyEvent& event);
+
+
     wxDECLARE_NO_COPY_CLASS(wxTreeCtrlBase);
 };
 
@@ -463,8 +465,6 @@ private:
 #elif defined(__WXGTK__)
     #include "wx/generic/treectlg.h"
 #elif defined(__WXMAC__)
-    #include "wx/generic/treectlg.h"
-#elif defined(__WXCOCOA__)
     #include "wx/generic/treectlg.h"
 #elif defined(__WXQT__)
     #include "wx/generic/treectlg.h"

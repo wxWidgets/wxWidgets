@@ -938,7 +938,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 unsigned char temp;
                 if ( !stream.ReadAll(&aWord, 2) )
                     return false;
-                aWord = wxUINT16_SWAP_ON_BE(aWord);
+                wxUINT16_SWAP_ON_BE_IN_PLACE(aWord);
                 linepos += 2;
                 /* Use the masks and calculated amount of shift
                    to retrieve the color data out of the word.  Then
@@ -958,7 +958,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 if ( !stream.ReadAll(&aDword, 4) )
                     return false;
 
-                aDword = wxINT32_SWAP_ON_BE(aDword);
+                wxINT32_SWAP_ON_BE_IN_PLACE(aDword);
                 linepos += 4;
                 temp = (unsigned char)((aDword & rmask) >> rshift);
                 ptr[poffset] = temp;

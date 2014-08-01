@@ -27,10 +27,6 @@
 
 #include "wx/fontutil.h"
 
-#if defined( __WXCOCOA__ )
-#include "wx/cocoa/string.h"
-#endif
-
 #ifdef __WXMAC__
 
 #if wxOSX_USE_CARBON

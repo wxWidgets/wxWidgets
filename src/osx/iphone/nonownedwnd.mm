@@ -284,6 +284,11 @@ bool wxNonOwnedWindowIPhoneImpl::IsFullScreen() const
     return m_macFullScreenData != NULL ;
 }
 
+bool wxNonOwnedWindowIPhoneImpl::EnableFullScreenView(bool WXUNUSED(enable))
+{
+    return true;
+}
+
 bool wxNonOwnedWindowIPhoneImpl::ShowFullScreen(bool show, long style)
 {
     return true;
