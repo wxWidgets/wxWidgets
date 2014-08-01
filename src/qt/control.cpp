@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/control.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/control.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxControl, wxControlBase )
 

@@ -12,7 +12,7 @@
 #define _WX_QT_EVENTSIGNALFORWARDER_H_
 
 #include "wx/window.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtCore/QEvent>
 #include <QtGui/QPaintEvent>

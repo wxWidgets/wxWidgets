@@ -9,8 +9,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/menu.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 
 
 static void ApplyStyle( QMenu *qtMenu, long style )

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/slider.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/slider.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
 

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/font.cpp
-// Author:      Peter Most, Javier Torres
-// Copyright:   (c) Peter Most, Javier Torres
+// Author:      Peter Most, Mariano Reingart, Javier Torres
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,8 +10,8 @@
 
 #include "wx/font.h"
 #include "wx/fontutil.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtGui/QFont>
 #include <QtGui/QFontInfo>

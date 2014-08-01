@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/notebook.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Mariano Reingart, Peter Most
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,8 +9,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/notebook.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
 class wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >

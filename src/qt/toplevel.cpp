@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/toplevel.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include <QtGui/QIcon>
 
 wxTopLevelWindowNative::wxTopLevelWindowNative()

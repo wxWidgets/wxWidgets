@@ -11,8 +11,8 @@
 #include "wx/utils.h"
 #include "wx/window.h"
 #include "wx/cursor.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtGui/QCursor>
 #include <QtWidgets/QApplication>

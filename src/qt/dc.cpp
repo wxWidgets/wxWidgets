@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/dc.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most, Javier Torres
+// Author:      Peter Most, Javier Torres, Mariano Reingart
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -11,8 +11,8 @@
 #include "wx/dc.h"
 #include "wx/icon.h"
 #include "wx/qt/dc.h"
-#include "wx/qt/converter.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 #include <QtGui/QBitmap>
 
 static void SetPenColour( QPainter *qtPainter, QColor col )

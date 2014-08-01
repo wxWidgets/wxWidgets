@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/scrolbar.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
 

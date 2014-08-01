@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/toolbar.cpp
-// Author:      Sean D'Epagnier
+// Author:      Sean D'Epagnier, Peter Most
 // Copyright:   (c) Sean D'Epagnier 2014
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -10,7 +10,7 @@
 
 #include "wx/toolbar.h"
 #include "wx/qt/private/winevent.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 
 #if wxUSE_TOOLBAR
 

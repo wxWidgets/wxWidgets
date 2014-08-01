@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/textctrl.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Mariano Reingart, Peter Most
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,9 +10,9 @@
 
 #include "wx/textctrl.h"
 #include "wx/settings.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 
 class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 {

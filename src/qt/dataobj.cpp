@@ -8,7 +8,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include "wx/dataobj.h"
 
 

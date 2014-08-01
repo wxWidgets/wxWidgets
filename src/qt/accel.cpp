@@ -10,7 +10,7 @@
 
 #include "wx/accel.h"
 #include "wx/list.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include <QtCore/QVariant>
 
 // ----------------------------------------------------------------------------
