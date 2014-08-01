@@ -3328,8 +3328,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --libs`"
         if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
             dnl build with position independent code if Qt needs it
-            SAMPLES_CXXFLAGS="$SAMPLES_CXXFLAGS -fPIC"
-            WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fPIC"
+            SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
+            WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS $TOOLKIT_INCLUDE"
         fi
     fi
     dnl the name of the directory where the files for this toolkit live

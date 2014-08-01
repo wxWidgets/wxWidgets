@@ -28,18 +28,30 @@ wxTopLevelWindowNative::wxTopLevelWindowNative(wxWindow *parent,
 }
 
 bool wxTopLevelWindowNative::Create( wxWindow *parent, wxWindowID winId,
-    const wxString &title, const wxPoint &pos, const wxSize &size,
+    const wxString &title, const wxPoint &pos, const wxSize &sizeOrig,
     long style, const wxString &name )
 {
-    wxSize defaultSize = size;
-    if ( !defaultSize.IsFullySpecified() )
-        defaultSize.SetDefaults( GetDefaultSize() );
+    wxSize size(sizeOrig);
+    if ( !size.IsFullySpecified() )
+        size.SetDefaults( GetDefaultSize() );
 
     wxTopLevelWindows.Append( this );
 
-    SetTitle( title );
+    if (!CreateBase( parent, winId, pos, size, style, wxDefaultValidator, name ))
+    {
+        wxFAIL_MSG( wxT("wxTopLevelWindowNative creation failed") );
+        return false;
+    }
 
-    return CreateBase( parent, winId, pos, size, style, wxDefaultValidator, name );
+    SetTitle( title );
+    SetWindowStyleFlag( style );
+
+    if (pos != wxDefaultPosition)
+        m_qtWindow->move( pos.x, pos.y );
+
+    m_qtWindow->resize( wxQtConvertSize( size ) );
+
+    return true;
 }
 
 void wxTopLevelWindowNative::Maximize(bool maximize) 
@@ -106,7 +118,12 @@ void wxTopLevelWindowNative::SetWindowStyleFlag( long style )
     if ( HasFlag( wxSTAY_ON_TOP ) != qtFlags.testFlag( Qt::WindowStaysOnTopHint ) )
         qtFlags ^= Qt::WindowStaysOnTopHint;
 
-    if ( HasFlag( wxCAPTION ) )
+    if ( ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) )
+         != qtFlags.testFlag( Qt::FramelessWindowHint ) )
+    {
+        qtFlags ^= Qt::FramelessWindowHint;
+    }
+    else if ( HasFlag( wxCAPTION ) )
     {
         // Only show buttons if window has caption
         if ( HasFlag( wxSYSTEM_MENU ) )

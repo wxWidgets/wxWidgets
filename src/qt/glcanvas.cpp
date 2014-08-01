@@ -19,6 +19,7 @@ public:
         : wxQtEventSignalHandler(parent, handler)
         {
             setFormat(format);
+            setAutoBufferSwap( false );
         }
 
 protected:
