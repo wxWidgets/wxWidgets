@@ -72,13 +72,13 @@ IMPLEMENT_CLASS(wxGLContext, wxWindow)
 
 wxGLContext::wxGLContext(wxGLCanvas *WXUNUSED(win), const wxGLContext* WXUNUSED(other))
 {
-//    m_glContext = win->GetQGLWidget()->context();
+//    m_glContext = win->GetHandle()->context();
 }
 
 bool wxGLContext::SetCurrent(const wxGLCanvas&) const
 {
 // I think I must destroy and recreate the QGLWidget to change the context?
-//    win->GetQGLWidget()->makeCurrent();
+//    win->GetHandle()->makeCurrent();
     return false;
 }
 
@@ -125,7 +125,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
 bool wxGLCanvas::SwapBuffers()
 {
-    GetQGLWidget()->swapBuffers();
+    GetHandle()->swapBuffers();
     return true;
 }
 
