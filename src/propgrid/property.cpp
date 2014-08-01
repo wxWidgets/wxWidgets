@@ -1984,7 +1984,7 @@ void wxPGProperty::SetChoiceSelection( int newValue )
     }
     else  // if ( valueType == wxPG_VARIANT_TYPE_LONG )
     {
-        SetValue( (long) newValue );
+        SetValue( m_choices.GetValue(newValue) );
     }
 }
 
