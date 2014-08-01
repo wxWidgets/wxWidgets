@@ -13,12 +13,20 @@
 class WXDLLIMPEXP_CORE wxFontDialog : public wxFontDialogBase
 {
 public:
-    wxFontDialog();
-    wxFontDialog(wxWindow *parent);
-    wxFontDialog(wxWindow *parent, const wxFontData& data);
+    wxFontDialog() { }
+    wxFontDialog(wxWindow *parent) { Create(parent); }
+    wxFontDialog(wxWindow *parent, const wxFontData& data) { Create(parent, data); }
     
+    virtual QFontDialog *GetHandle() const { return static_cast<QFontDialog *>(m_qtWindow); }
+
 protected:
-    virtual QFontDialog *GetHandle() const;
+    bool DoCreate(wxWindow *parent);
+    
+private:
+
+    wxFontData m_data;
+
+    DECLARE_DYNAMIC_CLASS(wxFontDialog)
 };
 
 #endif // _WX_QT_FONTDLG_H_

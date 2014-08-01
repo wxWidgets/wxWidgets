@@ -17,6 +17,7 @@ public:
     wxFont(const wxFontInfo& info);
     wxFont(const wxString& nativeFontInfoString);
     wxFont(const wxNativeFontInfo& info);
+    wxFont(const QFont& font);
     wxFont(int size,
            wxFontFamily family,
            wxFontStyle style,

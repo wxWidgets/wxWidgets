@@ -5343,7 +5343,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_defs.o \
 	monodll_qt_dialog.o \
 	monodll_unix_dialup.o \
-	monodll_qt_dirdlg.o \
 	monodll_qt_display.o \
 	monodll_qt_dnd.o \
 	monodll_qt_evtloop.o \
@@ -6294,7 +6293,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_defs.o \
 	monodll_qt_dialog.o \
 	monodll_unix_dialup.o \
-	monodll_qt_dirdlg.o \
 	monodll_qt_display.o \
 	monodll_qt_dnd.o \
 	monodll_qt_evtloop.o \
@@ -7689,7 +7687,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_defs.o \
 	monolib_qt_dialog.o \
 	monolib_unix_dialup.o \
-	monolib_qt_dirdlg.o \
 	monolib_qt_display.o \
 	monolib_qt_dnd.o \
 	monolib_qt_evtloop.o \
@@ -8640,7 +8637,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_defs.o \
 	monolib_qt_dialog.o \
 	monolib_unix_dialup.o \
-	monolib_qt_dirdlg.o \
 	monolib_qt_display.o \
 	monolib_qt_dnd.o \
 	monolib_qt_evtloop.o \
@@ -10193,7 +10189,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_defs.o \
 	coredll_qt_dialog.o \
 	coredll_unix_dialup.o \
-	coredll_qt_dirdlg.o \
 	coredll_qt_display.o \
 	coredll_qt_dnd.o \
 	coredll_qt_evtloop.o \
@@ -11144,7 +11139,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_defs.o \
 	coredll_qt_dialog.o \
 	coredll_unix_dialup.o \
-	coredll_qt_dirdlg.o \
 	coredll_qt_display.o \
 	coredll_qt_dnd.o \
 	coredll_qt_evtloop.o \
@@ -11962,7 +11956,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_defs.o \
 	corelib_qt_dialog.o \
 	corelib_unix_dialup.o \
-	corelib_qt_dirdlg.o \
 	corelib_qt_display.o \
 	corelib_qt_dnd.o \
 	corelib_qt_evtloop.o \
@@ -12913,7 +12906,6 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_defs.o \
 	corelib_qt_dialog.o \
 	corelib_unix_dialup.o \
-	corelib_qt_dirdlg.o \
 	corelib_qt_display.o \
 	corelib_qt_dnd.o \
 	corelib_qt_evtloop.o \
@@ -20567,9 +20559,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_display.o: $(srcdir)/src/qt/display.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/display.cpp
 
@@ -26431,9 +26420,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_display.o: $(srcdir)/src/qt/display.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/display.cpp
@@ -32408,9 +32394,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
 
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
-
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_display.o: $(srcdir)/src/qt/display.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/display.cpp
 
@@ -36790,9 +36773,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_display.o: $(srcdir)/src/qt/display.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/display.cpp

@@ -143,6 +143,13 @@ wxFont::wxFont(const wxNativeFontInfo& info)
     m_refData = new wxFontRefData();
 }
 
+wxFont::wxFont(const QFont& font)
+{
+    m_refData = new wxFontRefData();
+
+    M_FONTDATA = font;
+}
+
 wxFont::wxFont(int size,
        wxFontFamily family,
        wxFontStyle style,
