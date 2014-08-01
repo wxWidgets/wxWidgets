@@ -34,7 +34,7 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
             this, &wxQtComboBox::editTextChanged);
 }
 
-void wxQtComboBox::activated(int index)
+void wxQtComboBox::activated(int WXUNUSED(index))
 {
     wxComboBox *handler = GetHandler();
     if ( handler )

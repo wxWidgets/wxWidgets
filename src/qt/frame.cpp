@@ -82,7 +82,7 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
     wxFrameBase::SetStatusBar( statusBar );
 }
 
-void wxFrame::SetWindowStyleFlag( long style )
+void wxFrame::SetWindowStyleFlag( long WXUNUSED(style) )
 {
 //    wxWindow::SetWindowStyleFlag( style );
 //

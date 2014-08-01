@@ -29,7 +29,7 @@ wxQtChoice::wxQtChoice( wxWindow *parent, wxChoice *handler )
             this, &wxQtChoice::activated);
 }
 
-void wxQtChoice::activated(int index)
+void wxQtChoice::activated(int WXUNUSED(index))
 {
     wxChoice *handler = GetHandler();
     if ( handler )

@@ -282,7 +282,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 
 
 bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
-              const wxPalette *palette ) const
+              const wxPalette *WXUNUSED(palette) ) const
 {   
     #if wxUSE_IMAGE
     //Try to save using wx
@@ -334,7 +334,7 @@ wxPalette *wxBitmap::GetPalette() const
     return 0;
 }
 
-void wxBitmap::SetPalette(const wxPalette& palette)
+void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 {
     wxMISSING_IMPLEMENTATION( "wxBitmap palettes" );
 }
@@ -342,7 +342,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 #endif // wxUSE_PALETTE
 
 // copies the contents and mask of the given (colour) icon to the bitmap
-bool wxBitmap::CopyFromIcon(const wxIcon& icon)
+bool wxBitmap::CopyFromIcon(const wxIcon& WXUNUSED(icon))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     return 0;
@@ -350,17 +350,17 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 
 
 // implementation:
-void wxBitmap::SetHeight(int height)
+void wxBitmap::SetHeight(int WXUNUSED(height))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
-void wxBitmap::SetWidth(int width)
+void wxBitmap::SetWidth(int WXUNUSED(width))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
-void wxBitmap::SetDepth(int depth)
+void wxBitmap::SetDepth(int WXUNUSED(depth))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
@@ -385,7 +385,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
     return bits;
 }
 
-void wxBitmap::UngetRawData(wxPixelDataBase& data)
+void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
@@ -457,7 +457,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     return true;
 }
 
-bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
+bool wxMask::Create(const wxBitmap& WXUNUSED(bitmap), int WXUNUSED(paletteIndex))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     return false;

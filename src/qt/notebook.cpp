@@ -74,11 +74,11 @@ bool wxNotebook::Create(wxWindow *parent,
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
-void wxNotebook::SetPadding(const wxSize& padding)
+void wxNotebook::SetPadding(const wxSize& WXUNUSED(padding))
 {
 }
 
-void wxNotebook::SetTabSize(const wxSize& sz)
+void wxNotebook::SetTabSize(const wxSize& WXUNUSED(sz))
 {
 }
 

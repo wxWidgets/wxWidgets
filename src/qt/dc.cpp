@@ -167,7 +167,7 @@ void wxQtDCImpl::SetBackgroundMode(int mode)
 
 
 #if wxUSE_PALETTE
-void wxQtDCImpl::SetPalette(const wxPalette& palette)
+void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 {
     wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
@@ -700,8 +700,8 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord xsrc, wxCoord ysrc,
                     wxRasterOperationMode rop,
                     bool useMask,
-                    wxCoord xsrcMask,
-                    wxCoord ysrcMask )
+                    wxCoord WXUNUSED(xsrcMask),
+                    wxCoord WXUNUSED(ysrcMask) )
 {
     wxMISSING_IMPLEMENTATION( "wxDC::DoBlit Mask src" );
 

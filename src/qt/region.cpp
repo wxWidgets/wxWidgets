@@ -93,7 +93,7 @@ wxRegion::wxRegion(const wxBitmap& bmp)
         m_refData = new wxRegionRefData( QRect( 0, 0, bmp.GetWidth(), bmp.GetHeight() ) );
 }
 
-wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
+wxRegion::wxRegion(const wxBitmap& WXUNUSED(bmp), const wxColour& WXUNUSED(transp), int WXUNUSED(tolerance))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }

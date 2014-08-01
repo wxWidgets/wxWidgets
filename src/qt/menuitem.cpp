@@ -104,7 +104,7 @@ bool wxMenuItem::IsChecked() const
 }
 
 
-void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
+void wxMenuItem::SetBitmap(const wxBitmap& WXUNUSED(bitmap))
 {
     wxMISSING_FUNCTION();
 }

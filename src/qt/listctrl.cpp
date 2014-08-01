@@ -207,7 +207,7 @@ wxArrayInt wxListCtrl::GetColumnsOrder() const
     return wxArrayInt();
 }
 
-bool wxListCtrl::SetColumnsOrder(const wxArrayInt& orders)
+bool wxListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
 {
     return false;
 }
@@ -380,7 +380,7 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
     return SetItem(info);
 }
 
-bool wxListCtrl::SetItemImage(long item, int image, int selImage)
+bool wxListCtrl::SetItemImage(long item, int image, int WXUNUSED(selImage))
 {
     return SetItemColumnImage(item, 0, image);
 }
@@ -397,7 +397,7 @@ bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
     return SetItem(info);
 }
 
-wxString wxListCtrl::GetItemText(long item, int col) const
+wxString wxListCtrl::GetItemText(long item, int WXUNUSED(col)) const
 {
     QTreeWidgetItem *qitem = QtGetItem(item);
     if ( qitem )
@@ -451,7 +451,7 @@ bool wxListCtrl::SetItemData(long item, long data)
         return false;
 }
 
-bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
+bool wxListCtrl::GetItemRect(long item, wxRect& rect, int WXUNUSED(code)) const
 {
     QTreeWidgetItem *qitem = QtGetItem(item);
     if ( qitem != NULL )
@@ -491,7 +491,7 @@ bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
     return true;
 }
 
-bool wxListCtrl::SetItemPosition(long item, const wxPoint& pos)
+bool wxListCtrl::SetItemPosition(long WXUNUSED(item), const wxPoint& WXUNUSED(pos))
 {
     return false;
 }
@@ -511,29 +511,29 @@ wxSize wxListCtrl::GetItemSpacing() const
     return wxSize();
 }
 
-void wxListCtrl::SetItemTextColour( long item, const wxColour& col)
+void wxListCtrl::SetItemTextColour( long WXUNUSED(item), const wxColour& WXUNUSED(col))
 {
 }
 
-wxColour wxListCtrl::GetItemTextColour( long item ) const
-{
-    return wxColour();
-}
-
-void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col)
-{
-}
-
-wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
+wxColour wxListCtrl::GetItemTextColour( long WXUNUSED(item) ) const
 {
     return wxColour();
 }
 
-void wxListCtrl::SetItemFont( long item, const wxFont &f)
+void wxListCtrl::SetItemBackgroundColour( long WXUNUSED(item), const wxColour &WXUNUSED(col))
 {
 }
 
-wxFont wxListCtrl::GetItemFont( long item ) const
+wxColour wxListCtrl::GetItemBackgroundColour( long WXUNUSED(item) ) const
+{
+    return wxColour();
+}
+
+void wxListCtrl::SetItemFont( long WXUNUSED(item), const wxFont &WXUNUSED(f))
+{
+}
+
+wxFont wxListCtrl::GetItemFont( long WXUNUSED(item) ) const
 {
     return wxFont();
 }
@@ -548,7 +548,7 @@ wxColour wxListCtrl::GetTextColour() const
     return wxColour();
 }
 
-void wxListCtrl::SetTextColour(const wxColour& col)
+void wxListCtrl::SetTextColour(const wxColour& WXUNUSED(col))
 {
 }
 
@@ -557,11 +557,11 @@ long wxListCtrl::GetTopItem() const
     return 0;
 }
 
-void wxListCtrl::SetSingleStyle(long style, bool add)
+void wxListCtrl::SetSingleStyle(long WXUNUSED(style), bool WXUNUSED(add))
 {
 }
 
-void wxListCtrl::SetWindowStyleFlag(long style)
+void wxListCtrl::SetWindowStyleFlag(long WXUNUSED(style))
 {
 }
 
@@ -657,15 +657,15 @@ bool wxListCtrl::IsVirtual() const
     return false;
 }
 
-void wxListCtrl::RefreshItem(long item)
+void wxListCtrl::RefreshItem(long WXUNUSED(item))
 {
 }
 
-void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
+void wxListCtrl::RefreshItems(long WXUNUSED(itemFrom), long WXUNUSED(itemTo))
 {
 }
 
-bool wxListCtrl::Arrange(int flag)
+bool wxListCtrl::Arrange(int WXUNUSED(flag))
 {
     return false;
 }
@@ -721,7 +721,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* WXUNUSED(textControlCl
     return NULL;
 }
 
-bool wxListCtrl::EndEditLabel(bool cancel)
+bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
 {
     int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
     if (item > 0)
@@ -775,7 +775,7 @@ long wxListCtrl::FindItem(long start, wxUIntPtr data)
     return qindexes.at(0).row();
 }
 
-long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
+long wxListCtrl::FindItem(long WXUNUSED(start), const wxPoint& WXUNUSED(pt), int WXUNUSED(direction))
 {
     return -1;
 }
@@ -864,7 +864,7 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& info)
 }
 
 
-void wxListCtrl::SetItemCount(long count)
+void wxListCtrl::SetItemCount(long WXUNUSED(count))
 {
 }
 
@@ -874,7 +874,7 @@ bool wxListCtrl::ScrollList(int dx, int dy)
     m_qtTreeWidget->scroll(dx, dy);
 }
 
-bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
+bool wxListCtrl::SortItems(wxListCtrlCompare WXUNUSED(fn), wxIntPtr WXUNUSED(data))
 {
     return false;
 }

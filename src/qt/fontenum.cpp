@@ -10,13 +10,13 @@
 
 #include "wx/fontenum.h"
 
-bool wxFontEnumerator::EnumerateFacenames( wxFontEncoding encoding,
-                bool fixedWidthOnly)
+bool wxFontEnumerator::EnumerateFacenames( wxFontEncoding WXUNUSED(encoding),
+                bool WXUNUSED(fixedWidthOnly))
 {
     return false;
 }
 
-bool wxFontEnumerator::EnumerateEncodings(const wxString& facename)
+bool wxFontEnumerator::EnumerateEncodings(const wxString& WXUNUSED(facename))
 {
     return false;
 }

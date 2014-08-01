@@ -220,7 +220,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow * WXUNUSED(
     }
 }
 
-bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
+bool wxSystemSettingsNative::HasFeature(wxSystemFeature WXUNUSED(index))
 {
     return false;
 }

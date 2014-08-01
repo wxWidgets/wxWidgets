@@ -39,9 +39,9 @@ void wxStatusBar::Init()
 {
 }
 
-bool wxStatusBar::Create(wxWindow *parent, wxWindowID winid,
-            long style,
-            const wxString& name)
+bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
+            long WXUNUSED(style),
+            const wxString& WXUNUSED(name))
 {
     wxMISSING_IMPLEMENTATION( "wxStatusBar::Create parameters" );
 
@@ -52,12 +52,12 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID winid,
     return true;
 }
 
-bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
+bool wxStatusBar::GetFieldRect(int WXUNUSED(i), wxRect& WXUNUSED(rect)) const
 {
     return false;
 }
 
-void wxStatusBar::SetMinHeight(int height)
+void wxStatusBar::SetMinHeight(int WXUNUSED(height))
 {
 }
 
