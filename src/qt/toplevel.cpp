@@ -175,8 +175,11 @@ long wxTopLevelWindowNative::GetWindowStyleFlag() const
 {
     // Update maximized/minimized state
     long winStyle = wxWindow::GetWindowStyleFlag();
-    switch ( GetHandle()->windowState() )
+
+    if (GetHandle())
     {
+        switch ( GetHandle()->windowState() )
+        {
         case Qt::WindowMaximized:
             winStyle &= ~wxMINIMIZE;
             winStyle |= wxMAXIMIZE;
@@ -188,6 +191,7 @@ long wxTopLevelWindowNative::GetWindowStyleFlag() const
         default:
             winStyle &= ~wxMINIMIZE;
             winStyle &= ~wxMAXIMIZE;
+        }
     }
 
     return winStyle;
