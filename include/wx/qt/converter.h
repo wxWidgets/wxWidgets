@@ -50,5 +50,9 @@ QSize  wxQtConvertSize( const wxSize &size );
 Qt::Orientation wxQtConvertOrientation( long style, wxOrientation defaultOrientation );
 wxOrientation wxQtConvertOrientation( Qt::Orientation );
 
+wxKeyCode wxQtConvertKeyCode( int key, const Qt::KeyboardModifiers modifiers );
+void wxQtFillKeyboardModifiers( Qt::KeyboardModifiers modifiers, wxKeyboardState *state );
+int wxQtConvertKeyCode( int keyCode, int modifiers, Qt::KeyboardModifiers &qtmodifiers );
+
 #endif // _WX_QT_CONVERTER_H_
 
