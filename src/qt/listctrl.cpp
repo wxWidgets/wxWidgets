@@ -81,6 +81,7 @@ Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
         case wxLIST_FORMAT_RIGHT:
             return Qt::AlignRight;
         case wxLIST_FORMAT_CENTRE:
+        default:
             return Qt::AlignCenter;
     }
 }
@@ -94,6 +95,7 @@ wxListColumnFormat wxQtConvertAlignFlag(int align)
         case Qt::AlignRight:
             return wxLIST_FORMAT_RIGHT;
         case Qt::AlignCenter:
+        default:
             return wxLIST_FORMAT_CENTRE;
     }
 }
@@ -872,6 +874,7 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 {
     // aproximate, as scrollContentsBy is protected
     m_qtTreeWidget->scroll(dx, dy);
+    return true;
 }
 
 bool wxListCtrl::SortItems(wxListCtrlCompare WXUNUSED(fn), wxIntPtr WXUNUSED(data))

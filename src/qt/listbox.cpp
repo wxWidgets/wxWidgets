@@ -197,6 +197,7 @@ int wxListBox::DoInsertOneItem(const wxString& text, unsigned int pos)
         item->setCheckState(Qt::Unchecked);
     }
     m_qtListWidget->insertItem(pos, item);
+    return pos;
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
