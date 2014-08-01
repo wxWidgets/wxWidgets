@@ -80,6 +80,6 @@ bool wxDialog::IsModal() const
 
 QDialog *wxDialog::GetHandle() const
 {
-    return m_qtDialog;
+    return static_cast<QDialog*>(m_qtWindow);
 }
 
