@@ -130,3 +130,32 @@ void wxComboBox::Dismiss()
 {
     GetHandle()->hidePopup();
 }
+
+void wxComboBox::SetSelection( long from, long to )
+{
+    // SelectAll uses -1 to -1, adjust for qt:
+    if (from == -1 && to == -1)
+    {
+        from = 0;
+        to = GetValue().length();
+    }
+    // use the inner text entry widget (note that can be null if not editable)
+    if ( m_qtComboBox->lineEdit() != NULL )
+        m_qtComboBox->lineEdit()->setSelection(from, to);
+}
+
+void wxComboBox::GetSelection(long* from, long* to) const
+{
+    // use the inner text entry widget (note that can be null if not editable)
+    if ( m_qtComboBox->lineEdit() != NULL )
+    {
+        *from = m_qtComboBox->lineEdit()->selectionStart();
+        if ( *from >= 0 )
+        {
+            *to = *from + m_qtComboBox->lineEdit()->selectedText().length();
+            return;
+        }
+    }
+    // No selection or text control, call base for default behaviour:
+    wxTextEntry::GetSelection(from, to);
+}
