@@ -755,6 +755,8 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
                                    wxString* pString,
                                    const wxPGCell** pCell )
 {
+    wxCHECK_RET( GetGrid(),
+                 wxT("Cannot obtain display info for detached property") );
     const wxPGCell* cell = NULL;
 
     if ( !(flags & wxPGCellRenderer::ChoicePopup) )
@@ -989,8 +991,13 @@ wxString wxPGProperty::GetValueAsString( int argFlags ) const
         return g_invalidStringContent;
     }
 #endif
-
     wxPropertyGrid* pg = GetGrid();
+    wxASSERT_MSG( pg,
+                  wxT("Cannot get valid value for detached property") );
+    if ( !pg )
+    {
+        return wxEmptyString;
+    }
 
     if ( IsValueUnspecified() )
         return pg->GetUnspecifiedValueText(argFlags);
@@ -1464,6 +1471,8 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 
 void wxPGProperty::SetValueInEvent( wxVariant value ) const
 {
+    wxCHECK_RET( GetGrid(),
+                 wxT("Cannot store pending value for detached property"));
     GetGrid()->ValueChangeInEvent(value);
 }
 
@@ -1639,6 +1648,8 @@ const wxPGCell& wxPGProperty::GetCell( unsigned int column ) const
         return m_cells[column];
 
     wxPropertyGrid* pg = GetGrid();
+    wxASSERT_MSG( pg,
+                  wxT("Cannot get cell for detached property") );
 
     if ( IsCategory() )
         return pg->GetCategoryDefaultCell();
@@ -2086,6 +2097,10 @@ bool wxPGProperty::RecreateEditor()
 
 void wxPGProperty::SetValueImage( wxBitmap& bmp )
 {
+    // We need PG to obtain default image size
+    wxCHECK_RET( GetGrid(),
+                 wxT("Cannot set image for detached property") );
+
     delete m_valueBitmap;
 
     if ( &bmp && bmp.IsOk() )
@@ -2209,7 +2224,10 @@ int wxPGProperty::GetY2( int lh ) const
 
 int wxPGProperty::GetY() const
 {
-    return GetY2(GetGrid()->GetRowHeight());
+    wxPropertyGrid *pg = GetGrid();
+    wxASSERT_MSG( pg,
+        wxT("Cannot obtain coordinates of detached property") );
+    return pg ? GetY2(pg->GetRowHeight()) : 0;
 }
 
 // This is used by Insert etc.
@@ -2545,8 +2563,16 @@ void wxPGProperty::Empty()
 
 wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y ) const
 {
+    wxPropertyGrid *pg = GetGrid();
+    wxASSERT_MSG( pg,
+                  wxT("Cannot obtain property item for detached property") );
+    if( !pg )
+    {
+        return NULL;
+    }
+
     unsigned int nextItem = 0;
-    return GetItemAtY( y, GetGrid()->GetRowHeight(), &nextItem);
+    return GetItemAtY(y, pg->GetRowHeight(), &nextItem);
 }
 
 void wxPGProperty::DeleteChildren()
