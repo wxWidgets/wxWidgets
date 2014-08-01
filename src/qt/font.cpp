@@ -205,9 +205,12 @@ wxFontFamily wxFont::GetFamily() const
 {
     switch (M_FONTDATA.styleHint())
     {
+        case QFont::System:
         case QFont::AnyStyle:
             return wxFONTFAMILY_DEFAULT;
 
+        case QFont::Fantasy:
+        case QFont::Cursive:
         case QFont::Decorative:
             return wxFONTFAMILY_DECORATIVE;
 
@@ -217,13 +220,12 @@ wxFontFamily wxFont::GetFamily() const
         case QFont::SansSerif:
             return wxFONTFAMILY_SWISS;
 
+        case QFont::Monospace:
         case QFont::TypeWriter:
             return wxFONTFAMILY_TELETYPE;
 
-        default:
-            wxFAIL_MSG( "Invalid font family value" );
-            break;
     }
+    wxFAIL_MSG( "Invalid font family value" );
     return wxFontFamily();
 }
 
@@ -239,11 +241,8 @@ wxFontStyle wxFont::GetStyle() const
 
         case QFont::StyleOblique:
             return wxFONTSTYLE_SLANT;
-
-        default:
-            wxFAIL_MSG( "Invalid font style value" );
-            break;
     }
+    wxFAIL_MSG( "Invalid font style value" );
     return wxFontStyle();
 }
 
@@ -257,13 +256,12 @@ wxFontWeight wxFont::GetWeight() const
         case QFont::Light:
             return wxFONTWEIGHT_LIGHT;
 
+        case QFont::DemiBold:
+        case QFont::Black:
         case QFont::Bold:
             return wxFONTWEIGHT_BOLD;
-
-        default:
-            wxFAIL_MSG( "Invalid font weight value" );
-            break;
     }
+    wxFAIL_MSG( "Invalid font weight value" );
     return wxFontWeight();
 }
 

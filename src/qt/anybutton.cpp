@@ -90,8 +90,13 @@ void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
             wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Focused ));
             break;
 
-        default:
-            ;
+        case State_Disabled:
+            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Disabled ));
+            break;
+
+        case State_Max:
+            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Max ));
+
     }
 }
 
