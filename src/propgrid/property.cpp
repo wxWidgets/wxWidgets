@@ -1900,7 +1900,7 @@ int wxPGProperty::InsertChoice( const wxString& label, int index, int value )
     if ( sel != newSel )
         SetChoiceSelection(newSel);
 
-    if ( this == pg->GetSelection() )
+    if ( pg && this == pg->GetSelection() )
         GetEditorClass()->InsertItem(pg->GetEditorControl(),label,index);
 
     return index;
@@ -1930,7 +1930,7 @@ void wxPGProperty::DeleteChoice( int index )
     if ( sel != newSel )
         SetChoiceSelection(newSel);
 
-    if ( this == pg->GetSelection() )
+    if ( pg && this == pg->GetSelection() )
         GetEditorClass()->DeleteItem(pg->GetEditorControl(), index);
 }
 
