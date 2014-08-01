@@ -61,7 +61,7 @@ int wxDialog::ShowModal()
 {
     wxCHECK_MSG( GetHandle() != NULL, -1, "Invalid dialog" );
     
-    return GetHandle()->exec();
+    return GetHandle()->exec() ? wxID_OK : wxID_CANCEL;
 }
 
 void wxDialog::EndModal(int retCode)
