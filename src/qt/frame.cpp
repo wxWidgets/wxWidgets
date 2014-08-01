@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/frame.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,8 +10,8 @@
 
 #include "wx/frame.h"
 #include "wx/menu.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 #include <QtWidgets/QScrollArea>
 
@@ -82,7 +82,7 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
     wxFrameBase::SetStatusBar( statusBar );
 }
 
-void wxFrame::SetWindowStyleFlag( long style )
+void wxFrame::SetWindowStyleFlag( long WXUNUSED(style) )
 {
 //    wxWindow::SetWindowStyleFlag( style );
 //

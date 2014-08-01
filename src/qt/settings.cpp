@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/settings.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Mariano Reingart, Peter Most
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,8 +9,11 @@
 #include "wx/wxprec.h"
 
 #include "wx/settings.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include <QtGui/QPalette>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QStyle>
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
@@ -163,12 +166,61 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 
 }
 
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow * win)
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow * WXUNUSED(win))
 {
-    return 0;
+    switch (index)
+    {
+        case wxSYS_BORDER_X:
+        case wxSYS_BORDER_Y:
+        case wxSYS_EDGE_X:
+        case wxSYS_EDGE_Y:
+        case wxSYS_FRAMESIZE_X:
+        case wxSYS_FRAMESIZE_Y:
+            return QApplication::style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
+
+
+        case wxSYS_CURSOR_X:
+        case wxSYS_CURSOR_Y:
+            return 32;         // default recomended in docs
+
+        case wxSYS_DCLICK_X:
+        case wxSYS_DCLICK_Y:
+            return QApplication::startDragDistance();
+
+        case wxSYS_DCLICK_MSEC:
+            return QApplication::doubleClickInterval();
+
+        case wxSYS_DRAG_X:
+        case wxSYS_DRAG_Y:
+            return QApplication::style()->pixelMetric(QStyle::PM_ScrollBarSliderMin);
+
+        case wxSYS_ICON_X:
+        case wxSYS_ICON_Y:
+            return QApplication::style()->pixelMetric(QStyle::PM_IconViewIconSize);
+
+        case wxSYS_SCREEN_X:
+            return QApplication::desktop()->screenGeometry().width();
+
+        case wxSYS_SCREEN_Y:
+            return QApplication::desktop()->screenGeometry().height();
+
+        case wxSYS_HSCROLL_Y:
+        case wxSYS_VSCROLL_X:
+            return QApplication::style()->pixelMetric(QStyle::PM_ScrollBarSliderMin);
+
+        case wxSYS_CAPTION_Y:
+            return QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);
+
+        case wxSYS_PENWINDOWS_PRESENT:
+            // No MS Windows for Pen computing extension available in X11 based gtk+.
+            return 0;
+
+        default:
+            return -1;   // metric is unknown
+    }
 }
 
-bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
+bool wxSystemSettingsNative::HasFeature(wxSystemFeature WXUNUSED(index))
 {
     return false;
 }

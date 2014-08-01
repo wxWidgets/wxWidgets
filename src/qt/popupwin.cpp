@@ -14,7 +14,7 @@ wxPopupWindow::wxPopupWindow()
 {
 }
 
-wxPopupWindow::wxPopupWindow(wxWindow *parent, int flags)
+wxPopupWindow::wxPopupWindow(wxWindow *WXUNUSED(parent), int WXUNUSED(flags))
 {
 }
 

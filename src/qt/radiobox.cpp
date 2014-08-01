@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/radiobox.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,8 +9,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/radiobox.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGroupBox>
@@ -125,7 +125,7 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxPoint& pos,
             const wxSize& size,
             int n, const wxString choices[],
-            int majorDim,
+            int WXUNUSED(majorDim),
             long style,
             const wxValidator& val,
             const wxString& name)

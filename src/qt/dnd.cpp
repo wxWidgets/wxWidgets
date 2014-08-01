@@ -10,16 +10,16 @@
 
 #include "wx/dnd.h"
 
-wxDropTarget::wxDropTarget(wxDataObject *dataObject)
+wxDropTarget::wxDropTarget(wxDataObject *WXUNUSED(dataObject))
 {
 }
 
-bool wxDropTarget::OnDrop(wxCoord x, wxCoord y)
+bool wxDropTarget::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 {
     return false;
 }
 
-wxDragResult wxDropTarget::OnData(wxCoord x, wxCoord y, wxDragResult def)
+wxDragResult wxDropTarget::OnData(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResult WXUNUSED(def))
 {
     return wxDragResult();
 }
@@ -38,22 +38,22 @@ wxDataFormat wxDropTarget::GetMatchingPair()
 //##############################################################################
 
 
-wxDropSource::wxDropSource( wxWindow *win,
-              const wxIcon &copy,
-              const wxIcon &move,
-              const wxIcon &none)
+wxDropSource::wxDropSource( wxWindow *WXUNUSED(win),
+              const wxIcon &WXUNUSED(copy),
+              const wxIcon &WXUNUSED(move),
+              const wxIcon &WXUNUSED(none))
 {
 }
 
-wxDropSource::wxDropSource( wxDataObject& data,
-              wxWindow *win,
-              const wxIcon &copy,
-              const wxIcon &move,
-              const wxIcon &none)
+wxDropSource::wxDropSource( wxDataObject& WXUNUSED(data),
+              wxWindow *WXUNUSED(win),
+              const wxIcon &WXUNUSED(copy),
+              const wxIcon &WXUNUSED(move),
+              const wxIcon &WXUNUSED(none))
 {
 }
 
-wxDragResult wxDropSource::DoDragDrop(int flags)
+wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
 {
     return wxDragResult();
 }

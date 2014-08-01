@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/scrolbar.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
 
@@ -88,9 +88,9 @@ void wxScrollBar::SetThumbPosition(int viewStart)
     m_qtScrollBar->setValue( viewStart );
 }
 
-void wxScrollBar::SetScrollbar(int position, int thumbSize,
+void wxScrollBar::SetScrollbar(int position, int WXUNUSED(thumbSize),
                           int range, int pageSize,
-                          bool refresh)
+                          bool WXUNUSED(refresh))
 {
     wxCHECK_RET( m_qtScrollBar, "Invalid QScrollbar" );
 

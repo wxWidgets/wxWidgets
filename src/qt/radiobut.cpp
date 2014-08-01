@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/radiobut.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 
 wxRadioButton::wxRadioButton()
 {

@@ -105,7 +105,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
             const wxSize& size,
-            const wxArrayString& choices,
+            const wxArrayString& WXUNUSED(choices),
             long style,
             const wxValidator& validator,
             const wxString& name)
@@ -129,7 +129,7 @@ bool wxListBox::IsSelected(int n) const
     return item->isSelected();
 }
 
-int wxListBox::GetSelections(wxArrayInt& aSelections) const
+int wxListBox::GetSelections(wxArrayInt& WXUNUSED(aSelections)) const
 {
     return 0;
 }
@@ -146,7 +146,7 @@ wxString wxListBox::GetString(unsigned int n) const
     return wxQtConvertString( item->text() );
 }
 
-void wxListBox::SetString(unsigned int n, const wxString& s)
+void wxListBox::SetString(unsigned int n, const wxString& WXUNUSED(s))
 {
     QListWidgetItem* item = m_qtListWidget->item(n);
     wxCHECK_RET(item != NULL, wxT("wrong listbox index") );
@@ -167,7 +167,7 @@ int wxListBox::GetSelection() const
     return m_qtListWidget->currentIndex().row();
 }
 
-void wxListBox::DoSetFirstItem(int n)
+void wxListBox::DoSetFirstItem(int WXUNUSED(n))
 {
 }
 

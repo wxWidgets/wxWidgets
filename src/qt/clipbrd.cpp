@@ -11,7 +11,7 @@
 #include "wx/clipbrd.h"
 #include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 
 #include <QClipboard>
 

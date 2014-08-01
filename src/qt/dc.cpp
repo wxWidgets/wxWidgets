@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/dc.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most, Javier Torres
+// Author:      Peter Most, Javier Torres, Mariano Reingart
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -11,8 +11,8 @@
 #include "wx/dc.h"
 #include "wx/icon.h"
 #include "wx/qt/dc.h"
-#include "wx/qt/converter.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 #include <QtGui/QBitmap>
 
 static void SetPenColour( QPainter *qtPainter, QColor col )
@@ -167,7 +167,7 @@ void wxQtDCImpl::SetBackgroundMode(int mode)
 
 
 #if wxUSE_PALETTE
-void wxQtDCImpl::SetPalette(const wxPalette& palette)
+void wxQtDCImpl::SetPalette(const wxPalette& WXUNUSED(palette))
 {
     wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
@@ -700,8 +700,8 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord xsrc, wxCoord ysrc,
                     wxRasterOperationMode rop,
                     bool useMask,
-                    wxCoord xsrcMask,
-                    wxCoord ysrcMask )
+                    wxCoord WXUNUSED(xsrcMask),
+                    wxCoord WXUNUSED(ysrcMask) )
 {
     wxMISSING_IMPLEMENTATION( "wxDC::DoBlit Mask src" );
 

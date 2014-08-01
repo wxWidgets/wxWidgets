@@ -10,8 +10,8 @@
 
 #include "wx/region.h"
 #include "wx/bitmap.h"
-#include "wx/qt/converter.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 
 #include <QtGui/QRegion>
 #include <QtGui/QBitmap>
@@ -93,7 +93,7 @@ wxRegion::wxRegion(const wxBitmap& bmp)
         m_refData = new wxRegionRefData( QRect( 0, 0, bmp.GetWidth(), bmp.GetHeight() ) );
 }
 
-wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
+wxRegion::wxRegion(const wxBitmap& WXUNUSED(bmp), const wxColour& WXUNUSED(transp), int WXUNUSED(tolerance))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }

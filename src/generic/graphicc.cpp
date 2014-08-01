@@ -1870,7 +1870,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
     m_height = 0;
 }
 
-wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
+wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *WXUNUSED(window))
     : wxGraphicsContext(renderer)
 #ifdef __WXMSW__
     , m_mswWindowHDC(GetHwndOf(window))
@@ -2221,7 +2221,7 @@ void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDoub
     }
 }
 
-void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
+void wxCairoContext::GetPartialTextExtents(const wxString& WXUNUSED(text), wxArrayDouble& widths) const
 {
     widths.Empty();
     wxCHECK_RET( !m_font.IsNull(), wxT("wxCairoContext::GetPartialTextExtents - no valid font set") );

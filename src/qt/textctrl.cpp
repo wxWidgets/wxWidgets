@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/textctrl.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Mariano Reingart, Peter Most
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,9 +10,9 @@
 
 #include "wx/textctrl.h"
 #include "wx/settings.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 
 class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 {
@@ -140,12 +140,12 @@ wxSize wxTextCtrl::DoGetBestSize() const
     return wxTextCtrlBase::DoGetBestSize();
 
 }
-int wxTextCtrl::GetLineLength(long lineNo) const
+int wxTextCtrl::GetLineLength(long WXUNUSED(lineNo)) const
 {
     return 0;
 }
 
-wxString wxTextCtrl::GetLineText(long lineNo) const
+wxString wxTextCtrl::GetLineText(long WXUNUSED(lineNo)) const
 {
     return wxString();
 }
@@ -168,41 +168,41 @@ void wxTextCtrl::DiscardEdits()
 {
 }
 
-bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
+bool wxTextCtrl::SetStyle(long WXUNUSED(start), long WXUNUSED(end), const wxTextAttr& WXUNUSED(style))
 {
     return false;
 }
 
-bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
+bool wxTextCtrl::GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style))
 {
     return false;
 }
 
-bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
+bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& WXUNUSED(style))
 {
     return false;
 }
 
-long wxTextCtrl::XYToPosition(long x, long y) const
+long wxTextCtrl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
 {
     return 0;
 }
 
-bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
+bool wxTextCtrl::PositionToXY(long WXUNUSED(pos), long *WXUNUSED(x), long *WXUNUSED(y)) const
 {
     return false;
 }
 
-void wxTextCtrl::ShowPosition(long pos)
+void wxTextCtrl::ShowPosition(long WXUNUSED(pos))
 {
 }
 
-bool wxTextCtrl::DoLoadFile(const wxString& file, int fileType)
+bool wxTextCtrl::DoLoadFile(const wxString& WXUNUSED(file), int WXUNUSED(fileType))
 {
     return false;
 }
 
-bool wxTextCtrl::DoSaveFile(const wxString& file, int fileType)
+bool wxTextCtrl::DoSaveFile(const wxString& WXUNUSED(file), int WXUNUSED(fileType))
 {
     return false;
 }

@@ -9,24 +9,24 @@
 #include "wx/wxprec.h"
 
 #include "wx/tooltip.h"
-#include "wx/qt/utils.h"
+#include "wx/qt/private/utils.h"
 
-/* static */ void wxToolTip::Enable(bool flag)
+/* static */ void wxToolTip::Enable(bool WXUNUSED(flag))
 {
     wxMISSING_FUNCTION();
 }
 
-/* static */ void wxToolTip::SetDelay(long milliseconds)
+/* static */ void wxToolTip::SetDelay(long WXUNUSED(milliseconds))
 {
     wxMISSING_FUNCTION();
 }
 
-/* static */ void wxToolTip::SetAutoPop(long milliseconds)
+/* static */ void wxToolTip::SetAutoPop(long WXUNUSED(milliseconds))
 {
     wxMISSING_FUNCTION();
 }
 
-/* static */ void wxToolTip::SetReshow(long milliseconds)
+/* static */ void wxToolTip::SetReshow(long WXUNUSED(milliseconds))
 {
     wxMISSING_FUNCTION();
 }

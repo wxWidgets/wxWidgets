@@ -25,8 +25,8 @@ wxTaskBarIcon::wxTaskBarIcon()
 {
 }
 
-bool wxTaskBarIcon::SetIcon(const wxIcon& icon,
-             const wxString& tooltip)
+bool wxTaskBarIcon::SetIcon(const wxIcon& WXUNUSED(icon),
+             const wxString& WXUNUSED(tooltip))
 {
     return false;
 }
@@ -36,7 +36,7 @@ bool wxTaskBarIcon::RemoveIcon()
     return false;
 }
 
-bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
+bool wxTaskBarIcon::PopupMenu(wxMenu *WXUNUSED(menu))
 {
     return false;
 }

@@ -38,7 +38,6 @@ public:
     virtual QDialog *GetHandle() const;
 
 private:
-    QDialog *m_qtDialog;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxDialog );
 };

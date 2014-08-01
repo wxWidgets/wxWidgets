@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/toplevel.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include <QtGui/QIcon>
 
 wxTopLevelWindowNative::wxTopLevelWindowNative()
@@ -54,7 +54,7 @@ bool wxTopLevelWindowNative::Create( wxWindow *parent, wxWindowID winId,
     return true;
 }
 
-void wxTopLevelWindowNative::Maximize(bool maximize) 
+void wxTopLevelWindowNative::Maximize(bool WXUNUSED(maximize)) 
 {
 }
 
@@ -62,7 +62,7 @@ void wxTopLevelWindowNative::Restore()
 {
 }
 
-void wxTopLevelWindowNative::Iconize(bool iconize )
+void wxTopLevelWindowNative::Iconize(bool WXUNUSED(iconize) )
 {
 }
 
@@ -77,7 +77,7 @@ bool wxTopLevelWindowNative::IsIconized() const
 }
 
 
-bool wxTopLevelWindowNative::ShowFullScreen(bool show, long style)
+bool wxTopLevelWindowNative::ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style))
 {
     return false;
 }

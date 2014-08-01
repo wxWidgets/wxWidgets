@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/slider.cpp
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Peter Most, Mariano Reingart
+// Copyright:   (c) 2010 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -9,7 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/slider.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
 
@@ -58,7 +58,7 @@ wxSlider::wxSlider(wxWindow *parent,
 
 bool wxSlider::Create(wxWindow *parent,
             wxWindowID id,
-            int value, int minValue, int maxValue,
+            int WXUNUSED(value), int minValue, int maxValue,
             const wxPoint& pos,
             const wxSize& size,
             long style,
@@ -117,7 +117,7 @@ int wxSlider::GetTickFreq() const
     return m_qtSlider->tickInterval();
 }
 
-void wxSlider::SetLineSize(int lineSize)
+void wxSlider::SetLineSize(int WXUNUSED(lineSize))
 {
 }
 
@@ -136,7 +136,7 @@ int wxSlider::GetPageSize() const
     return m_qtSlider->pageStep();
 }
 
-void wxSlider::SetThumbLength(int lenPixels)
+void wxSlider::SetThumbLength(int WXUNUSED(lenPixels))
 {
 }
 

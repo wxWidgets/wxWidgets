@@ -11,7 +11,6 @@
 #define _WX_QT_CALCTRL_H_
 
 #include "wx/calctrl.h"
-#include "wx/qt/converter.h"
 #include <QtWidgets/QCalendarWidget>
 
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase

@@ -8,7 +8,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 #include "wx/dataobj.h"
 
 
@@ -144,7 +144,7 @@ wxBitmapDataObject::wxBitmapDataObject()
 {
 }
 
-wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &bitmap )
+wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &WXUNUSED(bitmap) )
 {
 }
 
@@ -152,7 +152,7 @@ wxFileDataObject::wxFileDataObject()
 {
 }
  
-void wxFileDataObject::AddFile( const wxString &filename )
+void wxFileDataObject::AddFile( const wxString &WXUNUSED(filename) )
 {
 
 }

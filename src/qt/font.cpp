@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/font.cpp
-// Author:      Peter Most, Javier Torres
-// Copyright:   (c) Peter Most, Javier Torres
+// Author:      Peter Most, Mariano Reingart, Javier Torres
+// Copyright:   (c) 2009 wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -10,8 +10,8 @@
 
 #include "wx/font.h"
 #include "wx/fontutil.h"
-#include "wx/qt/utils.h"
-#include "wx/qt/converter.h"
+#include "wx/qt/private/utils.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtGui/QFont>
 #include <QtGui/QFontInfo>
@@ -129,14 +129,14 @@ wxFont::wxFont(const wxFontInfo& info)
         SetPixelSize(pixelSize);
 }
 
-wxFont::wxFont(const wxString& nativeFontInfoString)
+wxFont::wxFont(const wxString& WXUNUSED(nativeFontInfoString))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 
     m_refData = new wxFontRefData();
 }
 
-wxFont::wxFont(const wxNativeFontInfo& info)
+wxFont::wxFont(const wxNativeFontInfo& WXUNUSED(info))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 
@@ -161,13 +161,13 @@ wxFont::wxFont(int size,
     Create(size, family, style, weight, underlined, face, encoding);
 }
 
-wxFont::wxFont(const wxSize& pixelSize,
-       wxFontFamily family,
-       wxFontStyle style,
-       wxFontWeight weight,
-       bool underlined,
-       const wxString& face,
-       wxFontEncoding encoding)
+wxFont::wxFont(const wxSize& WXUNUSED(pixelSize),
+       wxFontFamily WXUNUSED(family),
+       wxFontStyle WXUNUSED(style),
+       wxFontWeight WXUNUSED(weight),
+       bool WXUNUSED(underlined),
+       const wxString& WXUNUSED(face),
+       wxFontEncoding WXUNUSED(encoding))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 
@@ -188,7 +188,7 @@ wxFont::wxFont(int size,
 
 bool wxFont::Create(int size, wxFontFamily family, wxFontStyle style,
         wxFontWeight weight, bool underlined, const wxString& face,
-        wxFontEncoding encoding )
+        wxFontEncoding WXUNUSED(encoding) )
 {
     m_refData = new wxFontRefData(size, ConvertFontFamily(family), style != wxFONTSTYLE_NORMAL,
                                   ConvertFontWeight(weight), underlined, wxQtConvertString(face));
@@ -334,7 +334,7 @@ void wxFont::SetUnderlined( bool underlined )
     M_FONTDATA.setUnderline(underlined);
 }
 
-void wxFont::SetEncoding(wxFontEncoding encoding)
+void wxFont::SetEncoding(wxFontEncoding WXUNUSED(encoding))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }

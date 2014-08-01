@@ -12,7 +12,7 @@
 #include "wx/display_impl.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
-#include "wx/qt/converter.h"
+#include "wx/qt/private/converter.h"
 
 class wxDisplayImplQt : public wxDisplayImpl
 {
@@ -42,7 +42,7 @@ wxString wxDisplayImplQt::GetName() const
     return wxString();
 }
 
-wxArrayVideoModes wxDisplayImplQt::GetModes(const wxVideoMode& mode) const
+wxArrayVideoModes wxDisplayImplQt::GetModes(const wxVideoMode& WXUNUSED(mode)) const
 {
     return wxArrayVideoModes();
 }
@@ -56,7 +56,7 @@ wxVideoMode wxDisplayImplQt::GetCurrentMode() const
     return wxVideoMode( width, height, depth );
 }
 
-bool wxDisplayImplQt::ChangeMode(const wxVideoMode& mode)
+bool wxDisplayImplQt::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 {
     return false;
 }
