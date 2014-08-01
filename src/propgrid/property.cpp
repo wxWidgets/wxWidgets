@@ -1896,15 +1896,18 @@ wxValidator* wxPGProperty::DoGetValidator() const
 int wxPGProperty::InsertChoice( const wxString& label, int index, int value )
 {
     wxPropertyGrid* pg = GetGrid();
-    int sel = GetChoiceSelection();
-
-    int newSel = sel;
+    const int sel = GetChoiceSelection();
 
     if ( index == wxNOT_FOUND )
         index = m_choices.GetCount();
 
-    if ( index <= sel )
-        newSel++;
+    int newSel;
+    if ( sel == wxNOT_FOUND )
+        newSel = 0;
+    else if ( index <= sel )
+        newSel = sel + 1;
+    else
+        newSel = sel;
 
     m_choices.Insert(label, index, value);
 
