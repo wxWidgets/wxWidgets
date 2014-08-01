@@ -35,6 +35,8 @@ public:
     virtual QCheckBox *GetHandle() const;
 
 protected:
+    virtual void DoSet3StateValue(wxCheckBoxState state);
+    virtual wxCheckBoxState DoGet3StateValue() const;
 
 private:
     QCheckBox *m_qtCheckBox;
