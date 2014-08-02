@@ -2347,12 +2347,15 @@ wxGrid::SetTable(wxGridTableBase *table,
         m_numRows = table->GetNumberRows();
         m_numCols = table->GetNumberCols();
 
-        if ( m_useNativeHeader )
-            GetGridColHeader()->SetColumnCount(m_numCols);
-
         m_table = table;
         m_table->SetView( this );
         m_ownTable = takeOwnership;
+
+        // Notice that this must be called after setting m_table as it uses it
+        // indirectly, via wxGrid::GetColLabelValue().
+        if ( m_useNativeHeader )
+            GetGridColHeader()->SetColumnCount(m_numCols);
+
         m_selection = new wxGridSelection( this, selmode );
         if (checkSelection)
         {
