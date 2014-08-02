@@ -88,8 +88,7 @@ void wxQtToolButton::enterEvent( QEvent *WXUNUSED(event) )
     toolbar->OnMouseEnter( handler->GetId() );
 }
 
-// is this needed?
-//IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
 void wxToolBarTool::SetLabel( const wxString &label )
 {

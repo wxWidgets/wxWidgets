@@ -114,7 +114,7 @@ wxFont::wxFont()
 
 wxFont::wxFont(const wxFontInfo& info)
 {
-    Create(info.GetPointSize(),
+    Create(wxSize(0, info.GetPointSize()),
            info.GetFamily(),
            info.GetStyle(),
            info.GetWeight(),
@@ -129,18 +129,18 @@ wxFont::wxFont(const wxFontInfo& info)
         SetPixelSize(pixelSize);
 }
 
-wxFont::wxFont(const wxString& WXUNUSED(nativeFontInfoString))
+wxFont::wxFont(const wxString& nativeFontInfoString)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
     m_refData = new wxFontRefData();
+
+    QFont font;
+    font.fromString(wxQtConvertString( nativeFontInfoString ));
+    M_FONTDATA = font;
 }
 
-wxFont::wxFont(const wxNativeFontInfo& WXUNUSED(info))
+wxFont::wxFont(const wxNativeFontInfo& info)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    m_refData = new wxFontRefData();
+    Create(wxSize(0, info.pointSize), info.family, info.style, info.weight, info.underlined, info.faceName, info.encoding);
 }
 
 wxFont::wxFont(const QFont& font)
@@ -158,20 +158,18 @@ wxFont::wxFont(int size,
        const wxString& face,
        wxFontEncoding encoding)
 {
-    Create(size, family, style, weight, underlined, face, encoding);
+    Create(wxSize(0, size), family, style, weight, underlined, face, encoding);
 }
 
-wxFont::wxFont(const wxSize& WXUNUSED(pixelSize),
-       wxFontFamily WXUNUSED(family),
-       wxFontStyle WXUNUSED(style),
-       wxFontWeight WXUNUSED(weight),
-       bool WXUNUSED(underlined),
-       const wxString& WXUNUSED(face),
-       wxFontEncoding WXUNUSED(encoding))
+wxFont::wxFont(const wxSize& pixelSize,
+       wxFontFamily family,
+       wxFontStyle style,
+       wxFontWeight weight,
+       bool underlined,
+       const wxString& face,
+       wxFontEncoding encoding)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    m_refData = new wxFontRefData();
+    Create(pixelSize, family, style, weight, underlined, face, encoding);
 }
 
 wxFont::wxFont(int size,
@@ -182,15 +180,15 @@ wxFont::wxFont(int size,
        const wxString& face,
        wxFontEncoding encoding)
 {
-    Create(size, (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
+    Create(wxSize(0, size), (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
 }
 
 
-bool wxFont::Create(int size, wxFontFamily family, wxFontStyle style,
+bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
         wxFontWeight weight, bool underlined, const wxString& face,
         wxFontEncoding WXUNUSED(encoding) )
 {
-    m_refData = new wxFontRefData(size, ConvertFontFamily(family), style != wxFONTSTYLE_NORMAL,
+    m_refData = new wxFontRefData(size.GetHeight(), ConvertFontFamily(family), style != wxFONTSTYLE_NORMAL,
                                   ConvertFontWeight(weight), underlined, wxQtConvertString(face));
 
     return true;
@@ -199,34 +197,6 @@ bool wxFont::Create(int size, wxFontFamily family, wxFontStyle style,
 int wxFont::GetPointSize() const
 {
     return M_FONTDATA.pointSize();
-}
-
-wxFontFamily wxFont::GetFamily() const
-{
-    switch (M_FONTDATA.styleHint())
-    {
-        case QFont::System:
-        case QFont::AnyStyle:
-            return wxFONTFAMILY_DEFAULT;
-
-        case QFont::Fantasy:
-        case QFont::Cursive:
-        case QFont::Decorative:
-            return wxFONTFAMILY_DECORATIVE;
-
-        case QFont::Serif:
-            return wxFONTFAMILY_ROMAN;
-
-        case QFont::SansSerif:
-            return wxFONTFAMILY_SWISS;
-
-        case QFont::Monospace:
-        case QFont::TypeWriter:
-            return wxFONTFAMILY_TELETYPE;
-
-    }
-    wxFAIL_MSG( "Invalid font family value" );
-    return wxFontFamily();
 }
 
 wxFontStyle wxFont::GetStyle() const
@@ -279,6 +249,7 @@ wxString wxFont::GetFaceName() const
 
 wxFontEncoding wxFont::GetEncoding() const
 {
+    QFontInfo info = QFontInfo(M_FONTDATA);
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 
     return wxFontEncoding();
@@ -356,6 +327,27 @@ QFont wxFont::GetHandle() const
 
 wxFontFamily wxFont::DoGetFamily() const
 {
-    return wxFONTFAMILY_DEFAULT;
-}
+    switch (M_FONTDATA.styleHint())
+    {
+        case QFont::System:
+        case QFont::AnyStyle:
+            return wxFONTFAMILY_DEFAULT;
 
+        case QFont::Fantasy:
+        case QFont::Cursive:
+        case QFont::Decorative:
+            return wxFONTFAMILY_DECORATIVE;
+
+        case QFont::Serif:
+            return wxFONTFAMILY_ROMAN;
+
+        case QFont::SansSerif:
+            return wxFONTFAMILY_SWISS;
+
+        case QFont::Monospace:
+        case QFont::TypeWriter:
+            return wxFONTFAMILY_TELETYPE;
+
+    }
+    return wxFONTFAMILY_UNKNOWN;
+}

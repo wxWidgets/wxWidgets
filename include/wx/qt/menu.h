@@ -27,7 +27,7 @@ protected:
 private:
     QMenu *m_qtMenu;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu);
+    wxDECLARE_DYNAMIC_CLASS(wxMenu);
 };
 
 
@@ -53,7 +53,7 @@ public:
 private:
     QMenuBar *m_qtMenuBar;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuBar);
+    wxDECLARE_DYNAMIC_CLASS(wxMenuBar);
 };
 
 #endif // _WX_QT_MENU_H_

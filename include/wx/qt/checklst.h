@@ -52,7 +52,7 @@ public:
 private:
     virtual void Init(); //common construction
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckListBox);
+    wxDECLARE_DYNAMIC_CLASS(wxCheckListBox);
 };
 
 #endif // _WX_QT_CHECKLST_H_

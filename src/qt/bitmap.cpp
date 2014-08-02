@@ -155,6 +155,8 @@ class wxBitmapRefData: public wxGDIRefData
 // wxBitmap
 //-----------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS( wxBitmap, wxObject )
+
 #define M_PIXDATA (*((wxBitmapRefData *)m_refData)->m_qtPixmap)
 
 void wxBitmap::InitStandardHandlers()
@@ -163,7 +165,6 @@ void wxBitmap::InitStandardHandlers()
 
 wxBitmap::wxBitmap()
 {
-    // m_refData = new wxBitmapRefData();
 }
 
 wxBitmap::wxBitmap(QPixmap pix)
@@ -178,12 +179,13 @@ wxBitmap::wxBitmap(const wxBitmap& bmp)
 
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth )
 {
-    if (depth == 1) {
+    wxASSERT(depth == 1);
+
+    if (width > 0 && height > 0 && depth == 1)
+    {
         m_refData = new wxBitmapRefData();
-        ((wxBitmapRefData *)m_refData)->m_qtPixmap = new QBitmap(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
-    } else {
-        wxMISSING_IMPLEMENTATION("wxBitmap(bits, width, height, depth constructor) for depth != 1");
-        m_refData = new wxBitmapRefData();
+        ((wxBitmapRefData *)m_refData)->m_qtPixmap =
+            new QBitmap(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
     }
 }
 
@@ -197,9 +199,12 @@ wxBitmap::wxBitmap(const wxSize& sz, int depth )
     Create(sz, depth);
 }
 
-// wxBitmap::wxBitmap(const char* const* bits)
-// {
-// }
+// Create a wxBitmap from xpm data
+wxBitmap::wxBitmap(const char* const* bits)
+{
+    m_refData = new wxBitmapRefData();
+    ((wxBitmapRefData *)m_refData)->m_qtPixmap = new QPixmap( bits );
+}
 
 wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
 {
@@ -328,6 +333,7 @@ bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
         case wxBITMAP_TYPE_MACCURSOR_RESOURCE:
         case wxBITMAP_TYPE_MAX:
         case wxBITMAP_TYPE_ANY:
+        default:
             break;
     }
     return type_name &&
@@ -371,27 +377,30 @@ void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 #endif // wxUSE_PALETTE
 
 // copies the contents and mask of the given (colour) icon to the bitmap
-bool wxBitmap::CopyFromIcon(const wxIcon& WXUNUSED(icon))
+bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return 0;
+    *this = icon;
+    return IsOk();
 }
 
 
 // implementation:
-void wxBitmap::SetHeight(int WXUNUSED(height))
+void wxBitmap::SetHeight(int height)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    M_PIXDATA = QPixmap(GetWidth(), height);
 }
 
-void wxBitmap::SetWidth(int WXUNUSED(width))
+void wxBitmap::SetWidth(int width)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    M_PIXDATA = QPixmap(width, GetHeight());
 }
 
-void wxBitmap::SetDepth(int WXUNUSED(depth))
+void wxBitmap::SetDepth(int depth)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    if (depth == 1)
+        M_PIXDATA = QBitmap(GetWidth(), GetHeight());
+    else
+        M_PIXDATA = QPixmap(GetWidth(), GetHeight());
 }
 
 

@@ -19,14 +19,14 @@ class wxQtStatusBar : public wxQtEventSignalHandler< QStatusBar, wxStatusBar >
 
 public:
     wxQtStatusBar( wxWindow *parent, wxStatusBar *handler );
-
-private:
 };
 
-
-wxStatusBar::wxStatusBar()
+wxQtStatusBar::wxQtStatusBar( wxWindow *parent, wxStatusBar *handler )
+    : wxQtEventSignalHandler< QStatusBar, wxStatusBar >( parent, handler )
 {
 }
+
+//==============================================================================
 
 wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
             long style,
@@ -35,17 +35,15 @@ wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
     Create( parent, winid, style, name );
 }
 
-void wxStatusBar::Init()
-{
-}
-
 bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
-            long WXUNUSED(style),
-            const wxString& WXUNUSED(name))
+                         long style, const wxString& WXUNUSED(name))
 {
     wxMISSING_IMPLEMENTATION( "wxStatusBar::Create parameters" );
 
     m_qtStatusBar = new wxQtStatusBar( parent, this );
+
+    if(style & wxSTB_SIZEGRIP)
+        m_qtStatusBar->setSizeGripEnabled(true);
 
     PostCreation();
 
@@ -86,6 +84,8 @@ void wxStatusBar::Refresh( bool eraseBackground, const wxRect *rect )
 
 void wxStatusBar::UpdateFields()
 {
+    // is it a good idea to recreate all the panes every update?
+
     while ( !m_qtPanes.isEmpty() )
     {
         //Remove all panes
@@ -117,11 +117,3 @@ QStatusBar *wxStatusBar::GetHandle() const
 {
     return m_qtStatusBar;
 }
-
-//==============================================================================
-
-wxQtStatusBar::wxQtStatusBar( wxWindow *parent, wxStatusBar *handler )
-    : wxQtEventSignalHandler< QStatusBar, wxStatusBar >( parent, handler )
-{
-}
-

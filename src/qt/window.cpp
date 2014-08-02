@@ -704,9 +704,25 @@ void wxWindow::SetWindowStyleFlag( long style )
 //    }
 }
 
-void wxWindow::SetExtraStyle( long WXUNUSED( exStyle ) )
+void wxWindow::SetExtraStyle( long exStyle )
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    long exStyleOld = GetExtraStyle();
+    if ( exStyle == exStyleOld )
+        return;
+
+    // update the internal variable
+    wxWindowBase::SetExtraStyle(exStyle);
+
+    if (!m_qtWindow)
+        return;
+
+    Qt::WindowFlags flags = m_qtWindow->windowFlags();
+
+    if (!(exStyle & wxWS_EX_CONTEXTHELP) != !(flags & Qt::WindowContextHelpButtonHint))
+    {
+        flags ^= Qt::WindowContextHelpButtonHint;
+        m_qtWindow->setWindowFlags(flags);
+    }
 }
 
 

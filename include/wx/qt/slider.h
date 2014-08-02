@@ -55,7 +55,7 @@ public:
 private:
     QSlider *m_qtSlider;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSlider );
+    wxDECLARE_DYNAMIC_CLASS( wxSlider );
 };
 
 #endif // _WX_QT_SLIDER_H_

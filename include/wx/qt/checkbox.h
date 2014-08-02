@@ -35,11 +35,13 @@ public:
     virtual QCheckBox *GetHandle() const;
 
 protected:
+    virtual void DoSet3StateValue(wxCheckBoxState state);
+    virtual wxCheckBoxState DoGet3StateValue() const;
 
 private:
     QCheckBox *m_qtCheckBox;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox);
+    wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
 #endif // _WX_QT_CHECKBOX_H_
