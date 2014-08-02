@@ -20,11 +20,10 @@ public:
     virtual bool RemoveIcon();
     virtual bool PopupMenu(wxMenu *menu);
 
-protected:
-    DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
-
 private:
     QSystemTrayIcon m_qtSystemTrayIcon;
+
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon)
 };
 
 #endif // _WX_QT_TASKBAR_H_

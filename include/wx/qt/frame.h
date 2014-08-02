@@ -51,7 +51,7 @@ public:
 private:
     QMainWindow *m_qtMainWindow;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxFrame );
+    wxDECLARE_DYNAMIC_CLASS( wxFrame );
 };
 
 

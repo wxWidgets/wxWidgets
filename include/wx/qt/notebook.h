@@ -57,7 +57,7 @@ private:
     // internal array to store imageId for each page:
     wxVector<int> m_images;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxNotebook );
+    wxDECLARE_DYNAMIC_CLASS( wxNotebook );
 };
 
 

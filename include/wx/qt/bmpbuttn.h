@@ -31,8 +31,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 protected:
-    wxDECLARE_EVENT_TABLE();
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxBitmapButton);
+    wxDECLARE_DYNAMIC_CLASS(wxBitmapButton);
 
 private:
     // We re-use wxButton

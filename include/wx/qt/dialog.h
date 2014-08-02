@@ -39,7 +39,7 @@ public:
 
 private:
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxDialog );
+    wxDECLARE_DYNAMIC_CLASS( wxDialog );
 };
 
 

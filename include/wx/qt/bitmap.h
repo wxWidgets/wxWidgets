@@ -74,6 +74,7 @@ protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
+    DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
 class WXDLLIMPEXP_CORE wxMask : public wxObject

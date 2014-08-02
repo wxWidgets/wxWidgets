@@ -85,7 +85,7 @@ private:
         m_base = 10;
     }
     int m_base;
-    DECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrl )
+    DECLARE_DYNAMIC_CLASS( wxSpinCtrl )
 };
 
 class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxQtSpinCtrlBase< double, QDoubleSpinBox >
@@ -121,7 +121,7 @@ public:
     virtual void SetValue(double val) { wxQtSpinCtrlBase::SetValue(val); }
 
 private:
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinCtrlDouble );
+    wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );
 };
 
 #endif // _WX_QT_SPINCTRL_H_

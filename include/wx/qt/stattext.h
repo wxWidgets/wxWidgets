@@ -36,7 +36,7 @@ public:
 private:
     QLabel *m_qtLabel;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxStaticText );
+    wxDECLARE_DYNAMIC_CLASS( wxStaticText );
 };
 
 #endif // _WX_QT_STATTEXT_H_

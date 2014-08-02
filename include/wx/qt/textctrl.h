@@ -73,7 +73,7 @@ private:
     QLineEdit *m_qtLineEdit;
     QTextEdit *m_qtTextEdit;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxTextCtrl );
+    wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };
 
 #endif // _WX_QT_TEXTCTRL_H_
