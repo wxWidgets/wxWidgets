@@ -1102,7 +1102,7 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS(wxEnumProperty, wxPGProperty,
 wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, int value ) : wxPGProperty(label,name)
 {
-    SetIndex(wxNOT_FOUND);
+    SetIndex(0);
 
     if ( labels )
     {
@@ -1144,7 +1144,7 @@ wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name,
     const wxArrayString& labels, const wxArrayInt& values, int value )
     : wxPGProperty(label,name)
 {
-    SetIndex(wxNOT_FOUND);
+    SetIndex(0);
 
     if ( &labels && labels.size() )
     {
