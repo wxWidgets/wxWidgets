@@ -24,4 +24,7 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
 #define wxMISSING_FUNCTION() \
     wxMISSING_IMPLEMENTATION( __WXFUNCTION__ )
 
+// global function handle Qt objects destruction (just for debugging now)
+void wxQtHandleDestroyedSignal(QObject *qobj = 0);
+
 #endif // _WX_QT_UTILS_H_

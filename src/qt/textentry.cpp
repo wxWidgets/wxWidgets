@@ -68,10 +68,19 @@ long wxTextEntry::GetLastPosition() const
 
 void wxTextEntry::SetSelection(long WXUNUSED(from), long WXUNUSED(to))
 {
+    wxFAIL_MSG("wxTextEntry::SetSelection should be overriden");
 }
 
-void wxTextEntry::GetSelection(long *WXUNUSED(from), long *WXUNUSED(to)) const
+void wxTextEntry::GetSelection(long *from, long *to) const
 {
+    // no unified get selection method in Qt (overriden in textctrl & combobox)
+    // only called if no selection
+    // If the return values from and to are the same, there is no
+    // selection.
+    {
+        *from =
+        *to = GetInsertionPoint();
+    }
 }
 
 bool wxTextEntry::IsEditable() const

@@ -283,6 +283,29 @@ void wxTextCtrl::SetSelection( long from, long to )
     }
 }
 
+void wxTextCtrl::GetSelection(long* from, long* to) const
+{
+    if ( IsMultiLine() )
+    {
+        QTextCursor cursor = m_qtTextEdit->textCursor();
+        *from = cursor.selectionStart();
+        *to = cursor.selectionEnd();
+        if(cursor.hasSelection())
+                return;
+    }
+    else // single line
+    {
+        *from = m_qtLineEdit->selectionStart();
+        if ( *from >= 0 )
+        {
+            *to = *from + m_qtLineEdit->selectedText().length();
+            return;
+        }
+    }
+    // No selection, call base for default behaviour:
+    wxTextEntry::GetSelection(from, to);
+}
+
 void wxTextCtrl::WriteText( const wxString &text )
 {
     // Insert the text

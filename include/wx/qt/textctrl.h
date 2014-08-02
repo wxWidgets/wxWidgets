@@ -53,6 +53,7 @@ public:
     virtual void SetInsertionPoint(long pos);
     virtual long GetInsertionPoint() const;
     virtual void SetSelection( long from, long to );
+    virtual void GetSelection(long *from, long *to) const;
 
     virtual wxString DoGetValue() const;
     virtual void DoSetValue(const wxString &text, int flags = 0);

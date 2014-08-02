@@ -54,9 +54,9 @@ public:
 
     static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
 
-private:
+    virtual QGLWidget *GetHandle() const { return static_cast<QGLWidget *>(m_qtWindow); }
 
-    QGLWidget *GetQGLWidget() const { return static_cast<QGLWidget *>(m_qtWindow); }
+private:
 
 //    DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxGLCanvas)
