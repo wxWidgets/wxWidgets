@@ -713,6 +713,9 @@ void wxWindow::SetExtraStyle( long exStyle )
     // update the internal variable
     wxWindowBase::SetExtraStyle(exStyle);
 
+    if (!m_qtWindow)
+        return;
+
     Qt::WindowFlags flags = m_qtWindow->windowFlags();
 
     if (!(exStyle & wxWS_EX_CONTEXTHELP) != !(flags & Qt::WindowContextHelpButtonHint))
