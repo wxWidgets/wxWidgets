@@ -155,15 +155,18 @@
 #endif
 #if wxUSE_XML && !defined(wxNO_XML_LIB)
     #pragma comment(lib, wxBASE_LIB_NAME("xml"))
+    #if !defined(wxNO_EXPAT_LIB) && !defined(WXUSINGDLL)
+        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("expat"))
+    #endif
 #endif
 #if wxUSE_REGEX && !defined(wxNO_REGEX_LIB) && !defined(WXUSINGDLL)
     #pragma comment(lib, wx3RD_PARTY_LIB_NAME_U("regex"))
 #endif
+#if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB) && !defined(WXUSINGDLL)
+    #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
+#endif
 
 #if wxUSE_GUI
-    #if wxUSE_XML && !defined(wxNO_EXPAT_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("expat"))
-    #endif
     #if wxUSE_LIBJPEG && !defined(wxNO_JPEG_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("jpeg"))
     #endif
@@ -172,9 +175,6 @@
     #endif
     #if wxUSE_LIBTIFF && !defined(wxNO_TIFF_LIB) && !defined(WXUSINGDLL)
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("tiff"))
-    #endif
-    #if wxUSE_ZLIB && !defined(wxNO_ZLIB_LIB) && !defined(WXUSINGDLL)
-        #pragma comment(lib, wx3RD_PARTY_LIB_NAME("zlib"))
     #endif
 
     #pragma comment(lib, wxTOOLKIT_LIB_NAME("core"))
