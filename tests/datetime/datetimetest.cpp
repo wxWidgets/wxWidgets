@@ -228,6 +228,7 @@ private:
         CPPUNIT_TEST( TestDateParse );
         CPPUNIT_TEST( TestDateParseISO );
         CPPUNIT_TEST( TestDateTimeParse );
+        CPPUNIT_TEST( TestDateWeekFormat );
         CPPUNIT_TEST( TestTimeArithmetics );
         CPPUNIT_TEST( TestDSTBug );
         CPPUNIT_TEST( TestDateOnly );
@@ -247,6 +248,7 @@ private:
     void TestDateParse();
     void TestDateParseISO();
     void TestDateTimeParse();
+    void TestDateWeekFormat();
     void TestTimeArithmetics();
     void TestDSTBug();
     void TestDateOnly();
@@ -1209,6 +1211,85 @@ void DateTimeTestCase::TestDateTimeParse()
 
             CPPUNIT_ASSERT( !parseTestDates[n].good );
         }
+    }
+}
+
+void DateTimeTestCase::TestDateWeekFormat()
+{
+    static const struct DateWeekTestData
+    {
+        int y, m, d;
+        const char* result; // expected output of "%G%V"
+    } testWeeks[] =
+    {
+        // Some manual test cases.
+        { 2014,  1,  1, "2014-01" },
+        { 2014,  1,  2, "2014-01" },
+        { 2014,  1,  3, "2014-01" },
+        { 2014,  1,  4, "2014-01" },
+        { 2014,  1,  5, "2014-01" },
+        { 2014,  1,  6, "2014-02" },
+        { 2014,  1,  7, "2014-02" },
+        { 2014, 12, 24, "2014-52" },
+        { 2014, 12, 25, "2014-52" },
+        { 2014, 12, 26, "2014-52" },
+        { 2014, 12, 27, "2014-52" },
+        { 2014, 12, 28, "2014-52" },
+        { 2014, 12, 29, "2015-01" },
+        { 2014, 12, 30, "2015-01" },
+        { 2014, 12, 31, "2015-01" },
+        { 2015, 12, 24, "2015-52" },
+        { 2015, 12, 25, "2015-52" },
+        { 2015, 12, 26, "2015-52" },
+        { 2015, 12, 27, "2015-52" },
+        { 2015, 12, 28, "2015-53" },
+        { 2015, 12, 29, "2015-53" },
+        { 2015, 12, 30, "2015-53" },
+        { 2015, 12, 31, "2015-53" },
+        { 2016,  1,  1, "2015-53" },
+        { 2016,  1,  2, "2015-53" },
+        { 2016,  1,  3, "2015-53" },
+        { 2016,  1,  4, "2016-01" },
+        { 2016,  1,  5, "2016-01" },
+        { 2016,  1,  6, "2016-01" },
+        { 2016,  1,  7, "2016-01" },
+
+        // The rest of the tests was generated using the following zsh command:
+        //
+        //  for n in {0..19}; date --date $((RANDOM%100 + 2000))-$((RANDOM%12+1))-$((RANDOM%31+1)) +'{ %Y, %_m, %_d, "%G-%V" },'
+        //
+        // (ignore invalid dates if any are randomly created).
+        { 2017, 11, 28, "2017-48" },
+        { 2086,  9,  6, "2086-36" },
+        { 2060, 11, 11, "2060-46" },
+        { 2009,  5, 10, "2009-19" },
+        { 2032, 12,  8, "2032-50" },
+        { 2025,  4,  7, "2025-15" },
+        { 2080,  5, 20, "2080-21" },
+        { 2077,  7, 19, "2077-29" },
+        { 2084, 12, 17, "2084-50" },
+        { 2071,  4, 13, "2071-16" },
+        { 2006,  1,  3, "2006-01" },
+        { 2053,  8,  1, "2053-31" },
+        { 2097,  8, 14, "2097-33" },
+        { 2067,  1,  3, "2067-01" },
+        { 2039,  9, 27, "2039-39" },
+        { 2095,  2, 10, "2095-06" },
+        { 2004,  7,  7, "2004-28" },
+        { 2049, 12, 27, "2049-52" },
+        { 2071,  8, 19, "2071-34" },
+        { 2010, 11, 30, "2010-48" },
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(testWeeks); n++ )
+    {
+        const DateWeekTestData& td = testWeeks[n];
+        wxDateTime d(td.d, wxDateTime::Month(td.m - 1), td.y);
+
+        CPPUNIT_ASSERT_EQUAL( td.result, d.Format("%G-%V") );
+
+        if ( td.y > 2000 )
+            CPPUNIT_ASSERT_EQUAL( td.result + 2, d.Format("%g-%V") );
     }
 }
 

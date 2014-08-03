@@ -799,6 +799,10 @@ public:
         function (http://www.cplusplus.com/reference/clibrary/ctime/strftime.html).
         Please see its description for the meaning of @a format parameter.
 
+        Notice that POSIX @c "%g", @c "%G", @c "%V" and @c "%z" format
+        specifiers are supported even if the standard library doesn't support
+        them (e.g. MSVC).
+
         It also accepts a few wxWidgets-specific extensions: you can optionally
         specify the width of the field to follow using @c printf(3)-like syntax
         and the format specification @c "%l" can be used to get the number of
