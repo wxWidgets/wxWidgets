@@ -2450,7 +2450,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             }
                         }
 
-                        if ( btn && btn->IsEnabled() )
+                        if ( btn && btn->IsEnabled() && btn->IsShownOnScreen() )
                         {
                             btn->MSWCommand(BN_CLICKED, 0 /* unused */);
                             return true;
