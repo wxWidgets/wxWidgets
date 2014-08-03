@@ -107,9 +107,20 @@ void FontTestCase::Construct()
                                wxFONTWEIGHT_NORMAL).IsOk() );
 
 #if WXWIN_COMPATIBILITY_3_0
+    // Disable the warning about deprecated wxNORMAL as we use it here
+    // intentionally.
+    #ifdef __VISUALC__
+        #pragma warning(push)
+        #pragma warning(disable:4996)
+    #endif
+
     // Tests relying on the soon-to-be-deprecated ctor taking ints and not
     // wxFontXXX enum elements.
     CPPUNIT_ASSERT( wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL).IsOk() );
+
+    #ifdef __VISUALC__
+        #pragma warning(pop)
+    #endif
 #endif // WXWIN_COMPATIBILITY_3_0
 }
 
