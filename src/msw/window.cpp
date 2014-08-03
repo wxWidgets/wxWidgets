@@ -1159,6 +1159,11 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
     if ( styleNew != styleOld )
     {
         wxSetWindowExStyle(this, styleNew);
+
+        // Update layout: whether we have children or are drawing something, we
+        // need to redo it with the new layout.
+        SendSizeEvent();
+        Refresh();
     }
 #endif
 }
