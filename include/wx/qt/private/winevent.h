@@ -56,8 +56,13 @@ public:
 
         // Handle QWidget destruction signal AFTER it gets deleted
         QObject::connect( this, &QObject::destroyed, this,
-                            &wxQtHandleDestroyedSignal );
+                          &wxQtEventSignalHandler::HandleDestroyedSignal );
 
+    }
+
+    void HandleDestroyedSignal()
+    {
+        wxQtHandleDestroyedSignal(this);
     }
 
     virtual Handler *GetHandler() const
