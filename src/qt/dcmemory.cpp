@@ -37,7 +37,8 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
 
 wxMemoryDCImpl::~wxMemoryDCImpl()
 {
-    DoSelect( wxNullBitmap );
+    // dont deselect the bitmap here as it can be already deleted
+//    DoSelect( wxNullBitmap );     // TODO FIX (move to wxBitmap?)
 }
 
 void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
