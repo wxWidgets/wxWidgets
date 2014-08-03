@@ -314,7 +314,7 @@ bool wxToolBar::DoDeleteTool(size_t /* pos */, wxToolBarToolBase *toolBase)
     tool->m_qtToolButton = NULL;
 
     InvalidateBestSize();
-    return false;
+    return true;
 }
 
 void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
