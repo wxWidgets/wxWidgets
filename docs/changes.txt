@@ -87,6 +87,7 @@ wxMSW:
 - Keep menu item icon after removing and adding it back (Artur Wieczorek).
 - Add wxThread::MSWGetHandle() (troelsk).
 - Allow using sizers for laying out wxMDIClientWindow (Artur Wieczorek).
+- Fix updating wxSlider background when its parent background changes.
 
 wxOSX/Cocoa:
 
