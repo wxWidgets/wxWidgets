@@ -14,6 +14,7 @@ class WXDLLIMPEXP_BASE wxQtEventLoopBase : public wxEventLoopBase
 {
 public:
     wxQtEventLoopBase();
+    ~wxQtEventLoopBase();
 
     virtual int DoRun();
     virtual void ScheduleExit(int rc = 0);

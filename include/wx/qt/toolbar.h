@@ -40,9 +40,7 @@ public:
                 const wxString& name = wxToolBarNameStr);
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
-    virtual QToolBar *QtToolBar() const;
-
-    virtual WXWidget GetHandle() const { return QtToolBar(); }
+    virtual QToolBar *GetHandle() const;
 
     virtual void SetWindowStyleFlag( long style );
     virtual bool Realize() wxOVERRIDE;
