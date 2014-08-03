@@ -55,6 +55,9 @@ bool wxTopLevelWindowNative::Create( wxWindow *parent, wxWindowID winId,
     // (this should be the default, but left just fo enforce it)
     GetHandle()->setAttribute(Qt::WA_DeleteOnClose, false);
 
+    // not calling to wxWindow::Create, so do the rest of initialization:
+    if (parent) parent->AddChild( this );
+
     return true;
 }
 
