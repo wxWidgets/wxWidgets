@@ -919,7 +919,6 @@ wxTaskBarJumpListItem::wxTaskBarJumpListItem(wxTaskBarJumpListItemType type,
 {
 }
 
-
 wxTaskBarJumpListItemType wxTaskBarJumpListItem::GetType() const
 {
     return m_type;
@@ -1129,20 +1128,20 @@ wxTaskBarJumpList::GetCustomCategories() const
     return m_jumpListImpl->GetCustomCategories();
 }
 
-void wxTaskBarJumpList::AddCategory(wxTaskBarJumpListCategory* category)
+void wxTaskBarJumpList::AddCustomCategory(wxTaskBarJumpListCategory* category)
 {
-    m_jumpListImpl->AddCategory(category);
+    m_jumpListImpl->AddCustomCategory(category);
 }
 
-wxTaskBarJumpListCategory* wxTaskBarJumpList::RemoveCategory(
+wxTaskBarJumpListCategory* wxTaskBarJumpList::RemoveCustomCategory(
     const wxString& title)
 {
-    return m_jumpListImpl->RemoveCategory(title);
+    return m_jumpListImpl->RemoveCustomCategory(title);
 }
 
-void wxTaskBarJumpList::DeleteCategory(const wxString& title)
+void wxTaskBarJumpList::DeleteCustomCategory(const wxString& title)
 {
-    m_jumpListImpl->DeleteCategory(title);
+    m_jumpListImpl->DeleteCustomCategory(title);
 }
 
 void wxTaskBarJumpList::Update()
@@ -1251,13 +1250,15 @@ wxTaskBarJumpListImpl::GetCustomCategories() const
     return m_customCategories;
 }
 
-void wxTaskBarJumpListImpl::AddCategory(wxTaskBarJumpListCategory *category)
+void
+wxTaskBarJumpListImpl::AddCustomCategory(wxTaskBarJumpListCategory *category)
 {
+    wxASSERT_MSG( category != NULL, "Invalid category." );
     m_customCategories.push_back(category);
 }
 
 wxTaskBarJumpListCategory*
-wxTaskBarJumpListImpl::RemoveCategory(const wxString& title)
+wxTaskBarJumpListImpl::RemoveCustomCategory(const wxString& title)
 {
     for ( wxTaskBarJumpListCategories::iterator it = m_customCategories.begin();
           it != m_customCategories.end();
@@ -1273,9 +1274,9 @@ wxTaskBarJumpListImpl::RemoveCategory(const wxString& title)
     return NULL;
 }
 
-void wxTaskBarJumpListImpl::DeleteCategory(const wxString& title)
+void wxTaskBarJumpListImpl::DeleteCustomCategory(const wxString& title)
 {
-    wxTaskBarJumpListCategory* category = RemoveCategory(title);
+    wxTaskBarJumpListCategory* category = RemoveCustomCategory(title);
     if ( category )
         delete category;
 }
