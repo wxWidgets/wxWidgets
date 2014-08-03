@@ -27,6 +27,7 @@
             <border>5</border>
             <object class="wxButton" name="my_button">
                 <label>My Button</label>
+                <variant>small</variant>
             </object>
         </object>
         <object class="sizeritem">

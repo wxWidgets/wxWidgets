@@ -519,6 +519,8 @@ from properties lists below.
     If set to 1, the control is created hidden (default: 0).}
 @row3col{tooltip, @ref overview_xrcformat_type_text,
     Tooltip to use for the control (default: not set).}
+@row3col{variant, @ref overview_xrcformat_type_string,
+    Window variant (see wxWindow::SetWindowVariant()), one of "normal", "small", "mini" or "large" (default: "normal") (new since wxWidgets 3.0.2).}
 @row3col{font, @ref overview_xrcformat_type_font,
     Font to use for the control (default: window's default).}
 @row3col{ownfont, @ref overview_xrcformat_type_font,
