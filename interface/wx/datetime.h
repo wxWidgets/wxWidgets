@@ -577,6 +577,25 @@ public:
     WeekDay GetWeekDay(const TimeZone& tz = Local) const;
 
     /**
+        Returns the year to which the week containing this date belongs.
+
+        The value returned by this function is the same as the year, except,
+        possibly, for a few days at the very beginning and very end of the year
+        if they belong to a week which is mostly (i.e. at least 4 days) is in
+        another year in which case that other (previous or next) year is
+        returned.
+
+        For example, January 1 in 2015 belongs to the first year of 2015, hence
+        GetWeekOfYear() for it returns 1 and this function returns 2015.
+        However January 1 in 2016 belongs to the last week of 2015 according to
+        ISO 8601 standard rules and so GetWeekOfYear() returns 53 and this
+        function returns 2015, although GetYear() returns 2016.
+
+        @since 3.1.0
+    */
+    int GetWeekBasedYear(const TimeZone& tz) const;
+
+    /**
         Returns the ordinal number of the week in the month (in 1-5 range).
 
         As GetWeekOfYear(), this function supports both conventions for the
@@ -597,6 +616,8 @@ public:
         The function depends on the week start convention specified by the @a flags
         argument but its results for @c Sunday_First are not well-defined as the
         ISO definition quoted above applies to the weeks starting on Monday only.
+
+        @see GetWeekBasedYear()
     */
     wxDateTime_t GetWeekOfYear(WeekFlags flags = Monday_First,
                                const TimeZone& tz = Local) const;

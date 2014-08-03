@@ -760,6 +760,9 @@ public:
         // invalid)
     wxDateTime_t GetWeekOfYear(WeekFlags flags = Monday_First,
                                const TimeZone& tz = Local) const;
+        // get the year to which the number returned from GetWeekOfYear()
+        // belongs
+    int GetWeekBasedYear(const TimeZone& tz = Local) const;
         // get the week number since the month start (1..5, 0 if date is
         // invalid)
     wxDateTime_t GetWeekOfMonth(WeekFlags flags = Monday_First,

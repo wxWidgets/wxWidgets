@@ -1946,6 +1946,28 @@ wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags, const TimeZone& tz) const
     return (wxDateTime::wxDateTime_t)week;
 }
 
+int wxDateTime::GetWeekBasedYear(const TimeZone& tz) const
+{
+    const wxDateTime::Tm tm = GetTm(tz);
+
+    int year = tm.year;
+
+    // The week-based year can only be different from the normal year for few
+    // days in the beginning and the end of the year.
+    if ( tm.yday > 361 )
+    {
+        if ( GetWeekOfYear(Monday_First, tz) == 1 )
+            year++;
+    }
+    else if ( tm.yday < 5 )
+    {
+        if ( GetWeekOfYear(Monday_First, tz) == 53 )
+            year--;
+    }
+
+    return year;
+}
+
 wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
                                                     const TimeZone& tz) const
 {

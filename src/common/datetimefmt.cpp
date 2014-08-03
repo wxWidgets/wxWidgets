@@ -271,30 +271,6 @@ GetWeekDayFromName(wxString::const_iterator& p,
     return wd;
 }
 
-// return the year of the Monday of the week containing the given date
-int
-GetWeekBasedYear(const wxDateTime& dt)
-{
-    const wxDateTime::Tm tm = dt.GetTm();
-
-    int year = tm.year;
-
-    // The week-based year can only be different from the normal year for few
-    // days in the beginning and the end of the year.
-    if ( tm.yday > 361 )
-    {
-        if ( dt.GetWeekOfYear() == 1 )
-            year++;
-    }
-    else if ( tm.yday < 5 )
-    {
-        if ( dt.GetWeekOfYear() == 53 )
-            year--;
-    }
-
-    return year;
-}
-
 // parses string starting at given iterator using the specified format and,
 // optionally, a fall back format (and optionally another one... but it stops
 // there, really)
@@ -623,11 +599,11 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
                     break;
 
                 case wxT('g'):      // 2-digit week-based year
-                    res += wxString::Format(fmt, GetWeekBasedYear(*this) % 100);
+                    res += wxString::Format(fmt, GetWeekBasedYear() % 100);
                     break;
 
                 case wxT('G'):       // week-based year with century
-                    res += wxString::Format(fmt, GetWeekBasedYear(*this));
+                    res += wxString::Format(fmt, GetWeekBasedYear());
                     break;
 
                 case wxT('H'):       // hour in 24h format (00-23)
