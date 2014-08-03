@@ -90,6 +90,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("platform_property_tool_or_menuitem"), MyFrame::OnPlatformPropertyToolOrMenuCommand)
     EVT_MENU(XRCID("art_provider_tool_or_menuitem"), MyFrame::OnArtProviderToolOrMenuCommand)
     EVT_MENU(XRCID("variable_expansion_tool_or_menuitem"), MyFrame::OnVariableExpansionToolOrMenuCommand)
+    EVT_MENU(XRCID("variants"), MyFrame::OnVariants)
     EVT_MENU(XRCID("recursive_load"), MyFrame::OnRecursiveLoad)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAboutToolOrMenuCommand)
 wxEND_EVENT_TABLE()
@@ -328,6 +329,13 @@ void MyFrame::OnVariableExpansionToolOrMenuCommand(wxCommandEvent& WXUNUSED(even
 {
     wxDialog dlg;
     wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("variable_expansion_dialog"));
+    dlg.ShowModal();
+}
+
+void MyFrame::OnVariants(wxCommandEvent& WXUNUSED(event))
+{
+    wxDialog dlg;
+    wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("variants_dialog"));
     dlg.ShowModal();
 }
 

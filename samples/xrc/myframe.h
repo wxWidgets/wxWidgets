@@ -48,6 +48,7 @@ private:
     void OnPlatformPropertyToolOrMenuCommand(wxCommandEvent& event);
     void OnArtProviderToolOrMenuCommand(wxCommandEvent& event);
     void OnVariableExpansionToolOrMenuCommand(wxCommandEvent& event);
+    void OnVariants(wxCommandEvent& event);
     void OnRecursiveLoad(wxCommandEvent& event);
     void OnAnimationCtrlPlay(wxCommandEvent& event);
 

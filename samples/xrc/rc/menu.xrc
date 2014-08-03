@@ -74,6 +74,11 @@
             <bitmap>variable.xpm</bitmap>
             <help>Replace variables in the XRC file at runtime</help>
         </object>        
+        <object class="wxMenuItem" name="variants">
+            <label>_Variants</label>
+            <bitmap>variants.xpm</bitmap>
+            <help>Show different controls variants</help>
+        </object>
         <object class="wxMenuItem" name="recursive_load">
             <label>_Recursive Load</label>
             <help>Show how an individual control can be loaded</help>
