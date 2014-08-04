@@ -13,7 +13,7 @@
             <include>$(CEF_INCLUDE_DIR)</include>
             <sys-lib>$(LIBCEF_NAME)</sys-lib>
             <sys-lib>$(LIBCEF_DLL_WRAPPER_NAME)</sys-lib>
-            <ldflags>-F$(TOP_SRCDIR)/src/cef/Release/ -framework Chromium\ Embedded\ framework</ldflags>
+            <ldflags>-F$(TOP_SRCDIR)/src/cef/Release/ -framework Chromium\ Embedded\ Framework</ldflags>
         </if>
         <add-target target="fix_cef_link" type="action"
                     cond="target and PLATFORM_MACOSX=='1'">
@@ -24,7 +24,7 @@
                 mkdir -p webview_chromium_helper.app/Contents/MacOS
                 mkdir -p webview_chromium_helper.app/Contents/Resources
                 sed -e "s/\$${PRODUCT_NAME}/webview_chromium Helper/"  \
-                    -e "s/\$${EXECUTABLE_NAME}/webview_chromium Helper/"  helper-Info.plist >webview_chromium_helper.app/Contents/Info.plist
+                    -e "s/\$${EXECUTABLE_NAME}/webview_chromium Helper/"  mac/helper-Info.plist >webview_chromium_helper.app/Contents/Info.plist
                 /bin/echo "APPL????" >webview_chromium_helper.app/Contents/PkgInfo
                 <!--Fix CEF link path -->
                 install_name_tool -change "@executable_path/Chromium Embedded Framework" "@executable_path/../../../../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework" webview_chromium_helper
