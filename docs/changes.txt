@@ -637,6 +637,7 @@ All (GUI):
 - Fix handling of custom colours in wxPropertyGrid choices (Artur Wieczorek).
 - Add "hint" property to wxTextCtrl XRC handler.
 - Allow using wxALIGN_CENTER, and not just CENTRE, in XRC for wxStaticText.
+- Handle files used in wxAnimationCtrl "animation" property in wxrc.
 
 wxGTK:
 
