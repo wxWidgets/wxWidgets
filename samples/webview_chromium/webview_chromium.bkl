@@ -47,6 +47,7 @@
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
+        <ldflags>-Wl,-rpath,.</ldflags>
         <if cond="OUT_OF_TREE_MAKEFILES=='0' and CEF_INCLUDE_DIR!=''">
             <lib-path>$(LIBCEF_PATH)</lib-path>
             <lib-path>$(LIBCEF_WRAPPER_PATH)</lib-path>
