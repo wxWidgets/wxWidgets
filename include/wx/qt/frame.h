@@ -50,7 +50,7 @@ public:
         return static_cast<QMainWindow*>(m_qtWindow);
     }
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
+    virtual QAbstractScrollArea *QtGetScrollBarsContainer() const;
 
 private:
 
