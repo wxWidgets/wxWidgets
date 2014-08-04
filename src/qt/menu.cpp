@@ -133,7 +133,7 @@ QMenu *wxMenu::GetHandle() const
 
 wxMenuBar::wxMenuBar()
 {
-    m_qtMenuBar = new QMenuBar();
+    m_qtMenuBar  = new QMenuBar();
     PostCreation();
 }
 
@@ -229,6 +229,20 @@ wxString wxMenuBar::GetMenuLabel(size_t pos) const
     QMenu *qtMenu = qtAction->menu();
 
     return wxQtConvertString( qtMenu->title() );
+}
+
+void wxMenuBar::Attach(wxFrame *frame)
+{
+    // sanity check as setMenuBar takes ownership
+    wxCHECK_RET( m_qtMenuBar, "Menu bar has been previously deleted by Qt");
+    wxMenuBarBase::Attach(frame);
+}
+
+void wxMenuBar::Detach()
+{
+    // the QMenuBar probably was deleted by Qt as setMenuBar takes ownership
+    m_qtMenuBar = NULL;
+    wxMenuBarBase::Detach();
 }
 
 QMenuBar *wxMenuBar::GetHandle() const
