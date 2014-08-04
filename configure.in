@@ -7051,6 +7051,7 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
     if test "$wxUSE_WEBVIEW_CHROMIUM" = "yes"; then
         USE_WEBVIEW_CHROMIUM=1
         AC_DEFINE(wxUSE_WEBVIEW_CHROMIUM)
+        AC_CHECK_FILE([src/cef], [], [AC_MSG_ERROR([Chromium embedded framework not found])])
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webview_chromium"
     fi
 else
