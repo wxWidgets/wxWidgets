@@ -110,11 +110,11 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     wxFrameBase::SetToolBar( toolbar );
 }
 
-void wxFrame::SetWindowStyleFlag( long WXUNUSED(style) )
+void wxFrame::SetWindowStyleFlag( long style )
 {
-//    wxWindow::SetWindowStyleFlag( style );
-//
-//    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
+    wxWindow::SetWindowStyleFlag( style );
+
+    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
 //
 //    wxCHECK_RET( !HasFlag( wxFRAME_FLOAT_ON_PARENT ) && !HasFlag( wxTINY_CAPTION ) ,
 //                 "wxFRAME_FLOAT_ON_PARENT, wxTINY_CAPTION not supported. Use wxFRAME_TOOL_WINDOW instead." );
@@ -132,7 +132,15 @@ void wxFrame::SetWindowStyleFlag( long WXUNUSED(style) )
 //        qtFlags = Qt::Dialog;
 //    }
 //
-//    GetHandle()->setWindowFlags( qtFlags );
+    
+
+    if ( ( (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER) )
+         != qtFlags.testFlag( Qt::FramelessWindowHint ) )
+    {
+        qtFlags ^= Qt::FramelessWindowHint;
+    }
+
+    GetHandle()->setWindowFlags( qtFlags );
 }
 
 void wxFrame::AddChild( wxWindowBase *child )
