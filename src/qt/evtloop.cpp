@@ -139,20 +139,41 @@ public:
 class wxQtEventLoopSource : public wxEventLoopSource
 {
 public:
+    wxQtSocketNotifier<&wxEventLoopSourceHandler::OnReadWaiting> * m_reader;
+    wxQtSocketNotifier<&wxEventLoopSourceHandler::OnWriteWaiting> * m_writer;
+    wxQtSocketNotifier<&wxEventLoopSourceHandler::OnExceptionWaiting> * m_exception;
+
     wxQtEventLoopSource(int fd, wxEventLoopSourceHandler *handler, int flags)
         : wxEventLoopSource(handler, fd)
     {
         if ( flags & wxEVENT_SOURCE_INPUT )
-            new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnReadWaiting>
+            m_reader = new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnReadWaiting>
                 (fd, QSocketNotifier::Read, handler);
+        else
+            m_reader = NULL;
 
         if ( flags & wxEVENT_SOURCE_OUTPUT )
-            new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnWriteWaiting>
+            m_writer = new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnWriteWaiting>
                 (fd, QSocketNotifier::Write, handler);
+        else
+            m_writer = NULL;
 
         if ( flags & wxEVENT_SOURCE_EXCEPTION )
-            new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnExceptionWaiting>
+            m_exception = new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnExceptionWaiting>
                 (fd, QSocketNotifier::Exception, handler);
+        else
+            m_exception = NULL;
+    }
+
+    virtual ~wxQtEventLoopSource()
+    {
+        // clean up notifiers
+        if (m_reader)
+            delete m_reader;
+        if (m_writer)
+            delete m_writer;
+        if (m_exception)
+            delete m_exception;
     }
 };
 
