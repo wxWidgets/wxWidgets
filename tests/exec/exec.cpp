@@ -13,6 +13,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#ifndef __WXQT__
+
 #include "testprec.h"
 
 #ifdef __BORLANDC__
@@ -496,3 +498,5 @@ void ExecTestCase::TestOverlappedSyncExecute()
     CPPUNIT_ASSERT_EQUAL( SLEEP_END_STRING, longSleepOutput.Last() );
 #endif // !__WINDOWS__
 }
+
+#endif
