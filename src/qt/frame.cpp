@@ -66,11 +66,12 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
-    // The current menu bar could be deleted by Qt when dereferencing it so
-    // then that QMenuBar will raise a segmentation fault when using it again
-    wxCHECK_RET( !GetMenuBar(), "Replacing current menu bar is not supported in wxQT");
     if ( menuBar )
     {
+        // The current menu bar could be deleted by Qt when dereferencing it so
+        // then that QMenuBar will raise a segmentation fault when using it again
+        wxCHECK_RET( menuBar->GetHandle(),
+                     "Using a replaced menu bar is not supported in wxQT");
         // Warning: Qt main window takes ownership of the QMenuBar pointer:
         GetHandle()->setMenuBar( menuBar->GetHandle() );
     }
