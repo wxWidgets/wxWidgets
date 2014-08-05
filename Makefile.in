@@ -1775,6 +1775,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_scrol.o \
 	xrcdll_xh_scwin.o \
 	xrcdll_xh_htmllbox.o \
+	xrcdll_xh_simplebook.o \
 	xrcdll_xh_sizer.o \
 	xrcdll_xh_slidr.o \
 	xrcdll_xh_spin.o \
@@ -1847,6 +1848,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_scrol.o \
 	xrclib_xh_scwin.o \
 	xrclib_xh_htmllbox.o \
+	xrclib_xh_simplebook.o \
 	xrclib_xh_sizer.o \
 	xrclib_xh_slidr.o \
 	xrclib_xh_spin.o \
@@ -4374,6 +4376,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_scrol.h \
 	wx/xrc/xh_scwin.h \
 	wx/xrc/xh_htmllbox.h \
+	wx/xrc/xh_simplebook.h \
 	wx/xrc/xh_sizer.h \
 	wx/xrc/xh_slidr.h \
 	wx/xrc/xh_spin.h \
@@ -4699,6 +4702,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_scrol.o \
 	monodll_xh_scwin.o \
 	monodll_xh_htmllbox.o \
+	monodll_xh_simplebook.o \
 	monodll_xh_sizer.o \
 	monodll_xh_slidr.o \
 	monodll_xh_spin.o \
@@ -6951,6 +6955,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_scrol.o \
 	monolib_xh_scwin.o \
 	monolib_xh_htmllbox.o \
+	monolib_xh_simplebook.o \
 	monolib_xh_sizer.o \
 	monolib_xh_slidr.o \
 	monolib_xh_spin.o \
@@ -18704,6 +18709,9 @@ monodll_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(MONODLL_ODEP)
 monodll_xh_htmllbox.o: $(srcdir)/src/xrc/xh_htmllbox.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_htmllbox.cpp
 
+monodll_xh_simplebook.o: $(srcdir)/src/xrc/xh_simplebook.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_simplebook.cpp
+
 monodll_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_sizer.cpp
 
@@ -24577,6 +24585,9 @@ monolib_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(MONOLIB_ODEP)
 
 monolib_xh_htmllbox.o: $(srcdir)/src/xrc/xh_htmllbox.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_htmllbox.cpp
+
+monolib_xh_simplebook.o: $(srcdir)/src/xrc/xh_simplebook.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_simplebook.cpp
 
 monolib_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_sizer.cpp
@@ -39980,6 +39991,9 @@ xrcdll_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(XRCDLL_ODEP)
 xrcdll_xh_htmllbox.o: $(srcdir)/src/xrc/xh_htmllbox.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_htmllbox.cpp
 
+xrcdll_xh_simplebook.o: $(srcdir)/src/xrc/xh_simplebook.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_simplebook.cpp
+
 xrcdll_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_sizer.cpp
 
@@ -40174,6 +40188,9 @@ xrclib_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_htmllbox.o: $(srcdir)/src/xrc/xh_htmllbox.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_htmllbox.cpp
+
+xrclib_xh_simplebook.o: $(srcdir)/src/xrc/xh_simplebook.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_simplebook.cpp
 
 xrclib_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_sizer.cpp

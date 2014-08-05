@@ -514,6 +514,7 @@
     <ClCompile Include="..\..\src\xrc\xh_radbx.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_scrol.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_scwin.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_simplebook.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_sizer.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_slidr.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_spin.cpp" />
@@ -650,6 +651,7 @@
     <ClInclude Include="..\..\include\wx\xrc\xh_radbx.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_scrol.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_scwin.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_simplebook.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_sizer.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_slidr.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_spin.h" />

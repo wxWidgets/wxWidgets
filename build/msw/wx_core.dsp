@@ -3524,6 +3524,10 @@ SOURCE=..\..\include\wx\xrc\xh_scwin.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_simplebook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_sizer.h
 # End Source File
 # Begin Source File

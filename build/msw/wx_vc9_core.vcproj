@@ -4269,6 +4269,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_simplebook.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_sizer.h"
 				>
 			</File>

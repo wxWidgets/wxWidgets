@@ -154,6 +154,9 @@
     <ClCompile Include="..\..\src\xrc\xh_scwin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\xrc\xh_simplebook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\xrc\xh_sizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -357,6 +360,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_scwin.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\xrc\xh_simplebook.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_sizer.h">

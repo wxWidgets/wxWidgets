@@ -589,6 +589,7 @@ All (GUI):
 - Implement bounding box computation in wxGCDC (Toni Ruža).
 - Fix saving GIF animations with 2.5s+ delays between frames (elvissteinjr).
 - Add "variant" property to windows in XRC.
+- Add XRC handler for wxSimplebook.
 
 wxGTK:
 

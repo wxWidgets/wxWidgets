@@ -202,6 +202,7 @@ builtinWindowClasses =
     | wxScrollBar
     | wxScrolledWindow
     | wxSimpleHtmlListBox
+    | wxSimplebook
     | wxSlider
     | wxSpinButton
     | wxSpinCtrl
@@ -290,6 +291,7 @@ builtinClassesNames =
     | "wxScrollBar"
     | "wxScrolledWindow"
     | "wxSimpleHtmlListBox"
+    | "wxSimplebook"
     | "wxSlider"
     | "wxSpinButton"
     | "wxSpinCtrl"
@@ -329,6 +331,7 @@ builtinNestedClassesNames =
     | "notebookpage"
     | "choicebookpage"
     | "listbookpage"
+    | "simplebookpage"
     | "treebookpage"
     | "propertysheetpage"
     | "ownerdrawnitem"
@@ -1238,6 +1241,24 @@ wxSimpleHtmlListBox =
             platform,
             element item {_, t_text }*
         }?
+    }
+
+
+wxSimplebook =
+    element object {
+        attribute class { "wxSimplebook" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        (wxSimplebook_simplebookpage | objectRef)*
+    }
+
+wxSimplebook_simplebookpage =
+    element object {
+        attribute class { "simplebookpage" } &
+        platform &
+        element label {_, t_text }* &
+        [xrc:p="o"] element selected {_, t_bool }* &
+        windowNode
     }
 
 

@@ -195,6 +195,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_scrol.obj &
 	$(OBJS)\monodll_xh_scwin.obj &
 	$(OBJS)\monodll_xh_htmllbox.obj &
+	$(OBJS)\monodll_xh_simplebook.obj &
 	$(OBJS)\monodll_xh_sizer.obj &
 	$(OBJS)\monodll_xh_slidr.obj &
 	$(OBJS)\monodll_xh_spin.obj &
@@ -1012,6 +1013,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_scrol.obj &
 	$(OBJS)\monolib_xh_scwin.obj &
 	$(OBJS)\monolib_xh_htmllbox.obj &
+	$(OBJS)\monolib_xh_simplebook.obj &
 	$(OBJS)\monolib_xh_sizer.obj &
 	$(OBJS)\monolib_xh_slidr.obj &
 	$(OBJS)\monolib_xh_spin.obj &
@@ -4852,6 +4854,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_scrol.obj &
 	$(OBJS)\xrcdll_xh_scwin.obj &
 	$(OBJS)\xrcdll_xh_htmllbox.obj &
+	$(OBJS)\xrcdll_xh_simplebook.obj &
 	$(OBJS)\xrcdll_xh_sizer.obj &
 	$(OBJS)\xrcdll_xh_slidr.obj &
 	$(OBJS)\xrcdll_xh_spin.obj &
@@ -4928,6 +4931,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_scrol.obj &
 	$(OBJS)\xrclib_xh_scwin.obj &
 	$(OBJS)\xrclib_xh_htmllbox.obj &
+	$(OBJS)\xrclib_xh_simplebook.obj &
 	$(OBJS)\xrclib_xh_sizer.obj &
 	$(OBJS)\xrclib_xh_slidr.obj &
 	$(OBJS)\xrclib_xh_spin.obj &
@@ -7634,6 +7638,9 @@ $(OBJS)\monodll_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
 $(OBJS)\monodll_xh_htmllbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_htmllbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_xh_simplebook.obj :  .AUTODEPEND ..\..\src\xrc\xh_simplebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -10100,6 +10107,9 @@ $(OBJS)\monolib_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_htmllbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_htmllbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_simplebook.obj :  .AUTODEPEND ..\..\src\xrc\xh_simplebook.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
@@ -16004,6 +16014,9 @@ $(OBJS)\xrcdll_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
 $(OBJS)\xrcdll_xh_htmllbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_htmllbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_simplebook.obj :  .AUTODEPEND ..\..\src\xrc\xh_simplebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -16200,6 +16213,9 @@ $(OBJS)\xrclib_xh_scwin.obj :  .AUTODEPEND ..\..\src\xrc\xh_scwin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_htmllbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_htmllbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_simplebook.obj :  .AUTODEPEND ..\..\src\xrc\xh_simplebook.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_sizer.obj :  .AUTODEPEND ..\..\src\xrc\xh_sizer.cpp

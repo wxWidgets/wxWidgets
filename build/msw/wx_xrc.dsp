@@ -484,6 +484,10 @@ SOURCE=..\..\include\wx\xrc\xh_scwin.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_simplebook.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_sizer.h
 # End Source File
 # Begin Source File
@@ -737,6 +741,10 @@ SOURCE=..\..\src\xrc\xh_scrol.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_scwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_simplebook.cpp
 # End Source File
 # Begin Source File
 
