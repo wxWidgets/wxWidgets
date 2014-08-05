@@ -1765,6 +1765,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_scrol.o \
 	xrcdll_xh_scwin.o \
 	xrcdll_xh_htmllbox.o \
+	xrcdll_xh_simplebook.o \
 	xrcdll_xh_sizer.o \
 	xrcdll_xh_slidr.o \
 	xrcdll_xh_spin.o \
@@ -1837,6 +1838,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_scrol.o \
 	xrclib_xh_scwin.o \
 	xrclib_xh_htmllbox.o \
+	xrclib_xh_simplebook.o \
 	xrclib_xh_sizer.o \
 	xrclib_xh_slidr.o \
 	xrclib_xh_spin.o \
@@ -4222,6 +4224,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_scrol.h \
 	wx/xrc/xh_scwin.h \
 	wx/xrc/xh_htmllbox.h \
+	wx/xrc/xh_simplebook.h \
 	wx/xrc/xh_sizer.h \
 	wx/xrc/xh_slidr.h \
 	wx/xrc/xh_spin.h \
@@ -4533,6 +4536,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_scrol.o \
 	monodll_xh_scwin.o \
 	monodll_xh_htmllbox.o \
+	monodll_xh_simplebook.o \
 	monodll_xh_sizer.o \
 	monodll_xh_slidr.o \
 	monodll_xh_spin.o \
@@ -6477,7 +6481,7 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_COCOA@	= monodll_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS \
-@COND_TOOLKIT_OSX_IPHONE@	= monodll_osx_cocoa_mediactrl.o 
+@COND_TOOLKIT_OSX_IPHONE@	= monodll_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_WINCE@	monodll_mediactrl_am.o monodll_mediactrl_wmp10.o \
 @COND_TOOLKIT_WINCE@	monodll_mediactrl_qt.o
@@ -6676,6 +6680,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_scrol.o \
 	monolib_xh_scwin.o \
 	monolib_xh_htmllbox.o \
+	monolib_xh_simplebook.o \
 	monolib_xh_sizer.o \
 	monolib_xh_slidr.o \
 	monolib_xh_spin.o \
@@ -8621,7 +8626,8 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_CARBON@	= monolib_carbon_mediactrl.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_COCOA@	= monolib_osx_cocoa_mediactrl.o
-@COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_1 = 
+@COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_1 \
+@COND_TOOLKIT_OSX_IPHONE@	= monolib_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_WINCE@	monolib_mediactrl_am.o monolib_mediactrl_wmp10.o \
 @COND_TOOLKIT_WINCE@	monolib_mediactrl_qt.o
@@ -12964,7 +12970,8 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_OSX_CARBON@	= mediadll_carbon_mediactrl.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_2 \
 @COND_TOOLKIT_OSX_COCOA@	= mediadll_osx_cocoa_mediactrl.o
-@COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_2 = 
+@COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_2 \
+@COND_TOOLKIT_OSX_IPHONE@	= mediadll_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_WINCE@	mediadll_mediactrl_am.o mediadll_mediactrl_wmp10.o \
 @COND_TOOLKIT_WINCE@	mediadll_mediactrl_qt.o
@@ -12997,7 +13004,8 @@ COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_CARBON@	= medialib_carbon_mediactrl.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_3 \
 @COND_TOOLKIT_OSX_COCOA@	= medialib_osx_cocoa_mediactrl.o
-@COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_3 = 
+@COND_TOOLKIT_OSX_IPHONE@__MEDIA_PLATFORM_SRC_OBJECTS_3 \
+@COND_TOOLKIT_OSX_IPHONE@	= medialib_osx_cocoa_mediactrl.o
 @COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_WINCE@	medialib_mediactrl_am.o medialib_mediactrl_wmp10.o \
 @COND_TOOLKIT_WINCE@	medialib_mediactrl_qt.o
@@ -17660,9 +17668,6 @@ monodll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONODLL_ODEP)
 monodll_carbon_mediactrl.o: $(srcdir)/src/osx/carbon/mediactrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/mediactrl.cpp
 
-monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
-
 monodll_src_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/mediactrl.mm
 
@@ -17896,6 +17901,9 @@ monodll_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(MONODLL_ODEP)
 
 monodll_xh_htmllbox.o: $(srcdir)/src/xrc/xh_htmllbox.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_htmllbox.cpp
+
+monodll_xh_simplebook.o: $(srcdir)/src/xrc/xh_simplebook.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_simplebook.cpp
 
 monodll_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_sizer.cpp
@@ -21899,6 +21907,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_mediactrl_qt.o: $(srcdir)/src/msw/mediactrl_qt.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_qt.cpp
 
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
+
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
@@ -23231,9 +23245,6 @@ monolib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONOLIB_ODEP)
 monolib_carbon_mediactrl.o: $(srcdir)/src/osx/carbon/mediactrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/mediactrl.cpp
 
-monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
-
 monolib_src_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/mediactrl.mm
 
@@ -23467,6 +23478,9 @@ monolib_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(MONOLIB_ODEP)
 
 monolib_xh_htmllbox.o: $(srcdir)/src/xrc/xh_htmllbox.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_htmllbox.cpp
+
+monolib_xh_simplebook.o: $(srcdir)/src/xrc/xh_simplebook.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_simplebook.cpp
 
 monolib_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_sizer.cpp
@@ -27469,6 +27483,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_mediactrl_qt.o: $(srcdir)/src/msw/mediactrl_qt.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_qt.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
+
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
@@ -37742,9 +37762,6 @@ mediadll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIADLL_ODEP)
 mediadll_carbon_mediactrl.o: $(srcdir)/src/osx/carbon/mediactrl.cpp $(MEDIADLL_ODEP)
 	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/osx/carbon/mediactrl.cpp
 
-mediadll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MEDIADLL_ODEP)
-	$(CXXC) -c -o $@ $(MEDIADLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
-
 mediadll_src_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIADLL_ODEP)
 	$(CXXC) -c -o $@ $(MEDIADLL_OBJCXXFLAGS) $(srcdir)/src/cocoa/mediactrl.mm
 
@@ -37766,6 +37783,12 @@ mediadll_src_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIADLL_ODEP
 @COND_TOOLKIT_WINCE@mediadll_mediactrl_qt.o: $(srcdir)/src/msw/mediactrl_qt.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_qt.cpp
 
+@COND_TOOLKIT_OSX_COCOA@mediadll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MEDIADLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(MEDIADLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
+
+@COND_TOOLKIT_OSX_IPHONE@mediadll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MEDIADLL_ODEP)
+@COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(MEDIADLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
+
 @COND_TOOLKIT_MOTIF@mediadll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
@@ -37780,9 +37803,6 @@ medialib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MEDIALIB_ODEP)
 
 medialib_carbon_mediactrl.o: $(srcdir)/src/osx/carbon/mediactrl.cpp $(MEDIALIB_ODEP)
 	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/osx/carbon/mediactrl.cpp
-
-medialib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MEDIALIB_ODEP)
-	$(CXXC) -c -o $@ $(MEDIALIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
 medialib_src_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIALIB_ODEP)
 	$(CXXC) -c -o $@ $(MEDIALIB_OBJCXXFLAGS) $(srcdir)/src/cocoa/mediactrl.mm
@@ -37804,6 +37824,12 @@ medialib_src_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIALIB_ODEP
 
 @COND_TOOLKIT_WINCE@medialib_mediactrl_qt.o: $(srcdir)/src/msw/mediactrl_qt.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_qt.cpp
+
+@COND_TOOLKIT_OSX_COCOA@medialib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MEDIALIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(MEDIALIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
+
+@COND_TOOLKIT_OSX_IPHONE@medialib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MEDIALIB_ODEP)
+@COND_TOOLKIT_OSX_IPHONE@	$(CXXC) -c -o $@ $(MEDIALIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
 @COND_TOOLKIT_MOTIF@medialib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
@@ -38186,6 +38212,9 @@ xrcdll_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(XRCDLL_ODEP)
 xrcdll_xh_htmllbox.o: $(srcdir)/src/xrc/xh_htmllbox.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_htmllbox.cpp
 
+xrcdll_xh_simplebook.o: $(srcdir)/src/xrc/xh_simplebook.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_simplebook.cpp
+
 xrcdll_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_sizer.cpp
 
@@ -38380,6 +38409,9 @@ xrclib_xh_scwin.o: $(srcdir)/src/xrc/xh_scwin.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_htmllbox.o: $(srcdir)/src/xrc/xh_htmllbox.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_htmllbox.cpp
+
+xrclib_xh_simplebook.o: $(srcdir)/src/xrc/xh_simplebook.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_simplebook.cpp
 
 xrclib_xh_sizer.o: $(srcdir)/src/xrc/xh_sizer.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_sizer.cpp

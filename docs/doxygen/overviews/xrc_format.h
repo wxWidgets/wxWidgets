@@ -1726,6 +1726,32 @@ HTML markup. Note that the markup has to be escaped:
 @endcode
 
 
+@subsubsection xrc_wxsimplebook wxSimplebook
+
+wxSimplebook is similar to @ref xrc_wxnotebook "wxNotebook" but simpler: as it
+doesn't show any page headers, it doesn't use neither image list nor individual
+page bitmaps and while it still accepts page labels, they are optional as they
+are not shown to the user neither.
+
+So @c simplebookpage child elements, that must occur inside this object, only
+have the following properties:
+
+@c choicebookpage objects have the following properties:
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{label, @ref overview_xrcformat_type_text,
+     Page's label (default: empty).}
+@row3col{selected, @ref overview_xrcformat_type_bool,
+     Is the page selected initially (only one page can be selected; default: 0)?}
+@endTable
+
+As with all the other book page elements, each @c simplebookpage must have
+exactly one non-toplevel window as its child.
+
+@since 3.0.2
+
+
 @subsubsection xrc_wxslider wxSlider
 
 @beginTable
