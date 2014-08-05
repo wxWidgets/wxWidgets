@@ -21,17 +21,18 @@
 # and once released its version cannot be changed.
 
 
+# public symbols added in 3.0.2 (please keep in alphabetical order):
+@WX_VERSION_TAG@.2 {
+	*wxGenericListCtrl*EndEditLabel*;
+};
+
+
 # public symbols added in 3.0.1 (please keep in alphabetical order):
 @WX_VERSION_TAG@.1 {
         *wxDataViewListCtrl*ClearColumns*;
         *wxDataViewListStore*ClearColumns*;
         *wxInfoBarGeneric*SetForegroundColour*;
         *wxTDIChildFrame*DoMoveWindow*;
-};
-
-# public symbols added in 3.0.2 (please keep in alphabetical order):
-@WX_VERSION_TAG@.2 {
-	*wxGenericListCtrl*EndEditLabel*;
 };
 
 # symbols available since the beginning of this branch are only given
