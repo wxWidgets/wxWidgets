@@ -1,4 +1,4 @@
-# This file is supposed to become the primary source of the file composing
+# This file is supposed to become the primary source of the files composing
 # wxWidgets libraries and in the future all the other make/project files
 # containing lists of wxWidgets sources will be generated from it.
 #
@@ -14,7 +14,7 @@
 #    fancy is done here.
 
 # For the sources used in MSVC project files we also follow a convention that
-# for each FOO_SRC there is a matchin FOO_HDR, this allows us to just like FOO
+# for each FOO_SRC there is a matching FOO_HDR, this allows us to just like FOO
 # in the msvc_projects file instead of listing both the sources and headers.
 
 ### wxBase
@@ -62,7 +62,6 @@ BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC =
 
 BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR =
     $(BASE_UNIX_AND_DARWIN_HDR)
-    wx/unix/execute.h
     wx/unix/mimetype.h
 
 # Files used on all non-Darwin Unix systems (because Darwin provides other,
