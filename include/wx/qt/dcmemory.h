@@ -26,7 +26,6 @@ public:
 protected:
 
 private:
-    QPixmap *m_pixmap;
     wxBitmap m_selected;
 };
 
