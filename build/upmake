@@ -24,7 +24,7 @@ GetOptions(
         'only-project=s' => sub { $only_msbuild = 1; $only_project = $_[1] },
         'only-version=i' => sub { $only_msbuild = 1; $only_version = $_[1] },
     ) or die <<EOF
-Usage: $0 [--verbose] [--quiet] [--only-bkl] [--only-project=<name>] [--only-version=<ver>]
+Usage: $0 [--verbose] [--quiet] [--only-bkl] [--only-project=<name>]
 
 Update the files used by bakefile and MSBuild projects from the master list
 of files in build/files.
@@ -85,9 +85,6 @@ if (!$only_bkl) {
             xrc      => [qw(XRC)],
         );
 
-    # The versions of the projects.
-    my @projects_versions = qw(10 11 12);
-
     # Return the "filter" to use for the given file.
     sub filter_cb
     {
@@ -146,11 +143,7 @@ if (!$only_bkl) {
 
         my @args = (\@sources, \@headers, \&filter_cb);
 
-        foreach my $ver (@projects_versions) {
-            next if defined $only_version && $ver != $only_version;
-
-            log_upmake("$Bin/msw/wx_vc${ver}_${proj}.vcxproj", \&update_msbuild, @args);
-            log_upmake("$Bin/msw/wx_vc${ver}_${proj}.vcxproj.filters", \&update_msbuild_filters, @args);
-        }
+        log_upmake("$Bin/msw/wx_${proj}.vcxproj", \&update_msbuild, @args);
+        log_upmake("$Bin/msw/wx_${proj}.vcxproj.filters", \&update_msbuild_filters, @args);
     }
 }
