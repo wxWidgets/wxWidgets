@@ -36,19 +36,19 @@ class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
  * as some events need different handling (paintEvent) depending on that.
  * We pass the QWidget pointer to all event handlers for consistency.
  */
-class WXDLLIMPEXP_CORE wxWindow : public wxWindowBase
+class WXDLLIMPEXP_CORE wxWindowQt : public wxWindowBase
 {
 public:
-    wxWindow();
-    ~wxWindow();
-    wxWindow(wxWindow *parent,
+    wxWindowQt();
+    ~wxWindowQt();
+    wxWindowQt(wxWindowQt *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
     
-    bool Create(wxWindow *parent,
+    bool Create(wxWindowQt *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -141,8 +141,8 @@ public:
     virtual bool QtHandleContextMenuEvent  ( QWidget *handler, QContextMenuEvent *event );
     virtual bool QtHandleFocusEvent  ( QWidget *handler, QFocusEvent *event );
 
-    static void QtStoreWindowPointer( QWidget *widget, const wxWindow *window );
-    static wxWindow *QtRetrieveWindowPointer( const QWidget *widget );
+    static void QtStoreWindowPointer( QWidget *widget, const wxWindowQt *window );
+    static wxWindowQt *QtRetrieveWindowPointer( const QWidget *widget );
 
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
@@ -212,7 +212,7 @@ private:
 #endif // wxUSE_ACCEL
 
     wxDECLARE_EVENT_TABLE();
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow );
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxWindowQt );
 };
 
 #endif // _WX_QT_WINDOW_H_
