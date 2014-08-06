@@ -1949,8 +1949,6 @@ void wxPGProperty::DeleteChoice( int index )
 
 int wxPGProperty::GetChoiceSelection() const
 {
-    wxASSERT_MSG( m_choices.IsOk(), wxT("No choices defined") );
-
     wxVariant value = GetValue();
     wxString valueType = value.GetType();
     int index = wxNOT_FOUND;
