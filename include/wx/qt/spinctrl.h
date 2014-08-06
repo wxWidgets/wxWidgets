@@ -15,11 +15,11 @@
 // copy&paste code for the usage of QSpinBox/QDoubleSpinBox.
 
 template < typename T, typename Widget >
-class WXDLLIMPEXP_CORE wxQtSpinCtrlBase : public wxSpinCtrlBase
+class WXDLLIMPEXP_CORE wxSpinCtrlQt : public wxSpinCtrlBase
 {
 public:
-    wxQtSpinCtrlBase();
-    wxQtSpinCtrlBase( wxWindow *parent, wxWindowID id, const wxString& value,
+    wxSpinCtrlQt();
+    wxSpinCtrlQt( wxWindow *parent, wxWindowID id, const wxString& value,
         const wxPoint& pos, const wxSize& size, long style,
         T min, T max, T initial, T inc,
         const wxString& name );
@@ -52,7 +52,7 @@ protected:
 
 };
 
-class WXDLLIMPEXP_CORE wxSpinCtrl : public wxQtSpinCtrlBase< int, QSpinBox >
+class WXDLLIMPEXP_CORE wxSpinCtrl : public wxSpinCtrlQt< int, QSpinBox >
 {
 public:
     wxSpinCtrl();
@@ -76,7 +76,7 @@ public:
     virtual int GetBase() const wxOVERRIDE { return m_base; }
     virtual bool SetBase(int base) wxOVERRIDE;
     virtual void SetValue(const wxString & val);
-    virtual void SetValue(int val) { wxQtSpinCtrlBase::SetValue(val); }
+    virtual void SetValue(int val) { wxSpinCtrlQt::SetValue(val); }
 
 private:
     // Common part of all ctors.
@@ -88,7 +88,7 @@ private:
     DECLARE_DYNAMIC_CLASS( wxSpinCtrl )
 };
 
-class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxQtSpinCtrlBase< double, QDoubleSpinBox >
+class WXDLLIMPEXP_CORE wxSpinCtrlDouble : public wxSpinCtrlQt< double, QDoubleSpinBox >
 {
 public:
     wxSpinCtrlDouble();
@@ -118,7 +118,7 @@ public:
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
     virtual void SetValue(const wxString & val);
-    virtual void SetValue(double val) { wxQtSpinCtrlBase::SetValue(val); }
+    virtual void SetValue(double val) { wxSpinCtrlQt::SetValue(val); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );
