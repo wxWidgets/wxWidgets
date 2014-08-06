@@ -1949,6 +1949,8 @@ void wxPGProperty::DeleteChoice( int index )
 
 int wxPGProperty::GetChoiceSelection() const
 {
+    wxASSERT_MSG( m_choices.IsOk(), wxT("No choices defined") );
+
     wxVariant value = GetValue();
     wxString valueType = value.GetType();
     int index = wxNOT_FOUND;
@@ -1958,7 +1960,7 @@ int wxPGProperty::GetChoiceSelection() const
 
     if ( valueType == wxPG_VARIANT_TYPE_LONG )
     {
-        index = value.GetLong();
+        index = m_choices.Index(value.GetLong());
     }
     else if ( valueType == wxPG_VARIANT_TYPE_STRING )
     {
