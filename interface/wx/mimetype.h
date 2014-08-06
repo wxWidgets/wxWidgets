@@ -323,16 +323,12 @@ public:
     /**
         If the function returns @true, the @c iconLoc is filled with the
         location of the icon for this MIME type.
+
         A wxIcon may be created from @a iconLoc later.
 
-        @b Windows: The function returns the icon shown by Explorer for the files of
-        the specified type.
-
-        @b Mac: This function is not implemented and always returns @false.
-
-        @b Unix: MIME manager gathers information about icons from GNOME
-        and KDE settings and thus GetIcon's success depends on availability
-        of these desktop environments.
+        \note Under Unix MIME manager gathers information about icons from
+        GNOME and KDE settings and thus GetIcon's success depends on
+        availability of these desktop environments.
     */
     bool GetIcon(wxIconLocation* iconLoc) const;
 
