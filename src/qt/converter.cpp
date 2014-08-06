@@ -321,7 +321,7 @@ int wxQtConvertKeyCode( int key, int WXUNUSED(modifiers), Qt::KeyboardModifiers 
     QTWX_KEY_GROUP( 0x61, 0x7a, 0x41 );
 
     // ASCII (basic) values are the same in Qt and wx
-    QTWX_KEY_GROUP( 32, 127, 32 );
+    QTWX_KEY_GROUP( 32, 126, 32 );
 
     // ASCII (extended) values are the same in Qt but has holes
     // see qasciikey.cpp char QTest::keyToAscii(Qt::Key key)

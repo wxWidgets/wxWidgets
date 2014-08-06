@@ -102,6 +102,7 @@ bool wxUIActionSimulator::DoKey(int keyCode, int modifiers, bool isDown)
 
     key = (enum Key) wxQtConvertKeyCode( keyCode, modifiers, qtmodifiers );
 
+    wxCHECK_MSG(key, false, wxT("No current key conversion equivalent in Qt"));
     KeyAction keyAction = isDown ? Press : Release;
     return SimulateKeyboardKey( keyAction, key );
 }
