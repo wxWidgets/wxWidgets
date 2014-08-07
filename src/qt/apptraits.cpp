@@ -51,9 +51,13 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 
 //#############################################################################
 
+#if wxUSE_CONSOLE_EVENTLOOP
+
 wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
     return new wxEventLoop();
 }
+
+#endif
 
 //#############################################################################
