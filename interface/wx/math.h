@@ -17,6 +17,15 @@
 int wxFinite(double x);
 
 /**
+    Returns the greatest common divisor of the two given numbers.
+
+    @since 3.1.0
+
+    @header{wx/math.h}
+*/
+unsigned int wxGCD(unsigned int u, unsigned int v);
+
+/**
     Returns a non-zero value if x is NaN (not a number), returns 0 otherwise.
 
     @header{wx/math.h}
