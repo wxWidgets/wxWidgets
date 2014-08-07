@@ -67,6 +67,23 @@
         }
     #endif /* Cygwin and C++ */
 
+    /* the current (as of Mar 2014) version of Android (up to api level 19) */
+    /* doesn't include some declarations (wscdup, wcslen, wcscasecmp, etc.) */
+    /* (moved out from __CYGWIN__ block) */
+    #if defined(__WXQT__) && !defined(wcsdup) && defined(__ANDROID__)
+        #ifdef __cplusplus
+            extern "C" {
+        #endif
+            extern wchar_t *wcsdup(const wchar_t *);
+            extern size_t wcslen (const wchar_t *);
+            extern size_t wcsnlen (const wchar_t *, size_t );
+            extern int wcscasecmp (const wchar_t *, const wchar_t *);
+            extern int wcsncasecmp (const wchar_t *, const wchar_t *, size_t);
+        #ifdef __cplusplus
+            }
+        #endif
+    #endif /* Android */
+
 #elif defined(HAVE_WCSTR_H)
     /* old compilers have relevant declarations here */
     #include <wcstr.h>
