@@ -321,6 +321,13 @@ public:
                                     int flags = 0) = 0;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+    // Draw a gauge with native style like a wxGauge would display
+    virtual void DrawGauge(wxWindow* win,
+                           wxDC& dc,
+                           const wxRect& rect,
+                           int value,
+                           int max,
+                           int flags = 0) = 0;
 
     // geometry functions
     // ------------------
@@ -499,6 +506,14 @@ public:
                                     int flags = 0)
         { m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags); }
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+    virtual void DrawGauge(wxWindow* win,
+                           wxDC& dc,
+                           const wxRect& rect,
+                           int value,
+                           int max,
+                           int flags = 0)
+        { m_rendererNative.DrawGauge(win, dc, rect, value, max, flags); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

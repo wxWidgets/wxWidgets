@@ -36,6 +36,7 @@ All:
 - Add wxInt64 support to wxText{Input,Output}Stream (Alexander Bezzubikov).
 - Define wxOVERRIDE as override for supporting compilers (Thomas Goyne).
 - Allow specifying custom comparator for wxSortedArrayString (Catalin Raceanu).
+- Add wxDateTime::GetWeekBasedYear().
 
 Unix:
 
@@ -43,11 +44,13 @@ Unix:
 
 All (GUI):
 
+- Allow requesting modern (3.x+) OpenGL version in wxGLCanvas (Fabio Arnold).
 - XRC handler for wxAuiToolBar added (Kinaou Hervé, David Hart).
 - Add wxFD_NO_FOLLOW style for wxFileDialog (Luca Bacci).
 - Add support for embedding bitmaps in generated SVG in wxSVGFileDC (iwbnwif).
 - Add support for sorting wxDataViewCtrl by multiple columns (Trigve).
 - Allow dropping data on wxDataViewCtrl background (Laurent Poujoulat).
+- Add wxRendererNative::DrawGauge() (Tobias Taschner).
 - Add wxHtmlWindow::SetDefaultHTMLCursor() (Jeff A. Marr).
 - Add default ctor and Create() to wxContextHelpButton (Hanmac).
 - Send events when toggling wxPropertyGrid nodes from keyboard (Armel Asselin).
@@ -87,6 +90,7 @@ wxMSW:
 - Keep menu item icon after removing and adding it back (Artur Wieczorek).
 - Add wxThread::MSWGetHandle() (troelsk).
 - Allow using sizers for laying out wxMDIClientWindow (Artur Wieczorek).
+- Fix updating wxSlider background when its parent background changes.
 
 wxOSX/Cocoa:
 

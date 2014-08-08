@@ -2418,6 +2418,31 @@ void wxXmlResourceHandlerImpl::SetupWindow(wxWindow *wnd)
 {
     //FIXME : add cursor
 
+    const wxString variant = GetParamValue(wxS("variant"));
+    if (!variant.empty())
+    {
+        if (variant == wxS("normal"))
+            wnd->SetWindowVariant(wxWINDOW_VARIANT_NORMAL);
+        else if (variant == wxS("small"))
+            wnd->SetWindowVariant(wxWINDOW_VARIANT_SMALL);
+        else if (variant == wxS("mini"))
+            wnd->SetWindowVariant(wxWINDOW_VARIANT_MINI);
+        else if (variant == wxS("large"))
+            wnd->SetWindowVariant(wxWINDOW_VARIANT_LARGE);
+        else
+        {
+            ReportParamError
+            (
+                wxS("variant"),
+                wxString::Format
+                (
+                    "Invalid window variant \"%s\": must be one of "
+                    "normal|small|mini|large.",
+                    variant
+                )
+            );
+        }
+    }
     if (HasParam(wxT("exstyle")))
         // Have to OR it with existing style, since
         // some implementations (e.g. wxGTK) use the extra style

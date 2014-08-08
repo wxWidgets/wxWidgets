@@ -137,7 +137,44 @@ enum
     WX_GL_SAMPLE_BUFFERS,
 
     /// 4 for 2x2 antialiasing supersampling on most graphics cards
-    WX_GL_SAMPLES
+    WX_GL_SAMPLES,
+
+    /**
+        Request an OpenGL core profile.
+
+        Notice that using this attribute will result in also requesting OpenGL
+        at least version 3.0.
+
+        See ::WX_GL_MAJOR_VERSION and ::WX_GL_MINOR_VERSION for more precise
+        version selection.
+
+        @since 3.1.0
+     */
+    WX_GL_CORE_PROFILE,
+
+    /**
+        Request specific OpenGL core major version number (>= 3).
+
+        This attribute should be followed by the major version number
+        requested.
+
+        It has no effect under OS X where specifying ::WX_GL_CORE_PROFILE will
+        result in using OpenGL version at least 3.2 but can still be used
+        there for portability.
+
+        @since 3.1.0
+     */
+    WX_GL_MAJOR_VERSION,
+
+    /**
+        Request specific OpenGL core minor version number.
+
+        This attribute has the same semantics as ::WX_GL_MAJOR_VERSION but is
+        for the minor OpenGL version, e.g. 2 if OpenGL 3.2 is requested.
+
+        @since 3.1.0
+     */
+    WX_GL_MINOR_VERSION
 
 };
 

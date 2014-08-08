@@ -43,8 +43,7 @@ public:
     /**
         Default constructor.
 
-        Use Create() (inherited from the base class) later to really create the
-        control.
+        Use Create() later to really create the control.
     */
     wxSimplebook();
 
@@ -58,6 +57,18 @@ public:
                  long style = 0,
                  const wxString& name = wxEmptyString);
 
+    /**
+        Really create the window of an object created using default
+        constructor.
+
+        @since 3.0.2
+     */
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxEmptyString);
 
     /**
         Set the effects to use for showing and hiding the pages.

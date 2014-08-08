@@ -130,6 +130,8 @@ public:
                                     int flags = 0) wxOVERRIDE;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+    virtual void DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect, int value, int max, int flags = 0) wxOVERRIDE;
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
     virtual wxRendererVersion GetVersion() const wxOVERRIDE
@@ -792,6 +794,20 @@ void wxRendererGeneric::DrawTitleBarBitmap(wxWindow * WXUNUSED(win),
 
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+void wxRendererGeneric::DrawGauge(wxWindow* win, wxDC& dc, const wxRect& rect, int value, int max, int WXUNUSED(flags))
+{
+    // Use same background as text controls.
+    DrawTextCtrl(win, dc, rect);
+
+    // Calculate the progress bar size.
+    wxRect progRect(rect);
+    progRect.Deflate(2);
+    progRect.SetWidth(progRect.GetWidth() * ((double)value / max));
+
+    dc.SetBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(progRect);
+}
 
 // ----------------------------------------------------------------------------
 // A module to allow cleanup of generic renderer.

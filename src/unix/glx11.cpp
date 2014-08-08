@@ -36,15 +36,123 @@
     #endif
 #endif // __SGI__
 
+// ----------------------------------------------------------------------------
+// define possibly missing XGL constants and types
+// ----------------------------------------------------------------------------
+
+#ifndef GLX_NONE_EXT
+#define GLX_NONE_EXT                       0x8000
+#endif
+
+#ifndef GLX_ARB_multisample
+#define GLX_ARB_multisample
+#define GLX_SAMPLE_BUFFERS_ARB             100000
+#define GLX_SAMPLES_ARB                    100001
+#endif
+
+#ifndef GLX_EXT_visual_rating
+#define GLX_EXT_visual_rating
+#define GLX_VISUAL_CAVEAT_EXT              0x20
+#define GLX_NONE_EXT                       0x8000
+#define GLX_SLOW_VISUAL_EXT                0x8001
+#define GLX_NON_CONFORMANT_VISUAL_EXT      0x800D
+#endif
+
+#ifndef GLX_EXT_visual_info
+#define GLX_EXT_visual_info
+#define GLX_X_VISUAL_TYPE_EXT              0x22
+#define GLX_DIRECT_COLOR_EXT               0x8003
+#endif
+
+#ifndef GLX_ARB_create_context
+#define GLX_ARB_create_context
+#define GLX_CONTEXT_MAJOR_VERSION_ARB      0x2091
+#define GLX_CONTEXT_MINOR_VERSION_ARB      0x2092
+#define GLX_CONTEXT_FLAGS_ARB              0x2094
+#define GLX_CONTEXT_DEBUG_BIT_ARB          0x0001
+#define GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB 0x0002
+
+/* Typedef for the GL 3.0 context creation function */
+typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
+    (Display * dpy, GLXFBConfig config, GLXContext share_context,
+    Bool direct, const int *attrib_list);
+#endif
+
+#ifndef GLX_ARB_create_context_profile
+#define GLX_ARB_create_context_profile
+#define GLX_CONTEXT_PROFILE_MASK_ARB       0x9126
+#define GLX_CONTEXT_CORE_PROFILE_BIT_ARB   0x00000001
+#define GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB 0x00000002
+#endif
+
+#ifndef GLX_ARB_create_context_robustness
+#define GLX_ARB_create_context_robustness
+#define GLX_CONTEXT_ROBUST_ACCESS_BIT_ARB  0x00000004
+#define GLX_CONTEXT_RESET_NOTIFICATION_STRATEGY_ARB     0x8256
+#define GLX_NO_RESET_NOTIFICATION_ARB                   0x8261
+#define GLX_LOSE_CONTEXT_ON_RESET_ARB                   0x8252
+#endif
+
+#ifndef GLX_EXT_create_context_es2_profile
+#define GLX_EXT_create_context_es2_profile
+#ifndef GLX_CONTEXT_ES2_PROFILE_BIT_EXT
+#define GLX_CONTEXT_ES2_PROFILE_BIT_EXT    0x00000002
+#endif
+#endif
+
+#ifndef GLX_ARB_framebuffer_sRGB
+#define GLX_ARB_framebuffer_sRGB
+#ifndef GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB
+#define GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB                0x20B2
+#endif
+#endif
+
+
 // ============================================================================
 // wxGLContext implementation
 // ============================================================================
 
 IMPLEMENT_CLASS(wxGLContext, wxObject)
 
+// The window will always be created first so the array will be initialized
+// and then the window will be assigned to the context.
+// max 8 attributes plus terminator
+// if first is 0, create legacy context
+static int s_glxContextAttribs[9] = {0};
+
 wxGLContext::wxGLContext(wxGLCanvas *gc, const wxGLContext *other)
 {
-    if ( wxGLCanvas::GetGLXVersion() >= 13 )
+    if ( s_glxContextAttribs[0] != 0 ) // OpenGL 3 context creation
+    {
+        XVisualInfo *vi = gc->GetXVisualInfo();
+        wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
+
+        // We need to create a temporary context to get the
+        // glXCreateContextAttribsARB function
+        GLXContext tempContext = glXCreateContext( wxGetX11Display(), vi,
+                                                   NULL,
+                                                   GL_TRUE );
+        wxCHECK_RET( tempContext, wxT("Couldn't create OpenGL context") );
+
+        PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB
+            = (PFNGLXCREATECONTEXTATTRIBSARBPROC)
+            glXGetProcAddress((GLubyte *)"glXCreateContextAttribsARB");
+        if ( !glXCreateContextAttribsARB )
+        {
+            wxLogError(_("Core OpenGL profile is not supported by the OpenGL driver."));
+            return;
+        }
+
+        GLXFBConfig *fbc = gc->GetGLXFBConfig();
+        wxCHECK_RET( fbc, wxT("invalid GLXFBConfig for OpenGL") );
+
+        m_glContext = glXCreateContextAttribsARB( wxGetX11Display(), fbc[0],
+            other ? other->m_glContext : None,
+            GL_TRUE, s_glxContextAttribs );
+
+        glXDestroyContext( wxGetX11Display(), tempContext );
+    }
+    else if ( wxGLCanvas::GetGLXVersion() >= 13 )
     {
         GLXFBConfig *fbc = gc->GetGLXFBConfig();
         wxCHECK_RET( fbc, wxT("invalid GLXFBConfig for OpenGL") );
@@ -170,6 +278,8 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
           old version but must be followed by True or False in the new one.
      */
 
+    s_glxContextAttribs[0] = 0; // default is legacy context
+
     if ( !wxattrs )
     {
         size_t i = 0;
@@ -199,6 +309,14 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
     }
     else // have non-default attributes
     {
+        // these will be used for the context creation attributes
+        // if a core profile is requested
+        bool useGLCoreProfile = false;
+
+        // the minimum gl core version is 3.0
+        int glVersionMajor = 3,
+            glVersionMinor = 0;
+
         size_t p = 0;
         for ( int arg = 0; wxattrs[arg] != 0; )
         {
@@ -315,6 +433,18 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 
                     return false;
 
+                case WX_GL_CORE_PROFILE:
+                    useGLCoreProfile = true;
+                    continue;
+
+                case WX_GL_MAJOR_VERSION:
+                    glVersionMajor = wxattrs[arg++];
+                    continue;
+
+                case WX_GL_MINOR_VERSION:
+                    glVersionMinor = wxattrs[arg++];
+                    continue;
+
                 default:
                     wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
                                wxattrs[arg - 1]);
@@ -336,6 +466,23 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
         }
 
         glattrs[p] = None;
+
+        if ( useGLCoreProfile )
+        {
+            s_glxContextAttribs[0] = GLX_CONTEXT_MAJOR_VERSION_ARB;
+            s_glxContextAttribs[1] = glVersionMajor;
+            s_glxContextAttribs[2] = GLX_CONTEXT_MINOR_VERSION_ARB;
+            s_glxContextAttribs[3] = glVersionMinor;
+            s_glxContextAttribs[4] = GLX_CONTEXT_FLAGS_ARB;
+            s_glxContextAttribs[5] = GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB;
+            s_glxContextAttribs[6] = GLX_CONTEXT_PROFILE_MASK_ARB;
+            s_glxContextAttribs[7] = GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
+            s_glxContextAttribs[8] = 0; // terminate
+        }
+        else // create legacy/compatibility context
+        {
+            s_glxContextAttribs[0] = 0;
+        }
     }
 
     return true;

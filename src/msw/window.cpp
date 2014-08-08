@@ -1159,6 +1159,11 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
     if ( styleNew != styleOld )
     {
         wxSetWindowExStyle(this, styleNew);
+
+        // Update layout: whether we have children or are drawing something, we
+        // need to redo it with the new layout.
+        SendSizeEvent();
+        Refresh();
     }
 #endif
 }
@@ -1851,31 +1856,18 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
     {
         RECT rect = wxGetWindowRect(GetHwnd());
 
-        POINT point;
-        point.x = rect.left;
-        point.y = rect.top;
-
         // we do the adjustments with respect to the parent only for the "real"
         // children, not for the dialogs/frames
         if ( !IsTopLevel() )
         {
-            if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
-            {
-                // In RTL mode, we want the logical left x-coordinate,
-                // which would be the physical right x-coordinate.
-                point.x = rect.right;
-            }
-
-            // Since we now have the absolute screen coords, if there's a
-            // parent we must subtract its top left corner
-            if ( parent )
-            {
-                ::ScreenToClient(GetHwndOf(parent), &point);
-            }
+            // In RTL mode, we want the logical left x-coordinate,
+            // which would be the physical right x-coordinate.
+            ::MapWindowPoints(NULL, parent ? GetHwndOf(parent) : HWND_DESKTOP,
+                              (LPPOINT)&rect, 2);
         }
 
-        pos.x = point.x;
-        pos.y = point.y;
+        pos.x = rect.left;
+        pos.y = rect.top;
     }
 
     // we also must adjust by the client area offset: a control which is just
@@ -2536,7 +2528,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                             }
                         }
 
-                        if ( btn && btn->IsEnabled() )
+                        if ( btn && btn->IsEnabled() && btn->IsShownOnScreen() )
                         {
                             btn->MSWCommand(BN_CLICKED, 0 /* unused */);
                             return true;
