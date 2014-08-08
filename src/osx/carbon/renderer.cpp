@@ -31,6 +31,7 @@
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
 #include "wx/splitter.h"
+#include "wx/time.h"
 #include "wx/osx/private.h"
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
@@ -870,12 +871,12 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
 
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
-void wxRendererMac::DrawGauge(wxWindow* win,
-                           wxDC& dc,
-                           const wxRect& rect,
-                           int value,
-                           int max,
-                           int flags)
+void wxRendererMac::DrawGauge(wxWindow* WXUNUSED(win),
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int value,
+                              int max,
+                              int WXUNUSED(flags))
 {
     const wxCoord x = rect.x;
     const wxCoord y = rect.y;
