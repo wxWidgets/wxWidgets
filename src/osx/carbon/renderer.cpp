@@ -123,6 +123,13 @@ public:
                                     int flags = 0) wxOVERRIDE;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
+    virtual void DrawGauge(wxWindow* win,
+                           wxDC& dc,
+                           const wxRect& rect,
+                           int value,
+                           int max,
+                           int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win) wxOVERRIDE;
 
 private:
@@ -862,5 +869,39 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
 }
 
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+void wxRendererMac::DrawGauge(wxWindow* win,
+                           wxDC& dc,
+                           const wxRect& rect,
+                           int value,
+                           int max,
+                           int flags)
+{
+    const wxCoord x = rect.x;
+    const wxCoord y = rect.y;
+    const wxCoord w = rect.width;
+    const wxCoord h = rect.height;
+
+    HIThemeTrackDrawInfo tdi;
+    tdi.version = 0;
+    tdi.min = 0;
+    tdi.value = value;
+    tdi.max = max;
+    tdi.bounds = CGRectMake(x, y, w, h);
+    tdi.attributes = kThemeTrackHorizontal;
+    tdi.enableState = kThemeTrackActive;
+    tdi.kind = kThemeLargeProgressBar;
+
+    int milliSecondsPerStep = 1000 / 60;
+    wxLongLongNative localTime = wxGetLocalTimeMillis();
+    tdi.trackInfo.progress.phase = localTime.GetValue() / milliSecondsPerStep % 32;
+
+    CGContextRef cgContext;
+    wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
+
+    cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
+
+    HIThemeDrawTrack(&tdi, NULL, cgContext, kHIThemeOrientationNormal);
+}
 
 #endif

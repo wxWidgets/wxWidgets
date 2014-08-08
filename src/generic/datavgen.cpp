@@ -1211,20 +1211,12 @@ bool wxDataViewProgressRenderer::GetValue( wxVariant &value ) const
 bool
 wxDataViewProgressRenderer::Render(wxRect rect, wxDC *dc, int WXUNUSED(state))
 {
-    // deflate the rect to leave a small border between bars in adjacent rows
-    wxRect bar = rect.Deflate(0, 1);
-
-    dc->SetBrush( *wxTRANSPARENT_BRUSH );
-    dc->SetPen( *wxBLACK_PEN );
-    dc->DrawRectangle( bar );
-
-    bar.width = (int)(bar.width * m_value / 100.);
-    dc->SetPen( *wxTRANSPARENT_PEN );
-
-    const wxDataViewItemAttr& attr = GetAttr();
-    dc->SetBrush( attr.HasColour() ? wxBrush(attr.GetColour())
-                                  : *wxBLUE_BRUSH );
-    dc->DrawRectangle( bar );
+    wxRendererNative::Get().DrawGauge(
+        GetOwner()->GetOwner(),
+        *dc,
+        rect,
+        m_value,
+        100);
 
     return true;
 }
