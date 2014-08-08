@@ -332,7 +332,10 @@ wxPoint wxControl::GTKGetEntryMargins(GtkEntry* entry) const
 #ifndef __WXGTK3__
 #if GTK_CHECK_VERSION(2,10,0)
     // The margins we have previously set
-    const GtkBorder* border = gtk_entry_get_inner_border(entry);
+    const GtkBorder* border = NULL;
+    if (gtk_check_version(2,10,0) == NULL)
+        border = gtk_entry_get_inner_border(entry);
+
     if ( border )
     {
         marg.x = border->left + border->right;
