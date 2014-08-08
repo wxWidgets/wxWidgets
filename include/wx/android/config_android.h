@@ -13,6 +13,12 @@
 // 'fine-tuned' on a trial-and-error basis. This means, no in-depth analysis
 // of Android docs / source was done.
 
+// For Qt under Android, use the default configuration procedure as most
+// features should be supported and the following fixed definitions will
+// cause compiler warnings or other issues.
+
+#if !defined(__WXQT__)
+
 #define wxUSE_UNIX 1
 #define __UNIX__ 1
 
@@ -52,4 +58,6 @@
 #ifdef HAVE_PTHREAD_CANCEL
 // Android doesn't support pthread_cancel().
 #undef HAVE_PTHREAD_CANCEL
+#endif
+
 #endif

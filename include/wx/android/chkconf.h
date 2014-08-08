@@ -12,6 +12,11 @@
 #ifndef _WX_ANDROID_CHKCONF_H_
 #define _WX_ANDROID_CHKCONF_H_
 
+// For Qt under Android, use default configuration procedure as most features
+// should be supported (see documentation for more information)
+
+#ifndef __WXQT__
+
 // ----------------------------------------------------------------------------
 // Disable features which don't work (yet) or don't make sense under Android.
 // ----------------------------------------------------------------------------
@@ -226,5 +231,6 @@
 #undef wxUSE_PRINTING_ARCHITECTURE
 #define wxUSE_PRINTING_ARCHITECTURE 0
 
+#endif // __WXQT__
 
 #endif // _WX_ANDROID_CHKCONF_H_
