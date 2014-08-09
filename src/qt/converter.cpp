@@ -53,7 +53,7 @@ wxRect wxQtConvertRect( const QRect &rect )
 
 wxString wxQtConvertString( const QString &str )
 {
-    return wxString( qPrintable( str ));
+    return wxString( str.toUtf8().data(), wxConvUTF8 );
 }
 
 QString  wxQtConvertString( const wxString &str )
