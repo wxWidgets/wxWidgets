@@ -41,7 +41,6 @@
 
 #include "wx/msw/dc.h"
 #include "wx/sysopt.h"
-#include "wx/dynlib.h"
 
 #ifdef wxHAS_RAW_BITMAP
     #include "wx/rawbmp.h"
@@ -133,26 +132,8 @@ static bool AlphaBlt(wxMSWDCImpl* dcSrc,
                      HDC hdcSrc,
                      const wxBitmap& bmpSrc);
 
-#ifdef wxHAS_RAW_BITMAP
-
-// our (limited) AlphaBlend() replacement for Windows versions not providing it
-static void
-wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
-             int dstWidth, int dstHeight,
-             int srcX, int srcY,
-             int srcWidth, int srcHeight,
-             const wxBitmap& bmpSrc);
-
-#endif // wxHAS_RAW_BITMAP
-
 namespace wxMSWImpl
 {
-
-// Wrappers for the dynamically loaded {Set,Get}Layout() functions. They work
-// in exactly the same way as the standard functions and return GDI_ERROR if
-// they're not actually available.
-DWORD GetLayout(HDC hdc);
-DWORD SetLayout(HDC hdc, DWORD dwLayout);
 
 // Create a compatible HDC and copy the layout of the source DC to it. This is
 // necessary in order to draw bitmaps (which are usually blitted from a
@@ -224,164 +205,6 @@ private:
     StretchBltModeChanger wxMAKE_UNIQUE_NAME(stretchModeChanger)(hdc)
 
 #endif // __WXWINCE__/!__WXWINCE__
-
-#if wxUSE_DYNLIB_CLASS
-
-// helper class to cache dynamically loaded libraries and not attempt reloading
-// them if it fails
-class wxOnceOnlyDLLLoader
-{
-public:
-    // ctor argument must be a literal string as we don't make a copy of it!
-    wxOnceOnlyDLLLoader(const wxChar *dllName)
-        : m_dllName(dllName)
-    {
-    }
-
-
-    // return the symbol with the given name or NULL if the DLL not loaded
-    // or symbol not present
-    void *GetSymbol(const wxChar *name)
-    {
-        // we're prepared to handle errors here
-        wxLogNull noLog;
-
-        if ( m_dllName )
-        {
-            m_dll.Load(m_dllName);
-
-            // reset the name whether we succeeded or failed so that we don't
-            // try again the next time
-            m_dllName = NULL;
-        }
-
-        return m_dll.IsLoaded() ? m_dll.GetSymbol(name) : NULL;
-    }
-
-    void Unload()
-    {
-        if ( m_dll.IsLoaded() )
-        {
-            m_dll.Unload();
-        }
-    }
-
-private:
-    wxDynamicLibrary m_dll;
-    const wxChar *m_dllName;
-};
-
-static wxOnceOnlyDLLLoader wxMSIMG32DLL(wxT("msimg32"));
-
-// we must ensure that DLLs are unloaded before the static objects cleanup time
-// because we may hit the notorious DllMain() dead lock in this case if wx is
-// used as a DLL (attempting to unload another DLL from inside DllMain() hangs
-// under Windows because it tries to reacquire the same lock)
-class wxGDIDLLsCleanupModule : public wxModule
-{
-public:
-    virtual bool OnInit() { return true; }
-    virtual void OnExit() { wxMSIMG32DLL.Unload(); }
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxGDIDLLsCleanupModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
-
-namespace
-{
-
-#if wxUSE_DC_TRANSFORM_MATRIX
-
-// Class used to dynamically load world transform related API functions.
-class GdiWorldTransformFuncs
-{
-public:
-    static bool IsOk()
-    {
-        if ( !ms_worldTransformSymbolsLoaded )
-            LoadWorldTransformSymbols();
-
-        return ms_pfnSetGraphicsMode &&
-                ms_pfnSetWorldTransform &&
-                 ms_pfnGetWorldTransform &&
-                  ms_pfnModifyWorldTransform;
-    }
-
-    typedef int (WINAPI *SetGraphicsMode_t)(HDC, int);
-    static SetGraphicsMode_t SetGraphicsMode()
-    {
-        if ( !ms_worldTransformSymbolsLoaded )
-            LoadWorldTransformSymbols();
-
-        return ms_pfnSetGraphicsMode;
-    }
-
-    typedef BOOL (WINAPI *SetWorldTransform_t)(HDC, const XFORM *);
-    static SetWorldTransform_t SetWorldTransform()
-    {
-        if ( !ms_worldTransformSymbolsLoaded )
-            LoadWorldTransformSymbols();
-
-        return ms_pfnSetWorldTransform;
-    }
-
-    typedef BOOL (WINAPI *GetWorldTransform_t)(HDC, LPXFORM);
-    static GetWorldTransform_t GetWorldTransform()
-    {
-        if ( !ms_worldTransformSymbolsLoaded )
-            LoadWorldTransformSymbols();
-
-        return ms_pfnGetWorldTransform;
-    }
-
-    typedef BOOL (WINAPI *ModifyWorldTransform_t)(HDC, const XFORM *, DWORD);
-    static ModifyWorldTransform_t ModifyWorldTransform()
-    {
-        if ( !ms_worldTransformSymbolsLoaded )
-            LoadWorldTransformSymbols();
-
-        return ms_pfnModifyWorldTransform;
-    }
-
-private:
-    static void LoadWorldTransformSymbols()
-    {
-        wxDynamicLibrary dll(wxT("gdi32.dll"));
-
-        wxDL_INIT_FUNC(ms_pfn, SetGraphicsMode, dll);
-        wxDL_INIT_FUNC(ms_pfn, SetWorldTransform, dll);
-        wxDL_INIT_FUNC(ms_pfn, GetWorldTransform, dll);
-        wxDL_INIT_FUNC(ms_pfn, ModifyWorldTransform, dll);
-
-        ms_worldTransformSymbolsLoaded = true;
-    }
-
-    static SetGraphicsMode_t ms_pfnSetGraphicsMode;
-    static SetWorldTransform_t ms_pfnSetWorldTransform;
-    static GetWorldTransform_t ms_pfnGetWorldTransform;
-    static ModifyWorldTransform_t ms_pfnModifyWorldTransform;
-
-    static bool ms_worldTransformSymbolsLoaded;
-};
-
-GdiWorldTransformFuncs::SetGraphicsMode_t
-    GdiWorldTransformFuncs::ms_pfnSetGraphicsMode = NULL;
-GdiWorldTransformFuncs::SetWorldTransform_t
-    GdiWorldTransformFuncs::ms_pfnSetWorldTransform = NULL;
-GdiWorldTransformFuncs::GetWorldTransform_t
-    GdiWorldTransformFuncs::ms_pfnGetWorldTransform = NULL;
-GdiWorldTransformFuncs::ModifyWorldTransform_t
-    GdiWorldTransformFuncs::ms_pfnModifyWorldTransform = NULL;
-
-bool GdiWorldTransformFuncs::ms_worldTransformSymbolsLoaded = false;
-
-#endif // wxUSE_DC_TRANSFORM_MATRIX
-
-} // anonymous namespace
-
-#endif // wxUSE_DYNLIB_CLASS
 
 // ===========================================================================
 // implementation
@@ -2112,21 +1935,18 @@ void wxMSWDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y)
 
 bool wxMSWDCImpl::CanUseTransformMatrix() const
 {
-    return GdiWorldTransformFuncs::IsOk();
+    return true;
 }
 
 bool wxMSWDCImpl::SetTransformMatrix(const wxAffineMatrix2D &matrix)
 {
-    if ( !GdiWorldTransformFuncs::IsOk() )
-        return false;
-
     if ( matrix.IsIdentity() )
     {
         ResetTransformMatrix();
         return true;
     }
 
-    if ( !GdiWorldTransformFuncs::SetGraphicsMode()(GetHdc(), GM_ADVANCED) )
+    if ( !::SetGraphicsMode(GetHdc(), GM_ADVANCED) )
     {
         wxLogLastError(wxT("SetGraphicsMode"));
         return false;
@@ -2144,7 +1964,7 @@ bool wxMSWDCImpl::SetTransformMatrix(const wxAffineMatrix2D &matrix)
     xform.eDx = tr.m_x;
     xform.eDy = tr.m_y;
 
-    if ( !GdiWorldTransformFuncs::SetWorldTransform()(GetHdc(), &xform) )
+    if ( !::SetWorldTransform(GetHdc(), &xform) )
     {
         wxLogLastError(wxT("SetWorldTransform"));
         return false;
@@ -2157,11 +1977,8 @@ wxAffineMatrix2D wxMSWDCImpl::GetTransformMatrix() const
 {
     wxAffineMatrix2D transform;
 
-    if ( !GdiWorldTransformFuncs::IsOk() )
-        return transform;
-
     XFORM xform;
-    if ( !GdiWorldTransformFuncs::GetWorldTransform()(GetHdc(), &xform) )
+    if ( !::GetWorldTransform(GetHdc(), &xform) )
     {
         wxLogLastError(wxT("GetWorldTransform"));
         return transform;
@@ -2176,11 +1993,8 @@ wxAffineMatrix2D wxMSWDCImpl::GetTransformMatrix() const
 
 void wxMSWDCImpl::ResetTransformMatrix()
 {
-    if ( GdiWorldTransformFuncs::IsOk() )
-    {
-        GdiWorldTransformFuncs::ModifyWorldTransform()(GetHdc(), NULL, MWT_IDENTITY);
-        GdiWorldTransformFuncs::SetGraphicsMode()(GetHdc(), GM_COMPATIBLE);
-    }
+    ::ModifyWorldTransform(GetHdc(), NULL, MWT_IDENTITY);
+    ::SetGraphicsMode(GetHdc(), GM_COMPATIBLE);
 }
 
 #endif // wxUSE_DC_TRANSFORM_MATRIX
@@ -2720,269 +2534,142 @@ static bool AlphaBlt(wxMSWDCImpl* dcDst,
                     wxT("AlphaBlt(): invalid bitmap") );
     wxASSERT_MSG( dcDst && hdcSrc, wxT("AlphaBlt(): invalid HDC") );
 
-    // do we have AlphaBlend() and company in the headers?
-#if defined(AC_SRC_OVER) && wxUSE_DYNLIB_CLASS
-    // yes, now try to see if we have it during run-time
-    typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
-                                        HDC,int,int,int,int,
-                                        BLENDFUNCTION);
+    BLENDFUNCTION bf;
+    bf.BlendOp = AC_SRC_OVER;
+    bf.BlendFlags = 0;
+    bf.SourceConstantAlpha = 0xff;
+    bf.AlphaFormat = AC_SRC_ALPHA;
 
-    static AlphaBlend_t
-        pfnAlphaBlend = (AlphaBlend_t)wxMSIMG32DLL.GetSymbol(wxT("AlphaBlend"));
-    if ( pfnAlphaBlend )
+    if ( !::AlphaBlend(GetHdcOf(*dcDst), x, y, dstWidth, dstHeight,
+                       hdcSrc, srcX, srcY, srcWidth, srcHeight,
+                       bf) )
     {
-        BLENDFUNCTION bf;
-        bf.BlendOp = AC_SRC_OVER;
-        bf.BlendFlags = 0;
-        bf.SourceConstantAlpha = 0xff;
-        bf.AlphaFormat = AC_SRC_ALPHA;
+        wxLogLastError(wxT("AlphaBlend"));
+        return false;
+    }
 
-        if ( pfnAlphaBlend(GetHdcOf(*dcDst), x, y, dstWidth, dstHeight,
-                           hdcSrc, srcX, srcY, srcWidth, srcHeight,
-                           bf) )
+    // There is an extra complication with drawing bitmaps with alpha
+    // on bitmaps without alpha: AlphaBlt() modifies the alpha
+    // component of the destination bitmap even if it hadn't had it
+    // before which is not only unexpected but corrupts the bitmap as
+    // all its pixels outside of the (x, y, dstWidth, dstHeight) area
+    // are now fully transparent: they already had 0 value of alpha
+    // before but it didn't count as long as all other pixels had 0
+    // alpha as well, but now that some of them are not transparent any
+    // more, the rest of pixels with 0 alpha is transparent. So undo
+    // this to avoid "losing" the existing bitmap contents outside of
+    // the area affected by AlphaBlt(), see #14403.
+#ifdef wxHAS_RAW_BITMAP
+    const wxBitmap& bmpDst = dcDst->GetSelectedBitmap();
+    if ( bmpDst.IsOk() && !bmpDst.HasAlpha() && bmpDst.GetDepth() == 32 )
+    {
+        // We need to deselect the bitmap from the memory DC it is
+        // currently selected into before modifying it.
+        wxBitmap bmpOld = bmpDst;
+        dcDst->DoSelect(wxNullBitmap);
+
+        // Notice the extra block: we must destroy wxAlphaPixelData
+        // before selecting the bitmap into the DC again.
         {
-            // There is an extra complication with drawing bitmaps with alpha
-            // on bitmaps without alpha: AlphaBlt() modifies the alpha
-            // component of the destination bitmap even if it hadn't had it
-            // before which is not only unexpected but corrupts the bitmap as
-            // all its pixels outside of the (x, y, dstWidth, dstHeight) area
-            // are now fully transparent: they already had 0 value of alpha
-            // before but it didn't count as long as all other pixels had 0
-            // alpha as well, but now that some of them are not transparent any
-            // more, the rest of pixels with 0 alpha is transparent. So undo
-            // this to avoid "losing" the existing bitmap contents outside of
-            // the area affected by AlphaBlt(), see #14403.
-            const wxBitmap& bmpDst = dcDst->GetSelectedBitmap();
-            if ( bmpDst.IsOk() && !bmpDst.HasAlpha() && bmpDst.GetDepth() == 32 )
+            wxAlphaPixelData data(bmpOld);
+            if ( data )
             {
-                // We need to deselect the bitmap from the memory DC it is
-                // currently selected into before modifying it.
-                wxBitmap bmpOld = bmpDst;
-                dcDst->DoSelect(wxNullBitmap);
-
-                // Notice the extra block: we must destroy wxAlphaPixelData
-                // before selecting the bitmap into the DC again.
+                wxAlphaPixelData::Iterator p(data);
+                for ( int y = 0; y < data.GetHeight(); y++ )
                 {
-                    wxAlphaPixelData data(bmpOld);
-                    if ( data )
+                    wxAlphaPixelData::Iterator rowStart = p;
+
+                    for ( int x = 0; x < data.GetWidth(); x++ )
                     {
-                        wxAlphaPixelData::Iterator p(data);
-                        for ( int y = 0; y < data.GetHeight(); y++ )
-                        {
-                            wxAlphaPixelData::Iterator rowStart = p;
-
-                            for ( int x = 0; x < data.GetWidth(); x++ )
-                            {
-                                // We choose to use wxALPHA_TRANSPARENT instead
-                                // of perhaps more logical wxALPHA_OPAQUE here
-                                // to ensure that the bitmap remains the same
-                                // as before, i.e. without any alpha at all.
-                                p.Alpha() = wxALPHA_TRANSPARENT;
-                                ++p;
-                            }
-
-                            p = rowStart;
-                            p.OffsetY(data, 1);
-                        }
+                        // We choose to use wxALPHA_TRANSPARENT instead
+                        // of perhaps more logical wxALPHA_OPAQUE here
+                        // to ensure that the bitmap remains the same
+                        // as before, i.e. without any alpha at all.
+                        p.Alpha() = wxALPHA_TRANSPARENT;
+                        ++p;
                     }
+
+                    p = rowStart;
+                    p.OffsetY(data, 1);
                 }
-
-                // Using wxAlphaPixelData sets the internal "has alpha" flag
-                // which is usually what we need, but in this particular case
-                // we use it to get rid of alpha, not set it, so reset it back.
-                bmpOld.ResetAlpha();
-
-                dcDst->DoSelect(bmpOld);
             }
-
-            // skip wxAlphaBlend() call below
-            return true;
         }
 
-        wxLogLastError(wxT("AlphaBlend"));
-    }
-#else
-    wxUnusedVar(hdcSrc);
-#endif // defined(AC_SRC_OVER)
+        // Using wxAlphaPixelData sets the internal "has alpha" flag
+        // which is usually what we need, but in this particular case
+        // we use it to get rid of alpha, not set it, so reset it back.
+        bmpOld.ResetAlpha();
 
-    // AlphaBlend() unavailable of failed: use our own (probably much slower)
-    // implementation
-#ifdef wxHAS_RAW_BITMAP
-    wxAlphaBlend(GetHdcOf(*dcDst), x, y, dstWidth, dstHeight,
-                 srcX, srcY, srcWidth, srcHeight, bmpSrc);
+        dcDst->DoSelect(bmpOld);
+    }
+#endif // wxHAS_RAW_BITMAP
 
     return true;
-#else // !wxHAS_RAW_BITMAP
-    // no wxAlphaBlend() neither, fall back to using simple BitBlt() (we lose
-    // alpha but at least something will be shown like this)
-    wxUnusedVar(bmpSrc);
-    return false;
-#endif // wxHAS_RAW_BITMAP/!wxHAS_RAW_BITMAP
 }
 
-
-// wxAlphaBlend: our fallback if ::AlphaBlend() is unavailable
-#ifdef wxHAS_RAW_BITMAP
-
-static void
-wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
-             int dstWidth, int dstHeight,
-             int srcX, int srcY,
-             int srcWidth, int srcHeight,
-             const wxBitmap& bmpSrc)
-{
-    // get the destination DC pixels
-    wxBitmap bmpDst(dstWidth, dstHeight, 32 /* force creating RGBA DIB */);
-    MemoryHDC hdcMem;
-    SelectInHDC select(hdcMem, GetHbitmapOf(bmpDst));
-
-    if ( !::BitBlt(hdcMem, 0, 0, dstWidth, dstHeight, hdcDst, xDst, yDst, SRCCOPY) )
-    {
-        wxLogLastError(wxT("BitBlt"));
-    }
-
-    // combine them with the source bitmap using alpha
-    wxAlphaPixelData dataDst(bmpDst),
-                     dataSrc((wxBitmap &)bmpSrc);
-
-    wxCHECK_RET( dataDst && dataSrc,
-                    wxT("failed to get raw data in wxAlphaBlend") );
-
-    wxAlphaPixelData::Iterator pDst(dataDst),
-                               pSrc(dataSrc);
-
-
-    for ( int y = 0; y < dstHeight; y++ )
-    {
-        wxAlphaPixelData::Iterator pDstRowStart = pDst;
-
-        for ( int x = 0; x < dstWidth; x++ )
-        {
-            // source is point sampled, Alpha StretchBlit is ugly on Win95
-            // (but does not impact performance)
-            pSrc.MoveTo(dataSrc, srcX + (srcWidth*x/dstWidth), srcY + (srcHeight*y/dstHeight));
-
-            // note that source bitmap uses premultiplied alpha (as required by
-            // the real AlphaBlend)
-            const unsigned beta = 255 - pSrc.Alpha();
-
-            pDst.Red() = pSrc.Red() + (beta * pDst.Red() + 127) / 255;
-            pDst.Blue() = pSrc.Blue() + (beta * pDst.Blue() + 127) / 255;
-            pDst.Green() = pSrc.Green() + (beta * pDst.Green() + 127) / 255;
-
-            ++pDst;
-        }
-
-        pDst = pDstRowStart;
-        pDst.OffsetY(dataDst, 1);
-    }
-
-    // and finally blit them back to the destination DC
-    if ( !::BitBlt(hdcDst, xDst, yDst, dstWidth, dstHeight, hdcMem, 0, 0, SRCCOPY) )
-    {
-        wxLogLastError(wxT("BitBlt"));
-    }
-}
-
-#endif // wxHAS_RAW_BITMAP
 
 void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
                                  const wxColour& initialColour,
                                  const wxColour& destColour,
                                  wxDirection nDirection)
 {
-    // use native function if we have compile-time support it and can load it
-    // during run-time (linking to it statically would make the program
-    // unusable on earlier Windows versions)
-#if defined(GRADIENT_FILL_RECT_H) && wxUSE_DYNLIB_CLASS
-    typedef BOOL
-        (WINAPI *GradientFill_t)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
-    static GradientFill_t pfnGradientFill =
-        (GradientFill_t)wxMSIMG32DLL.GetSymbol(wxT("GradientFill"));
+    GRADIENT_RECT grect;
+    grect.UpperLeft = 0;
+    grect.LowerRight = 1;
 
-    if ( pfnGradientFill )
+    // invert colours direction if not filling from left-to-right or
+    // top-to-bottom
+    int firstVertex = nDirection == wxNORTH || nDirection == wxWEST ? 1 : 0;
+
+    // one vertex for upper left and one for upper-right
+    TRIVERTEX vertices[2];
+
+    vertices[0].x = rect.GetLeft();
+    vertices[0].y = rect.GetTop();
+    vertices[1].x = rect.GetRight()+1;
+    vertices[1].y = rect.GetBottom()+1;
+
+    vertices[firstVertex].Red = (COLOR16)(initialColour.Red() << 8);
+    vertices[firstVertex].Green = (COLOR16)(initialColour.Green() << 8);
+    vertices[firstVertex].Blue = (COLOR16)(initialColour.Blue() << 8);
+    vertices[firstVertex].Alpha = 0;
+    vertices[1 - firstVertex].Red = (COLOR16)(destColour.Red() << 8);
+    vertices[1 - firstVertex].Green = (COLOR16)(destColour.Green() << 8);
+    vertices[1 - firstVertex].Blue = (COLOR16)(destColour.Blue() << 8);
+    vertices[1 - firstVertex].Alpha = 0;
+
+    if ( ::GradientFill
+         (
+            GetHdc(),
+            vertices,
+            WXSIZEOF(vertices),
+            &grect,
+            1,
+            nDirection == wxWEST || nDirection == wxEAST
+                ? GRADIENT_FILL_RECT_H
+                : GRADIENT_FILL_RECT_V
+         ) )
     {
-        GRADIENT_RECT grect;
-        grect.UpperLeft = 0;
-        grect.LowerRight = 1;
-
-        // invert colours direction if not filling from left-to-right or
-        // top-to-bottom
-        int firstVertex = nDirection == wxNORTH || nDirection == wxWEST ? 1 : 0;
-
-        // one vertex for upper left and one for upper-right
-        TRIVERTEX vertices[2];
-
-        vertices[0].x = rect.GetLeft();
-        vertices[0].y = rect.GetTop();
-        vertices[1].x = rect.GetRight()+1;
-        vertices[1].y = rect.GetBottom()+1;
-
-        vertices[firstVertex].Red = (COLOR16)(initialColour.Red() << 8);
-        vertices[firstVertex].Green = (COLOR16)(initialColour.Green() << 8);
-        vertices[firstVertex].Blue = (COLOR16)(initialColour.Blue() << 8);
-        vertices[firstVertex].Alpha = 0;
-        vertices[1 - firstVertex].Red = (COLOR16)(destColour.Red() << 8);
-        vertices[1 - firstVertex].Green = (COLOR16)(destColour.Green() << 8);
-        vertices[1 - firstVertex].Blue = (COLOR16)(destColour.Blue() << 8);
-        vertices[1 - firstVertex].Alpha = 0;
-
-        if ( (*pfnGradientFill)
-             (
-                GetHdc(),
-                vertices,
-                WXSIZEOF(vertices),
-                &grect,
-                1,
-                nDirection == wxWEST || nDirection == wxEAST
-                    ? GRADIENT_FILL_RECT_H
-                    : GRADIENT_FILL_RECT_V
-             ) )
-        {
-            // skip call of the base class version below
-            CalcBoundingBox(rect.GetLeft(), rect.GetBottom());
-            CalcBoundingBox(rect.GetRight(), rect.GetTop());
-            return;
-        }
-
+        CalcBoundingBox(rect.GetLeft(), rect.GetBottom());
+        CalcBoundingBox(rect.GetRight(), rect.GetTop());
+    }
+    else
+    {
         wxLogLastError(wxT("GradientFill"));
     }
-#endif // wxUSE_DYNLIB_CLASS
-
-    wxDCImpl::DoGradientFillLinear(rect, initialColour, destColour, nDirection);
 }
-
-#if wxUSE_DYNLIB_CLASS
 
 namespace wxMSWImpl
 {
-
-DWORD GetLayout(HDC hdc)
-{
-    typedef DWORD (WINAPI *GetLayout_t)(HDC);
-    static GetLayout_t
-        wxDL_INIT_FUNC(s_pfn, GetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
-
-    return s_pfnGetLayout ? s_pfnGetLayout(hdc) : GDI_ERROR;
-}
-
-DWORD SetLayout(HDC hdc, DWORD dwLayout)
-{
-    typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
-    static SetLayout_t
-        wxDL_INIT_FUNC(s_pfn, SetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
-
-    return s_pfnSetLayout ? s_pfnSetLayout(hdc, dwLayout) : GDI_ERROR;
-}
 
 HDC CreateCompatibleDCWithLayout(HDC hdc)
 {
     HDC hdcNew = ::CreateCompatibleDC(hdc);
     if ( hdcNew )
     {
-        DWORD dwLayout = wxMSWImpl::GetLayout(hdc);
+        DWORD dwLayout = ::GetLayout(hdc);
         if ( dwLayout != GDI_ERROR )
-            wxMSWImpl::SetLayout(hdcNew, dwLayout);
+            ::SetLayout(hdcNew, dwLayout);
     }
 
     return hdcNew;
@@ -2992,7 +2679,7 @@ HDC CreateCompatibleDCWithLayout(HDC hdc)
 
 wxLayoutDirection wxMSWDCImpl::GetLayoutDirection() const
 {
-    DWORD layout = wxMSWImpl::GetLayout(GetHdc());
+    DWORD layout = ::GetLayout(GetHdc());
 
     if ( layout == GDI_ERROR )
         return wxLayout_Default;
@@ -3009,7 +2696,7 @@ void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
             return;
     }
 
-    DWORD layout = wxMSWImpl::GetLayout(GetHdc());
+    DWORD layout = ::GetLayout(GetHdc());
     if ( layout == GDI_ERROR )
         return;
 
@@ -3018,40 +2705,5 @@ void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
     else
         layout &= ~LAYOUT_RTL;
 
-    wxMSWImpl::SetLayout(GetHdc(), layout);
+    ::SetLayout(GetHdc(), layout);
 }
-
-#else // !wxUSE_DYNLIB_CLASS
-
-// Provide stubs to avoid ifdefs in the code using these functions.
-namespace wxMSWImpl
-{
-
-DWORD GetLayout(HDC WXUNUSED(hdc))
-{
-    return GDI_ERROR;
-}
-
-DWORD SetLayout(HDC WXUNUSED(hdc), DWORD WXUNUSED(dwLayout))
-{
-    return GDI_ERROR;
-}
-
-HDC CreateCompatibleDCWithLayout(HDC hdc)
-{
-    return ::CreateCompatibleDC(hdc);
-}
-
-} // namespace wxMSWImpl
-
-// we can't provide RTL support without dynamic loading, so stub it out
-wxLayoutDirection wxMSWDCImpl::GetLayoutDirection() const
-{
-    return wxLayout_Default;
-}
-
-void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection WXUNUSED(dir))
-{
-}
-
-#endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
