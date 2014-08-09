@@ -1034,7 +1034,9 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
     wxCoord x2 = x + width;
     wxCoord y2 = y + height;
 
-    wxCoord x2dev = XLOG2DEV(x2),
+    wxCoord x1dev = XLOG2DEV(x),
+            y1dev = YLOG2DEV(y),
+            x2dev = XLOG2DEV(x2),
             y2dev = YLOG2DEV(y2);
 
     // Windows (but not Windows CE) draws the filled rectangles without outline
@@ -1043,12 +1045,18 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 #ifndef __WXWINCE__
     if ( m_pen.IsTransparent() )
     {
-        x2dev++;
+        // Right edge to be extended is "displayed right edge"
+        // and hence its device coordinates depend
+        // on layout direction and can be either x1 or x2.
+        if ( GetLayoutDirection() == wxLayout_RightToLeft )
+            x1dev--;
+        else
+            x2dev++;
         y2dev++;
     }
 #endif // !__WXWINCE__
 
-    (void)Rectangle(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), x2dev, y2dev);
+    (void)Rectangle(GetHdc(), x1dev, y1dev, x2dev, y2dev);
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x2, y2);
