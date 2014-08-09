@@ -32,13 +32,13 @@ using @ifdef_ and not @if_.
 @itemdef{__WXGTK24__, GTK+ 2.4 or higher}
 @itemdef{__WXGTK26__, GTK+ 2.6 or higher}
 @itemdef{__WXGTK210__, GTK+ 2.10 or higher}
-@itemdef{__WXMAC__, old define, same as @c __WXOSX__}
+@itemdef{__WXMAC__, old define, same as <tt>__WXOSX__</tt>}
 @itemdef{__WXMOTIF__, Motif}
 @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
 @itemdef{__WXMSW__, GUI using <a href="http://en.wikipedia.org/wiki/Windows_User">Windows Controls</a>.
 Notice that for compatibility reasons, this symbol is defined for console
 applications under Windows as well, but it should only be used in the GUI code
-while @c __WINDOWS__ should be used for the platform tests.}
+while <tt>__WINDOWS__</tt> should be used for the platform tests.}
 @itemdef{__WXOSX__, OS X GUI using any Apple widget framework (Carbon, AppKit or UIKit)}
 @itemdef{__WXOSX_IPHONE__, OS X iPhone (UIKit)}
 @itemdef{__WXOSX_CARBON__, Mac OS X using Carbon}
@@ -47,7 +47,7 @@ while @c __WINDOWS__ should be used for the platform tests.}
 @itemdef{__WXPM__, OS/2 native Presentation Manager (not used any longer).}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
 @itemdef{__WXXT__, Xt; mutually exclusive with WX_MOTIF, not implemented in wxWidgets 2.x}
-@itemdef{__WXX11__, wxX11 (__WXUNIVERSAL__ will be also defined)}
+@itemdef{__WXX11__, wxX11 (<tt>__WXUNIVERSAL__</tt> will be also defined)}
 @itemdef{__WXWINE__, WINE (i.e. WIN32 on Unix)}
 @itemdef{__WXUNIVERSAL__, wxUniversal port, always defined in addition
                         to one of the symbols above so this should be tested first.}
@@ -60,15 +60,15 @@ desktop and a very early iPhone port. And there is the Cocoa port named wxCocoa
 which has not been updated very actively since beginning 2008. To summarize:
 
 @li If you want to test for wxOSX on the desktop, use
-    @c __WXOSX_MAC__.
+    <tt>__WXOSX_MAC__</tt>.
 @li If you want to test for wxOSX on the iPhone, use
-    @c __WXOSX_IPHONE__.
+    <tt>__WXOSX_IPHONE__</tt>.
 @li If you want to test for a particular GUI Mac port under OS X, use
-    @c __WXOSX_CARBON__ or @c __WXOSX_COCOA__.
+    <tt>__WXOSX_CARBON__</tt> or <tt>__WXOSX_COCOA__</tt>.
 @li If you want to test for any port under Mac OS X, including, for
-    example, wxGTK and also wxBase, use @c __DARWIN__ (see below).
+    example, wxGTK and also wxBase, use <tt>__DARWIN__</tt> (see below).
 
-The convention is to use the @c __WX prefix for these
+The convention is to use the <tt>__WX</tt> prefix for these
 symbols, although this has not always been followed.
 
 
@@ -80,7 +80,7 @@ symbols, although this has not always been followed.
 @itemdef{__AIX__, AIX}
 @itemdef{__BSD__, Any *BSD system}
 @itemdef{__CYGWIN__, Cygwin: Unix on Win32}
-@itemdef{__DARWIN__, Mac OS X (with BSD C library), using any port (see also @c __WXOSX__)}
+@itemdef{__DARWIN__, Mac OS X (with BSD C library), using any port (see also <tt>__WXOSX__</tt>)}
 @itemdef{__DATA_GENERAL__, DG-UX}
 @itemdef{__FREEBSD__, FreeBSD}
 @itemdef{__HPUX__, HP-UX (Unix)}
@@ -99,7 +99,7 @@ symbols, although this has not always been followed.
 @itemdef{__UNIX__, any Unix}
 @itemdef{__UNIX_LIKE__, Unix, BeOS or VMS}
 @itemdef{__VMS__, VMS}
-@itemdef{__WINDOWS__, Any Windows platform, using any port (see also @c __WXMSW__)}
+@itemdef{__WINDOWS__, Any Windows platform, using any port (see also <tt>__WXMSW__</tt>)}
 @itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
 @itemdef{__WIN32__, Win32 API}
 @itemdef{__WIN64__, Win64 (mostly same as Win32 but data type sizes are different)}
@@ -160,8 +160,8 @@ compiler used.
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for
                     @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
                     __VISUALCn__ are also defined for each major compiler version from
-                    5 to 12, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
-                    for compiler version being precisely 7.}
+                    5 to 12, i.e. you can use tests such as <tt>#ifdef \_\_VISUALC7\_\_</tt>
+                    to test for compiler version being precisely 7.}
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
                     the compiler version, @c 1100 is @c 11.0 and @c 1200 is OpenWatcom
@@ -278,7 +278,7 @@ configuration.
         includes a number of wxWidgets headers thus making it unnecessary to include
         them explicitly. However if this is not defined, you do need to include them
         and so the usual idiom which allows to support both cases is to first include
-        @c wx/wxprec.h} and then, inside @ifndef_ WX_PRECOMP, individual
+        @c wx/wxprec.h} and then, inside <tt>#ifndef WX_PRECOMP</tt>, individual
         headers you need.}
 @itemdef{_UNICODE and UNICODE, both are defined if wxUSE_UNICODE is set to @c 1}
 @itemdef{wxUSE_GUI,
