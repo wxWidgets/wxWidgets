@@ -27,6 +27,7 @@
 #include "wx/wfstream.h"
 #include "wx/filedlg.h"
 #include "wx/stockitem.h"
+#include "wx/dcbuffer.h"
 
 #include "life.h"
 #include "game.h"
@@ -436,11 +437,20 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
             m_running = true;
             m_topspeed = true;
             UpdateUI();
+            
+            const long YIELD_INTERVAL = 1000 / 30;
+            wxMilliClock_t lastyield = 0, now;
+            
             while (m_running && m_topspeed)
             {
                 OnStep();
-                wxYield();
+                if ( (now=wxGetLocalTimeMillis()) - lastyield > YIELD_INTERVAL)
+                {
+                    wxYield();
+                    lastyield = now;
+                }
             }
+ 
             break;
         }
     }
@@ -589,12 +599,13 @@ void LifeFrame::OnStop()
 void LifeFrame::OnStep()
 {
     if (m_life->NextTic())
+    {
         m_tics++;
+        m_canvas->Refresh();
+        UpdateInfoText();
+    }
     else
         OnStop();
-
-    m_canvas->DrawChanged();
-    UpdateInfoText();
 }
 
 
@@ -791,50 +802,45 @@ void LifeCanvas::DrawCell(wxInt32 i, wxInt32 j, wxDC &dc)
     }
 }
 
-// draw all changed cells
+// draw all changed cells, currently not in use
 void LifeCanvas::DrawChanged()
 {
-#ifdef __WXOSX__
-    // we should not do out of band redraws on OSX, let things happen in the event loop
-    Refresh();
-#else
     wxClientDC dc(this);
-
+    
     size_t ncells;
     LifeCell *cells;
     bool done = false;
-
+    
     m_life->BeginFind(m_viewportX,
                       m_viewportY,
                       m_viewportX + m_viewportW,
                       m_viewportY + m_viewportH,
                       true);
-
+    
     if (m_cellsize == 1)
     {
-        dc.SetPen(*wxBLACK_PEN);
+        dc.SetPen(*wxWHITE_PEN);
     }
     else
     {
         dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(*wxBLACK_BRUSH);
+        dc.SetBrush(*wxWHITE_BRUSH);
     }
-    dc.SetLogicalFunction(wxINVERT);
-
+    dc.SetLogicalFunction(wxXOR);
+    
     while (!done)
     {
         done = m_life->FindMore(&cells, &ncells);
-
+        
         for (size_t m = 0; m < ncells; m++)
             DrawCell(cells[m].i, cells[m].j, dc);
     }
-#endif
 }
 
 // event handlers
 void LifeCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxPaintDC dc(this);
+    wxAutoBufferedPaintDC dc(this);
     wxRect  rect = GetUpdateRegion().GetBox();
     wxCoord x, y, w, h;
     wxInt32 i0, j0, i1, j1;
