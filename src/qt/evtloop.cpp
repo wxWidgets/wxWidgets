@@ -204,9 +204,21 @@ public:
 wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
 {
     static wxQtEventLoopSourcesManager s_eventLoopSourcesManager;
-
     return &s_eventLoopSourcesManager;
 }
+
+#if !wxUSE_CONSOLE_EVENTLOOP
+
+// Use the GUI event loop sources manager if console support is disabled
+// (needed by some common code, will raise an undefinied reference if not done)
+
+wxEventLoopSourcesManagerBase* wxAppTraits::GetEventLoopSourcesManager()
+{
+    static wxQtEventLoopSourcesManager s_eventLoopSourcesManager;
+    return &s_eventLoopSourcesManager;
+}
+
+#endif
 
 wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags)
 {

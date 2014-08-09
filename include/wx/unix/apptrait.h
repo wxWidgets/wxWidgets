@@ -85,7 +85,9 @@ public:
 
 #endif // wxUSE_SOCKETS
 
+#if wxUSE_EVENTLOOP_SOURCE
     virtual wxEventLoopSourcesManagerBase* GetEventLoopSourcesManager() wxOVERRIDE;
+#endif
 };
 
 #endif // wxUSE_GUI
