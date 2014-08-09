@@ -1937,7 +1937,6 @@ OSX_CARBON_COCOA_SRC =
     src/osx/carbon/dcclient.cpp
     src/osx/carbon/dcprint.cpp
     src/osx/carbon/dcscreen.cpp
-    src/osx/core/glgrab.cpp
     src/osx/carbon/graphics.cpp
     src/osx/carbon/font.cpp
     src/osx/carbon/frame.cpp

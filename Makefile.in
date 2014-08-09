@@ -708,6 +708,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
+	wx/unix/execute.h \
 	wx/unix/fswatcher_inotify.h \
 	wx/msw/apptrait.h \
 	wx/msw/apptbase.h \
@@ -2473,6 +2474,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
+	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2495,6 +2497,7 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
+	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2517,6 +2520,7 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
+	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2539,6 +2543,7 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
+	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2561,6 +2566,7 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
+	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2585,6 +2591,7 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
+	wx/unix/execute.h \
 	wx/unix/fswatcher_inotify.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
@@ -14048,7 +14055,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_carbon_dcclient.o \
 	monodll_carbon_dcprint.o \
 	monodll_carbon_dcscreen.o \
-	monodll_glgrab.o \
 	monodll_carbon_graphics.o \
 	monodll_carbon_font.o \
 	monodll_carbon_frame.o \
@@ -14195,7 +14201,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_12 =  \
 	monolib_carbon_dcclient.o \
 	monolib_carbon_dcprint.o \
 	monolib_carbon_dcscreen.o \
-	monolib_glgrab.o \
 	monolib_carbon_graphics.o \
 	monolib_carbon_font.o \
 	monolib_carbon_frame.o \
@@ -14342,7 +14347,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_14 =  \
 	coredll_carbon_dcclient.o \
 	coredll_carbon_dcprint.o \
 	coredll_carbon_dcscreen.o \
-	coredll_glgrab.o \
 	coredll_carbon_graphics.o \
 	coredll_carbon_font.o \
 	coredll_carbon_frame.o \
@@ -14474,7 +14478,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_1_0 =  \
 	corelib_carbon_dcclient.o \
 	corelib_carbon_dcprint.o \
 	corelib_carbon_dcscreen.o \
-	corelib_glgrab.o \
 	corelib_carbon_graphics.o \
 	corelib_carbon_font.o \
 	corelib_carbon_frame.o \
@@ -20815,15 +20818,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_dcscreen.o: $(srcdir)/src/osx/carbon/dcscreen.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dcscreen.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_carbon_graphics.o: $(srcdir)/src/osx/carbon/graphics.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/graphics.cpp
 
@@ -26391,15 +26385,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_dcscreen.o: $(srcdir)/src/osx/carbon/dcscreen.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dcscreen.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_carbon_graphics.o: $(srcdir)/src/osx/carbon/graphics.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/graphics.cpp
@@ -32086,15 +32071,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_dcscreen.o: $(srcdir)/src/osx/carbon/dcscreen.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dcscreen.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_carbon_graphics.o: $(srcdir)/src/osx/carbon/graphics.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/graphics.cpp
 
@@ -36210,15 +36186,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_dcscreen.o: $(srcdir)/src/osx/carbon/dcscreen.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dcscreen.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_glgrab.o: $(srcdir)/src/osx/core/glgrab.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/glgrab.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_carbon_graphics.o: $(srcdir)/src/osx/carbon/graphics.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/graphics.cpp
