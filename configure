@@ -23051,7 +23051,8 @@ if test "$wxUSE_GUI" = "yes"; then
 
                 case "${host}" in
             *-*-mingw32* )
-                WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
+                GUI_TK_LIBRARY="-lmsimg32"
+                WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows $GUI_TK_LIBRARY"
         esac
     fi
 

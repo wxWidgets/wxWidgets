@@ -51,6 +51,18 @@
 #include "wx/msw/private/dc.h"
 #include "wx/private/textmeasure.h"
 
+// In the previous versions of wxWidgets, AlphaBlend() was dynamically loaded
+// from msimg32.dll during the run-time, so we didn't need to link with this
+// library. Now that we use the function statically, we do need to link with it
+// and we do it implicitly from here for MSVC users to avoid breaking the build
+// of the existing projects which didn't link with.
+//
+// MinGW users will need to add -lmsimg32 to their make/project files
+// explicitly however as MinGW doesn't have this pragma equivalent.
+#ifdef _MSC_VER
+    #pragma comment(lib, "msimg32")
+#endif
+
 using namespace wxMSWImpl;
 
 #ifndef AC_SRC_ALPHA

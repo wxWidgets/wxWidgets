@@ -590,6 +590,11 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <if cond="FORMAT=='borland'">
                 <sys-lib>oleacc</sys-lib>
             </if>
+            <if cond="FORMAT=='mingw' or FORMAT=='borland'">
+                <!-- this one is autu linked for MSVC, don't bother including
+                     it in the make/project files -->
+                <sys-lib>msimg32</sys-lib>
+            </if>
         </if>
     </template>
 
