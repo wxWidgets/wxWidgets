@@ -603,6 +603,7 @@ wxMSW:
 - Fix background of wxRadioBox buttons and wxSlider (Artur Wieczorek).
 - Fix appearance of wxToggleButtons with non default colours (Artur Wieczorek).
 - Fix drawing on wxDC when using right-to-left layout (Artur Wieczorek).
+- Fix wxGrid appearance and behaviour in RTL (Artur Wieczorek).
 
 
 3.0.1: (released 2014-06-15)
