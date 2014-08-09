@@ -724,6 +724,7 @@ LifeCanvas::LifeCanvas(wxWindow *parent, Life *life, bool interactive)
 
     // reduce flicker if wxEVT_ERASE_BACKGROUND is not available
     SetBackgroundColour(*wxWHITE);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 LifeCanvas::~LifeCanvas()
