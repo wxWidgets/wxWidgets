@@ -4672,16 +4672,6 @@ public:
     */
     wxRichTextImageBlock& GetImageBlock() { return m_imageBlock; }
 
-    /**
-        Gets the original image size.
-    */
-    wxSize GetOriginalImageSize() const;
-
-    /**
-        Sets the original image size.
-    */
-    void SetOriginalImageSize(const wxSize& sz);
-
 // Operations
 
     /**
