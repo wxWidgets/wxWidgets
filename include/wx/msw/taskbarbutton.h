@@ -69,7 +69,8 @@ private:
 class WXDLLIMPEXP_CORE wxTaskBarJumpListImpl
 {
 public:
-    wxTaskBarJumpListImpl(const wxString& appID = wxEmptyString);
+    wxTaskBarJumpListImpl(wxTaskBarJumpList *jumpList = NULL,
+                          const wxString& appID = wxEmptyString);
     virtual ~wxTaskBarJumpListImpl();
     void ShowRecentCategory(bool shown = true);
     void HideRecentCategory();
@@ -92,6 +93,8 @@ private:
     void AddTasksToDestinationList();
     void AddCustomCategoriesToDestionationList();
     void LoadKnownCategory(const wxString& title);
+
+    wxTaskBarJumpList *m_jumpList;
 
     ICustomDestinationList    *m_destinationList;
     IObjectArray              *m_objectArray;

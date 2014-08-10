@@ -399,6 +399,9 @@ public:
     /**
         Constructs a jump list item.
 
+        @param parentCategory
+            Category that the jump list item belongs to. Can be NULL if the item
+            is going to be added to the category later.
         @param type
             The type for this item.
         @param title
@@ -419,13 +422,14 @@ public:
         @param iconIndex
             The index of the icon, which is specified by iconPath.
     */
-    wxTaskBarJumpListItem(wxTaskBarJumpListItemType type,
-                   const wxString& title = wxEmptyString,
-                   const wxString& filePath = wxEmptyString,
-                   const wxString& arguments = wxEmptyString,
-                   const wxString& tooltip = wxEmptyString,
-                   const wxString& iconPath = wxEmptyString,
-                   int iconIndex = 0);
+    wxTaskBarJumpListItem(wxTaskBarJumpListCategory *parentCategory = NULL,
+        wxTaskBarJumpListItemType type = wxTASKBAR_JUMP_LIST_SEPARATOR,
+        const wxString& title = wxEmptyString,
+        const wxString& filePath = wxEmptyString,
+        const wxString& arguments = wxEmptyString,
+        const wxString& tooltip = wxEmptyString,
+        const wxString& iconPath = wxEmptyString,
+        int iconIndex = 0);
 
     /**
         Returns the type of this item.
@@ -496,6 +500,17 @@ public:
         Sets the icon index of icon in this item.
     */
     void SetIconIndex(int iconIndex);
+
+    /**
+        Returns the category this jump list item is in, or NULL if this jump
+        list item is not attached.
+    */
+    wxTaskBarJumpListCategory* GetCategory() const;
+
+    /**
+        Sets the parent category which will contain this jump list item.
+    */
+    void SetCategory(wxTaskBarJumpListCategory *category);
 };
 
 /**
@@ -523,17 +538,21 @@ public:
     /**
         Constructs the jump list category.
 
+        @param parent
+            Jump list that the jump list category belongs to. Can be NULL if
+            the category is going to be added to the jump list later.
         @param title
             The title of the category.
     */
-    wxTaskBarJumpListCategory(const wxString& title = wxEmptyString);
+    wxTaskBarJumpListCategory(wxTaskBarJumpList *parent = NULL,
+                              const wxString& title = wxEmptyString);
     virtual ~wxTaskBarJumpListCategory();
 
     /**
         Append a jump list item.
 
         @param item
-            The jump list item to be appended. It will be owned by the 
+            The jump list item to be appended. It will be owned by the
             wxTaskBarJumpListCategory object after this function is called, so
             do not delete it yourself.
 
@@ -619,6 +638,4 @@ public:
     void AddCustomCategory(wxTaskBarJumpListCategory* category);
     wxTaskBarJumpListCategory* RemoveCustomCategory(const wxString& title);
     void DeleteCustomCategory(const wxString& title);
-
-    void Update();
 };
