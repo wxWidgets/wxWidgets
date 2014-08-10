@@ -465,7 +465,9 @@ NB: The makefiles and project files provided with wxWidgets samples show which
     sample and adapt it to your application.
 
 Independently of the compiler and make/IDE you are using you must do the
-following to use wxWidgets:
+following to use wxWidgets sources under the directory $WXWIN (notice that
+different tool chains refer to environment variables such as WXWIN in
+different ways, e.g. MSVC users should use $(WXWIN) instead of just $WXWIN):
 
 * Add $WXWIN/include to the
   - compiler
@@ -489,7 +491,8 @@ following to use wxWidgets:
   (all wxWidgets applications use the base library).
 
 
-Microsoft Visual C++ users can simplify the linker setup by prepending the
-directory $WXWIN/msvc to the include path (it must come before $WXWIN/include
-directory!) and omitting the last step: the required libraries will be linked
-in automatically using the "#pragma comment(lib)" feature of this compiler.
+Microsoft Visual C++ users can simplify the linker setup by prepending
+"$(WXWIN)/include/msvc" to the include path (it must come before the
+"$(WXWIN)/include" part!) and omitting the last step: the required libraries
+will be linked in automatically using the "#pragma comment(lib)" feature of
+this compiler.
