@@ -145,6 +145,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BECEE10EBF6330080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"wxUSE_BASE=1",
+				);
 			};
 			name = Debug;
 		};
@@ -152,6 +156,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BECEE10EBF6330080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"wxUSE_BASE=1",
+				);
 			};
 			name = Release;
 		};
