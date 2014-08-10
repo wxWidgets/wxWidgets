@@ -598,6 +598,7 @@ wxGTK:
 wxMSW:
 
 - Fix Cygwin 1.7 build.
+- Work around a bug in MinGW 4.8 headers and fix build with it too.
 - Include x64 configurations in MSVC 8/9 project files too.
 - Fix parallel build of MSVC 11/12 solutions (Artur Wieczorek).
 - Fix background of wxRadioBox buttons and wxSlider (Artur Wieczorek).
