@@ -708,7 +708,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
-	wx/unix/execute.h \
 	wx/unix/fswatcher_inotify.h \
 	wx/msw/apptrait.h \
 	wx/msw/apptbase.h \
@@ -2474,7 +2473,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
-	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2497,7 +2495,6 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
-	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2520,7 +2517,6 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
-	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2543,7 +2539,6 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
-	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2566,7 +2561,6 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
-	wx/unix/execute.h \
 	wx/osx/core/cfdataref.h \
 	wx/osx/core/cfref.h \
 	wx/osx/core/cfstring.h \
@@ -2591,7 +2585,6 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/tls.h \
 	wx/unix/fswatcher_kqueue.h \
 	wx/unix/mimetype.h \
-	wx/unix/execute.h \
 	wx/unix/fswatcher_inotify.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
