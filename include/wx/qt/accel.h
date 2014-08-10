@@ -47,6 +47,9 @@ public:
     // Implementation
     QList< QShortcut* > ConvertShortcutTable( QWidget *parent ) const;
 
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const;
+
 protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
