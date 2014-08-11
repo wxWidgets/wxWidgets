@@ -276,6 +276,25 @@ public:
     bool SortItems(wxListCtrlCompare fn, wxIntPtr data);
 
 
+    // these functions are only used for virtual list view controls, i.e. the
+    // ones with wxLC_VIRTUAL style (not currently implemented in wxQT)
+
+    // return the text for the given column of the given item
+    virtual wxString OnGetItemText(long item, long column) const;
+
+    // return the icon for the given item. In report view, OnGetItemImage will
+    // only be called for the first column. See OnGetItemColumnImage for
+    // details.
+    virtual int OnGetItemImage(long item) const;
+
+    // return the icon for the given item and column.
+    virtual int OnGetItemColumnImage(long item, long column) const;
+
+    // return the attribute for the given item and column (may return NULL if none)
+    virtual wxListItemAttr *OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
+    {
+        return OnGetItemAttr(item);
+    }
 
     virtual QTreeWidget *GetHandle() const;
 
