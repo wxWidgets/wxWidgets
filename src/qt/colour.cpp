@@ -10,9 +10,16 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/qt/private/utils.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+
+int wxColour::GetPixel() const
+{
+    wxMISSING_IMPLEMENTATION( "wxColour::GetPixel" );
+    return 0;
+}
 
 #include "wx/colour.h"
