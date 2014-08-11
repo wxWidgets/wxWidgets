@@ -18,11 +18,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxGetPasswordFromUserPromptStr[];
 
 #define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
 
-#if defined(__WXQT__)
-    #include "wx/qt/textdlg.h"
-#else
-    #include "wx/generic/textdlgg.h"
-#endif
+#include "wx/generic/textdlgg.h"
 
 // ----------------------------------------------------------------------------
 // function to get a string from user
