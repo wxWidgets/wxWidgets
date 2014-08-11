@@ -24,6 +24,15 @@ public:
     bool operator==(const wxDataFormat& format) const;
     bool operator!=(const wxDataFormat& format) const;
 
+    // string ids are used for custom types - this SetId() must be used for
+    // application-specific formats
+    wxString GetId() const;
+    void SetId( const wxString& id );
+
+    // implementation
+    wxDataFormatId GetType() const;
+    void SetType( wxDataFormatId type );
+
     QString m_MimeType;
 };
 
