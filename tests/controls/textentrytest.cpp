@@ -177,9 +177,32 @@ void TextEntryTestCase::Replace()
     CPPUNIT_ASSERT_EQUAL(2, entry->GetInsertionPoint());
 }
 
+#if wxUSE_UIACTIONSIMULATOR
+
+class TextEventHandler
+{
+public:
+    explicit TextEventHandler(wxWindow* win)
+    {
+        win->Bind(wxEVT_TEXT, &TextEventHandler::OnText, this);
+    }
+
+    const wxString& GetLastString() const
+    {
+        return m_string;
+    }
+
+private:
+    void OnText(wxCommandEvent& event)
+    {
+        m_string = event.GetString();
+    }
+
+    wxString m_string;
+};
+
 void TextEntryTestCase::Editable()
 {
-#if wxUSE_UIACTIONSIMULATOR
 
 #ifdef __WXGTK__
     // FIXME: For some reason this test regularly (although not always) fails
@@ -203,6 +226,7 @@ void TextEntryTestCase::Editable()
     window->SetFocus();
     wxYield();
 
+    // Check that we get the expected number of events.
     wxUIActionSimulator sim;
     sim.Text("abcdef");
     wxYield();
@@ -210,6 +234,26 @@ void TextEntryTestCase::Editable()
     CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
 
+
+    // And that the event carries the right value.
+    TextEventHandler handler(window);
+
+    sim.Text("g");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("abcdefg", handler.GetLastString());
+
+    // ... even if we generate the event programmatically and whether it uses
+    // the same value as the control has right now
+    entry->SetValue("abcdefg");
+    CPPUNIT_ASSERT_EQUAL("abcdefg", handler.GetLastString());
+
+    // ... or not
+    entry->SetValue("abcdef");
+    CPPUNIT_ASSERT_EQUAL("abcdef", handler.GetLastString());
+
+    // Check that making the control not editable does indeed prevent it from
+    // being edited.
     updated.Clear();
 
     entry->SetEditable(false);
@@ -218,8 +262,9 @@ void TextEntryTestCase::Editable()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(0, updated.GetCount());
-#endif
 }
+
+#endif // wxUSE_UIACTIONSIMULATOR
 
 void TextEntryTestCase::Hint()
 {
