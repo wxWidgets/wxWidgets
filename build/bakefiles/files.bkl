@@ -962,7 +962,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/srchctlg.cpp
     src/generic/statbmpg.cpp
     src/generic/stattextg.cpp
-    src/common/textdlg.cpp
     src/generic/textdlgg.cpp
     src/generic/tipwin.cpp
     src/generic/toolbkg.cpp
