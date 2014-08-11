@@ -549,7 +549,7 @@ public:
     virtual ~wxTaskBarJumpListCategory();
 
     /**
-        Append a jump list item.
+        Appends a jump list item.
 
         @param item
             The jump list item to be appended. It will be owned by the
@@ -561,7 +561,7 @@ public:
     wxTaskBarJumpListItem* Append(wxTaskBarJumpListItem *item);
 
     /**
-        Delete the jump list item from the category.
+        Deletes the jump list item from the category.
 
         @param item
             The jump list item to be deleted.
@@ -600,17 +600,17 @@ public:
     wxTaskBarJumpListItem* Prepend(wxTaskBarJumpListItem *item);
 
     /**
-        Set the title of the category.
+        Sets the title of the category.
     */
     void SetTitle(const wxString& title);
 
     /**
-        Get the title of the category.
+        Gets the title of the category.
     */
     const wxString& GetTitle() const;
 
     /**
-        Get the jump list items of the category.
+        Gets the jump list items of the category.
     */
     const wxTaskBarJumpListItems& GetItems() const;
 };
@@ -620,22 +620,113 @@ public:
 */
 typedef wxVector<wxTaskBarJumpListCategory*> wxTaskBarJumpListCategories;
 
+/**
+    @class wxTaskBarJumpList
+
+    This class is an transparent wrapper around Windows Jump Lists. Jump
+    Lists, as an new feature since Windows 7, are lists of recently opened
+    items, such as files, folders, or websites, which are organized by the
+    program that the user use to open them. Jump Lists don't just show
+    shortcuts to files. Sometimes they can also provide quick access to tasks.
+    With this class, you can access the recent and frequent category in the
+    jump lists. You can also set the tasks category of the Jump Lists of your
+    application. What's more, you can add custom category to them.
+
+    @library{wxcore}
+    @category{misc}
+
+    @onlyfor{wxmsw}
+
+    @see wxTaskBarJumpListCategory, wxTaskBarJumpListItem
+*/
 class WXDLLIMPEXP_CORE wxTaskBarJumpList
 {
 public:
+    /**
+        Constructs the jump list.
+
+        @param appID
+            Specifies a unique identifier for the application jump list, can be
+            empty by default.
+
+            See <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/dd378459(v=vs.85).aspx">
+            Application User Model IDs</a> on MSDN for further details.
+    */
     wxTaskBarJumpList(const wxString& appID = wxEmptyString);
     virtual ~wxTaskBarJumpList();
+
+    /**
+        Shows or hides the recent category.
+    */
     void ShowRecentCategory(bool shown = true);
+
+    /**
+        Hides the recent category. Equivalent to calling wxTaskBarJumpList::ShowFrequentCategory(false).
+    */
     void HideRecentCategory();
+
+    /**
+        Shows or hides the frequent category.
+    */
     void ShowFrequentCategory(bool shown = true);
+
+    /**
+        Hides the frequent category. Equivalent to calling wxTaskBarJumpList::ShowFrequentCategory(false).
+    */
     void HideFrequentCategory();
 
+    /**
+        Accesses the built in tasks category.
+
+        With the returned tasks category, you can append an new task, remove
+        an existing task, modify the task item etc.
+    */
     wxTaskBarJumpListCategory& GetTasks() const;
+
+    /**
+        Gets the built in frequent category.
+
+        Note that the returned category is read-only.
+    */
     const wxTaskBarJumpListCategory& GetFrequentCategory() const;
+
+    /**
+        Gets the built in recent category.
+
+        Note that the returned category is read-only.
+
+    */
     const wxTaskBarJumpListCategory& GetRecentCategory() const;
+
+    /**
+        Gets the custom categories.
+    */
     const wxTaskBarJumpListCategories& GetCustomCategories() const;
 
+    /**
+        Add an new custom category.
+
+        @param category
+            A wxTaskBarJumpListCategory object. It will be owned by the
+            wxTaskBarJumpList object after this function is called, so
+            do not delete it yourself.
+    */
     void AddCustomCategory(wxTaskBarJumpListCategory* category);
+
+    /**
+        Removes the custom category from the jump lists but doesn't delete the
+        associated C++ object.
+
+        @param title
+            The title of the custom category.
+    */
     wxTaskBarJumpListCategory* RemoveCustomCategory(const wxString& title);
+
+    /**
+        Deletes the custom category from the jump lists.
+
+        @param title
+            The title of the custom category.
+    */
     void DeleteCustomCategory(const wxString& title);
 };
