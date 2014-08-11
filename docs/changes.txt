@@ -590,6 +590,8 @@ All (GUI):
 - Fix saving GIF animations with 2.5s+ delays between frames (elvissteinjr).
 - Add "variant" property to windows in XRC.
 - Add XRC handler for wxSimplebook.
+- Return correct value from wxCommandEvent::GetString() for programmatically
+  generated wxEVT_TEXT events from wxComboBox.
 
 wxGTK:
 
