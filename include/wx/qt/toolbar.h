@@ -45,15 +45,6 @@ public:
     virtual void SetWindowStyleFlag( long style );
     virtual bool Realize() wxOVERRIDE;
 
-protected:
-
-    QActionGroup* GetActionGroup(size_t pos);
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
-    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
-    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
-    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
-    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
-
     virtual wxToolBarToolBase *CreateTool(int toolid,
                                           const wxString& label,
                                           const wxBitmap& bmpNormal,
@@ -62,9 +53,18 @@ protected:
                                           wxObject *clientData,
                                           const wxString& shortHelp,
                                           const wxString& longHelp);
-    
+
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label);
+
+protected:
+
+    QActionGroup* GetActionGroup(size_t pos);
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
 
 private:
     Qt::ToolButtonStyle GetButtonStyle();
