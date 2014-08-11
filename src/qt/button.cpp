@@ -51,3 +51,16 @@ wxWindow *wxButton::SetDefault()
 
 }
 
+/* static */
+wxSize wxButtonBase::GetDefaultSize()
+{
+    static wxSize size = wxDefaultSize;
+    if (size == wxDefaultSize)
+    {
+        // Default size of buttons should be same as size of stock
+        // buttons as used in most GTK+ apps. (currently this is aproximate)
+        QPushButton btn;
+        size = wxQtConvertSize(btn.sizeHint());
+    }
+    return size;
+}
