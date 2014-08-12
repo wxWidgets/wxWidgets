@@ -1551,7 +1551,7 @@ bool wxRichTextCompositeObject::Defragment(wxRichTextDrawingContext& context, co
             wxRichTextObject* child = node->GetData();
             if (range == wxRICHTEXT_ALL || !child->GetRange().IsOutside(range))
             {
-                if (child->IsEmpty())
+                if (child->IsEmpty() && !child->IsKindOf(CLASSINFO(wxRichTextCell)))
                 {
                     child->Dereference();
                     m_children.Erase(node);
