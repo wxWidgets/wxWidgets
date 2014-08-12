@@ -18,14 +18,18 @@ IMPLEMENT_DYNAMIC_CLASS( wxApp, wxAppBase )
 
 wxApp::wxApp()
 {
+    m_qtApplication = NULL;
 }
 
 
 wxApp::~wxApp()
 {
-    m_qtApplication->deleteLater();
-
-    delete [] m_qtArgv;
+    // Only delete if the app was actually initialized
+    if ( m_qtApplication != NULL )
+    {
+        m_qtApplication->deleteLater();
+        delete [] m_qtArgv;
+    }
 }
 
 bool wxApp::Initialize( int &argc, wxChar **argv )
@@ -34,7 +38,6 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
         return false;
 
     wxConvCurrent = &wxConvUTF8;
-    wxMISSING_IMPLEMENTATION( "Unicode argc, argv" );
 
     // (See: http://bugreports.qt.nokia.com/browse/QTBUG-7551)
     // Need to store argc, argv. The argc, argv from wxAppBase are
@@ -79,7 +82,6 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
         argc = m_qtApplication->arguments().size();
         argv[argc] = NULL;
     }
-    
 
     return true;
 }
