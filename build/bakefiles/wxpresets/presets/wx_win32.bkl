@@ -299,6 +299,7 @@
             <sys-lib>rpcrt4</sys-lib>
             <sys-lib>advapi32</sys-lib>
             <sys-lib>wsock32</sys-lib>
+            <sys-lib>shlwapi</sys-lib>
         </if>
 
         <!-- Libs common to both borland and MSVC               -->
