@@ -51,17 +51,31 @@
 #include "wx/msw/private/dc.h"
 #include "wx/private/textmeasure.h"
 
-// In the previous versions of wxWidgets, AlphaBlend() was dynamically loaded
-// from msimg32.dll during the run-time, so we didn't need to link with this
-// library. Now that we use the function statically, we do need to link with it
-// and we do it implicitly from here for MSVC users to avoid breaking the build
-// of the existing projects which didn't link with.
-//
-// MinGW users will need to add -lmsimg32 to their make/project files
-// explicitly however as MinGW doesn't have this pragma equivalent.
 #ifdef _MSC_VER
+    // In the previous versions of wxWidgets, AlphaBlend() was dynamically
+    // loaded from msimg32.dll during the run-time, so we didn't need to link
+    // with this library. Now that we use the function statically, we do need
+    // to link with it and we do it implicitly from here for MSVC users to
+    // avoid breaking the build of the existing projects which didn't link with
+    // this library before.
     #pragma comment(lib, "msimg32")
-#endif
+
+    // Indicate that we should just use the functions from gdi32.dll and
+    // msimg32.dll directly.
+    #define USE_STATIC_GDI_FUNCS
+#else // !_MSC_VER
+    // In other compilers, e.g. MinGW, we don't have anything similar to
+    // #pragma comment(lib) used above, so we continue loading AlphaBlend()
+    // dynamically, if possible.
+    //
+    // We also load some GDI functions not present in MinGW libraries
+    // dynamically.
+    #if wxUSE_DYNLIB_CLASS
+        #include "wx/dynlib.h"
+
+        #define USE_DYNAMIC_GDI_FUNCS
+    #endif
+#endif // _MSC_VER/!_MSC_VER
 
 using namespace wxMSWImpl;
 
@@ -128,6 +142,210 @@ static const int VIEWPORT_EXTENT = 134217727;
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
+
+#ifdef USE_DYNAMIC_GDI_FUNCS
+
+namespace wxMSWImpl
+{
+
+// helper class to cache dynamically loaded libraries and not attempt reloading
+// them if it fails
+class wxOnceOnlyDLLLoader
+{
+public:
+    // ctor argument must be a literal string as we don't make a copy of it!
+    wxOnceOnlyDLLLoader(const wxChar *dllName)
+        : m_dllName(dllName)
+    {
+    }
+
+    // return the symbol with the given name or NULL if the DLL not loaded
+    // or symbol not present
+    void *GetSymbol(const wxChar *name)
+    {
+        // we're prepared to handle errors here
+        wxLogNull noLog;
+
+        if ( m_dllName )
+        {
+            m_dll.Load(m_dllName);
+
+            // reset the name whether we succeeded or failed so that we don't
+            // try again the next time
+            m_dllName = NULL;
+        }
+
+        return m_dll.IsLoaded() ? m_dll.GetSymbol(name) : NULL;
+    }
+
+    void Unload()
+    {
+        if ( m_dll.IsLoaded() )
+        {
+            m_dll.Unload();
+        }
+    }
+
+private:
+    wxDynamicLibrary m_dll;
+    const wxChar *m_dllName;
+};
+
+static wxOnceOnlyDLLLoader wxMSIMG32DLL(wxT("msimg32"));
+
+// we must ensure that DLLs are unloaded before the static objects cleanup time
+// because we may hit the notorious DllMain() dead lock in this case if wx is
+// used as a DLL (attempting to unload another DLL from inside DllMain() hangs
+// under Windows because it tries to reacquire the same lock)
+class wxGDIDLLsCleanupModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxMSIMG32DLL.Unload(); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGDIDLLsCleanupModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxGDIDLLsCleanupModule, wxModule)
+
+} // namespace wxMSWImpl
+
+#endif // USE_DYNAMIC_GDI_FUNCS
+
+// Namespace for the wrapper functions, hopefully one day we'll be able to get
+// rid of all of them and then it will be easy to find all occurrences of their
+// use by just searching for this namespace name.
+//
+// All of the functions in this namespace must work *exactly* like the standard
+// functions with the same name and just return an error if dynamically loading
+// them failed.
+namespace wxDynLoadWrappers
+{
+
+#ifdef USE_DYNAMIC_GDI_FUNCS
+
+// This is unfortunately necessary because GetLayout() is missing in MinGW
+// libgdi32.a import library (at least up to w32api 4.0.3).
+DWORD GetLayout(HDC hdc)
+{
+    typedef DWORD (WINAPI *GetLayout_t)(HDC);
+    static GetLayout_t
+        wxDL_INIT_FUNC(s_pfn, GetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
+
+    return s_pfnGetLayout ? s_pfnGetLayout(hdc) : GDI_ERROR;
+}
+
+// SetLayout is present in newer w32api versions but in older one (e.g. the one
+// used by mingw32 4.2 Debian package), so load it dynamically too while we're
+// at it.
+DWORD SetLayout(HDC hdc, DWORD dwLayout)
+{
+    typedef DWORD (WINAPI *SetLayout_t)(HDC, DWORD);
+    static SetLayout_t
+        wxDL_INIT_FUNC(s_pfn, SetLayout, wxDynamicLibrary(wxT("gdi32.dll")));
+
+    return s_pfnSetLayout ? s_pfnSetLayout(hdc, dwLayout) : GDI_ERROR;
+}
+
+// AlphaBlend() requires linking with libmsimg32.a and we want to avoid this as
+// it would break all the existing make/project files.
+BOOL AlphaBlend(HDC hdcDest, int xDest, int yDest, int wDest, int hDest,
+                HDC hdcSrc, int xSrc, int ySrc, int wSrc, int hSrc,
+                BLENDFUNCTION bf)
+{
+    typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
+                                        HDC,int,int,int,int,
+                                        BLENDFUNCTION);
+    static const AlphaBlend_t pfnAlphaBlend =
+        (AlphaBlend_t)wxMSIMG32DLL.GetSymbol(wxT("AlphaBlend"));
+
+    if ( !pfnAlphaBlend )
+        return FALSE;
+
+    return pfnAlphaBlend(hdcDest, xDest, yDest, wDest, hDest,
+                         hdcSrc, xSrc, ySrc, wSrc, hSrc,
+                         bf);
+}
+
+// Just as AlphaBlend(), this one lives in msimg32.dll.
+BOOL GradientFill(HDC hdc, PTRIVERTEX pVert, ULONG numVert,
+                  PVOID pMesh, ULONG numMesh, ULONG mode)
+{
+    typedef BOOL
+        (WINAPI *GradientFill_t)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
+    static const GradientFill_t pfnGradientFill =
+        (GradientFill_t)wxMSIMG32DLL.GetSymbol(wxT("GradientFill"));
+
+    if ( !pfnGradientFill )
+        return FALSE;
+
+    return pfnGradientFill(hdc, pVert, numVert, pMesh, numMesh, mode);
+}
+
+#elif defined(USE_STATIC_GDI_FUNCS)
+
+inline
+DWORD GetLayout(HDC hdc)
+{
+    return ::GetLayout(hdc);
+}
+
+inline
+DWORD SetLayout(HDC hdc, DWORD dwLayout)
+{
+    return ::SetLayout(hdc, dwLayout);
+}
+
+inline
+BOOL AlphaBlend(HDC hdcDest, int xDest, int yDest, int wDest, int hDest,
+                HDC hdcSrc, int xSrc, int ySrc, int wSrc, int hSrc,
+                BLENDFUNCTION bf)
+{
+    return ::AlphaBlend(hdcDest, xDest, yDest, wDest, hDest,
+                        hdcSrc, xSrc, ySrc, wSrc, hSrc,
+                        bf);
+}
+
+inline
+BOOL GradientFill(HDC hdc, PTRIVERTEX pVert, ULONG numVert,
+                  PVOID pMesh, ULONG numMesh, ULONG mode)
+{
+    return ::GradientFill(hdc, pVert, numVert, pMesh, numMesh, mode);
+}
+
+#else // Can't use the functions neither statically nor dynamically.
+
+inline
+DWORD GetLayout(HDC WXUNUSED(hdc))
+{
+    return GDI_ERROR;
+}
+
+inline
+DWORD SetLayout(HDC WXUNUSED(hdc), DWORD WXUNUSED(dwLayout))
+{
+    return GDI_ERROR;
+}
+
+inline
+BOOL AlphaBlend(HDC,int,int,int,int,
+                HDC,int,int,int,int,
+                BLENDFUNCTION)
+{
+    return FALSE;
+}
+
+inline
+BOOL GradientFill(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG)
+{
+    return FALSE;
+}
+
+#endif // USE_DYNAMIC_GDI_FUNCS/USE_STATIC_GDI_FUNCS
+
+} // namespace wxDynLoadWrappers
+
 
 // call AlphaBlend() to blit contents of hdcSrc to dcDst using alpha
 //
@@ -2552,9 +2770,12 @@ static bool AlphaBlt(wxMSWDCImpl* dcDst,
     bf.SourceConstantAlpha = 0xff;
     bf.AlphaFormat = AC_SRC_ALPHA;
 
-    if ( !::AlphaBlend(GetHdcOf(*dcDst), x, y, dstWidth, dstHeight,
-                       hdcSrc, srcX, srcY, srcWidth, srcHeight,
-                       bf) )
+    if ( !wxDynLoadWrappers::AlphaBlend
+          (
+            GetHdcOf(*dcDst), x, y, dstWidth, dstHeight,
+            hdcSrc, srcX, srcY, srcWidth, srcHeight,
+            bf
+          ) )
     {
         wxLogLastError(wxT("AlphaBlend"));
         return false;
@@ -2650,7 +2871,7 @@ void wxMSWDCImpl::DoGradientFillLinear (const wxRect& rect,
     vertices[1 - firstVertex].Blue = (COLOR16)(destColour.Blue() << 8);
     vertices[1 - firstVertex].Alpha = 0;
 
-    if ( ::GradientFill
+    if ( wxDynLoadWrappers::GradientFill
          (
             GetHdc(),
             vertices,
@@ -2679,9 +2900,9 @@ HDC CreateCompatibleDCWithLayout(HDC hdc)
     HDC hdcNew = ::CreateCompatibleDC(hdc);
     if ( hdcNew )
     {
-        DWORD dwLayout = ::GetLayout(hdc);
+        DWORD dwLayout = wxDynLoadWrappers::GetLayout(hdc);
         if ( dwLayout != GDI_ERROR )
-            ::SetLayout(hdcNew, dwLayout);
+            wxDynLoadWrappers::SetLayout(hdcNew, dwLayout);
     }
 
     return hdcNew;
@@ -2691,7 +2912,7 @@ HDC CreateCompatibleDCWithLayout(HDC hdc)
 
 wxLayoutDirection wxMSWDCImpl::GetLayoutDirection() const
 {
-    DWORD layout = ::GetLayout(GetHdc());
+    DWORD layout = wxDynLoadWrappers::GetLayout(GetHdc());
 
     if ( layout == GDI_ERROR )
         return wxLayout_Default;
@@ -2708,7 +2929,7 @@ void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
             return;
     }
 
-    DWORD layout = ::GetLayout(GetHdc());
+    DWORD layout = wxDynLoadWrappers::GetLayout(GetHdc());
     if ( layout == GDI_ERROR )
         return;
 
@@ -2717,5 +2938,5 @@ void wxMSWDCImpl::SetLayoutDirection(wxLayoutDirection dir)
     else
         layout &= ~LAYOUT_RTL;
 
-    ::SetLayout(GetHdc(), layout);
+    wxDynLoadWrappers::SetLayout(GetHdc(), layout);
 }

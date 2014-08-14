@@ -22,8 +22,6 @@ Changes in behaviour which may result in build errors
 
 - "webview" library is not included in `wx-config --libs` output any more, you
   need to request it explicitly, e.g. `wx-config --libs std,webview`.
-- MinGW users will need to add "-lmsimg32" to their makefiles when using
-  statically linked wxWidgets libraries if not using wx-config.
 
 
 3.1.0: (released 2014-xx-xx)
