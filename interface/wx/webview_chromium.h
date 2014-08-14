@@ -8,15 +8,25 @@
 /**
     @class wxWebViewChromium
 
-    wxWebviewChromium is a Chromium backend with Chromium Embedded Framework(CEF3),
+    wxWebViewChromium is a Chromium backend base on Chromium Embedded Framework(CEF3),
     which uses the same rendering engine with Google Chrome Browser. The current
     CEF3 required version is 3.1750.1738. This backend is available for
     MSW/Linux/Mac OS X port. Custom schemes and virtual file systems are also supported.
 
+    @section differences API Differences
+
+    wxWebViewChromium aims to support the full wxWebView API, but there are some features 
+    unsupported by CEF3 API, see the following differences.
+
+    - GetSelectedSource/GetSelectedText: return ""
+    - HasSelection: Not supported by CEF3, return false
+    - IsEditable: Not supported by CEF3, return false
+    - CanUndo/CanRedo/CanCut/CanCopy/CanPaste: Not supported by CEF3, return true
+    - Find: return -1
+
     @section requirements Requirements
 
     Chromium Embedded Framework: 3.1750.1738.
-
 
     On Windows platform, you will need to change the vistual stdio building
     properties of `libcef_dll_wrapper` to consistent with wxWidgets, see following steps:
@@ -271,4 +281,30 @@ public:
            @endcode
     */
     static void DoCEFWork();
+};
+
+
+/**
+    @class wxWebViewFactoryChromium
+
+    A factory class for creating wxWebViewChromium backend.
+    By default, wxWebViewFactoryChromium is not registered in wxWebView, developer should register the
+    factory class in wxWebView before using.
+
+    @code
+    wxWebView::RegisterFactory(wxWebViewBackendChromium,
+                               wxSharedPtr<wxWebViewFactory>(new wxWebViewFactoryChromium));
+    @endcode
+*/
+class wxWebViewFactoryChromium : public wxWebViewFactory
+{
+public:
+    virtual wxWebView* Create();
+    virtual wxWebView* Create(wxWindow* parent,
+                              wxWindowID id,
+                              const wxString& url = wxWebViewDefaultURLStr,
+                              const wxPoint& pos = wxDefaultPosition,
+                              const wxSize& size = wxDefaultSize,
+                              long style = 0,
+                              const wxString& name = wxWebViewNameStr);
 };
