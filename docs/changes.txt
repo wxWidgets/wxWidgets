@@ -607,6 +607,7 @@ wxMSW:
 - Fix appearance of wxToggleButtons with non default colours (Artur Wieczorek).
 - Fix drawing on wxDC when using right-to-left layout (Artur Wieczorek).
 - Fix wxGrid appearance and behaviour in RTL (Artur Wieczorek).
+- Add paragraph spacing attributes support to wxTextCtrl (dannchr).
 
 
 3.0.1: (released 2014-06-15)
