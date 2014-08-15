@@ -346,14 +346,12 @@ void wxBell()
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
     if ( UMAGetSystemVersion() >= 0x1090 )
     {
         [[NSRunningApplication currentApplication] activateWithOptions:
          (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];
     }
     else
-#endif
     {
         [self deactivate];
         [self activateIgnoringOtherApps:YES];
@@ -502,8 +500,6 @@ void wxGetMousePosition( int* x, int* y )
         *y = pt.y;
 };
 
-#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
-
 wxMouseState wxGetMouseState()
 {
     wxMouseState ms;
@@ -526,9 +522,6 @@ wxMouseState wxGetMouseState()
     
     return ms;
 }
-
-
-#endif
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {

@@ -2777,6 +2777,24 @@ bool wxTextCtrl::MSWSetParaFormat(const wxTextAttr& style, long start, long end)
     }
 
 #if wxUSE_RICHEDIT2
+    if ( style.HasParagraphSpacingAfter() )
+    {
+        pf.dwMask |= PFM_SPACEAFTER;
+
+        // Convert from 1/10 mm to TWIPS
+        pf.dySpaceAfter = (int) (((double) style.GetParagraphSpacingAfter()) * mm2twips / 10.0) ;
+    }
+
+    if ( style.HasParagraphSpacingBefore() )
+    {
+        pf.dwMask |= PFM_SPACEBEFORE;
+
+        // Convert from 1/10 mm to TWIPS
+        pf.dySpaceBefore = (int) (((double) style.GetParagraphSpacingBefore()) * mm2twips / 10.0) ;
+    }
+#endif // wxUSE_RICHEDIT2
+
+#if wxUSE_RICHEDIT2
     if ( m_verRichEdit > 1 )
     {
         if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )

@@ -1552,20 +1552,7 @@ wxBitmap* wxSimpleCheckBox::ms_doubleBuffer = NULL;
 void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxRect rect(GetClientSize());
-#ifdef __WXMSW__
-    wxPaintDC dc(this);
-    // Under MSW, wxAutoBufferedPaintDC, wxPaintDC don't work fine with RTL,
-    // so we need to bypass this problem by setting LTR direction for this DC.
-    // Fortunately, we have only check box image to draw, no texts.
-    if ( dc.GetLayoutDirection() == wxLayout_RightToLeft )
-    {
-        dc.SetLayoutDirection(wxLayout_LeftToRight);
-        // Some hack to prevent shifting the ouput image.
-        rect.x -= 2;
-    }
-#else
     wxAutoBufferedPaintDC dc(this);
-#endif
     dc.Clear();
 
     rect.y += 1;
