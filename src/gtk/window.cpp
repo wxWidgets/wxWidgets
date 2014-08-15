@@ -996,9 +996,12 @@ void AdjustCharEventKeyCodes(wxKeyEvent& event)
 // navigation will work.
 #define wxPROCESS_EVENT_ONCE(EventType, event) \
     static EventType eventPrev; \
-    if (memcmp(&eventPrev, event, sizeof(EventType)) == 0) \
+    if (!gs_isNewEvent && memcmp(&eventPrev, event, sizeof(EventType)) == 0) \
         return false; \
+    gs_isNewEvent = false; \
     eventPrev = *event
+
+static bool gs_isNewEvent;
 
 extern "C" {
 static gboolean
@@ -2740,8 +2743,44 @@ wxWindowGTK::GTKConnectWidget(const char *signal, wxGTKCallback callback)
     return g_signal_connect(m_widget, signal, callback, this);
 }
 
+// GSource callback functions for source used to detect new GDK events
+extern "C" {
+static gboolean source_prepare(GSource*, int*)
+{
+    return !gs_isNewEvent;
+}
+
+static gboolean source_check(GSource*)
+{
+    // 'check' will only be called if 'prepare' returned false
+    return false;
+}
+
+static gboolean source_dispatch(GSource*, GSourceFunc, void*)
+{
+    gs_isNewEvent = true;
+    // don't remove this source
+    return true;
+}
+}
+
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 {
+    static bool isSourceAttached;
+    if (!isSourceAttached)
+    {
+        // attach GSource to detect new GDK events
+        isSourceAttached = true;
+        static GSourceFuncs funcs = {
+            source_prepare, source_check, source_dispatch,
+            NULL, NULL, NULL
+        };
+        GSource* source = g_source_new(&funcs, sizeof(GSource));
+        // priority slightly higher than GDK_PRIORITY_EVENTS
+        g_source_set_priority(source, GDK_PRIORITY_EVENTS - 1);
+        g_source_attach(source, NULL);
+    }
+
     g_signal_connect (widget, "key_press_event",
                       G_CALLBACK (gtk_window_key_press_callback), this);
     g_signal_connect (widget, "key_release_event",
