@@ -114,15 +114,9 @@ typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
 
 IMPLEMENT_CLASS(wxGLContext, wxObject)
 
-// The window will always be created first so the array will be initialized
-// and then the window will be assigned to the context.
-// max 8 attributes plus terminator
-// if first is 0, create legacy context
-static int s_glxContextAttribs[9] = {0};
-
 wxGLContext::wxGLContext(wxGLCanvas *gc, const wxGLContext *other)
 {
-    if ( s_glxContextAttribs[0] != 0 ) // OpenGL 3 context creation
+    if ( gc->GetGLXContextAttribs()[0] != 0 ) // OpenGL 3 context creation
     {
         XVisualInfo *vi = gc->GetXVisualInfo();
         wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
@@ -148,7 +142,7 @@ wxGLContext::wxGLContext(wxGLCanvas *gc, const wxGLContext *other)
 
         m_glContext = glXCreateContextAttribsARB( wxGetX11Display(), fbc[0],
             other ? other->m_glContext : None,
-            GL_TRUE, s_glxContextAttribs );
+            GL_TRUE, gc->GetGLXContextAttribs() );
 
         glXDestroyContext( wxGetX11Display(), tempContext );
     }
@@ -219,10 +213,13 @@ wxGLCanvasX11::wxGLCanvasX11()
 {
     m_fbc = NULL;
     m_vi = NULL;
+    m_glxContextAttribs[0] = 0;
 }
 
 bool wxGLCanvasX11::InitVisual(const int *attribList)
 {
+    InitGLXContextAttribs(attribList, m_glxContextAttribs);
+
     return InitXVisualInfo(attribList, &m_fbc, &m_vi);
 }
 
@@ -259,6 +256,56 @@ bool wxGLCanvasX11::IsGLXMultiSampleAvailable()
     return s_isMultiSampleAvailable != 0;
 }
 
+
+/* static */
+void wxGLCanvasX11::InitGLXContextAttribs(const int *wxattrs, int *wxctxattrs)
+{
+    wxctxattrs[0] = 0; // default is legacy context
+
+    if ( !wxattrs )    // default attribs
+        return;
+
+    bool useGLCoreProfile = false;
+
+    // the minimum gl core version would be 3.0
+    int glVersionMajor = 3,
+        glVersionMinor = 0;
+
+    for ( int arg = 0; wxattrs[arg] != 0; )
+    {
+        switch ( wxattrs[arg++] )
+        {
+            case WX_GL_CORE_PROFILE:
+                useGLCoreProfile = true;
+                break;
+
+            case WX_GL_MAJOR_VERSION:
+                glVersionMajor = wxattrs[arg++];
+                break;
+
+            case WX_GL_MINOR_VERSION:
+                glVersionMinor = wxattrs[arg++];
+                break;
+
+            default: break;
+        }
+    }
+
+    if ( useGLCoreProfile )
+    {
+        wxctxattrs[0] = GLX_CONTEXT_MAJOR_VERSION_ARB;
+        wxctxattrs[1] = glVersionMajor;
+        wxctxattrs[2] = GLX_CONTEXT_MINOR_VERSION_ARB;
+        wxctxattrs[3] = glVersionMinor;
+        wxctxattrs[4] = GLX_CONTEXT_FLAGS_ARB;
+        wxctxattrs[5] = GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB;
+        wxctxattrs[6] = GLX_CONTEXT_PROFILE_MASK_ARB;
+        wxctxattrs[7] = GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
+        wxctxattrs[8] = 0; // terminate
+    }
+}
+
+/* static */
 bool
 wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 {
@@ -277,8 +324,6 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
         - Boolean attributes such as GLX_DOUBLEBUFFER don't take values in the
           old version but must be followed by True or False in the new one.
      */
-
-    s_glxContextAttribs[0] = 0; // default is legacy context
 
     if ( !wxattrs )
     {
@@ -309,14 +354,6 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
     }
     else // have non-default attributes
     {
-        // these will be used for the context creation attributes
-        // if a core profile is requested
-        bool useGLCoreProfile = false;
-
-        // the minimum gl core version is 3.0
-        int glVersionMajor = 3,
-            glVersionMinor = 0;
-
         size_t p = 0;
         for ( int arg = 0; wxattrs[arg] != 0; )
         {
@@ -433,16 +470,17 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 
                     return false;
 
+                // the following constants are context attribs
+                // ignore them
                 case WX_GL_CORE_PROFILE:
-                    useGLCoreProfile = true;
                     continue;
 
                 case WX_GL_MAJOR_VERSION:
-                    glVersionMajor = wxattrs[arg++];
+                    arg++; // skip int
                     continue;
 
                 case WX_GL_MINOR_VERSION:
-                    glVersionMinor = wxattrs[arg++];
+                    arg++; // skip int
                     continue;
 
                 default:
@@ -466,23 +504,6 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
         }
 
         glattrs[p] = None;
-
-        if ( useGLCoreProfile )
-        {
-            s_glxContextAttribs[0] = GLX_CONTEXT_MAJOR_VERSION_ARB;
-            s_glxContextAttribs[1] = glVersionMajor;
-            s_glxContextAttribs[2] = GLX_CONTEXT_MINOR_VERSION_ARB;
-            s_glxContextAttribs[3] = glVersionMinor;
-            s_glxContextAttribs[4] = GLX_CONTEXT_FLAGS_ARB;
-            s_glxContextAttribs[5] = GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB;
-            s_glxContextAttribs[6] = GLX_CONTEXT_PROFILE_MASK_ARB;
-            s_glxContextAttribs[7] = GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
-            s_glxContextAttribs[8] = 0; // terminate
-        }
-        else // create legacy/compatibility context
-        {
-            s_glxContextAttribs[0] = 0;
-        }
     }
 
     return true;
