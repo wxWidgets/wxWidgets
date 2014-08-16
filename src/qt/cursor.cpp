@@ -43,27 +43,29 @@ wxCursor::wxCursor( const wxCursor &cursor )
     m_qtCursor = cursor.m_qtCursor;
 }
 
-wxCursor::wxCursor(const wxString& filename,
-                   wxBitmapType kind,
-                   int hotSpotX,
-                   int hotSpotY)
+#if wxUSE_IMAGE
+wxCursor::wxCursor(const wxString& cursor_file,
+                   wxBitmapType type,
+                   int hotSpotX, int hotSpotY)
 {
-    switch ( kind )
-    {
-        case wxBITMAP_TYPE_ICO:
-            m_qtCursor = QCursor(
-                            *wxBitmap(filename, wxBITMAP_TYPE_ICO).GetHandle(),
-                            hotSpotX, hotSpotY );
-            break;
-        case wxBITMAP_TYPE_BMP:
-            m_qtCursor = QCursor(
-                            *wxBitmap(filename, wxBITMAP_TYPE_ICO).GetHandle(),
-                            hotSpotX, hotSpotY );
-            break;
-        default:
-            wxLogError( wxT("unknown cursor resource type '%d'"), kind );
-    }
+    wxImage img;
+    if (!img.LoadFile(cursor_file, type))
+        return;
+
+    // eventually set the hotspot:
+    if (!img.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X))
+        img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX);
+    if (!img.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y))
+        img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY);
+
+    InitFromImage(img);
 }
+
+wxCursor::wxCursor(const wxImage& img)
+{
+    InitFromImage(img);
+}
+#endif
 
 void wxCursor::InitFromStock( wxStockCursor cursorId )
 {
