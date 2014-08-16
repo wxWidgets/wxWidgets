@@ -1637,8 +1637,12 @@ bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
         {
             // OnExceptionInMainLoop() threw, possibly rethrowing the same
             // exception again: very good, but we still need Exit() to
-            // be called
-            if ( loop )
+            // be called, unless we're not called from the loop directly but
+            // from Yield(), in which case we shouldn't exit the loop but just
+            // unwind to the point where Yield() is called where the exception
+            // might be handled -- and if not, then it will unwind further and
+            // exit the loop when it is caught.
+            if ( loop && !loop->IsYielding() )
                 loop->Exit();
             throw;
         }
