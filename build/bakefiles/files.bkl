@@ -307,6 +307,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/mdi.h
     wx/qt/menu.h
     wx/qt/menuitem.h
+    wx/qt/minifram.h
     wx/qt/msgdlg.h
     wx/qt/notebook.h
     wx/qt/palette.h
@@ -394,6 +395,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/mdi.cpp
     src/qt/menu.cpp
     src/qt/menuitem.cpp
+    src/qt/minifram.cpp
     src/qt/msgdlg.cpp
     src/qt/notebook.cpp
     src/qt/palette.cpp

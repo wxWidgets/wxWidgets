@@ -2800,6 +2800,7 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/mdi.h \
 	wx/qt/menu.h \
 	wx/qt/menuitem.h \
+	wx/qt/minifram.h \
 	wx/qt/msgdlg.h \
 	wx/qt/notebook.h \
 	wx/qt/palette.h \
@@ -5367,6 +5368,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_mdi.o \
 	monodll_qt_menu.o \
 	monodll_qt_menuitem.o \
+	monodll_qt_minifram.o \
 	monodll_qt_msgdlg.o \
 	monodll_qt_notebook.o \
 	monodll_qt_palette.o \
@@ -6317,6 +6319,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_mdi.o \
 	monodll_qt_menu.o \
 	monodll_qt_menuitem.o \
+	monodll_qt_minifram.o \
 	monodll_qt_msgdlg.o \
 	monodll_qt_notebook.o \
 	monodll_qt_palette.o \
@@ -7713,6 +7716,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_mdi.o \
 	monolib_qt_menu.o \
 	monolib_qt_menuitem.o \
+	monolib_qt_minifram.o \
 	monolib_qt_msgdlg.o \
 	monolib_qt_notebook.o \
 	monolib_qt_palette.o \
@@ -8663,6 +8667,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_mdi.o \
 	monolib_qt_menu.o \
 	monolib_qt_menuitem.o \
+	monolib_qt_minifram.o \
 	monolib_qt_msgdlg.o \
 	monolib_qt_notebook.o \
 	monolib_qt_palette.o \
@@ -10216,6 +10221,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_mdi.o \
 	coredll_qt_menu.o \
 	coredll_qt_menuitem.o \
+	coredll_qt_minifram.o \
 	coredll_qt_msgdlg.o \
 	coredll_qt_notebook.o \
 	coredll_qt_palette.o \
@@ -11166,6 +11172,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_mdi.o \
 	coredll_qt_menu.o \
 	coredll_qt_menuitem.o \
+	coredll_qt_minifram.o \
 	coredll_qt_msgdlg.o \
 	coredll_qt_notebook.o \
 	coredll_qt_palette.o \
@@ -11983,6 +11990,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_mdi.o \
 	corelib_qt_menu.o \
 	corelib_qt_menuitem.o \
+	corelib_qt_minifram.o \
 	corelib_qt_msgdlg.o \
 	corelib_qt_notebook.o \
 	corelib_qt_palette.o \
@@ -12933,6 +12941,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_mdi.o \
 	corelib_qt_menu.o \
 	corelib_qt_menuitem.o \
+	corelib_qt_minifram.o \
 	corelib_qt_msgdlg.o \
 	corelib_qt_notebook.o \
 	corelib_qt_palette.o \
@@ -20708,6 +20717,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_menuitem.o: $(srcdir)/src/qt/menuitem.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/menuitem.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_minifram.o: $(srcdir)/src/qt/minifram.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/minifram.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
 
@@ -26566,6 +26578,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_menuitem.o: $(srcdir)/src/qt/menuitem.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/menuitem.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_minifram.o: $(srcdir)/src/qt/minifram.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/minifram.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
@@ -32537,6 +32552,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_menuitem.o: $(srcdir)/src/qt/menuitem.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/menuitem.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_minifram.o: $(srcdir)/src/qt/minifram.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/minifram.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
 
@@ -36907,6 +36925,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_menuitem.o: $(srcdir)/src/qt/menuitem.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/menuitem.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_minifram.o: $(srcdir)/src/qt/minifram.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/minifram.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
