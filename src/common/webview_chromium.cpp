@@ -498,12 +498,15 @@ void wxWebViewChromium::Shutdown()
 }
 
 // CefDisplayHandler methods
-void ClientHandler::OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading,
-                          bool canGoBack, bool canGoForward)
+void ClientHandler::OnLoadingStateChange(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                                         bool WXUNUSED(isLoading),
+                                         bool WXUNUSED(canGoBack),
+                                         bool WXUNUSED(canGoForward))
 {}
 
-void ClientHandler::OnAddressChange(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
-                     const CefString& url)
+void ClientHandler::OnAddressChange(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                                    CefRefPtr<CefFrame> WXUNUSED(frame),
+                                    const CefString& WXUNUSED(url))
 {}
 
 void ClientHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title)
@@ -518,45 +521,46 @@ void ClientHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString
     m_webview->HandleWindowEvent(event);
 }
 
-bool ClientHandler::OnConsoleMessage(CefRefPtr<CefBrowser> browser, const CefString& message,
-                      const CefString& source, int line)
+bool ClientHandler::OnConsoleMessage(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                                     const CefString& WXUNUSED(message),
+                                     const CefString& WXUNUSED(source), int WXUNUSED(line))
 {
     return false;
 }
 
 // CefContextMenuHandler methods
-void ClientHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> browser,
-                                        CefRefPtr<CefFrame> frame,
-                                        CefRefPtr<CefContextMenuParams> params,
+void ClientHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                                        CefRefPtr<CefFrame> WXUNUSED(frame),
+                                        CefRefPtr<CefContextMenuParams> WXUNUSED(params),
                                         CefRefPtr<CefMenuModel> model)
 {
     if(!m_webview->IsContextMenuEnabled())
         model->Clear();
 }
 
-bool ClientHandler::OnContextMenuCommand(CefRefPtr<CefBrowser> browser,
-                                         CefRefPtr<CefFrame> frame,
-                                         CefRefPtr<CefContextMenuParams> params,
-                                         int command_id,
-                                         CefContextMenuHandler::EventFlags event_flags)
+bool ClientHandler::OnContextMenuCommand(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                                         CefRefPtr<CefFrame> WXUNUSED(frame),
+                                         CefRefPtr<CefContextMenuParams> WXUNUSED(params),
+                                         int WXUNUSED(command_id),
+                                         CefContextMenuHandler::EventFlags WXUNUSED(event_flags))
 {
     return false;
 }
 
-void ClientHandler::OnContextMenuDismissed(CefRefPtr<CefBrowser> browser,
-                                           CefRefPtr<CefFrame> frame)
+void ClientHandler::OnContextMenuDismissed(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                                           CefRefPtr<CefFrame> WXUNUSED(frame))
 {}
 
 // CefLifeSpanHandler methods
-bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> browser,
-                             CefRefPtr<CefFrame> frame,
+bool ClientHandler::OnBeforePopup(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                             CefRefPtr<CefFrame> WXUNUSED(frame),
                              const CefString& target_url,
                              const CefString& target_frame_name,
-                             const CefPopupFeatures& popupFeatures,
-                             CefWindowInfo& windowInfo,
-                             CefRefPtr<CefClient>& client,
-                             CefBrowserSettings& settings,
-                             bool* no_javascript_access)
+                             const CefPopupFeatures& WXUNUSED(popupFeatures),
+                             CefWindowInfo& WXUNUSED(windowInfo),
+                             CefRefPtr<CefClient>& WXUNUSED(client),
+                             CefBrowserSettings& WXUNUSED(settings),
+                             bool* WXUNUSED(no_javascript_access))
 {
     wxWebViewEvent *event = new wxWebViewEvent(wxEVT_WEBVIEW_NEWWINDOW,
                                                m_webview->GetId(),
@@ -577,7 +581,7 @@ void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
         m_browserId = browser->GetIdentifier();
     }
 }
-bool ClientHandler::DoClose(CefRefPtr<CefBrowser> browser)
+bool ClientHandler::DoClose(CefRefPtr<CefBrowser> WXUNUSED(browser))
 {
     return false;
 }
@@ -591,7 +595,7 @@ void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 }
 
 // CefLoadHandler methods
-void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> browser,
+void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> WXUNUSED(browser),
                                 CefRefPtr<CefFrame> frame)
 {
     wxString url = frame->GetURL().ToString();
@@ -608,9 +612,9 @@ void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> browser,
     }
 }
 
-void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser,
+void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> WXUNUSED(browser),
                               CefRefPtr<CefFrame> frame,
-                              int httpStatusCode)
+                              int WXUNUSED(httpStatusCode))
 {
     wxString url = frame->GetURL().ToString();
     wxString target = frame->GetName().ToString();
@@ -665,11 +669,11 @@ void ClientHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser,
     }
 }
 
-void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
-                                CefRefPtr<CefFrame> frame,
+void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                                CefRefPtr<CefFrame> WXUNUSED(frame),
                                 ErrorCode errorCode,
-                                const CefString& errorText,
-                                const CefString& failedUrl)
+                                const CefString& WXUNUSED(errorText),
+                                const CefString& WXUNUSED(failedUrl))
 {
     //We define a macro for convenience
     #define ERROR_TYPE_CASE(error, wxtype) case(error): \
@@ -765,7 +769,7 @@ bool SchemeHandler::ProcessRequest(CefRefPtr<CefRequest> request,
 
 void SchemeHandler::GetResponseHeaders(CefRefPtr<CefResponse> response,
                                        int64& response_length,
-                                       CefString& redirectUrl)
+                                       CefString& WXUNUSED(redirectUrl))
 {
     if ( !m_mime_type.empty() )
         response->SetMimeType( m_mime_type );
@@ -778,7 +782,7 @@ void SchemeHandler::GetResponseHeaders(CefRefPtr<CefResponse> response,
 bool SchemeHandler::ReadResponse(void* data_out,
                                  int bytes_to_read,
                                  int& bytes_read,
-                                 CefRefPtr<CefCallback> callback)
+                                 CefRefPtr<CefCallback> WXUNUSED(callback))
 {
     bool has_data = false;
     bytes_read = 0;

@@ -1088,7 +1088,7 @@ SourceViewDialog::SourceViewDialog(wxWindow* parent, wxString source) :
     SetSizer(sizer);
 }
 
-void WebFrame::OnClose(wxCloseEvent &evt)
+void WebFrame::OnClose(wxCloseEvent & WXUNUSED(evt))
 {
     delete m_timer;
 // On Windows/Linux, calling `Shutdown` here will cause a crash when closing WebFrame.

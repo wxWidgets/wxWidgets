@@ -149,10 +149,10 @@ public:
     SchemeHandlerFactory(wxSharedPtr<wxWebViewHandler> handler): m_handler(handler) {}
 
     // Return a new scheme handler instance to handle the request.
-    virtual CefRefPtr<CefResourceHandler> Create(CefRefPtr<CefBrowser> browser,
-                                                 CefRefPtr<CefFrame> frame,
-                                                 const CefString& scheme_name,
-                                                 CefRefPtr<CefRequest> request)
+    virtual CefRefPtr<CefResourceHandler> Create(CefRefPtr<CefBrowser> WXUNUSED(browser),
+                                                 CefRefPtr<CefFrame> WXUNUSED(frame),
+                                                 const CefString& WXUNUSED(scheme_name),
+                                                 CefRefPtr<CefRequest> WXUNUSED(request))
     {
         return new SchemeHandler( m_handler );
     }
@@ -226,7 +226,7 @@ public:
 
     virtual void* GetNativeBackend() const;
 
-    virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) { return wxNOT_FOUND; }
+    virtual long Find(const wxString& WXUNUSED(text), int WXUNUSED(flags) = wxWEBVIEW_FIND_DEFAULT) { return wxNOT_FOUND; }
 
     //Clipboard functions
     virtual bool CanCut() const { return true; }
