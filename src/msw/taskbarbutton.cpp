@@ -1428,7 +1428,7 @@ void wxTaskBarJumpListImpl::LoadKnownCategory(const wxString& title)
     hr = docList->GetList
                  (
                      title == "Recent" ? ADLT_RECENT : ADLT_FREQUENT,
-                     NULL,
+                     0,
                      wxIID_IObjectArray,
                      reinterpret_cast<void **>(&array)
                  );

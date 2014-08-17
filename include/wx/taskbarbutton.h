@@ -15,14 +15,14 @@
 
 #include "wx/defs.h"
 
-// ----------------------------------------------------------------------------
-// wxTaskBarButton: define wxTaskBarButton interface.
-// ----------------------------------------------------------------------------
-
 class WXDLLIMPEXP_FWD_CORE wxTaskBarButton;
 class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpListCategory;
 class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpList;
 class WXDLLIMPEXP_FWD_CORE wxTaskBarJumpListImpl;
+
+// ----------------------------------------------------------------------------
+// wxTaskBarButton: define wxTaskBarButton interface.
+// ----------------------------------------------------------------------------
 
 /**
     State of the task bar button.
