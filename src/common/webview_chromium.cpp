@@ -127,13 +127,8 @@ bool wxWebViewChromium::Create(wxWindow* parent,
     info.SetAsChild( GetHandle(), 0, 0, size.GetX(), size.GetY() );
 #endif
 
-#if CHROME_VERSION_BUILD >= 1650
     CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
                                   url.ToStdString(), browsersettings, NULL);
-#else
-    CefBrowserHost::CreateBrowser(info, static_cast<CefRefPtr<CefClient> >(m_clientHandler),
-                                  url.ToStdString(), browsersettings);
-#endif
 
     this->Bind(wxEVT_SIZE, &wxWebViewChromium::OnSize, this);
     return true;
@@ -306,9 +301,7 @@ wxString wxWebViewChromium::GetCurrentTitle() const
 
 void wxWebViewChromium::Print()
 {
-#if CHROME_VERSION_BUILD >= 1650
     m_clientHandler->GetBrowser()->GetHost()->Print();
-#endif
 }
 
 void wxWebViewChromium::Cut()
