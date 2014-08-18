@@ -121,7 +121,8 @@ protected:
 
     // the checkboxes for styles
     wxCheckBox *m_chkVert,
-               *m_chkSmooth;
+               *m_chkSmooth,
+               *m_chkProgress;
 
     // the gauge itself and the sizer it is in
     wxGauge *m_gauge;
@@ -186,7 +187,8 @@ GaugeWidgetsPage::GaugeWidgetsPage(WidgetsBookCtrl *book,
     m_timer = (wxTimer *)NULL;
 
     m_chkVert =
-    m_chkSmooth = (wxCheckBox *)NULL;
+    m_chkSmooth =
+    m_chkProgress = (wxCheckBox *)NULL;
 
     m_gauge = (wxGauge *)NULL;
     m_sizerGauge = (wxSizer *)NULL;
@@ -203,6 +205,7 @@ void GaugeWidgetsPage::CreateContent()
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Vertical"));
     m_chkSmooth = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Smooth"));
+    m_chkProgress = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Progress"));
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
@@ -275,6 +278,7 @@ void GaugeWidgetsPage::Reset()
 {
     m_chkVert->SetValue(false);
     m_chkSmooth->SetValue(false);
+    m_chkProgress->SetValue(false);
 }
 
 void GaugeWidgetsPage::CreateGauge()
@@ -288,6 +292,11 @@ void GaugeWidgetsPage::CreateGauge()
 
     if ( m_chkSmooth->GetValue() )
         flags |= wxGA_SMOOTH;
+
+#if wxUSE_TASKBARBUTTON
+    if ( m_chkProgress->GetValue() )
+        flags |= wxGA_PROGRESS;
+#endif
 
     int val = 0;
     if ( m_gauge )
@@ -431,7 +440,8 @@ void GaugeWidgetsPage::OnUpdateUIRangeButton(wxUpdateUIEvent& event)
 
 void GaugeWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
-    event.Enable( m_chkVert->GetValue() || m_chkSmooth->GetValue() );
+    event.Enable( m_chkVert->GetValue() || m_chkSmooth->GetValue() ||
+                  m_chkProgress->GetValue() );
 }
 
 void GaugeWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))

@@ -130,17 +130,17 @@ private:
 class WXDLLIMPEXP_CORE wxAppProgressIndicator
 {
 public:
-    wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue);
+    wxAppProgressIndicator(WXWidget parent, int maxValue);
     virtual ~wxAppProgressIndicator();
-    bool Update(int value);
-    bool Pulse();
+    void SetValue(int value);
+    void SetRange(int range);
+    void Pulse();
+    void Reset();
 
 private:
-    void Init();
-
-    wxTopLevelWindow *m_parent;
     int m_maxValue;
-    wxScopedPtr<wxTaskBarButton> m_taskBarButton;
+    WXWidget m_parent;
+    wxTaskBarButton* m_taskBarButton;
 };
 
 enum WXDLLIMPEXP_CORE wxTaskBarJumpListItemType

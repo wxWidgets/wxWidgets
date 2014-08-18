@@ -29,6 +29,10 @@
 // QT only, display current completed percentage (text default format "%p%")
 #define wxGA_TEXT            0x0040
 
+#if wxUSE_TASKBARBUTTON
+#define wxGA_PROGRESS        0x0010
+#endif
+
 // GTK and Mac always have native implementation of the indeterminate mode
 // wxMSW has native implementation only if comctl32.dll >= 6.00
 #if !defined(__WXGTK20__) && !defined(__WXMAC__)

@@ -34,6 +34,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/taskbarbutton.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -91,13 +92,41 @@ bool wxGauge::Create(wxWindow *parent,
     if ( !MSWCreateControl(PROGRESS_CLASS, wxEmptyString, pos, size) )
         return false;
 
-    SetRange(range);
-
     // in case we need to emulate indeterminate mode...
     m_nDirection = wxRIGHT;
 
+#if wxUSE_TASKBARBUTTON
+    m_appProgressIndicator = NULL;
+    if ( (style & wxGA_PROGRESS) != 0 )
+    {
+        wxWindow* topParent = GetParent();
+        while (topParent != NULL && topParent->GetParent() != NULL)
+        {
+            topParent = topParent->GetParent();
+        }
+        if ( topParent != NULL )
+        {
+            m_appProgressIndicator =
+                new wxAppProgressIndicator(topParent->GetHandle(), range);
+        }
+    }
+#endif
+
+    SetRange(range);
+
     return true;
 }
+
+#if wxUSE_TASKBARBUTTON
+wxGauge::~wxGauge()
+{
+    if ( m_appProgressIndicator )
+    {
+        delete m_appProgressIndicator;
+        m_appProgressIndicator = NULL;
+    }
+}
+#endif
 
 WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
@@ -146,6 +175,11 @@ void wxGauge::SetRange(int r)
     // fall back to PBM_SETRANGE (limited to 16 bits)
     ::SendMessage(GetHwnd(), PBM_SETRANGE, 0, MAKELPARAM(0, r));
 #endif // PBM_SETRANGE32/!PBM_SETRANGE32
+
+#if wxUSE_TASKBARBUTTON
+    if ( m_appProgressIndicator )
+        m_appProgressIndicator->SetRange(m_rangeMax);
+#endif
 }
 
 void wxGauge::SetValue(int pos)
@@ -159,6 +193,17 @@ void wxGauge::SetValue(int pos)
         m_gaugePos = pos;
 
         ::SendMessage(GetHwnd(), PBM_SETPOS, pos, 0);
+
+#if wxUSE_TASKBARBUTTON
+        if ( m_appProgressIndicator )
+        {
+            m_appProgressIndicator->SetValue(pos);
+            if ( pos == 0 )
+            {
+                m_appProgressIndicator->Reset();
+            }
+        }
+#endif
     }
 }
 
@@ -222,6 +267,11 @@ void wxGauge::Pulse()
         // emulate indeterminate mode
         wxGaugeBase::Pulse();
     }
+
+#if wxUSE_TASKBARBUTTON
+        if ( m_appProgressIndicator )
+            m_appProgressIndicator->Pulse();
+#endif
 }
 
 #endif // wxUSE_GAUGE
