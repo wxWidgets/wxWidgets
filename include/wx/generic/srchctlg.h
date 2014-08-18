@@ -207,9 +207,8 @@ protected:
     virtual bool DoSaveFile(const wxString& file, int fileType) wxOVERRIDE;
 
     // override the base class virtuals involved into geometry calculations
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
     virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
-    virtual void LayoutControls(int x, int y, int width, int height);
 
     virtual void RecalcBitmaps();
 
@@ -237,6 +236,9 @@ private:
 
     // Implement pure virtual function inherited from wxCompositeWindow.
     virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
+
+    // Position the child controls using the current window size.
+    void LayoutControls();
 
 #if wxUSE_MENUS
     void PopupSearchMenu();
