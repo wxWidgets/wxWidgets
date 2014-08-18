@@ -1552,6 +1552,7 @@ static void SendSetCursorEvent(wxWindowGTK* win, int x, int y)
         {
             gs_overrideCursor = &event.GetCursor();
             win->GTKUpdateCursor();
+            gs_overrideCursor = NULL;
             gs_needCursorResetMap[win] = true;
             return;
         }
