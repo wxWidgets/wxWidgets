@@ -15,6 +15,8 @@
 
 #include "wx/qt/timer.h"
 
+#include <QtGlobal>
+
 wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop();
@@ -40,7 +42,12 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 {
-    return wxPortId();
+    if ( majVer )
+        *majVer = QT_VERSION >> 16;
+    if ( minVer )
+        *minVer = (QT_VERSION >> 8) & 0xFF;
+
+    return wxPORT_QT;
 }
 
 //#############################################################################

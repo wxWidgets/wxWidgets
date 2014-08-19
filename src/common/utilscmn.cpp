@@ -104,6 +104,10 @@
     #include <gtk/gtk.h>    // for GTK_XXX_VERSION constants
 #endif
 
+#if wxUSE_GUI && defined(__WXGTK__)
+    #include <QtGlobals>       // for QT_VERSION_STR constants
+#endif
+
 #if wxUSE_BASE
 
 // ============================================================================
@@ -408,6 +412,10 @@ bool wxPlatform::Is(int platform)
 #endif
 #ifdef __WXCOCOA__
     if (platform == wxPORT_MAC)
+        return true;
+#endif
+#ifdef __WXQT__
+    if (platform == wxPORT_QT)
         return true;
 #endif
 
@@ -1399,6 +1407,11 @@ wxVersionInfo wxGetLibraryVersionInfo()
                             GTK_MAJOR_VERSION,
                             GTK_MINOR_VERSION,
                             GTK_MICRO_VERSION);
+#endif // __WXGTK__
+
+#ifdef __WXQT__
+    msg += wxString::Format("Compile-time QT version is %s.\n",
+                            QT_VERSION_STR);
 #endif // __WXGTK__
 
     return wxVersionInfo(wxS("wxWidgets"),
