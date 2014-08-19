@@ -12,7 +12,7 @@
 #include "wx/scrolbar.h"
 #include "wx/qt/winevent_qt.h"
 
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QScrollBar>
 
 class WXDLLIMPEXP_FWD_CORE wxQtScrollBar;
 

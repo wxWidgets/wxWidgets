@@ -16,7 +16,7 @@
 #include "wx/qt/winevent_qt.h"
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QMainWindow>
+#include <QtWidgets/QMainWindow>
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {

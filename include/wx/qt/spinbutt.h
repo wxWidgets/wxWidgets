@@ -11,7 +11,7 @@
 
 #include "wx/spinbutt.h"
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QSpinBox>
+#include <QtWidgets/QSpinBox>
 
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {

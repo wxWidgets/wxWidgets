@@ -16,7 +16,7 @@
 
 #include <QtGui/QPixmap>
 #include <QtGui/QBitmap>
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 
 static wxImage ConvertImage( QImage qtImage )
 {

@@ -10,7 +10,7 @@
 #define _WX_QT_STATBMP_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 
 class WXDLLIMPEXP_CORE wxStaticBitmap : public wxStaticBitmapBase
 {

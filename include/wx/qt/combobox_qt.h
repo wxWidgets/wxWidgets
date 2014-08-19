@@ -9,7 +9,7 @@
 #ifndef _WX_QT_COMBOBOX_QT_H_
 #define _WX_QT_COMBOBOX_QT_H_
 
-#include <QtGui/QComboBox>
+#include <QtWidgets/QComboBox>
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxArrayString;

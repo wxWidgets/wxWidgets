@@ -9,7 +9,11 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_DATAVIEWCTRL
+
 #include "wx/dataview.h"
+
+#ifndef wxUSE_GENERICDATAVIEWCTRL
 
 wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode,
@@ -252,3 +256,7 @@ void wxDataViewChoiceRenderer::SetAlignment( int align )
 {
 
 }
+
+#endif // !wxUSE_GENERICDATAVIEWCTRL
+
+#endif // wxUSE_DATAVIEWCTRL

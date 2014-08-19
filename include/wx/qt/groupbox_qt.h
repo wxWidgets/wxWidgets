@@ -9,7 +9,7 @@
 #ifndef _WX_QT_GROUPBOX_QT_H_
 #define _WX_QT_GROUPBOX_QT_H_
 
-#include <QtGui/QGroupBox>
+#include <QtWidgets/QGroupBox>
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxString;

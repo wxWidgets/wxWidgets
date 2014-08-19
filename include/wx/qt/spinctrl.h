@@ -10,8 +10,8 @@
 #define _WX_QT_SPINCTRL_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QSpinBox>
-#include <QtGui/QDoubleSpinBox>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QDoubleSpinBox>
 
 // Define a derived helper class to get access to valueFromText:
 

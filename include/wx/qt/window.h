@@ -12,8 +12,8 @@
 #define _WX_QT_WINDOW_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QWidget>
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QScrollBar>
 
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;

@@ -10,7 +10,7 @@
 #define _WX_QT_SLIDER_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QSlider>
+#include <QtWidgets/QSlider>
 
 class WXDLLIMPEXP_CORE wxSlider : public wxSliderBase
 {

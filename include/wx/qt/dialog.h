@@ -9,7 +9,7 @@
 #ifndef _WX_QT_DIALOG_H_
 #define _WX_QT_DIALOG_H_
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
 {

@@ -15,7 +15,7 @@
 #include "wx/qt/converter.h"
 #include "wx/qt/winevent_qt.h"
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QCalendarWidget>
+#include <QtWidgets/QCalendarWidget>
 
 class WXDLLIMPEXP_FWD_ADV wxQtCalendarWidget;
 

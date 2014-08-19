@@ -13,7 +13,7 @@
 #define _WX_QT_APP_H_
 
 #include "wx/qt/pointer_qt.h"
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 class WXDLLIMPEXP_CORE wxApp : public wxAppBase
 {
