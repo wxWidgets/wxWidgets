@@ -3670,9 +3670,9 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         GUIDIST=QT_DIST
         TOOLKIT_DIR="qt"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
-        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config QtGui QtTest --cflags`"
-        LIBS="$LIBS `pkg-config QtGui QtTest --libs`"
-        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config QtGui QtTest --libs`"
+        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --cflags`"
+        LIBS="$LIBS `pkg-config Qt5Gui Qt5Test --libs`"
+        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --libs`"
     fi
 
     dnl the name of the directory where the files for this toolkit live
