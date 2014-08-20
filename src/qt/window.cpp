@@ -274,6 +274,7 @@ void wxWindowQt::PostCreation(bool generic)
     SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
     SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
 
+    GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
 }
 
 void wxWindowQt::AddChild( wxWindowBase *child )
@@ -422,9 +423,16 @@ void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
     
 bool wxWindowQt::SetFont( const wxFont &font )
 {
-    GetHandle()->setFont( font.GetHandle() );
-    
-    return ( true );
+    // SetFont may be called before Create, so the font is stored
+    // by the base class, and set in PostCreation
+
+    if (GetHandle())
+    {
+        GetHandle()->setFont( font.GetHandle() );
+        return true;
+    }
+
+    return wxWindowBase::SetFont(font);
 }
 
 
