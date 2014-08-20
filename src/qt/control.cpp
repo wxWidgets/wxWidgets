@@ -11,7 +11,7 @@
 #include "wx/control.h"
 #include "wx/qt/private/converter.h"
 
-IMPLEMENT_DYNAMIC_CLASS( wxControl, wxControlBase )
+IMPLEMENT_DYNAMIC_CLASS( wxControl, wxWindow )
 
 wxControl::wxControl()
 {
