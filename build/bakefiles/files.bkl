@@ -391,7 +391,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/qt/listbox.cpp
-    src/qt/listctrl.cpp
+<!--    src/qt/listctrl.cpp -->
+    src/generic/listctrl.cpp
+
     src/qt/mdi.cpp
     src/qt/menu.cpp
     src/qt/menuitem.cpp
