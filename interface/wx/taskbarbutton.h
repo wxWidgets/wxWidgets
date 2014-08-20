@@ -347,23 +347,29 @@ public:
         Constructs the wxAppProgressIndicator.
 
         @param parent
-            The parent window of wxAppProgressIndicator.
+            The parent window handle of wxAppProgressIndicator. Note that the
+            window should has taskbar button showing.
         @param maxValue
     */
-    wxAppProgressIndicator(wxTopLevelWindow *parent, int maxValue);
+    wxAppProgressIndicator(WXWidget parent, int maxValue);
     virtual ~wxAppProgressIndicator();
 
     /**
-        Updates the progress in taskbar button of parent window.
+        Set the progress value in taskbar button of parent window.
 
         @param value
             The new value of the progress meter. It should be less than or equal
-            to the maximum value given to the constructor.
+            to the range.
      */
-    bool Update(int value);
+    void SetValue(int value);
 
     /**
-        Like Update() but makes the progress bar run in indeterminate mode.
+        Set the progress range in taskbar button of parent window.
+     */
+    void SetRange(int range);
+
+    /**
+        Makes the progress bar run in indeterminate mode.
     */
     bool Pulse();
 };
