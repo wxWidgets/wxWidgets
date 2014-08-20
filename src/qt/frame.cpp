@@ -171,6 +171,20 @@ QAbstractScrollArea *wxFrame::QtGetScrollBarsContainer() const
     return dynamic_cast <QAbstractScrollArea *> (GetHandle()->centralWidget() );
 }
 
+void wxFrame::DoGetClientSize(int *width, int *height) const
+{
+    wxWindow::DoGetClientSize(width, height);
+
+    // for a status bar, we must subtract it's height here
+    wxStatusBar *sb = GetStatusBar();
+    if (height && sb)
+    {
+        int sbh = 0;
+        sb->GetSize(NULL, &sbh);
+        *height -= sbh;
+    }
+}
+
 //=============================================================================
 
 wxQtMainWindow::wxQtMainWindow( wxWindow *parent, wxFrame *handler )
