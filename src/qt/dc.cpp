@@ -63,6 +63,7 @@ void wxQtDCImpl::QtPreparePainter( )
     {
         m_qtPainter->setPen( wxPen().GetHandle() );
         m_qtPainter->setBrush( wxBrush().GetHandle() );
+        m_qtPainter->setFont( wxFont().GetHandle() );
     }
     else
     {
@@ -105,8 +106,9 @@ wxSize wxQtDCImpl::GetPPI() const
 void wxQtDCImpl::SetFont(const wxFont& font)
 {
     m_font = font;
-    
-    m_qtPainter->setFont(font.GetHandle());
+
+    if (m_qtPainter->isActive())
+        m_qtPainter->setFont(font.GetHandle());
 }
 
 void wxQtDCImpl::SetPen(const wxPen& pen)
@@ -153,7 +155,8 @@ void wxQtDCImpl::SetBackground(const wxBrush& brush)
 {
     m_backgroundBrush = brush;
     
-    m_qtPainter->setBackground(brush.GetHandle());
+    if (m_qtPainter->isActive())
+        m_qtPainter->setBackground(brush.GetHandle());
 }
 
 void wxQtDCImpl::SetBackgroundMode(int mode)
