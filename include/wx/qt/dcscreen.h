@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/dcscreen.h
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Sean D'Epagnier
+// Copyright:   (c) Sean D'Epagnier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -15,9 +15,13 @@ class WXDLLIMPEXP_CORE wxScreenDCImpl : public wxWindowDCImpl
 public:
     wxScreenDCImpl( wxScreenDC *owner );
 
-protected:
+    ~wxScreenDCImpl();
+
+    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
 
 private:
+
+    DECLARE_ABSTRACT_CLASS(wxScreenDCImpl)
 };
 
 #endif // _WX_QT_DCSCREEN_H_
