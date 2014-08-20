@@ -122,7 +122,7 @@ class wxBitmapRefData: public wxGDIRefData
         wxBitmapRefData( const wxBitmapRefData& data ) : wxGDIRefData()
         {
             m_mask = NULL;
-            m_qtPixmap = data.m_qtPixmap;
+            m_qtPixmap = new QPixmap(data.m_qtPixmap->handle());
         }
         
         wxBitmapRefData( int width, int height, int depth ) : wxGDIRefData()
