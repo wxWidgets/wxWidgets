@@ -138,8 +138,8 @@ public:
     void Reset();
 
 private:
-    int m_maxValue;
     WXWidget m_parent;
+    int m_maxValue;
     wxTaskBarButton* m_taskBarButton;
 };
 
