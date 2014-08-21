@@ -71,41 +71,23 @@ static QFont::Weight ConvertFontWeight(wxFontWeight weight)
 class wxFontRefData: public wxGDIRefData
 {
     public:
-        wxFontRefData()
-        {
-        }
-
-        wxFontRefData(int size, QFont::StyleHint family, bool italic, QFont::Weight weight, bool underlined, QString face)
-        {
-            if (!face.isEmpty())
-                m_qtFont.setFamily(face);
-            else
-            {
-                m_qtFont.setStyleHint(family);
-                // force qt to choose a font using the hint:
-                m_qtFont.setFamily("");
-            }
-            m_qtFont.setItalic(italic);
-            m_qtFont.setWeight(weight);
-            m_qtFont.setUnderline(underlined);
-            m_qtFont.setPointSize(size);
-        }
+        wxFontRefData() {}
 
         wxFontRefData( const wxFontRefData& data )
         : wxGDIRefData()
         {
-            m_qtFont = data.m_qtFont;
+            m_nativeFontInfo.m_qtFont = data.m_nativeFontInfo.m_qtFont;
         }
 
         bool operator == (const wxFontRefData& data) const
         {
-            return m_qtFont == data.m_qtFont;
+            return m_nativeFontInfo.m_qtFont == data.m_nativeFontInfo.m_qtFont;
         }
         
-        QFont m_qtFont;
+    wxNativeFontInfo m_nativeFontInfo;
 };
 
-#define M_FONTDATA ((wxFontRefData *)m_refData)->m_qtFont
+#define M_FONTDATA ((wxFontRefData *)m_refData)->m_nativeFontInfo
 
 wxFont::wxFont()
 {
@@ -114,6 +96,7 @@ wxFont::wxFont()
 
 wxFont::wxFont(const wxFontInfo& info)
 {
+    m_refData = new wxFontRefData();
     Create(wxSize(0, info.GetPointSize()),
            info.GetFamily(),
            info.GetStyle(),
@@ -135,19 +118,21 @@ wxFont::wxFont(const wxString& nativeFontInfoString)
 
     QFont font;
     font.fromString(wxQtConvertString( nativeFontInfoString ));
-    M_FONTDATA = font;
+    M_FONTDATA.m_qtFont = font;
 }
 
 wxFont::wxFont(const wxNativeFontInfo& info)
 {
-    Create(wxSize(0, info.pointSize), info.family, info.style, info.weight, info.underlined, info.faceName, info.encoding);
+    m_refData = new wxFontRefData();
+
+    M_FONTDATA.m_qtFont = info.m_qtFont;
 }
 
 wxFont::wxFont(const QFont& font)
 {
     m_refData = new wxFontRefData();
 
-    M_FONTDATA = font;
+    M_FONTDATA.m_qtFont = font;
 }
 
 wxFont::wxFont(int size,
@@ -158,6 +143,7 @@ wxFont::wxFont(int size,
        const wxString& face,
        wxFontEncoding encoding)
 {
+    m_refData = new wxFontRefData();
     Create(wxSize(0, size), family, style, weight, underlined, face, encoding);
 }
 
@@ -169,6 +155,7 @@ wxFont::wxFont(const wxSize& pixelSize,
        const wxString& face,
        wxFontEncoding encoding)
 {
+    m_refData = new wxFontRefData();
     Create(pixelSize, family, style, weight, underlined, face, encoding);
 }
 
@@ -180,6 +167,7 @@ wxFont::wxFont(int size,
        const wxString& face,
        wxFontEncoding encoding)
 {
+    m_refData = new wxFontRefData();
     Create(wxSize(0, size), (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
 }
 
@@ -188,20 +176,139 @@ bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
         wxFontWeight weight, bool underlined, const wxString& face,
         wxFontEncoding WXUNUSED(encoding) )
 {
-    m_refData = new wxFontRefData(size.GetHeight(), ConvertFontFamily(family), style != wxFONTSTYLE_NORMAL,
-                                  ConvertFontWeight(weight), underlined, wxQtConvertString(face));
+    if (!face.empty())
+        M_FONTDATA.SetFaceName(face);
+    else
+        M_FONTDATA.SetFamily(family);
+
+    M_FONTDATA.SetStyle(style);
+    M_FONTDATA.SetWeight(weight);
+    M_FONTDATA.SetUnderlined(underlined);
+    M_FONTDATA.SetPointSize(size.GetHeight());
 
     return true;
 }
 
 int wxFont::GetPointSize() const
 {
-    return M_FONTDATA.pointSize();
+    return M_FONTDATA.GetPointSize();
 }
 
 wxFontStyle wxFont::GetStyle() const
 {
-    switch (M_FONTDATA.style())
+    return M_FONTDATA.GetStyle();
+}
+
+wxFontWeight wxFont::GetWeight() const
+{
+    return M_FONTDATA.GetWeight();
+}
+
+bool wxFont::GetUnderlined() const
+{
+    return M_FONTDATA.GetUnderlined();
+}
+
+wxString wxFont::GetFaceName() const
+{
+    return M_FONTDATA.GetFaceName();
+}
+
+wxFontEncoding wxFont::GetEncoding() const
+{
+    return M_FONTDATA.GetEncoding();
+}
+
+const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
+{
+    return &M_FONTDATA;
+}
+
+void wxFont::SetPointSize( int pointSize )
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetPointSize(pointSize);
+}
+
+bool wxFont::SetFaceName(const wxString& facename)
+{
+    AllocExclusive();
+
+    return M_FONTDATA.SetFaceName(facename);
+}
+
+void wxFont::SetFamily( wxFontFamily family )
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetFamily(family);
+}
+
+void wxFont::SetStyle( wxFontStyle style )
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetStyle(style);
+}
+
+void wxFont::SetWeight( wxFontWeight weight )
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetWeight(weight);
+}
+
+void wxFont::SetUnderlined( bool underlined )
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetUnderlined(underlined);
+}
+
+void wxFont::SetEncoding(wxFontEncoding encoding)
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetEncoding(encoding);
+}
+
+wxGDIRefData *wxFont::CreateGDIRefData() const
+{
+    return new wxFontRefData;
+}
+
+wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
+{
+    return new wxFontRefData(*(wxFontRefData *)data);
+}
+
+QFont wxFont::GetHandle() const
+{
+    return M_FONTDATA.m_qtFont;
+}
+
+wxFontFamily wxFont::DoGetFamily() const
+{
+    return M_FONTDATA.GetFamily();
+}
+
+// ----------------------------------------------------------------------------
+// wxNativeFontInfo
+// ----------------------------------------------------------------------------
+
+void wxNativeFontInfo::Init()
+{
+}
+
+int wxNativeFontInfo::GetPointSize() const
+{
+    return m_qtFont.pointSize();
+}
+
+wxFontStyle wxNativeFontInfo::GetStyle() const
+{
+    switch (m_qtFont.style())
     {
         case QFont::StyleNormal:
             return wxFONTSTYLE_NORMAL;
@@ -216,9 +323,9 @@ wxFontStyle wxFont::GetStyle() const
     return wxFontStyle();
 }
 
-wxFontWeight wxFont::GetWeight() const
+wxFontWeight wxNativeFontInfo::GetWeight() const
 {
-    switch ( M_FONTDATA.weight() )
+    switch ( m_qtFont.weight() )
     {
         case QFont::Normal:
             return wxFONTWEIGHT_NORMAL;
@@ -235,99 +342,26 @@ wxFontWeight wxFont::GetWeight() const
     return wxFontWeight();
 }
 
-bool wxFont::GetUnderlined() const
+bool wxNativeFontInfo::GetUnderlined() const
 {
-    return M_FONTDATA.underline();
+    return m_qtFont.underline();
 }
 
-wxString wxFont::GetFaceName() const
+bool wxNativeFontInfo::GetStrikethrough() const
+{
+    return m_qtFont.strikeOut();
+}
+
+wxString wxNativeFontInfo::GetFaceName() const
 {
     // use font info to get the matched face name (not the family given)
-    QFontInfo info = QFontInfo(M_FONTDATA);
+    QFontInfo info = QFontInfo(m_qtFont);
     return wxQtConvertString(info.family());
 }
 
-wxFontEncoding wxFont::GetEncoding() const
+wxFontFamily wxNativeFontInfo::GetFamily() const
 {
-    QFontInfo info = QFontInfo(M_FONTDATA);
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return wxFontEncoding();
-}
-
-const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
-{
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return new wxNativeFontInfo();
-}
-
-
-void wxFont::SetPointSize( int pointSize )
-{
-    AllocExclusive();
-    M_FONTDATA.setPointSize(pointSize);
-}
-
-bool wxFont::SetFaceName(const wxString& facename)
-{
-    AllocExclusive();
-    M_FONTDATA.setFamily(wxQtConvertString(facename));
-    // qt uses a "font matching algoritm" so the font will be allways valid
-    return true;
-}
-
-void wxFont::SetFamily( wxFontFamily family )
-{
-    AllocExclusive();
-    M_FONTDATA.setStyleHint(ConvertFontFamily(family));
-    // reset the face name to force qt to choose a new font
-    M_FONTDATA.setFamily("");
-}
-
-void wxFont::SetStyle( wxFontStyle style )
-{
-    AllocExclusive();
-    M_FONTDATA.setItalic(style != wxFONTSTYLE_NORMAL);
-}
-
-void wxFont::SetWeight( wxFontWeight weight )
-{
-    AllocExclusive();
-    M_FONTDATA.setWeight(ConvertFontWeight(weight));
-}
-
-void wxFont::SetUnderlined( bool underlined )
-{
-    AllocExclusive();
-    M_FONTDATA.setUnderline(underlined);
-}
-
-void wxFont::SetEncoding(wxFontEncoding WXUNUSED(encoding))
-{
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-}
-
-wxGDIRefData *wxFont::CreateGDIRefData() const
-{
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return NULL;
-}
-
-wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
-{
-    return new wxFontRefData(*(wxFontRefData *)data);
-}
-
-
-QFont wxFont::GetHandle() const
-{
-    return M_FONTDATA;
-}
-
-wxFontFamily wxFont::DoGetFamily() const
-{
-    switch (M_FONTDATA.styleHint())
+    switch (m_qtFont.styleHint())
     {
         case QFont::System:
         case QFont::AnyStyle:
@@ -350,4 +384,78 @@ wxFontFamily wxFont::DoGetFamily() const
 
     }
     return wxFONTFAMILY_UNKNOWN;
+}
+
+wxFontEncoding wxNativeFontInfo::GetEncoding() const
+{
+//    QFontInfo info = QFontInfo(m_qtFont);
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
+    return wxFONTENCODING_MAX;
+}
+
+void wxNativeFontInfo::SetPointSize(int pointsize)
+{
+    m_qtFont.setPointSize(pointsize);
+}
+
+void wxNativeFontInfo::SetStyle(wxFontStyle style)
+{
+    m_qtFont.setItalic(style == wxFONTSTYLE_ITALIC);
+//case wxFONTSTYLE_SLANT:
+//case wxFONTSTYLE_NORMAL:
+}
+
+void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+{
+    m_qtFont.setWeight(ConvertFontWeight(weight));
+}
+
+void wxNativeFontInfo::SetUnderlined(bool underlined)
+{
+    m_qtFont.setUnderline(underlined);
+}
+
+void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
+{
+    m_qtFont.setStrikeOut(strikethrough);
+}
+
+bool wxNativeFontInfo::SetFaceName(const wxString& facename)
+{
+    m_qtFont.setFamily(wxQtConvertString(facename));
+    // qt uses a "font matching algoritm" so the font will be allways valid
+    return true;
+}
+
+void wxNativeFontInfo::SetFamily(wxFontFamily family)
+{
+    m_qtFont.setStyleHint(ConvertFontFamily(family));
+    // reset the face name to force qt to choose a new font
+    m_qtFont.setFamily("");
+}
+
+void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
+{
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+}
+
+bool wxNativeFontInfo::FromString(const wxString& s)
+{
+    return m_qtFont.fromString( wxQtConvertString( s ) );
+}
+
+wxString wxNativeFontInfo::ToString() const
+{
+    return wxQtConvertString( m_qtFont.toString() );
+}
+
+bool wxNativeFontInfo::FromUserString(const wxString& s)
+{
+    return FromString(s);
+}
+
+wxString wxNativeFontInfo::ToUserString() const
+{
+    return ToString();
 }
