@@ -36,6 +36,9 @@
     - C/C++ - Code Generation - Enable C++ Exceptions - Yes
     - C/C++ - Language - Enable Run-Time Type Information - Yes
 
+    On Linux platform, some dependency libraries are required to install, including build-essential,
+    libgtk2.0-dev, libgtkglext1-dev and libnss3-dev.
+
     1. Download cef3 binary and extract it to wxWidgets src directory.(<wx_root>/src/cef is default directory)
     2. Build libcef_dll_wrapper static library.
 
