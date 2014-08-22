@@ -831,6 +831,13 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
         height = h;
 
     DoMoveWindow( x, y, width, height );
+
+    // An annoying feature of Qt
+    // if a control is created with size of zero, it is set as hidden by qt
+    // if it is then resized, in some cases it remains hidden, so it
+    // needs to be shown here
+    if (!m_qtWindow->isVisible() && IsShown())
+        m_qtWindow->show();
 }
 
 
