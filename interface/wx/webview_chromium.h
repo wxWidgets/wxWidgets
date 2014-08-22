@@ -48,9 +48,10 @@
     
     wxWidgets provides Visual Stdio 2010/2012/2013 project file to build wxWebViewChromium.
     
-    1. Open `build/msw/wc_vc10.sln` project file in Visual Stdio 2010, and build `wxWidgets` library.
-    2. Open `samples/webview_chromium/webview_chromium_vc10.vcxproj` file in Visual Stdio 2010, and build it.
-    3. Copy CEF3 related resources(libcef.dll, libffmpegsumo.so, locales/\*, cef.apk, devtools_resources.pak) to webview_chromium binary directory.
+    1. Set `wxUSE_WEBVIEW_CHROMIUM` to 1 in `wx_root/include/wx/msw/setup0.h` to enable wxWebViewChromium feature.
+    2. Open `build/msw/wc_vc10.sln` project file in Visual Stdio 2010, and build `wxWidgets` library.
+    3. Open `samples/webview_chromium/webview_chromium_vc10.vcxproj` file in Visual Stdio 2010, and build it.
+    4. Copy CEF3 related resources(libcef.dll, libffmpegsumo.so, locales/\*, cef.apk, devtools_resources.pak) to webview_chromium binary directory.
     
     __Linux Platform__
     
