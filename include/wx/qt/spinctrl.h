@@ -15,11 +15,11 @@
 // Define a derived helper class to get access to valueFromText:
 
 template < typename Widget >
-class WXDLLIMPEXP_CORE wxQtSpinBoxBase : public Widget
+class WXDLLIMPEXP_CORE wxQtSpinBoxBase : public wxQtEventSignalHandler< Widget, wxControl >
 {
 public:
-    wxQtSpinBoxBase( QWidget *parent )
-        : Widget( parent )
+    wxQtSpinBoxBase( wxWindow *parent, wxControl *handler )
+        : wxQtEventSignalHandler< Widget, wxControl >( parent, handler )
     { }
 
     using Widget::valueFromText;
@@ -28,16 +28,16 @@ public:
 class WXDLLIMPEXP_CORE wxQtSpinBox : public wxQtSpinBoxBase< QSpinBox >
 {
 public:
-    wxQtSpinBox( QWidget *parent )
-        : wxQtSpinBoxBase< QSpinBox >( parent )
+    wxQtSpinBox( wxWindow *parent, wxControl *handler )
+        : wxQtSpinBoxBase< QSpinBox >( parent, handler )
     { }
 };
 
 class WXDLLIMPEXP_CORE wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
 {
 public:
-    wxQtDoubleSpinBox( QWidget *parent )
-        : wxQtSpinBoxBase< QDoubleSpinBox >( parent )
+    wxQtDoubleSpinBox( wxWindow *parent, wxControl *handler )
+        : wxQtSpinBoxBase< QDoubleSpinBox >( parent, handler )
     { }
 };
 

@@ -32,7 +32,7 @@ bool wxQtSpinCtrlBase< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     const wxString& value, const wxPoint& pos, const wxSize& size, long style,
     T min, T max, T initial, T inc, const wxString& name )
 {
-    m_qtSpinBox = new Widget( parent->GetHandle() );
+    m_qtSpinBox = new Widget( parent, this );
     wxMISSING_IMPLEMENTATION( wxSTRINGIZE( style ));
     SetValue( initial );
     SetRange( min, max );
