@@ -9,7 +9,7 @@
 #define _WX_QT_COMBOBOX_H_
 
 #include "wx/qt/pointer_qt.h"
-#include "wx/qt/combobox_qt.h"
+#include <QtWidgets/QComboBox>
 
 class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 {
@@ -70,7 +70,8 @@ protected:
                               unsigned int pos,
                               void **clientData,
                               wxClientDataType type);
-    
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos);
+
     virtual void DoSetItemClientData(unsigned int n, void *clientData);
     virtual void *DoGetItemClientData(unsigned int n) const;
     
@@ -78,7 +79,7 @@ protected:
     virtual void DoDeleteOneItem(unsigned int pos);
 
 private:
-    wxQtPointer< wxQtComboBox > m_qtComboBox;
+    wxQtPointer< QComboBox > m_qtComboBox;
 
     DECLARE_DYNAMIC_CLASS(wxComboBox)
 };

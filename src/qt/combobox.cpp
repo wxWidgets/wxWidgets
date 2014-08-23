@@ -10,32 +10,31 @@
 
 #include "wx/combobox.h"
 #include "wx/window.h"
-#include "wx/qt/combobox_qt.h"
 #include "wx/qt/converter.h"
+#include <QtWidgets/QComboBox>
 
-// Constructor for wxChoice:
+class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
+{
+public:
+    wxQtComboBox( wxWindow *parent, wxComboBox *handler );
 
-wxQtComboBox::wxQtComboBox( wxWindow *parent )
-    : QComboBox( parent->GetHandle() )
+private:
+    void activated(int index);
+};
+
+wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
+    : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler )
 {
     setEditable( false );
+    connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
+            this, &wxQtComboBox::activated);
 }
 
-// Constructor for wxComboBox:
-
-wxQtComboBox::wxQtComboBox( wxWindow *parent, const wxString &value )
-    : QComboBox( parent->GetHandle() )
+void wxQtComboBox::activated(int index)
 {
-    setEditable( true );
-    setEditText( wxQtConvertString( value ));
+    //GetHandler()->SendSelectionChangedEvent(wxEVT_COMBOBOX);
 }
 
-
-void wxQtComboBox::AddChoices( int count, const wxString choices[] )
-{
-    while ( count-- > 0 )
-        addItem( wxQtConvertString( *choices++ ));
-}
 
 wxComboBox::wxComboBox()
 {
@@ -92,14 +91,17 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    m_qtComboBox = new wxQtComboBox( parent, value );
-    m_qtComboBox->AddChoices( n, choices );
+    m_qtComboBox = new wxQtComboBox( parent, this );
+    while ( n-- > 0 )
+        m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
+    m_qtComboBox->setEditText( wxQtConvertString( value ));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
 void wxComboBox::SetSelection(int n)
 {
+    m_qtComboBox->setCurrentIndex(n);
 }
 
 void wxComboBox::SetSelection(long from, long to)
@@ -108,7 +110,7 @@ void wxComboBox::SetSelection(long from, long to)
 
 int wxComboBox::GetSelection() const
 {
-    return 0;
+    return m_qtComboBox->currentIndex();
 }
 
 void wxComboBox::GetSelection(long *from, long *to) const
@@ -117,22 +119,23 @@ void wxComboBox::GetSelection(long *from, long *to) const
 
 wxString wxComboBox::GetStringSelection() const
 {
-    return wxString();
+    return wxQtConvertString( m_qtComboBox->currentText() );
 }
 
 
 unsigned wxComboBox::GetCount() const
 {
-    return 0;
+    return m_qtComboBox->count();
 }
 
 wxString wxComboBox::GetString(unsigned int n) const
 {
-    return wxString();
+    return wxQtConvertString( m_qtComboBox->itemText(n) );
 }
 
 void wxComboBox::SetString(unsigned int n, const wxString& s)
 {
+    m_qtComboBox->setItemText(n, wxQtConvertString(s));
 }
 
 
@@ -141,26 +144,38 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
                   void **clientData,
                   wxClientDataType type)
 {
-    return 0;
+    InvalidateBestSize();
+    int n = DoInsertItemsInLoop(items, pos, clientData, type);
+    return n;
+}
+
+int wxComboBox::DoInsertOneItem(const wxString& item, unsigned int pos)
+{
+    m_qtComboBox->insertItem(pos, wxQtConvertString(item));
 }
 
 
 void wxComboBox::DoSetItemClientData(unsigned int n, void *clientData)
 {
+    QVariant variant = qVariantFromValue(clientData);
+    m_qtComboBox->setItemData(n, variant);
 }
 
 void *wxComboBox::DoGetItemClientData(unsigned int n) const
 {
-    return NULL;
+    QVariant variant = m_qtComboBox->itemData(n);
+    return variant.value<void *>();
 }
 
 
 void wxComboBox::DoClear()
 {
+    m_qtComboBox->clear();
 }
 
 void wxComboBox::DoDeleteOneItem(unsigned int pos)
 {
+    m_qtComboBox->removeItem(pos);
 }
 
 QComboBox *wxComboBox::GetHandle() const

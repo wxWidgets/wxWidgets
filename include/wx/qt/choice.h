@@ -9,7 +9,7 @@
 #define _WX_QT_CHOICE_H_
 
 #include "wx/qt/pointer_qt.h"
-#include "wx/qt/combobox_qt.h"
+#include <QtWidgets/QComboBox>
 
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
