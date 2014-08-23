@@ -43,6 +43,28 @@ wxCursor::wxCursor( const wxCursor &cursor )
     m_qtCursor = cursor.m_qtCursor;
 }
 
+wxCursor::wxCursor(const wxString& filename,
+                   wxBitmapType kind,
+                   int hotSpotX,
+                   int hotSpotY)
+{
+    switch ( kind )
+    {
+        case wxBITMAP_TYPE_ICO:
+            m_qtCursor = QCursor(
+                            *wxBitmap(filename, wxBITMAP_TYPE_ICO).GetHandle(),
+                            hotSpotX, hotSpotY );
+            break;
+        case wxBITMAP_TYPE_BMP:
+            m_qtCursor = QCursor(
+                            *wxBitmap(filename, wxBITMAP_TYPE_ICO).GetHandle(),
+                            hotSpotX, hotSpotY );
+            break;
+        default:
+            wxLogError( wxT("unknown cursor resource type '%d'"), kind );
+    }
+}
+
 void wxCursor::InitFromStock( wxStockCursor cursorId )
 {
     Qt::CursorShape qt_cur;
