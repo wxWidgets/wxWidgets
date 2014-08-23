@@ -6373,6 +6373,7 @@ void wxGrid::ShowCellEditControl()
             if (rect.x < 0)
                 nXMove = rect.x;
 
+#ifndef __WXQT__
             // cell is shifted by one pixel
             // However, don't allow x or y to become negative
             // since the SetSize() method interprets that as
@@ -6381,6 +6382,11 @@ void wxGrid::ShowCellEditControl()
                 rect.x--;
             if (rect.y > 0)
                 rect.y--;
+#else
+            // Substract 1 pixel in every dimension to fit in the cell area.
+            // If not, Qt will draw the control outside the cell.
+            rect.Deflate(1, 1);
+#endif
 
             wxGridCellEditor* editor = attr->GetEditor(this, row, col);
             if ( !editor->IsCreated() )
