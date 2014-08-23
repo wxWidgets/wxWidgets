@@ -24,6 +24,25 @@
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0
 
+wxQtWidget::wxQtWidget( wxWindow *parent, wxWindow *handler )
+    : wxQtEventSignalHandler< QWidget, wxWindow >( parent, handler )
+{
+}
+
+#if wxUSE_ACCEL
+wxQtShortcutHandler::wxQtShortcutHandler( wxWindow *window )
+    : wxQtSignalHandler< wxWindow >( window )
+{
+}
+
+void wxQtShortcutHandler::activated()
+{
+    int command = sender()->property("wxQt_Command").toInt();
+
+    GetHandler()->QtHandleShortcut( command );
+}
+#endif // wxUSE_ACCEL
+
 //##############################################################################
 
 wxBEGIN_EVENT_TABLE( wxWindow, wxWindowBase )

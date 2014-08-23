@@ -9,7 +9,6 @@
 #define _WX_QT_TGLBTN_H_
 
 #include "wx/tglbtn.h"
-#include "wx/qt/button_qt.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
 

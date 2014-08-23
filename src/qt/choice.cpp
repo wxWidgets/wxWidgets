@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/choice.h"
+#include "wx/qt/combobox_qt.h"
 
 wxChoice::wxChoice()
 {

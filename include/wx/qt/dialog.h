@@ -8,6 +8,8 @@
 #ifndef _WX_QT_DIALOG_H_
 #define _WX_QT_DIALOG_H_
 
+#include "wx/dialog.h"
+#include "wx/qt/winevent_qt.h"
 #include <QtWidgets/QDialog>
 
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
@@ -40,6 +42,15 @@ private:
     wxQtPointer< QDialog > m_qtDialog;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxDialog );
+};
+
+
+class WXDLLIMPEXP_CORE wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
+{
+    Q_OBJECT
+
+    public:
+        wxQtDialog( wxWindow *parent, wxDialog *handler );
 };
 
 #endif // _WX_QT_DIALOG_H_
