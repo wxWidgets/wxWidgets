@@ -42,7 +42,7 @@ private:
     // Qt is using an action instead of a menu item.
     QAction *m_qtAction;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxMenuItem );
+    wxDECLARE_DYNAMIC_CLASS( wxMenuItem );
 };
 
 

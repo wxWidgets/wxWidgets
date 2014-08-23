@@ -155,6 +155,8 @@ class wxBitmapRefData: public wxGDIRefData
 // wxBitmap
 //-----------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS( wxBitmap, wxObject )
+
 #define M_PIXDATA (*((wxBitmapRefData *)m_refData)->m_qtPixmap)
 
 void wxBitmap::InitStandardHandlers()

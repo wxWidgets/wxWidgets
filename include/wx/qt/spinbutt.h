@@ -37,7 +37,7 @@ public:
 private:
     QSpinBox *m_qtSpinBox;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxSpinButton );
+    wxDECLARE_DYNAMIC_CLASS( wxSpinButton );
 };
 
 #endif // _WX_QT_SPINBUTT_H_

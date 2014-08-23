@@ -41,7 +41,7 @@ protected:
 private:
     QCheckBox *m_qtCheckBox;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox);
+    wxDECLARE_DYNAMIC_CLASS(wxCheckBox);
 };
 
 #endif // _WX_QT_CHECKBOX_H_

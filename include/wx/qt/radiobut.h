@@ -42,7 +42,7 @@ protected:
 private:
     QRadioButton *m_qtRadioButton;
 
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxRadioButton );
+    wxDECLARE_DYNAMIC_CLASS( wxRadioButton );
 };
 
 #endif // _WX_QT_RADIOBUT_H_

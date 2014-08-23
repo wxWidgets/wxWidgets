@@ -34,6 +34,7 @@ public:
 protected:
 
 private:
+    DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 };
 
 
