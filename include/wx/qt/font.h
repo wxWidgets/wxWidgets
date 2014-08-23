@@ -14,6 +14,7 @@ class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
     wxFont();
+    wxFont(const wxFontInfo& info);
     wxFont(const wxString& nativeFontInfoString);
     wxFont(const wxNativeFontInfo& info);
     wxFont(int size,

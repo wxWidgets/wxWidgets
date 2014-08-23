@@ -111,6 +111,11 @@ wxFont::wxFont()
     m_refData = new wxFontRefData();
 }
 
+wxFont::wxFont(const wxFontInfo& info)
+{
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+}
+
 wxFont::wxFont(const wxString& nativeFontInfoString)
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
