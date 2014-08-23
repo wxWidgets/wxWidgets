@@ -1959,6 +1959,16 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
     ApplyEffectiveScale(m_scaleX, m_signX, &devExtX, &logExtX);
     ApplyEffectiveScale(m_scaleY, m_signY, &devExtY, &logExtY);
 
+    // In GDI anisotropic mode only devExt/logExt ratio is important
+    // so we can reduce the fractions to avoid large numbers
+    // which could cause arithmetic overflows inside Win API.
+    unsigned int gcd = wxGCD(abs(devExtX), abs(logExtX));
+    devExtX /= gcd;
+    logExtX /= gcd;
+    gcd = wxGCD(abs(devExtY), abs(logExtY));
+    devExtY /= gcd;
+    logExtY /= gcd;
+
     ::SetViewportExtEx(GetHdc(), devExtX, devExtY, NULL);
     ::SetWindowExtEx(GetHdc(), logExtX, logExtY, NULL);
 

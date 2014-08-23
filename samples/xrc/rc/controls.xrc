@@ -1044,7 +1044,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     <label>wxTextCtrl</label>
                     <object class="wxPanel" name="textctrl">
                         <object class="wxFlexGridSizer">
-                            <cols>2</cols>
+                            <cols>4</cols>
                             <rows>0</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
@@ -1068,6 +1068,21 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             <object class="sizeritem">
                                 <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
+                                <object class="wxStaticText">
+                                    <label>With a _hint:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxTextCtrl">
+                                    <size>180,-1</size>
+                                    <hint>you@some.whe.re</hint>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
                                 <object class="wxStaticText" name="controls_textctrl2_statictext">
                                     <label>Password:</label>
                                 </object>
@@ -1084,6 +1099,21 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             <object class="sizeritem">
                                 <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
+                                <object class="wxStaticText" name="controls_textctrl4_statictext">
+                                    <label>Search for:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxSearchCtrl" name="controls_multiline_searchctrl">
+                                    <size>180,-1</size>
+                                    <value>true love</value>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
                                 <object class="wxStaticText" name="controls_textctrl3_statictext">
                                     <label>Multiline:</label>
                                 </object>
@@ -1095,21 +1125,6 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <size>180,90</size>
                                     <style>wxTE_MULTILINE</style>
                                     <value>"So many pretty widgets" said Pooh, said he. "So many pretty widgets", said Pooh.</value>
-                                </object>
-                            </object>
-                            <object class="sizeritem">
-                                <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>5</border>
-                                <object class="wxStaticText" name="controls_textctrl4_statictext">
-                                    <label>Search for:</label>
-                                </object>
-                            </object>
-                            <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
-                                <border>5</border>
-                                <object class="wxSearchCtrl" name="controls_multiline_searchctrl">
-                                    <size>180,-1</size>
-                                    <value>true love</value>
                                 </object>
                             </object>
                         </object>

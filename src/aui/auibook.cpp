@@ -1377,6 +1377,13 @@ void wxAuiTabCtrl::OnChar(wxKeyEvent& event)
         bool bWindowChange = (key == WXK_PAGEUP) || (key == WXK_PAGEDOWN) || bCtrlDown;
         bool bFromTab = (key == WXK_TAB);
 
+        if (bFromTab && !bWindowChange)
+        {
+            // Handle ordinary tabs via Navigate. This is needed at least for wxGTK to tab properly.
+            Navigate(bForward ? wxNavigationKeyEvent::IsForward : wxNavigationKeyEvent::IsBackward);
+            return;
+        }
+
         wxAuiNotebook* nb = wxDynamicCast(GetParent(), wxAuiNotebook);
         if (!nb)
         {

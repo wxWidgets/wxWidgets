@@ -213,6 +213,15 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                     data[p++] = NSOpenGLPFASamples;
                     data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
+
+                case WX_GL_CORE_PROFILE:
+                    data[p++] = NSOpenGLPFAOpenGLProfile;
+                    // request an OpenGL core profile
+                    // will use the highest available OpenGL version
+                    // which will be at least 3.2
+                    data[p++] = NSOpenGLProfileVersion3_2Core;
+
+                    break;
             }
         }
 

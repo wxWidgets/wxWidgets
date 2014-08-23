@@ -118,8 +118,14 @@ protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
 
+    WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd) wxOVERRIDE;
+
+
     // the labels windows, if any
     wxSubwindows  *m_labels;
+
+    // Last background brush we returned from DoMSWControlColor(), see there.
+    WXHBRUSH m_hBrushBg;
 
     int           m_rangeMin;
     int           m_rangeMax;

@@ -445,7 +445,7 @@ namespace
 {
     //From the sample but fixed so it actually inverts
     int wxCALLBACK
-    MyCompareFunction(long item1, long item2, wxIntPtr WXUNUSED(sortData))
+    MyCompareFunction(wxIntPtr item1, wxIntPtr item2, wxIntPtr WXUNUSED(sortData))
     {
         // inverse the order
         if (item1 < item2)

@@ -74,6 +74,8 @@ void wxSlider::Init()
 {
     m_labels = NULL;
 
+    m_hBrushBg = NULL;
+
     m_pageSize = 1;
     m_lineSize = 1;
     m_rangeMax = 0;
@@ -565,6 +567,25 @@ wxSize wxSlider::DoGetBestSize() const
             *width += TICK;
     }
     return size;
+}
+
+WXHBRUSH wxSlider::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
+{
+    const WXHBRUSH hBrush = wxSliderBase::DoMSWControlColor(pDC, colBg, hWnd);
+
+    // The native control doesn't repaint itself when it's invalidated, so we
+    // do it explicitly from here, as this is the only way to propagate the
+    // parent background colour to the slider when it changes.
+    if ( hWnd == GetHwnd() && hBrush != m_hBrushBg )
+    {
+        m_hBrushBg = hBrush;
+
+        // Anything really refreshing the slider would work here, we use a
+        // dummy WM_ENABLE but using TBM_SETPOS would work too, for example.
+        ::PostMessage(hWnd, WM_ENABLE, (BOOL)IsEnabled(), 0);
+    }
+
+    return hBrush;
 }
 
 // ----------------------------------------------------------------------------

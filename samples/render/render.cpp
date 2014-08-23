@@ -267,6 +267,15 @@ private:
 
         y += lineHeight + rBtn.height;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+        const wxCoord heightGauge = 24;
+        const wxCoord widthGauge = 180;
+
+        dc.DrawText("DrawGauge()", x1, y);
+        wxRendererNative::GetDefault().DrawGauge(this, dc,
+            wxRect(x2, y, widthGauge, heightGauge), 25, 100, m_flags);
+
+        y += lineHeight + heightGauge;
     }
 
     int m_flags;
