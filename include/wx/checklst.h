@@ -37,6 +37,7 @@ public:
     virtual void Check(unsigned int item, bool check = true) = 0;
 
     virtual unsigned int GetCheckedItems(wxArrayInt& checkedItems) const;
+
     wxDECLARE_NO_COPY_CLASS(wxCheckListBoxBase);
 };
 
@@ -54,8 +55,6 @@ public:
     #include "wx/gtk1/checklst.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/checklst.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/checklst.h"
 #elif defined(__WXQT__)
     #include "wx/qt/checklst.h"
 #endif

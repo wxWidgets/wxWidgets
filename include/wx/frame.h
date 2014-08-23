@@ -207,6 +207,7 @@ protected:
     // Return true if we should update the menu item state from idle event
     // handler or false if we should delay it until the menu is opened.
     static bool ShouldUpdateMenuFromIdle();
+
     wxMenuBar *m_frameMenuBar;
 #endif // wxUSE_MENUS
 
@@ -263,8 +264,6 @@ protected:
         #include "wx/motif/frame.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/frame.h"
-    #elif defined(__WXCOCOA__)
-        #include "wx/cocoa/frame.h"
     #elif defined(__WXQT__)
         #include "wx/qt/frame.h"
     #endif

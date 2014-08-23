@@ -237,6 +237,7 @@ public:
     // falls back to wxConsoleAppTraits to ensure that it always returns
     // something valid.
     static wxAppTraits& GetValidTraits();
+
     // returns the main event loop instance, i.e. the event loop which is started
     // by OnRun() and which dispatches all events sent from the native toolkit
     // to the application (except when new event loops are temporarily set-up).
@@ -256,6 +257,7 @@ public:
     // Finally, notice that while this function is virtual, it is not supposed
     // to be overridden outside of the library itself.
     virtual void SetCLocale();
+
 
     // event processing functions
     // --------------------------
@@ -655,7 +657,6 @@ public:
     // deactivated
     virtual void SetActive(bool isActive, wxWindow *lastFocus);
 
-
 protected:
     // override base class method to use GUI traits
     virtual wxAppTraits *CreateTraits() wxOVERRIDE;
@@ -687,7 +688,6 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxAppBase);
 };
 
-
 // ----------------------------------------------------------------------------
 // now include the declaration of the real class
 // ----------------------------------------------------------------------------
@@ -706,8 +706,6 @@ protected:
     #include "wx/x11/app.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/app.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/app.h"
 #elif defined(__WXQT__)
     #include "wx/qt/app.h"
 #endif

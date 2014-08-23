@@ -166,7 +166,6 @@ public:
     static void          ChangeLightness(unsigned char* r, unsigned char* g, unsigned char* b, int ialpha);
 
     wxColour ChangeLightness(int ialpha) const;
-
     wxColour& MakeDisabled(unsigned char brightness = 255);
 
 protected:
@@ -220,8 +219,6 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
     #include "wx/x11/colour.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/colour.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/colour.h"
 #elif defined(__WXQT__)
     #include "wx/qt/colour.h"
 #endif

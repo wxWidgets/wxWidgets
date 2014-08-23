@@ -83,8 +83,6 @@ public:
     #include "wx/x11/dataform.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/dataform.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/dataform.h"
 #elif defined(__WXQT__)
     #include "wx/qt/dataform.h"
 #endif
@@ -171,8 +169,6 @@ public:
     #include "wx/gtk1/dataobj.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/dataobj.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/dataobj.h"
 #elif defined(__WXQT__)
     #include "wx/qt/dataobj.h"
 #endif
@@ -371,6 +367,7 @@ public:
 private:
     wxString m_html;
 };
+
 class WXDLLIMPEXP_CORE wxTextDataObject : public wxDataObjectSimple
 {
 public:
@@ -563,8 +560,6 @@ private:
         #include "wx/motif/dataobj2.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/dataobj2.h"
-    #elif defined(__WXCOCOA__)
-        #include "wx/cocoa/dataobj2.h"
     #elif defined(__WXQT__)
         #include "wx/qt/dataobj2.h"
     #endif

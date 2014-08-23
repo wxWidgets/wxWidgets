@@ -55,13 +55,6 @@ bool wxFrame::Create(wxWindow *parent,
     return true;
 }
 
-wxFrame::~wxFrame()
-{
-    SendDestroyEvent();
-
-    DeleteAllBars();
-}
-
 // get the origin of the client area in the client coordinates
 wxPoint wxFrame::GetClientAreaOrigin() const
 {

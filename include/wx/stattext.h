@@ -97,8 +97,6 @@ private:
     #include "wx/gtk1/stattext.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/stattext.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/stattext.h"
 #elif defined(__WXQT__)
     #include "wx/qt/stattext.h"
 #endif

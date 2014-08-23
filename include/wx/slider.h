@@ -41,7 +41,6 @@
 #define wxSL_VALUE_LABEL     0x4000
 #define wxSL_LABELS          (wxSL_MIN_MAX_LABELS|wxSL_VALUE_LABEL)
 
-
 extern WXDLLIMPEXP_DATA_CORE(const char) wxSliderNameStr[];
 
 // ----------------------------------------------------------------------------
@@ -140,8 +139,6 @@ private:
     #include "wx/gtk1/slider.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/slider.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/slider.h"
 #elif defined(__WXQT__)
     #include "wx/qt/slider.h"
 #endif

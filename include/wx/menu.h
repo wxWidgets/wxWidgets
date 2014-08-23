@@ -589,8 +589,6 @@ protected:
     #include "wx/gtk1/menu.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/menu.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/menu.h"
 #elif defined(__WXQT__)
     #include "wx/qt/menu.h"
 #endif

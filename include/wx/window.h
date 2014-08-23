@@ -389,6 +389,8 @@ public:
         // returns input-independent best size for the others.
     int GetBestHeight(int width) const;
     int GetBestWidth(int height) const;
+
+
     void SetScrollHelper( wxScrollHelper *sh )   { m_scrollHelper = sh; }
     wxScrollHelper *GetScrollHelper()            { return m_scrollHelper; }
 
@@ -403,6 +405,7 @@ public:
         // minimum size, giving priority to the min size components, and
         // returns the results.
     virtual wxSize GetEffectiveMinSize() const;
+
     wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
     wxSize GetBestFittingSize() const;
     wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
@@ -411,6 +414,7 @@ public:
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
     void SetInitialSize(const wxSize& size=wxDefaultSize);
+
     wxDEPRECATED_MSG("use SetInitialSize() instead")
     void SetBestFittingSize(const wxSize& size=wxDefaultSize);
 
@@ -603,6 +607,7 @@ public:
         wxDECLARE_NO_COPY_CLASS(ChildrenRepositioningGuard);
     };
 
+
     // window state
     // ------------
 
@@ -681,7 +686,6 @@ public:
         // make the window modal (all other windows unresponsive)
     wxDEPRECATED( virtual void MakeModal(bool modal = true) );
 #endif
-
 
     // (primitive) theming support
     // ---------------------------
@@ -803,6 +807,7 @@ public:
         // is this window a child or grand child of this one (inside the same
         // TLW)?
     bool IsDescendant(wxWindowBase* win) const;
+
         // it doesn't really change parent, use Reparent() instead
     void SetParent( wxWindowBase *parent );
         // change the real parent of this window, return true if the parent
@@ -1104,6 +1109,7 @@ public:
         // user-readable explanation of why it isn't supported if the return
         // value is false.
     virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const;
+
         // set/retrieve the font for the window (SetFont() returns true if the
         // font really changed)
     virtual bool SetFont(const wxFont& font) = 0;
@@ -1315,6 +1321,7 @@ public:
         // get the associated tooltip or NULL if none
     wxToolTip* GetToolTip() const { return m_tooltip; }
     wxString GetToolTipText() const;
+
     // Use the same tool tip as the given one (which can be NULL to indicate
     // that no tooltip should be used) for this window. This is currently only
     // used by wxCompositeWindow::DoSetToolTip() implementation and is not part
@@ -1498,6 +1505,8 @@ public:
     // children frames are not top level windows (and their IsTopLevel()
     // returns false) but still are self-contained navigation domains as well.
     virtual bool IsTopNavigationDomain() const { return false; }
+
+
 protected:
     // helper for the derived class Create() methods: the first overload, with
     // validator parameter, should be used for child windows while the second
@@ -1550,7 +1559,6 @@ protected:
     // really need to enable/disable window and so no additional checks on the
     // widgets state are necessary
     virtual void DoEnable(bool WXUNUSED(enable)) { }
-
 
 
     // the window id - a number which uniquely identifies a window among
@@ -1739,6 +1747,7 @@ protected:
         { return wxDefaultCoord; }
     virtual int DoGetBestClientWidth(int WXUNUSED(height)) const
         { return wxDefaultCoord; }
+
     // this is the virtual function to be overridden in any derived class which
     // wants to change how SetSize() or Move() works - it is called by all
     // versions of these functions in the base class
@@ -1827,7 +1836,6 @@ private:
     wxSize GetDlgUnitBase() const;
 
 
-
     // number of Freeze() calls minus the number of Thaw() calls: we're frozen
     // (i.e. not being updated) if it is positive
     unsigned int m_freezeCount;
@@ -1907,13 +1915,6 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
         #define wxWindowMac wxWindow
     #endif // wxUniv
     #include "wx/osx/window.h"
-#elif defined(__WXCOCOA__)
-    #ifdef __WXUNIVERSAL__
-        #define wxWindowNative wxWindowCocoa
-    #else // !wxUniv
-        #define wxWindowCocoa wxWindow
-    #endif // wxUniv
-    #include "wx/cocoa/window.h"
 #elif defined(__WXQT__)
     #include "wx/qt/window.h"
 #endif
@@ -1954,7 +1955,6 @@ extern WXDLLIMPEXP_CORE wxWindow *wxGetActiveWindow();
 
 // get the (first) top level parent window
 WXDLLIMPEXP_CORE wxWindow* wxGetTopLevelParent(wxWindow *win);
-
 
 #if wxUSE_ACCESSIBILITY
 // ----------------------------------------------------------------------------

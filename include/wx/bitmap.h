@@ -150,7 +150,6 @@ private:
     DECLARE_ABSTRACT_CLASS(wxBitmapHandler)
 };
 
-
 // ----------------------------------------------------------------------------
 // wxBitmap: class which represents platform-dependent bitmap (unlike wxImage)
 // ----------------------------------------------------------------------------
@@ -192,6 +191,7 @@ public:
     virtual double GetScaledHeight() const { return GetHeight() / GetScaleFactor(); }
     virtual wxSize GetScaledSize() const
         { return wxSize(wxRound(GetScaledWidth()), wxRound(GetScaledHeight())); }
+
 #if wxUSE_IMAGE
     virtual wxImage ConvertToImage() const = 0;
 
@@ -288,9 +288,6 @@ protected:
 #elif defined(__WXMAC__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_PICT_RESOURCE
     #include "wx/osx/bitmap.h"
-#elif defined(__WXCOCOA__)
-    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
-    #include "wx/cocoa/bitmap.h"
 #elif defined(__WXQT__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
     #include "wx/qt/bitmap.h"

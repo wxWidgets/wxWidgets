@@ -50,7 +50,6 @@ enum
     wxFD_PREVIEW           = 0x0100
 };
 
-
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileDialogNameStr[];
@@ -113,6 +112,7 @@ public:
 
     virtual wxString GetCurrentlySelectedFilename() const
         { return m_currentlySelectedFilename; }
+
     // this function is called with wxFileDialog as parameter and should
     // create the window containing the extra controls we want to show in it
     typedef wxWindow *(*ExtraControlCreatorFunction)(wxWindow*);
@@ -123,8 +123,6 @@ public:
     wxWindow *GetExtraControl() const { return m_extraControl; }
 
     // Utility functions
-
-
 
     // Append first extension to filePath from a ';' separated extensionList
     // if filePath = "path/foo.bar" just return it as is
@@ -140,11 +138,13 @@ protected:
     wxString      m_fileName;
     wxString      m_wildCard;
     int           m_filterIndex;
+
     // Currently selected, but not yet necessarily accepted by the user, file.
     // This should be updated whenever the selection in the control changes by
     // the platform-specific code to provide a useful implementation of
     // GetCurrentlySelectedFilename().
     wxString      m_currentlySelectedFilename;
+
     wxWindow*     m_extraControl;
 
     // returns true if control is created (if it already exists returns false)
@@ -218,8 +218,6 @@ wxSaveFileSelector(const wxString& what,
     #include "wx/gtk1/filedlg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/filedlg.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/filedlg.h"
 #elif defined(__WXQT__)
     #include "wx/qt/filedlg.h"
 #endif

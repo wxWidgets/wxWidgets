@@ -109,8 +109,6 @@ public:
     #include "wx/dfb/pen.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/pen.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/pen.h"
 #elif defined(__WXQT__)
     #include "wx/qt/pen.h"
 #endif
@@ -154,6 +152,5 @@ inline bool operator!=(wxPenStyle s, wxDeprecatedGUIConstants t)
 }
 
 #endif // wxCOMPILER_NO_OVERLOAD_ON_ENUM
-
 
 #endif // _WX_PEN_H_BASE_

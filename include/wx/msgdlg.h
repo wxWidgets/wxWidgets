@@ -291,8 +291,6 @@ private:
     (defined(__WXGTK__) && !defined(__WXGTK20__))
 
     #define wxMessageDialog wxGenericMessageDialog
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/msgdlg.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/msgdlg.h"
 #elif defined(__WXMOTIF__)

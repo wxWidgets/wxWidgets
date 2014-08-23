@@ -204,8 +204,6 @@ inline void wxMenuItemBase::SetText(const wxString& text) { SetItemLabel(text); 
     #include "wx/gtk1/menuitem.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/menuitem.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/menuitem.h"
 #elif defined(__WXQT__)
     #include "wx/qt/menuitem.h"
 #endif

@@ -1225,8 +1225,6 @@
 #  endif
 #elif defined(__WXGTK__)
 #  include "wx/gtk/chkconf.h"
-#elif defined(__WXCOCOA__)
-#  include "wx/cocoa/chkconf.h"
 #elif defined(__WXMAC__)
 #  include "wx/osx/chkconf.h"
 #elif defined(__WXDFB__)

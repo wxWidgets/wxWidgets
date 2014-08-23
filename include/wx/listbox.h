@@ -153,8 +153,6 @@ private:
   #include "wx/gtk1/listbox.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/listbox.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/listbox.h"
 #elif defined(__WXQT__)
     #include "wx/qt/listbox.h"
 #endif

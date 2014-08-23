@@ -81,8 +81,6 @@ enum
         #include "wx/gtk1/toolbar.h"
     #elif defined(__WXMAC__)
        #include "wx/osx/toolbar.h"
-    #elif defined(__WXCOCOA__)
-       #include "wx/cocoa/toolbar.h"
     #elif defined(__WXQT__)
         #include "wx/qt/toolbar.h"
     #endif

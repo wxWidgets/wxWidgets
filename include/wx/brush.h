@@ -81,8 +81,6 @@ public:
     #include "wx/dfb/brush.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/brush.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/brush.h"
 #elif defined(__WXQT__)
     #include "wx/qt/brush.h"
 #endif
@@ -125,6 +123,5 @@ inline bool operator!=(wxBrushStyle s, wxDeprecatedGUIConstants t)
 }
 
 #endif // wxCOMPILER_NO_OVERLOAD_ON_ENUM
-
 
 #endif // _WX_BRUSH_H_BASE_

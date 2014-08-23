@@ -285,7 +285,6 @@ public:
     virtual ~wxFontBase();
 
 
-
     // from the font components
     static wxFont *New(
         int pointSize,              // size of the font in points
@@ -423,6 +422,8 @@ public:
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT)  // ISO8859-X, ...
         { return New(pixelSize, (wxFontFamily)family, (wxFontStyle)style,
                      (wxFontWeight)weight, underlined, face, encoding); }
+
+
 protected:
     // the function called by both overloads of SetNativeFontInfo()
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
@@ -430,6 +431,7 @@ protected:
     // The function called by public GetFamily(): it can return
     // wxFONTFAMILY_UNKNOWN unlike the public method (see comment there).
     virtual wxFontFamily DoGetFamily() const = 0;
+
 
     // Helper functions to recover wxFONTSTYLE/wxFONTWEIGHT and underlined flag
     // values from flags containing a combination of wxFONTFLAG_XXX.
@@ -460,6 +462,7 @@ protected:
     {
         return (flags & wxFONTFLAG_STRIKETHROUGH) != 0;
     }
+
 private:
     // the currently default encoding: by default, it's the default system
     // encoding, but may be changed by the application using
@@ -527,8 +530,6 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     #include "wx/dfb/font.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/font.h"
-#elif defined(__WXCOCOA__)
-    #include "wx/cocoa/font.h"
 #elif defined(__WXQT__)
     #include "wx/qt/font.h"
 #endif
