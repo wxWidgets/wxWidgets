@@ -182,6 +182,45 @@ public:
     void ShowMessage(const wxString& msg, int flags = wxICON_NONE);
 
     /**
+        Returns the number of currently shown buttons.
+
+        This is simply the number of calls to AddButton() minus the number
+        of calls to RemoveButton() so far.
+
+        @return The number of currently shown buttons, possibly 0.
+
+        @since 3.1.0
+     */
+    virtual size_t GetButtonCount() const;
+
+    /**
+        Returns the ID of the button at the given position.
+
+        The positions of the buttons are counted in order of their addition.
+
+        @param idx
+            The position of the button in 0 to GetButtonCount() range.
+        @return
+            The ID of the button at the given position or wxID_NONE if it
+            is out of range (this also results in an assertion failure).
+
+        @since 3.1.0
+     */
+    virtual wxWindowID GetButtonId(size_t idx) const;
+
+    /**
+        Returns whether a button with the given ID is currently shown.
+
+        @param btnid
+            ID of the button to check for.
+        @return
+            \true if the button with this ID is currently shown.
+
+        @since 3.1.0
+     */
+    virtual bool HasButtonId(wxWindowID btnid) const;
+
+    /**
         @name Generic version customization methods.
 
         All these methods exist in the generic version of the class only.

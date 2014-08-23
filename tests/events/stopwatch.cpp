@@ -153,7 +153,19 @@ void StopWatchTestCase::RestartBug()
     WX_ASSERT_MESSAGE
     (
         ("Actual time value is %ld", t),
-        t > offset + sleepTime - tolerance &&
-            t < offset + sleepTime + tolerance
+        t >= offset + sleepTime
     );
+
+    // As above, this is not actually due to the fact of the test being
+    // automatic but just because buildot machines are usually pretty slow, so
+    // this test often fails there simply because of the high load on them.
+    if ( !IsAutomaticTest() )
+    {
+
+        WX_ASSERT_MESSAGE
+        (
+            ("Actual time value is %ld", t),
+            t < offset + sleepTime + tolerance
+        );
+    }
 }

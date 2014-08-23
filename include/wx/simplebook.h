@@ -139,7 +139,7 @@ public:
 protected:
     virtual void UpdateSelectedPage(size_t newsel) wxOVERRIDE
     {
-        m_selection = newsel;
+        m_selection = (int)newsel;
     }
 
     virtual wxBookCtrlEvent* CreatePageChangingEvent() const wxOVERRIDE

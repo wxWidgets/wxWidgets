@@ -495,6 +495,8 @@ initWithModelPtr:(wxDataViewModel*)initModelPtr
 
         currentParentItem = nil;
 
+        sortDescriptors = nil;
+
         children = [[NSMutableArray alloc] init];
         items    = [[NSMutableSet   alloc] init];
     }
@@ -503,6 +505,8 @@ initWithModelPtr:(wxDataViewModel*)initModelPtr
 
 -(void) dealloc
 {
+    [sortDescriptors release];
+
     [currentParentItem release];
 
     [children release];
@@ -2045,6 +2049,10 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
     // specified position the column is first appended and - if necessary -
     // moved to its final position:
     [m_OutlineView addTableColumn:nativeColumn];
+
+    // it is owned, and kepy alive, by m_OutlineView now
+    [nativeColumn release];
+
     if (pos != static_cast<unsigned int>([m_OutlineView numberOfColumns]-1))
         [m_OutlineView moveColumn:[m_OutlineView numberOfColumns]-1 toColumn:pos];
 
@@ -2751,7 +2759,9 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer(const wxString& varianttype,
       m_editorCtrlPtr(NULL),
       m_DCPtr(NULL)
 {
-    SetNativeData(new wxDataViewRendererNativeData([[wxCustomCell alloc] init]));
+    wxCustomCell* cell = [[wxCustomCell alloc] init];
+    SetNativeData(new wxDataViewRendererNativeData(cell));
+    [cell release];
 }
 
 bool wxDataViewCustomRenderer::MacRender()

@@ -1277,7 +1277,7 @@ bool wxPGComboBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
         return true;
     }
 
-    bool res = property->StringToValue(variant, textVal, wxPG_EDITABLE_VALUE);
+    bool res = property->StringToValue(variant, textVal, wxPG_EDITABLE_VALUE|wxPG_PROPERTY_SPECIFIC);
 
     // Changing unspecified always causes event (returning
     // true here should be enough to trigger it).
@@ -2019,7 +2019,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
   #endif
 #endif
 
-    if ( selected->HasFlag(wxPG_PROP_READONLY) )
+    if ( selected->HasFlag(wxPG_PROP_READONLY) && !selected->HasFlag(wxPG_PROP_ACTIVE_BTN) )
         but->Disable();
 
     return but;
