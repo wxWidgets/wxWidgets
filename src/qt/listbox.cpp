@@ -151,11 +151,16 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
 {
+    QListWidgetItem* item = m_qtListWidget->item(n);
+    QVariant variant = qVariantFromValue(clientData);
+    item->setData(Qt::UserRole, variant);
 }
 
 void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    return NULL;
+    QListWidgetItem* item = m_qtListWidget->item(n);
+    QVariant variant = item->data(Qt::UserRole);
+    return variant.value<void *>();
 }
 
 void wxListBox::DoClear()
