@@ -175,17 +175,18 @@ bool wxWindow::Show( bool show )
     // Show can be called before the underlying window is created:
 
     QWidget *qtWidget = GetHandle();
-    if ( qtWidget != NULL )
+    if ( qtWidget == NULL )
     {
-        qtWidget->setVisible( show );
-        return true;
-    }
-    else
         return false;
+    }
+
+    qtWidget->setVisible( show );
 
     wxSizeEvent event(GetSize(), GetId());
     event.SetEventObject(this);
     HandleWindowEvent(event);
+
+    return true;
 }
 
 
