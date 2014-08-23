@@ -349,8 +349,8 @@ MyCanvas::MyCanvas(wxFrame *parent)
     new wxStaticBitmap( this, wxID_ANY, m_bitmap, wxPoint(80,20) );
 
     new wxStaticText(this, wxID_ANY,
-                     "Left bitmap is a wxStaticBitmap,\n"
-                     "right one drawn directly",
+                     "Right bitmap is a wxStaticBitmap,\n"
+                     "left one drawn directly",
                      wxPoint(150, 20));
 
     new ControlWithTransparency(this, wxPoint(65, 125), wxSize(350, 22));
