@@ -50,6 +50,9 @@ public:
 
     virtual QMenuBar *GetHandle() const;
 
+    virtual void Attach(wxFrame *frame);
+    virtual void Detach();
+
 private:
     QMenuBar *m_qtMenuBar;
 
