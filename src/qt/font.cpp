@@ -113,7 +113,19 @@ wxFont::wxFont()
 
 wxFont::wxFont(const wxFontInfo& info)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    Create(info.GetPointSize(),
+           info.GetFamily(),
+           info.GetStyle(),
+           info.GetWeight(),
+           info.IsUnderlined(),
+           info.GetFaceName(),
+           info.GetEncoding());
+
+    SetStrikethrough(info.IsStrikethrough());
+
+    wxSize pixelSize = info.GetPixelSize();
+    if ( pixelSize != wxDefaultSize )
+        SetPixelSize(pixelSize);
 }
 
 wxFont::wxFont(const wxString& nativeFontInfoString)
