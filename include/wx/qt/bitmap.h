@@ -107,6 +107,8 @@ public:
     bool Create(const wxBitmap& bitmap, int paletteIndex);
     bool Create(const wxBitmap& bitmap);
 
+    wxBitmap GetBitmap() const;
+
     // Implementation
     QBitmap *GetHandle() const;
 

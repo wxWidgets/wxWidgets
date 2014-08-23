@@ -519,6 +519,11 @@ bool wxMask::Create(const wxBitmap& bitmap)
     return true;
 }
 
+wxBitmap wxMask::GetBitmap() const
+{
+    return wxBitmap(*m_qtBitmap);
+}
+
 QBitmap *wxMask::GetHandle() const
 {
     return m_qtBitmap;
