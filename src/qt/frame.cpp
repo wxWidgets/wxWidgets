@@ -14,6 +14,17 @@
 #include "wx/qt/converter.h"
 #include "wx/qt/window_qt.h"
 
+
+class wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >
+{
+
+public:
+    wxQtMainWindow( wxWindow *parent, wxFrame *handler );
+
+private:
+};
+
+
 wxFrame::wxFrame()
 {
 }

@@ -56,15 +56,4 @@ private:
 };
 
 
-
-class WXDLLIMPEXP_CORE wxQtMainWindow : public wxQtEventSignalHandler< QMainWindow, wxFrame >
-{
-
-public:
-    wxQtMainWindow( wxWindow *parent, wxFrame *handler );
-
-private:
-};
-
-
 #endif // _WX_QT_FRAME_H_

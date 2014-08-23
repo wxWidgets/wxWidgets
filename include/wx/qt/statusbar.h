@@ -14,8 +14,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QStatusBar>
 
-class WXDLLIMPEXP_FWD_CORE wxQtStatusBar;
-
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
 public:
@@ -44,19 +42,11 @@ private:
     void Init();
     void UpdateFields();
 
-    wxQtPointer< wxQtStatusBar > m_qtStatusBar;
+    wxQtPointer< QStatusBar > m_qtStatusBar;
     QList< QLabel* > m_qtPanes;
 
     DECLARE_DYNAMIC_CLASS( wxStatusBar )
 };
 
-class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventSignalHandler< QStatusBar, wxStatusBar >
-{
-
-public:
-    wxQtStatusBar( wxWindow *parent, wxStatusBar *handler );
-
-private:
-};
 
 #endif // _WX_QT_STATUSBAR_H_

@@ -11,6 +11,15 @@
 #include "wx/dialog.h"
 #include "wx/qt/utils.h"
 
+
+class wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
+{
+
+    public:
+        wxQtDialog( wxWindow *parent, wxDialog *handler );
+};
+
+
 wxQtDialog::wxQtDialog( wxWindow *parent, wxDialog *handler )
     : wxQtEventSignalHandler< QDialog, wxDialog >( parent, handler )
 {

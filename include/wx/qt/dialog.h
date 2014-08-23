@@ -45,11 +45,4 @@ private:
 };
 
 
-class WXDLLIMPEXP_CORE wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
-{
-
-    public:
-        wxQtDialog( wxWindow *parent, wxDialog *handler );
-};
-
 #endif // _WX_QT_DIALOG_H_
