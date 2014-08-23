@@ -81,10 +81,10 @@ protected:
     bool       m_hasCheckBoxes;
 #endif // wxUSE_CHECKLISTBOX
 
+    wxQtPointer< QListWidget > m_qtListWidget;
+
 private:
     virtual void Init(); //common construction
-
-    wxQtPointer< QListWidget > m_qtListWidget;
 
     DECLARE_DYNAMIC_CLASS(wxListBox)
 };
