@@ -168,6 +168,34 @@ long wxTextCtrl::GetInsertionPoint() const
     }
 }
 
+wxString wxTextCtrl::DoGetValue() const
+{
+    if ( IsMultiLine() )
+        return wxQtConvertString( m_qtTextEdit->toPlainText() );
+    else
+        return wxQtConvertString( m_qtLineEdit->text() );
+}
+
+void wxTextCtrl::SetSelection( long from, long to )
+{
+    // SelectAll uses -1 to -1, adjust for qt:
+    if (from == -1 && to == -1)
+    {
+        from = 0;
+        to = GetValue().length();
+    }
+    if ( IsMultiLine() )
+    {
+        QTextCursor cursor = m_qtTextEdit->textCursor();
+        cursor.setPosition(from);
+        cursor.setPosition(to, QTextCursor::KeepAnchor);
+        m_qtTextEdit->setTextCursor(cursor);
+    }
+    else // single line
+    {
+        m_qtLineEdit->setSelection(from, to);
+    }
+}
 
 void wxTextCtrl::WriteText( const wxString &text )
 {

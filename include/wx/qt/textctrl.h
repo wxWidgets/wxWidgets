@@ -53,7 +53,9 @@ public:
 
     virtual void SetInsertionPoint(long pos);
     virtual long GetInsertionPoint() const;
+    virtual void SetSelection( long from, long to );
 
+    virtual wxString DoGetValue() const;
     virtual void WriteText(const wxString& text);
     
     virtual QWidget *GetHandle() const;
