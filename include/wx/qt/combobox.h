@@ -53,12 +53,11 @@ public:
                 const wxString& name = wxComboBoxNameStr);
 
     virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
-    virtual void SetSelection(long from, long to)
-                               { wxTextEntry::SetSelection(from, to); }
+    virtual void SetSelection(long from, long to);
 
     virtual int GetSelection() const { return wxChoice::GetSelection(); }
-    virtual void GetSelection(long *from, long *to) const
-                               { return wxTextEntry::GetSelection(from, to); }
+    virtual void GetSelection(long *from, long *to) const;
+
     virtual wxString GetStringSelection() const
     {
         return wxItemContainer::GetStringSelection();
