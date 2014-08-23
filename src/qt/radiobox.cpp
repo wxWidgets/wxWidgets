@@ -16,6 +16,13 @@
 #include <QtWidgets/QRadioButton>
 
 
+class wxQtRadioBox : public wxQtEventSignalHandler< QGroupBox, wxRadioBox >
+{
+public:
+    wxQtRadioBox( wxWindow *parent, wxRadioBox *handler ):
+        wxQtEventSignalHandler< QGroupBox, wxRadioBox >( parent, handler ){}
+};
+
 IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
 
 
@@ -94,7 +101,8 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxValidator& val,
             const wxString& name)
 {
-    m_qtGroupBox = new QGroupBox( wxQtConvertString( title ), parent->GetHandle() );
+    m_qtGroupBox = new wxQtRadioBox( parent, this );
+    m_qtGroupBox->setTitle( wxQtConvertString( title ) );
     m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
 
     if ( style & wxRA_SPECIFY_ROWS )
