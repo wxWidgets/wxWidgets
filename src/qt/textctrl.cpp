@@ -149,6 +149,7 @@ void wxTextCtrl::SetInsertionPoint(long pos)
         cursor = m_qtTextEdit->textCursor();
         cursor.movePosition(op, QTextCursor::MoveAnchor, pos);
         m_qtTextEdit->setTextCursor(cursor);
+        m_qtTextEdit->ensureCursorVisible();
     }
 }
 
