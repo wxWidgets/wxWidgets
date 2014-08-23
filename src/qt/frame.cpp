@@ -82,6 +82,26 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
     wxFrameBase::SetStatusBar( statusBar );
 }
 
+void wxFrame::SetToolBar(wxToolBar *toolbar)
+{
+    int area = 0;
+    if ( toolbar != NULL )
+    {
+        if (toolbar->HasFlag(wxTB_LEFT))   area |= Qt::LeftToolBarArea;
+        if (toolbar->HasFlag(wxTB_RIGHT))  area |= Qt::RightToolBarArea;
+        if (toolbar->HasFlag(wxTB_TOP))    area |= Qt::TopToolBarArea;
+        if (toolbar->HasFlag(wxTB_BOTTOM)) area |= Qt::BottomToolBarArea;
+
+        m_qtMainWindow->addToolBar((Qt::ToolBarArea)area, toolbar->GetHandle());
+        m_frameToolBar = toolbar;
+    }
+    else if ( m_frameToolBar != NULL )
+    {
+        m_qtMainWindow->removeToolBar(m_frameToolBar->GetHandle());
+        m_frameToolBar = NULL;
+    }
+}
+
 void wxFrame::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
