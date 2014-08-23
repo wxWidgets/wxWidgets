@@ -9,7 +9,9 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/apptrait.h"
 #include "wx/evtloop.h"
+#include "wx/private/eventloopsourcesmanager.h"
 #include "wx/qt/evtloop_qt.h"
 
 #include <QtCore/QCoreApplication>
@@ -85,6 +87,28 @@ wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHa
 
     return NULL;
 }
+
+class wxQtEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
+{
+public:
+    wxEventLoopSource *
+    AddSourceForFD(int WXUNUSED(fd),
+                   wxEventLoopSourceHandler* WXUNUSED(handler),
+                   int WXUNUSED(flags))
+    {
+        wxFAIL_MSG("Monitoring FDs in the main loop is not implemented in wxQT");
+
+        return NULL;
+    }
+};
+
+wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
+{
+    static wxQtEventLoopSourcesManager s_eventLoopSourcesManager;
+
+    return &s_eventLoopSourcesManager;
+}
+
 #endif // wxUSE_EVENTLOOP_SOURCE
 
 //#############################################################################
