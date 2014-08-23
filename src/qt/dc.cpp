@@ -312,9 +312,8 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
     if (descent != NULL)
         *descent = metrics.descent();
 
-    wxMISSING_IMPLEMENTATION( "DoGetTextExtent: externalLeading" );
     if (externalLeading != NULL)
-        *externalLeading = 0;
+        *externalLeading = metrics.leading();
 }
 
 void wxQtDCImpl::Clear()
