@@ -917,7 +917,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                    m_updateRegion.GetBox().width, m_updateRegion.GetBox().height);
 
         // Prepare the Qt painter for wxWindowDC:
-        bool ok;
+        bool ok = false;
         if ( QtGetScrollBarsContainer() )
         {
             // QScrollArea can only draw in the viewport:
