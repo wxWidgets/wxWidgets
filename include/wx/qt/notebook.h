@@ -33,8 +33,6 @@ public:
     virtual void SetPadding(const wxSize& padding);
     virtual void SetTabSize(const wxSize& sz);
 
-    virtual int GetSelection() const;
-
     virtual bool SetPageText(size_t n, const wxString& strText);
     virtual wxString GetPageText(size_t n) const;
 
@@ -46,13 +44,14 @@ public:
 
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
-    virtual int SetSelection(size_t n);
-    virtual int ChangeSelection(size_t n);
+    int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
+    int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
 
     virtual QTabWidget *GetHandle() const;
 
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
+    int DoSetSelection(size_t nPage, int flags = 0);
 
 private:
     wxQtPointer< QTabWidget > m_qtTabWidget;
