@@ -69,6 +69,7 @@ protected:
                               unsigned int pos,
                               void **clientData,
                               wxClientDataType type);
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos);
     
     virtual void DoSetItemClientData(unsigned int n, void *clientData);
     virtual void *DoGetItemClientData(unsigned int n) const;

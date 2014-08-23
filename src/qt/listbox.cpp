@@ -146,7 +146,15 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
                           void **clientData,
                           wxClientDataType type)
 {
-    return 0;
+    InvalidateBestSize();
+    int n = DoInsertItemsInLoop(items, pos, clientData, type);
+    UpdateOldSelections();
+    return n;
+}
+
+int wxListBox::DoInsertOneItem(const wxString& item, unsigned int pos)
+{
+    m_qtListWidget->insertItem(pos, wxQtConvertString(item));
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
