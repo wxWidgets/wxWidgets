@@ -13,6 +13,7 @@
 
 #include "wx/window.h"
 #include "wx/qt/private/converter.h"
+#include "wx/qt/private/utils.h"
 
 #include <QtCore/QEvent>
 #include <QtGui/QPaintEvent>
@@ -52,8 +53,12 @@ public:
     {
         // Set immediatelly as it is used to check if wxWindow is alive
         wxWindow::QtStoreWindowPointer( this, handler );
-    }
 
+        // Handle QWidget destruction signal AFTER it gets deleted
+        QObject::connect( this, &QObject::destroyed, this,
+                            &wxQtHandleDestroyedSignal );
+
+    }
 
     virtual Handler *GetHandler() const
     {
@@ -316,6 +321,7 @@ protected:
     virtual void tabletEvent ( QTabletEvent * event ) { }
     virtual bool winEvent ( MSG * message, long * result ) { }
     virtual bool x11Event ( XEvent * event ) { } */
+
 };
 
 #endif
