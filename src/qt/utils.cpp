@@ -108,14 +108,18 @@ int wxDisplayDepth()
 
 void wxDisplaySize(int *width, int *height)
 {
-    *width = QApplication::desktop()->width();
-    *height = QApplication::desktop()->height();
+    if ( width != NULL )
+        *width = QApplication::desktop()->width();
+    if ( height != NULL )
+        *height = QApplication::desktop()->height();
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-    *width = QApplication::desktop()->widthMM();
-    *height = QApplication::desktop()->heightMM();
+    if ( width != NULL )
+        *width = QApplication::desktop()->widthMM();
+    if ( height != NULL )
+        *height = QApplication::desktop()->heightMM();
 }
 
 void wxBell()
