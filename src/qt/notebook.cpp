@@ -78,7 +78,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     m_qtTabWidget->insertTab( n, page->GetHandle(), wxQtConvertString( text ));
 //    m_qtTabWidget->setTabEnabled( n, bSelect );
 
-//    AddChild( page );
+    m_pages.Insert(page, n);
 
     return true;
 }
