@@ -58,6 +58,8 @@ public:
 
     virtual QListWidget *GetHandle() const;
 
+    void QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected);
+
 protected:
     virtual void DoSetFirstItem(int n);
 
