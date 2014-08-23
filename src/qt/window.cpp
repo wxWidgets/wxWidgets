@@ -243,6 +243,16 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
     return ( true );
 }
 
+void wxWindow::AddChild( wxWindowBase *child )
+{
+    // Make sure all children are children of the inner scroll area widget (if any):
+
+    if ( QtGetScrollBarsContainer() )
+        QtReparent( child->GetHandle(), QtGetScrollBarsContainer()->viewport() );
+
+    wxWindowBase::AddChild( child );
+}
+
 bool wxWindow::Show( bool show )
 {
     if ( !wxWindowBase::Show( show ))

@@ -55,6 +55,8 @@ public:
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
     
+    void AddChild( wxWindowBase *child );
+
     virtual bool Show( bool show = true );
 
     virtual void SetLabel(const wxString& label);
