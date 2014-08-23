@@ -142,7 +142,9 @@ public:
 #if wxUSE_ACCEL
     virtual void QtHandleShortcut ( int command );
 #endif // wxUSE_ACCEL
-    
+
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
+
 protected:
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
@@ -177,9 +179,6 @@ protected:
 #if wxUSE_MENUS
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 #endif // wxUSE_MENUS
-
-
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 private:
     void Init();
