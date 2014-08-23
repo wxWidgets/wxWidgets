@@ -24,6 +24,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxControlNameStr);
 
+    virtual wxSize DoGetBestSize() const;
+
 protected:
     bool QtCreateControl( wxWindow *parent, wxWindowID id, const wxPoint &pos,
         const wxSize &size, long style, const wxValidator &validator,

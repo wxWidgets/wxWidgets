@@ -160,7 +160,6 @@ protected:
 
     virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
     virtual void DoGetSize(int *width, int *height) const;
-    virtual wxSize DoGetBestSize() const;
 
     // same as DoSetSize() for the client size
     virtual void DoSetClientSize(int width, int height);

@@ -54,3 +54,8 @@ bool wxControl::QtCreateControl( wxWindow *parent, wxWindowID id,
 
     return CreateControl( parent, id, pos, size, style, validator, name );
 }
+
+wxSize wxControl::DoGetBestSize() const
+{
+    return wxQtConvertSize( GetHandle()->sizeHint() );
+}
