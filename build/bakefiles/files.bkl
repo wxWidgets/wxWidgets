@@ -388,7 +388,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontpickerg.cpp
     src/qt/frame.cpp
     src/qt/gauge.cpp
-    src/qt/graphics.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/qt/listbox.cpp

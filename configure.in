@@ -7297,7 +7297,7 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
-    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
+    elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
         PKG_CHECK_MODULES(CAIRO, cairo,
             [wx_has_graphics=1],
             [AC_MSG_WARN([Cairo library not found])]
