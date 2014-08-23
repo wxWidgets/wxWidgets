@@ -269,3 +269,127 @@ void wxQtFillKeyboardModifiers( Qt::KeyboardModifiers modifiers, wxKeyboardState
     state->SetAltDown( modifiers.testFlag( Qt::AltModifier ) );
     state->SetMetaDown( modifiers.testFlag( Qt::MetaModifier ) );
 }
+
+
+int wxQtConvertKeyCode( int key, int modifiers, Qt::KeyboardModifiers &qtmodifiers )
+{
+    /* First treat common ranges and then handle specific values
+     * The macro takes Qt first and last codes and the first wx code
+     * to make the conversion */
+    #define QTWX_KEY_GROUP( firstWX, lastWX, firstQT ) \
+        if ( key >= firstWX && key <= lastWX ) \
+            return (int)(key - (firstQT - firstWX));
+
+    qtmodifiers |= Qt::KeypadModifier;
+    // This is a numpad event
+    QTWX_KEY_GROUP( WXK_NUMPAD0, WXK_NUMPAD9, Qt::Key_0 )
+    QTWX_KEY_GROUP( WXK_NUMPAD_F1, WXK_NUMPAD_F4, Qt::Key_F1 )
+    QTWX_KEY_GROUP( WXK_NUMPAD_LEFT, WXK_NUMPAD_DOWN, Qt::Key_Left )
+
+    // * + , - . /
+    QTWX_KEY_GROUP( WXK_NUMPAD_MULTIPLY, WXK_NUMPAD_DIVIDE, Qt::Key_Asterisk )
+
+    switch (key)
+    {
+        case WXK_NUMPAD_SPACE:
+            return Qt::Key_Space;
+        case WXK_NUMPAD_TAB:
+            return Qt::Key_Tab;
+        case WXK_NUMPAD_ENTER:
+            return Qt::Key_Enter;
+        case WXK_NUMPAD_HOME:
+            return Qt::Key_Home;
+        case WXK_NUMPAD_PAGEUP:
+            return Qt::Key_PageUp;
+        case WXK_NUMPAD_PAGEDOWN:
+            return Qt::Key_PageDown;
+        case WXK_NUMPAD_END:
+            return Qt::Key_End;
+        case WXK_NUMPAD_INSERT:
+            return Qt::Key_Insert;
+        case WXK_NUMPAD_DELETE:
+            return Qt::Key_Delete;
+        case WXK_NUMPAD_BEGIN:
+            return Qt::Key_Clear;
+        case WXK_NUMPAD_EQUAL:
+            return Qt::Key_Equal;
+    }
+
+    qtmodifiers &= ~Qt::KeypadModifier;
+
+    // ASCII (basic and extended) values are the same in Qt and wx
+    QTWX_KEY_GROUP( 32, 255, 32 );
+
+    // Arrow keys
+    QTWX_KEY_GROUP( WXK_LEFT, WXK_DOWN, Qt::Key_Left )
+
+    // F-keys (Note: Qt has up to F35, wx up to F24)
+    QTWX_KEY_GROUP( WXK_F1, WXK_F24, Qt::Key_F1 )
+
+    // * + , - . /
+    QTWX_KEY_GROUP( WXK_MULTIPLY, WXK_DIVIDE, Qt::Key_Asterisk )
+
+    // Special keys in wx. Seems most appropriate to map to LaunchX
+    QTWX_KEY_GROUP( WXK_SPECIAL1, WXK_SPECIAL20, Qt::Key_Launch0 )
+
+    // All other cases
+    switch ( key )
+    {
+        case WXK_BACK:
+            return Qt::Key_Backspace;
+        case WXK_TAB:
+            return Qt::Key_Tab;
+        case WXK_RETURN:
+            return Qt::Key_Return;
+        case WXK_ESCAPE:
+            return Qt::Key_Escape;
+        case WXK_CANCEL:
+            return Qt::Key_Cancel;
+        case Qt::Key_Clear:
+            return WXK_CLEAR;
+        case WXK_SHIFT:
+            return Qt::Key_Shift;
+        case WXK_ALT:
+            return Qt::Key_Alt;
+        case WXK_CONTROL:
+            return Qt::Key_Control;
+        case WXK_MENU:
+            return Qt::Key_Menu;
+        case WXK_PAUSE:
+            return Qt::Key_Pause;
+        case WXK_CAPITAL:
+            return Qt::Key_CapsLock;
+        case WXK_END:
+            return Qt::Key_End;
+        case WXK_HOME:
+            return Qt::Key_Home;
+        case WXK_SELECT:
+            return Qt::Key_Select;
+        case WXK_PRINT:
+            return Qt::Key_SysReq;
+        case WXK_EXECUTE:
+            return Qt::Key_Execute;
+        case WXK_INSERT:
+            return Qt::Key_Insert;
+        case WXK_HELP:
+            return Qt::Key_Help;
+        case WXK_NUMLOCK:
+            return Qt::Key_NumLock;
+        case WXK_SCROLL:
+            return Qt::Key_ScrollLock;
+        case WXK_PAGEUP:
+            return Qt::Key_PageUp;
+        case WXK_PAGEDOWN:
+            return Qt::Key_PageDown;
+        case WXK_WINDOWS_LEFT:
+            return Qt::Key_Meta;
+    }
+
+    // Missing wx-codes: WXK_START, WXK_LBUTTON, WXK_RBUTTON, WXK_MBUTTON
+    // WXK_SPECIAL(17-20), WXK_WINDOWS_RIGHT, WXK_WINDOWS_MENU, WXK_COMMAND
+    // WXK_SNAPSHOT
+
+    return (wxKeyCode)0;
+
+    #undef QTWX_KEY_GROUP
+}
