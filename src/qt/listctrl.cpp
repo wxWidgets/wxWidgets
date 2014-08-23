@@ -270,11 +270,18 @@ bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
 
 wxString wxListCtrl::GetItemText(long item, int col) const
 {
-    return wxString();
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem )
+        return wxQtConvertString( qitem->text(0) );
+    else
+        return wxString();
 }
 
 void wxListCtrl::SetItemText(long item, const wxString& str)
 {
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem )
+        qitem->setText( 0, wxQtConvertString( str ) );
 }
 
 wxUIntPtr wxListCtrl::GetItemData(long item) const
