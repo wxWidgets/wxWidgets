@@ -10,6 +10,31 @@
 
 #include "wx/spinbutt.h"
 
+
+class wxQtSpinBox : public wxQtEventSignalHandler< QSpinBox, wxSpinButton  >
+{
+public:
+    wxQtSpinBox( wxWindow *parent, wxSpinButton *handler );
+
+private:
+    void valueChanged(int value);
+};
+
+wxQtSpinBox::wxQtSpinBox( wxWindow *parent, wxSpinButton *handler )
+    : wxQtEventSignalHandler< QSpinBox, wxSpinButton >( parent, handler )
+{
+    connect(this, static_cast<void (QSpinBox::*)(int index)>(&QSpinBox::valueChanged),
+            this, &wxQtSpinBox::valueChanged);
+}
+
+void wxQtSpinBox::valueChanged(int value)
+{
+    wxCommandEvent event( wxEVT_SPIN, GetHandler()->GetId() );
+    event.SetInt( value );
+    EmitEvent( event );
+}
+
+
 wxSpinButton::wxSpinButton()
 {
 }
@@ -31,7 +56,7 @@ bool wxSpinButton::Create(wxWindow *parent,
             long style,
             const wxString& name)
 {
-    m_qtSpinBox = new QSpinBox( parent->GetHandle() );
+    m_qtSpinBox = new wxQtSpinBox( parent, this );
 
     // Modify the size so that the text field is not visible.
     // TODO: Find out the width of the buttons i.e. take the style into account (QStyleOptionSpinBox).
