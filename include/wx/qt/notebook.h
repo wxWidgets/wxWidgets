@@ -66,7 +66,6 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
 {
-    Q_OBJECT
 
 public:
 
