@@ -11,6 +11,22 @@
 #include "wx/gauge.h"
 #include "wx/qt/converter.h"
 
+
+class wxQtProgressBar : public wxQtEventSignalHandler< QProgressBar, wxGauge >
+{
+public:
+    wxQtProgressBar( wxWindow *parent, wxGauge *handler );
+
+private:
+    void valueChanged(int value);
+};
+
+wxQtProgressBar::wxQtProgressBar( wxWindow *parent, wxGauge *handler )
+    : wxQtEventSignalHandler< QProgressBar, wxGauge >( parent, handler )
+{
+}
+
+
 wxGauge::wxGauge()
 {
 }
@@ -36,7 +52,7 @@ bool wxGauge::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtProgressBar = new QProgressBar( parent->GetHandle() );
+    m_qtProgressBar = new wxQtProgressBar( parent, this);
     m_qtProgressBar->setOrientation( wxQtConvertOrientation( style, wxGA_HORIZONTAL ));
     m_qtProgressBar->setRange( 0, range );
 
