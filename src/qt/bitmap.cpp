@@ -140,6 +140,12 @@ class wxBitmapRefData: public wxGDIRefData
             m_qtPixmap = new QPixmap(pix);
         }
 
+        virtual ~wxBitmapRefData()
+        {
+            if (m_qtPixmap != NULL)
+                delete m_qtPixmap;
+        }
+
         QPixmap *m_qtPixmap;
         wxMask *m_mask;
 };
