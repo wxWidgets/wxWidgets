@@ -216,9 +216,30 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     QTreeWidgetItem *qitem = QtGetItem(id);
     if ( qitem != NULL )
     {
-        info.SetText(wxQtConvertString(qitem->text(info.GetColumn())));
-        QVariant variant = qitem->data(0, Qt::UserRole);
-        info.SetData(variant.value<long>());
+        if ( !info.m_mask )
+            // by default, get everything for backwards compatibility
+            info.m_mask = -1;
+        if ( info.m_mask & wxLIST_MASK_TEXT )
+            info.SetText(wxQtConvertString(qitem->text(info.GetColumn())));
+        if ( info.m_mask & wxLIST_MASK_DATA )
+        {
+            QVariant variant = qitem->data(0, Qt::UserRole);
+            info.SetData(variant.value<long>());
+        }
+        if ( info.m_mask & wxLIST_MASK_STATE )
+        {
+            info.m_state = wxLIST_STATE_DONTCARE;
+            if ( info.m_stateMask & wxLIST_STATE_FOCUSED )
+            {
+                if ( m_qtTreeWidget->currentIndex().row() == id )
+                    info.m_state |= wxLIST_STATE_FOCUSED;
+            }
+            if ( info.m_stateMask & wxLIST_STATE_SELECTED )
+            {
+                if ( qitem->isSelected() )
+                    info.m_state |= wxLIST_STATE_SELECTED;
+            }
+        }
         return true;
     }
     else
@@ -231,10 +252,23 @@ bool wxListCtrl::SetItem(wxListItem& info)
     QTreeWidgetItem *qitem = QtGetItem(id);
     if ( qitem != NULL )
     {
-        if ( !info.GetText().IsNull() )
+        if ((info.m_mask & wxLIST_MASK_TEXT) && !info.GetText().IsNull() )
             qitem->setText(info.GetColumn(), wxQtConvertString(info.GetText()));
         qitem->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
 
+        if ( info.m_mask & wxLIST_MASK_DATA )
+        {
+            QVariant variant = qVariantFromValue(info.GetData());
+            qitem->setData(0, Qt::UserRole, variant);
+        }
+        if (info.m_mask & wxLIST_MASK_STATE)
+        {
+            if ((info.m_stateMask & wxLIST_STATE_FOCUSED) &&
+                (info.m_state & wxLIST_STATE_FOCUSED))
+                    m_qtTreeWidget->setCurrentItem(qitem, 0);
+            if (info.m_stateMask & wxLIST_STATE_SELECTED)
+                qitem->setSelected(info.m_state & wxLIST_STATE_SELECTED);
+        }
         for (int col=0; col<GetColumnCount(); col++)
         {
             if ( info.GetFont().IsOk() )
@@ -267,12 +301,28 @@ long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId
 
 int  wxListCtrl::GetItemState(long item, long stateMask) const
 {
-    return 0;
+    wxListItem info;
+
+    info.m_mask = wxLIST_MASK_STATE;
+    info.m_stateMask = stateMask;
+    info.m_itemId = item;
+
+    if (!GetItem(info))
+        return 0;
+
+    return info.m_state;
 }
 
 bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 {
-    return false;
+    wxListItem info;
+
+    info.m_mask = wxLIST_MASK_STATE;
+    info.m_stateMask = stateMask;
+    info.m_state = state;
+    info.m_itemId = item;
+
+    return SetItem(info);
 }
 
 bool wxListCtrl::SetItemImage(long item, int image, int selImage)
