@@ -79,8 +79,10 @@ wxClientDCImpl::~wxClientDCImpl()
 
         if ( m_window != NULL )
         {
-            // force paint event (if not currently painting to avoid recursion)
-            if (!m_window->GetHandle()->paintingActive())
+            // force paint event if there is something to replay and
+            // if not currently inside a paint event (to avoid recursion)
+            if ( !m_window->QtGetPicture()->isNull() &&
+                 !m_window->GetHandle()->paintingActive() )
                 m_window->GetHandle()->repaint();
             // let destroy the m_qtPainter (see inherited classes destructors)
             m_window = NULL;
