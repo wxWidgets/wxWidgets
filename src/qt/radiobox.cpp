@@ -23,6 +23,30 @@ public:
         wxQtEventSignalHandler< QGroupBox, wxRadioBox >( parent, handler ){}
 };
 
+
+class wxQtButtonGroup : public wxQtSignalHandler< wxRadioBox >, public QButtonGroup
+{
+public:
+    wxQtButtonGroup( QGroupBox *parent, wxRadioBox *handler ):
+        wxQtSignalHandler< wxRadioBox >(handler ),
+        QButtonGroup(parent)
+    {
+        connect(this,
+                static_cast<void (QButtonGroup::*)(int index)>(&QButtonGroup::buttonClicked),
+                this, &wxQtButtonGroup::buttonClicked);
+    }
+private:
+    void buttonClicked(int index);
+};
+
+void wxQtButtonGroup::buttonClicked(int index) {
+    wxCommandEvent event( wxEVT_RADIOBOX, GetHandler()->GetId() );
+    event.SetInt(index);
+    event.SetString(wxQtConvertString(button(index)->text()));
+    EmitEvent( event );
+}
+
+
 IMPLEMENT_DYNAMIC_CLASS( wxRadioBox, wxControl )
 
 
@@ -103,7 +127,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 {
     m_qtGroupBox = new wxQtRadioBox( parent, this );
     m_qtGroupBox->setTitle( wxQtConvertString( title ) );
-    m_qtButtonGroup = new QButtonGroup( m_qtGroupBox );
+    m_qtButtonGroup = new wxQtButtonGroup( m_qtGroupBox, this );
 
     if ( style & wxRA_SPECIFY_ROWS )
         m_qtBoxLayout = new QHBoxLayout;
