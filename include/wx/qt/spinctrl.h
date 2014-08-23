@@ -30,7 +30,12 @@ class WXDLLIMPEXP_CORE wxQtSpinBox : public wxQtSpinBoxBase< QSpinBox >
 public:
     wxQtSpinBox( wxWindow *parent, wxControl *handler )
         : wxQtSpinBoxBase< QSpinBox >( parent, handler )
-    { }
+    {
+        connect(this, static_cast<void (QSpinBox::*)(int index)>(&QSpinBox::valueChanged),
+                this, &wxQtSpinBox::valueChanged);
+    }
+private:
+    void valueChanged(int value);
 };
 
 class WXDLLIMPEXP_CORE wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
