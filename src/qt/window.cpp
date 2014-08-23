@@ -397,18 +397,21 @@ void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
         widget = GetHandle();
     }
 
-    if ( rect != NULL )
+    if ( widget != NULL )
     {
-        wxLogDebug(wxT("wxWindow::Refresh %s rect %d %d %d %d"),
-                   (const char*)GetName(),
-                   rect->x, rect->y, rect->width, rect->height);
-        widget->update( wxQtConvertRect( *rect ));
-    }
-    else
-    {
-        wxLogDebug(wxT("wxWindow::Refresh %s"),
-                   (const char*)GetName());
-        widget->update();
+        if ( rect != NULL )
+        {
+            wxLogDebug(wxT("wxWindow::Refresh %s rect %d %d %d %d"),
+                       (const char*)GetName(),
+                       rect->x, rect->y, rect->width, rect->height);
+            widget->update( wxQtConvertRect( *rect ));
+        }
+        else
+        {
+            wxLogDebug(wxT("wxWindow::Refresh %s"),
+                       (const char*)GetName());
+            widget->update();
+        }
     }
 }
 
@@ -745,6 +748,7 @@ void wxWindowQt::DoScreenToClient( int *x, int *y ) const
 
 void wxWindowQt::DoCaptureMouse()
 {
+    wxCHECK_RET( GetHandle() != NULL, wxT("invalid window") );
     GetHandle()->grabMouse();
     s_capturedWindow = this;
 }
@@ -752,6 +756,7 @@ void wxWindowQt::DoCaptureMouse()
 
 void wxWindowQt::DoReleaseMouse()
 {
+    wxCHECK_RET( GetHandle() != NULL, wxT("invalid window") );
     GetHandle()->releaseMouse();
     s_capturedWindow = NULL;
 }
