@@ -29,7 +29,7 @@ wxQtCheckBox::wxQtCheckBox( wxWindow *parent, wxCheckBox *handler )
 
 void wxQtCheckBox::clicked( bool checked )
 {
-    wxCommandEvent event( wxEVT_COMMAND_CHECKBOX_CLICKED, GetHandler()->GetId() );
+    wxCommandEvent event( wxEVT_CHECKBOX, GetHandler()->GetId() );
     event.SetInt( checked );
     EmitEvent( event );
 }
