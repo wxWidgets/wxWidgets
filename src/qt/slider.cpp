@@ -63,10 +63,16 @@ bool wxSlider::Create(wxWindow *parent,
     m_qtSlider = new wxQtSlider( parent, this );
     m_qtSlider->setOrientation( wxQtConvertOrientation( style, wxSL_HORIZONTAL ) );
     SetRange( minValue, maxValue );
-    // draw ticks marks (bellow if horizontal, right if vertical):
-    if (style & wxSL_AUTOTICKS)
+    // draw ticks marks (default bellow if horizontal, right if vertical):
+    if ( style & wxSL_VERTICAL )
     {
-        m_qtSlider->setTickPosition( QSlider::TicksBelow );
+        m_qtSlider->setTickPosition( style & wxSL_LEFT ? QSlider::TicksLeft :
+                                                         QSlider::TicksRight );
+    }
+    else // horizontal slider
+    {
+        m_qtSlider->setTickPosition( style & wxSL_TOP ? QSlider::TicksAbove :
+                                                        QSlider::TicksBelow );
     }
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
