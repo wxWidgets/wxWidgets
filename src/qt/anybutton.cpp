@@ -16,6 +16,7 @@
 
 #include "wx/bitmap.h"
 #include "wx/qt/utils.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtPushButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >

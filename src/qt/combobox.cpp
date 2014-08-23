@@ -11,6 +11,7 @@
 #include "wx/combobox.h"
 #include "wx/window.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 #include <QtWidgets/QComboBox>
 
 class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >

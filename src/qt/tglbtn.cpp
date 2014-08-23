@@ -11,6 +11,7 @@
 #include "wx/tglbtn.h"
 #include "wx/bitmap.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/private/winevent.h"
 
 class wxQtToggleButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
 {

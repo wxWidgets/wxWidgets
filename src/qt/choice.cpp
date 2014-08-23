@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/choice.h"
+#include "wx/qt/private/winevent.h"
 #include <QtWidgets/QComboBox>
 
 class wxQtChoice : public wxQtEventSignalHandler< QComboBox, wxChoice >

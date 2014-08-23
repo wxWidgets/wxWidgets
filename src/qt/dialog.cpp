@@ -10,6 +10,7 @@
 
 #include "wx/dialog.h"
 #include "wx/qt/utils.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >

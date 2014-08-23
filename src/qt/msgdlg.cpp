@@ -10,6 +10,7 @@
 
 #include "wx/msgdlg.h"
 #include "wx/qt/utils.h"
+#include "wx/qt/private/winevent.h"
 
 #include <QtWidgets/qmessagebox.h>
 

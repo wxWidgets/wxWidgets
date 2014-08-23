@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/listbox.h"
+#include "wx/qt/private/winevent.h"
 
 
 class wxQtListWidget : public wxQtEventSignalHandler< QListWidget, wxListBox >

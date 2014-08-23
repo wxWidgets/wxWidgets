@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/control.h"
+#include "wx/qt/converter.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxControl, wxControlBase )
 
