@@ -189,7 +189,9 @@ protected:
     //wxMoveEvent
     virtual void moveEvent ( QMoveEvent * event )
     {
-        if ( !this->GetHandler()->QtHandleMoveEvent(this, event) )
+        if ( !this->GetHandler() )
+            wxFAIL_MSG( wxT("moveEvent for invalid handler!") );
+        else if ( !this->GetHandler()->QtHandleMoveEvent(this, event) )
             Widget::moveEvent(event);
         else
             event->accept();
