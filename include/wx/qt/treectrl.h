@@ -8,7 +8,7 @@
 #ifndef _WX_QT_TREECTRL_H_
 #define _WX_QT_TREECTRL_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QTreeWidget>
 
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase

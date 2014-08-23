@@ -8,7 +8,7 @@
 #ifndef _WX_QT_GAUGE_H_
 #define _WX_QT_GAUGE_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QProgressBar>
 
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase

@@ -8,7 +8,7 @@
 #ifndef _WX_QT_CHOICE_H_
 #define _WX_QT_CHOICE_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QComboBox>
 
 class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase

@@ -8,7 +8,7 @@
 #ifndef _WX_QT_LISTBOX_H_
 #define _WX_QT_LISTBOX_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QListWidget>
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase

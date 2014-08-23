@@ -12,8 +12,8 @@
 
 #include "wx/calctrl.h"
 #include "wx/qt/converter.h"
-#include "wx/qt/winevent_qt.h"
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/private/winevent.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QCalendarWidget>
 
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase

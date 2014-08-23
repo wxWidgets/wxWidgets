@@ -8,8 +8,8 @@
 #ifndef _WX_QT_NOTEBOOK_H_
 #define _WX_QT_NOTEBOOK_H_
 
-#include "wx/qt/pointer_qt.h"
-#include "wx/qt/winevent_qt.h"
+#include "wx/qt/pointer.h"
+#include "wx/qt/private/winevent.h"
 #include <QtWidgets/QTabWidget>
 
 class WXDLLIMPEXP_CORE wxNotebook : public wxNotebookBase

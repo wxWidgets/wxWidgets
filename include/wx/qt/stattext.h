@@ -8,7 +8,7 @@
 #ifndef _WX_QT_STATTEXT_H_
 #define _WX_QT_STATTEXT_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QLabel>
 
 class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase

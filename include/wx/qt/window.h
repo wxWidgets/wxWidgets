@@ -10,7 +10,7 @@
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
-#include "wx/qt/pointer_qt.h"
+#include "wx/qt/pointer.h"
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QScrollBar>
 
