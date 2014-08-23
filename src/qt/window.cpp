@@ -1066,143 +1066,6 @@ bool wxWindow::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent *e
     return ProcessWindowEvent( e );
 }
 
-/* Auxiliar function for key events. Returns the wx keycode for a qt one.
- * The event is needed to check it flags (numpad key or not) */
-static wxKeyCode ConvertQtKeyCode( QKeyEvent *event )
-{
-    /* First treat common ranges and then handle specific values
-     * The macro takes Qt first and last codes and the first wx code
-     * to make the conversion */
-    #define WXQT_KEY_GROUP( firstQT, lastQT, firstWX ) \
-        if ( key >= firstQT && key <= lastQT ) \
-            return (wxKeyCode)(key - (firstQT - firstWX));
-
-    int key = event->key();
-
-    if ( event->modifiers().testFlag( Qt::KeypadModifier ) )
-    {
-        // This is a numpad event
-        WXQT_KEY_GROUP( Qt::Key_0, Qt::Key_9, WXK_NUMPAD0 )
-        WXQT_KEY_GROUP( Qt::Key_F1, Qt::Key_F4, WXK_NUMPAD_F1 )
-        WXQT_KEY_GROUP( Qt::Key_Left, Qt::Key_Down, WXK_NUMPAD_LEFT )
-
-        // * + , - . /
-        WXQT_KEY_GROUP( Qt::Key_Asterisk, Qt::Key_Slash, WXK_NUMPAD_MULTIPLY )
-
-        switch (key)
-        {
-            case Qt::Key_Space:
-                return WXK_NUMPAD_SPACE;
-            case Qt::Key_Tab:
-                return WXK_NUMPAD_TAB;
-            case Qt::Key_Enter:
-                return WXK_NUMPAD_ENTER;
-            case Qt::Key_Home:
-                return WXK_NUMPAD_HOME;
-            case Qt::Key_PageUp:
-                return WXK_NUMPAD_PAGEUP;
-            case Qt::Key_PageDown:
-                return WXK_NUMPAD_PAGEDOWN;
-            case Qt::Key_End:
-                return WXK_NUMPAD_END;
-            case Qt::Key_Insert:
-                return WXK_NUMPAD_INSERT;
-            case Qt::Key_Delete:
-                return WXK_NUMPAD_DELETE;
-            case Qt::Key_Clear:
-                return WXK_NUMPAD_BEGIN;
-            case Qt::Key_Equal:
-                return WXK_NUMPAD_EQUAL;
-        }
-
-        // All other possible numpads button have no equivalent in wx
-        return (wxKeyCode)0;
-    }
-        
-    // ASCII (basic and extended) values are the same in Qt and wx
-    WXQT_KEY_GROUP( 32, 255, 32 );
-
-    // Arrow keys
-    WXQT_KEY_GROUP( Qt::Key_Left, Qt::Key_Down, WXK_LEFT )
-    
-    // F-keys (Note: Qt has up to F35, wx up to F24)
-    WXQT_KEY_GROUP( Qt::Key_F1, Qt::Key_F24, WXK_F1 )
-    
-    // * + , - . /
-    WXQT_KEY_GROUP( Qt::Key_Asterisk, Qt::Key_Slash, WXK_MULTIPLY )
-
-    // Special keys in wx. Seems most appropriate to map to LaunchX
-    WXQT_KEY_GROUP( Qt::Key_Launch0, Qt::Key_LaunchF, WXK_SPECIAL1 )
-
-    // All other cases
-    switch ( key )
-    {
-        case Qt::Key_Backspace:
-            return WXK_BACK;
-        case Qt::Key_Tab:
-            return WXK_TAB;
-        case Qt::Key_Return:
-            return WXK_RETURN;
-        case Qt::Key_Escape:
-            return WXK_ESCAPE;
-        case Qt::Key_Cancel:
-            return WXK_CANCEL;
-        case Qt::Key_Clear:
-            return WXK_CLEAR;
-        case Qt::Key_Shift:
-            return WXK_SHIFT;
-        case Qt::Key_Alt:
-            return WXK_ALT;
-        case Qt::Key_Control:
-            return WXK_CONTROL;
-        case Qt::Key_Menu:
-            return WXK_MENU;
-        case Qt::Key_Pause:
-            return WXK_PAUSE;
-        case Qt::Key_CapsLock:
-            return WXK_CAPITAL;
-        case Qt::Key_End:
-            return WXK_END;
-        case Qt::Key_Home:
-            return WXK_HOME;
-        case Qt::Key_Select:
-            return WXK_SELECT;
-        case Qt::Key_SysReq:
-            return WXK_PRINT;
-        case Qt::Key_Execute:
-            return WXK_EXECUTE;
-        case Qt::Key_Insert:
-            return WXK_INSERT;
-        case Qt::Key_Help:
-            return WXK_HELP;
-        case Qt::Key_NumLock:
-            return WXK_NUMLOCK;
-        case Qt::Key_ScrollLock:
-            return WXK_SCROLL;
-        case Qt::Key_PageUp:
-            return WXK_PAGEUP;
-        case Qt::Key_PageDown:
-            return WXK_PAGEDOWN;
-        case Qt::Key_Meta:
-            return WXK_WINDOWS_LEFT;
-    }
-
-    // Missing wx-codes: WXK_START, WXK_LBUTTON, WXK_RBUTTON, WXK_MBUTTON
-    // WXK_SPECIAL(17-20), WXK_WINDOWS_RIGHT, WXK_WINDOWS_MENU, WXK_COMMAND
-    // WXK_SNAPSHOT
-    
-    return (wxKeyCode)0;
-    
-    #undef WXQT_KEY_GROUP
-}
-
-static void FillKeyboardModifiers( Qt::KeyboardModifiers modifiers, wxKeyboardState *state )
-{
-    state->SetControlDown( modifiers.testFlag( Qt::ControlModifier ) );
-    state->SetShiftDown( modifiers.testFlag( Qt::ShiftModifier ) );
-    state->SetAltDown( modifiers.testFlag( Qt::AltModifier ) );
-    state->SetMetaDown( modifiers.testFlag( Qt::MetaModifier ) );
-}
 
 bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event )
 {
@@ -1223,7 +1086,7 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event
     // Build the event
     wxKeyEvent e( event->type() == QEvent::KeyPress ? wxEVT_KEY_DOWN : wxEVT_KEY_UP );
     // TODO: m_x, m_y
-    e.m_keyCode = ConvertQtKeyCode( event );
+    e.m_keyCode = wxQtConvertKeyCode( event->key(), event->modifiers() );
 
     if ( event->text().isEmpty() )
         e.m_uniChar = 0;
@@ -1234,7 +1097,7 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event
     e.m_rawFlags = event->nativeModifiers();
 
     // Modifiers
-    FillKeyboardModifiers( event->modifiers(), &e );
+    wxQtFillKeyboardModifiers( event->modifiers(), &e );
 
     handled = ProcessWindowEvent( e );
 
@@ -1370,7 +1233,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
     wxQtFillMouseButtons( event->buttons(), &e );
 
     // Keyboard modifiers
-    FillKeyboardModifiers( event->modifiers(), &e );
+    wxQtFillKeyboardModifiers( event->modifiers(), &e );
 
     bool handled = ProcessWindowEvent( e );
 
@@ -1414,7 +1277,7 @@ bool wxWindow::QtHandleEnterEvent ( QWidget *handler, QEvent *event )
     wxQtFillMouseButtons( QApplication::mouseButtons(), &e );
     
     // Keyboard modifiers
-    FillKeyboardModifiers( QApplication::keyboardModifiers(), &e );
+    wxQtFillKeyboardModifiers( QApplication::keyboardModifiers(), &e );
     
     return ProcessWindowEvent( e );
 }
