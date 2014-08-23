@@ -11,10 +11,9 @@
 #include "wx/clipbrd.h"
 #include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
-
 #include "wx/qt/converter.h"
 
-#include <QObject>
+#include <QClipboard>
 
 // ----------------------------------------------------------------------------
 // wxClipboard ctor/dtor
@@ -108,7 +107,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     delete data;
 
-    QtClipboard->setMimeData(MimeData, Mode());
+    QtClipboard->setMimeData(MimeData, (QClipboard::Mode)Mode());
 
     return true;
 }
@@ -128,7 +127,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 {
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
-    const QMimeData *MimeData = QtClipboard->mimeData( Mode() );
+    const QMimeData *MimeData = QtClipboard->mimeData( (QClipboard::Mode)Mode() );
     const size_t count = data.GetFormatCount(wxDataObject::Set);
     wxDataFormatArray formats(count);
     data.GetAllFormats(formats.get(), wxDataObject::Set);
@@ -158,12 +157,12 @@ bool wxClipboard::GetData( wxDataObject& data )
 
 void wxClipboard::Clear()
 {
-    QtClipboard->clear( Mode() );
+    QtClipboard->clear( (QClipboard::Mode)Mode() );
 }
 
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
-    const QMimeData *data = QtClipboard->mimeData( Mode() );
+    const QMimeData *data = QtClipboard->mimeData( (QClipboard::Mode)Mode() );
     return data->hasFormat(format.m_MimeType);
 }
 
@@ -177,4 +176,9 @@ bool wxClipboard::IsSupportedAsync(wxEvtHandler *sink)
     m_sink = sink;
 
     return true;
+}
+
+int wxClipboard::Mode()
+{
+    return m_usePrimary ? QClipboard::Selection : QClipboard::Clipboard;
 }
