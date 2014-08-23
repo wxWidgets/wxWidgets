@@ -217,6 +217,8 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     if ( qitem != NULL )
     {
         info.SetText(wxQtConvertString(qitem->text(info.GetColumn())));
+        QVariant variant = qitem->data(0, Qt::UserRole);
+        info.SetData(variant.value<long>());
         return true;
     }
     else
@@ -301,17 +303,40 @@ void wxListCtrl::SetItemText(long item, const wxString& str)
 
 wxUIntPtr wxListCtrl::GetItemData(long item) const
 {
-    return wxUIntPtr();
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem != NULL )
+    {
+        QVariant variant = qitem->data(0, Qt::UserRole);
+        return variant.value<wxUIntPtr>();
+    }
+    else
+        return 0;
 }
 
 bool wxListCtrl::SetItemPtrData(long item, wxUIntPtr data)
 {
-    return false;
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem != NULL )
+    {
+        QVariant variant = qVariantFromValue(data);
+        qitem->setData(0, Qt::UserRole, variant);
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxListCtrl::SetItemData(long item, long data)
 {
-    return false;
+    QTreeWidgetItem *qitem = QtGetItem(item);
+    if ( qitem != NULL )
+    {
+        QVariant variant = qVariantFromValue(data);
+        qitem->setData(0, Qt::UserRole, variant);
+        return true;
+    }
+    else
+        return false;
 }
 
 bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
