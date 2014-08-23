@@ -195,22 +195,67 @@ int wxFont::GetPointSize() const
 
 wxFontFamily wxFont::GetFamily() const
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    switch (M_FONTDATA.styleHint())
+    {
+        case QFont::AnyStyle:
+            return wxFONTFAMILY_DEFAULT;
 
+        case QFont::Decorative:
+            return wxFONTFAMILY_DECORATIVE;
+
+        case QFont::Serif:
+            return wxFONTFAMILY_ROMAN;
+
+        case QFont::SansSerif:
+            return wxFONTFAMILY_SWISS;
+
+        case QFont::TypeWriter:
+            return wxFONTFAMILY_TELETYPE;
+
+        default:
+            wxFAIL_MSG( "Invalid font family value" );
+            break;
+    }
     return wxFontFamily();
 }
 
 wxFontStyle wxFont::GetStyle() const
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    switch (M_FONTDATA.style())
+    {
+        case QFont::StyleNormal:
+            return wxFONTSTYLE_NORMAL;
 
+        case QFont::StyleItalic:
+            return wxFONTSTYLE_ITALIC;
+
+        case QFont::StyleOblique:
+            return wxFONTSTYLE_SLANT;
+
+        default:
+            wxFAIL_MSG( "Invalid font style value" );
+            break;
+    }
     return wxFontStyle();
 }
 
 wxFontWeight wxFont::GetWeight() const
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    switch ( M_FONTDATA.weight() )
+    {
+        case QFont::Normal:
+            return wxFONTWEIGHT_NORMAL;
 
+        case QFont::Light:
+            return wxFONTWEIGHT_LIGHT;
+
+        case QFont::Bold:
+            return wxFONTWEIGHT_BOLD;
+
+        default:
+            wxFAIL_MSG( "Invalid font weight value" );
+            break;
+    }
     return wxFontWeight();
 }
 
