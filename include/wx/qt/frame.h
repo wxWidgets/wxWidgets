@@ -13,6 +13,7 @@
 
 #include "wx/frame.h"
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QScrollArea>
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
@@ -43,6 +44,8 @@ public:
     virtual void RemoveChild( wxWindowBase *child );
 
     virtual QMainWindow *GetHandle() const;
+
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 private:
     QMainWindow *m_qtMainWindow;

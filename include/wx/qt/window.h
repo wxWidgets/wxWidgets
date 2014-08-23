@@ -11,7 +11,7 @@
 #define _WX_QT_WINDOW_H_
 
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QScrollArea>
 
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
@@ -176,12 +176,12 @@ protected:
 #endif // wxUSE_MENUS
 
 
-    virtual WXWidget QtGetScrollBarsContainer() const;
+    virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 private:
     void Init();
     QWidget *m_qtWindow;
-    QWidget *m_qtContainer;
+    QScrollArea *m_qtContainer;
 
     wxScrollBar *m_horzScrollBar;
     wxScrollBar *m_vertScrollBar;
