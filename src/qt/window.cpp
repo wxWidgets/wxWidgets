@@ -109,17 +109,19 @@ static wxWindow *s_capturedWindow = NULL;
     return window;
 }
 
-#define Init() \
-    m_horzScrollBar = NULL; \
-    m_vertScrollBar = NULL; \
-    \
-    m_qtPicture = new QPicture(); \
-    m_qtPaintBuffer = NULL; \
-    \
-    m_mouseInside = false; \
-    \
-    m_qtShortcutHandler = new wxQtShortcutHandler( this ); \
-    m_processingShortcut = false
+void wxWindow::Init()
+{
+    m_horzScrollBar = NULL;
+    m_vertScrollBar = NULL;
+
+    m_qtPicture = new QPicture();
+    m_qtPaintBuffer = NULL;
+
+    m_mouseInside = false;
+
+    m_qtShortcutHandler = new wxQtShortcutHandler( this );
+    m_processingShortcut = false;
+}
 
 wxWindow::wxWindow()
 {
