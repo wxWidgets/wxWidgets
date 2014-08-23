@@ -814,11 +814,58 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                 delete m_qtPaintBuffer;
                 m_qtPaintBuffer = 0;
             }
-            wxEraseEvent erase;
-            ProcessWindowEvent(erase);
+
+            // prepare the background
+            switch ( GetBackgroundStyle() )
+            {
+                case wxBG_STYLE_TRANSPARENT:
+                    if (IsTransparentBackgroundSupported())
+                    {
+                        // Set a transparent background, so that overlaying in parent
+                        // might indeed let see through where this child did not
+                        // explicitly paint. See wxBG_STYLE_SYSTEM for more comment
+                    }
+                    break;
+                case wxBG_STYLE_ERASE:
+                    {
+                        wxWindowDC dc( (wxWindow*)this );
+                        dc.SetDeviceClippingRegion( m_updateRegion );
+                        wxColor bgcol = GetBackgroundColour();
+                        dc.SetBackground(bgcol);
+                        dc.Clear();
+                        // set the erase event
+                        wxEraseEvent erase;
+                        if ( ProcessWindowEvent(erase) )
+                        {
+                            // background erased, don't do it again
+                            break;
+                        }
+                    }
+                    // fall through
+                case wxBG_STYLE_SYSTEM:
+                    if ( GetThemeEnabled() )
+                    {
+                        // let qt render the background:
+                        // commented out as this will cause recursive painting
+                        // this should be done outside using setBackgroundRole
+                        // setAutoFillBackground or setAttribute
+                        //wxWindowDC dc( (wxWindow*)this );
+                        //widget->render(m_qtPaintBuffer);
+                    }
+                    break;
+                case wxBG_STYLE_PAINT:
+                    // nothing to do: window will be painted over in EVT_PAINT
+                    break;
+
+                default:
+                    wxFAIL_MSG( "unsupported background style" );
+            }
+
+            // send the paint event:
             wxPaintEvent paint;
             bool handled = ProcessWindowEvent(paint);
 
+            // draw the QImage buffer created by wxWindowDC (if any):
             if ( m_qtPaintBuffer )
             {
                 QPainter p( widget );
@@ -1309,7 +1356,8 @@ QImage *wxWindow::QtGetPaintBuffer()
     {
         m_qtPaintBuffer = new QImage( wxQtConvertSize( GetClientSize() ),
                                       QImage::Format_ARGB32_Premultiplied );
-        m_qtPaintBuffer->fill( GetBackgroundColour().GetHandle().rgb() );
+        // honor the widget erased background, don't fill with a colour:
+        m_qtPaintBuffer->fill( Qt::transparent );
     }
 
     return m_qtPaintBuffer;
