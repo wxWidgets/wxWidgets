@@ -63,7 +63,8 @@ public:
 
     using wxWindowBase::Show;
     using wxWindowBase::Enable;
-    
+    using wxRadioBoxBase::GetDefaultBorder;
+
     virtual bool Enable(unsigned int n, bool enable = true);
     virtual bool Show(unsigned int n, bool show = true);
     virtual bool IsItemEnabled(unsigned int n) const;
