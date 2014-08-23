@@ -73,7 +73,7 @@ protected:
 
 
 private:
-    wxQtPointer< wxQtComboBox > m_qtComboBox;
+    wxQtPointer< QComboBox > m_qtComboBox;
 
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };
