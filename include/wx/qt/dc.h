@@ -109,6 +109,8 @@ public:
 
     void QtPreparePainter();
 
+    virtual void* GetHandle() const { return (void*) m_qtPainter; }
+
 protected:
     QPainter *m_qtPainter;
     QImage *m_qtImage;
