@@ -36,6 +36,13 @@ public:
 
     virtual QProgressBar *GetHandle() const;
 
+    // set/get the control range
+    virtual void SetRange(int range);
+    virtual int GetRange() const;
+
+    virtual void SetValue(int pos);
+    virtual int GetValue() const;
+
 private:
     wxQtPointer< QProgressBar > m_qtProgressBar;
 

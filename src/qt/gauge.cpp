@@ -64,3 +64,25 @@ QProgressBar *wxGauge::GetHandle() const
 {
     return m_qtProgressBar;
 }
+
+// set/get the control range and value
+
+void wxGauge::SetRange(int range)
+{
+    // note that in wx minimun range is fixed at 0
+    m_qtProgressBar->setMaximum(range);
+}
+
+int wxGauge::GetRange() const
+{
+    return m_qtProgressBar->maximum();
+}
+
+void wxGauge::SetValue(int pos)
+{
+    m_qtProgressBar->setValue(pos);
+}
+
+int wxGauge::GetValue() const {
+    return m_qtProgressBar->value();
+}
