@@ -159,6 +159,8 @@ bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
 
     mainwindow->addToolBar((Qt::ToolBarArea)area, m_qtToolBar);
 
+    PostCreation();
+
     return wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 

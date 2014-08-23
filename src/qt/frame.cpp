@@ -60,6 +60,8 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_qtMainWindow->setCentralWidget( new wxQtCentralWidget( parent, this ) );
 
+    PostCreation();
+
     return wxFrameBase::Create( parent, id, title, pos, size, style, name );
 }
 

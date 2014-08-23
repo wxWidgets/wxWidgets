@@ -51,7 +51,9 @@ bool wxControl::QtCreateControl( wxWindow *parent, wxWindowID id,
     wxSize bestSize = GetBestSize();
     int width = ( size.GetWidth() == wxDefaultCoord ) ? bestSize.GetWidth() : size.GetWidth();
     int height = ( size.GetHeight() == wxDefaultCoord ) ? bestSize.GetHeight() : size.GetHeight();
+
     DoMoveWindow( pos.x, pos.y, width, height );
+    PostCreation();
 
     return CreateControl( parent, id, pos, size, style, validator, name );
 }

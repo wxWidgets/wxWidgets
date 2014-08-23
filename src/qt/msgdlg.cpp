@@ -27,7 +27,7 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         const wxString& caption, long style, const wxPoint& pos )
     : wxMessageDialogBase( parent, message, caption, style )
 {
-    m_qtWindow = m_qtMessageBox = new wxQtMessageDialog( parent, this );
+    m_qtMessageBox = new wxQtMessageDialog( parent, this );
 
     // Set properties
     Move( pos );
@@ -106,6 +106,8 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
 
     if ( style & wxSTAY_ON_TOP )
         m_qtMessageBox->setWindowModality( Qt::ApplicationModal );
+
+    PostCreation();
 }
 
 int wxMessageDialog::ShowModal()

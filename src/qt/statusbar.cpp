@@ -45,7 +45,9 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID winid,
 {
     wxMISSING_IMPLEMENTATION( "wxStatusBar::Create parameters" );
 
-    m_qtWindow = m_qtStatusBar = new wxQtStatusBar( parent, this );
+    m_qtStatusBar = new wxQtStatusBar( parent, this );
+
+    PostCreation();
 
     return true;
 }

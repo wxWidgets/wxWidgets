@@ -134,11 +134,13 @@ QMenu *wxMenu::GetHandle() const
 wxMenuBar::wxMenuBar()
 {
     m_qtMenuBar = new QMenuBar();
+    PostCreation();
 }
 
 wxMenuBar::wxMenuBar( long WXUNUSED( style ))
 {
     m_qtMenuBar = new QMenuBar();
+    PostCreation();
 }
 
 wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], long WXUNUSED( style ))
@@ -147,6 +149,8 @@ wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], lon
 
     for ( size_t i = 0; i < count; ++i )
         Append( menus[ i ], titles[ i ] );
+
+    PostCreation();
 }
 
 
