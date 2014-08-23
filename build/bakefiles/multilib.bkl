@@ -204,6 +204,7 @@
         <msvc-headers>$(WEBVIEWCHROMIUM_HDR)</msvc-headers>
         <library>coredll</library>
         <library>basedll</library>
+        <library>webviewdll</library>
         <include>$(CEF_INCLUDE_DIR)</include>
         <lib-path>$(LIBCEF_PATH)</lib-path>
         <lib-path>$(LIBCEF_WRAPPER_PATH)</lib-path>
