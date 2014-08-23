@@ -51,6 +51,9 @@ public:
 
     virtual void ShowPosition(long pos);
 
+    virtual void SetInsertionPoint(long pos);
+    virtual long GetInsertionPoint() const;
+
     virtual void WriteText(const wxString& text);
     
     virtual QWidget *GetHandle() const;
