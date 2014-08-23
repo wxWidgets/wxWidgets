@@ -175,4 +175,4 @@ If you are looking for support, you can get it from
 
 Have fun!
 
-The wxWidgets Team, Augoust 2014
+The wxWidgets Team, August 2014

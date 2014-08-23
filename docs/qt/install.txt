@@ -63,14 +63,72 @@ g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 ---------------
 
 wxWidgets/Qt requires the Qt library to be installed on your system. It has
-to be a stable version, preferably Qt 5.x.y, where x is an even number.
+to be a stable version, preferably Qt 5.2.1 or later.
 
-* Building wxGTK on Ubuntu
+* Building wxQT on Ubuntu
+-------------------------
+
+Install latest Qt5 packages (qt5-default). To build unit tests, libcppunit-dev
+is required. You will need to install other dependencies to compile wxWidgets
+depending on the features you'll want to use (build-essential libjpeg-dev 
+libtiff5-dev ubuntu-restricted-extras freeglut3 freeglut3-dev libsdl1.2-dev
+libgstreamer-plugins-base0.10-dev)
+
+
+Then create a build directory, configure and compile:
+
+mkdir bldqt5
+cd bldqt5
+../configure --with-qt --enable-debug
+make
+make samples
+
+If everything is ok, you can do the make install as specified before.
+
+Optionally, you can build and run Unit Tests:
+
+cd tests
+make
+./test_gui
+
+* Building wxGT on Android
 --------------------------
 
-* Building wxGTK on Android
----------------------------
+Download Android Native Development Kit (NDK), tandalone Android Software
+Development Kit (SDK), install them and perform the following instructions to
+prepare the cross-compilation tool-chain to (change NDK and other paths):
 
+NDK=~/src/android-ndk-r9d
+SDK=~/src/android-sdk-linux
+export ANDROID_NDK_ROOT=$NDK
+$NDK/build/tools/make-standalone-toolchain.sh \
+    --toolchain=arm-linux-androideabi-4.8 --platform=android-9 \
+    --install-dir=/tmp/ndk
+
+export PATH=/tmp/ndk/bin:$PATH
+export CC=arm-linux-androideabi-gcc  
+export CXX=arm-linux-androideabi-g++ 
+
+
+Also, you'll need to download the Qt library bundle that matches your operating
+system installed package (5.2.1 in this case installed in ~/src/qt, you'll need 
+the android_armv5/ android_armv7/ android_x86/ pre-compiled folders to
+cross-compile for that architectures)
+
+Then, create a build directory (under the wxWidgets folder), configure for 
+Andrid (disable currently unsupported/uneeded features) and run make:
+
+cd ~/src/wxWidgets
+mkdir bldqt5droid
+cd bldqt5droid
+../configure --with-qt --enable-debug  --build=x86_64-unknown-linux-gnu \
+    --host=arm-linux-androideabi  --disable-compat28 --disable-shared \
+    --disable-arttango --enable-image --disable-dragimage --disable-sockets \
+    --with-libtiff=no --without-opengl --disable-baseevtloop --disable-utf8 
+make
+
+You can now compile and link your app against this build, and finally
+package it for Android using standard APK tools.
 
 * Create your configuration
 ---------------------------
