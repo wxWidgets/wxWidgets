@@ -5376,6 +5376,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_region.o \
 	monodll_qt_scrolbar.o \
 	monodll_qt_settings.o \
+	monodll_sockqt.o \
 	monodll_qt_slider.o \
 	monodll_qt_spinbutt.o \
 	monodll_qt_spinctrl.o \
@@ -6326,6 +6327,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_region.o \
 	monodll_qt_scrolbar.o \
 	monodll_qt_settings.o \
+	monodll_sockqt.o \
 	monodll_qt_slider.o \
 	monodll_qt_spinbutt.o \
 	monodll_qt_spinctrl.o \
@@ -7721,6 +7723,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_region.o \
 	monolib_qt_scrolbar.o \
 	monolib_qt_settings.o \
+	monolib_sockqt.o \
 	monolib_qt_slider.o \
 	monolib_qt_spinbutt.o \
 	monolib_qt_spinctrl.o \
@@ -8671,6 +8674,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_region.o \
 	monolib_qt_scrolbar.o \
 	monolib_qt_settings.o \
+	monolib_sockqt.o \
 	monolib_qt_slider.o \
 	monolib_qt_spinbutt.o \
 	monolib_qt_spinctrl.o \
@@ -10224,6 +10228,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_region.o \
 	coredll_qt_scrolbar.o \
 	coredll_qt_settings.o \
+	coredll_sockqt.o \
 	coredll_qt_slider.o \
 	coredll_qt_spinbutt.o \
 	coredll_qt_spinctrl.o \
@@ -11174,6 +11179,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_region.o \
 	coredll_qt_scrolbar.o \
 	coredll_qt_settings.o \
+	coredll_sockqt.o \
 	coredll_qt_slider.o \
 	coredll_qt_spinbutt.o \
 	coredll_qt_spinctrl.o \
@@ -11991,6 +11997,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_region.o \
 	corelib_qt_scrolbar.o \
 	corelib_qt_settings.o \
+	corelib_sockqt.o \
 	corelib_qt_slider.o \
 	corelib_qt_spinbutt.o \
 	corelib_qt_spinctrl.o \
@@ -12941,6 +12948,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_region.o \
 	corelib_qt_scrolbar.o \
 	corelib_qt_settings.o \
+	corelib_sockqt.o \
 	corelib_qt_slider.o \
 	corelib_qt_spinbutt.o \
 	corelib_qt_spinctrl.o \
@@ -20773,6 +20781,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_settings.o: $(srcdir)/src/qt/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/settings.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_sockqt.o: $(srcdir)/src/qt/sockqt.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/sockqt.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_slider.o: $(srcdir)/src/qt/slider.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/slider.cpp
 
@@ -26637,6 +26648,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_settings.o: $(srcdir)/src/qt/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/settings.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_sockqt.o: $(srcdir)/src/qt/sockqt.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/sockqt.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_slider.o: $(srcdir)/src/qt/slider.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/slider.cpp
@@ -32617,6 +32631,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_settings.o: $(srcdir)/src/qt/settings.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/settings.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_sockqt.o: $(srcdir)/src/qt/sockqt.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/sockqt.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_slider.o: $(srcdir)/src/qt/slider.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/slider.cpp
 
@@ -36996,6 +37013,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_settings.o: $(srcdir)/src/qt/settings.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/settings.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_sockqt.o: $(srcdir)/src/qt/sockqt.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/sockqt.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_slider.o: $(srcdir)/src/qt/slider.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/slider.cpp

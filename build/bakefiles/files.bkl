@@ -407,6 +407,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/region.cpp
     src/qt/scrolbar.cpp
     src/qt/settings.cpp
+    src/qt/sockqt.cpp
     src/qt/slider.cpp
     src/qt/spinbutt.cpp
     src/qt/spinctrl.cpp
