@@ -148,6 +148,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
     m_qtComboBox->insertItem(pos, wxQtConvertString(item));
+    return pos;
 }
 
 void wxChoice::DoSetItemClientData(unsigned int n, void *clientData)

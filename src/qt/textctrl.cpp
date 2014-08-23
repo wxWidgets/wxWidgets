@@ -133,6 +133,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         SetBackgroundColour( wxSystemSettingsNative::GetColour( wxSYS_COLOUR_LISTBOX ) );
         return true;
     }
+    return false;
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const
