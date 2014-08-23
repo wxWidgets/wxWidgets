@@ -175,9 +175,12 @@ wxWindow::~wxWindow()
     m_qtShortcutHandler->deleteLater();
 #endif
 
-    // delete QWidget when control return to event loop (safer)
+    // Delete only if the qt widget was created or assigned to this base class
     if (m_qtWindow)
     {
+        // Reset the pointer to avoid handling pending event and signals
+        QtStoreWindowPointer( GetHandle(), NULL );
+        // Delete QWidget when control return to event loop (safer)
         m_qtWindow->deleteLater();
     }
 }
@@ -213,8 +216,6 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         return false;
-
-    QtStoreWindowPointer( GetHandle(), this );
 
     parent->AddChild( this );
 
