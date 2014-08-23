@@ -108,9 +108,13 @@ bool wxTextCtrl::Create(wxWindow *parent,
     {
         m_qtTextEdit = new wxQtTextEdit( parent, this );
     }
-    // set the initial text value without sending the event:
-    ChangeValue( value );
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    if ( QtCreateControl( parent, id, pos, size, style, validator, name ) )
+    {
+        // set the initial text value without sending the event:
+        // (done here as needs CreateBase called to set flags for IsMultiLine)
+        ChangeValue( value );
+        return true;
+    }
 }
 
 wxSize wxTextCtrl::DoGetBestSize() const
