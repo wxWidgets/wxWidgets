@@ -833,32 +833,25 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     {
         // use the bounding rect as a region in Qt could be complex or even elliptical:
         m_updateRegion = wxRegion( wxQtConvertRect( event->region().boundingRect() ) );
-        if ( !m_qtPicture->isNull() )
+
+        // Real paint event, prepare the qt painter for wxWindowDC:
+        m_qtPainter = new QPainter();
+
+        bool ok;
+        if ( QtGetScrollBarsContainer() )
         {
-            // Data from wxClientDC, paint it
-            QPainter p( GetHandle() );
-            p.drawPicture( QPoint( 0, 0 ), *m_qtPicture );
-            // Reset picture
-            m_qtPicture->setData( NULL, 0 );
+            // QScrollArea can only draw in the viewport:
+            ok = m_qtPainter->begin( QtGetScrollBarsContainer()->viewport() );
         }
-        else
+        if ( !ok )
         {
-            // Real paint event, prepare the qt painter for wxWindowDC:
-            m_qtPainter = new QPainter();
+            // Start the paint in the widget itself
+            ok =  m_qtPainter->begin( GetHandle() );
+        }
+        //wxASSERT_MSG( ok, "qt windget painter begin failed" );
 
-            bool ok;
-            if ( QtGetScrollBarsContainer() )
-            {
-                // QScrollArea can only draw in the viewport:
-                ok = m_qtPainter->begin( QtGetScrollBarsContainer()->viewport() );
-            }
-            if ( !ok )
-            {
-                // Start the paint in the widget itself
-                ok =  m_qtPainter->begin( GetHandle() );
-            }
-            //wxASSERT_MSG( ok, "qt windget painter begin failed" );
-
+        if ( ok )
+        {
             // prepare the background
             switch ( GetBackgroundStyle() )
             {
@@ -904,6 +897,15 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
             // send the paint event (wxWindowDC will draw directly):
             wxPaintEvent paint;
             bool handled = ProcessWindowEvent(paint);
+
+            if ( !m_qtPicture->isNull() )
+            {
+                // Data from wxClientDC, paint it
+                m_qtPicture->play( m_qtPainter );
+                // Reset picture
+                m_qtPicture->setData( NULL, 0 );
+                handled = true;
+            }
 
             // destruction of painter
             m_qtPainter->end();
