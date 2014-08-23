@@ -374,7 +374,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/defs.cpp
     src/qt/dialog.cpp
     src/unix/dialup.cpp
-    src/qt/dirdlg.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
     src/qt/evtloop.cpp

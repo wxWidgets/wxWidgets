@@ -1,17 +1,20 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/dirdlg.h
-// Author:      Peter Most
-// Copyright:   (c) Peter Most
+// Author:      Sean D'Epagnier
+// Copyright:   (c) 2014 Sean D'Epagnier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_DIRDLG_H_
 #define _WX_QT_DIRDLG_H_
 
+#include <QtWidgets/QFileDialog>
+
 class WXDLLIMPEXP_CORE wxDirDialog : public wxDirDialogBase
 {
 public:
-    wxDirDialog();
+    wxDirDialog() { }
+
     wxDirDialog(wxWindow *parent,
                 const wxString& message = wxDirSelectorPromptStr,
                 const wxString& defaultPath = wxEmptyString,
@@ -20,9 +23,24 @@ public:
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
 
-protected:
+    bool Create(wxWindow *parent,
+                const wxString& message = wxDirSelectorPromptStr,
+                const wxString& defaultPath = wxEmptyString,
+                long style = wxDD_DEFAULT_STYLE,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                const wxString& name = wxDirDialogNameStr);
+
+public:     // overrides from wxGenericDirDialog
+
+    wxString GetPath() const wxOVERRIDE;
+    void SetPath(const wxString& path) wxOVERRIDE;
+
+    virtual QFileDialog *GetHandle() const;
 
 private:
+
+    DECLARE_DYNAMIC_CLASS(wxDirDialog)
 };
 
 #endif // _WX_QT_DIRDLG_H_
