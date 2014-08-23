@@ -15,6 +15,7 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QAbstractEventDispatcher>
+#include <QtCore/QSocketNotifier>
 
 wxQtIdleTimer::wxQtIdleTimer( wxQtEventLoopBase *eventLoop )
 {
@@ -51,8 +52,7 @@ wxQtEventLoopBase::wxQtEventLoopBase()
     // already exist as we can't modify wxConsoleApp
     if ( !QCoreApplication::instance() )
     {
-        int n = 0;
-        new QCoreApplication( n , NULL );
+        new QApplication( wxAppConsole::GetInstance()->argc, wxAppConsole::GetInstance()->argv );
     }
     
     // Create an idle timer to run each time there are no events (timeout = 0)
@@ -60,7 +60,7 @@ wxQtEventLoopBase::wxQtEventLoopBase()
 
     // Pass all events to the idle timer, so it can be restarted each time
     // an event is received
-    QCoreApplication::instance()->installEventFilter( m_qtIdleTimer );
+    qApp->installEventFilter( m_qtIdleTimer );
 }
 
 void wxQtEventLoopBase::ScheduleExit(int rc)
@@ -109,24 +109,55 @@ void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)
 }
 
 #if wxUSE_EVENTLOOP_SOURCE
-wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags)
-{
-    // --> QSocketNotifier
 
-    return NULL;
-}
+template <void (wxEventLoopSourceHandler::*function)()>
+class wxQtSocketNotifier : public QSocketNotifier
+{
+public:
+    wxQtSocketNotifier(int fd, Type type, wxEventLoopSourceHandler *handler)
+        : QSocketNotifier(fd, type),
+          m_handler(handler)
+    {
+        setEnabled(true);
+
+        connect(this, &wxQtSocketNotifier::activated, this, &wxQtSocketNotifier::OnWaiting);
+    }
+
+    void OnWaiting()
+    {
+        (m_handler->*function)();
+    }
+
+    wxEventLoopSourceHandler *m_handler;
+};
+
+class wxQtEventLoopSource : public wxEventLoopSource
+{
+public:
+    wxQtEventLoopSource(int fd, wxEventLoopSourceHandler *handler, int flags)
+        : wxEventLoopSource(handler, fd)
+    {
+        if ( flags & wxEVENT_SOURCE_INPUT )
+            new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnReadWaiting>
+                (fd, QSocketNotifier::Read, handler);
+
+        if ( flags & wxEVENT_SOURCE_OUTPUT )
+            new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnWriteWaiting>
+                (fd, QSocketNotifier::Write, handler);
+
+        if ( flags & wxEVENT_SOURCE_EXCEPTION )
+            new wxQtSocketNotifier<&wxEventLoopSourceHandler::OnExceptionWaiting>
+                (fd, QSocketNotifier::Exception, handler);
+    }
+};
 
 class wxQtEventLoopSourcesManager : public wxEventLoopSourcesManagerBase
 {
 public:
-    wxEventLoopSource *
-    AddSourceForFD(int WXUNUSED(fd),
-                   wxEventLoopSourceHandler* WXUNUSED(handler),
-                   int WXUNUSED(flags))
+    wxEventLoopSource*
+    AddSourceForFD(int fd, wxEventLoopSourceHandler* handler, int flags)
     {
-        wxFAIL_MSG("Monitoring FDs in the main loop is not implemented in wxQT");
-
-        return NULL;
+        return new wxQtEventLoopSource(fd, handler, flags);
     }
 };
 
@@ -135,6 +166,16 @@ wxEventLoopSourcesManagerBase* wxGUIAppTraits::GetEventLoopSourcesManager()
     static wxQtEventLoopSourcesManager s_eventLoopSourcesManager;
 
     return &s_eventLoopSourcesManager;
+}
+
+wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags)
+{
+    wxGUIAppTraits *AppTraits = dynamic_cast<wxGUIAppTraits *>(wxApp::GetTraitsIfExists());
+
+    if(AppTraits)
+        return AppTraits->GetEventLoopSourcesManager()->AddSourceForFD(fd, handler, flags);
+
+    return NULL;
 }
 
 #endif // wxUSE_EVENTLOOP_SOURCE
