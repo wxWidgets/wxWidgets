@@ -20,24 +20,28 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
 {
     m_window = NULL;
     m_ok = false;
+    m_qtPainter = new QPainter();
 }
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
     m_window = win;
-
-    m_qtImage = win->QtGetPaintBuffer();
-    m_ok = m_qtPainter.begin( m_qtImage );
+    m_qtPainter = m_window->QtGetPainter();
+    // if we're not inside a Paint event, painter will invalid
+    m_ok = m_qtPainter != NULL;
 }
 
 wxWindowDCImpl::~wxWindowDCImpl()
 {
     if ( m_ok )
     {
-        m_qtPainter.end();
-        m_qtImage = NULL;
         m_ok = false;
+    }
+    if ( m_window )
+    {
+        // do not destroy as it is owned by the window
+        m_qtPainter = NULL;
     }
 }
 
@@ -60,7 +64,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
     win->GetClientSize( &w, &h );
 
     pic->setBoundingRect( QRect( 0, 0, w, h ) );
-    m_ok = m_qtPainter.begin( pic );
+    m_ok = m_qtPainter->begin( pic );
 }
 
 wxClientDCImpl::~wxClientDCImpl()
@@ -70,7 +74,7 @@ wxClientDCImpl::~wxClientDCImpl()
      * when this wxClientDC is done). */
     if ( m_ok )
     {
-        m_qtPainter.end();
+        m_qtPainter->end();
         m_ok = false;
 
         if ( m_window != NULL )

@@ -131,7 +131,7 @@ void wxWindow::Init()
     m_vertScrollBar = NULL;
 
     m_qtPicture = new QPicture();
-    m_qtPaintBuffer = NULL;
+    m_qtPainter = NULL;
 
     m_mouseInside = false;
 
@@ -166,7 +166,6 @@ wxWindow::~wxWindow()
     DestroyChildren(); // This also destroys scrollbars
 
     delete m_qtPicture;
-    delete m_qtPaintBuffer;
     delete m_qtShortcutHandler;
     // delete QWidget when control return to event loop (safer)
     if (GetHandle())
@@ -798,7 +797,10 @@ bool wxWindow::SetBackgroundStyle(wxBackgroundStyle style)
     else if (style == wxBG_STYLE_SYSTEM)
     {
         GetHandle()->setAttribute(Qt::WA_NoSystemBackground, false);
-        GetHandle()->autoFillBackground(true);
+    }
+    else if (style == wxBG_STYLE_ERASE)
+    {
+        GetHandle()->setAutoFillBackground(true);
     }
 
     return true;
@@ -829,26 +831,33 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
     }
     else
     {
-        // QScrollArea can only draw in the viewport:
-        QWidget *widget = QtGetScrollBarsContainer() ? QtGetScrollBarsContainer()->viewport() : GetHandle();
         // use the bounding rect as a region in Qt could be complex or even elliptical:
         m_updateRegion = wxRegion( wxQtConvertRect( event->region().boundingRect() ) );
         if ( !m_qtPicture->isNull() )
         {
             // Data from wxClientDC, paint it
-            QPainter p( widget );
+            QPainter p( GetHandle() );
             p.drawPicture( QPoint( 0, 0 ), *m_qtPicture );
             // Reset picture
             m_qtPicture->setData( NULL, 0 );
         }
         else
         {
-            // Real paint event, send it
-            if ( m_qtPaintBuffer )
+            // Real paint event, prepare the qt painter for wxWindowDC:
+            m_qtPainter = new QPainter();
+
+            bool ok;
+            if ( QtGetScrollBarsContainer() )
             {
-                delete m_qtPaintBuffer;
-                m_qtPaintBuffer = 0;
+                // QScrollArea can only draw in the viewport:
+                ok = m_qtPainter->begin( QtGetScrollBarsContainer()->viewport() );
             }
+            if ( !ok )
+            {
+                // Start the paint in the widget itself
+                ok =  m_qtPainter->begin( GetHandle() );
+            }
+            //wxASSERT_MSG( ok, "qt windget painter begin failed" );
 
             // prepare the background
             switch ( GetBackgroundStyle() )
@@ -863,12 +872,8 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                     break;
                 case wxBG_STYLE_ERASE:
                     {
-                        wxWindowDC dc( (wxWindow*)this );
-                        dc.SetDeviceClippingRegion( m_updateRegion );
-                        wxColor bgcol = GetBackgroundColour();
-                        dc.SetBackground(bgcol);
-                        dc.Clear();
-                        // set the erase event
+                        // the background should be cleared by qt auto fill
+                        // send the erase event
                         wxEraseEvent erase;
                         if ( ProcessWindowEvent(erase) )
                         {
@@ -885,7 +890,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                         // this should be done outside using setBackgroundRole
                         // setAutoFillBackground or setAttribute
                         //wxWindowDC dc( (wxWindow*)this );
-                        //widget->render(m_qtPaintBuffer);
+                        //widget->render(m_qtPainter);
                     }
                     break;
                 case wxBG_STYLE_PAINT:
@@ -896,16 +901,14 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                     wxFAIL_MSG( "unsupported background style" );
             }
 
-            // send the paint event:
+            // send the paint event (wxWindowDC will draw directly):
             wxPaintEvent paint;
             bool handled = ProcessWindowEvent(paint);
 
-            // draw the QImage buffer created by wxWindowDC (if any):
-            if ( m_qtPaintBuffer )
-            {
-                QPainter p( widget );
-                p.drawImage( QPoint( 0, 0 ), *m_qtPaintBuffer );
-            }
+            // destruction of painter
+            m_qtPainter->end();
+            delete m_qtPainter;
+            m_qtPainter = NULL;
 
             return handled;
         }
@@ -1385,15 +1388,7 @@ QPicture *wxWindow::QtGetPicture() const
     return m_qtPicture;
 }
 
-QImage *wxWindow::QtGetPaintBuffer()
+QPainter *wxWindow::QtGetPainter()
 {
-    if ( !m_qtPaintBuffer )
-    {
-        m_qtPaintBuffer = new QImage( wxQtConvertSize( GetClientSize() ),
-                                      QImage::Format_ARGB32_Premultiplied );
-        // honor the widget erased background, don't fill with a colour:
-        m_qtPaintBuffer->fill( Qt::transparent );
-    }
-
-    return m_qtPaintBuffer;
+    return m_qtPainter;
 }

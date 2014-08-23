@@ -108,9 +108,10 @@ public:
     virtual void ComputeScaleAndOrigin();
 
 protected:
-    QPainter m_qtPainter;
+    QPainter *m_qtPainter;
     QImage *m_qtImage;
-    void PrepareQPainter( QSize size );
+
+    void QtPreparePainter( QSize size );
 
     wxRegion *m_clippingRegion;
 private:

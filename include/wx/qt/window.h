@@ -121,7 +121,7 @@ public:
 
     virtual QPicture *QtGetPicture() const;
 
-    QImage *QtGetPaintBuffer();
+    QPainter *QtGetPainter();
 
     virtual bool QtHandlePaintEvent  ( QWidget *handler, QPaintEvent *event );
     virtual bool QtHandleResizeEvent ( QWidget *handler, QResizeEvent *event );
@@ -194,7 +194,7 @@ private:
     wxScrollBar *QtSetScrollBar( int orientation, wxScrollBar *scrollBar=NULL );
 
     QPicture *m_qtPicture;
-    QImage *m_qtPaintBuffer;
+    QPainter *m_qtPainter;
 
     bool m_mouseInside;
 
