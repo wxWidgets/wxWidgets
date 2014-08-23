@@ -87,14 +87,19 @@ wxClientDCImpl::~wxClientDCImpl()
             }
             // force paint event if there is something to replay and
             // if not currently inside a paint event (to avoid recursion)
-            if ( !pict->isNull() && !widget->paintingActive() )
+            QRect rect = pict->boundingRect();
+            if ( !pict->isNull() && !widget->paintingActive() && !rect.isEmpty() )
             {
                 // only force the update of the rect affected by the DC
-                QRect rect = pict->boundingRect();
                 widget->repaint( rect );
                 wxLogDebug( wxT("wxClientDC Repainting %s (%d %d %d %d)"),
                            (const char*) m_window->GetName(),
                            rect.left(), rect.top(), rect.width(), rect.height());
+            }
+            else
+            {
+                // Not drawing anything, reset picture to avoid issues in handler
+                pict->setData( NULL, 0 );
             }
             // let destroy the m_qtPainter (see inherited classes destructors)
             m_window = NULL;
