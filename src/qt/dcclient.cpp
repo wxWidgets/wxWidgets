@@ -60,10 +60,6 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
     m_window = win;
 
     QPicture *pic = win->QtGetPicture();
-    int w, h;
-    win->GetClientSize( &w, &h );
-
-    pic->setBoundingRect( QRect( 0, 0, w, h ) );
     m_ok = m_qtPainter->begin( pic );
 }
 
