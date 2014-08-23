@@ -223,6 +223,8 @@ bool wxListCtrl::SetItem(wxListItem& info)
 
     for (int col=0; col<GetColumnCount(); col++)
     {
+        if ( info.GetFont().IsOk() )
+            item->setFont(col, info.GetFont().GetHandle() );
         if ( info.GetTextColour().IsOk() )
             item->setTextColor(col, info.GetTextColour().GetHandle());
         if ( info.GetBackgroundColour().IsOk() )
@@ -488,6 +490,8 @@ long wxListCtrl::InsertItem(const wxListItem& info)
     item->setTextAlignment(info.GetColumn(), wxQtConvertTextAlign(info.GetAlign()));
     for (int col=0; col<GetColumnCount();col++)
     {
+        if ( info.GetFont().IsOk() )
+            item->setFont(col, info.GetFont().GetHandle() );
         if ( info.GetTextColour().IsOk() )
             item->setTextColor(col, info.GetTextColour().GetHandle());
         if ( info.GetBackgroundColour().IsOk() )
