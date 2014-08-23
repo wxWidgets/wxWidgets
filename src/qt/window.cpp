@@ -189,6 +189,11 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
         {
             m_qtContainer = new wxQtScrollArea( parent, this );
             m_qtWindow = m_qtContainer;
+            // Create the scroll bars if needed:
+            if ( style & wxHSCROLL )
+                QtSetScrollBar( wxHORIZONTAL );
+            if ( style & wxVSCROLL )
+                QtSetScrollBar( wxVERTICAL );
         }
         else
         {
@@ -221,12 +226,6 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID id, const wxPoint & pos,
 //
 //    m_backgroundColour = wxColour( GetHandle()->palette().color( GetHandle()->backgroundRole() ) );
 //    m_foregroundColour = wxColour( GetHandle()->palette().color( GetHandle()->foregroundRole() ) );
-
-    // Create the scroll bars if needed:
-    if ( style & wxHSCROLL )
-        QtSetScrollBar( wxHORIZONTAL );
-    if ( style & wxVSCROLL )
-        QtSetScrollBar( wxVERTICAL );
 
     return ( true );
 }
