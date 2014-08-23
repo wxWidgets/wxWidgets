@@ -650,6 +650,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_logTargetOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
+    // use default position and size (will be recalculated automatically)
     m_book = new wxBookCtrl(this, ID_BOOK);
 
     wxString choices[] =
