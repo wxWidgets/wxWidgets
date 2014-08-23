@@ -72,9 +72,9 @@ protected:
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int pos);
 
+    wxQtPointer< QComboBox > m_qtComboBox;
 
 private:
-    wxQtPointer< QComboBox > m_qtComboBox;
 
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };
