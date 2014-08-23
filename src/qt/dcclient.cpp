@@ -62,6 +62,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
 
     QPicture *pic = win->QtGetPicture();
     m_ok = m_qtPainter->begin( pic );
+    QtPreparePainter();
 }
 
 wxClientDCImpl::~wxClientDCImpl()
@@ -112,10 +113,18 @@ wxClientDCImpl::~wxClientDCImpl()
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
     : wxWindowDCImpl( owner )
 {
+    if ( m_ok )
+    {
+        QtPreparePainter();
+    }
 }
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
     : wxWindowDCImpl( owner, win )
 {
+    if ( m_ok )
+    {
+        QtPreparePainter();
+    }
 }
 

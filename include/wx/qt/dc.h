@@ -107,11 +107,11 @@ public:
     // Use Qt transformations, as they automatically scale pen widths, text...
     virtual void ComputeScaleAndOrigin();
 
+    void QtPreparePainter();
+
 protected:
     QPainter *m_qtPainter;
     QImage *m_qtImage;
-
-    void QtPreparePainter( QSize size );
 
     wxRegion *m_clippingRegion;
 private:
