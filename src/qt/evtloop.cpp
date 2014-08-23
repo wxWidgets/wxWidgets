@@ -20,7 +20,7 @@ wxQtIdleTimer::wxQtIdleTimer( wxQtEventLoopBase *eventLoop )
 {
     m_eventLoop = eventLoop;
 
-    connect( this, SIGNAL( timeout() ), this, SLOT( idle() ) );
+    connect( this, &QTimer::timeout, this, &wxQtIdleTimer::idle );
     setSingleShot( true );
     start( 0 );
 }

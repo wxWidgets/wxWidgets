@@ -711,8 +711,8 @@ void wxWindow::SetAcceleratorTable( const wxAcceleratorTable& accel )
     // Connect shortcuts to window
     Q_FOREACH( QShortcut *s, m_qtShortcuts )
     {
-        QObject::connect( s, SIGNAL( activated() ), m_qtShortcutHandler, SLOT( activated() ) );
-        QObject::connect( s, SIGNAL( activatedAmbiguously() ), m_qtShortcutHandler, SLOT( activated() ) );
+        QObject::connect( s, &QShortcut::activated, m_qtShortcutHandler, &wxQtShortcutHandler::activated );
+        QObject::connect( s, &QShortcut::activatedAmbiguously, m_qtShortcutHandler, &wxQtShortcutHandler::activated );
     }
 }
 #endif // wxUSE_ACCEL

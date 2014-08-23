@@ -138,7 +138,7 @@ wxQtAction::wxQtAction( wxMenu *parent, int id, const wxString &text, const wxSt
             break;
     }
 
-    connect( this, SIGNAL( triggered( bool )), this, SLOT( OnActionTriggered( bool )));
+    connect( this, &QAction::triggered, this, &wxQtAction::OnActionTriggered );
 }
 
 void wxQtAction::SetItemLabel( const wxString &label )
