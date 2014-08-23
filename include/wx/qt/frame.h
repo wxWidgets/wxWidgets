@@ -45,12 +45,14 @@ public:
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
 
-    virtual QMainWindow *GetHandle() const;
+    virtual QMainWindow *GetHandle() const
+    {
+        return static_cast<QMainWindow*>(m_qtWindow);
+    }
 
     virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 private:
-    QMainWindow *m_qtMainWindow;
 
     wxDECLARE_DYNAMIC_CLASS( wxFrame );
 };

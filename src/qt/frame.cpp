@@ -34,7 +34,6 @@ class wxQtCentralWidget : public wxQtEventSignalHandler< QScrollArea, wxFrame >
 
 
 wxFrame::wxFrame()
-    : m_qtMainWindow(NULL)
 {
 }
 
@@ -47,18 +46,18 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
 wxFrame::~wxFrame()
 {
     // central widget should be deleted by qt when the main window is destroyed
-    QtStoreWindowPointer( m_qtMainWindow->centralWidget(), NULL );
+    QtStoreWindowPointer( GetHandle()->centralWidget(), NULL );
 }
 
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
-    m_qtWindow = m_qtMainWindow = new wxQtMainWindow( parent, this );
+    m_qtWindow = new wxQtMainWindow( parent, this );
 
     // TODO: Could we use a wxPanel as the central widget? If so then we could
     // remove wxWindow::QtReparent.
 
-    m_qtMainWindow->setCentralWidget( new wxQtCentralWidget( parent, this ) );
+    GetHandle()->setCentralWidget( new wxQtCentralWidget( parent, this ) );
 
     PostCreation();
 
@@ -73,20 +72,20 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
     if ( menuBar )
     {
         // Warning: Qt main window takes ownership of the QMenuBar pointer:
-        m_qtMainWindow->setMenuBar( menuBar->GetHandle() );
+        GetHandle()->setMenuBar( menuBar->GetHandle() );
     }
     else
     {
         // Creating an empty menu bar should hide it and free the previous:
-        QMenuBar *qmenubar = new QMenuBar(m_qtMainWindow);
-        m_qtMainWindow->setMenuBar( qmenubar );
+        QMenuBar *qmenubar = new QMenuBar(GetHandle());
+        GetHandle()->setMenuBar( qmenubar );
     }
     wxFrameBase::SetMenuBar( menuBar );
 }
 
 void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 {
-    m_qtMainWindow->setStatusBar( statusBar->GetHandle() );
+    GetHandle()->setStatusBar( statusBar->GetHandle() );
 
     // Update statusbar sizes now that it has a size
     statusBar->Refresh();
@@ -104,11 +103,11 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
         if (toolbar->HasFlag(wxTB_TOP))    area |= Qt::TopToolBarArea;
         if (toolbar->HasFlag(wxTB_BOTTOM)) area |= Qt::BottomToolBarArea;
 
-        m_qtMainWindow->addToolBar((Qt::ToolBarArea)area, toolbar->GetHandle());
+        GetHandle()->addToolBar((Qt::ToolBarArea)area, toolbar->GetHandle());
     }
     else if ( m_frameToolBar != NULL )
     {
-        m_qtMainWindow->removeToolBar(m_frameToolBar->GetHandle());
+        GetHandle()->removeToolBar(m_frameToolBar->GetHandle());
     }
     wxFrameBase::SetToolBar( toolbar );
 }
@@ -160,15 +159,9 @@ void wxFrame::RemoveChild( wxWindowBase *child )
     wxFrameBase::RemoveChild( child );
 }
 
-
-QMainWindow *wxFrame::GetHandle() const
-{
-    return m_qtMainWindow;
-}
-
 QScrollArea *wxFrame::QtGetScrollBarsContainer() const
 {
-    return dynamic_cast <QScrollArea *> (m_qtMainWindow->centralWidget() );
+    return dynamic_cast <QScrollArea *> (GetHandle()->centralWidget() );
 }
 
 //=============================================================================
