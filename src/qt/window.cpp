@@ -860,7 +860,7 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         // use the bounding rect as a region in Qt could be complex or even elliptical:
         m_updateRegion = wxRegion( wxQtConvertRect( event->region().boundingRect() ) );
 
-        // Real paint event, prepare the qt painter for wxWindowDC:
+        // Prepare the Qt painter for wxWindowDC:
         bool ok;
         if ( QtGetScrollBarsContainer() )
         {
@@ -876,62 +876,67 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 
         if ( ok )
         {
-            // prepare the background
-            switch ( GetBackgroundStyle() )
+            bool handled;
+
+            if ( m_qtPicture->isNull() )
             {
-                case wxBG_STYLE_TRANSPARENT:
-                    if (IsTransparentBackgroundSupported())
-                    {
-                        // Set a transparent background, so that overlaying in parent
-                        // might indeed let see through where this child did not
-                        // explicitly paint. See wxBG_STYLE_SYSTEM for more comment
-                    }
-                    break;
-                case wxBG_STYLE_ERASE:
-                    {
-                        // the background should be cleared by qt auto fill
-                        // send the erase event (properly creating a DC for it)
-                        wxWindowDC dc( (wxWindow*)this );
-                        dc.SetDeviceClippingRegion( m_updateRegion );
-
-                        // Ensure DC is cleared if Qt didn't it
-                        if ( UseBgCol() && !GetHandle()->autoFillBackground() )
+                // Real paint event (not for wxClientDC), prepare the background
+                switch ( GetBackgroundStyle() )
+                {
+                    case wxBG_STYLE_TRANSPARENT:
+                        if (IsTransparentBackgroundSupported())
                         {
-                            dc.SetBackground(GetBackgroundColour());
-                            dc.Clear();
+                            // Set a transparent background, so that overlaying in parent
+                            // might indeed let see through where this child did not
+                            // explicitly paint. See wxBG_STYLE_SYSTEM for more comment
                         }
-                        wxEraseEvent erase( GetId(), &dc );
-                        if ( ProcessWindowEvent(erase) )
+                        break;
+                    case wxBG_STYLE_ERASE:
                         {
-                            // background erased, don't do it again
-                            break;
-                        }
-                    }
-                    // fall through
-                case wxBG_STYLE_SYSTEM:
-                    if ( GetThemeEnabled() )
-                    {
-                        // let qt render the background:
-                        // commented out as this will cause recursive painting
-                        // this should be done outside using setBackgroundRole
-                        // setAutoFillBackground or setAttribute
-                        //wxWindowDC dc( (wxWindow*)this );
-                        //widget->render(m_qtPainter);
-                    }
-                    break;
-                case wxBG_STYLE_PAINT:
-                    // nothing to do: window will be painted over in EVT_PAINT
-                    break;
+                            // the background should be cleared by qt auto fill
+                            // send the erase event (properly creating a DC for it)
+                            wxWindowDC dc( (wxWindow*)this );
+                            dc.SetDeviceClippingRegion( m_updateRegion );
 
-                default:
-                    wxFAIL_MSG( "unsupported background style" );
+                            // Ensure DC is cleared if Qt didn't it
+                            if ( UseBgCol() && !GetHandle()->autoFillBackground() )
+                            {
+                                dc.SetBackground(GetBackgroundColour());
+                                dc.Clear();
+                            }
+                            wxEraseEvent erase( GetId(), &dc );
+                            if ( ProcessWindowEvent(erase) )
+                            {
+                                // background erased, don't do it again
+                                break;
+                            }
+                        }
+                        // fall through
+                    case wxBG_STYLE_SYSTEM:
+                        if ( GetThemeEnabled() )
+                        {
+                            // let qt render the background:
+                            // commented out as this will cause recursive painting
+                            // this should be done outside using setBackgroundRole
+                            // setAutoFillBackground or setAttribute
+                            //wxWindowDC dc( (wxWindow*)this );
+                            //widget->render(m_qtPainter);
+                        }
+                        break;
+                    case wxBG_STYLE_PAINT:
+                        // nothing to do: window will be painted over in EVT_PAINT
+                        break;
+
+                    default:
+                        wxFAIL_MSG( "unsupported background style" );
+                }
+
+                // send the paint event (wxWindowDC will draw directly):
+                wxPaintEvent paint( GetId() );
+                handled = ProcessWindowEvent(paint);
+                m_updateRegion.Clear();
             }
-
-            // send the paint event (wxWindowDC will draw directly):
-            wxPaintEvent paint( GetId() );
-            bool handled = ProcessWindowEvent(paint);
-
-            if ( !m_qtPicture->isNull() )
+            else
             {
                 // Data from wxClientDC, paint it
                 m_qtPicture->play( m_qtPainter );
