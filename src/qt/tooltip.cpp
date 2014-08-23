@@ -48,3 +48,9 @@ const wxString &wxToolTip::GetTip() const
     return m_text;
 }
 
+
+void wxToolTip::SetWindow(wxWindow *win)
+{
+    m_window = win;
+    wxMISSING_FUNCTION();
+}
