@@ -271,14 +271,14 @@ void wxQtFillKeyboardModifiers( Qt::KeyboardModifiers modifiers, wxKeyboardState
 }
 
 
-int wxQtConvertKeyCode( int key, int modifiers, Qt::KeyboardModifiers &qtmodifiers )
+int wxQtConvertKeyCode( int key, int WXUNUSED(modifiers), Qt::KeyboardModifiers &qtmodifiers )
 {
     /* First treat common ranges and then handle specific values
      * The macro takes Qt first and last codes and the first wx code
      * to make the conversion */
     #define QTWX_KEY_GROUP( firstWX, lastWX, firstQT ) \
         if ( key >= firstWX && key <= lastWX ) \
-            return (int)(key - (firstQT - firstWX));
+            return (int)(key - (firstWX - firstQT));
 
     qtmodifiers |= Qt::KeypadModifier;
     // This is a numpad event
@@ -317,8 +317,15 @@ int wxQtConvertKeyCode( int key, int modifiers, Qt::KeyboardModifiers &qtmodifie
 
     qtmodifiers &= ~Qt::KeypadModifier;
 
-    // ASCII (basic and extended) values are the same in Qt and wx
-    QTWX_KEY_GROUP( 32, 255, 32 );
+    // ASCII letters are only supported in uppercase in Qt
+    QTWX_KEY_GROUP( 0x61, 0x7a, 0x41 );
+
+    // ASCII (basic) values are the same in Qt and wx
+    QTWX_KEY_GROUP( 32, 127, 32 );
+
+    // ASCII (extended) values are the same in Qt but has holes
+    // see qasciikey.cpp char QTest::keyToAscii(Qt::Key key)
+    // WARNING: not translated as there is an assert in keyToAscii
 
     // Arrow keys
     QTWX_KEY_GROUP( WXK_LEFT, WXK_DOWN, Qt::Key_Left )
