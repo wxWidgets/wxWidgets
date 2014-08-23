@@ -67,8 +67,17 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
-    m_qtMainWindow->setMenuBar( menuBar->GetHandle() );
-
+    if ( menuBar )
+    {
+        // Warning: Qt main window takes ownership of the QMenuBar pointer:
+        m_qtMainWindow->setMenuBar( menuBar->GetHandle() );
+    }
+    else
+    {
+        // Creating an empty menu bar should hide it and free the previous:
+        QMenuBar *qmenubar = new QMenuBar(m_qtMainWindow);
+        m_qtMainWindow->setMenuBar( qmenubar );
+    }
     wxFrameBase::SetMenuBar( menuBar );
 }
 
@@ -93,13 +102,12 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
         if (toolbar->HasFlag(wxTB_BOTTOM)) area |= Qt::BottomToolBarArea;
 
         m_qtMainWindow->addToolBar((Qt::ToolBarArea)area, toolbar->GetHandle());
-        m_frameToolBar = toolbar;
     }
     else if ( m_frameToolBar != NULL )
     {
         m_qtMainWindow->removeToolBar(m_frameToolBar->GetHandle());
-        m_frameToolBar = NULL;
     }
+    wxFrameBase::SetToolBar( toolbar );
 }
 
 void wxFrame::SetWindowStyleFlag( long style )
