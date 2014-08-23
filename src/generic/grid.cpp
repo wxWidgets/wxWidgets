@@ -1730,6 +1730,12 @@ END_EVENT_TABLE()
 
 void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
+    wxLogDebug( wxT("wxGridWindow::OnPaint %s region %d %d %d %d \n"),
+                (const char*)this->GetName(),
+                GetUpdateRegion().GetBox().GetX(),
+                GetUpdateRegion().GetBox().GetY(),
+                GetUpdateRegion().GetBox().GetWidth(),
+                GetUpdateRegion().GetBox().GetHeight() );
     wxPaintDC dc( this );
     m_owner->PrepareDC( dc );
     wxRegion reg = GetUpdateRegion();
@@ -5114,6 +5120,8 @@ void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)
 
 bool wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
 {
+    wxLogDebug( wxT("wxGrid::SetCurrentCell %d %d \n"),
+                coords.GetRow(), coords.GetCol() );
     if ( SendEvent(wxEVT_GRID_SELECT_CELL, coords) == -1 )
     {
         // the event has been vetoed - do nothing
