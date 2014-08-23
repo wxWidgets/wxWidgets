@@ -4855,7 +4855,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_srchctlg.o \
 	monodll_statbmpg.o \
 	monodll_stattextg.o \
-	monodll_textdlg.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_toolbkg.o \
@@ -5078,7 +5077,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_srchctlg.o \
 	monodll_statbmpg.o \
 	monodll_stattextg.o \
-	monodll_textdlg.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_toolbkg.o \
@@ -7203,7 +7201,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_srchctlg.o \
 	monolib_statbmpg.o \
 	monolib_stattextg.o \
-	monolib_textdlg.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_toolbkg.o \
@@ -7426,7 +7423,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_srchctlg.o \
 	monolib_statbmpg.o \
 	monolib_stattextg.o \
-	monolib_textdlg.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_toolbkg.o \
@@ -9708,7 +9704,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_srchctlg.o \
 	coredll_statbmpg.o \
 	coredll_stattextg.o \
-	coredll_textdlg.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_toolbkg.o \
@@ -9931,7 +9926,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_srchctlg.o \
 	coredll_statbmpg.o \
 	coredll_stattextg.o \
-	coredll_textdlg.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_toolbkg.o \
@@ -11477,7 +11471,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_srchctlg.o \
 	corelib_statbmpg.o \
 	corelib_stattextg.o \
-	corelib_textdlg.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_toolbkg.o \
@@ -11700,7 +11693,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_srchctlg.o \
 	corelib_statbmpg.o \
 	corelib_stattextg.o \
-	corelib_textdlg.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_toolbkg.o \
@@ -22580,9 +22572,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_stattextg.o: $(srcdir)/src/generic/stattextg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/stattextg.cpp
 
-@COND_USE_GUI_1@monodll_textdlg.o: $(srcdir)/src/common/textdlg.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textdlg.cpp
-
 @COND_USE_GUI_1@monodll_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
 
@@ -28450,9 +28439,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_stattextg.o: $(srcdir)/src/generic/stattextg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/stattextg.cpp
-
-@COND_USE_GUI_1@monolib_textdlg.o: $(srcdir)/src/common/textdlg.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textdlg.cpp
 
 @COND_USE_GUI_1@monolib_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
@@ -34430,9 +34416,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_stattextg.o: $(srcdir)/src/generic/stattextg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/stattextg.cpp
 
-@COND_USE_GUI_1@coredll_textdlg.o: $(srcdir)/src/common/textdlg.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/textdlg.cpp
-
 @COND_USE_GUI_1@coredll_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
 
@@ -38812,9 +38795,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_stattextg.o: $(srcdir)/src/generic/stattextg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/stattextg.cpp
-
-@COND_USE_GUI_1@corelib_textdlg.o: $(srcdir)/src/common/textdlg.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/textdlg.cpp
 
 @COND_USE_GUI_1@corelib_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
