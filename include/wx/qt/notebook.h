@@ -56,6 +56,9 @@ protected:
 private:
     wxQtPointer< QTabWidget > m_qtTabWidget;
 
+    // internal array to store imageId for each page:
+    wxArrayInt m_images;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxNotebook );
 };
 
