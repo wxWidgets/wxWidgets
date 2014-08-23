@@ -26144,8 +26144,8 @@ $as_echo "none" >&6; }
         TOOLKIT=QT
         GUIDIST=QT_DIST
         TOOLKIT_DIR="qt"
-        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --cflags` -DQT_WIDGETS_LIB"
-        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5Test --libs`"
+        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --cflags` -DQT_WIDGETS_LIB"
+        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test --libs`"
         TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT_CFLAGS}"
         GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT_LIBS}"
         if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
@@ -27342,7 +27342,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
-    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT"; then
+    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1; then
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for OpenGL headers" >&5
 $as_echo_n "checking for OpenGL headers... " >&6; }
