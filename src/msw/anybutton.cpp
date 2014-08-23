@@ -832,7 +832,12 @@ wxAnyButton::State GetButtonState(wxAnyButton *btn, UINT state)
     if ( state & ODS_DISABLED )
         return wxAnyButton::State_Disabled;
 
-    if ( state & ODS_SELECTED )
+    // We need to check for the pressed state of the button itself before the
+    // other checks because even if it is selected or current, it it still
+    // pressed first and foremost.
+    const wxAnyButton::State btnState = btn->GetNormalState();
+
+    if ( btnState == wxAnyButton::State_Pressed || state & ODS_SELECTED )
         return wxAnyButton::State_Pressed;
 
     if ( btn->HasCapture() || btn->IsMouseInWindow() )
@@ -841,7 +846,7 @@ wxAnyButton::State GetButtonState(wxAnyButton *btn, UINT state)
     if ( state & ODS_FOCUS )
         return wxAnyButton::State_Focused;
 
-    return btn->GetNormalState();
+    return btnState;
 }
 
 void DrawButtonText(HDC hdc,

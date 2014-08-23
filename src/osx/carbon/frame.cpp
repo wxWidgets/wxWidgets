@@ -356,12 +356,12 @@ void wxFrame::PositionToolBar()
 
     wxTopLevelWindow::DoGetClientSize( &cw , &ch );
 
-    int statusX = 0 ;
-    int statusY = 0 ;
-
 #if wxUSE_STATUSBAR
     if (GetStatusBar() && GetStatusBar()->IsShown())
     {
+        int statusX = 0 ;
+        int statusY = 0 ;
+
         GetStatusBar()->GetSize(&statusX, &statusY);
         ch -= statusY;
     }

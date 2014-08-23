@@ -36083,7 +36083,7 @@ fi
 if test "$wxUSE_PREFERENCES_EDITOR" = "yes"; then
     $as_echo "#define wxUSE_PREFERENCES_EDITOR 1" >>confdefs.h
 
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS prefseditor"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS preferences"
 fi
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
     if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
@@ -37121,8 +37121,9 @@ if test "$wxUSE_MAC" = 1 ; then
         if test "$wxUSE_OSX_IPHONE" = 1; then
             EXTRA_FRAMEWORKS="-framework IOKit -framework UIKit -framework CFNetwork -framework AudioToolbox -framework CoreFoundation -framework CoreGraphics -framework OpenGLES -framework Foundation -framework QuartzCore"
         else
-            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
+            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System"
 
+                                                                        if test "$wxUSE_MEDIACTRL" = "yes"; then
 
             if test "$cross_compiling" != "no"; then
                                                                                                 wx_cv_target_x86_64=no
@@ -37154,6 +37155,8 @@ $as_echo "$wx_cv_target_x86_64" >&6; }
 
             if test "$wx_cv_target_x86_64" != "yes"; then
                 EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
+            fi
+
             fi
         fi
     fi

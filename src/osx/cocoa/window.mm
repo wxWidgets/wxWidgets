@@ -1549,20 +1549,23 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     wxRegion clearRgn;
     if ( tlwParent->GetWindowStyle() & wxFRAME_SHAPED )
     {
-        if ( isTopLevel )
-            clearRgn = updateRgn;
-
-        int xoffset = 0, yoffset = 0;
         wxRegion rgn = tlwParent->GetShape();
-        wxpeer->MacRootWindowToWindow( &xoffset, &yoffset );
-        rgn.Offset( xoffset, yoffset );
-        updateRgn.Intersect(rgn);
-
-        if ( isTopLevel )
+        if ( rgn.IsOk() )
         {
-            // Exclude the window shape from the region to be cleared below.
-            rgn.Xor(wxpeer->GetSize());
-            clearRgn.Intersect(rgn);
+            if ( isTopLevel )
+                clearRgn = updateRgn;
+
+            int xoffset = 0, yoffset = 0;
+            wxpeer->MacRootWindowToWindow( &xoffset, &yoffset );
+            rgn.Offset( xoffset, yoffset );
+            updateRgn.Intersect(rgn);
+
+            if ( isTopLevel )
+            {
+                // Exclude the window shape from the region to be cleared below.
+                rgn.Xor(wxpeer->GetSize());
+                clearRgn.Intersect(rgn);
+            }
         }
     }
     

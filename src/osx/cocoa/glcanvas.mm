@@ -89,7 +89,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
         NSOpenGLPFAAlphaSize,(NSOpenGLPixelFormatAttribute)0,
         NSOpenGLPFADepthSize,(NSOpenGLPixelFormatAttribute)8,
         NSOpenGLPFAAccelerated, // use hardware accelerated context
-        (NSOpenGLPixelFormatAttribute)nil
+        0
     };
 
     const NSOpenGLPixelFormatAttribute *attribs;
@@ -216,7 +216,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
             }
         }
 
-        data[p] = (NSOpenGLPixelFormatAttribute)nil;
+        data[p] = 0;
 
         attribs = data;
     }

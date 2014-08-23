@@ -28,10 +28,10 @@ public:
 
     virtual bool            IsOk() const ;
 
-    virtual void            TransferFrom( wxPageSetupDialogData * );
+    virtual void            TransferFrom( const wxPageSetupDialogData * );
     virtual void            TransferTo( wxPageSetupDialogData * );
 
-    virtual void            TransferFrom( wxPrintDialogData * );
+    virtual void            TransferFrom( const wxPrintDialogData * );
     virtual void            TransferTo( wxPrintDialogData * );
 
     PMPrintSession          GetPrintSession() { return m_macPrintSession; }

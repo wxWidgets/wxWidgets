@@ -144,7 +144,7 @@ void wxToggleButton::SetValue(bool val)
     }
     else
     {
-        ::SendMessage(GetHwnd(), BM_SETCHECK, val, 0);
+        ::SendMessage(GetHwnd(), BM_SETCHECK, val ? BST_CHECKED : BST_UNCHECKED, 0);
     }
 }
 

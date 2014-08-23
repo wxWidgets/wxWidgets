@@ -358,6 +358,20 @@ void ArraysTestCase::SortedArray()
     a.push_back("b");
     a.push_back("a");
     CPPUNIT_ASSERT_EQUAL( 0, a.Index("a") );
+
+
+    wxSortedArrayString ar(wxStringSortDescending);
+    ar.Add("a");
+    ar.Add("b");
+    CPPUNIT_ASSERT_EQUAL( "b", ar[0] );
+    CPPUNIT_ASSERT_EQUAL( "a", ar[1] );
+
+    wxSortedArrayString ad(wxDictionaryStringSortAscending);
+    ad.Add("AB");
+    ad.Add("a");
+    ad.Add("Aa");
+    CPPUNIT_ASSERT_EQUAL( "a", ad[0] );
+    CPPUNIT_ASSERT_EQUAL( "Aa", ad[1] );
 }
 
 void ArraysTestCase::wxStringArraySplitTest()

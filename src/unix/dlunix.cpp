@@ -287,7 +287,8 @@ void* wxDynamicLibrary::GetModuleFromAddress(const void* addr, wxString* path)
 #ifdef HAVE_DLADDR
     Dl_info di = { 0 };
 
-    if ( dladdr(addr, &di) == 0 )
+    // At least under Solaris dladdr() takes non-const void*.
+    if ( dladdr(const_cast<void*>(addr), &di) == 0 )
         return NULL;
 
     if ( path )

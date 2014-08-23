@@ -1361,6 +1361,9 @@ wxWinVersion wxGetWinVersion()
 
                         case 2:
                             return wxWinVersion_8;
+
+                        case 3:
+                            return wxWinVersion_8_1;
                     }
                     break;
             }

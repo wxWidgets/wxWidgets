@@ -352,7 +352,7 @@ wxMenu::~wxMenu()
     // we should free Windows resources only if Windows doesn't do it for us
     // which happens if we're attached to a menubar or a submenu of another
     // menu
-    if ( !IsAttached() && !GetParent() )
+    if ( m_hMenu && !IsAttached() && !GetParent() )
     {
         if ( !::DestroyMenu(GetHmenu()) )
         {
@@ -573,13 +573,13 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 if ( pItem->IsCheckable() )
                 {
                     mii.fMask |= MIIM_CHECKMARKS;
-                    mii.hbmpChecked = pItem->GetHBitmapForMenu(true);
-                    mii.hbmpUnchecked = pItem->GetHBitmapForMenu(false);
+                    mii.hbmpChecked = pItem->GetHBitmapForMenu(wxMenuItem::Checked);
+                    mii.hbmpUnchecked = pItem->GetHBitmapForMenu(wxMenuItem::Unchecked);
                 }
                 else if ( pItem->GetBitmap().IsOk() )
                 {
                     mii.fMask |= MIIM_BITMAP;
-                    mii.hbmpItem = pItem->GetHBitmapForMenu();
+                    mii.hbmpItem = pItem->GetHBitmapForMenu(wxMenuItem::Normal);
                 }
 
                 mii.cch = itemText.length();
@@ -641,7 +641,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         if ( pItem->GetBitmap().IsOk() )
         {
             flags |= MF_BITMAP;
-            pData = reinterpret_cast<LPCTSTR>(pItem->GetHBitmapForMenu());
+            pData = reinterpret_cast<LPCTSTR>(
+                pItem->GetHBitmapForMenu(wxMenuItem::Normal));
         }
         else
         {

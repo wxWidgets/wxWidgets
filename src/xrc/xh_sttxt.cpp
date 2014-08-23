@@ -30,6 +30,7 @@ wxStaticTextXmlHandler::wxStaticTextXmlHandler()
     XRC_ADD_STYLE(wxST_NO_AUTORESIZE);
     XRC_ADD_STYLE(wxALIGN_LEFT);
     XRC_ADD_STYLE(wxALIGN_RIGHT);
+    XRC_ADD_STYLE(wxALIGN_CENTER);
     XRC_ADD_STYLE(wxALIGN_CENTRE);
     AddWindowStyles();
 }

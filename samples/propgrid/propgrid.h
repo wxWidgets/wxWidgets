@@ -51,8 +51,8 @@ public:
         x = y = z = 0.0;
     }
     wxVector3f( double x, double y, double z )
+        : x(x), y(y), z(z)
     {
-        x = x; y = y; z = z;
     }
 
     double x, y, z;

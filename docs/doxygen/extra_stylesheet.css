@@ -116,6 +116,26 @@ div.appearance .caption {
     font-size: 90%;
 }
 
+div.appearance_brief table {
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+div.appearance_brief table td:first-child {
+    width: 20em;
+    text-align: left;
+    padding-left: 2em;
+}
+
+div.appearance_brief table td {
+    border-style: none solid solid none;
+    border-width: 1px;
+    border-color: lightblue;
+}
+
+
 td.green { color: green; }
 td.orange { color: #ff8000; }
 td.red { color: red; }

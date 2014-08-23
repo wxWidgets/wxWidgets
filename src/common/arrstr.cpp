@@ -72,6 +72,7 @@ void wxArrayString::Init(bool autoSort)
   m_nSize  =
   m_nCount = 0;
   m_pItems = NULL;
+  m_compareFunction = NULL;
   m_autoSort = autoSort;
 }
 
@@ -270,7 +271,7 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
     while ( lo < hi ) {
       i = (lo + hi)/2;
 
-      res = str.Cmp(m_pItems[i]);
+      res = m_compareFunction ? m_compareFunction(str, m_pItems[i]) : str.Cmp(m_pItems[i]);
       if ( res < 0 )
         hi = i;
       else if ( res > 0 )

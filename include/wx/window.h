@@ -236,7 +236,7 @@ public:
 
         // window id uniquely identifies the window among its siblings unless
         // it is wxID_ANY which means "don't care"
-    void SetId( wxWindowID winid ) { m_windowId = winid; }
+    virtual void SetId( wxWindowID winid ) { m_windowId = winid; }
     wxWindowID GetId() const { return m_windowId; }
 
         // generate a unique id (or count of them consecutively), returns a
