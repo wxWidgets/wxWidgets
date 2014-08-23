@@ -885,7 +885,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // gauge and slider
     // ------------------------------------------------------------------------
 
-#if 1 //wxUSE_SLIDER && wxUSE_GAUGE
+#if wxUSE_SLIDER && wxUSE_GAUGE
     panel = new wxPanel(m_book);
 
     wxBoxSizer *gauge_page_vsizer = new wxBoxSizer( wxVERTICAL );
