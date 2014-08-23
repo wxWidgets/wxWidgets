@@ -331,6 +331,7 @@ bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
         case wxBITMAP_TYPE_MACCURSOR_RESOURCE:
         case wxBITMAP_TYPE_MAX:
         case wxBITMAP_TYPE_ANY:
+        default:
             break;
     }
     return type_name &&
@@ -374,7 +375,7 @@ void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 #endif // wxUSE_PALETTE
 
 // copies the contents and mask of the given (colour) icon to the bitmap
-bool wxBitmap::CopyFromIcon(const wxIcon& WXUNUSED(icon))
+bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
     *this = icon;
     return IsOk();
@@ -382,17 +383,17 @@ bool wxBitmap::CopyFromIcon(const wxIcon& WXUNUSED(icon))
 
 
 // implementation:
-void wxBitmap::SetHeight(int WXUNUSED(height))
+void wxBitmap::SetHeight(int height)
 {
     M_PIXDATA = QPixmap(GetWidth(), height);
 }
 
-void wxBitmap::SetWidth(int WXUNUSED(width))
+void wxBitmap::SetWidth(int width)
 {
     M_PIXDATA = QPixmap(width, GetHeight());
 }
 
-void wxBitmap::SetDepth(int WXUNUSED(depth))
+void wxBitmap::SetDepth(int depth)
 {
     if (depth == 1)
         M_PIXDATA = QBitmap(GetWidth(), GetHeight());
