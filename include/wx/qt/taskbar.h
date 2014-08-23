@@ -13,8 +13,13 @@
 class WXDLLIMPEXP_CORE wxTaskBarIcon : public wxTaskBarIconBase
 {
 public:
-    wxTaskBarIcon();
+    wxTaskBarIcon(wxTaskBarIconType iconType = wxTBI_DEFAULT_TYPE);
 
+    // Accessors
+    bool IsOk() const { return false; }
+    bool IsIconInstalled() const { return false; }
+
+    // Operations
     virtual bool SetIcon(const wxIcon& icon,
                          const wxString& tooltip = wxEmptyString);
     virtual bool RemoveIcon();
