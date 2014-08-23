@@ -895,7 +895,6 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
             // Start the paint in the widget itself
             ok =  m_qtPainter->begin( GetHandle() );
         }
-        //wxASSERT_MSG( ok, "qt windget painter begin failed" );
 
         if ( ok )
         {
@@ -979,6 +978,8 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         else
         {
             // Painter didn't begun, not handled by wxWidgets:
+            wxLogDebug(wxT("wxWindow::QtHandlePaintEvent %s Qt widget painter begin failed"),
+                       (const char*)GetName() );
             return false;
         }
     }
