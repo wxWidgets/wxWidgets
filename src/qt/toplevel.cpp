@@ -51,6 +51,10 @@ bool wxTopLevelWindowNative::Create( wxWindow *parent, wxWindowID winId,
 
     m_qtWindow->resize( wxQtConvertSize( size ) );
 
+    // Prevent automatic deletion of Qt main window on close
+    // (this should be the default, but left just fo enforce it)
+    GetHandle()->setAttribute(Qt::WA_DeleteOnClose, false);
+
     return true;
 }
 
