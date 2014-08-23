@@ -2221,6 +2221,7 @@ COND_TOOLKIT_MSW_WEBVIEW_HDR_PLATFORM =  \
 @COND_TOOLKIT_MSW@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
 @COND_TOOLKIT_OSX_CARBON@OPENGL_HDR_PLATFORM = wx/osx/glcanvas.h
 @COND_TOOLKIT_OSX_COCOA@OPENGL_HDR_PLATFORM = wx/osx/glcanvas.h
+@COND_TOOLKIT_Qt@OPENGL_HDR_PLATFORM = wx/qt/glcanvas.h
 @COND_TOOLKIT_WINCE@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
 @COND_TOOLKIT_X11@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h wx/unix/glx11.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@AUI_GTK_HDR = wx/aui/tabartgtk.h
@@ -14839,6 +14840,7 @@ COND_USE_SOVERSOLARIS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 @COND_TOOLKIT_OSX_COCOA@	= gldll_osx_cocoa_glcanvas.o gldll_glcanvas_osx.o
 @COND_TOOLKIT_OSX_IPHONE@__OPENGL_SRC_PLATFORM_OBJECTS \
 @COND_TOOLKIT_OSX_IPHONE@	= gldll_iphone_glcanvas.o gldll_glcanvas_osx.o
+@COND_TOOLKIT_QT@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_qt_glcanvas.o
 @COND_TOOLKIT_WINCE@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_msw_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS = \
 @COND_TOOLKIT_X11@	gldll_x11_glcanvas.o gldll_glx11.o
@@ -14881,6 +14883,7 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_TOOLKIT_OSX_COCOA@	= gllib_osx_cocoa_glcanvas.o gllib_glcanvas_osx.o
 @COND_TOOLKIT_OSX_IPHONE@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
 @COND_TOOLKIT_OSX_IPHONE@	= gllib_iphone_glcanvas.o gllib_glcanvas_osx.o
+@COND_TOOLKIT_QT@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_qt_glcanvas.o
 @COND_TOOLKIT_WINCE@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_msw_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS_1 = \
 @COND_TOOLKIT_X11@	gllib_x11_glcanvas.o gllib_glx11.o
@@ -40823,6 +40826,9 @@ gldll_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLDLL_ODEP)
 gldll_gtk1_glcanvas.o: $(srcdir)/src/gtk1/glcanvas.cpp $(GLDLL_ODEP)
 	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/gtk1/glcanvas.cpp
 
+gldll_qt_glcanvas.o: $(srcdir)/src/qt/glcanvas.cpp $(GLDLL_ODEP)
+	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/qt/glcanvas.cpp
+
 @COND_TOOLKIT_OSX_CARBON@gldll_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp
 
@@ -40882,6 +40888,9 @@ gllib_src_cocoa_glcanvas.o: $(srcdir)/src/cocoa/glcanvas.mm $(GLLIB_ODEP)
 
 gllib_gtk1_glcanvas.o: $(srcdir)/src/gtk1/glcanvas.cpp $(GLLIB_ODEP)
 	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/gtk1/glcanvas.cpp
+
+gllib_qt_glcanvas.o: $(srcdir)/src/qt/glcanvas.cpp $(GLLIB_ODEP)
+	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/qt/glcanvas.cpp
 
 @COND_TOOLKIT_OSX_CARBON@gllib_glcanvas_osx.o: $(srcdir)/src/osx/glcanvas_osx.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/osx/glcanvas_osx.cpp

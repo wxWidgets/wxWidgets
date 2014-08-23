@@ -709,6 +709,7 @@ COND_TOOLKIT_WINCE_WXUNIV_0
 COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_WINCE_USE_GUI_1
 COND_TOOLKIT_WINCE
+COND_TOOLKIT_Qt
 COND_TOOLKIT_QT_USE_GUI_1
 COND_TOOLKIT_QT
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
@@ -27341,7 +27342,7 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
-    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1; then
+    elif test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_QT"; then
 
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for OpenGL headers" >&5
 $as_echo_n "checking for OpenGL headers... " >&6; }
@@ -39866,6 +39867,11 @@ EOF
     COND_TOOLKIT_QT_USE_GUI_1="#"
     if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" ; then
         COND_TOOLKIT_QT_USE_GUI_1=""
+    fi
+
+    COND_TOOLKIT_Qt="#"
+    if test "x$TOOLKIT" = "xQt" ; then
+        COND_TOOLKIT_Qt=""
     fi
 
     COND_TOOLKIT_WINCE="#"
