@@ -129,7 +129,7 @@ public:
 
     void OnSizerCheck (wxCommandEvent &event);
 
-    wxListBox     *m_listbox,
+    wxCheckListBox     *m_listbox,
                   *m_listboxSorted;
 #if wxUSE_CHOICE
     wxChoice      *m_choice,
@@ -369,7 +369,7 @@ private:
 // other
 //----------------------------------------------------------------------
 
-static void SetListboxClientData(const wxChar *name, wxListBox *control);
+static void SetListboxClientData(const wxChar *name, wxCheckListBox *control);
 
 #if wxUSE_CHOICE
 static void SetChoiceClientData(const wxChar *name, wxChoice *control);
@@ -741,10 +741,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     // listbox page
     // ------------------------------------------------------------------------
     wxPanel *panel = new wxPanel(m_book);
-    m_listbox = new wxListBox( panel, ID_LISTBOX,
+    m_listbox = new wxCheckListBox( panel, ID_LISTBOX,
                                wxPoint(10,10), wxSize(120,70),
                                5, choices, wxLB_MULTIPLE | wxLB_ALWAYS_SB | wxHSCROLL );
-    m_listboxSorted = new wxListBox( panel, ID_LISTBOX_SORTED,
+    m_listboxSorted = new wxCheckListBox( panel, ID_LISTBOX_SORTED,
                                      wxPoint(10,90), wxSize(120,70),
                                      3, choices, wxLB_SORT );
 
@@ -768,7 +768,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxCheckBox( panel, ID_CHANGE_COLOUR, wxT("&Toggle colour"),
                           wxPoint(110,170) );
     panel->SetCursor(wxCursor(wxCURSOR_HAND));
-    m_book->AddPage(panel, wxT("wxListBox"), true);
+    m_book->AddPage(panel, wxT("wxCheckListBox"), true);
     m_book->SetPageImage(0, Image_List);
     wxASSERT_MSG(m_book->GetPageImage(m_book->GetPageCount()-1) == Image_List, "invalid imageId");
     //m_book->SetPageImage(0, -1);  // remove the image to test wxQT
@@ -1285,7 +1285,7 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-    wxListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
+    wxCheckListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
                                                      : m_listboxSorted;
 
     bool deselect = false;
@@ -2151,7 +2151,7 @@ void MyComboBox::OnKeyUp(wxKeyEvent& event)
     event.Skip();
 }
 
-static void SetListboxClientData(const wxChar *name, wxListBox *control)
+static void SetListboxClientData(const wxChar *name, wxCheckListBox *control)
 {
     size_t count = control->GetCount();
     for ( size_t n = 0; n < count; n++ )
