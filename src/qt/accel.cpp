@@ -103,3 +103,7 @@ wxObjectRefData *wxAcceleratorTable::CloneRefData(const wxObjectRefData *data) c
     return new wxAccelRefData(*(wxAccelRefData *)data);
 }
 
+bool wxAcceleratorTable::IsOk() const
+{
+    return (m_refData != NULL);
+}
