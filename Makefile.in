@@ -40948,14 +40948,6 @@ sound_sdl_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp
 @COND_PYTHON@@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
 
 #
-# Rule for Qt's moc precompiler:
-#
-$(srcdir)/src/qt/%.moc.cpp: $(srcdir)/include/wx/qt/%.h
-	moc $< -o $@
-    
-
-
-#
 # "make dist" target implementation:
 #
 
