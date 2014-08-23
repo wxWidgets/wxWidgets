@@ -122,6 +122,20 @@ void wxToolBarTool::SetToolTip()
     m_qtToolButton->setToolTip(wxQtConvertString( GetShortHelp() ));
 }
 
+
+class wxQtToolBar : public wxQtEventSignalHandler< QToolBar, wxToolBar >
+{
+public:
+    wxQtToolBar( wxWindow *parent, wxToolBar *handler );
+
+};
+
+wxQtToolBar::wxQtToolBar( wxWindow *parent, wxToolBar *handler )
+    : wxQtEventSignalHandler< QToolBar, wxToolBar >( parent, handler )
+{
+}
+
+
 QToolBar *wxToolBar::QtToolBar() const
 {
     return m_qtToolBar;
@@ -139,7 +153,8 @@ wxToolBar::~wxToolBar()
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
                        const wxSize& size, long style, const wxString& name)
 {
-    m_qtToolBar = new QToolBar(wxQtConvertString( name ));
+    m_qtToolBar = new wxQtToolBar( parent, this );
+    m_qtToolBar->setWindowTitle( wxQtConvertString( name ) );
 
     SetWindowStyleFlag(style);
 
