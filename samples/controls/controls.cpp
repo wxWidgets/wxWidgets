@@ -814,11 +814,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                               wxPoint(15,25), wxDefaultSize,
                               5, choices,
                               wxTE_PROCESS_ENTER);
-    m_combo->SetString(100, wxString("NULL"));
+
     wxASSERT_MSG(!m_combo->GetString(2).IsNull(), "Invalid item not null");
 
     wxSize combosize(m_combo->GetBestSize().x + 20, 100);
-    wxStaticBox *stbox = new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
+    (void)new wxStaticBox( panel, wxID_ANY, wxT("&Box around combobox"),
                            wxPoint(5, 5), combosize);
 #ifdef __WXQT__
     m_combo->Reparent(stbox);
