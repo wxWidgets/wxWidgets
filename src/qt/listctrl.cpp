@@ -92,12 +92,12 @@ bool wxListCtrl::Create(wxWindow *parent,
 
 bool wxListCtrl::SetForegroundColour(const wxColour& col)
 {
-    return false;
+    return wxListCtrlBase::SetForegroundColour(col);
 }
 
 bool wxListCtrl::SetBackgroundColour(const wxColour& col)
 {
-    return false;
+    return wxListCtrlBase::SetBackgroundColour(col);
 }
 
 bool wxListCtrl::GetColumn(int col, wxListItem& item) const
@@ -112,22 +112,23 @@ bool wxListCtrl::SetColumn(int col, const wxListItem& item)
 
 int wxListCtrl::GetColumnWidth(int col) const
 {
-    return 0;
+    return m_qtTreeWidget->columnWidth(col);
 }
 
 bool wxListCtrl::SetColumnWidth(int col, int width)
 {
-    return false;
+    m_qtTreeWidget->setColumnWidth(col, width);
+    return true;
 }
 
 int wxListCtrl::GetColumnOrder(int col) const
 {
-    return 0;
+    return col;
 }
 
 int wxListCtrl::GetColumnIndexFromOrder(int order) const
 {
-    return 0;
+    return order;
 }
 
 wxArrayInt wxListCtrl::GetColumnsOrder() const
@@ -273,7 +274,7 @@ int wxListCtrl::GetItemCount() const
 
 int wxListCtrl::GetColumnCount() const
 {
-    return 0;
+    return m_qtTreeWidget->columnCount();
 }
 
 wxSize wxListCtrl::GetItemSpacing() const
@@ -356,7 +357,7 @@ void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
 
 bool wxListCtrl::InReportView() const
 {
-    return false;
+    return true;
 }
 
 bool wxListCtrl::IsVirtual() const
@@ -399,6 +400,7 @@ bool wxListCtrl::DeleteAllColumns()
 
 void wxListCtrl::ClearAll()
 {
+    m_qtTreeWidget->clear();
 }
 
 wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
