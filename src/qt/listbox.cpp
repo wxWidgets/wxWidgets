@@ -82,7 +82,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 {
     Init();
     QListWidgetItem* item;
-    m_qtListWidget = new wxQtListWidget( parent, this );
+    m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
 
     while ( n-- > 0 )
     {
@@ -107,7 +107,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& name)
 {
     Init();
-    m_qtListWidget = new wxQtListWidget( parent, this );
+    m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
 
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }

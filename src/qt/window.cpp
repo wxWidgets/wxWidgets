@@ -176,9 +176,9 @@ wxWindow::~wxWindow()
 #endif
 
     // delete QWidget when control return to event loop (safer)
-    if (GetHandle())
+    if (m_qtWindow)
     {
-        GetHandle()->deleteLater();
+        m_qtWindow->deleteLater();
     }
 }
 

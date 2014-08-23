@@ -42,7 +42,6 @@ wxDialog::wxDialog( wxWindow *parent, wxWindowID id,
 
 wxDialog::~wxDialog()
 {
-    SendDestroyEvent();
 }
 
 
@@ -53,7 +52,7 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
         long style,
         const wxString &name)
 {
-    m_qtDialog = new wxQtDialog( parent, this );
+    m_qtWindow = m_qtDialog = new wxQtDialog( parent, this );
     
     return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
