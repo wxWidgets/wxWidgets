@@ -187,12 +187,12 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
     return false;
 }
 
-void wxPrinterDCImpl::DoDrawLines(int n, wxPoint points[],
+void wxPrinterDCImpl::DoDrawLines(int n, const wxPoint points[],
                          wxCoord xoffset, wxCoord yoffset )
 {
 }
 
-void wxPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
+void wxPrinterDCImpl::DoDrawPolygon(int n, const wxPoint points[],
                        wxCoord xoffset, wxCoord yoffset,
                        wxPolygonFillMode fillStyle )
 {
