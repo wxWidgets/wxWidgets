@@ -575,22 +575,17 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         m_qtPainter->setBackground(savedBrush);
         m_qtPainter->setPen(savedPen);
     } else {
-        if ( !useMask )
+        if ( !useMask && bmp.GetMask() )
         {
             // Temporarly disable mask
             QBitmap mask;
             mask = pix.mask();
             pix.setMask( QBitmap() );
 
-            // Use text background
-            QBrush savedBrush = m_qtPainter->background();
-            m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetHandle()));
-
             // Draw
             m_qtPainter->drawPixmap(x, y, pix);
 
-            // Restore saved settings and mask
-            m_qtPainter->setBackground(savedBrush);
+            // Restore saved mask
             pix.setMask( mask );
         }
         else
