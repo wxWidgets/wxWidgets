@@ -58,7 +58,7 @@ wxSlider::wxSlider(wxWindow *parent,
 
 bool wxSlider::Create(wxWindow *parent,
             wxWindowID id,
-            int value, int minValue, int maxValue,
+            int WXUNUSED(value), int minValue, int maxValue,
             const wxPoint& pos,
             const wxSize& size,
             long style,
@@ -117,7 +117,7 @@ int wxSlider::GetTickFreq() const
     return m_qtSlider->tickInterval();
 }
 
-void wxSlider::SetLineSize(int lineSize)
+void wxSlider::SetLineSize(int WXUNUSED(lineSize))
 {
 }
 
@@ -136,7 +136,7 @@ int wxSlider::GetPageSize() const
     return m_qtSlider->pageStep();
 }
 
-void wxSlider::SetThumbLength(int lenPixels)
+void wxSlider::SetThumbLength(int WXUNUSED(lenPixels))
 {
 }
 

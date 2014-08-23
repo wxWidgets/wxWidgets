@@ -125,7 +125,7 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxPoint& pos,
             const wxSize& size,
             int n, const wxString choices[],
-            int majorDim,
+            int WXUNUSED(majorDim),
             long style,
             const wxValidator& val,
             const wxString& name)

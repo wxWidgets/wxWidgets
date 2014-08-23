@@ -144,7 +144,7 @@ wxBitmapDataObject::wxBitmapDataObject()
 {
 }
 
-wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &bitmap )
+wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &WXUNUSED(bitmap) )
 {
 }
 
@@ -152,7 +152,7 @@ wxFileDataObject::wxFileDataObject()
 {
 }
  
-void wxFileDataObject::AddFile( const wxString &filename )
+void wxFileDataObject::AddFile( const wxString &WXUNUSED(filename) )
 {
 
 }

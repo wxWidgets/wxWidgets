@@ -14,12 +14,12 @@ wxQtPrintNativeData::wxQtPrintNativeData()
 {
 }
 
-bool wxQtPrintNativeData::TransferTo( wxPrintData &data )
+bool wxQtPrintNativeData::TransferTo( wxPrintData &WXUNUSED(data) )
 {
     return false;
 }
 
-bool wxQtPrintNativeData::TransferFrom( const wxPrintData &data )
+bool wxQtPrintNativeData::TransferFrom( const wxPrintData &WXUNUSED(data) )
 {
     return false;
 }
@@ -31,11 +31,11 @@ bool wxQtPrintNativeData::IsOk() const
 
 //##############################################################################
 
-wxQtPrintDialog::wxQtPrintDialog(wxWindow *parent, wxPrintDialogData *data)
+wxQtPrintDialog::wxQtPrintDialog(wxWindow *WXUNUSED(parent), wxPrintDialogData *WXUNUSED(data))
 {
 }
 
-wxQtPrintDialog::wxQtPrintDialog(wxWindow *parent, wxPrintData *data)
+wxQtPrintDialog::wxQtPrintDialog(wxWindow *WXUNUSED(parent), wxPrintData *WXUNUSED(data))
 {
 }
 
@@ -65,11 +65,11 @@ wxQtPageSetupDialog::wxQtPageSetupDialog()
 {
 }
 
-wxQtPageSetupDialog::wxQtPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data)
+wxQtPageSetupDialog::wxQtPageSetupDialog(wxWindow *WXUNUSED(parent), wxPageSetupDialogData *WXUNUSED(data))
 {
 }
 
-bool wxQtPageSetupDialog::Create(wxWindow *parent, wxPageSetupDialogData *data)
+bool wxQtPageSetupDialog::Create(wxWindow *WXUNUSED(parent), wxPageSetupDialogData *WXUNUSED(data))
 {
     return false;
 }

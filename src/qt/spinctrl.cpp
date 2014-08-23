@@ -21,9 +21,9 @@ wxQtSpinCtrlBase< T, Widget >::wxQtSpinCtrlBase()
 }
 
 template< typename T, typename Widget >
-wxQtSpinCtrlBase< T, Widget >::wxQtSpinCtrlBase( wxWindow *parent, wxWindowID id,
-    const wxString& value, const wxPoint& pos, const wxSize& size, long style,
-    T min, T max, T initial, T inc, const wxString& name )
+wxQtSpinCtrlBase< T, Widget >::wxQtSpinCtrlBase( wxWindow *WXUNUSED(WXUNUSED(parent)), wxWindowID WXUNUSED(WXUNUSED(id)),
+    const wxString& WXUNUSED(WXUNUSED(value)), const wxPoint& WXUNUSED(WXUNUSED(pos)), const wxSize& WXUNUSED(WXUNUSED(size)), long WXUNUSED(WXUNUSED(style)),
+    T WXUNUSED(WXUNUSED(min)), T WXUNUSED(WXUNUSED(max)), T WXUNUSED(WXUNUSED(initial)), T WXUNUSED(WXUNUSED(inc)), const wxString& WXUNUSED(WXUNUSED(name)) )
 {
 }
 
@@ -86,7 +86,7 @@ T wxQtSpinCtrlBase< T, Widget >::GetIncrement() const
 }
 
 template< typename T, typename Widget >
-void wxQtSpinCtrlBase< T, Widget >::SetSnapToTicks(bool snap_to_ticks)
+void wxQtSpinCtrlBase< T, Widget >::SetSnapToTicks(bool WXUNUSED(WXUNUSED(snap_to_ticks)))
 {
     wxMISSING_FUNCTION();
 }
@@ -100,7 +100,7 @@ bool wxQtSpinCtrlBase< T, Widget >::GetSnapToTicks() const
 }
 
 template< typename T, typename Widget >
-void wxQtSpinCtrlBase< T, Widget >::SetSelection(long from, long to)
+void wxQtSpinCtrlBase< T, Widget >::SetSelection(long WXUNUSED(WXUNUSED(from)), long WXUNUSED(WXUNUSED(to)))
 {
     wxMISSING_FUNCTION();
 }

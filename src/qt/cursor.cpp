@@ -11,12 +11,12 @@
 #include "wx/cursor.h"
 #include "wx/qt/private/utils.h"
 
-void wxSetCursor(const wxCursor& cursor)
+void wxSetCursor(const wxCursor& WXUNUSED(cursor))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
-void wxBeginBusyCursor(const wxCursor *cursor)
+void wxBeginBusyCursor(const wxCursor *WXUNUSED(cursor))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
@@ -55,7 +55,7 @@ wxGDIRefData *wxCursor::CreateGDIRefData() const
     return NULL;
 }
 
-wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
+wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
 {
     return NULL;
 }

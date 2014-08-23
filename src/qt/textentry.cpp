@@ -14,11 +14,11 @@ wxTextEntry::wxTextEntry()
 {
 }
 
-void wxTextEntry::WriteText(const wxString& text)
+void wxTextEntry::WriteText(const wxString& WXUNUSED(text))
 {
 }
 
-void wxTextEntry::Remove(long from, long to)
+void wxTextEntry::Remove(long WXUNUSED(from), long WXUNUSED(to))
 {
 }
 
@@ -52,7 +52,7 @@ bool wxTextEntry::CanRedo() const
     return false;
 }
 
-void wxTextEntry::SetInsertionPoint(long pos)
+void wxTextEntry::SetInsertionPoint(long WXUNUSED(pos))
 {
 }
 
@@ -66,11 +66,11 @@ long wxTextEntry::GetLastPosition() const
     return 0;
 }
 
-void wxTextEntry::SetSelection(long from, long to)
+void wxTextEntry::SetSelection(long WXUNUSED(from), long WXUNUSED(to))
 {
 }
 
-void wxTextEntry::GetSelection(long *from, long *to) const
+void wxTextEntry::GetSelection(long *WXUNUSED(from), long *WXUNUSED(to)) const
 {
 }
 
@@ -79,7 +79,7 @@ bool wxTextEntry::IsEditable() const
     return false;
 }
 
-void wxTextEntry::SetEditable(bool editable)
+void wxTextEntry::SetEditable(bool WXUNUSED(editable))
 {
 }
 
@@ -88,7 +88,7 @@ wxString wxTextEntry::DoGetValue() const
     return wxString();
 }
 
-void wxTextEntry::DoSetValue(const wxString &value, int flags)
+void wxTextEntry::DoSetValue(const wxString &WXUNUSED(value), int WXUNUSED(flags))
 {
 }
 

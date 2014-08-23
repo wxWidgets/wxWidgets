@@ -69,7 +69,7 @@ void wxQtGLWidget::paintGL()
 
 IMPLEMENT_CLASS(wxGLContext, wxWindow)
 
-wxGLContext::wxGLContext(wxGLCanvas *win, const wxGLContext* other)
+wxGLContext::wxGLContext(wxGLCanvas *WXUNUSED(win), const wxGLContext* WXUNUSED(other))
 {
 //    m_glContext = win->GetQGLWidget()->context();
 }

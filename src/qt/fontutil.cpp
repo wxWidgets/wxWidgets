@@ -11,7 +11,7 @@
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
 
-bool wxNativeEncodingInfo::FromString(const wxString& s)
+bool wxNativeEncodingInfo::FromString(const wxString& WXUNUSED(s))
 {
     return false;
 }
@@ -23,7 +23,7 @@ wxString wxNativeEncodingInfo::ToString() const
 
 //#############################################################################
 
-bool wxGetNativeFontEncoding(wxFontEncoding encoding,
+bool wxGetNativeFontEncoding(wxFontEncoding WXUNUSED(encoding),
                           wxNativeEncodingInfo *info)
 {
     *info = wxNativeEncodingInfo();
@@ -32,7 +32,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
 }
 
 
-bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
+bool wxTestFontEncoding(const wxNativeEncodingInfo& WXUNUSED(info))
 {
     return false;
 }
