@@ -40,6 +40,7 @@ wxMemoryDCImpl::~wxMemoryDCImpl()
 
 void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
+    m_selected = bitmap;
     if ( IsOk() )
     {
         // Copy image to bitmap
@@ -66,4 +67,14 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
         m_ok = m_qtPainter.begin( m_qtImage );
     }
+}
+
+const wxBitmap& wxMemoryDCImpl::GetSelectedBitmap() const
+{
+    return m_selected;
+}
+
+wxBitmap& wxMemoryDCImpl::GetSelectedBitmap()
+{
+    return m_selected;
 }
