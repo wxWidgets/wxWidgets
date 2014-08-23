@@ -517,12 +517,20 @@ void wxWindow::QtOnScrollBarEvent( wxScrollEvent& event )
     }
 }
 
-    // scroll window to the specified position
-
+// scroll window to the specified position
 void wxWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
+    // check if this is a scroll area (scroll only inner viewport)
+    QWidget *widget;
+    if ( QtGetScrollBarsContainer() )
+        widget = QtGetScrollBarsContainer()->viewport();
+    else
+        widget = GetHandle();
+    // scroll the widget or the specified rect (not children)
     if ( rect != NULL )
-        GetHandle()->scroll( dx, dy, wxQtConvertRect( *rect ));
+        widget->scroll( dx, dy, wxQtConvertRect( *rect ));
+    else
+        widget->scroll( dx, dy );
 }
     
 
